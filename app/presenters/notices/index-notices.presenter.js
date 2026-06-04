@@ -31,7 +31,11 @@ function go(notices, auth) {
 function _links(scope) {
   const links = {}
 
-  if (scope.includes('returns') || scope.includes('bulk_return_notifications')) {
+  if (
+    scope.includes('returns') ||
+    scope.includes('bulk_return_notifications') ||
+    scope.includes('renewal_notifications')
+  ) {
     links.adhoc = {
       text: 'Create an ad-hoc notice',
       href: '/system/notices/setup/adhoc'

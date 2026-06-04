@@ -21,7 +21,7 @@ const { formatValidationResult } = require('../../../../presenters/base.presente
  * @returns {Promise<object>} The validation result (null if valid)
  */
 async function go(payload) {
-  const licenceRenewal = await FetchRenewalLicenceDal.go(payload.licenceRef)
+  const licenceRenewal = await _licenceRenewal(payload)
 
   const validationResult = _validate(payload, licenceRenewal)
 
@@ -40,6 +40,14 @@ function _additionalSessionData(licenceRenewal) {
   }
 
   return {}
+}
+
+async function _licenceRenewal(payload) {
+  if (!payload.licenceRef) {
+    return null
+  }
+
+  return FetchRenewalLicenceDal.go(payload.licenceRef)
 }
 
 function _validate(payload, licenceRenewal) {

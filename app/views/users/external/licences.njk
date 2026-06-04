@@ -49,8 +49,8 @@
       }) }}
     {% endif %}
 
-    {% if showUnregisterButton %}
-    <form method="post">
+    {% if unregisterActionLink %}
+    <form method="post" action="{{unregisterActionLink}}">
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
       {{ govukButton({ text: "Unregister licences", preventDoubleClick: true }) }}

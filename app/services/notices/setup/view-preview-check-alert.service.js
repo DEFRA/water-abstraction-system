@@ -7,7 +7,7 @@
  */
 
 const CheckAlertPresenter = require('../../../presenters/notices/setup/preview-check-alert.presenter.js')
-const FetchAbstractionAlertRecipientsService = require('./abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
+const FetchAbstractionAlertRecipientsDal = require('../../../dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 
 /**
@@ -32,7 +32,7 @@ async function go(contactHashId, sessionId) {
 }
 
 async function _recipientLicenceRefs(contactHashId, session) {
-  const recipients = await FetchAbstractionAlertRecipientsService.go(session)
+  const recipients = await FetchAbstractionAlertRecipientsDal.go(session)
 
   const matchedRecipient = recipients.find((recipient) => {
     return recipient.contact_hash_id === contactHashId

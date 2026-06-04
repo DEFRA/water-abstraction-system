@@ -165,9 +165,9 @@ describe('Notices - Index Notices presenter', () => {
   })
 
   describe('the "links" property', () => {
-    describe('when the user has both permissions', () => {
+    describe('when the user has permissions', () => {
       beforeEach(() => {
-        auth.credentials.scope = ['bulk_return_notifications', 'returns']
+        auth.credentials.scope = ['bulk_return_notifications', 'returns', 'renewal_notifications']
       })
 
       it('returns all of the links', () => {
@@ -225,6 +225,23 @@ describe('Notices - Index Notices presenter', () => {
       })
 
       it('returns only the "adhoc" link', () => {
+        const result = IndexNoticesPresenter.go(notices, auth)
+
+        expect(result.links).to.equal({
+          adhoc: {
+            href: '/system/notices/setup/adhoc',
+            text: 'Create an ad-hoc notice'
+          }
+        })
+      })
+    })
+
+    describe('when the user has the "renewal_notifications" permission', () => {
+      beforeEach(() => {
+        auth.credentials.scope = ['renewal_notifications']
+      })
+
+      it('returns all of the links', () => {
         const result = IndexNoticesPresenter.go(notices, auth)
 
         expect(result.links).to.equal({

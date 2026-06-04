@@ -1,0 +1,27 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
+
+{% block pageContent %}
+
+  {{ govukSummaryList({
+    rows: [
+      {
+        key: { text: "Licences to unregister" },
+        value: { html: newLineArrayItems(licences) }
+      }
+    ]
+  }) }}
+
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
+
+    {{ govukButton({
+      text: "Confirm cancel",
+      preventDoubleClick: true
+    }) }}
+  </form>
+{% endblock %}

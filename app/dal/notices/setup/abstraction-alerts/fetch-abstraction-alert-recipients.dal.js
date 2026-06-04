@@ -2,10 +2,10 @@
 
 /**
  * Fetches the abstraction alert recipients data for the `/notices/setup/check` page
- * @module FetchAbstractionAlertRecipientsService
+ * @module FetchAbstractionAlertRecipientsDal
  */
 
-const GenerateAbstractionAlertRecipientsQueryService = require('./generate-abstraction-alert-recipients-query.service.js')
+const GenerateAbstractionAlertRecipientsQueryDal = require('./generate-abstraction-alert-recipients-query.dal.js')
 const { db } = require('../../../../../db/db.js')
 
 /**
@@ -16,7 +16,7 @@ const { db } = require('../../../../../db/db.js')
  * @returns {Promise<object[]>} The contact data for all licence refs
  */
 async function go(session) {
-  const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(session.licenceRefs)
+  const { bindings, query } = GenerateAbstractionAlertRecipientsQueryDal.go(session.licenceRefs)
 
   const { rows } = await db.raw(query, bindings)
 

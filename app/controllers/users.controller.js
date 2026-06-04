@@ -32,12 +32,6 @@ async function index(request, h) {
   return h.view('users/index.njk', pageData)
 }
 
-async function submitExternalLicences(request, h) {
-  const { id } = request.params
-
-  return _redirectToLegacy(id, h)
-}
-
 async function submitIndex(request, h) {
   const {
     auth,
@@ -106,10 +100,11 @@ async function viewExternalLicences(request, h) {
   const {
     auth,
     params: { id },
-    query: { back, page }
+    query: { back, page },
+    yar
   } = request
 
-  const pageData = await ViewExternalLicencesService.go(id, auth, page, back)
+  const pageData = await ViewExternalLicencesService.go(id, auth, page, yar, back)
 
   return h.view('users/external/licences.njk', pageData)
 }
@@ -178,7 +173,6 @@ async function _redirectToLegacy(id, h) {
 
 module.exports = {
   index,
-  submitExternalLicences,
   submitIndex,
   submitProfileDetails,
   submitInternalDetails,

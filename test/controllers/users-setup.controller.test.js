@@ -13,13 +13,20 @@ const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Things we need to stub
-const InitiateSessionService = require('../../app/services/users/internal/setup/initiate-session.service.js')
-const SubmitCheckService = require('../../app/services/users/internal/setup/submit-check.service.js')
-const SubmitEmailService = require('../../app/services/users/internal/setup/submit-email.service.js')
-const SubmitPermissionsService = require('../../app/services/users/internal/setup/submit-permissions.service.js')
-const ViewCheckService = require('../../app/services/users/internal/setup/view-check.service.js')
-const ViewEmailService = require('../../app/services/users/internal/setup/view-email.service.js')
-const ViewPermissionsService = require('../../app/services/users/internal/setup/view-permissions.service.js')
+const InitiateExternalSessionService = require('../../app/services/users/external/setup/initiate-session.service.js')
+const InitiateInternalSessionService = require('../../app/services/users/internal/setup/initiate-session.service.js')
+const SubmitExternalCancelService = require('../../app/services/users/external/setup/submit-cancel.service.js')
+const SubmitExternalCheckService = require('../../app/services/users/external/setup/submit-check.service.js')
+const SubmitExternalLicencesService = require('../../app/services/users/external/setup/submit-licences.service.js')
+const SubmitInternalCheckService = require('../../app/services/users/internal/setup/submit-check.service.js')
+const SubmitInternalEmailService = require('../../app/services/users/internal/setup/submit-email.service.js')
+const SubmitInternalPermissionsService = require('../../app/services/users/internal/setup/submit-permissions.service.js')
+const ViewExternalCancelService = require('../../app/services/users/external/setup/view-cancel.service.js')
+const ViewExternalCheckService = require('../../app/services/users/external/setup/view-check.service.js')
+const ViewExternalLicencesService = require('../../app/services/users/external/setup/view-licences.service.js')
+const ViewInternalCheckService = require('../../app/services/users/internal/setup/view-check.service.js')
+const ViewInternalEmailService = require('../../app/services/users/internal/setup/view-email.service.js')
+const ViewInternalPermissionsService = require('../../app/services/users/internal/setup/view-permissions.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -32,6 +39,7 @@ describe('Users Setup controller', () => {
   let options
   let postOptions
   let server
+  let userId
 
   // Create server before running the tests
   before(async () => {
@@ -51,6 +59,160 @@ describe('Users Setup controller', () => {
     Sinon.restore()
   })
 
+  describe('/users/external/{id}/setup', () => {
+    describe('POST', () => {
+      beforeEach(() => {
+        userId = generateUUID()
+
+        postOptions = postRequestOptions(`/users/external/${userId}/setup`, {}, ['unlink_licences'])
+
+        Sinon.stub(InitiateExternalSessionService, 'go').resolves({
+          data: { selectedLicences: [], userId },
+          id: sessionId
+        })
+      })
+
+      it('initiates a session and redirects to the "Select the licences to unlink" page', async () => {
+        const response = await server.inject(postOptions)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+        expect(response.headers.location).to.equal(`/system/users/external/setup/${sessionId}/licences`)
+      })
+    })
+  })
+
+  describe('/users/external/setup/{sessionId}/cancel', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _getOptions(`/users/external/setup/${sessionId}/cancel`, { scope: ['unlink_licences'] })
+
+        Sinon.stub(ViewExternalCancelService, 'go').resolves({
+          pageTitle: 'You are about to cancel unregistering these licences'
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('You are about to cancel unregistering these licences')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        userId = generateUUID()
+
+        postOptions = postRequestOptions(`/users/external/setup/${sessionId}/cancel`, {}, ['unlink_licences'])
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitExternalCancelService, 'go').resolves({
+            redirectUrl: `/system/users/external/${userId}/licences?back=users`
+          })
+        })
+
+        it('redirects to the Users page', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/users/external/${userId}/licences?back=users`)
+        })
+      })
+    })
+  })
+
+  describe('/users/external/setup/{sessionId}/check', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _getOptions(`/users/external/setup/${sessionId}/check`, { scope: ['unlink_licences'] })
+
+        Sinon.stub(ViewExternalCheckService, 'go').resolves({
+          pageTitle: 'Check licences to unregister'
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Check licences to unregister')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        userId = generateUUID()
+
+        postOptions = postRequestOptions(`/users/external/setup/${sessionId}/check`, {}, ['unlink_licences'])
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitExternalCheckService, 'go').resolves({
+            redirectUrl: `/system/users/external/${userId}/licences?back=users`
+          })
+        })
+
+        it('redirects to the Users page', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/users/external/${userId}/licences?back=users`)
+        })
+      })
+    })
+  })
+
+  describe('/users/external/setup/{sessionId}/licences', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _getOptions(`/users/external/setup/${sessionId}/licences`, { scope: ['unlink_licences'] })
+
+        Sinon.stub(ViewExternalLicencesService, 'go').resolves({
+          pageTitle: 'Select licences to unregister'
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Select licences to unregister')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        userId = generateUUID()
+
+        postOptions = postRequestOptions(`/users/external/setup/${sessionId}/licences`, {}, ['unlink_licences'])
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitExternalLicencesService, 'go').resolves({
+            redirectUrl: `/system/users/external/setup/${sessionId}/check`
+          })
+        })
+
+        it('redirects to the Users page', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/users/external/setup/${sessionId}/check`)
+        })
+      })
+    })
+  })
+
   describe('/users/internal/setup', () => {
     describe('GET', () => {
       const id = generateUUID()
@@ -58,7 +220,7 @@ describe('Users Setup controller', () => {
       beforeEach(() => {
         options = _getOptions('/users/internal/setup', { scope: ['manage_accounts'] })
 
-        Sinon.stub(InitiateSessionService, 'go').resolves({ data: {}, id })
+        Sinon.stub(InitiateInternalSessionService, 'go').resolves({ data: {}, id })
       })
 
       it('initiates a session and redirects to the "Enter an email address for the user" page', async () => {
@@ -75,7 +237,7 @@ describe('Users Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions(`/users/internal/setup/${sessionId}/check`, { scope: ['manage_accounts'] })
 
-        Sinon.stub(ViewCheckService, 'go').resolves({
+        Sinon.stub(ViewInternalCheckService, 'go').resolves({
           pageTitle: 'Check user'
         })
       })
@@ -97,7 +259,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitCheckService, 'go').resolves()
+          Sinon.stub(SubmitInternalCheckService, 'go').resolves()
         })
 
         it('redirects to the Users page', async () => {
@@ -115,7 +277,7 @@ describe('Users Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions(`/users/internal/setup/${sessionId}/email`, { scope: ['manage_accounts'] })
 
-        Sinon.stub(ViewEmailService, 'go').resolves({
+        Sinon.stub(ViewInternalEmailService, 'go').resolves({
           pageTitle: 'Enter an email address for the user'
         })
       })
@@ -137,7 +299,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitEmailService, 'go').resolves({
+          Sinon.stub(SubmitInternalEmailService, 'go').resolves({
             redirectUrl: `/system/users/internal/setup/${sessionId}/permissions`
           })
         })
@@ -152,7 +314,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is invalid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitEmailService, 'go').resolves({
+          Sinon.stub(SubmitInternalEmailService, 'go').resolves({
             error: {
               errorList: [{ text: 'Enter a gov.uk email address, like name@environment-agency.gov.uk' }]
             },
@@ -176,7 +338,7 @@ describe('Users Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions(`/users/internal/setup/${sessionId}/permissions`, { scope: ['manage_accounts'] })
 
-        Sinon.stub(ViewPermissionsService, 'go').resolves({
+        Sinon.stub(ViewInternalPermissionsService, 'go').resolves({
           pageTitle: 'Select permissions for the user'
         })
       })
@@ -198,7 +360,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitPermissionsService, 'go').resolves({
+          Sinon.stub(SubmitInternalPermissionsService, 'go').resolves({
             redirectUrl: `/system/users/internal/setup/${sessionId}/check`
           })
         })
@@ -213,7 +375,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is invalid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitPermissionsService, 'go').resolves({
+          Sinon.stub(SubmitInternalPermissionsService, 'go').resolves({
             error: {
               errorList: [{ text: 'Select a permission' }]
             },

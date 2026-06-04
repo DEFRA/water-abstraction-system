@@ -5,7 +5,7 @@
  * @module FetchRecipientsService
  */
 
-const FetchAbstractionAlertRecipientsService = require('./abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
+const FetchAbstractionAlertRecipientsDal = require('../../../dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
 const FetchPaperReturnsRecipientsService = require('./returns-notice/fetch-paper-returns-recipients.service.js')
 const FetchRenewalInvitationRecipientsService = require('./renewal-notice/fetch-renewal-invitation-recipients.service.js')
 const FetchReturnsInvitationRecipientsService = require('./returns-notice/fetch-returns-invitation-recipients.service.js')
@@ -32,7 +32,7 @@ async function go(session, download) {
 
 async function _recipientsData(session, download) {
   if (session.noticeType === NoticeType.ABSTRACTION_ALERTS) {
-    return FetchAbstractionAlertRecipientsService.go(session)
+    return FetchAbstractionAlertRecipientsDal.go(session)
   }
 
   if (session.noticeType === NoticeType.PAPER_RETURN) {

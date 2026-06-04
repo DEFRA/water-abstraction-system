@@ -39,7 +39,12 @@ function go(user, licences, viewingUserScope, back) {
     licences: formattedLicences,
     pageTitle: 'Licences',
     pageTitleCaption: username,
-    showUnregisterButton: _showUnregisterButton(viewingUserScope, formattedLicences)
+    unregisterActionLink: _unregisterActionLink(
+      viewingUserScope,
+      formattedLicences,
+      user.id,
+      sourceNavigationDetails.backQueryString
+    )
   }
 }
 
@@ -65,24 +70,30 @@ function _licencePermissions(licence) {
   return 'Basic access'
 }
 
-function _showUnregisterButton(viewingUserScope, formattedLicences) {
-  const canUnregisterLicences = viewingUserScope.includes('unlink_licences')
-
-  if (!canUnregisterLicences) {
-    return false
-  }
-
-  return formattedLicences.some((formattedLicence) => {
-    return formattedLicence.permissions === 'Primary user'
-  })
-}
-
 function _status(licenceEndDetails) {
   if (licenceEndDetails && licenceEndDetails.date <= today()) {
     return licenceEndDetails.reason
   }
 
   return null
+}
+
+function _unregisterActionLink(viewingUserScope, formattedLicences, userId, backQueryString) {
+  const canUnregisterLicences = viewingUserScope.includes('unlink_licences')
+
+  if (!canUnregisterLicences) {
+    return null
+  }
+
+  const primaryUserForLicence = formattedLicences.some((formattedLicence) => {
+    return formattedLicence.permissions === 'Primary user'
+  })
+
+  if (!primaryUserForLicence) {
+    return null
+  }
+
+  return `/system/users/external/${userId}/setup${backQueryString}`
 }
 
 function _userLicences(licences) {
