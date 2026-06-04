@@ -3,6 +3,7 @@
 /**
  * SQL query fragment for fetching additional contact recipient
  *
+ * Requires 1 binding: licenceRefs
  */
 const additionalContactRecipientQuery = `
     SELECT

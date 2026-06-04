@@ -39,7 +39,7 @@ describe('Notices - Recipient Queries DAL', () => {
         new Date('2023-01-01')
       )
 
-      // 4) Additional contact where the deleted at is true. The contact should NOT appear in results.
+      // 4) Additional contact where the contact has been soft-deleted. The contact should NOT appear in results.
       licence = await EmptyLicence.seed()
       scenarios.deletedAdditionalContact = await RecipientScenariosSeeder.additionalContactRecipient(
         licence,
@@ -96,7 +96,7 @@ describe('Notices - Recipient Queries DAL', () => {
         expect(rows).to.equal([])
       })
 
-      it('(Scenario 4) does not return the additional contact when deleted at is true', async () => {
+      it('(Scenario 4) does not return the additional contact when the contact has been soft-deleted', async () => {
         const licenceRefs = scenarios.deletedAdditionalContact.additionalContactRecipient.licenceRefs
 
         const query = RecipientQueriesDal.additionalContactRecipientQuery
