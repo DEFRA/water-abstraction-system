@@ -10,11 +10,10 @@ const { hashSync } = require('bcryptjs')
 const EventModel = require('../../../models/event.model.js')
 const FetchUserDetailsDal = require('./fetch-user-details.dal.js')
 const GroupModel = require('../../../models/group.model.js')
-const NotificationModel = require('../../../models/notification.model.js')
+const InsertNotificationDal = require('./insert-notification.dal.js')
 const RoleModel = require('../../../models/role.model.js')
 const UserModel = require('../../../models/user.model.js')
 const { generateUUID, timestampForPostgres } = require('../../../lib/general.lib.js')
-const { domains } = require('../../../../config/server.config.js')
 const { userPermissions } = require('../../../lib/static-lookups.lib.js')
 
 /**
@@ -48,7 +47,7 @@ async function go(auth, session) {
 
     await _insertEvent(auth, email, trx, userId)
 
-    const notification = await _insertNotification(email, resetGuid, trx)
+    const notification = await InsertNotificationDal.go(email, resetGuid, trx)
 
     return notification
   })
@@ -69,21 +68,6 @@ async function _insertEvent(auth, email, trx, userId) {
   }
 
   return EventModel.query(trx).insert(eventData)
-}
-
-async function _insertNotification(email, resetGuid, trx) {
-  const personalisation = {
-    unique_create_password_link: `${domains.internal}/reset_password_change_password?resetGuid=${resetGuid}`
-  }
-
-  const notificationData = {
-    messageRef: 'new_internal_user_email',
-    messageType: 'email',
-    personalisation,
-    recipient: email
-  }
-
-  return NotificationModel.query(trx).insert(notificationData)
 }
 
 async function _insertUser(application, email, trx) {

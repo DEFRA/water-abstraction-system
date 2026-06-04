@@ -10,21 +10,32 @@ const { expect } = Code
 
 // Test helpers
 const EventModel = require('../../../../app/models/event.model.js')
-const NotificationModel = require('../../../../app/models/notification.model.js')
 const UserGroupModel = require('../../../../app/models/user-group.model.js')
 const UserModel = require('../../../../app/models/user.model.js')
 const UserRoleModel = require('../../../../app/models/user-role.model.js')
-const { domains } = require('../../../../config/server.config.js')
 const { generateUserName } = require('../../../support/helpers/user.helper.js')
 
 // Things we need to stub
 const FetchUserDetailsDal = require('../../../../app/dal/users/internal/fetch-user-details.dal.js')
+const InsertNotificationDal = require('../../../../app/dal/users/internal/insert-notification.dal.js')
 
 // Thing under test
 const CreateUserDal = require('../../../../app/dal/users/internal/create-user.dal.js')
 
 describe('Users - Internal - Create User DAL', () => {
+  const notification = {
+    id: '06a30477-fbdc-4e62-8f1a-1b6f9b83a454',
+    messageRef: 'new_internal_user_email',
+    messageType: 'email',
+    personalisation: {
+      unique_create_password_link:
+        'https://internal.com/reset_password_change_password?resetGuid=4695078b-1f09-4cb9-80ab-15528d2718d4'
+    },
+    recipient: generateUserName()
+  }
+
   let auth
+  let notificationStub
   let session
 
   beforeEach(() => {
@@ -32,6 +43,8 @@ describe('Users - Internal - Create User DAL', () => {
     session = { email: generateUserName(), permission: 'basic' }
 
     Sinon.stub(FetchUserDetailsDal, 'go').resolves({ username: 'internal-user-creator@wrls.gov.uk' })
+
+    notificationStub = Sinon.stub(InsertNotificationDal, 'go').resolves(notification)
   })
 
   afterEach(async () => {
@@ -39,7 +52,6 @@ describe('Users - Internal - Create User DAL', () => {
 
     if (user) {
       await EventModel.query().delete().where({ issuer: 'internal-user-creator@wrls.gov.uk' })
-      await NotificationModel.query().delete().where({ recipient: user.username })
       await UserGroupModel.query().delete().where({ userId: user.userId })
       await UserRoleModel.query().delete().where({ userId: user.userId })
       await user.$query().delete()
@@ -84,32 +96,14 @@ describe('Users - Internal - Create User DAL', () => {
       await CreateUserDal.go(auth, session)
 
       const user = await UserModel.query().where('username', session.email).limit(1).first()
-      const notification = await NotificationModel.query().where('recipient', user.username).limit(1).first()
 
-      expect(notification.messageRef).to.equal('new_internal_user_email')
-      expect(notification.messageType).to.equal('email')
-      expect(notification.personalisation).to.equal({
-        unique_create_password_link: `${domains.internal}/reset_password_change_password?resetGuid=${user.resetGuid}`
-      })
-      expect(notification.recipient).to.equal(user.username)
+      expect(notificationStub.calledWith(session.email, user.resetGuid)).to.be.true()
     })
 
     it('returns the notification record', async () => {
       const result = await CreateUserDal.go(auth, session)
 
-      const user = await UserModel.query().where('username', session.email).limit(1).first()
-      const notification = await NotificationModel.query().where('recipient', user.username).limit(1).first()
-
-      expect(result).to.equal({
-        messageRef: 'new_internal_user_email',
-        messageType: 'email',
-        personalisation: {
-          unique_create_password_link: `${domains.internal}/reset_password_change_password?resetGuid=${user.resetGuid}`
-        },
-        recipient: user.username,
-        id: notification.id
-      })
-      expect(result).to.be.an.instanceOf(NotificationModel)
+      expect(result).to.equal(notification)
     })
 
     describe('and the permission has no groups or roles', () => {
