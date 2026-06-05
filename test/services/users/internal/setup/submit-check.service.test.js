@@ -12,10 +12,10 @@ const { expect } = Code
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
 
 // Things we need to stub
+const CreateNotificationDal = require('../../../../../app/dal/users/internal/create-notification.dal.js')
 const CreateUserDal = require('../../../../../app/dal/users/internal/create-user.dal.js')
 const DeleteSessionDal = require('../../../../../app/dal/delete-session.dal.js')
 const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
-const InsertNotificationDal = require('../../../../../app/dal/users/internal/insert-notification.dal.js')
 const SendVerificationEmailService = require('../../../../../app/services/users/internal/setup/send-verification-email.service.js')
 
 // Thing under test
@@ -52,7 +52,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
     Sinon.stub(CreateUserDal, 'go').resolves(resetGuid)
     Sinon.stub(DeleteSessionDal, 'go').resolves()
     Sinon.stub(FetchSessionDal, 'go').resolves(session)
-    Sinon.stub(InsertNotificationDal, 'go').resolves(notification)
+    Sinon.stub(CreateNotificationDal, 'go').resolves(notification)
     Sinon.stub(SendVerificationEmailService, 'go').resolves()
 
     yarStub = { flash: Sinon.stub() }
@@ -75,10 +75,10 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
       expect(CreateUserDal.go.calledWith(auth, session)).to.be.true()
     })
 
-    it('calls the InsertNotificationDal with the email and resetGuid', async () => {
+    it('calls the CreateNotificationDal with the email and resetGuid', async () => {
       await SubmitCheckService.go(auth, session.id, yarStub)
 
-      expect(InsertNotificationDal.go.calledWith(session.email, resetGuid)).to.be.true()
+      expect(CreateNotificationDal.go.calledWith(session.email, resetGuid)).to.be.true()
     })
 
     it('sets a success flash notification', async () => {
