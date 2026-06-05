@@ -49,10 +49,10 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
 
     session = SessionModelStub.build(Sinon, sessionData)
 
+    Sinon.stub(CreateNotificationDal, 'go').resolves(notification)
     Sinon.stub(CreateUserDal, 'go').resolves(resetGuid)
     Sinon.stub(DeleteSessionDal, 'go').resolves()
     Sinon.stub(FetchSessionDal, 'go').resolves(session)
-    Sinon.stub(CreateNotificationDal, 'go').resolves(notification)
     Sinon.stub(SendVerificationEmailService, 'go').resolves()
 
     yarStub = { flash: Sinon.stub() }

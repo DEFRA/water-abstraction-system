@@ -44,7 +44,7 @@ describe('Users - Internal - Update Notification DAL', () => {
       }
     })
 
-    it('patches and persists key fields', async () => {
+    it('updates the notification with the send result details', async () => {
       await UpdateNotificationDal.go(notification, sendResult)
 
       const result = await notification.$query()
@@ -87,7 +87,7 @@ describe('Users - Internal - Update Notification DAL', () => {
       }
     })
 
-    it('patches the notification with the error details and failed status', async () => {
+    it('updates the notification with the error details and failed status', async () => {
       await UpdateNotificationDal.go(notification, sendResult)
 
       const result = await notification.$query()
