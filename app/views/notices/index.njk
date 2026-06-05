@@ -12,7 +12,9 @@
 
 {% block pageContent %}
   {% if links.notice or links.adhoc %}
-    <p> Create a returns invitation, reminder or paper return notice</p>
+    {% if helperText %}
+      <p>{{ helperText }}</p>
+    {% endif %}
 
     <div class="govuk-button-group">
       {% if links.notice %}

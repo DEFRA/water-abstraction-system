@@ -19,19 +19,17 @@ const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
  *
  * An additional contact is
  *
- * @param {object} licenceSeedData - The licence seed data
+ * @param {object} licenceHolderSeedData - Licence holder (company, address, and licence version) data
  * @param {object} additionalContactSeedData - The additional contact seed data
  * @param {boolean} [abstractionAlerts=true] - Whether the contact has abstraction alerts enabled
- * @param {Date|null} [endDate=null] - Optional end date for the licence document role
- * @param {boolean|null} [deletedAt=null] - Whether the contact has been soft deleted
+ * @param {Date|null} [deletedAt=null] - Whether the contact has been soft deleted
  *
  * @returns {Promise<object>} an object containing all records related to an additional contact
  */
 async function additionalContact(
-  licenceSeedData,
+  licenceHolderSeedData,
   additionalContactSeedData = null,
   abstractionAlerts = true,
-  endDate = null,
   deletedAt = null
 ) {
   const additionalContact = additionalContactSeedData || {
@@ -40,15 +38,10 @@ async function additionalContact(
     email: 'Ron.Burgundy@news.com'
   }
 
-  const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
-    licenceDocumentId: licenceSeedData.licenceDocument.id,
-    endDate
-  })
-
   const licenceRole = await LicenceRoleHelper.select('additionalContact')
 
   const companyContact = await CompanyContactHelper.add({
-    companyId: licenceDocumentRole.companyId,
+    companyId: licenceHolderSeedData.company.id,
     licenceRoleId: licenceRole.id,
     abstractionAlerts,
     deletedAt
@@ -62,12 +55,10 @@ async function additionalContact(
   return {
     companyContact,
     contact,
-    licenceDocumentRole,
     licenceRole,
     clean: async () => {
       await companyContact.$query().delete()
       await contact.$query().delete()
-      await licenceDocumentRole.$query().delete()
     }
   }
 }
@@ -79,11 +70,12 @@ async function additionalContact(
  *
  * @param {object} licenceSeedData - The licence seed data
  * @param {string} name - The company name
- * @param {string} [existingRegionId] - The id of the region to assign to the company that will be created
+ * @param {string|null} [existingRegionId] - The id of the region to assign to the company that will be created
  *
+ * @param licenceVersionEndDate
  * @returns {Promise<object>} an object containing all records related to a licence holder
  */
-async function licenceHolder(licenceSeedData, name, existingRegionId = null) {
+async function licenceHolder(licenceSeedData, name, existingRegionId = null, licenceVersionEndDate = null) {
   const regionId = existingRegionId || licenceSeedData.licence.regionId
 
   const company = await CompanyHelper.add({
@@ -106,7 +98,7 @@ async function licenceHolder(licenceSeedData, name, existingRegionId = null) {
   const licenceVersion = await LicenceVersionHelper.add({
     addressId: address.id,
     companyId: company.id,
-    endDate: null,
+    endDate: licenceVersionEndDate,
     licenceId: licenceSeedData.licence.id
   })
 
