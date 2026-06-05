@@ -246,6 +246,7 @@ describe('Notices - Submit Index Notices service', () => {
               statuses: [],
               toDate: undefined
             },
+            helperText: 'Create a returns invitation, reminder or paper return notice',
             links: {
               adhoc: {
                 href: '/system/notices/setup/adhoc',
@@ -335,6 +336,7 @@ describe('Notices - Submit Index Notices service', () => {
               statuses: [],
               toDate: undefined
             },
+            helperText: 'Create a returns invitation, reminder or paper return notice',
             links: {
               adhoc: {
                 href: '/system/notices/setup/adhoc',
