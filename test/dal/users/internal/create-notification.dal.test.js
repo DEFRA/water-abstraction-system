@@ -14,9 +14,9 @@ const { generateUserName } = require('../../../support/helpers/user.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const InsertNotificationDal = require('../../../../app/dal/users/internal/insert-notification.dal.js')
+const CreateNotificationDal = require('../../../../app/dal/users/internal/create-notification.dal.js')
 
-describe('Users - Internal - Insert Notification DAL', () => {
+describe('Users - Internal - Create Notification DAL', () => {
   let email
   let resetGuid
 
@@ -27,7 +27,7 @@ describe('Users - Internal - Insert Notification DAL', () => {
     })
 
     it('creates a notification', async () => {
-      await InsertNotificationDal.go(email, resetGuid)
+      await CreateNotificationDal.go(email, resetGuid)
 
       const notification = await NotificationModel.query().where('recipient', email).limit(1).first()
 

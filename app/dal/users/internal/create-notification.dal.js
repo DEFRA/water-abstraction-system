@@ -2,7 +2,7 @@
 
 /**
  * Creates a notification record for the new user
- * @module InsertNotificationDal
+ * @module CreateNotificationDal
  */
 
 const NotificationModel = require('../../../models/notification.model.js')
