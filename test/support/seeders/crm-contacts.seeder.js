@@ -19,7 +19,7 @@ const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
  *
  * An additional contact is
  *
- * @param licenceHolderSeedData
+ * @param {object} licenceHolderSeedData - Licence holder (company, address, and licence version) data
  * @param {object} additionalContactSeedData - The additional contact seed data
  * @param {boolean} [abstractionAlerts=true] - Whether the contact has abstraction alerts enabled
  * @param {Date|null} [deletedAt=null] - Whether the contact has been soft deleted
