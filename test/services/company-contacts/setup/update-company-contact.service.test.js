@@ -81,6 +81,7 @@ describe('Company Contacts - Update Company Contact service', () => {
         {
           id: companyContact.id,
           abstractionAlerts: true,
+          abstractionAlertLicences: null,
           companyId: companyContact.companyId,
           contactId: contact.id,
           createdAt: seedDate,
