@@ -59,7 +59,7 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
       additionalContactRecipient: scenario5AdditionalContactRecipient
     }
 
-    // 6) Additional contact multiple licence refs. Two calls with the same default company name and contact email means
+    // 6) Additional contact multiple licence refs. Two contacts with the same default company name and contact email means
     // the query combines them into a single row per contact (same contact_hash_id).
     const scenario6a = await RecipientScenariosSeeder.additionalContactRecipient()
     const scenario6b = await RecipientScenariosSeeder.additionalContactRecipient()
