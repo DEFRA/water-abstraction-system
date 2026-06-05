@@ -17,6 +17,8 @@ exports.up = function (knex) {
     table.date('end_date')
     table.boolean('is_test').notNullable().defaultTo(false)
     table.boolean('water_abstraction_alerts_enabled').defaultTo(false)
+    table.jsonb('abstraction_alert_licences').defaultTo(null)
+
     table.uuid('created_by')
     table.uuid('updated_by')
     table.timestamp('deleted_at').defaultTo(null)
