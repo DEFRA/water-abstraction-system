@@ -150,7 +150,6 @@ describe('Notices - Recipient Queries DAL', () => {
       // 3) Additional contact where the end date has passed. The expired contact should NOT appear in results.
       scenarios.expiredAdditionalContact = await RecipientScenariosSeeder.additionalContactRecipient(
         true,
-        null,
         new Date('2023-01-01')
       )
 
@@ -158,8 +157,7 @@ describe('Notices - Recipient Queries DAL', () => {
       scenarios.deletedAdditionalContact = await RecipientScenariosSeeder.additionalContactRecipient(
         true,
         null,
-        null,
-        new Date('2023-01-01')
+        new Date('2023-06-01')
       )
     })
 

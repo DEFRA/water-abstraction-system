@@ -43,7 +43,7 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
     const s4LicenceHolderRecipient = await RecipientsFormatter.licenceHolder(s4Licence, s4LicenceHolder)
     const s4PrimaryUser = await CRMContactsSeeder.primaryUser(s4Licence, 'primary.withcontact@test.com')
     const s4PrimaryUserRecipient = await RecipientsFormatter.primaryUser(s4Licence, s4PrimaryUser)
-    const s4AdditionalContact = await CRMContactsSeeder.additionalContact(s4Licence, s4LicenceHolder)
+    const s4AdditionalContact = await CRMContactsSeeder.additionalContact(s4LicenceHolder)
     const s4AdditionalContactRecipient = await RecipientsFormatter.additionalContact(s4Licence, s4AdditionalContact)
     scenarios.primaryUserWithAdditionalContact = {
       licenceHolderRecipient: s4LicenceHolderRecipient,
@@ -267,12 +267,7 @@ async function _additionalContact(name, contactData = null, abstractionAlerts = 
   const licence = await EmptyLicence.seed()
   const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, name)
   const licenceHolderRecipient = await RecipientsFormatter.licenceHolder(licence, licenceHolder)
-  const additionalContact = await CRMContactsSeeder.additionalContact(
-    licence,
-    licenceHolder,
-    contactData,
-    abstractionAlerts
-  )
+  const additionalContact = await CRMContactsSeeder.additionalContact(licenceHolder, contactData, abstractionAlerts)
   const additionalContactRecipient = await RecipientsFormatter.additionalContact(licence, additionalContact)
 
   return { licenceHolderRecipient, additionalContactRecipient }
