@@ -32,49 +32,58 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
     // 2) Licence holder, and an additional contact
     scenarios.licenceHolderWithAdditionalContact = await RecipientScenariosSeeder.additionalContactRecipient()
 
-    // 3) Primary user only. All licences have a licence holder record, but when 'registered' the query will only
-    // return the primary user recipient.
-    scenarios.primaryUser = await RecipientScenariosSeeder.primaryUserOnly()
-
-    // 4) Primary user with an additional contact. Similar to scenario 3 - when registered, we expect the primary user
-    // and additional contact but not the licence holder. All three must share one licence, so we build this manually.
-    const s4Licence = await EmptyLicence.seed()
-    const s4LicenceHolder = await CRMContactsSeeder.licenceHolder(s4Licence, 'PrimaryWithAdditional')
-    const s4LicenceHolderRecipient = await RecipientsFormatter.licenceHolder(s4Licence, s4LicenceHolder)
-    const s4PrimaryUser = await CRMContactsSeeder.primaryUser(s4Licence, 'primary.withcontact@test.com')
-    const s4PrimaryUserRecipient = await RecipientsFormatter.primaryUser(s4Licence, s4PrimaryUser)
-    const s4AdditionalContact = await CRMContactsSeeder.additionalContact(s4LicenceHolder)
-    const s4AdditionalContactRecipient = await RecipientsFormatter.additionalContact(s4Licence, s4AdditionalContact)
-    scenarios.primaryUserWithAdditionalContact = {
-      licenceHolderRecipient: s4LicenceHolderRecipient,
-      primaryUserRecipient: s4PrimaryUserRecipient,
-      additionalContactRecipient: s4AdditionalContactRecipient
-    }
-
-    // 5) Additional contact multiple licence refs. Two calls with the same default company name and contact email means
-    // the query combines them into a single row per contact (same contact_hash_id).
-    const scenario5a = await RecipientScenariosSeeder.additionalContactRecipient()
-    const scenario5b = await RecipientScenariosSeeder.additionalContactRecipient()
-    scenarios.additionalContactMultipleLicences = {
-      licenceHolderRecipient: scenario5a.licenceHolderRecipient,
-      licenceHolderRecipientTwo: scenario5b.licenceHolderRecipient,
-      additionalContactRecipient: scenario5a.additionalContactRecipient,
-      additionalContactRecipientTwo: scenario5b.additionalContactRecipient
-    }
-
-    // 6) Licence holder with an additional contact where abstractionAlerts = false. The additional contact should NOT
+    // 3) Licence holder with an additional contact where abstractionAlerts = false. The additional contact should NOT
     // appear in results.
     scenarios.additionalContactNoAlerts = await RecipientScenariosSeeder.additionalContactRecipient(false)
 
-    // 7) Different licence holders and different additional contacts for different licences. Unlike scenario 5 where
+    // 4) Primary user only. All licences have a licence holder record, but when 'registered' the query will only
+    // return the primary user recipient.
+    scenarios.primaryUser = await RecipientScenariosSeeder.primaryUserOnly()
+
+    // 5) Primary user with an additional contact. Similar to scenario 4 - when registered, we expect the primary user
+    // and additional contact but not the licence holder. All three must share one licence, so we build this manually.
+    const s5Licence = await EmptyLicence.seed()
+    const s5LicenceHolder = await CRMContactsSeeder.licenceHolder(s5Licence, 'PrimaryWithAdditional')
+    const s5LicenceHolderRecipient = await RecipientsFormatter.licenceHolder(s5Licence, s5LicenceHolder)
+    const s5PrimaryUser = await CRMContactsSeeder.primaryUser(s5Licence, 'primary.withcontact@test.com')
+    const s5PrimaryUserRecipient = await RecipientsFormatter.primaryUser(s5Licence, s5PrimaryUser)
+    const s5AdditionalContact = await CRMContactsSeeder.additionalContact(s5LicenceHolder)
+    const s5AdditionalContactRecipient = await RecipientsFormatter.additionalContact(s5Licence, s5AdditionalContact)
+
+    scenarios.primaryUserWithAdditionalContact = {
+      licenceHolderRecipient: s5LicenceHolderRecipient,
+      primaryUserRecipient: s5PrimaryUserRecipient,
+      additionalContactRecipient: s5AdditionalContactRecipient
+    }
+
+    // 6) Additional contact multiple licence refs. Two calls with the same default company name and contact email means
+    // the query combines them into a single row per contact (same contact_hash_id).
+    const scenario6a = await RecipientScenariosSeeder.additionalContactRecipient()
+    const scenario6b = await RecipientScenariosSeeder.additionalContactRecipient()
+
+    scenarios.additionalContactMultipleLicences = {
+      licenceHolderRecipient: scenario6a.licenceHolderRecipient,
+      licenceHolderRecipientTwo: scenario6b.licenceHolderRecipient,
+      additionalContactRecipient: scenario6a.additionalContactRecipient,
+      additionalContactRecipientTwo: scenario6b.additionalContactRecipient
+    }
+
+    // 7) Different licence holders and different additional contacts for different licences. Unlike scenario 6 where
     // the same contact spans multiple licences and is combined into one row, here each licence has unique contacts so
     // all four recipients are returned separately.
-    const s7a = await _additionalContact('HolderWithUniqueContactA')
-    const s7b = await _additionalContact('HolderWithUniqueContactB', {
-      firstName: 'Champ',
-      lastName: 'Kind',
-      email: 'champ.kind@news.com'
-    })
+    const s7a = await RecipientScenariosSeeder.additionalContactRecipient(true, null, null, 'HolderWithUniqueContactA')
+    const s7b = await RecipientScenariosSeeder.additionalContactRecipient(
+      true,
+      null,
+      null,
+      'HolderWithUniqueContactB',
+      {
+        firstName: 'Champ',
+        lastName: 'Kind',
+        email: 'champ.kind@news.com'
+      }
+    )
+
     scenarios.differentHoldersAndContacts = {
       firstLicenceHolderRecipient: s7a.licenceHolderRecipient,
       secondLicenceHolderRecipient: s7b.licenceHolderRecipient,
@@ -84,16 +93,14 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
 
     // 8) Two licences with different licence holders and additional contacts, but one additional contact has
     // abstractionAlerts = false and should NOT appear in results.
-    const s8a = await _additionalContact('HolderWithMixedAlertsA')
-    const s8b = await _additionalContact(
-      'HolderWithMixedAlertsB',
-      {
-        firstName: 'Champ',
-        lastName: 'Kind',
-        email: 'champ.kind@news.com'
-      },
-      false
-    )
+    const s8a = await RecipientScenariosSeeder.additionalContactRecipient(true, null, null, 'HolderWithMixedAlertsA')
+
+    const s8b = await RecipientScenariosSeeder.additionalContactRecipient(false, null, null, 'HolderWithMixedAlertsB', {
+      firstName: 'Champ',
+      lastName: 'Kind',
+      email: 'champ.kind@news.com'
+    })
+
     scenarios.mixedAlerts = {
       licenceHolderRecipientWithAlert: s8a.licenceHolderRecipient,
       licenceHolderRecipientWithoutAlert: s8b.licenceHolderRecipient,
@@ -146,7 +153,21 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
       })
     })
 
-    describe('and only the "primary user" is present for a registered licence (Scenario 3)', () => {
+    describe('and an additional contact is present but abstractionAlerts is false (Scenario 3)', () => {
+      it('returns only the "licence holder" and not the additional contact', async () => {
+        const licenceRefs = scenarios.additionalContactNoAlerts.licenceHolderRecipient.licenceRefs
+
+        const { rows } = await db.raw(query, [licenceRefs, licenceRefs, licenceRefs])
+
+        const expectedResults = RecipientScenariosSeeder.transformToSendingResults({
+          licenceHolderRecipient: scenarios.additionalContactNoAlerts.licenceHolderRecipient
+        })
+
+        expect(rows).to.equal(expectedResults)
+      })
+    })
+
+    describe('and only the "primary user" is present for a registered licence (Scenario 4)', () => {
       it('returns the expected recipients', async () => {
         const licenceRefs = scenarios.primaryUser.primaryUserRecipient.licenceRefs
 
@@ -160,7 +181,7 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
       })
     })
 
-    describe('and both the "primary user" and "additional contact" are present for a registered licence, but not the licence holder (Scenario 4)', () => {
+    describe('and both the "primary user" and "additional contact" are present for a registered licence, but not the licence holder (Scenario 5)', () => {
       it('returns the expected recipients', async () => {
         const licenceRefs = scenarios.primaryUserWithAdditionalContact.primaryUserRecipient.licenceRefs
 
@@ -175,7 +196,7 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
       })
     })
 
-    describe('and the same "additional contact" is associated with multiple licence documents (Scenario 5)', () => {
+    describe('and the same "additional contact" is associated with multiple licence documents (Scenario 6)', () => {
       it('returns the expected recipients', async () => {
         const licenceRefs = [
           ...scenarios.additionalContactMultipleLicences.licenceHolderRecipient.licenceRefs,
@@ -199,20 +220,6 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
         })
 
         expect(sortedRows).to.equal(expectedResults)
-      })
-    })
-
-    describe('and an additional contact is present but abstractionAlerts is false (Scenario 6)', () => {
-      it('returns only the "licence holder" and not the additional contact', async () => {
-        const licenceRefs = scenarios.additionalContactNoAlerts.licenceHolderRecipient.licenceRefs
-
-        const { rows } = await db.raw(query, [licenceRefs, licenceRefs, licenceRefs])
-
-        const expectedResults = RecipientScenariosSeeder.transformToSendingResults({
-          licenceHolderRecipient: scenarios.additionalContactNoAlerts.licenceHolderRecipient
-        })
-
-        expect(rows).to.equal(expectedResults)
       })
     })
 

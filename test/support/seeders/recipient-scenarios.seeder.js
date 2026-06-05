@@ -16,6 +16,7 @@ const { compareStrings } = require('../../../app/lib/general.lib.js')
  * @param {boolean} [abstractionAlerts] - Whether the contact has abstraction alerts enabled
  * @param {Date|null} [licenceVersionEndDate] - Optional licence version end date
  * @param {Date|null} [deletedAt] - Optional soft-delete date for the company contact
+ * @param name
  * @param {object|null} [contactData] - Optional contact data overrides
  *
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
@@ -24,15 +25,11 @@ async function additionalContactRecipient(
   abstractionAlerts = true,
   licenceVersionEndDate = null,
   deletedAt = null,
+  name = 'LicenceHolderForAdditonalContact',
   contactData = null
 ) {
   const licence = await EmptyLicence.seed()
-  const licenceHolder = await CRMContactsSeeder.licenceHolder(
-    licence,
-    'LicenceHolderForAdditonalContact',
-    null,
-    licenceVersionEndDate
-  )
+  const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, name, null, licenceVersionEndDate)
 
   const licenceHolderRecipient = await RecipientsFormatter.licenceHolder(licence, licenceHolder)
 
