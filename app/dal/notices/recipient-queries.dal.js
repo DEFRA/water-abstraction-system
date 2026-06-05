@@ -3,9 +3,6 @@
 /**
  * SQL join fragment for fetching the current licence version
  *
- * Selects the most recent licence version per licence where start_date <= CURRENT_DATE,
- * ordered by issue DESC, increment DESC, end_date DESC NULLS FIRST.
- *
  * Consumers must include `FROM public.licences l` before this fragment.
  */
 const currentLicenceVersionsJoin = `
