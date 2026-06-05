@@ -14,7 +14,7 @@ exports.up = function (knex) {
         'is_default AS default',
         'start_date',
         'water_abstraction_alerts_enabled AS abstraction_alerts',
-        'abstraction_alert_licences as abstractionAlertLicences',
+        'abstraction_alert_licences',
         // email_address
         // end_date
         // is_test
