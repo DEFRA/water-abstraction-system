@@ -1,0 +1,123 @@
+'use strict'
+
+// Test framework dependencies
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+
+const { beforeEach, describe, it } = (exports.lab = Lab.script())
+const { expect } = Code
+
+// Test helpers
+const NotificationHelper = require('../../../support/helpers/notification.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateUserName } = require('../../../support/helpers/user.helper.js')
+
+// Thing under test
+const UpdateNotificationDal = require('../../../../app/dal/users/internal/update-notification.dal.js')
+
+describe('Users - Internal - Update Notification DAL', () => {
+  let notification
+  let notificationData
+  let sendResult
+
+  beforeEach(async () => {
+    notificationData = {
+      messageRef: 'new_internal_user_email',
+      messageType: 'email',
+      personalisation: {
+        unique_create_password_link:
+          'https://internal.com/reset_password_change_password?resetGuid=2a595ee7-3ece-47b2-95c0-bea84efa7422'
+      },
+      recipient: generateUserName()
+    }
+
+    notification = await NotificationHelper.add(notificationData)
+  })
+
+  describe('when called with a successful send result', () => {
+    beforeEach(() => {
+      sendResult = {
+        notifyId: generateUUID(),
+        notifyStatus: 'created',
+        plaintext: 'The email text',
+        status: 'sent'
+      }
+    })
+
+    it('patches and persists key fields', async () => {
+      await UpdateNotificationDal.go(notification, sendResult)
+
+      const result = await notification.$query()
+
+      expect(result).to.equal({
+        alternateNoticeId: null,
+        contactType: null,
+        createdAt: notification.createdAt,
+        dueDate: null,
+        eventId: null,
+        id: notification.id,
+        licenceMonitoringStationId: null,
+        licences: null,
+        messageRef: 'new_internal_user_email',
+        messageType: 'email',
+        notifyError: null,
+        notifyId: sendResult.notifyId,
+        notifyStatus: 'created',
+        pdf: null,
+        personalisation: {
+          unique_create_password_link:
+            'https://internal.com/reset_password_change_password?resetGuid=2a595ee7-3ece-47b2-95c0-bea84efa7422'
+        },
+        plaintext: 'The email text',
+        recipient: notificationData.recipient,
+        returnedAt: null,
+        returnLogIds: null,
+        status: 'sent',
+        templateId: null,
+        updatedAt: notification.updatedAt
+      })
+    })
+  })
+
+  describe('when called with an error send result', () => {
+    beforeEach(() => {
+      sendResult = {
+        notifyError: 'Notify error',
+        status: 'error'
+      }
+    })
+
+    it('patches the notification with the error details and failed status', async () => {
+      await UpdateNotificationDal.go(notification, sendResult)
+
+      const result = await notification.$query()
+
+      expect(result).to.equal({
+        alternateNoticeId: null,
+        contactType: null,
+        createdAt: notification.createdAt,
+        dueDate: null,
+        eventId: null,
+        id: notification.id,
+        licenceMonitoringStationId: null,
+        licences: null,
+        messageRef: 'new_internal_user_email',
+        messageType: 'email',
+        notifyError: 'Notify error',
+        notifyId: null,
+        notifyStatus: null,
+        pdf: null,
+        personalisation: {
+          unique_create_password_link: `https://internal.com/reset_password_change_password?resetGuid=2a595ee7-3ece-47b2-95c0-bea84efa7422`
+        },
+        plaintext: null,
+        recipient: notificationData.recipient,
+        returnedAt: null,
+        returnLogIds: null,
+        status: 'error',
+        templateId: null,
+        updatedAt: notification.updatedAt
+      })
+    })
+  })
+})
