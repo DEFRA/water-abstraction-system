@@ -32,6 +32,7 @@ async function go(auth, sessionId, yar) {
 
   flashNotification(yar, 'User added', `We have emailed ${email} instructions to complete their account set up.`)
 
+  // Intentionally not awaited — fire-and-forget with internal error handling
   SendVerificationEmailService.go(notification)
 }
 

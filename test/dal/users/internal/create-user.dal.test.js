@@ -38,9 +38,12 @@ describe('Users - Internal - Create User DAL', () => {
     const user = await UserModel.query().where('username', session.email).limit(1).first()
 
     await EventModel.query().delete().where({ issuer: 'internal-user-creator@wrls.gov.uk' })
-    await UserGroupModel.query().delete().where({ userId: user.userId })
-    await UserRoleModel.query().delete().where({ userId: user.userId })
-    await user.$query().delete()
+
+    if (user) {
+      await UserGroupModel.query().delete().where({ userId: user.userId })
+      await UserRoleModel.query().delete().where({ userId: user.userId })
+      await user.$query().delete()
+    }
 
     Sinon.restore()
   })

@@ -6,6 +6,7 @@
  */
 
 const NotificationModel = require('../../../models/notification.model.js')
+
 const { domains } = require('../../../../config/server.config.js')
 
 /**

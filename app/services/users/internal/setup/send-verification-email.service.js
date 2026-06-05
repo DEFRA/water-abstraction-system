@@ -9,19 +9,15 @@ const CheckNotificationStatusService = require('../../../notifications/check-not
 const CreateEmailRequest = require('../../../../requests/notify/create-email.request.js')
 const NotifyUpdatePresenter = require('../../../../presenters/notifications/notify-update.presenter.js')
 const UpdateNotificationDal = require('../../../../dal/users/internal/update-notification.dal.js')
-
 const { pause } = require('../../../../lib/general.lib.js')
+const { NOTIFY_TEMPLATES } = require('../../../../lib/notify-templates.lib.js')
 
 const notifyConfig = require('../../../../../config/notify.config.js')
-
-const { NOTIFY_TEMPLATES } = require('../../../../lib/notify-templates.lib.js')
 
 /**
  * Orchestrates sending the verification email to the new user, recording the results, and checking the status
  *
  * @param {object} notification - The notification linked to the verification email to be sent
- *
- * @returns {string} the status of the notification'
  */
 async function go(notification) {
   try {
