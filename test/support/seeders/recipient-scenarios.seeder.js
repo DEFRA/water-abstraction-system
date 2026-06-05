@@ -16,7 +16,7 @@ const { compareStrings } = require('../../../app/lib/general.lib.js')
  * @param {boolean} [abstractionAlerts] - Whether the contact has abstraction alerts enabled
  * @param {Date|null} [licenceVersionEndDate] - Optional licence version end date
  * @param {Date|null} [deletedAt] - Optional soft-delete date for the company contact
- * @param name
+ * @param {string} [name] - The company name for the licence holder
  * @param {object|null} [contactData] - Optional contact data overrides
  *
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing

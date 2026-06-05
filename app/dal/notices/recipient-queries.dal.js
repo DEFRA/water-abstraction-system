@@ -89,8 +89,8 @@ const licenceHolderRecipientQuery = `
   FROM
     public.licences l
     ${currentLicenceVersionsJoin}
-  INNER JOIN public.companies c ON c.id = llv.company_id
-  INNER JOIN public.addresses a ON a.id = llv.address_id
+    INNER JOIN public.companies c ON c.id = llv.company_id
+    INNER JOIN public.addresses a ON a.id = llv.address_id
 `
 
 /**

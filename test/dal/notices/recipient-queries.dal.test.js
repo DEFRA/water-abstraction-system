@@ -10,8 +10,8 @@ const { expect } = Code
 // Test helpers
 const CRMContactsSeeder = require('../../support/seeders/crm-contacts.seeder.js')
 const EmptyLicence = require('../../support/seeders/empty-licence.seeder.js')
-const RecipientScenariosSeeder = require('../../support/seeders/recipient-scenarios.seeder.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
+const RecipientScenariosSeeder = require('../../support/seeders/recipient-scenarios.seeder.js')
 const { db } = require('../../../db/db.js')
 
 // Thing under test
