@@ -8,6 +8,7 @@
 const CheckNotificationStatusService = require('../../../notifications/check-notification-status.service.js')
 const CreateEmailRequest = require('../../../../requests/notify/create-email.request.js')
 const NotifyUpdatePresenter = require('../../../../presenters/notifications/notify-update.presenter.js')
+const UpdateNotificationDal = require('../../../../dal/users/internal/update-notification.dal.js')
 
 const { pause } = require('../../../../lib/general.lib.js')
 
@@ -52,16 +53,10 @@ async function _createEmailRequest(notification) {
   return NotifyUpdatePresenter.go(notifyResult)
 }
 
-async function _recordResult(notification, sendResult) {
-  const { notifyError, notifyId, notifyStatus, plaintext, status } = sendResult
-
-  await notification.$query().patch({ notifyError, notifyId, notifyStatus, plaintext, status })
-}
-
 async function _sendEmail(notification) {
   const sendResult = await _createEmailRequest(notification)
 
-  await _recordResult(notification, sendResult)
+  await UpdateNotificationDal.go(notification, sendResult)
 
   return sendResult.status
 }

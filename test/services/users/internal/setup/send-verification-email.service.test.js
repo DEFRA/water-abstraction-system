@@ -15,6 +15,7 @@ const GeneralLib = require('../../../../../app/lib/general.lib.js')
 const GlobalNotifierStub = require('../../../../support/stubs/global-notifier.stub.js')
 const NotifyConfig = require('../../../../../config/notify.config.js')
 const NotifyUpdatePresenter = require('../../../../../app/presenters/notifications/notify-update.presenter.js')
+const UpdateNotificationDal = require('../../../../../app/dal/users/internal/update-notification.dal.js')
 
 // Thing under test
 const SendVerificationEmailService = require('../../../../../app/services/users/internal/setup/send-verification-email.service.js')
@@ -32,10 +33,10 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
   let checkNotificationStatusStub
   let createEmailRequestStub
   let notification
-  let notificationPatchStub
   let notifierStub
   let notifyUpdatePresenterStub
   let pauseStub
+  let updateNotificationDalStub
 
   beforeEach(() => {
     checkNotificationStatusStub = Sinon.stub(CheckNotificationStatusService, 'go').resolves()
@@ -53,15 +54,7 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
       }
     })
 
-    notificationPatchStub = Sinon.stub().callsFake(function (updates) {
-      Object.assign(notification, updates)
-      return this
-    })
-
     notification = {
-      $query: Sinon.stub().returns({
-        patch: notificationPatchStub
-      }),
       id: notificationId,
       messageRef: 'new_internal_user_email',
       messageType: 'email',
@@ -74,6 +67,8 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     notifyUpdatePresenterStub = Sinon.stub(NotifyUpdatePresenter, 'go')
 
     pauseStub = Sinon.stub(GeneralLib, 'pause').resolves()
+
+    updateNotificationDalStub = Sinon.stub(UpdateNotificationDal, 'go').resolves()
 
     // We have to set wait for status to 25ms to avoid the tests timing out. By default it would be 5 seconds and is
     // used to give Notify a chance to process the email notifications.
@@ -113,9 +108,9 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     it('records the Notify response to the notification', async () => {
       await SendVerificationEmailService.go(notification)
 
-      expect(notificationPatchStub.calledOnce).to.be.true()
-      expect(notificationPatchStub.firstCall.args[0]).to.equal({
-        notifyError: undefined,
+      expect(updateNotificationDalStub.calledOnce).to.be.true()
+      expect(updateNotificationDalStub.firstCall.args[0]).to.equal(notification)
+      expect(updateNotificationDalStub.firstCall.args[1]).to.equal({
         notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
         notifyStatus: 'created',
         plaintext: verificationEmailPlaintext,
@@ -129,13 +124,7 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
       expect(checkNotificationStatusStub.calledOnce).to.be.true()
       const notificationPassedToCheck = checkNotificationStatusStub.firstCall.args[0]
 
-      expect(notificationPassedToCheck).to.include({
-        id: notificationId,
-        notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
-        notifyStatus: 'created',
-        plaintext: verificationEmailPlaintext,
-        status: 'pending'
-      })
+      expect(notificationPassedToCheck).to.equal(notification)
     })
   })
 
@@ -161,8 +150,8 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     it('records the error against the notification', async () => {
       await SendVerificationEmailService.go(notification)
 
-      expect(notificationPatchStub.calledOnce).to.be.true()
-      const patchData = notificationPatchStub.firstCall.args[0]
+      expect(updateNotificationDalStub.calledOnce).to.be.true()
+      const patchData = updateNotificationDalStub.firstCall.args[1]
 
       expect(patchData.status).to.equal('error')
       expect(patchData.notifyError).to.exist()
