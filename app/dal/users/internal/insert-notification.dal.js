@@ -13,11 +13,10 @@ const { domains } = require('../../../../config/server.config.js')
  *
  * @param {string} email - The email address of the new user
  * @param {string} resetGuid - The reset GUID for the new user
- * @param {object} trx - The transaction instance
  *
  * @returns {Promise<object>} The created notification
  */
-async function go(email, resetGuid, trx) {
+async function go(email, resetGuid) {
   const personalisation = {
     unique_create_password_link: `${domains.internal}/reset_password_change_password?resetGuid=${resetGuid}`
   }
@@ -29,7 +28,7 @@ async function go(email, resetGuid, trx) {
     recipient: email
   }
 
-  return NotificationModel.query(trx).insert(notificationData)
+  return NotificationModel.query().insert(notificationData)
 }
 
 module.exports = {
