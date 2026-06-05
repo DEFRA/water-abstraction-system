@@ -42,18 +42,21 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
 
     // 5) Primary user with an additional contact. Similar to scenario 4 - when registered, we expect the primary user
     // and additional contact but not the licence holder. All three must share one licence, so we build this manually.
-    const s5Licence = await EmptyLicence.seed()
-    const s5LicenceHolder = await CRMContactsSeeder.licenceHolder(s5Licence, 'PrimaryWithAdditional')
-    const s5LicenceHolderRecipient = await RecipientsFormatter.licenceHolder(s5Licence, s5LicenceHolder)
-    const s5PrimaryUser = await CRMContactsSeeder.primaryUser(s5Licence, 'primary.withcontact@test.com')
-    const s5PrimaryUserRecipient = await RecipientsFormatter.primaryUser(s5Licence, s5PrimaryUser)
-    const s5AdditionalContact = await CRMContactsSeeder.additionalContact(s5LicenceHolder)
-    const s5AdditionalContactRecipient = await RecipientsFormatter.additionalContact(s5Licence, s5AdditionalContact)
+    const licence = await EmptyLicence.seed()
+    const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, 'PrimaryWithAdditional')
+    const scenario5LicenceHolderRecipient = await RecipientsFormatter.licenceHolder(licence, licenceHolder)
+    const scenario5PrimaryUser = await CRMContactsSeeder.primaryUser(licence, 'primary.withcontact@test.com')
+    const scenario5PrimaryUserRecipient = await RecipientsFormatter.primaryUser(licence, scenario5PrimaryUser)
+    const scenario5AdditionalContact = await CRMContactsSeeder.additionalContact(licenceHolder)
+    const scenario5AdditionalContactRecipient = await RecipientsFormatter.additionalContact(
+      licence,
+      scenario5AdditionalContact
+    )
 
     scenarios.primaryUserWithAdditionalContact = {
-      licenceHolderRecipient: s5LicenceHolderRecipient,
-      primaryUserRecipient: s5PrimaryUserRecipient,
-      additionalContactRecipient: s5AdditionalContactRecipient
+      licenceHolderRecipient: scenario5LicenceHolderRecipient,
+      primaryUserRecipient: scenario5PrimaryUserRecipient,
+      additionalContactRecipient: scenario5AdditionalContactRecipient
     }
 
     // 6) Additional contact multiple licence refs. Two calls with the same default company name and contact email means
@@ -71,8 +74,13 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
     // 7) Different licence holders and different additional contacts for different licences. Unlike scenario 6 where
     // the same contact spans multiple licences and is combined into one row, here each licence has unique contacts so
     // all four recipients are returned separately.
-    const s7a = await RecipientScenariosSeeder.additionalContactRecipient(true, null, null, 'HolderWithUniqueContactA')
-    const s7b = await RecipientScenariosSeeder.additionalContactRecipient(
+    const scenario7a = await RecipientScenariosSeeder.additionalContactRecipient(
+      true,
+      null,
+      null,
+      'HolderWithUniqueContactA'
+    )
+    const scenario7b = await RecipientScenariosSeeder.additionalContactRecipient(
       true,
       null,
       null,
@@ -85,27 +93,38 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
     )
 
     scenarios.differentHoldersAndContacts = {
-      firstLicenceHolderRecipient: s7a.licenceHolderRecipient,
-      secondLicenceHolderRecipient: s7b.licenceHolderRecipient,
-      firstAdditionalContact: s7a.additionalContactRecipient,
-      secondAdditionalContact: s7b.additionalContactRecipient
+      firstLicenceHolderRecipient: scenario7a.licenceHolderRecipient,
+      secondLicenceHolderRecipient: scenario7b.licenceHolderRecipient,
+      firstAdditionalContact: scenario7a.additionalContactRecipient,
+      secondAdditionalContact: scenario7b.additionalContactRecipient
     }
 
     // 8) Two licences with different licence holders and additional contacts, but one additional contact has
     // abstractionAlerts = false and should NOT appear in results.
-    const s8a = await RecipientScenariosSeeder.additionalContactRecipient(true, null, null, 'HolderWithMixedAlertsA')
+    const scenario8a = await RecipientScenariosSeeder.additionalContactRecipient(
+      true,
+      null,
+      null,
+      'HolderWithMixedAlertsA'
+    )
 
-    const s8b = await RecipientScenariosSeeder.additionalContactRecipient(false, null, null, 'HolderWithMixedAlertsB', {
-      firstName: 'Champ',
-      lastName: 'Kind',
-      email: 'champ.kind@news.com'
-    })
+    const scenario8b = await RecipientScenariosSeeder.additionalContactRecipient(
+      false,
+      null,
+      null,
+      'HolderWithMixedAlertsB',
+      {
+        firstName: 'Champ',
+        lastName: 'Kind',
+        email: 'champ.kind@news.com'
+      }
+    )
 
     scenarios.mixedAlerts = {
-      licenceHolderRecipientWithAlert: s8a.licenceHolderRecipient,
-      licenceHolderRecipientWithoutAlert: s8b.licenceHolderRecipient,
-      additionalContactWithAlert: s8a.additionalContactRecipient,
-      additionalContactWithoutAlert: s8b.additionalContactRecipient
+      licenceHolderRecipientWithAlert: scenario8a.licenceHolderRecipient,
+      licenceHolderRecipientWithoutAlert: scenario8b.licenceHolderRecipient,
+      additionalContactWithAlert: scenario8a.additionalContactRecipient,
+      additionalContactWithoutAlert: scenario8b.additionalContactRecipient
     }
   })
 
@@ -269,13 +288,3 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
     })
   })
 })
-
-async function _additionalContact(name, contactData = null, abstractionAlerts = true) {
-  const licence = await EmptyLicence.seed()
-  const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, name)
-  const licenceHolderRecipient = await RecipientsFormatter.licenceHolder(licence, licenceHolder)
-  const additionalContact = await CRMContactsSeeder.additionalContact(licenceHolder, contactData, abstractionAlerts)
-  const additionalContactRecipient = await RecipientsFormatter.additionalContact(licence, additionalContact)
-
-  return { licenceHolderRecipient, additionalContactRecipient }
-}
