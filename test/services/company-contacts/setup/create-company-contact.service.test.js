@@ -52,6 +52,7 @@ describe('Company Contacts - Create Company Contact service', () => {
 
       expect(newCompanyContact).to.equal(
         {
+          abstractionAlertLicences: null,
           abstractionAlerts: true,
           createdBy: companyContact.createdBy,
           companyId: company.id,
