@@ -25,11 +25,6 @@ describe('Notify Token Cache plugin', () => {
   let testDate
 
   beforeEach(async () => {
-    // NOTE: We stub the UserModel `findById().select()` query to avoid hitting the DB as part of the test. It is
-    // sufficiently simple running it would just be testing Objection.js and not our logic.
-    // Sinon.stub(NotifyConfig, 'apiKey').value(
-    //   'my_test_key-26785a09-ab16-4eb0-8407-a37497a57506-3d844edf-8d35-48ac-975b-e847b4f122b0'
-    // )
     jwtSignSpy = Sinon.spy(jwt, 'sign')
 
     testDate = new Date('2025-08-19T11:03:00.000Z')
@@ -38,8 +33,6 @@ describe('Notify Token Cache plugin', () => {
     // Create server before each test
     server = await init()
 
-    // NOTE: We stub the UserModel `findById().select()` query to avoid hitting the DB as part of the test. It is
-    // sufficiently simple running it would just be testing Objection.js and not our logic.
     Sinon.stub(notifyConfig, 'apiKey').value(
       'my_test_key-26785a09-ab16-4eb0-8407-a37497a57506-3d844edf-8d35-48ac-975b-e847b4f122b0'
     )
