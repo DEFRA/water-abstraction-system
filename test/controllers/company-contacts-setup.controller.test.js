@@ -20,12 +20,14 @@ const SubmitCancelService = require('../../app/services/company-contacts/setup/s
 const SubmitCheckService = require('../../app/services/company-contacts/setup/submit-check.service.js')
 const SubmitContactEmailService = require('../../app/services/company-contacts/setup/submit-contact-email.service.js')
 const SubmitContactNameService = require('../../app/services/company-contacts/setup/submit-contact-name.service.js')
+const SubmitLicencesService = require('../../app/services/company-contacts/setup/submit-licences.service.js')
 const SubmitRestoreService = require('../../app/services/company-contacts/setup/submit-restore.service.js')
 const ViewAbstractionAlertsService = require('../../app/services/company-contacts/setup/view-abstraction-alerts.service.js')
 const ViewCancelService = require('../../app/services/company-contacts/setup/view-cancel.service.js')
 const ViewCheckService = require('../../app/services/company-contacts/setup/view-check.service.js')
 const ViewContactEmailService = require('../../app/services/company-contacts/setup/view-contact-email.service.js')
 const ViewContactNameService = require('../../app/services/company-contacts/setup/view-contact-name.service.js')
+const ViewLicencesService = require('../../app/services/company-contacts/setup/view-licences.service.js')
 const ViewRestoreService = require('../../app/services/company-contacts/setup/view-restore.service.js')
 
 // For running our service
@@ -332,6 +334,49 @@ describe('Company Contacts Setup controller', () => {
 
         expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
         expect(response.headers.location).to.equal(`/system/company-contacts/setup/${sessionId}/abstraction-alerts`)
+      })
+    })
+  })
+
+  describe('/company-contacts/setup/{id}/licences', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: `/company-contacts/setup/${generateUUID()}/licences`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['hof_notifications'] }
+          }
+        }
+
+        Sinon.stub(ViewLicencesService, 'go').returns({ pageTitle: 'Licences' })
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Licences')
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+
+        postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/licences`, {}, ['hof_notifications'])
+
+        Sinon.stub(SubmitLicencesService, 'go').returns({
+          redirectUrl: `/system/company-contacts/setup/${sessionId}/check`
+        })
+      })
+
+      it('redirects to the company contacts setup check page', async () => {
+        const response = await server.inject(postOptions)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+        expect(response.headers.location).to.equal(`/system/company-contacts/setup/${sessionId}/check`)
       })
     })
   })
