@@ -12,12 +12,12 @@ const { expect } = Code
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+const DeleteSessionDal = require('../../../../../app/dal/delete-session.dal.js')
 
 // Thing under test
-const ViewCancelService = require('../../../../../app/services/users/internal/setup/view-cancel.service.js')
+const SubmitCancelService = require('../../../../../app/services/users/internal/setup/submit-cancel.service.js')
 
-describe('Users - Internal - Setup - View Cancel Service', () => {
+describe('Users - Internal - Setup - Submit Cancel service', () => {
   let session
   let sessionData
 
@@ -29,7 +29,7 @@ describe('Users - Internal - Setup - View Cancel Service', () => {
 
     session = SessionModelStub.build(Sinon, sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    Sinon.stub(DeleteSessionDal, 'go').resolves(session)
   })
 
   afterEach(() => {
@@ -37,16 +37,16 @@ describe('Users - Internal - Setup - View Cancel Service', () => {
   })
 
   describe('when called', () => {
-    it('returns page data for the view', async () => {
-      const result = await ViewCancelService.go(session.id)
+    it('clears the session', async () => {
+      await SubmitCancelService.go(session.id)
 
-      expect(result).to.equal({
-        activeNavBar: 'users',
-        email: session.email,
-        pageTitle: 'You are about to cancel this user',
-        pageTitleCaption: 'Internal',
-        permission: 'Billing and Data'
-      })
+      expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
+    })
+
+    it('returns the redirect url', async () => {
+      const result = await SubmitCancelService.go(session.id)
+
+      expect(result).to.equal('/system/users')
     })
   })
 })
