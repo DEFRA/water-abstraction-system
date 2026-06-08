@@ -21,6 +21,7 @@ function go(session) {
     activeNavBar: 'users',
     email,
     links: {
+      cancel: `/system/users/internal/setup/${sessionId}/cancel`,
       email: `/system/users/internal/setup/${sessionId}/email`,
       permissions: `/system/users/internal/setup/${sessionId}/permissions`
     },

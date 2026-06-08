@@ -28,6 +28,7 @@ describe('Users - Internal - Setup - Check Presenter', () => {
         activeNavBar: 'users',
         email: session.email,
         links: {
+          cancel: `/system/users/internal/setup/${session.id}/cancel`,
           email: `/system/users/internal/setup/${session.id}/email`,
           permissions: `/system/users/internal/setup/${session.id}/permissions`
         },
