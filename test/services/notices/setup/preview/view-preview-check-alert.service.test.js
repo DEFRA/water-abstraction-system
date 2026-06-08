@@ -9,19 +9,19 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const AbstractionAlertSessionDataFixture = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+const AbstractionAlertSessionDataFixture = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
+const RecipientsFixture = require('../../../../support/fixtures/recipients.fixture.js')
+const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+const { generateNoticeReferenceCode } = require('../../../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const FetchAbstractionAlertRecipientsDal = require('../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+const FetchAbstractionAlertRecipientsDal = require('../../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
+const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
-const ViewPreviewCheckAlertService = require('../../../../app/services/notices/setup/view-preview-check-alert.service.js')
+const ViewPreviewCheckAlertService = require('../../../../../app/services/notices/setup/preview/view-preview-check-alert.service.js')
 
-describe('Notices - Setup - View Preview Check Alert service', () => {
+describe('Notices - Setup - Preview - View Preview Check Alert service', () => {
   let licenceMonitoringStations
   let recipients
   let session

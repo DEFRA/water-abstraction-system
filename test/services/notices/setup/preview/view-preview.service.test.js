@@ -11,20 +11,20 @@ const { expect } = Code
 // Test helpers
 const { HTTP_STATUS_OK } = require('node:http2').constants
 
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
+const RecipientsFixture = require('../../../../support/fixtures/recipients.fixture.js')
+const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
+const { generateNoticeReferenceCode, generateUUID } = require('../../../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
-const GeneratePreviewRequest = require('../../../../app/requests/notify/generate-preview.request.js')
+const FetchRecipientsService = require('../../../../../app/services/notices/setup/fetch-recipients.service.js')
+const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+const GeneratePreviewRequest = require('../../../../../app/requests/notify/generate-preview.request.js')
 
 // Thing under test
-const ViewPreviewService = require('../../../../app/services/notices/setup/view-preview.service.js')
+const ViewPreviewService = require('../../../../../app/services/notices/setup/preview/view-preview.service.js')
 
-describe('Notices - Setup - View Preview service', () => {
+describe('Notices - Setup - Preview - View Preview service', () => {
   let licenceMonitoringStationId
   let recipients
   let session

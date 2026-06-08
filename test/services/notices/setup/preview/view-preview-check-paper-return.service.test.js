@@ -9,16 +9,16 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
+const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+const { generateNoticeReferenceCode, generateUUID } = require('../../../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
-const ViewPreviewCheckPaperReturnService = require('../../../../app/services/notices/setup/view-preview-check-paper-return.service.js')
+const ViewPreviewCheckPaperReturnService = require('../../../../../app/services/notices/setup/preview/view-preview-check-paper-return.service.js')
 
-describe('Notices - Setup - View Preview Check Paper Return service', () => {
+describe('Notices - Setup - Preview - View Preview Check Paper Return service', () => {
   const contactHashId = '9df5923f179a0ed55c13173c16651ed9'
 
   let dueReturn
