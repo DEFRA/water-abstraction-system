@@ -15,7 +15,7 @@ const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
  * @returns {object} The data formatted for the view template
  */
 function go(session) {
-  const { email, id: sessionId, permission } = session
+  const { email, permission } = session
 
   return {
     activeNavBar: 'users',
