@@ -6,8 +6,8 @@
  * @module SubmitCancelAlertsService
  */
 
-const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+const DeleteSessionDal = require('../../../../dal/delete-session.dal.js')
+const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
 
 /**
  * Orchestrates cancelling the data for `/notices/setup/{sessionId}/abstraction-alerts/` journey
