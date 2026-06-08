@@ -25,7 +25,16 @@ const currentLicenceVersionsJoin = `
 `
 
 /**
- * SQL query fragment for fetching additional contact recipient
+ * SQL query fragment for fetching additional contact recipients
+ *
+ * A company contact becomes an additional contact recipient when `abstraction_alerts = true` on the
+ * `company_contacts` record. Whether they receive alerts for a specific licence depends on
+ * `abstraction_alert_licences`:
+ *
+ * - `abstraction_alert_licences IS NULL`: the contact receives alerts for all licences held by their company
+ * - `abstraction_alert_licences` contains the licence ID: the contact receives alerts only for those licences
+ *
+ * When `abstraction_alerts = false` the contact is excluded regardless of `abstraction_alert_licences`.
  *
  * Requires 1 binding: licenceRefs
  */
@@ -51,6 +60,7 @@ const additionalContactRecipientQuery = `
     )
     AND cct.abstraction_alerts = true
     AND cct.deleted_at IS NULL
+    AND ( cct.abstraction_alert_licences IS NULL OR cct.abstraction_alert_licences @> jsonb_build_array(l.id::text))
   `
 
 /**

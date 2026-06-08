@@ -12,7 +12,9 @@ const CRMContactsSeeder = require('../../support/seeders/crm-contacts.seeder.js'
 const EmptyLicence = require('../../support/seeders/empty-licence.seeder.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const RecipientScenariosSeeder = require('../../support/seeders/recipient-scenarios.seeder.js')
+const RecipientsFormatter = require('../../support/seeders/recipients.formatter.js')
 const { db } = require('../../../db/db.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const RecipientQueriesDal = require('../../../app/dal/notices/recipient-queries.dal.js')
@@ -159,6 +161,12 @@ describe('Notices - Recipient Queries DAL', () => {
         null,
         new Date('2023-06-01')
       )
+
+      // 5) Additional contact where there are matching licences
+      scenarios.additionalContactWithMatchingLicences = await _additionalContactAbstractionAlertsLicences()
+
+      // 6) Additional contact where there are no matching licences. The contact should NOT appear in results.
+      scenarios.additionalContactWithNoMatchingLicences = await _additionalContactAbstractionAlertsLicences(false)
     })
 
     after(async () => {
@@ -215,6 +223,26 @@ describe('Notices - Recipient Queries DAL', () => {
 
           expect(rows).to.equal([])
         })
+      })
+
+      it('(Scenario 5)', async () => {
+        const licenceRefs = scenarios.additionalContactWithMatchingLicences.licenceHolderRecipient.licenceRefs
+
+        const { rows } = await db.raw(query, [licenceRefs])
+
+        const expectedResult = _transformToRecipient(
+          scenarios.additionalContactWithMatchingLicences.additionalContactRecipient
+        )
+
+        expect(rows).to.equal([expectedResult])
+      })
+
+      it('(Scenario 6) ', async () => {
+        const licenceRefs = scenarios.additionalContactWithNoMatchingLicences.licenceHolderRecipient.licenceRefs
+
+        const { rows } = await db.raw(query, [licenceRefs])
+
+        expect(rows).to.equal([])
       })
     })
   })
@@ -314,6 +342,38 @@ describe('Notices - Recipient Queries DAL', () => {
     })
   })
 })
+
+/**
+ * Seeds a licence with a licence holder and additional contact where `abstraction_alert_licences` is populated.
+ *
+ * When `licences = true` (default), the additional contact's `abstraction_alert_licences` contains the seeded
+ * licence's ID, so the contact should be returned as a recipient. When `licences = false`, it contains a random
+ * UUID, so the contact should be excluded.
+ *
+ * @private
+ */
+async function _additionalContactAbstractionAlertsLicences(licences = true) {
+  const licence = await EmptyLicence.seed()
+  const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, 'LicenceHolderForAdditonalContactWithLicences')
+
+  const licenceHolderRecipient = await RecipientsFormatter.licenceHolder(licence, licenceHolder)
+
+  const additionalContact = await CRMContactsSeeder.additionalContact(licenceHolder)
+
+  if (licences) {
+    await additionalContact.companyContact
+      .$query()
+      .patch({ abstraction_alert_licences: JSON.stringify([licence.licence.id, generateUUID()]) })
+  } else {
+    await additionalContact.companyContact
+      .$query()
+      .patch({ abstraction_alert_licences: JSON.stringify([generateUUID()]) })
+  }
+
+  const additionalContactRecipient = await RecipientsFormatter.additionalContact(licence, additionalContact)
+
+  return { licenceHolderRecipient, additionalContactRecipient }
+}
 
 function _transformToRecipient(recipient, priority = null) {
   const result = {
