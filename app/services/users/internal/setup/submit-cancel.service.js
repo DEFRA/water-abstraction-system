@@ -14,12 +14,14 @@ const DeleteSessionDal = require('../../../../dal/delete-session.dal.js')
  *
  * @param {string} sessionId - The UUID of the current session
  *
- * @returns {Promise<string>} - The redirect url
+ * @returns {Promise<object>} An object containing the URL to redirect the user to after cancelling
  */
 async function go(sessionId) {
   await DeleteSessionDal.go(sessionId)
 
-  return '/system/users'
+  return {
+    redirectUrl: '/system/users'
+  }
 }
 
 module.exports = {
