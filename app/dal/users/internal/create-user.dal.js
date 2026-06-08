@@ -47,7 +47,7 @@ async function go(auth, session) {
   })
 }
 
-async function _insertEvent(auth, email, trx, userId) {
+async function _insertEvent(auth, email, userId, trx) {
   const { username } = await FetchUserDetailsDal.go(auth.credentials.user.id)
   
   const timestamp = timestampForPostgres()
