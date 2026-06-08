@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Creates a notification record for the new user
- * @module CreateNotificationDal
+ * Creates a verification notification record for the new user
+ * @module CreateVerificationNotificationDal
  */
 
 const NotificationModel = require('../../../models/notification.model.js')
@@ -10,7 +10,7 @@ const NotificationModel = require('../../../models/notification.model.js')
 const { domains } = require('../../../../config/server.config.js')
 
 /**
- * Creates a notification record for the new user
+ * Creates a verification notification record for the new user
  *
  * @param {string} email - The email address of the new user
  * @param {string} resetGuid - The reset GUID for the new user

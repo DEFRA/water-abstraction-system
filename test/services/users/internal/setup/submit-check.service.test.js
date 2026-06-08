@@ -12,8 +12,8 @@ const { expect } = Code
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
 
 // Things we need to stub
-const CreateNotificationDal = require('../../../../../app/dal/users/internal/create-notification.dal.js')
 const CreateUserDal = require('../../../../../app/dal/users/internal/create-user.dal.js')
+const CreateVerificationNotificationDal = require('../../../../../app/dal/users/internal/create-verification-notification.dal.js')
 const DeleteSessionDal = require('../../../../../app/dal/delete-session.dal.js')
 const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
 const SendVerificationEmailService = require('../../../../../app/services/users/internal/setup/send-verification-email.service.js')
@@ -49,8 +49,8 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
 
     session = SessionModelStub.build(Sinon, sessionData)
 
-    Sinon.stub(CreateNotificationDal, 'go').resolves(notification)
     Sinon.stub(CreateUserDal, 'go').resolves(resetGuid)
+    Sinon.stub(CreateVerificationNotificationDal, 'go').resolves(notification)
     Sinon.stub(DeleteSessionDal, 'go').resolves()
     Sinon.stub(FetchSessionDal, 'go').resolves(session)
     Sinon.stub(SendVerificationEmailService, 'go').resolves()
@@ -78,7 +78,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
     it('calls the CreateNotificationDal with the email and resetGuid', async () => {
       await SubmitCheckService.go(auth, session.id, yarStub)
 
-      expect(CreateNotificationDal.go.calledWith(session.email, resetGuid)).to.be.true()
+      expect(CreateVerificationNotificationDal.go.calledWith(session.email, resetGuid)).to.be.true()
     })
 
     it('sets a success flash notification', async () => {
