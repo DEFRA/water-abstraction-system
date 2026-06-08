@@ -49,16 +49,18 @@ async function go(auth, session) {
 
 async function _insertEvent(auth, email, trx, userId) {
   const { username } = await FetchUserDetailsDal.go(auth.credentials.user.id)
+  
+  const timestamp = timestampForPostgres()
 
   const eventData = {
-    createdAt: timestampForPostgres(),
+    createdAt: timestamp,
     entities: [],
     issuer: username,
     licences: [],
     metadata: { user: email, userId },
     subtype: 'internal',
     type: 'new-user',
-    updatedAt: timestampForPostgres()
+    updatedAt: timestamp
   }
 
   return EventModel.query(trx).insert(eventData)
