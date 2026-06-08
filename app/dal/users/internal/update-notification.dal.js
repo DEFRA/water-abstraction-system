@@ -5,6 +5,8 @@
  * @module UpdateNotificationDal
  */
 
+const { timestampForPostgres } = require('../../../lib/general.lib.js')
+
 /**
  * Updates the notification record for the new user with the result of sending a notification
  *
@@ -16,7 +18,9 @@
 async function go(notification, sendResult) {
   const { notifyError, notifyId, notifyStatus, plaintext, status } = sendResult
 
-  return notification.$query().patch({ notifyError, notifyId, notifyStatus, plaintext, status })
+  const updatedAt = timestampForPostgres()
+
+  return notification.$query().patch({ notifyError, notifyId, notifyStatus, plaintext, status, updatedAt })
 }
 
 module.exports = {

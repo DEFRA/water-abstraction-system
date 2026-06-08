@@ -49,33 +49,35 @@ describe('Users - Internal - Update Notification DAL', () => {
 
       const result = await notification.$query()
 
-      expect(result).to.equal({
-        alternateNoticeId: null,
-        contactType: null,
-        createdAt: notification.createdAt,
-        dueDate: null,
-        eventId: null,
-        id: notification.id,
-        licenceMonitoringStationId: null,
-        licences: null,
-        messageRef: 'new_internal_user_email',
-        messageType: 'email',
-        notifyError: null,
-        notifyId: sendResult.notifyId,
-        notifyStatus: 'created',
-        pdf: null,
-        personalisation: {
-          unique_create_password_link:
-            'https://internal.com/reset_password_change_password?resetGuid=2a595ee7-3ece-47b2-95c0-bea84efa7422'
+      expect(result).to.equal(
+        {
+          alternateNoticeId: null,
+          contactType: null,
+          createdAt: notification.createdAt,
+          dueDate: null,
+          eventId: null,
+          id: notification.id,
+          licenceMonitoringStationId: null,
+          licences: null,
+          messageRef: 'new_internal_user_email',
+          messageType: 'email',
+          notifyError: null,
+          notifyId: sendResult.notifyId,
+          notifyStatus: 'created',
+          pdf: null,
+          personalisation: {
+            unique_create_password_link:
+              'https://internal.com/reset_password_change_password?resetGuid=2a595ee7-3ece-47b2-95c0-bea84efa7422'
+          },
+          plaintext: 'The email text',
+          recipient: notificationData.recipient,
+          returnedAt: null,
+          returnLogIds: null,
+          status: 'sent',
+          templateId: null
         },
-        plaintext: 'The email text',
-        recipient: notificationData.recipient,
-        returnedAt: null,
-        returnLogIds: null,
-        status: 'sent',
-        templateId: null,
-        updatedAt: notification.updatedAt
-      })
+        { skip: ['updatedAt'] }
+      )
     })
   })
 
@@ -92,32 +94,34 @@ describe('Users - Internal - Update Notification DAL', () => {
 
       const result = await notification.$query()
 
-      expect(result).to.equal({
-        alternateNoticeId: null,
-        contactType: null,
-        createdAt: notification.createdAt,
-        dueDate: null,
-        eventId: null,
-        id: notification.id,
-        licenceMonitoringStationId: null,
-        licences: null,
-        messageRef: 'new_internal_user_email',
-        messageType: 'email',
-        notifyError: 'Notify error',
-        notifyId: null,
-        notifyStatus: null,
-        pdf: null,
-        personalisation: {
-          unique_create_password_link: `https://internal.com/reset_password_change_password?resetGuid=2a595ee7-3ece-47b2-95c0-bea84efa7422`
+      expect(result).to.equal(
+        {
+          alternateNoticeId: null,
+          contactType: null,
+          createdAt: notification.createdAt,
+          dueDate: null,
+          eventId: null,
+          id: notification.id,
+          licenceMonitoringStationId: null,
+          licences: null,
+          messageRef: 'new_internal_user_email',
+          messageType: 'email',
+          notifyError: 'Notify error',
+          notifyId: null,
+          notifyStatus: null,
+          pdf: null,
+          personalisation: {
+            unique_create_password_link: `https://internal.com/reset_password_change_password?resetGuid=2a595ee7-3ece-47b2-95c0-bea84efa7422`
+          },
+          plaintext: null,
+          recipient: notificationData.recipient,
+          returnedAt: null,
+          returnLogIds: null,
+          status: 'error',
+          templateId: null
         },
-        plaintext: null,
-        recipient: notificationData.recipient,
-        returnedAt: null,
-        returnLogIds: null,
-        status: 'error',
-        templateId: null,
-        updatedAt: notification.updatedAt
-      })
+        { skip: ['updatedAt'] }
+      )
     })
   })
 })
