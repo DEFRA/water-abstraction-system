@@ -98,9 +98,9 @@ async function submitInternalCheck(request, h) {
     yar
   } = request
 
-  await SubmitInternalCheckService.go(auth, sessionId, yar)
+  const { redirectUrl } = await SubmitInternalCheckService.go(auth, sessionId, yar)
 
-  return h.redirect('/system/users')
+  return h.redirect(redirectUrl)
 }
 
 async function submitInternalEmail(request, h) {

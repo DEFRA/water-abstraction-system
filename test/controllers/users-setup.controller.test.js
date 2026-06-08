@@ -303,7 +303,9 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitInternalCheckService, 'go').resolves()
+          Sinon.stub(SubmitInternalCheckService, 'go').resolves({
+            redirectUrl: '/system/users'
+          })
         })
 
         it('redirects to the Users page', async () => {
