@@ -83,7 +83,12 @@ const routes = [
     method: 'POST',
     path: '/users/internal/{id}/details',
     options: {
-      handler: UsersController.submitInternalDetails
+      handler: UsersController.submitInternalDetails,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
     }
   },
   {
