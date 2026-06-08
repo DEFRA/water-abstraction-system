@@ -41,7 +41,7 @@ async function go(auth, session) {
       await _insertUserRoles(roleIds, id, trx)
     }
 
-    await _insertEvent(auth, email, trx, userId)
+    await _insertEvent(auth, email, userId, trx)
 
     return resetGuid
   })
