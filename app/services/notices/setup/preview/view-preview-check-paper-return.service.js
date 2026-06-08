@@ -6,8 +6,8 @@
  * @module ViewPreviewCheckPaperReturnService
  */
 
-const CheckPaperReturnPresenter = require('../../../presenters/notices/setup/preview-check-paper-return.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+const CheckPaperReturnPresenter = require('../../../../presenters/notices/setup/preview/preview-check-paper-return.presenter.js')
+const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
 
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return` page
