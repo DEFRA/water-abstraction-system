@@ -6,8 +6,8 @@
  * @module ViewAlertTypeService
  */
 
-const AlertTypePresenter = require('../../../presenters/notices/setup/alert-type.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+const AlertTypePresenter = require('../../../../presenters/notices/setup/abstraction-alerts/alert-type.presenter.js')
+const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
 
 /**
  * Orchestrates presenting the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-type` page

@@ -9,16 +9,16 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
+const SessionModelStub = require('../../../../support/stubs/session.stub.js')
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
-const ViewAlertEmailAddressService = require('../../../../app/services/notices/setup/view-alert-email-address.service.js')
+const ViewAlertEmailAddressService = require('../../../../../app/services/notices/setup/abstraction-alerts/view-alert-email-address.service.js')
 
-describe('Notices - Setup - View Alert Email Address service', () => {
+describe('Notices - Setup - Abstraction Alerts - View Alert Email Address service', () => {
   let auth
   let session
   let sessionData

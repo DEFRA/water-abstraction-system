@@ -6,8 +6,8 @@
  * @module ViewAlertThresholdsService
  */
 
-const AlertThresholdsPresenter = require('../../../presenters/notices/setup/alert-thresholds.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+const AlertThresholdsPresenter = require('../../../../presenters/notices/setup/abstraction-alerts/alert-thresholds.presenter.js')
+const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
 
 /**
  * Orchestrates presenting the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
