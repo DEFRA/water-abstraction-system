@@ -8,12 +8,12 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
+const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
 
 // Thing under test
-const PreviewCheckAlertPresenter = require('../../../../app/presenters/notices/setup/preview-check-alert.presenter.js')
+const PreviewCheckAlertPresenter = require('../../../../../app/presenters/notices/setup/preview/preview-check-alert.presenter.js')
 
-describe('Notices - Setup - Preview Check Alert presenter', () => {
+describe('Notices - Setup - Preview - Preview Check Alert presenter', () => {
   const contactHashId = '7a5efa5da17ab1ead8b8c91e05a0e3f7'
 
   let licenceMonitoringStations

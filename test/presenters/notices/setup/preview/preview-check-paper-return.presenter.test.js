@@ -8,12 +8,12 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 
 // Thing under test
-const PreviewCheckPaperReturnPresenter = require('../../../../app/presenters/notices/setup/preview-check-paper-return.presenter.js')
+const PreviewCheckPaperReturnPresenter = require('../../../../../app/presenters/notices/setup/preview/preview-check-paper-return.presenter.js')
 
-describe('Notices - Setup - Check Paper Return presenter', () => {
+describe('Notices - Setup - Preview - Check Paper Return presenter', () => {
   const contactHashId = '9df5923f179a0ed55c13173c16651ed9'
   const sessionId = '7334a25e-9723-4732-a6e1-8e30c5f3732e'
 
