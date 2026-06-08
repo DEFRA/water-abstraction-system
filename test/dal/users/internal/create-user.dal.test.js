@@ -16,7 +16,7 @@ const UserRoleModel = require('../../../../app/models/user-role.model.js')
 const { generateUserName } = require('../../../support/helpers/user.helper.js')
 
 // Things we need to stub
-const FetchUserDetailsDal = require('../../../../app/dal/users/internal/fetch-user-details.dal.js')
+const FetchUserDal = require('../../../../app/dal/users/fetch-user.dal.js')
 
 // Thing under test
 const CreateUserDal = require('../../../../app/dal/users/internal/create-user.dal.js')
@@ -31,7 +31,7 @@ describe('Users - Internal - Create User DAL', () => {
     auth = { credentials: { user: { id: 1 } } }
     session = { email, permission: 'basic' }
 
-    Sinon.stub(FetchUserDetailsDal, 'go').resolves({ username: 'internal-user-creator@wrls.gov.uk' })
+    Sinon.stub(FetchUserDal, 'go').resolves({ username: 'internal-user-creator@wrls.gov.uk' })
   })
 
   afterEach(async () => {

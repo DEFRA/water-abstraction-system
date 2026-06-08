@@ -8,7 +8,7 @@
 const { hashSync } = require('bcryptjs')
 
 const EventModel = require('../../../models/event.model.js')
-const FetchUserDetailsDal = require('./fetch-user-details.dal.js')
+const FetchUserDal = require('../fetch-user.dal.js')
 const GroupModel = require('../../../models/group.model.js')
 const RoleModel = require('../../../models/role.model.js')
 const UserModel = require('../../../models/user.model.js')
@@ -48,7 +48,7 @@ async function go(auth, session) {
 }
 
 async function _insertEvent(auth, email, userId, trx) {
-  const { username } = await FetchUserDetailsDal.go(auth.credentials.user.id)
+  const { username } = await FetchUserDal.go(auth.credentials.user.id)
 
   const timestamp = timestampForPostgres()
 
