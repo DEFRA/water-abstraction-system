@@ -1,0 +1,33 @@
+'use strict'
+
+/**
+ * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return` page
+ *
+ * @module ViewPreviewCheckPaperReturnService
+ */
+
+const CheckPaperReturnPresenter = require('../../../../presenters/notices/setup/preview/preview-check-paper-return.presenter.js')
+const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+
+/**
+ * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return` page
+ *
+ * @param {string} sessionId - The UUID of the current session
+ * @param {string} contactHashId - The recipients unique identifier
+ *
+ * @returns {Promise<object>} - The data formatted for the view template
+ */
+async function go(sessionId, contactHashId) {
+  const session = await FetchSessionDal.go(sessionId)
+
+  const pageData = CheckPaperReturnPresenter.go(session, contactHashId)
+
+  return {
+    activeNavBar: 'notices',
+    ...pageData
+  }
+}
+
+module.exports = {
+  go
+}
