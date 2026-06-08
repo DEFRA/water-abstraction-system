@@ -83,19 +83,19 @@ const routes = [
     method: 'POST',
     path: '/users/internal/{id}/details',
     options: {
-      handler: UsersController.submitInternalDetails
+      handler: UsersController.submitInternalDetails,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
     }
   },
   {
     method: 'GET',
     path: '/users/{type}/{id}/notifications/{notificationId}',
     options: {
-      handler: UsersController.viewNotification,
-      auth: {
-        access: {
-          scope: ['manage_accounts']
-        }
-      }
+      handler: UsersController.viewNotification
     }
   },
   {

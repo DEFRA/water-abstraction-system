@@ -81,11 +81,12 @@ async function submitExternalLicences(request, h) {
 
 async function submitInternalCheck(request, h) {
   const {
+    auth,
     params: { sessionId },
     yar
   } = request
 
-  await SubmitInternalCheckService.go(sessionId, yar)
+  await SubmitInternalCheckService.go(auth, sessionId, yar)
 
   return h.redirect('/system/users')
 }
