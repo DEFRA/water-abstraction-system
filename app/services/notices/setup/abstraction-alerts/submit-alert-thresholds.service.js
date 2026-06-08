@@ -6,11 +6,11 @@
  * @module SubmitAlertThresholdsService
  */
 
-const AlertThresholdsPresenter = require('../../../presenters/notices/setup/alert-thresholds.presenter.js')
-const AlertThresholdsValidator = require('../../../validators/notices/setup/alert-thresholds.validator.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
+const AlertThresholdsPresenter = require('../../../../presenters/notices/setup/abstraction-alerts/alert-thresholds.presenter.js')
+const AlertThresholdsValidator = require('../../../../validators/notices/setup/alert-thresholds.validator.js')
+const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+const { handleOneOptionSelected } = require('../../../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page

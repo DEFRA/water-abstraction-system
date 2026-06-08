@@ -9,16 +9,16 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
+const SessionModelStub = require('../../../../support/stubs/session.stub.js')
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
-const ViewAlertThresholdsService = require('../../../../app/services/notices/setup/view-alert-thresholds.service.js')
+const ViewAlertThresholdsService = require('../../../../../app/services/notices/setup/abstraction-alerts/view-alert-thresholds.service.js')
 
-describe('Notices - Setup - View Alert Thresholds service', () => {
+describe('Notices - Setup - Abstraction Alerts - View Alert Thresholds service', () => {
   let session
   let sessionData
   let licenceMonitoringStations
