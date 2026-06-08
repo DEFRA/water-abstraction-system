@@ -8,12 +8,12 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
+const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
 
 // Thing under test
-const CancelAlertsPresenter = require('../../../../app/presenters/notices/setup/cancel-alerts.presenter.js')
+const CancelAlertsPresenter = require('../../../../../app/presenters/notices/setup/abstraction-alerts/cancel-alerts.presenter.js')
 
-describe('Notices - Setup - Cancel Alerts presenter', () => {
+describe('Notices - Setup - Abstraction Alerts - Cancel Alerts presenter', () => {
   let session
 
   beforeEach(() => {

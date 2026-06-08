@@ -9,17 +9,17 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
+const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+const YarStub = require('../../../../support/stubs/yar.stub.js')
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
-const ProcessRemoveThresholdService = require('../../../../app/services/notices/setup/process-remove-threshold.service.js')
+const ProcessRemoveThresholdService = require('../../../../../app/services/notices/setup/abstraction-alerts/process-remove-threshold.service.js')
 
-describe('Notices - Setup - Process Remove Threshold service', () => {
+describe('Notices - Setup - Abstraction Alerts -Process Remove Threshold service', () => {
   let fetchSessionStub
   let licenceMonitoringStations
   let session
