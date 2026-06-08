@@ -5,7 +5,8 @@
  * @module InitiateEditSessionService
  */
 
-const FetchCompanyContactService = require('./fetch-company-contact.service.js')
+const FetchCompanyContactDal = require('../../../dal/company-contacts/setup/fetch-company-contact.dal.js')
+const FetchCompanyLicencesService = require('../../../dal/company-contacts/fetch-company-licences.dal.js')
 const SessionModel = require('../../../models/session.model.js')
 const { formatEmail } = require('../../../presenters/base.presenter.js')
 
@@ -17,11 +18,16 @@ const { formatEmail } = require('../../../presenters/base.presenter.js')
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
 async function go(companyContactId) {
-  const companyContact = await FetchCompanyContactService.go(companyContactId)
+  const companyContact = await FetchCompanyContactDal.go(companyContactId)
+
+  const licences = await FetchCompanyLicencesService.go(companyContact.company.id)
 
   return SessionModel.query()
     .insert({
-      data: _formatDataForJourney(companyContact)
+      data: {
+        ..._formatDataForJourney(companyContact),
+        licences
+      }
     })
     .returning('id')
 }

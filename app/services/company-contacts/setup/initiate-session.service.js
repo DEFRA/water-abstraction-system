@@ -5,8 +5,9 @@
  * @module InitiateSessionService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const FetchCompanyLicencesService = require('../../../dal/company-contacts/fetch-company-licences.dal.js')
 const FetchCompanyService = require('../../companies/fetch-company.service.js')
+const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Initiates the session record used for setting up a new company contact
@@ -18,10 +19,13 @@ const FetchCompanyService = require('../../companies/fetch-company.service.js')
 async function go(companyId) {
   const company = await FetchCompanyService.go(companyId)
 
+  const licences = await FetchCompanyLicencesService.go(companyId)
+
   return SessionModel.query()
     .insert({
       data: {
-        company
+        company,
+        licences
       }
     })
     .returning('id')
