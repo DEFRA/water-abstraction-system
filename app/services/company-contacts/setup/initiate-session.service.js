@@ -5,7 +5,7 @@
  * @module InitiateSessionService
  */
 
-const FetchCompanyLicencesService = require('../../../dal/company-contacts/fetch-company-licences.dal.js')
+const FetchCompanyLicencesDal = require('../../../dal/company-contacts/fetch-company-licences.dal.js')
 const FetchCompanyService = require('../../companies/fetch-company.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
@@ -19,7 +19,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(companyId) {
   const company = await FetchCompanyService.go(companyId)
 
-  const licences = await FetchCompanyLicencesService.go(companyId)
+  const licences = await FetchCompanyLicencesDal.go(companyId)
 
   return SessionModel.query()
     .insert({

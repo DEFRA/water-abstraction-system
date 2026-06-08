@@ -37,10 +37,10 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
   })
 
   after(async () => {
-    await company.$query().delete()
-    await licence.$query().delete()
-    await licenceVersion.$query().delete()
     await licenceVersionHolder.$query().delete()
+    await licenceVersion.$query().delete()
+    await licence.$query().delete()
+    await company.$query().delete()
   })
 
   describe('when there are licences linked to the company', () => {

@@ -11,12 +11,12 @@ const { expect } = Code
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const SessionModel = require('../../../../app/models/session.model.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Things we need to stub
-const FetchCompanyContactService = require('../../../../app/dal/company-contacts/setup/fetch-company-contact.dal.js')
-const FetchCompanyLicencesService = require('../../../../app/dal/company-contacts/fetch-company-licences.dal.js')
+const FetchCompanyContactDal = require('../../../../app/dal/company-contacts/setup/fetch-company-contact.dal.js')
+const FetchCompanyLicencesDal = require('../../../../app/dal/company-contacts/fetch-company-licences.dal.js')
 
 // Thing under test
 const InitiateEditSessionService = require('../../../../app/services/company-contacts/setup/initiate-edit-session.service.js')
@@ -26,7 +26,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
   let companyContact
   let contact
   let licences
-  let stubFetchCompanyContactService
+  let stubFetchCompanyContactDal
 
   beforeEach(() => {
     company = CustomersFixtures.company()
@@ -41,9 +41,9 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
       contact
     }
 
-    stubFetchCompanyContactService = Sinon.stub(FetchCompanyContactService, 'go').returns(companyContact)
+    stubFetchCompanyContactDal = Sinon.stub(FetchCompanyContactDal, 'go').returns(companyContact)
 
-    Sinon.stub(FetchCompanyLicencesService, 'go').returns(licences)
+    Sinon.stub(FetchCompanyLicencesDal, 'go').returns(licences)
   })
 
   afterEach(() => {
@@ -73,7 +73,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
       beforeEach(() => {
         companyContact.abstractionAlerts = true
 
-        stubFetchCompanyContactService.resolves(companyContact)
+        stubFetchCompanyContactDal.resolves(companyContact)
       })
 
       it('converts false to "yes"', async () => {

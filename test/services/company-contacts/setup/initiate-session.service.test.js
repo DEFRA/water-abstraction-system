@@ -9,13 +9,13 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionModel = require('../../../../app/models/session.model.js')
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const SessionModel = require('../../../../app/models/session.model.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Things we need to stub
-const FetchCompanyLicencesService = require('../../../../app/dal/company-contacts/fetch-company-licences.dal.js')
+const FetchCompanyLicencesDal = require('../../../../app/dal/company-contacts/fetch-company-licences.dal.js')
 const FetchCompanyService = require('../../../../app/services/companies/fetch-company.service.js')
 
 // Thing under test
@@ -30,7 +30,7 @@ describe('Company Contacts - Setup - Initiate Session service', () => {
     licences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
 
     Sinon.stub(FetchCompanyService, 'go').returns(company)
-    Sinon.stub(FetchCompanyLicencesService, 'go').returns(licences)
+    Sinon.stub(FetchCompanyLicencesDal, 'go').returns(licences)
   })
 
   afterEach(() => {
