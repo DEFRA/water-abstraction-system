@@ -25,16 +25,13 @@ const { userPermissions } = require('../../../lib/static-lookups.lib.js')
  */
 async function go(auth, session) {
   const { email, permission } = session
-  const { application, groups, roles } = userPermissions[permission]
-
-  // We do this because a "Basic access" user can be both internal and external, so we set it to be internal here
-  const resolvedApplication = application === 'both' ? 'water_admin' : application
+  const { groups, roles } = userPermissions[permission]
 
   const groupIds = await GroupModel.query().select('id').whereIn('group', groups)
   const roleIds = await RoleModel.query().select('id').whereIn('role', roles)
 
   return UserModel.transaction(async (trx) => {
-    const { id, resetGuid, userId } = await _insertUser(resolvedApplication, email, trx)
+    const { id, resetGuid, userId } = await _insertUser(email, trx)
 
     if (groupIds.length > 0) {
       await _insertUserGroups(groupIds, id, trx)
@@ -67,9 +64,9 @@ async function _insertEvent(auth, email, trx, userId) {
   return EventModel.query(trx).insert(eventData)
 }
 
-async function _insertUser(application, email, trx) {
+async function _insertUser(email, trx) {
   const userData = {
-    application,
+    application: 'water_admin',
     badLogins: 0,
     password: hashSync(generateUUID(), 10), // Sets a random password
     resetGuid: generateUUID(),
