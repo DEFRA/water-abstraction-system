@@ -6,9 +6,9 @@
  * @module ViewPreviewCheckAlertService
  */
 
-const CheckAlertPresenter = require('../../../presenters/notices/setup/preview-check-alert.presenter.js')
-const FetchAbstractionAlertRecipientsDal = require('../../../dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+const CheckAlertPresenter = require('../../../../presenters/notices/setup/preview/preview-check-alert.presenter.js')
+const FetchAbstractionAlertRecipientsDal = require('../../../../dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
+const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
 
 /**
  * Orchestrates presenting the data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-alert` page

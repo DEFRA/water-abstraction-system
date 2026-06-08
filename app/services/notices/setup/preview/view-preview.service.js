@@ -5,13 +5,13 @@
  * @module ViewPreviewService
  */
 
-const AbstractionAlertNotificationsPresenter = require('../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js')
-const FetchRecipientsService = require('./fetch-recipients.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const PreviewPresenter = require('../../../presenters/notices/setup/preview.presenter.js')
-const RenewalInvitationNotificationsPresenter = require('../../../presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js')
-const ReturnsNoticeNotificationsPresenter = require('../../../presenters/notices/setup/returns-notice-notifications.presenter.js')
-const { NoticeType } = require('../../../lib/static-lookups.lib.js')
+const AbstractionAlertNotificationsPresenter = require('../../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js')
+const FetchRecipientsService = require('../fetch-recipients.service.js')
+const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+const PreviewPresenter = require('../../../../presenters/notices/setup/preview/preview.presenter.js')
+const RenewalInvitationNotificationsPresenter = require('../../../../presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js')
+const ReturnsNoticeNotificationsPresenter = require('../../../../presenters/notices/setup/returns-notice-notifications.presenter.js')
+const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup preview page
