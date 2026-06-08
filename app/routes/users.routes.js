@@ -90,12 +90,7 @@ const routes = [
     method: 'GET',
     path: '/users/{type}/{id}/notifications/{notificationId}',
     options: {
-      handler: UsersController.viewNotification,
-      auth: {
-        access: {
-          scope: ['manage_accounts']
-        }
-      }
+      handler: UsersController.viewNotification
     }
   },
   {
