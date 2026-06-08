@@ -40,7 +40,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
   let yarStub
 
   beforeEach(() => {
-    auth = { credentials: { user: { id: 1 } } }
+    auth = { credentials: { user: { id: '89b25863-918f-484f-b7fa-49f7062b4af3' } } }
 
     sessionData = {
       email: 'bob.bobbles@environment-agency.gov.uk',
@@ -93,7 +93,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
       })
     })
 
-    it('calls the SendVerificationEmailService with the notification', async () => {
+    it('calls the SendVerificationEmailService with the new notification', async () => {
       await SubmitCheckService.go(auth, session.id, yarStub)
 
       expect(SendVerificationEmailService.go.calledWith(notification)).to.be.true()
