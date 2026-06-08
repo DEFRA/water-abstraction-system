@@ -17,6 +17,9 @@ const LicenceModel = require('../../models/licence.model.js')
 async function go(companyId) {
   return LicenceModel.query()
     .select(['licences.id', 'licences.licenceRef'])
+    .whereNull('licences.expiredDate')
+    .whereNull('licences.lapsedDate')
+    .whereNull('licences.revokedDate')
     .whereExists(
       LicenceModel.relatedQuery('licenceVersions')
         .innerJoinRelated('licenceVersionHolder')
