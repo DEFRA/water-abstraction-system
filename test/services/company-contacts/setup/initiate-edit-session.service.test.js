@@ -12,9 +12,11 @@ const { expect } = Code
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const SessionModel = require('../../../../app/models/session.model.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Things we need to stub
-const FetchCompanyContactService = require('../../../../app/services/company-contacts/setup/fetch-company-contact.service.js')
+const FetchCompanyContactDal = require('../../../../app/dal/company-contacts/setup/fetch-company-contact.dal.js')
+const FetchCompanyLicencesDal = require('../../../../app/dal/company-contacts/fetch-company-licences.dal.js')
 
 // Thing under test
 const InitiateEditSessionService = require('../../../../app/services/company-contacts/setup/initiate-edit-session.service.js')
@@ -23,10 +25,14 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
   let company
   let companyContact
   let contact
+  let licences
+  let stubFetchCompanyContactDal
 
-  beforeEach(async () => {
+  beforeEach(() => {
     company = CustomersFixtures.company()
     contact = CustomersFixtures.contact()
+
+    licences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
 
     companyContact = {
       id: generateUUID(),
@@ -34,6 +40,10 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
       company,
       contact
     }
+
+    stubFetchCompanyContactDal = Sinon.stub(FetchCompanyContactDal, 'go').returns(companyContact)
+
+    Sinon.stub(FetchCompanyLicencesDal, 'go').returns(licences)
   })
 
   afterEach(() => {
@@ -41,16 +51,12 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
   })
 
   describe('when called', () => {
-    beforeEach(() => {
-      Sinon.stub(FetchCompanyContactService, 'go').returns(companyContact)
-    })
-
     it('creates a new session record with the "company contact" saved', async () => {
       const result = await InitiateEditSessionService.go(companyContact.id)
 
       const matchingSession = await SessionModel.query().findById(result.id)
 
-      const expectedSessionData = _expectedSessionData(companyContact, company, contact)
+      const expectedSessionData = _expectedSessionData(companyContact, company, contact, licences)
 
       expect(matchingSession).to.equal({
         ...expectedSessionData,
@@ -67,7 +73,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
       beforeEach(() => {
         companyContact.abstractionAlerts = true
 
-        Sinon.stub(FetchCompanyContactService, 'go').returns(companyContact)
+        stubFetchCompanyContactDal.resolves(companyContact)
       })
 
       it('converts false to "yes"', async () => {
@@ -80,10 +86,6 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
     })
 
     describe('when the "abstractionAlerts" property is false', () => {
-      beforeEach(() => {
-        Sinon.stub(FetchCompanyContactService, 'go').returns(companyContact)
-      })
-
       it('converts false to "no"', async () => {
         const result = await InitiateEditSessionService.go(companyContact.id)
 
@@ -95,10 +97,6 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
   })
 
   describe('the "name" property', () => {
-    beforeEach(() => {
-      Sinon.stub(FetchCompanyContactService, 'go').returns(companyContact)
-    })
-
     it('formats the name', async () => {
       const result = await InitiateEditSessionService.go(companyContact.id)
 
@@ -109,7 +107,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
   })
 })
 
-function _expectedSessionData(companyContact, company, contact) {
+function _expectedSessionData(companyContact, company, contact, licences) {
   return {
     abstractionAlerts: 'no',
     companyContact: {
@@ -123,6 +121,7 @@ function _expectedSessionData(companyContact, company, contact) {
     },
     company,
     email: 'rachael.tyrell@tyrellcorp.com',
+    licences,
     name: 'Rachael Tyrell'
   }
 }

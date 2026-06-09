@@ -13,9 +13,9 @@ const CompanyHelper = require('../../../support/helpers/company.helper.js')
 const ContactHelper = require('../../../support/helpers/contact.helper.js')
 
 // Thing under test
-const FetchCompanyContactService = require('../../../../app/services/company-contacts/setup/fetch-company-contact.service.js')
+const FetchCompanyContactDal = require('../../../../app/dal/company-contacts/setup/fetch-company-contact.dal.js')
 
-describe('Company Contacts - Setup - Fetch Company Contact service', () => {
+describe('Company Contacts - Setup - Fetch Company Contact Dal', () => {
   let company
   let companyContact
   let contact
@@ -39,7 +39,7 @@ describe('Company Contacts - Setup - Fetch Company Contact service', () => {
 
   describe('when there is a company contact', () => {
     it('returns the matching company contact', async () => {
-      const result = await FetchCompanyContactService.go(companyContact.id)
+      const result = await FetchCompanyContactDal.go(companyContact.id)
 
       expect(result).to.equal({
         abstractionAlerts: false,

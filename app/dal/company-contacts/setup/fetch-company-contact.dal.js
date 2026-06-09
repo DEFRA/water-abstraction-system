@@ -2,7 +2,7 @@
 
 /**
  * Fetches the company contact data needed for the '/company-contacts/setup/{id}/edit'
- * @module FetchCompanyContactService
+ * @module FetchCompanyContactDal
  */
 
 const CompanyContactModel = require('../../../models/company-contact.model.js')
