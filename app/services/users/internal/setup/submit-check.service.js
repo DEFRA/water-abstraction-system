@@ -19,6 +19,8 @@ const { flashNotification } = require('../../../../lib/general.lib.js')
  * @param {object} auth - The current user's authentication details from `request.auth`
  * @param {string} sessionId - The UUID of the current session
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ *
+ * @returns {Promise<object>} An object containing the URL to redirect the user to after confirming
  */
 async function go(auth, sessionId, yar) {
   const session = await FetchSessionDal.go(sessionId)
@@ -34,6 +36,10 @@ async function go(auth, sessionId, yar) {
 
   // Intentionally not awaited — fire-and-forget with internal error handling
   SendVerificationEmailService.go(notification)
+
+  return {
+    redirectUrl: '/system/users'
+  }
 }
 
 module.exports = {
