@@ -38,7 +38,7 @@ async function go(sessionId, yar, auth) {
 }
 
 function _abstractionAlerts(session) {
-  return session.abstractionAlerts === 'yes'
+  return session.abstractionAlerts === 'yes' || session.abstractionAlerts === 'some'
 }
 
 function _email(session) {

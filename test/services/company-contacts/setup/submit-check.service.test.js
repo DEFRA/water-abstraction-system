@@ -110,7 +110,23 @@ describe('Company Contacts - Setup - Check Service', () => {
         })
       })
 
-      describe(' is "no"', () => {
+      describe('is "some"', () => {
+        beforeEach(() => {
+          session = SessionModelStub.build(Sinon, { ...sessionData, abstractionAlerts: 'some' })
+
+          fetchSessionStub.resolves(session)
+        })
+
+        it('persists the "abstractionAlerts" as "true"', async () => {
+          await SubmitCheckService.go(session.id, yarStub, auth)
+
+          const actualContact = CreateCompanyContactService.go.args[0][1]
+
+          expect(actualContact.abstractionAlerts).to.be.true()
+        })
+      })
+
+      describe('is "no"', () => {
         beforeEach(async () => {
           session = SessionModelStub.build(Sinon, { ...sessionData, abstractionAlerts: 'no' })
 
@@ -198,7 +214,23 @@ describe('Company Contacts - Setup - Check Service', () => {
         })
       })
 
-      describe(' is "no"', () => {
+      describe('is "some"', () => {
+        beforeEach(() => {
+          session = SessionModelStub.build(Sinon, { ...sessionData, abstractionAlerts: 'some' })
+
+          fetchSessionStub.resolves(session)
+        })
+
+        it('persists the "abstractionAlerts" as "true"', async () => {
+          await SubmitCheckService.go(session.id, yarStub, auth)
+
+          const [actualContact] = UpdateCompanyContactService.go.args[0]
+
+          expect(actualContact.abstractionAlerts).to.be.true()
+        })
+      })
+
+      describe('is "no"', () => {
         beforeEach(async () => {
           session = SessionModelStub.build(Sinon, { ...sessionData, abstractionAlerts: 'no' })
 

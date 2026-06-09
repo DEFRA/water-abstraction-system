@@ -37,6 +37,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
     companyContact = {
       id: generateUUID(),
       abstractionAlerts: false,
+      abstractionAlertLicences: null,
       company,
       contact
     }
@@ -76,17 +77,35 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
         stubFetchCompanyContactDal.resolves(companyContact)
       })
 
-      it('converts false to "yes"', async () => {
-        const result = await InitiateEditSessionService.go(companyContact.id)
+      describe('and abstraction alert licences exist', () => {
+        beforeEach(() => {
+          companyContact.abstractionAlertLicences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
 
-        const matchingSession = await SessionModel.query().findById(result.id)
+          stubFetchCompanyContactDal.resolves(companyContact)
+        })
 
-        expect(matchingSession.abstractionAlerts).to.equal('yes')
+        it('returns "some"', async () => {
+          const result = await InitiateEditSessionService.go(companyContact.id)
+
+          const matchingSession = await SessionModel.query().findById(result.id)
+
+          expect(matchingSession.abstractionAlerts).to.equal('some')
+        })
+      })
+
+      describe('and no abstraction alert licences exist', () => {
+        it('returns "yes"', async () => {
+          const result = await InitiateEditSessionService.go(companyContact.id)
+
+          const matchingSession = await SessionModel.query().findById(result.id)
+
+          expect(matchingSession.abstractionAlerts).to.equal('yes')
+        })
       })
     })
 
     describe('when the "abstractionAlerts" property is false', () => {
-      it('converts false to "no"', async () => {
+      it('returns "no"', async () => {
         const result = await InitiateEditSessionService.go(companyContact.id)
 
         const matchingSession = await SessionModel.query().findById(result.id)
@@ -110,8 +129,10 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 function _expectedSessionData(companyContact, company, contact, licences) {
   return {
     abstractionAlerts: 'no',
+    abstractionAlertLicences: null,
     companyContact: {
       abstractionAlerts: false,
+      abstractionAlertLicences: null,
       company: {
         id: company.id,
         name: 'Tyrell Corporation'

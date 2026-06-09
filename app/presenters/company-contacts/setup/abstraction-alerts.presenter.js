@@ -24,7 +24,7 @@ function go(session) {
     },
     pageTitle: 'Should the contact get abstraction alerts?',
     pageTitleCaption: company.name,
-    abstractionAlerts: session.abstractionAlerts ?? null
+    abstractionAlerts: session.abstractionAlerts || null
   }
 }
 
