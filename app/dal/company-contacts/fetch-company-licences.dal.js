@@ -5,7 +5,8 @@
  * @module FetchCompanyLicencesDal
  */
 
-const LicenceModel = require('../../models/licence.model.js')
+const { currentLicenceVersionsJoin } = require('../notices/recipient-queries.dal.js')
+const { db } = require('../../../db/db.js')
 const { timestampForPostgres } = require('../../lib/general.lib.js')
 
 /**
@@ -16,40 +17,25 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
  * @returns {Promise<object[]>} An array of licence objects with `id` and `licenceRef`, sorted by `licenceRef`
  */
 async function go(companyId) {
-  const licences = await _fetch(companyId)
+  const query = `
+  SELECT
+    l.id,
+    l.licence_ref as "licenceRef"
+  FROM licences l
+  ${currentLicenceVersionsJoin}
+  WHERE
+    (l.expired_date IS NULL OR l.expired_date >= ?)
+    AND (l.lapsed_date IS NULL OR l.lapsed_date >= ?)
+    AND (l.revoked_date IS NULL OR l.revoked_date >= ?)
+    AND llv.company_id = ?
+  ORDER BY l.licence_ref ASC
+  `
 
-  return _data(licences)
-}
+  const today = timestampForPostgres()
 
-async function _fetch(companyId) {
-  return LicenceModel.query()
-    .select(['id', 'licenceRef'])
-    .where((expiredDateBuilder) => {
-      expiredDateBuilder.whereNull('expiredDate').orWhere('expiredDate', '>=', timestampForPostgres())
-    })
-    .where((lapsedDateBuilder) => {
-      lapsedDateBuilder.whereNull('lapsedDate').orWhere('lapsedDate', '>=', timestampForPostgres())
-    })
-    .where((revokedDateBuilder) => {
-      revokedDateBuilder.whereNull('revokedDate').orWhere('revokedDate', '>=', timestampForPostgres())
-    })
-    .whereExists(LicenceModel.relatedQuery('licenceVersions').where('companyId', companyId))
-    .modify('currentVersion')
-    .orderBy([{ column: 'licenceRef', order: 'asc' }])
-}
+  const { rows } = await db.raw(query, [today, today, today, companyId])
 
-/**
- * We only need to return the licence ID and licence reference.
- *
- * @private
- */
-function _data(licences) {
-  return licences.map((licence) => {
-    return {
-      id: licence.id,
-      licenceRef: licence.licenceRef
-    }
-  })
+  return rows
 }
 
 module.exports = {

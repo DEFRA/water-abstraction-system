@@ -33,6 +33,16 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     scenarios.expiredFuture = await _scenario({ expiredDate: new Date('2099-01-01') })
     scenarios.lapsedFuture = await _scenario({ lapsedDate: new Date('2099-01-01') })
     scenarios.revokedFuture = await _scenario({ revokedDate: new Date('2099-01-01') })
+
+    const scenario = await _scenario()
+    scenarios.licenceCurrentVersion = {
+      ...scenario,
+      newerLicenceVersion: await LicenceVersionHelper.add({
+        licenceId: scenario.scenarioLinkedLicence.licence.id,
+        issue: 2,
+        companyId: generateUUID()
+      })
+    }
   })
 
   after(async () => {
@@ -42,6 +52,10 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
       await scenario.activeLinkedLicence.licenceVersion.$query().delete()
       await scenario.activeLinkedLicence.licence.$query().delete()
       await scenario.company.$query().delete()
+
+      if (scenario.newerLicenceVersion) {
+        await scenario.newerLicenceVersion.$query().delete()
+      }
     }
   })
 
@@ -49,18 +63,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     it('returns the matching licences', async () => {
       const result = await FetchCompanyLicencesDal.go(scenarios.licence.company.id)
 
-      const expectedLicences = [
-        {
-          id: scenarios.licence.activeLinkedLicence.licence.id,
-          licenceRef: scenarios.licence.activeLinkedLicence.licence.licenceRef
-        },
-        {
-          id: scenarios.licence.scenarioLinkedLicence.licence.id,
-          licenceRef: scenarios.licence.scenarioLinkedLicence.licence.licenceRef
-        }
-      ].sort((a, b) => {
-        return a.licenceRef.localeCompare(b.licenceRef)
-      })
+      const expectedLicences = _expectedLicence(scenarios.licence)
 
       expect(result).to.equal(expectedLicences)
     })
@@ -122,18 +125,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     it('returns both licences', async () => {
       const result = await FetchCompanyLicencesDal.go(scenarios.expiredFuture.company.id)
 
-      const expectedLicences = [
-        {
-          id: scenarios.expiredFuture.activeLinkedLicence.licence.id,
-          licenceRef: scenarios.expiredFuture.activeLinkedLicence.licence.licenceRef
-        },
-        {
-          id: scenarios.expiredFuture.scenarioLinkedLicence.licence.id,
-          licenceRef: scenarios.expiredFuture.scenarioLinkedLicence.licence.licenceRef
-        }
-      ].sort((a, b) => {
-        return a.licenceRef.localeCompare(b.licenceRef)
-      })
+      const expectedLicences = _expectedLicence(scenarios.expiredFuture)
 
       expect(result).to.equal(expectedLicences)
     })
@@ -143,18 +135,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     it('returns both licences', async () => {
       const result = await FetchCompanyLicencesDal.go(scenarios.lapsedFuture.company.id)
 
-      const expectedLicences = [
-        {
-          id: scenarios.lapsedFuture.activeLinkedLicence.licence.id,
-          licenceRef: scenarios.lapsedFuture.activeLinkedLicence.licence.licenceRef
-        },
-        {
-          id: scenarios.lapsedFuture.scenarioLinkedLicence.licence.id,
-          licenceRef: scenarios.lapsedFuture.scenarioLinkedLicence.licence.licenceRef
-        }
-      ].sort((a, b) => {
-        return a.licenceRef.localeCompare(b.licenceRef)
-      })
+      const expectedLicences = _expectedLicence(scenarios.lapsedFuture)
 
       expect(result).to.equal(expectedLicences)
     })
@@ -164,18 +145,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     it('returns both licences', async () => {
       const result = await FetchCompanyLicencesDal.go(scenarios.revokedFuture.company.id)
 
-      const expectedLicences = [
-        {
-          id: scenarios.revokedFuture.activeLinkedLicence.licence.id,
-          licenceRef: scenarios.revokedFuture.activeLinkedLicence.licence.licenceRef
-        },
-        {
-          id: scenarios.revokedFuture.scenarioLinkedLicence.licence.id,
-          licenceRef: scenarios.revokedFuture.scenarioLinkedLicence.licence.licenceRef
-        }
-      ].sort((a, b) => {
-        return a.licenceRef.localeCompare(b.licenceRef)
-      })
+      const expectedLicences = _expectedLicence(scenarios.revokedFuture)
 
       expect(result).to.equal(expectedLicences)
     })
@@ -186,6 +156,19 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
       const result = await FetchCompanyLicencesDal.go(generateUUID())
 
       expect(result).to.equal([])
+    })
+  })
+
+  describe('when a current version is not linked to the company id', () => {
+    it('returns only the active licence', async () => {
+      const result = await FetchCompanyLicencesDal.go(scenarios.licenceCurrentVersion.company.id)
+
+      expect(result).to.equal([
+        {
+          id: scenarios.licenceCurrentVersion.activeLinkedLicence.licence.id,
+          licenceRef: scenarios.licenceCurrentVersion.activeLinkedLicence.licence.licenceRef
+        }
+      ])
     })
   })
 })
@@ -203,4 +186,19 @@ async function _createLinkedLicence(companyId, data = {}) {
   const licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id, companyId })
 
   return { licence, licenceVersion }
+}
+
+function _expectedLicence(scenario) {
+  return [
+    {
+      id: scenario.activeLinkedLicence.licence.id,
+      licenceRef: scenario.activeLinkedLicence.licence.licenceRef
+    },
+    {
+      id: scenario.scenarioLinkedLicence.licence.id,
+      licenceRef: scenario.scenarioLinkedLicence.licence.licenceRef
+    }
+  ].sort((a, b) => {
+    return a.licenceRef.localeCompare(b.licenceRef)
+  })
 }
