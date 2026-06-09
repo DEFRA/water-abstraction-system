@@ -12,6 +12,7 @@ const CompanyHelper = require('../../support/helpers/company.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { tomorrow, yesterday } = require('../../support/general.js')
 
 // Thing under test
 const FetchCompanyLicencesDal = require('../../../app/dal/company-contacts/fetch-company-licences.dal.js')
@@ -23,16 +24,16 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     scenarios = {}
 
     scenarios.licence = await _scenario()
-    scenarios.expiredPast = await _scenario({ expiredDate: new Date('2020-01-01') })
-    scenarios.lapsedPast = await _scenario({ lapsedDate: new Date('2020-01-01') })
-    scenarios.revokedPast = await _scenario({ revokedDate: new Date('2020-01-01') })
+    scenarios.expiredPast = await _scenario({ expiredDate: yesterday() })
+    scenarios.lapsedPast = await _scenario({ lapsedDate: yesterday() })
+    scenarios.revokedPast = await _scenario({ revokedDate: yesterday() })
     scenarios.mixedDates = await _scenario({
-      expiredDate: new Date('2099-01-01'),
-      lapsedDate: new Date('2020-01-01')
+      expiredDate: tomorrow(),
+      lapsedDate: yesterday()
     })
-    scenarios.expiredFuture = await _scenario({ expiredDate: new Date('2099-01-01') })
-    scenarios.lapsedFuture = await _scenario({ lapsedDate: new Date('2099-01-01') })
-    scenarios.revokedFuture = await _scenario({ revokedDate: new Date('2099-01-01') })
+    scenarios.expiredFuture = await _scenario({ expiredDate: tomorrow() })
+    scenarios.lapsedFuture = await _scenario({ lapsedDate: tomorrow() })
+    scenarios.revokedFuture = await _scenario({ revokedDate: tomorrow() })
 
     // Add a newer licence version to the scenario with a different company id, so that we can test that the licence
     // is not returned (the company id is not linked to the current licence version)
