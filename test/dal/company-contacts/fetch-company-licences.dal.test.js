@@ -8,9 +8,11 @@ const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const CompanyHelper = require('../../support/helpers/company.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
+const {
+  exLicenceHolderWithSingleLicences,
+  licenceHolderWithMultipleLicences,
+  licenceHolderWithSingleLicence
+} = require('../../support/seeders/licence.seeder.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { tomorrow, yesterday } = require('../../support/general.js')
 
@@ -23,49 +25,24 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
   before(async () => {
     scenarios = {}
 
-    scenarios.licence = await _scenario()
-    scenarios.expiredPast = await _scenario({ expiredDate: yesterday() })
-    scenarios.lapsedPast = await _scenario({ lapsedDate: yesterday() })
-    scenarios.revokedPast = await _scenario({ revokedDate: yesterday() })
-    scenarios.mixedDates = await _scenario({
+    scenarios.licence = await licenceHolderWithSingleLicence()
+    scenarios.expiredPast = await licenceHolderWithSingleLicence({ expiredDate: yesterday() })
+    scenarios.lapsedPast = await licenceHolderWithSingleLicence({ lapsedDate: yesterday() })
+    scenarios.revokedPast = await licenceHolderWithSingleLicence({ revokedDate: yesterday() })
+    scenarios.mixedDates = await licenceHolderWithSingleLicence({
       expiredDate: tomorrow(),
       lapsedDate: yesterday()
     })
-    scenarios.expiredFuture = await _scenario({ expiredDate: tomorrow() })
-    scenarios.lapsedFuture = await _scenario({ lapsedDate: tomorrow() })
-    scenarios.revokedFuture = await _scenario({ revokedDate: tomorrow() })
-
-    // Add a newer licence version to the scenario with a different company id, so that we can test that the licence
-    // is not returned (the company id is not linked to the current licence version)
-    const scenario = await _scenario()
-    const newerLicenceVersion = await LicenceVersionHelper.add({
-      licenceId: scenario.licence.id,
-      issue: 2,
-      companyId: generateUUID()
-    })
-
-    scenarios.licenceCurrentVersion = {
-      ...scenario,
-      newerLicenceVersion
-    }
-
-    scenarios.multpleLicences = await _scenarioWithMultipleLicences()
+    scenarios.expiredFuture = await licenceHolderWithSingleLicence({ expiredDate: tomorrow() })
+    scenarios.lapsedFuture = await licenceHolderWithSingleLicence({ lapsedDate: tomorrow() })
+    scenarios.revokedFuture = await licenceHolderWithSingleLicence({ revokedDate: tomorrow() })
+    scenarios.licenceCurrentVersion = await exLicenceHolderWithSingleLicences()
+    scenarios.multpleLicences = await licenceHolderWithMultipleLicences()
   })
 
   after(async () => {
     for (const scenario of Object.values(scenarios)) {
-      await scenario.licenceVersion?.$query().delete()
-      await scenario.licence?.$query().delete()
-      await scenario.company?.$query().delete()
-
-      await scenario.newerLicenceVersion?.$query().delete()
-
-      if (scenario.multpleLicences) {
-        await scenario.licenceOne.licence.$query().delete()
-        await scenario.licenceTwo.licence.$query().delete()
-        await scenario.licenceOne.licenceVersion.$query().delete()
-        await scenario.licenceTwo.licenceVersion.$query().delete()
-      }
+      await scenario.clean()
     }
   })
 
@@ -190,30 +167,3 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     })
   })
 })
-
-async function _scenario(data = {}) {
-  const company = await CompanyHelper.add()
-
-  const licence = await LicenceHelper.add(data)
-  const licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id, companyId: company.id })
-
-  return { company, licence, licenceVersion }
-}
-
-async function _scenarioWithMultipleLicences() {
-  const scenario = await _scenario()
-  const licence = await LicenceHelper.add()
-  const licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id, companyId: scenario.company.id })
-
-  return {
-    company: scenario.company,
-    licenceOne: {
-      licence: scenario.licence,
-      licenceVersion: scenario.licenceVersion
-    },
-    licenceTwo: {
-      licence,
-      licenceVersion
-    }
-  }
-}
