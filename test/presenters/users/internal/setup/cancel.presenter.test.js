@@ -11,9 +11,9 @@ const { expect } = Code
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 
 // Thing under test
-const CheckPresenter = require('../../../../../app/presenters/users/internal/setup/check.presenter.js')
+const CancelPresenter = require('../../../../../app/presenters/users/internal/setup/cancel.presenter.js')
 
-describe('Users - Internal - Setup - Check Presenter', () => {
+describe('Users - Internal - Setup - Cancel Presenter', () => {
   let session
 
   beforeEach(() => {
@@ -22,17 +22,12 @@ describe('Users - Internal - Setup - Check Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CheckPresenter.go(session)
+      const result = CancelPresenter.go(session)
 
       expect(result).to.equal({
         activeNavBar: 'users',
         email: session.email,
-        links: {
-          cancel: `/system/users/internal/setup/${session.id}/cancel`,
-          email: `/system/users/internal/setup/${session.id}/email`,
-          permissions: `/system/users/internal/setup/${session.id}/permissions`
-        },
-        pageTitle: 'Check user',
+        pageTitle: 'You are about to cancel this user',
         pageTitleCaption: 'Internal',
         permission: 'Billing and Data'
       })

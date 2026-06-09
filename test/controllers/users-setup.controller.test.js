@@ -18,12 +18,14 @@ const InitiateInternalSessionService = require('../../app/services/users/interna
 const SubmitExternalCancelService = require('../../app/services/users/external/setup/submit-cancel.service.js')
 const SubmitExternalCheckService = require('../../app/services/users/external/setup/submit-check.service.js')
 const SubmitExternalLicencesService = require('../../app/services/users/external/setup/submit-licences.service.js')
+const SubmitInternalCancelService = require('../../app/services/users/internal/setup/submit-cancel.service.js')
 const SubmitInternalCheckService = require('../../app/services/users/internal/setup/submit-check.service.js')
 const SubmitInternalEmailService = require('../../app/services/users/internal/setup/submit-email.service.js')
 const SubmitInternalPermissionsService = require('../../app/services/users/internal/setup/submit-permissions.service.js')
 const ViewExternalCancelService = require('../../app/services/users/external/setup/view-cancel.service.js')
 const ViewExternalCheckService = require('../../app/services/users/external/setup/view-check.service.js')
 const ViewExternalLicencesService = require('../../app/services/users/external/setup/view-licences.service.js')
+const ViewInternalCancelService = require('../../app/services/users/internal/setup/view-cancel.service.js')
 const ViewInternalCheckService = require('../../app/services/users/internal/setup/view-check.service.js')
 const ViewInternalEmailService = require('../../app/services/users/internal/setup/view-email.service.js')
 const ViewInternalPermissionsService = require('../../app/services/users/internal/setup/view-permissions.service.js')
@@ -232,6 +234,48 @@ describe('Users Setup controller', () => {
     })
   })
 
+  describe('/users/internal/setup/{sessionId}/cancel', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = _getOptions(`/users/internal/setup/${sessionId}/cancel`, { scope: ['manage_accounts'] })
+
+        Sinon.stub(ViewInternalCancelService, 'go').resolves({
+          pageTitle: 'You are about to cancel this user'
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('You are about to cancel this user')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        postOptions = postRequestOptions(`/users/internal/setup/${sessionId}/cancel`, {}, ['manage_accounts'])
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitInternalCancelService, 'go').resolves({
+            redirectUrl: '/system/users'
+          })
+        })
+
+        it('redirects to the Users page', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal('/system/users')
+        })
+      })
+    })
+  })
+
   describe('/users/internal/setup/{sessionId}/check', () => {
     describe('GET', () => {
       beforeEach(async () => {
@@ -259,7 +303,9 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitInternalCheckService, 'go').resolves()
+          Sinon.stub(SubmitInternalCheckService, 'go').resolves({
+            redirectUrl: '/system/users'
+          })
         })
 
         it('redirects to the Users page', async () => {

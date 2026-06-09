@@ -98,5 +98,13 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
 
       expect(SendVerificationEmailService.go.calledWith(notification)).to.be.true()
     })
+
+    it('returns the redirect url', async () => {
+      const result = await SubmitCheckService.go(auth, session.id, yarStub)
+
+      expect(result).to.equal({
+        redirectUrl: '/system/users'
+      })
+    })
   })
 })

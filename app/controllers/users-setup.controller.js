@@ -10,12 +10,14 @@ const InitiateInternalSessionService = require('../services/users/internal/setup
 const SubmitExternalCancelService = require('../services/users/external/setup/submit-cancel.service.js')
 const SubmitExternalCheckService = require('../services/users/external/setup/submit-check.service.js')
 const SubmitExternalLicencesService = require('../services/users/external/setup/submit-licences.service.js')
+const SubmitInternalCancelService = require('../services/users/internal/setup/submit-cancel.service.js')
 const SubmitInternalCheckService = require('../services/users/internal/setup/submit-check.service.js')
 const SubmitInternalEmailService = require('../services/users/internal/setup/submit-email.service.js')
 const SubmitInternalPermissionsService = require('../services/users/internal/setup/submit-permissions.service.js')
 const ViewExternalCancelService = require('../services/users/external/setup/view-cancel.service.js')
 const ViewExternalCheckService = require('../services/users/external/setup/view-check.service.js')
 const ViewExternalLicencesService = require('../services/users/external/setup/view-licences.service.js')
+const ViewInternalCancelService = require('../services/users/internal/setup/view-cancel.service.js')
 const ViewInternalCheckService = require('../services/users/internal/setup/view-check.service.js')
 const ViewInternalEmailService = require('../services/users/internal/setup/view-email.service.js')
 const ViewInternalPermissionsService = require('../services/users/internal/setup/view-permissions.service.js')
@@ -79,6 +81,16 @@ async function submitExternalLicences(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
+async function submitInternalCancel(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const { redirectUrl } = await SubmitInternalCancelService.go(sessionId)
+
+  return h.redirect(redirectUrl)
+}
+
 async function submitInternalCheck(request, h) {
   const {
     auth,
@@ -86,9 +98,9 @@ async function submitInternalCheck(request, h) {
     yar
   } = request
 
-  await SubmitInternalCheckService.go(auth, sessionId, yar)
+  const { redirectUrl } = await SubmitInternalCheckService.go(auth, sessionId, yar)
 
-  return h.redirect('/system/users')
+  return h.redirect(redirectUrl)
 }
 
 async function submitInternalEmail(request, h) {
@@ -151,6 +163,14 @@ async function viewExternalLicences(request, h) {
   return h.view('users/external/setup/licences.njk', pageData)
 }
 
+async function viewInternalCancel(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewInternalCancelService.go(sessionId)
+
+  return h.view('users/internal/setup/cancel.njk', pageData)
+}
+
 async function viewInternalCheck(request, h) {
   const {
     params: { sessionId },
@@ -187,12 +207,14 @@ module.exports = {
   submitExternalCancel,
   submitExternalCheck,
   submitExternalLicences,
+  submitInternalCancel,
   submitInternalCheck,
   submitInternalEmail,
   submitInternalPermissions,
   viewExternalCancel,
   viewExternalCheck,
   viewExternalLicences,
+  viewInternalCancel,
   viewInternalCheck,
   viewInternalEmail,
   viewInternalPermissions
