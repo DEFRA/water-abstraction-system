@@ -24,9 +24,9 @@ async function go(companyId) {
   FROM licences l
   ${currentLicenceVersionsJoin}
   WHERE
-    (l.expired_date IS NULL OR l.expired_date >= ?)
-    AND (l.lapsed_date IS NULL OR l.lapsed_date >= ?)
-    AND (l.revoked_date IS NULL OR l.revoked_date >= ?)
+    (l.expired_date IS NULL OR l.expired_date > ?)
+    AND (l.lapsed_date IS NULL OR l.lapsed_date > ?)
+    AND (l.revoked_date IS NULL OR l.revoked_date > ?)
     AND llv.company_id = ?
   ORDER BY l.licence_ref ASC
   `
