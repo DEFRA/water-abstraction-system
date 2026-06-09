@@ -34,8 +34,9 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     scenarios.lapsedFuture = await _scenario({ lapsedDate: new Date('2099-01-01') })
     scenarios.revokedFuture = await _scenario({ revokedDate: new Date('2099-01-01') })
 
+    // Add a newer licence version to the scenario with a different company id, so that we can test that the licence
+    // is not returned (the company id is not linked to the current licence version)
     const scenario = await _scenario()
-
     const newerLicenceVersion = await LicenceVersionHelper.add({
       licenceId: scenario.licence.id,
       issue: 2,
@@ -113,7 +114,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
   })
 
   describe('when a licence linked to the company has an expiredDate in the future', () => {
-    it('returns both licences', async () => {
+    it('returns the licences', async () => {
       const result = await FetchCompanyLicencesDal.go(scenarios.expiredFuture.company.id)
 
       expect(result).to.equal([
@@ -126,7 +127,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
   })
 
   describe('when a licence linked to the company has a lapsedDate in the future', () => {
-    it('returns both licences', async () => {
+    it('returns the licences', async () => {
       const result = await FetchCompanyLicencesDal.go(scenarios.lapsedFuture.company.id)
 
       expect(result).to.equal([
@@ -139,7 +140,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
   })
 
   describe('when a licence linked to the company has a revokedDate in the future', () => {
-    it('returns both licences', async () => {
+    it('returns the licences', async () => {
       const result = await FetchCompanyLicencesDal.go(scenarios.revokedFuture.company.id)
 
       expect(result).to.equal([
