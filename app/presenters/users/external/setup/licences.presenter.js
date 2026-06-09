@@ -19,7 +19,7 @@ function go(session) {
 
   return {
     activeNavBar,
-    backLink: { href: `/system/users/external/${user.id}/licences`, text: 'Go back to user' },
+    backLink: { href: `/system/users/external/${user.id}/licences`, text: 'Back' },
     checkBoxItems,
     pageTitle: 'Select licences to unregister',
     pageTitleCaption: user.username,
