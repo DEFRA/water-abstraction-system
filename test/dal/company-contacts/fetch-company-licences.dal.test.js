@@ -13,7 +13,7 @@ const {
   licenceHolderWithMultipleLicences,
   licenceHolderWithSingleLicence
 } = require('../../support/seeders/licence.seeder.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { generateUUID, today } = require('../../../app/lib/general.lib.js')
 const { tomorrow, yesterday } = require('../../support/general.js')
 
 // Thing under test
@@ -29,6 +29,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     scenarios.expiredPast = await licenceHolderWithSingleLicence({ expiredDate: yesterday() })
     scenarios.lapsedPast = await licenceHolderWithSingleLicence({ lapsedDate: yesterday() })
     scenarios.revokedPast = await licenceHolderWithSingleLicence({ revokedDate: yesterday() })
+    scenarios.endedToday = await licenceHolderWithSingleLicence({ expiredDate: today() })
     scenarios.mixedDates = await licenceHolderWithSingleLicence({
       expiredDate: tomorrow(),
       lapsedDate: yesterday()
@@ -78,6 +79,14 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
   describe('when a licence linked to the company has a revokedDate in the past', () => {
     it('returns an empty array', async () => {
       const result = await FetchCompanyLicencesDal.go(scenarios.revokedPast.company.id)
+
+      expect(result).to.equal([])
+    })
+  })
+
+  describe('when a licence linked to the company has "ended" today', () => {
+    it('returns an empty array', async () => {
+      const result = await FetchCompanyLicencesDal.go(scenarios.endedToday.company.id)
 
       expect(result).to.equal([])
     })
