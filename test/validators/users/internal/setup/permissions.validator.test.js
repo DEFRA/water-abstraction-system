@@ -37,7 +37,7 @@ describe('Users - Internal - Setup - Permissions Validator', () => {
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select a permission')
+        expect(result.error.details[0].message).to.equal('Select permissions for the user')
       })
     })
 
@@ -51,7 +51,7 @@ describe('Users - Internal - Setup - Permissions Validator', () => {
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select a valid permission')
+        expect(result.error.details[0].message).to.equal('Select valid permissions for the user')
       })
     })
   })
