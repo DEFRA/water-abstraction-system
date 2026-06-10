@@ -9,7 +9,10 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
@@ -18,13 +21,23 @@ const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 const SubmitLicencesService = require('../../../../app/services/company-contacts/setup/submit-licences.service.js')
 
 describe('Company Contacts - Setup - Licences Service', () => {
+  let company
+  let licence
   let payload
   let session
   let sessionData
 
   beforeEach(() => {
-    payload = { placeholder: 'change me' }
-    sessionData = {}
+    licence = {
+      id: generateUUID(),
+      licenceRef: generateLicenceRef()
+    }
+
+    company = CustomersFixtures.company()
+
+    payload = { licences: [licence.id] }
+
+    sessionData = { company, licences: [licence] }
 
     session = SessionModelStub.build(Sinon, sessionData)
 
@@ -39,7 +52,7 @@ describe('Company Contacts - Setup - Licences Service', () => {
     it('saves the submitted value', async () => {
       await SubmitLicencesService.go(session.id, payload)
 
-      expect(session).to.equal(session)
+      expect(session.abstractionAlertLicences).to.equal([licence.id])
       expect(session.$update.called).to.be.true()
     })
 
@@ -66,15 +79,23 @@ describe('Company Contacts - Setup - Licences Service', () => {
         error: {
           errorList: [
             {
-              href: '#placeholder',
-              text: '"placeholder" is required'
+              href: '#licences',
+              text: 'Select the licences they should get water abstraction alerts emails for'
             }
           ],
-          placeholder: {
-            text: '"placeholder" is required'
+          licences: {
+            text: 'Select the licences they should get water abstraction alerts emails for'
           }
         },
-        pageTitle: 'Select the licences they should get water abstraction alerts emails for'
+        licences: [
+          {
+            checked: false,
+            text: licence.licenceRef,
+            value: licence.id
+          }
+        ],
+        pageTitle: 'Select the licences they should get water abstraction alerts emails for',
+        pageTitleCaption: 'Tyrell Corporation'
       })
     })
   })

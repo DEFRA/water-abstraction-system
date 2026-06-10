@@ -8,6 +8,8 @@
 
 const Joi = require('joi')
 
+const errorMessage = 'Select the licences they should get water abstraction alerts emails for'
+
 /**
  * Validates data submitted for the '/company-contacts/setup/{sessionId}/licences' page
  *
@@ -18,7 +20,11 @@ const Joi = require('joi')
  */
 function go(payload) {
   const schema = Joi.object({
-    placeholder: Joi.required()
+    licences: Joi.array().min(1).required().messages({
+      'any.required': errorMessage,
+      'array.base': errorMessage,
+      'array.min': errorMessage
+    })
   })
 
   return schema.validate(payload, { abortEarly: false })

@@ -24,10 +24,11 @@ describe('Company Contacts - Create Company Contact service', () => {
 
   before(async () => {
     companyContact = {
+      abstractionAlertLicences: null,
       abstractionAlerts: true,
+      createdBy: generateUUID(),
       email: 'bob@test.com',
-      name: 'Bob',
-      createdBy: generateUUID()
+      name: 'Bob'
     }
 
     company = await CompanyHelper.add()

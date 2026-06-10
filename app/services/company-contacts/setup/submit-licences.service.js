@@ -11,6 +11,7 @@ const LicencesPresenter = require('../../../presenters/company-contacts/setup/li
 const LicencesValidator = require('../../../validators/company-contacts/setup/licences.validator.js')
 const { checkUrl } = require('../../../lib/check-page.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/licences' page
@@ -22,6 +23,8 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  */
 async function go(sessionId, payload) {
   const session = await FetchSessionDal.go(sessionId)
+
+  handleOneOptionSelected(payload, 'licences')
 
   const validationResult = _validate(payload)
 
@@ -42,6 +45,8 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
+  session.abstractionAlertLicences = payload.licences
+
   return session.$update()
 }
 
