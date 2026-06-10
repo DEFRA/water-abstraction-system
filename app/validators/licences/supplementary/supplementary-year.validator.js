@@ -22,14 +22,10 @@ const ERROR_MESSAGE = 'Select at least one financial year'
  */
 function go(payload) {
   const schema = Joi.object({
-    supplementaryYears: Joi.array()
-      .items(Joi.string())
-      .single() // allows string to be treated as [string]
-      .required()
-      .messages({
-        'any.required': ERROR_MESSAGE,
-        'array.sparse': ERROR_MESSAGE
-      })
+    supplementaryYears: Joi.array().items(Joi.string()).required().messages({
+      'any.required': ERROR_MESSAGE,
+      'array.sparse': ERROR_MESSAGE
+    })
   })
 
   return schema.validate(payload, { abortEarly: true })

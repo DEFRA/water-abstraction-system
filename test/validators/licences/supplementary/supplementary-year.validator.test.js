@@ -16,7 +16,7 @@ describe('Supplementary Year validator', () => {
   describe('when valid data is provided', () => {
     describe('that has a single year', () => {
       beforeEach(() => {
-        payload = { supplementaryYears: '2025' }
+        payload = { supplementaryYears: ['2025'] }
       })
 
       it('confirms the data is valid', () => {

@@ -11,6 +11,7 @@ const MarkForSupplementaryBillingPresenter = require('../../../presenters/licenc
 const PersistSupplementaryBillingFlagsService = require('./persist-supplementary-billing-flags.service.js')
 const SupplementaryYearValidator = require('../../../validators/licences/supplementary/supplementary-year.validator.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
  * Handles the submission to mark a licence for supplementary billing.
@@ -25,14 +26,12 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  * @returns {Promise<object>} The licence marked for supplementary billing
  */
 async function go(licenceId, payload) {
+  handleOneOptionSelected(payload, 'supplementaryYears')
+
   const validationResult = _validate(payload)
 
   if (!validationResult) {
-    let { supplementaryYears } = payload
-
-    // If the user picked multiple years this comes through as an array. If they only picked one year it comes through
-    // as a string.
-    supplementaryYears = Array.isArray(supplementaryYears) ? supplementaryYears : [supplementaryYears]
+    const { supplementaryYears } = payload
 
     await _flagForBilling(supplementaryYears, licenceId)
 
