@@ -9,7 +9,6 @@
 const AbstractionAlertsPresenter = require('../../../presenters/company-contacts/setup/abstraction-alerts.presenter.js')
 const AbstractionAlertsValidator = require('../../../validators/company-contacts/setup/abstraction-alerts.validator.js')
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { checkUrl } = require('../../../lib/check-page.lib.js')
 const { flashNotification } = require('../../../lib/general.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
