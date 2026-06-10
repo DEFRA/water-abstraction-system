@@ -48,11 +48,7 @@ function _helperText(scope) {
 function _links(scope) {
   const links = {}
 
-  if (
-    scope.includes('returns') ||
-    scope.includes('bulk_return_notifications') ||
-    scope.includes('renewal_notifications')
-  ) {
+  if (scope.includes('bulk_return_notifications') || scope.includes('renewal_notifications')) {
     links.adhoc = {
       text: 'Create an ad-hoc notice',
       href: '/system/notices/setup/adhoc'

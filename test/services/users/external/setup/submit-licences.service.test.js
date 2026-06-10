@@ -194,7 +194,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
         activeNavBar: 'users',
         backLink: {
           href: `/system/users/external/${sessionData.user.id}/licences`,
-          text: 'Go back to user'
+          text: 'Back'
         },
         checkBoxItems: [
           {
