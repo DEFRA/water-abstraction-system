@@ -142,12 +142,12 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
         },
         error: {
           permission: {
-            text: 'Select a permission'
+            text: 'Select permissions for the user'
           },
           errorList: [
             {
               href: '#permission',
-              text: 'Select a permission'
+              text: 'Select permissions for the user'
             }
           ]
         },
