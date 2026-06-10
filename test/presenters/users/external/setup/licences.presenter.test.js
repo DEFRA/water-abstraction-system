@@ -27,7 +27,7 @@ describe('Users - External - Setup - Licences Presenter', () => {
       activeNavBar: 'users',
       backLink: {
         href: `/system/users/external/${session.user.id}/licences`,
-        text: 'Go back to user'
+        text: 'Back'
       },
       checkBoxItems: [
         {

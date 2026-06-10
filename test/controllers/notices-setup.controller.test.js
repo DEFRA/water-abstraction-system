@@ -125,7 +125,7 @@ describe('Notices Setup controller', () => {
             url: '/notices/setup/standard',
             auth: {
               strategy: 'session',
-              credentials: { scope: ['returns'] }
+              credentials: { scope: ['bulk_return_notifications'] }
             }
           }
 
@@ -153,7 +153,7 @@ describe('Notices Setup controller', () => {
             url: '/notices/setup/adhoc',
             auth: {
               strategy: 'session',
-              credentials: { scope: ['returns'] }
+              credentials: { scope: ['bulk_return_notifications'] }
             }
           }
 
@@ -184,7 +184,7 @@ describe('Notices Setup controller', () => {
           url: basePath + `/${session.id}/cancel`,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['returns'] }
+            credentials: { scope: ['bulk_return_notifications'] }
           }
         }
       })
@@ -210,7 +210,7 @@ describe('Notices Setup controller', () => {
       describe('when the request succeeds', () => {
         beforeEach(async () => {
           Sinon.stub(SubmitCancelService, 'go').returns('/system/notices')
-          postOptions = postRequestOptions(basePath + `/${session.id}/cancel`, {})
+          postOptions = postRequestOptions(basePath + `/${session.id}/cancel`, {}, ['bulk_return_notifications'])
         })
 
         it('redirects the to the next page', async () => {
@@ -231,7 +231,7 @@ describe('Notices Setup controller', () => {
           url: basePath + `/${session.id}/check`,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['returns'] }
+            credentials: { scope: ['bulk_return_notifications'] }
           }
         }
       })
@@ -260,7 +260,7 @@ describe('Notices Setup controller', () => {
           eventId = '1233'
 
           Sinon.stub(SubmitCheckService, 'go').returns(eventId)
-          postOptions = postRequestOptions(basePath + `/${session.id}/check`, {})
+          postOptions = postRequestOptions(basePath + `/${session.id}/check`, {}, ['bulk_return_notifications'])
         })
 
         it('redirects the to the next page', async () => {
@@ -281,7 +281,7 @@ describe('Notices Setup controller', () => {
           url: basePath + `/${session.id}/check-notice-type`,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['returns'] }
+            credentials: { scope: ['bulk_return_notifications'] }
           }
         }
       })
@@ -304,7 +304,9 @@ describe('Notices Setup controller', () => {
 
     describe('POST', () => {
       beforeEach(async () => {
-        postOptions = postRequestOptions(basePath + `/${session.id}/check-notice-type`, {})
+        postOptions = postRequestOptions(basePath + `/${session.id}/check-notice-type`, {}, [
+          'bulk_return_notifications'
+        ])
 
         Sinon.stub(SubmitCheckNoticeTypeService, 'go').resolves({ redirectUrl: 'check' })
       })
@@ -330,7 +332,7 @@ describe('Notices Setup controller', () => {
           url: basePath + `/${eventId}/confirmation`,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['returns'] }
+            credentials: { scope: ['bulk_return_notifications'] }
           }
         }
       })
@@ -360,7 +362,7 @@ describe('Notices Setup controller', () => {
           url: basePath + `/${session.id}/download`,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['returns'] }
+            credentials: { scope: ['bulk_return_notifications'] }
           }
         }
       })
@@ -732,7 +734,7 @@ describe('Notices Setup controller', () => {
           url: basePath + `/${session.id}/licence`,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['returns'] }
+            credentials: { scope: ['bulk_return_notifications'] }
           }
         }
 
@@ -754,7 +756,9 @@ describe('Notices Setup controller', () => {
     describe('POST', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          postOptions = postRequestOptions(basePath + `/${session.id}/licence`, { licenceRef: '01/115' })
+          postOptions = postRequestOptions(basePath + `/${session.id}/licence`, { licenceRef: '01/115' }, [
+            'bulk_return_notifications'
+          ])
 
           Sinon.stub(SubmitLicenceService, 'go').resolves({ redirectUrl: 'notice-type' })
         })
@@ -769,7 +773,9 @@ describe('Notices Setup controller', () => {
 
       describe('when a request is invalid', () => {
         beforeEach(async () => {
-          postOptions = postRequestOptions(basePath + `/${session.id}/licence`, { licenceRef: '' })
+          postOptions = postRequestOptions(basePath + `/${session.id}/licence`, { licenceRef: '' }, [
+            'bulk_return_notifications'
+          ])
 
           Sinon.stub(SubmitLicenceService, 'go').resolves({
             licenceRef: null,
@@ -808,7 +814,7 @@ describe('Notices Setup controller', () => {
           url: basePath + `/${session.id}/preview/${contactHashId}`,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['returns'] }
+            credentials: { scope: ['bulk_return_notifications'] }
           }
         }
 
@@ -899,7 +905,7 @@ describe('Notices Setup controller', () => {
           url: basePath + `/${session.id}/preview/${contactHashId}/check-paper-return`,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['returns'] }
+            credentials: { scope: ['bulk_return_notifications'] }
           }
         }
 
@@ -931,7 +937,7 @@ describe('Notices Setup controller', () => {
             `/${session.id}/preview/938c2cc0dcc05f2b68c4287040cfcf71/paper-return/95b54f97-fefb-46e7-aae8-ebf40ecb8b50`,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['returns'] }
+            credentials: { scope: ['bulk_return_notifications'] }
           }
         }
 
@@ -963,7 +969,7 @@ describe('Notices Setup controller', () => {
           url: basePath + `/${session.id}/notice-type`,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['returns'] }
+            credentials: { scope: ['bulk_return_notifications'] }
           }
         }
 
@@ -985,7 +991,9 @@ describe('Notices Setup controller', () => {
     describe('POST', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          postOptions = postRequestOptions(basePath + `/${session.id}/notice-type`, { noticeType: 'returns' })
+          postOptions = postRequestOptions(basePath + `/${session.id}/notice-type`, { noticeType: 'returns' }, [
+            'bulk_return_notifications'
+          ])
 
           Sinon.stub(SubmitNoticeTypeService, 'go').resolves({ redirectUrl: 'check-notice-type' })
         })
@@ -1000,7 +1008,9 @@ describe('Notices Setup controller', () => {
 
       describe('when a request is invalid', () => {
         beforeEach(async () => {
-          postOptions = postRequestOptions(basePath + `/${session.id}/notice-type`, { noticeType: '' })
+          postOptions = postRequestOptions(basePath + `/${session.id}/notice-type`, { noticeType: '' }, [
+            'bulk_return_notifications'
+          ])
 
           Sinon.stub(SubmitNoticeTypeService, 'go').resolves({
             error: { text: 'Select the notice type' },
@@ -1027,7 +1037,7 @@ describe('Notices Setup controller', () => {
           url: basePath + `/${session.id}/recipient-name`,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['returns'] }
+            credentials: { scope: ['bulk_return_notifications'] }
           }
         }
       })
@@ -1054,7 +1064,9 @@ describe('Notices Setup controller', () => {
               error: 'Something went wrong'
             })
 
-            postOptions = postRequestOptions(basePath + `/${session.id}/recipient-name`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/recipient-name`, {}, [
+              'bulk_return_notifications'
+            ])
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -1070,7 +1082,9 @@ describe('Notices Setup controller', () => {
             Sinon.stub(SubmitRecipientNameService, 'go').returns({
               pageTile: 'Select recipients'
             })
-            postOptions = postRequestOptions(basePath + `/${session.id}/recipient-name`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/recipient-name`, {}, [
+              'bulk_return_notifications'
+            ])
           })
 
           it('redirects the to the next page', async () => {
@@ -1092,7 +1106,7 @@ describe('Notices Setup controller', () => {
           url: basePath + `/${session.id}/remove-licences`,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['returns'] }
+            credentials: { scope: ['bulk_return_notifications'] }
           }
         }
       })
@@ -1123,7 +1137,9 @@ describe('Notices Setup controller', () => {
               ..._viewRemoveLicence(),
               error: 'Something went wrong'
             })
-            postOptions = postRequestOptions(basePath + `/${session.id}/remove-licences`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/remove-licences`, {}, [
+              'bulk_return_notifications'
+            ])
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -1137,7 +1153,9 @@ describe('Notices Setup controller', () => {
         describe('and the validation succeeds', () => {
           beforeEach(async () => {
             Sinon.stub(SubmitRemoveLicencesService, 'go').returns({ redirect: 'check' })
-            postOptions = postRequestOptions(basePath + `/${session.id}/remove-licences`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/remove-licences`, {}, [
+              'bulk_return_notifications'
+            ])
           })
 
           it('redirects the to the next page', async () => {
@@ -1159,7 +1177,7 @@ describe('Notices Setup controller', () => {
           url: basePath + `/${session.id}/returns-period`,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['returns'] }
+            credentials: { scope: ['bulk_return_notifications'] }
           }
         }
       })
@@ -1189,7 +1207,9 @@ describe('Notices Setup controller', () => {
               ..._viewReturnsPeriod(),
               error: 'Something went wrong'
             })
-            postOptions = postRequestOptions(basePath + `/${session.id}/returns-period`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/returns-period`, {}, [
+              'bulk_return_notifications'
+            ])
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -1203,7 +1223,9 @@ describe('Notices Setup controller', () => {
         describe('and the validation succeeds', () => {
           beforeEach(async () => {
             Sinon.stub(SubmitReturnsPeriodService, 'go').returns({ redirect: 'send-notice' })
-            postOptions = postRequestOptions(basePath + `/${session.id}/returns-period`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/returns-period`, {}, [
+              'bulk_return_notifications'
+            ])
           })
 
           it('redirects the to the next page', async () => {
@@ -1225,7 +1247,7 @@ describe('Notices Setup controller', () => {
           url: basePath + `/${session.id}/paper-return`,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['returns'] }
+            credentials: { scope: ['bulk_return_notifications'] }
           }
         }
       })
@@ -1253,7 +1275,9 @@ describe('Notices Setup controller', () => {
             Sinon.stub(SubmitPaperReturnService, 'go').returns({
               error: 'Something went wrong'
             })
-            postOptions = postRequestOptions(basePath + `/${session.id}/paper-return`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/paper-return`, {}, [
+              'bulk_return_notifications'
+            ])
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -1269,7 +1293,9 @@ describe('Notices Setup controller', () => {
             Sinon.stub(SubmitPaperReturnService, 'go').returns({
               pageTile: 'Select the returns for the paper forms'
             })
-            postOptions = postRequestOptions(basePath + `/${session.id}/paper-return`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/paper-return`, {}, [
+              'bulk_return_notifications'
+            ])
           })
 
           it('redirects the to the next page', async () => {
@@ -1291,7 +1317,7 @@ describe('Notices Setup controller', () => {
           url: basePath + `/${session.id}/select-recipients`,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['returns'] }
+            credentials: { scope: ['bulk_return_notifications'] }
           }
         }
       })
@@ -1317,7 +1343,9 @@ describe('Notices Setup controller', () => {
             Sinon.stub(SubmitSelectRecipientsService, 'go').returns({
               error: 'Something went wrong'
             })
-            postOptions = postRequestOptions(basePath + `/${session.id}/select-recipients`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/select-recipients`, {}, [
+              'bulk_return_notifications'
+            ])
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -1333,7 +1361,9 @@ describe('Notices Setup controller', () => {
             Sinon.stub(SubmitSelectRecipientsService, 'go').returns({
               pageTile: 'Select recipients'
             })
-            postOptions = postRequestOptions(basePath + `/${session.id}/select-recipients`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/select-recipients`, {}, [
+              'bulk_return_notifications'
+            ])
           })
 
           it('redirects the to the next page', async () => {
@@ -1355,7 +1385,7 @@ describe('Notices Setup controller', () => {
           url: basePath + `/${session.id}/contact-type`,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['returns'] }
+            credentials: { scope: ['bulk_return_notifications'] }
           }
         }
       })
@@ -1383,7 +1413,9 @@ describe('Notices Setup controller', () => {
             Sinon.stub(SubmitContactTypeService, 'go').returns({
               error: 'Something went wrong'
             })
-            postOptions = postRequestOptions(basePath + `/${session.id}/contact-type`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/contact-type`, {}, [
+              'bulk_return_notifications'
+            ])
           })
 
           it('returns the page successfully with the error summary banner', async () => {
@@ -1400,7 +1432,9 @@ describe('Notices Setup controller', () => {
               contactType: 'post',
               pageTile: 'Select how to contact the recipient'
             })
-            postOptions = postRequestOptions(basePath + `/${session.id}/contact-type`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/contact-type`, {}, [
+              'bulk_return_notifications'
+            ])
           })
 
           it('redirects the to the next page', async () => {
@@ -1417,7 +1451,9 @@ describe('Notices Setup controller', () => {
               contactType: 'email',
               pageTile: 'Select how to contact the recipient'
             })
-            postOptions = postRequestOptions(basePath + `/${session.id}/contact-type`, {})
+            postOptions = postRequestOptions(basePath + `/${session.id}/contact-type`, {}, [
+              'bulk_return_notifications'
+            ])
           })
 
           it('redirects the to the next page', async () => {
@@ -1439,7 +1475,7 @@ describe('Notices Setup controller', () => {
           url: basePath + `/${session.id}/add-recipient`,
           auth: {
             strategy: 'session',
-            credentials: { scope: ['returns'] }
+            credentials: { scope: ['bulk_return_notifications'] }
           }
         }
       })

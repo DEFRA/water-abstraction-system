@@ -21,7 +21,7 @@ describe('Notices - Index Notices presenter', () => {
     notices = NoticesFixture.mapToFetchNoticesResult(NoticesFixture.notices())
 
     auth = {
-      credentials: { scope: ['bulk_return_notifications', 'returns'] }
+      credentials: { scope: ['bulk_return_notifications'] }
     }
   })
 
@@ -138,7 +138,7 @@ describe('Notices - Index Notices presenter', () => {
   })
 
   describe('the "helperText" property', () => {
-    describe('when the user has both the "bulk_notifications" and "renewal_notifications" roles', () => {
+    describe('when the user has both the "bulk_return_notifications" and "renewal_notifications" roles', () => {
       beforeEach(() => {
         auth.credentials.scope = ['bulk_return_notifications', 'renewal_notifications']
       })
@@ -152,7 +152,7 @@ describe('Notices - Index Notices presenter', () => {
       })
     })
 
-    describe('when the user has only the "bulk_notifications" role', () => {
+    describe('when the user has only the "bulk_return_notifications" role', () => {
       beforeEach(() => {
         auth.credentials.scope = ['bulk_return_notifications']
       })
@@ -220,7 +220,7 @@ describe('Notices - Index Notices presenter', () => {
   describe('the "links" property', () => {
     describe('when the user has permissions', () => {
       beforeEach(() => {
-        auth.credentials.scope = ['bulk_return_notifications', 'returns', 'renewal_notifications']
+        auth.credentials.scope = ['bulk_return_notifications', 'renewal_notifications']
       })
 
       it('returns all of the links', () => {
@@ -267,23 +267,6 @@ describe('Notices - Index Notices presenter', () => {
           notice: {
             href: '/system/notices/setup/standard',
             text: 'Create a standard notice'
-          }
-        })
-      })
-    })
-
-    describe('when the user has the "returns" permission', () => {
-      beforeEach(() => {
-        auth.credentials.scope = ['returns']
-      })
-
-      it('returns only the "adhoc" link', () => {
-        const result = IndexNoticesPresenter.go(notices, auth)
-
-        expect(result.links).to.equal({
-          adhoc: {
-            href: '/system/notices/setup/adhoc',
-            text: 'Create an ad-hoc notice'
           }
         })
       })
