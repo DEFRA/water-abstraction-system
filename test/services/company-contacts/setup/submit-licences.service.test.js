@@ -22,7 +22,6 @@ const SubmitLicencesService = require('../../../../app/services/company-contacts
 
 describe('Company Contacts - Setup - Licences Service', () => {
   let company
-  let fetchSessionStub
   let licence
   let payload
   let session
@@ -42,7 +41,7 @@ describe('Company Contacts - Setup - Licences Service', () => {
 
     session = SessionModelStub.build(Sinon, sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
   afterEach(() => {
