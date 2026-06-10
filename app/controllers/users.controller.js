@@ -52,7 +52,11 @@ async function submitIndex(request, h) {
 async function submitInternalDetails(request, h) {
   const { id } = request.params
 
-  return _redirectToLegacy(id, h)
+  if (!FeatureFlagsConfig.enableUsersManagement) {
+    return _redirectToLegacy(id, h)
+  }
+
+  return h.redirect(`/system/users/internal/setup/${id}/edit`)
 }
 
 async function submitProfileDetails(request, h) {
