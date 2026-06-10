@@ -7,6 +7,9 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+
 // Thing under test
 const LicencesValidator = require('../../../../app/validators/company-contacts/setup/licences.validator.js')
 
@@ -14,7 +17,7 @@ describe('Company Contacts - Setup - Licences Validator', () => {
   let payload
 
   beforeEach(() => {
-    payload = { licences: ['1'] }
+    payload = { licences: [generateUUID()] }
   })
 
   describe('when called with valid data', () => {

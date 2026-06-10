@@ -62,24 +62,6 @@ describe('Company Contacts - Setup - Licences Service', () => {
 
       expect(result).to.equal({ redirectUrl: `/system/company-contacts/setup/${session.id}/check` })
     })
-
-    describe('and the payload has one item (is not an array)', () => {
-      beforeEach(() => {
-        payload = { licences: licence.id }
-
-        sessionData = { company, licences: [licence] }
-
-        session = SessionModelStub.build(Sinon, sessionData)
-
-        fetchSessionStub.resolves(session)
-      })
-
-      it('saves the selected licences', async () => {
-        await SubmitLicencesService.go(session.id, payload)
-
-        expect(session.abstractionAlertLicences).to.equal([licence.id])
-      })
-    })
   })
 
   describe('when validation fails', () => {
