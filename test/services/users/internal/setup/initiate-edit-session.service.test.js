@@ -17,7 +17,7 @@ const FetchUserDetailsDal = require('../../../../../app/dal/users/internal/fetch
 // Thing under test
 const InitiateEditSessionService = require('../../../../../app/services/users/internal/setup/initiate-edit-session.service.js')
 
-describe.only('Users - Internal - Setup - Initiate Edit Session service', () => {
+describe('Users - Internal - Setup - Initiate Edit Session service', () => {
   const id = 'd26787fc-6df4-4606-aa9d-c04951b3761f'
 
   let user
