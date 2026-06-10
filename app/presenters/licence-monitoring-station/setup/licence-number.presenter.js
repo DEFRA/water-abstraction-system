@@ -1,5 +1,7 @@
 'use strict'
 
+const { checkUrl } = require('../../../lib/check-page.lib.js')
+
 /**
  * Formats data for the `/licence-monitoring-station/setup/{sessionId}/licence-number` page
  * @module LicenceNumberPresenter
@@ -16,21 +18,11 @@ function go(session) {
   const { label, licenceRef } = session
 
   return {
-    backLink: _backLink(session),
+    backLink: checkUrl(session, `/system/licence-monitoring-station/setup/${session.id}/stop-or-reduce`),
     licenceRef,
     monitoringStationLabel: label,
     pageTitle: 'Enter the licence number this threshold applies to'
   }
-}
-
-function _backLink(session) {
-  const { checkPageVisited, id } = session
-
-  if (checkPageVisited) {
-    return `/system/licence-monitoring-station/setup/${id}/check`
-  }
-
-  return `/system/licence-monitoring-station/setup/${id}/stop-or-reduce`
 }
 
 module.exports = {
