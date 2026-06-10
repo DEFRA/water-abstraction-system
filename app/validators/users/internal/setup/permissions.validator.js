@@ -24,8 +24,8 @@ function go(payload) {
       .required()
       .valid(...Object.keys(userPermissions))
       .messages({
-        'any.required': 'Select a permission',
-        'any.only': 'Select a valid permission'
+        'any.required': 'Select permissions for the user',
+        'any.only': 'Select valid permissions for the user'
       })
   })
 
