@@ -17,8 +17,10 @@ const FetchUserDetailsDal = require('../../../../../app/dal/users/internal/fetch
 // Thing under test
 const InitiateEditSessionService = require('../../../../../app/services/users/internal/setup/initiate-edit-session.service.js')
 
-describe('Users - Internal - Setup - Initiate Edit Session service', () => {
+describe.only('Users - Internal - Setup - Initiate Edit Session service', () => {
   const id = 'd26787fc-6df4-4606-aa9d-c04951b3761f'
+
+  let user
 
   afterEach(() => {
     Sinon.restore()
@@ -27,12 +29,14 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
   describe('when called', () => {
     describe('for a user that has no groups or roles', () => {
       beforeEach(() => {
-        Sinon.stub(FetchUserDetailsDal, 'go').resolves({
+        user = {
           groups: [],
           id,
           roles: [],
           username: 'bob.bobbles@environment-agency.gov.uk'
-        })
+        }
+
+        Sinon.stub(FetchUserDetailsDal, 'go').resolves(user)
       })
 
       it('returns the session Id and a formatted data object', async () => {
@@ -42,12 +46,12 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
           data: {
             email: 'bob.bobbles@environment-agency.gov.uk',
             permission: 'basic',
-            userId: id
+            user
           },
           id: result.id,
           email: 'bob.bobbles@environment-agency.gov.uk',
           permission: 'basic',
-          userId: id
+          user
         })
       })
 
@@ -59,19 +63,21 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
         expect(matchingSession.data).to.equal({
           email: 'bob.bobbles@environment-agency.gov.uk',
           permission: 'basic',
-          userId: id
+          user
         })
       })
     })
 
     describe('for a user that has groups and roles', () => {
       beforeEach(() => {
-        Sinon.stub(FetchUserDetailsDal, 'go').resolves({
+        user = {
           groups: [{ group: 'nps' }],
           id,
           roles: [{ role: 'ar_approver' }],
           username: 'bob.bobbles@environment-agency.gov.uk'
-        })
+        }
+
+        Sinon.stub(FetchUserDetailsDal, 'go').resolves(user)
       })
 
       it('returns the session Id and a formatted data object', async () => {
@@ -81,12 +87,12 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
           data: {
             email: 'bob.bobbles@environment-agency.gov.uk',
             permission: 'nps_ar_approver',
-            userId: id
+            user
           },
           id: result.id,
           email: 'bob.bobbles@environment-agency.gov.uk',
           permission: 'nps_ar_approver',
-          userId: id
+          user
         })
       })
 
@@ -98,7 +104,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
         expect(matchingSession.data).to.equal({
           email: 'bob.bobbles@environment-agency.gov.uk',
           permission: 'nps_ar_approver',
-          userId: id
+          user
         })
       })
     })

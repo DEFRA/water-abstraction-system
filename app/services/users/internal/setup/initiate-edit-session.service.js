@@ -29,14 +29,14 @@ async function go(id) {
  *
  * Simple structure changes and renaming.
  *
- * The user id is also added to the session data. This will be needed to update the user record.
+ * The user object is also added to the session data. This will be needed to update the user record.
  *
- * When the 'userId' is present, then we know this is the edit journey.
+ * When the 'user' object is present, then we know this is the edit journey.
  *
  * @private
  */
 function _formatDataForJourney(user) {
-  const { groups, id, roles, username } = user
+  const { groups, roles, username } = user
 
   const group = groups.length > 0 ? groups[0].group : null
   const role = roles.length > 0 ? roles[0].role : null
@@ -46,7 +46,7 @@ function _formatDataForJourney(user) {
   return {
     email: username,
     permission,
-    userId: id
+    user
   }
 }
 
