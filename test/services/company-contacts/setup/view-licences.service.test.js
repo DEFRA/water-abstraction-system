@@ -9,16 +9,16 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
-const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const ViewLicencesService = require('../../../../app/services/company-contacts/setup/view-licences.service.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 describe('Company Contacts - Setup - Licences Service', () => {
   let company
@@ -28,8 +28,8 @@ describe('Company Contacts - Setup - Licences Service', () => {
 
   beforeEach(() => {
     licence = {
-      id: generateLicenceRef(),
-      licenceRef: generateUUID()
+      id: generateUUID(),
+      licenceRef: generateLicenceRef()
     }
 
     company = CustomersFixtures.company()

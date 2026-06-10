@@ -24,8 +24,8 @@ describe('Company Contacts - Setup - Licences Presenter', () => {
     company = CustomersFixtures.company()
 
     licence = {
-      id: generateLicenceRef(),
-      licenceRef: generateUUID()
+      id: generateUUID(),
+      licenceRef: generateLicenceRef()
     }
 
     session = { id: generateUUID(), company, licences: [licence] }

@@ -30,8 +30,8 @@ describe('Company Contacts - Setup - Licences Service', () => {
 
   beforeEach(() => {
     licence = {
-      id: generateLicenceRef(),
-      licenceRef: generateUUID()
+      id: generateUUID(),
+      licenceRef: generateLicenceRef()
     }
 
     company = CustomersFixtures.company()
