@@ -40,12 +40,12 @@ describe('Company Contacts - Setup - Abstraction Alerts Presenter', () => {
     })
 
     describe('the "abstractionAlerts" property', () => {
-      describe('when the "abstractionAlerts" has previously been saved', () => {
+      describe('when "abstractionAlerts" property is set on the session', () => {
         beforeEach(() => {
           session.abstractionAlerts = 'yes'
         })
 
-        it('returns the "abstractionAlerts" from the session', () => {
+        it('returns the "abstractionAlerts" value', () => {
           const result = AbstractionAlertsPresenter.go(session)
 
           expect(result.abstractionAlerts).to.equal('yes')
