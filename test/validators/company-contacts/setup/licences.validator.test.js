@@ -14,7 +14,7 @@ describe('Company Contacts - Setup - Licences Validator', () => {
   let payload
 
   beforeEach(() => {
-    payload = { placeholder: '' }
+    payload = { licences: ['1'] }
   })
 
   describe('when called with valid data', () => {
@@ -27,16 +27,52 @@ describe('Company Contacts - Setup - Licences Validator', () => {
   })
 
   describe('when called with invalid data', () => {
-    beforeEach(() => {
-      payload = {}
+    describe('when no licences are selected', () => {
+      beforeEach(() => {
+        payload = {}
+      })
+
+      it('returns with errors', () => {
+        const result = LicencesValidator.go(payload)
+
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal(
+          'Select the licences they should get water abstraction alerts emails for'
+        )
+      })
     })
 
-    it('returns with errors', () => {
-      const result = LicencesValidator.go(payload)
+    describe('when "licences" is an empty array', () => {
+      beforeEach(() => {
+        payload = { licences: [] }
+      })
 
-      expect(result.value).to.exist()
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('"placeholder" is required')
+      it('returns with errors', () => {
+        const result = LicencesValidator.go(payload)
+
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal(
+          'Select the licences they should get water abstraction alerts emails for'
+        )
+      })
+    })
+
+    describe('when "licences" is not an array', () => {
+      beforeEach(() => {
+        payload = { licences: 'licence' }
+      })
+
+      it('returns with errors', () => {
+        const result = LicencesValidator.go(payload)
+
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal(
+          'Select the licences they should get water abstraction alerts emails for'
+        )
+      })
     })
   })
 })

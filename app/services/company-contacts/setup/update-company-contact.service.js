@@ -25,6 +25,7 @@ async function _update(companyContact) {
   return CompanyContactModel.query().upsertGraph(
     {
       id: companyContact.id,
+      abstractionAlertLicences: companyContact.abstractionAlertLicences,
       abstractionAlerts: companyContact.abstractionAlerts,
       updatedBy: companyContact.updatedBy,
       updatedAt: today().toISOString(),

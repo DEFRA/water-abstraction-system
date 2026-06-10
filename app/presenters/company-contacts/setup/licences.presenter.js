@@ -15,15 +15,27 @@ const { checkUrl } = require('../../../lib/check-page.lib.js')
  * @returns {object} The data formatted for the view template
  */
 function go(session) {
-  const { id: sessionId } = session
+  const { company, id: sessionId, licences, abstractionAlertLicences } = session
 
   return {
     backLink: {
       href: checkUrl(session, `/system/company-contacts/setup/${sessionId}/abstraction-alerts`),
       text: 'Back'
     },
-    pageTitle: 'Select the licences they should get water abstraction alerts emails for'
+    licences: _licences(licences, abstractionAlertLicences),
+    pageTitle: 'Select the licences they should get water abstraction alerts emails for',
+    pageTitleCaption: company.name
   }
+}
+
+function _licences(licences, abstractionAlertLicences) {
+  return licences.map((licence) => {
+    return {
+      value: licence.id,
+      text: licence.licenceRef,
+      checked: abstractionAlertLicences?.includes(licence.id) || false
+    }
+  })
 }
 
 module.exports = {

@@ -56,11 +56,37 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
       expect(session.$update.called).to.be.true()
     })
 
-    it('continues the journey', async () => {
-      const result = await SubmitAbstractionAlertsService.go(session.id, payload)
+    describe('the redirect URL', () => {
+      describe('when "abstractionAlerts" is "yes"', () => {
+        it('redirects to the check page', async () => {
+          const result = await SubmitAbstractionAlertsService.go(session.id, payload)
 
-      expect(result).to.equal({
-        redirectUrl: `/system/company-contacts/setup/${session.id}/check`
+          expect(result).to.equal({ redirectUrl: `/system/company-contacts/setup/${session.id}/check` })
+        })
+      })
+
+      describe('when "abstractionAlerts" is "no"', () => {
+        beforeEach(() => {
+          payload = { abstractionAlerts: 'no' }
+        })
+
+        it('redirects to the check page', async () => {
+          const result = await SubmitAbstractionAlertsService.go(session.id, payload)
+
+          expect(result).to.equal({ redirectUrl: `/system/company-contacts/setup/${session.id}/check` })
+        })
+      })
+
+      describe('when "abstractionAlerts" is "some"', () => {
+        beforeEach(() => {
+          payload = { abstractionAlerts: 'some' }
+        })
+
+        it('redirects to the licences page', async () => {
+          const result = await SubmitAbstractionAlertsService.go(session.id, payload)
+
+          expect(result).to.equal({ redirectUrl: `/system/company-contacts/setup/${session.id}/licences` })
+        })
       })
     })
 

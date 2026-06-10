@@ -33,7 +33,7 @@ async function go(sessionId, payload, yar) {
     await _save(session, payload)
 
     return {
-      redirectUrl: checkUrl(session, `/system/company-contacts/setup/${sessionId}/check`)
+      redirectUrl: _redirectUrl(sessionId, payload)
     }
   }
 
@@ -51,6 +51,14 @@ function _notification(session, payload, yar) {
   if (session.checkPageVisited && session.abstractionAlerts !== payload.abstractionAlerts) {
     flashNotification(yar, 'Updated', 'Water abstraction alerts updated')
   }
+}
+
+function _redirectUrl(sessionId, payload) {
+  if (payload.abstractionAlerts === 'some') {
+    return `/system/company-contacts/setup/${sessionId}/licences`
+  }
+
+  return `/system/company-contacts/setup/${sessionId}/check`
 }
 
 async function _save(session, payload) {
