@@ -183,7 +183,7 @@ describe('Company Contacts model', () => {
       describe('and there are "abstractionAlertLicences"', () => {
         before(async () => {
           testRecord = await CompanyContactHelper.add({
-            abstractionAlertLicences: [generateUUID()],
+            abstractionAlertLicences: JSON.stringify([generateUUID()]),
             abstractionAlerts: true
           })
         })
