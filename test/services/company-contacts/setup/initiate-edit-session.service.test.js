@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CompanyContactModel = require('../../../../app/models/company-contact.model.js')
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const SessionModel = require('../../../../app/models/session.model.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -34,13 +35,13 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
     licences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
 
-    companyContact = {
+    companyContact = CompanyContactModel.fromJson({
       id: generateUUID(),
       abstractionAlerts: false,
       abstractionAlertLicences: null,
       company,
       contact
-    }
+    })
 
     stubFetchCompanyContactDal = Sinon.stub(FetchCompanyContactDal, 'go').returns(companyContact)
 

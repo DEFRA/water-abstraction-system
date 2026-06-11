@@ -45,35 +45,16 @@ async function go(companyContactId) {
  * @private
  */
 function _formatDataForJourney(companyContact) {
-  const { abstractionAlertLicences, abstractionAlerts, company, contact } = companyContact
+  const { abstractionAlertLicences, company, contact } = companyContact
 
   return {
     abstractionAlertLicences,
-    abstractionAlerts: _abstractionAlerts(abstractionAlerts, abstractionAlertLicences),
+    abstractionAlerts: companyContact.$abstractionAlertType(),
     company,
     companyContact,
     email: formatEmail(contact.email),
     name: contact.$name()
   }
-}
-
-/**
- * Determines the abstraction alerts value for the session
- *
- * Maps the boolean `abstractionAlerts` flag from the company contact record to the string value used in the journey.
- * If the contact has alerts enabled and abstraction alert licences linked, they receive alerts for some licences only.
- * If no licences are linked, they receive alerts for all licences.
- *
- * @returns {string} 'yes', 'some', or 'no'
- *
- * @private
- */
-function _abstractionAlerts(abstractionAlerts, abstractionAlertLicences) {
-  if (!abstractionAlerts) {
-    return 'no'
-  }
-
-  return abstractionAlertLicences ? 'some' : 'yes'
 }
 
 module.exports = {
