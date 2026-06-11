@@ -1,5 +1,7 @@
 'use strict'
 
+const { checkUrl } = require('../../../lib/check-page.lib.js')
+
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/no-returns-required` page
  * @module NoReturnsRequiredPresenter
@@ -16,7 +18,7 @@ function go(session) {
   const { id: sessionId, licence, reason } = session
 
   return {
-    backLink: { href: _backLinkHref(session), text: 'Back' },
+    backLink: _backLink(session),
     licenceRef: licence.licenceRef,
     reason: reason || null,
     pageTitle: 'Why are no returns required?',
@@ -25,14 +27,11 @@ function go(session) {
   }
 }
 
-function _backLinkHref(session) {
-  const { checkPageVisited, id } = session
-
-  if (checkPageVisited) {
-    return `/system/return-versions/setup/${id}/check`
+function _backLink(session) {
+  return {
+    href: checkUrl(session, `/system/return-versions/setup/${session.id}/start-date`),
+    text: 'Back'
   }
-
-  return `/system/return-versions/setup/${id}/start-date`
 }
 
 module.exports = {

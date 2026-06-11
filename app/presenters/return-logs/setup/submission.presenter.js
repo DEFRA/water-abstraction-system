@@ -1,5 +1,7 @@
 'use strict'
 
+const { checkUrl } = require('../../../lib/check-page.lib.js')
+
 /**
  * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/submission` page
  * @module SubmissionPresenter
@@ -16,7 +18,7 @@ function go(session) {
   const { beenReceived, journey, returnReference } = session
 
   return {
-    backLink: { href: _backLinkHref(session), text: 'Back' },
+    backLink: _backLink(session),
     beenReceived,
     journey: journey ?? null,
     pageTitle: 'What do you want to do with this return?',
@@ -24,14 +26,11 @@ function go(session) {
   }
 }
 
-function _backLinkHref(session) {
-  const { checkPageVisited, id } = session
-
-  if (checkPageVisited) {
-    return `/system/return-logs/setup/${id}/check`
+function _backLink(session) {
+  return {
+    href: checkUrl(session, `/system/return-logs/setup/${session.id}/received`),
+    text: 'Back'
   }
-
-  return `/system/return-logs/setup/${id}/received`
 }
 
 module.exports = {

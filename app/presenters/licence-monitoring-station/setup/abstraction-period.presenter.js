@@ -1,5 +1,7 @@
 'use strict'
 
+const { checkUrl } = require('../../../lib/check-page.lib.js')
+
 /**
  * Formats data for `/licence-monitoring-station/setup/{sessionId}/abstraction-period`
  * @module AbstractionPeriodPresenter
@@ -27,20 +29,17 @@ function go(session) {
     abstractionPeriodEndDay,
     abstractionPeriodStartMonth,
     abstractionPeriodEndMonth,
-    backLink: { href: _backLinkHref(session), text: 'Back' },
+    backLink: _backLink(session),
     monitoringStationLabel: label,
     pageTitle: `Enter an abstraction period for licence ${licenceRef}`
   }
 }
 
-function _backLinkHref(session) {
-  const { checkPageVisited, id } = session
-
-  if (checkPageVisited) {
-    return `/system/licence-monitoring-station/setup/${id}/check`
+function _backLink(session) {
+  return {
+    href: checkUrl(session, `/system/licence-monitoring-station/setup/${session.id}/full-condition`),
+    text: 'Back'
   }
-
-  return `/system/licence-monitoring-station/setup/${id}/full-condition`
 }
 
 module.exports = {

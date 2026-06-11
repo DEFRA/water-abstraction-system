@@ -1,5 +1,7 @@
 'use strict'
 
+const { checkUrl } = require('../../../lib/check-page.lib.js')
+
 /**
  * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/start-reading` page
  * @module StartReadingPresenter
@@ -16,7 +18,7 @@ function go(session) {
   const { id: sessionId, returnReference, startReading } = session
 
   return {
-    backLink: { href: _backLinkHref(session), text: 'Back' },
+    backLink: _backLink(session),
     pageTitle: 'Enter the start meter reading',
     pageTitleCaption: `Return reference ${returnReference}`,
     sessionId,
@@ -24,14 +26,11 @@ function go(session) {
   }
 }
 
-function _backLinkHref(session) {
-  const { checkPageVisited, id } = session
-
-  if (checkPageVisited) {
-    return `/system/return-logs/setup/${id}/check`
+function _backLink(session) {
+  return {
+    href: checkUrl(session, `/system/return-logs/setup/${session.id}/reported`),
+    text: 'Back'
   }
-
-  return `/system/return-logs/setup/${id}/reported`
 }
 
 function _savedValue(startReading) {
