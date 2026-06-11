@@ -49,7 +49,7 @@ function _formatDataForJourney(companyContact) {
 
   return {
     abstractionAlertLicences,
-    abstractionAlerts: companyContact.$abstractionAlertType(),
+    abstractionAlerts: companyContact.$abstractionAlertType().value,
     company,
     companyContact,
     email: formatEmail(contact.email),

@@ -165,7 +165,10 @@ describe('Company Contacts model', () => {
       it('returns "no"', () => {
         const result = testRecord.$abstractionAlertType()
 
-        expect(result).to.equal('no')
+        expect(result).to.equal({
+          label: 'No',
+          value: 'no'
+        })
       })
     })
 
@@ -178,7 +181,10 @@ describe('Company Contacts model', () => {
         it('returns "yes"', () => {
           const result = testRecord.$abstractionAlertType()
 
-          expect(result).to.equal('yes')
+          expect(result).to.equal({
+            label: 'Yes, for all licences',
+            value: 'yes'
+          })
         })
       })
 
@@ -193,7 +199,10 @@ describe('Company Contacts model', () => {
         it('returns "some"', () => {
           const result = testRecord.$abstractionAlertType()
 
-          expect(result).to.equal('some')
+          expect(result).to.equal({
+            label: 'Yes, for some licences',
+            value: 'some'
+          })
         })
       })
     })

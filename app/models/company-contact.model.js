@@ -62,14 +62,27 @@ class CompanyContactModel extends BaseModel {
   /**
    * Maps the `abstractionAlerts` flag and linked licences to the journey string value ('yes', 'some', or 'no')
    *
-   * @returns {string} 'yes', 'some', or 'no'
+   * @returns {object} The value and label for the abstraction alert type
    */
   $abstractionAlertType() {
     if (!this.abstractionAlerts) {
-      return 'no'
+      return {
+        value: 'no',
+        label: 'No'
+      }
     }
 
-    return this.abstractionAlertLicences ? 'some' : 'yes'
+    if (this.abstractionAlertLicences) {
+      return {
+        value: 'some',
+        label: 'Yes, for some licences'
+      }
+    }
+
+    return {
+      value: 'yes',
+      label: 'Yes, for all licences'
+    }
   }
 }
 
