@@ -1,5 +1,7 @@
 'use strict'
 
+const { checkUrl } = require('../../../lib/check-page.lib.js')
+
 /**
  * Formats data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
  *
@@ -26,21 +28,11 @@ function go(session, conditions) {
       : `Select the full condition for licence ${licenceRef}`
 
   return {
-    backLink: _backLink(session),
+    backLink: checkUrl(session, `/system/licence-monitoring-station/setup/${session.id}/licence-number`),
     monitoringStationLabel: label,
     pageTitle,
     radioButtons
   }
-}
-
-function _backLink(session) {
-  const { checkPageVisited, id } = session
-
-  if (checkPageVisited) {
-    return `/system/licence-monitoring-station/setup/${id}/check`
-  }
-
-  return `/system/licence-monitoring-station/setup/${id}/licence-number`
 }
 
 function _generateRadioButtons(conditions, conditionId) {

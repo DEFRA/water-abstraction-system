@@ -1,5 +1,7 @@
 'use strict'
 
+const { checkUrl } = require('../../../lib/check-page.lib.js')
+
 /**
  * Format data for the `/return-log/setup/{sessionId}/reported` page
  * @module ReportedPresenter
@@ -16,7 +18,7 @@ function go(session) {
   const { id: sessionId, returnReference, reported } = session
 
   return {
-    backLink: { href: _backLinkHref(session), text: 'Back' },
+    backLink: _backLink(session),
     pageTitle: 'How was this return reported?',
     pageTitleCaption: `Return reference ${returnReference}`,
     reported: reported ?? null,
@@ -24,14 +26,11 @@ function go(session) {
   }
 }
 
-function _backLinkHref(session) {
-  const { checkPageVisited, id } = session
-
-  if (checkPageVisited) {
-    return `/system/return-logs/setup/${id}/check`
+function _backLink(session) {
+  return {
+    href: checkUrl(session, `/system/return-logs/setup/${session.id}/submission`),
+    text: 'Back'
   }
-
-  return `/system/return-logs/setup/${id}/submission`
 }
 
 module.exports = {
