@@ -48,6 +48,28 @@ describe('Company Contacts - Contact Details presenter', () => {
     })
 
     describe('the "contact" property', () => {
+      describe('the "additionalContact" property', () => {
+        describe('when the contact is an additional contact', () => {
+          it('returns true', () => {
+            const result = ContactDetailsPresenter.go(company, companyContact)
+
+            expect(result.additionalContact).to.be.true()
+          })
+        })
+
+        describe('when the contact is not an additional contact', () => {
+          beforeEach(() => {
+            companyContact.licenceRole.name = 'licenceHolder'
+          })
+
+          it('returns false', () => {
+            const result = ContactDetailsPresenter.go(company, companyContact)
+
+            expect(result.additionalContact).to.be.false()
+          })
+        })
+      })
+
       describe('the "created" property', () => {
         describe('when there is "createdByUser"', () => {
           it('returns the created text with the created at date and the created by username', () => {
@@ -66,28 +88,6 @@ describe('Company Contacts - Contact Details presenter', () => {
             const result = ContactDetailsPresenter.go(company, companyContact)
 
             expect(result.contact.created).to.equal('1 January 2022')
-          })
-        })
-      })
-
-      describe('the "abstractionAlerts" property', () => {
-        describe('when the contact is an additional contact', () => {
-          it('returns true', () => {
-            const result = ContactDetailsPresenter.go(company, companyContact)
-
-            expect(result.additionalContact).to.be.true()
-          })
-        })
-
-        describe('when the contact is not an additional contact', () => {
-          beforeEach(() => {
-            companyContact.licenceRole.name = 'licenceHolder'
-          })
-
-          it('returns false', () => {
-            const result = ContactDetailsPresenter.go(company, companyContact)
-
-            expect(result.additionalContact).to.be.false()
           })
         })
       })

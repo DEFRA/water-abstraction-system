@@ -63,40 +63,6 @@ describe('Company Contacts - Setup - Check Presenter', () => {
       })
     })
 
-    describe('the "abstractionAlerts" property', () => {
-      describe('when "abstractionAlerts" is "yes"', () => {
-        it('returns "Yes, for all licences"', () => {
-          const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
-
-          expect(result.abstractionAlerts).to.equal('Yes, for all licences')
-        })
-      })
-
-      describe('when "abstractionAlerts" is "some"', () => {
-        beforeEach(() => {
-          session.abstractionAlerts = 'some'
-        })
-
-        it('returns "Yes, for some licences"', () => {
-          const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
-
-          expect(result.abstractionAlerts).to.equal('Yes, for some licences')
-        })
-      })
-
-      describe('when "abstractionAlerts" is "no"', () => {
-        beforeEach(() => {
-          session.abstractionAlerts = 'no'
-        })
-
-        it('returns "No"', () => {
-          const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
-
-          expect(result.abstractionAlerts).to.equal('No')
-        })
-      })
-    })
-
     describe('the "emailInUse" property', () => {
       describe('when creating a new contact', () => {
         describe('and the email has not been used for notifications', () => {

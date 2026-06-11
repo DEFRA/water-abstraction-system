@@ -132,6 +132,7 @@ describe('Company Contacts - Fetch Company Contact Details service', () => {
 function _transformToFetchResult(companyContact, contact, user, licenceRole, abstractionAlertsCount = 0) {
   return {
     id: companyContact.id,
+    abstractionAlertLicences: null,
     abstractionAlerts: companyContact.abstractionAlerts,
     abstractionAlertsCount,
     companyId: companyContact.companyId,
