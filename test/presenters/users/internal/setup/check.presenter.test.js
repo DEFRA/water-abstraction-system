@@ -13,7 +13,7 @@ const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 // Thing under test
 const CheckPresenter = require('../../../../../app/presenters/users/internal/setup/check.presenter.js')
 
-describe.only('Users - Internal - Setup - Check Presenter', () => {
+describe('Users - Internal - Setup - Check Presenter', () => {
   let session
 
   beforeEach(() => {
