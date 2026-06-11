@@ -23,7 +23,7 @@ function go(company, companyContact) {
       text: 'Go back to licence holder contacts'
     },
     contact: {
-      abstractionAlerts: companyContact.$abstractionAlertType().label,
+      abstractionAlerts: _abstractionAlerts(companyContact),
       created: _created(companyContact),
       email: formatEmail(companyContact.contact.email),
       lastUpdated: _lastUpdated(companyContact),
@@ -34,6 +34,17 @@ function go(company, companyContact) {
     pageTitleCaption: company.name,
     removeContactLink: `/system/company-contacts/${companyContact.id}/remove`
   }
+}
+
+function _abstractionAlerts(companyContact) {
+  const abstractionAlerts = companyContact.$abstractionAlertType()
+  const abstractionAlertsText = {
+    no: 'No',
+    some: 'Yes, for some licences',
+    yes: 'Yes, for all licences'
+  }
+
+  return abstractionAlertsText[abstractionAlerts]
 }
 
 function _created(companyContact) {
