@@ -28,7 +28,7 @@ describe('Users - Internal - Create User DAL', () => {
   beforeEach(() => {
     const email = generateUserName()
 
-    auth = { credentials: { user: { id: 1 } } }
+    auth = { credentials: { user: { id: 'f42aa5b2-95e2-49c0-9ad4-4a7c3c5aefaf' } } }
     session = { email, permission: 'basic' }
 
     Sinon.stub(FetchUserDal, 'go').resolves({ username: 'internal-user-creator@wrls.gov.uk' })
