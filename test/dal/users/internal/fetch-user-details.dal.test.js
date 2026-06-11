@@ -31,6 +31,7 @@ describe('Users - Internal - Fetch User Details DAL', () => {
 
       expect(result).to.equal({
         id: user.id,
+        userId: user.userId,
         username: user.username,
         enabled: true,
         lastLogin: user.lastLogin,
