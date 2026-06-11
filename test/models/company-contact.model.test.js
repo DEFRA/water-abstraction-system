@@ -173,7 +173,7 @@ describe('Company Contacts model', () => {
       before(async () => {
         testRecord = await CompanyContactHelper.add({ abstractionAlerts: true })
       })
-      
+
       describe('and "abstractionAlertLicences" is null', () => {
         it('returns "yes"', () => {
           const result = testRecord.$abstractionAlertType()
