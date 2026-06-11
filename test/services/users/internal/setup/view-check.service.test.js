@@ -54,7 +54,8 @@ describe('Users - Internal - Setup - Check Service', () => {
         notification: undefined,
         pageTitle: 'Check user',
         pageTitleCaption: 'Internal',
-        permission: 'Billing and Data'
+        permission: 'Billing and Data',
+        showEmailChangeLink: true
       })
     })
 
