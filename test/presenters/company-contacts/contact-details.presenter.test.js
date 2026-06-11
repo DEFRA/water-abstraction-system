@@ -9,7 +9,6 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const ContactDetailsPresenter = require('../../../app/presenters/company-contacts/contact-details.presenter.js')
@@ -49,44 +48,6 @@ describe('Company Contacts - Contact Details presenter', () => {
     })
 
     describe('the "contact" property', () => {
-      describe('the "abstractionAlerts" property', () => {
-        describe('when the contact has "abstractionAlerts" enabled', () => {
-          beforeEach(() => {
-            companyContact.abstractionAlerts = true
-          })
-
-          it('returns "Yes, for all licences"', () => {
-            const result = ContactDetailsPresenter.go(company, companyContact)
-
-            expect(result.contact.abstractionAlerts).to.equal('Yes, for all licences')
-          })
-
-          describe('and there are "abstractionAlertLicences"', () => {
-            beforeEach(() => {
-              companyContact.abstractionAlertLicences = [generateUUID()]
-            })
-
-            it('returns "Yes, for some licences"', () => {
-              const result = ContactDetailsPresenter.go(company, companyContact)
-
-              expect(result.contact.abstractionAlerts).to.equal('Yes, for some licences')
-            })
-          })
-        })
-
-        describe('when the contact has "abstractionAlerts" disabled', () => {
-          beforeEach(() => {
-            companyContact.abstractionAlerts = false
-          })
-
-          it('returns "No"', () => {
-            const result = ContactDetailsPresenter.go(company, companyContact)
-
-            expect(result.contact.abstractionAlerts).to.equal('No')
-          })
-        })
-      })
-
       describe('the "additionalContact" property', () => {
         describe('when the contact is an additional contact', () => {
           it('returns true', () => {

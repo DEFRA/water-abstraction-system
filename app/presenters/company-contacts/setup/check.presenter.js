@@ -5,6 +5,8 @@
  * @module CheckPresenter
  */
 
+const { abstractionAlertsLabel } = require('../../crm.presenter.js')
+
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/check' page
  *
@@ -21,7 +23,7 @@ function go(session, savedCompanyContacts, sentNotification) {
   const matchingContact = _matchingContact(email, name, savedCompanyContacts)
 
   return {
-    abstractionAlerts: _abstractionAlerts(abstractionAlerts),
+    abstractionAlerts: abstractionAlertsLabel(abstractionAlerts),
     email,
     emailInUse: _emailInUse(sentNotification, companyContact),
     name,
@@ -37,16 +39,6 @@ function go(session, savedCompanyContacts, sentNotification) {
     matchingContact,
     warning: _warning(matchingContact)
   }
-}
-
-function _abstractionAlerts(abstractionAlerts) {
-  const abstractionAlertsText = {
-    no: 'No',
-    some: 'Yes, for some licences',
-    yes: 'Yes, for all licences'
-  }
-
-  return abstractionAlertsText[abstractionAlerts]
 }
 
 /**

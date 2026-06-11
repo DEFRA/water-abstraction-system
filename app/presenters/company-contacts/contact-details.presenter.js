@@ -5,6 +5,7 @@
  * @module ContactDetailsPresenter
  */
 
+const { abstractionAlertsLabel } = require('../crm.presenter.js')
 const { formatEmail, formatLongDate } = require('../base.presenter.js')
 
 /**
@@ -38,13 +39,8 @@ function go(company, companyContact) {
 
 function _abstractionAlerts(companyContact) {
   const abstractionAlerts = companyContact.$abstractionAlertType()
-  const abstractionAlertsText = {
-    no: 'No',
-    some: 'Yes, for some licences',
-    yes: 'Yes, for all licences'
-  }
 
-  return abstractionAlertsText[abstractionAlerts]
+  return abstractionAlertsLabel(abstractionAlerts)
 }
 
 function _created(companyContact) {
