@@ -5,7 +5,7 @@
  * @module InitiateSessionService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const CreateSessionDal = require('../../../dal/create-session.dal.js')
 const FetchCompanyService = require('../../companies/fetch-company.service.js')
 
 /**
@@ -18,13 +18,9 @@ const FetchCompanyService = require('../../companies/fetch-company.service.js')
 async function go(companyId) {
   const company = await FetchCompanyService.go(companyId)
 
-  return SessionModel.query()
-    .insert({
-      data: {
-        company
-      }
-    })
-    .returning('id')
+  const data = { company }
+
+  return CreateSessionDal.go(data)
 }
 
 module.exports = {
