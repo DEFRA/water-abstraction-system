@@ -15,7 +15,7 @@ const SessionModel = require('../models/session.model.js')
  *
  * @param {object} [data={}] - The data for the new session.
  *
- * @returns {Promise<object>} The ID of the newly created session.
+ * @returns {Promise<module:SessionModel>} The newly created session.
  */
 async function go(data = {}) {
   return SessionModel.query().insert({ data }).returning('id')
