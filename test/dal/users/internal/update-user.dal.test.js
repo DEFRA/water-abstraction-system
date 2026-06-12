@@ -34,7 +34,12 @@ describe('Users - Internal - Update User DAL', () => {
     session = {
       email: UserHelper.generateUserName(),
       permission: 'basic',
-      user: { id: existingUser.id, userId: existingUser.userId, username: existingUser.username }
+      user: {
+        currentPermission: 'environment_officer',
+        id: existingUser.id,
+        userId: existingUser.userId,
+        username: existingUser.username
+      }
     }
 
     Sinon.stub(FetchUserDal, 'go').resolves({ username: 'internal-user-creator@wrls.gov.uk' })
@@ -127,12 +132,90 @@ describe('Users - Internal - Update User DAL', () => {
       })
     })
 
-    describe('and the permission has no groups or roles', () => {
-      beforeEach(() => {
-        session.permission = 'basic'
+    describe('and the permission has changed', () => {
+      describe('and the new permission has no groups or roles', () => {
+        beforeEach(() => {
+          session.permission = 'basic'
+        })
+
+        it('does not create any user groups', async () => {
+          await UpdateUserDal.go(auth, session)
+
+          const userGroup = await UserGroupModel.query().where({ userId: existingUser.userId })
+
+          expect(userGroup).to.be.empty()
+        })
+
+        it('does not create any user roles', async () => {
+          await UpdateUserDal.go(auth, session)
+
+          const userRole = await UserRoleModel.query().where({ userId: existingUser.userId })
+
+          expect(userRole).to.be.empty()
+        })
       })
 
-      it('does not create any user groups', async () => {
+      describe('and the new permission has groups but no roles', () => {
+        beforeEach(() => {
+          session.permission = 'nps'
+        })
+
+        it('creates the user groups', async () => {
+          await UpdateUserDal.go(auth, session)
+
+          const userGroup = await UserGroupModel.query()
+            .where({ userId: existingUser.userId })
+            .withGraphFetched('group')
+
+          expect(userGroup).to.have.length(1)
+          expect(userGroup[0].userId).to.equal(existingUser.userId)
+          expect(userGroup[0].group.group).to.equal('nps')
+        })
+
+        it('does not create any user roles', async () => {
+          await UpdateUserDal.go(auth, session)
+
+          const userRole = await UserRoleModel.query().where({ userId: existingUser.userId })
+
+          expect(userRole).to.be.empty()
+        })
+      })
+
+      describe('and the new permission has both groups and roles', () => {
+        beforeEach(() => {
+          session.permission = 'nps_ar_approver'
+        })
+
+        it('creates the user groups', async () => {
+          await UpdateUserDal.go(auth, session)
+
+          const userGroup = await UserGroupModel.query()
+            .where({ userId: existingUser.userId })
+            .withGraphFetched('group')
+
+          expect(userGroup).to.have.length(1)
+          expect(userGroup[0].userId).to.equal(existingUser.userId)
+          expect(userGroup[0].group.group).to.equal('nps')
+        })
+
+        it('creates the user roles', async () => {
+          await UpdateUserDal.go(auth, session)
+
+          const userRole = await UserRoleModel.query().where({ userId: existingUser.userId }).withGraphFetched('role')
+
+          expect(userRole).to.have.length(1)
+          expect(userRole[0].userId).to.equal(existingUser.userId)
+          expect(userRole[0].role.role).to.equal('ar_approver')
+        })
+      })
+    })
+
+    describe('and the permission has not changed', () => {
+      beforeEach(() => {
+        session.user = { ...session.user, currentPermission: session.permission }
+      })
+
+      it('does not update any user groups', async () => {
         await UpdateUserDal.go(auth, session)
 
         const userGroup = await UserGroupModel.query().where({ userId: existingUser.userId })
@@ -140,62 +223,12 @@ describe('Users - Internal - Update User DAL', () => {
         expect(userGroup).to.be.empty()
       })
 
-      it('does not create any user roles', async () => {
+      it('does not update any user roles', async () => {
         await UpdateUserDal.go(auth, session)
 
         const userRole = await UserRoleModel.query().where({ userId: existingUser.userId })
 
         expect(userRole).to.be.empty()
-      })
-    })
-
-    describe('and the permission has groups but no roles', () => {
-      beforeEach(() => {
-        session.permission = 'nps'
-      })
-
-      it('creates the user groups', async () => {
-        await UpdateUserDal.go(auth, session)
-
-        const userGroup = await UserGroupModel.query().where({ userId: existingUser.userId }).withGraphFetched('group')
-
-        expect(userGroup).to.have.length(1)
-        expect(userGroup[0].userId).to.equal(existingUser.userId)
-        expect(userGroup[0].group.group).to.equal('nps')
-      })
-
-      it('does not create any user roles', async () => {
-        await UpdateUserDal.go(auth, session)
-
-        const userRole = await UserRoleModel.query().where({ userId: existingUser.userId })
-
-        expect(userRole).to.be.empty()
-      })
-    })
-
-    describe('and the permission has both groups and roles', () => {
-      beforeEach(() => {
-        session.permission = 'nps_ar_approver'
-      })
-
-      it('creates the user groups', async () => {
-        await UpdateUserDal.go(auth, session)
-
-        const userGroup = await UserGroupModel.query().where({ userId: existingUser.userId }).withGraphFetched('group')
-
-        expect(userGroup).to.have.length(1)
-        expect(userGroup[0].userId).to.equal(existingUser.userId)
-        expect(userGroup[0].group.group).to.equal('nps')
-      })
-
-      it('creates the user roles', async () => {
-        await UpdateUserDal.go(auth, session)
-
-        const userRole = await UserRoleModel.query().where({ userId: existingUser.userId }).withGraphFetched('role')
-
-        expect(userRole).to.have.length(1)
-        expect(userRole[0].userId).to.equal(existingUser.userId)
-        expect(userRole[0].role.role).to.equal('ar_approver')
       })
     })
   })
