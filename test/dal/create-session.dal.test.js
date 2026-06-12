@@ -13,7 +13,7 @@ const SessionModel = require('../../app/models/session.model.js')
 // Thing under test
 const CreateSessionDal = require('../../app/dal/create-session.dal.js')
 
-describe('DAL - Create session dal', () => {
+describe('DAL - Create Session DAL', () => {
   describe('when there is no data', () => {
     it('creates an empty session and returns the session ID', async () => {
       const result = await CreateSessionDal.go()
