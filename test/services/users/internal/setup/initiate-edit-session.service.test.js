@@ -65,6 +65,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
           email: 'bob.bobbles@environment-agency.gov.uk',
           permission: 'basic',
           user: {
+            currentPermission: 'basic',
             groups: [],
             id,
             roles: [],
@@ -113,6 +114,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
           email: 'bob.bobbles@environment-agency.gov.uk',
           permission: 'nps_ar_approver',
           user: {
+            currentPermission: 'nps_ar_approver',
             groups: [{ group: 'nps' }],
             id,
             roles: [{ role: 'ar_approver' }],
