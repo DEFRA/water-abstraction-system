@@ -27,7 +27,7 @@ async function go(auth, session) {
   const { email, permission, user } = session
   const { groups, roles } = userPermissions[permission]
 
-  const { id, userId, username } = user
+  const { currentPermission, id, userId, username } = user
 
   const groupIds = await GroupModel.query().select('id').whereIn('group', groups)
   const roleIds = await RoleModel.query().select('id').whereIn('role', roles)
@@ -37,7 +37,9 @@ async function go(auth, session) {
   return UserModel.transaction(async (trx) => {
     const resetGuid = await _updateUser(email, id, username, trx)
 
-    await _insertUserGroupsRoles(groupIds, roleIds, userId, trx)
+    if (permission !== currentPermission) {
+      await _insertUserGroupsRoles(groupIds, roleIds, userId, trx)
+    }
 
     await _insertEvent(email, issuer, userId, trx)
 
