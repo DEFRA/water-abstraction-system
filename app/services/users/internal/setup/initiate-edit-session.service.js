@@ -5,8 +5,8 @@
  * @module InitiateEditSessionService
  */
 
+const CreateSessionDal = require('../../../../dal/create-session.dal.js')
 const FetchUserDetailsDal = require('../../../../dal/users/internal/fetch-user-details.dal.js')
-const SessionModel = require('../../../../models/session.model.js')
 const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
 
 /**
@@ -21,9 +21,9 @@ async function go(id) {
 
   user.status = user.$status()
 
-  return SessionModel.query()
-    .insert({ data: _formatDataForJourney(user) })
-    .returning('id')
+  const data = _formatDataForJourney(user)
+
+  return CreateSessionDal.go(data)
 }
 
 /**
