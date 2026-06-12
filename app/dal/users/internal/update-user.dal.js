@@ -9,8 +9,8 @@ const EventModel = require('../../../models/event.model.js')
 const FetchUserDal = require('../fetch-user.dal.js')
 const GroupModel = require('../../../models/group.model.js')
 const RoleModel = require('../../../models/role.model.js')
-const UserModel = require('../../../models/user.model.js')
 const UserGroupModel = require('../../../models/user-group.model.js')
+const UserModel = require('../../../models/user.model.js')
 const UserRoleModel = require('../../../models/user-role.model.js')
 const { generateUUID, timestampForPostgres } = require('../../../lib/general.lib.js')
 const { userPermissions } = require('../../../lib/static-lookups.lib.js')
@@ -32,12 +32,14 @@ async function go(auth, session) {
   const groupIds = await GroupModel.query().select('id').whereIn('group', groups)
   const roleIds = await RoleModel.query().select('id').whereIn('role', roles)
 
+  const { username: issuer } = await FetchUserDal.go(auth.credentials.user.id)
+
   return UserModel.transaction(async (trx) => {
     const resetGuid = await _updateUser(email, id, username, trx)
 
     await _insertUserGroupsRoles(groupIds, roleIds, userId, trx)
 
-    await _insertEvent(auth, email, userId, trx)
+    await _insertEvent(email, issuer, userId, trx)
 
     return resetGuid
   })
@@ -50,15 +52,13 @@ async function _deleteExistingGroupsRoles(userId, trx) {
   ])
 }
 
-async function _insertEvent(auth, email, userId, trx) {
-  const { username } = await FetchUserDal.go(auth.credentials.user.id)
-
+async function _insertEvent(email, issuer, userId, trx) {
   const timestamp = timestampForPostgres()
 
   const eventData = {
     createdAt: timestamp,
     entities: [],
-    issuer: username,
+    issuer,
     licences: [],
     metadata: { user: email, userId },
     subtype: 'internal',

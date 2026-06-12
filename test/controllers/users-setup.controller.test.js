@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { afterEach, before, beforeEach, describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -14,8 +14,8 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Things we need to stub
 const InitiateExternalSessionService = require('../../app/services/users/external/setup/initiate-session.service.js')
-const InitiateInternalSessionService = require('../../app/services/users/internal/setup/initiate-session.service.js')
 const InitiateInternalEditSessionService = require('../../app/services/users/internal/setup/initiate-edit-session.service.js')
+const InitiateInternalSessionService = require('../../app/services/users/internal/setup/initiate-session.service.js')
 const SubmitExternalCancelService = require('../../app/services/users/external/setup/submit-cancel.service.js')
 const SubmitExternalCheckService = require('../../app/services/users/external/setup/submit-check.service.js')
 const SubmitExternalLicencesService = require('../../app/services/users/external/setup/submit-licences.service.js')
