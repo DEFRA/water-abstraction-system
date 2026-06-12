@@ -65,13 +65,27 @@ describe('Users - Internal - Update User DAL', () => {
 
         const event = await EventModel.query().where('issuer', 'internal-user-creator@wrls.gov.uk').limit(1).first()
 
+        expect(event).to.equal(
+          {
+            referenceCode: null,
+            type: 'update-user-roles',
+            subtype: 'internal',
+            issuer: 'internal-user-creator@wrls.gov.uk',
+            licences: [],
+            entities: [],
+            metadata: {
+              user: session.email,
+              userId: existingUser.userId
+            },
+            status: null,
+            overallStatus: null,
+            statusCounts: null,
+            triggerNoticeId: null
+          },
+          { skip: ['createdAt', 'id', 'updatedAt'] }
+        )
+
         expect(event.createdAt).to.be.instanceof(Date)
-        expect(event.entities).to.equal([])
-        expect(event.issuer).to.equal('internal-user-creator@wrls.gov.uk')
-        expect(event.licences).to.equal([])
-        expect(event.metadata).to.equal({ user: session.email, userId: existingUser.userId })
-        expect(event.subtype).to.equal('internal')
-        expect(event.type).to.equal('update-user-roles')
         expect(event.updatedAt).to.be.instanceof(Date)
       })
 
