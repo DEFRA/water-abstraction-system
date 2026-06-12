@@ -19,8 +19,6 @@ const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
 async function go(id) {
   const user = await FetchUserDetailsDal.go(id)
 
-  user.status = user.$status()
-
   const data = _formatDataForJourney(user)
 
   return CreateSessionDal.go(data)
@@ -44,6 +42,9 @@ function _formatDataForJourney(user) {
   const role = roles.length > 0 ? roles[0].role : null
 
   const permission = _getUserPermissionKey(group, role)
+
+  user.currentPermission = permission
+  user.status = user.$status()
 
   return {
     email: username,
