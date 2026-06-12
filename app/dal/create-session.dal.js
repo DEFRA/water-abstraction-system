@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Creates a new session.
+ * Creates a new session
  * @module CreateSessionDal
  */
 
