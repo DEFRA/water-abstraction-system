@@ -1,0 +1,16 @@
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
+
+{% macro collapsibleList(items, label, threshold = 5) %}
+
+  {% if items.length > threshold %}
+    {{ govukDetails({
+      summaryText: items.length + " " + label,
+      html: newLineArrayItems(items) | safe,
+      classes: "govuk-!-margin-bottom-0 govuk-!-padding-bottom-0 govuk-!-padding-top-0"
+    }) }}
+  {% else %}
+    {{ newLineArrayItems(items) | safe }}
+  {% endif %}
+{% endmacro %}

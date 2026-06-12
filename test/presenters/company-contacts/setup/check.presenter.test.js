@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { yesterday } = require('../../../support/general.js')
 
@@ -19,10 +20,11 @@ describe('Company Contacts - Setup - Check Presenter', () => {
   let company
   let companyContact
   let email
+  let licences
   let name
   let savedCompanyContacts
-  let session
   let sentNotification
+  let session
 
   beforeEach(() => {
     company = CustomersFixtures.company()
@@ -35,9 +37,19 @@ describe('Company Contacts - Setup - Check Presenter', () => {
     name = companyContact.contact.department
     email = companyContact.contact.email
 
+    licences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
+
     sentNotification = undefined
 
-    session = { id: generateUUID(), company, abstractionAlerts: 'yes', name, email }
+    session = {
+      abstractionAlertLicences: [],
+      abstractionAlerts: 'yes',
+      company,
+      email,
+      id: generateUUID(),
+      licences,
+      name
+    }
   })
 
   describe('when called', () => {
@@ -45,9 +57,10 @@ describe('Company Contacts - Setup - Check Presenter', () => {
       const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
       expect(result).to.equal({
-        abstractionAlerts: 'Yes, for all licences',
+        abstractionAlertsLabel: 'Yes, for all licences',
         email,
         emailInUse: null,
+        licences: [],
         links: {
           abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
           cancel: `/system/company-contacts/setup/${session.id}/cancel`,
@@ -111,6 +124,70 @@ describe('Company Contacts - Setup - Check Presenter', () => {
               'Notifications have been sent to this contact, so the email address cannot be changed.'
             )
           })
+        })
+      })
+    })
+
+    describe('the "licences" property', () => {
+      describe('when the abstraction alert is for "some"', () => {
+        beforeEach(() => {
+          session.abstractionAlerts = 'some'
+        })
+
+        describe('and there are "licences"', () => {
+          describe('and "abstractionAlertLicences"', () => {
+            beforeEach(() => {
+              session.abstractionAlertLicences = [licences[0].id]
+            })
+
+            it('returns the matching licences "licenceRef"', () => {
+              const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+              expect(result.licences).to.equal([licences[0].licenceRef])
+            })
+          })
+
+          describe('and no "abstractionAlertLicences"', () => {
+            it('returns an empty array', () => {
+              const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+              expect(result.licences).to.be.empty()
+            })
+          })
+        })
+
+        describe('and there are no "licences"', () => {
+          beforeEach(() => {
+            session.licences = []
+          })
+
+          describe('and "abstractionAlertLicences"', () => {
+            beforeEach(() => {
+              session.abstractionAlertLicences = [licences[0].id]
+            })
+
+            it('returns an empty array', () => {
+              const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+              expect(result.licences).to.be.empty()
+            })
+          })
+
+          describe('and no "abstractionAlertLicences"', () => {
+            it('returns an empty array', () => {
+              const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+              expect(result.licences).to.be.empty()
+            })
+          })
+        })
+      })
+
+      describe('when the abstraction alert is not "some"', () => {
+        it('returns an empty array', () => {
+          const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+          expect(result.licences).to.be.empty()
         })
       })
     })
