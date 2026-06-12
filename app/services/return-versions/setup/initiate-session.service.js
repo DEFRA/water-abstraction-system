@@ -7,8 +7,8 @@
 
 const Boom = require('@hapi/boom')
 
+const CreateSessionDal = require('../../../dal/create-session.dal.js')
 const FetchLicenceService = require('./fetch-licence.service.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Initiates the session record using for setting up a new return requirement
@@ -34,17 +34,7 @@ async function go(licenceId, journey) {
 
   const data = _data(licence, journey)
 
-  return _createSession(data)
-}
-
-async function _createSession(data) {
-  const session = await SessionModel.query()
-    .insert({
-      data
-    })
-    .returning('id')
-
-  return session
+  return CreateSessionDal.go(data)
 }
 
 function _data(licence, journey) {
