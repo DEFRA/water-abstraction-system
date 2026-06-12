@@ -5,8 +5,8 @@
  * @module InitiateSessionService
  */
 
+const CreateSessionDal = require('../../../dal/create-session.dal.js')
 const MonitoringStationModel = require('../../../models/monitoring-station.model.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Initiates the session record used for setting up a new licence monitoring station journey
@@ -27,7 +27,7 @@ async function go(monitoringStationId) {
   const monitoringStation = await _fetchMonitoringStation(monitoringStationId)
   const data = { monitoringStationId, ...monitoringStation }
 
-  const { id: sessionId } = await SessionModel.query().insert({ data }).returning('id')
+  const { id: sessionId } = await CreateSessionDal.go(data)
 
   return sessionId
 }

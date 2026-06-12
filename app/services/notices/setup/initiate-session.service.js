@@ -5,8 +5,8 @@
  * @module InitiateSessionService
  */
 
+const CreateSessionDal = require('../../../dal/create-session.dal.js')
 const DetermineLicenceMonitoringStationsService = require('./abstraction-alerts/determine-licence-monitoring-stations.service.js')
-const SessionModel = require('../../../models/session.model.js')
 const { generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
 const { NoticeJourney, NoticeType, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
 
@@ -39,15 +39,13 @@ async function go(journey, monitoringStationId = null) {
     additionalData = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
   }
 
-  const session = await SessionModel.query()
-    .insert({
-      data: {
-        ...additionalData,
-        ...noticeProperties,
-        journey
-      }
-    })
-    .returning('id')
+  const data = {
+    ...additionalData,
+    ...noticeProperties,
+    journey
+  }
+
+  const session = await CreateSessionDal.go(data)
 
   return {
     sessionId: session.id,

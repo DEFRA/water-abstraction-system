@@ -5,9 +5,9 @@
  * @module InitiateSessionService
  */
 
+const CreateSessionDal = require('../../../../dal/create-session.dal.js')
 const FetchLicencesDal = require('../../../../dal/users/external/setup/fetch-licences.dal.js')
 const FetchUserDal = require('../../../../dal/users/fetch-user.dal.js')
-const SessionModel = require('../../../../models/session.model.js')
 
 /**
  * Initiates the session record used for unlinking licences from an external user account
@@ -32,9 +32,9 @@ async function go(id, back) {
 
   const activeNavBar = back === 'users' ? 'users' : 'search'
 
-  return SessionModel.query()
-    .insert({ data: { activeNavBar, licences, selectedLicences: [], user } })
-    .returning('id')
+  const data = { activeNavBar, licences, selectedLicences: [], user }
+
+  return CreateSessionDal.go(data)
 }
 
 module.exports = {
