@@ -5,8 +5,8 @@
  * @module InitiateEditSessionService
  */
 
+const CreateSessionDal = require('../../../dal/create-session.dal.js')
 const FetchCompanyContactService = require('./fetch-company-contact.service.js')
-const SessionModel = require('../../../models/session.model.js')
 const { formatEmail } = require('../../../presenters/base.presenter.js')
 
 /**
@@ -19,11 +19,9 @@ const { formatEmail } = require('../../../presenters/base.presenter.js')
 async function go(companyContactId) {
   const companyContact = await FetchCompanyContactService.go(companyContactId)
 
-  return SessionModel.query()
-    .insert({
-      data: _formatDataForJourney(companyContact)
-    })
-    .returning('id')
+  const data = _formatDataForJourney(companyContact)
+
+  return CreateSessionDal.go(data)
 }
 
 /**
