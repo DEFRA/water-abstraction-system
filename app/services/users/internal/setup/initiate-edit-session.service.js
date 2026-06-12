@@ -19,6 +19,8 @@ const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
 async function go(id) {
   const user = await FetchUserDetailsDal.go(id)
 
+  user.status = user.$status()
+
   return SessionModel.query()
     .insert({ data: _formatDataForJourney(user) })
     .returning('id')

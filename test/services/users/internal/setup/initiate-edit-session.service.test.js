@@ -30,6 +30,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
     describe('for a user that has no groups or roles', () => {
       beforeEach(() => {
         user = {
+          $status: Sinon.stub().returns('enabled'),
           groups: [],
           id,
           roles: [],
@@ -63,7 +64,13 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
         expect(matchingSession.data).to.equal({
           email: 'bob.bobbles@environment-agency.gov.uk',
           permission: 'basic',
-          user
+          user: {
+            groups: [],
+            id,
+            roles: [],
+            status: 'enabled',
+            username: 'bob.bobbles@environment-agency.gov.uk'
+          }
         })
       })
     })
@@ -71,6 +78,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
     describe('for a user that has groups and roles', () => {
       beforeEach(() => {
         user = {
+          $status: Sinon.stub().returns('enabled'),
           groups: [{ group: 'nps' }],
           id,
           roles: [{ role: 'ar_approver' }],
@@ -104,7 +112,13 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
         expect(matchingSession.data).to.equal({
           email: 'bob.bobbles@environment-agency.gov.uk',
           permission: 'nps_ar_approver',
-          user
+          user: {
+            groups: [{ group: 'nps' }],
+            id,
+            roles: [{ role: 'ar_approver' }],
+            status: 'enabled',
+            username: 'bob.bobbles@environment-agency.gov.uk'
+          }
         })
       })
     })
