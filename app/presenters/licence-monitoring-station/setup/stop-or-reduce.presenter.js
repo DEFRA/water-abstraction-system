@@ -1,5 +1,7 @@
 'use strict'
 
+const { checkUrl } = require('../../../lib/check-page.lib.js')
+
 /**
  * Formats data for the `/licence-monitoring-station/setup/{sessionId}/stop-or-reduce` page
  * @module StopOrReducePresenter
@@ -16,23 +18,13 @@ function go(session) {
   const { id: sessionId, label, stopOrReduce, reduceAtThreshold } = session
 
   return {
-    backLink: _backLink(session),
+    backLink: checkUrl(session, `/system/licence-monitoring-station/setup/${session.id}/threshold-and-unit`),
     monitoringStationLabel: label,
     pageTitle: 'Does the licence holder need to stop or reduce at this threshold?',
     reduceAtThreshold: reduceAtThreshold ?? null,
     sessionId,
     stopOrReduce: stopOrReduce ?? null
   }
-}
-
-function _backLink(session) {
-  const { checkPageVisited, id } = session
-
-  if (checkPageVisited) {
-    return `/system/licence-monitoring-station/setup/${id}/check`
-  }
-
-  return `/system/licence-monitoring-station/setup/${id}/threshold-and-unit`
 }
 
 module.exports = {
