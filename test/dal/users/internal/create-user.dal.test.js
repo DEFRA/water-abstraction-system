@@ -54,14 +54,22 @@ describe('Users - Internal - Create User DAL', () => {
 
       const user = await UserModel.query().where('username', session.email).limit(1).first()
 
-      expect(user.application).to.equal('water_admin')
-      expect(user.badLogins).to.equal(0)
-      expect(user.enabled).to.be.true()
+      expect(user).to.equal(
+        {
+          application: 'water_admin',
+          badLogins: 0,
+          enabled: true,
+          lastLogin: null,
+          licenceEntityId: null,
+          resetRequired: 1,
+          userData: null,
+          username: session.email
+        },
+        { skip: ['createdAt', 'id', 'password', 'resetGuid', 'resetGuidCreatedAt', 'updatedAt', 'userId'] }
+      )
       expect(user.password).to.exist()
       expect(user.resetGuid).to.exist()
       expect(user.resetGuidCreatedAt).to.be.instanceof(Date)
-      expect(user.resetRequired).to.equal(1)
-      expect(user.username).to.equal(session.email)
     })
 
     it('creates an event', async () => {
@@ -70,13 +78,26 @@ describe('Users - Internal - Create User DAL', () => {
       const user = await UserModel.query().where('username', session.email).limit(1).first()
       const event = await EventModel.query().where('issuer', 'internal-user-creator@wrls.gov.uk').limit(1).first()
 
+      expect(event).to.equal(
+        {
+          referenceCode: null,
+          type: 'new-user',
+          subtype: 'internal',
+          issuer: 'internal-user-creator@wrls.gov.uk',
+          licences: [],
+          entities: [],
+          metadata: {
+            user: user.username,
+            userId: user.userId
+          },
+          status: null,
+          overallStatus: null,
+          statusCounts: null,
+          triggerNoticeId: null
+        },
+        { skip: ['createdAt', 'id', 'updatedAt'] }
+      )
       expect(event.createdAt).to.be.instanceof(Date)
-      expect(event.entities).to.equal([])
-      expect(event.issuer).to.equal('internal-user-creator@wrls.gov.uk')
-      expect(event.licences).to.equal([])
-      expect(event.metadata).to.equal({ user: user.username, userId: user.userId })
-      expect(event.subtype).to.equal('internal')
-      expect(event.type).to.equal('new-user')
       expect(event.updatedAt).to.be.instanceof(Date)
     })
 
@@ -93,21 +114,14 @@ describe('Users - Internal - Create User DAL', () => {
         session.permission = 'basic'
       })
 
-      it('does not create any user groups', async () => {
+      it('does not create any user groups or user roles', async () => {
         await CreateUserDal.go(auth, session)
 
         const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
         const userGroup = await UserGroupModel.query().where({ userId })
-
-        expect(userGroup).to.be.empty()
-      })
-
-      it('does not create any user roles', async () => {
-        await CreateUserDal.go(auth, session)
-
-        const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
         const userRole = await UserRoleModel.query().where({ userId })
 
+        expect(userGroup).to.be.empty()
         expect(userRole).to.be.empty()
       })
     })
@@ -117,23 +131,16 @@ describe('Users - Internal - Create User DAL', () => {
         session.permission = 'nps'
       })
 
-      it('creates the user groups', async () => {
+      it('creates the user groups but no user roles', async () => {
         await CreateUserDal.go(auth, session)
 
         const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
         const userGroup = await UserGroupModel.query().where({ userId }).withGraphFetched('group')
+        const userRole = await UserRoleModel.query().where({ userId })
 
         expect(userGroup).to.have.length(1)
         expect(userGroup[0].userId).to.equal(userId)
         expect(userGroup[0].group.group).to.equal('nps')
-      })
-
-      it('does not create any user roles', async () => {
-        await CreateUserDal.go(auth, session)
-
-        const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
-        const userRole = await UserRoleModel.query().where({ userId })
-
         expect(userRole).to.be.empty()
       })
     })
@@ -143,23 +150,16 @@ describe('Users - Internal - Create User DAL', () => {
         session.permission = 'nps_ar_approver'
       })
 
-      it('creates the user groups', async () => {
+      it('creates the user groups and user roles', async () => {
         await CreateUserDal.go(auth, session)
 
         const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
         const userGroup = await UserGroupModel.query().where({ userId }).withGraphFetched('group')
+        const userRole = await UserRoleModel.query().where({ userId }).withGraphFetched('role')
 
         expect(userGroup).to.have.length(1)
         expect(userGroup[0].userId).to.equal(userId)
         expect(userGroup[0].group.group).to.equal('nps')
-      })
-
-      it('creates the user roles', async () => {
-        await CreateUserDal.go(auth, session)
-
-        const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
-        const userRole = await UserRoleModel.query().where({ userId }).withGraphFetched('role')
-
         expect(userRole).to.have.length(1)
         expect(userRole[0].userId).to.equal(userId)
         expect(userRole[0].role.role).to.equal('ar_approver')
