@@ -10,8 +10,8 @@ const SessionModel = require('../models/session.model.js')
 /**
  * Creates a new session
  *
- * We default `data` to `{}` when a new record is created because Objection.js throws a 'The query is empty' error
- * if we pass nothing into `insert()`.
+ * We default `data` to `{}` when a new record is created because Objection.js throws a 'The query is empty' error if
+ * we pass nothing into `insert()`.
  *
  * @param {object} [data={}] - The data for the new session.
  *
