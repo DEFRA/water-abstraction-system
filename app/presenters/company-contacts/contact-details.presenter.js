@@ -13,10 +13,13 @@ const { formatEmail, formatLongDate } = require('../base.presenter.js')
  *
  * @param {module:CompanyModel} company - The customer from the companies table
  * @param {module:CompanyContactModel} companyContact - The customer contact from the company contacts table
+ * @param {object[]} licences - The licences linked to the abstraction alert licences
  *
  * @returns {object} The data formatted for the view template
  */
-function go(company, companyContact) {
+function go(company, companyContact, licences) {
+  const abstractionAlertType = companyContact.$abstractionAlertType()
+
   return {
     additionalContact: companyContact.licenceRole.name === 'additionalContact',
     backLink: {
@@ -24,10 +27,11 @@ function go(company, companyContact) {
       text: 'Go back to licence holder contacts'
     },
     contact: {
-      abstractionAlerts: _abstractionAlerts(companyContact),
+      abstractionAlertsLabel: abstractionAlertsLabel(abstractionAlertType),
       created: _created(companyContact),
       email: formatEmail(companyContact.contact.email),
       lastUpdated: _lastUpdated(companyContact),
+      licences: _licences(abstractionAlertType, licences),
       name: companyContact.contact.$name()
     },
     editContactLink: `/system/company-contacts/setup/${companyContact.id}/edit`,
@@ -35,12 +39,6 @@ function go(company, companyContact) {
     pageTitleCaption: company.name,
     removeContactLink: `/system/company-contacts/${companyContact.id}/remove`
   }
-}
-
-function _abstractionAlerts(companyContact) {
-  const abstractionAlerts = companyContact.$abstractionAlertType()
-
-  return abstractionAlertsLabel(abstractionAlerts)
 }
 
 function _created(companyContact) {
@@ -63,6 +61,15 @@ function _lastUpdated(companyContact) {
   return `${formattedDate} by ${companyContact.updatedByUser.username}`
 }
 
+function _licences(abstractionAlertType, licences) {
+  if (abstractionAlertType !== 'some') {
+    return []
+  }
+
+  return licences.map((licence) => {
+    return licence.licenceRef
+  })
+}
 module.exports = {
   go
 }

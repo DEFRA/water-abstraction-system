@@ -13,6 +13,7 @@ const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 const YarStub = require('../../support/stubs/yar.stub.js')
 
 // Things we need to stub
+const AbstractionAlertLicencesDal = require('../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
 const FetchCompanyContactDetailsService = require('../../../app/services/company-contacts/fetch-company-contact-details.service.js')
 const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
 
@@ -25,15 +26,16 @@ describe('Company Contacts - View Contact Details Service', () => {
   let companyContact
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     auth = { credentials: { roles: [] } }
 
     companyContact = CustomersFixtures.companyContact()
 
     company = CustomersFixtures.company()
 
-    Sinon.stub(FetchCompanyService, 'go').returns(company)
-    Sinon.stub(FetchCompanyContactDetailsService, 'go').returns(companyContact)
+    Sinon.stub(AbstractionAlertLicencesDal, 'go').resolves([])
+    Sinon.stub(FetchCompanyService, 'go').resolves(company)
+    Sinon.stub(FetchCompanyContactDetailsService, 'go').resolves(companyContact)
 
     yarStub = YarStub.build(Sinon)
     yarStub.flash.returns([{ titleText: 'Updated', text: 'Contact details updated.' }])
@@ -60,10 +62,11 @@ describe('Company Contacts - View Contact Details Service', () => {
           text: 'Go back to licence holder contacts'
         },
         contact: {
-          abstractionAlerts: 'No',
+          abstractionAlertsLabel: 'No',
           created: '1 January 2022 by nexus6.hunter@offworld.net',
           email: 'rachael.tyrell@tyrellcorp.com',
           lastUpdated: '1 January 2022 by void.kampff@tyrell.com',
+          licences: [],
           name: 'Rachael Tyrell'
         },
         editContactLink: `/system/company-contacts/setup/${companyContact.id}/edit`,

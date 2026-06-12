@@ -3,6 +3,32 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
+
+{% macro collapsibleList(items, label, threshold = 5) %}
+
+  {% if items.length > threshold %}
+    {{ govukDetails({
+      summaryText: items.length + " " + label,
+      html: newLineArrayItems(items) | safe,
+      classes: "govuk-!-margin-bottom-0 govuk-!-padding-bottom-0 govuk-!-padding-top-0"
+    }) }}
+  {% else %}
+    {{ newLineArrayItems(items) | safe }}
+  {% endif %}
+{% endmacro %}
+
+{% set abstractionAlertsHtml %}
+  {% if contact.licences.length %}
+    <p class="govuk-!-margin-bottom-3">{{ contact.abstractionAlertsLabel }}</p>
+    {{ collapsibleList(contact.licences, "Licences") }}
+  {% else %}
+    <p class="govuk-!-margin-bottom-1">{{ contact.abstractionAlertsLabel }}</p>
+  {% endif %}
+{% endset %}
+
 {% block pageContent %}
   {{ govukSummaryList({
     rows: [
@@ -16,7 +42,7 @@
       },
       {
         key: { text: "Water abstraction alerts" },
-        value: { text: contact.abstractionAlerts }
+        value: { html: abstractionAlertsHtml }
       },
       {
         key: { text: "Created" },
