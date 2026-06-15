@@ -28,7 +28,8 @@ function go(company, companyContact, licences) {
     editContactLink: `/system/company-contacts/setup/${companyContact.id}/edit`,
     pageTitle: `Contact details for ${companyContact.contact.$name()}`,
     pageTitleCaption: company.name,
-    removeContactLink: `/system/company-contacts/${companyContact.id}/remove`
+    removeContactLink: `/system/company-contacts/${companyContact.id}/remove`,
+    warning: _warning(licences)
   }
 }
 
@@ -74,6 +75,22 @@ function _licences(abstractionAlertType, licences) {
     return licence.licenceRef
   })
 }
+
+function _warning(licences) {
+  const endedLicences = licences.filter((licence) => {
+    return licence.$ended()
+  })
+
+  if (endedLicences.length === 0) {
+    return null
+  }
+
+  return {
+    text: 'One or more licences for abstraction alerts have ended. No alerts will be sent for these.',
+    iconFallbackText: 'Warning'
+  }
+}
+
 module.exports = {
   go
 }
