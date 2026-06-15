@@ -15,10 +15,14 @@ const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
  * @returns {object} The data formatted for the view template
  */
 function go(session) {
-  const { email, permission } = session
+  const { email, id: sessionId, permission } = session
 
   return {
     activeNavBar: 'users',
+    backLink: {
+      href: `/system/users/internal/setup/${sessionId}/check`,
+      text: 'Back'
+    },
     email,
     pageTitle: 'You are about to cancel this user',
     pageTitleCaption: 'Internal',
