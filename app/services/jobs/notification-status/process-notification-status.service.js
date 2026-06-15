@@ -7,6 +7,7 @@
 
 const CheckNotificationStatusService = require('../../notifications/check-notification-status.service.js')
 const FetchNotificationsService = require('./fetch-notifications.service.js')
+const SendAlternateNoticesService = require('./send-alternate-notices.service.js')
 const UpdateNoticeService = require('../../notices/update-notice.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 
@@ -45,6 +46,8 @@ async function go() {
     }
 
     await _updateEventErrorCount(notifications)
+
+    await SendAlternateNoticesService.go(notifications)
 
     calculateAndLogTimeTaken(startTime, 'Notification status job complete', { count: notifications.length })
   } catch (error) {
