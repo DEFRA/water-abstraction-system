@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetch all licences by abstraction alert licences ids
+ * Fetch all licences for abstraction alert licences ids
  * @module AbstractionAlertLicencesDal
  */
 
 const LicenceModel = require('../../models/licence.model.js')
 
 /**
- * Fetch all licences by abstraction alert licences ids
+ * Fetch all licences for abstraction alert licences ids
  *
  * @param {string[]|null} abstractionAlertLicences - The UUIDs of the abstraction alert licences
  *

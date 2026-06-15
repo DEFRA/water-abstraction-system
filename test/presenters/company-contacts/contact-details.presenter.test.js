@@ -131,9 +131,6 @@ describe('Company Contacts - Contact Details presenter', () => {
 
         describe('when the abstractionAlertType is "some"', () => {
           beforeEach(() => {
-            companyContact.abstractionAlerts = true
-            companyContact.abstractionAlertLicences = [generateUUID()]
-
             licences = [
               {
                 id: generateUUID(),
@@ -143,6 +140,9 @@ describe('Company Contacts - Contact Details presenter', () => {
                 revokedDate: null
               }
             ]
+
+            companyContact.abstractionAlerts = true
+            companyContact.abstractionAlertLicences = [licences[0].id]
           })
 
           it('returns the licence refs', () => {
