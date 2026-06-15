@@ -26,6 +26,10 @@ describe('Users - Internal - Setup - Cancel Presenter', () => {
 
       expect(result).to.equal({
         activeNavBar: 'users',
+        backLink: {
+          href: `/system/users/internal/setup/${session.id}/check`,
+          text: 'Back'
+        },
         email: session.email,
         pageTitle: 'You are about to cancel this user',
         pageTitleCaption: 'Internal',
