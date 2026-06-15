@@ -56,9 +56,10 @@ describe('Company Contacts - Setup - Check Service', () => {
         const result = await ViewCheckService.go(session.id, yarStub)
 
         expect(result).to.equal({
-          abstractionAlerts: 'Yes, for all licences',
+          abstractionAlertsLabel: 'Yes, for all licences',
           email: 'eric@test.com',
           emailInUse: null,
+          licences: [],
           links: {
             abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
             cancel: `/system/company-contacts/setup/${session.id}/cancel`,

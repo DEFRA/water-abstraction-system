@@ -18,17 +18,18 @@ const { abstractionAlertsLabel } = require('../../crm.presenter.js')
  * @returns {object} The data formatted for the view template
  */
 function go(session, savedCompanyContacts, sentNotification) {
-  const { company, email, name, abstractionAlerts, companyContact } = session
+  const { company, email, name, abstractionAlerts, companyContact, licences, abstractionAlertLicences } = session
 
   const matchingContact = _matchingContact(email, name, savedCompanyContacts)
 
   return {
-    abstractionAlerts: abstractionAlertsLabel(abstractionAlerts),
+    abstractionAlertsLabel: abstractionAlertsLabel(abstractionAlerts),
     email,
     emailInUse: _emailInUse(sentNotification, companyContact),
     name,
     pageTitle: 'Check contact',
     pageTitleCaption: company.name,
+    licences: _licences(licences, abstractionAlertLicences, abstractionAlerts),
     links: {
       abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
       cancel: `/system/company-contacts/setup/${session.id}/cancel`,
@@ -57,6 +58,19 @@ function _emailInUse(sentNotification, companyContact) {
   return null
 }
 
+function _licences(licences, abstractionAlertLicences, abstractionAlerts) {
+  if (abstractionAlerts !== 'some') {
+    return []
+  }
+
+  return licences
+    .filter((licence) => {
+      return abstractionAlertLicences.includes(licence.id)
+    })
+    .map((licence) => {
+      return licence.licenceRef
+    })
+}
 /*
  * Check if the contact already exists, if it does, then this is a match.
  *
