@@ -2,7 +2,7 @@
 
 /**
  * Fetch all licences for abstraction alert licences ids
- * @module AbstractionAlertLicencesDal
+ * @module FetchAbstractionAlertLicencesDal
  */
 
 const LicenceModel = require('../../models/licence.model.js')

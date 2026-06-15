@@ -13,7 +13,7 @@ const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 const YarStub = require('../../support/stubs/yar.stub.js')
 
 // Things we need to stub
-const AbstractionAlertLicencesDal = require('../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
+const FetchAbstractionAlertLicencesDal = require('../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
 const FetchCompanyContactDetailsService = require('../../../app/services/company-contacts/fetch-company-contact-details.service.js')
 const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
 
@@ -33,7 +33,7 @@ describe('Company Contacts - View Contact Details Service', () => {
 
     company = CustomersFixtures.company()
 
-    Sinon.stub(AbstractionAlertLicencesDal, 'go').resolves([])
+    Sinon.stub(FetchAbstractionAlertLicencesDal, 'go').resolves([])
     Sinon.stub(FetchCompanyService, 'go').resolves(company)
     Sinon.stub(FetchCompanyContactDetailsService, 'go').resolves(companyContact)
 
