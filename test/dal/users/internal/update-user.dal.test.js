@@ -10,9 +10,13 @@ const { expect } = Code
 
 // Test helpers
 const EventModel = require('../../../../app/models/event.model.js')
+const GroupHelper = require('../../../support/helpers/group.helper.js')
+const RoleHelper = require('../../../support/helpers/role.helper.js')
+const UserGroupHelper = require('../../../support/helpers/user-group.helper.js')
 const UserGroupModel = require('../../../../app/models/user-group.model.js')
 const UserHelper = require('../../../support/helpers/user.helper.js')
 const UserModel = require('../../../../app/models/user.model.js')
+const UserRoleHelper = require('../../../support/helpers/user-role.helper.js')
 const UserRoleModel = require('../../../../app/models/user-role.model.js')
 
 // Things we need to stub
@@ -24,18 +28,31 @@ const UpdateUserDal = require('../../../../app/dal/users/internal/update-user.da
 describe('Users - Internal - Update User DAL', () => {
   let auth
   let existingUser
+  let existingUserGroup
+  let existingUserRole
   let session
 
   beforeEach(async () => {
+    const groupId = GroupHelper.data.find((group) => {
+      return group.group === 'nps'
+    }).id
+
+    const roleId = RoleHelper.data.find((role) => {
+      return role.role === 'ar_approver'
+    }).id
+
     auth = { credentials: { user: { id: 'f42aa5b2-95e2-49c0-9ad4-4a7c3c5aefaf' } } }
 
     existingUser = await UserHelper.add()
+
+    existingUserGroup = await UserGroupHelper.add({ groupId, userId: existingUser.userId })
+    existingUserRole = await UserRoleHelper.add({ roleId, userId: existingUser.userId })
 
     session = {
       email: UserHelper.generateUserName(),
       permission: 'basic',
       user: {
-        currentPermission: 'environment_officer',
+        currentPermission: 'nps_ar_approver',
         id: existingUser.id,
         userId: existingUser.userId,
         username: existingUser.username
@@ -122,10 +139,6 @@ describe('Users - Internal - Update User DAL', () => {
 
     describe('and the permission has changed', () => {
       describe('and the new permission has no groups or roles', () => {
-        beforeEach(() => {
-          session.permission = 'basic'
-        })
-
         it('does not create any user groups or user roles', async () => {
           await UpdateUserDal.go(auth, session)
 
@@ -159,7 +172,7 @@ describe('Users - Internal - Update User DAL', () => {
 
       describe('and the new permission has both groups and roles', () => {
         beforeEach(() => {
-          session.permission = 'nps_ar_approver'
+          session.permission = 'nps_ar_user'
         })
 
         it('creates the user groups and user roles', async () => {
@@ -175,24 +188,24 @@ describe('Users - Internal - Update User DAL', () => {
           expect(userGroup[0].group.group).to.equal('nps')
           expect(userRole).to.have.length(1)
           expect(userRole[0].userId).to.equal(existingUser.userId)
-          expect(userRole[0].role.role).to.equal('ar_approver')
+          expect(userRole[0].role.role).to.equal('ar_user')
         })
       })
     })
 
     describe('and the permission has not changed', () => {
       beforeEach(() => {
-        session.user = { ...session.user, currentPermission: session.permission }
+        session.permission = session.user.currentPermission
       })
 
-      it('does not update any user groups or user roles', async () => {
+      it('does not remove the existing user groups or user roles', async () => {
         await UpdateUserDal.go(auth, session)
 
-        const userGroup = await UserGroupModel.query().where({ userId: existingUser.userId })
-        const userRole = await UserRoleModel.query().where({ userId: existingUser.userId })
+        const userGroup = await UserGroupModel.query().where({ id: existingUserGroup.id, userId: existingUser.userId })
+        const userRole = await UserRoleModel.query().where({ id: existingUserRole.id, userId: existingUser.userId })
 
-        expect(userGroup).to.be.empty()
-        expect(userRole).to.be.empty()
+        expect(userGroup).to.have.length(1)
+        expect(userRole).to.have.length(1)
       })
     })
   })
