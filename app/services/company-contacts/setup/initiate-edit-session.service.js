@@ -22,10 +22,7 @@ async function go(companyContactId) {
 
   const licences = await FetchCompanyLicencesDal.go(companyContact.company.id)
 
-  const data = {
-    ..._formatDataForJourney(companyContact),
-    licences
-  }
+  const data = _formatDataForJourney(companyContact, licences)
 
   return CreateSessionDal.go(data)
 }
@@ -42,15 +39,18 @@ async function go(companyContactId) {
  *
  * @private
  */
-function _formatDataForJourney(companyContact) {
+function _formatDataForJourney(companyContact, licences) {
   const { abstractionAlertLicences, company, contact } = companyContact
+
+  const abstractionAlerts = companyContact.$abstractionAlertType()
 
   return {
     abstractionAlertLicences,
-    abstractionAlerts: companyContact.$abstractionAlertType(),
+    abstractionAlerts: licences.length > 0 ? abstractionAlerts : 'no',
     company,
     companyContact,
     email: formatEmail(contact.email),
+    licences,
     name: contact.$name()
   }
 }

@@ -28,6 +28,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
   let contact
   let licences
   let stubFetchCompanyContactDal
+  let stubFetchCompanyLicencesDal
 
   beforeEach(() => {
     company = CustomersFixtures.company()
@@ -44,8 +45,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
     })
 
     stubFetchCompanyContactDal = Sinon.stub(FetchCompanyContactDal, 'go').returns(companyContact)
-
-    Sinon.stub(FetchCompanyLicencesDal, 'go').returns(licences)
+    stubFetchCompanyLicencesDal = Sinon.stub(FetchCompanyLicencesDal, 'go').returns(licences)
   })
 
   afterEach(() => {
@@ -85,12 +85,48 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
           stubFetchCompanyContactDal.resolves(companyContact)
         })
 
-        it('returns "some"', async () => {
-          const result = await InitiateEditSessionService.go(companyContact.id)
+        describe('and there are active licences', () => {
+          describe('and at least one licence matches an "abstractionAlertLicences"', () => {
+            beforeEach(() => {
+              stubFetchCompanyLicencesDal.resolves([companyContact.abstractionAlertLicences[0].id])
+            })
 
-          const matchingSession = await SessionModel.query().findById(result.id)
+            it('returns "some"', async () => {
+              const result = await InitiateEditSessionService.go(companyContact.id)
 
-          expect(matchingSession.abstractionAlerts).to.equal('some')
+              const matchingSession = await SessionModel.query().findById(result.id)
+
+              expect(matchingSession.abstractionAlerts).to.equal('some')
+            })
+          })
+
+          describe('and no licences match the "abstractionAlertLicences"', () => {
+            beforeEach(() => {
+              stubFetchCompanyLicencesDal.resolves(generateUUID())
+            })
+
+            it('returns "some"', async () => {
+              const result = await InitiateEditSessionService.go(companyContact.id)
+
+              const matchingSession = await SessionModel.query().findById(result.id)
+
+              expect(matchingSession.abstractionAlerts).to.equal('some')
+            })
+          })
+        })
+
+        describe('and there are no active licences', () => {
+          beforeEach(() => {
+            stubFetchCompanyLicencesDal.resolves([])
+          })
+
+          it('returns "no"', async () => {
+            const result = await InitiateEditSessionService.go(companyContact.id)
+
+            const matchingSession = await SessionModel.query().findById(result.id)
+
+            expect(matchingSession.abstractionAlerts).to.equal('no')
+          })
         })
       })
 
