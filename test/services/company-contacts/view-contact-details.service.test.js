@@ -51,11 +51,6 @@ describe('Company Contacts - View Contact Details Service', () => {
 
       expect(result).to.equal({
         activeSecondaryNav: 'contact-details',
-        notification: {
-          text: 'Contact details updated.',
-          titleText: 'Updated'
-        },
-        roles: [],
         additionalContact: true,
         backLink: {
           href: `/system/companies/${company.id}/contacts`,
@@ -70,9 +65,15 @@ describe('Company Contacts - View Contact Details Service', () => {
           name: 'Rachael Tyrell'
         },
         editContactLink: `/system/company-contacts/setup/${companyContact.id}/edit`,
+        notification: {
+          text: 'Contact details updated.',
+          titleText: 'Updated'
+        },
         pageTitle: 'Contact details for Rachael Tyrell',
         pageTitleCaption: 'Tyrell Corporation',
-        removeContactLink: `/system/company-contacts/${companyContact.id}/remove`
+        removeContactLink: `/system/company-contacts/${companyContact.id}/remove`,
+        roles: [],
+        warning: null
       })
     })
   })

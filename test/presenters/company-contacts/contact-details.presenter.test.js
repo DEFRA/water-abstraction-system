@@ -9,8 +9,10 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
+const LicenceModel = require('../../../app/models/licence.model.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { yesterday } = require('../../support/general.js')
 
 // Thing under test
 const ContactDetailsPresenter = require('../../../app/presenters/company-contacts/contact-details.presenter.js')
@@ -47,6 +49,7 @@ describe('Company Contacts - Contact Details presenter', () => {
           name: 'Rachael Tyrell'
         },
         editContactLink: `/system/company-contacts/setup/${companyContact.id}/edit`,
+        warning: null,
         pageTitle: 'Contact details for Rachael Tyrell',
         pageTitleCaption: 'Tyrell Corporation',
         removeContactLink: `/system/company-contacts/${companyContact.id}/remove`
@@ -132,13 +135,13 @@ describe('Company Contacts - Contact Details presenter', () => {
         describe('when the abstractionAlertType is "some"', () => {
           beforeEach(() => {
             licences = [
-              {
+              LicenceModel.fromJson({
                 id: generateUUID(),
                 licenceRef: generateLicenceRef(),
                 lapsedDate: null,
                 expiredDate: null,
                 revokedDate: null
-              }
+              })
             ]
 
             companyContact.abstractionAlerts = true
@@ -149,6 +152,39 @@ describe('Company Contacts - Contact Details presenter', () => {
             const result = ContactDetailsPresenter.go(company, companyContact, licences)
 
             expect(result.contact.licences).to.equal([licences[0].licenceRef])
+          })
+        })
+      })
+    })
+
+    describe('the "warning" property', () => {
+      describe('when no licences have ended', () => {
+        it('returns null', () => {
+          const result = ContactDetailsPresenter.go(company, companyContact, licences)
+
+          expect(result.warning).to.be.null()
+        })
+      })
+
+      describe('when one or more licences have ended', () => {
+        beforeEach(() => {
+          licences = [
+            LicenceModel.fromJson({
+              id: generateUUID(),
+              licenceRef: generateLicenceRef(),
+              lapsedDate: null,
+              expiredDate: yesterday(),
+              revokedDate: null
+            })
+          ]
+        })
+
+        it('returns a warning object', () => {
+          const result = ContactDetailsPresenter.go(company, companyContact, licences)
+
+          expect(result.warning).to.equal({
+            text: 'One or more licences for abstraction alerts have ended. No alerts will be sent for these.',
+            iconFallbackText: 'Warning'
           })
         })
       })

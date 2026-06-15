@@ -9,7 +9,7 @@ const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 const { compareDates } = require('../lib/dates.lib.js')
-const { timestampForPostgres } = require('../lib/general.lib.js')
+const { timestampForPostgres, today } = require('../lib/general.lib.js')
 
 class LicenceModel extends BaseModel {
   static get tableName() {
@@ -265,6 +265,22 @@ class LicenceModel extends BaseModel {
     }
 
     return this.licenceVersions[0]
+  }
+
+  /**
+   * Determine if the licence has ended
+   *
+   * A licence is considered ended if any of its end dates (revoked, lapsed, or expired) are set and that date is today
+   * or in the past.
+   *
+   * @returns {boolean}
+   */
+  $ended() {
+    const endDates = [this.revokedDate, this.lapsedDate, this.expiredDate]
+
+    return endDates.some((date) => {
+      return date && date <= today()
+    })
   }
 
   /**
