@@ -25,20 +25,18 @@ const { userPermissions } = require('../../../lib/static-lookups.lib.js')
  */
 async function go(auth, session) {
   const { email, permission, user } = session
-  const { groups, roles } = userPermissions[permission]
 
   const { currentPermission, id, userId, username } = user
 
-  const groupIds = await GroupModel.query().select('id').whereIn('group', groups)
-  const roleIds = await RoleModel.query().select('id').whereIn('role', roles)
+  const newGroupsRoles = await _newGroupsRoles(currentPermission, permission)
 
   const { username: issuer } = await FetchUserDal.go(auth.credentials.user.id)
 
   return UserModel.transaction(async (trx) => {
     const resetGuid = await _updateUser(email, id, username, trx)
 
-    if (permission !== currentPermission) {
-      await _insertUserGroupsRoles(groupIds, roleIds, userId, trx)
+    if (newGroupsRoles) {
+      await _insertUserGroupsRoles(newGroupsRoles, userId, trx)
     }
 
     await _insertEvent(email, issuer, userId, trx)
@@ -77,7 +75,9 @@ async function _insertUserGroups(groupIds, userId, trx) {
   }
 }
 
-async function _insertUserGroupsRoles(groupIds, roleIds, userId, trx) {
+async function _insertUserGroupsRoles(newGroupsRoles, userId, trx) {
+  const {groupIds, roleIds } = newGroupsRoles
+
   await _deleteExistingGroupsRoles(userId, trx)
 
   if (groupIds.length > 0) {
@@ -93,6 +93,21 @@ async function _insertUserRoles(roleIds, userId, trx) {
   for (const { id: roleId } of roleIds) {
     await UserRoleModel.query(trx).insert({ id: generateUUID(), roleId, userId })
   }
+}
+
+async function _newGroupsRoles(currentPermission, permission) {
+  if (permission !== currentPermission) {
+    const { groups, roles } = userPermissions[permission]
+
+    const [groupIds, roleIds] = await Promise.all([
+      GroupModel.query().select('id').whereIn('group', groups),
+      RoleModel.query().select('id').whereIn('role', roles)
+    ])
+
+    return { groupIds, roleIds }
+  }
+
+  return null
 }
 
 async function _updateUser(email, id, username, trx) {
