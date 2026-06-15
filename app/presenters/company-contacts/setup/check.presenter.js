@@ -63,12 +63,13 @@ function _licences(licences, abstractionAlertLicences, abstractionAlerts) {
     return []
   }
 
-  return licences.reduce((acc, licence) => {
-    if (abstractionAlertLicences.includes(licence.id)) {
-      acc.push(licence.licenceRef)
-    }
-    return acc
-  }, [])
+  return licences
+    .filter((licence) => {
+      return abstractionAlertLicences.includes(licence.id)
+    })
+    .map((licence) => {
+      return licence.licenceRef
+    })
 }
 /*
  * Check if the contact already exists, if it does, then this is a match.
