@@ -26,7 +26,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
   beforeEach(async () => {
     company = CustomersFixtures.company()
 
-    sessionData = { company }
+    sessionData = { company, licences: [] }
 
     session = SessionModelStub.build(Sinon, sessionData)
 
@@ -48,7 +48,8 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
           text: 'Back'
         },
         pageTitle: 'Should the contact get abstraction alerts?',
-        pageTitleCaption: 'Tyrell Corporation'
+        pageTitleCaption: 'Tyrell Corporation',
+        showSomeLicences: false
       })
     })
   })

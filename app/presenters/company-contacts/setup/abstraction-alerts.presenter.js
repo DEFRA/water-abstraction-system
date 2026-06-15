@@ -15,16 +15,17 @@ const { checkUrl } = require('../../../lib/check-page.lib.js')
  * @returns {object} The data formatted for the view template
  */
 function go(session) {
-  const { id: sessionId, company } = session
+  const { id: sessionId, company, licences } = session
 
   return {
+    abstractionAlerts: session.abstractionAlerts ?? null,
     backLink: {
       href: checkUrl(session, `/system/company-contacts/setup/${sessionId}/contact-email`),
       text: 'Back'
     },
     pageTitle: 'Should the contact get abstraction alerts?',
     pageTitleCaption: company.name,
-    abstractionAlerts: session.abstractionAlerts ?? null
+    showSomeLicences: licences.length > 0
   }
 }
 
