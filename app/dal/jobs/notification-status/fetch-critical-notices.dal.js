@@ -13,7 +13,8 @@ const { NoticeTypes } = require('../../../lib/static-lookups.lib.js')
  *
  * @param {string[]} noticeIds - The UUIDs of the notices processed by the status check job
  *
- * @returns {Promise<void>}
+ * @returns {Promise<module:EventModel[]>} any matching notices which are critical, and contain errored notifications
+ * to primary users that have not been sent an alternate notification
  */
 async function go(noticeIds) {
   return EventModel.query()
