@@ -11,8 +11,8 @@ const { expect } = Code
 const EventHelper = require('../../../support/helpers/event.helper.js')
 const EventModel = require('../../../../app/models/event.model.js')
 const NoticesFixture = require('../../../support/fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
 const NotificationHelper = require('../../../support/helpers/notification.helper.js')
+const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
 
 // Thing under test
 const FetchCriticalNoticesDal = require('../../../../app/dal/jobs/notification-status/fetch-critical-notices.dal.js')
