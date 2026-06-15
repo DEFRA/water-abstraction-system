@@ -9,7 +9,6 @@ const CreateSessionDal = require('../../../dal/create-session.dal.js')
 const FetchCompanyContactDal = require('../../../dal/company-contacts/setup/fetch-company-contact.dal.js')
 const FetchCompanyLicencesDal = require('../../../dal/company-contacts/fetch-company-licences.dal.js')
 const { formatEmail } = require('../../../presenters/base.presenter.js')
-const { licences } = require('../../../../test/support/fixtures/customers.fixture.js')
 
 /**
  * Initiates the session record used for setting up an existing company contact
