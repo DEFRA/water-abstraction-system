@@ -13,34 +13,23 @@ const { formatEmail, formatLongDate } = require('../base.presenter.js')
  *
  * @param {module:CompanyModel} company - The customer from the companies table
  * @param {module:CompanyContactModel} companyContact - The customer contact from the company contacts table
+ * @param {object[]} licences - The licences linked to the abstraction alert licences
  *
  * @returns {object} The data formatted for the view template
  */
-function go(company, companyContact) {
+function go(company, companyContact, licences) {
   return {
     additionalContact: companyContact.licenceRole.name === 'additionalContact',
     backLink: {
       href: `/system/companies/${company.id}/contacts`,
       text: 'Go back to licence holder contacts'
     },
-    contact: {
-      abstractionAlerts: _abstractionAlerts(companyContact),
-      created: _created(companyContact),
-      email: formatEmail(companyContact.contact.email),
-      lastUpdated: _lastUpdated(companyContact),
-      name: companyContact.contact.$name()
-    },
+    contact: _contact(companyContact, licences),
     editContactLink: `/system/company-contacts/setup/${companyContact.id}/edit`,
     pageTitle: `Contact details for ${companyContact.contact.$name()}`,
     pageTitleCaption: company.name,
     removeContactLink: `/system/company-contacts/${companyContact.id}/remove`
   }
-}
-
-function _abstractionAlerts(companyContact) {
-  const abstractionAlerts = companyContact.$abstractionAlertType()
-
-  return abstractionAlertsLabel(abstractionAlerts)
 }
 
 function _created(companyContact) {
@@ -53,6 +42,19 @@ function _created(companyContact) {
   return `${formattedDate} by ${companyContact.createdByUser.username}`
 }
 
+function _contact(companyContact, licences) {
+  const abstractionAlertType = companyContact.$abstractionAlertType()
+
+  return {
+    abstractionAlertsLabel: abstractionAlertsLabel(abstractionAlertType),
+    created: _created(companyContact),
+    email: formatEmail(companyContact.contact.email),
+    lastUpdated: _lastUpdated(companyContact),
+    licences: _licences(abstractionAlertType, licences),
+    name: companyContact.contact.$name()
+  }
+}
+
 function _lastUpdated(companyContact) {
   const formattedDate = formatLongDate(companyContact.updatedAt)
 
@@ -63,6 +65,15 @@ function _lastUpdated(companyContact) {
   return `${formattedDate} by ${companyContact.updatedByUser.username}`
 }
 
+function _licences(abstractionAlertType, licences) {
+  if (abstractionAlertType !== 'some') {
+    return []
+  }
+
+  return licences.map((licence) => {
+    return licence.licenceRef
+  })
+}
 module.exports = {
   go
 }
