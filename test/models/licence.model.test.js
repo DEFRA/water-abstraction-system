@@ -724,6 +724,20 @@ describe('Licence model', () => {
           expect(result).to.be.true()
         })
       })
+
+      describe('because an end date is today', () => {
+        beforeEach(() => {
+          revokedDate = today()
+
+          endedRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
+        })
+
+        it('returns true', () => {
+          const result = endedRecord.$ended()
+
+          expect(result).to.be.true()
+        })
+      })
     })
 
     describe('when a licence has not ended', () => {
@@ -738,20 +752,6 @@ describe('Licence model', () => {
           const result = endedRecord.$ended()
 
           expect(result).to.be.false()
-        })
-      })
-
-      describe('because an end date is today', () => {
-        beforeEach(() => {
-          revokedDate = today()
-
-          endedRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
-        })
-
-        it('returns true', () => {
-          const result = endedRecord.$ended()
-
-          expect(result).to.be.true()
         })
       })
 
