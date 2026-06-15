@@ -18,22 +18,13 @@ const { formatEmail, formatLongDate } = require('../base.presenter.js')
  * @returns {object} The data formatted for the view template
  */
 function go(company, companyContact, licences) {
-  const abstractionAlertType = companyContact.$abstractionAlertType()
-
   return {
     additionalContact: companyContact.licenceRole.name === 'additionalContact',
     backLink: {
       href: `/system/companies/${company.id}/contacts`,
       text: 'Go back to licence holder contacts'
     },
-    contact: {
-      abstractionAlertsLabel: abstractionAlertsLabel(abstractionAlertType),
-      created: _created(companyContact),
-      email: formatEmail(companyContact.contact.email),
-      lastUpdated: _lastUpdated(companyContact),
-      licences: _licences(abstractionAlertType, licences),
-      name: companyContact.contact.$name()
-    },
+    contact: _contact(companyContact, licences),
     editContactLink: `/system/company-contacts/setup/${companyContact.id}/edit`,
     pageTitle: `Contact details for ${companyContact.contact.$name()}`,
     pageTitleCaption: company.name,
@@ -49,6 +40,19 @@ function _created(companyContact) {
   }
 
   return `${formattedDate} by ${companyContact.createdByUser.username}`
+}
+
+function _contact(companyContact, licences) {
+  const abstractionAlertType = companyContact.$abstractionAlertType()
+
+  return {
+    abstractionAlertsLabel: abstractionAlertsLabel(abstractionAlertType),
+    created: _created(companyContact),
+    email: formatEmail(companyContact.contact.email),
+    lastUpdated: _lastUpdated(companyContact),
+    licences: _licences(abstractionAlertType, licences),
+    name: companyContact.contact.$name()
+  }
 }
 
 function _lastUpdated(companyContact) {
