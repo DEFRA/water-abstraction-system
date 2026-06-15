@@ -76,7 +76,7 @@ async function _insertUserGroups(groupIds, userId, trx) {
 }
 
 async function _insertUserGroupsRoles(newGroupsRoles, userId, trx) {
-  const {groupIds, roleIds } = newGroupsRoles
+  const { groupIds, roleIds } = newGroupsRoles
 
   await _deleteExistingGroupsRoles(userId, trx)
 
