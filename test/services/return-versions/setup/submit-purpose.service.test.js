@@ -186,7 +186,7 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
       describe('because they entered an alias that is too long', () => {
         beforeEach(() => {
           payload = {
-            purposes: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f',
+            purposes: ['14794d57-1acf-4c91-8b48-4b1ec68bfd6f'],
             'alias-14794d57-1acf-4c91-8b48-4b1ec68bfd6f':
               'THGBk2GM85EyXB54SsfenU2yWiKjDuPTcJCrPfTsSzojNvj6ciVmI3PXJ2fisQgXWfSI4ZPIqV5GLPtR15qbcw3Hamoeit764Cojz'
           }

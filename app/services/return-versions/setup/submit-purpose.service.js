@@ -11,7 +11,6 @@ const GeneralLib = require('../../../lib/general.lib.js')
 const PurposePresenter = require('../../../presenters/return-versions/setup/purpose.presenter.js')
 const PurposeValidation = require('../../../validators/return-versions/setup/purpose.validator.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/purpose` page
@@ -34,7 +33,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
   const session = await FetchSessionDal.go(sessionId)
   const licencePurposes = await FetchPurposesService.go(session.licenceVersion.id)
 
-  handleOneOptionSelected(payload, 'purposes')
+  payload.purposes ??= []
 
   const purposes = _combinePurposeDetails(payload, licencePurposes)
 

@@ -32,7 +32,7 @@
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukCheckboxes({
-      name: "recipients",
+      name: "recipients[]",
       errorMessage: error.recipients,
       hint: {
         classes: 'govuk-!-margin-bottom-7',

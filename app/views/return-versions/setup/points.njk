@@ -20,7 +20,7 @@
     {% endfor %}
 
     {{ govukCheckboxes({
-      name: "points",
+      name: "points[]",
       errorMessage: error.points,
       hint: {
         text: "Select all that apply"

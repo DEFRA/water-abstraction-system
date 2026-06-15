@@ -11,7 +11,6 @@ const GeneralLib = require('../../../lib/general.lib.js')
 const PaperReturnPresenter = require('../../../presenters/notices/setup/paper-return.presenter.js')
 const PaperReturnValidator = require('../../../validators/notices/setup/paper-return.validator.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates validating the data for the `/notices/setup/{sessionId}/paper-return` page
@@ -24,8 +23,6 @@ const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
  */
 async function go(sessionId, payload, yar) {
   const session = await FetchSessionDal.go(sessionId)
-
-  handleOneOptionSelected(payload, 'returns')
 
   const error = _validate(payload)
 

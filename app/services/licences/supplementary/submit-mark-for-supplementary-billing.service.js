@@ -28,11 +28,7 @@ async function go(licenceId, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
-    let { supplementaryYears } = payload
-
-    // If the user picked multiple years this comes through as an array. If they only picked one year it comes through
-    // as a string.
-    supplementaryYears = Array.isArray(supplementaryYears) ? supplementaryYears : [supplementaryYears]
+    const { supplementaryYears } = payload
 
     await _flagForBilling(supplementaryYears, licenceId)
 

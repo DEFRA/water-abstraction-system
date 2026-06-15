@@ -38,7 +38,7 @@ describe('Submit Mark For Supplementary Billing Service', () => {
     describe('and only a single sroc year selected', () => {
       beforeEach(() => {
         payload = {
-          supplementaryYears: '2023'
+          supplementaryYears: ['2023']
         }
       })
 
@@ -108,7 +108,7 @@ describe('Submit Mark For Supplementary Billing Service', () => {
     describe('and only pre sroc years selected', () => {
       beforeEach(() => {
         payload = {
-          supplementaryYears: 'preSroc'
+          supplementaryYears: ['preSroc']
         }
       })
 

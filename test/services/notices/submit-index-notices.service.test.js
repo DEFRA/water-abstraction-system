@@ -138,7 +138,7 @@ describe('Notices - Submit Index Notices service', () => {
 
       describe('including a single notice type selected', () => {
         beforeEach(() => {
-          payload.noticeTypes = 'stop'
+          payload.noticeTypes = ['stop']
         })
 
         it('returns a result that tells the controller to redirect to the index page', async () => {

@@ -71,9 +71,9 @@ describe('Notices - Setup - Submit Paper Return service', () => {
       expect(result).to.equal({})
     })
 
-    describe('and the payload has one item (is not an array)', () => {
+    describe('and the payload has one item', () => {
       beforeEach(() => {
-        payload = { returns: dueReturn.returnLogId }
+        payload = { returns: [dueReturn.returnLogId] }
         sessionData = {}
 
         session = SessionModelStub.build(Sinon, sessionData)

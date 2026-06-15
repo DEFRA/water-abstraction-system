@@ -12,7 +12,6 @@ const GeneralLib = require('../../../lib/general.lib.js')
 const SelectRecipientsPresenter = require('../../../presenters/notices/setup/select-recipients.presenter.js')
 const SelectRecipientsValidator = require('../../../validators/notices/setup/select-recipients.validator.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates validating the data for '/notices/setup/{sessionId}/select-recipients' page
@@ -25,8 +24,6 @@ const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
  */
 async function go(sessionId, payload, yar) {
   const session = await FetchSessionDal.go(sessionId)
-
-  handleOneOptionSelected(payload, 'recipients')
 
   const error = _validate(payload)
 

@@ -29,7 +29,7 @@
 
       {% set checkBoxItem = {
         id: 'purposes-' + checkIndex,
-        name: 'purposes',
+        name: 'purposes[]',
         value: purpose.id,
         text: purpose.description,
         checked: purpose.checked,
@@ -42,7 +42,7 @@
     {% endfor %}
 
     {{ govukCheckboxes({
-      name: "purposes",
+      name: "purposes[]",
       errorMessage: error.purposes,
       hint: {
         text: "Select all that apply"

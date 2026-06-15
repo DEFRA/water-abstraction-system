@@ -12,7 +12,7 @@ const FetchRegionsService = require('./setup/fetch-regions.service.js')
 const IndexBillRunsPresenter = require('../../presenters/bill-runs/index-bill-runs.presenter.js')
 const IndexValidator = require('../../validators/bill-runs/index.validator.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { clearFilters, handleOneOptionSelected } = require('../../lib/submit-page.lib.js')
+const { clearFilters } = require('../../lib/submit-page.lib.js')
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
@@ -33,9 +33,9 @@ async function go(payload, yar, page) {
     return {}
   }
 
-  handleOneOptionSelected(payload, 'regions')
-  handleOneOptionSelected(payload, 'runTypes')
-  handleOneOptionSelected(payload, 'statuses')
+  payload.regions ??= []
+  payload.runTypes ??= []
+  payload.statuses ??= []
 
   const regions = await FetchRegionsService.go()
   const error = _validate(payload, regions)

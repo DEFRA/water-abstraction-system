@@ -10,7 +10,6 @@ const AlertThresholdsPresenter = require('../../../../presenters/notices/setup/a
 const AlertThresholdsValidator = require('../../../../validators/notices/setup/alert-thresholds.validator.js')
 const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
 const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
@@ -23,7 +22,7 @@ const { handleOneOptionSelected } = require('../../../../lib/submit-page.lib.js'
 async function go(sessionId, payload) {
   const session = await FetchSessionDal.go(sessionId)
 
-  handleOneOptionSelected(payload, 'alertThresholds')
+  payload.alertThresholds ??= []
 
   session.alertThresholds = payload.alertThresholds
 

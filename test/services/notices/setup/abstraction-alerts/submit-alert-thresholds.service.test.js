@@ -56,7 +56,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
       describe('and one threshold has been selected ', () => {
         beforeEach(() => {
           payload = {
-            alertThresholds: licenceMonitoringStations.one.thresholdGroup
+            alertThresholds: [licenceMonitoringStations.one.thresholdGroup]
           }
         })
 

@@ -8,7 +8,7 @@
     <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
 
     {{ govukCheckboxes({
-      name: "returns",
+      name: "returns[]",
       errorMessage: error.returns,
       hint: {
         text: "Select all that apply"

@@ -8,7 +8,7 @@
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukCheckboxes({
-      name: "alertThresholds",
+      name: "alertThresholds[]",
       errorMessage: error.alertThresholds,
       items: thresholdOptions
     }) }}

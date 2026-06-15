@@ -9,7 +9,6 @@ const AdditionalSubmissionOptionsPresenter = require('../../../presenters/return
 const AdditionalSubmissionOptionsValidator = require('../../../validators/return-versions/setup/additional-submission-options.validator.js')
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/additional-submission-options` page
@@ -29,8 +28,6 @@ const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
  */
 async function go(sessionId, payload, yar) {
   const session = await FetchSessionDal.go(sessionId)
-
-  handleOneOptionSelected(payload, 'additionalSubmissionOptions')
 
   const error = _validate(payload, session)
 

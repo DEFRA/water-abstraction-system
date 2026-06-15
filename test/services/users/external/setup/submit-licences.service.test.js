@@ -42,7 +42,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
 
   describe('when called with a valid payload', () => {
     beforeEach(() => {
-      payload = { licences: 'all' }
+      payload = { licences: ['all'] }
     })
 
     it('saves the submitted value', async () => {
@@ -76,7 +76,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
 
               fetchSessionStub.resolves(session)
 
-              payload = { licences: 'all' }
+              payload = { licences: ['all'] }
             })
 
             it('does not set a notification', async () => {
@@ -97,7 +97,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
 
                 fetchSessionStub.resolves(session)
 
-                payload = { licences: sessionData.licences[0].id }
+                payload = { licences: [sessionData.licences[0].id] }
               })
 
               it('sets a notification', async () => {
@@ -121,7 +121,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
 
                 fetchSessionStub.resolves(session)
 
-                payload = { licences: sessionData.licences[0].id }
+                payload = { licences: [sessionData.licences[0].id] }
               })
 
               it('sets a notification', async () => {
@@ -145,7 +145,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
 
                 fetchSessionStub.resolves(session)
 
-                payload = { licences: sessionData.licences[0].id }
+                payload = { licences: [sessionData.licences[0].id] }
               })
 
               it('sets a notification', async () => {

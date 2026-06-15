@@ -10,7 +10,7 @@ const IndexValidator = require('../../validators/notices/index.validator.js')
 const NoticesIndexPresenter = require('../../presenters/notices/index-notices.presenter.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const { formatValidationResult } = require('../../presenters/base.presenter.js')
-const { clearFilters, handleOneOptionSelected } = require('../../lib/submit-page.lib.js')
+const { clearFilters } = require('../../lib/submit-page.lib.js')
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
@@ -32,8 +32,8 @@ async function go(payload, yar, auth, page) {
     return {}
   }
 
-  handleOneOptionSelected(payload, 'noticeTypes')
-  handleOneOptionSelected(payload, 'statuses')
+  payload.noticeTypes ??= []
+  payload.statuses ??= []
 
   const error = _validate(payload)
 

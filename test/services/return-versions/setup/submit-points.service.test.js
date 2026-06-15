@@ -86,7 +86,7 @@ describe('Return Versions - Setup - Submit Points service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          points: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6'
+          points: ['d03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6']
         }
 
         Sinon.stub(FetchPointsService, 'go').resolves(_points())

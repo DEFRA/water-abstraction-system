@@ -12,7 +12,6 @@ const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const PointsPresenter = require('../../../presenters/return-versions/setup/points.presenter.js')
 const PointsValidator = require('../../../validators/return-versions/setup/points.validator.js')
-const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/points` page
@@ -33,8 +32,6 @@ const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
  */
 async function go(sessionId, requirementIndex, payload, yar) {
   const session = await FetchSessionDal.go(sessionId)
-
-  handleOneOptionSelected(payload, 'points')
 
   const error = _validate(payload)
 

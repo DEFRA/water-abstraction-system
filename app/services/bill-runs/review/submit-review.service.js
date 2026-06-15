@@ -5,7 +5,7 @@
  * @module SubmitReviewService
  */
 
-const { clearFilters, handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
+const { clearFilters } = require('../../../lib/submit-page.lib.js')
 
 /**
  * Updates the session cookie with the filter data needed for the '/bill-runs/review/{id}' page
@@ -23,8 +23,8 @@ async function go(billRunId, payload, yar) {
     return
   }
 
-  handleOneOptionSelected(payload, 'issues')
-  handleOneOptionSelected(payload, 'progress')
+  payload.issues ??= []
+  payload.progress ??= []
 
   _save(payload, yar, filterKey)
 }

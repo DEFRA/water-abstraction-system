@@ -12,7 +12,6 @@ const LicencesValidator = require('../../../../validators/users/external/setup/l
 const { checkUrl } = require('../../../../lib/check-page.lib.js')
 const { flashNotification } = require('../../../../lib/general.lib.js')
 const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates validating the data for the '/users/external/setup/{sessionId}/licences' page
@@ -26,7 +25,7 @@ const { handleOneOptionSelected } = require('../../../../lib/submit-page.lib.js'
 async function go(sessionId, payload, yar) {
   const session = await FetchSessionDal.go(sessionId)
 
-  handleOneOptionSelected(payload, 'licences')
+  payload.licences ??= []
 
   const payloadSelection = _payloadSelection(payload)
 

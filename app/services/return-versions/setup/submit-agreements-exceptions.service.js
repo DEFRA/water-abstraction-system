@@ -10,7 +10,6 @@ const AgreementsExceptionsValidator = require('../../../validators/return-versio
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/agreements-exceptions` page
@@ -31,8 +30,6 @@ const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
  */
 async function go(sessionId, requirementIndex, payload, yar) {
   const session = await FetchSessionDal.go(sessionId)
-
-  handleOneOptionSelected(payload, 'agreementsExceptions')
 
   const error = _validate(payload)
 

@@ -97,9 +97,9 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         expect(setArgs[1]).to.equal({ number: '1001', regions: [], runTypes: [], statuses: [], yearCreated: '2025' })
       })
 
-      describe('and a single "Run type" filter has been selected ("runTypes" is a string)', () => {
+      describe('and a single "Run type" filter has been selected', () => {
         beforeEach(() => {
-          payload = { runTypes: 'annual' }
+          payload = { runTypes: ['annual'] }
         })
 
         it('saves the state of the "Run type" filter as an array in the session', async () => {
@@ -118,7 +118,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         })
       })
 
-      describe('and multiple "Run type" filters have been selected ("runTypes" is an array)', () => {
+      describe('and multiple "Run type" filters have been selected', () => {
         beforeEach(() => {
           payload = {
             runTypes: ['annual', 'supplementary']
@@ -141,9 +141,9 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         })
       })
 
-      describe('and a single "Region" filter has been selected ("regions" is a string)', () => {
+      describe('and a single "Region" filter has been selected', () => {
         beforeEach(() => {
-          payload = { regions: '1d562e9a-2104-41d9-aa75-c008a7ec9059', yearCreated: '2025' }
+          payload = { regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059'], yearCreated: '2025' }
         })
 
         it('saves the state of the "Region" filter as an array in the session', async () => {
@@ -162,7 +162,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         })
       })
 
-      describe('and multiple "Region" filters have been selected ("regions" is an array)', () => {
+      describe('and multiple "Region" filters have been selected', () => {
         beforeEach(() => {
           payload = {
             regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059', 'fd3d1154-c83d-4580-bcd6-46bfc380f233']
@@ -185,9 +185,9 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         })
       })
 
-      describe('and a single "Status" filter has been selected ("statuses" is a string)', () => {
+      describe('and a single "Status" filter has been selected', () => {
         beforeEach(() => {
-          payload = { statuses: 'sent' }
+          payload = { statuses: ['sent'] }
         })
 
         it('saves the state of the "Status" filter as an array in the session', async () => {
@@ -206,7 +206,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         })
       })
 
-      describe('and multiple "Status" filters have been selected ("statuses" is an array)', () => {
+      describe('and multiple "Status" filters have been selected', () => {
         beforeEach(() => {
           payload = {
             statuses: ['ready', 'review']
