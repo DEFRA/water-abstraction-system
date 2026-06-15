@@ -5,9 +5,9 @@
  * @module InitiateEditSessionService
  */
 
+const CreateSessionDal = require('../../../dal/create-session.dal.js')
 const FetchCompanyContactDal = require('../../../dal/company-contacts/setup/fetch-company-contact.dal.js')
 const FetchCompanyLicencesDal = require('../../../dal/company-contacts/fetch-company-licences.dal.js')
-const CreateSessionDal = require('../../../dal/create-session.dal.js')
 const { formatEmail } = require('../../../presenters/base.presenter.js')
 
 /**
@@ -22,10 +22,11 @@ async function go(companyContactId) {
 
   const licences = await FetchCompanyLicencesDal.go(companyContact.company.id)
 
- const data = {
-   ..._formatDataForJourney(companyContact),
-   licences
- }
+  const data = {
+    ..._formatDataForJourney(companyContact),
+    licences
+  }
+
   return CreateSessionDal.go(data)
 }
 
