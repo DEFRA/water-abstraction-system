@@ -1,0 +1,113 @@
+'use strict'
+
+// Test framework dependencies
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+
+const { describe, it, before, after } = (exports.lab = Lab.script())
+const { expect } = Code
+
+// Test helpers
+const EventHelper = require('../../../support/helpers/event.helper.js')
+const EventModel = require('../../../../app/models/event.model.js')
+const NoticesFixture = require('../../../support/fixtures/notices.fixture.js')
+const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
+const NotificationHelper = require('../../../support/helpers/notification.helper.js')
+
+// Thing under test
+const FetchCriticalNoticesDal = require('../../../../app/dal/jobs/notification-status/fetch-critical-notices.dal.js')
+
+describe('Jobs - Notification Status - Fetch Critical Notices DAL', () => {
+  let criticalNoticeWithErrors
+  let criticalNoticeWithoutErrors
+  let noticeIds
+  let notificationForCriticalNoticeWithErrors
+  let notificationForCriticalNoticeWithoutErrors
+  let notificationForStandardNoticeWithErrors
+  let notificationForStandardNoticeWithoutErrors
+  let standardNoticeWithErrors
+  let standardNoticeWithoutErrors
+
+  before(async () => {
+    // Scenario 1: Critical notice with notifications that have errors. This should be return by the DAL
+    let noticeData = NoticesFixture.renewalInvitation()
+
+    noticeData.metadata.recipients = 1
+    noticeData.overallStatus = 'error'
+    noticeData.statusCounts = { cancelled: 0, error: 1, pending: 0, returned: 0, sent: 0 }
+
+    criticalNoticeWithErrors = await EventHelper.add(noticeData)
+
+    let notificationData = NotificationsFixture.renewalInvitationEmail(criticalNoticeWithErrors)
+    notificationData.status = 'error'
+
+    notificationForCriticalNoticeWithErrors = await NotificationHelper.add(notificationData)
+
+    // Scenario 2: Standard notice with notifications that have errors. This should NOT be returned by the DAL
+    noticeData = NoticesFixture.returnsReminder()
+
+    noticeData.metadata.recipients = 1
+    noticeData.overallStatus = 'error'
+    noticeData.statusCounts = { cancelled: 0, error: 1, pending: 0, returned: 0, sent: 0 }
+
+    standardNoticeWithErrors = await EventHelper.add(noticeData)
+
+    notificationData = NotificationsFixture.returnsReminderEmail(standardNoticeWithErrors)
+    notificationData.status = 'error'
+
+    notificationForStandardNoticeWithErrors = await NotificationHelper.add(notificationData)
+
+    // Scenario 3: Critical notice with notifications that were successful. This should NOT be returned by the DAL
+    noticeData = NoticesFixture.returnsInvitation()
+    noticeData.overallStatus = 'sent'
+    noticeData.statusCounts = { cancelled: 0, error: 0, pending: 0, returned: 0, sent: 1 }
+
+    criticalNoticeWithoutErrors = await EventHelper.add(noticeData)
+
+    notificationData = NotificationsFixture.returnsInvitationEmail(criticalNoticeWithoutErrors)
+    notificationForCriticalNoticeWithoutErrors = await NotificationHelper.add(notificationData)
+
+    // Scenario 4: Standard notice with notifications that were successful. This should NOT be returned by the DAL
+    noticeData = NoticesFixture.returnsPaperForm()
+    noticeData.overallStatus = 'sent'
+    noticeData.statusCounts = { cancelled: 0, error: 0, pending: 0, returned: 0, sent: 1 }
+
+    standardNoticeWithoutErrors = await EventHelper.add(noticeData)
+
+    notificationData = NotificationsFixture.returnsReminderEmail(standardNoticeWithoutErrors)
+    notificationForStandardNoticeWithoutErrors = await NotificationHelper.add(notificationData)
+
+    noticeIds = [
+      criticalNoticeWithErrors.id,
+      standardNoticeWithErrors.id,
+      criticalNoticeWithoutErrors.id,
+      standardNoticeWithoutErrors.id
+    ]
+  })
+
+  after(async () => {
+    await notificationForCriticalNoticeWithErrors.$query().delete()
+    await notificationForCriticalNoticeWithoutErrors.$query().delete()
+    await notificationForStandardNoticeWithErrors.$query().delete()
+    await notificationForStandardNoticeWithoutErrors.$query().delete()
+    await criticalNoticeWithErrors.$query().delete()
+    await criticalNoticeWithoutErrors.$query().delete()
+    await standardNoticeWithErrors.$query().delete()
+    await standardNoticeWithoutErrors.$query().delete()
+  })
+
+  describe('when called', () => {
+    it('returns only the critical notices that have notifications with errors from those request', async () => {
+      const results = await FetchCriticalNoticesDal.go(noticeIds)
+
+      expect(results).to.include(EventModel.fromJson(
+        {
+          id: criticalNoticeWithErrors.id,
+          issuer: criticalNoticeWithErrors.issuer,
+          metadata: criticalNoticeWithErrors.metadata,
+          subtype: criticalNoticeWithErrors.subtype
+        }
+      ))
+    })
+  })
+})
