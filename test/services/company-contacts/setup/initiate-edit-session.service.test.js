@@ -120,7 +120,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
             stubFetchCompanyLicencesDal.resolves([])
           })
 
-          it('returns "some"', async () => {
+          it('returns "no"', async () => {
             const result = await InitiateEditSessionService.go(companyContact.id)
 
             const matchingSession = await SessionModel.query().findById(result.id)
