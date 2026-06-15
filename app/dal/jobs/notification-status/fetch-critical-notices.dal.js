@@ -24,7 +24,12 @@ async function go(noticeIds) {
     .whereExists(
       EventModel.relatedQuery('notifications')
         .where('status', 'error')
-        .whereIn('messageRef', ['renewal invitation', 'renewal invitation ad-hoc', 'returns invitation', 'returns invitation ad-hoc'])
+        .whereIn('messageRef', [
+          'renewal invitation',
+          'renewal invitation ad-hoc',
+          'returns invitation',
+          'returns invitation ad-hoc'
+        ])
         .where('contactType', 'primary user')
         .where('messageType', 'email')
         .whereNull('alternateNoticeId')
