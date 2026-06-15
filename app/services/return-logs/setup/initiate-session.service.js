@@ -5,8 +5,8 @@
  * @module InitiateSessionService
  */
 
+const CreateSessionDal = require('../../../dal/create-session.dal.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
-const SessionModel = require('../../../models/session.model.js')
 const { daysFromPeriod, weeksFromPeriod, monthsFromPeriod } = require('../../../lib/dates.lib.js')
 const { convertFromCubicMetres } = require('../../../lib/general.lib.js')
 const { returnUnits, unitNames } = require('../../../lib/static-lookups.lib.js')
@@ -34,7 +34,7 @@ async function go(returnLogId) {
 
   const data = { ...referenceData, ...submissionData }
 
-  const { id: sessionId } = await SessionModel.query().insert({ data }).returning('id')
+  const { id: sessionId } = await CreateSessionDal.go(data)
 
   const redirect = data.submissionType === 'edit' ? 'check' : 'received'
 

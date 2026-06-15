@@ -7,7 +7,7 @@
 
 const FetchCompanyContactDal = require('../../../dal/company-contacts/setup/fetch-company-contact.dal.js')
 const FetchCompanyLicencesDal = require('../../../dal/company-contacts/fetch-company-licences.dal.js')
-const SessionModel = require('../../../models/session.model.js')
+const CreateSessionDal = require('../../../dal/create-session.dal.js')
 const { formatEmail } = require('../../../presenters/base.presenter.js')
 
 /**
@@ -22,14 +22,11 @@ async function go(companyContactId) {
 
   const licences = await FetchCompanyLicencesDal.go(companyContact.company.id)
 
-  return SessionModel.query()
-    .insert({
-      data: {
-        ..._formatDataForJourney(companyContact),
-        licences
-      }
-    })
-    .returning('id')
+ const data = {
+   ..._formatDataForJourney(companyContact),
+   licences
+ }
+  return CreateSessionDal.go(data)
 }
 
 /**

@@ -6,8 +6,8 @@
  */
 
 const FetchCompanyLicencesDal = require('../../../dal/company-contacts/fetch-company-licences.dal.js')
+const CreateSessionDal = require('../../../dal/create-session.dal.js')
 const FetchCompanyService = require('../../companies/fetch-company.service.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Initiates the session record used for setting up a new company contact
@@ -21,14 +21,12 @@ async function go(companyId) {
 
   const licences = await FetchCompanyLicencesDal.go(companyId)
 
-  return SessionModel.query()
-    .insert({
-      data: {
-        company,
-        licences
-      }
-    })
-    .returning('id')
+  const data =  {
+    company,
+      licences
+  }
+
+  return CreateSessionDal.go(data)
 }
 
 module.exports = {

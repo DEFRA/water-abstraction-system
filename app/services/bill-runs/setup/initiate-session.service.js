@@ -5,7 +5,7 @@
  * @module InitiateSessionService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const CreateSessionDal = require('../../../dal/create-session.dal.js')
 
 /**
  * Initiates the session record using for setting up a new bill run
@@ -20,9 +20,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
 async function go() {
-  // NOTE: data defaults to {} when a new record is created. But Objection.js throws a 'The query is empty' if we pass
-  // nothing into `insert()`.
-  return SessionModel.query().insert({ data: {} }).returning('id')
+  return CreateSessionDal.go()
 }
 
 module.exports = {

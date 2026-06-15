@@ -5,8 +5,8 @@
  * @module InitiateSessionService
  */
 
+const CreateSessionDal = require('../../../dal/create-session.dal.js')
 const FetchViewBillingAccountService = require('../fetch-view-billing-account.service.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Initiates the session record used for setting up a new billing account journey
@@ -30,7 +30,7 @@ async function go(billingAccountId) {
     billingAccount
   }
 
-  return SessionModel.query().insert({ data }).returning('id')
+  return CreateSessionDal.go(data)
 }
 
 module.exports = {
