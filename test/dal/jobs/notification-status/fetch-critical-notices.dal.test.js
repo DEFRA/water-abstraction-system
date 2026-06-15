@@ -97,7 +97,7 @@ describe('Jobs - Notification Status - Fetch Critical Notices DAL', () => {
   })
 
   describe('when called', () => {
-    it('returns only the critical notices that have notifications with errors from those request', async () => {
+    it('returns only the critical notices that have notifications with errors from those request (scenario 1)', async () => {
       const results = await FetchCriticalNoticesDal.go(noticeIds)
 
       expect(results).to.include(EventModel.fromJson(
@@ -106,6 +106,36 @@ describe('Jobs - Notification Status - Fetch Critical Notices DAL', () => {
           issuer: criticalNoticeWithErrors.issuer,
           metadata: criticalNoticeWithErrors.metadata,
           subtype: criticalNoticeWithErrors.subtype
+        }
+      ))
+
+      // Scenario 2
+      expect(results).not.to.include(EventModel.fromJson(
+        {
+          id: standardNoticeWithErrors.id,
+          issuer: standardNoticeWithErrors.issuer,
+          metadata: standardNoticeWithErrors.metadata,
+          subtype: standardNoticeWithErrors.subtype
+        }
+      ))
+
+      // Scenario 3
+      expect(results).not.to.include(EventModel.fromJson(
+        {
+          id: criticalNoticeWithoutErrors.id,
+          issuer: criticalNoticeWithoutErrors.issuer,
+          metadata: criticalNoticeWithoutErrors.metadata,
+          subtype: criticalNoticeWithoutErrors.subtype
+        }
+      ))
+
+      // Scenario 4
+      expect(results).not.to.include(EventModel.fromJson(
+        {
+          id: standardNoticeWithoutErrors.id,
+          issuer: standardNoticeWithoutErrors.issuer,
+          metadata: standardNoticeWithoutErrors.metadata,
+          subtype: standardNoticeWithoutErrors.subtype
         }
       ))
     })
