@@ -42,7 +42,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
     sentNotification = undefined
 
     session = {
-      abstractionAlertLicences: [],
+      abstractionAlertLicences: null,
       abstractionAlerts: 'yes',
       company,
       email,
@@ -138,6 +138,10 @@ describe('Company Contacts - Setup - Check Presenter', () => {
       })
 
       describe('when the user is set not to receive abstraction alerts ("no")', () => {
+        beforeEach(() => {
+          session.abstractionAlerts = 'no'
+        })
+
         it('returns an empty array', () => {
           const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
@@ -150,7 +154,19 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           session.abstractionAlerts = 'some'
         })
 
-        describe('and the licence holder has "live" licences', () => {
+        describe('and there are no existing "abstractionAlertLicences"', () => {
+          beforeEach(() => {
+            session.abstractionAlertLicences = null
+          })
+
+          it('returns an empty array', () => {
+            const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+            expect(result.licences).to.be.empty()
+          })
+        })
+
+        describe('and there are "live" licences', () => {
           describe('and the selected licences for the user matches the "live" licences', () => {
             beforeEach(() => {
               session.abstractionAlertLicences = [licences[0].id]
@@ -164,6 +180,10 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           })
 
           describe('but none of the selected licences for the user matches the "live" licences', () => {
+            beforeEach(() => {
+              session.abstractionAlertLicences = [generateUUID()]
+            })
+
             it('returns an empty array', () => {
               const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
@@ -172,7 +192,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           })
         })
 
-        describe('but the licence holder has no "live" licences', () => {
+        describe('but there are no "live" licences', () => {
           beforeEach(() => {
             session.licences = []
             session.abstractionAlertLicences = [licences[0].id]
@@ -230,6 +250,27 @@ describe('Company Contacts - Setup - Check Presenter', () => {
     })
 
     describe('the "warning" property', () => {
+      describe('when the user has selected "Yes, for some licences" but not selected any licences', () => {
+        beforeEach(() => {
+          session.abstractionAlerts = 'some'
+        })
+
+        describe('and there are no "abstractionAlertLicences"', () => {
+          beforeEach(() => {
+            session.abstractionAlertLicences = null
+          })
+
+          it('returns "select licences" warning', () => {
+            const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+            expect(result.warning).to.equal({
+              text: 'Select the licences they should get water abstraction alert emails for or change should they get abstraction alerts.',
+              iconFallbackText: 'Warning'
+            })
+          })
+        })
+      })
+
       describe('when creating a new contact', () => {
         describe('and a contact with a matching name and email does not exist', () => {
           it('returns null', () => {

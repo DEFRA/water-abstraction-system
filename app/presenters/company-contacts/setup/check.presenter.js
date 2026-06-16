@@ -18,7 +18,7 @@ const { abstractionAlertsLabel } = require('../../crm.presenter.js')
  * @returns {object} The data formatted for the view template
  */
 function go(session, savedCompanyContacts, sentNotification) {
-  const { company, email, name, abstractionAlerts, companyContact, licences, abstractionAlertLicences } = session
+  const { abstractionAlertLicences, abstractionAlerts, company, companyContact, email, licences, name } = session
 
   const matchingContact = _matchingContact(email, name, savedCompanyContacts)
 
@@ -38,7 +38,7 @@ function go(session, savedCompanyContacts, sentNotification) {
       restoreContact: matchingContact?.deletedAt ? `/system/company-contacts/setup/${session.id}/restore` : null
     },
     matchingContact,
-    warning: _warning(matchingContact)
+    warning: _warning(matchingContact, abstractionAlertLicences, abstractionAlerts)
   }
 }
 
@@ -59,7 +59,7 @@ function _emailInUse(sentNotification, companyContact) {
 }
 
 function _licences(licences, abstractionAlertLicences, abstractionAlerts) {
-  if (abstractionAlerts !== 'some') {
+  if (abstractionAlerts !== 'some' || !abstractionAlertLicences?.length) {
     return []
   }
 
@@ -93,12 +93,20 @@ function _matchingContact(email, name, savedCompanyContacts) {
 }
 
 /*
- * Show the warning if the contact already exists.
+ * Show the warning if the contact already exists, or if the user has not selected any licences but has selected abstraction
+ * alert type "some".
  *
  * This variable is also used to show / hide the 'confirm' button, we do not allow a user to submit if the contact already
  * exists (when creating a company contact).
  */
-function _warning(matchingContact) {
+function _warning(matchingContact, abstractionAlertLicences, abstractionAlerts) {
+  if (abstractionAlerts === 'some' && !abstractionAlertLicences?.length) {
+    return {
+      text: 'Select the licences they should get water abstraction alert emails for or change should they get abstraction alerts.',
+      iconFallbackText: 'Warning'
+    }
+  }
+
   if (!matchingContact) {
     return null
   }
