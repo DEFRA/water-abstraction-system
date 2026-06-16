@@ -19,6 +19,7 @@ const FetchUserDetailsDal = require('../../../../app/dal/users/internal/fetch-us
 const ViewDetailsService = require('../../../../app/services/users/internal/view-details.service.js')
 
 describe('Users - Internal - View Details service', () => {
+  const auth = { credentials: { user: { id: '367e5f4b-07d1-460b-842f-adf8f5dad7ef' } } }
   const user = UsersFixture.basicAccess()
 
   beforeEach(() => {
@@ -32,7 +33,7 @@ describe('Users - Internal - View Details service', () => {
 
   describe('when called', () => {
     it('returns page data for the internal user view', async () => {
-      const result = await ViewDetailsService.go(user.id)
+      const result = await ViewDetailsService.go(auth, user.id)
 
       expect(result).to.equal({
         activeNavBar: 'users',
@@ -47,6 +48,7 @@ describe('Users - Internal - View Details service', () => {
         pageTitleCaption: user.username,
         permissions: 'Basic access',
         roles: [],
+        showEditButton: true,
         status: 'enabled'
       })
     })

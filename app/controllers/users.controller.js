@@ -138,6 +138,7 @@ async function viewInternalCommunications(request, h) {
 
 async function viewInternalDetails(request, h) {
   const {
+    auth,
     params: { id }
   } = request
 
@@ -145,7 +146,7 @@ async function viewInternalDetails(request, h) {
     return _redirectToLegacy(id, h)
   }
 
-  const pageData = await ViewInternalDetailsService.go(id)
+  const pageData = await ViewInternalDetailsService.go(auth, id)
 
   return h.view('users/internal/details.njk', pageData)
 }
