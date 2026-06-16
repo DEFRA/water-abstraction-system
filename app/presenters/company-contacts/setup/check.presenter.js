@@ -18,10 +18,9 @@ const { abstractionAlertsLabel } = require('../../crm.presenter.js')
  * @returns {object} The data formatted for the view template
  */
 function go(session, savedCompanyContacts, sentNotification) {
-  const { company, email, name, abstractionAlerts, companyContact, licences, abstractionAlertLicences } = session
+  const { abstractionAlertLicences, abstractionAlerts, company, companyContact, email, licences, name } = session
 
   const matchingContact = _matchingContact(email, name, savedCompanyContacts)
-  const parsedAbstractionAlertLicences = !abstractionAlertLicences ? [] : abstractionAlertLicences
 
   return {
     abstractionAlertsLabel: abstractionAlertsLabel(abstractionAlerts),
@@ -30,7 +29,7 @@ function go(session, savedCompanyContacts, sentNotification) {
     name,
     pageTitle: 'Check contact',
     pageTitleCaption: company.name,
-    licences: _licences(licences, parsedAbstractionAlertLicences, abstractionAlerts),
+    licences: _licences(licences, abstractionAlertLicences, abstractionAlerts),
     links: {
       abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
       cancel: `/system/company-contacts/setup/${session.id}/cancel`,
@@ -39,7 +38,7 @@ function go(session, savedCompanyContacts, sentNotification) {
       restoreContact: matchingContact?.deletedAt ? `/system/company-contacts/setup/${session.id}/restore` : null
     },
     matchingContact,
-    warning: _warning(matchingContact, parsedAbstractionAlertLicences, abstractionAlerts)
+    warning: _warning(matchingContact, abstractionAlertLicences, abstractionAlerts)
   }
 }
 
@@ -60,9 +59,7 @@ function _emailInUse(sentNotification, companyContact) {
 }
 
 function _licences(licences, abstractionAlertLicences, abstractionAlerts) {
-  const abstractionAlertLicencesEmpty = abstractionAlertLicences.length === 0
-
-  if (abstractionAlerts !== 'some' || abstractionAlertLicencesEmpty) {
+  if (abstractionAlerts !== 'some' || !abstractionAlertLicences?.length) {
     return []
   }
 
@@ -102,9 +99,7 @@ function _matchingContact(email, name, savedCompanyContacts) {
  * exists (when creating a company contact).
  */
 function _warning(matchingContact, abstractionAlertLicences, abstractionAlerts) {
-  const abstractionAlertLicencesEmpty = abstractionAlertLicences.length === 0
-
-  if (abstractionAlerts === 'some' && abstractionAlertLicencesEmpty) {
+  if (abstractionAlerts === 'some' && !abstractionAlertLicences?.length) {
     return {
       text: 'Select the licences they should get water abstraction alert emails for or change should they get abstraction alerts.',
       iconFallbackText: 'Warning'

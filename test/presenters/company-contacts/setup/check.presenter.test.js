@@ -138,6 +138,10 @@ describe('Company Contacts - Setup - Check Presenter', () => {
       })
 
       describe('when the user is set not to receive abstraction alerts ("no")', () => {
+        beforeEach(() => {
+          session.abstractionAlerts = 'no'
+        })
+
         it('returns an empty array', () => {
           const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
@@ -148,6 +152,18 @@ describe('Company Contacts - Setup - Check Presenter', () => {
       describe('when the user is set to receive abstraction alerts for specific licences ("some")', () => {
         beforeEach(() => {
           session.abstractionAlerts = 'some'
+        })
+
+        describe('and "abstractionAlertLicences" has never been set in the session', () => {
+          beforeEach(() => {
+            session.abstractionAlertLicences = undefined
+          })
+
+          it('returns an empty array', () => {
+            const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+            expect(result.licences).to.be.empty()
+          })
         })
 
         describe('and the licence holder has "live" licences', () => {
@@ -164,6 +180,10 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           })
 
           describe('but none of the selected licences for the user matches the "live" licences', () => {
+            beforeEach(() => {
+              session.abstractionAlertLicences = [generateUUID()]
+            })
+
             it('returns an empty array', () => {
               const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
@@ -230,6 +250,38 @@ describe('Company Contacts - Setup - Check Presenter', () => {
     })
 
     describe('the "warning" property', () => {
+      describe('when the user has selected "Yes, for some licences" but not selected any licences', () => {
+        beforeEach(() => {
+          session.abstractionAlerts = 'some'
+        })
+
+        describe('and "abstractionAlertLicences" has never been set in the session', () => {
+          beforeEach(() => {
+            session.abstractionAlertLicences = undefined
+          })
+
+          it('returns "select licences" warning', () => {
+            const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+            expect(result.warning).to.equal({
+              text: 'Select the licences they should get water abstraction alert emails for or change should they get abstraction alerts.',
+              iconFallbackText: 'Warning'
+            })
+          })
+        })
+
+        describe('and the user navigated back without selecting any licences', () => {
+          it('returns "select licences" warning', () => {
+            const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+            expect(result.warning).to.equal({
+              text: 'Select the licences they should get water abstraction alert emails for or change should they get abstraction alerts.',
+              iconFallbackText: 'Warning'
+            })
+          })
+        })
+      })
+
       describe('when creating a new contact', () => {
         describe('and a contact with a matching name and email does not exist', () => {
           it('returns null', () => {
