@@ -166,7 +166,7 @@ describe.only('Company Contacts - Setup - Check Presenter', () => {
           })
         })
 
-        describe('and the licence holder has "live" licences', () => {
+        describe('and there are "live" licences', () => {
           describe('and the selected licences for the user matches the "live" licences', () => {
             beforeEach(() => {
               session.abstractionAlertLicences = [licences[0].id]
@@ -192,7 +192,7 @@ describe.only('Company Contacts - Setup - Check Presenter', () => {
           })
         })
 
-        describe('but the licence holder has no "live" licences', () => {
+        describe('but there are no "live" licences', () => {
           beforeEach(() => {
             session.licences = []
             session.abstractionAlertLicences = [licences[0].id]
