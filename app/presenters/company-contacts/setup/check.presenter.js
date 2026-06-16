@@ -93,7 +93,8 @@ function _matchingContact(email, name, savedCompanyContacts) {
 }
 
 /*
- * Show the warning if the contact already exists.
+ * Show the warning if the contact already exists, or if the user has not selected any licences but has selected abstraction
+ * alert type "some".
  *
  * This variable is also used to show / hide the 'confirm' button, we do not allow a user to submit if the contact already
  * exists (when creating a company contact).
