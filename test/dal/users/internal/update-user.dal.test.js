@@ -113,7 +113,7 @@ describe('Users - Internal - Update User DAL', () => {
       it('replaces the existing resetGuid with a new one and returns the updated users resetGuid', async () => {
         const result = await UpdateUserDal.go(auth, session)
 
-        const { resetGuid } = await UserModel.query().where('username', session.email).limit(1).first()
+        const { resetGuid } = await UserModel.query().findById(existingUser.id)
 
         expect(resetGuid).to.exist()
         expect(resetGuid).to.not.equal(existingUser.resetGuid)
