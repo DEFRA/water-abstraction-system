@@ -16,6 +16,7 @@ const NotificationsFixture = require('../../../support/fixtures/notifications.fi
 const CheckNotificationStatusService = require('../../../../app/services/notifications/check-notification-status.service.js')
 const FetchNotificationsService = require('../../../../app/services/jobs/notification-status/fetch-notifications.service.js')
 const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+const SendAlternateNoticesService = require('../../../../app/services/jobs/notification-status/send-alternate-notices.service.js')
 const UpdateNoticeService = require('../../../../app/services/notices/update-notice.service.js')
 
 // Thing under test
@@ -24,11 +25,13 @@ const ProcessNotificationStatusService = require('../../../../app/services/jobs/
 describe('Job - Notifications - Process Notification Status service', () => {
   let noticeA
   let noticeB
+  let notifications
   let notifierStub
+  let sendAlternateNoticesStub
   let updateEventStub
 
   beforeEach(async () => {
-    const notifications = []
+    notifications = []
 
     let notification
     // NOTE: We create multiple notifications a cross two notices so we can demonstrate that we are providing
@@ -52,6 +55,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
     Sinon.stub(FetchNotificationsService, 'go').resolves(notifications)
 
     updateEventStub = Sinon.stub(UpdateNoticeService, 'go').resolves()
+    sendAlternateNoticesStub = Sinon.stub(SendAlternateNoticesService, 'go').resolves()
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -75,6 +79,13 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
       expect(updateEventStub.called).to.be.true()
       expect(updateEventStub.firstCall.args[0]).to.equal([noticeA.id, noticeB.id])
+    })
+
+    it('checks whether any alternate notices need to be sent', async () => {
+      await ProcessNotificationStatusService.go()
+
+      expect(sendAlternateNoticesStub.called).to.be.true()
+      expect(sendAlternateNoticesStub.firstCall.args[0]).to.equal(notifications)
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {

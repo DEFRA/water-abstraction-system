@@ -15,7 +15,7 @@ const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
  * @returns {object} The data formatted for the view template
  */
 function go(session) {
-  const { email, id: sessionId, permission } = session
+  const { email, id: sessionId, permission, user } = session
 
   return {
     activeNavBar: 'users',
@@ -27,7 +27,9 @@ function go(session) {
     },
     pageTitle: 'Check user',
     pageTitleCaption: 'Internal',
-    permission: userPermissions[permission].label
+    permission: userPermissions[permission].label,
+    // Only allow changing the email address if this is a new user or the user has not yet verified their email address
+    showEmailChangeLink: !user || user.status === 'awaiting'
   }
 }
 

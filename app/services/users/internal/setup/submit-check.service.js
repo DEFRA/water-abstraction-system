@@ -11,6 +11,7 @@ const CreateVerificationNotificationDal = require('../../../../dal/users/interna
 const DeleteSessionDal = require('../../../../dal/delete-session.dal.js')
 const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
 const SendVerificationEmailService = require('./send-verification-email.service.js')
+const UpdateUserDal = require('../../../../dal/users/internal/update-user.dal.js')
 const { flashNotification } = require('../../../../lib/general.lib.js')
 
 /**
@@ -24,9 +25,41 @@ const { flashNotification } = require('../../../../lib/general.lib.js')
  */
 async function go(auth, sessionId, yar) {
   const session = await FetchSessionDal.go(sessionId)
-  const { email } = session
 
   await DeleteSessionDal.go(sessionId)
+
+  if (session.user) {
+    await _updateUser(auth, session, yar)
+  } else {
+    await _createUser(auth, session, yar)
+  }
+
+  return {
+    redirectUrl: '/system/users'
+  }
+}
+
+async function _updateUser(auth, session, yar) {
+  const { email } = session
+
+  const resetGuid = await UpdateUserDal.go(auth, session)
+
+  // A resetGuid will only exist if the users email has been updated. This can only happen if the user has not yet
+  // verified their email address
+  if (resetGuid) {
+    const notification = await CreateVerificationNotificationDal.go(email, resetGuid)
+
+    flashNotification(yar, 'User updated', `We have emailed ${email} instructions to complete their account set up.`)
+
+    // Intentionally not awaited — fire-and-forget with internal error handling
+    SendVerificationEmailService.go(notification)
+  } else {
+    flashNotification(yar, 'User updated', `User ${email} has been updated.`)
+  }
+}
+
+async function _createUser(auth, session, yar) {
+  const { email } = session
 
   const resetGuid = await CreateUserDal.go(auth, session)
 
@@ -36,10 +69,6 @@ async function go(auth, sessionId, yar) {
 
   // Intentionally not awaited — fire-and-forget with internal error handling
   SendVerificationEmailService.go(notification)
-
-  return {
-    redirectUrl: '/system/users'
-  }
 }
 
 module.exports = {
