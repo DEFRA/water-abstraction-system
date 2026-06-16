@@ -6,6 +6,7 @@
  */
 
 const InitiateExternalSessionService = require('../services/users/external/setup/initiate-session.service.js')
+const InitiateInternalEditSessionService = require('../services/users/internal/setup/initiate-edit-session.service.js')
 const InitiateInternalSessionService = require('../services/users/internal/setup/initiate-session.service.js')
 const SubmitExternalCancelService = require('../services/users/external/setup/submit-cancel.service.js')
 const SubmitExternalCheckService = require('../services/users/external/setup/submit-check.service.js')
@@ -37,6 +38,16 @@ async function setupInternal(_request, h) {
   const { id: sessionId } = await InitiateInternalSessionService.go()
 
   return h.redirect(`/system/users/internal/setup/${sessionId}/email`)
+}
+
+async function setupInternalEdit(request, h) {
+  const {
+    params: { id }
+  } = request
+
+  const { id: sessionId } = await InitiateInternalEditSessionService.go(id)
+
+  return h.redirect(`/system/users/internal/setup/${sessionId}/check`)
 }
 
 async function submitExternalCancel(request, h) {
@@ -204,6 +215,7 @@ async function viewInternalPermissions(request, h) {
 module.exports = {
   setupExternal,
   setupInternal,
+  setupInternalEdit,
   submitExternalCancel,
   submitExternalCheck,
   submitExternalLicences,

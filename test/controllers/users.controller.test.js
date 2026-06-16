@@ -743,11 +743,11 @@ describe('Users controller', () => {
           Sinon.stub(FetchLegacyIdDal, 'go').returns(456)
         })
 
-        it('redirects to the legacy user page', async () => {
+        it('redirects to the internal initiate edit session url', async () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/user/456/status`)
+          expect(response.headers.location).to.equal(`/system/users/internal/setup/${id}/edit`)
         })
       })
     })
