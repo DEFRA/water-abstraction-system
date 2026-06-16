@@ -720,6 +720,7 @@ describe('Users controller', () => {
           pageTitleCaption: 'basic.access@wrls.gov.uk',
           permissions: 'Basic access',
           roles: [],
+          showEditButton: true,
           status: 'enabled'
         })
       })

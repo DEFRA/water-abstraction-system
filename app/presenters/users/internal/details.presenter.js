@@ -11,12 +11,15 @@ const { formatLongDateTime, sentenceCase } = require('../../base.presenter.js')
 /**
  * Formats data for internal users on the `/users/internal/{id}/details` page
  *
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  * @param {module:UserModel} user - The user instance
  *
  * @returns {object} The data formatted for the view template
  */
-function go(user) {
+function go(auth, user) {
   const { id, username } = user
+
+  const status = user.$status()
 
   return {
     backLink: {
@@ -29,7 +32,8 @@ function go(user) {
     pageTitleCaption: username,
     permissions: user.$permissions().label,
     roles: _roles(user),
-    status: user.$status()
+    showEditButton: auth.credentials.user.id !== id && status !== 'disabled',
+    status
   }
 }
 

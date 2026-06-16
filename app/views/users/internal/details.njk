@@ -24,7 +24,7 @@
     ]
   }) }}
 
-  {% if status !== 'disabled' %}
+  {% if showEditButton === true %}
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 

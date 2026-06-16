@@ -14,14 +14,16 @@ const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 const DetailsPresenter = require('../../../../app/presenters/users/internal/details.presenter.js')
 
 describe('Users - Internal - Details Presenter', () => {
+  let auth
   let user
 
   beforeEach(() => {
+    auth = { credentials: { user: { id: '367e5f4b-07d1-460b-842f-adf8f5dad7ef' } } }
     user = UsersFixture.basicAccess()
   })
 
   it('correctly presents the data', () => {
-    const result = DetailsPresenter.go(user)
+    const result = DetailsPresenter.go(auth, user)
 
     expect(result).to.equal({
       backLink: {
@@ -34,6 +36,7 @@ describe('Users - Internal - Details Presenter', () => {
       pageTitleCaption: user.username,
       permissions: 'Basic access',
       roles: [],
+      showEditButton: true,
       status: 'enabled'
     })
   })
@@ -41,7 +44,7 @@ describe('Users - Internal - Details Presenter', () => {
   describe('the "lastSignedIn" property', () => {
     describe('when the lastLogin is not "null"', () => {
       it('returns the date and time of the last login', () => {
-        const result = DetailsPresenter.go(user)
+        const result = DetailsPresenter.go(auth, user)
 
         expect(result.lastSignedIn).to.equal('6 October 2022 at 10:00:00')
       })
@@ -53,7 +56,7 @@ describe('Users - Internal - Details Presenter', () => {
       })
 
       it('returns "Never signed in"', () => {
-        const result = DetailsPresenter.go(user)
+        const result = DetailsPresenter.go(auth, user)
 
         expect(result.lastSignedIn).to.equal('Never signed in')
       })
@@ -63,7 +66,7 @@ describe('Users - Internal - Details Presenter', () => {
   describe('the "roles" property', () => {
     describe('when the user has no group or user roles', () => {
       it('returns an empty array', () => {
-        const result = DetailsPresenter.go(user)
+        const result = DetailsPresenter.go(auth, user)
 
         expect(result.roles).to.equal([])
       })
@@ -77,7 +80,7 @@ describe('Users - Internal - Details Presenter', () => {
       })
 
       it('returns the "roles" for the group in sentence case, sorted by name', () => {
-        const result = DetailsPresenter.go(user)
+        const result = DetailsPresenter.go(auth, user)
 
         expect(result.roles).to.equal([
           {
@@ -100,7 +103,7 @@ describe('Users - Internal - Details Presenter', () => {
       })
 
       it('returns all "roles" in sentence case, sorted by name', () => {
-        const result = DetailsPresenter.go(user)
+        const result = DetailsPresenter.go(auth, user)
 
         expect(result.roles).to.equal([
           {
@@ -135,7 +138,7 @@ describe('Users - Internal - Details Presenter', () => {
       })
 
       it('returns the "roles" for the group in sentence case, sorted by name, with "unlink" mapped to "unregister"', () => {
-        const result = DetailsPresenter.go(user)
+        const result = DetailsPresenter.go(auth, user)
 
         expect(result.roles).to.equal([
           {
@@ -155,6 +158,40 @@ describe('Users - Internal - Details Presenter', () => {
             name: 'View charge versions'
           }
         ])
+      })
+    })
+  })
+
+  describe('the "showEditButton" property', () => {
+    describe('when the authorised user is different to the one being edited', () => {
+      it('returns "true"', () => {
+        const result = DetailsPresenter.go(auth, user)
+
+        expect(result.showEditButton).to.be.true()
+      })
+    })
+
+    describe('when the user being edited is disabled', () => {
+      beforeEach(() => {
+        user.enabled = false
+      })
+
+      it('returns "false"', () => {
+        const result = DetailsPresenter.go(auth, user)
+
+        expect(result.showEditButton).to.be.false()
+      })
+    })
+
+    describe('when the authorised user is the same as the one being edited', () => {
+      beforeEach(() => {
+        auth = { credentials: { user: { id: user.id } } }
+      })
+
+      it('returns "false"', () => {
+        const result = DetailsPresenter.go(auth, user)
+
+        expect(result.showEditButton).to.be.false()
       })
     })
   })
