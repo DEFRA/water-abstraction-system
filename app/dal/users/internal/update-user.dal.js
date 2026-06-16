@@ -96,18 +96,18 @@ async function _insertUserRoles(roleIds, userId, trx) {
 }
 
 async function _newGroupsRoles(currentPermission, permission) {
-  if (permission !== currentPermission) {
-    const { groups, roles } = userPermissions[permission]
-
-    const [groupIds, roleIds] = await Promise.all([
-      GroupModel.query().select('id').whereIn('group', groups),
-      RoleModel.query().select('id').whereIn('role', roles)
-    ])
-
-    return { groupIds, roleIds }
+  if (permission === currentPermission) {
+    return null
   }
 
-  return null
+  const { groups, roles } = userPermissions[permission]
+
+  const [groupIds, roleIds] = await Promise.all([
+    GroupModel.query().select('id').whereIn('group', groups),
+    RoleModel.query().select('id').whereIn('role', roles)
+  ])
+
+  return { groupIds, roleIds }
 }
 
 async function _updateUser(email, id, username, trx) {
