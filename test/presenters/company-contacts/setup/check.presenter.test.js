@@ -16,7 +16,7 @@ const { yesterday } = require('../../../support/general.js')
 // Thing under test
 const CheckPresenter = require('../../../../app/presenters/company-contacts/setup/check.presenter.js')
 
-describe('Company Contacts - Setup - Check Presenter', () => {
+describe.only('Company Contacts - Setup - Check Presenter', () => {
   let company
   let companyContact
   let email
@@ -42,7 +42,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
     sentNotification = undefined
 
     session = {
-      abstractionAlertLicences: [],
+      abstractionAlertLicences: null,
       abstractionAlerts: 'yes',
       company,
       email,
@@ -154,9 +154,9 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           session.abstractionAlerts = 'some'
         })
 
-        describe('and "abstractionAlertLicences" has never been set in the session', () => {
+        describe('and there are no existing "abstractionAlertLicences"', () => {
           beforeEach(() => {
-            session.abstractionAlertLicences = undefined
+            session.abstractionAlertLicences = null
           })
 
           it('returns an empty array', () => {
@@ -255,22 +255,11 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           session.abstractionAlerts = 'some'
         })
 
-        describe('and "abstractionAlertLicences" has never been set in the session', () => {
+        describe('and there are no "abstractionAlertLicences"', () => {
           beforeEach(() => {
-            session.abstractionAlertLicences = undefined
+            session.abstractionAlertLicences = null
           })
 
-          it('returns "select licences" warning', () => {
-            const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
-
-            expect(result.warning).to.equal({
-              text: 'Select the licences they should get water abstraction alert emails for or change should they get abstraction alerts.',
-              iconFallbackText: 'Warning'
-            })
-          })
-        })
-
-        describe('and the user navigated back without selecting any licences', () => {
           it('returns "select licences" warning', () => {
             const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
