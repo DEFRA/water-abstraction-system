@@ -21,6 +21,7 @@ function go(session, savedCompanyContacts, sentNotification) {
   const { company, email, name, abstractionAlerts, companyContact, licences, abstractionAlertLicences } = session
 
   const matchingContact = _matchingContact(email, name, savedCompanyContacts)
+  const parsedAbstractionAlertLicences = !abstractionAlertLicences ? [] : abstractionAlertLicences
 
   return {
     abstractionAlertsLabel: abstractionAlertsLabel(abstractionAlerts),
@@ -29,7 +30,7 @@ function go(session, savedCompanyContacts, sentNotification) {
     name,
     pageTitle: 'Check contact',
     pageTitleCaption: company.name,
-    licences: _licences(licences, abstractionAlertLicences, abstractionAlerts),
+    licences: _licences(licences, parsedAbstractionAlertLicences, abstractionAlerts),
     links: {
       abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
       cancel: `/system/company-contacts/setup/${session.id}/cancel`,
@@ -38,7 +39,7 @@ function go(session, savedCompanyContacts, sentNotification) {
       restoreContact: matchingContact?.deletedAt ? `/system/company-contacts/setup/${session.id}/restore` : null
     },
     matchingContact,
-    warning: _warning(matchingContact)
+    warning: _warning(matchingContact, parsedAbstractionAlertLicences, abstractionAlerts)
   }
 }
 
@@ -59,7 +60,9 @@ function _emailInUse(sentNotification, companyContact) {
 }
 
 function _licences(licences, abstractionAlertLicences, abstractionAlerts) {
-  if (abstractionAlerts !== 'some') {
+  const abstractionAlertLicencesEmpty = abstractionAlertLicences.length === 0
+
+  if (abstractionAlerts !== 'some' || abstractionAlertLicencesEmpty) {
     return []
   }
 
@@ -98,7 +101,16 @@ function _matchingContact(email, name, savedCompanyContacts) {
  * This variable is also used to show / hide the 'confirm' button, we do not allow a user to submit if the contact already
  * exists (when creating a company contact).
  */
-function _warning(matchingContact) {
+function _warning(matchingContact, abstractionAlertLicences, abstractionAlerts) {
+  const abstractionAlertLicencesEmpty = abstractionAlertLicences.length === 0
+
+  if (abstractionAlerts === 'some' && abstractionAlertLicencesEmpty) {
+    return {
+      text: 'Select the licences they should get water abstraction alert emails for or change should they get abstraction alerts.',
+      iconFallbackText: 'Warning'
+    }
+  }
+
   if (!matchingContact) {
     return null
   }

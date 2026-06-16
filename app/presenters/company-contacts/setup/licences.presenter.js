@@ -5,8 +5,6 @@
  * @module LicencesPresenter
  */
 
-const { checkUrl } = require('../../../lib/check-page.lib.js')
-
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/licences' page
  *
@@ -19,7 +17,7 @@ function go(session) {
 
   return {
     backLink: {
-      href: checkUrl(session, `/system/company-contacts/setup/${sessionId}/abstraction-alerts`),
+      href: `/system/company-contacts/setup/${sessionId}/abstraction-alerts`,
       text: 'Back'
     },
     licences: _licences(licences, abstractionAlertLicences),
