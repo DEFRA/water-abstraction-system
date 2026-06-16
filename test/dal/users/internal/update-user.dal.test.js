@@ -129,7 +129,7 @@ describe('Users - Internal - Update User DAL', () => {
       it('does not update the username and returns undefined', async () => {
         const result = await UpdateUserDal.go(auth, session)
 
-        const user = await UserModel.query().where('username', existingUser.username).limit(1).first()
+        const user = await UserModel.query().findById(existingUser.id)
 
         expect(user.username).to.equal(existingUser.username)
         expect(result).to.be.undefined()
