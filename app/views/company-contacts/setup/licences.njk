@@ -8,6 +8,7 @@
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukCheckboxes({
+      errorMessage: error.licences if error.licences,
       name: "licences",
       hint: {
         text: "Select all that apply"
