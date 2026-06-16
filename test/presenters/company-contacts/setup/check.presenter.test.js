@@ -16,7 +16,7 @@ const { yesterday } = require('../../../support/general.js')
 // Thing under test
 const CheckPresenter = require('../../../../app/presenters/company-contacts/setup/check.presenter.js')
 
-describe.only('Company Contacts - Setup - Check Presenter', () => {
+describe('Company Contacts - Setup - Check Presenter', () => {
   let company
   let companyContact
   let email
