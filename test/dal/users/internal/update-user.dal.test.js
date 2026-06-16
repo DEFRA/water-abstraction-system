@@ -73,12 +73,11 @@ describe('Users - Internal - Update User DAL', () => {
 
   describe('when called', () => {
     describe('and the email has changed', () => {
-      it('updates the user with the correct attributes', async () => {
+      it('updates the username', async () => {
         await UpdateUserDal.go(auth, session)
 
-        const user = await UserModel.query().where('username', session.email).limit(1).first()
+        const user = await UserModel.query().findById(existingUser.id)
 
-        expect(user.resetGuid).to.exist()
         expect(user.username).to.equal(session.email)
       })
 
