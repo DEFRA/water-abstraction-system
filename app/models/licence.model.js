@@ -181,6 +181,10 @@ class LicenceModel extends BaseModel {
             ])
         })
       },
+      // ended modifier fetches the dates for a licence to determine if a licence has ended
+      ended(query) {
+        query.select(['expiredDate', 'lapsedDate', 'revokedDate'])
+      },
       // licenceHolder modifier fetches all the joined records needed to identify the licence holder
       licenceHolder(query) {
         query
