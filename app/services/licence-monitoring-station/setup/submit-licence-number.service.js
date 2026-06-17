@@ -6,8 +6,8 @@
  * @module SubmitLicenceNumberService
  */
 
+const FetchLicenceDal = require('../../../dal/licence-monitoring-station/fetch-licence.dal.js')
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const LicenceModel = require('../../../models/licence.model.js')
 const LicenceNumberPresenter = require('../../../presenters/licence-monitoring-station/setup/licence-number.presenter.js')
 const LicenceNumberValidator = require('../../../validators/licence-monitoring-station/setup/licence-number.validator.js')
 
@@ -22,7 +22,7 @@ const LicenceNumberValidator = require('../../../validators/licence-monitoring-s
 async function go(sessionId, payload) {
   const session = await FetchSessionDal.go(sessionId)
 
-  const licence = payload.licenceRef ? await _fetchLicence(payload.licenceRef) : null
+  const licence = payload.licenceRef ? await FetchLicenceDal.go(payload.licenceRef) : null
 
   const validationResult = await _validate(payload, licence)
 
@@ -48,10 +48,6 @@ async function go(sessionId, payload) {
   }
 }
 
-async function _fetchLicence(licenceRef) {
-  return LicenceModel.query().where('licenceRef', licenceRef).select('id', 'licenceRef').first()
-}
-
 async function _save(session, payload, licence) {
   session.licenceId = licence.id
   session.licenceRef = payload.licenceRef
@@ -66,9 +62,7 @@ function _submittedSessionData(session, payload) {
 }
 
 async function _validate(payload, licence) {
-  const licenceExists = !!licence
-
-  const validation = LicenceNumberValidator.go(payload, licenceExists)
+  const validation = LicenceNumberValidator.go(payload, licence)
 
   if (!validation.error) {
     return null

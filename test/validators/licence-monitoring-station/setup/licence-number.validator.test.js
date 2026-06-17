@@ -7,23 +7,38 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const LicenceModel = require('../../../../app/models/licence.model.js')
+const { yesterday } = require('../../../support/general.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+
 // Thing under test
 const LicenceNumberValidator = require('../../../../app/validators/licence-monitoring-station/setup/licence-number.validator.js')
 
 describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
-  let licenceExists
+  let licence
   let payload = {}
+
+  beforeEach(() => {
+    licence = LicenceModel.fromJson({
+      expiredDate: null,
+      id: generateUUID(),
+      lapsedDate: null,
+      licenceRef: generateLicenceRef(),
+      revokedDate: null
+    })
+  })
 
   describe('when called with valid data', () => {
     beforeEach(() => {
-      licenceExists = true
       payload = {
         licenceRef: '1234567890'
       }
     })
 
     it('returns with no errors', () => {
-      const result = LicenceNumberValidator.go(payload, licenceExists)
+      const result = LicenceNumberValidator.go(payload, licence)
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -37,7 +52,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = LicenceNumberValidator.go(payload)
+        const result = LicenceNumberValidator.go(payload, licence)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -53,7 +68,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = LicenceNumberValidator.go(payload)
+        const result = LicenceNumberValidator.go(payload, licence)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -63,18 +78,37 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
 
     describe('because the licence number was not found', () => {
       beforeEach(() => {
-        licenceExists = false
+        licence = undefined
+
         payload = {
-          licenceRef: '1234567890'
+          licenceRef: generateLicenceRef()
         }
       })
 
       it('returns with errors', () => {
-        const result = LicenceNumberValidator.go(payload, licenceExists)
+        const result = LicenceNumberValidator.go(payload, licence)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
         expect(result.error.details[0].message).to.equal('Licence could not be found')
+      })
+    })
+
+    describe('because the licence has ended', () => {
+      beforeEach(() => {
+        licence.lapsedDate = yesterday()
+
+        payload = {
+          licenceRef: generateLicenceRef()
+        }
+      })
+
+      it('returns with errors', () => {
+        const result = LicenceNumberValidator.go(payload, licence)
+
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('The licence has ended')
       })
     })
   })
