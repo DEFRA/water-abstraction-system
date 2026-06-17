@@ -32,7 +32,7 @@ function go(auth, user) {
     pageTitleCaption: username,
     permissions: user.$permissions().label,
     roles: _roles(user),
-    showEditButton: auth.credentials.user.id !== id && status !== 'locked',
+    showEditButton: auth.credentials.user.id !== id,
     status
   }
 }
