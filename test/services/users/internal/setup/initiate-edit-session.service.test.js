@@ -45,9 +45,9 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
         const result = await InitiateEditSessionService.go(id)
 
         expect(result).to.equal({
-          access: true,
+          access: 'enabled',
           data: {
-            access: true,
+            access: 'enabled',
             email: 'bob.bobbles@environment-agency.gov.uk',
             permission: 'basic',
             user
@@ -65,7 +65,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
         const matchingSession = await SessionModel.query().findById(result.id)
 
         expect(matchingSession.data).to.equal({
-          access: true,
+          access: 'enabled',
           email: 'bob.bobbles@environment-agency.gov.uk',
           permission: 'basic',
           user: {
@@ -99,9 +99,9 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
         const result = await InitiateEditSessionService.go(id)
 
         expect(result).to.equal({
-          access: true,
+          access: 'enabled',
           data: {
-            access: true,
+            access: 'enabled',
             email: 'bob.bobbles@environment-agency.gov.uk',
             permission: 'nps_ar_approver',
             user
@@ -119,7 +119,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
         const matchingSession = await SessionModel.query().findById(result.id)
 
         expect(matchingSession.data).to.equal({
-          access: true,
+          access: 'enabled',
           email: 'bob.bobbles@environment-agency.gov.uk',
           permission: 'nps_ar_approver',
           user: {

@@ -47,7 +47,7 @@ function _formatDataForJourney(user) {
   user.currentStatus = user.$status()
 
   return {
-    access: user.enabled,
+    access: user.enabled ? 'enabled' : 'disabled',
     email: username,
     permission,
     user
