@@ -42,15 +42,14 @@ function _formatDataForJourney(user) {
   const role = roles.length > 0 ? roles[0].role : null
 
   const permission = _getUserPermissionKey(group, role)
-  const status = user.$status()
 
   user.currentPermission = permission
-  user.currentStatus = status
+  user.currentStatus = user.$status()
 
   return {
+    access: user.enabled,
     email: username,
     permission,
-    status,
     user
   }
 }
