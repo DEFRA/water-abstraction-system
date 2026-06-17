@@ -5,7 +5,7 @@
  * @module ViewService
  */
 
-const FetchMonitoringStationDetailsService = require('../monitoring-stations/fetch-monitoring-station-details.service.js')
+const FetchMonitoringStationDetailsDal = require('../../dal/monitoring-stations/fetch-monitoring-station-details.dal.js')
 const ViewPresenter = require('../../presenters/monitoring-stations/view.presenter.js')
 const { readFlashNotification } = require('../../lib/general.lib.js')
 
@@ -20,7 +20,7 @@ const { readFlashNotification } = require('../../lib/general.lib.js')
  */
 async function go(auth, monitoringStationId, yar) {
   const { licenceMonitoringStations, monitoringStation } =
-    await FetchMonitoringStationDetailsService.go(monitoringStationId)
+    await FetchMonitoringStationDetailsDal.go(monitoringStationId)
 
   const pageData = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 

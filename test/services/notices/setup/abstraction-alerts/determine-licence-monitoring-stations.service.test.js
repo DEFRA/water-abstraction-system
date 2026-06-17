@@ -15,7 +15,7 @@ const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 const { yesterday } = require('../../../../support/general.js')
 
 // Things we need to stub
-const FetchMonitoringStationDetailsService = require('../../../../../app/services/monitoring-stations/fetch-monitoring-station-details.service.js')
+const FetchMonitoringStationDetailsDal = require('../../../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js')
 
 // Thing under test
 const DetermineLicenceMonitoringStationsService = require('../../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js')
@@ -24,7 +24,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
   let licenceMonitoringStations
   let monitoringStation
   let monitoringStationId
-  let stubFetchMonitoringStationDetailsService
+  let stubFetchMonitoringStationDetailsDal
 
   beforeEach(() => {
     monitoringStationId = generateUUID()
@@ -108,7 +108,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
       }
     ]
 
-    stubFetchMonitoringStationDetailsService = Sinon.stub(FetchMonitoringStationDetailsService, 'go').resolves({
+    stubFetchMonitoringStationDetailsDal = Sinon.stub(FetchMonitoringStationDetailsDal, 'go').resolves({
       licenceMonitoringStations,
       monitoringStation
     })
@@ -198,7 +198,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
       licenceMonitoringStations[1].licence.revokedDate = yesterday()
       licenceMonitoringStations[2].licence.expiredDate = yesterday()
 
-      stubFetchMonitoringStationDetailsService.resolves({
+      stubFetchMonitoringStationDetailsDal.resolves({
         licenceMonitoringStations,
         monitoringStation
       })

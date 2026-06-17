@@ -5,7 +5,7 @@
  * @module DetermineLicenceMonitoringStationsService
  */
 
-const FetchMonitoringStationDetailsService = require('../../../monitoring-stations/fetch-monitoring-station-details.service.js')
+const FetchMonitoringStationDetailsDal = require('../../../../dal/monitoring-stations/fetch-monitoring-station-details.dal.js')
 
 /**
  * Orchestrates fetching and formatting the data needed for the Monitoring station journey
@@ -14,7 +14,7 @@ const FetchMonitoringStationDetailsService = require('../../../monitoring-statio
  * @returns {Promise<{object}>}
  */
 async function go(id) {
-  const { licenceMonitoringStations, monitoringStation } = await FetchMonitoringStationDetailsService.go(id)
+  const { licenceMonitoringStations, monitoringStation } = await FetchMonitoringStationDetailsDal.go(id)
 
   return {
     licenceMonitoringStations: _licenceMonitoringStations(licenceMonitoringStations),

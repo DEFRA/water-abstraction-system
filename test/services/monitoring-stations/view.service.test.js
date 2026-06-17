@@ -12,7 +12,7 @@ const { expect } = Code
 const YarStub = require('../../support/stubs/yar.stub.js')
 
 // Things we need to stub
-const FetchMonitoringStationDetailsService = require('../../../app/services/monitoring-stations/fetch-monitoring-station-details.service.js')
+const FetchMonitoringStationDetailsDal = require('../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js')
 
 // Thing under test
 const ViewService = require('../../../app/services/monitoring-stations/view.service.js')
@@ -63,7 +63,7 @@ describe('Monitoring Stations - View service', () => {
     yarStub = YarStub.build(Sinon)
     yarStub.flash.returns(['Tag removed for 99/999/9999'])
 
-    Sinon.stub(FetchMonitoringStationDetailsService, 'go').resolves({ licenceMonitoringStations, monitoringStation })
+    Sinon.stub(FetchMonitoringStationDetailsDal, 'go').resolves({ licenceMonitoringStations, monitoringStation })
   })
 
   afterEach(() => {

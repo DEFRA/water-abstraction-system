@@ -2,7 +2,7 @@
 
 /**
  * Fetches the matching monitoring station and additional records needed for the view monitoring station page
- * @module FetchMonitoringStationDetailsService
+ * @module FetchMonitoringStationDetailsDal
  */
 
 const LicenceMonitoringStationModel = require('../../models/licence-monitoring-station.model.js')
