@@ -33,18 +33,18 @@
         }
       },
       {
-        key: { text: "Status" },
-        value: { text: status },
+        key: { text: "Access" },
+        value: { text: access },
         actions: {
           items: [
             {
-              href: links.status,
+              href: links.access,
               text: "Change",
-              visuallyHiddenText: "change status"
+              visuallyHiddenText: "enable/disable access"
             }
           ]
         }
-      } if status
+      } if access
     ]
   }) }}
 
