@@ -57,7 +57,7 @@ describe('Return Logs - View Communications Service', () => {
         },
         backLink: {
           href: `/system/licences/${returnLog.licence.id}/returns`,
-          text: 'Go back to summary'
+          text: 'Go back to returns'
         },
         notifications: [],
         pageTitle: 'Communications',

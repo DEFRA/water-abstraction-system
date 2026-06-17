@@ -149,7 +149,7 @@ function _backLink(licenceId, latest, returnLogId) {
   if (latest) {
     return {
       href: `/system/licences/${licenceId}/returns`,
-      text: 'Go back to summary'
+      text: 'Go back to returns'
     }
   }
 

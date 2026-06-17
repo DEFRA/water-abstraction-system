@@ -53,7 +53,7 @@ describe('Return Logs - Details presenter', () => {
       },
       backLink: {
         href: `/system/licences/${returnLog.licence.id}/returns`,
-        text: 'Go back to summary'
+        text: 'Go back to returns'
       },
       displayReadings: false,
       displayTable: true,
@@ -265,12 +265,12 @@ describe('Return Logs - Details presenter', () => {
         returnLog.returnSubmissions = [latestSubmission]
       })
 
-      it('returns "Go back to summary"', () => {
+      it('returns "Go back to returns"', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
         expect(result.backLink).to.equal({
           href: `/system/licences/${returnLog.licence.id}/returns`,
-          text: 'Go back to summary'
+          text: 'Go back to returns'
         })
       })
     })

@@ -63,7 +63,7 @@ describe('Return Logs - View Details service', () => {
       },
       backLink: {
         href: `/system/licences/${returnLog.licence.id}/returns`,
-        text: 'Go back to summary'
+        text: 'Go back to returns'
       },
       displayReadings: true,
       displayTable: false,
