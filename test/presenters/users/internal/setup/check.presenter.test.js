@@ -25,9 +25,11 @@ describe('Users - Internal - Setup - Check Presenter', () => {
       const result = CheckPresenter.go(session)
 
       expect(result).to.equal({
+        access: null,
         activeNavBar: 'users',
         email: session.email,
         links: {
+          access: `/system/users/internal/setup/${session.id}/access`,
           cancel: `/system/users/internal/setup/${session.id}/cancel`,
           email: `/system/users/internal/setup/${session.id}/email`,
           permissions: `/system/users/internal/setup/${session.id}/permissions`
@@ -36,6 +38,28 @@ describe('Users - Internal - Setup - Check Presenter', () => {
         pageTitleCaption: 'Internal',
         permission: 'Billing and Data',
         showEmailChangeLink: true
+      })
+    })
+  })
+
+  describe('the "access" property', () => {
+    describe('when creating a new user', () => {
+      it('returns null', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.access).to.be.null()
+      })
+    })
+
+    describe('when editing an existing user', () => {
+      beforeEach(() => {
+        session.access = 'enabled'
+      })
+
+      it('returns the users access status', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.access).to.equal('Enabled')
       })
     })
   })
@@ -51,7 +75,7 @@ describe('Users - Internal - Setup - Check Presenter', () => {
 
     describe('when editing an existing user that is awaiting verification', () => {
       beforeEach(() => {
-        session.user = { status: 'awaiting' }
+        session.user = { currentStatus: 'awaiting' }
       })
 
       it('returns true', () => {
@@ -63,7 +87,7 @@ describe('Users - Internal - Setup - Check Presenter', () => {
 
     describe('when editing an existing user that is NOT awaiting verification', () => {
       beforeEach(() => {
-        session.user = { status: 'enabled' }
+        session.user = { currentStatus: 'enabled' }
       })
 
       it('returns false', () => {
