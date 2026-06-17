@@ -2,7 +2,7 @@
 
 /**
  * Fetches the matching monitoring station and additional records needed for the view monitoring station page
- * @module FetchMonitoringStationDetailsService
+ * @module FetchMonitoringStationDetailsDal
  */
 
 const LicenceMonitoringStationModel = require('../../models/licence-monitoring-station.model.js')
@@ -68,7 +68,7 @@ async function _fetchLicenceMonitoringStations(monitoringStationId) {
     ])
     .withGraphFetched('licence')
     .modifyGraph('licence', (licenceBuilder) => {
-      licenceBuilder.select(['id', 'licenceRef'])
+      licenceBuilder.select(['id', 'licenceRef']).modify('ended')
     })
     .withGraphFetched('licenceVersionPurposeCondition')
     .modifyGraph('licenceVersionPurposeCondition', (licenceVersionPurposeConditionBuilder) => {
