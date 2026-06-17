@@ -7,6 +7,7 @@
  */
 
 const ContactDetailsPresenter = require('../../presenters/company-contacts/contact-details.presenter.js')
+const FetchAbstractionAlertLicencesDal = require('../../dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
 const FetchCompanyContactDetailsService = require('./fetch-company-contact-details.service.js')
 const FetchCompanyService = require('../companies/fetch-company.service.js')
 const { readFlashNotification } = require('../../lib/general.lib.js')
@@ -26,7 +27,9 @@ async function go(id, auth, yar) {
 
   const company = await FetchCompanyService.go(companyContact.companyId)
 
-  const pageData = ContactDetailsPresenter.go(company, companyContact)
+  const licences = await FetchAbstractionAlertLicencesDal.go(companyContact.abstractionAlertLicences)
+
+  const pageData = ContactDetailsPresenter.go(company, companyContact, licences)
 
   const notification = readFlashNotification(yar)
 

@@ -7,12 +7,14 @@ const SubmitCancelService = require('../services/company-contacts/setup/submit-c
 const SubmitCheckService = require('../services/company-contacts/setup/submit-check.service.js')
 const SubmitContactEmailService = require('../services/company-contacts/setup/submit-contact-email.service.js')
 const SubmitContactNameService = require('../services/company-contacts/setup/submit-contact-name.service.js')
+const SubmitLicencesService = require('../services/company-contacts/setup/submit-licences.service.js')
 const SubmitRestoreService = require('../services/company-contacts/setup/submit-restore.service.js')
 const ViewAbstractionAlertsService = require('../services/company-contacts/setup/view-abstraction-alerts.service.js')
 const ViewCancelService = require('../services/company-contacts/setup/view-cancel.service.js')
 const ViewCheckService = require('../services/company-contacts/setup/view-check.service.js')
 const ViewContactEmailService = require('../services/company-contacts/setup/view-contact-email.service.js')
 const ViewContactNameService = require('../services/company-contacts/setup/view-contact-name.service.js')
+const ViewLicencesService = require('../services/company-contacts/setup/view-licences.service.js')
 const ViewRestoreService = require('../services/company-contacts/setup/view-restore.service.js')
 
 /**
@@ -77,6 +79,14 @@ async function viewContactName(request, h) {
   const pageData = await ViewContactNameService.go(sessionId)
 
   return h.view(`company-contacts/setup/contact-name.njk`, pageData)
+}
+
+async function viewLicences(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewLicencesService.go(sessionId)
+
+  return h.view(`company-contacts/setup/licences.njk`, pageData)
 }
 
 async function viewRestore(request, h) {
@@ -157,6 +167,21 @@ async function submitContactName(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
+async function submitLicences(request, h) {
+  const {
+    payload,
+    params: { sessionId }
+  } = request
+
+  const pageData = await SubmitLicencesService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view(`company-contacts/setup/licences.njk`, pageData)
+  }
+
+  return h.redirect(pageData.redirectUrl)
+}
+
 async function submitRestore(request, h) {
   const {
     auth,
@@ -177,11 +202,13 @@ module.exports = {
   viewCheck,
   viewContactEmail,
   viewContactName,
+  viewLicences,
   viewRestore,
   submitAbstractionAlerts,
   submitCancel,
   submitCheck,
   submitContactEmail,
   submitContactName,
+  submitLicences,
   submitRestore
 }

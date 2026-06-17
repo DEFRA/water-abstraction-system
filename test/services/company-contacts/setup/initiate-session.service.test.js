@@ -9,10 +9,13 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionModel = require('../../../../app/models/session.model.js')
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
+const SessionModel = require('../../../../app/models/session.model.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Things we need to stub
+const FetchCompanyLicencesDal = require('../../../../app/dal/company-contacts/fetch-company-licences.dal.js')
 const FetchCompanyService = require('../../../../app/services/companies/fetch-company.service.js')
 
 // Thing under test
@@ -20,11 +23,14 @@ const InitiateSessionService = require('../../../../app/services/company-contact
 
 describe('Company Contacts - Setup - Initiate Session service', () => {
   let company
+  let licences
 
-  beforeEach(async () => {
+  beforeEach(() => {
     company = CustomersFixtures.company()
+    licences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
 
     Sinon.stub(FetchCompanyService, 'go').returns(company)
+    Sinon.stub(FetchCompanyLicencesDal, 'go').returns(licences)
   })
 
   afterEach(() => {
@@ -41,9 +47,11 @@ describe('Company Contacts - Setup - Initiate Session service', () => {
         company,
         createdAt: matchingSession.createdAt,
         data: {
-          company
+          company,
+          licences
         },
         id: result.id,
+        licences,
         updatedAt: matchingSession.updatedAt
       })
     })

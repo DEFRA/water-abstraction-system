@@ -1,0 +1,88 @@
+'use strict'
+
+// Test framework dependencies
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+
+const { describe, it, before, after } = (exports.lab = Lab.script())
+const { expect } = Code
+
+// Test helpers
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+
+// Thing under test
+const FetchAbstractionAlertLicencesDal = require('../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
+
+describe('Company Contacts - Fetch Abstraction Alert Licences Dal', () => {
+  let licence
+  let licenceA
+  let licenceB
+
+  before(async () => {
+    licence = await LicenceHelper.add()
+    licenceA = await LicenceHelper.add({ licenceRef: '01/111/AA' })
+    licenceB = await LicenceHelper.add({ licenceRef: '01/222/AA' })
+  })
+
+  after(async () => {
+    await licence.$query().delete()
+    await licenceA.$query().delete()
+    await licenceB.$query().delete()
+  })
+
+  describe('when there are matching licences', () => {
+    it('returns the licences', async () => {
+      const result = await FetchAbstractionAlertLicencesDal.go([licence.id])
+
+      expect(result).to.equal([
+        {
+          id: licence.id,
+          licenceRef: licence.licenceRef,
+          revokedDate: null,
+          lapsedDate: null,
+          expiredDate: null
+        }
+      ])
+    })
+  })
+
+  describe('when there are multiple matching licences', () => {
+    it('returns the licences ordered by licenceRef', async () => {
+      const result = await FetchAbstractionAlertLicencesDal.go([licenceB.id, licenceA.id])
+
+      expect(result).to.equal([
+        {
+          id: licenceA.id,
+          licenceRef: licenceA.licenceRef,
+          revokedDate: null,
+          lapsedDate: null,
+          expiredDate: null
+        },
+        {
+          id: licenceB.id,
+          licenceRef: licenceB.licenceRef,
+          revokedDate: null,
+          lapsedDate: null,
+          expiredDate: null
+        }
+      ])
+    })
+  })
+
+  describe('when abstractionAlertLicences is null', () => {
+    it('returns an empty array', async () => {
+      const result = await FetchAbstractionAlertLicencesDal.go(null)
+
+      expect(result).to.equal([])
+    })
+  })
+
+  describe('when none of the IDs match any licences', () => {
+    it('returns an empty array', async () => {
+      const result = await FetchAbstractionAlertLicencesDal.go([generateUUID()])
+
+      expect(result).to.equal([])
+    })
+  })
+})

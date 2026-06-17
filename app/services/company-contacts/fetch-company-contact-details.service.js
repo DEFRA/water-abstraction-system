@@ -22,6 +22,7 @@ async function _fetch(companyContactId) {
   return CompanyContactModel.query()
     .select([
       'companyContacts.id',
+      'companyContacts.abstractionAlertLicences',
       'companyContacts.abstractionAlerts',
       'companyContacts.companyId',
       'companyContacts.createdAt',

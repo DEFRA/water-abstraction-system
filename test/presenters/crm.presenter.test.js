@@ -14,6 +14,32 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 const CRMPresenter = require('../../app/presenters/crm.presenter.js')
 
 describe('CRM presenter', () => {
+  describe('#abstractionAlertsLabel()', () => {
+    describe('when "abstractionAlerts" is "yes"', () => {
+      it('returns "Yes, for all licences"', () => {
+        const result = CRMPresenter.abstractionAlertsLabel('yes')
+
+        expect(result).to.equal('Yes, for all licences')
+      })
+    })
+
+    describe('when "abstractionAlerts" is "some"', () => {
+      it('returns "Yes, for some licences"', () => {
+        const result = CRMPresenter.abstractionAlertsLabel('some')
+
+        expect(result).to.equal('Yes, for some licences')
+      })
+    })
+
+    describe('when "abstractionAlerts" is "no"', () => {
+      it('returns "No"', () => {
+        const result = CRMPresenter.abstractionAlertsLabel('no')
+
+        expect(result).to.equal('No')
+      })
+    })
+  })
+
   describe('#formatContact()', () => {
     const billingQueryId = generateUUID()
 

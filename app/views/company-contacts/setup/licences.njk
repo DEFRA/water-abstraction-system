@@ -1,0 +1,21 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block pageContent %}
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukCheckboxes({
+      errorMessage: error.licences if error.licences,
+      name: "licences",
+      hint: {
+        text: "Select all that apply"
+      },
+      items: licences
+    }) }}
+
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
+{% endblock %}

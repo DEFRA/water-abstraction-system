@@ -6,7 +6,8 @@
  */
 
 const CreateSessionDal = require('../../../dal/create-session.dal.js')
-const FetchCompanyContactService = require('./fetch-company-contact.service.js')
+const FetchCompanyContactDal = require('../../../dal/company-contacts/setup/fetch-company-contact.dal.js')
+const FetchCompanyLicencesDal = require('../../../dal/company-contacts/fetch-company-licences.dal.js')
 const { formatEmail } = require('../../../presenters/base.presenter.js')
 
 /**
@@ -17,9 +18,11 @@ const { formatEmail } = require('../../../presenters/base.presenter.js')
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
 async function go(companyContactId) {
-  const companyContact = await FetchCompanyContactService.go(companyContactId)
+  const companyContact = await FetchCompanyContactDal.go(companyContactId)
 
-  const data = _formatDataForJourney(companyContact)
+  const licences = await FetchCompanyLicencesDal.go(companyContact.company.id)
+
+  const data = _formatDataForJourney(companyContact, licences)
 
   return CreateSessionDal.go(data)
 }
@@ -36,14 +39,18 @@ async function go(companyContactId) {
  *
  * @private
  */
-function _formatDataForJourney(companyContact) {
-  const { abstractionAlerts, company, contact } = companyContact
+function _formatDataForJourney(companyContact, licences) {
+  const { abstractionAlertLicences, company, contact } = companyContact
+
+  const abstractionAlerts = companyContact.$abstractionAlertType()
 
   return {
-    abstractionAlerts: abstractionAlerts === true ? 'yes' : 'no',
+    abstractionAlertLicences,
+    abstractionAlerts: licences.length > 0 ? abstractionAlerts : 'no',
     company,
     companyContact,
     email: formatEmail(contact.email),
+    licences,
     name: contact.$name()
   }
 }

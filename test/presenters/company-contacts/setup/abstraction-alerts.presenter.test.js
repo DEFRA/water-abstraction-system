@@ -21,7 +21,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Presenter', () => {
   beforeEach(() => {
     company = CustomersFixtures.company()
 
-    session = { id: generateUUID(), company }
+    session = { id: generateUUID(), company, licences: [] }
   })
 
   describe('when called', () => {
@@ -35,17 +35,18 @@ describe('Company Contacts - Setup - Abstraction Alerts Presenter', () => {
           text: 'Back'
         },
         pageTitle: 'Should the contact get abstraction alerts?',
-        pageTitleCaption: 'Tyrell Corporation'
+        pageTitleCaption: 'Tyrell Corporation',
+        showSomeLicences: false
       })
     })
 
     describe('the "abstractionAlerts" property', () => {
-      describe('when the "abstractionAlerts" has previously been saved', () => {
+      describe('when "abstractionAlerts" property is set on the session', () => {
         beforeEach(() => {
           session.abstractionAlerts = 'yes'
         })
 
-        it('returns the "abstractionAlerts" from the session', () => {
+        it('returns the "abstractionAlerts" value', () => {
           const result = AbstractionAlertsPresenter.go(session)
 
           expect(result.abstractionAlerts).to.equal('yes')
@@ -57,6 +58,28 @@ describe('Company Contacts - Setup - Abstraction Alerts Presenter', () => {
           const result = AbstractionAlertsPresenter.go(session)
 
           expect(result.abstractionAlerts).to.be.null()
+        })
+      })
+    })
+
+    describe('the "showSomeLicences" property', () => {
+      describe('when there are licences', () => {
+        beforeEach(() => {
+          session.licences = [generateUUID()]
+        })
+
+        it('returns true', () => {
+          const result = AbstractionAlertsPresenter.go(session)
+
+          expect(result.showSomeLicences).to.true()
+        })
+      })
+
+      describe('when there are no licences', () => {
+        it('returns false', () => {
+          const result = AbstractionAlertsPresenter.go(session)
+
+          expect(result.showSomeLicences).to.false()
         })
       })
     })

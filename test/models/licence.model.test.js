@@ -45,7 +45,7 @@ const UserModel = require('../../app/models/user.model.js')
 const WorkflowHelper = require('../support/helpers/workflow.helper.js')
 const WorkflowModel = require('../../app/models/workflow.model.js')
 const { generateUUID, today } = require('../../app/lib/general.lib.js')
-const { tomorrow } = require('../support/general.js')
+const { tomorrow, yesterday } = require('../support/general.js')
 
 // Thing under test
 const LicenceModel = require('../../app/models/licence.model.js')
@@ -665,6 +665,109 @@ describe('Licence model', () => {
             startDate: otherLicenceVersions[2].startDate,
             status: 'current'
           })
+        })
+      })
+    })
+  })
+
+  describe('$ended', () => {
+    let endedRecord
+    let expiredDate
+    let lapsedDate
+    let revokedDate
+
+    beforeEach(() => {
+      expiredDate = null
+      lapsedDate = null
+      revokedDate = null
+    })
+
+    describe('when a licence has ended', () => {
+      describe('because is has expired', () => {
+        beforeEach(() => {
+          expiredDate = yesterday()
+
+          endedRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
+        })
+
+        it('returns true', () => {
+          const result = endedRecord.$ended()
+
+          expect(result).to.be.true()
+        })
+      })
+
+      describe('because is has lapsed', () => {
+        beforeEach(() => {
+          lapsedDate = yesterday()
+
+          endedRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
+        })
+
+        it('returns true', () => {
+          const result = endedRecord.$ended()
+
+          expect(result).to.be.true()
+        })
+      })
+
+      describe('because is has been revoked', () => {
+        beforeEach(() => {
+          revokedDate = yesterday()
+
+          endedRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
+        })
+
+        it('returns true', () => {
+          const result = endedRecord.$ended()
+
+          expect(result).to.be.true()
+        })
+      })
+
+      describe('because an end date is today', () => {
+        beforeEach(() => {
+          revokedDate = today()
+
+          endedRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
+        })
+
+        it('returns true', () => {
+          const result = endedRecord.$ended()
+
+          expect(result).to.be.true()
+        })
+      })
+    })
+
+    describe('when a licence has not ended', () => {
+      describe('because an end date is in the future', () => {
+        beforeEach(() => {
+          expiredDate = tomorrow()
+
+          endedRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
+        })
+
+        it('returns false', () => {
+          const result = endedRecord.$ended()
+
+          expect(result).to.be.false()
+        })
+      })
+
+      describe('because all end dates are in the future', () => {
+        beforeEach(() => {
+          expiredDate = tomorrow()
+          lapsedDate = tomorrow()
+          revokedDate = tomorrow()
+
+          endedRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
+        })
+
+        it('returns false', () => {
+          const result = endedRecord.$ended()
+
+          expect(result).to.be.false()
         })
       })
     })
