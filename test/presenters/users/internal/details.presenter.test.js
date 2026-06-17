@@ -171,9 +171,9 @@ describe('Users - Internal - Details Presenter', () => {
       })
     })
 
-    describe('when the user being edited is disabled', () => {
+    describe('when the user being edited is locked', () => {
       beforeEach(() => {
-        user.enabled = false
+        user.password = 'VOID'
       })
 
       it('returns "false"', () => {
