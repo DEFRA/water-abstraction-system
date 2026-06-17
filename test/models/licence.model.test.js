@@ -682,6 +682,22 @@ describe('Licence model', () => {
       revokedDate = null
     })
 
+    describe('when the "ended" modifier has been used', () => {
+      let testLicence
+
+      before(async () => {
+        testLicence = await LicenceModel.query().findById(testRecord.id).modify('ended')
+      })
+
+      it('returns the dates', () => {
+        expect(testLicence).to.equal({
+          expiredDate: null,
+          lapsedDate: null,
+          revokedDate: null
+        })
+      })
+    })
+
     describe('when a licence has ended', () => {
       describe('because is has expired', () => {
         beforeEach(() => {
