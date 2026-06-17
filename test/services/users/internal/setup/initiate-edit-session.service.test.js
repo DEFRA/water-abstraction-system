@@ -47,11 +47,13 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
           data: {
             email: 'bob.bobbles@environment-agency.gov.uk',
             permission: 'basic',
+            status: 'enabled',
             user
           },
           id: result.id,
           email: 'bob.bobbles@environment-agency.gov.uk',
           permission: 'basic',
+          status: 'enabled',
           user
         })
       })
@@ -64,12 +66,13 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
         expect(matchingSession.data).to.equal({
           email: 'bob.bobbles@environment-agency.gov.uk',
           permission: 'basic',
+          status: 'enabled',
           user: {
             currentPermission: 'basic',
+            currentStatus: 'enabled',
             groups: [],
             id,
             roles: [],
-            status: 'enabled',
             username: 'bob.bobbles@environment-agency.gov.uk'
           }
         })
@@ -96,11 +99,13 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
           data: {
             email: 'bob.bobbles@environment-agency.gov.uk',
             permission: 'nps_ar_approver',
+            status: 'enabled',
             user
           },
           id: result.id,
           email: 'bob.bobbles@environment-agency.gov.uk',
           permission: 'nps_ar_approver',
+          status: 'enabled',
           user
         })
       })
@@ -113,12 +118,13 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
         expect(matchingSession.data).to.equal({
           email: 'bob.bobbles@environment-agency.gov.uk',
           permission: 'nps_ar_approver',
+          status: 'enabled',
           user: {
             currentPermission: 'nps_ar_approver',
+            currentStatus: 'enabled',
             groups: [{ group: 'nps' }],
             id,
             roles: [{ role: 'ar_approver' }],
-            status: 'enabled',
             username: 'bob.bobbles@environment-agency.gov.uk'
           }
         })
