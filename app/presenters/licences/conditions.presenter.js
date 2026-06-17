@@ -23,7 +23,7 @@ function go(conditions, licence) {
   return {
     backLink: {
       href: `/system/licences/${licenceId}/summary`,
-      text: 'Go back to summary'
+      text: 'Go back to licence summary'
     },
     conditionTypes,
     pageTitle: 'Conditions',
