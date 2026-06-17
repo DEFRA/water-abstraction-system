@@ -7,6 +7,19 @@
   {{ govukSummaryList({
     rows: [
       {
+        key: { text: "Access" },
+        value: { text: access },
+        actions: {
+          items: [
+            {
+              href: links.access,
+              text: "Change",
+              visuallyHiddenText: "enable/disable access"
+            }
+          ]
+        }
+      } if access,
+      {
         key: { text: "Email address" },
         value: { text: email },
         actions: {
@@ -31,20 +44,7 @@
             }
           ]
         }
-      },
-      {
-        key: { text: "Access" },
-        value: { text: access },
-        actions: {
-          items: [
-            {
-              href: links.access,
-              text: "Change",
-              visuallyHiddenText: "enable/disable access"
-            }
-          ]
-        }
-      } if access
+      }
     ]
   }) }}
 
