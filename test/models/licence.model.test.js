@@ -687,6 +687,7 @@ describe('Licence model', () => {
         const result = await LicenceModel.query().select(['id']).findById(testRecord.id).modify('ended')
 
         expect(result).to.equal({
+          id: testRecord.id,
           expiredDate: null,
           lapsedDate: null,
           revokedDate: null
