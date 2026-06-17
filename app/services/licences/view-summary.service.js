@@ -24,7 +24,7 @@ async function go(licenceId, auth) {
   const summary = await FetchSummaryService.go(licenceId)
 
   const summaryHeadingData = SummaryHeadingPresenter.go(licence, summary)
-  const pageData = SummaryPresenter.go(summary)
+  const pageData = SummaryPresenter.go(licence, summary)
 
   return {
     ...summaryHeadingData,
