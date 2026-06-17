@@ -53,7 +53,7 @@ describe('Licence Versions - View presenter', () => {
       expect(result).to.equal({
         backLink: {
           href: `/system/licences/${licenceVersion.licence.id}/history`,
-          text: 'Go back to licence history'
+          text: 'Go back to history'
         },
         changeType: 'licence issued',
         conditionTypes: [],
