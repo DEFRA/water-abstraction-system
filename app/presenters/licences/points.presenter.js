@@ -24,7 +24,7 @@ function go(points, licence) {
   return {
     backLink: {
       href: `/system/licences/${licenceId}/summary`,
-      text: 'Go back to summary'
+      text: 'Go back to licence summary'
     },
     licencePoints,
     pageTitle: 'Points',
