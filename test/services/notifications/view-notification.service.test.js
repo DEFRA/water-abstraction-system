@@ -60,7 +60,7 @@ describe('Notifications - View Notification service', () => {
           activeNavBar: 'search',
           address: [],
           alertDetails: null,
-          backLink: { href: `/system/licences/${licence.id}/communications`, text: 'Go back to licence' },
+          backLink: { href: `/system/licences/${licence.id}/communications`, text: 'Go back to communications' },
           contents: notification.plaintext,
           errorDetails: null,
           messageType: 'email',
