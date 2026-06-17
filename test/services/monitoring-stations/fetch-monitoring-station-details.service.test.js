@@ -125,8 +125,11 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
             thresholdValue: 150,
             latestNotification: null,
             licence: {
+              expiredDate: null,
               id: licenceTwo.licence.id,
-              licenceRef: licenceTwo.licence.licenceRef
+              lapsedDate: null,
+              licenceRef: licenceTwo.licence.licenceRef,
+              revokedDate: null
             },
             licenceVersionPurposeCondition: null
           },
@@ -146,8 +149,11 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
               sendingAlertType: 'stop'
             },
             licence: {
+              expiredDate: null,
               id: licenceTwo.licence.id,
-              licenceRef: licenceTwo.licence.licenceRef
+              lapsedDate: null,
+              licenceRef: licenceTwo.licence.licenceRef,
+              revokedDate: null
             },
             licenceVersionPurposeCondition: null
           },
@@ -163,8 +169,11 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
             thresholdValue: 100,
             latestNotification: null,
             licence: {
+              expiredDate: null,
               id: licenceOne.licence.id,
-              licenceRef: licenceOne.licence.licenceRef
+              lapsedDate: null,
+              licenceRef: licenceOne.licence.licenceRef,
+              revokedDate: null
             },
             licenceVersionPurposeCondition: {
               id: licenceOne.purposeCondition.id,

@@ -34,7 +34,11 @@ function _abstractionPeriod(licenceMonitoringStation) {
 }
 
 function _licenceMonitoringStations(licenceMonitoringStations) {
-  return licenceMonitoringStations.map((licenceMonitoringStation) => {
+  const licenceMonitoringStationsWithActiveLicence = licenceMonitoringStations.filter((licenceMonitoringStation) => {
+    return !licenceMonitoringStation.licence.$ended()
+  })
+
+  return licenceMonitoringStationsWithActiveLicence.map((licenceMonitoringStation) => {
     const { id, latestNotification, licence, measureType, restrictionType, thresholdUnit, thresholdValue } =
       licenceMonitoringStation
 
