@@ -68,7 +68,7 @@ async function _fetchLicenceMonitoringStations(monitoringStationId) {
     ])
     .withGraphFetched('licence')
     .modifyGraph('licence', (licenceBuilder) => {
-      licenceBuilder.select(['id', 'licenceRef', 'revokedDate', 'expiredDate', 'lapsedDate'])
+      licenceBuilder.select(['id', 'licenceRef']).modify('ended')
     })
     .withGraphFetched('licenceVersionPurposeCondition')
     .modifyGraph('licenceVersionPurposeCondition', (licenceVersionPurposeConditionBuilder) => {
