@@ -3,6 +3,23 @@
 const { roles } = require('../lib/static-lookups.lib.js')
 
 /**
+ * Returns the display label for an abstraction alerts value
+ *
+ * @param {string} abstractionAlerts - The abstraction alerts value ('no', 'some', or 'yes')
+ *
+ * @returns {string} The label for the abstraction alerts value
+ */
+function abstractionAlertsLabel(abstractionAlerts) {
+  const abstractionAlertsText = {
+    no: 'No',
+    some: 'Yes, for some licences',
+    yes: 'Yes, for all licences'
+  }
+
+  return abstractionAlertsText[abstractionAlerts]
+}
+
+/**
  * Format the contact for the contacts table
  *
  * @param {object} contact - the contact from the crm data
@@ -44,5 +61,6 @@ function _contactLink(contact, billingQueryArgs) {
 }
 
 module.exports = {
+  abstractionAlertsLabel,
   formatContact
 }

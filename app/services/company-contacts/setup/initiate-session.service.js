@@ -6,6 +6,7 @@
  */
 
 const CreateSessionDal = require('../../../dal/create-session.dal.js')
+const FetchCompanyLicencesDal = require('../../../dal/company-contacts/fetch-company-licences.dal.js')
 const FetchCompanyService = require('../../companies/fetch-company.service.js')
 
 /**
@@ -18,7 +19,12 @@ const FetchCompanyService = require('../../companies/fetch-company.service.js')
 async function go(companyId) {
   const company = await FetchCompanyService.go(companyId)
 
-  const data = { company }
+  const licences = await FetchCompanyLicencesDal.go(companyId)
+
+  const data = {
+    company,
+    licences
+  }
 
   return CreateSessionDal.go(data)
 }

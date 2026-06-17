@@ -14,9 +14,17 @@
       items: [
         {
           value: "yes",
-          text: "Yes",
+          text: "Yes, for all licences",
           checked: abstractionAlerts === 'yes'
         },
+        {
+          value: "some",
+          text: "Yes, for some licences",
+          checked: abstractionAlerts === 'some'
+        } if showSomeLicences,
+        {
+          divider: "or"
+        } if showSomeLicences,
         {
           value: "no",
           text: "No",

@@ -42,11 +42,12 @@ describe('Company Contacts - Update Company Contact service', () => {
     })
 
     companyContact = await CompanyContactHelper.add({
-      contactId: contact.id,
+      abstractionAlertLicences: null,
       abstractionAlerts: false,
+      contactId: contact.id,
       createdAt: seedDate,
-      updatedAt: seedDate,
-      licenceRoleId: licenceRole.id
+      licenceRoleId: licenceRole.id,
+      updatedAt: seedDate
     })
 
     user = UserHelper.select()

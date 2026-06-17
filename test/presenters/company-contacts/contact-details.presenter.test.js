@@ -9,6 +9,10 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
+const LicenceModel = require('../../../app/models/licence.model.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { yesterday } = require('../../support/general.js')
 
 // Thing under test
 const ContactDetailsPresenter = require('../../../app/presenters/company-contacts/contact-details.presenter.js')
@@ -16,16 +20,19 @@ const ContactDetailsPresenter = require('../../../app/presenters/company-contact
 describe('Company Contacts - Contact Details presenter', () => {
   let companyContact
   let company
+  let licences
 
   beforeEach(() => {
     companyContact = CustomersFixtures.companyContact()
 
     company = CustomersFixtures.company()
+
+    licences = []
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ContactDetailsPresenter.go(company, companyContact)
+      const result = ContactDetailsPresenter.go(company, companyContact, licences)
 
       expect(result).to.equal({
         additionalContact: true,
@@ -34,13 +41,15 @@ describe('Company Contacts - Contact Details presenter', () => {
           text: 'Go back to licence holder contacts'
         },
         contact: {
-          abstractionAlerts: 'No',
+          abstractionAlertsLabel: 'No',
           created: '1 January 2022 by nexus6.hunter@offworld.net',
           email: 'rachael.tyrell@tyrellcorp.com',
           lastUpdated: '1 January 2022 by void.kampff@tyrell.com',
+          licences: [],
           name: 'Rachael Tyrell'
         },
         editContactLink: `/system/company-contacts/setup/${companyContact.id}/edit`,
+        warning: null,
         pageTitle: 'Contact details for Rachael Tyrell',
         pageTitleCaption: 'Tyrell Corporation',
         removeContactLink: `/system/company-contacts/${companyContact.id}/remove`
@@ -48,32 +57,10 @@ describe('Company Contacts - Contact Details presenter', () => {
     })
 
     describe('the "contact" property', () => {
-      describe('the "created" property', () => {
-        describe('when there is "createdByUser"', () => {
-          it('returns the created text with the created at date and the created by username', () => {
-            const result = ContactDetailsPresenter.go(company, companyContact)
-
-            expect(result.contact.created).to.equal('1 January 2022 by nexus6.hunter@offworld.net')
-          })
-        })
-
-        describe('when there is no "createdByUser"', () => {
-          beforeEach(() => {
-            companyContact.createdByUser = null
-          })
-
-          it('returns the created text with the created at date', () => {
-            const result = ContactDetailsPresenter.go(company, companyContact)
-
-            expect(result.contact.created).to.equal('1 January 2022')
-          })
-        })
-      })
-
-      describe('the "abstractionAlerts" property', () => {
+      describe('the "additionalContact" property', () => {
         describe('when the contact is an additional contact', () => {
           it('returns true', () => {
-            const result = ContactDetailsPresenter.go(company, companyContact)
+            const result = ContactDetailsPresenter.go(company, companyContact, licences)
 
             expect(result.additionalContact).to.be.true()
           })
@@ -85,9 +72,31 @@ describe('Company Contacts - Contact Details presenter', () => {
           })
 
           it('returns false', () => {
-            const result = ContactDetailsPresenter.go(company, companyContact)
+            const result = ContactDetailsPresenter.go(company, companyContact, licences)
 
             expect(result.additionalContact).to.be.false()
+          })
+        })
+      })
+
+      describe('the "created" property', () => {
+        describe('when there is "createdByUser"', () => {
+          it('returns the created text with the created at date and the created by username', () => {
+            const result = ContactDetailsPresenter.go(company, companyContact, licences)
+
+            expect(result.contact.created).to.equal('1 January 2022 by nexus6.hunter@offworld.net')
+          })
+        })
+
+        describe('when there is no "createdByUser"', () => {
+          beforeEach(() => {
+            companyContact.createdByUser = null
+          })
+
+          it('returns the created text with the created at date', () => {
+            const result = ContactDetailsPresenter.go(company, companyContact, licences)
+
+            expect(result.contact.created).to.equal('1 January 2022')
           })
         })
       })
@@ -95,7 +104,7 @@ describe('Company Contacts - Contact Details presenter', () => {
       describe('the "lastUpdated" property', () => {
         describe('when there is "updatedByUser"', () => {
           it('returns the created text with the updated at date and the updated by username', () => {
-            const result = ContactDetailsPresenter.go(company, companyContact)
+            const result = ContactDetailsPresenter.go(company, companyContact, licences)
 
             expect(result.contact.lastUpdated).to.equal('1 January 2022 by void.kampff@tyrell.com')
           })
@@ -107,9 +116,75 @@ describe('Company Contacts - Contact Details presenter', () => {
           })
 
           it('returns the created text with the created at date', () => {
-            const result = ContactDetailsPresenter.go(company, companyContact)
+            const result = ContactDetailsPresenter.go(company, companyContact, licences)
 
             expect(result.contact.lastUpdated).to.equal('1 January 2022')
+          })
+        })
+      })
+
+      describe('the "licences" property', () => {
+        describe('when the abstractionAlertType is not "some"', () => {
+          it('returns an empty array', () => {
+            const result = ContactDetailsPresenter.go(company, companyContact, licences)
+
+            expect(result.contact.licences).to.equal([])
+          })
+        })
+
+        describe('when the abstractionAlertType is "some"', () => {
+          beforeEach(() => {
+            licences = [
+              LicenceModel.fromJson({
+                id: generateUUID(),
+                licenceRef: generateLicenceRef(),
+                lapsedDate: null,
+                expiredDate: null,
+                revokedDate: null
+              })
+            ]
+
+            companyContact.abstractionAlerts = true
+            companyContact.abstractionAlertLicences = [licences[0].id]
+          })
+
+          it('returns the licence refs', () => {
+            const result = ContactDetailsPresenter.go(company, companyContact, licences)
+
+            expect(result.contact.licences).to.equal([licences[0].licenceRef])
+          })
+        })
+      })
+    })
+
+    describe('the "warning" property', () => {
+      describe('when no licences have ended', () => {
+        it('returns null', () => {
+          const result = ContactDetailsPresenter.go(company, companyContact, licences)
+
+          expect(result.warning).to.be.null()
+        })
+      })
+
+      describe('when one or more licences have ended', () => {
+        beforeEach(() => {
+          licences = [
+            LicenceModel.fromJson({
+              id: generateUUID(),
+              licenceRef: generateLicenceRef(),
+              lapsedDate: null,
+              expiredDate: yesterday(),
+              revokedDate: null
+            })
+          ]
+        })
+
+        it('returns a warning object', () => {
+          const result = ContactDetailsPresenter.go(company, companyContact, licences)
+
+          expect(result.warning).to.equal({
+            text: 'One or more licences for abstraction alerts have ended. No alerts will be sent for these.',
+            iconFallbackText: 'Warning'
           })
         })
       })

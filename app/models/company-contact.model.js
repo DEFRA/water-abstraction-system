@@ -58,6 +58,19 @@ class CompanyContactModel extends BaseModel {
       }
     }
   }
+
+  /**
+   * Maps the `abstractionAlerts` flag and linked licences to the journey string value ('yes', 'some', or 'no')
+   *
+   * @returns {string} 'yes', 'some', or 'no'
+   */
+  $abstractionAlertType() {
+    if (!this.abstractionAlerts) {
+      return 'no'
+    }
+
+    return this.abstractionAlertLicences ? 'some' : 'yes'
+  }
 }
 
 module.exports = CompanyContactModel

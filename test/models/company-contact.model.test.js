@@ -17,6 +17,7 @@ const LicenceRoleHelper = require('../support/helpers/licence-role.helper.js')
 const LicenceRoleModel = require('../../app/models/licence-role.model.js')
 const UserHelper = require('../support/helpers/user.helper.js')
 const UserModel = require('../../app/models/user.model.js')
+const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Thing under test
 const CompanyContactModel = require('../../app/models/company-contact.model.js')
@@ -154,6 +155,45 @@ describe('Company Contacts model', () => {
         expect(result.updatedByUser).to.be.an.instanceOf(UserModel)
         expect(result.updatedByUser).to.equal(testUpdatedByUser, {
           skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt', 'userData']
+        })
+      })
+    })
+  })
+
+  describe('$abstractionAlertType', () => {
+    describe('when "abstractionAlerts" is disabled', () => {
+      it('returns "no"', () => {
+        const result = testRecord.$abstractionAlertType()
+
+        expect(result).to.equal('no')
+      })
+    })
+
+    describe('when "abstractionAlerts" is enabled', () => {
+      before(async () => {
+        testRecord = await CompanyContactHelper.add({ abstractionAlerts: true })
+      })
+
+      describe('and "abstractionAlertLicences" is null', () => {
+        it('returns "yes"', () => {
+          const result = testRecord.$abstractionAlertType()
+
+          expect(result).to.equal('yes')
+        })
+      })
+
+      describe('and "abstractionAlertLicences" is populated', () => {
+        before(async () => {
+          testRecord = await CompanyContactHelper.add({
+            abstractionAlertLicences: JSON.stringify([generateUUID()]),
+            abstractionAlerts: true
+          })
+        })
+
+        it('returns "some"', () => {
+          const result = testRecord.$abstractionAlertType()
+
+          expect(result).to.equal('some')
         })
       })
     })

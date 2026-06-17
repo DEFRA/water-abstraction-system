@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { yesterday } = require('../../../support/general.js')
 
@@ -19,10 +20,11 @@ describe('Company Contacts - Setup - Check Presenter', () => {
   let company
   let companyContact
   let email
+  let licences
   let name
   let savedCompanyContacts
-  let session
   let sentNotification
+  let session
 
   beforeEach(() => {
     company = CustomersFixtures.company()
@@ -35,9 +37,19 @@ describe('Company Contacts - Setup - Check Presenter', () => {
     name = companyContact.contact.department
     email = companyContact.contact.email
 
+    licences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
+
     sentNotification = undefined
 
-    session = { id: generateUUID(), company, abstractionAlerts: 'yes', name, email }
+    session = {
+      abstractionAlertLicences: null,
+      abstractionAlerts: 'yes',
+      company,
+      email,
+      id: generateUUID(),
+      licences,
+      name
+    }
   })
 
   describe('when called', () => {
@@ -45,9 +57,10 @@ describe('Company Contacts - Setup - Check Presenter', () => {
       const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
       expect(result).to.equal({
-        abstractionAlerts: 'Yes',
+        abstractionAlertsLabel: 'Yes, for all licences',
         email,
         emailInUse: null,
+        licences: [],
         links: {
           abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
           cancel: `/system/company-contacts/setup/${session.id}/cancel`,
@@ -115,6 +128,87 @@ describe('Company Contacts - Setup - Check Presenter', () => {
       })
     })
 
+    describe('the "licences" property', () => {
+      describe('when the user is set to receive abstraction alerts for all licences ("yes")', () => {
+        it('returns an empty array', () => {
+          const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+          expect(result.licences).to.be.empty()
+        })
+      })
+
+      describe('when the user is set not to receive abstraction alerts ("no")', () => {
+        beforeEach(() => {
+          session.abstractionAlerts = 'no'
+        })
+
+        it('returns an empty array', () => {
+          const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+          expect(result.licences).to.be.empty()
+        })
+      })
+
+      describe('when the user is set to receive abstraction alerts for specific licences ("some")', () => {
+        beforeEach(() => {
+          session.abstractionAlerts = 'some'
+        })
+
+        describe('and there are no existing "abstractionAlertLicences"', () => {
+          beforeEach(() => {
+            session.abstractionAlertLicences = null
+          })
+
+          it('returns an empty array', () => {
+            const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+            expect(result.licences).to.be.empty()
+          })
+        })
+
+        describe('and there are "live" licences', () => {
+          describe('and the selected licences for the user matches the "live" licences', () => {
+            beforeEach(() => {
+              session.abstractionAlertLicences = [licences[0].id]
+            })
+
+            it('returns the matching licence references', () => {
+              const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+              expect(result.licences).to.equal([licences[0].licenceRef])
+            })
+          })
+
+          describe('but none of the selected licences for the user matches the "live" licences', () => {
+            beforeEach(() => {
+              session.abstractionAlertLicences = [generateUUID()]
+            })
+
+            it('returns an empty array', () => {
+              const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+              expect(result.licences).to.be.empty()
+            })
+          })
+        })
+
+        describe('but there are no "live" licences', () => {
+          beforeEach(() => {
+            session.licences = []
+            session.abstractionAlertLicences = [licences[0].id]
+          })
+
+          describe('even though the user has selected licences to receive abstraction alerts for', () => {
+            it('returns an empty array', () => {
+              const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+              expect(result.licences).to.be.empty()
+            })
+          })
+        })
+      })
+    })
+
     describe('the "matchingContact" property', () => {
       describe('when a contact with a matching name and email does not exist', () => {
         it('returns undefined', () => {
@@ -156,6 +250,27 @@ describe('Company Contacts - Setup - Check Presenter', () => {
     })
 
     describe('the "warning" property', () => {
+      describe('when the user has selected "Yes, for some licences" but not selected any licences', () => {
+        beforeEach(() => {
+          session.abstractionAlerts = 'some'
+        })
+
+        describe('and there are no "abstractionAlertLicences"', () => {
+          beforeEach(() => {
+            session.abstractionAlertLicences = null
+          })
+
+          it('returns "select licences" warning', () => {
+            const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+            expect(result.warning).to.equal({
+              text: 'Select the licences they should get water abstraction alert emails for or change should they get abstraction alerts.',
+              iconFallbackText: 'Warning'
+            })
+          })
+        })
+      })
+
       describe('when creating a new contact', () => {
         describe('and a contact with a matching name and email does not exist', () => {
           it('returns null', () => {

@@ -82,6 +82,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       expect(actualContact).to.equal([
         company.id,
         {
+          abstractionAlertLicences: null,
           abstractionAlerts: true,
           createdBy: auth.credentials.user.id,
           email: 'eric@test.com',
@@ -110,7 +111,23 @@ describe('Company Contacts - Setup - Check Service', () => {
         })
       })
 
-      describe(' is "no"', () => {
+      describe('is "some"', () => {
+        beforeEach(() => {
+          session = SessionModelStub.build(Sinon, { ...sessionData, abstractionAlerts: 'some' })
+
+          fetchSessionStub.resolves(session)
+        })
+
+        it('persists the "abstractionAlerts" as "true"', async () => {
+          await SubmitCheckService.go(session.id, yarStub, auth)
+
+          const actualContact = CreateCompanyContactService.go.args[0][1]
+
+          expect(actualContact.abstractionAlerts).to.be.true()
+        })
+      })
+
+      describe('is "no"', () => {
         beforeEach(async () => {
           session = SessionModelStub.build(Sinon, { ...sessionData, abstractionAlerts: 'no' })
 
@@ -123,6 +140,43 @@ describe('Company Contacts - Setup - Check Service', () => {
           const actualContact = CreateCompanyContactService.go.args[0][1]
 
           expect(actualContact.abstractionAlerts).to.be.false()
+        })
+      })
+    })
+
+    describe('the "abstractionAlertLicences" property', () => {
+      describe('when "abstractionAlerts" is "some"', () => {
+        let abstractionAlertLicences
+
+        beforeEach(() => {
+          abstractionAlertLicences = [generateUUID(), generateUUID()]
+
+          session = SessionModelStub.build(Sinon, {
+            ...sessionData,
+            abstractionAlerts: 'some',
+            abstractionAlertLicences
+          })
+
+          fetchSessionStub.resolves(session)
+        })
+
+        it('persists "abstractionAlertLicences" as a JSON string', async () => {
+          await SubmitCheckService.go(session.id, yarStub, auth)
+
+          const actualContact = CreateCompanyContactService.go.args[0][1]
+          const expectedAbstractionAlertLicences = JSON.stringify(abstractionAlertLicences)
+
+          expect(actualContact.abstractionAlertLicences).to.equal(expectedAbstractionAlertLicences)
+        })
+      })
+
+      describe('when "abstractionAlerts" is not "some"', () => {
+        it('persists "abstractionAlertLicences" as null', async () => {
+          await SubmitCheckService.go(session.id, yarStub, auth)
+
+          const actualContact = CreateCompanyContactService.go.args[0][1]
+
+          expect(actualContact.abstractionAlertLicences).to.be.null()
         })
       })
     })
@@ -170,6 +224,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       expect(actualContact).to.equal({
         id: companyContact.id,
+        abstractionAlertLicences: null,
         abstractionAlerts: true,
         contactId: companyContact.contact.id,
         email: 'eric@test.com',
@@ -198,7 +253,23 @@ describe('Company Contacts - Setup - Check Service', () => {
         })
       })
 
-      describe(' is "no"', () => {
+      describe('is "some"', () => {
+        beforeEach(() => {
+          session = SessionModelStub.build(Sinon, { ...sessionData, abstractionAlerts: 'some' })
+
+          fetchSessionStub.resolves(session)
+        })
+
+        it('persists the "abstractionAlerts" as "true"', async () => {
+          await SubmitCheckService.go(session.id, yarStub, auth)
+
+          const [actualContact] = UpdateCompanyContactService.go.args[0]
+
+          expect(actualContact.abstractionAlerts).to.be.true()
+        })
+      })
+
+      describe('is "no"', () => {
         beforeEach(async () => {
           session = SessionModelStub.build(Sinon, { ...sessionData, abstractionAlerts: 'no' })
 
@@ -211,6 +282,43 @@ describe('Company Contacts - Setup - Check Service', () => {
           const [actualContact] = UpdateCompanyContactService.go.args[0]
 
           expect(actualContact.abstractionAlerts).to.be.false()
+        })
+      })
+    })
+
+    describe('the "abstractionAlertLicences" property', () => {
+      describe('when "abstractionAlerts" is "some"', () => {
+        let abstractionAlertLicences
+
+        beforeEach(() => {
+          abstractionAlertLicences = [generateUUID(), generateUUID()]
+
+          session = SessionModelStub.build(Sinon, {
+            ...sessionData,
+            abstractionAlerts: 'some',
+            abstractionAlertLicences
+          })
+
+          fetchSessionStub.resolves(session)
+        })
+
+        it('persists "abstractionAlertLicences" as a JSON string', async () => {
+          await SubmitCheckService.go(session.id, yarStub, auth)
+
+          const [actualContact] = UpdateCompanyContactService.go.args[0]
+          const expectedAbstractionAlertLicences = JSON.stringify(abstractionAlertLicences)
+
+          expect(actualContact.abstractionAlertLicences).to.equal(expectedAbstractionAlertLicences)
+        })
+      })
+
+      describe('when "abstractionAlerts" is not "some"', () => {
+        it('persists "abstractionAlertLicences" as null', async () => {
+          await SubmitCheckService.go(session.id, yarStub, auth)
+
+          const [actualContact] = UpdateCompanyContactService.go.args[0]
+
+          expect(actualContact.abstractionAlertLicences).to.be.null()
         })
       })
     })

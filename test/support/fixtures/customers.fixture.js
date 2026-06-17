@@ -1,6 +1,7 @@
 'use strict'
 
 const BillingAccountModel = require('../../../app/models/billing-account.model.js')
+const CompanyContactModel = require('../../../app/models/company-contact.model.js')
 const ContactModel = require('../../../app/models/contact.model.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const { generateAccountNumber } = require('../helpers/billing-account.helper.js')
@@ -98,8 +99,9 @@ function companyAddress() {
  * @returns {module:CompanyContactModel} A company contact
  */
 function companyContact() {
-  return {
+  return CompanyContactModel.fromJson({
     id: generateUUID(),
+    abstractionAlertLicences: null,
     abstractionAlerts: false,
     companyId: generateUUID(),
     contact: contact(),
@@ -118,7 +120,7 @@ function companyContact() {
       id: generateUUID(),
       username: 'void.kampff@tyrell.com'
     }
-  }
+  })
 }
 
 /**

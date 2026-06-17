@@ -149,6 +149,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/company-contacts/setup/{sessionId}/licences',
+    options: {
+      handler: CompanyContactsSetupController.viewLicences,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/company-contacts/setup/{sessionId}/licences',
+    options: {
+      handler: CompanyContactsSetupController.submitLicences,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/company-contacts/setup/{sessionId}/restore',
     options: {
       handler: CompanyContactsSetupController.viewRestore,
