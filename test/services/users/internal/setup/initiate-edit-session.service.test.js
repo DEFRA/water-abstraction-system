@@ -134,5 +134,47 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
         })
       })
     })
+
+    describe('for a user that is enabled', () => {
+      beforeEach(() => {
+        user = {
+          $status: Sinon.stub().returns('awaiting'),
+          enabled: true,
+          groups: [],
+          id,
+          roles: [],
+          username: 'bob.bobbles@environment-agency.gov.uk'
+        }
+
+        Sinon.stub(FetchUserDetailsDal, 'go').resolves(user)
+      })
+
+      it('returns the users access status of "enabled"', async () => {
+        const result = await InitiateEditSessionService.go(id)
+
+        expect(result.access).to.equal('enabled')
+      })
+    })
+
+    describe('for a user that is disabled', () => {
+      beforeEach(() => {
+        user = {
+          $status: Sinon.stub().returns('disabled'),
+          enabled: false,
+          groups: [],
+          id,
+          roles: [],
+          username: 'bob.bobbles@environment-agency.gov.uk'
+        }
+
+        Sinon.stub(FetchUserDetailsDal, 'go').resolves(user)
+      })
+
+      it('returns the users access status of "disabled"', async () => {
+        const result = await InitiateEditSessionService.go(id)
+
+        expect(result.access).to.equal('disabled')
+      })
+    })
   })
 })
