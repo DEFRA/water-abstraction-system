@@ -16,7 +16,7 @@ const UserModel = require('../../../models/user.model.js')
  */
 async function go(id) {
   return UserModel.query()
-    .select(['id', 'enabled', 'userId', 'username'])
+    .select(['id', 'userId', 'username'])
     .modify('status')
     .modify('permissions')
     .findById(id)
