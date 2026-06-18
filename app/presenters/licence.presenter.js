@@ -180,8 +180,11 @@ function _param(paramLabel, param, noteNumber) {
 }
 
 /**
+ * Determines the warning to display when a licence has ended
  *
- * @param licence
+ * @param {module:LicenceModel} licence - the licence
+ *
+ * @returns {object} `null` if the licence has not ended else an object containing the warning
  */
 function licenceEndsWarning(licence) {
   const ends = licence.$ends()
