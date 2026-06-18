@@ -41,7 +41,7 @@ describe('Return Versions - View service', () => {
       expect(result).to.equal({
         backLink: {
           href: `/system/licences/${returnVersion.licence.id}/set-up`,
-          text: 'Go back to summary'
+          text: 'Go back to licence set up'
         },
         licenceId: returnVersion.licence.id,
         licenceRef: '01/123',

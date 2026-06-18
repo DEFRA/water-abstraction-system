@@ -35,7 +35,7 @@ function _backLink(companyId, licenceId) {
   if (licenceId) {
     return {
       href: `/system/licences/${licenceId}/contact-details`,
-      text: 'Go back to licence contact details'
+      text: 'Go back to contact details'
     }
   }
 

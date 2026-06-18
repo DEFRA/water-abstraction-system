@@ -56,7 +56,7 @@ describe('Licences - View Purposes service', () => {
         activeSummarySubNav: 'purposes',
         backLink: {
           href: `/system/licences/${licence.id}/summary`,
-          text: 'Go back to summary'
+          text: 'Go back to licence summary'
         },
         licencePurposes: [
           {

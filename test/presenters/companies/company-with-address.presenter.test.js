@@ -32,7 +32,7 @@ describe('Companies - Company With Address Presenter', () => {
       expect(result).to.equal({
         backLink: {
           href: `/system/licences/${licenceId}/contact-details`,
-          text: 'Go back to licence contact details'
+          text: 'Go back to contact details'
         },
         details: {
           address: [
@@ -59,7 +59,7 @@ describe('Companies - Company With Address Presenter', () => {
 
           expect(result.backLink).to.equal({
             href: `/system/licences/${licenceId}/contact-details`,
-            text: 'Go back to licence contact details'
+            text: 'Go back to contact details'
           })
         })
       })

@@ -57,7 +57,7 @@ describe('Licences - View Conditions service', () => {
         activeSummarySubNav: 'conditions',
         backLink: {
           href: `/system/licences/${licence.id}/summary`,
-          text: 'Go back to summary'
+          text: 'Go back to licence summary'
         },
         conditionTypes: [
           {
@@ -114,7 +114,7 @@ describe('Licences - View Conditions service', () => {
         activeSummarySubNav: 'conditions',
         backLink: {
           href: `/system/licences/${licence.id}/summary`,
-          text: 'Go back to summary'
+          text: 'Go back to licence summary'
         },
         conditionTypes: [],
         pageTitle: 'Conditions',

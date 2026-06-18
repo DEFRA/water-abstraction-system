@@ -42,8 +42,8 @@ describe('Billing Accounts - View Billing Account presenter', () => {
           'ME15 0NE'
         ],
         backLink: {
-          title: 'Go back to charge information',
-          href: `/licences/${licenceId}/charge-information/${chargeVersionId}/view`
+          href: `/licences/${licenceId}/charge-information/${chargeVersionId}/view`,
+          text: 'Go back to charge information'
         },
         billingAccountId: billingAccountData.billingAccount.id,
         bills: [
@@ -78,8 +78,8 @@ describe('Billing Accounts - View Billing Account presenter', () => {
         const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
 
         expect(result.backLink).to.equal({
-          title: 'Go back to search',
-          href: '/'
+          href: '/',
+          text: 'Go back to search'
         })
       })
     })
@@ -89,8 +89,8 @@ describe('Billing Accounts - View Billing Account presenter', () => {
         const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
 
         expect(result.backLink).to.equal({
-          title: 'Go back to charge information',
-          href: `/licences/${licenceId}/charge-information/${chargeVersionId}/view`
+          href: `/licences/${licenceId}/charge-information/${chargeVersionId}/view`,
+          text: 'Go back to charge information'
         })
       })
     })
@@ -104,8 +104,8 @@ describe('Billing Accounts - View Billing Account presenter', () => {
         const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
 
         expect(result.backLink).to.equal({
-          title: 'Go back to bills',
-          href: `/system/licences/${licenceId}/bills`
+          href: `/system/licences/${licenceId}/bills`,
+          text: 'Go back to bills'
         })
       })
     })
@@ -120,8 +120,8 @@ describe('Billing Accounts - View Billing Account presenter', () => {
         const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
 
         expect(result.backLink).to.equal({
-          title: 'Go back to customer',
-          href: `/system/companies/${companyId}/billing-accounts`
+          href: `/system/companies/${companyId}/billing-accounts`,
+          text: 'Go back to customer'
         })
       })
     })
