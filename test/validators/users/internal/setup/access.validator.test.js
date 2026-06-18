@@ -40,5 +40,19 @@ describe('Users - Internal - Setup - Access Validator', () => {
         expect(result.error.details[0].message).to.equal('Select access for the user')
       })
     })
+
+    describe('because the "access" value is not in the allowed list', () => {
+      beforeEach(() => {
+        payload.access = 'an-invalid-value'
+      })
+
+      it('fails validation', () => {
+        const result = AccessValidator.go(payload)
+
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Select a valid access option for the user')
+      })
+    })
   })
 })

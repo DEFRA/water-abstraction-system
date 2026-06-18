@@ -18,8 +18,9 @@ const Joi = require('joi')
  */
 function go(payload) {
   const schema = Joi.object({
-    access: Joi.string().required().messages({
-      'any.required': 'Select access for the user'
+    access: Joi.string().required().valid('enabled', 'disabled').messages({
+      'any.required': 'Select access for the user',
+      'any.only': 'Select a valid access option for the user'
     })
   })
 
