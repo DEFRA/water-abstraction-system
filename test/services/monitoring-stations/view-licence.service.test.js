@@ -10,8 +10,8 @@ const { expect } = Code
 
 // Test helpers
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateUserId } = require('../../support/helpers/user.helper.js')
 const { licenceEnds } = require('../../support/fixtures/licence.fixture.js')
+const { generateUserId } = require('../../support/helpers/user.helper.js')
 
 // Things we need to stub
 const FetchLicenceMonitoringStationsDal = require('../../../app/dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js')

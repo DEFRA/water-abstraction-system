@@ -9,8 +9,8 @@ const { expect } = Code
 
 // Test helpers
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateUserId } = require('../../support/helpers/user.helper.js')
 const { licenceEnds } = require('../../support/fixtures/licence.fixture.js')
+const { generateUserId } = require('../../support/helpers/user.helper.js')
 
 // Thing under test
 const ViewLicencePresenter = require('../../../app/presenters/monitoring-stations/view-licence.presenter.js')

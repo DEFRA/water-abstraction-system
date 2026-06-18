@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const { licenceEnds } = require('../../../support/fixtures/licence.fixture.js')
 const { yesterday } = require('../../../support/general.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
 const LicenceNumberValidator = require('../../../../app/validators/licence-monitoring-station/setup/licence-number.validator.js')
