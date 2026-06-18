@@ -5,7 +5,7 @@
  * @module ViewLicenceService
  */
 
-const FetchLicenceMonitoringStationsService = require('./fetch-licence-monitoring-stations.service.js')
+const FetchLicenceMonitoringStationsDal = require('../../dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js')
 const ViewLicencePresenter = require('../../presenters/monitoring-stations/view-licence.presenter.js')
 
 /**
@@ -18,7 +18,7 @@ const ViewLicencePresenter = require('../../presenters/monitoring-stations/view-
  * @returns {Promise<object>} The view data for the licence tag details page
  */
 async function go(auth, licenceId, monitoringStationId) {
-  const { licence, licenceMonitoringStations, monitoringStation } = await FetchLicenceMonitoringStationsService.go(
+  const { licence, licenceMonitoringStations, monitoringStation } = await FetchLicenceMonitoringStationsDal.go(
     licenceId,
     monitoringStationId
   )

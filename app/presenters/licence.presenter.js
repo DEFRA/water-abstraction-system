@@ -1,8 +1,9 @@
 'use strict'
 
 const PointModel = require('../models/point.model.js')
-const { formatAbstractionPeriod } = require('./base.presenter.js')
 const { formatAbstractionAmounts } = require('./licences/base-licences.presenter.js')
+const { formatAbstractionPeriod, formatLongDate } = require('./base.presenter.js')
+const { today } = require('../lib/general.lib.js')
 
 /**
  * Formats Licence condition types for the view
@@ -177,8 +178,43 @@ function _param(paramLabel, param, noteNumber) {
     value: param
   }
 }
+
+/**
+ *
+ * @param licence
+ */
+function licenceEndsWarning(licence) {
+  const ends = licence.$ends()
+
+  if (!ends || ends.date > today()) {
+    return null
+  }
+
+  const formattedDate = formatLongDate(ends.date)
+
+  if (ends.reason === 'revoked') {
+    return {
+      text: `This licence was revoked on ${formattedDate}`,
+      iconFallbackText: 'Warning'
+    }
+  }
+
+  if (ends.reason === 'lapsed') {
+    return {
+      text: `This licence lapsed on ${formattedDate}`,
+      iconFallbackText: 'Warning'
+    }
+  }
+
+  return {
+    text: `This licence expired on ${formattedDate}`,
+    iconFallbackText: 'Warning'
+  }
+}
+
 module.exports = {
   formatConditionTypes,
   formatLicencePoints,
-  formatLicencePurposes
+  formatLicencePurposes,
+  licenceEndsWarning
 }
