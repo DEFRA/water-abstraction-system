@@ -1,9 +1,9 @@
 'use strict'
 
 const PointModel = require('../models/point.model.js')
-const { formatAbstractionAmounts } = require('./licences/base-licences.presenter.js')
-const { formatAbstractionPeriod, formatLongDate } = require('./base.presenter.js')
 const { today } = require('../lib/general.lib.js')
+const { formatAbstractionPeriod, formatLongDate } = require('./base.presenter.js')
+const { formatAbstractionAmounts } = require('./licences/base-licences.presenter.js')
 
 /**
  * Formats Licence condition types for the view
