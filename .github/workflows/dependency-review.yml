@@ -4,6 +4,8 @@ on: pull_request
 
 permissions:
   contents: read
+  # Required when using the "comment-summary-in-pr" option
+  pull-requests: write
 
 jobs:
   dependency-review:
