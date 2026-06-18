@@ -9,9 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
-const LicenceModel = require('../../../app/models/licence.model.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { licenceEnds } = require('../../support/fixtures/licence.fixture.js')
 const { yesterday } = require('../../support/general.js')
 
 // Thing under test
@@ -134,15 +132,7 @@ describe('Company Contacts - Contact Details presenter', () => {
 
         describe('when the abstractionAlertType is "some"', () => {
           beforeEach(() => {
-            licences = [
-              LicenceModel.fromJson({
-                id: generateUUID(),
-                licenceRef: generateLicenceRef(),
-                lapsedDate: null,
-                expiredDate: null,
-                revokedDate: null
-              })
-            ]
+            licences = [licenceEnds()]
 
             companyContact.abstractionAlerts = true
             companyContact.abstractionAlertLicences = [licences[0].id]
@@ -168,15 +158,7 @@ describe('Company Contacts - Contact Details presenter', () => {
 
       describe('when one or more licences have ended', () => {
         beforeEach(() => {
-          licences = [
-            LicenceModel.fromJson({
-              id: generateUUID(),
-              licenceRef: generateLicenceRef(),
-              lapsedDate: null,
-              expiredDate: yesterday(),
-              revokedDate: null
-            })
-          ]
+          licences = [licenceEnds(yesterday())]
         })
 
         it('returns a warning object', () => {
