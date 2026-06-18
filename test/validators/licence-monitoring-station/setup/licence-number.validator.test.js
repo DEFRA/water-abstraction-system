@@ -8,10 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicenceModel = require('../../../../app/models/licence.model.js')
-const { yesterday } = require('../../../support/general.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const { licenceEnds } = require('../../../support/fixtures/licence.fixture.js')
+const { yesterday } = require('../../../support/general.js')
 
 // Thing under test
 const LicenceNumberValidator = require('../../../../app/validators/licence-monitoring-station/setup/licence-number.validator.js')
@@ -21,13 +20,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
   let payload = {}
 
   beforeEach(() => {
-    licence = LicenceModel.fromJson({
-      expiredDate: null,
-      id: generateUUID(),
-      lapsedDate: null,
-      licenceRef: generateLicenceRef(),
-      revokedDate: null
-    })
+    licence = licenceEnds()
   })
 
   describe('when called with valid data', () => {
@@ -96,7 +89,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
 
     describe('because the licence has ended', () => {
       beforeEach(() => {
-        licence.lapsedDate = yesterday()
+        licence = licenceEnds(yesterday())
 
         payload = {
           licenceRef: generateLicenceRef()
