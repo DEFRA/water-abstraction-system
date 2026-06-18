@@ -11,6 +11,7 @@ const { expect } = Code
 const PointModel = require('../../app/models/point.model.js')
 const ViewLicencesFixture = require('../support/fixtures/view-licences.fixture.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
+const { licenceEnds } = require('../support/fixtures/licence.fixture.js')
 
 // Thing under test
 const LicencePresenter = require('../../app/presenters/licence.presenter.js')
@@ -726,6 +727,83 @@ describe('Licences presenter', () => {
           const result = LicencePresenter.formatLicencePurposes(purposes)
 
           expect(result[0].purposeDescription).equal('Spray Irrigation - Storage')
+        })
+      })
+    })
+  })
+
+  describe('#licenceEndsWarning()', () => {
+    let licence
+
+    describe('when the licence does not have an "end" date', () => {
+      beforeEach(() => {
+        licence = licenceEnds()
+      })
+
+      it('returns null', () => {
+        const result = LicencePresenter.licenceEndsWarning(licence)
+
+        expect(result).to.be.null()
+      })
+    })
+
+    describe('when the licence does have an "end" date', () => {
+      describe('but it is in the future', () => {
+        beforeEach(() => {
+          licence = licenceEnds(new Date('2099-04-01'))
+        })
+
+        it('returns null', () => {
+          const result = LicencePresenter.licenceEndsWarning(licence)
+
+          expect(result).to.be.null()
+        })
+      })
+
+      describe('because it expired in the past', () => {
+        beforeEach(() => {
+          licence = licenceEnds(new Date('2019-04-01'))
+        })
+
+        it('returns "This licence expired on 1 April 2019"', () => {
+          const result = LicencePresenter.licenceEndsWarning(licence)
+
+          expect(result).to.equal({
+            iconFallbackText: 'Warning',
+            text: 'This licence expired on 1 April 2019'
+          })
+        })
+      })
+
+      describe('because it lapsed in the past', () => {
+        beforeEach(() => {
+          licence = licenceEnds()
+          licence.lapsedDate = new Date('2019-04-01')
+        })
+
+        it('returns "This licence lapsed on 1 April 2019"', () => {
+          const result = LicencePresenter.licenceEndsWarning(licence)
+
+          expect(result).to.equal({
+            iconFallbackText: 'Warning',
+            text: 'This licence lapsed on 1 April 2019'
+          })
+        })
+      })
+
+      describe('because it was revoked in the past', () => {
+        beforeEach(() => {
+          licence = licenceEnds()
+          licence.revokedDate = new Date('2019-04-01')
+        })
+
+        it('returns "This licence was revoked on 1 April 2019"', () => {
+          const result = LicencePresenter.licenceEndsWarning(licence)
+
+          expect(result).to.equal({
+            iconFallbackText: 'Warning',
+            text: 'This licence was revoked on 1 April 2019'
+          })
         })
       })
     })

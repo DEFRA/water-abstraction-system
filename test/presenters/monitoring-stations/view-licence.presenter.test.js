@@ -410,7 +410,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
         licence = licenceEnds(new Date('2000-01-01'))
       })
 
-      it('returns just the station name', () => {
+      it('returns the warning', () => {
         const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
         expect(result.warning).to.equal({

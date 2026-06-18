@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const LicenceModel = require('../../../app/models/licence.model.js')
 const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
+const { licenceEnds } = require('../../support/fixtures/licence.fixture.js')
 
 // Thing under test
 const SummaryHeadingPresenter = require('../../../app/presenters/licences/summary-heading.presenter.js')
@@ -113,69 +114,17 @@ describe('Licences - Summary Heading presenter', () => {
   })
 
   describe('the "warning" property', () => {
-    describe('when the licence does not have an "end" date', () => {
-      it('returns null', () => {
+    describe('when the licence has ended', () => {
+      beforeEach(() => {
+        licence = licenceEnds(new Date('2019-04-01'))
+      })
+
+      it('returns the warning', () => {
         const result = SummaryHeadingPresenter.go(licence, summary)
 
-        expect(result.warning).to.be.null()
-      })
-    })
-
-    describe('when the licence does have an "end" date', () => {
-      describe('but it is in the future', () => {
-        beforeEach(() => {
-          licence.expiredDate = new Date('2099-04-01')
-        })
-
-        it('returns null', () => {
-          const result = SummaryHeadingPresenter.go(licence, summary)
-
-          expect(result.warning).to.be.null()
-        })
-      })
-
-      describe('because it expired in the past', () => {
-        beforeEach(() => {
-          licence.expiredDate = new Date('2019-04-01')
-        })
-
-        it('returns "This licence expired on 1 April 2019"', () => {
-          const result = SummaryHeadingPresenter.go(licence, summary)
-
-          expect(result.warning).to.equal({
-            iconFallbackText: 'Warning',
-            text: 'This licence expired on 1 April 2019'
-          })
-        })
-      })
-
-      describe('because it lapsed in the past', () => {
-        beforeEach(() => {
-          licence.lapsedDate = new Date('2019-04-01')
-        })
-
-        it('returns "This licence lapsed on 1 April 2019"', () => {
-          const result = SummaryHeadingPresenter.go(licence, summary)
-
-          expect(result.warning).to.equal({
-            iconFallbackText: 'Warning',
-            text: 'This licence lapsed on 1 April 2019'
-          })
-        })
-      })
-
-      describe('because it was revoked in the past', () => {
-        beforeEach(() => {
-          licence.revokedDate = new Date('2019-04-01')
-        })
-
-        it('returns "This licence was revoked on 1 April 2019"', () => {
-          const result = SummaryHeadingPresenter.go(licence, summary)
-
-          expect(result.warning).to.equal({
-            iconFallbackText: 'Warning',
-            text: 'This licence was revoked on 1 April 2019'
-          })
+        expect(result.warning).to.equal({
+          iconFallbackText: 'Warning',
+          text: 'This licence expired on 1 April 2019'
         })
       })
     })
