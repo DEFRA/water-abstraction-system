@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicenceModel = require('../../../../app/models/licence.model.js')
 const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 const { generateUUID, today } = require('../../../../app/lib/general.lib.js')
+const { licenceEnds } = require('../../../support/fixtures/licence.fixture.js')
 const { tomorrow } = require('../../../support/general.js')
 
 // Thing under test
@@ -153,13 +153,7 @@ function _licence(licenceRef, expiredDate, role) {
   const licenceVersionId = generateUUID()
   const licenceDocumentHeaderId = generateUUID()
 
-  const licence = LicenceModel.fromJson({
-    expiredDate,
-    id: generateUUID(),
-    lapsedDate: null,
-    licenceRef,
-    revokedDate: null
-  })
+  const licence = licenceEnds(expiredDate)
 
   licence.licenceVersions = [
     {

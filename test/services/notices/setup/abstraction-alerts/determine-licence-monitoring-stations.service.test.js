@@ -9,9 +9,8 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicenceModel = require('../../../../../app/models/licence.model.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+const { licenceEnds } = require('../../../../support/fixtures/licence.fixture.js')
 const { yesterday } = require('../../../../support/general.js')
 
 // Things we need to stub
@@ -51,13 +50,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
         thresholdUnit: 'm3/s',
         thresholdValue: 100,
         latestNotification: null,
-        licence: LicenceModel.fromJson({
-          expiredDate: null,
-          id: generateUUID(),
-          lapsedDate: null,
-          licenceRef: generateLicenceRef(),
-          revokedDate: null
-        }),
+        licence: licenceEnds(),
         licenceVersionPurposeCondition: null
       },
       {
@@ -71,13 +64,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
         thresholdUnit: 'm3/s',
         thresholdValue: 100,
         latestNotification: null,
-        licence: LicenceModel.fromJson({
-          expiredDate: null,
-          id: generateUUID(),
-          lapsedDate: null,
-          licenceRef: generateLicenceRef(),
-          revokedDate: null
-        }),
+        licence: licenceEnds(),
         licenceVersionPurposeCondition: {
           id: generateUUID(),
           notes: 'I have a bad feeling about this'
@@ -90,13 +77,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
         abstractionPeriodStartMonth: 1,
         id: generateUUID(),
         latestNotification: null,
-        licence: LicenceModel.fromJson({
-          expiredDate: null,
-          id: generateUUID(),
-          lapsedDate: null,
-          licenceRef: generateLicenceRef(),
-          revokedDate: null
-        }),
+        licence: licenceEnds(),
         licenceVersionPurposeCondition: {
           id: generateUUID(),
           notes: '"                   "             "                    "'
