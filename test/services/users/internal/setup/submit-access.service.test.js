@@ -61,7 +61,7 @@ describe('Users - Internal - Setup - Submit Access Service', () => {
       })
     })
 
-    describe('on the check page has', () => {
+    describe('on the check page', () => {
       describe('when the "session" and "payload" value', () => {
         describe('match', () => {
           beforeEach(() => {
