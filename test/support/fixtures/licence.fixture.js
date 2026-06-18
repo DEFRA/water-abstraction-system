@@ -1,8 +1,8 @@
 'use strict'
 
 const LicenceModel = require('../../../app/models/licence.model.js')
-const { generateLicenceRef } = require('../helpers/licence.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../helpers/licence.helper.js')
 
 /**
  * When we check if a licence ends or has ended, we query the database and return the expected, revoked, and lapsed date.

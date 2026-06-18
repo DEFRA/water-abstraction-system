@@ -11,17 +11,17 @@ const { expect } = Code
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
+const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
 const NotificationHelper = require('../../support/helpers/notification.helper.js')
 const UserHelper = require('../../support/helpers/user.helper.js')
 
 // Thing under test
-const FetchLicenceMonitoringStationsService = require('../../../app/services/monitoring-stations/fetch-licence-monitoring-stations.service.js')
+const FetchLicenceMonitoringStationsDal = require('../../../app/dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js')
 
-describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () => {
+describe('Monitoring Stations - Fetch Licence Monitoring Stations dal', () => {
   let licence
   let licenceMonitoringStations
   let licenceVersion
@@ -145,9 +145,15 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
       })
 
       it('returns the licence, monitoring station and non-deleted licence monitoring station records', async () => {
-        const result = await FetchLicenceMonitoringStationsService.go(licence.id, monitoringStation.id)
+        const result = await FetchLicenceMonitoringStationsDal.go(licence.id, monitoringStation.id)
 
-        expect(result.licence).to.equal({ id: licence.id, licenceRef: licence.licenceRef })
+        expect(result.licence).to.equal({
+          expiredDate: null,
+          id: licence.id,
+          lapsedDate: null,
+          licenceRef: licence.licenceRef,
+          revokedDate: null
+        })
         expect(result.monitoringStation).to.equal({
           id: monitoringStation.id,
           label: 'The Monitoring Station',
@@ -204,9 +210,15 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
 
     describe('but no licence monitoring station records exist for them', () => {
       it('returns the licence, monitoring station but no licence monitoring station records', async () => {
-        const result = await FetchLicenceMonitoringStationsService.go(licence.id, monitoringStation.id)
+        const result = await FetchLicenceMonitoringStationsDal.go(licence.id, monitoringStation.id)
 
-        expect(result.licence).to.equal({ id: licence.id, licenceRef: licence.licenceRef })
+        expect(result.licence).to.equal({
+          expiredDate: null,
+          id: licence.id,
+          lapsedDate: null,
+          licenceRef: licence.licenceRef,
+          revokedDate: null
+        })
         expect(result.monitoringStation).to.equal({
           id: monitoringStation.id,
           label: 'The Monitoring Station',
@@ -220,9 +232,15 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
 
   describe('when a matching monitoring station does not exist', () => {
     it('returns only the licence record populated', async () => {
-      const result = await FetchLicenceMonitoringStationsService.go(licence.id, '1dcbafad-a1c6-43ec-9313-7149b40ffa57')
+      const result = await FetchLicenceMonitoringStationsDal.go(licence.id, '1dcbafad-a1c6-43ec-9313-7149b40ffa57')
 
-      expect(result.licence).to.equal({ id: licence.id, licenceRef: licence.licenceRef })
+      expect(result.licence).to.equal({
+        expiredDate: null,
+        id: licence.id,
+        lapsedDate: null,
+        licenceRef: licence.licenceRef,
+        revokedDate: null
+      })
       expect(result.monitoringStation).to.be.undefined()
       expect(result.licenceMonitoringStations).to.be.empty()
     })
@@ -230,7 +248,7 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
 
   describe('when a matching licence does not exist', () => {
     it('returns only the monitoring station record populated', async () => {
-      const result = await FetchLicenceMonitoringStationsService.go(
+      const result = await FetchLicenceMonitoringStationsDal.go(
         '86cb402a-5122-407a-beea-3f5422133e55',
         monitoringStation.id
       )

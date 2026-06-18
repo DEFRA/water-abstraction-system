@@ -6,8 +6,8 @@
  */
 
 const { formatLongDate } = require('../base.presenter.js')
+const { licenceEndsWarning } = require('../licence.presenter.js')
 const { supplementaryBillingNotification } = require('./base-licences.presenter.js')
-const { today } = require('../../lib/general.lib.js')
 
 /**
  * Formats data for the `/licences/{id}/summary` page
@@ -23,7 +23,6 @@ function go(licence, summary) {
   const { workflows, startDate } = summary
 
   const primaryUser = summary.$primaryUser()
-  const ends = licence.$ends()
 
   return {
     backLink: {
@@ -36,7 +35,7 @@ function go(licence, summary) {
     pageTitle: `Licence summary ${licenceRef}`,
     pageTitleCaption: _licenceName(primaryUser, summary),
     primaryUser,
-    warning: _warning(ends),
+    warning: licenceEndsWarning(licence),
     workflowWarning: _workflowWarning(workflows)
   }
 }
@@ -59,33 +58,6 @@ function _licenceName(primaryUser, licence) {
   const licenceName = licence.$licenceName()
 
   return licenceName ?? null
-}
-
-function _warning(ends) {
-  if (!ends || ends.date > today()) {
-    return null
-  }
-
-  const formattedDate = formatLongDate(ends.date)
-
-  if (ends.reason === 'revoked') {
-    return {
-      text: `This licence was revoked on ${formattedDate}`,
-      iconFallbackText: 'Warning'
-    }
-  }
-
-  if (ends.reason === 'lapsed') {
-    return {
-      text: `This licence lapsed on ${formattedDate}`,
-      iconFallbackText: 'Warning'
-    }
-  }
-
-  return {
-    text: `This licence expired on ${formattedDate}`,
-    iconFallbackText: 'Warning'
-  }
 }
 
 function _workflowWarning(workflows) {
