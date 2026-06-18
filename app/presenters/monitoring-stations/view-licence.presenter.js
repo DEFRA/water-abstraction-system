@@ -6,6 +6,7 @@
  */
 
 const { formatLongDate, formatRestrictionType, formatValueUnit, sentenceCase } = require('../base.presenter.js')
+const { licenceEndsWarning } = require('../licence.presenter.js')
 
 /**
  * Format data for the `/monitoring-stations/{monitoringStationId}/licence/{licenceId}` page
@@ -27,7 +28,8 @@ function go(licence, licenceMonitoringStations, monitoringStation, auth) {
     lastAlertSentForLicence: _lastAlertSentForLicence(licenceMonitoringStations),
     licenceTags: _licenceTags(licenceMonitoringStations, canRemoveTags),
     pageTitle: `Details for ${licence.licenceRef}`,
-    pageTitleCaption: _monitoringStationName(monitoringStation)
+    pageTitleCaption: _monitoringStationName(monitoringStation),
+    warning: licenceEndsWarning(licence)
   }
 }
 

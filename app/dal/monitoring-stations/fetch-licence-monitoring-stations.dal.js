@@ -2,7 +2,7 @@
 
 /**
  * Fetches the licence monitoring stations, plus the parent licence and monitoring station for view licence page
- * @module FetchLicenceMonitoringStationsService
+ * @module FetchLicenceMonitoringStationsDal
  */
 
 const LicenceModel = require('../../models/licence.model.js')
@@ -26,8 +26,8 @@ async function go(licenceId, monitoringStationId) {
   return { licence, licenceMonitoringStations, monitoringStation }
 }
 
-async function _fetchLicence(monitoringStationId) {
-  return LicenceModel.query().findById(monitoringStationId).select(['id', 'licenceRef'])
+async function _fetchLicence(licenceId) {
+  return LicenceModel.query().findById(licenceId).select(['id', 'licenceRef']).modify('ended')
 }
 
 async function _fetchLicenceMonitoringStations(licenceId, monitoringStationId) {

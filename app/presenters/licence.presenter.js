@@ -1,7 +1,8 @@
 'use strict'
 
 const PointModel = require('../models/point.model.js')
-const { formatAbstractionPeriod } = require('./base.presenter.js')
+const { today } = require('../lib/general.lib.js')
+const { formatAbstractionPeriod, formatLongDate } = require('./base.presenter.js')
 const { formatAbstractionAmounts } = require('./licences/base-licences.presenter.js')
 
 /**
@@ -177,8 +178,46 @@ function _param(paramLabel, param, noteNumber) {
     value: param
   }
 }
+
+/**
+ * Determines the warning to display when a licence has ended
+ *
+ * @param {module:LicenceModel} licence - the licence
+ *
+ * @returns {object} `null` if the licence has not ended else an object containing the warning
+ */
+function licenceEndsWarning(licence) {
+  const ends = licence.$ends()
+
+  if (!ends || ends.date > today()) {
+    return null
+  }
+
+  const formattedDate = formatLongDate(ends.date)
+
+  if (ends.reason === 'revoked') {
+    return {
+      text: `This licence was revoked on ${formattedDate}`,
+      iconFallbackText: 'Warning'
+    }
+  }
+
+  if (ends.reason === 'lapsed') {
+    return {
+      text: `This licence lapsed on ${formattedDate}`,
+      iconFallbackText: 'Warning'
+    }
+  }
+
+  return {
+    text: `This licence expired on ${formattedDate}`,
+    iconFallbackText: 'Warning'
+  }
+}
+
 module.exports = {
   formatConditionTypes,
   formatLicencePoints,
-  formatLicencePurposes
+  formatLicencePurposes,
+  licenceEndsWarning
 }
