@@ -12,11 +12,12 @@ const { formatAbstractionAmounts } = require('./base-licences.presenter.js')
 /**
  * Formats data for the `/licences/{id}/summary` page
  *
- * @param {module:LicenceModel} summary - The licence summary the page data will be extracted from
+ * @param {object} licence - the licence data returned by `FetchLicenceService`
+ * @param {object} summary - The licence summary the page data will be extracted from
  *
  * @returns {object} The data formatted for the view template
  */
-function go(summary) {
+function go(licence, summary) {
   const { expiredDate, issueDate, licenceMonitoringStations, region, startDate } = summary
 
   const licenceVersionPurposes = _licenceVersionPurposes(summary)
@@ -34,6 +35,7 @@ function go(summary) {
     activeSecondaryNav: 'summary',
     endDate: _endDate(expiredDate),
     issueDate: _issueDate(summary, issueDate),
+    licenceEnded: licence.$ended(),
     licenceHolder: _licenceHolder(summary),
     monitoringStations: _monitoringStations(licenceMonitoringStations),
     purposes,
