@@ -27,7 +27,6 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
   let companyContact
   let contact
   let licences
-  let stubFetchCompanyContactDal
   let stubFetchCompanyLicencesDal
 
   beforeEach(() => {
@@ -44,8 +43,8 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
       contact
     })
 
-    stubFetchCompanyContactDal = Sinon.stub(FetchCompanyContactDal, 'go').returns(companyContact)
-    stubFetchCompanyLicencesDal = Sinon.stub(FetchCompanyLicencesDal, 'go').returns(licences)
+    Sinon.stub(FetchCompanyContactDal, 'go').resolves(companyContact)
+    stubFetchCompanyLicencesDal = Sinon.stub(FetchCompanyLicencesDal, 'go').resolves(licences)
   })
 
   afterEach(() => {
@@ -71,53 +70,67 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
   })
 
   describe('the "abstractionAlerts" property', () => {
-    describe('when the "abstractionAlerts" property is true', () => {
-      beforeEach(() => {
-        companyContact.abstractionAlerts = true
+    describe('and the company has active licences', () => {
+      describe('when the "abstractionAlerts" property is true', () => {
+        beforeEach(() => {
+          companyContact.abstractionAlerts = true
+        })
 
-        stubFetchCompanyContactDal.resolves(companyContact)
+        it('returns "yes"', async () => {
+          const result = await InitiateEditSessionService.go(companyContact.id)
+
+          const matchingSession = await SessionModel.query().findById(result.id)
+
+          expect(matchingSession.abstractionAlerts).to.equal('yes')
+        })
+
+        describe('and there are abstraction alert licences', () => {
+          beforeEach(() => {
+            companyContact.abstractionAlertLicences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
+          })
+
+          it('returns "some"', async () => {
+            const result = await InitiateEditSessionService.go(companyContact.id)
+
+            const matchingSession = await SessionModel.query().findById(result.id)
+
+            expect(matchingSession.abstractionAlerts).to.equal('some')
+          })
+        })
       })
 
-      describe('and abstraction alert licences exist', () => {
+      describe('when the "abstractionAlerts" property is false', () => {
+        it('returns "no"', async () => {
+          const result = await InitiateEditSessionService.go(companyContact.id)
+
+          const matchingSession = await SessionModel.query().findById(result.id)
+
+          expect(matchingSession.abstractionAlerts).to.equal('no')
+        })
+      })
+    })
+
+    describe('and the company has no active licences', () => {
+      beforeEach(() => {
+        stubFetchCompanyLicencesDal.resolves([])
+      })
+
+      describe('when the "abstractionAlerts" property is true', () => {
         beforeEach(() => {
-          companyContact.abstractionAlertLicences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
-
-          stubFetchCompanyContactDal.resolves(companyContact)
+          companyContact.abstractionAlerts = true
         })
 
-        describe('and there are active licences', () => {
-          describe('and at least one licence matches an "abstractionAlertLicences"', () => {
-            beforeEach(() => {
-              stubFetchCompanyLicencesDal.resolves([companyContact.abstractionAlertLicences[0].id])
-            })
+        it('returns "yes"', async () => {
+          const result = await InitiateEditSessionService.go(companyContact.id)
 
-            it('returns "some"', async () => {
-              const result = await InitiateEditSessionService.go(companyContact.id)
+          const matchingSession = await SessionModel.query().findById(result.id)
 
-              const matchingSession = await SessionModel.query().findById(result.id)
-
-              expect(matchingSession.abstractionAlerts).to.equal('some')
-            })
-          })
-
-          describe('and no licences match the "abstractionAlertLicences"', () => {
-            beforeEach(() => {
-              stubFetchCompanyLicencesDal.resolves(generateUUID())
-            })
-
-            it('returns "some"', async () => {
-              const result = await InitiateEditSessionService.go(companyContact.id)
-
-              const matchingSession = await SessionModel.query().findById(result.id)
-
-              expect(matchingSession.abstractionAlerts).to.equal('some')
-            })
-          })
+          expect(matchingSession.abstractionAlerts).to.equal('yes')
         })
 
-        describe('and there are no active licences', () => {
+        describe('and there are abstraction alert licences', () => {
           beforeEach(() => {
-            stubFetchCompanyLicencesDal.resolves([])
+            companyContact.abstractionAlertLicences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
           })
 
           it('returns "no"', async () => {
@@ -130,24 +143,14 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
         })
       })
 
-      describe('and no abstraction alert licences exist', () => {
-        it('returns "yes"', async () => {
+      describe('when the "abstractionAlerts" property is false', () => {
+        it('returns "no"', async () => {
           const result = await InitiateEditSessionService.go(companyContact.id)
 
           const matchingSession = await SessionModel.query().findById(result.id)
 
-          expect(matchingSession.abstractionAlerts).to.equal('yes')
+          expect(matchingSession.abstractionAlerts).to.equal('no')
         })
-      })
-    })
-
-    describe('when the "abstractionAlerts" property is false', () => {
-      it('returns "no"', async () => {
-        const result = await InitiateEditSessionService.go(companyContact.id)
-
-        const matchingSession = await SessionModel.query().findById(result.id)
-
-        expect(matchingSession.abstractionAlerts).to.equal('no')
       })
     })
   })

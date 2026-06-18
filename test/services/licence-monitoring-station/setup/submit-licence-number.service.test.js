@@ -9,23 +9,37 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+const LicenceModel = require('../../../../app/models/licence.model.js')
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Things we need to stub
+const FetchLicenceDal = require('../../../../app/dal/licence-monitoring-station/fetch-licence.dal.js')
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitLicenceNumberService = require('../../../../app/services/licence-monitoring-station/setup/submit-licence-number.service.js')
 
 describe('Licence Monitoring Station Setup - Licence Number Service', () => {
+  let fetchLicenceStub
   let fetchSessionStub
+  let licence
   let payload
   let session
   let sessionData
 
   beforeEach(() => {
     payload = {}
+
+    licence = LicenceModel.fromJson({
+      expiredDate: null,
+      id: generateUUID(),
+      lapsedDate: null,
+      licenceRef: generateLicenceRef(),
+      revokedDate: null
+    })
+
     sessionData = {
       label: 'LABEL'
     }
@@ -33,6 +47,8 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
     session = SessionModelStub.build(Sinon, sessionData)
 
     fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+    fetchLicenceStub = Sinon.stub(FetchLicenceDal, 'go').resolves(licence)
   })
 
   afterEach(() => {
@@ -41,10 +57,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
 
   describe('when called', () => {
     describe('and the licence exists', () => {
-      let licence
-
       beforeEach(async () => {
-        licence = await LicenceHelper.add()
         payload = { licenceRef: licence.licenceRef }
       })
 
@@ -140,6 +153,8 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
   describe('and the licence does not exist', () => {
     beforeEach(() => {
       payload = { licenceRef: '1234567890' }
+
+      fetchLicenceStub.resolves(null)
     })
 
     it('returns page data for the view, with errors', async () => {

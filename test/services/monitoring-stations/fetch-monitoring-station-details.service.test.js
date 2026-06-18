@@ -19,9 +19,9 @@ const NotificationHelper = require('../../support/helpers/notification.helper.js
 const PointHelper = require('../../support/helpers/point.helper.js')
 
 // Thing under test
-const FetchMonitoringStationDetailsService = require('../../../app/services/monitoring-stations/fetch-monitoring-station-details.service.js')
+const FetchMonitoringStationDetailsDal = require('../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js')
 
-describe('Monitoring Stations - Fetch Monitoring Station Details service', () => {
+describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
   let monitoringStation
   let licenceMonitoringStationOne
   let licenceMonitoringStationTwo
@@ -100,7 +100,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
       })
 
       it('returns the matching monitoring station with its licence monitoring stations correctly ordered', async () => {
-        const result = await FetchMonitoringStationDetailsService.go(monitoringStation.id)
+        const result = await FetchMonitoringStationDetailsDal.go(monitoringStation.id)
 
         expect(result.monitoringStation).to.equal({
           catchmentName: null,
@@ -125,8 +125,11 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
             thresholdValue: 150,
             latestNotification: null,
             licence: {
+              expiredDate: null,
               id: licenceTwo.licence.id,
-              licenceRef: licenceTwo.licence.licenceRef
+              lapsedDate: null,
+              licenceRef: licenceTwo.licence.licenceRef,
+              revokedDate: null
             },
             licenceVersionPurposeCondition: null
           },
@@ -146,8 +149,11 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
               sendingAlertType: 'stop'
             },
             licence: {
+              expiredDate: null,
               id: licenceTwo.licence.id,
-              licenceRef: licenceTwo.licence.licenceRef
+              lapsedDate: null,
+              licenceRef: licenceTwo.licence.licenceRef,
+              revokedDate: null
             },
             licenceVersionPurposeCondition: null
           },
@@ -163,8 +169,11 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
             thresholdValue: 100,
             latestNotification: null,
             licence: {
+              expiredDate: null,
               id: licenceOne.licence.id,
-              licenceRef: licenceOne.licence.licenceRef
+              lapsedDate: null,
+              licenceRef: licenceOne.licence.licenceRef,
+              revokedDate: null
             },
             licenceVersionPurposeCondition: {
               id: licenceOne.purposeCondition.id,
@@ -177,7 +186,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
 
     describe('but it has no tagged licences with restrictions', () => {
       it('returns the matching monitoring station with no licence monitoring stations', async () => {
-        const result = await FetchMonitoringStationDetailsService.go(monitoringStation.id)
+        const result = await FetchMonitoringStationDetailsDal.go(monitoringStation.id)
 
         expect(result.monitoringStation).to.equal({
           catchmentName: null,
@@ -196,7 +205,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
 
   describe('when no matching monitoring station exists', () => {
     it('returns empty values', async () => {
-      const result = await FetchMonitoringStationDetailsService.go('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
+      const result = await FetchMonitoringStationDetailsDal.go('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
 
       expect(result.monitoringStation).to.be.undefined()
       expect(result.licenceMonitoringStations).to.equal([])

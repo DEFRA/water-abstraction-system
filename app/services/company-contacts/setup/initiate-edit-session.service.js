@@ -42,17 +42,32 @@ async function go(companyContactId) {
 function _formatDataForJourney(companyContact, licences) {
   const { abstractionAlertLicences, company, contact } = companyContact
 
-  const abstractionAlerts = companyContact.$abstractionAlertType()
-
   return {
     abstractionAlertLicences,
-    abstractionAlerts: licences.length > 0 ? abstractionAlerts : 'no',
+    abstractionAlerts: _abstractionAlerts(companyContact, licences),
     company,
     companyContact,
     email: formatEmail(contact.email),
     licences,
     name: contact.$name()
   }
+}
+
+/**
+ * Determines the resolved abstraction alert type based on the user's selection and the current active licences.
+ * - 'yes' - The contact wants alerts for any licence (including future ones).
+ * - 'some' - The contact wants alerts for specific licences. If all licences expire/end, this defaults to 'no'.
+ *
+ * @private
+ */
+function _abstractionAlerts(companyContact, licences) {
+  const abstractionAlertType = companyContact.$abstractionAlertType()
+
+  if (abstractionAlertType === 'some' && licences.length === 0) {
+    return 'no'
+  }
+
+  return abstractionAlertType
 }
 
 module.exports = {
