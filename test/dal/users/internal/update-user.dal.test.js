@@ -49,10 +49,12 @@ describe('Users - Internal - Update User DAL', () => {
     existingUserRole = await UserRoleHelper.add({ roleId, userId: existingUser.userId })
 
     session = {
-      email: UserHelper.generateUserName(),
+      access: 'enabled',
+      email: existingUser.username,
       permission: 'basic',
       user: {
         currentPermission: 'nps_ar_approver',
+        enabled: true,
         id: existingUser.id,
         userId: existingUser.userId,
         username: existingUser.username
@@ -72,42 +74,69 @@ describe('Users - Internal - Update User DAL', () => {
   })
 
   describe('when called', () => {
+    it('updates the user', async () => {
+      await UpdateUserDal.go(auth, session)
+
+      const user = await UserModel.query().findById(existingUser.id)
+
+      expect(user).to.equal(
+        {
+          application: 'water_admin',
+          badLogins: 0,
+          enabled: true,
+          lastLogin: null,
+          licenceEntityId: null,
+          resetGuid: null,
+          resetRequired: 0,
+          resetGuidCreatedAt: null,
+          userData: null,
+          username: existingUser.username
+        },
+        { skip: ['createdAt', 'id', 'password', 'updatedAt', 'userId'] }
+      )
+      expect(user.updatedAt).to.not.equal(existingUser.updatedAt)
+    })
+
+    it('creates an event', async () => {
+      await UpdateUserDal.go(auth, session)
+
+      const event = await EventModel.query().where('issuer', 'internal-user-creator@wrls.gov.uk').limit(1).first()
+
+      expect(event).to.equal(
+        {
+          referenceCode: null,
+          type: 'update-user-roles',
+          subtype: 'internal',
+          issuer: 'internal-user-creator@wrls.gov.uk',
+          licences: [],
+          entities: [],
+          metadata: {
+            user: session.email,
+            userId: existingUser.userId
+          },
+          status: null,
+          overallStatus: null,
+          statusCounts: null,
+          triggerNoticeId: null
+        },
+        { skip: ['createdAt', 'id', 'updatedAt'] }
+      )
+
+      expect(event.createdAt).to.be.instanceof(Date)
+      expect(event.updatedAt).to.be.instanceof(Date)
+    })
+
     describe('and the email has changed', () => {
+      beforeEach(() => {
+        session.email = UserHelper.generateUserName()
+      })
+
       it('updates the username', async () => {
         await UpdateUserDal.go(auth, session)
 
         const user = await UserModel.query().findById(existingUser.id)
 
         expect(user.username).to.equal(session.email)
-      })
-
-      it('creates an event', async () => {
-        await UpdateUserDal.go(auth, session)
-
-        const event = await EventModel.query().where('issuer', 'internal-user-creator@wrls.gov.uk').limit(1).first()
-
-        expect(event).to.equal(
-          {
-            referenceCode: null,
-            type: 'update-user-roles',
-            subtype: 'internal',
-            issuer: 'internal-user-creator@wrls.gov.uk',
-            licences: [],
-            entities: [],
-            metadata: {
-              user: session.email,
-              userId: existingUser.userId
-            },
-            status: null,
-            overallStatus: null,
-            statusCounts: null,
-            triggerNoticeId: null
-          },
-          { skip: ['createdAt', 'id', 'updatedAt'] }
-        )
-
-        expect(event.createdAt).to.be.instanceof(Date)
-        expect(event.updatedAt).to.be.instanceof(Date)
       })
 
       it('replaces the existing resetGuid with a new one and returns the updated users resetGuid', async () => {
@@ -122,10 +151,6 @@ describe('Users - Internal - Update User DAL', () => {
     })
 
     describe('and the email has not changed', () => {
-      beforeEach(() => {
-        session.email = existingUser.username
-      })
-
       it('does not update the username and returns undefined', async () => {
         const result = await UpdateUserDal.go(auth, session)
 
@@ -205,6 +230,20 @@ describe('Users - Internal - Update User DAL', () => {
 
         expect(userGroup).to.have.length(1)
         expect(userRole).to.have.length(1)
+      })
+    })
+
+    describe('and the user has been disabled', () => {
+      beforeEach(() => {
+        session.access = 'disabled'
+      })
+
+      it('disables the user', async () => {
+        await UpdateUserDal.go(auth, session)
+
+        const user = await UserModel.query().findById(existingUser.id)
+
+        expect(user.enabled).to.be.false()
       })
     })
   })

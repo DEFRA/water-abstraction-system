@@ -24,16 +24,16 @@ const { userPermissions } = require('../../../lib/static-lookups.lib.js')
  * @returns {Promise<string>} The resetGuid for the updated user
  */
 async function go(auth, session) {
-  const { email, permission, user } = session
+  const { access, email, permission, user } = session
 
-  const { currentPermission, id, userId, username } = user
+  const { currentPermission, enabled: currentlyEnabled, id, userId, username: currentUsername } = user
 
   const newGroupsRoles = await _newGroupsRoles(currentPermission, permission)
 
   const { username: issuer } = await FetchUserDal.go(auth.credentials.user.id)
 
   return UserModel.transaction(async (trx) => {
-    const resetGuid = await _updateUser(email, id, username, trx)
+    const resetGuid = await _updateUser(access, currentlyEnabled, currentUsername, email, id, trx)
 
     if (newGroupsRoles) {
       await _insertUserGroupsRoles(newGroupsRoles, userId, trx)
@@ -110,12 +110,17 @@ async function _newGroupsRoles(currentPermission, permission) {
   return { groupIds, roleIds }
 }
 
-async function _updateUser(email, id, username, trx) {
+async function _updateUser(access, currentlyEnabled, currentUsername, email, id, trx) {
+  const enabled = access === 'enabled'
   const userData = { updatedAt: timestampForPostgres() }
 
-  if (email !== username) {
+  if (email !== currentUsername) {
     userData.resetGuid = generateUUID()
     userData.username = email
+  }
+
+  if (enabled !== currentlyEnabled) {
+    userData.enabled = enabled
   }
 
   await UserModel.query(trx).findById(id).patch(userData)
