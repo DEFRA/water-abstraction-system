@@ -29,7 +29,7 @@ describe('Licences - Conditions presenter', () => {
       expect(result).to.equal({
         backLink: {
           href: `/system/licences/${licence.id}/summary`,
-          text: 'Go back to summary'
+          text: 'Go back to licence summary'
         },
         conditionTypes: [
           {

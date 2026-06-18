@@ -59,8 +59,8 @@ describe('Billing Accounts - View Billing Account service', () => {
           'ME15 0NE'
         ],
         backLink: {
-          title: 'Go back to charge information',
-          href: `/licences/${licenceId}/charge-information/${chargeVersionId}/view`
+          href: `/licences/${licenceId}/charge-information/${chargeVersionId}/view`,
+          text: 'Go back to charge information'
         },
         billingAccountId: billingAccountData.billingAccount.id,
         bills: [

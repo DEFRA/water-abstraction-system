@@ -21,7 +21,7 @@ function go(returnLog, notifications) {
   return {
     backLink: {
       href: `/system/licences/${licence.id}/returns`,
-      text: 'Go back to summary'
+      text: 'Go back to returns'
     },
     notifications: NotificationsTablePresenter.go(notifications, null, id, null),
     pageTitle: 'Communications',

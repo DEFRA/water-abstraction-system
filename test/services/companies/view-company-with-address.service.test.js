@@ -49,7 +49,7 @@ describe('Companies - View Company With Address Service', () => {
         expect(result).to.equal({
           backLink: {
             href: `/system/licences/${licenceId}/contact-details`,
-            text: 'Go back to licence contact details'
+            text: 'Go back to contact details'
           },
           details: {
             address: [
@@ -81,7 +81,7 @@ describe('Companies - View Company With Address Service', () => {
         expect(result).to.equal({
           backLink: {
             href: `/system/licences/${licenceId}/contact-details`,
-            text: 'Go back to licence contact details'
+            text: 'Go back to contact details'
           },
           details: {
             address: [

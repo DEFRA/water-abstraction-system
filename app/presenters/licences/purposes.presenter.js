@@ -24,7 +24,7 @@ function go(purposes, licence) {
   return {
     backLink: {
       href: `/system/licences/${id}/summary`,
-      text: 'Go back to summary'
+      text: 'Go back to licence summary'
     },
     licencePurposes,
     pageTitle: 'Purposes, periods and amounts',

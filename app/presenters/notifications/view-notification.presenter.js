@@ -87,7 +87,7 @@ function _alertDetails(notification) {
 
 function _backLink(notification, licence, returnLogId, companyContactId) {
   if (licence) {
-    return { href: `/system/licences/${licence.id}/communications`, text: 'Go back to licence' }
+    return { href: `/system/licences/${licence.id}/communications`, text: 'Go back to communications' }
   }
 
   if (returnLogId) {

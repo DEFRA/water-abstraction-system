@@ -25,7 +25,7 @@ function go(returnVersionData) {
   return {
     backLink: {
       href: `/system/licences/${licence.id}/set-up`,
-      text: 'Go back to summary'
+      text: 'Go back to licence set up'
     },
     licenceId: licence.id,
     licenceRef: licence.licenceRef,

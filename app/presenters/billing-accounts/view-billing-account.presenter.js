@@ -41,28 +41,28 @@ function go(billingAccountData, licenceId, chargeVersionId, companyId) {
 function _backLink(licenceId, chargeVersionId, companyId) {
   if (licenceId && chargeVersionId) {
     return {
-      title: 'Go back to charge information',
-      href: `/licences/${licenceId}/charge-information/${chargeVersionId}/view`
+      href: `/licences/${licenceId}/charge-information/${chargeVersionId}/view`,
+      text: 'Go back to charge information'
     }
   }
 
   if (licenceId) {
     return {
-      title: 'Go back to bills',
-      href: `/system/licences/${licenceId}/bills`
+      href: `/system/licences/${licenceId}/bills`,
+      text: 'Go back to bills'
     }
   }
 
   if (companyId) {
     return {
-      title: 'Go back to customer',
-      href: `/system/companies/${companyId}/billing-accounts`
+      href: `/system/companies/${companyId}/billing-accounts`,
+      text: 'Go back to customer'
     }
   }
 
   return {
-    title: 'Go back to search',
-    href: '/'
+    href: '/',
+    text: 'Go back to search'
   }
 }
 
