@@ -113,6 +113,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/users/internal/setup/{sessionId}/access',
+    options: {
+      handler: UsersSetupController.viewInternalAccess,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/users/internal/setup/{sessionId}/access',
+    options: {
+      handler: UsersSetupController.submitInternalAccess,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/users/internal/setup/{sessionId}/cancel',
     options: {
       handler: UsersSetupController.viewInternalCancel,
