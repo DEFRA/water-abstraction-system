@@ -31,6 +31,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
       beforeEach(() => {
         user = {
           $status: Sinon.stub().returns('enabled'),
+          enabled: true,
           groups: [],
           id,
           roles: [],
@@ -44,13 +45,15 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
         const result = await InitiateEditSessionService.go(id)
 
         expect(result).to.equal({
+          access: 'enabled',
           data: {
+            access: 'enabled',
             email: 'bob.bobbles@environment-agency.gov.uk',
             permission: 'basic',
             user
           },
-          id: result.id,
           email: 'bob.bobbles@environment-agency.gov.uk',
+          id: result.id,
           permission: 'basic',
           user
         })
@@ -62,14 +65,16 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
         const matchingSession = await SessionModel.query().findById(result.id)
 
         expect(matchingSession.data).to.equal({
+          access: 'enabled',
           email: 'bob.bobbles@environment-agency.gov.uk',
           permission: 'basic',
           user: {
             currentPermission: 'basic',
+            currentStatus: 'enabled',
+            enabled: true,
             groups: [],
             id,
             roles: [],
-            status: 'enabled',
             username: 'bob.bobbles@environment-agency.gov.uk'
           }
         })
@@ -80,6 +85,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
       beforeEach(() => {
         user = {
           $status: Sinon.stub().returns('enabled'),
+          enabled: true,
           groups: [{ group: 'nps' }],
           id,
           roles: [{ role: 'ar_approver' }],
@@ -93,13 +99,15 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
         const result = await InitiateEditSessionService.go(id)
 
         expect(result).to.equal({
+          access: 'enabled',
           data: {
+            access: 'enabled',
             email: 'bob.bobbles@environment-agency.gov.uk',
             permission: 'nps_ar_approver',
             user
           },
-          id: result.id,
           email: 'bob.bobbles@environment-agency.gov.uk',
+          id: result.id,
           permission: 'nps_ar_approver',
           user
         })
@@ -111,17 +119,61 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
         const matchingSession = await SessionModel.query().findById(result.id)
 
         expect(matchingSession.data).to.equal({
+          access: 'enabled',
           email: 'bob.bobbles@environment-agency.gov.uk',
           permission: 'nps_ar_approver',
           user: {
             currentPermission: 'nps_ar_approver',
+            currentStatus: 'enabled',
+            enabled: true,
             groups: [{ group: 'nps' }],
             id,
             roles: [{ role: 'ar_approver' }],
-            status: 'enabled',
             username: 'bob.bobbles@environment-agency.gov.uk'
           }
         })
+      })
+    })
+
+    describe('for a user that is enabled', () => {
+      beforeEach(() => {
+        user = {
+          $status: Sinon.stub().returns('awaiting'),
+          enabled: true,
+          groups: [],
+          id,
+          roles: [],
+          username: 'bob.bobbles@environment-agency.gov.uk'
+        }
+
+        Sinon.stub(FetchUserDetailsDal, 'go').resolves(user)
+      })
+
+      it('returns the users access status of "enabled"', async () => {
+        const result = await InitiateEditSessionService.go(id)
+
+        expect(result.access).to.equal('enabled')
+      })
+    })
+
+    describe('for a user that is disabled', () => {
+      beforeEach(() => {
+        user = {
+          $status: Sinon.stub().returns('disabled'),
+          enabled: false,
+          groups: [],
+          id,
+          roles: [],
+          username: 'bob.bobbles@environment-agency.gov.uk'
+        }
+
+        Sinon.stub(FetchUserDetailsDal, 'go').resolves(user)
+      })
+
+      it('returns the users access status of "disabled"', async () => {
+        const result = await InitiateEditSessionService.go(id)
+
+        expect(result.access).to.equal('disabled')
       })
     })
   })

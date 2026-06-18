@@ -31,7 +31,20 @@
             }
           ]
         }
-      }
+      },
+      {
+        key: { text: "Access" },
+        value: { text: access },
+        actions: {
+          items: [
+            {
+              href: links.access,
+              text: "Change",
+              visuallyHiddenText: "change access status"
+            }
+          ]
+        }
+      } if access
     ]
   }) }}
 

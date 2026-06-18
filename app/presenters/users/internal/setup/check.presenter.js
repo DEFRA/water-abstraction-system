@@ -5,6 +5,7 @@
  * @module CheckPresenter
  */
 
+const { sentenceCase } = require('../../../base.presenter.js')
 const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
 
 /**
@@ -15,12 +16,14 @@ const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
  * @returns {object} The data formatted for the view template
  */
 function go(session) {
-  const { email, id: sessionId, permission, user } = session
+  const { access, email, id: sessionId, permission, user } = session
 
   return {
+    access: access ? sentenceCase(access) : null,
     activeNavBar: 'users',
     email,
     links: {
+      access: `/system/users/internal/setup/${sessionId}/access`,
       cancel: `/system/users/internal/setup/${sessionId}/cancel`,
       email: `/system/users/internal/setup/${sessionId}/email`,
       permissions: `/system/users/internal/setup/${sessionId}/permissions`
@@ -29,7 +32,7 @@ function go(session) {
     pageTitleCaption: 'Internal',
     permission: userPermissions[permission].label,
     // Only allow changing the email address if this is a new user or the user has not yet verified their email address
-    showEmailChangeLink: !user || user.status === 'awaiting'
+    showEmailChangeLink: !user || user.currentStatus === 'awaiting'
   }
 }
 

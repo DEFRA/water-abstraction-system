@@ -44,9 +44,11 @@ describe('Users - Internal - Setup - Check Service', () => {
       const result = await ViewCheckService.go(session.id, yarStub)
 
       expect(result).to.equal({
+        access: null,
         activeNavBar: 'users',
         email: session.email,
         links: {
+          access: `/system/users/internal/setup/${session.id}/access`,
           cancel: `/system/users/internal/setup/${session.id}/cancel`,
           email: `/system/users/internal/setup/${session.id}/email`,
           permissions: `/system/users/internal/setup/${session.id}/permissions`

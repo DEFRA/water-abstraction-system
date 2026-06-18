@@ -171,18 +171,6 @@ describe('Users - Internal - Details Presenter', () => {
       })
     })
 
-    describe('when the user being edited is disabled', () => {
-      beforeEach(() => {
-        user.enabled = false
-      })
-
-      it('returns "false"', () => {
-        const result = DetailsPresenter.go(auth, user)
-
-        expect(result.showEditButton).to.be.false()
-      })
-    })
-
     describe('when the authorised user is the same as the one being edited', () => {
       beforeEach(() => {
         auth = { credentials: { user: { id: user.id } } }

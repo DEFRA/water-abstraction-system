@@ -2,7 +2,7 @@
 
 /**
  * Formats data for internal users on the `/users/internal/{id}/details` page
- * @module UserPresenter
+ * @module DetailsPresenter
  */
 
 const { compareStrings } = require('../../../lib/general.lib.js')
@@ -32,7 +32,7 @@ function go(auth, user) {
     pageTitleCaption: username,
     permissions: user.$permissions().label,
     roles: _roles(user),
-    showEditButton: auth.credentials.user.id !== id && status !== 'disabled',
+    showEditButton: auth.credentials.user.id !== id,
     status
   }
 }
