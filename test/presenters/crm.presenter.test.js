@@ -259,7 +259,7 @@ describe('CRM presenter', () => {
     })
   })
 
-  describe.only('#selectedLicences()', () => {
+  describe('#selectedLicences()', () => {
     let abstractionAlertLicences
     let abstractionAlerts
     let licences
