@@ -5,7 +5,7 @@
  * @module CancelPresenter
  */
 
-const { titleCase } = require('../../base.presenter.js')
+const { abstractionAlertsLabel, selectedLicences } = require('../../crm.presenter.js')
 
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/cancel' page
@@ -15,15 +15,16 @@ const { titleCase } = require('../../base.presenter.js')
  * @returns {object} The data formatted for the view template
  */
 function go(session) {
-  const { company, email, name, abstractionAlerts } = session
+  const { abstractionAlertLicences, abstractionAlerts, company, email, licences, name } = session
 
   return {
     backLink: {
       href: `/system/company-contacts/setup/${session.id}/check`,
       text: 'Back'
     },
-    abstractionAlerts: titleCase(abstractionAlerts),
+    abstractionAlertsLabel: abstractionAlertsLabel(abstractionAlerts),
     email,
+    licences: selectedLicences(licences, abstractionAlertLicences, abstractionAlerts),
     name,
     pageTitle: _pageTitle(session),
     pageTitleCaption: company.name

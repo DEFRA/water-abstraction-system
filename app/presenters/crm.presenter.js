@@ -35,6 +35,31 @@ function formatContact(contact, billingQueryArgs) {
   }
 }
 
+/**
+ * Returns the licence references the user has selected to receive abstraction alerts for
+ *
+ * This is used to display the licence to the user.
+ *
+ * @param {object[]} licences - The licences for the company
+ * @param {string[]} abstractionAlertLicences - The IDs of the licences selected to receive abstraction alerts
+ * @param {string} abstractionAlerts - The abstraction alerts value ('no', 'some', or 'yes')
+ *
+ * @returns {string[]} The licence references the user has selected, or an empty array if not applicable
+ */
+function selectedLicences(licences, abstractionAlertLicences, abstractionAlerts) {
+  if (abstractionAlerts !== 'some' || !abstractionAlertLicences?.length) {
+    return []
+  }
+
+  return licences
+    .filter((licence) => {
+      return abstractionAlertLicences.includes(licence.id)
+    })
+    .map((licence) => {
+      return licence.licenceRef
+    })
+}
+
 function _contactLink(contact, billingQueryArgs) {
   const billingTypes = ['billing']
   const companyContactTypes = ['abstraction-alerts', 'additional-contact']
@@ -62,5 +87,6 @@ function _contactLink(contact, billingQueryArgs) {
 
 module.exports = {
   abstractionAlertsLabel,
-  formatContact
+  formatContact,
+  selectedLicences
 }

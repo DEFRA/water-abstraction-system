@@ -10,18 +10,30 @@ const { expect } = Code
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { licenceWithLicenceRefs } = require('../../../support/fixtures/licence.fixture.js')
 
 // Thing under test
 const CancelPresenter = require('../../../../app/presenters/company-contacts/setup/cancel.presenter.js')
 
 describe('Company Contacts - Setup - Cancel Presenter', () => {
   let company
+  let licences
   let session
 
   beforeEach(() => {
     company = CustomersFixtures.company()
 
-    session = { id: generateUUID(), company, abstractionAlerts: 'yes', name: 'Eric', email: 'eric@test.com' }
+    licences = licenceWithLicenceRefs()
+
+    session = {
+      abstractionAlertLicences: null,
+      abstractionAlerts: 'yes',
+      company,
+      email: 'eric@test.com',
+      id: generateUUID(),
+      licences,
+      name: 'Eric'
+    }
   })
 
   describe('when called', () => {
@@ -29,12 +41,13 @@ describe('Company Contacts - Setup - Cancel Presenter', () => {
       const result = CancelPresenter.go(session)
 
       expect(result).to.equal({
-        abstractionAlerts: 'Yes',
+        abstractionAlertsLabel: 'Yes, for all licences',
         backLink: {
           href: `/system/company-contacts/setup/${session.id}/check`,
           text: 'Back'
         },
         email: 'eric@test.com',
+        licences: [],
         name: 'Eric',
         pageTitle: 'You are about to cancel this contact',
         pageTitleCaption: 'Tyrell Corporation'

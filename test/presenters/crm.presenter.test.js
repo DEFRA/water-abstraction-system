@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const { generateUUID } = require('../../app/lib/general.lib.js')
+const { licenceWithLicenceRefs } = require('../support/fixtures/licence.fixture.js')
 
 // Thing under test
 const CRMPresenter = require('../../app/presenters/crm.presenter.js')
@@ -253,6 +254,67 @@ describe('CRM presenter', () => {
               name: 'Rachael Tyrell'
             })
           })
+        })
+      })
+    })
+  })
+
+  describe.only('#selectedLicences()', () => {
+    let abstractionAlertLicences
+    let abstractionAlerts
+    let licences
+
+    beforeEach(() => {
+      abstractionAlertLicences = []
+      licences = licenceWithLicenceRefs()
+    })
+
+    describe('when the user is set to receive abstraction alerts for all licences ("yes")', () => {
+      beforeEach(() => {
+        abstractionAlerts = 'yes'
+      })
+
+      it('returns an empty array', () => {
+        const result = CRMPresenter.selectedLicences(licences, abstractionAlertLicences, abstractionAlerts)
+
+        expect(result).to.be.empty()
+      })
+    })
+
+    describe('when the user is set not to receive abstraction alerts ("no")', () => {
+      beforeEach(() => {
+        abstractionAlerts = 'no'
+      })
+
+      it('returns an empty array', () => {
+        const result = CRMPresenter.selectedLicences(licences, abstractionAlertLicences, abstractionAlerts)
+
+        expect(result).to.be.empty()
+      })
+    })
+
+    describe('when the user is set to receive abstraction alerts for specific licences ("some")', () => {
+      beforeEach(() => {
+        abstractionAlerts = 'some'
+      })
+
+      describe('and there are no existing "abstractionAlertLicences"', () => {
+        it('returns an empty array', () => {
+          const result = CRMPresenter.selectedLicences(licences, abstractionAlertLicences, abstractionAlerts)
+
+          expect(result).to.be.empty()
+        })
+      })
+
+      describe('and there are existing "abstractionAlertLicences"', () => {
+        beforeEach(() => {
+          abstractionAlertLicences = [licences[0].id]
+        })
+
+        it('returns the matching licence references', () => {
+          const result = CRMPresenter.selectedLicences(licences, abstractionAlertLicences, abstractionAlerts)
+
+          expect(result).to.equal([licences[0].licenceRef])
         })
       })
     })

@@ -9,8 +9,8 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { licenceWithLicenceRefs } = require('../../../support/fixtures/licence.fixture.js')
 const { yesterday } = require('../../../support/general.js')
 
 // Thing under test
@@ -37,7 +37,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
     name = companyContact.contact.department
     email = companyContact.contact.email
 
-    licences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
+    licences = licenceWithLicenceRefs()
 
     sentNotification = undefined
 
@@ -123,87 +123,6 @@ describe('Company Contacts - Setup - Check Presenter', () => {
             expect(result.emailInUse).to.equal(
               'Notifications have been sent to this contact, so the email address cannot be changed.'
             )
-          })
-        })
-      })
-    })
-
-    describe('the "licences" property', () => {
-      describe('when the user is set to receive abstraction alerts for all licences ("yes")', () => {
-        it('returns an empty array', () => {
-          const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
-
-          expect(result.licences).to.be.empty()
-        })
-      })
-
-      describe('when the user is set not to receive abstraction alerts ("no")', () => {
-        beforeEach(() => {
-          session.abstractionAlerts = 'no'
-        })
-
-        it('returns an empty array', () => {
-          const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
-
-          expect(result.licences).to.be.empty()
-        })
-      })
-
-      describe('when the user is set to receive abstraction alerts for specific licences ("some")', () => {
-        beforeEach(() => {
-          session.abstractionAlerts = 'some'
-        })
-
-        describe('and there are no existing "abstractionAlertLicences"', () => {
-          beforeEach(() => {
-            session.abstractionAlertLicences = null
-          })
-
-          it('returns an empty array', () => {
-            const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
-
-            expect(result.licences).to.be.empty()
-          })
-        })
-
-        describe('and there are "live" licences', () => {
-          describe('and the selected licences for the user matches the "live" licences', () => {
-            beforeEach(() => {
-              session.abstractionAlertLicences = [licences[0].id]
-            })
-
-            it('returns the matching licence references', () => {
-              const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
-
-              expect(result.licences).to.equal([licences[0].licenceRef])
-            })
-          })
-
-          describe('but none of the selected licences for the user matches the "live" licences', () => {
-            beforeEach(() => {
-              session.abstractionAlertLicences = [generateUUID()]
-            })
-
-            it('returns an empty array', () => {
-              const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
-
-              expect(result.licences).to.be.empty()
-            })
-          })
-        })
-
-        describe('but there are no "live" licences', () => {
-          beforeEach(() => {
-            session.licences = []
-            session.abstractionAlertLicences = [licences[0].id]
-          })
-
-          describe('even though the user has selected licences to receive abstraction alerts for', () => {
-            it('returns an empty array', () => {
-              const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
-
-              expect(result.licences).to.be.empty()
-            })
           })
         })
       })

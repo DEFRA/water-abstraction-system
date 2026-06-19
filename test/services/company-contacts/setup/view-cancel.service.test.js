@@ -42,12 +42,13 @@ describe('Company Contacts - Setup - Cancel Service', () => {
       const result = await ViewCancelService.go(session.id)
 
       expect(result).to.equal({
-        abstractionAlerts: 'Yes',
+        abstractionAlertsLabel: 'Yes, for all licences',
         backLink: {
           href: `/system/company-contacts/setup/${session.id}/check`,
           text: 'Back'
         },
         email: 'eric@test.com',
+        licences: [],
         name: 'Eric',
         pageTitle: 'You are about to cancel this contact',
         pageTitleCaption: 'Tyrell Corporation'

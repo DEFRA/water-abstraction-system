@@ -25,4 +25,25 @@ function licenceEnds(endDate = null) {
   })
 }
 
-module.exports = { licenceEnds }
+/**
+ * A licence with a licence ref
+ *
+ * @returns {LicenceModel} A licence with a licence ref
+ */
+function licenceWithLicenceRef() {
+  return LicenceModel.fromJson({
+    id: generateUUID(),
+    licenceRef: generateLicenceRef()
+  })
+}
+
+/**
+ * An array of licences with a licence ref
+ *
+ * @returns {LicenceModel[]} An array of licences with licence refs
+ */
+function licenceWithLicenceRefs() {
+  return [licenceWithLicenceRef()]
+}
+
+module.exports = { licenceEnds, licenceWithLicenceRefs }
