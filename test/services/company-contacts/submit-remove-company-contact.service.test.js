@@ -14,7 +14,7 @@ const YarStub = require('../../support/stubs/yar.stub.js')
 
 // Things we need to stub
 const DeleteCompanyContactService = require('../../../app/services/company-contacts/delete-company-contact.service.js')
-const FetchCompanyContactService = require('../../../app/services/company-contacts/fetch-company-contact.service.js')
+const FetchCompanyContactDal = require('../../../app/dal/company-contacts/fetch-company-contact.dal.js')
 const FetchNotificationService = require('../../../app/services/company-contacts/fetch-notification.service.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
@@ -30,7 +30,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
     companyContact = CustomersFixtures.companyContact()
 
     Sinon.stub(DeleteCompanyContactService, 'go').resolves()
-    Sinon.stub(FetchCompanyContactService, 'go').resolves(companyContact)
+    Sinon.stub(FetchCompanyContactDal, 'go').resolves(companyContact)
 
     yarStub = YarStub.build(Sinon)
   })

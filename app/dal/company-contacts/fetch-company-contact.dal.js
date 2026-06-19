@@ -2,7 +2,7 @@
 
 /**
  * Fetches the company contact needed for the view '/company-contacts/{id}communications' page
- * @module FetchCompanyContactService
+ * @module FetchCompanyContactDal
  */
 
 const CompanyContactModel = require('../../models/company-contact.model.js')

@@ -13,7 +13,7 @@ const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 
 // Things we need to stub
 const FetchAbstractionAlertLicencesDal = require('../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
-const FetchCompanyContactService = require('../../../app/services/company-contacts/fetch-company-contact.service.js')
+const FetchCompanyContactDal = require('../../../app/dal/company-contacts/fetch-company-contact.dal.js')
 const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
 
 // Thing under test
@@ -30,7 +30,7 @@ describe('Company Contacts - View Remove Company Contact Service', () => {
 
     Sinon.stub(FetchAbstractionAlertLicencesDal, 'go').resolves([])
     Sinon.stub(FetchCompanyService, 'go').returns(company)
-    Sinon.stub(FetchCompanyContactService, 'go').returns(companyContact)
+    Sinon.stub(FetchCompanyContactDal, 'go').returns(companyContact)
   })
 
   afterEach(() => {
