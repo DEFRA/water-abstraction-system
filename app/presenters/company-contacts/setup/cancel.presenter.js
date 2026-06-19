@@ -18,11 +18,11 @@ function go(session) {
   const { abstractionAlertLicences, abstractionAlerts, company, email, licences, name } = session
 
   return {
+    abstractionAlertsLabel: abstractionAlertsLabel(abstractionAlerts),
     backLink: {
       href: `/system/company-contacts/setup/${session.id}/check`,
       text: 'Back'
     },
-    abstractionAlertsLabel: abstractionAlertsLabel(abstractionAlerts),
     email,
     licences: selectedLicences(licences, abstractionAlertLicences, abstractionAlerts),
     name,

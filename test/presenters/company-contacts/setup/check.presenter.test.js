@@ -9,9 +9,9 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
+const { yesterday } = require('../../../support/general.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { licenceWithLicenceRefs } = require('../../../support/fixtures/licence.fixture.js')
-const { yesterday } = require('../../../support/general.js')
 
 // Thing under test
 const CheckPresenter = require('../../../../app/presenters/company-contacts/setup/check.presenter.js')

@@ -26,9 +26,6 @@ function go(session, savedCompanyContacts, sentNotification) {
     abstractionAlertsLabel: abstractionAlertsLabel(abstractionAlerts),
     email,
     emailInUse: _emailInUse(sentNotification, companyContact),
-    name,
-    pageTitle: 'Check contact',
-    pageTitleCaption: company.name,
     licences: selectedLicences(licences, abstractionAlertLicences, abstractionAlerts),
     links: {
       abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
@@ -38,6 +35,9 @@ function go(session, savedCompanyContacts, sentNotification) {
       restoreContact: matchingContact?.deletedAt ? `/system/company-contacts/setup/${session.id}/restore` : null
     },
     matchingContact,
+    name,
+    pageTitle: 'Check contact',
+    pageTitleCaption: company.name,
     warning: _warning(matchingContact, abstractionAlertLicences, abstractionAlerts)
   }
 }
