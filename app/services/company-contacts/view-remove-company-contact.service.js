@@ -6,6 +6,7 @@
  * @module ViewRemoveCompanyContactService
  */
 
+const FetchAbstractionAlertLicencesDal = require('../../dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
 const FetchCompanyContactService = require('./fetch-company-contact.service.js')
 const FetchCompanyService = require('../companies/fetch-company.service.js')
 const RemoveCompanyContactPresenter = require('../../presenters/company-contacts/remove-company-contact.presenter.js')
@@ -22,7 +23,9 @@ async function go(id) {
 
   const company = await FetchCompanyService.go(companyContact.companyId)
 
-  const pageData = RemoveCompanyContactPresenter.go(company, companyContact)
+  const licences = await FetchAbstractionAlertLicencesDal.go(companyContact.abstractionAlertLicences)
+
+  const pageData = RemoveCompanyContactPresenter.go(company, companyContact, licences)
 
   return {
     ...pageData

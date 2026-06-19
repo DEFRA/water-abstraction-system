@@ -3,6 +3,18 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
+{% from "macros/collapsible-list.njk" import collapsibleList %}
+
+
+{% set abstractionAlertsHtml %}
+  {% if contact.licences.length %}
+    <p class="govuk-!-margin-bottom-3">{{ contact.abstractionAlertsLabel }}</p>
+    {{ collapsibleList(contact.licences, "Licences") }}
+  {% else %}
+    <p class="govuk-!-margin-bottom-1">{{ contact.abstractionAlertsLabel }}</p>
+  {% endif %}
+{% endset %}
+
 {% block pageContent %}
   {{ govukSummaryList({
     classes: "govuk-summary-list--no-border",
@@ -17,7 +29,7 @@
       },
       {
         key: { text: "Water abstraction alerts", classes: "meta-data__label" },
-        value: { text:  contact.abstractionAlerts, classes: "meta-data__value" }
+        value: { html: abstractionAlertsHtml, classes: "meta-data__value" }
       }
     ]
   }) }}

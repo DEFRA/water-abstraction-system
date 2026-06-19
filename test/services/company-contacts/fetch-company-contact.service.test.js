@@ -36,6 +36,8 @@ describe('Company Contacts - Fetch Company Contact service', () => {
       const result = await FetchCompanyContactService.go(companyContact.id)
 
       expect(result).to.equal({
+        abstractionAlertLicences: null,
+        abstractionAlerts: false,
         companyId,
         id: companyContact.id,
         contact: {

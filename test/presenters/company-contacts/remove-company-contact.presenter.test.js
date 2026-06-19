@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
+const { licenceEnds } = require('../../support/fixtures/licence.fixture.js')
 
 // Thing under test
 const RemoveCompanyContactPresenter = require('../../../app/presenters/company-contacts/remove-company-contact.presenter.js')
@@ -16,16 +17,19 @@ const RemoveCompanyContactPresenter = require('../../../app/presenters/company-c
 describe('Company Contacts - Remove Company Contact Presenter', () => {
   let companyContact
   let company
+  let licences
 
   beforeEach(() => {
     companyContact = CustomersFixtures.companyContact()
 
     company = CustomersFixtures.company()
+
+    licences = []
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = RemoveCompanyContactPresenter.go(company, companyContact)
+      const result = RemoveCompanyContactPresenter.go(company, companyContact, licences)
 
       expect(result).to.equal({
         backLink: {
@@ -33,12 +37,38 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
           text: 'Go back to contact details'
         },
         contact: {
-          abstractionAlerts: 'No',
+          abstractionAlertsLabel: 'No',
           email: 'rachael.tyrell@tyrellcorp.com',
+          licences: [],
           name: 'Rachael Tyrell'
         },
         pageTitle: "You're about to remove this contact",
         pageTitleCaption: 'Tyrell Corporation'
+      })
+    })
+
+    describe('the "licences" property', () => {
+      describe('when the abstractionAlertType is not "some"', () => {
+        it('returns an empty array', () => {
+          const result = RemoveCompanyContactPresenter.go(company, companyContact, licences)
+
+          expect(result.contact.licences).to.equal([])
+        })
+      })
+
+      describe('when the abstractionAlertType is "some"', () => {
+        beforeEach(() => {
+          licences = [licenceEnds()]
+
+          companyContact.abstractionAlerts = true
+          companyContact.abstractionAlertLicences = [licences[0].id]
+        })
+
+        it('returns the licence refs', () => {
+          const result = RemoveCompanyContactPresenter.go(company, companyContact, licences)
+
+          expect(result.contact.licences).to.equal([licences[0].licenceRef])
+        })
       })
     })
 
@@ -51,7 +81,7 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
           })
 
           it('returns the warning', () => {
-            const result = RemoveCompanyContactPresenter.go(company, companyContact)
+            const result = RemoveCompanyContactPresenter.go(company, companyContact, licences)
 
             expect(result.warning).to.equal({
               iconFallbackText: 'Warning',
@@ -67,7 +97,7 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
           })
 
           it('does not return the warning', () => {
-            const result = RemoveCompanyContactPresenter.go(company, companyContact)
+            const result = RemoveCompanyContactPresenter.go(company, companyContact, licences)
 
             expect(result.warning).to.be.undefined()
           })
@@ -81,7 +111,7 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
         })
 
         it('does not return the warning', () => {
-          const result = RemoveCompanyContactPresenter.go(company, companyContact)
+          const result = RemoveCompanyContactPresenter.go(company, companyContact, licences)
 
           expect(result.warning).to.be.undefined()
         })
