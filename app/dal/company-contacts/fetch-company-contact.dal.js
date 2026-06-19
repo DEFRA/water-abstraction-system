@@ -16,7 +16,7 @@ const CompanyContactModel = require('../../models/company-contact.model.js')
  */
 async function go(companyContactId) {
   return CompanyContactModel.query()
-    .select(['companyId', 'id', 'abstractionAlertLicences', 'abstractionAlerts'])
+    .select(['abstractionAlertLicences', 'abstractionAlerts', 'companyId', 'id'])
     .findById(companyContactId)
     .withGraphFetched('contact')
     .modifyGraph('contact', (contactBuilder) => {
