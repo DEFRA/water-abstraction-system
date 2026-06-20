@@ -8,6 +8,7 @@
 const FetchUserRolesAndGroupsService = require('../idm/fetch-user-roles-and-groups.service.js')
 
 const featureFlagsConfig = require('../../../config/feature-flags.config.js')
+const { userPermissions } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Used by `AuthPlugin` to authenticate and authorise users
@@ -49,10 +50,16 @@ const featureFlagsConfig = require('../../../config/feature-flags.config.js')
 async function go(userId) {
   const { user, roles, groups } = await FetchUserRolesAndGroupsService.go(userId)
 
-  // We put each role's name into the scope array for hapi to use for its scope authorisation
-  const scope = roles.map((role) => {
-    return role.role
-  })
+  // If the new permissions field is populated and the scopes are defined, use that to determine the user's scopes
+  // (a.k.a. roles), otherwise fall back to using the roles returned form the database
+  let scope = userPermissions[user.permissions]?.scopes
+
+  if (!scope) {
+    // We put each role's name into the scope array for hapi to use for its scope authorisation
+    scope = roles.map((role) => {
+      return role.role
+    })
+  }
 
   const permission = _permission(scope)
 
