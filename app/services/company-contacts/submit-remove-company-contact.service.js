@@ -7,7 +7,7 @@
  */
 
 const DeleteCompanyContactService = require('./delete-company-contact.service.js')
-const FetchCompanyContactService = require('./fetch-company-contact.service.js')
+const FetchCompanyContactDal = require('../../dal/company-contacts/fetch-company-contact.dal.js')
 const FetchNotificationService = require('./fetch-notification.service.js')
 const { flashNotification } = require('../../lib/general.lib.js')
 
@@ -20,7 +20,7 @@ const { flashNotification } = require('../../lib/general.lib.js')
  * @returns {Promise<object>} The data to redirect the user after the company contact has been removed
  */
 async function go(id, yar) {
-  const companyContact = await FetchCompanyContactService.go(id)
+  const companyContact = await FetchCompanyContactDal.go(id)
 
   const notification = await FetchNotificationService.go(companyContact.contact.email)
 
