@@ -13,7 +13,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Things we need to stub
-const FetchNotificationsService = require('../../../app/services/return-logs/fetch-notifications.service.js')
+const FetchNotificationsDal = require('../../../app/dal/return-logs/fetch-notifications.dal.js')
 const FetchReturnLogService = require('../../../app/services/return-logs/fetch-return-log.service.js')
 
 // Thing under test
@@ -34,7 +34,7 @@ describe('Return Logs - View Communications Service', () => {
     }
 
     Sinon.stub(FetchReturnLogService, 'go').returns(returnLog)
-    Sinon.stub(FetchNotificationsService, 'go').returns({
+    Sinon.stub(FetchNotificationsDal, 'go').returns({
       notifications: [],
       totalNumber: 0
     })
