@@ -2,7 +2,7 @@
 
 /**
  * Fetches data needed for the view '/system/company-contacts/{id}/communications' page
- * @module FetchNotificationsService
+ * @module FetchNotificationsDal
  */
 
 const { ref } = require('objection')
