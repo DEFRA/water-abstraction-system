@@ -5,6 +5,23 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../helpers/licence.helper.js')
 
 /**
+ * Generates an instance of `LicenceModel` with an ID and a licence reference
+ *
+ * You can override or add additional properties by passing them in as an object
+ *
+ * @param {object} [data={}] - an object of properties to override or add to the licence
+ *
+ * @returns {module:LicenceModel} A licence with a licence ref
+ */
+function licence(data = {}) {
+  return LicenceModel.fromJson({
+    id: generateUUID(),
+    licenceRef: generateLicenceRef(),
+    ...data
+  })
+}
+
+/**
  * When we check if a licence ends or has ended, we query the database and return the expected, revoked, and lapsed date.
  *
  * We would then use the 'ends' or 'ended' instance methods.
@@ -16,13 +33,11 @@ const { generateLicenceRef } = require('../helpers/licence.helper.js')
  * @returns {module:LicenceModel} A licence to be used in tests that uses the 'ends' or 'ended' instance method
  */
 function licenceEnds(endDate = null) {
-  return LicenceModel.fromJson({
+  return licence({
     expiredDate: endDate,
-    id: generateUUID(),
     lapsedDate: null,
-    licenceRef: generateLicenceRef(),
     revokedDate: null
   })
 }
 
-module.exports = { licenceEnds }
+module.exports = { licence, licenceEnds }

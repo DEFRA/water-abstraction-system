@@ -5,7 +5,7 @@
  * @module CheckPresenter
  */
 
-const { abstractionAlertsLabel } = require('../../crm.presenter.js')
+const { abstractionAlertsLabel, selectedLiveLicences } = require('../../crm.presenter.js')
 
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/check' page
@@ -26,10 +26,7 @@ function go(session, savedCompanyContacts, sentNotification) {
     abstractionAlertsLabel: abstractionAlertsLabel(abstractionAlerts),
     email,
     emailInUse: _emailInUse(sentNotification, companyContact),
-    name,
-    pageTitle: 'Check contact',
-    pageTitleCaption: company.name,
-    licences: _licences(licences, abstractionAlertLicences, abstractionAlerts),
+    licences: selectedLiveLicences(licences, abstractionAlertLicences, abstractionAlerts),
     links: {
       abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
       cancel: `/system/company-contacts/setup/${session.id}/cancel`,
@@ -38,6 +35,9 @@ function go(session, savedCompanyContacts, sentNotification) {
       restoreContact: matchingContact?.deletedAt ? `/system/company-contacts/setup/${session.id}/restore` : null
     },
     matchingContact,
+    name,
+    pageTitle: 'Check contact',
+    pageTitleCaption: company.name,
     warning: _warning(matchingContact, abstractionAlertLicences, abstractionAlerts)
   }
 }
@@ -58,19 +58,6 @@ function _emailInUse(sentNotification, companyContact) {
   return null
 }
 
-function _licences(licences, abstractionAlertLicences, abstractionAlerts) {
-  if (abstractionAlerts !== 'some' || !abstractionAlertLicences?.length) {
-    return []
-  }
-
-  return licences
-    .filter((licence) => {
-      return abstractionAlertLicences.includes(licence.id)
-    })
-    .map((licence) => {
-      return licence.licenceRef
-    })
-}
 /*
  * Check if the contact already exists, if it does, then this is a match.
  *
