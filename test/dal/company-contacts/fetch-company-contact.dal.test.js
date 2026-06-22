@@ -13,9 +13,9 @@ const ContactHelper = require('../../support/helpers/contact.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
-const FetchCompanyContactService = require('../../../app/services/company-contacts/fetch-company-contact.service.js')
+const FetchCompanyContactDal = require('../../../app/dal/company-contacts/fetch-company-contact.dal.js')
 
-describe('Company Contacts - Fetch Company Contact service', () => {
+describe('Company Contacts - Fetch Company Contact dal', () => {
   const companyId = generateUUID()
 
   let companyContact
@@ -33,9 +33,11 @@ describe('Company Contacts - Fetch Company Contact service', () => {
 
   describe('when there is a company contact', () => {
     it('returns the company contact and associated contact record', async () => {
-      const result = await FetchCompanyContactService.go(companyContact.id)
+      const result = await FetchCompanyContactDal.go(companyContact.id)
 
       expect(result).to.equal({
+        abstractionAlertLicences: null,
+        abstractionAlerts: false,
         companyId,
         id: companyContact.id,
         contact: {

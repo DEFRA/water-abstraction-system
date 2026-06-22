@@ -13,7 +13,7 @@ const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const FetchCompanyContactService = require('../../../app/services/company-contacts/fetch-company-contact.service.js')
+const FetchCompanyContactDal = require('../../../app/dal/company-contacts/fetch-company-contact.dal.js')
 const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
 const FetchNotificationsService = require('../../../app/services/company-contacts/fetch-notifications.service.js')
 
@@ -36,7 +36,7 @@ describe('Company Contacts - View Communications Service', () => {
     }
 
     Sinon.stub(FetchCompanyService, 'go').returns(company)
-    Sinon.stub(FetchCompanyContactService, 'go').returns(companyContact)
+    Sinon.stub(FetchCompanyContactDal, 'go').returns(companyContact)
     Sinon.stub(FetchNotificationsService, 'go').returns({
       notifications: [],
       totalNumber: 0
