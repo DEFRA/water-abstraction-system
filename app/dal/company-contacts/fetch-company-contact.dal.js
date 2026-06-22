@@ -2,7 +2,7 @@
 
 /**
  * Fetches the company contact needed for the view '/company-contacts/{id}communications' page
- * @module FetchCompanyContactService
+ * @module FetchCompanyContactDal
  */
 
 const CompanyContactModel = require('../../models/company-contact.model.js')
@@ -16,7 +16,7 @@ const CompanyContactModel = require('../../models/company-contact.model.js')
  */
 async function go(companyContactId) {
   return CompanyContactModel.query()
-    .select(['companyId', 'id'])
+    .select(['abstractionAlertLicences', 'abstractionAlerts', 'companyId', 'id'])
     .findById(companyContactId)
     .withGraphFetched('contact')
     .modifyGraph('contact', (contactBuilder) => {

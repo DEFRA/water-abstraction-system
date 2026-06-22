@@ -7,7 +7,7 @@
  */
 
 const CommunicationsPresenter = require('../../presenters/company-contacts/communications.presenter.js')
-const FetchCompanyContactService = require('./fetch-company-contact.service.js')
+const FetchCompanyContactDal = require('../../dal/company-contacts/fetch-company-contact.dal.js')
 const FetchCompanyService = require('../companies/fetch-company.service.js')
 const FetchNotificationsService = require('./fetch-notifications.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
@@ -21,7 +21,7 @@ const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(id, page) {
-  const companyContact = await FetchCompanyContactService.go(id)
+  const companyContact = await FetchCompanyContactDal.go(id)
 
   const company = await FetchCompanyService.go(companyContact.companyId)
 

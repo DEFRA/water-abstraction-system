@@ -12,7 +12,8 @@ const { expect } = Code
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 
 // Things we need to stub
-const FetchCompanyContactService = require('../../../app/services/company-contacts/fetch-company-contact.service.js')
+const FetchAbstractionAlertLicencesDal = require('../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
+const FetchCompanyContactDal = require('../../../app/dal/company-contacts/fetch-company-contact.dal.js')
 const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
 
 // Thing under test
@@ -27,8 +28,9 @@ describe('Company Contacts - View Remove Company Contact Service', () => {
 
     company = CustomersFixtures.company()
 
+    Sinon.stub(FetchAbstractionAlertLicencesDal, 'go').resolves([])
     Sinon.stub(FetchCompanyService, 'go').returns(company)
-    Sinon.stub(FetchCompanyContactService, 'go').returns(companyContact)
+    Sinon.stub(FetchCompanyContactDal, 'go').returns(companyContact)
   })
 
   afterEach(() => {
@@ -45,8 +47,9 @@ describe('Company Contacts - View Remove Company Contact Service', () => {
           text: 'Go back to contact details'
         },
         contact: {
-          abstractionAlerts: 'No',
+          abstractionAlertsLabel: 'No',
           email: 'rachael.tyrell@tyrellcorp.com',
+          licences: [],
           name: 'Rachael Tyrell'
         },
         pageTitle: "You're about to remove this contact",
