@@ -5,7 +5,7 @@
  * @module CancelPresenter
  */
 
-const { abstractionAlertsLabel, selectedLicences } = require('../../crm.presenter.js')
+const { abstractionAlertsLabel, selectedLiveLicences } = require('../../crm.presenter.js')
 
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/cancel' page
@@ -24,7 +24,7 @@ function go(session) {
       text: 'Back'
     },
     email,
-    licences: selectedLicences(licences, abstractionAlertLicences, abstractionAlerts),
+    licences: selectedLiveLicences(licences, abstractionAlertLicences, abstractionAlerts),
     name,
     pageTitle: _pageTitle(session),
     pageTitleCaption: company.name

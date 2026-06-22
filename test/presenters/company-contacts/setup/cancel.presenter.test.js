@@ -10,7 +10,7 @@ const { expect } = Code
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { licenceWithLicenceRefs } = require('../../../support/fixtures/licence.fixture.js')
+const { licence } = require('../../../support/fixtures/licence.fixture.js')
 
 // Thing under test
 const CancelPresenter = require('../../../../app/presenters/company-contacts/setup/cancel.presenter.js')
@@ -23,7 +23,7 @@ describe('Company Contacts - Setup - Cancel Presenter', () => {
   beforeEach(() => {
     company = CustomersFixtures.company()
 
-    licences = licenceWithLicenceRefs()
+    licences = [licence()]
 
     session = {
       abstractionAlertLicences: null,

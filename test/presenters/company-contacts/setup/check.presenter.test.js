@@ -11,7 +11,7 @@ const { expect } = Code
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const { yesterday } = require('../../../support/general.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { licenceWithLicenceRefs } = require('../../../support/fixtures/licence.fixture.js')
+const { licence } = require('../../../support/fixtures/licence.fixture.js')
 
 // Thing under test
 const CheckPresenter = require('../../../../app/presenters/company-contacts/setup/check.presenter.js')
@@ -37,7 +37,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
     name = companyContact.contact.department
     email = companyContact.contact.email
 
-    licences = licenceWithLicenceRefs()
+    licences = [licence()]
 
     sentNotification = undefined
 

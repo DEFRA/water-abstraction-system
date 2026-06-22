@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const { generateUUID } = require('../../app/lib/general.lib.js')
-const { licenceWithLicenceRefs } = require('../support/fixtures/licence.fixture.js')
+const { licence } = require('../support/fixtures/licence.fixture.js')
 
 // Thing under test
 const CRMPresenter = require('../../app/presenters/crm.presenter.js')
@@ -259,62 +259,109 @@ describe('CRM presenter', () => {
     })
   })
 
-  describe('#selectedLicences()', () => {
-    let abstractionAlertLicences
-    let abstractionAlerts
-    let licences
+  describe('#selectedLiveLicences()', () => {
+    let liveLicences
+    let noticeSetting
+    let selectedLicences
 
     beforeEach(() => {
-      abstractionAlertLicences = []
-      licences = licenceWithLicenceRefs()
+      selectedLicences = []
     })
 
-    describe('when the user is set to receive abstraction alerts for all licences ("yes")', () => {
+    describe('when there are "liveLicences"', () => {
       beforeEach(() => {
-        abstractionAlerts = 'yes'
+        liveLicences = [licence()]
       })
 
-      it('returns an empty array', () => {
-        const result = CRMPresenter.selectedLicences(licences, abstractionAlertLicences, abstractionAlerts)
+      describe('and the user is set to receive "some" notices', () => {
+        beforeEach(() => {
+          noticeSetting = 'some'
+        })
 
-        expect(result).to.be.empty()
-      })
-    })
-
-    describe('when the user is set not to receive abstraction alerts ("no")', () => {
-      beforeEach(() => {
-        abstractionAlerts = 'no'
-      })
-
-      it('returns an empty array', () => {
-        const result = CRMPresenter.selectedLicences(licences, abstractionAlertLicences, abstractionAlerts)
-
-        expect(result).to.be.empty()
-      })
-    })
-
-    describe('when the user is set to receive abstraction alerts for specific licences ("some")', () => {
-      beforeEach(() => {
-        abstractionAlerts = 'some'
-      })
-
-      describe('and there are no existing "abstractionAlertLicences"', () => {
         it('returns an empty array', () => {
-          const result = CRMPresenter.selectedLicences(licences, abstractionAlertLicences, abstractionAlerts)
+          const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
+
+          expect(result).to.be.empty()
+        })
+
+        describe('and there are existing "selectedLicences"', () => {
+          describe('that match the "liveLicences"', () => {
+            beforeEach(() => {
+              selectedLicences = [liveLicences[0].id]
+            })
+
+            it('returns the matching licence references', () => {
+              const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
+
+              expect(result).to.equal([liveLicences[0].licenceRef])
+            })
+          })
+
+          describe('that do not match the "liveLicences"', () => {
+            beforeEach(() => {
+              selectedLicences = [generateUUID()]
+            })
+
+            it('returns the matching licence references (none)', () => {
+              const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
+
+              expect(result).to.equal([])
+            })
+          })
+        })
+      })
+
+      describe('and the user is set to receive something other than "some" notices', () => {
+        beforeEach(() => {
+          noticeSetting = 'yes'
+        })
+
+        it('returns an empty array', () => {
+          const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
 
           expect(result).to.be.empty()
         })
       })
+    })
 
-      describe('and there are existing "abstractionAlertLicences"', () => {
+    describe('when there are no "liveLicences"', () => {
+      beforeEach(() => {
+        liveLicences = []
+      })
+
+      describe('and the user is set to receive "some" notices', () => {
         beforeEach(() => {
-          abstractionAlertLicences = [licences[0].id]
+          noticeSetting = 'some'
         })
 
-        it('returns the matching licence references', () => {
-          const result = CRMPresenter.selectedLicences(licences, abstractionAlertLicences, abstractionAlerts)
+        it('returns an empty array', () => {
+          const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
 
-          expect(result).to.equal([licences[0].licenceRef])
+          expect(result).to.be.empty()
+        })
+
+        describe('and there are existing "selectedLicences"', () => {
+          beforeEach(() => {
+            selectedLicences = [generateUUID()]
+          })
+
+          it('returns an empty array', () => {
+            const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
+
+            expect(result).to.be.empty()
+          })
+        })
+      })
+
+      describe('and the user is set to receive something other than "some" notices', () => {
+        beforeEach(() => {
+          noticeSetting = 'yes'
+        })
+
+        it('returns an empty array', () => {
+          const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
+
+          expect(result).to.be.empty()
         })
       })
     })

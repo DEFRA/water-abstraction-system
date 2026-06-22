@@ -5,7 +5,7 @@
  * @module CheckPresenter
  */
 
-const { abstractionAlertsLabel, selectedLicences } = require('../../crm.presenter.js')
+const { abstractionAlertsLabel, selectedLiveLicences } = require('../../crm.presenter.js')
 
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/check' page
@@ -26,7 +26,7 @@ function go(session, savedCompanyContacts, sentNotification) {
     abstractionAlertsLabel: abstractionAlertsLabel(abstractionAlerts),
     email,
     emailInUse: _emailInUse(sentNotification, companyContact),
-    licences: selectedLicences(licences, abstractionAlertLicences, abstractionAlerts),
+    licences: selectedLiveLicences(licences, abstractionAlertLicences, abstractionAlerts),
     links: {
       abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
       cancel: `/system/company-contacts/setup/${session.id}/cancel`,
