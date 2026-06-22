@@ -36,7 +36,12 @@ async function _fetch(email, page) {
     .whereNotNull('recipient')
     .where('recipient', email)
     .whereNotIn('messageRef', ignoreMessageRef)
-    .orderBy('createdAt', 'DESC')
+    .orderBy([
+      { column: 'createdAt', order: 'desc' },
+      { column: 'messageType', order: 'asc' },
+      { column: 'status', order: 'asc' },
+      { column: 'id', order: 'asc' }
+    ])
     .withGraphFetched('event')
     .modifyGraph('event', (builder) => {
       builder.select([
