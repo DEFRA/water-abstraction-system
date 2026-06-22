@@ -29,7 +29,12 @@ async function _fetch(returnLogId, page) {
   return NotificationModel.query()
     .select(['createdAt', 'id', 'messageType', 'status'])
     .where('returnLogIds', '?', returnLogId)
-    .orderBy('createdAt', 'DESC')
+    .orderBy([
+      { column: 'createdAt', order: 'desc' },
+      { column: 'messageType', order: 'asc' },
+      { column: 'status', order: 'asc' },
+      { column: 'id', order: 'asc' }
+    ])
     .withGraphFetched('event')
     .modifyGraph('event', (builder) => {
       builder.select([
