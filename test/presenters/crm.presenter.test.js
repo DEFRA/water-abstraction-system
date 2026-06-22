@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const { generateUUID } = require('../../app/lib/general.lib.js')
+const { licence } = require('../support/fixtures/licence.fixture.js')
 
 // Thing under test
 const CRMPresenter = require('../../app/presenters/crm.presenter.js')
@@ -253,6 +254,114 @@ describe('CRM presenter', () => {
               name: 'Rachael Tyrell'
             })
           })
+        })
+      })
+    })
+  })
+
+  describe('#selectedLiveLicences()', () => {
+    let liveLicences
+    let noticeSetting
+    let selectedLicences
+
+    beforeEach(() => {
+      selectedLicences = []
+    })
+
+    describe('when there are "liveLicences"', () => {
+      beforeEach(() => {
+        liveLicences = [licence()]
+      })
+
+      describe('and the user is set to receive "some" notices', () => {
+        beforeEach(() => {
+          noticeSetting = 'some'
+        })
+
+        it('returns an empty array', () => {
+          const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
+
+          expect(result).to.be.empty()
+        })
+
+        describe('and there are existing "selectedLicences"', () => {
+          describe('that match the "liveLicences"', () => {
+            beforeEach(() => {
+              selectedLicences = [liveLicences[0].id]
+            })
+
+            it('returns the matching licence references', () => {
+              const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
+
+              expect(result).to.equal([liveLicences[0].licenceRef])
+            })
+          })
+
+          describe('that do not match the "liveLicences"', () => {
+            beforeEach(() => {
+              selectedLicences = [generateUUID()]
+            })
+
+            it('returns the matching licence references (none)', () => {
+              const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
+
+              expect(result).to.equal([])
+            })
+          })
+        })
+      })
+
+      describe('and the user is set to receive something other than "some" notices', () => {
+        beforeEach(() => {
+          noticeSetting = 'yes'
+        })
+
+        it('returns an empty array', () => {
+          const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
+
+          expect(result).to.be.empty()
+        })
+      })
+    })
+
+    describe('when there are no "liveLicences"', () => {
+      beforeEach(() => {
+        liveLicences = []
+      })
+
+      describe('and the user is set to receive "some" notices', () => {
+        beforeEach(() => {
+          noticeSetting = 'some'
+        })
+
+        it('returns an empty array', () => {
+          const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
+
+          expect(result).to.be.empty()
+        })
+
+        describe('and there are existing "selectedLicences"', () => {
+          beforeEach(() => {
+            selectedLicences = [generateUUID()]
+          })
+
+          it('returns an empty array', () => {
+            const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
+
+            expect(result).to.be.empty()
+          })
+        })
+      })
+
+      describe('and the user is set to receive something other than "some" notices', () => {
+        beforeEach(() => {
+          noticeSetting = 'yes'
+        })
+
+        it('returns an empty array', () => {
+          const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
+
+          expect(result).to.be.empty()
         })
       })
     })
