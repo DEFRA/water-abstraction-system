@@ -37,7 +37,12 @@ async function _fetch(username, page) {
   OR notifications.personalisation->>'reset_url' LIKE '${ServerConfig.domains.internal}%'
 )`
     )
-    .orderBy('createdAt', 'DESC')
+    .orderBy([
+      { column: 'createdAt', order: 'desc' },
+      { column: 'messageType', order: 'asc' },
+      { column: 'status', order: 'asc' },
+      { column: 'id', order: 'asc' }
+    ])
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
 
