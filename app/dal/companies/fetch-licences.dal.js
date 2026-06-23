@@ -2,7 +2,7 @@
 
 /**
  * Fetches the licences, related to a company, data needed for the view '/companies/{id}/licences'
- * @module FetchLicencesService
+ * @module FetchLicencesDal
  */
 
 const LicenceModel = require('../../models/licence.model.js')

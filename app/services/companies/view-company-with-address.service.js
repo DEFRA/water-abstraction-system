@@ -7,8 +7,8 @@
  */
 
 const CompanyWithAddressPresenter = require('../../presenters/companies/company-with-address.presenter.js')
-const FetchAddressService = require('./fetch-address.service.js')
-const FetchCompanyService = require('./fetch-company.service.js')
+const FetchAddressDal = require('../../dal/companies/fetch-address.dal.js')
+const FetchCompanyDal = require('../../dal/companies/fetch-company.dal.js')
 
 /**
  * Orchestrates fetching and presenting the data for the '/companies/{id}/address/{addressId}/{role}' page
@@ -21,8 +21,8 @@ const FetchCompanyService = require('./fetch-company.service.js')
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(companyId, addressId, role, licenceId = null) {
-  const company = await FetchCompanyService.go(companyId)
-  const address = await FetchAddressService.go(addressId)
+  const company = await FetchCompanyDal.go(companyId)
+  const address = await FetchAddressDal.go(addressId)
 
   const pageData = CompanyWithAddressPresenter.go(company, address, role, licenceId)
 

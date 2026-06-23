@@ -11,9 +11,9 @@ const { expect } = Code
 const AddressHelper = require('../../support/helpers/address.helper.js')
 
 // Thing under test
-const FetchAddressService = require('../../../app/services/companies/fetch-address.service.js')
+const FetchAddressDal = require('../../../app/dal/companies/fetch-address.dal.js')
 
-describe('Companies - Fetch Address service', () => {
+describe('Companies - Fetch Address dal', () => {
   let address
 
   describe('when there is an address', () => {
@@ -22,7 +22,7 @@ describe('Companies - Fetch Address service', () => {
     })
 
     it('returns the matching address', async () => {
-      const result = await FetchAddressService.go(address.id)
+      const result = await FetchAddressDal.go(address.id)
 
       expect(result).to.equal({
         id: address.id,

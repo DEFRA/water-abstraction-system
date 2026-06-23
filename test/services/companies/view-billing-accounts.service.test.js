@@ -12,8 +12,8 @@ const { expect } = Code
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 
 // Things we need to stub
-const FetchBillingAccountsService = require('../../../app/services/companies/fetch-billing-accounts.service.js')
-const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
+const FetchBillingAccountsDal = require('../../../app/dal/companies/fetch-billing-accounts.dal.js')
+const FetchCompanyDal = require('../../../app/dal/companies/fetch-company.dal.js')
 
 // Thing under test
 const ViewBillingAccountsService = require('../../../app/services/companies/view-billing-accounts.service.js')
@@ -34,9 +34,9 @@ describe('Companies - View Billing Accounts service', () => {
 
     billingAccount = billingAccounts[0]
 
-    Sinon.stub(FetchCompanyService, 'go').returns(company)
+    Sinon.stub(FetchCompanyDal, 'go').returns(company)
 
-    Sinon.stub(FetchBillingAccountsService, 'go').returns({
+    Sinon.stub(FetchBillingAccountsDal, 'go').returns({
       billingAccounts,
       totalNumber: 1
     })

@@ -2,7 +2,7 @@
 
 /**
  * Fetches the address data needed for the view '/companies/{id}/address/{addressId}/{role}'
- * @module FetchAddressService
+ * @module FetchAddressDal
  */
 
 const AddressModel = require('../../models/address.model.js')
