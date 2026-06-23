@@ -15,8 +15,8 @@ const { generateLicenceRef } = require('../../support/helpers/licence.helper.js'
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const FetchCommunicationsService = require('../../../app/services/licences/fetch-communications.service.js')
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
+const FetchNotificationsDal = require('../../../app/dal/licences/fetch-notifications.dal.js')
 
 // Thing under test
 const ViewCommunicationsService = require('../../../app/services/licences/view-communications.service.js')
@@ -64,7 +64,7 @@ describe('Licences - View Communications service', () => {
       licenceRef
     })
 
-    Sinon.stub(FetchCommunicationsService, 'go').resolves({
+    Sinon.stub(FetchNotificationsDal, 'go').resolves({
       notifications: [notification],
       totalNumber: 1
     })
