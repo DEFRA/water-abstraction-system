@@ -2,11 +2,12 @@
 
 /**
  * Fetches data needed for the view `/licence-versions/{id}` page
- * @module FetchLicenceVersionService
+ * @module FetchLicenceVersionDal
  */
 
-const LicenceVersionModel = require('../../models/licence-version.model.js')
 const { raw } = require('objection')
+
+const LicenceVersionModel = require('../../models/licence-version.model.js')
 
 /**
  * Fetches data needed for the view `/licence-versions/{id}` page
@@ -49,20 +50,23 @@ async function _fetch(licenceVersionId) {
     .modifyGraph('licence', (licenceBuilder) => {
       licenceBuilder.select(['id', 'licenceRef'])
     })
-    .withGraphFetched('licenceVersionHolder')
-    .modifyGraph('licenceVersionHolder', (licenceVersionHolderBuilder) => {
-      licenceVersionHolderBuilder.select([
-        'id',
-        'addressLine1',
-        'addressLine2',
-        'addressLine3',
-        'addressLine4',
+    .withGraphFetched('address')
+    .modifyGraph('address', (addressBuilder) => {
+      addressBuilder.select([
+        'address1',
+        'address2',
+        'address3',
+        'address4',
+        'address5',
+        'address6',
         'country',
-        'county',
-        'derivedName',
-        'postcode',
-        'town'
+        'id',
+        'postcode'
       ])
+    })
+    .withGraphFetched('company')
+    .modifyGraph('company', (companyBuilder) => {
+      companyBuilder.select(['id', 'name'])
     })
     .modify('history')
     .withGraphFetched('licenceVersionPurposes')

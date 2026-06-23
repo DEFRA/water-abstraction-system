@@ -5,11 +5,12 @@
  * @module ViewPresenter
  */
 
+const NotifyAddressPresenter = require('../notices/setup/notify-address.presenter.js')
 const NotifyConfig = require('../../../config/notify.config.js')
 const PreviousAndNextPresenter = require('../previous-and-next.presenter.js')
-const { formatLicencePoints, formatLicencePurposes, formatConditionTypes } = require('../licence.presenter.js')
 const { formatLongDate, formatVersionReason } = require('../base.presenter.js')
 const { compareStrings } = require('../../lib/general.lib.js')
+const { formatLicencePoints, formatLicencePurposes, formatConditionTypes } = require('../licence.presenter.js')
 
 /**
  * Formats data for the `/licence-versions/{id}` page
@@ -46,6 +47,23 @@ function go(licenceVersionData, auth, conditions) {
   }
 }
 
+/**
+ * The name is always set to address line 1 when using the notify address presenter. We need to remove this, specifically
+ * for this page as the name is shown directly above and would look like a duplicate.
+ *
+ * @private
+ */
+function _address(licenceVersion) {
+  const address = NotifyAddressPresenter.go({
+    name: licenceVersion.company.name,
+    ...licenceVersion.address
+  })
+
+  delete address.address_line_1
+
+  return Object.values(address)
+}
+
 function _errorInDataEmail(billingAndDataRole) {
   if (billingAndDataRole) {
     return null
@@ -56,11 +74,11 @@ function _errorInDataEmail(billingAndDataRole) {
 
 function _licenceDetails(licenceVersion) {
   return {
-    address: licenceVersion.licenceVersionHolder.$address(),
+    address: _address(licenceVersion),
     applicationNumber: licenceVersion.applicationNumber,
     endDate: formatLongDate(licenceVersion.endDate),
     issueDate: formatLongDate(licenceVersion.issueDate),
-    licenceHolderName: licenceVersion.licenceVersionHolder.derivedName,
+    licenceHolderName: licenceVersion.company.name,
     startDate: formatLongDate(licenceVersion.startDate)
   }
 }

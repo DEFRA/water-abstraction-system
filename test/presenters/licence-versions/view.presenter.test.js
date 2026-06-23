@@ -30,6 +30,7 @@ describe('Licence Versions - View presenter', () => {
         scope: []
       }
     }
+
     licenceVersion = ViewLicencesFixture.licenceVersion()
 
     licenceVersionData = {

@@ -4,13 +4,13 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CRMContactsSeeder = require('../../support/seeders/crm-contacts.seeder.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const LicenceVersionHolderHelper = require('../../support/helpers/licence-version-holder.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposePointHelper = require('../../support/helpers/licence-version-purpose-point.helper.js')
 const PointHelper = require('../../support/helpers/point.helper.js')
@@ -18,15 +18,16 @@ const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const SourceHelper = require('../../support/helpers/source.helper.js')
 
 // Thing under test
-const FetchLicenceVersionService = require('../../../app/services/licence-versions/fetch-licence-version.service.js')
+const FetchLicenceVersionDal = require('../../../app/dal/licence-versions/fetch-licence-version.dal.js')
 
-describe('Licence Versions - Fetch licence version service', () => {
+describe('Licence Versions - Fetch licence version dal', () => {
   let additionalLicenceVersionOne
   let additionalLicenceVersionTwo
   let licence
+  let licenceHolder
   let licenceVersion
-  let licenceVersionHolder
   let licenceVersionPurpose
+  let licenceVersionPurposePoint
   let point
   let purpose
   let source
@@ -35,23 +36,21 @@ describe('Licence Versions - Fetch licence version service', () => {
     before(async () => {
       licence = await LicenceHelper.add()
 
-      licenceVersion = await LicenceVersionHelper.add({
-        licenceId: licence.id,
-        startDate: new Date('2023-01-02'),
-        endDate: null
-      })
+      licenceHolder = await CRMContactsSeeder.licenceHolder({ licence }, 'Example Trading Ltd')
+
+      licenceVersion = licenceHolder.licenceVersion
 
       // Add additional licence for the pagination array
       additionalLicenceVersionOne = await LicenceVersionHelper.add({
         licenceId: licence.id,
-        startDate: new Date('2023-01-01'),
-        endDate: new Date('2023-01-01')
+        startDate: new Date('2021-01-01'),
+        endDate: new Date('2021-12-31')
       })
 
       additionalLicenceVersionTwo = await LicenceVersionHelper.add({
         licenceId: licence.id,
         startDate: new Date('2019-01-01'),
-        endDate: new Date('2022-12-30')
+        endDate: new Date('2021-12-31')
       })
 
       purpose = PurposeHelper.select()
@@ -61,25 +60,48 @@ describe('Licence Versions - Fetch licence version service', () => {
         purposeId: purpose.id
       })
 
-      licenceVersionHolder = await LicenceVersionHolderHelper.add({
-        licenceVersionId: licenceVersion.id
-      })
-
       source = SourceHelper.select()
       point = await PointHelper.add({ sourceId: source.id })
-      await LicenceVersionPurposePointHelper.add({
+
+      licenceVersionPurposePoint = await LicenceVersionPurposePointHelper.add({
         licenceVersionPurposeId: licenceVersionPurpose.id,
         pointId: point.id
       })
     })
 
+    afterEach(async () => {
+      await licenceHolder.clean()
+
+      await licence.$query().delete()
+      await additionalLicenceVersionOne.$query().delete()
+      await additionalLicenceVersionTwo.$query().delete()
+      await licenceVersionPurpose.$query().delete()
+      await licenceVersionPurposePoint.$query().delete()
+      await point.$query().delete()
+    })
+
     it('returns the matching licence version and the pagination array (in order)', async () => {
-      const result = await FetchLicenceVersionService.go(licenceVersion.id)
+      const result = await FetchLicenceVersionDal.go(licenceVersion.id)
 
       expect(result).to.equal({
         licenceVersion: {
+          address: {
+            address1: '4',
+            address2: 'Privet Drive',
+            address3: 'Little Whinging',
+            address4: 'Surrey',
+            address5: null,
+            address6: null,
+            country: null,
+            id: licenceHolder.address.id,
+            postcode: 'WD25 7LR'
+          },
           administrative: null,
           applicationNumber: null,
+          company: {
+            id: licenceHolder.company.id,
+            name: 'Example Trading Ltd'
+          },
           createdAt: licenceVersion.createdAt,
           endDate: null,
           id: licenceVersion.id,
@@ -87,18 +109,6 @@ describe('Licence Versions - Fetch licence version service', () => {
           licence: {
             id: licence.id,
             licenceRef: licence.licenceRef
-          },
-          licenceVersionHolder: {
-            id: licenceVersionHolder.id,
-            addressLine1: null,
-            addressLine2: null,
-            addressLine3: null,
-            addressLine4: null,
-            country: null,
-            county: null,
-            derivedName: null,
-            postcode: null,
-            town: null
           },
           licenceVersionPurposes: [
             {
@@ -157,11 +167,11 @@ describe('Licence Versions - Fetch licence version service', () => {
           },
           {
             id: additionalLicenceVersionOne.id,
-            startDate: new Date('2023-01-01')
+            startDate: new Date('2021-01-01')
           },
           {
             id: licenceVersion.id,
-            startDate: new Date('2023-01-02')
+            startDate: new Date('2022-01-01')
           }
         ]
       })
