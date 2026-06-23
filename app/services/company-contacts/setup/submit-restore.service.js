@@ -8,7 +8,7 @@
 
 const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const UpdateCompanyContactService = require('./update-company-contact.service.js')
+const UpdateCompanyContactDal = require('../../../dal/company-contacts/setup/update-company-contact.dal.js')
 const { flashNotification } = require('../../../lib/general.lib.js')
 
 /**
@@ -46,7 +46,7 @@ async function _updateCompanyContact(session, auth) {
     updatedBy: auth.credentials.user.id
   }
 
-  await UpdateCompanyContactService.go(companyContact)
+  await UpdateCompanyContactDal.go(companyContact)
 }
 
 module.exports = {

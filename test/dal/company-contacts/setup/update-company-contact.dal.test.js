@@ -16,9 +16,9 @@ const LicenceRoleHelper = require('../../../support/helpers/licence-role.helper.
 const UserHelper = require('../../../support/helpers/user.helper.js')
 
 // Thing under test
-const UpdateCompanyContactService = require('../../../../app/services/company-contacts/setup/update-company-contact.service.js')
+const UpdateCompanyContactDal = require('../../../../app/dal/company-contacts/setup/update-company-contact.dal.js')
 
-describe('Company Contacts - Update Company Contact service', () => {
+describe('Company Contacts - Update Company Contact dal', () => {
   let today
   let clock
   let companyContact
@@ -72,7 +72,7 @@ describe('Company Contacts - Update Company Contact service', () => {
 
   describe('when a updating a company contact', () => {
     it('updates the company contact and associated contact', async () => {
-      await UpdateCompanyContactService.go(updatedCompanyContact)
+      await UpdateCompanyContactDal.go(updatedCompanyContact)
 
       const updatedCompanyContactResult = await CompanyContactModel.query()
         .findById(companyContact.id)
