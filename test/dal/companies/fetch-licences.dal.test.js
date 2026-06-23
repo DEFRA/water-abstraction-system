@@ -18,9 +18,9 @@ const { generateRandomInteger, generateUUID } = require('../../../app/lib/genera
 const databaseConfig = require('../../../config/database.config.js')
 
 // Thing under test
-const FetchLicencesService = require('../../../app/services/companies/fetch-licences.service.js')
+const FetchLicencesDal = require('../../../app/dal/companies/fetch-licences.dal.js')
 
-describe('Companies - Fetch Licences service', () => {
+describe('Companies - Fetch Licences dal', () => {
   let anotherLicence
   let anotherLicenceVersion
   let anotherLicenceVersionHolder
@@ -132,7 +132,7 @@ describe('Companies - Fetch Licences service', () => {
 
   describe('when called', () => {
     it('returns licences linked to the company where it is the licence holder', async () => {
-      const result = await FetchLicencesService.go(companyId, pageNumber)
+      const result = await FetchLicencesDal.go(companyId, pageNumber)
 
       expect(result).to.equal({
         licences: [

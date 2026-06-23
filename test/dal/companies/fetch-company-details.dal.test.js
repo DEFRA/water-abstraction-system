@@ -15,9 +15,9 @@ const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js'
 const { tomorrow, yesterday } = require('../../support/general.js')
 
 // Thing under test
-const FetchCompanyDetailsService = require('../../../app/services/companies/fetch-company-details.service.js')
+const FetchCompanyDetailsDal = require('../../../app/dal/companies/fetch-company-details.dal.js')
 
-describe('Companies - Fetch Company details service', () => {
+describe('Companies - Fetch Company details dal', () => {
   let addressDifferentRole
   let addressEndDateInPast
   let addressEndDateInFuture
@@ -86,7 +86,7 @@ describe('Companies - Fetch Company details service', () => {
 
   describe('when there is a company', () => {
     it("returns the matching company's details and _all_ addresses for the specified role", async () => {
-      const result = await FetchCompanyDetailsService.go(company.id, 'licenceHolder')
+      const result = await FetchCompanyDetailsDal.go(company.id, 'licenceHolder')
 
       expect(result).to.equal({
         id: company.id,
@@ -146,7 +146,7 @@ describe('Companies - Fetch Company details service', () => {
 
     describe('and the company does not have any addresses for the specified role', () => {
       it("returns the matching company's details and no addresses", async () => {
-        const result = await FetchCompanyDetailsService.go(company.id, 'billing')
+        const result = await FetchCompanyDetailsDal.go(company.id, 'billing')
 
         expect(result).to.equal({
           id: company.id,

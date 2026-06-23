@@ -7,7 +7,7 @@
 
 const CreateSessionDal = require('../../../dal/create-session.dal.js')
 const FetchCompanyLicencesDal = require('../../../dal/company-contacts/fetch-company-licences.dal.js')
-const FetchCompanyService = require('../../companies/fetch-company.service.js')
+const FetchCompanyService = require('../../../dal/companies/fetch-company.dal.js')
 
 /**
  * Initiates the session record used for setting up a new company contact

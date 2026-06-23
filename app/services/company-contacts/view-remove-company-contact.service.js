@@ -8,7 +8,7 @@
 
 const FetchAbstractionAlertLicencesDal = require('../../dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
 const FetchCompanyContactDal = require('../../dal/company-contacts/fetch-company-contact.dal.js')
-const FetchCompanyService = require('../companies/fetch-company.service.js')
+const FetchCompanyService = require('../../dal/companies/fetch-company.dal.js')
 const RemoveCompanyContactPresenter = require('../../presenters/company-contacts/remove-company-contact.presenter.js')
 
 /**

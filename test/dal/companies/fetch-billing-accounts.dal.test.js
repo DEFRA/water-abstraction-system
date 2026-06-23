@@ -14,9 +14,9 @@ const BillingAccountHelper = require('../../support/helpers/billing-account.help
 const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
 
 // Thing under test
-const FetchBillingAccountsService = require('../../../app/services/companies/fetch-billing-accounts.service.js')
+const FetchCompanyDal = require('../../../app/dal/companies/fetch-billing-accounts.dal.js')
 
-describe('Companies - Fetch Billing Accounts service', () => {
+describe('Companies - Fetch Billing Accounts dal', () => {
   let address
   let company
   let billingAccount
@@ -40,7 +40,7 @@ describe('Companies - Fetch Billing Accounts service', () => {
   })
 
   it('returns the billing accounts for the company', async () => {
-    const result = await FetchBillingAccountsService.go(company.id)
+    const result = await FetchCompanyDal.go(company.id)
 
     expect(result).to.equal({
       billingAccounts: [
