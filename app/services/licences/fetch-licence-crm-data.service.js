@@ -100,14 +100,14 @@ function _query(paginationAndOrderBy = '') {
     ),
     licence_holder AS (
       SELECT
-        lvh.company_id AS id,
-        lvh.derived_name AS "contactName",
+        lv.company_id AS id,
+        c.name AS "contactName",
         'licence-holder' AS "contactType",
-        lvh.address_id AS "addressId"
+        lv.address_id AS "addressId"
       FROM
         public.licence_versions lv
-      INNER JOIN public.licence_version_holders lvh
-        ON lv.id = lvh.licence_version_id
+      INNER JOIN public.companies c
+        ON c.id = lv.company_id
       INNER JOIN licence l
         ON l.licence_id = lv.licence_id
       ORDER BY

@@ -18,7 +18,6 @@ const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.j
 const LicenceHelper = require('../helpers/licence.helper.js')
 const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
-const LicenceVersionHolderHelper = require('../helpers/licence-version-holder.helper.js')
 const UserModel = require('../helpers/user.helper.js')
 const { generateLicenceRef } = require('../helpers/licence.helper.js')
 
@@ -320,13 +319,8 @@ async function _licence(company) {
   const licence = await LicenceHelper.add()
 
   const licenceVersion = await LicenceVersionHelper.add({
-    licenceId: licence.id
-  })
-
-  const licenceVersionHolder = await LicenceVersionHolderHelper.add({
-    companyId: company.record.id,
-    derivedName: company.record.name,
-    licenceVersionId: licenceVersion.id
+    licenceId: licence.id,
+    companyId: company.record.id
   })
 
   return {
@@ -334,7 +328,6 @@ async function _licence(company) {
     clean: async () => {
       await licence.$query().delete()
       await licenceVersion.$query().delete()
-      await licenceVersionHolder.$query().delete()
     }
   }
 }

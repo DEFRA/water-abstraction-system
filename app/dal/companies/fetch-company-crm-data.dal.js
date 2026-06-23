@@ -79,10 +79,8 @@ function _query(paginationAndOrderBy = '') {
         1
       FROM
         public.licence_versions lv
-      INNER JOIN public.licence_version_holders lvh
-        ON lvh.licence_version_id = lv.id
       INNER JOIN company c
-        ON c.company_id = lvh.company_id
+        ON c.company_id = lv.company_id
       WHERE lv.licence_id = l.id
     )
   ),

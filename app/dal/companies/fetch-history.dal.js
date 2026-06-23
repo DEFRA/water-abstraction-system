@@ -27,19 +27,13 @@ async function go(companyId, page = '1') {
 async function _fetch(companyId, page) {
   return LicenceModel.query()
     .select(['expiredDate', 'id', 'lapsedDate', 'licenceRef', 'revokedDate', 'startDate'])
-    .whereExists(
-      LicenceModel.relatedQuery('licenceVersions')
-        .innerJoinRelated('licenceVersionHolder')
-        .where('licenceVersionHolder.companyId', companyId)
-    )
+    .whereExists(LicenceModel.relatedQuery('licenceVersions').where('licenceVersions.companyId', companyId))
     .withGraphFetched('licenceVersions')
     .modifyGraph('licenceVersions', (licenceVersionsBuilder) => {
       licenceVersionsBuilder
         .select(['endDate', 'id', 'startDate'])
         .modify('changeType')
-        .whereExists(
-          LicenceVersionModel.relatedQuery('licenceVersionHolder').where('licenceVersionHolder.companyId', companyId)
-        )
+        .where('companyId', companyId)
         .orderBy([
           { column: 'startDate', order: 'desc' },
           { column: 'issue', order: 'desc' },
