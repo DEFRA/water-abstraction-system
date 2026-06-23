@@ -18,7 +18,7 @@ const NotifyConfig = require('../../../config/notify.config.js')
 // Thing under test
 const ViewPresenter = require('../../../app/presenters/licence-versions/view.presenter.js')
 
-describe.only('Licence Versions - View presenter', () => {
+describe('Licence Versions - View presenter', () => {
   let auth
   let conditions
   let licenceVersion
