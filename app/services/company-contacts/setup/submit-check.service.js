@@ -6,10 +6,10 @@
  * @module SubmitCheckService
  */
 
-const CreateCompanyContactService = require('./create-company-contact.service.js')
+const CreateCompanyContactDal = require('../../../dal/company-contacts/setup/create-company-contact.dal.js')
 const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const UpdateCompanyContactService = require('./update-company-contact.service.js')
+const UpdateCompanyContactDal = require('../../../dal/company-contacts/setup/update-company-contact.dal.js')
 const { flashNotification } = require('../../../lib/general.lib.js')
 
 /**
@@ -62,7 +62,7 @@ async function _createCompanyContact(session, auth, yar) {
     name: session.name
   }
 
-  await CreateCompanyContactService.go(session.company.id, companyContact)
+  await CreateCompanyContactDal.go(session.company.id, companyContact)
 
   flashNotification(yar, 'Contact added', `${session.name} was added to this company`)
 }
@@ -78,7 +78,7 @@ async function _updateCompanyContact(session, auth, yar) {
     updatedBy: auth.credentials.user.id
   }
 
-  await UpdateCompanyContactService.go(companyContact)
+  await UpdateCompanyContactDal.go(companyContact)
 
   flashNotification(yar, 'Updated', 'Contact details updated.')
 }

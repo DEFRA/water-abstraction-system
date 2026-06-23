@@ -7,7 +7,7 @@
  */
 
 const CompanyPresenter = require('../../presenters/companies/company.presenter.js')
-const FetchCompanyDetailsService = require('./fetch-company-details.service.js')
+const FetchCompanyDetailsDal = require('../../dal/companies/fetch-company-details.dal.js')
 const { roles } = require('../../lib/static-lookups.lib.js')
 
 /**
@@ -19,7 +19,7 @@ const { roles } = require('../../lib/static-lookups.lib.js')
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(companyId, role) {
-  const companyDetails = await FetchCompanyDetailsService.go(companyId, roles[role].name)
+  const companyDetails = await FetchCompanyDetailsDal.go(companyId, roles[role].name)
 
   const pageData = CompanyPresenter.go(companyDetails, role)
 

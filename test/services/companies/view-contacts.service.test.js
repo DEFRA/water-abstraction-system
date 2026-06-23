@@ -16,8 +16,8 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const YarStub = require('../../support/stubs/yar.stub.js')
 
 // Things we need to stub
-const FetchCompanyContactsService = require('../../../app/services/companies/fetch-company-crm-data.service.js')
-const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
+const FetchCompanyContactsDal = require('../../../app/dal/companies/fetch-company-crm-data.dal.js')
+const FetchCompanyDal = require('../../../app/dal/companies/fetch-company.dal.js')
 
 // Thing under test
 const ViewContactsService = require('../../../app/services/companies/view-contacts.service.js')
@@ -42,9 +42,9 @@ describe('Companies - View Contacts service', () => {
       }
     ]
 
-    Sinon.stub(FetchCompanyService, 'go').returns(company)
+    Sinon.stub(FetchCompanyDal, 'go').returns(company)
 
-    Sinon.stub(FetchCompanyContactsService, 'go').returns({
+    Sinon.stub(FetchCompanyContactsDal, 'go').returns({
       contacts,
       totalNumber: contacts.length
     })

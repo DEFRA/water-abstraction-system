@@ -14,7 +14,7 @@ const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 // Things we need to stub
 const FetchAbstractionAlertLicencesDal = require('../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
 const FetchCompanyContactDal = require('../../../app/dal/company-contacts/fetch-company-contact.dal.js')
-const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
+const FetchCompanyService = require('../../../app/dal/companies/fetch-company.dal.js')
 
 // Thing under test
 const ViewRemoveCompanyContactService = require('../../../app/services/company-contacts/view-remove-company-contact.service.js')

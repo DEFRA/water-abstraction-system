@@ -13,8 +13,8 @@ const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 
 // Things we need to stub
-const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
-const FetchLicencesService = require('../../../app/services/companies/fetch-licences.service.js')
+const FetchCompanyService = require('../../../app/dal/companies/fetch-company.dal.js')
+const FetchLicencesService = require('../../../app/dal/companies/fetch-licences.dal.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 

@@ -12,9 +12,9 @@ const CompanyContactHelper = require('../../../support/helpers/company-contact.h
 const ContactHelper = require('../../../support/helpers/contact.helper.js')
 
 // Thing under test
-const FetchCompanyContactsService = require('../../../../app/services/company-contacts/setup/fetch-company-contacts.service.js')
+const FetchCompanyContactsDal = require('../../../../app/dal/company-contacts/setup/fetch-company-contacts.dal.js')
 
-describe('Company Contacts - Setup - Fetch Company Contacts service', () => {
+describe('Company Contacts - Setup - Fetch Company Contacts dal', () => {
   let additionalCompanyContact
   let companyContact
   let companyContactToIgnore
@@ -41,7 +41,7 @@ describe('Company Contacts - Setup - Fetch Company Contacts service', () => {
 
   describe('when there are company contacts', () => {
     it('returns the matching company contacts', async () => {
-      const result = await FetchCompanyContactsService.go(companyContact.companyId, undefined)
+      const result = await FetchCompanyContactsDal.go(companyContact.companyId, undefined)
 
       expect(result).to.equal([
         {
@@ -72,7 +72,7 @@ describe('Company Contacts - Setup - Fetch Company Contacts service', () => {
       })
 
       it('returns the matching company contacts', async () => {
-        const result = await FetchCompanyContactsService.go(companyContact.companyId, companyContactToIgnore)
+        const result = await FetchCompanyContactsDal.go(companyContact.companyId, companyContactToIgnore)
 
         expect(result).to.equal([
           {

@@ -14,7 +14,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchCompanyContactDal = require('../../../app/dal/company-contacts/fetch-company-contact.dal.js')
-const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
+const FetchCompanyService = require('../../../app/dal/companies/fetch-company.dal.js')
 const FetchNotificationsDal = require('../../../app/dal/company-contacts/fetch-notifications.dal.js')
 
 // Thing under test

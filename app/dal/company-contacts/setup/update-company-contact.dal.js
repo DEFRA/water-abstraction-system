@@ -2,7 +2,7 @@
 
 /**
  * Update the company contact data for the '/company-contacts/{id}/check' page
- * @module UpdateCompanyContactService
+ * @module UpdateCompanyContactDal
  */
 
 const CompanyContactModel = require('../../../models/company-contact.model.js')

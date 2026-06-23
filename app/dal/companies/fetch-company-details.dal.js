@@ -2,7 +2,7 @@
 
 /**
  * Fetches the company details for the view '/companies/{id}/{role}' page
- * @module FetchCompanyDetailsService
+ * @module FetchCompanyDetailsDal
  */
 
 const CompanyModel = require('../../models/company.model.js')

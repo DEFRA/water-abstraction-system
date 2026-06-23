@@ -2,7 +2,7 @@
 
 /**
  * Fetches the company contacts data needed for the '/company-contacts/setup/{sessionId}/check' page
- * @module FetchCompanyContactsService
+ * @module FetchCompanyContactsDal
  */
 
 const CompanyContactModel = require('../../../models/company-contact.model.js')

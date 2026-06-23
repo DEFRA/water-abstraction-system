@@ -6,8 +6,8 @@
  * @module ViewHistoryService
  */
 
-const FetchCompanyService = require('./fetch-company.service.js')
-const FetchHistoryService = require('./fetch-history.service.js')
+const FetchCompanyDal = require('../../dal/companies/fetch-company.dal.js')
+const FetchHistoryDal = require('../../dal/companies/fetch-history.dal.js')
 const HistoryPresenter = require('../../presenters/companies/history.presenter.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
@@ -22,9 +22,9 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(companyId, auth, page) {
-  const company = await FetchCompanyService.go(companyId)
+  const company = await FetchCompanyDal.go(companyId)
 
-  const { licences, totalNumber } = await FetchHistoryService.go(companyId, page)
+  const { licences, totalNumber } = await FetchHistoryDal.go(companyId, page)
 
   const pageData = HistoryPresenter.go(company, licences)
 

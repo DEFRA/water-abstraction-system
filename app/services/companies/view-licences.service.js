@@ -6,8 +6,8 @@
  * @module ViewLicencesService
  */
 
-const FetchCompanyService = require('./fetch-company.service.js')
-const FetchLicencesService = require('./fetch-licences.service.js')
+const FetchCompanyDal = require('../../dal/companies/fetch-company.dal.js')
+const FetchLicencesDal = require('../../dal/companies/fetch-licences.dal.js')
 const LicencesPresenter = require('../../presenters/companies/licences.presenter.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
@@ -22,9 +22,9 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(companyId, auth, page) {
-  const company = await FetchCompanyService.go(companyId)
+  const company = await FetchCompanyDal.go(companyId)
 
-  const { licences, totalNumber } = await FetchLicencesService.go(companyId, page)
+  const { licences, totalNumber } = await FetchLicencesDal.go(companyId, page)
 
   const pageData = LicencesPresenter.go(company, licences)
 

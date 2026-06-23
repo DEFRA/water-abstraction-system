@@ -18,9 +18,9 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const YarStub = require('../../../support/stubs/yar.stub.js')
 
 // Things we need to stub
-const CreateCompanyContactService = require('../../../../app/services/company-contacts/setup/create-company-contact.service.js')
+const CreateCompanyContactDal = require('../../../../app/dal/company-contacts/setup/create-company-contact.dal.js')
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
-const UpdateCompanyContactService = require('../../../../app/services/company-contacts/setup/update-company-contact.service.js')
+const UpdateCompanyContactDal = require('../../../../app/dal/company-contacts/setup/update-company-contact.dal.js')
 
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/company-contacts/setup/submit-check.service.js')
@@ -39,8 +39,8 @@ describe('Company Contacts - Setup - Check Service', () => {
 
     company = CustomersFixtures.company()
 
-    Sinon.stub(CreateCompanyContactService, 'go').resolves()
-    Sinon.stub(UpdateCompanyContactService, 'go').resolves()
+    Sinon.stub(CreateCompanyContactDal, 'go').resolves()
+    Sinon.stub(UpdateCompanyContactDal, 'go').resolves()
 
     yarStub = YarStub.build(Sinon)
   })
@@ -77,7 +77,7 @@ describe('Company Contacts - Setup - Check Service', () => {
     it('persists the company contact details', async () => {
       await SubmitCheckService.go(session.id, yarStub, auth)
 
-      const actualContact = CreateCompanyContactService.go.args[0]
+      const actualContact = CreateCompanyContactDal.go.args[0]
 
       expect(actualContact).to.equal([
         company.id,
@@ -105,7 +105,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists the "abstractionAlerts" as "true"', async () => {
           await SubmitCheckService.go(session.id, yarStub, auth)
 
-          const actualContact = CreateCompanyContactService.go.args[0][1]
+          const actualContact = CreateCompanyContactDal.go.args[0][1]
 
           expect(actualContact.abstractionAlerts).to.be.true()
         })
@@ -121,7 +121,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists the "abstractionAlerts" as "true"', async () => {
           await SubmitCheckService.go(session.id, yarStub, auth)
 
-          const actualContact = CreateCompanyContactService.go.args[0][1]
+          const actualContact = CreateCompanyContactDal.go.args[0][1]
 
           expect(actualContact.abstractionAlerts).to.be.true()
         })
@@ -137,7 +137,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists the "abstractionAlerts" as "false"', async () => {
           await SubmitCheckService.go(session.id, yarStub, auth)
 
-          const actualContact = CreateCompanyContactService.go.args[0][1]
+          const actualContact = CreateCompanyContactDal.go.args[0][1]
 
           expect(actualContact.abstractionAlerts).to.be.false()
         })
@@ -163,7 +163,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists "abstractionAlertLicences" as a JSON string', async () => {
           await SubmitCheckService.go(session.id, yarStub, auth)
 
-          const actualContact = CreateCompanyContactService.go.args[0][1]
+          const actualContact = CreateCompanyContactDal.go.args[0][1]
           const expectedAbstractionAlertLicences = JSON.stringify(abstractionAlertLicences)
 
           expect(actualContact.abstractionAlertLicences).to.equal(expectedAbstractionAlertLicences)
@@ -174,7 +174,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists "abstractionAlertLicences" as null', async () => {
           await SubmitCheckService.go(session.id, yarStub, auth)
 
-          const actualContact = CreateCompanyContactService.go.args[0][1]
+          const actualContact = CreateCompanyContactDal.go.args[0][1]
 
           expect(actualContact.abstractionAlertLicences).to.be.null()
         })
@@ -191,7 +191,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       it('persists the "email" in lowercase', async () => {
         await SubmitCheckService.go(session.id, yarStub, auth)
 
-        const actualContact = CreateCompanyContactService.go.args[0][1]
+        const actualContact = CreateCompanyContactDal.go.args[0][1]
 
         expect(actualContact.email).to.equal('erice@test.com')
       })
@@ -220,7 +220,7 @@ describe('Company Contacts - Setup - Check Service', () => {
     it('persists the company contact details', async () => {
       await SubmitCheckService.go(session.id, yarStub, auth)
 
-      const [actualContact] = UpdateCompanyContactService.go.args[0]
+      const [actualContact] = UpdateCompanyContactDal.go.args[0]
 
       expect(actualContact).to.equal({
         id: companyContact.id,
@@ -247,7 +247,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists the "abstractionAlerts" as "true"', async () => {
           await SubmitCheckService.go(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactService.go.args[0]
+          const [actualContact] = UpdateCompanyContactDal.go.args[0]
 
           expect(actualContact.abstractionAlerts).to.be.true()
         })
@@ -263,7 +263,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists the "abstractionAlerts" as "true"', async () => {
           await SubmitCheckService.go(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactService.go.args[0]
+          const [actualContact] = UpdateCompanyContactDal.go.args[0]
 
           expect(actualContact.abstractionAlerts).to.be.true()
         })
@@ -279,7 +279,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists the "abstractionAlerts" as "false"', async () => {
           await SubmitCheckService.go(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactService.go.args[0]
+          const [actualContact] = UpdateCompanyContactDal.go.args[0]
 
           expect(actualContact.abstractionAlerts).to.be.false()
         })
@@ -305,7 +305,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists "abstractionAlertLicences" as a JSON string', async () => {
           await SubmitCheckService.go(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactService.go.args[0]
+          const [actualContact] = UpdateCompanyContactDal.go.args[0]
           const expectedAbstractionAlertLicences = JSON.stringify(abstractionAlertLicences)
 
           expect(actualContact.abstractionAlertLicences).to.equal(expectedAbstractionAlertLicences)
@@ -316,7 +316,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists "abstractionAlertLicences" as null', async () => {
           await SubmitCheckService.go(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactService.go.args[0]
+          const [actualContact] = UpdateCompanyContactDal.go.args[0]
 
           expect(actualContact.abstractionAlertLicences).to.be.null()
         })
@@ -334,7 +334,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists the "email" in lowercase', async () => {
           await SubmitCheckService.go(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactService.go.args[0]
+          const [actualContact] = UpdateCompanyContactDal.go.args[0]
 
           expect(actualContact.email).to.equal('erice@test.com')
         })

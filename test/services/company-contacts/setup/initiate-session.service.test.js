@@ -16,7 +16,7 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 
 // Things we need to stub
 const FetchCompanyLicencesDal = require('../../../../app/dal/company-contacts/fetch-company-licences.dal.js')
-const FetchCompanyService = require('../../../../app/services/companies/fetch-company.service.js')
+const FetchCompanyService = require('../../../../app/dal/companies/fetch-company.dal.js')
 
 // Thing under test
 const InitiateSessionService = require('../../../../app/services/company-contacts/setup/initiate-session.service.js')

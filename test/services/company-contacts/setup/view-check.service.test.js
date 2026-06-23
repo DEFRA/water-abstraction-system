@@ -14,7 +14,7 @@ const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const YarStub = require('../../../support/stubs/yar.stub.js')
 
 // Things we need to stub
-const FetchCompanyContactsService = require('../../../../app/services/company-contacts/setup/fetch-company-contacts.service.js')
+const FetchCompanyContactsDal = require('../../../../app/dal/company-contacts/setup/fetch-company-contacts.dal.js')
 const FetchNotificationService = require('../../../../app/services/company-contacts/fetch-notification.service.js')
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
@@ -26,6 +26,7 @@ describe('Company Contacts - Setup - Check Service', () => {
   let notification
   let session
   let yarStub
+  let stubFetchCompanyContactsDal
 
   beforeEach(async () => {
     company = CustomersFixtures.company()
@@ -38,6 +39,8 @@ describe('Company Contacts - Setup - Check Service', () => {
 
     Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
+    stubFetchCompanyContactsDal = Sinon.stub(FetchCompanyContactsDal, 'go')
+
     yarStub = YarStub.build(Sinon)
     yarStub.flash.returns([{ title: 'Test', text: 'Notification' }])
   })
@@ -49,7 +52,7 @@ describe('Company Contacts - Setup - Check Service', () => {
   describe('when called', () => {
     describe('when there is no matching contact', () => {
       beforeEach(() => {
-        Sinon.stub(FetchCompanyContactsService, 'go').resolves(CustomersFixtures.companyContacts())
+        stubFetchCompanyContactsDal.resolves(CustomersFixtures.companyContacts())
       })
 
       it('returns page data for the view', async () => {
@@ -101,7 +104,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         matchingContact.contact.email = 'eric@test.com'
         matchingContact.contact.contactType = 'department'
 
-        Sinon.stub(FetchCompanyContactsService, 'go').returns([matchingContact])
+        stubFetchCompanyContactsDal.returns([matchingContact])
       })
 
       it('updates the session', async () => {
