@@ -2,7 +2,7 @@
 
 /**
  * Creates the company contact data for the '/company-contacts/{id}' pages
- * @module CreateCompanyContactService
+ * @module CreateCompanyContactDal
  */
 
 const CompanyContactModel = require('../../../models/company-contact.model.js')
