@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -26,6 +26,7 @@ describe('Licence Versions - Fetch licence version dal', () => {
   let licence
   let licenceVersion
   let licenceVersionPurpose
+  let licenceVersionPurposePoint
   let point
   let purpose
   let source
@@ -61,10 +62,22 @@ describe('Licence Versions - Fetch licence version dal', () => {
 
       source = SourceHelper.select()
       point = await PointHelper.add({ sourceId: source.id })
-      await LicenceVersionPurposePointHelper.add({
+
+      licenceVersionPurposePoint = await LicenceVersionPurposePointHelper.add({
         licenceVersionPurposeId: licenceVersionPurpose.id,
         pointId: point.id
       })
+    })
+
+    afterEach(async () => {
+      await licenceHolder.clean()
+
+      await licence.$query().delete()
+      await additionalLicenceVersionOne.$query().delete()
+      await additionalLicenceVersionTwo.$query().delete()
+      await licenceVersionPurpose.$query().delete()
+      await licenceVersionPurposePoint.$query().delete()
+      await point.$query().delete()
     })
 
     it('returns the matching licence version and the pagination array (in order)', async () => {
