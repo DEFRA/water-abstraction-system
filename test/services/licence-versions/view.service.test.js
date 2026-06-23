@@ -13,7 +13,7 @@ const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixtur
 
 // Things we need to stub
 const FetchConditionsService = require('../../../app/services/licences/fetch-conditions.service.js')
-const FetchLicenceVersionService = require('../../../app/services/licence-versions/fetch-licence-version.service.js')
+const FetchLicenceVersionDal = require('../../../app/dal/licence-versions/fetch-licence-version.dal.js')
 const NotifyConfig = require('../../../config/notify.config.js')
 
 // Thing under test
@@ -35,7 +35,7 @@ describe('Licence Versions - View service', () => {
 
     conditions = []
 
-    Sinon.stub(FetchLicenceVersionService, 'go').returns({
+    Sinon.stub(FetchLicenceVersionDal, 'go').returns({
       licenceVersion,
       licenceVersionsForPagination: [licenceVersion]
     })
@@ -62,7 +62,7 @@ describe('Licence Versions - View service', () => {
         conditionTypes: [],
         errorInDataEmail: 'notify@test.gov.uk',
         licenceDetails: {
-          address: ['12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
+          address: ['ORDER OF THE PHOENIX', '12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
           applicationNumber: null,
           endDate: null,
           issueDate: null,

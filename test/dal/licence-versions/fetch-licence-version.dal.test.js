@@ -8,9 +8,10 @@ const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const AddressHelper = require('../../support/helpers/address.helper.js')
+const CompanyHelper = require('../../support/helpers/company.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const LicenceVersionHolderHelper = require('../../support/helpers/licence-version-holder.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposePointHelper = require('../../support/helpers/licence-version-purpose-point.helper.js')
 const PointHelper = require('../../support/helpers/point.helper.js')
@@ -18,14 +19,15 @@ const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const SourceHelper = require('../../support/helpers/source.helper.js')
 
 // Thing under test
-const FetchLicenceVersionService = require('../../../app/services/licence-versions/fetch-licence-version.service.js')
+const FetchLicenceVersionDal = require('../../../app/dal/licence-versions/fetch-licence-version.dal.js')
 
-describe('Licence Versions - Fetch licence version service', () => {
+describe('Licence Versions - Fetch licence version dal', () => {
   let additionalLicenceVersionOne
   let additionalLicenceVersionTwo
+  let address
+  let company
   let licence
   let licenceVersion
-  let licenceVersionHolder
   let licenceVersionPurpose
   let point
   let purpose
@@ -35,10 +37,16 @@ describe('Licence Versions - Fetch licence version service', () => {
     before(async () => {
       licence = await LicenceHelper.add()
 
+      address = await AddressHelper.add()
+
+      company = await CompanyHelper.add()
+
       licenceVersion = await LicenceVersionHelper.add({
         licenceId: licence.id,
         startDate: new Date('2023-01-02'),
-        endDate: null
+        endDate: null,
+        addressId: address.id,
+        companyId: company.id
       })
 
       // Add additional licence for the pagination array
@@ -61,10 +69,6 @@ describe('Licence Versions - Fetch licence version service', () => {
         purposeId: purpose.id
       })
 
-      licenceVersionHolder = await LicenceVersionHolderHelper.add({
-        licenceVersionId: licenceVersion.id
-      })
-
       source = SourceHelper.select()
       point = await PointHelper.add({ sourceId: source.id })
       await LicenceVersionPurposePointHelper.add({
@@ -74,12 +78,27 @@ describe('Licence Versions - Fetch licence version service', () => {
     })
 
     it('returns the matching licence version and the pagination array (in order)', async () => {
-      const result = await FetchLicenceVersionService.go(licenceVersion.id)
+      const result = await FetchLicenceVersionDal.go(licenceVersion.id)
 
       expect(result).to.equal({
         licenceVersion: {
+          address: {
+            address1: 'ENVIRONMENT AGENCY',
+            address2: 'HORIZON HOUSE',
+            address3: 'DEANERY ROAD',
+            address4: 'BRISTOL',
+            address5: null,
+            address6: null,
+            country: 'United Kingdom',
+            id: address.id,
+            postcode: 'BS1 5AH'
+          },
           administrative: null,
           applicationNumber: null,
+          company: {
+            id: company.id,
+            name: 'Example Trading Ltd'
+          },
           createdAt: licenceVersion.createdAt,
           endDate: null,
           id: licenceVersion.id,
@@ -87,18 +106,6 @@ describe('Licence Versions - Fetch licence version service', () => {
           licence: {
             id: licence.id,
             licenceRef: licence.licenceRef
-          },
-          licenceVersionHolder: {
-            id: licenceVersionHolder.id,
-            addressLine1: null,
-            addressLine2: null,
-            addressLine3: null,
-            addressLine4: null,
-            country: null,
-            county: null,
-            derivedName: null,
-            postcode: null,
-            town: null
           },
           licenceVersionPurposes: [
             {

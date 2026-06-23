@@ -7,7 +7,7 @@
  */
 
 const FetchConditionsService = require('../licences/fetch-conditions.service.js')
-const FetchLicenceVersionService = require('./fetch-licence-version.service.js')
+const FetchLicenceVersionService = require('../../dal/licence-versions/fetch-licence-version.dal.js')
 const ViewPresenter = require('../../presenters/licence-versions/view.presenter.js')
 
 /**

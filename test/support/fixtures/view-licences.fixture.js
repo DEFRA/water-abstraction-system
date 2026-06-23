@@ -5,7 +5,6 @@
  */
 
 const LicenceModel = require('../../../app/models/licence.model.js')
-const LicenceVersionHolderModel = require('../../../app/models/licence-version-holder.model.js')
 const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
 const PointModel = require('../../../app/models/point.model.js')
 const { generateLicenceRef } = require('../helpers/licence.helper.js')
@@ -76,27 +75,24 @@ function licence() {
  * @returns {object} - licence version
  */
 function licenceVersion() {
-  const licenceVersionHolder = LicenceVersionHolderModel.fromJson({
-    addressLine1: '12 GRIMMAULD PLACE',
-    addressLine2: 'ISLINGTON',
-    addressLine3: null,
-    addressLine4: null,
-    county: 'GREATER LONDON',
-    country: 'UNITED KINGDOM',
-    derivedName: 'ORDER OF THE PHOENIX',
-    forename: null,
-    holderType: 'organisation',
-    id: generateUUID(),
-    initials: null,
-    postcode: 'N1 9LX',
-    name: 'ORDER OF THE PHOENIX',
-    salutation: null,
-    town: 'LONDON'
-  })
-
   return LicenceVersionModel.fromJson({
+    address: {
+      address1: '12 GRIMMAULD PLACE',
+      address2: 'ISLINGTON',
+      address3: 'LONDON',
+      address4: 'GREATER LONDON',
+      address5: null,
+      address6: null,
+      country: 'UNITED KINGDOM',
+      id: generateUUID(),
+      postcode: 'N1 9LX'
+    },
     administrative: null,
     applicationNumber: null,
+    company: {
+      id: generateUUID(),
+      name: 'ORDER OF THE PHOENIX'
+    },
     createdAt: new Date('2022-01-01'),
     endDate: null,
     id: generateUUID(),
@@ -106,7 +102,6 @@ function licenceVersion() {
       licenceRef: generateLicenceRef()
     },
     licenceVersionPurposes: [],
-    licenceVersionHolder,
     modLogs: [
       {
         id: generateUUID(),
