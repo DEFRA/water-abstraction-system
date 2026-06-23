@@ -15,7 +15,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 // Things we need to stub
 const FetchCompanyContactDal = require('../../../app/dal/company-contacts/fetch-company-contact.dal.js')
 const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
-const FetchNotificationsService = require('../../../app/services/company-contacts/fetch-notifications.service.js')
+const FetchNotificationsDal = require('../../../app/dal/company-contacts/fetch-notifications.dal.js')
 
 // Thing under test
 const ViewCommunicationsService = require('../../../app/services/company-contacts/view-communications.service.js')
@@ -37,7 +37,7 @@ describe('Company Contacts - View Communications Service', () => {
 
     Sinon.stub(FetchCompanyService, 'go').returns(company)
     Sinon.stub(FetchCompanyContactDal, 'go').returns(companyContact)
-    Sinon.stub(FetchNotificationsService, 'go').returns({
+    Sinon.stub(FetchNotificationsDal, 'go').returns({
       notifications: [],
       totalNumber: 0
     })

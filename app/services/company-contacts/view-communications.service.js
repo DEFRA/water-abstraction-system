@@ -9,7 +9,7 @@
 const CommunicationsPresenter = require('../../presenters/company-contacts/communications.presenter.js')
 const FetchCompanyContactDal = require('../../dal/company-contacts/fetch-company-contact.dal.js')
 const FetchCompanyService = require('../companies/fetch-company.service.js')
-const FetchNotificationsService = require('./fetch-notifications.service.js')
+const FetchNotificationsDal = require('../../dal/company-contacts/fetch-notifications.dal.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 
 /**
@@ -25,7 +25,7 @@ async function go(id, page) {
 
   const company = await FetchCompanyService.go(companyContact.companyId)
 
-  const { notifications, totalNumber } = await FetchNotificationsService.go(companyContact.contact.email, page)
+  const { notifications, totalNumber } = await FetchNotificationsDal.go(companyContact.contact.email, page)
 
   const pageData = CommunicationsPresenter.go(company, companyContact, notifications)
 

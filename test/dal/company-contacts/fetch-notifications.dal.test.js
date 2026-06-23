@@ -15,9 +15,9 @@ const NotificationsFixture = require('../../support/fixtures/notifications.fixtu
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
-const FetchNotificationsService = require('../../../app/services/company-contacts/fetch-notifications.service.js')
+const FetchNotificationsDal = require('../../../app/dal/company-contacts/fetch-notifications.dal.js')
 
-describe('Company contact - Fetch Notifications service', () => {
+describe('Company contact - Fetch Notifications DAL', () => {
   let notice
   let noticeTwo
   let notification
@@ -61,7 +61,7 @@ describe('Company contact - Fetch Notifications service', () => {
 
   describe('when the company contact has notifications', () => {
     it('returns the matching notifications', async () => {
-      const result = await FetchNotificationsService.go(email)
+      const result = await FetchNotificationsDal.go(email)
 
       expect(result).to.equal({
         notifications: [
@@ -101,7 +101,7 @@ describe('Company contact - Fetch Notifications service', () => {
     })
 
     it('returns no notifications', async () => {
-      const result = await FetchNotificationsService.go(email)
+      const result = await FetchNotificationsDal.go(email)
 
       expect(result).to.equal({
         notifications: [],
@@ -116,7 +116,7 @@ describe('Company contact - Fetch Notifications service', () => {
     })
 
     it('returns no notifications', async () => {
-      const result = await FetchNotificationsService.go(email)
+      const result = await FetchNotificationsDal.go(email)
 
       expect(result).to.equal({
         notifications: [],
