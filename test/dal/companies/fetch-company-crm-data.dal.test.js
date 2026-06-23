@@ -15,9 +15,9 @@ const CRMSeeder = require('../../support/seeders/crm.seeder.js')
 const DatabaseConfig = require('../../../config/database.config.js')
 
 // Thing under test
-const FetchCompanyCRMDataService = require('../../../app/services/companies/fetch-company-crm-data.service.js')
+const FetchCompanyCRMDataDal = require('../../../app/dal/companies/fetch-company-crm-data.dal.js')
 
-describe('Companies - Fetch Company CRM Data service', () => {
+describe('Companies - Fetch Company CRM Data dal', () => {
   let company
   let crmData
   let page
@@ -43,7 +43,7 @@ describe('Companies - Fetch Company CRM Data service', () => {
 
   describe('when there are contacts', () => {
     it('returns the matching contacts', async () => {
-      const result = await FetchCompanyCRMDataService.go(company.record.id, roles, page)
+      const result = await FetchCompanyCRMDataDal.go(company.record.id, roles, page)
 
       expect(result).to.equal({
         contacts: [
@@ -108,7 +108,7 @@ describe('Companies - Fetch Company CRM Data service', () => {
         })
 
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
-          const result = await FetchCompanyCRMDataService.go(company.record.id, roles, page)
+          const result = await FetchCompanyCRMDataDal.go(company.record.id, roles, page)
 
           expect(result).to.equal({
             contacts: [
@@ -129,7 +129,7 @@ describe('Companies - Fetch Company CRM Data service', () => {
         })
 
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
-          const result = await FetchCompanyCRMDataService.go(company.record.id, roles, page)
+          const result = await FetchCompanyCRMDataDal.go(company.record.id, roles, page)
 
           expect(result).to.equal({
             contacts: [
@@ -150,7 +150,7 @@ describe('Companies - Fetch Company CRM Data service', () => {
         })
 
         it('returns the matching contacts for the page (the second page) with the total number', async () => {
-          const result = await FetchCompanyCRMDataService.go(company.record.id, roles, page)
+          const result = await FetchCompanyCRMDataDal.go(company.record.id, roles, page)
 
           expect(result).to.equal({
             contacts: [

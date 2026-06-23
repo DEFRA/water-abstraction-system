@@ -12,8 +12,8 @@ const { expect } = Code
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 
 // Things we need to stub
-const FetchAddressService = require('../../../app/services/companies/fetch-address.service.js')
-const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
+const FetchAddressDal = require('../../../app/dal/companies/fetch-address.dal.js')
+const FetchCompanyDal = require('../../../app/dal/companies/fetch-company.dal.js')
 
 // Thing under test
 const ViewCompanyWithAddressService = require('../../../app/services/companies/view-company-with-address.service.js')
@@ -29,8 +29,8 @@ describe('Companies - View Company With Address Service', () => {
     company = CustomersFixtures.company()
     address = CustomersFixtures.companyAddress().address
 
-    Sinon.stub(FetchCompanyService, 'go').returns(company)
-    Sinon.stub(FetchAddressService, 'go').returns(address)
+    Sinon.stub(FetchCompanyDal, 'go').returns(company)
+    Sinon.stub(FetchAddressDal, 'go').returns(address)
   })
 
   afterEach(() => {

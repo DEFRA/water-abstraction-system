@@ -8,7 +8,7 @@
 
 const CommunicationsPresenter = require('../../presenters/company-contacts/communications.presenter.js')
 const FetchCompanyContactDal = require('../../dal/company-contacts/fetch-company-contact.dal.js')
-const FetchCompanyService = require('../companies/fetch-company.service.js')
+const FetchCompanyService = require('../../dal/companies/fetch-company.dal.js')
 const FetchNotificationsDal = require('../../dal/company-contacts/fetch-notifications.dal.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 

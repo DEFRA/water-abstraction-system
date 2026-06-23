@@ -11,9 +11,9 @@ const { expect } = Code
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 
 // Thing under test
-const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
+const FetchCompanyDal = require('../../../app/dal/companies/fetch-company.dal.js')
 
-describe('Companies - Fetch Company service', () => {
+describe('Companies - Fetch Company dal', () => {
   let company
 
   describe('when there is a company', () => {
@@ -22,7 +22,7 @@ describe('Companies - Fetch Company service', () => {
     })
 
     it('returns the matching company', async () => {
-      const result = await FetchCompanyService.go(company.id)
+      const result = await FetchCompanyDal.go(company.id)
 
       expect(result).to.equal({
         id: company.id,

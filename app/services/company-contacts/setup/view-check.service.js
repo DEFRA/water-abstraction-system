@@ -7,7 +7,7 @@
  */
 
 const CheckPresenter = require('../../../presenters/company-contacts/setup/check.presenter.js')
-const FetchCompanyContactsService = require('./fetch-company-contacts.service.js')
+const FetchCompanyContactsDal = require('../../../dal/company-contacts/setup/fetch-company-contacts.dal.js')
 const FetchNotificationService = require('../fetch-notification.service.js')
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const { markCheckPageVisited } = require('../../../lib/check-page.lib.js')
@@ -24,7 +24,7 @@ const { readFlashNotification } = require('../../../lib/general.lib.js')
 async function go(sessionId, yar) {
   const session = await FetchSessionDal.go(sessionId)
 
-  const companyContacts = await FetchCompanyContactsService.go(session.company.id, session.companyContact)
+  const companyContacts = await FetchCompanyContactsDal.go(session.company.id, session.companyContact)
 
   const sentNotification = await FetchNotificationService.go(session.email)
 

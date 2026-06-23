@@ -15,9 +15,9 @@ const LicenceRoleHelper = require('../../../support/helpers/licence-role.helper.
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const CreateCompanyContactService = require('../../../../app/services/company-contacts/setup/create-company-contact.service.js')
+const CreateCompanyContactDal = require('../../../../app/dal/company-contacts/setup/create-company-contact.dal.js')
 
-describe('Company Contacts - Create Company Contact service', () => {
+describe('Company Contacts - Create Company Contact dal', () => {
   let clock
   let companyContact
   let company
@@ -45,7 +45,7 @@ describe('Company Contacts - Create Company Contact service', () => {
 
   describe('when a new company contact is added', () => {
     it('inserts the company contact and links the company contact to the "additionalContact" licence role', async () => {
-      const result = await CreateCompanyContactService.go(company.id, companyContact)
+      const result = await CreateCompanyContactDal.go(company.id, companyContact)
 
       const licenceRole = LicenceRoleHelper.select('additionalContact')
 
