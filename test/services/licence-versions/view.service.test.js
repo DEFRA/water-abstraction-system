@@ -62,7 +62,7 @@ describe('Licence Versions - View service', () => {
         conditionTypes: [],
         errorInDataEmail: 'notify@test.gov.uk',
         licenceDetails: {
-          address: ['ORDER OF THE PHOENIX', '12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
+          address: ['12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
           applicationNumber: null,
           endDate: null,
           issueDate: null,
