@@ -6,8 +6,8 @@
  */
 
 const CommunicationsPresenter = require('../../presenters/licences/communications.presenter.js')
-const FetchCommunicationsService = require('./fetch-communications.service.js')
 const FetchLicenceService = require('./fetch-licence.service.js')
+const FetchNotificationsDal = require('../../dal/licences/fetch-notifications.dal.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
@@ -23,7 +23,7 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
 async function go(licenceId, auth, page) {
   const licence = await FetchLicenceService.go(licenceId)
 
-  const { notifications, totalNumber } = await FetchCommunicationsService.go(licence.licenceRef, page)
+  const { notifications, totalNumber } = await FetchNotificationsDal.go(licence.licenceRef, page)
 
   const pageData = CommunicationsPresenter.go(notifications, licence)
 

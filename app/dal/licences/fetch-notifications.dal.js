@@ -2,7 +2,7 @@
 
 /**
  * Fetches data needed for the view '/licences/{id}/communications` page
- * @module FetchCommunicationsService
+ * @module FetchNotificationsDal
  */
 
 const { ref } = require('objection')
@@ -29,7 +29,12 @@ async function _fetch(licenceRef, page) {
   return NotificationModel.query()
     .select(['createdAt', 'id', 'messageType', 'status'])
     .where('licences', '?', licenceRef)
-    .orderBy('createdAt', 'DESC')
+    .orderBy([
+      { column: 'createdAt', order: 'desc' },
+      { column: 'messageType', order: 'asc' },
+      { column: 'status', order: 'asc' },
+      { column: 'id', order: 'asc' }
+    ])
     .withGraphFetched('event')
     .modifyGraph('event', (builder) => {
       builder.select([
