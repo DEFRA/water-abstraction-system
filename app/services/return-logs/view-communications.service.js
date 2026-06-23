@@ -7,7 +7,7 @@
  */
 
 const CommunicationsPresenter = require('../../presenters/return-logs/communications.presenter.js')
-const FetchNotificationsService = require('./fetch-notifications.service.js')
+const FetchNotificationsDal = require('../../dal/return-logs/fetch-notifications.dal.js')
 const FetchReturnLogService = require('./fetch-return-log.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 
@@ -22,7 +22,7 @@ const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 async function go(id, page) {
   const returnLog = await FetchReturnLogService.go(id)
 
-  const { notifications, totalNumber } = await FetchNotificationsService.go(id, page)
+  const { notifications, totalNumber } = await FetchNotificationsDal.go(id, page)
 
   const pageData = CommunicationsPresenter.go(returnLog, notifications)
 
