@@ -2,7 +2,7 @@
 
 /**
  * Fetches data needed for the view '/licences/{id}/communications` page
- * @module FetchCommunicationsService
+ * @module FetchNotificationsDal
  */
 
 const { ref } = require('objection')

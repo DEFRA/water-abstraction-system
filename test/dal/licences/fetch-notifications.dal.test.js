@@ -15,9 +15,9 @@ const NotificationHelper = require('../../support/helpers/notification.helper.js
 const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
 
 // Thing under test
-const FetchCommunicationsService = require('../../../app/services/licences/fetch-communications.service.js')
+const FetchNotificationsDal = require('../../../app/dal/licences/fetch-notifications.dal.js')
 
-describe('Licences - Fetch Communications service', () => {
+describe('Licences - Fetch Notifications DAL', () => {
   let licence
   let notice
   let notification
@@ -41,7 +41,7 @@ describe('Licences - Fetch Communications service', () => {
 
   describe('when the licence has notifications', () => {
     it('returns the matching notifications', async () => {
-      const result = await FetchCommunicationsService.go(licence.licenceRef)
+      const result = await FetchNotificationsDal.go(licence.licenceRef)
 
       expect(result).to.equal({
         notifications: [
@@ -69,7 +69,7 @@ describe('Licences - Fetch Communications service', () => {
     })
 
     it('returns no notifications', async () => {
-      const result = await FetchCommunicationsService.go(licence.licenceRef)
+      const result = await FetchNotificationsDal.go(licence.licenceRef)
 
       expect(result).to.equal({
         notifications: [],
