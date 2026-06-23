@@ -8,6 +8,7 @@ const { describe, it, before, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CRMContactsSeeder = require('../../support/seeders/crm-contacts.seeder.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
@@ -15,7 +16,6 @@ const LicenceVersionPurposePointHelper = require('../../support/helpers/licence-
 const PointHelper = require('../../support/helpers/point.helper.js')
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const SourceHelper = require('../../support/helpers/source.helper.js')
-const CRMContactsSeeder = require('../../support/seeders/crm-contacts.seeder.js')
 
 // Thing under test
 const FetchLicenceVersionDal = require('../../../app/dal/licence-versions/fetch-licence-version.dal.js')
@@ -24,13 +24,13 @@ describe('Licence Versions - Fetch licence version dal', () => {
   let additionalLicenceVersionOne
   let additionalLicenceVersionTwo
   let licence
+  let licenceHolder
   let licenceVersion
   let licenceVersionPurpose
   let licenceVersionPurposePoint
   let point
   let purpose
   let source
-  let licenceHolder
 
   describe('when there is licence version', () => {
     before(async () => {

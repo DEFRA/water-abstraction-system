@@ -7,7 +7,7 @@
  */
 
 const FetchConditionsService = require('../licences/fetch-conditions.service.js')
-const FetchLicenceVersionService = require('../../dal/licence-versions/fetch-licence-version.dal.js')
+const FetchLicenceVersionDal = require('../../dal/licence-versions/fetch-licence-version.dal.js')
 const ViewPresenter = require('../../presenters/licence-versions/view.presenter.js')
 
 /**
@@ -19,7 +19,7 @@ const ViewPresenter = require('../../presenters/licence-versions/view.presenter.
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(licenceVersionId, auth) {
-  const licenceVersionData = await FetchLicenceVersionService.go(licenceVersionId)
+  const licenceVersionData = await FetchLicenceVersionDal.go(licenceVersionId)
   const conditions = await FetchConditionsService.go(licenceVersionId)
 
   const pageData = ViewPresenter.go(licenceVersionData, auth, conditions)

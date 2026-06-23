@@ -5,8 +5,9 @@
  * @module FetchLicenceVersionDal
  */
 
-const LicenceVersionModel = require('../../models/licence-version.model.js')
 const { raw } = require('objection')
+
+const LicenceVersionModel = require('../../models/licence-version.model.js')
 
 /**
  * Fetches data needed for the view `/licence-versions/{id}` page

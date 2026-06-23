@@ -8,9 +8,9 @@
 const NotifyAddressPresenter = require('../notices/setup/notify-address.presenter.js')
 const NotifyConfig = require('../../../config/notify.config.js')
 const PreviousAndNextPresenter = require('../previous-and-next.presenter.js')
+const { formatLongDate, formatVersionReason } = require('../base.presenter.js')
 const { compareStrings } = require('../../lib/general.lib.js')
 const { formatLicencePoints, formatLicencePurposes, formatConditionTypes } = require('../licence.presenter.js')
-const { formatLongDate, formatVersionReason } = require('../base.presenter.js')
 
 /**
  * Formats data for the `/licence-versions/{id}` page
@@ -48,8 +48,8 @@ function go(licenceVersionData, auth, conditions) {
 }
 
 /**
- * The name is always set to address line 1 when using the notify address presenter. We need to remove this, specfically
- * for this page as the name is show directyl above and would look like a duplciate.
+ * The name is always set to address line 1 when using the notify address presenter. We need to remove this, specifically
+ * for this page as the name is shown directly above and would look like a duplicate.
  *
  * @private
  */
