@@ -12,7 +12,7 @@ const { expect } = Code
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 
 // Things we need to stub
-const FetchCompanyDetailsService = require('../../../app/services/companies/fetch-company-details.service.js')
+const FetchCompanyDetailsDal = require('../../../app/dal/companies/fetch-company-details.dal.js')
 
 // Thing under test
 const ViewCompanyService = require('../../../app/services/companies/view-company.service.js')
@@ -33,7 +33,7 @@ describe('Companies - View Company Service', () => {
     companyAddress.address.country = null
     companyDetails.companyAddresses.push({ ...companyAddress })
 
-    Sinon.stub(FetchCompanyDetailsService, 'go').returns(companyDetails)
+    Sinon.stub(FetchCompanyDetailsDal, 'go').returns(companyDetails)
   })
 
   afterEach(() => {
@@ -77,7 +77,7 @@ describe('Companies - View Company Service', () => {
       it('calls the fetch service with role converted to camelCase', async () => {
         await ViewCompanyService.go(companyDetails.id, role)
 
-        expect(FetchCompanyDetailsService.go.calledWith(companyDetails.id, 'licenceHolder')).to.be.true()
+        expect(FetchCompanyDetailsDal.go.calledWith(companyDetails.id, 'licenceHolder')).to.be.true()
       })
     })
 
@@ -117,7 +117,7 @@ describe('Companies - View Company Service', () => {
       it('calls the fetch service with role converted to camelCase', async () => {
         await ViewCompanyService.go(companyDetails.id, role)
 
-        expect(FetchCompanyDetailsService.go.calledWith(companyDetails.id, 'returnsTo')).to.be.true()
+        expect(FetchCompanyDetailsDal.go.calledWith(companyDetails.id, 'returnsTo')).to.be.true()
       })
     })
   })

@@ -15,7 +15,7 @@ const YarStub = require('../../support/stubs/yar.stub.js')
 // Things we need to stub
 const FetchAbstractionAlertLicencesDal = require('../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
 const FetchCompanyContactDetailsService = require('../../../app/services/company-contacts/fetch-company-contact-details.service.js')
-const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
+const FetchCompanyService = require('../../../app/dal/companies/fetch-company.dal.js')
 
 // Thing under test
 const ViewContactDetailsService = require('../../../app/services/company-contacts/view-contact-details.service.js')

@@ -9,7 +9,7 @@
 const ContactDetailsPresenter = require('../../presenters/company-contacts/contact-details.presenter.js')
 const FetchAbstractionAlertLicencesDal = require('../../dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
 const FetchCompanyContactDetailsService = require('./fetch-company-contact-details.service.js')
-const FetchCompanyService = require('../companies/fetch-company.service.js')
+const FetchCompanyService = require('../../dal/companies/fetch-company.dal.js')
 const { readFlashNotification } = require('../../lib/general.lib.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 

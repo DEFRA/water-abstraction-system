@@ -2,7 +2,7 @@
 
 /**
  * Fetches the company billing accounts data needed for the view '/companies/{id}/billing-accounts'
- * @module FetchBillingAccountsService
+ * @module FetchBillingAccountsDal
  */
 
 const BillingAccountModel = require('../../models/billing-account.model.js')

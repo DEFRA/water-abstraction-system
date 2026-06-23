@@ -2,7 +2,7 @@
 
 /**
  * Fetches the contacts data needed for the view '/companies/{id}/contacts'
- * @module FetchCompanyCRMDataService
+ * @module FetchCompanyCRMDataDal
  */
 
 const { db } = require('../../../db/db.js')

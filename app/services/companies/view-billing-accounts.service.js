@@ -7,8 +7,8 @@
  */
 
 const BillingAccountsPresenter = require('../../presenters/companies/billing-accounts.presenter.js')
-const FetchBillingAccountsService = require('./fetch-billing-accounts.service.js')
-const FetchCompanyService = require('./fetch-company.service.js')
+const FetchBillingAccountsDal = require('../../dal/companies/fetch-billing-accounts.dal.js')
+const FetchCompanyDal = require('../../dal/companies/fetch-company.dal.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
@@ -22,9 +22,9 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(companyId, auth, page) {
-  const company = await FetchCompanyService.go(companyId)
+  const company = await FetchCompanyDal.go(companyId)
 
-  const { billingAccounts, totalNumber } = await FetchBillingAccountsService.go(companyId, page)
+  const { billingAccounts, totalNumber } = await FetchBillingAccountsDal.go(companyId, page)
 
   const pageData = BillingAccountsPresenter.go(company, billingAccounts)
 

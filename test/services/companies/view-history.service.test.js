@@ -12,8 +12,8 @@ const { expect } = Code
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 
 // Things we need to stub
-const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
-const FetchHistoryService = require('../../../app/services/companies/fetch-history.service.js')
+const FetchCompanyDal = require('../../../app/dal/companies/fetch-company.dal.js')
+const FetchHistoryDal = require('../../../app/dal/companies/fetch-history.dal.js')
 
 // Thing under test
 const ViewHistoryService = require('../../../app/services/companies/view-history.service.js')
@@ -31,8 +31,8 @@ describe('Companies - View History service', () => {
 
     licences = CustomersFixtures.licences()
 
-    Sinon.stub(FetchCompanyService, 'go').returns(company)
-    Sinon.stub(FetchHistoryService, 'go').returns({
+    Sinon.stub(FetchCompanyDal, 'go').returns(company)
+    Sinon.stub(FetchHistoryDal, 'go').returns({
       licences,
       totalNumber: 1
     })
