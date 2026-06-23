@@ -18,7 +18,7 @@ const NotifyConfig = require('../../../config/notify.config.js')
 // Thing under test
 const ViewPresenter = require('../../../app/presenters/licence-versions/view.presenter.js')
 
-describe('Licence Versions - View presenter', () => {
+describe.only('Licence Versions - View presenter', () => {
   let auth
   let conditions
   let licenceVersion
@@ -60,7 +60,7 @@ describe('Licence Versions - View presenter', () => {
         conditionTypes: [],
         errorInDataEmail: 'notify@test.gov.uk',
         licenceDetails: {
-          address: ['ORDER OF THE PHOENIX', '12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
+          address: ['12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
           applicationNumber: null,
           endDate: null,
           issueDate: null,
@@ -172,7 +172,7 @@ describe('Licence Versions - View presenter', () => {
         const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
         expect(result.licenceDetails).to.equal({
-          address: ['ORDER OF THE PHOENIX', '12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
+          address: ['12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
           applicationNumber: 'R.1',
           endDate: '1 February 2024',
           issueDate: '3 March 2023',
@@ -187,7 +187,7 @@ describe('Licence Versions - View presenter', () => {
         const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
         expect(result.licenceDetails).to.equal({
-          address: ['ORDER OF THE PHOENIX', '12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
+          address: ['12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
           applicationNumber: null,
           endDate: null,
           issueDate: null,

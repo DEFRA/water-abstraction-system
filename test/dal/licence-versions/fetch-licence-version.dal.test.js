@@ -8,8 +8,6 @@ const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const AddressHelper = require('../../support/helpers/address.helper.js')
-const CompanyHelper = require('../../support/helpers/company.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
@@ -17,6 +15,7 @@ const LicenceVersionPurposePointHelper = require('../../support/helpers/licence-
 const PointHelper = require('../../support/helpers/point.helper.js')
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const SourceHelper = require('../../support/helpers/source.helper.js')
+const CRMContactsSeeder = require('../../support/seeders/crm-contacts.seeder.js')
 
 // Thing under test
 const FetchLicenceVersionDal = require('../../../app/dal/licence-versions/fetch-licence-version.dal.js')
@@ -24,42 +23,33 @@ const FetchLicenceVersionDal = require('../../../app/dal/licence-versions/fetch-
 describe('Licence Versions - Fetch licence version dal', () => {
   let additionalLicenceVersionOne
   let additionalLicenceVersionTwo
-  let address
-  let company
   let licence
   let licenceVersion
   let licenceVersionPurpose
   let point
   let purpose
   let source
+  let licenceHolder
 
   describe('when there is licence version', () => {
     before(async () => {
       licence = await LicenceHelper.add()
 
-      address = await AddressHelper.add()
+      licenceHolder = await CRMContactsSeeder.licenceHolder({ licence }, 'Example Trading Ltd')
 
-      company = await CompanyHelper.add()
-
-      licenceVersion = await LicenceVersionHelper.add({
-        licenceId: licence.id,
-        startDate: new Date('2023-01-02'),
-        endDate: null,
-        addressId: address.id,
-        companyId: company.id
-      })
+      licenceVersion = licenceHolder.licenceVersion
 
       // Add additional licence for the pagination array
       additionalLicenceVersionOne = await LicenceVersionHelper.add({
         licenceId: licence.id,
-        startDate: new Date('2023-01-01'),
-        endDate: new Date('2023-01-01')
+        startDate: new Date('2021-01-01'),
+        endDate: new Date('2021-12-31')
       })
 
       additionalLicenceVersionTwo = await LicenceVersionHelper.add({
         licenceId: licence.id,
         startDate: new Date('2019-01-01'),
-        endDate: new Date('2022-12-30')
+        endDate: new Date('2021-12-31')
       })
 
       purpose = PurposeHelper.select()
@@ -83,20 +73,20 @@ describe('Licence Versions - Fetch licence version dal', () => {
       expect(result).to.equal({
         licenceVersion: {
           address: {
-            address1: 'ENVIRONMENT AGENCY',
-            address2: 'HORIZON HOUSE',
-            address3: 'DEANERY ROAD',
-            address4: 'BRISTOL',
+            address1: '4',
+            address2: 'Privet Drive',
+            address3: 'Little Whinging',
+            address4: 'Surrey',
             address5: null,
             address6: null,
-            country: 'United Kingdom',
-            id: address.id,
-            postcode: 'BS1 5AH'
+            country: null,
+            id: licenceHolder.address.id,
+            postcode: 'WD25 7LR'
           },
           administrative: null,
           applicationNumber: null,
           company: {
-            id: company.id,
+            id: licenceHolder.company.id,
             name: 'Example Trading Ltd'
           },
           createdAt: licenceVersion.createdAt,
@@ -164,11 +154,11 @@ describe('Licence Versions - Fetch licence version dal', () => {
           },
           {
             id: additionalLicenceVersionOne.id,
-            startDate: new Date('2023-01-01')
+            startDate: new Date('2021-01-01')
           },
           {
             id: licenceVersion.id,
-            startDate: new Date('2023-01-02')
+            startDate: new Date('2022-01-01')
           }
         ]
       })

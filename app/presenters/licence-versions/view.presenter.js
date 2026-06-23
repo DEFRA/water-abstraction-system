@@ -48,11 +48,8 @@ function go(licenceVersionData, auth, conditions) {
 }
 
 /**
- * The 'NotifyAddressPresenter' is designed for 'recipients'.
- *
- * We need to add the name to the expected contact.
- *
- * We use a macro to render address, and it expects an array of address lines.
+ * The name is always set to address line 1 when using the notify address presenter. We need to remove this, specfically
+ * for this page as the name is show directyl above and would look like a duplciate.
  *
  * @private
  */
@@ -61,6 +58,8 @@ function _address(licenceVersion) {
     name: licenceVersion.company.name,
     ...licenceVersion.address
   })
+
+  delete address.address_line_1
 
   return Object.values(address)
 }
