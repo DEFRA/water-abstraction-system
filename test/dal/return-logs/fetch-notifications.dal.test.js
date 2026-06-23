@@ -16,9 +16,9 @@ const NotificationsFixture = require('../../support/fixtures/notifications.fixtu
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
-const FetchNotificationsService = require('../../../app/services/return-logs/fetch-notifications.service.js')
+const FetchNotificationsDal = require('../../../app/dal/return-logs/fetch-notifications.dal.js')
 
-describe('Return Logs - Fetch Notifications service', () => {
+describe('Return Logs - Fetch Notifications DAL', () => {
   let notice
   let notification
 
@@ -38,7 +38,7 @@ describe('Return Logs - Fetch Notifications service', () => {
 
   describe('when the return log has notifications', () => {
     it('returns the matching notifications and the total', async () => {
-      const result = await FetchNotificationsService.go(notification.returnLogIds[0])
+      const result = await FetchNotificationsDal.go(notification.returnLogIds[0])
 
       expect(result).to.equal({
         notifications: [
@@ -62,7 +62,7 @@ describe('Return Logs - Fetch Notifications service', () => {
 
   describe('when the return log has no notifications', () => {
     it('returns an empty array and zero', async () => {
-      const result = await FetchNotificationsService.go('513f8813-3782-4c1b-a095-a078adf757f4')
+      const result = await FetchNotificationsDal.go('513f8813-3782-4c1b-a095-a078adf757f4')
 
       expect(result).to.equal({ notifications: [], totalNumber: 0 })
     })
