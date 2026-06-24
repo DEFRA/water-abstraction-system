@@ -31,7 +31,7 @@ describe('Companies - Fetch History dal', () => {
     licence = await LicenceHelper.add()
 
     // A licence version linked to the company
-    licenceHolder = await CRMContactsSeeder.licenceHolder({ licence }, 'Example Trading Ltd')
+    licenceHolder = await CRMContactsSeeder.licenceHolder({ licence }, 'Omni Consumer Products')
 
     // A licence version not linked to the company
     licenceVersionSameLicenceDifferentCompany = await LicenceVersionHelper.add({
