@@ -37,7 +37,7 @@ describe('Companies - Fetch Licences dal', () => {
       licenceRef: `02/${generateRandomInteger(10, 99)}/${generateRandomInteger(100, 999)}`
     })
 
-    licenceHolder = await CRMContactsSeeder.licenceHolder({ licence }, 'Example Trading Ltd')
+    licenceHolder = await CRMContactsSeeder.licenceHolder({ licence }, 'Kanemitsu Corporation')
 
     companyId = licenceHolder.company.id
 
