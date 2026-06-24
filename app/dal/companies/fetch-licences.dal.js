@@ -55,11 +55,7 @@ async function go(companyId, page = '1') {
 async function _fetch(companyId, page) {
   return LicenceModel.query()
     .select(['licences.id'])
-    .whereExists(
-      LicenceModel.relatedQuery('licenceVersions')
-        .innerJoinRelated('licenceVersionHolder')
-        .where('licenceVersionHolder.companyId', companyId)
-    )
+    .whereExists(LicenceModel.relatedQuery('licenceVersions').where('licenceVersions.companyId', companyId))
     .orderBy([{ column: 'licenceRef', order: 'asc' }])
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
@@ -101,17 +97,17 @@ async function _fetchDetail(licenceIds) {
       'licences.revokedDate',
       'licences.startDate',
       'latest_holder.company_id AS currentLicenceHolderId',
-      'latest_holder.derived_name AS currentLicenceHolder'
+      'latest_holder.name AS currentLicenceHolder'
     ])
     .whereIn('id', licenceIds)
     .joinRaw(
       `LEFT JOIN LATERAL (
       SELECT
-        lvh.company_id,
-        lvh.derived_name
+        lv.company_id,
+        c.name
       FROM public.licence_versions lv
-      INNER JOIN public.licence_version_holders lvh
-        ON lvh.licence_version_id = lv.id
+      INNER JOIN public.companies c
+        ON c.id = lv.company_id
       WHERE
         lv.licence_id = licences.id
       ORDER BY
