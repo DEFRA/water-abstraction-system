@@ -47,7 +47,7 @@ async function _deleteAllTestData() {
       USING "crm_v2"."invoice_accounts" AS "ia",
     "crm_v2"."companies" AS "c"
   WHERE
-    "c"."is_test" = TRUE
+    ("c"."is_test" = TRUE OR "c"."name" IN ('Big Farm Co Ltd', 'Test Farm Co Ltd'))
     AND "iaa"."invoice_account_id" = "ia"."invoice_account_id"
     AND "ia"."company_id" = "c"."company_id";
 
@@ -62,7 +62,7 @@ async function _deleteAllTestData() {
     "crm_v2"."invoice_accounts" AS "ia"
       USING "crm_v2"."companies" AS "c"
   WHERE
-    "c"."is_test" = TRUE
+    ("c"."is_test" = TRUE OR "c"."name" IN ('Big Farm Co Ltd', 'Test Farm Co Ltd'))
     AND "ia"."company_id" = "c"."company_id";
 
   DELETE
@@ -75,7 +75,8 @@ async function _deleteAllTestData() {
   FROM
     "crm_v2"."companies"
   WHERE
-    "is_test" = TRUE;
+    "is_test" = TRUE
+    OR "name" IN ('Big Farm Co Ltd', 'Test Farm Co Ltd');
 
   DELETE
   FROM
@@ -102,15 +103,10 @@ async function _deleteAllTestData() {
 
   DELETE
   FROM
-    "crm_v2"."contacts"
+    "crm_v2"."contacts" AS "c"
   WHERE
-    "is_test" = TRUE;
-
-  DELETE
-  FROM
-    "crm_v2"."companies"
-  WHERE
-    "name" LIKE 'Big Farm Co Ltd%';
+    "c"."is_test" = TRUE
+    OR "c"."department" = 'Test Farm Manager';
 
   DELETE
   FROM
@@ -125,6 +121,7 @@ async function _deleteAllTestData() {
       OR "e"."entity_nm" LIKE '%@e'
       OR "e"."entity_nm" LIKE 'regression.tests.%'
       OR "e"."entity_nm" LIKE 'Big Farm Co Ltd%'
+      OR "e"."entity_nm" LIKE 'Test Farm Co Ltd%'
       OR "e"."source" = 'acceptance-test-setup'
     );
 
@@ -137,6 +134,7 @@ async function _deleteAllTestData() {
     OR "entity_nm" LIKE '%@e'
     OR "entity_nm" LIKE 'regression.tests.%'
     OR "entity_nm" LIKE 'Big Farm Co Ltd%'
+    OR "entity_nm" LIKE 'Test Farm Co Ltd%'
     OR "source" = 'acceptance-test-setup';
 
   DELETE
