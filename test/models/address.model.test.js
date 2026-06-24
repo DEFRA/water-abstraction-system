@@ -15,8 +15,6 @@ const CompanyAddressHelper = require('../support/helpers/company-address.helper.
 const CompanyAddressModel = require('../../app/models/company-address.model.js')
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
 const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
-const LicenceVersionHolderHelper = require('../support/helpers/licence-version-holder.helper.js')
-const LicenceVersionHolderModel = require('../../app/models/licence-version-holder.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 
@@ -27,7 +25,6 @@ describe('Address model', () => {
   let billingAccountAddresses
   let companyAddresses
   let licenceDocumentRoles
-  let licenceVersionHolders
   let licenceVersions
   let testRecord
 
@@ -39,7 +36,6 @@ describe('Address model', () => {
     billingAccountAddresses = []
     companyAddresses = []
     licenceDocumentRoles = []
-    licenceVersionHolders = []
     licenceVersions = []
 
     for (let i = 0; i < 2; i++) {
@@ -62,11 +58,6 @@ describe('Address model', () => {
 
       licenceDocumentRoles.push(licenceDocumentRole)
 
-      // Link licence version holders
-      const licenceVersionHolder = await LicenceVersionHolderHelper.add({ addressId })
-
-      licenceVersionHolders.push(licenceVersionHolder)
-
       // Link licence versions
       const licenceVersion = await LicenceVersionHelper.add({ addressId })
 
@@ -78,11 +69,6 @@ describe('Address model', () => {
     for (const licenceVersion of licenceVersions) {
       await licenceVersion.$query().delete()
     }
-
-    for (const licenceVersionHolder of licenceVersionHolders) {
-      await licenceVersionHolder.$query().delete()
-    }
-
     for (const licenceDocumentRole of licenceDocumentRoles) {
       await licenceDocumentRole.$query().delete()
     }
@@ -165,26 +151,6 @@ describe('Address model', () => {
         expect(result.licenceDocumentRoles[0]).to.be.an.instanceOf(LicenceDocumentRoleModel)
         expect(result.licenceDocumentRoles).to.include(licenceDocumentRoles[0])
         expect(result.licenceDocumentRoles).to.include(licenceDocumentRoles[1])
-      })
-    })
-
-    describe('when linking to licence version holders', () => {
-      it('can successfully run a related query', async () => {
-        const query = await AddressModel.query().innerJoinRelated('licenceVersionHolders')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the licence version holders', async () => {
-        const result = await AddressModel.query().findById(testRecord.id).withGraphFetched('licenceVersionHolders')
-
-        expect(result).to.be.instanceOf(AddressModel)
-        expect(result.id).to.equal(testRecord.id)
-
-        expect(result.licenceVersionHolders).to.be.an.array()
-        expect(result.licenceVersionHolders[0]).to.be.an.instanceOf(LicenceVersionHolderModel)
-        expect(result.licenceVersionHolders).to.include(licenceVersionHolders[0])
-        expect(result.licenceVersionHolders).to.include(licenceVersionHolders[1])
       })
     })
 
