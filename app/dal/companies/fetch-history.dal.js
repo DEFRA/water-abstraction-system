@@ -6,7 +6,6 @@
  */
 
 const LicenceModel = require('../../models/licence.model.js')
-const LicenceVersionModel = require('../../models/licence-version.model.js')
 
 const DatabaseConfig = require('../../../config/database.config.js')
 
