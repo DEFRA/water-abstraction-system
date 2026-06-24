@@ -19,8 +19,6 @@ const CompanyContactModel = require('../../app/models/company-contact.model.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
 const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
-const LicenceVersionHolderHelper = require('../support/helpers/licence-version-holder.helper.js')
-const LicenceVersionHolderModel = require('../../app/models/licence-version-holder.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
@@ -35,7 +33,6 @@ describe('Company model', () => {
   let companyAddresses
   let companyContacts
   let licenceDocumentRoles
-  let licenceVersionHolders
   let licenceVersions
   let region
   let testRecord
@@ -52,7 +49,6 @@ describe('Company model', () => {
     companyAddresses = []
     companyContacts = []
     licenceDocumentRoles = []
-    licenceVersionHolders = []
     licenceVersions = []
 
     for (let i = 0; i < 2; i++) {
@@ -85,11 +81,6 @@ describe('Company model', () => {
 
       licenceDocumentRoles.push(licenceDocumentRole)
 
-      // Link licence version holders
-      const licenceVersionHolder = await LicenceVersionHolderHelper.add({ companyId })
-
-      licenceVersionHolders.push(licenceVersionHolder)
-
       // Link licence versions
       const licenceVersion = await LicenceVersionHelper.add({ companyId })
 
@@ -100,10 +91,6 @@ describe('Company model', () => {
   after(async () => {
     for (const licenceVersion of licenceVersions) {
       await licenceVersion.$query().delete()
-    }
-
-    for (const licenceVersionHolder of licenceVersionHolders) {
-      await licenceVersionHolder.$query().delete()
     }
 
     for (const licenceDocumentRole of licenceDocumentRoles) {
@@ -236,26 +223,6 @@ describe('Company model', () => {
         expect(result.licenceDocumentRoles[0]).to.be.an.instanceOf(LicenceDocumentRoleModel)
         expect(result.licenceDocumentRoles).to.include(licenceDocumentRoles[0])
         expect(result.licenceDocumentRoles).to.include(licenceDocumentRoles[1])
-      })
-    })
-
-    describe('when linking to licence version holders', () => {
-      it('can successfully run a related query', async () => {
-        const query = await CompanyModel.query().innerJoinRelated('licenceVersionHolders')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the licence version holders', async () => {
-        const result = await CompanyModel.query().findById(testRecord.id).withGraphFetched('licenceVersionHolders')
-
-        expect(result).to.be.instanceOf(CompanyModel)
-        expect(result.id).to.equal(testRecord.id)
-
-        expect(result.licenceVersionHolders).to.be.an.array()
-        expect(result.licenceVersionHolders[0]).to.be.an.instanceOf(LicenceVersionHolderModel)
-        expect(result.licenceVersionHolders).to.include(licenceVersionHolders[0])
-        expect(result.licenceVersionHolders).to.include(licenceVersionHolders[1])
       })
     })
 

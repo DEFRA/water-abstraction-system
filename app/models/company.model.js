@@ -88,14 +88,6 @@ class CompanyModel extends BaseModel {
           to: 'licenceDocumentRoles.companyId'
         }
       },
-      licenceVersionHolders: {
-        relation: Model.HasManyRelation,
-        modelClass: 'licence-version-holder.model',
-        join: {
-          from: 'companies.id',
-          to: 'licenceVersionHolders.companyId'
-        }
-      },
       licenceVersions: {
         relation: Model.HasManyRelation,
         modelClass: 'licence-version.model',

@@ -14,8 +14,6 @@ const CompanyHelper = require('../support/helpers/company.helper.js')
 const CompanyModel = require('../../app/models/company.model.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
-const LicenceVersionHolderHelper = require('../support/helpers/licence-version-holder.helper.js')
-const LicenceVersionHolderModel = require('../../app/models/licence-version-holder.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
 const LicenceVersionPurposesHelper = require('../support/helpers/licence-version-purpose.helper.js')
@@ -33,7 +31,6 @@ describe('Licence Version model', () => {
   let address
   let company
   let licence
-  let licenceVersionHolder
   let licenceVersionPurpose
   let purpose
   let licenceVersionId
@@ -74,8 +71,6 @@ describe('Licence Version model', () => {
       licenceId: firstIssueLicenceVersion.licenceId,
       startDate: new Date('2022-04-01')
     })
-
-    licenceVersionHolder = await LicenceVersionHolderHelper.add({ licenceVersionId: testRecord.id })
 
     const region = RegionHelper.select()
     const firstNaldId = generateRandomInteger(100, 99998)
@@ -136,7 +131,6 @@ describe('Licence Version model', () => {
     }
 
     await licenceVersionPurpose.$query().delete()
-    await licenceVersionHolder.$query().delete()
     await testRecord.$query().delete()
     await secondIncrementLicenceVersion.$query().delete()
     await firstIssueLicenceVersion.$query().delete()
@@ -206,26 +200,6 @@ describe('Licence Version model', () => {
 
         expect(result.licence).to.be.an.instanceOf(LicenceModel)
         expect(result.licence).to.equal(licence)
-      })
-    })
-
-    describe('when linking to licence version holder', () => {
-      it('can successfully run a related query', async () => {
-        const query = await LicenceVersionModel.query().innerJoinRelated('licenceVersionHolder')
-
-        expect(query).to.exist()
-      })
-
-      it('can eager load the note', async () => {
-        const result = await LicenceVersionModel.query()
-          .findById(testRecord.id)
-          .withGraphFetched('licenceVersionHolder')
-
-        expect(result).to.be.instanceOf(LicenceVersionModel)
-        expect(result.id).to.equal(testRecord.id)
-
-        expect(result.licenceVersionHolder).to.be.an.instanceOf(LicenceVersionHolderModel)
-        expect(result.licenceVersionHolder).to.equal(licenceVersionHolder)
       })
     })
 
