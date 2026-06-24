@@ -47,7 +47,11 @@ async function _deleteAllTestData() {
       USING "crm_v2"."invoice_accounts" AS "ia",
     "crm_v2"."companies" AS "c"
   WHERE
-    ("c"."is_test" = TRUE OR "c"."name" IN ('Big Farm Co Ltd', 'Test Farm Co Ltd'))
+    (
+      "c"."is_test" = TRUE
+      OR "c"."name" IN ('Big Farm Co Ltd', 'Test Farm Co Ltd')
+      OR "c"."name" LIKE 'Big Farm Co Ltd%'
+    )
     AND "iaa"."invoice_account_id" = "ia"."invoice_account_id"
     AND "ia"."company_id" = "c"."company_id";
 
@@ -62,7 +66,11 @@ async function _deleteAllTestData() {
     "crm_v2"."invoice_accounts" AS "ia"
       USING "crm_v2"."companies" AS "c"
   WHERE
-    ("c"."is_test" = TRUE OR "c"."name" IN ('Big Farm Co Ltd', 'Test Farm Co Ltd'))
+    (
+      "c"."is_test" = TRUE
+      OR "c"."name" IN ('Big Farm Co Ltd', 'Test Farm Co Ltd')
+      OR "c"."name" LIKE 'Big Farm Co Ltd%'
+    )
     AND "ia"."company_id" = "c"."company_id";
 
   DELETE
@@ -73,10 +81,11 @@ async function _deleteAllTestData() {
 
   DELETE
   FROM
-    "crm_v2"."companies"
+    "crm_v2"."companies" AS "c"
   WHERE
-    "is_test" = TRUE
-    OR "name" IN ('Big Farm Co Ltd', 'Test Farm Co Ltd');
+    "c"."is_test" = TRUE
+    OR "c"."name" IN ('Big Farm Co Ltd', 'Test Farm Co Ltd')
+    OR "c"."name" LIKE 'Big Farm Co Ltd%';
 
   DELETE
   FROM
