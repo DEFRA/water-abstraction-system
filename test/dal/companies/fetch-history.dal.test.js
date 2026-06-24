@@ -23,8 +23,8 @@ const FetchHistoryDal = require('../../../app/dal/companies/fetch-history.dal.js
 describe('Companies - Fetch History dal', () => {
   let licence
   let licenceHolder
+  let licenceVersionDifferentLicenceAndCompany
   let licenceVersionSameLicenceDifferentCompany
-  let licenceVersionSameLicenceNoCompany
   let pageNumber
 
   before(async () => {
@@ -39,9 +39,9 @@ describe('Companies - Fetch History dal', () => {
       companyId: generateUUID()
     })
 
-    // A licence version not linked to any company
-    licenceVersionSameLicenceNoCompany = await LicenceVersionHelper.add({
-      licenceId: licence.id,
+    // A licence version not linked to the company or licence
+    licenceVersionDifferentLicenceAndCompany = await LicenceVersionHelper.add({
+      licenceId: generateUUID(),
       companyId: generateUUID()
     })
 
@@ -56,8 +56,8 @@ describe('Companies - Fetch History dal', () => {
     await licenceHolder.clean()
 
     await licence.$query().delete()
+    await licenceVersionDifferentLicenceAndCompany.$query().delete()
     await licenceVersionSameLicenceDifferentCompany.$query().delete()
-    await licenceVersionSameLicenceNoCompany.$query().delete()
 
     Sinon.restore()
   })
