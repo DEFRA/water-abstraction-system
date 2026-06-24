@@ -41,8 +41,6 @@ describe('Companies - Fetch Licences dal', () => {
 
     companyId = licenceHolder.company.id
 
-    //startDate: new Date('2022-01-01'),
-
     // This is an older licence version linked to a different company. This confirms we are getting the right current
     // licence holder details
     olderLicenceVersion = await LicenceVersionHelper.add({
