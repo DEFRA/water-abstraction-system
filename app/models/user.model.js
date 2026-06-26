@@ -63,6 +63,14 @@ class UserModel extends BaseModel {
           to: 'licenceMonitoringStations.createdBy'
         }
       },
+      licenceUnregistrations: {
+        relation: Model.HasManyRelation,
+        modelClass: 'licence-unregistration.model',
+        join: {
+          from: 'users.id',
+          to: 'licenceUnregistrations.createdBy'
+        }
+      },
       returnVersions: {
         relation: Model.HasManyRelation,
         modelClass: 'return-version.model',
