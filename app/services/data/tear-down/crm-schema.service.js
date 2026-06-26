@@ -79,8 +79,8 @@ async function _deleteAllTestData() {
       USING "crm_v2"."companies" AS "c"
   WHERE
     "cc"."is_test" = TRUE
-     OR "c"."name" IN ('Big Farm Co Ltd', 'Test Farm Co Ltd')
-     OR "c"."name" LIKE 'Big Farm Co Ltd%';
+    OR "c"."name" IN ('Big Farm Co Ltd', 'Test Farm Co Ltd')
+    OR "c"."name" LIKE 'Big Farm Co Ltd%';
 
   DELETE
   FROM
