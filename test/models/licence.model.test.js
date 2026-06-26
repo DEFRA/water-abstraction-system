@@ -28,6 +28,8 @@ const LicenceMonitoringStationHelper = require('../support/helpers/licence-monit
 const LicenceMonitoringStationModel = require('../../app/models/licence-monitoring-station.model.js')
 const LicenceSupplementaryYearHelper = require('../support/helpers/licence-supplementary-year.helper.js')
 const LicenceSupplementaryYearModel = require('../../app/models/licence-supplementary-year.model.js')
+const LicenceUnregistrationHelper = require('../support/helpers/licence-unregistration.helper.js')
+const LicenceUnregistrationModel = require('../../app/models/licence-unregistration.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const ModLogHelper = require('../support/helpers/mod-log.helper.js')
@@ -59,6 +61,7 @@ describe('Licence model', () => {
   let licenceEndDateChanges
   let licenceMonitoringStations
   let licenceSupplementaryYears
+  let licenceUnregistrations
   let licenceVersions
   let modLogs
   let region
@@ -79,6 +82,7 @@ describe('Licence model', () => {
     licenceEndDateChanges = []
     licenceMonitoringStations = []
     licenceSupplementaryYears = []
+    licenceUnregistrations = []
     licenceVersions = []
     modLogs = []
     returnLogs = []
@@ -117,6 +121,10 @@ describe('Licence model', () => {
       // Create test licence supplementary years
       const licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({ licenceId: testRecord.id })
       licenceSupplementaryYears.push(licenceSupplementaryYear)
+
+      // Create test licence unregistrations
+      const licenceUnregistration = await LicenceUnregistrationHelper.add({ licenceId: testRecord.id })
+      licenceUnregistrations.push(licenceUnregistration)
 
       // Create test licence versions
       const licenceVersion = await LicenceVersionHelper.add({ licenceId: testRecord.id })
@@ -177,6 +185,10 @@ describe('Licence model', () => {
 
     for (const licenceSupplementaryYear of licenceSupplementaryYears) {
       await licenceSupplementaryYear.$query().delete()
+    }
+
+    for (const licenceUnregistration of licenceUnregistrations) {
+      await licenceUnregistration.$query().delete()
     }
 
     for (const licenceMonitoringStation of licenceMonitoringStations) {
@@ -365,6 +377,26 @@ describe('Licence model', () => {
         expect(result.licenceSupplementaryYears[0]).to.be.an.instanceOf(LicenceSupplementaryYearModel)
         expect(result.licenceSupplementaryYears).to.include(licenceSupplementaryYears[0])
         expect(result.licenceSupplementaryYears).to.include(licenceSupplementaryYears[1])
+      })
+    })
+
+    describe('when linking to licence unregistrations', () => {
+      it('can successfully run a related query', async () => {
+        const query = await LicenceModel.query().innerJoinRelated('licenceUnregistrations')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence unregistrations', async () => {
+        const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('licenceUnregistrations')
+
+        expect(result).to.be.instanceOf(LicenceModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceUnregistrations).to.be.an.array()
+        expect(result.licenceUnregistrations[0]).to.be.an.instanceOf(LicenceUnregistrationModel)
+        expect(result.licenceUnregistrations).to.include(licenceUnregistrations[0])
+        expect(result.licenceUnregistrations).to.include(licenceUnregistrations[1])
       })
     })
 

@@ -21,6 +21,8 @@ const LicenceEntityRoleHelper = require('../support/helpers/licence-entity-role.
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceMonitoringStationHelper = require('../support/helpers/licence-monitoring-station.helper.js')
 const LicenceMonitoringStationModel = require('../../app/models/licence-monitoring-station.model.js')
+const LicenceUnregistrationHelper = require('../support/helpers/licence-unregistration.helper.js')
+const LicenceUnregistrationModel = require('../../app/models/licence-unregistration.model.js')
 const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
 const ReturnVersionModel = require('../../app/models/return-version.model.js')
 const RoleHelper = require('../support/helpers/role.helper.js')
@@ -262,6 +264,41 @@ describe('User model', () => {
         expect(result.licenceMonitoringStations[0]).to.be.an.instanceOf(LicenceMonitoringStationModel)
         expect(result.licenceMonitoringStations).to.include(testLicenceMonitoringStations[0])
         expect(result.licenceMonitoringStations).to.include(testLicenceMonitoringStations[1])
+      })
+    })
+
+    describe('when linking to licence unregistrations', () => {
+      let testLicenceUnregistrations
+
+      beforeEach(async () => {
+        testLicenceUnregistrations = []
+        for (let i = 0; i < 2; i++) {
+          const licenceUnregistration = await LicenceUnregistrationHelper.add({ createdBy: testRecord.id })
+
+          testLicenceUnregistrations.push(licenceUnregistration)
+        }
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await UserModel.query().innerJoinRelated('licenceUnregistrations')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence unregistrations', async () => {
+        const result = await UserModel.query()
+          .findById(testRecord.id)
+          .limit(1)
+          .first()
+          .withGraphFetched('licenceUnregistrations')
+
+        expect(result).to.be.instanceOf(UserModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceUnregistrations).to.be.an.array()
+        expect(result.licenceUnregistrations[0]).to.be.an.instanceOf(LicenceUnregistrationModel)
+        expect(result.licenceUnregistrations).to.include(testLicenceUnregistrations[0])
+        expect(result.licenceUnregistrations).to.include(testLicenceUnregistrations[1])
       })
     })
 
