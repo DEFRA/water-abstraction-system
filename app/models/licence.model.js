@@ -82,6 +82,14 @@ class LicenceModel extends BaseModel {
           to: 'licenceSupplementaryYears.licenceId'
         }
       },
+      licenceUnregistrations: {
+        relation: Model.HasManyRelation,
+        modelClass: 'licence-unregistration.model',
+        join: {
+          from: 'licences.id',
+          to: 'licenceUnregistrations.licenceId'
+        }
+      },
       licenceVersions: {
         relation: Model.HasManyRelation,
         modelClass: 'licence-version.model',
