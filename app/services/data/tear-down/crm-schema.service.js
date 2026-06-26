@@ -75,9 +75,12 @@ async function _deleteAllTestData() {
 
   DELETE
   FROM
-    "crm_v2"."company_contacts"
+    "crm_v2"."company_contacts" AS "cc"
+      USING "crm_v2"."companies" AS "c"
   WHERE
-    "is_test" = TRUE;
+    "cc"."is_test" = TRUE
+     OR "c"."name" IN ('Big Farm Co Ltd', 'Test Farm Co Ltd')
+     OR "c"."name" LIKE 'Big Farm Co Ltd%';
 
   DELETE
   FROM
@@ -115,7 +118,8 @@ async function _deleteAllTestData() {
     "crm_v2"."contacts" AS "c"
   WHERE
     "c"."is_test" = TRUE
-    OR "c"."department" = 'Test Farm Manager';
+    OR "c"."department" = 'Test Farm Manager'
+    OR "c"."department" LIKE 'Test Contact%';
 
   DELETE
   FROM
