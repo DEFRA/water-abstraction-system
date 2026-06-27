@@ -20,8 +20,8 @@
     "seed": "knex seed:run --knexfile knexfile.application.js",
     "lint": "eslint .",
     "pretest": "NODE_ENV=test node db/clean.js",
-    "test": "lab --silent-skips --shuffle",
-    "test:skip": "lab --silent-skips --shuffle",
+    "test": "NODE_ENV=test vitest run --coverage",
+    "test:skip": "NODE_ENV=test vitest run",
     "postinstall": "npm run build",
     "version": "npx --yes auto-changelog -p --commit-limit false && git add CHANGELOG.md"
   },
@@ -69,9 +69,7 @@
     "tar": "^7.5.7"
   },
   "devDependencies": {
-    "@hapi/code": "^9.0.3",
-    "@hapi/hoek": "^11.0.2",
-    "@hapi/lab": "^26.0.1",
+    "@vitest/coverage-v8": "4.1.9",
     "eslint": "^9.14.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsdoc": "^62.9.0",
@@ -83,10 +81,12 @@
     "pino-pretty": "^13.1.1",
     "prettier": "3.3.3",
     "proxyquire": "^2.1.3",
-    "sinon": "^21.0.0"
+    "sinon": "^21.0.0",
+    "vitest": "4.1.9"
   },
   "allowScripts": {
     "unrs-resolver@1.11.0": true,
-    "@parcel/watcher@2.5.0": true
+    "@parcel/watcher@2.5.0": true,
+    "esbuild@0.27.7": true
   }
 }
