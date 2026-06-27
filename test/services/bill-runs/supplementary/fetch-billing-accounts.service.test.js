@@ -38,7 +38,13 @@ describe('Fetch Billing Accounts service', () => {
       ])
 
       expect(result).toHaveLength(2)
-      expect(result).toEqual(expect.arrayContaining(expectedResult.map((item) => expect.objectContaining(item))))
+      expect(result).toEqual(
+        expect.arrayContaining(
+          expectedResult.map((item) => {
+            return expect.objectContaining(item)
+          })
+        )
+      )
     })
   })
 })
