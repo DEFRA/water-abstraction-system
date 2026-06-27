@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -12,6 +12,7 @@ const ChargeElementHelper = require('../support/helpers/charge-element.helper.js
 const ChargeElementModel = require('../../app/models/charge-element.model.js')
 const ReviewChargeElementHelper = require('../support/helpers/review-charge-element.helper.js')
 const ReviewChargeElementReturnHelper = require('../support/helpers/review-charge-element-return.helper.js')
+const ReviewChargeElementReturnModel = require('../../app/models/review-charge-element-return.model.js')
 const ReviewChargeReferenceHelper = require('../support/helpers/review-charge-reference.helper.js')
 const ReviewChargeReferenceModel = require('../../app/models/review-charge-reference.model.js')
 const ReviewReturnHelper = require('../support/helpers/review-return.helper.js')
@@ -24,6 +25,7 @@ describe('Review Charge Element model', () => {
   let testChargeElement
   let testRecord
   let testReviewChargeReference
+  let testReviewChargeElementReturns
   let testReviewReturns
 
   before(async () => {
@@ -36,16 +38,34 @@ describe('Review Charge Element model', () => {
     })
 
     testReviewReturns = []
+    testReviewChargeElementReturns = []
     for (let i = 0; i < 2; i++) {
       const testReviewReturn = await ReviewReturnHelper.add()
 
       testReviewReturns.push(testReviewReturn)
 
-      await ReviewChargeElementReturnHelper.add({
+      const testReviewChargeElementReturn = await ReviewChargeElementReturnHelper.add({
         reviewChargeElementId: testRecord.id,
         reviewReturnId: testReviewReturn.id
       })
+
+      testReviewChargeElementReturns.push(testReviewChargeElementReturn)
     }
+  })
+
+  after(async () => {
+    await testChargeElement.$query().delete()
+    await testReviewChargeReference.$query().delete()
+
+    for (const reviewReturn of testReviewReturns) {
+      await reviewReturn.$query().delete()
+    }
+
+    for (const reviewChargeElementReturn of testReviewChargeElementReturns) {
+      await reviewChargeElementReturn.$query().delete()
+    }
+
+    await testRecord.$query().delete()
   })
 
   describe('Basic query', () => {
@@ -73,6 +93,28 @@ describe('Review Charge Element model', () => {
 
         expect(result.chargeElement).to.be.an.instanceOf(ChargeElementModel)
         expect(result.chargeElement).to.equal(testChargeElement)
+      })
+    })
+
+    describe('when linking to review charge element returns', () => {
+      it('can successfully run a related query', async () => {
+        const query = await ReviewChargeElementModel.query().innerJoinRelated('reviewChargeElementReturns')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the review charge element returns', async () => {
+        const result = await ReviewChargeElementModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('reviewChargeElementReturns')
+
+        expect(result).to.be.instanceOf(ReviewChargeElementModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.reviewChargeElementReturns).to.be.an.array()
+        expect(result.reviewChargeElementReturns[0]).to.be.an.instanceOf(ReviewChargeElementReturnModel)
+        expect(result.reviewChargeElementReturns).to.include(testReviewChargeElementReturns[0])
+        expect(result.reviewChargeElementReturns).to.include(testReviewChargeElementReturns[1])
       })
     })
 

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -31,16 +31,14 @@ describe('Bill Run model', () => {
   before(async () => {
     // Link regions
     testRegion = RegionHelper.select()
-    const { id: regionId } = testRegion
 
     // Test record
-    testRecord = await BillRunHelper.add({ regionId })
-    const { id } = testRecord
+    testRecord = await BillRunHelper.add({ regionId: testRegion.id })
 
     // Link bills
     testBills = []
     for (let i = 0; i < 2; i++) {
-      const bill = await BillHelper.add({ financialYearEnding: 2023, billRunId: id })
+      const bill = await BillHelper.add({ financialYearEnding: 2023, billRunId: testRecord.id })
 
       testBills.push(bill)
     }
@@ -48,7 +46,7 @@ describe('Bill Run model', () => {
     // Link to bill run volumes
     testBillRunVolumes = []
     for (let i = 0; i < 2; i++) {
-      const billRunVolume = await BillRunVolumeHelper.add({ billRunId: id })
+      const billRunVolume = await BillRunVolumeHelper.add({ billRunId: testRecord.id })
 
       testBillRunVolumes.push(billRunVolume)
     }
@@ -56,10 +54,26 @@ describe('Bill Run model', () => {
     // Link to review licences
     testReviewLicences = []
     for (let i = 0; i < 2; i++) {
-      const reviewLicence = await ReviewLicenceHelper.add({ billRunId: id })
+      const reviewLicence = await ReviewLicenceHelper.add({ billRunId: testRecord.id })
 
       testReviewLicences.push(reviewLicence)
     }
+  })
+
+  after(async () => {
+    for (const bill of testBills) {
+      await bill.$query().delete()
+    }
+
+    for (const billRunVolume of testBillRunVolumes) {
+      await billRunVolume.$query().delete()
+    }
+
+    for (const reviewLicence of testReviewLicences) {
+      await reviewLicence.$query().delete()
+    }
+
+    await testRecord.$query().delete()
   })
 
   describe('Basic query', () => {

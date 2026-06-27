@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -28,6 +28,12 @@ describe('Charge Version Note model', () => {
     testUser = UserHelper.select()
     testRecord = await ChargeVersionNoteHelper.add({ userId: testUser.userId })
     testChargeVersion = await ChargeVersionHelper.add({ noteId: testRecord.id })
+  })
+
+  after(async () => {
+    await testChargeVersion.$query().delete()
+
+    await testRecord.$query().delete()
   })
 
   describe('Basic query', () => {

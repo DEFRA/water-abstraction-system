@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, before, after, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -33,26 +33,34 @@ describe('Company Contacts model', () => {
   before(async () => {
     // Link licence role
     testLicenceRole = await LicenceRoleHelper.select()
-    const { id: licenceRoleId } = testLicenceRole
 
     // Link contact
     testContact = await ContactHelper.add()
-    const { id: contactId } = testContact
 
     // Link company
     testCompany = await CompanyHelper.add()
-    const { id: companyId } = testCompany
 
     // Link to user for createdBy
     testCreatedByUser = await UserHelper.select(0)
-    const { id: createdBy } = testCreatedByUser
 
     // Link to user for updatedBy
     testUpdatedByUser = await UserHelper.select(1)
-    const { id: updatedBy } = testUpdatedByUser
 
     // Test record
-    testRecord = await CompanyContactHelper.add({ companyId, contactId, createdBy, licenceRoleId, updatedBy })
+    testRecord = await CompanyContactHelper.add({
+      companyId: testCompany.id,
+      contactId: testContact.id,
+      createdBy: testCreatedByUser.id,
+      licenceRoleId: testLicenceRole.id,
+      updatedBy: testUpdatedByUser.id
+    })
+  })
+
+  after(async () => {
+    await testCompany.$query().delete()
+    await testContact.$query().delete()
+
+    await testRecord.$query().delete()
   })
 
   describe('Basic query', () => {
@@ -161,37 +169,47 @@ describe('Company Contacts model', () => {
   })
 
   describe('$abstractionAlertType', () => {
+    let abstractionAlertTypeTestRecord
+
+    afterEach(async () => {
+      await abstractionAlertTypeTestRecord.$query().delete()
+    })
+
     describe('when "abstractionAlerts" is disabled', () => {
+      beforeEach(async () => {
+        abstractionAlertTypeTestRecord = await CompanyContactHelper.add({ abstractionAlerts: false })
+      })
+
       it('returns "no"', () => {
-        const result = testRecord.$abstractionAlertType()
+        const result = abstractionAlertTypeTestRecord.$abstractionAlertType()
 
         expect(result).to.equal('no')
       })
     })
 
     describe('when "abstractionAlerts" is enabled', () => {
-      before(async () => {
-        testRecord = await CompanyContactHelper.add({ abstractionAlerts: true })
+      beforeEach(async () => {
+        abstractionAlertTypeTestRecord = await CompanyContactHelper.add({ abstractionAlerts: true })
       })
 
       describe('and "abstractionAlertLicences" is null', () => {
         it('returns "yes"', () => {
-          const result = testRecord.$abstractionAlertType()
+          const result = abstractionAlertTypeTestRecord.$abstractionAlertType()
 
           expect(result).to.equal('yes')
         })
       })
 
       describe('and "abstractionAlertLicences" is populated', () => {
-        before(async () => {
-          testRecord = await CompanyContactHelper.add({
+        beforeEach(async () => {
+          abstractionAlertTypeTestRecord = await CompanyContactHelper.add({
             abstractionAlertLicences: JSON.stringify([generateUUID()]),
             abstractionAlerts: true
           })
         })
 
         it('returns "some"', () => {
-          const result = testRecord.$abstractionAlertType()
+          const result = abstractionAlertTypeTestRecord.$abstractionAlertType()
 
           expect(result).to.equal('some')
         })

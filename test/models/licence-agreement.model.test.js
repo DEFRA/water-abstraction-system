@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -27,14 +27,21 @@ describe('Licence Agreement model', () => {
   before(async () => {
     // Link to financial agreement
     testFinancialAgreement = FinancialAgreementHelper.select(FINANCIAL_AGREEMENT_MCHG_INDEX)
-    const { id: financialAgreementId } = testFinancialAgreement
 
     // Link to licence
     testLicence = await LicenceHelper.add()
-    const { licenceRef } = testLicence
 
     // Test record
-    testRecord = await LicenceAgreementHelper.add({ financialAgreementId, licenceRef })
+    testRecord = await LicenceAgreementHelper.add({
+      financialAgreementId: testFinancialAgreement.id,
+      licenceRef: testLicence.licenceRef
+    })
+  })
+
+  after(async () => {
+    await testLicence.$query().delete()
+
+    await testRecord.$query().delete()
   })
 
   describe('Basic query', () => {

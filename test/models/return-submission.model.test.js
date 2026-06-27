@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -21,12 +21,39 @@ const { unitNames } = require('../../app/lib/static-lookups.lib.js')
 
 describe('Return Submission model', () => {
   let testRecord
+  let testReturnLog
+  let testReturnSubmissionLines
+
+  before(async () => {
+    testReturnLog = await ReturnLogHelper.add()
+
+    testRecord = await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id })
+
+    testReturnSubmissionLines = []
+    for (let i = 0; i < 2; i++) {
+      // NOTE: A constraint in the lines table means you cannot have 2 records with the same returnSubmissionId,
+      // startDate and endDate
+      const returnSubmissionLine = await ReturnSubmissionLineHelper.add({
+        returnSubmissionId: testRecord.id,
+        startDate: new Date(2022, 11, 1 + i),
+        endDate: new Date(2022, 11, 2 + i)
+      })
+
+      testReturnSubmissionLines.push(returnSubmissionLine)
+    }
+  })
+
+  after(async () => {
+    await testReturnLog.$query().delete()
+
+    for (const returnSubmissionLine of testReturnSubmissionLines) {
+      await returnSubmissionLine.$query().delete()
+    }
+
+    await testRecord.$query().delete()
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await ReturnSubmissionHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await ReturnSubmissionModel.query().findById(testRecord.id)
 
@@ -37,13 +64,6 @@ describe('Return Submission model', () => {
 
   describe('Relationships', () => {
     describe('when linking to return log', () => {
-      let testReturnLog
-
-      beforeEach(async () => {
-        testReturnLog = await ReturnLogHelper.add()
-        testRecord = await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ReturnSubmissionModel.query().innerJoinRelated('returnLog')
 
@@ -62,26 +82,6 @@ describe('Return Submission model', () => {
     })
 
     describe('when linking to return submission lines', () => {
-      let testLines
-
-      beforeEach(async () => {
-        testRecord = await ReturnSubmissionHelper.add()
-        const { id: returnSubmissionId } = testRecord
-
-        testLines = []
-        for (let i = 0; i < 2; i++) {
-          // NOTE: A constraint in the lines table means you cannot have 2 records with the same returnSubmissionId,
-          // startDate and endDate
-          const returnSubmissionLine = await ReturnSubmissionLineHelper.add({
-            returnSubmissionId,
-            startDate: new Date(2022, 11, 1 + i),
-            endDate: new Date(2022, 11, 2 + i)
-          })
-
-          testLines.push(returnSubmissionLine)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await ReturnSubmissionModel.query().innerJoinRelated('returnSubmissionLines')
 
@@ -98,15 +98,17 @@ describe('Return Submission model', () => {
 
         expect(result.returnSubmissionLines).to.be.an.array()
         expect(result.returnSubmissionLines[0]).to.be.an.instanceOf(ReturnSubmissionLineModel)
-        expect(result.returnSubmissionLines).to.include(testLines[0])
-        expect(result.returnSubmissionLines).to.include(testLines[1])
+        expect(result.returnSubmissionLines).to.include(testReturnSubmissionLines[0])
+        expect(result.returnSubmissionLines).to.include(testReturnSubmissionLines[1])
       })
     })
   })
 
   describe('$applyReadings', () => {
+    let applyReadingsTestRecord
+
     beforeEach(() => {
-      testRecord = ReturnSubmissionModel.fromJson({
+      applyReadingsTestRecord = ReturnSubmissionModel.fromJson({
         metadata: {
           meters: [
             {
@@ -126,18 +128,20 @@ describe('Return Submission model', () => {
     })
 
     it('applies readings to the return submission lines', () => {
-      testRecord.$applyReadings()
+      applyReadingsTestRecord.$applyReadings()
 
-      expect(testRecord.returnSubmissionLines[0].reading).to.equal(1)
-      expect(testRecord.returnSubmissionLines[1].reading).to.equal(2)
-      expect(testRecord.returnSubmissionLines[2].reading).be.null()
+      expect(applyReadingsTestRecord.returnSubmissionLines[0].reading).to.equal(1)
+      expect(applyReadingsTestRecord.returnSubmissionLines[1].reading).to.equal(2)
+      expect(applyReadingsTestRecord.returnSubmissionLines[2].reading).be.null()
     })
   })
 
   describe('$meter', () => {
+    let meterTestRecord
+
     describe('when the return submission contains meters', () => {
-      beforeEach(async () => {
-        testRecord = ReturnSubmissionModel.fromJson({
+      beforeEach(() => {
+        meterTestRecord = ReturnSubmissionModel.fromJson({
           metadata: {
             meters: [{ serialNumber: 'METER_1' }, { serialNumber: 'METER_2' }]
           }
@@ -145,7 +149,7 @@ describe('Return Submission model', () => {
       })
 
       it('returns the first meter', () => {
-        const result = testRecord.$meter()
+        const result = meterTestRecord.$meter()
 
         expect(result).to.equal({ serialNumber: 'METER_1' })
       })
@@ -153,11 +157,11 @@ describe('Return Submission model', () => {
 
     describe('when the return submission contains no meters', () => {
       beforeEach(async () => {
-        testRecord = ReturnSubmissionModel.fromJson()
+        meterTestRecord = ReturnSubmissionModel.fromJson()
       })
 
       it('returns null', () => {
-        const result = testRecord.$meter()
+        const result = meterTestRecord.$meter()
 
         expect(result).to.be.null()
       })
@@ -165,13 +169,15 @@ describe('Return Submission model', () => {
   })
 
   describe('$method', () => {
+    let methodTestRecord
+
     describe('when the return submission contains the method', () => {
       beforeEach(async () => {
-        testRecord = ReturnSubmissionModel.fromJson({ metadata: { method: 'METHOD' } })
+        methodTestRecord = ReturnSubmissionModel.fromJson({ metadata: { method: 'METHOD' } })
       })
 
       it('returns the method', () => {
-        const result = testRecord.$method()
+        const result = methodTestRecord.$method()
 
         expect(result).to.equal('METHOD')
       })
@@ -179,11 +185,11 @@ describe('Return Submission model', () => {
 
     describe('when the return submission contains no method', () => {
       beforeEach(async () => {
-        testRecord = ReturnSubmissionModel.fromJson()
+        methodTestRecord = ReturnSubmissionModel.fromJson()
       })
 
       it('returns the method as abstractionVolumes', () => {
-        const result = testRecord.$method()
+        const result = methodTestRecord.$method()
 
         expect(result).to.equal('abstractionVolumes')
       })
@@ -191,13 +197,15 @@ describe('Return Submission model', () => {
   })
 
   describe('$units', () => {
+    let unitsTestRecord
+
     describe('when the return submission contains the unit', () => {
       beforeEach(async () => {
-        testRecord = ReturnSubmissionModel.fromJson({ metadata: { units: 'UNITS' } })
+        unitsTestRecord = ReturnSubmissionModel.fromJson({ metadata: { units: 'UNITS' } })
       })
 
       it('returns the unit', () => {
-        const result = testRecord.$units()
+        const result = unitsTestRecord.$units()
 
         expect(result).to.equal('UNITS')
       })
@@ -205,11 +213,11 @@ describe('Return Submission model', () => {
 
     describe('when the return submission contains no unit', () => {
       beforeEach(async () => {
-        testRecord = ReturnSubmissionModel.fromJson()
+        unitsTestRecord = ReturnSubmissionModel.fromJson()
       })
 
       it('returns the units as cubic metres', () => {
-        const result = testRecord.$units()
+        const result = unitsTestRecord.$units()
 
         expect(result).to.equal(unitNames.CUBIC_METRES)
       })

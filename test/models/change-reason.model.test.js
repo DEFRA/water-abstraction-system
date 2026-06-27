@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -23,14 +23,19 @@ describe('Change Reason model', () => {
 
   before(async () => {
     testRecord = ChangeReasonHelper.select(CHANGE_REASON_SUCCESSION_REMAINDER_INDEX)
-    const { id } = testRecord
 
     // Link charge versions
     testChargeVersions = []
     for (let i = 0; i < 2; i++) {
-      const chargeVersion = await ChargeVersionHelper.add({ changeReasonId: id })
+      const chargeVersion = await ChargeVersionHelper.add({ changeReasonId: testRecord.id })
 
       testChargeVersions.push(chargeVersion)
+    }
+  })
+
+  after(async () => {
+    for (const chargeVersion of testChargeVersions) {
+      await chargeVersion.$query().delete()
     }
   })
 

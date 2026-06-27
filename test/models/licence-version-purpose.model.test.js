@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -70,6 +70,21 @@ describe('Licence Version Purpose model', () => {
       testLicenceVersionPurposeConditions.push(licenceVersionPurposeCondition)
       testLicenceVersionPurposePoints.push(licenceVersionPurposePoint)
     }
+  })
+
+  after(async () => {
+    await testLicenceVersion.$query().delete()
+    await testPoint.$query().delete()
+
+    for (const licenceVersionPurposeCondition of testLicenceVersionPurposeConditions) {
+      await licenceVersionPurposeCondition.$query().delete()
+    }
+
+    for (const licenceVersionPurposePoint of testLicenceVersionPurposePoints) {
+      await licenceVersionPurposePoint.$query().delete()
+    }
+
+    await testRecord.$query().delete()
   })
 
   describe('Basic query', () => {

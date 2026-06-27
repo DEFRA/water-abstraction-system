@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -27,6 +27,12 @@ describe('Return Cycle model', () => {
       const returnLog = await ReturnLogHelper.add({ returnCycleId: testRecord.id })
 
       testReturnLogs.push(returnLog)
+    }
+  })
+
+  after(async () => {
+    for (const returnLog of testReturnLogs) {
+      await returnLog.$query().delete()
     }
   })
 

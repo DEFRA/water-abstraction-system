@@ -42,7 +42,6 @@ describe('Company model', () => {
 
     // Test record
     testRecord = await CompanyHelper.add({ regionId: region.id })
-    const { id: companyId } = testRecord
 
     billingAccountAddresses = []
     billingAccounts = []
@@ -57,32 +56,32 @@ describe('Company model', () => {
       // NOTE: A constraint in the billing_account_addresses table means you cannot have 2 records with the same
       // billingAccountId and start date
       const startDate = i === 0 ? new Date(2023, 8, 4) : new Date(2023, 8, 3)
-      const billingAccountAddress = await BillingAccountAddressHelper.add({ startDate, companyId })
+      const billingAccountAddress = await BillingAccountAddressHelper.add({ startDate, companyId: testRecord.id })
 
       billingAccountAddresses.push(billingAccountAddress)
 
       // Link billing accounts
-      const billingAccount = await BillingAccountHelper.add({ companyId })
+      const billingAccount = await BillingAccountHelper.add({ companyId: testRecord.id })
 
       billingAccounts.push(billingAccount)
 
       // Link company addresses
-      const companyAddress = await CompanyAddressHelper.add({ companyId })
+      const companyAddress = await CompanyAddressHelper.add({ companyId: testRecord.id })
 
       companyAddresses.push(companyAddress)
 
       // Link company contacts
-      const companyContact = await CompanyContactHelper.add({ companyId })
+      const companyContact = await CompanyContactHelper.add({ companyId: testRecord.id })
 
       companyContacts.push(companyContact)
 
       // Link licence document roles
-      const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ companyId })
+      const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ companyId: testRecord.id })
 
       licenceDocumentRoles.push(licenceDocumentRole)
 
       // Link licence versions
-      const licenceVersion = await LicenceVersionHelper.add({ companyId })
+      const licenceVersion = await LicenceVersionHelper.add({ companyId: testRecord.id })
 
       licenceVersions.push(licenceVersion)
     }

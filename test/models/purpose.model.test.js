@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -57,6 +57,24 @@ describe('Purpose model', () => {
       const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({ purposeId: testRecord.id })
 
       testReturnRequirementPurposes.push(returnRequirementPurpose)
+    }
+  })
+
+  after(async () => {
+    for (const chargeElement of testChargeElements) {
+      await chargeElement.$query().delete()
+    }
+
+    for (const chargeReference of testChargeReferences) {
+      await chargeReference.$query().delete()
+    }
+
+    for (const licenceVersionPurpose of testLicenceVersionPurposes) {
+      await licenceVersionPurpose.$query().delete()
+    }
+
+    for (const returnRequirementPurpose of testReturnRequirementPurposes) {
+      await returnRequirementPurpose.$query().delete()
     }
   })
 

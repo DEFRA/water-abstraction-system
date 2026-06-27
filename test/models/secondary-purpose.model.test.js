@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -18,7 +18,43 @@ const SecondaryPurposeHelper = require('../support/helpers/secondary-purpose.hel
 const SecondaryPurposeModel = require('../../app/models/secondary-purpose.model.js')
 
 describe('Secondary Purpose model', () => {
-  const testRecordId = SecondaryPurposeHelper.select().id
+  let testRecordId
+  let testLicenceVersionPurposes
+  let testReturnRequirementPurposes
+
+  before(async () => {
+    testRecordId = SecondaryPurposeHelper.select().id
+
+    testLicenceVersionPurposes = []
+    for (let i = 0; i < 2; i++) {
+      const licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
+        notes: `TEST licence Version purpose ${i}`,
+        secondaryPurposeId: testRecordId
+      })
+
+      testLicenceVersionPurposes.push(licenceVersionPurpose)
+    }
+
+    testReturnRequirementPurposes = []
+    for (let i = 0; i < 2; i++) {
+      const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
+        alias: `TEST return requirement purpose ${i}`,
+        secondaryPurposeId: testRecordId
+      })
+
+      testReturnRequirementPurposes.push(returnRequirementPurpose)
+    }
+  })
+
+  after(async () => {
+    for (const licenceVersionPurpose of testLicenceVersionPurposes) {
+      await licenceVersionPurpose.$query().delete()
+    }
+
+    for (const returnRequirementPurpose of testReturnRequirementPurposes) {
+      await returnRequirementPurpose.$query().delete()
+    }
+  })
 
   describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
@@ -31,20 +67,6 @@ describe('Secondary Purpose model', () => {
 
   describe('Relationships', () => {
     describe('when linking to licence version purposes', () => {
-      let testLicenceVersionPurposes
-
-      beforeEach(async () => {
-        testLicenceVersionPurposes = []
-        for (let i = 0; i < 2; i++) {
-          const licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
-            notes: `TEST licence Version purpose ${i}`,
-            secondaryPurposeId: testRecordId
-          })
-
-          testLicenceVersionPurposes.push(licenceVersionPurpose)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await SecondaryPurposeModel.query().innerJoinRelated('licenceVersionPurposes')
 
@@ -67,20 +89,6 @@ describe('Secondary Purpose model', () => {
     })
 
     describe('when linking to return requirement purposes', () => {
-      let testReturnRequirementPurposes
-
-      beforeEach(async () => {
-        testReturnRequirementPurposes = []
-        for (let i = 0; i < 2; i++) {
-          const returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-            alias: `TEST return requirement purpose ${i}`,
-            secondaryPurposeId: testRecordId
-          })
-
-          testReturnRequirementPurposes.push(returnRequirementPurpose)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await SecondaryPurposeModel.query().innerJoinRelated('returnRequirementPurposes')
 

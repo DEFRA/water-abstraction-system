@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -63,6 +63,24 @@ describe('Billing Account model', () => {
 
       testChargeVersions.push(chargeVersion)
     }
+  })
+
+  after(async () => {
+    await testCompany.$query().delete()
+
+    for (const billingAccountAddress of testBillingAccountAddresses) {
+      await billingAccountAddress.$query().delete()
+    }
+
+    for (const bill of testBills) {
+      await bill.$query().delete()
+    }
+
+    for (const chargeVersion of testChargeVersions) {
+      await chargeVersion.$query().delete()
+    }
+
+    await testRecord.$query().delete()
   })
 
   describe('Basic query', () => {

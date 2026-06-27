@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -56,6 +56,21 @@ describe('Return Log model', () => {
 
       testReviewReturns.push(reviewReturn)
     }
+  })
+
+  after(async () => {
+    await testLicence.$query().delete()
+    await testReturnRequirements.$query().delete()
+
+    for (const returnSubmission of testReturnSubmissions) {
+      await returnSubmission.$query().delete()
+    }
+
+    for (const reviewReturn of testReviewReturns) {
+      await reviewReturn.$query().delete()
+    }
+
+    await testRecord.$query().delete()
   })
 
   describe('Basic query', () => {
