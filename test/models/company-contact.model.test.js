@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, before, after, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CompanyContactHelper = require('../support/helpers/company-contact.helper.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
@@ -30,7 +23,7 @@ describe('Company Contacts model', () => {
   let testRecord
   let testUpdatedByUser
 
-  before(async () => {
+  beforeAll(async () => {
     // Link licence role
     testLicenceRole = await LicenceRoleHelper.select()
 
@@ -56,7 +49,7 @@ describe('Company Contacts model', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testCompany.$query().delete()
     await testContact.$query().delete()
 
@@ -67,8 +60,8 @@ describe('Company Contacts model', () => {
     it('can successfully run a basic query', async () => {
       const result = await CompanyContactModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(CompanyContactModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(CompanyContactModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -77,17 +70,17 @@ describe('Company Contacts model', () => {
       it('can successfully run a related query', async () => {
         const query = await CompanyContactModel.query().innerJoinRelated('company')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the company', async () => {
         const result = await CompanyContactModel.query().findById(testRecord.id).withGraphFetched('company')
 
-        expect(result).to.be.instanceOf(CompanyContactModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(CompanyContactModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.company).to.be.an.instanceOf(CompanyModel)
-        expect(result.company).to.equal(testCompany)
+        expect(result.company).toBeInstanceOf(CompanyModel)
+        expect(result.company).toEqual(testCompany)
       })
     })
 
@@ -95,17 +88,17 @@ describe('Company Contacts model', () => {
       it('can successfully run a related query', async () => {
         const query = await CompanyContactModel.query().innerJoinRelated('contact')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the contact', async () => {
         const result = await CompanyContactModel.query().findById(testRecord.id).withGraphFetched('contact')
 
-        expect(result).to.be.instanceOf(CompanyContactModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(CompanyContactModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.contact).to.be.an.instanceOf(ContactModel)
-        expect(result.contact).to.equal(testContact)
+        expect(result.contact).toBeInstanceOf(ContactModel)
+        expect(result.contact).toEqual(testContact)
       })
     })
 
@@ -113,19 +106,17 @@ describe('Company Contacts model', () => {
       it('can successfully run a related query', async () => {
         const query = await CompanyContactModel.query().innerJoinRelated('createdByUser')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the created by user', async () => {
         const result = await CompanyContactModel.query().findById(testRecord.id).withGraphFetched('createdByUser')
 
-        expect(result).to.be.instanceOf(CompanyContactModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(CompanyContactModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.createdByUser).to.be.an.instanceOf(UserModel)
-        expect(result.createdByUser).to.equal(testCreatedByUser, {
-          skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt', 'userData']
-        })
+        expect(result.createdByUser).toBeInstanceOf(UserModel)
+        expect(result.createdByUser).toMatchObject({ ...testCreatedByUser, password: expect.any(String) })
       })
     })
 
@@ -133,17 +124,17 @@ describe('Company Contacts model', () => {
       it('can successfully run a related query', async () => {
         const query = await CompanyContactModel.query().innerJoinRelated('licenceRole')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence role', async () => {
         const result = await CompanyContactModel.query().findById(testRecord.id).withGraphFetched('licenceRole')
 
-        expect(result).to.be.instanceOf(CompanyContactModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(CompanyContactModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.licenceRole).to.be.an.instanceOf(LicenceRoleModel)
-        expect(result.licenceRole).to.equal(testLicenceRole, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.licenceRole).toBeInstanceOf(LicenceRoleModel)
+        expect(result.licenceRole).toMatchObject(testLicenceRole)
       })
     })
 
@@ -151,19 +142,17 @@ describe('Company Contacts model', () => {
       it('can successfully run a related query', async () => {
         const query = await CompanyContactModel.query().innerJoinRelated('updatedByUser')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the updated by user', async () => {
         const result = await CompanyContactModel.query().findById(testRecord.id).withGraphFetched('updatedByUser')
 
-        expect(result).to.be.instanceOf(CompanyContactModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(CompanyContactModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.updatedByUser).to.be.an.instanceOf(UserModel)
-        expect(result.updatedByUser).to.equal(testUpdatedByUser, {
-          skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt', 'userData']
-        })
+        expect(result.updatedByUser).toBeInstanceOf(UserModel)
+        expect(result.updatedByUser).toMatchObject({ ...testUpdatedByUser, password: expect.any(String) })
       })
     })
   })
@@ -183,7 +172,7 @@ describe('Company Contacts model', () => {
       it('returns "no"', () => {
         const result = abstractionAlertTypeTestRecord.$abstractionAlertType()
 
-        expect(result).to.equal('no')
+        expect(result).toEqual('no')
       })
     })
 
@@ -196,7 +185,7 @@ describe('Company Contacts model', () => {
         it('returns "yes"', () => {
           const result = abstractionAlertTypeTestRecord.$abstractionAlertType()
 
-          expect(result).to.equal('yes')
+          expect(result).toEqual('yes')
         })
       })
 
@@ -211,7 +200,7 @@ describe('Company Contacts model', () => {
         it('returns "some"', () => {
           const result = abstractionAlertTypeTestRecord.$abstractionAlertType()
 
-          expect(result).to.equal('some')
+          expect(result).toEqual('some')
         })
       })
     })

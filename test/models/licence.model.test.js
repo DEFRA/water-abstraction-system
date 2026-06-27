@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach, after, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillLicenceHelper = require('../support/helpers/bill-licence.helper.js')
 const BillLicenceModel = require('../../app/models/bill-licence.model.js')
@@ -71,7 +64,7 @@ describe('Licence model', () => {
   let testRecord
   let workflows
 
-  before(async () => {
+  beforeAll(async () => {
     region = RegionHelper.select()
 
     testRecord = await LicenceHelper.add({ regionId: region.id })
@@ -155,7 +148,7 @@ describe('Licence model', () => {
     licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({ licenceRef: testRecord.licenceRef })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await licenceDocumentHeader.$query().delete()
     await licenceDocument.$query().delete()
 
@@ -218,8 +211,8 @@ describe('Licence model', () => {
     it('can successfully run a basic query', async () => {
       const result = await LicenceModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(LicenceModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(LicenceModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -228,19 +221,19 @@ describe('Licence model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('billLicences')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the bill licences', async () => {
         const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('billLicences')
 
-        expect(result).to.be.instanceOf(LicenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.billLicences).to.be.an.array()
-        expect(result.billLicences[0]).to.be.an.instanceOf(BillLicenceModel)
-        expect(result.billLicences).to.include(billLicences[0])
-        expect(result.billLicences).to.include(billLicences[1])
+        expect(result.billLicences).toBeInstanceOf(Array)
+        expect(result.billLicences[0]).toBeInstanceOf(BillLicenceModel)
+        expect(result.billLicences).toContainEqual(billLicences[0])
+        expect(result.billLicences).toContainEqual(billLicences[1])
       })
     })
 
@@ -248,19 +241,19 @@ describe('Licence model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('chargeVersions')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge versions', async () => {
         const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('chargeVersions')
 
-        expect(result).to.be.instanceOf(LicenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.chargeVersions).to.be.an.array()
-        expect(result.chargeVersions[0]).to.be.an.instanceOf(ChargeVersionModel)
-        expect(result.chargeVersions).to.include(chargeVersions[0])
-        expect(result.chargeVersions).to.include(chargeVersions[1])
+        expect(result.chargeVersions).toBeInstanceOf(Array)
+        expect(result.chargeVersions[0]).toBeInstanceOf(ChargeVersionModel)
+        expect(result.chargeVersions).toContainEqual(chargeVersions[0])
+        expect(result.chargeVersions).toContainEqual(chargeVersions[1])
       })
     })
 
@@ -268,19 +261,19 @@ describe('Licence model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('licenceAgreements')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence agreements', async () => {
         const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('licenceAgreements')
 
-        expect(result).to.be.instanceOf(LicenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceAgreements).to.be.an.array()
-        expect(result.licenceAgreements[0]).to.be.an.instanceOf(LicenceAgreementModel)
-        expect(result.licenceAgreements).to.include(licenceAgreements[0])
-        expect(result.licenceAgreements).to.include(licenceAgreements[1])
+        expect(result.licenceAgreements).toBeInstanceOf(Array)
+        expect(result.licenceAgreements[0]).toBeInstanceOf(LicenceAgreementModel)
+        expect(result.licenceAgreements).toContainEqual(licenceAgreements[0])
+        expect(result.licenceAgreements).toContainEqual(licenceAgreements[1])
       })
     })
 
@@ -288,17 +281,17 @@ describe('Licence model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('licenceDocument')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence document', async () => {
         const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('licenceDocument')
 
-        expect(result).to.be.instanceOf(LicenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceDocument).to.be.an.instanceOf(LicenceDocumentModel)
-        expect(result.licenceDocument).to.equal(licenceDocument)
+        expect(result.licenceDocument).toBeInstanceOf(LicenceDocumentModel)
+        expect(result.licenceDocument).toEqual(licenceDocument)
       })
     })
 
@@ -306,17 +299,17 @@ describe('Licence model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('licenceDocumentHeader')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence document header', async () => {
         const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('licenceDocumentHeader')
 
-        expect(result).to.be.instanceOf(LicenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceDocumentHeader).to.be.an.instanceOf(LicenceDocumentHeaderModel)
-        expect(result.licenceDocumentHeader).to.equal(licenceDocumentHeader)
+        expect(result.licenceDocumentHeader).toBeInstanceOf(LicenceDocumentHeaderModel)
+        expect(result.licenceDocumentHeader).toEqual(licenceDocumentHeader)
       })
     })
 
@@ -324,19 +317,19 @@ describe('Licence model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('licenceEndDateChanges')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence end date changes', async () => {
         const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('licenceEndDateChanges')
 
-        expect(result).to.be.instanceOf(LicenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceEndDateChanges).to.be.an.array()
-        expect(result.licenceEndDateChanges[0]).to.be.an.instanceOf(LicenceEndDateChangeModel)
-        expect(result.licenceEndDateChanges).to.include(licenceEndDateChanges[0])
-        expect(result.licenceEndDateChanges).to.include(licenceEndDateChanges[1])
+        expect(result.licenceEndDateChanges).toBeInstanceOf(Array)
+        expect(result.licenceEndDateChanges[0]).toBeInstanceOf(LicenceEndDateChangeModel)
+        expect(result.licenceEndDateChanges).toContainEqual(licenceEndDateChanges[0])
+        expect(result.licenceEndDateChanges).toContainEqual(licenceEndDateChanges[1])
       })
     })
 
@@ -344,19 +337,19 @@ describe('Licence model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('licenceMonitoringStations')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence monitoring stations', async () => {
         const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('licenceMonitoringStations')
 
-        expect(result).to.be.instanceOf(LicenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceMonitoringStations).to.be.an.array()
-        expect(result.licenceMonitoringStations[0]).to.be.an.instanceOf(LicenceMonitoringStationModel)
-        expect(result.licenceMonitoringStations).to.include(licenceMonitoringStations[0])
-        expect(result.licenceMonitoringStations).to.include(licenceMonitoringStations[1])
+        expect(result.licenceMonitoringStations).toBeInstanceOf(Array)
+        expect(result.licenceMonitoringStations[0]).toBeInstanceOf(LicenceMonitoringStationModel)
+        expect(result.licenceMonitoringStations).toContainEqual(licenceMonitoringStations[0])
+        expect(result.licenceMonitoringStations).toContainEqual(licenceMonitoringStations[1])
       })
     })
 
@@ -364,19 +357,19 @@ describe('Licence model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('licenceSupplementaryYears')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence supplementary years', async () => {
         const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('licenceSupplementaryYears')
 
-        expect(result).to.be.instanceOf(LicenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceSupplementaryYears).to.be.an.array()
-        expect(result.licenceSupplementaryYears[0]).to.be.an.instanceOf(LicenceSupplementaryYearModel)
-        expect(result.licenceSupplementaryYears).to.include(licenceSupplementaryYears[0])
-        expect(result.licenceSupplementaryYears).to.include(licenceSupplementaryYears[1])
+        expect(result.licenceSupplementaryYears).toBeInstanceOf(Array)
+        expect(result.licenceSupplementaryYears[0]).toBeInstanceOf(LicenceSupplementaryYearModel)
+        expect(result.licenceSupplementaryYears).toContainEqual(licenceSupplementaryYears[0])
+        expect(result.licenceSupplementaryYears).toContainEqual(licenceSupplementaryYears[1])
       })
     })
 
@@ -384,19 +377,19 @@ describe('Licence model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('licenceUnregistrations')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence unregistrations', async () => {
         const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('licenceUnregistrations')
 
-        expect(result).to.be.instanceOf(LicenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceUnregistrations).to.be.an.array()
-        expect(result.licenceUnregistrations[0]).to.be.an.instanceOf(LicenceUnregistrationModel)
-        expect(result.licenceUnregistrations).to.include(licenceUnregistrations[0])
-        expect(result.licenceUnregistrations).to.include(licenceUnregistrations[1])
+        expect(result.licenceUnregistrations).toBeInstanceOf(Array)
+        expect(result.licenceUnregistrations[0]).toBeInstanceOf(LicenceUnregistrationModel)
+        expect(result.licenceUnregistrations).toContainEqual(licenceUnregistrations[0])
+        expect(result.licenceUnregistrations).toContainEqual(licenceUnregistrations[1])
       })
     })
 
@@ -404,19 +397,19 @@ describe('Licence model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('licenceVersions')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence versions', async () => {
         const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('licenceVersions')
 
-        expect(result).to.be.instanceOf(LicenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceVersions).to.be.an.array()
-        expect(result.licenceVersions[0]).to.be.an.instanceOf(LicenceVersionModel)
-        expect(result.licenceVersions).to.include(licenceVersions[0])
-        expect(result.licenceVersions).to.include(licenceVersions[1])
+        expect(result.licenceVersions).toBeInstanceOf(Array)
+        expect(result.licenceVersions[0]).toBeInstanceOf(LicenceVersionModel)
+        expect(result.licenceVersions).toContainEqual(licenceVersions[0])
+        expect(result.licenceVersions).toContainEqual(licenceVersions[1])
       })
     })
 
@@ -424,19 +417,19 @@ describe('Licence model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('modLogs')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the mod logs', async () => {
         const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('modLogs')
 
-        expect(result).to.be.instanceOf(LicenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.modLogs).to.be.an.array()
-        expect(result.modLogs[0]).to.be.an.instanceOf(ModLogModel)
-        expect(result.modLogs).to.include(modLogs[0])
-        expect(result.modLogs).to.include(modLogs[1])
+        expect(result.modLogs).toBeInstanceOf(Array)
+        expect(result.modLogs[0]).toBeInstanceOf(ModLogModel)
+        expect(result.modLogs).toContainEqual(modLogs[0])
+        expect(result.modLogs).toContainEqual(modLogs[1])
       })
     })
 
@@ -444,17 +437,17 @@ describe('Licence model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('region')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the region', async () => {
         const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('region')
 
-        expect(result).to.be.instanceOf(LicenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.region).to.be.an.instanceOf(RegionModel)
-        expect(result.region).to.equal(region, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.region).toBeInstanceOf(RegionModel)
+        expect(result.region).toMatchObject(region)
       })
     })
 
@@ -462,19 +455,19 @@ describe('Licence model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('returnLogs')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the return logs', async () => {
         const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('returnLogs')
 
-        expect(result).to.be.instanceOf(LicenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.returnLogs).to.be.an.array()
-        expect(result.returnLogs[0]).to.be.an.instanceOf(ReturnLogModel)
-        expect(result.returnLogs).to.include(returnLogs[0])
-        expect(result.returnLogs).to.include(returnLogs[1])
+        expect(result.returnLogs).toBeInstanceOf(Array)
+        expect(result.returnLogs[0]).toBeInstanceOf(ReturnLogModel)
+        expect(result.returnLogs).toContainEqual(returnLogs[0])
+        expect(result.returnLogs).toContainEqual(returnLogs[1])
       })
     })
 
@@ -482,19 +475,19 @@ describe('Licence model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('returnVersions')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the return versions', async () => {
         const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('returnVersions')
 
-        expect(result).to.be.instanceOf(LicenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.returnVersions).to.be.an.array()
-        expect(result.returnVersions[0]).to.be.an.instanceOf(ReturnVersionModel)
-        expect(result.returnVersions).to.include(returnVersions[0])
-        expect(result.returnVersions).to.include(returnVersions[1])
+        expect(result.returnVersions).toBeInstanceOf(Array)
+        expect(result.returnVersions[0]).toBeInstanceOf(ReturnVersionModel)
+        expect(result.returnVersions).toContainEqual(returnVersions[0])
+        expect(result.returnVersions).toContainEqual(returnVersions[1])
       })
     })
 
@@ -502,19 +495,19 @@ describe('Licence model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('reviewLicences')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the workflows', async () => {
         const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('reviewLicences')
 
-        expect(result).to.be.instanceOf(LicenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.reviewLicences).to.be.an.array()
-        expect(result.reviewLicences[0]).to.be.an.instanceOf(ReviewLicenceModel)
-        expect(result.reviewLicences).to.include(reviewLicences[0])
-        expect(result.reviewLicences).to.include(reviewLicences[1])
+        expect(result.reviewLicences).toBeInstanceOf(Array)
+        expect(result.reviewLicences[0]).toBeInstanceOf(ReviewLicenceModel)
+        expect(result.reviewLicences).toContainEqual(reviewLicences[0])
+        expect(result.reviewLicences).toContainEqual(reviewLicences[1])
       })
     })
 
@@ -522,19 +515,19 @@ describe('Licence model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('workflows')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the workflows', async () => {
         const result = await LicenceModel.query().findById(testRecord.id).withGraphFetched('workflows')
 
-        expect(result).to.be.instanceOf(LicenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.workflows).to.be.an.array()
-        expect(result.workflows[0]).to.be.an.instanceOf(WorkflowModel)
-        expect(result.workflows).to.include(workflows[0])
-        expect(result.workflows).to.include(workflows[1])
+        expect(result.workflows).toBeInstanceOf(Array)
+        expect(result.workflows[0]).toBeInstanceOf(WorkflowModel)
+        expect(result.workflows).toContainEqual(workflows[0])
+        expect(result.workflows).toContainEqual(workflows[1])
       })
     })
   })
@@ -566,7 +559,7 @@ describe('Licence model', () => {
       it('returns null', () => {
         const result = currentVersionRecord.$currentVersion()
 
-        expect(result).to.be.null()
+        expect(result).toBeNull()
       })
     })
 
@@ -598,7 +591,7 @@ describe('Licence model', () => {
         it('returns the "current" licence version', () => {
           const result = currentVersionRecord.$currentVersion()
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             id: otherLicenceVersions[0].id,
             issueDate: otherLicenceVersions[0].issueDate,
             licenceId: otherLicenceVersions[0].licenceId,
@@ -637,7 +630,7 @@ describe('Licence model', () => {
         it('returns the "current" licence version', () => {
           const result = currentVersionRecord.$currentVersion()
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             id: otherLicenceVersions[1].id,
             issueDate: otherLicenceVersions[1].issueDate,
             licenceId: otherLicenceVersions[1].licenceId,
@@ -690,7 +683,7 @@ describe('Licence model', () => {
         it('returns the "current" licence version', () => {
           const result = currentVersionRecord.$currentVersion()
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             id: otherLicenceVersions[2].id,
             issueDate: otherLicenceVersions[2].issueDate,
             licenceId: otherLicenceVersions[2].licenceId,
@@ -718,7 +711,7 @@ describe('Licence model', () => {
       it('returns the dates', async () => {
         const result = await LicenceModel.query().select(['id']).findById(testRecord.id).modify('ended')
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           id: testRecord.id,
           expiredDate: null,
           lapsedDate: null,
@@ -738,7 +731,7 @@ describe('Licence model', () => {
         it('returns true', () => {
           const result = endedRecord.$ended()
 
-          expect(result).to.be.true()
+          expect(result).toBe(true)
         })
       })
 
@@ -752,7 +745,7 @@ describe('Licence model', () => {
         it('returns true', () => {
           const result = endedRecord.$ended()
 
-          expect(result).to.be.true()
+          expect(result).toBe(true)
         })
       })
 
@@ -766,7 +759,7 @@ describe('Licence model', () => {
         it('returns true', () => {
           const result = endedRecord.$ended()
 
-          expect(result).to.be.true()
+          expect(result).toBe(true)
         })
       })
 
@@ -780,7 +773,7 @@ describe('Licence model', () => {
         it('returns true', () => {
           const result = endedRecord.$ended()
 
-          expect(result).to.be.true()
+          expect(result).toBe(true)
         })
       })
     })
@@ -796,7 +789,7 @@ describe('Licence model', () => {
         it('returns false', () => {
           const result = endedRecord.$ended()
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
         })
       })
 
@@ -812,7 +805,7 @@ describe('Licence model', () => {
         it('returns false', () => {
           const result = endedRecord.$ended()
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
         })
       })
     })
@@ -832,7 +825,7 @@ describe('Licence model', () => {
       it('returns null', () => {
         const result = endsRecord.$ends()
 
-        expect(result).to.be.null()
+        expect(result).toBeNull()
       })
     })
 
@@ -848,7 +841,7 @@ describe('Licence model', () => {
       it('returns null', () => {
         const result = endsRecord.$ends()
 
-        expect(result).to.be.null()
+        expect(result).toBeNull()
       })
     })
 
@@ -864,7 +857,7 @@ describe('Licence model', () => {
       it('returns "expired" as the reason and "2023-03-09" as the date', () => {
         const result = endsRecord.$ends()
 
-        expect(result).to.equal({ date: expiredDate, priority: 3, reason: 'expired' })
+        expect(result).toEqual({ date: expiredDate, priority: 3, reason: 'expired' })
       })
     })
 
@@ -880,7 +873,7 @@ describe('Licence model', () => {
       it('returns "lapsed" as the reason and "2023-03-08" as the date', () => {
         const result = endsRecord.$ends()
 
-        expect(result).to.equal({ date: lapsedDate, priority: 2, reason: 'lapsed' })
+        expect(result).toEqual({ date: lapsedDate, priority: 2, reason: 'lapsed' })
       })
     })
 
@@ -896,7 +889,7 @@ describe('Licence model', () => {
       it('returns "revoked" as the reason and "2023-03-07" as the date', () => {
         const result = endsRecord.$ends()
 
-        expect(result).to.equal({ date: revokedDate, priority: 1, reason: 'revoked' })
+        expect(result).toEqual({ date: revokedDate, priority: 1, reason: 'revoked' })
       })
     })
 
@@ -913,7 +906,7 @@ describe('Licence model', () => {
         it('returns the one with the earliest date', () => {
           const result = endsRecord.$ends()
 
-          expect(result).to.equal({ date: lapsedDate, priority: 2, reason: 'lapsed' })
+          expect(result).toEqual({ date: lapsedDate, priority: 2, reason: 'lapsed' })
         })
       })
 
@@ -930,7 +923,7 @@ describe('Licence model', () => {
           it('returns "lapsed" as the end date', () => {
             const result = endsRecord.$ends()
 
-            expect(result).to.equal({ date: lapsedDate, priority: 2, reason: 'lapsed' })
+            expect(result).toEqual({ date: lapsedDate, priority: 2, reason: 'lapsed' })
           })
         })
 
@@ -946,7 +939,7 @@ describe('Licence model', () => {
           it('returns "revoked" as the end date', () => {
             const result = endsRecord.$ends()
 
-            expect(result).to.equal({ date: revokedDate, priority: 1, reason: 'revoked' })
+            expect(result).toEqual({ date: revokedDate, priority: 1, reason: 'revoked' })
           })
         })
 
@@ -962,7 +955,7 @@ describe('Licence model', () => {
           it('returns "revoked" as the end date', () => {
             const result = endsRecord.$ends()
 
-            expect(result).to.equal({ date: revokedDate, priority: 1, reason: 'revoked' })
+            expect(result).toEqual({ date: revokedDate, priority: 1, reason: 'revoked' })
           })
         })
       })
@@ -981,7 +974,7 @@ describe('Licence model', () => {
         it('returns the one with the earliest date', () => {
           const result = endsRecord.$ends()
 
-          expect(result).to.equal({ date: revokedDate, priority: 1, reason: 'revoked' })
+          expect(result).toEqual({ date: revokedDate, priority: 1, reason: 'revoked' })
         })
       })
 
@@ -998,7 +991,7 @@ describe('Licence model', () => {
           it('returns "lapsed" as the end date', () => {
             const result = endsRecord.$ends()
 
-            expect(result).to.equal({ date: lapsedDate, priority: 2, reason: 'lapsed' })
+            expect(result).toEqual({ date: lapsedDate, priority: 2, reason: 'lapsed' })
           })
         })
 
@@ -1014,7 +1007,7 @@ describe('Licence model', () => {
           it('returns "revoked" as the end date', () => {
             const result = endsRecord.$ends()
 
-            expect(result).to.equal({ date: revokedDate, priority: 1, reason: 'revoked' })
+            expect(result).toEqual({ date: revokedDate, priority: 1, reason: 'revoked' })
           })
         })
 
@@ -1030,7 +1023,7 @@ describe('Licence model', () => {
           it('returns "revoked" as the end date', () => {
             const result = endsRecord.$ends()
 
-            expect(result).to.equal({ date: revokedDate, priority: 1, reason: 'revoked' })
+            expect(result).toEqual({ date: revokedDate, priority: 1, reason: 'revoked' })
           })
         })
       })
@@ -1047,7 +1040,7 @@ describe('Licence model', () => {
         it('returns "revoked" as the end date', () => {
           const result = endsRecord.$ends()
 
-          expect(result).to.equal({ date: revokedDate, priority: 1, reason: 'revoked' })
+          expect(result).toEqual({ date: revokedDate, priority: 1, reason: 'revoked' })
         })
       })
     })
@@ -1091,7 +1084,7 @@ describe('Licence model', () => {
       it('returns null', () => {
         const result = otherLicence.$licenceHolder()
 
-        expect(result).to.be.null()
+        expect(result).toBeNull()
       })
     })
 
@@ -1140,7 +1133,7 @@ describe('Licence model', () => {
         it('returns the company name as the licence holder', async () => {
           const result = licenceHolderRecord.$licenceHolder()
 
-          expect(result).to.equal(company.name)
+          expect(result).toEqual(company.name)
         })
       })
 
@@ -1167,7 +1160,7 @@ describe('Licence model', () => {
         it('returns the company name as the licence holder', async () => {
           const result = licenceHolderRecord.$licenceHolder()
 
-          expect(result).to.equal(oldCompany.name)
+          expect(result).toEqual(oldCompany.name)
         })
       })
     })
@@ -1194,7 +1187,7 @@ describe('Licence model', () => {
       it('returns null', () => {
         const result = testRecord.$licenceName()
 
-        expect(result).to.be.null()
+        expect(result).toBeNull()
       })
     })
 
@@ -1211,7 +1204,7 @@ describe('Licence model', () => {
       it('returns the licence name', async () => {
         const result = licenceNameRecord.$licenceName()
 
-        expect(result).to.equal('My custom licence name')
+        expect(result).toEqual('My custom licence name')
       })
     })
   })
@@ -1248,7 +1241,7 @@ describe('Licence model', () => {
       it('returns null', () => {
         const result = otherLicence.$primaryUser()
 
-        expect(result).to.be.null()
+        expect(result).toBeNull()
       })
     })
 
@@ -1279,8 +1272,8 @@ describe('Licence model', () => {
       it('returns the primary user', async () => {
         const result = primaryUserRecord.$primaryUser()
 
-        expect(result).to.be.an.instanceOf(UserModel)
-        expect(result).to.equal({ id: user.id, userId: user.userId, username: user.username })
+        expect(result).toBeInstanceOf(UserModel)
+        expect(result).toEqual({ id: user.id, userId: user.userId, username: user.username })
       })
     })
   })

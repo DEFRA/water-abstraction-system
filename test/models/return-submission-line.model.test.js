@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ReturnSubmissionLineHelper = require('../support/helpers/return-submission-line.helper.js')
 const ReturnSubmissionHelper = require('../support/helpers/return-submission.helper.js')
@@ -19,13 +12,13 @@ describe('Return Submission Line model', () => {
   let testRecord
   let testReturnSubmission
 
-  before(async () => {
+  beforeAll(async () => {
     testReturnSubmission = await ReturnSubmissionHelper.add()
 
     testRecord = await ReturnSubmissionLineHelper.add({ returnSubmissionId: testReturnSubmission.id })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testReturnSubmission.$query().delete()
 
     await testRecord.$query().delete()
@@ -35,8 +28,8 @@ describe('Return Submission Line model', () => {
     it('can successfully run a basic query', async () => {
       const result = await ReturnSubmissionLineModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(ReturnSubmissionLineModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(ReturnSubmissionLineModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -45,7 +38,7 @@ describe('Return Submission Line model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReturnSubmissionLineModel.query().innerJoinRelated('returnSubmission')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the return submission', async () => {
@@ -53,11 +46,11 @@ describe('Return Submission Line model', () => {
           .findById(testRecord.id)
           .withGraphFetched('returnSubmission')
 
-        expect(result).to.be.instanceOf(ReturnSubmissionLineModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReturnSubmissionLineModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.returnSubmission).to.be.an.instanceOf(ReturnSubmissionModel)
-        expect(result.returnSubmission).to.equal(testReturnSubmission)
+        expect(result.returnSubmission).toBeInstanceOf(ReturnSubmissionModel)
+        expect(result.returnSubmission).toEqual(testReturnSubmission)
       })
     })
   })

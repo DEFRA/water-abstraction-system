@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillLicenceModel = require('../../app/models/bill-licence.model.js')
 const BillLicenceHelper = require('../support/helpers/bill-licence.helper.js')
@@ -22,7 +15,7 @@ describe('Transaction model', () => {
   let testChargeReference
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     testBillLicence = await BillLicenceHelper.add()
     testChargeReference = await ChargeReferenceHelper.add()
 
@@ -32,7 +25,7 @@ describe('Transaction model', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testBillLicence.$query().delete()
     await testChargeReference.$query().delete()
     await testRecord.$query().delete()
@@ -42,8 +35,8 @@ describe('Transaction model', () => {
     it('can successfully run a basic query', async () => {
       const result = await TransactionModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(TransactionModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(TransactionModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -52,17 +45,17 @@ describe('Transaction model', () => {
       it('can successfully run a related query', async () => {
         const query = await TransactionModel.query().innerJoinRelated('billLicence')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the bill licence', async () => {
         const result = await TransactionModel.query().findById(testRecord.id).withGraphFetched('billLicence')
 
-        expect(result).to.be.instanceOf(TransactionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(TransactionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.billLicence).to.be.an.instanceOf(BillLicenceModel)
-        expect(result.billLicence).to.equal(testBillLicence)
+        expect(result.billLicence).toBeInstanceOf(BillLicenceModel)
+        expect(result.billLicence).toEqual(testBillLicence)
       })
     })
 
@@ -70,17 +63,17 @@ describe('Transaction model', () => {
       it('can successfully run a related query', async () => {
         const query = await TransactionModel.query().innerJoinRelated('chargeReference')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge reference', async () => {
         const result = await TransactionModel.query().findById(testRecord.id).withGraphFetched('chargeReference')
 
-        expect(result).to.be.instanceOf(TransactionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(TransactionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.chargeReference).to.be.an.instanceOf(ChargeReferenceModel)
-        expect(result.chargeReference).to.equal(testChargeReference)
+        expect(result.chargeReference).toBeInstanceOf(ChargeReferenceModel)
+        expect(result.chargeReference).toEqual(testChargeReference)
       })
     })
   })
@@ -95,7 +88,7 @@ describe('Transaction model', () => {
           ...TransactionHelper.defaults(),
           purposes: [{ test: 'TEST' }]
         })
-      ).to.not.reject()
+      ).resolves.toBeDefined()
     })
 
     it('returns an object from a json field regardless of whether the inserted object was stringified first', async () => {
@@ -111,8 +104,8 @@ describe('Transaction model', () => {
       const objectResult = await TransactionModel.query().findById(objectTransaction.id)
       const stringifyResult = await TransactionModel.query().findById(stringifyTransaction.id)
 
-      expect(objectResult.purposes).to.equal([{ test: 'TEST' }])
-      expect(stringifyResult.purposes).to.equal([{ test: 'TEST' }])
+      expect(objectResult.purposes).toEqual([{ test: 'TEST' }])
+      expect(stringifyResult.purposes).toEqual([{ test: 'TEST' }])
     })
   })
 })

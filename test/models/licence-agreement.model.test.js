@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const FinancialAgreementHelper = require('../support/helpers/financial-agreement.helper.js')
 const FinancialAgreementModel = require('../../app/models/financial-agreement.model.js')
@@ -24,7 +17,7 @@ describe('Licence Agreement model', () => {
   let testLicence
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     // Link to financial agreement
     testFinancialAgreement = FinancialAgreementHelper.select(FINANCIAL_AGREEMENT_MCHG_INDEX)
 
@@ -38,7 +31,7 @@ describe('Licence Agreement model', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testLicence.$query().delete()
 
     await testRecord.$query().delete()
@@ -48,8 +41,8 @@ describe('Licence Agreement model', () => {
     it('can successfully run a basic query', async () => {
       const result = await LicenceAgreementModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(LicenceAgreementModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(LicenceAgreementModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -58,7 +51,7 @@ describe('Licence Agreement model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceAgreementModel.query().innerJoinRelated('financialAgreement')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the financial agreement', async () => {
@@ -66,11 +59,11 @@ describe('Licence Agreement model', () => {
           .findById(testRecord.id)
           .withGraphFetched('financialAgreement')
 
-        expect(result).to.be.instanceOf(LicenceAgreementModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceAgreementModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.financialAgreement).to.be.an.instanceOf(FinancialAgreementModel)
-        expect(result.financialAgreement).to.equal(testFinancialAgreement, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.financialAgreement).toBeInstanceOf(FinancialAgreementModel)
+        expect(result.financialAgreement).toMatchObject(testFinancialAgreement)
       })
     })
 
@@ -78,17 +71,17 @@ describe('Licence Agreement model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceAgreementModel.query().innerJoinRelated('licence')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence', async () => {
         const result = await LicenceAgreementModel.query().findById(testRecord.id).withGraphFetched('licence')
 
-        expect(result).to.be.instanceOf(LicenceAgreementModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceAgreementModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licence).to.be.an.instanceOf(LicenceModel)
-        expect(result.licence.id).to.equal(testLicence.id)
+        expect(result.licence).toBeInstanceOf(LicenceModel)
+        expect(result.licence.id).toEqual(testLicence.id)
       })
     })
   })

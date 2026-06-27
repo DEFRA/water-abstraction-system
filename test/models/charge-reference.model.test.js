@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillRunVolumeHelper = require('../support/helpers/bill-run-volume.helper.js')
 const BillRunVolumeModel = require('../../app/models/bill-run-volume.model.js')
@@ -37,7 +30,7 @@ describe('Charge Reference model', () => {
   let testPurpose
   let testTransactions
 
-  before(async () => {
+  beforeAll(async () => {
     // Link purpose
     testPurpose = PurposeHelper.select()
 
@@ -88,7 +81,7 @@ describe('Charge Reference model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testChargeVersion.$query().delete()
 
     for (const billRunVolume of testBillRunVolumes) {
@@ -114,8 +107,8 @@ describe('Charge Reference model', () => {
     it('can successfully run a basic query', async () => {
       const result = await ChargeReferenceModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(ChargeReferenceModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(ChargeReferenceModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -124,19 +117,19 @@ describe('Charge Reference model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeReferenceModel.query().innerJoinRelated('billRunVolumes')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the bills', async () => {
         const result = await ChargeReferenceModel.query().findById(testRecord.id).withGraphFetched('billRunVolumes')
 
-        expect(result).to.be.instanceOf(ChargeReferenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ChargeReferenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.billRunVolumes).to.be.an.array()
-        expect(result.billRunVolumes[0]).to.be.an.instanceOf(BillRunVolumeModel)
-        expect(result.billRunVolumes).to.include(testBillRunVolumes[0])
-        expect(result.billRunVolumes).to.include(testBillRunVolumes[1])
+        expect(result.billRunVolumes).toBeInstanceOf(Array)
+        expect(result.billRunVolumes[0]).toBeInstanceOf(BillRunVolumeModel)
+        expect(result.billRunVolumes).toContainEqual(testBillRunVolumes[0])
+        expect(result.billRunVolumes).toContainEqual(testBillRunVolumes[1])
       })
     })
 
@@ -144,17 +137,17 @@ describe('Charge Reference model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeReferenceModel.query().innerJoinRelated('chargeCategory')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge category', async () => {
         const result = await ChargeReferenceModel.query().findById(testRecord.id).withGraphFetched('chargeCategory')
 
-        expect(result).to.be.instanceOf(ChargeReferenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ChargeReferenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.chargeCategory).to.be.an.instanceOf(ChargeCategoryModel)
-        expect(result.chargeCategory).to.include(testChargeCategory)
+        expect(result.chargeCategory).toBeInstanceOf(ChargeCategoryModel)
+        expect(result.chargeCategory).toMatchObject(testChargeCategory)
       })
     })
 
@@ -162,19 +155,19 @@ describe('Charge Reference model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeReferenceModel.query().innerJoinRelated('chargeElements')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge elements', async () => {
         const result = await ChargeReferenceModel.query().findById(testRecord.id).withGraphFetched('chargeElements')
 
-        expect(result).to.be.instanceOf(ChargeReferenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ChargeReferenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.chargeElements).to.be.an.array()
-        expect(result.chargeElements[0]).to.be.an.instanceOf(ChargeElementModel)
-        expect(result.chargeElements).to.include(testChargeElements[0])
-        expect(result.chargeElements).to.include(testChargeElements[1])
+        expect(result.chargeElements).toBeInstanceOf(Array)
+        expect(result.chargeElements[0]).toBeInstanceOf(ChargeElementModel)
+        expect(result.chargeElements).toContainEqual(testChargeElements[0])
+        expect(result.chargeElements).toContainEqual(testChargeElements[1])
       })
     })
 
@@ -182,17 +175,17 @@ describe('Charge Reference model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeReferenceModel.query().innerJoinRelated('chargeVersion')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge version', async () => {
         const result = await ChargeReferenceModel.query().findById(testRecord.id).withGraphFetched('chargeVersion')
 
-        expect(result).to.be.instanceOf(ChargeReferenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ChargeReferenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.chargeVersion).to.be.an.instanceOf(ChargeVersionModel)
-        expect(result.chargeVersion).to.equal(testChargeVersion)
+        expect(result.chargeVersion).toBeInstanceOf(ChargeVersionModel)
+        expect(result.chargeVersion).toEqual(testChargeVersion)
       })
     })
 
@@ -200,17 +193,17 @@ describe('Charge Reference model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeReferenceModel.query().innerJoinRelated('purpose')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the purpose', async () => {
         const result = await ChargeReferenceModel.query().findById(testRecord.id).withGraphFetched('purpose')
 
-        expect(result).to.be.instanceOf(ChargeReferenceModel)
-        expect(result.chargePurposeId).to.equal(testRecord.chargePurposeId)
+        expect(result).toBeInstanceOf(ChargeReferenceModel)
+        expect(result.chargePurposeId).toMatchObject(testRecord.chargePurposeId)
 
-        expect(result.purpose).to.be.an.instanceOf(PurposeModel)
-        expect(result.purpose).to.equal(testPurpose, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.purpose).toBeInstanceOf(PurposeModel)
+        expect(result.purpose).toMatchObject(testPurpose)
       })
     })
 
@@ -218,7 +211,7 @@ describe('Charge Reference model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeReferenceModel.query().innerJoinRelated('reviewChargeReferences')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the review charge references', async () => {
@@ -226,13 +219,13 @@ describe('Charge Reference model', () => {
           .findById(testRecord.id)
           .withGraphFetched('reviewChargeReferences')
 
-        expect(result).to.be.instanceOf(ChargeReferenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ChargeReferenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.reviewChargeReferences).to.be.an.array()
-        expect(result.reviewChargeReferences[0]).to.be.an.instanceOf(ReviewChargeReferenceModel)
-        expect(result.reviewChargeReferences).to.include(testReviewChargeReferences[0])
-        expect(result.reviewChargeReferences).to.include(testReviewChargeReferences[1])
+        expect(result.reviewChargeReferences).toBeInstanceOf(Array)
+        expect(result.reviewChargeReferences[0]).toBeInstanceOf(ReviewChargeReferenceModel)
+        expect(result.reviewChargeReferences).toContainEqual(testReviewChargeReferences[0])
+        expect(result.reviewChargeReferences).toContainEqual(testReviewChargeReferences[1])
       })
     })
 
@@ -240,19 +233,19 @@ describe('Charge Reference model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeReferenceModel.query().innerJoinRelated('transactions')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the transactions', async () => {
         const result = await ChargeReferenceModel.query().findById(testRecord.id).withGraphFetched('transactions')
 
-        expect(result).to.be.instanceOf(ChargeReferenceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ChargeReferenceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.transactions).to.be.an.array()
-        expect(result.transactions[0]).to.be.an.instanceOf(TransactionModel)
-        expect(result.transactions).to.include(testTransactions[0])
-        expect(result.transactions).to.include(testTransactions[1])
+        expect(result.transactions).toBeInstanceOf(Array)
+        expect(result.transactions[0]).toBeInstanceOf(TransactionModel)
+        expect(result.transactions).toContainEqual(testTransactions[0])
+        expect(result.transactions).toContainEqual(testTransactions[1])
       })
     })
   })

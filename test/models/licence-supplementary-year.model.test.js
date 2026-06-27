@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillRunHelper = require('../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../app/models/bill-run.model.js')
@@ -22,14 +15,14 @@ describe('Licence Supplementary Year model', () => {
   let testLicence
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     testBillRun = await BillRunHelper.add()
     testLicence = await LicenceHelper.add()
 
     testRecord = await LicenceSupplementaryYearHelper.add({ billRunId: testBillRun.id, licenceId: testLicence.id })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testBillRun.$query().delete()
     await testLicence.$query().delete()
 
@@ -40,8 +33,8 @@ describe('Licence Supplementary Year model', () => {
     it('can successfully run a basic query', async () => {
       const result = await LicenceSupplementaryYearModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(LicenceSupplementaryYearModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(LicenceSupplementaryYearModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -50,17 +43,17 @@ describe('Licence Supplementary Year model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceSupplementaryYearModel.query().innerJoinRelated('licence')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence', async () => {
         const result = await LicenceSupplementaryYearModel.query().findById(testRecord.id).withGraphFetched('licence')
 
-        expect(result).to.be.instanceOf(LicenceSupplementaryYearModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceSupplementaryYearModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licence).to.be.instanceOf(LicenceModel)
-        expect(result.licence).to.equal(testLicence)
+        expect(result.licence).toBeInstanceOf(LicenceModel)
+        expect(result.licence).toEqual(testLicence)
       })
     })
 
@@ -68,17 +61,17 @@ describe('Licence Supplementary Year model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceSupplementaryYearModel.query().innerJoinRelated('billRun')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the bill run', async () => {
         const result = await LicenceSupplementaryYearModel.query().findById(testRecord.id).withGraphFetched('billRun')
 
-        expect(result).to.be.instanceOf(LicenceSupplementaryYearModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceSupplementaryYearModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.billRun).to.be.instanceOf(BillRunModel)
-        expect(result.billRun).to.equal(testBillRun)
+        expect(result.billRun).toBeInstanceOf(BillRunModel)
+        expect(result.billRun).toEqual(testBillRun)
       })
     })
   })

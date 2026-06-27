@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceMonitoringStationHelper = require('../support/helpers/licence-monitoring-station.helper.js')
 const LicenceMonitoringStationModel = require('../../app/models/licence-monitoring-station.model.js')
@@ -19,7 +12,7 @@ describe('Monitoring Station model', () => {
   let testLicenceMonitoringStations
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     testRecord = await MonitoringStationHelper.add()
 
     testLicenceMonitoringStations = []
@@ -30,7 +23,7 @@ describe('Monitoring Station model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const licenceMonitoringStation of testLicenceMonitoringStations) {
       await licenceMonitoringStation.$query().delete()
     }
@@ -42,8 +35,8 @@ describe('Monitoring Station model', () => {
     it('can successfully run a basic query', async () => {
       const result = await MonitoringStationModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(MonitoringStationModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(MonitoringStationModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -52,7 +45,7 @@ describe('Monitoring Station model', () => {
       it('can successfully run a related query', async () => {
         const query = await MonitoringStationModel.query().innerJoinRelated('licenceMonitoringStations')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence monitoring stations', async () => {
@@ -60,13 +53,13 @@ describe('Monitoring Station model', () => {
           .findById(testRecord.id)
           .withGraphFetched('licenceMonitoringStations')
 
-        expect(result).to.be.instanceOf(MonitoringStationModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(MonitoringStationModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceMonitoringStations).to.be.an.array()
-        expect(result.licenceMonitoringStations[0]).to.be.an.instanceOf(LicenceMonitoringStationModel)
-        expect(result.licenceMonitoringStations).to.include(testLicenceMonitoringStations[0])
-        expect(result.licenceMonitoringStations).to.include(testLicenceMonitoringStations[1])
+        expect(result.licenceMonitoringStations).toBeInstanceOf(Array)
+        expect(result.licenceMonitoringStations[0]).toBeInstanceOf(LicenceMonitoringStationModel)
+        expect(result.licenceMonitoringStations).toContainEqual(testLicenceMonitoringStations[0])
+        expect(result.licenceMonitoringStations).toContainEqual(testLicenceMonitoringStations[1])
       })
     })
   })

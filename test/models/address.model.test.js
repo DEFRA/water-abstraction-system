@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AddressHelper = require('../support/helpers/address.helper.js')
 const BillingAccountAddressHelper = require('../support/helpers/billing-account-address.helper.js')
@@ -28,7 +21,7 @@ describe('Address model', () => {
   let licenceVersions
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     // Test record
     testRecord = await AddressHelper.add()
     const { id: addressId } = testRecord
@@ -65,7 +58,7 @@ describe('Address model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const licenceVersion of licenceVersions) {
       await licenceVersion.$query().delete()
     }
@@ -88,8 +81,8 @@ describe('Address model', () => {
     it('can successfully run a basic query', async () => {
       const result = await AddressModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(AddressModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(AddressModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -98,19 +91,19 @@ describe('Address model', () => {
       it('can successfully run a related query', async () => {
         const query = await AddressModel.query().innerJoinRelated('billingAccountAddresses')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the billing account addresses', async () => {
         const result = await AddressModel.query().findById(testRecord.id).withGraphFetched('billingAccountAddresses')
 
-        expect(result).to.be.instanceOf(AddressModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(AddressModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.billingAccountAddresses).to.be.an.array()
-        expect(result.billingAccountAddresses[0]).to.be.an.instanceOf(BillingAccountAddressModel)
-        expect(result.billingAccountAddresses).to.include(billingAccountAddresses[0])
-        expect(result.billingAccountAddresses).to.include(billingAccountAddresses[1])
+        expect(result.billingAccountAddresses).toBeInstanceOf(Array)
+        expect(result.billingAccountAddresses[0]).toBeInstanceOf(BillingAccountAddressModel)
+        expect(result.billingAccountAddresses).toContainEqual(billingAccountAddresses[0])
+        expect(result.billingAccountAddresses).toContainEqual(billingAccountAddresses[1])
       })
     })
 
@@ -118,19 +111,19 @@ describe('Address model', () => {
       it('can successfully run a related query', async () => {
         const query = await AddressModel.query().innerJoinRelated('companyAddresses')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the company addresses', async () => {
         const result = await AddressModel.query().findById(testRecord.id).withGraphFetched('companyAddresses')
 
-        expect(result).to.be.instanceOf(AddressModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(AddressModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.companyAddresses).to.be.an.array()
-        expect(result.companyAddresses[0]).to.be.an.instanceOf(CompanyAddressModel)
-        expect(result.companyAddresses).to.include(companyAddresses[0])
-        expect(result.companyAddresses).to.include(companyAddresses[1])
+        expect(result.companyAddresses).toBeInstanceOf(Array)
+        expect(result.companyAddresses[0]).toBeInstanceOf(CompanyAddressModel)
+        expect(result.companyAddresses).toContainEqual(companyAddresses[0])
+        expect(result.companyAddresses).toContainEqual(companyAddresses[1])
       })
     })
 
@@ -138,19 +131,19 @@ describe('Address model', () => {
       it('can successfully run a related query', async () => {
         const query = await AddressModel.query().innerJoinRelated('licenceDocumentRoles')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence document roles', async () => {
         const result = await AddressModel.query().findById(testRecord.id).withGraphFetched('licenceDocumentRoles')
 
-        expect(result).to.be.instanceOf(AddressModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(AddressModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceDocumentRoles).to.be.an.array()
-        expect(result.licenceDocumentRoles[0]).to.be.an.instanceOf(LicenceDocumentRoleModel)
-        expect(result.licenceDocumentRoles).to.include(licenceDocumentRoles[0])
-        expect(result.licenceDocumentRoles).to.include(licenceDocumentRoles[1])
+        expect(result.licenceDocumentRoles).toBeInstanceOf(Array)
+        expect(result.licenceDocumentRoles[0]).toBeInstanceOf(LicenceDocumentRoleModel)
+        expect(result.licenceDocumentRoles).toContainEqual(licenceDocumentRoles[0])
+        expect(result.licenceDocumentRoles).toContainEqual(licenceDocumentRoles[1])
       })
     })
 
@@ -158,19 +151,19 @@ describe('Address model', () => {
       it('can successfully run a related query', async () => {
         const query = await AddressModel.query().innerJoinRelated('licenceVersions')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence versions', async () => {
         const result = await AddressModel.query().findById(testRecord.id).withGraphFetched('licenceVersions')
 
-        expect(result).to.be.instanceOf(AddressModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(AddressModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceVersions).to.be.an.array()
-        expect(result.licenceVersions[0]).to.be.an.instanceOf(LicenceVersionModel)
-        expect(result.licenceVersions).to.include(licenceVersions[0])
-        expect(result.licenceVersions).to.include(licenceVersions[1])
+        expect(result.licenceVersions).toBeInstanceOf(Array)
+        expect(result.licenceVersions[0]).toBeInstanceOf(LicenceVersionModel)
+        expect(result.licenceVersions).toContainEqual(licenceVersions[0])
+        expect(result.licenceVersions).toContainEqual(licenceVersions[1])
       })
     })
   })
