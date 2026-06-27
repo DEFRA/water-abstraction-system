@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const CompanyContactModel = require('../../../../app/models/company-contact.model.js')
@@ -22,7 +17,7 @@ describe('Company Contacts - Create Company Contact dal', () => {
   let companyContact
   let company
 
-  before(async () => {
+  beforeAll(async () => {
     companyContact = {
       abstractionAlertLicences: null,
       abstractionAlerts: true,
@@ -36,7 +31,7 @@ describe('Company Contacts - Create Company Contact dal', () => {
     clock = Sinon.useFakeTimers(new Date('2021-01-01'))
   })
 
-  after(async () => {
+  afterAll(async () => {
     Sinon.restore()
     clock.restore()
 
@@ -51,38 +46,33 @@ describe('Company Contacts - Create Company Contact dal', () => {
 
       const newCompanyContact = await CompanyContactModel.query().findById(result).withGraphFetched('contact')
 
-      expect(newCompanyContact).to.equal(
-        {
-          abstractionAlertLicences: null,
-          abstractionAlerts: true,
-          createdBy: companyContact.createdBy,
-          companyId: company.id,
-          contact: {
-            contactType: 'department',
-            dataSource: 'wrls',
-            department: 'Bob',
-            email: 'bob@test.com',
-            externalId: null,
-            firstName: null,
-            id: newCompanyContact.contact.id,
-            initials: null,
-            lastName: null,
-            middleInitials: null,
-            salutation: null,
-            suffix: null
-          },
-          contactId: newCompanyContact.contact.id,
-          default: false,
-          deletedAt: null,
-          id: result,
-          licenceRoleId: licenceRole.id,
-          startDate: new Date('2021-01-01'),
-          updatedBy: null
+      expect(newCompanyContact).toMatchObject({
+        abstractionAlertLicences: null,
+        abstractionAlerts: true,
+        createdBy: companyContact.createdBy,
+        companyId: company.id,
+        contact: {
+          contactType: 'department',
+          dataSource: 'wrls',
+          department: 'Bob',
+          email: 'bob@test.com',
+          externalId: null,
+          firstName: null,
+          id: newCompanyContact.contact.id,
+          initials: null,
+          lastName: null,
+          middleInitials: null,
+          salutation: null,
+          suffix: null
         },
-        {
-          skip: ['createdAt', 'updatedAt', 'contact.createdAt', 'contact.updatedAt']
-        }
-      )
+        contactId: newCompanyContact.contact.id,
+        default: false,
+        deletedAt: null,
+        id: result,
+        licenceRoleId: licenceRole.id,
+        startDate: new Date('2021-01-01'),
+        updatedBy: null
+      })
     })
   })
 })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
@@ -102,7 +95,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
       it('returns the matching monitoring station with its licence monitoring stations correctly ordered', async () => {
         const result = await FetchMonitoringStationDetailsDal.go(monitoringStation.id)
 
-        expect(result.monitoringStation).to.equal({
+        expect(result.monitoringStation).toEqual({
           catchmentName: null,
           gridReference: monitoringStation.gridReference,
           id: monitoringStation.id,
@@ -112,7 +105,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
           wiskiId: null
         })
 
-        expect(result.licenceMonitoringStations).to.equal([
+        expect(result.licenceMonitoringStations).toEqual([
           {
             abstractionPeriodEndDay: null,
             abstractionPeriodEndMonth: null,
@@ -188,7 +181,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
       it('returns the matching monitoring station with no licence monitoring stations', async () => {
         const result = await FetchMonitoringStationDetailsDal.go(monitoringStation.id)
 
-        expect(result.monitoringStation).to.equal({
+        expect(result.monitoringStation).toEqual({
           catchmentName: null,
           gridReference: monitoringStation.gridReference,
           id: monitoringStation.id,
@@ -198,7 +191,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
           wiskiId: null
         })
 
-        expect(result.licenceMonitoringStations).to.equal([])
+        expect(result.licenceMonitoringStations).toEqual([])
       })
     })
   })
@@ -207,8 +200,8 @@ describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
     it('returns empty values', async () => {
       const result = await FetchMonitoringStationDetailsDal.go('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
 
-      expect(result.monitoringStation).to.be.undefined()
-      expect(result.licenceMonitoringStations).to.equal([])
+      expect(result.monitoringStation).toBeUndefined()
+      expect(result.licenceMonitoringStations).toEqual([])
     })
   })
 })

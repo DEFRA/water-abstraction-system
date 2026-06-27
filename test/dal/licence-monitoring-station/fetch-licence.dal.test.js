@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, after, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
@@ -17,11 +10,11 @@ const FetchLicenceDal = require('../../../app/dal/licence-monitoring-station/fet
 describe('Licence Monitoring Station - Fetch Licence DAL', () => {
   let licence
 
-  before(async () => {
+  beforeAll(async () => {
     licence = await LicenceHelper.add()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await licence.$query().delete()
   })
 
@@ -29,7 +22,7 @@ describe('Licence Monitoring Station - Fetch Licence DAL', () => {
     it('returns the licence with the data needed to determine if it has ended', async () => {
       const result = await FetchLicenceDal.go(licence.licenceRef)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         expiredDate: null,
         id: licence.id,
         lapsedDate: null,
@@ -43,7 +36,7 @@ describe('Licence Monitoring Station - Fetch Licence DAL', () => {
     it('returns undefined', async () => {
       const result = await FetchLicenceDal.go(generateUUID())
 
-      expect(result).to.be.undefined()
+      expect(result).toBeUndefined()
     })
   })
 })

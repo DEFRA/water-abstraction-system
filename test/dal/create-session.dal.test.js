@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const SessionModel = require('../../app/models/session.model.js')
 
@@ -20,20 +13,17 @@ describe('DAL - Create Session DAL', () => {
 
       const session = await SessionModel.query().findById(result.id)
 
-      expect(session).to.equal(
-        {
-          data: {},
-          id: result.id
-        },
-        { skip: ['createdAt', 'updatedAt'] }
-      )
+      expect(session).toMatchObject({
+        data: {},
+        id: result.id
+      })
     })
   })
 
   describe('when there is data', () => {
     let data
 
-    before(() => {
+    beforeAll(() => {
       data = { testData: 'Here is some test data' }
     })
 
@@ -42,14 +32,11 @@ describe('DAL - Create Session DAL', () => {
 
       const session = await SessionModel.query().findById(result.id)
 
-      expect(session).to.equal(
-        {
-          data: { testData: 'Here is some test data' },
-          id: result.id,
-          testData: 'Here is some test data'
-        },
-        { skip: ['createdAt', 'updatedAt'] }
-      )
+      expect(session).toMatchObject({
+        data: { testData: 'Here is some test data' },
+        id: result.id,
+        testData: 'Here is some test data'
+      })
     })
   })
 })

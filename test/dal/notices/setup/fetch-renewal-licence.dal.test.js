@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, after, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 
@@ -16,11 +9,11 @@ const FetchRenewalLicenceDal = require('../../../../app/dal/notices/setup/fetch-
 describe('Notices - Setup - Fetch Renewal Licence DAL', () => {
   let licence
 
-  before(async () => {
+  beforeAll(async () => {
     licence = await LicenceHelper.add()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await licence.$query().delete()
   })
 
@@ -28,7 +21,7 @@ describe('Notices - Setup - Fetch Renewal Licence DAL', () => {
     it('returns the licence with the renewal date fields', async () => {
       const result = await FetchRenewalLicenceDal.go(licence.licenceRef)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         expiredDate: null,
         id: licence.id,
         lapsedDate: null,
@@ -42,7 +35,7 @@ describe('Notices - Setup - Fetch Renewal Licence DAL', () => {
     it('returns undefined', async () => {
       const result = await FetchRenewalLicenceDal.go('does-not-exist')
 
-      expect(result).to.equal(undefined)
+      expect(result).toEqual(undefined)
     })
   })
 })

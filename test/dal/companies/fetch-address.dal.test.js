@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AddressHelper = require('../../support/helpers/address.helper.js')
 
@@ -17,14 +10,14 @@ describe('Companies - Fetch Address dal', () => {
   let address
 
   describe('when there is an address', () => {
-    before(async () => {
+    beforeAll(async () => {
       address = await AddressHelper.add()
     })
 
     it('returns the matching address', async () => {
       const result = await FetchAddressDal.go(address.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         id: address.id,
         address1: 'ENVIRONMENT AGENCY',
         address2: 'HORIZON HOUSE',

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CompanyHelper = require('../../../support/helpers/company.helper.js')
 const LicenceDocumentHeaderHelper = require('../../../support/helpers/licence-document-header.helper.js')
@@ -26,7 +19,7 @@ describe('Users - External - Fetch Licences DAL', () => {
   let licenceData4
   let userEntity
 
-  before(async () => {
+  beforeAll(async () => {
     userEntity = await LicenceEntityHelper.add()
 
     // Add the licences in non-alphabetical order to ensure the service is correctly ordering them by licenceRef,
@@ -40,7 +33,7 @@ describe('Users - External - Fetch Licences DAL', () => {
     licenceData2 = await _licenceData(userEntity, 'FE/TC/H/US/ER/02')
   })
 
-  after(async () => {
+  afterAll(async () => {
     await licenceData4.clean()
     await licenceData3.clean()
     await licenceData2.clean()
@@ -53,7 +46,7 @@ describe('Users - External - Fetch Licences DAL', () => {
     it('returns the matching licences and the total', async () => {
       const result = await FetchLicencesDal.go(userEntity.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         licences: [
           {
             expiredDate: licenceData1.licence.expiredDate,

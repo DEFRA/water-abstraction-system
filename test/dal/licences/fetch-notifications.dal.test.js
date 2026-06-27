@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const EventHelper = require('../../support/helpers/event.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
@@ -43,7 +36,7 @@ describe('Licences - Fetch Notifications DAL', () => {
     it('returns the matching notifications', async () => {
       const result = await FetchNotificationsDal.go(licence.licenceRef)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         notifications: [
           {
             createdAt: notification.createdAt,
@@ -71,7 +64,7 @@ describe('Licences - Fetch Notifications DAL', () => {
     it('returns no notifications', async () => {
       const result = await FetchNotificationsDal.go(licence.licenceRef)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         notifications: [],
         totalNumber: 0
       })

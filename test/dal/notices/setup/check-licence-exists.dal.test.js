@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, after, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 
@@ -16,11 +9,11 @@ const CheckLicenceExistsDal = require('../../../../app/dal/notices/setup/check-l
 describe('Notices - Setup - Check Licence Exists DAL', () => {
   let licence
 
-  before(async () => {
+  beforeAll(async () => {
     licence = await LicenceHelper.add()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await licence.$query().delete()
   })
 
@@ -28,7 +21,7 @@ describe('Notices - Setup - Check Licence Exists DAL', () => {
     it('returns true', async () => {
       const result = await CheckLicenceExistsDal.go(licence.licenceRef)
 
-      expect(result).to.equal(true)
+      expect(result).toEqual(true)
     })
   })
 
@@ -36,7 +29,7 @@ describe('Notices - Setup - Check Licence Exists DAL', () => {
     it('returns false', async () => {
       const result = await CheckLicenceExistsDal.go('does-not-exist')
 
-      expect(result).to.equal(false)
+      expect(result).toEqual(false)
     })
   })
 })

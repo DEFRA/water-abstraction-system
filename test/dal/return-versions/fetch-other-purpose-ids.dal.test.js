@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, after, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
@@ -28,7 +21,7 @@ describe('DAL - Return Versions - Fetch Other Purpose Ids dal', () => {
   let otherPurposeDetails
   let supersededPurposeDetails
 
-  before(async () => {
+  beforeAll(async () => {
     licenceId = generateUUID()
 
     // NOTE: We use the different primary and secondary purpose IDs to confirm we are fetching the correct ones when the
@@ -123,7 +116,7 @@ describe('DAL - Return Versions - Fetch Other Purpose Ids dal', () => {
     ]
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const licenceVersionPurpose of licenceVersionPurposes) {
       await licenceVersionPurpose.$query().delete()
     }
@@ -138,7 +131,7 @@ describe('DAL - Return Versions - Fetch Other Purpose Ids dal', () => {
       it('returns the matching primary and secondary purpose IDs', async () => {
         const result = await FetchOtherPurposeIdsDal.go(licenceId, currentPurposeDetails.purposeId)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           primaryPurposeId: currentPurposeDetails.primaryPurposeId,
           secondaryPurposeId: currentPurposeDetails.secondaryPurposeId
         })
@@ -149,7 +142,7 @@ describe('DAL - Return Versions - Fetch Other Purpose Ids dal', () => {
       it('still returns the matching primary and secondary purpose IDs', async () => {
         const result = await FetchOtherPurposeIdsDal.go(licenceId, historicPurposeDetails.purposeId)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           primaryPurposeId: historicPurposeDetails.primaryPurposeId,
           secondaryPurposeId: historicPurposeDetails.secondaryPurposeId
         })

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { afterEach, beforeEach, describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const EventModel = require('../../../../app/models/event.model.js')
@@ -54,22 +49,19 @@ describe('Users - Internal - Create User DAL', () => {
 
       const user = await UserModel.query().where('username', session.email).limit(1).first()
 
-      expect(user).to.equal(
-        {
-          application: 'water_admin',
-          badLogins: 0,
-          enabled: true,
-          lastLogin: null,
-          licenceEntityId: null,
-          resetRequired: 1,
-          userData: null,
-          username: session.email
-        },
-        { skip: ['createdAt', 'id', 'password', 'resetGuid', 'resetGuidCreatedAt', 'updatedAt', 'userId'] }
-      )
-      expect(user.password).to.exist()
-      expect(user.resetGuid).to.exist()
-      expect(user.resetGuidCreatedAt).to.be.instanceof(Date)
+      expect(user).toMatchObject({
+        application: 'water_admin',
+        badLogins: 0,
+        enabled: true,
+        lastLogin: null,
+        licenceEntityId: null,
+        resetRequired: 1,
+        userData: null,
+        username: session.email
+      })
+      expect(user.password).toBeDefined()
+      expect(user.resetGuid).toBeDefined()
+      expect(user.resetGuidCreatedAt).toBeInstanceOf(Date)
     })
 
     it('creates an event', async () => {
@@ -78,27 +70,24 @@ describe('Users - Internal - Create User DAL', () => {
       const user = await UserModel.query().where('username', session.email).limit(1).first()
       const event = await EventModel.query().where('issuer', 'internal-user-creator@wrls.gov.uk').limit(1).first()
 
-      expect(event).to.equal(
-        {
-          referenceCode: null,
-          type: 'new-user',
-          subtype: 'internal',
-          issuer: 'internal-user-creator@wrls.gov.uk',
-          licences: [],
-          entities: [],
-          metadata: {
-            user: user.username,
-            userId: user.userId
-          },
-          status: null,
-          overallStatus: null,
-          statusCounts: null,
-          triggerNoticeId: null
+      expect(event).toMatchObject({
+        referenceCode: null,
+        type: 'new-user',
+        subtype: 'internal',
+        issuer: 'internal-user-creator@wrls.gov.uk',
+        licences: [],
+        entities: [],
+        metadata: {
+          user: user.username,
+          userId: user.userId
         },
-        { skip: ['createdAt', 'id', 'updatedAt'] }
-      )
-      expect(event.createdAt).to.be.instanceof(Date)
-      expect(event.updatedAt).to.be.instanceof(Date)
+        status: null,
+        overallStatus: null,
+        statusCounts: null,
+        triggerNoticeId: null
+      })
+      expect(event.createdAt).toBeInstanceOf(Date)
+      expect(event.updatedAt).toBeInstanceOf(Date)
     })
 
     it('returns the the new users resetGuid', async () => {
@@ -106,7 +95,7 @@ describe('Users - Internal - Create User DAL', () => {
 
       const { resetGuid } = await UserModel.query().where('username', session.email).limit(1).first()
 
-      expect(result).to.equal(resetGuid)
+      expect(result).toEqual(resetGuid)
     })
 
     describe('and the permission has no groups or roles', () => {
@@ -121,8 +110,8 @@ describe('Users - Internal - Create User DAL', () => {
         const userGroup = await UserGroupModel.query().where({ userId })
         const userRole = await UserRoleModel.query().where({ userId })
 
-        expect(userGroup).to.be.empty()
-        expect(userRole).to.be.empty()
+        expect(userGroup).toHaveLength(0)
+        expect(userRole).toHaveLength(0)
       })
     })
 
@@ -138,10 +127,10 @@ describe('Users - Internal - Create User DAL', () => {
         const userGroup = await UserGroupModel.query().where({ userId }).withGraphFetched('group')
         const userRole = await UserRoleModel.query().where({ userId })
 
-        expect(userGroup).to.have.length(1)
-        expect(userGroup[0].userId).to.equal(userId)
-        expect(userGroup[0].group.group).to.equal('nps')
-        expect(userRole).to.be.empty()
+        expect(userGroup).toHaveLength(1)
+        expect(userGroup[0].userId).toEqual(userId)
+        expect(userGroup[0].group.group).toEqual('nps')
+        expect(userRole).toHaveLength(0)
       })
     })
 
@@ -157,12 +146,12 @@ describe('Users - Internal - Create User DAL', () => {
         const userGroup = await UserGroupModel.query().where({ userId }).withGraphFetched('group')
         const userRole = await UserRoleModel.query().where({ userId }).withGraphFetched('role')
 
-        expect(userGroup).to.have.length(1)
-        expect(userGroup[0].userId).to.equal(userId)
-        expect(userGroup[0].group.group).to.equal('nps')
-        expect(userRole).to.have.length(1)
-        expect(userRole[0].userId).to.equal(userId)
-        expect(userRole[0].role.role).to.equal('ar_approver')
+        expect(userGroup).toHaveLength(1)
+        expect(userGroup[0].userId).toEqual(userId)
+        expect(userGroup[0].group.group).toEqual('nps')
+        expect(userRole).toHaveLength(1)
+        expect(userRole[0].userId).toEqual(userId)
+        expect(userRole[0].role.role).toEqual('ar_approver')
       })
     })
   })

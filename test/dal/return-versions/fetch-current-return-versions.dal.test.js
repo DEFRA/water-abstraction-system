@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
 const ReturnVersionModel = require('../../../app/models/return-version.model.js')
@@ -44,8 +37,8 @@ describe('DAL - Return Versions - Fetch Current Return Versions dal', () => {
     it('fetches the current return versions for the specified licence', async () => {
       const result = await FetchCurrentReturnVersionsDal.go(licenceId)
 
-      expect(result).to.have.length(2)
-      expect(result[0].startDate).to.be.above(result[1].startDate)
+      expect(result).toHaveLength(2)
+      expect(result[0].startDate.getTime()).toBeGreaterThan(result[1].startDate.getTime())
     })
   })
 
@@ -63,8 +56,8 @@ describe('DAL - Return Versions - Fetch Current Return Versions dal', () => {
     it('fetches the current return versions for the specified licence', async () => {
       const result = await FetchCurrentReturnVersionsDal.go(licenceId, trx)
 
-      expect(result).to.have.length(2)
-      expect(result[0].startDate).to.be.above(result[1].startDate)
+      expect(result).toHaveLength(2)
+      expect(result[0].startDate.getTime()).toBeGreaterThan(result[1].startDate.getTime())
     })
   })
 })
