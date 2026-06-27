@@ -36,17 +36,6 @@ module.exports = [
       globals: {
         ...globals.node
       },
-      // @hapi/lab v26 uses @babel/eslint-parser for coverage instrumentation. It reads the project's eslint.config.js
-      // (via ESLint.calculateConfigForFile()) and passes languageOptions.parserOptions directly to
-      // @babel/eslint-parser.parse(). Without requireConfigFile: false, @babel/eslint-parser fails with
-      // "Cannot read properties of undefined (reading 'includes')" because it can't find a babel config file.
-      parserOptions: {
-        requireConfigFile: false,
-        babelOptions: {
-          babelrc: false,
-          configFile: false
-        }
-      },
       sourceType: 'commonjs'
     },
     plugins: {
@@ -86,6 +75,23 @@ module.exports = [
     files: ['app/controllers/**/*', 'db/seeds/**/*'],
     rules: {
       'jsdoc/require-jsdoc': 'off'
+    }
+  },
+  // Vitest injects test globals (describe, it, expect, etc.) via globals: true in vitest.config.js. This tells ESLint
+  // about those globals so it does not flag them as undefined in test files.
+  {
+    files: ['test/**/*.test.js'],
+    languageOptions: {
+      globals: {
+        afterAll: 'readonly',
+        afterEach: 'readonly',
+        beforeAll: 'readonly',
+        beforeEach: 'readonly',
+        describe: 'readonly',
+        expect: 'readonly',
+        it: 'readonly',
+        vi: 'readonly'
+      }
     }
   },
   // This section adds another override to the configuration object above. It tells the import/extensions plugin to
