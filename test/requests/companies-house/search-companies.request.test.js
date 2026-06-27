@@ -3,12 +3,7 @@
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const CompaniesHouseRequest = require('../../../app/requests/companies-house.request.js')
@@ -49,19 +44,19 @@ describe('Companies House - Search Companies request', () => {
 
       const requestArgs = CompaniesHouseRequest.get.firstCall.args
 
-      expect(requestArgs[0]).to.equal('search/companies')
+      expect(requestArgs[0]).toEqual('search/companies')
     })
 
     it('returns a "true" success status', async () => {
       const result = await SearchCompaniesRequest.send(queryString)
 
-      expect(result.succeeded).to.be.true()
+      expect(result.succeeded).toBe(true)
     })
 
     it('returns the matching addresses', async () => {
       const result = await SearchCompaniesRequest.send(queryString)
 
-      expect(result.matches).to.equal(matches)
+      expect(result.matches).toEqual(matches)
     })
   })
 
@@ -81,13 +76,13 @@ describe('Companies House - Search Companies request', () => {
       it('returns a "false" success status', async () => {
         const result = await SearchCompaniesRequest.send(queryString)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns an error in the "response"', async () => {
         const result = await SearchCompaniesRequest.send(queryString)
 
-        expect(result.response.body).to.equal({
+        expect(result.response.body).toEqual({
           statusCode: HTTP_STATUS_NOT_FOUND,
           error: 'Not Found',
           message: 'Not Found'
@@ -97,9 +92,9 @@ describe('Companies House - Search Companies request', () => {
       it('does not returns any matches', async () => {
         const result = await SearchCompaniesRequest.send(queryString)
 
-        expect(result.response.body.items).not.to.exist()
-        expect(result.matches).to.be.instanceOf(Array)
-        expect(result.matches).to.be.empty()
+        expect(result.response.body.items).toBeUndefined()
+        expect(result.matches).toBeInstanceOf(Array)
+        expect(result.matches).toHaveLength(0)
       })
     })
 
@@ -115,23 +110,23 @@ describe('Companies House - Search Companies request', () => {
       it('returns a "false" success status', async () => {
         const result = await SearchCompaniesRequest.send(queryString)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
         const result = await SearchCompaniesRequest.send(queryString)
 
-        expect(result.response.statusCode).not.to.exist()
-        expect(result.response.body).not.to.exist()
-        expect(result.response.message).to.equal("Timeout awaiting 'request' for 5000ms")
+        expect(result.response.statusCode).toBeUndefined()
+        expect(result.response.body).toBeUndefined()
+        expect(result.response.message).toEqual("Timeout awaiting 'request' for 5000ms")
       })
 
       it('does not returns any matches', async () => {
         const result = await SearchCompaniesRequest.send(queryString)
 
-        expect(result.matches).to.exist()
-        expect(result.matches).to.be.instanceOf(Array)
-        expect(result.matches).to.be.empty()
+        expect(result.matches).toBeDefined()
+        expect(result.matches).toBeInstanceOf(Array)
+        expect(result.matches).toHaveLength(0)
       })
     })
   })

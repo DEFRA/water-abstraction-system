@@ -3,12 +3,7 @@
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const BaseRequest = require('../../../app/requests/base.request.js')
@@ -35,8 +30,8 @@ describe('ReSP API Token request', () => {
     it('returns an object with the access token and how long till it expires', async () => {
       const result = await TokenRequest.send()
 
-      expect(result.accessToken).to.equal('reallylong.stringoflettersandnumbers.in3parts')
-      expect(result.expiresIn).to.equal(3600)
+      expect(result.accessToken).toEqual('reallylong.stringoflettersandnumbers.in3parts')
+      expect(result.expiresIn).toEqual(3600)
     })
   })
 
@@ -54,8 +49,8 @@ describe('ReSP API Token request', () => {
     it('returns an object with empty access token expires in properties', async () => {
       const result = await TokenRequest.send()
 
-      expect(result.accessToken).to.be.null()
-      expect(result.expiresIn).to.be.null()
+      expect(result.accessToken).toBeNull()
+      expect(result.expiresIn).toBeNull()
     })
   })
 })

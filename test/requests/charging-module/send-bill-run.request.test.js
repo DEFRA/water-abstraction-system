@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
@@ -51,19 +46,19 @@ describe('Charging Module Send Bill Run request', () => {
     it('returns a "true" success status', async () => {
       const result = await SendBillRunRequest.send(billRunId)
 
-      expect(result.succeeded).to.be.true()
+      expect(result.succeeded).toBe(true)
     })
 
     it('returns the last status received', async () => {
       const result = await SendBillRunRequest.send(billRunId)
 
-      expect(result.status).to.equal('billed')
+      expect(result.status).toEqual('billed')
     })
 
     it('returns the number of attempts', async () => {
       const result = await SendBillRunRequest.send(billRunId)
 
-      expect(result.attempts).to.equal(1)
+      expect(result.attempts).toEqual(1)
     })
   })
 
@@ -77,12 +72,14 @@ describe('Charging Module Send Bill Run request', () => {
       })
 
       it('throws an error', async () => {
-        const error = await expect(SendBillRunRequest.send(billRunId)).to.reject()
+        const error = await SendBillRunRequest.send(billRunId).catch((e) => {
+          return e
+        })
 
-        expect(error).to.be.instanceOf(ExpandedError)
-        expect(error.message).to.equal('Charging Module approve request failed')
-        expect(error.billRunExternalId).to.equal(billRunId)
-        expect(error.responseBody).to.equal('Boom')
+        expect(error).toBeInstanceOf(ExpandedError)
+        expect(error.message).toEqual('Charging Module approve request failed')
+        expect(error.billRunExternalId).toEqual(billRunId)
+        expect(error.responseBody).toEqual('Boom')
       })
     })
 
@@ -96,12 +93,14 @@ describe('Charging Module Send Bill Run request', () => {
       })
 
       it('throws an error', async () => {
-        const error = await expect(SendBillRunRequest.send(billRunId)).to.reject()
+        const error = await SendBillRunRequest.send(billRunId).catch((e) => {
+          return e
+        })
 
-        expect(error).to.be.instanceOf(ExpandedError)
-        expect(error.message).to.equal('Charging Module send request failed')
-        expect(error.billRunExternalId).to.equal(billRunId)
-        expect(error.responseBody).to.equal('Boom')
+        expect(error).toBeInstanceOf(ExpandedError)
+        expect(error.message).toEqual('Charging Module send request failed')
+        expect(error.billRunExternalId).toEqual(billRunId)
+        expect(error.responseBody).toEqual('Boom')
       })
     })
 
@@ -117,13 +116,15 @@ describe('Charging Module Send Bill Run request', () => {
       })
 
       it('throws an error', async () => {
-        const error = await expect(SendBillRunRequest.send(billRunId)).to.reject()
+        const error = await SendBillRunRequest.send(billRunId).catch((e) => {
+          return e
+        })
 
-        expect(error).to.be.instanceOf(ExpandedError)
-        expect(error.message).to.equal('Charging Module wait request failed')
-        expect(error.billRunExternalId).to.equal(billRunId)
-        expect(error.attempts).to.equal(100)
-        expect(error.responseBody).to.equal('Boom')
+        expect(error).toBeInstanceOf(ExpandedError)
+        expect(error.message).toEqual('Charging Module wait request failed')
+        expect(error.billRunExternalId).toEqual(billRunId)
+        expect(error.attempts).toEqual(100)
+        expect(error.responseBody).toEqual('Boom')
       })
     })
   })

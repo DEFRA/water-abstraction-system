@@ -3,12 +3,7 @@
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const CompaniesHouseRequest = require('../../../app/requests/companies-house.request.js')
@@ -42,19 +37,19 @@ describe('Companies House - Lookup Companies House Number request', () => {
 
       const requestArgs = CompaniesHouseRequest.get.firstCall.args
 
-      expect(requestArgs[0]).to.equal(`company/${companiesHouseNumber}`)
+      expect(requestArgs[0]).toEqual(`company/${companiesHouseNumber}`)
     })
 
     it('returns a "true" success status', async () => {
       const result = await LookupCompaniesHouseNumberRequest.send(companiesHouseNumber)
 
-      expect(result.succeeded).to.be.true()
+      expect(result.succeeded).toBe(true)
     })
 
     it('returns the matching company', async () => {
       const result = await LookupCompaniesHouseNumberRequest.send(companiesHouseNumber)
 
-      expect(result.response.body).to.equal({
+      expect(result.response.body).toEqual({
         company_number: 12345678,
         company_name: 'Example Ltd'
       })
@@ -76,16 +71,16 @@ describe('Companies House - Lookup Companies House Number request', () => {
       it('returns a "false" success status', async () => {
         const result = await LookupCompaniesHouseNumberRequest.send(companiesHouseNumber)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns an error in the "response"', async () => {
         const result = await LookupCompaniesHouseNumberRequest.send(companiesHouseNumber)
 
-        expect(result.response.body).to.equal({
+        expect(result.response.body).toEqual({
           message: 'Resource not found for company profile 12345678'
         })
-        expect(result.response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
+        expect(result.response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
       })
     })
 
@@ -100,15 +95,15 @@ describe('Companies House - Lookup Companies House Number request', () => {
       it('returns a "false" success status', async () => {
         const result = await LookupCompaniesHouseNumberRequest.send(companiesHouseNumber)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
         const result = await LookupCompaniesHouseNumberRequest.send(companiesHouseNumber)
 
-        expect(result.response.statusCode).not.to.exist()
-        expect(result.response.body).not.to.exist()
-        expect(result.response.message).to.equal("Timeout awaiting 'request' for 5000ms")
+        expect(result.response.statusCode).toBeUndefined()
+        expect(result.response.body).toBeUndefined()
+        expect(result.response.message).toEqual("Timeout awaiting 'request' for 5000ms")
       })
     })
   })
