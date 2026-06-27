@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
@@ -28,7 +23,7 @@ describe('Return Logs controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -45,7 +40,7 @@ describe('Return Logs controller', () => {
     Sinon.restore()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await server.stop()
   })
 
@@ -67,8 +62,8 @@ describe('Return Logs controller', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(getOptions)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Communications')
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain('Communications')
       })
     })
   })
@@ -94,10 +89,10 @@ describe('Return Logs controller', () => {
 
           const calls = ViewDetailsService.go.firstCall
 
-          expect(calls.args).to.contain(0)
+          expect(calls.args).toContain(0)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Return details')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Return details')
         })
       })
 
@@ -111,10 +106,10 @@ describe('Return Logs controller', () => {
 
           const calls = ViewDetailsService.go.firstCall
 
-          expect(calls.args).to.contain(1)
+          expect(calls.args).toContain(1)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Return details')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Return details')
         })
       })
     })
@@ -130,8 +125,8 @@ describe('Return Logs controller', () => {
         it('redirects back to the "return details" page', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/return-logs/${returnLogId}/details`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/return-logs/${returnLogId}/details`)
         })
       })
     })
@@ -160,10 +155,10 @@ describe('Return Logs controller', () => {
         it('returns the file successfully', async () => {
           const response = await server.inject(getOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.headers['content-type']).to.equal('type/csv')
-          expect(response.headers['content-disposition']).to.equal('attachment; filename="test.csv"')
-          expect(response.payload).to.equal('test')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.headers['content-type']).toEqual('type/csv')
+          expect(response.headers['content-disposition']).toEqual('attachment; filename="test.csv"')
+          expect(response.payload).toEqual('test')
         })
       })
     })

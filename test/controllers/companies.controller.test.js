@@ -1,15 +1,10 @@
 'use strict'
 
-const { HTTP_STATUS_OK, HTTP_STATUS_NOT_FOUND } = require('node:http2').constants
-
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
+// Test helpers
+const { HTTP_STATUS_OK, HTTP_STATUS_NOT_FOUND } = require('node:http2').constants
 const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Things we need to stub
@@ -28,7 +23,7 @@ describe('Companies controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -45,7 +40,7 @@ describe('Companies controller', () => {
     Sinon.restore()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await server.stop()
   })
 
@@ -69,8 +64,8 @@ describe('Companies controller', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Licence holder')
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain('Licence holder')
       })
     })
   })
@@ -95,8 +90,8 @@ describe('Companies controller', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Licence holder')
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain('Licence holder')
       })
     })
   })
@@ -120,8 +115,8 @@ describe('Companies controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Billing accounts')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Billing accounts')
         })
       })
 
@@ -142,8 +137,8 @@ describe('Companies controller', () => {
         it('returns "page not found"', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
-          expect(response.payload).to.contain('Page not found')
+          expect(response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
+          expect(response.payload).toContain('Page not found')
         })
       })
     })
@@ -167,8 +162,8 @@ describe('Companies controller', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Contacts')
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain('Contacts')
       })
     })
   })
@@ -191,8 +186,8 @@ describe('Companies controller', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('History')
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain('History')
       })
     })
   })
@@ -215,8 +210,8 @@ describe('Companies controller', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Licences')
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain('Licences')
       })
     })
   })

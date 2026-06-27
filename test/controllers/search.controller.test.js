@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
@@ -23,7 +18,7 @@ describe('Search controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -40,7 +35,7 @@ describe('Search controller', () => {
     Sinon.restore()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await server.stop()
   })
 
@@ -63,8 +58,8 @@ describe('Search controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(getOptions)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Search')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Search')
           })
         })
 
@@ -84,8 +79,8 @@ describe('Search controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(getOptions)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Search results for &quot;searchthis&quot;')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Search results for &quot;searchthis&quot;')
           })
         })
       })
@@ -108,8 +103,8 @@ describe('Search controller', () => {
         it('redirects to the first page of results', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal('/system/search?page=1')
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual('/system/search?page=1')
         })
       })
 
@@ -134,9 +129,9 @@ describe('Search controller', () => {
         it('returns the page with an error message', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('There is a problem')
-          expect(response.payload).to.contain('Query error')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('There is a problem')
+          expect(response.payload).toContain('Query error')
         })
       })
     })

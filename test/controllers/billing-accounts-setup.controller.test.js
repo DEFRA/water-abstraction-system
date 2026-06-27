@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
@@ -45,7 +40,7 @@ describe('Billing Accounts Setup controller', () => {
   let server
   let sessionId
 
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -62,7 +57,7 @@ describe('Billing Accounts Setup controller', () => {
     Sinon.restore()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await server.stop()
   })
 
@@ -82,8 +77,8 @@ describe('Billing Accounts Setup controller', () => {
         it('creates a new session and redirects to the "Who should the bills go to" page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/account`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/billing-accounts/setup/${sessionId}/account`)
         })
       })
     })
@@ -106,8 +101,8 @@ describe('Billing Accounts Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Who should the bills go to?')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Who should the bills go to?')
         })
       })
     })
@@ -128,8 +123,8 @@ describe('Billing Accounts Setup controller', () => {
         it('redirects to the "select company address" page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/existing-address`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/billing-accounts/setup/${sessionId}/existing-address`)
         })
       })
 
@@ -143,8 +138,8 @@ describe('Billing Accounts Setup controller', () => {
         it('redirects to the "does this account already exist" page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/existing-account`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/billing-accounts/setup/${sessionId}/existing-account`)
         })
       })
     })
@@ -167,8 +162,8 @@ describe('Billing Accounts Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select an existing address for Test User?')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select an existing address for Test User?')
         })
       })
     })
@@ -189,8 +184,8 @@ describe('Billing Accounts Setup controller', () => {
         it('redirects to the "fao" page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/fao`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/billing-accounts/setup/${sessionId}/fao`)
         })
       })
 
@@ -204,8 +199,8 @@ describe('Billing Accounts Setup controller', () => {
         it('redirects to the "postcode" page of the address lookup journey', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/address/${sessionId}/postcode`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/address/${sessionId}/postcode`)
         })
       })
     })
@@ -228,8 +223,8 @@ describe('Billing Accounts Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Does this account already exist?')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Does this account already exist?')
         })
       })
     })
@@ -250,8 +245,8 @@ describe('Billing Accounts Setup controller', () => {
         it('redirects to the "postcode" page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/address/${sessionId}/postcode`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/address/${sessionId}/postcode`)
         })
       })
 
@@ -265,8 +260,8 @@ describe('Billing Accounts Setup controller', () => {
         it('redirects to the "Select the account type" page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/account-type`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/billing-accounts/setup/${sessionId}/account-type`)
         })
       })
     })
@@ -289,8 +284,8 @@ describe('Billing Accounts Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select the account type')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select the account type')
         })
       })
     })
@@ -311,8 +306,8 @@ describe('Billing Accounts Setup controller', () => {
         it('redirects to the "existing-address" page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/existing-address`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/billing-accounts/setup/${sessionId}/existing-address`)
         })
       })
 
@@ -326,8 +321,8 @@ describe('Billing Accounts Setup controller', () => {
         it('redirects to the "company search" page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/company-search`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/billing-accounts/setup/${sessionId}/company-search`)
         })
       })
     })
@@ -350,8 +345,8 @@ describe('Billing Accounts Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Set up a contact for Company Name')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Set up a contact for Company Name')
         })
       })
     })
@@ -372,8 +367,8 @@ describe('Billing Accounts Setup controller', () => {
         it('redirects to the "contact name" page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/contact-name`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/billing-accounts/setup/${sessionId}/contact-name`)
         })
       })
     })
@@ -396,8 +391,8 @@ describe('Billing Accounts Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Enter a name for the contact')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Enter a name for the contact')
         })
       })
     })
@@ -418,8 +413,8 @@ describe('Billing Accounts Setup controller', () => {
         it('redirects to the "check" page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/check`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/billing-accounts/setup/${sessionId}/check`)
         })
       })
     })
@@ -442,8 +437,8 @@ describe('Billing Accounts Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select the account type')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select the account type')
         })
       })
     })
@@ -464,8 +459,8 @@ describe('Billing Accounts Setup controller', () => {
         it('redirects to the "existing-address" page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/existing-address`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/billing-accounts/setup/${sessionId}/existing-address`)
         })
       })
 
@@ -479,8 +474,8 @@ describe('Billing Accounts Setup controller', () => {
         it('redirects to the "company search" page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/company-search`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/billing-accounts/setup/${sessionId}/company-search`)
         })
       })
     })
@@ -503,8 +498,8 @@ describe('Billing Accounts Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Enter the company details')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Enter the company details')
         })
       })
     })
@@ -525,8 +520,8 @@ describe('Billing Accounts Setup controller', () => {
         it('redirects to the "select-company" page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/select-company`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/billing-accounts/setup/${sessionId}/select-company`)
         })
       })
     })
@@ -549,8 +544,8 @@ describe('Billing Accounts Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select the registered company details')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select the registered company details')
         })
       })
     })
@@ -571,8 +566,8 @@ describe('Billing Accounts Setup controller', () => {
         it('redirects to the "existing-address" page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/existing-address`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/billing-accounts/setup/${sessionId}/existing-address`)
         })
       })
     })
@@ -595,8 +590,8 @@ describe('Billing Accounts Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Do you need to add an FAO?')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Do you need to add an FAO?')
         })
       })
     })
@@ -617,8 +612,8 @@ describe('Billing Accounts Setup controller', () => {
         it('redirects to the "contact" page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/contact`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/billing-accounts/setup/${sessionId}/contact`)
         })
       })
 
@@ -632,8 +627,8 @@ describe('Billing Accounts Setup controller', () => {
         it('redirects to the "check" page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/check`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/billing-accounts/setup/${sessionId}/check`)
         })
       })
     })
@@ -656,8 +651,8 @@ describe('Billing Accounts Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Check billing account details')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Check billing account details')
         })
       })
     })
@@ -678,8 +673,8 @@ describe('Billing Accounts Setup controller', () => {
         it('redirects to the "confirmation" page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`system/billing-accounts/${billingAccountId}`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`system/billing-accounts/${billingAccountId}`)
         })
       })
     })

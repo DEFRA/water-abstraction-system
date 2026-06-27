@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const FeatureFlagsConfig = require('../../config/feature-flags.config.js')
@@ -40,7 +35,7 @@ describe('Users controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -59,7 +54,7 @@ describe('Users controller', () => {
     Sinon.restore()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await server.stop()
   })
 
@@ -98,9 +93,9 @@ describe('Users controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Users')
-          expect(response.payload).to.contain('No users found.')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Users')
+          expect(response.payload).toContain('No users found.')
         })
       })
 
@@ -127,9 +122,9 @@ describe('Users controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Users')
-            expect(response.payload).to.contain('Showing all 1 users')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Users')
+            expect(response.payload).toContain('Showing all 1 users')
           })
         })
 
@@ -147,9 +142,9 @@ describe('Users controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Users')
-            expect(response.payload).to.contain('Showing 25 of 70 users')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Users')
+            expect(response.payload).toContain('Showing 25 of 70 users')
           })
         })
       })
@@ -170,8 +165,8 @@ describe('Users controller', () => {
         it('redirects back to the index page', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/users`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/users`)
         })
       })
 
@@ -199,11 +194,11 @@ describe('Users controller', () => {
           it('re-renders the index page with no pagination and an error', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
 
-            expect(response.payload).to.contain('There is a problem')
-            expect(response.payload).to.contain('Users')
-            expect(response.payload).to.contain('No users found.')
+            expect(response.payload).toContain('There is a problem')
+            expect(response.payload).toContain('Users')
+            expect(response.payload).toContain('No users found.')
           })
         })
 
@@ -230,11 +225,11 @@ describe('Users controller', () => {
             it('re-renders the index page with no pagination and an error', async () => {
               const response = await server.inject(postOptions)
 
-              expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+              expect(response.statusCode).toEqual(HTTP_STATUS_OK)
 
-              expect(response.payload).to.contain('There is a problem')
-              expect(response.payload).to.contain('Users')
-              expect(response.payload).to.contain('Showing all 1 users')
+              expect(response.payload).toContain('There is a problem')
+              expect(response.payload).toContain('Users')
+              expect(response.payload).toContain('Showing all 1 users')
             })
           })
 
@@ -252,11 +247,11 @@ describe('Users controller', () => {
             it('re-renders the index page with pagination and an error', async () => {
               const response = await server.inject(postOptions)
 
-              expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+              expect(response.statusCode).toEqual(HTTP_STATUS_OK)
 
-              expect(response.payload).to.contain('There is a problem')
-              expect(response.payload).to.contain('Users')
-              expect(response.payload).to.contain('Showing 25 of 70 users')
+              expect(response.payload).toContain('There is a problem')
+              expect(response.payload).toContain('Users')
+              expect(response.payload).toContain('Showing 25 of 70 users')
             })
           })
         })
@@ -297,9 +292,9 @@ describe('Users controller', () => {
         it('returns the external user page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Communications')
-          expect(response.payload).to.contain('This user has no associated communications.')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Communications')
+          expect(response.payload).toContain('This user has no associated communications.')
         })
       })
 
@@ -326,9 +321,9 @@ describe('Users controller', () => {
           it('returns the external user page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Communications')
-            expect(response.payload).to.contain('Showing all 1 communications')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Communications')
+            expect(response.payload).toContain('Showing all 1 communications')
           })
         })
 
@@ -346,9 +341,9 @@ describe('Users controller', () => {
           it('returns the external user page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Communications')
-            expect(response.payload).to.contain('Showing 25 of 70 communications')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Communications')
+            expect(response.payload).toContain('Showing 25 of 70 communications')
           })
         })
       })
@@ -381,8 +376,8 @@ describe('Users controller', () => {
       it('returns the external user page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('User details')
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain('User details')
       })
     })
   })
@@ -422,9 +417,9 @@ describe('Users controller', () => {
         it('returns the external user page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Licences')
-          expect(response.payload).to.contain('This user has no linked licences.')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Licences')
+          expect(response.payload).toContain('This user has no linked licences.')
         })
       })
 
@@ -472,9 +467,9 @@ describe('Users controller', () => {
           it('returns the external user page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Licences')
-            expect(response.payload).to.contain('Showing all 1 licences')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Licences')
+            expect(response.payload).toContain('Showing all 1 licences')
           })
         })
 
@@ -492,9 +487,9 @@ describe('Users controller', () => {
           it('returns the external user page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Licences')
-            expect(response.payload).to.contain('Showing 25 of 70 licences')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Licences')
+            expect(response.payload).toContain('Showing 25 of 70 licences')
           })
         })
       })
@@ -534,9 +529,9 @@ describe('Users controller', () => {
         it('returns the external user page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Verifications')
-          expect(response.payload).to.contain('This user has no associated verifications.')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Verifications')
+          expect(response.payload).toContain('This user has no associated verifications.')
         })
       })
 
@@ -586,9 +581,9 @@ describe('Users controller', () => {
           it('returns the external user page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Verifications')
-            expect(response.payload).to.contain('Showing all 1 verifications')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Verifications')
+            expect(response.payload).toContain('Showing all 1 verifications')
           })
         })
 
@@ -606,9 +601,9 @@ describe('Users controller', () => {
           it('returns the external user page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Verifications')
-            expect(response.payload).to.contain('Showing 25 of 70 verifications')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Verifications')
+            expect(response.payload).toContain('Showing 25 of 70 verifications')
           })
         })
       })
@@ -647,9 +642,9 @@ describe('Users controller', () => {
         it('returns the internal user page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Communications')
-          expect(response.payload).to.contain('This user has no associated communications.')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Communications')
+          expect(response.payload).toContain('This user has no associated communications.')
         })
       })
 
@@ -676,9 +671,9 @@ describe('Users controller', () => {
           it('returns the internal user page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Communications')
-            expect(response.payload).to.contain('Showing all 1 communications')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Communications')
+            expect(response.payload).toContain('Showing all 1 communications')
           })
         })
 
@@ -696,9 +691,9 @@ describe('Users controller', () => {
           it('returns the internal user page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Communications')
-            expect(response.payload).to.contain('Showing 25 of 70 communications')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Communications')
+            expect(response.payload).toContain('Showing 25 of 70 communications')
           })
         })
       })
@@ -732,8 +727,8 @@ describe('Users controller', () => {
       it('returns the internal user page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('User details')
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain('User details')
       })
     })
 
@@ -751,8 +746,8 @@ describe('Users controller', () => {
         it('redirects to the internal initiate edit session url', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/users/internal/setup/${id}/edit`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/users/internal/setup/${id}/edit`)
         })
       })
     })
@@ -788,8 +783,8 @@ describe('Users controller', () => {
       it('returns the internal user page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Password reset')
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain('Password reset')
       })
     })
   })
@@ -808,8 +803,8 @@ describe('Users controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Profile details')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Profile details')
         })
       })
     })
@@ -828,8 +823,8 @@ describe('Users controller', () => {
           it('redirects to itself', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal('/system/users/me/profile-details')
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual('/system/users/me/profile-details')
           })
         })
 
@@ -841,8 +836,8 @@ describe('Users controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('There is a problem')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('There is a problem')
           })
         })
       })

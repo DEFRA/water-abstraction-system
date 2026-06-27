@@ -1,16 +1,10 @@
 'use strict'
 
-const { HTTP_STATUS_OK, HTTP_STATUS_FOUND } = require('node:http2').constants
-
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
+const { HTTP_STATUS_OK, HTTP_STATUS_FOUND } = require('node:http2').constants
 const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Things we need to stub
@@ -29,7 +23,7 @@ describe('Company Contacts controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -46,7 +40,7 @@ describe('Company Contacts controller', () => {
     Sinon.restore()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await server.stop()
   })
 
@@ -68,8 +62,8 @@ describe('Company Contacts controller', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Communications for Rachael Tyrell')
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain('Communications for Rachael Tyrell')
       })
     })
   })
@@ -95,8 +89,8 @@ describe('Company Contacts controller', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Contact details for Rachael Tyrell')
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain('Contact details for Rachael Tyrell')
       })
     })
   })
@@ -119,8 +113,8 @@ describe('Company Contacts controller', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Remove page')
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain('Remove page')
       })
     })
 
@@ -138,8 +132,8 @@ describe('Company Contacts controller', () => {
       it('redirects to companies contacts page', async () => {
         const response = await server.inject(postOptions)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-        expect(response.headers.location).to.equal(`/system/companies/${companyId}/contacts`)
+        expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+        expect(response.headers.location).toEqual(`/system/companies/${companyId}/contacts`)
       })
     })
   })

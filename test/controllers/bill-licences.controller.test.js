@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_FOUND, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
@@ -26,7 +21,7 @@ describe('Bill Licences controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -43,7 +38,7 @@ describe('Bill Licences controller', () => {
     Sinon.restore()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await server.stop()
   })
 
@@ -62,11 +57,11 @@ describe('Bill Licences controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Transactions for WA/055/0017/999')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Transactions for WA/055/0017/999')
 
             // Only the presroc view has this data attribute tag
-            expect(response.payload).to.contain('data-test="charge-element-season-0"')
+            expect(response.payload).toContain('data-test="charge-element-season-0"')
           })
         })
 
@@ -78,11 +73,11 @@ describe('Bill Licences controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Transactions for 03/28/72/0099/1')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Transactions for 03/28/72/0099/1')
 
             // Only the SROC view has this data attribute tag
-            expect(response.payload).to.contain('data-test="charge-reference-0"')
+            expect(response.payload).toContain('data-test="charge-reference-0"')
           })
         })
       })
@@ -103,8 +98,8 @@ describe('Bill Licences controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('about to remove AT/SROC/SUPB/02 from the bill run')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('about to remove AT/SROC/SUPB/02 from the bill run')
         })
       })
     })
@@ -124,8 +119,8 @@ describe('Bill Licences controller', () => {
         it('redirects to the legacy processing bill run page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(
             '/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing?invoiceId=9a87e3ee-038e-4e58-99f2-1081292a7710'
           )
         })
@@ -143,8 +138,8 @@ describe('Bill Licences controller', () => {
           it('returns the error page', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Sorry, there is a problem with the service')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Sorry, there is a problem with the service')
           })
         })
       })

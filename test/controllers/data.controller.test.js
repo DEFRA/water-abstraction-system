@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = require('node:http2').constants
@@ -23,7 +18,7 @@ describe('Data controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -40,7 +35,7 @@ describe('Data controller', () => {
     Sinon.restore()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await server.stop()
   })
 
@@ -59,8 +54,8 @@ describe('Data controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('billingPeriods')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('billingPeriods')
         })
       })
     })
@@ -83,8 +78,8 @@ describe('Data controller', () => {
         it('returns a 200 status and the results', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.equal('{"regions":["d0a4123d-1e19-480d-9dd4-f70f3387c4b9"]}')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toEqual('{"regions":["d0a4123d-1e19-480d-9dd4-f70f3387c4b9"]}')
         })
       })
 
@@ -97,7 +92,7 @@ describe('Data controller', () => {
           it('returns a 500 status', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_INTERNAL_SERVER_ERROR)
+            expect(response.statusCode).toEqual(HTTP_STATUS_INTERNAL_SERVER_ERROR)
           })
         })
       })
@@ -119,7 +114,7 @@ describe('Data controller', () => {
         it('displays the correct message', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
+          expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
         })
       })
 
@@ -132,7 +127,7 @@ describe('Data controller', () => {
           it('returns a 500 status', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_INTERNAL_SERVER_ERROR)
+            expect(response.statusCode).toEqual(HTTP_STATUS_INTERNAL_SERVER_ERROR)
           })
         })
       })
@@ -154,7 +149,7 @@ describe('Data controller', () => {
         it('returns a 204 status', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
+          expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
         })
       })
 
@@ -167,7 +162,7 @@ describe('Data controller', () => {
           it('returns a 500 status', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_INTERNAL_SERVER_ERROR)
+            expect(response.statusCode).toEqual(HTTP_STATUS_INTERNAL_SERVER_ERROR)
           })
         })
       })

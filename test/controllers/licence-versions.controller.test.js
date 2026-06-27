@@ -1,26 +1,23 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_OK } = require('node:http2').constants
 
+// Things we need to stub
+const ViewService = require('../../app/services/licence-versions/view.service.js')
+
 // For running our service
 const { init } = require('../../app/server.js')
-const ViewService = require('../../app/services/licence-versions/view.service.js')
 
 describe('Licence Versions controller', () => {
   let options
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -37,7 +34,7 @@ describe('Licence Versions controller', () => {
     Sinon.restore()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await server.stop()
   })
 
@@ -62,8 +59,8 @@ describe('Licence Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Licence version starting')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Licence version starting')
         })
       })
     })

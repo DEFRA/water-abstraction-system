@@ -1,14 +1,10 @@
 'use strict'
 
-const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
-
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
+// Test helpers
+const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -18,7 +14,7 @@ describe('Check controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -35,7 +31,7 @@ describe('Check controller', () => {
     Sinon.restore()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await server.stop()
   })
 
@@ -49,7 +45,7 @@ describe('Check controller', () => {
         it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
+          expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
         })
       })
     })

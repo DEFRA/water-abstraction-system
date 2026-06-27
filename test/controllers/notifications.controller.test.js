@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = require('node:http2').constants
@@ -30,7 +25,7 @@ describe('Notifications controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -47,7 +42,7 @@ describe('Notifications controller', () => {
     Sinon.restore()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await server.stop()
   })
 
@@ -97,10 +92,10 @@ describe('Notifications controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain(`Licence ${licence.licenceRef}`)
-            expect(response.payload).to.contain('Returns invitation')
-            expect(response.payload).to.contain('Go back to notice')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain(`Licence ${licence.licenceRef}`)
+            expect(response.payload).toContain('Returns invitation')
+            expect(response.payload).toContain('Go back to notice')
           })
         })
       })
@@ -151,10 +146,10 @@ describe('Notifications controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain(`Licence ${licence.licenceRef}`)
-            expect(response.payload).to.contain('Returns invitation')
-            expect(response.payload).to.contain('Go back to communications')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain(`Licence ${licence.licenceRef}`)
+            expect(response.payload).toContain('Returns invitation')
+            expect(response.payload).toContain('Go back to communications')
           })
         })
       })
@@ -206,10 +201,10 @@ describe('Notifications controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain(`Licence ${licence.licenceRef}`)
-            expect(response.payload).to.contain('Returns invitation')
-            expect(response.payload).to.contain('Go back to return log')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain(`Licence ${licence.licenceRef}`)
+            expect(response.payload).toContain('Returns invitation')
+            expect(response.payload).toContain('Go back to return log')
           })
         })
       })
@@ -240,12 +235,12 @@ describe('Notifications controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.headers['content-type']).to.equal('application/pdf')
-            expect(response.headers['content-disposition']).to.contain('inline; filename="letter.pdf"')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.headers['content-type']).toEqual('application/pdf')
+            expect(response.headers['content-disposition']).toContain('inline; filename="letter.pdf"')
 
             // Check that the payload matches the buffer we stubbed
-            expect(response.payload).to.equal(buffer.toString())
+            expect(response.payload).toEqual(buffer.toString())
           })
         })
       })
@@ -277,7 +272,7 @@ describe('Notifications controller', () => {
           it('returns a 204 response', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
+            expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
           })
         })
 
@@ -299,7 +294,7 @@ describe('Notifications controller', () => {
           it('returns a 404 response', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
+            expect(response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
           })
         })
       })
