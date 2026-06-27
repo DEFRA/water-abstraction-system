@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = require('node:http2').constants
@@ -75,13 +70,13 @@ describe('Notify - Create Email request', () => {
     it('returns a "true" success status', async () => {
       const result = await CreateEmailRequest.send(templateId, emailAddress, options)
 
-      expect(result.succeeded).to.be.true()
+      expect(result.succeeded).toBe(true)
     })
 
     it('returns the result from Notify in the "response"', async () => {
       const result = await CreateEmailRequest.send(templateId, emailAddress, options)
 
-      expect(result.response.body).to.equal(response.body)
+      expect(result.response.body).toEqual(response.body)
     })
   })
 
@@ -110,13 +105,13 @@ describe('Notify - Create Email request', () => {
       it('returns a "false" success status', async () => {
         const result = await CreateEmailRequest.send(templateId, emailAddress, options)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
         const result = await CreateEmailRequest.send(templateId, emailAddress, options)
 
-        expect(result.response.body).to.equal(response.body)
+        expect(result.response.body).toEqual(response.body)
       })
     })
   })

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
@@ -52,14 +47,14 @@ describe('Charging Module Create Bill Run request', () => {
     it('returns a "true" success status', async () => {
       const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
 
-      expect(result.succeeded).to.be.true()
+      expect(result.succeeded).toBe(true)
     })
 
     it('returns the bill run id and number in the "response"', async () => {
       const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
 
-      expect(result.response.body.billRun.id).to.equal('2bbbe459-966e-4026-b5d2-2f10867bdddd')
-      expect(result.response.body.billRun.billRunNumber).to.equal(10004)
+      expect(result.response.body.billRun.id).toEqual('2bbbe459-966e-4026-b5d2-2f10867bdddd')
+      expect(result.response.body.billRun.billRunNumber).toEqual(10004)
     })
   })
 
@@ -87,15 +82,15 @@ describe('Charging Module Create Bill Run request', () => {
       it('returns a "false" success status', async () => {
         const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
         const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
 
-        expect(result.response.body.statusCode).to.equal(HTTP_STATUS_UNAUTHORIZED)
-        expect(result.response.body.error).to.equal('Unauthorized')
-        expect(result.response.body.message).to.equal('Invalid JWT: Token format not valid')
+        expect(result.response.body.statusCode).toEqual(HTTP_STATUS_UNAUTHORIZED)
+        expect(result.response.body.error).toEqual('Unauthorized')
+        expect(result.response.body.message).toEqual('Invalid JWT: Token format not valid')
       })
     })
 
@@ -110,15 +105,15 @@ describe('Charging Module Create Bill Run request', () => {
       it('returns a "false" success status', async () => {
         const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
         const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
 
-        expect(result.response.statusCode).not.to.exist()
-        expect(result.response.body).not.to.exist()
-        expect(result.response.message).to.equal("Timeout awaiting 'request' for 5000ms")
+        expect(result.response.statusCode).toBeUndefined()
+        expect(result.response.body).toBeUndefined()
+        expect(result.response.message).toEqual("Timeout awaiting 'request' for 5000ms")
       })
     })
   })

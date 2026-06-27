@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = require('node:http2').constants
@@ -42,28 +37,28 @@ describe('Legacy Request', () => {
 
         const requestArgs = BaseRequest.delete.firstCall.args
 
-        expect(requestArgs[0]).to.equal(testPath)
-        expect(requestArgs[1].prefixUrl).to.equal(`${legacyConfig.import.url}/import/1.0`)
-        expect(requestArgs[1].headers).to.equal({ authorization: `Bearer ${legacyConfig.legacyAuthToken}` })
-        expect(requestArgs[1].responseType).to.equal('json')
+        expect(requestArgs[0]).toEqual(testPath)
+        expect(requestArgs[1].prefixUrl).toEqual(`${legacyConfig.import.url}/import/1.0`)
+        expect(requestArgs[1].headers).toEqual({ authorization: `Bearer ${legacyConfig.legacyAuthToken}` })
+        expect(requestArgs[1].responseType).toEqual('json')
       })
 
       it('returns a "true" success status', async () => {
         const result = await LegacyRequest.delete('import', testPath)
 
-        expect(result.succeeded).to.be.true()
+        expect(result.succeeded).toBe(true)
       })
 
       it('returns the response body as an object', async () => {
         const result = await LegacyRequest.delete('import', testPath)
 
-        expect(result.response.body).to.equal({})
+        expect(result.response.body).toEqual({})
       })
 
       it('returns the status code', async () => {
         const result = await LegacyRequest.delete('import', testPath)
 
-        expect(result.response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
+        expect(result.response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
       })
 
       it('can handle none API requests', async () => {
@@ -71,7 +66,7 @@ describe('Legacy Request', () => {
 
         const requestArgs = BaseRequest.delete.firstCall.args
 
-        expect(requestArgs[1].prefixUrl).to.equal(legacyConfig.import.url)
+        expect(requestArgs[1].prefixUrl).toEqual(legacyConfig.import.url)
       })
 
       it('can add the defra-user-id header', async () => {
@@ -79,7 +74,7 @@ describe('Legacy Request', () => {
 
         const requestArgs = BaseRequest.delete.firstCall.args
 
-        expect(requestArgs[1].headers['defra-internal-user-id']).to.equal(1234)
+        expect(requestArgs[1].headers['defra-internal-user-id']).toEqual(1234)
       })
     })
 
@@ -98,26 +93,25 @@ describe('Legacy Request', () => {
       it('returns a "false" success status', async () => {
         const result = await LegacyRequest.delete('import', testPath)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error response', async () => {
         const result = await LegacyRequest.delete('import', testPath)
 
-        expect(result.response.body.message).to.equal('Not Found')
+        expect(result.response.body.message).toEqual('Not Found')
       })
 
       it('returns the status code', async () => {
         const result = await LegacyRequest.delete('import', testPath)
 
-        expect(result.response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
+        expect(result.response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
       })
     })
 
     describe('when the request is to an unknown legacy service', () => {
       it('throws an error', async () => {
-        await expect(LegacyRequest.delete('foobar', testPath)).to.reject(
-          Error,
+        await expect(LegacyRequest.delete('foobar', testPath)).rejects.toThrow(
           'Request to unknown legacy service foobar'
         )
       })
@@ -141,30 +135,30 @@ describe('Legacy Request', () => {
 
         const requestArgs = BaseRequest.get.firstCall.args
 
-        expect(requestArgs[0]).to.equal(testPath)
-        expect(requestArgs[1].prefixUrl).to.equal(`${legacyConfig.import.url}/import/1.0`)
-        expect(requestArgs[1].headers).to.equal({ authorization: `Bearer ${legacyConfig.legacyAuthToken}` })
-        expect(requestArgs[1].responseType).to.equal('json')
-        expect(requestArgs[1].json).to.be.undefined()
+        expect(requestArgs[0]).toEqual(testPath)
+        expect(requestArgs[1].prefixUrl).toEqual(`${legacyConfig.import.url}/import/1.0`)
+        expect(requestArgs[1].headers).toEqual({ authorization: `Bearer ${legacyConfig.legacyAuthToken}` })
+        expect(requestArgs[1].responseType).toEqual('json')
+        expect(requestArgs[1].json).toBeUndefined()
       })
 
       it('returns a "true" success status', async () => {
         const result = await LegacyRequest.get('import', testPath)
 
-        expect(result.succeeded).to.be.true()
+        expect(result.succeeded).toBe(true)
       })
 
       it('returns the response body as an object', async () => {
         const result = await LegacyRequest.get('import', testPath)
 
-        expect(result.response.body.version).to.equal('3.1.2')
-        expect(result.response.body.commit).to.equal('70708cff586cc410c11af25cf8fd296f987d7f36')
+        expect(result.response.body.version).toEqual('3.1.2')
+        expect(result.response.body.commit).toEqual('70708cff586cc410c11af25cf8fd296f987d7f36')
       })
 
       it('returns the status code', async () => {
         const result = await LegacyRequest.get('import', testPath)
 
-        expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(result.response.statusCode).toEqual(HTTP_STATUS_OK)
       })
 
       it('can handle none API requests', async () => {
@@ -172,7 +166,7 @@ describe('Legacy Request', () => {
 
         const requestArgs = BaseRequest.get.firstCall.args
 
-        expect(requestArgs[1].prefixUrl).to.equal(legacyConfig.import.url)
+        expect(requestArgs[1].prefixUrl).toEqual(legacyConfig.import.url)
       })
 
       it('can add the defra-user-id header', async () => {
@@ -180,7 +174,7 @@ describe('Legacy Request', () => {
 
         const requestArgs = BaseRequest.get.firstCall.args
 
-        expect(requestArgs[1].headers['defra-internal-user-id']).to.equal(1234)
+        expect(requestArgs[1].headers['defra-internal-user-id']).toEqual(1234)
       })
     })
 
@@ -199,25 +193,25 @@ describe('Legacy Request', () => {
       it('returns a "false" success status', async () => {
         const result = await LegacyRequest.get('import', testPath)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error response', async () => {
         const result = await LegacyRequest.get('import', testPath)
 
-        expect(result.response.body.message).to.equal('Not Found')
+        expect(result.response.body.message).toEqual('Not Found')
       })
 
       it('returns the status code', async () => {
         const result = await LegacyRequest.get('import', testPath)
 
-        expect(result.response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
+        expect(result.response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
       })
     })
 
     describe('when the request is to an unknown legacy service', () => {
       it('throws an error', async () => {
-        await expect(LegacyRequest.get('foobar', testPath)).to.reject(Error, 'Request to unknown legacy service foobar')
+        await expect(LegacyRequest.get('foobar', testPath)).rejects.toThrow('Request to unknown legacy service foobar')
       })
     })
   })
@@ -241,30 +235,30 @@ describe('Legacy Request', () => {
 
         const requestArgs = BaseRequest.post.firstCall.args
 
-        expect(requestArgs[0]).to.equal(testPath)
-        expect(requestArgs[1].prefixUrl).to.equal(`${legacyConfig.import.url}/import/1.0`)
-        expect(requestArgs[1].headers).to.equal({ authorization: `Bearer ${legacyConfig.legacyAuthToken}` })
-        expect(requestArgs[1].responseType).to.equal('json')
-        expect(requestArgs[1].json).to.equal(requestBody)
+        expect(requestArgs[0]).toEqual(testPath)
+        expect(requestArgs[1].prefixUrl).toEqual(`${legacyConfig.import.url}/import/1.0`)
+        expect(requestArgs[1].headers).toEqual({ authorization: `Bearer ${legacyConfig.legacyAuthToken}` })
+        expect(requestArgs[1].responseType).toEqual('json')
+        expect(requestArgs[1].json).toEqual(requestBody)
       })
 
       it('returns a "true" success status', async () => {
         const result = await LegacyRequest.post('import', testPath, null, true, requestBody)
 
-        expect(result.succeeded).to.be.true()
+        expect(result.succeeded).toBe(true)
       })
 
       it('returns the response body as an object', async () => {
         const result = await LegacyRequest.post('import', testPath, null, true, requestBody)
 
-        expect(result.response.body.version).to.equal('3.1.2')
-        expect(result.response.body.commit).to.equal('70708cff586cc410c11af25cf8fd296f987d7f36')
+        expect(result.response.body.version).toEqual('3.1.2')
+        expect(result.response.body.commit).toEqual('70708cff586cc410c11af25cf8fd296f987d7f36')
       })
 
       it('returns the status code', async () => {
         const result = await LegacyRequest.post('import', testPath, null, true, requestBody)
 
-        expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(result.response.statusCode).toEqual(HTTP_STATUS_OK)
       })
 
       it('can handle none API requests', async () => {
@@ -272,7 +266,7 @@ describe('Legacy Request', () => {
 
         const requestArgs = BaseRequest.post.firstCall.args
 
-        expect(requestArgs[1].prefixUrl).to.equal(legacyConfig.import.url)
+        expect(requestArgs[1].prefixUrl).toEqual(legacyConfig.import.url)
       })
 
       it('can add the defra-user-id header', async () => {
@@ -280,7 +274,7 @@ describe('Legacy Request', () => {
 
         const requestArgs = BaseRequest.post.firstCall.args
 
-        expect(requestArgs[1].headers['defra-internal-user-id']).to.equal(1234)
+        expect(requestArgs[1].headers['defra-internal-user-id']).toEqual(1234)
       })
     })
 
@@ -299,26 +293,25 @@ describe('Legacy Request', () => {
       it('returns a "false" success status', async () => {
         const result = await LegacyRequest.post('import', testPath, null, true, requestBody)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error response', async () => {
         const result = await LegacyRequest.post('import', testPath, null, true, requestBody)
 
-        expect(result.response.body.message).to.equal('Not Found')
+        expect(result.response.body.message).toEqual('Not Found')
       })
 
       it('returns the status code', async () => {
         const result = await LegacyRequest.post('import', testPath, null, true, requestBody)
 
-        expect(result.response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
+        expect(result.response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
       })
     })
 
     describe('when the request is to an unknown legacy service', () => {
       it('throws an error', async () => {
-        await expect(LegacyRequest.post('foobar', testPath, null, true, requestBody)).to.reject(
-          Error,
+        await expect(LegacyRequest.post('foobar', testPath, null, true, requestBody)).rejects.toThrow(
           'Request to unknown legacy service foobar'
         )
       })

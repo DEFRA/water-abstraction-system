@@ -3,12 +3,7 @@
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const AddressFacadeRequest = require('../../../app/requests/address-facade.request.js')
@@ -53,19 +48,19 @@ describe('Address Facade - Lookup Postcode request', () => {
 
       const requestArgs = AddressFacadeRequest.get.firstCall.args
 
-      expect(requestArgs[0]).to.equal(`address-service/v1/addresses/postcode?query-string=${postcode}&key=client1`)
+      expect(requestArgs[0]).toEqual(`address-service/v1/addresses/postcode?query-string=${postcode}&key=client1`)
     })
 
     it('returns a "true" success status', async () => {
       const result = await LookupPostcodeRequest.send(postcode)
 
-      expect(result.succeeded).to.be.true()
+      expect(result.succeeded).toBe(true)
     })
 
     it('returns the matching addresses', async () => {
       const result = await LookupPostcodeRequest.send(postcode)
 
-      expect(result.matches).to.equal([match])
+      expect(result.matches).toEqual([match])
     })
   })
 
@@ -85,13 +80,13 @@ describe('Address Facade - Lookup Postcode request', () => {
       it('returns a "false" success status', async () => {
         const result = await LookupPostcodeRequest.send(postcode)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
         const result = await LookupPostcodeRequest.send(postcode)
 
-        expect(result.response.body).to.equal({
+        expect(result.response.body).toEqual({
           statusCode: HTTP_STATUS_NOT_FOUND,
           error: 'Not Found',
           message: 'Not Found'
@@ -101,9 +96,9 @@ describe('Address Facade - Lookup Postcode request', () => {
       it('does not returns any matches', async () => {
         const result = await LookupPostcodeRequest.send(postcode)
 
-        expect(result.matches).to.exist()
-        expect(result.matches).to.be.instanceOf(Array)
-        expect(result.matches).to.be.empty()
+        expect(result.matches).toBeDefined()
+        expect(result.matches).toBeInstanceOf(Array)
+        expect(result.matches).toHaveLength(0)
       })
     })
 
@@ -119,23 +114,23 @@ describe('Address Facade - Lookup Postcode request', () => {
       it('returns a "false" success status', async () => {
         const result = await LookupPostcodeRequest.send(postcode)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
         const result = await LookupPostcodeRequest.send(postcode)
 
-        expect(result.response.statusCode).not.to.exist()
-        expect(result.response.body).not.to.exist()
-        expect(result.response.message).to.equal("Timeout awaiting 'request' for 5000ms")
+        expect(result.response.statusCode).toBeUndefined()
+        expect(result.response.body).toBeUndefined()
+        expect(result.response.message).toEqual("Timeout awaiting 'request' for 5000ms")
       })
 
       it('does not returns any matches', async () => {
         const result = await LookupPostcodeRequest.send(postcode)
 
-        expect(result.matches).to.exist()
-        expect(result.matches).to.be.instanceOf(Array)
-        expect(result.matches).to.be.empty()
+        expect(result.matches).toBeDefined()
+        expect(result.matches).toBeInstanceOf(Array)
+        expect(result.matches).toHaveLength(0)
       })
     })
   })
