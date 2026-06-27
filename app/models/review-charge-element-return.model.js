@@ -23,6 +23,14 @@ class ReviewChargeElementReturnModel extends BaseModel {
           from: 'reviewChargeElementReturns.reviewChargeElementId',
           to: 'reviewChargeElements.id'
         }
+      },
+      reviewReturn: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'review-return.model',
+        join: {
+          from: 'reviewChargeElementReturns.reviewReturnId',
+          to: 'reviewReturns.id'
+        }
       }
     }
   }

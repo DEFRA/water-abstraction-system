@@ -41,6 +41,14 @@ class ReviewReturnModel extends BaseModel {
           to: 'reviewChargeElements.id'
         }
       },
+      reviewChargeElementReturns: {
+        relation: Model.HasManyRelation,
+        modelClass: 'review-charge-element-return.model',
+        join: {
+          from: 'reviewReturns.id',
+          to: 'reviewChargeElementReturns.reviewReturnId'
+        }
+      },
       reviewLicence: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'review-licence.model',

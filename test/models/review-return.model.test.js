@@ -12,9 +12,10 @@ const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
 const ReturnLogModel = require('../../app/models/return-log.model.js')
 const ReviewChargeElementHelper = require('../support/helpers/review-charge-element.helper.js')
 const ReviewChargeElementModel = require('../../app/models/review-charge-element.model.js')
+const ReviewChargeElementReturnHelper = require('../support/helpers/review-charge-element-return.helper.js')
+const ReviewChargeElementReturnModel = require('../../app/models/review-charge-element-return.model.js')
 const ReviewLicenceHelper = require('../support/helpers/review-licence.helper.js')
 const ReviewLicenceModel = require('../../app/models/review-licence.model.js')
-const ReviewChargeElementReturnHelper = require('../support/helpers/review-charge-element-return.helper.js')
 const ReviewReturnHelper = require('../support/helpers/review-return.helper.js')
 
 // Thing under test
@@ -109,6 +110,28 @@ describe('Review Return model', () => {
         expect(result.reviewChargeElements[0]).to.be.an.instanceOf(ReviewChargeElementModel)
         expect(result.reviewChargeElements).to.include(testReviewChargeElements[0])
         expect(result.reviewChargeElements).to.include(testReviewChargeElements[1])
+      })
+    })
+
+    describe('when linking to review charge element returns', () => {
+      it('can successfully run a related query', async () => {
+        const query = await ReviewReturnModel.query().innerJoinRelated('reviewChargeElementReturns')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the review charge element returns', async () => {
+        const result = await ReviewReturnModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('reviewChargeElementReturns')
+
+        expect(result).to.be.instanceOf(ReviewReturnModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.reviewChargeElementReturns).to.be.an.array()
+        expect(result.reviewChargeElementReturns[0]).to.be.an.instanceOf(ReviewChargeElementReturnModel)
+        expect(result.reviewChargeElementReturns).to.include(testReviewChargeElementReturns[0])
+        expect(result.reviewChargeElementReturns).to.include(testReviewChargeElementReturns[1])
       })
     })
 
