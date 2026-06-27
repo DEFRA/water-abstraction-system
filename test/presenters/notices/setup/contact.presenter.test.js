@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
 
@@ -24,7 +17,7 @@ describe('Notices - Setup - Contact presenter', () => {
     it('should return the email address', () => {
       const result = ContactPresenter.go(recipients.primaryUser)
 
-      expect(result).to.equal(['primary.user@important.com'])
+      expect(result).toEqual(['primary.user@important.com'])
     })
   })
 
@@ -33,7 +26,7 @@ describe('Notices - Setup - Contact presenter', () => {
       it('should return the postal address', () => {
         const result = ContactPresenter.go(recipients.licenceHolder)
 
-        expect(result).to.equal(['Harry Potter', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'])
+        expect(result).toEqual(['Harry Potter', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'])
       })
     })
 
@@ -45,7 +38,7 @@ describe('Notices - Setup - Contact presenter', () => {
       it('should return the postal address flagged as INVALID', () => {
         const result = ContactPresenter.go(recipients.licenceHolder)
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           'Harry Potter',
           'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
           '1',

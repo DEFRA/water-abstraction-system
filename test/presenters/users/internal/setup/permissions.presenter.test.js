@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 
@@ -24,7 +17,7 @@ describe('Users - Internal - Setup - Permissions Presenter', () => {
     it('returns page data for the view', () => {
       const result = PermissionsPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'users',
         backLink: {
           href: `/system/users/internal/setup/${session.id}/email`,
@@ -41,7 +34,7 @@ describe('Users - Internal - Setup - Permissions Presenter', () => {
         it('returns the correct back link', () => {
           const result = PermissionsPresenter.go(session)
 
-          expect(result.backLink.href).to.equal(`/system/users/internal/setup/${session.id}/email`)
+          expect(result.backLink.href).toEqual(`/system/users/internal/setup/${session.id}/email`)
         })
       })
 
@@ -53,7 +46,7 @@ describe('Users - Internal - Setup - Permissions Presenter', () => {
         it('returns the correct back link', () => {
           const result = PermissionsPresenter.go(session)
 
-          expect(result.backLink.href).to.equal(`/system/users/internal/setup/${session.id}/check`)
+          expect(result.backLink.href).toEqual(`/system/users/internal/setup/${session.id}/check`)
         })
       })
     })

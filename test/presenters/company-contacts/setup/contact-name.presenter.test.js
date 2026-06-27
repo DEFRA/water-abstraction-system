@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -28,7 +21,7 @@ describe('Company Contacts - Setup - Contact Name Presenter', () => {
     it('returns page data for the view', () => {
       const result = ContactNamePresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/companies/${company.id}/contacts`,
           text: 'Back'
@@ -48,7 +41,7 @@ describe('Company Contacts - Setup - Contact Name Presenter', () => {
         it('returns the name from the session', () => {
           const result = ContactNamePresenter.go(session)
 
-          expect(result.name).to.equal('Eric')
+          expect(result.name).toEqual('Eric')
         })
       })
 
@@ -56,7 +49,7 @@ describe('Company Contacts - Setup - Contact Name Presenter', () => {
         it('returns an empty string', () => {
           const result = ContactNamePresenter.go(session)
 
-          expect(result.name).to.equal('')
+          expect(result.name).toEqual('')
         })
       })
     })
@@ -70,7 +63,7 @@ describe('Company Contacts - Setup - Contact Name Presenter', () => {
         it('returns the link to the "check" page', () => {
           const result = ContactNamePresenter.go(session)
 
-          expect(result.backLink).to.equal({
+          expect(result.backLink).toEqual({
             href: `/system/company-contacts/setup/${session.id}/check`,
             text: 'Back'
           })
@@ -81,7 +74,7 @@ describe('Company Contacts - Setup - Contact Name Presenter', () => {
         it('returns a link to the company "contacts" page', () => {
           const result = ContactNamePresenter.go(session)
 
-          expect(result.backLink).to.equal({
+          expect(result.backLink).toEqual({
             href: `/system/companies/${company.id}/contacts`,
             text: 'Back'
           })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -28,7 +21,7 @@ describe('Billing Accounts - Setup - Account Type Presenter', () => {
     it('returns page data for the view', () => {
       const result = AccountTypePresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         accountType: null,
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/existing-account`,
@@ -50,7 +43,7 @@ describe('Billing Accounts - Setup - Account Type Presenter', () => {
       it('returns page data for the view', () => {
         const result = AccountTypePresenter.go(session)
 
-        expect(result.accountType).to.equal(session.accountType)
+        expect(result.accountType).toEqual(session.accountType)
       })
     })
 
@@ -63,8 +56,8 @@ describe('Billing Accounts - Setup - Account Type Presenter', () => {
       it('returns page data for the view', () => {
         const result = AccountTypePresenter.go(session)
 
-        expect(result.accountType).to.equal(session.accountType)
-        expect(result.individualName).to.equal(session.individualName)
+        expect(result.accountType).toEqual(session.accountType)
+        expect(result.individualName).toEqual(session.individualName)
       })
     })
   })

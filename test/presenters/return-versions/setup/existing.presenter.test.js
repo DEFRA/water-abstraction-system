@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ExistingPresenter = require('../../../../app/presenters/return-versions/setup/existing.presenter.js')
 
@@ -58,7 +51,7 @@ describe('Return Versions - Setup - Existing presenter', () => {
     it('correctly presents the data', () => {
       const result = ExistingPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/method',
           text: 'Back'
@@ -76,7 +69,7 @@ describe('Return Versions - Setup - Existing presenter', () => {
     it('returns a link back to the "setup" page', () => {
       const result = ExistingPresenter.go(session)
 
-      expect(result.backLink).to.equal({
+      expect(result.backLink).toEqual({
         href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/method',
         text: 'Back'
       })
@@ -89,7 +82,7 @@ describe('Return Versions - Setup - Existing presenter', () => {
         it('returns the version ID as the option value and just the start date as the option text', () => {
           const result = ExistingPresenter.go(session)
 
-          expect(result.existingOptions).to.equal([
+          expect(result.existingOptions).toEqual([
             { value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }
           ])
         })
@@ -104,7 +97,7 @@ describe('Return Versions - Setup - Existing presenter', () => {
           it('returns the version ID as the option value and just the start date as the option text', () => {
             const result = ExistingPresenter.go(session)
 
-            expect(result.existingOptions).to.equal([
+            expect(result.existingOptions).toEqual([
               { value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }
             ])
           })
@@ -120,7 +113,7 @@ describe('Return Versions - Setup - Existing presenter', () => {
           it('returns the version ID as the option value and the start date and reason as the option text', () => {
             const result = ExistingPresenter.go(session)
 
-            expect(result.existingOptions).to.equal([
+            expect(result.existingOptions).toEqual([
               { value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023 - Record Loaded During Migration' }
             ])
           })
@@ -140,7 +133,7 @@ describe('Return Versions - Setup - Existing presenter', () => {
       it('returns the version ID as the option value and the start date and reason as the option text', () => {
         const result = ExistingPresenter.go(session)
 
-        expect(result.existingOptions).to.equal([
+        expect(result.existingOptions).toEqual([
           { value: '22ecef19-3a13-44a0-a55e-8f4d34dd59a5', text: '7 May 2024 - Major change' },
           { value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }
         ])

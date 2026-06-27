@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
@@ -44,7 +39,7 @@ describe('Users - Index Users presenter', () => {
   it('correctly presents the data', () => {
     const result = IndexUsersPresenter.go(users, auth)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       links: {
         user: {
           href: '/system/users/internal/setup',
@@ -97,7 +92,7 @@ describe('Users - Index Users presenter', () => {
       it('returns all of the links', () => {
         const result = IndexUsersPresenter.go(users, auth)
 
-        expect(result.links).to.equal({
+        expect(result.links).toEqual({
           user: {
             href: '/system/users/internal/setup',
             text: 'Create a user'
@@ -114,7 +109,7 @@ describe('Users - Index Users presenter', () => {
       it('returns an empty object', () => {
         const result = IndexUsersPresenter.go(users, auth)
 
-        expect(result.links).to.equal({})
+        expect(result.links).toEqual({})
       })
     })
   })
@@ -126,9 +121,9 @@ describe('Users - Index Users presenter', () => {
           it('returns an empty string', () => {
             const result = IndexUsersPresenter.go(users, auth)
 
-            expect(result.users[1].permissions).to.equal('Returns user')
-            expect(result.users[2].permissions).to.equal('None')
-            expect(result.users[4].permissions).to.equal('Basic access')
+            expect(result.users[1].permissions).toEqual('Returns user')
+            expect(result.users[2].permissions).toEqual('None')
+            expect(result.users[4].permissions).toEqual('Basic access')
           })
         })
 
@@ -142,9 +137,9 @@ describe('Users - Index Users presenter', () => {
           it('returns their permissions', () => {
             const result = IndexUsersPresenter.go(users, auth)
 
-            expect(result.users[1].permissions).to.equal('None')
-            expect(result.users[2].permissions).to.equal('None')
-            expect(result.users[4].permissions).to.equal('None')
+            expect(result.users[1].permissions).toEqual('None')
+            expect(result.users[2].permissions).toEqual('None')
+            expect(result.users[4].permissions).toEqual('None')
           })
         })
       })
@@ -153,8 +148,8 @@ describe('Users - Index Users presenter', () => {
         it('returns their permissions', () => {
           const result = IndexUsersPresenter.go(users, auth)
 
-          expect(result.users[0].permissions).to.equal('Basic access')
-          expect(result.users[3].permissions).to.equal('Super user')
+          expect(result.users[0].permissions).toEqual('Basic access')
+          expect(result.users[3].permissions).toEqual('Super user')
         })
       })
     })
@@ -164,8 +159,8 @@ describe('Users - Index Users presenter', () => {
         it('returns "External"', () => {
           const result = IndexUsersPresenter.go(users, auth)
 
-          expect(result.users[1].type).to.equal('External')
-          expect(result.users[2].type).to.equal('External')
+          expect(result.users[1].type).toEqual('External')
+          expect(result.users[2].type).toEqual('External')
         })
       })
 
@@ -173,8 +168,8 @@ describe('Users - Index Users presenter', () => {
         it('returns "Internal"', () => {
           const result = IndexUsersPresenter.go(users, auth)
 
-          expect(result.users[0].type).to.equal('Internal')
-          expect(result.users[3].type).to.equal('Internal')
+          expect(result.users[0].type).toEqual('Internal')
+          expect(result.users[3].type).toEqual('Internal')
         })
       })
     })

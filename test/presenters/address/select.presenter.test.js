@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const SelectPresenter = require('../../../app/presenters/address/select.presenter.js')
 
@@ -45,7 +38,7 @@ describe('Address - Select Presenter', () => {
   it('correctly presents the data', () => {
     const result = SelectPresenter.go(session, addresses)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       activeNavBar: 'manage',
       addresses: [
         {
@@ -78,7 +71,7 @@ describe('Address - Select Presenter', () => {
       it('returns all the addresses, and the inserted description entry is pluralised and selected', () => {
         const result = SelectPresenter.go(session, addresses)
 
-        expect(result.addresses).to.equal([
+        expect(result.addresses).toEqual([
           {
             value: 'select',
             selected: true,
@@ -100,7 +93,7 @@ describe('Address - Select Presenter', () => {
       it('returns the one address, and the inserted description entry is singular and selected', () => {
         const result = SelectPresenter.go(session, [addresses[0]])
 
-        expect(result.addresses).to.equal([
+        expect(result.addresses).toEqual([
           {
             value: 'select',
             selected: true,
@@ -120,7 +113,7 @@ describe('Address - Select Presenter', () => {
       it('returns null', () => {
         const result = SelectPresenter.go(session, addresses)
 
-        expect(result.pageTitleCaption).to.equal(null)
+        expect(result.pageTitleCaption).toEqual(null)
       })
     })
 
@@ -132,7 +125,7 @@ describe('Address - Select Presenter', () => {
       it('returns the set value', () => {
         const result = SelectPresenter.go(session, addresses)
 
-        expect(result.pageTitleCaption).to.equal('Super awesome caption')
+        expect(result.pageTitleCaption).toEqual('Super awesome caption')
       })
     })
   })

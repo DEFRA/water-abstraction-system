@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const PostcodePresenter = require('../../../app/presenters/address/postcode.presenter.js')
 
@@ -31,7 +24,7 @@ describe('Address - Postcode Presenter', () => {
   it('correctly presents the data', () => {
     const result = PostcodePresenter.go(session)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       activeNavBar: 'manage',
       backLink: {
         href: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/contact-type',
@@ -49,7 +42,7 @@ describe('Address - Postcode Presenter', () => {
       it('returns null', () => {
         const result = PostcodePresenter.go(session)
 
-        expect(result.pageTitleCaption).to.equal(null)
+        expect(result.pageTitleCaption).toEqual(null)
       })
     })
 
@@ -61,7 +54,7 @@ describe('Address - Postcode Presenter', () => {
       it('returns the set value', () => {
         const result = PostcodePresenter.go(session)
 
-        expect(result.pageTitleCaption).to.equal('Super awesome caption')
+        expect(result.pageTitleCaption).toEqual('Super awesome caption')
       })
     })
   })
@@ -75,7 +68,7 @@ describe('Address - Postcode Presenter', () => {
       it('returns the postcode', () => {
         const result = PostcodePresenter.go(session)
 
-        expect(result.postcode).to.equal('SW1A 1AA')
+        expect(result.postcode).toEqual('SW1A 1AA')
       })
     })
 
@@ -83,7 +76,7 @@ describe('Address - Postcode Presenter', () => {
       it('returns null', () => {
         const result = PostcodePresenter.go(session)
 
-        expect(result.postcode).to.equal(null)
+        expect(result.postcode).toEqual(null)
       })
     })
   })
@@ -93,7 +86,7 @@ describe('Address - Postcode Presenter', () => {
       it('returns the activeNavBar', () => {
         const result = PostcodePresenter.go(session)
 
-        expect(result.activeNavBar).to.equal(session.addressJourney.activeNavBar)
+        expect(result.activeNavBar).toEqual(session.addressJourney.activeNavBar)
       })
     })
 
@@ -105,7 +98,7 @@ describe('Address - Postcode Presenter', () => {
       it('returns null', () => {
         const result = PostcodePresenter.go(session)
 
-        expect(result.activeNavBar).to.equal(null)
+        expect(result.activeNavBar).toEqual(null)
       })
     })
   })

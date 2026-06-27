@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateUUID } = require('../../app/lib/general.lib.js')
 
@@ -46,7 +39,7 @@ describe('Previous and next presenter', () => {
       it('returns the populated "previous" and "next" elements', () => {
         const result = PreviousAndNextPresenter.go(arrayOfElements, anchorElement)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           previous: previousElement,
           next: nextElement
         })
@@ -61,7 +54,7 @@ describe('Previous and next presenter', () => {
       it('returns the populated "previous" element', () => {
         const result = PreviousAndNextPresenter.go(arrayOfElements, anchorElement)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           previous: previousElement,
           next: null
         })
@@ -76,7 +69,7 @@ describe('Previous and next presenter', () => {
       it('returns the populated "next" element', () => {
         const result = PreviousAndNextPresenter.go(arrayOfElements, anchorElement)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           previous: null,
           next: nextElement
         })
@@ -91,7 +84,7 @@ describe('Previous and next presenter', () => {
       it('returns the "previous" and "next" elements as null', () => {
         const result = PreviousAndNextPresenter.go(arrayOfElements, anchorElement)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           previous: null,
           next: null
         })
@@ -114,7 +107,7 @@ describe('Previous and next presenter', () => {
     it('returns the "previous" and "next" as null', () => {
       const result = PreviousAndNextPresenter.go(arrayOfElements, anchorElement)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         previous: null,
         next: null
       })

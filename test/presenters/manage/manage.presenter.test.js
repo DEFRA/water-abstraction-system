@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const AuthService = require('../../../app/services/plugins/auth.service.js')
@@ -37,7 +32,7 @@ describe('Manage - Manage presenter', () => {
     it('provides the correct items to display', async () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
         viewReports: {
@@ -57,7 +52,7 @@ describe('Manage - Manage presenter', () => {
     it('provides the correct items to display', async () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
         viewReports: {
@@ -77,7 +72,7 @@ describe('Manage - Manage presenter', () => {
     it('provides the correct items to display', async () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
         viewReports: {
@@ -97,7 +92,7 @@ describe('Manage - Manage presenter', () => {
     it('provides the correct items to display', async () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
         viewReports: {
@@ -117,7 +112,7 @@ describe('Manage - Manage presenter', () => {
     it('provides the correct items to display', async () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
         viewReports: {
@@ -137,7 +132,7 @@ describe('Manage - Manage presenter', () => {
     it('provides the correct items to display', async () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
         viewReports: {
@@ -157,7 +152,7 @@ describe('Manage - Manage presenter', () => {
     it('provides the correct items to display', async () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
         viewReports: {
@@ -177,7 +172,7 @@ describe('Manage - Manage presenter', () => {
     it('provides the correct items to display', async () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
         viewReports: {
@@ -197,7 +192,7 @@ describe('Manage - Manage presenter', () => {
     it('provides the correct items to display', async () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
         viewReports: {

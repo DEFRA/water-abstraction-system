@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
 const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
@@ -35,7 +28,7 @@ describe('Notifications - View Notification presenter', () => {
   it('correctly presents the data', () => {
     const result = ViewNotificationPresenter.go(notification, licence)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       activeNavBar: 'search',
       address: [],
       alertDetails: null,
@@ -60,7 +53,7 @@ describe('Notifications - View Notification presenter', () => {
       it('returns "search"', () => {
         const result = ViewNotificationPresenter.go(notification, licence)
 
-        expect(result.activeNavBar).to.be.equal('search')
+        expect(result.activeNavBar).to.be.toEqual('search')
       })
     })
 
@@ -68,7 +61,7 @@ describe('Notifications - View Notification presenter', () => {
       it('returns "notices"', () => {
         const result = ViewNotificationPresenter.go(notification)
 
-        expect(result.activeNavBar).to.be.equal('notices')
+        expect(result.activeNavBar).to.be.toEqual('notices')
       })
     })
   })
@@ -78,7 +71,7 @@ describe('Notifications - View Notification presenter', () => {
       it('returns an empty array', () => {
         const result = ViewNotificationPresenter.go(notification, licence)
 
-        expect(result.address).to.be.empty()
+        expect(result.address).toHaveLength(0)
       })
     })
 
@@ -97,7 +90,7 @@ describe('Notifications - View Notification presenter', () => {
         it('returns all populated address fields including postcode', () => {
           const result = ViewNotificationPresenter.go(notification, licence)
 
-          expect(result.address).to.equal([
+          expect(result.address).toEqual([
             'ACME Services Ltd',
             'ACME Operations Centre',
             'Bakersfield Road',
@@ -113,7 +106,7 @@ describe('Notifications - View Notification presenter', () => {
         it('returns all populated address fields', () => {
           const result = ViewNotificationPresenter.go(notification, licence)
 
-          expect(result.address).to.equal([
+          expect(result.address).toEqual([
             'ACME Services Ltd',
             'ACME Operations Centre',
             'Bakersfield Road',
@@ -134,7 +127,7 @@ describe('Notifications - View Notification presenter', () => {
         it('returns only the populated address fields', () => {
           const result = ViewNotificationPresenter.go(notification, licence)
 
-          expect(result.address).to.equal([
+          expect(result.address).toEqual([
             'ACME Services Ltd',
             'ACME Operations Centre',
             'Bakersfield',
@@ -151,7 +144,7 @@ describe('Notifications - View Notification presenter', () => {
       it('returns null', () => {
         const result = ViewNotificationPresenter.go(notification, licence)
 
-        expect(result.alertDetails).to.be.null()
+        expect(result.alertDetails).toBeNull()
       })
     })
 
@@ -172,7 +165,7 @@ describe('Notifications - View Notification presenter', () => {
           it('returns details for the alert, including the monitoring station name', () => {
             const result = ViewNotificationPresenter.go(notification, licence)
 
-            expect(result.alertDetails).to.equal({
+            expect(result.alertDetails).toEqual({
               alertType: 'Not recorded',
               monitoringStation: 'Death star',
               threshold: '100m3/s'
@@ -184,7 +177,7 @@ describe('Notifications - View Notification presenter', () => {
           it('returns details for the alert, though alert type is "Not recorded"', () => {
             const result = ViewNotificationPresenter.go(notification, licence)
 
-            expect(result.alertDetails).to.equal({
+            expect(result.alertDetails).toEqual({
               alertType: 'Not recorded',
               monitoringStation: 'Death star',
               threshold: '100m3/s'
@@ -198,7 +191,7 @@ describe('Notifications - View Notification presenter', () => {
           it('returns details for the alert, including the monitoring station name', () => {
             const result = ViewNotificationPresenter.go(notification, licence)
 
-            expect(result.alertDetails).to.equal({
+            expect(result.alertDetails).toEqual({
               alertType: 'Stop',
               monitoringStation: 'Death star',
               threshold: '100m3/s'
@@ -216,7 +209,7 @@ describe('Notifications - View Notification presenter', () => {
           it('returns details for the alert, including the alert type', () => {
             const result = ViewNotificationPresenter.go(notification, licence)
 
-            expect(result.alertDetails).to.equal({
+            expect(result.alertDetails).toEqual({
               alertType: 'Stop or reduce',
               monitoringStation: 'Death star',
               threshold: '100m3/s'
@@ -232,7 +225,7 @@ describe('Notifications - View Notification presenter', () => {
       it('returns a back link to the view licence communications page', () => {
         const result = ViewNotificationPresenter.go(notification, licence)
 
-        expect(result.backLink).to.be.equal({
+        expect(result.backLink).to.be.toEqual({
           href: `/system/licences/${licence.id}/communications`,
           text: 'Go back to communications'
         })
@@ -245,7 +238,7 @@ describe('Notifications - View Notification presenter', () => {
 
         const result = ViewNotificationPresenter.go(notification, null, returnLogId)
 
-        expect(result.backLink).to.be.equal({
+        expect(result.backLink).to.be.toEqual({
           href: `/system/return-logs/${returnLogId}/communications`,
           text: 'Go back to return log'
         })
@@ -258,7 +251,7 @@ describe('Notifications - View Notification presenter', () => {
 
         const result = ViewNotificationPresenter.go(notification, null, null, companyContactId)
 
-        expect(result.backLink).to.be.equal({
+        expect(result.backLink).to.be.toEqual({
           href: `/system/company-contacts/${companyContactId}/communications`,
           text: 'Go back to company contact'
         })
@@ -269,7 +262,7 @@ describe('Notifications - View Notification presenter', () => {
       it('returns a back link to the view notice page', () => {
         const result = ViewNotificationPresenter.go(notification)
 
-        expect(result.backLink).to.be.equal({
+        expect(result.backLink).to.be.toEqual({
           href: `/system/notices/${notice.id}`,
           text: `Go back to notice ${notice.referenceCode}`
         })
@@ -282,7 +275,7 @@ describe('Notifications - View Notification presenter', () => {
       it('returns a caption with the licence reference', () => {
         const result = ViewNotificationPresenter.go(notification, licence)
 
-        expect(result.pageTitleCaption).to.be.equal(`Licence ${licence.licenceRef}`)
+        expect(result.pageTitleCaption).to.be.toEqual(`Licence ${licence.licenceRef}`)
       })
     })
 
@@ -290,7 +283,7 @@ describe('Notifications - View Notification presenter', () => {
       it('returns a caption with the notice reference', () => {
         const result = ViewNotificationPresenter.go(notification)
 
-        expect(result.pageTitleCaption).to.be.equal(`Notice ${notice.referenceCode}`)
+        expect(result.pageTitleCaption).to.be.toEqual(`Notice ${notice.referenceCode}`)
       })
     })
   })
@@ -300,7 +293,7 @@ describe('Notifications - View Notification presenter', () => {
       it('returns null', () => {
         const result = ViewNotificationPresenter.go(notification, licence)
 
-        expect(result.paperForm).to.be.null()
+        expect(result.paperForm).toBeNull()
       })
     })
 
@@ -320,7 +313,7 @@ describe('Notifications - View Notification presenter', () => {
         it('returns paper return or reminder details without a link to view the PDF', () => {
           const result = ViewNotificationPresenter.go(notification, licence)
 
-          expect(result.paperForm).to.equal({
+          expect(result.paperForm).toEqual({
             downloadLink: null,
             link: `/system/return-logs/${notification.personalisation.qr_url}/details`,
             period: '1 April 2024 to 31 March 2025',
@@ -339,7 +332,7 @@ describe('Notifications - View Notification presenter', () => {
         it('returns paper return or reminder details with a link to view the PDF', () => {
           const result = ViewNotificationPresenter.go(notification, licence)
 
-          expect(result.paperForm).to.equal({
+          expect(result.paperForm).toEqual({
             downloadLink: `/system/notifications/${notification.id}/download`,
             link: `/system/return-logs/${notification.personalisation.qr_url}/details`,
             period: '1 April 2024 to 31 March 2025',
@@ -358,7 +351,7 @@ describe('Notifications - View Notification presenter', () => {
         it('returns an empty site description in the "paperForm" details', () => {
           const result = ViewNotificationPresenter.go(notification, licence)
 
-          expect(result.paperForm.siteDescription).to.be.empty()
+          expect(result.paperForm.siteDescription).toHaveLength(0)
         })
       })
     })
@@ -369,7 +362,7 @@ describe('Notifications - View Notification presenter', () => {
       it('returns the notice reference', () => {
         const result = ViewNotificationPresenter.go(notification, licence)
 
-        expect(result.reference).to.be.equal(notice.referenceCode)
+        expect(result.reference).to.be.toEqual(notice.referenceCode)
       })
     })
 
@@ -377,7 +370,7 @@ describe('Notifications - View Notification presenter', () => {
       it('returns null', () => {
         const result = ViewNotificationPresenter.go(notification)
 
-        expect(result.reference).to.be.null()
+        expect(result.reference).toBeNull()
       })
     })
   })
@@ -387,7 +380,7 @@ describe('Notifications - View Notification presenter', () => {
       it('returns null', () => {
         const result = ViewNotificationPresenter.go(notification, licence)
 
-        expect(result.returnedDate).to.be.null()
+        expect(result.returnedDate).toBeNull()
       })
     })
 
@@ -399,7 +392,7 @@ describe('Notifications - View Notification presenter', () => {
       it('returns the "returnedAt" date formatted for the page', () => {
         const result = ViewNotificationPresenter.go(notification, licence)
 
-        expect(result.returnedDate).to.equal('13 October 2025')
+        expect(result.returnedDate).toEqual('13 October 2025')
       })
     })
   })
@@ -409,7 +402,7 @@ describe('Notifications - View Notification presenter', () => {
       it('returns the "recipient"', () => {
         const result = ViewNotificationPresenter.go(notification, licence)
 
-        expect(result.sentTo).to.equal('grace.hopper@acme.co.uk')
+        expect(result.sentTo).toEqual('grace.hopper@acme.co.uk')
       })
     })
 
@@ -422,7 +415,7 @@ describe('Notifications - View Notification presenter', () => {
       it('returns the "address_line_1"', () => {
         const result = ViewNotificationPresenter.go(notification, licence)
 
-        expect(result.sentTo).to.equal('ACME Services Ltd')
+        expect(result.sentTo).toEqual('ACME Services Ltd')
       })
     })
   })

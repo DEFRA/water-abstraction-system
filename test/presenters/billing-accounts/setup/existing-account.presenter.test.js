@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
 const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
@@ -32,7 +25,7 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
     it('returns page data for the view', () => {
       const result = ExistingAccountPresenter.go(session, companies)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/account`,
           text: 'Back'
@@ -71,7 +64,7 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       it('the checked property should be true', () => {
         const result = ExistingAccountPresenter.go(session, companies)
 
-        expect(result.items[2].checked).to.equal(true)
+        expect(result.items[2].checked).toEqual(true)
       })
     })
 
@@ -87,7 +80,7 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       it('each of the checked properties should be false', () => {
         const result = ExistingAccountPresenter.go(session, companies)
 
-        expect(result.items).to.equal([
+        expect(result.items).toEqual([
           {
             id: companies[0].id,
             value: companies[0].id,
@@ -118,7 +111,7 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       it('returns the correct page title', () => {
         const result = ExistingAccountPresenter.go(session, companies)
 
-        expect(result.pageTitle).to.equal('Does this account already exist?')
+        expect(result.pageTitle).toEqual('Does this account already exist?')
       })
     })
 
@@ -133,7 +126,7 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       it('returns the correct page title', () => {
         const result = ExistingAccountPresenter.go(session, [])
 
-        expect(result.pageTitle).to.equal(`No search results found for "${session.searchInput}"`)
+        expect(result.pageTitle).toEqual(`No search results found for "${session.searchInput}"`)
       })
     })
   })
@@ -150,7 +143,7 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       it('returns the correct back link', () => {
         const result = ExistingAccountPresenter.go(session, companies)
 
-        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/account`)
+        expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/account`)
       })
     })
 
@@ -166,7 +159,7 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       it('returns the correct back link', () => {
         const result = ExistingAccountPresenter.go(session, [])
 
-        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
+        expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
     })
   })

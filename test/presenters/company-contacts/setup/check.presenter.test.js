@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const { yesterday } = require('../../../support/general.js')
@@ -56,7 +49,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
     it('returns page data for the view', () => {
       const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         abstractionAlertsLabel: 'Yes, for all licences',
         email,
         emailInUse: null,
@@ -82,7 +75,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           it('returns null', () => {
             const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-            expect(result.emailInUse).to.be.null()
+            expect(result.emailInUse).toBeNull()
           })
         })
 
@@ -94,7 +87,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           it('still returns null', () => {
             const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-            expect(result.emailInUse).to.be.null()
+            expect(result.emailInUse).toBeNull()
           })
         })
       })
@@ -108,7 +101,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           it('returns null', () => {
             const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-            expect(result.emailInUse).to.be.null()
+            expect(result.emailInUse).toBeNull()
           })
         })
 
@@ -120,7 +113,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           it('returns "email address cannot be changed" message', () => {
             const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-            expect(result.emailInUse).to.equal(
+            expect(result.emailInUse).toEqual(
               'Notifications have been sent to this contact, so the email address cannot be changed.'
             )
           })
@@ -133,7 +126,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
         it('returns undefined', () => {
           const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-          expect(result.matchingContact).to.be.undefined()
+          expect(result.matchingContact).toBeUndefined()
         })
       })
 
@@ -146,7 +139,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           it('returns the matching contact', () => {
             const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-            expect(result.matchingContact).to.equal(savedCompanyContacts[0])
+            expect(result.matchingContact).toEqual(savedCompanyContacts[0])
           })
         })
 
@@ -162,7 +155,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           it('returns the matching contact', () => {
             const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-            expect(result.matchingContact).to.equal(savedCompanyContacts[0])
+            expect(result.matchingContact).toEqual(savedCompanyContacts[0])
           })
         })
       })
@@ -182,7 +175,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           it('returns "select licences" warning', () => {
             const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-            expect(result.warning).to.equal({
+            expect(result.warning).toEqual({
               text: 'Select the licences they should get water abstraction alert emails for or change should they get abstraction alerts.',
               iconFallbackText: 'Warning'
             })
@@ -195,7 +188,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           it('returns null', () => {
             const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-            expect(result.warning).to.be.null()
+            expect(result.warning).toBeNull()
           })
         })
 
@@ -209,7 +202,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
               it('returns "contact already exists" message', () => {
                 const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-                expect(result.warning).to.equal({
+                expect(result.warning).toEqual({
                   text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
                   iconFallbackText: 'Warning'
                 })
@@ -224,7 +217,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
               it('returns "deleted contact already exists" message', () => {
                 const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-                expect(result.warning).to.equal({
+                expect(result.warning).toEqual({
                   text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
                   iconFallbackText: 'Warning'
                 })
@@ -247,7 +240,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
               it('returns "contact already exists" message', () => {
                 const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-                expect(result.warning).to.equal({
+                expect(result.warning).toEqual({
                   text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
                   iconFallbackText: 'Warning'
                 })
@@ -262,7 +255,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
               it('returns "deleted contact already exists" message', () => {
                 const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-                expect(result.warning).to.equal({
+                expect(result.warning).toEqual({
                   text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
                   iconFallbackText: 'Warning'
                 })
@@ -281,7 +274,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           it('returns null', () => {
             const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-            expect(result.warning).to.be.null()
+            expect(result.warning).toBeNull()
           })
         })
 
@@ -295,7 +288,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
               it('returns "contact already exists" message', () => {
                 const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-                expect(result.warning).to.equal({
+                expect(result.warning).toEqual({
                   text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
                   iconFallbackText: 'Warning'
                 })
@@ -310,7 +303,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
               it('returns "deleted contact already exists" message', () => {
                 const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-                expect(result.warning).to.equal({
+                expect(result.warning).toEqual({
                   text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
                   iconFallbackText: 'Warning'
                 })
@@ -333,7 +326,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
               it('returns "contact already exists" message', () => {
                 const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-                expect(result.warning).to.equal({
+                expect(result.warning).toEqual({
                   text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
                   iconFallbackText: 'Warning'
                 })
@@ -348,7 +341,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
               it('returns "deleted contact already exists" message', () => {
                 const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-                expect(result.warning).to.equal({
+                expect(result.warning).toEqual({
                   text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
                   iconFallbackText: 'Warning'
                 })

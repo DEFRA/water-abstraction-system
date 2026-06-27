@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const NotifyStatusPresenter = require('../../../../app/presenters/jobs/notifications/notify-status.presenter.js')
 
@@ -30,7 +23,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (pending)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'created',
           status: 'pending'
         })
@@ -45,7 +38,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (pending)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'sending',
           status: 'pending'
         })
@@ -60,7 +53,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (sent)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'delivered',
           status: 'sent'
         })
@@ -75,7 +68,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (error)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'permanent-failure',
           status: 'error'
         })
@@ -90,7 +83,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (error)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'technical-failure',
           status: 'error'
         })
@@ -105,7 +98,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (error)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'temporary-failure',
           status: 'error'
         })
@@ -120,7 +113,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (error)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'error',
           status: 'error'
         })
@@ -135,7 +128,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (pending)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'fake',
           status: 'pending'
         })
@@ -159,7 +152,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (pending)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'accepted',
           status: 'pending'
         })
@@ -174,7 +167,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (pending)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'created',
           status: 'pending'
         })
@@ -189,7 +182,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (pending)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'sending',
           status: 'pending'
         })
@@ -204,7 +197,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (pending)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'pending-virus-check',
           status: 'pending'
         })
@@ -219,7 +212,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (sent)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'received',
           status: 'sent'
         })
@@ -234,7 +227,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (cancelled)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'cancelled',
           status: 'cancelled'
         })
@@ -249,7 +242,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (error)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'permanent-failure',
           status: 'error'
         })
@@ -264,7 +257,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (error)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'technical-failure',
           status: 'error'
         })
@@ -279,7 +272,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (error)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'temporary-failure',
           status: 'error'
         })
@@ -294,7 +287,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (error)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'validation-failed',
           status: 'error'
         })
@@ -309,7 +302,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (error)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'error',
           status: 'error'
         })
@@ -324,7 +317,7 @@ describe('Jobs - Notifications - Notify Status presenter', () => {
       it('correctly returns the statuses to update (pending)', () => {
         const result = NotifyStatusPresenter.go(notifyStatus, notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           notifyStatus: 'fake',
           status: 'pending'
         })

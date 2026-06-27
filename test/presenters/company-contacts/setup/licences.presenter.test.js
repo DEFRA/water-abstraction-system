@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
@@ -35,7 +28,7 @@ describe('Company Contacts - Setup - Licences Presenter', () => {
     it('returns page data for the view', () => {
       const result = LicencesPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
           text: 'Back'
@@ -61,7 +54,7 @@ describe('Company Contacts - Setup - Licences Presenter', () => {
         it('returns the matching licence as checked', () => {
           const result = LicencesPresenter.go(session)
 
-          expect(result.licences).to.equal([
+          expect(result.licences).toEqual([
             {
               checked: true,
               text: licence.licenceRef,

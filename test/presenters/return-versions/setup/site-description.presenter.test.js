@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const SiteDescriptionPresenter = require('../../../../app/presenters/return-versions/setup/site-description.presenter.js')
 
@@ -38,7 +31,7 @@ describe('Return Versions Setup - Site Description presenter', () => {
     it('correctly presents the data', () => {
       const result = SiteDescriptionPresenter.go(session, requirementIndex)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/returns-cycle/0',
           text: 'Back'
@@ -62,7 +55,7 @@ describe('Return Versions Setup - Site Description presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = SiteDescriptionPresenter.go(session, requirementIndex)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
           text: 'Back'
         })
@@ -73,7 +66,7 @@ describe('Return Versions Setup - Site Description presenter', () => {
       it('returns a link back to the "returns-cycle" page', () => {
         const result = SiteDescriptionPresenter.go(session, requirementIndex)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/returns-cycle/0',
           text: 'Back'
         })
@@ -90,7 +83,7 @@ describe('Return Versions Setup - Site Description presenter', () => {
       it('returns a populated site description', () => {
         const result = SiteDescriptionPresenter.go(session, requirementIndex)
 
-        expect(result.siteDescription).to.equal('This is a valid return requirement description')
+        expect(result.siteDescription).toEqual('This is a valid return requirement description')
       })
     })
 
@@ -98,7 +91,7 @@ describe('Return Versions Setup - Site Description presenter', () => {
       it('returns an empty site description', () => {
         const result = SiteDescriptionPresenter.go(session, requirementIndex)
 
-        expect(result.siteDescription).to.be.null()
+        expect(result.siteDescription).toBeNull()
       })
     })
   })

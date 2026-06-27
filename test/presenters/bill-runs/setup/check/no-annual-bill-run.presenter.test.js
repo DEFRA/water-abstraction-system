@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const NoAnnualBillRunPresenter = require('../../../../../app/presenters/bill-runs/setup/check/no-annual-bill-run.presenter.js')
 
@@ -28,7 +21,7 @@ describe('Bill Runs - Setup - No Annual Bill Run presenter', () => {
     it('correctly presents the data', () => {
       const result = NoAnnualBillRunPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region',
         billRunLink: null,
         billRunNumber: null,

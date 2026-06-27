@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -43,16 +38,13 @@ describe('Notices - Setup - Returns Period presenter', () => {
     it('correctly presents the data', () => {
       const result = ReturnsPeriodPresenter.go(session)
 
-      expect(result).to.equal(
-        {
-          backLink: {
-            href: `/system/notices/setup/${session.id}/notice-type`,
-            text: 'Back'
-          },
-          pageTitle: 'Select the returns periods for the invitations'
+      expect(result).toMatchObject({
+        backLink: {
+          href: `/system/notices/setup/${session.id}/notice-type`,
+          text: 'Back'
         },
-        { skip: ['returnsPeriod'] }
-      )
+        pageTitle: 'Select the returns periods for the invitations'
+      })
     })
   })
 
@@ -65,7 +57,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       it('correctly returns the back link', () => {
         const result = ReturnsPeriodPresenter.go(session)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: `/system/notices/setup/${session.id}/check-notice-type`,
           text: 'Back'
         })
@@ -80,7 +72,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       it('correctly returns the back link', () => {
         const result = ReturnsPeriodPresenter.go(session)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: `/system/notices/setup/${session.id}/notice-type`,
           text: 'Back'
         })
@@ -98,7 +90,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       it('correctly presents the data', () => {
         const result = ReturnsPeriodPresenter.go(session)
 
-        expect(result.pageTitle).to.equal('Select the returns periods for the invitations')
+        expect(result.pageTitle).toEqual('Select the returns periods for the invitations')
       })
     })
 
@@ -110,7 +102,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       it('correctly presents the data', () => {
         const result = ReturnsPeriodPresenter.go(session)
 
-        expect(result.pageTitle).to.equal('Select the returns periods for the reminders')
+        expect(result.pageTitle).toEqual('Select the returns periods for the reminders')
       })
     })
   })
@@ -129,7 +121,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
           returnsPeriod: [currentReturnPeriod]
         } = ReturnsPeriodPresenter.go(session)
 
-        expect(currentReturnPeriod).to.equal({
+        expect(currentReturnPeriod).toEqual({
           checked: true,
           value: 'quarterOne',
           text: `Quarterly 1 April ${currentYear} to 30 June ${currentYear}`,
@@ -149,7 +141,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
           returnsPeriod: [currentReturnPeriod]
         } = ReturnsPeriodPresenter.go(session)
 
-        expect(currentReturnPeriod).to.equal({
+        expect(currentReturnPeriod).toEqual({
           checked: false,
           value: 'quarterFour',
           text: `Quarterly 1 January ${currentYear} to 31 March ${currentYear}`,
@@ -162,7 +154,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
           returnsPeriod: [, nextReturnPeriod]
         } = ReturnsPeriodPresenter.go(session)
 
-        expect(nextReturnPeriod).to.equal({
+        expect(nextReturnPeriod).toEqual({
           checked: false,
           value: 'allYear',
           text: `Winter and all year annual 1 April 2024 to 31 March ${currentYear}`,
@@ -183,7 +175,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
             returnsPeriod: [currentReturnPeriod]
           } = ReturnsPeriodPresenter.go(session)
 
-          expect(currentReturnPeriod).to.equal({
+          expect(currentReturnPeriod).toEqual({
             checked: false,
             value: 'quarterFour',
             text: `Quarterly 1 January ${currentYear} to 31 March ${currentYear}`,
@@ -196,7 +188,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
             returnsPeriod: [, nextReturnPeriod]
           } = ReturnsPeriodPresenter.go(session)
 
-          expect(nextReturnPeriod).to.equal({
+          expect(nextReturnPeriod).toEqual({
             checked: false,
             value: 'allYear',
             text: `Winter and all year annual 1 April 2024 to 31 March ${currentYear}`,
@@ -218,7 +210,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
             returnsPeriod: [currentReturnPeriod]
           } = ReturnsPeriodPresenter.go(session)
 
-          expect(currentReturnPeriod).to.equal({
+          expect(currentReturnPeriod).toEqual({
             checked: false,
             value: 'quarterOne',
             text: `Quarterly 1 April ${currentYear} to 30 June ${currentYear}`,
@@ -231,7 +223,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
             returnsPeriod: [, nextReturnPeriod]
           } = ReturnsPeriodPresenter.go(session)
 
-          expect(nextReturnPeriod).to.equal({
+          expect(nextReturnPeriod).toEqual({
             checked: false,
             value: 'quarterTwo',
             text: `Quarterly 1 July ${currentYear} to 30 September ${currentYear}`,
@@ -253,7 +245,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
             returnsPeriod: [currentReturnPeriod]
           } = ReturnsPeriodPresenter.go(session)
 
-          expect(currentReturnPeriod).to.equal({
+          expect(currentReturnPeriod).toEqual({
             checked: false,
             value: 'quarterTwo',
             text: `Quarterly 1 July ${currentYear} to 30 September ${currentYear}`,
@@ -266,7 +258,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
             returnsPeriod: [, nextReturnPeriod]
           } = ReturnsPeriodPresenter.go(session)
 
-          expect(nextReturnPeriod).to.equal({
+          expect(nextReturnPeriod).toEqual({
             checked: false,
             value: 'summer',
             text: `Summer annual 1 November ${previousYear} to 31 October ${currentYear}`,
@@ -288,7 +280,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
             returnsPeriod: [currentReturnPeriod]
           } = ReturnsPeriodPresenter.go(session)
 
-          expect(currentReturnPeriod).to.equal({
+          expect(currentReturnPeriod).toEqual({
             checked: false,
             value: 'summer',
             text: `Summer annual 1 November ${previousYear} to 31 October ${currentYear}`,
@@ -301,7 +293,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
             returnsPeriod: [, nextReturnPeriod]
           } = ReturnsPeriodPresenter.go(session)
 
-          expect(nextReturnPeriod).to.equal({
+          expect(nextReturnPeriod).toEqual({
             checked: false,
             value: 'quarterThree',
             text: `Quarterly 1 October ${currentYear} to 31 December ${currentYear}`,
@@ -323,7 +315,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
             returnsPeriod: [currentReturnPeriod]
           } = ReturnsPeriodPresenter.go(session)
 
-          expect(currentReturnPeriod).to.equal({
+          expect(currentReturnPeriod).toEqual({
             checked: false,
             value: 'quarterThree',
             text: `Quarterly 1 October ${currentYear} to 31 December ${currentYear}`,
@@ -336,7 +328,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
             returnsPeriod: [, nextReturnPeriod]
           } = ReturnsPeriodPresenter.go(session)
 
-          expect(nextReturnPeriod).to.equal({
+          expect(nextReturnPeriod).toEqual({
             checked: false,
             value: 'quarterFour',
             text: `Quarterly 1 January ${nextYear} to 31 March ${nextYear}`,
@@ -356,7 +348,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
             returnsPeriod: [currentReturnPeriod]
           } = ReturnsPeriodPresenter.go(session)
 
-          expect(currentReturnPeriod).to.equal({
+          expect(currentReturnPeriod).toEqual({
             checked: false,
             value: 'quarterThree',
             text: `Quarterly 1 October ${previousYear} to 31 December ${previousYear}`,
@@ -369,7 +361,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
             returnsPeriod: [, nextReturnPeriod]
           } = ReturnsPeriodPresenter.go(session)
 
-          expect(nextReturnPeriod).to.equal({
+          expect(nextReturnPeriod).toEqual({
             checked: false,
             value: 'quarterFour',
             text: `Quarterly 1 January ${currentYear} to 31 March ${currentYear}`,

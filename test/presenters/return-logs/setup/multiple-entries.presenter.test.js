@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const MultipleEntriesPresenter = require('../../../../app/presenters/return-logs/setup/multiple-entries.presenter.js')
 
@@ -30,7 +23,7 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
     it('correctly presents the data', () => {
       const result = MultipleEntriesPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: { href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check', text: 'Back' },
         endDate: '1 May 2023',
         frequency: 'monthly',
@@ -54,7 +47,7 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
       it('returns "measurementType" back as "volumes"', () => {
         const result = MultipleEntriesPresenter.go(session)
 
-        expect(result.measurementType).to.equal('volumes')
+        expect(result.measurementType).toEqual('volumes')
       })
     })
 
@@ -66,7 +59,7 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
       it('returns "measurementType" back as "readings"', () => {
         const result = MultipleEntriesPresenter.go(session)
 
-        expect(result.measurementType).to.equal('readings')
+        expect(result.measurementType).toEqual('readings')
       })
     })
   })
@@ -80,7 +73,7 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
       it('returns "frequency" back as "daily"', () => {
         const result = MultipleEntriesPresenter.go(session)
 
-        expect(result.frequency).to.equal('daily')
+        expect(result.frequency).toEqual('daily')
       })
     })
 
@@ -92,7 +85,7 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
       it('returns "frequency" back as "weekly"', () => {
         const result = MultipleEntriesPresenter.go(session)
 
-        expect(result.frequency).to.equal('weekly')
+        expect(result.frequency).toEqual('weekly')
       })
     })
 
@@ -104,7 +97,7 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
       it('returns "frequency" back as "monthly"', () => {
         const result = MultipleEntriesPresenter.go(session)
 
-        expect(result.frequency).to.equal('monthly')
+        expect(result.frequency).toEqual('monthly')
       })
     })
   })
@@ -118,7 +111,7 @@ describe('Return Logs Setup - Multiple Entries presenter', () => {
       it('returns the "multipleEntries" property populated', () => {
         const result = MultipleEntriesPresenter.go(session)
 
-        expect(result.multipleEntries).to.equal('1,2,3,4,5,6,7,8,9,10,11,12')
+        expect(result.multipleEntries).toEqual('1,2,3,4,5,6,7,8,9,10,11,12')
       })
     })
   })

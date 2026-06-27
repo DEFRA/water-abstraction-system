@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CustomersFixtures = require('../support/fixtures/customers.fixture.js')
 
@@ -26,7 +19,7 @@ describe('Customer presenter', () => {
     it('returns the company contact', () => {
       const result = CustomerPresenter.formatCompanyContact(companyContact)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         communicationType: 'Additional Contact',
         email: 'rachael.tyrell@tyrellcorp.com',
         name: 'Rachael Tyrell'
@@ -42,7 +35,7 @@ describe('Customer presenter', () => {
         it('returns the string "Water abstraction alerts"', () => {
           const result = CustomerPresenter.formatCompanyContact(companyContact)
 
-          expect(result.communicationType).to.equal('Water abstraction alerts')
+          expect(result.communicationType).toEqual('Water abstraction alerts')
         })
       })
 
@@ -50,7 +43,7 @@ describe('Customer presenter', () => {
         it('returns the licence role', () => {
           const result = CustomerPresenter.formatCompanyContact(companyContact)
 
-          expect(result.communicationType).to.equal('Additional Contact')
+          expect(result.communicationType).toEqual('Additional Contact')
         })
       })
     })
@@ -60,7 +53,7 @@ describe('Customer presenter', () => {
         it('returns the email', () => {
           const result = CustomerPresenter.formatCompanyContact(companyContact)
 
-          expect(result.email).to.equal('rachael.tyrell@tyrellcorp.com')
+          expect(result.email).toEqual('rachael.tyrell@tyrellcorp.com')
         })
       })
 
@@ -72,7 +65,7 @@ describe('Customer presenter', () => {
         it('returns null', () => {
           const result = CustomerPresenter.formatCompanyContact(companyContact)
 
-          expect(result.email).to.be.null()
+          expect(result.email).toBeNull()
         })
       })
     })

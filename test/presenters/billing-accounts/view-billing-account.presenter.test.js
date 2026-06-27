@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillingAccountsFixture = require('../../support/fixtures/billing-accounts.fixture.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
@@ -31,7 +24,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
     it('returns the correctly presents the data', () => {
       const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         address: [
           'Ferns Surfacing Limited',
           'Test Testingson',
@@ -77,7 +70,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
       it('returns the title "Go back to search" and the link to search page', () => {
         const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/',
           text: 'Go back to search'
         })
@@ -88,7 +81,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
       it('returns the title "Go back to charge information" and the link to the charge information page', () => {
         const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: `/licences/${licenceId}/charge-information/${chargeVersionId}/view`,
           text: 'Go back to charge information'
         })
@@ -103,7 +96,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
       it('returns the title "Go back to bills" and the link to the licence bills page', () => {
         const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: `/system/licences/${licenceId}/bills`,
           text: 'Go back to bills'
         })
@@ -119,7 +112,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
       it('returns the title "Go back to customer" and the link to the customer page', () => {
         const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: `/system/companies/${companyId}/billing-accounts`,
           text: 'Go back to customer'
         })
@@ -137,7 +130,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
         it('returns the "invoiceNumber" value', () => {
           const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
 
-          expect(result.bills[0].billNumber).to.equal('Test123')
+          expect(result.bills[0].billNumber).toEqual('Test123')
         })
       })
 
@@ -145,7 +138,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
         it('returns the string "Zero value bill"', () => {
           const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
 
-          expect(result.bills[0].billNumber).to.equal('Zero value bill')
+          expect(result.bills[0].billNumber).toEqual('Zero value bill')
         })
       })
     })
@@ -159,7 +152,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
         it('returns the formatted "bill.netAmount" value followed by the string "Credit"', () => {
           const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
 
-          expect(result.bills[0].billTotal).to.equal('£103.84 Credit')
+          expect(result.bills[0].billTotal).toEqual('£103.84 Credit')
         })
       })
 
@@ -167,7 +160,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
         it('returns the formatted "bill.netAmount" value', () => {
           const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
 
-          expect(result.bills[0].billTotal).to.equal('£103.84')
+          expect(result.bills[0].billTotal).toEqual('£103.84')
         })
       })
     })
@@ -182,7 +175,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
       it('returns the formatted "lastTransactionFileCreatedAt" date value', () => {
         const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
 
-        expect(result.lastUpdated).to.equal('14 December 2023')
+        expect(result.lastUpdated).toEqual('14 December 2023')
       })
     })
 
@@ -190,7 +183,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
       it('returns null', () => {
         const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
 
-        expect(result.lastUpdated).to.be.null()
+        expect(result.lastUpdated).toBeNull()
       })
     })
   })

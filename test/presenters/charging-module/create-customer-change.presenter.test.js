@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AddressModel = require('../../../app/models/address.model.js')
 const BillingAccountModel = require('../../../app/models/billing-account.model.js')
@@ -54,7 +47,7 @@ describe('Charging Module Create Transaction presenter', () => {
       it('returns as the region', () => {
         const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-        expect(result.region).to.equal('B')
+        expect(result.region).toEqual('B')
       })
     })
   })
@@ -69,7 +62,7 @@ describe('Charging Module Create Transaction presenter', () => {
     it('returns the billing account number for customer reference', () => {
       const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-      expect(result.customerReference).to.equal('B19120000A')
+      expect(result.customerReference).toEqual('B19120000A')
     })
   })
 
@@ -88,7 +81,7 @@ describe('Charging Module Create Transaction presenter', () => {
         it('returns the name of the "company" for customer name', () => {
           const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-          expect(result.customerName).to.equal('AGENT COMPANY')
+          expect(result.customerName).toEqual('AGENT COMPANY')
         })
       })
 
@@ -100,7 +93,7 @@ describe('Charging Module Create Transaction presenter', () => {
         it("returns the name of the billing account's company for customer name", () => {
           const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-          expect(result.customerName).to.equal('BILLING ACCOUNT COMPANY')
+          expect(result.customerName).toEqual('BILLING ACCOUNT COMPANY')
         })
       })
     })
@@ -128,7 +121,7 @@ describe('Charging Module Create Transaction presenter', () => {
           it('returns the contact name as an FAO and address1 for addressLine1', () => {
             const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-            expect(result.addressLine1).to.equal('FAO Margherita Villar, ENVIRONMENT AGENCY')
+            expect(result.addressLine1).toEqual('FAO Margherita Villar, ENVIRONMENT AGENCY')
           })
         })
 
@@ -140,7 +133,7 @@ describe('Charging Module Create Transaction presenter', () => {
           it('returns the contact name as an FAO only for addressLine1', () => {
             const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-            expect(result.addressLine1).to.equal('FAO Margherita Villar')
+            expect(result.addressLine1).toEqual('FAO Margherita Villar')
           })
         })
       })
@@ -158,7 +151,7 @@ describe('Charging Module Create Transaction presenter', () => {
           it('returns address1 for addressLine1', () => {
             const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-            expect(result.addressLine1).to.equal('ENVIRONMENT AGENCY')
+            expect(result.addressLine1).toEqual('ENVIRONMENT AGENCY')
           })
         })
 
@@ -173,7 +166,7 @@ describe('Charging Module Create Transaction presenter', () => {
           it('returns the first populated address property for addressLine1', () => {
             const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-            expect(result.addressLine1).to.equal('HORIZON HOUSE')
+            expect(result.addressLine1).toEqual('HORIZON HOUSE')
           })
         })
       })
@@ -202,9 +195,9 @@ describe('Charging Module Create Transaction presenter', () => {
           it('returns address2 to address4 for addressLine2 to addressLine4', () => {
             const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-            expect(result.addressLine2).to.equal('HORIZON HOUSE')
-            expect(result.addressLine3).to.equal('DEANERY ROAD')
-            expect(result.addressLine4).to.equal('COLLEGE GREEN')
+            expect(result.addressLine2).toEqual('HORIZON HOUSE')
+            expect(result.addressLine3).toEqual('DEANERY ROAD')
+            expect(result.addressLine4).toEqual('COLLEGE GREEN')
           })
         })
 
@@ -222,9 +215,9 @@ describe('Charging Module Create Transaction presenter', () => {
           it('returns address4 for addressLine2 and null for the rest', () => {
             const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-            expect(result.addressLine2).to.equal('COLLEGE GREEN')
-            expect(result.addressLine3).to.be.null()
-            expect(result.addressLine4).to.be.null()
+            expect(result.addressLine2).toEqual('COLLEGE GREEN')
+            expect(result.addressLine3).toBeNull()
+            expect(result.addressLine4).toBeNull()
           })
         })
       })
@@ -245,9 +238,9 @@ describe('Charging Module Create Transaction presenter', () => {
           it('returns address2 to address4 for addressLine2 to addressLine4', () => {
             const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-            expect(result.addressLine2).to.equal('HORIZON HOUSE')
-            expect(result.addressLine3).to.equal('DEANERY ROAD')
-            expect(result.addressLine4).to.equal('COLLEGE GREEN')
+            expect(result.addressLine2).toEqual('HORIZON HOUSE')
+            expect(result.addressLine3).toEqual('DEANERY ROAD')
+            expect(result.addressLine4).toEqual('COLLEGE GREEN')
           })
         })
 
@@ -265,9 +258,9 @@ describe('Charging Module Create Transaction presenter', () => {
           it('returns the second property as addressLine2 and addressLine3 to addressLine4 are null', () => {
             const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-            expect(result.addressLine2).to.equal('COLLEGE GREEN')
-            expect(result.addressLine3).to.be.null()
-            expect(result.addressLine4).to.be.null()
+            expect(result.addressLine2).toEqual('COLLEGE GREEN')
+            expect(result.addressLine3).toBeNull()
+            expect(result.addressLine4).toBeNull()
           })
         })
 
@@ -285,9 +278,9 @@ describe('Charging Module Create Transaction presenter', () => {
           it('returns null for addressLine2 to addressLine4', () => {
             const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-            expect(result.addressLine2).to.be.null()
-            expect(result.addressLine3).to.be.null()
-            expect(result.addressLine4).to.be.null()
+            expect(result.addressLine2).toBeNull()
+            expect(result.addressLine3).toBeNull()
+            expect(result.addressLine4).toBeNull()
           })
         })
       })
@@ -308,7 +301,7 @@ describe('Charging Module Create Transaction presenter', () => {
       it('returns address for addressLine5', () => {
         const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-        expect(result.addressLine5).to.equal('BRISTOL')
+        expect(result.addressLine5).toEqual('BRISTOL')
       })
     })
 
@@ -320,7 +313,7 @@ describe('Charging Module Create Transaction presenter', () => {
       it('returns null for addressLine5', () => {
         const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-        expect(result.addressLine5).to.be.null()
+        expect(result.addressLine5).toBeNull()
       })
     })
   })
@@ -342,7 +335,7 @@ describe('Charging Module Create Transaction presenter', () => {
       it('returns both address6 and country for addressLine6', () => {
         const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-        expect(result.addressLine6).to.equal('AVON, United Kingdom')
+        expect(result.addressLine6).toEqual('AVON, United Kingdom')
       })
     })
 
@@ -357,7 +350,7 @@ describe('Charging Module Create Transaction presenter', () => {
       it('returns an empty string for addressLine6', () => {
         const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-        expect(result.addressLine6).to.equal('')
+        expect(result.addressLine6).toEqual('')
       })
     })
 
@@ -373,7 +366,7 @@ describe('Charging Module Create Transaction presenter', () => {
       it('returns just address for addressLine6', () => {
         const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-        expect(result.addressLine6).to.equal('AVON')
+        expect(result.addressLine6).toEqual('AVON')
       })
     })
 
@@ -385,7 +378,7 @@ describe('Charging Module Create Transaction presenter', () => {
       it('returns just the country for addressLine6', () => {
         const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-        expect(result.addressLine6).to.equal('United Kingdom')
+        expect(result.addressLine6).toEqual('United Kingdom')
       })
     })
   })
@@ -400,7 +393,7 @@ describe('Charging Module Create Transaction presenter', () => {
     it('returns the postcode for postcode', () => {
       const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-      expect(result.postcode).to.equal('BS1 5AH')
+      expect(result.postcode).toEqual('BS1 5AH')
     })
   })
 
@@ -417,7 +410,7 @@ describe('Charging Module Create Transaction presenter', () => {
     it('truncates it and replaces the last 3 characters with ...', () => {
       const result = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-      expect(result.addressLine5).to.equal('Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoc...')
+      expect(result.addressLine5).toEqual('Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoc...')
     })
   })
 })

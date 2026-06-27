@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ViewLicenceSummariesPresenter = require('../../../app/presenters/bills/view-licence-summaries.presenter.js')
 
@@ -21,7 +14,7 @@ describe('View Licence Summaries presenter', () => {
     it('correctly presents the data', () => {
       const result = ViewLicenceSummariesPresenter.go(licenceSummaries)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         billLicences: [
           {
             id: 'e37320ba-10c8-4954-8bc4-6982e56ded41',
@@ -54,7 +47,7 @@ describe('View Licence Summaries presenter', () => {
         it('returns the count and caption singular', () => {
           const result = ViewLicenceSummariesPresenter.go(singularLicenceSummary)
 
-          expect(result.tableCaption).to.equal('1 licence')
+          expect(result.tableCaption).toEqual('1 licence')
         })
       })
 
@@ -62,7 +55,7 @@ describe('View Licence Summaries presenter', () => {
         it('returns the count and caption pluralised', () => {
           const result = ViewLicenceSummariesPresenter.go(licenceSummaries)
 
-          expect(result.tableCaption).to.equal('3 licences')
+          expect(result.tableCaption).toEqual('3 licences')
         })
       })
     })

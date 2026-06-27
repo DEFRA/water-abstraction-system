@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { licenceEnds } = require('../../support/fixtures/licence.fixture.js')
@@ -86,7 +79,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
   it('correctly presents the data', () => {
     const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       backLink: {
         href: `/system/monitoring-stations/${monitoringStation.id}`,
         text: 'Go back to monitoring station'
@@ -149,7 +142,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
       it('returns null', () => {
         const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-        expect(result.lastAlertSentForLicence).to.be.null()
+        expect(result.lastAlertSentForLicence).toBeNull()
       })
     })
 
@@ -157,7 +150,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
       it('returns that records alert details', () => {
         const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-        expect(result.lastAlertSentForLicence).to.equal('Resume email on 26 August 2025 sent to carol.shaw@atari.com')
+        expect(result.lastAlertSentForLicence).toEqual('Resume email on 26 August 2025 sent to carol.shaw@atari.com')
       })
     })
 
@@ -176,7 +169,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
       it('returns the details of the most recent alert', () => {
         const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-        expect(result.lastAlertSentForLicence).to.equal('Resume email on 26 August 2025 sent to carol.shaw@atari.com')
+        expect(result.lastAlertSentForLicence).toEqual('Resume email on 26 August 2025 sent to carol.shaw@atari.com')
       })
     })
   })
@@ -185,27 +178,25 @@ describe('Monitoring Stations - View Licence presenter', () => {
     describe('the "actions" property', () => {
       describe('when the user has permissions to remove tags', () => {
         it('returns an "items" object need by the govukSummaryList to display a link to the remove page', () => {
-          it('returns null', () => {
-            const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-            expect(result.licenceTags[0].actions).to.equal({
-              items: [
-                {
-                  href: '/system/licence-monitoring-station/8c79ddbe-b8d8-477f-b2f5-1f729b095f80/remove',
-                  text: 'Remove tag',
-                  visuallyHiddenText: 'Remove Reduce tag Created on 7 August 2025 by environment.officer@wrls.gov.uk'
-                }
-              ]
-            })
-            expect(result.licenceTags[1].actions).to.equal({
-              items: [
-                {
-                  href: '/system/licence-monitoring-station/7cbfb847-e666-4841-befc-d9bf3423c6ff/remove',
-                  text: 'Remove tag',
-                  visuallyHiddenText: 'Remove Stop tag Created on 6 August 2025 by environment.officer@wrls.gov.uk'
-                }
-              ]
-            })
+          expect(result.licenceTags[0].actions).toEqual({
+            items: [
+              {
+                href: `/system/licence-monitoring-station/${licenceMonitoringStations[0].id}/remove`,
+                text: 'Remove tag',
+                visuallyHiddenText: 'Remove Reduce tag Created on 7 August 2025 by environment.officer@wrls.gov.uk'
+              }
+            ]
+          })
+          expect(result.licenceTags[1].actions).toEqual({
+            items: [
+              {
+                href: `/system/licence-monitoring-station/${licenceMonitoringStations[1].id}/remove`,
+                text: 'Remove tag',
+                visuallyHiddenText: 'Remove Stop tag Created on 6 August 2025 by environment.officer@wrls.gov.uk'
+              }
+            ]
           })
         })
       })
@@ -218,8 +209,8 @@ describe('Monitoring Stations - View Licence presenter', () => {
         it('returns null', () => {
           const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-          expect(result.licenceTags[0].actions).to.be.null()
-          expect(result.licenceTags[1].actions).to.be.null()
+          expect(result.licenceTags[0].actions).toBeNull()
+          expect(result.licenceTags[1].actions).toBeNull()
         })
       })
     })
@@ -229,8 +220,8 @@ describe('Monitoring Stations - View Licence presenter', () => {
         it('returns when it was created and who by', () => {
           const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-          expect(result.licenceTags[0].created).to.equal('Created on 7 August 2025 by environment.officer@wrls.gov.uk')
-          expect(result.licenceTags[1].created).to.equal('Created on 6 August 2025 by environment.officer@wrls.gov.uk')
+          expect(result.licenceTags[0].created).toEqual('Created on 7 August 2025 by environment.officer@wrls.gov.uk')
+          expect(result.licenceTags[1].created).toEqual('Created on 6 August 2025 by environment.officer@wrls.gov.uk')
         })
       })
 
@@ -243,8 +234,8 @@ describe('Monitoring Stations - View Licence presenter', () => {
         it('returns just when it was created', () => {
           const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-          expect(result.licenceTags[0].created).to.equal('Created on 7 August 2025')
-          expect(result.licenceTags[1].created).to.equal('Created on 6 August 2025')
+          expect(result.licenceTags[0].created).toEqual('Created on 7 August 2025')
+          expect(result.licenceTags[1].created).toEqual('Created on 6 August 2025')
         })
       })
     })
@@ -259,7 +250,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
         it('returns true (display the warning)', () => {
           const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-          expect(result.licenceTags[1].displaySupersededWarning).to.be.true()
+          expect(result.licenceTags[1].displaySupersededWarning).toBe(true)
         })
       })
 
@@ -267,7 +258,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
         it('returns false (do not display the warning)', () => {
           const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-          expect(result.licenceTags[1].displaySupersededWarning).to.be.false()
+          expect(result.licenceTags[1].displaySupersededWarning).toBe(false)
         })
       })
 
@@ -275,7 +266,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
         it('returns false (do not display the warning)', () => {
           const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-          expect(result.licenceTags[1].displaySupersededWarning).to.be.false()
+          expect(result.licenceTags[1].displaySupersededWarning).toBe(false)
         })
       })
     })
@@ -285,7 +276,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
         it('returns the notes', () => {
           const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-          expect(result.licenceTags[1].effectOfRestriction).to.equal('This is the effect of restriction')
+          expect(result.licenceTags[1].effectOfRestriction).toEqual('This is the effect of restriction')
         })
       })
 
@@ -297,7 +288,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
         it('returns null', () => {
           const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-          expect(result.licenceTags[1].effectOfRestriction).to.be.null()
+          expect(result.licenceTags[1].effectOfRestriction).toBeNull()
         })
       })
 
@@ -305,7 +296,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
         it('returns null', () => {
           const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-          expect(result.licenceTags[0].effectOfRestriction).to.be.null()
+          expect(result.licenceTags[0].effectOfRestriction).toBeNull()
         })
       })
     })
@@ -319,8 +310,8 @@ describe('Monitoring Stations - View Licence presenter', () => {
         it('returns null (we are already showing it in the "lastAlertSentForLicence" property)', () => {
           const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-          expect(result.licenceTags[0].lastAlertSent).to.be.null()
-          expect(result.lastAlertSentForLicence).to.equal('Resume email on 26 August 2025 sent to carol.shaw@atari.com')
+          expect(result.licenceTags[0].lastAlertSent).toBeNull()
+          expect(result.lastAlertSentForLicence).toEqual('Resume email on 26 August 2025 sent to carol.shaw@atari.com')
         })
       })
 
@@ -330,7 +321,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
             it('returns the details of the alert', () => {
               const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-              expect(result.licenceTags[1].lastAlertSent).to.equal(
+              expect(result.licenceTags[1].lastAlertSent).toEqual(
                 'Resume email on 26 August 2025 sent to carol.shaw@atari.com'
               )
             })
@@ -346,7 +337,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
             it('returns the details of the alert', () => {
               const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-              expect(result.licenceTags[1].lastAlertSent).to.equal(
+              expect(result.licenceTags[1].lastAlertSent).toEqual(
                 'Resume letter on 26 August 2025 sent to Sherlock Holmes'
               )
             })
@@ -357,7 +348,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
           it('returns an empty string (indicates show row in the view but leave empty)', () => {
             const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-            expect(result.licenceTags[0].lastAlertSent).to.equal('')
+            expect(result.licenceTags[0].lastAlertSent).toEqual('')
           })
         })
       })
@@ -368,7 +359,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
         it('returns the details of the condition', () => {
           const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-          expect(result.licenceTags[1].linkedCondition).to.equal('Rates m3 per day, NALD ID 1234')
+          expect(result.licenceTags[1].linkedCondition).toEqual('Rates m3 per day, NALD ID 1234')
         })
       })
 
@@ -376,7 +367,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
         it('returns "Not linked to a condition"', () => {
           const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-          expect(result.licenceTags[0].linkedCondition).to.equal('Not linked to a condition')
+          expect(result.licenceTags[0].linkedCondition).toEqual('Not linked to a condition')
         })
       })
     })
@@ -387,7 +378,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
       it('returns both the station and river name', () => {
         const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-        expect(result.pageTitleCaption).to.equal('The River Styx at Hades')
+        expect(result.pageTitleCaption).toEqual('The River Styx at Hades')
       })
     })
 
@@ -399,7 +390,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
       it('returns just the station name', () => {
         const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-        expect(result.pageTitleCaption).to.equal('Hades')
+        expect(result.pageTitleCaption).toEqual('Hades')
       })
     })
   })
@@ -413,7 +404,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
       it('returns the warning', () => {
         const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
-        expect(result.warning).to.equal({
+        expect(result.warning).toEqual({
           iconFallbackText: 'Warning',
           text: 'This licence expired on 1 January 2000'
         })

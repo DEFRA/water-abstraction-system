@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 
@@ -23,7 +16,7 @@ describe('Users - Internal - Setup - Email Presenter', () => {
   it('correctly presents the data', () => {
     const result = EmailPresenter.go(session)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       activeNavBar: 'users',
       backLink: {
         href: '/system/users',
@@ -44,7 +37,7 @@ describe('Users - Internal - Setup - Email Presenter', () => {
       it('returns the correct href', () => {
         const result = EmailPresenter.go(session)
 
-        expect(result.backLink.href).to.equal(`/system/users/internal/setup/${session.id}/check`)
+        expect(result.backLink.href).toEqual(`/system/users/internal/setup/${session.id}/check`)
       })
     })
 
@@ -52,7 +45,7 @@ describe('Users - Internal - Setup - Email Presenter', () => {
       it('returns the correct href', () => {
         const result = EmailPresenter.go(session)
 
-        expect(result.backLink.href).to.equal('/system/users')
+        expect(result.backLink.href).toEqual('/system/users')
       })
     })
   })
@@ -66,7 +59,7 @@ describe('Users - Internal - Setup - Email Presenter', () => {
       it('returns the email from the session in lowercase', () => {
         const result = EmailPresenter.go(session)
 
-        expect(result.email).to.equal('bob@test.com')
+        expect(result.email).toEqual('bob@test.com')
       })
     })
 
@@ -74,7 +67,7 @@ describe('Users - Internal - Setup - Email Presenter', () => {
       it('returns an empty string', () => {
         const result = EmailPresenter.go(session)
 
-        expect(result.email).to.be.null()
+        expect(result.email).toBeNull()
       })
     })
   })

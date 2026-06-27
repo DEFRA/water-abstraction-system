@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ViewBillSummariesPresenter = require('../../../app/presenters/bill-runs/view-bill-summaries.presenter.js')
 
@@ -21,7 +14,7 @@ describe('View Bill Summaries presenter', () => {
     it('correctly presents the data', () => {
       const result = ViewBillSummariesPresenter.go(billSummaries)
 
-      expect(result).to.equal([
+      expect(result).toEqual([
         {
           type: 'water-companies',
           caption: '1 water company',
@@ -74,8 +67,8 @@ describe('View Bill Summaries presenter', () => {
       it('returns just the water companies group', () => {
         const result = ViewBillSummariesPresenter.go(billSummaries)
 
-        expect(result).to.have.length(1)
-        expect(result[0].type).to.equal('water-companies')
+        expect(result).toHaveLength(1)
+        expect(result[0].type).toEqual('water-companies')
       })
     })
 
@@ -89,8 +82,8 @@ describe('View Bill Summaries presenter', () => {
       it('returns just the other abstractors group', () => {
         const result = ViewBillSummariesPresenter.go(billSummaries)
 
-        expect(result).to.have.length(1)
-        expect(result[0].type).to.equal('other-abstractors')
+        expect(result).toHaveLength(1)
+        expect(result[0].type).toEqual('other-abstractors')
       })
     })
 
@@ -100,9 +93,9 @@ describe('View Bill Summaries presenter', () => {
       it('the first group is always the water companies and the second the other abstractors', () => {
         const result = ViewBillSummariesPresenter.go(billSummaries)
 
-        expect(result).to.have.length(2)
-        expect(result[0].type).to.equal('water-companies')
-        expect(result[1].type).to.equal('other-abstractors')
+        expect(result).toHaveLength(2)
+        expect(result[0].type).toEqual('water-companies')
+        expect(result[1].type).toEqual('other-abstractors')
       })
     })
 
@@ -111,7 +104,7 @@ describe('View Bill Summaries presenter', () => {
         it("the group's caption is singular (1 water company)", () => {
           const result = ViewBillSummariesPresenter.go(billSummaries)
 
-          expect(result[0].caption).to.equal('1 water company')
+          expect(result[0].caption).toEqual('1 water company')
         })
       })
 
@@ -123,7 +116,7 @@ describe('View Bill Summaries presenter', () => {
         it("the group's caption is pluralised (2 water companies)", () => {
           const result = ViewBillSummariesPresenter.go(billSummaries)
 
-          expect(result[0].caption).to.equal('2 water companies')
+          expect(result[0].caption).toEqual('2 water companies')
         })
       })
 
@@ -135,7 +128,7 @@ describe('View Bill Summaries presenter', () => {
         it("the group's caption is singular (1 other abstractor)", () => {
           const result = ViewBillSummariesPresenter.go(billSummaries)
 
-          expect(result[1].caption).to.equal('1 other abstractor')
+          expect(result[1].caption).toEqual('1 other abstractor')
         })
       })
 
@@ -143,7 +136,7 @@ describe('View Bill Summaries presenter', () => {
         it("the group's caption is pluralised (2 other abstractors)", () => {
           const result = ViewBillSummariesPresenter.go(billSummaries)
 
-          expect(result[1].caption).to.equal('2 other abstractors')
+          expect(result[1].caption).toEqual('2 other abstractors')
         })
       })
     })
@@ -153,7 +146,7 @@ describe('View Bill Summaries presenter', () => {
         it('returns the agent company name', () => {
           const result = ViewBillSummariesPresenter.go(billSummaries)
 
-          expect(result[1].bills[0].billingContact).to.equal('Geordie Leforge')
+          expect(result[1].bills[0].billingContact).toEqual('Geordie Leforge')
         })
       })
 
@@ -161,7 +154,7 @@ describe('View Bill Summaries presenter', () => {
         it('returns the company name', () => {
           const result = ViewBillSummariesPresenter.go(billSummaries)
 
-          expect(result[1].bills[1].billingContact).to.equal('Flint & Michigan Squash Club Ltd')
+          expect(result[1].bills[1].billingContact).toEqual('Flint & Michigan Squash Club Ltd')
         })
       })
     })
@@ -170,7 +163,7 @@ describe('View Bill Summaries presenter', () => {
       it('splits the licences provided by , and places the resulting references into an array', () => {
         const result = ViewBillSummariesPresenter.go(billSummaries)
 
-        expect(result[0].bills[0].licences).to.equal(['17/53/001/A/101', '17/53/002/B/205', '17/53/002/C/308'])
+        expect(result[0].bills[0].licences).toEqual(['17/53/001/A/101', '17/53/002/B/205', '17/53/002/C/308'])
       })
     })
   })

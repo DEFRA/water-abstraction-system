@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillingAccountModel = require('../../../app/models/billing-account.model.js')
@@ -29,7 +24,7 @@ describe('Remove Bill presenter', () => {
     it('correctly presents the data', () => {
       const result = RemoveBillPresenter.go(bill)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         accountName: 'Example Trading Ltd',
         accountNumber: 'T65757520A',
         billId: bill.id,
@@ -53,7 +48,7 @@ describe('Remove Bill presenter', () => {
         it('returns the name of the company linked to the billing account', () => {
           const result = RemoveBillPresenter.go(bill)
 
-          expect(result.accountName).to.equal('Example Trading Ltd')
+          expect(result.accountName).toEqual('Example Trading Ltd')
         })
       })
 
@@ -69,7 +64,7 @@ describe('Remove Bill presenter', () => {
         it('returns the name of the agent company', () => {
           const result = RemoveBillPresenter.go(bill)
 
-          expect(result.accountName).to.equal('Alan Broke')
+          expect(result.accountName).toEqual('Alan Broke')
         })
       })
     })
@@ -79,7 +74,7 @@ describe('Remove Bill presenter', () => {
         it('returns them as a comma separated list', () => {
           const result = RemoveBillPresenter.go(bill)
 
-          expect(result.licences).to.equal('01/01/26/9400, 01/02/26/9400')
+          expect(result.licences).toEqual('01/01/26/9400, 01/02/26/9400')
         })
       })
 
@@ -91,7 +86,7 @@ describe('Remove Bill presenter', () => {
         it('returns just the single licence reference', () => {
           const result = RemoveBillPresenter.go(bill)
 
-          expect(result.licences).to.equal('01/01/26/9400')
+          expect(result.licences).toEqual('01/01/26/9400')
         })
       })
     })
@@ -101,7 +96,7 @@ describe('Remove Bill presenter', () => {
         it('returns "Licences" (plural)', () => {
           const result = RemoveBillPresenter.go(bill)
 
-          expect(result.licencesText).to.equal('Licences')
+          expect(result.licencesText).toEqual('Licences')
         })
       })
 
@@ -113,7 +108,7 @@ describe('Remove Bill presenter', () => {
         it('returns "Licence" (singular)', () => {
           const result = RemoveBillPresenter.go(bill)
 
-          expect(result.licencesText).to.equal('Licence')
+          expect(result.licencesText).toEqual('Licence')
         })
       })
     })
@@ -122,7 +117,7 @@ describe('Remove Bill presenter', () => {
       it('returns the account number as part of the title', () => {
         const result = RemoveBillPresenter.go(bill)
 
-        expect(result.pageTitle).to.equal("You're about to remove the bill for T65757520A from the bill run")
+        expect(result.pageTitle).toEqual("You're about to remove the bill for T65757520A from the bill run")
       })
     })
 
@@ -131,7 +126,7 @@ describe('Remove Bill presenter', () => {
         it('returns the message with "licences" (plural)', () => {
           const result = RemoveBillPresenter.go(bill)
 
-          expect(result.supplementaryMessage).to.equal('The licences will go into the next supplementary bill run.')
+          expect(result.supplementaryMessage).toEqual('The licences will go into the next supplementary bill run.')
         })
       })
 
@@ -143,7 +138,7 @@ describe('Remove Bill presenter', () => {
         it('returns the message with "licence" (singular)', () => {
           const result = RemoveBillPresenter.go(bill)
 
-          expect(result.supplementaryMessage).to.equal('The licence will go into the next supplementary bill run.')
+          expect(result.supplementaryMessage).toEqual('The licence will go into the next supplementary bill run.')
         })
       })
     })

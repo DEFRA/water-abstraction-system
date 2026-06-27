@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -28,7 +21,7 @@ describe('Company Contacts - Setup - Contact Email Presenter', () => {
     it('returns page data for the view', () => {
       const result = ContactEmailPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/company-contacts/setup/${session.id}/contact-name`,
           text: 'Back'
@@ -48,7 +41,7 @@ describe('Company Contacts - Setup - Contact Email Presenter', () => {
         it('returns the email from the session', () => {
           const result = ContactEmailPresenter.go(session)
 
-          expect(result.email).to.equal('eric@test.com')
+          expect(result.email).toEqual('eric@test.com')
         })
       })
 
@@ -56,7 +49,7 @@ describe('Company Contacts - Setup - Contact Email Presenter', () => {
         it('returns an empty string', () => {
           const result = ContactEmailPresenter.go(session)
 
-          expect(result.email).to.be.null()
+          expect(result.email).toBeNull()
         })
       })
     })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const UserSessionsFixture = require('../../../../support/fixtures/user-sessions.fixture.js')
 
@@ -25,7 +18,7 @@ describe('Users - External - Setup - Cancel Presenter', () => {
     it('returns page data for the view', () => {
       const result = CancelPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'users',
         backLink: {
           href: `/system/users/external/setup/${session.id}/check`,

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -43,7 +38,7 @@ describe('Mark For Supplementary Billing presenter', () => {
       it('correctly presents the data', () => {
         const result = MarkForSupplementaryBillingPresenter.go(licence)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           backLink: {
             href: `/system/licences/${licence.id}/set-up`,
             text: 'Back'
@@ -77,7 +72,7 @@ describe('Mark For Supplementary Billing presenter', () => {
       it('correctly presents the data', () => {
         const result = MarkForSupplementaryBillingPresenter.go(licence)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           backLink: {
             href: `/system/licences/${licence.id}/set-up`,
             text: 'Back'
@@ -112,7 +107,7 @@ describe('Mark For Supplementary Billing presenter', () => {
       it('correctly presents the data', () => {
         const result = MarkForSupplementaryBillingPresenter.go(licence)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           backLink: {
             href: `/system/licences/${licence.id}/set-up`,
             text: 'Back'

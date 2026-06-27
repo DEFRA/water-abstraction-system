@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
 const ReturnLogFixture = require('../../../support/fixtures/return-logs.fixture.js')
@@ -78,7 +71,7 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
   it('correctly presents the data', () => {
     const result = PaperReturnNotificationsPresenter.go(session, recipients, noticeId)
 
-    expect(result).to.equal([
+    expect(result).toEqual([
       {
         contactType: 'licence holder',
         dueDate: dynamicLetterDueDate,

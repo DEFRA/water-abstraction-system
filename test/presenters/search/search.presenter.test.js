@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const SearchPresenter = require('../../../app/presenters/search/search.presenter.js')
 
@@ -188,7 +181,7 @@ describe('Search - Search presenter', () => {
   it('correctly presents the data', () => {
     const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       filterItems: [
         {
           checked: false,
@@ -372,7 +365,7 @@ describe('Search - Search presenter', () => {
       it('returns no selected items', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
-        expect(result.filterItems).to.equal([
+        expect(result.filterItems).toEqual([
           {
             checked: false,
             text: 'Billing accounts',
@@ -415,7 +408,7 @@ describe('Search - Search presenter', () => {
       it('returns the selected item', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
-        expect(result.filterItems).to.equal([
+        expect(result.filterItems).toEqual([
           {
             checked: true,
             text: 'Billing accounts',
@@ -458,7 +451,7 @@ describe('Search - Search presenter', () => {
       it('returns no selected items', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
-        expect(result.filterItems).to.equal([
+        expect(result.filterItems).toEqual([
           {
             checked: false,
             text: 'Billing accounts',
@@ -501,7 +494,7 @@ describe('Search - Search presenter', () => {
       it('does not include the "billingAccount" item', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
-        expect(result.filterItems).to.equal([
+        expect(result.filterItems).toEqual([
           {
             checked: false,
             text: 'Licence holders',
@@ -544,7 +537,7 @@ describe('Search - Search presenter', () => {
       it('returns "true"', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
-        expect(result.noResults).to.be.true()
+        expect(result.noResults).toBe(true)
       })
     })
   })
@@ -560,7 +553,7 @@ describe('Search - Search presenter', () => {
       it('returns "Search"', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
-        expect(result.pageTitle).to.equal('Search')
+        expect(result.pageTitle).toEqual('Search')
       })
     })
 
@@ -568,7 +561,7 @@ describe('Search - Search presenter', () => {
       it('returns "Search results" with the text being searched for', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
-        expect(result.pageTitle).to.equal('Search results for "searchthis"')
+        expect(result.pageTitle).toEqual('Search results for "searchthis"')
       })
     })
   })
@@ -582,7 +575,7 @@ describe('Search - Search presenter', () => {
       it('returns "false"', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
-        expect(result.showResults).to.be.false()
+        expect(result.showResults).toBe(false)
       })
     })
 
@@ -590,7 +583,7 @@ describe('Search - Search presenter', () => {
       it('returns "true"', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
-        expect(result.showResults).to.be.true()
+        expect(result.showResults).toBe(true)
       })
     })
   })
@@ -604,7 +597,7 @@ describe('Search - Search presenter', () => {
       it('returns a blank name', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
-        expect(result.results[2].col2Value).to.equal('')
+        expect(result.results[2].col2Value).toEqual('')
       })
     })
 
@@ -618,7 +611,7 @@ describe('Search - Search presenter', () => {
       it('returns a blank name', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
-        expect(result.results[2].col2Value).to.equal('')
+        expect(result.results[2].col2Value).toEqual('')
       })
     })
   })
@@ -637,7 +630,7 @@ describe('Search - Search presenter', () => {
       it('returns the `reason` value', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
-        expect(result.results[2].statusTag).to.equal('revoked')
+        expect(result.results[2].statusTag).toEqual('revoked')
       })
     })
 
@@ -657,7 +650,7 @@ describe('Search - Search presenter', () => {
       it('returns an empty value', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
-        expect(result.results[2].statusTag).to.not.exist()
+        expect(result.results[2].statusTag).toBeNull()
       })
     })
   })
@@ -667,7 +660,7 @@ describe('Search - Search presenter', () => {
       it('returns the formatted last login date', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
-        expect(result.results[5].col3Value).to.equal('1 January 2001')
+        expect(result.results[5].col3Value).toEqual('1 January 2001')
       })
     })
 
@@ -679,7 +672,7 @@ describe('Search - Search presenter', () => {
       it('returns "Never"', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
-        expect(result.results[5].col3Value).to.equal('Never')
+        expect(result.results[5].col3Value).toEqual('Never')
       })
     })
   })

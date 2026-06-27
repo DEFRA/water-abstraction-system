@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ReturnLogsFixture = require('../../support/fixtures/return-logs.fixture.js')
 const { formatNumber } = require('../../../app/presenters/base.presenter.js')
@@ -45,7 +38,7 @@ describe('Return Logs - Details presenter', () => {
       return acc + line.quantity
     }, 0)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       abstractionPeriod: '1 April to 28 April',
       actionButton: {
         value: returnLog.id,
@@ -115,7 +108,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns the correctly-formatted date', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.abstractionPeriod).to.equal('1 April to 28 April')
+        expect(result.abstractionPeriod).toEqual('1 April to 28 April')
       })
     })
 
@@ -130,7 +123,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns an empty string', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.abstractionPeriod).to.equal('')
+        expect(result.abstractionPeriod).toEqual('')
       })
     })
 
@@ -145,7 +138,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns an empty string', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.abstractionPeriod).to.equal('')
+        expect(result.abstractionPeriod).toEqual('')
       })
     })
   })
@@ -159,7 +152,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns null', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.actionButton).to.be.null()
+        expect(result.actionButton).toBeNull()
       })
     })
 
@@ -174,7 +167,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns null', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.actionButton).to.be.null()
+        expect(result.actionButton).toBeNull()
       })
     })
 
@@ -187,7 +180,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns "Submit return"', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.actionButton).to.equal({
+        expect(result.actionButton).toEqual({
           value: returnLog.id,
           text: 'Submit return'
         })
@@ -202,7 +195,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns null', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.actionButton).to.be.null()
+        expect(result.actionButton).toBeNull()
       })
     })
 
@@ -224,7 +217,7 @@ describe('Return Logs - Details presenter', () => {
         it('returns "Edit return"', () => {
           const result = DetailsPresenter.go(returnLog, auth)
 
-          expect(result.actionButton).to.equal({
+          expect(result.actionButton).toEqual({
             value: returnLog.id,
             text: 'Edit return'
           })
@@ -244,7 +237,7 @@ describe('Return Logs - Details presenter', () => {
         it('returns null', () => {
           const result = DetailsPresenter.go(returnLog, auth)
 
-          expect(result.actionButton).to.be.null()
+          expect(result.actionButton).toBeNull()
         })
       })
     })
@@ -268,7 +261,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns "Go back to returns"', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: `/system/licences/${returnLog.licence.id}/returns`,
           text: 'Go back to returns'
         })
@@ -288,7 +281,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns "Go back to the latest version"', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: `/system/return-logs/${returnLog.id}/details`,
           text: 'Go back to the latest version'
         })
@@ -301,7 +294,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns false', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.displayReadings).to.equal(false)
+        expect(result.displayReadings).toEqual(false)
       })
     })
 
@@ -313,7 +306,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns true', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.displayReadings).to.equal(true)
+        expect(result.displayReadings).toEqual(true)
       })
     })
   })
@@ -329,7 +322,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns false', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.displayTable).to.equal(false)
+        expect(result.displayTable).toEqual(false)
       })
     })
 
@@ -343,7 +336,7 @@ describe('Return Logs - Details presenter', () => {
         it('returns false', () => {
           const result = DetailsPresenter.go(returnLog, auth)
 
-          expect(result.displayTable).to.equal(false)
+          expect(result.displayTable).toEqual(false)
         })
       })
 
@@ -351,7 +344,7 @@ describe('Return Logs - Details presenter', () => {
         it('returns true', () => {
           const result = DetailsPresenter.go(returnLog, auth)
 
-          expect(result.displayTable).to.equal(true)
+          expect(result.displayTable).toEqual(true)
         })
       })
     })
@@ -366,7 +359,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns true', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.displayUnits).to.equal(true)
+        expect(result.displayUnits).toEqual(true)
       })
     })
 
@@ -374,7 +367,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns false', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.displayUnits).to.equal(false)
+        expect(result.displayUnits).toEqual(false)
       })
     })
   })
@@ -390,7 +383,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns null', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.downloadCSVLink).to.be.null()
+        expect(result.downloadCSVLink).toBeNull()
       })
     })
 
@@ -404,7 +397,7 @@ describe('Return Logs - Details presenter', () => {
         it('returns null', () => {
           const result = DetailsPresenter.go(returnLog, auth)
 
-          expect(result.downloadCSVLink).to.be.null()
+          expect(result.downloadCSVLink).toBeNull()
         })
       })
 
@@ -414,7 +407,7 @@ describe('Return Logs - Details presenter', () => {
 
           const expectedLink = `/system/return-logs/${returnLog.id}/download?version=${returnLog.returnSubmissions[0].version}`
 
-          expect(result.downloadCSVLink).to.equal(expectedLink)
+          expect(result.downloadCSVLink).toEqual(expectedLink)
         })
       })
     })
@@ -431,7 +424,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns false', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.nilReturn).to.equal(false)
+        expect(result.nilReturn).toEqual(false)
       })
     })
 
@@ -445,7 +438,7 @@ describe('Return Logs - Details presenter', () => {
         it('returns true', () => {
           const result = DetailsPresenter.go(returnLog, auth)
 
-          expect(result.nilReturn).to.equal(true)
+          expect(result.nilReturn).toEqual(true)
         })
       })
 
@@ -453,7 +446,7 @@ describe('Return Logs - Details presenter', () => {
         it('returns true', () => {
           const result = DetailsPresenter.go(returnLog, auth)
 
-          expect(result.nilReturn).to.equal(false)
+          expect(result.nilReturn).toEqual(false)
         })
       })
     })
@@ -468,7 +461,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns the notification text', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.notification).to.equal({ text: 'This return has been marked under query' })
+        expect(result.notification).toEqual({ text: 'This return has been marked under query' })
       })
     })
 
@@ -476,7 +469,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns null', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.notification).to.be.null()
+        expect(result.notification).toBeNull()
       })
     })
   })
@@ -493,7 +486,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns null ', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.receivedDate).to.be.null()
+        expect(result.receivedDate).toBeNull()
       })
     })
 
@@ -501,7 +494,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns the formatted date', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.receivedDate).to.equal('12 April 2023')
+        expect(result.receivedDate).toEqual('12 April 2023')
       })
     })
   })
@@ -515,7 +508,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns false', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.showUnderQuery).to.be.false()
+        expect(result.showUnderQuery).toBe(false)
       })
     })
 
@@ -530,7 +523,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns false', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.showUnderQuery).to.be.false()
+        expect(result.showUnderQuery).toBe(false)
       })
     })
 
@@ -538,7 +531,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns true', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.showUnderQuery).to.be.true()
+        expect(result.showUnderQuery).toBe(true)
       })
     })
   })
@@ -555,7 +548,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns null', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.startReading).to.be.null()
+        expect(result.startReading).toBeNull()
       })
     })
 
@@ -564,7 +557,7 @@ describe('Return Logs - Details presenter', () => {
         it('returns null', () => {
           const result = DetailsPresenter.go(returnLog, auth)
 
-          expect(result.startReading).to.be.null()
+          expect(result.startReading).toBeNull()
         })
       })
 
@@ -580,7 +573,7 @@ describe('Return Logs - Details presenter', () => {
         it('returns the start reading', () => {
           const result = DetailsPresenter.go(returnLog, auth)
 
-          expect(result.startReading).to.equal(meteredSubmission.metadata.meters[0].startReading)
+          expect(result.startReading).toEqual(meteredSubmission.metadata.meters[0].startReading)
         })
       })
     })
@@ -598,7 +591,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns null', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.summaryTableData).to.be.null()
+        expect(result.summaryTableData).toBeNull()
       })
     })
 
@@ -609,8 +602,8 @@ describe('Return Logs - Details presenter', () => {
         // NOTE: The testing is this simple because we have the 'correctly presents the data' test at the very top plus
         // the generating the headers and the rows is handled by base-return-logs.presenter.js, where they have been
         // extensively tested
-        expect(result.summaryTableData.headers).to.exist()
-        expect(result.summaryTableData.rows).to.exist()
+        expect(result.summaryTableData.headers).toBeDefined()
+        expect(result.summaryTableData.rows).toBeDefined()
       })
     })
   })
@@ -625,7 +618,7 @@ describe('Return Logs - Details presenter', () => {
         it('returns "Summary of daily abstraction volumes"', () => {
           const result = DetailsPresenter.go(returnLog, auth)
 
-          expect(result.tableTitle).to.equal('Summary of daily abstraction volumes')
+          expect(result.tableTitle).toEqual('Summary of daily abstraction volumes')
         })
       })
 
@@ -637,7 +630,7 @@ describe('Return Logs - Details presenter', () => {
         it('returns "Summary of daily meter readings"', () => {
           const result = DetailsPresenter.go(returnLog, auth)
 
-          expect(result.tableTitle).to.equal('Summary of daily meter readings')
+          expect(result.tableTitle).toEqual('Summary of daily meter readings')
         })
       })
 
@@ -652,7 +645,7 @@ describe('Return Logs - Details presenter', () => {
         it('returns null', () => {
           const result = DetailsPresenter.go(returnLog, auth)
 
-          expect(result.summaryTableData).to.be.null()
+          expect(result.summaryTableData).toBeNull()
         })
       })
     })
@@ -666,7 +659,7 @@ describe('Return Logs - Details presenter', () => {
         it('returns "Summary of weekly abstraction volumes"', () => {
           const result = DetailsPresenter.go(returnLog, auth)
 
-          expect(result.tableTitle).to.equal('Summary of weekly abstraction volumes')
+          expect(result.tableTitle).toEqual('Summary of weekly abstraction volumes')
         })
       })
 
@@ -678,7 +671,7 @@ describe('Return Logs - Details presenter', () => {
         it('returns "Summary of weekly meter readings"', () => {
           const result = DetailsPresenter.go(returnLog, auth)
 
-          expect(result.tableTitle).to.equal('Summary of weekly meter readings')
+          expect(result.tableTitle).toEqual('Summary of weekly meter readings')
         })
       })
 
@@ -693,7 +686,7 @@ describe('Return Logs - Details presenter', () => {
         it('returns null', () => {
           const result = DetailsPresenter.go(returnLog, auth)
 
-          expect(result.summaryTableData).to.be.null()
+          expect(result.summaryTableData).toBeNull()
         })
       })
     })
@@ -707,7 +700,7 @@ describe('Return Logs - Details presenter', () => {
         it('returns "Summary of monthly abstraction volumes"', () => {
           const result = DetailsPresenter.go(returnLog, auth)
 
-          expect(result.tableTitle).to.equal('Summary of monthly abstraction volumes')
+          expect(result.tableTitle).toEqual('Summary of monthly abstraction volumes')
         })
       })
 
@@ -719,7 +712,7 @@ describe('Return Logs - Details presenter', () => {
         it('returns "Summary of monthly meter readings"', () => {
           const result = DetailsPresenter.go(returnLog, auth)
 
-          expect(result.tableTitle).to.equal('Summary of monthly meter readings')
+          expect(result.tableTitle).toEqual('Summary of monthly meter readings')
         })
       })
 
@@ -735,7 +728,7 @@ describe('Return Logs - Details presenter', () => {
         it('returns null', () => {
           const result = DetailsPresenter.go(returnLog, auth)
 
-          expect(result.tableTitle).to.be.null()
+          expect(result.tableTitle).toBeNull()
         })
       })
     })
@@ -750,7 +743,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns "Two-part"', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.tariff).to.equal('Two-part')
+        expect(result.tariff).toEqual('Two-part')
       })
     })
 
@@ -758,7 +751,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns "Standard', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.tariff).to.equal('Standard')
+        expect(result.tariff).toEqual('Standard')
       })
     })
   })
@@ -775,7 +768,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns 0 as a string', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.total).to.equal('0')
+        expect(result.total).toEqual('0')
       })
     })
 
@@ -791,7 +784,7 @@ describe('Return Logs - Details presenter', () => {
         it('returns 0 as a string', () => {
           const result = DetailsPresenter.go(returnLog, auth)
 
-          expect(result.total).to.equal('0')
+          expect(result.total).toEqual('0')
         })
       })
 
@@ -806,7 +799,7 @@ describe('Return Logs - Details presenter', () => {
           it('returns 0 as a string', () => {
             const result = DetailsPresenter.go(returnLog, auth)
 
-            expect(result.total).to.equal('0')
+            expect(result.total).toEqual('0')
           })
         })
 
@@ -825,7 +818,7 @@ describe('Return Logs - Details presenter', () => {
           it('returns the formatted total quantity', () => {
             const result = DetailsPresenter.go(returnLog, auth)
 
-            expect(result.total).to.equal(formatNumber(total))
+            expect(result.total).toEqual(formatNumber(total))
           })
         })
       })
@@ -841,7 +834,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns true', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.underQuery).to.equal(true)
+        expect(result.underQuery).toEqual(true)
       })
     })
 
@@ -849,7 +842,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns false', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.underQuery).to.equal(false)
+        expect(result.underQuery).toEqual(false)
       })
     })
   })
@@ -870,27 +863,24 @@ describe('Return Logs - Details presenter', () => {
     it('returns the return submissions formatted as "versions"', () => {
       const result = DetailsPresenter.go(returnLog, auth)
 
-      expect(result.versions).to.equal(
-        [
-          {
-            createdAt: '16 December 2023',
-            link: `/system/return-logs/${returnLog.id}/details?version=${returnLog.versions[0].version}`,
-            notes: 'This was a good one',
-            selected: false,
-            version: returnLog.versions[0].version,
-            user: returnLog.versions[0].userId
-          },
-          {
-            createdAt: '16 December 2023',
-            link: `/system/return-logs/${returnLog.id}/details?version=${returnLog.versions[1].version}`,
-            notes: null,
-            selected: true,
-            version: returnLog.versions[1].version,
-            user: returnLog.versions[1].userId
-          }
-        ],
-        { skip: ['createdAt'] }
-      )
+      expect(result.versions).toMatchObject([
+        {
+          createdAt: '16 December 2023',
+          link: `/system/return-logs/${returnLog.id}/details?version=${returnLog.versions[0].version}`,
+          notes: 'This was a good one',
+          selected: false,
+          version: returnLog.versions[0].version,
+          user: returnLog.versions[0].userId
+        },
+        {
+          createdAt: '16 December 2023',
+          link: `/system/return-logs/${returnLog.id}/details?version=${returnLog.versions[1].version}`,
+          notes: null,
+          selected: true,
+          version: returnLog.versions[1].version,
+          user: returnLog.versions[1].userId
+        }
+      ])
     })
   })
 
@@ -903,7 +893,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns "This return is void and has been replaced. Do not use this data."', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.warning).to.equal({
+        expect(result.warning).toEqual({
           text: 'This return is void and has been replaced. Do not use this data.',
           iconFallbackText: 'Warning'
         })
@@ -927,7 +917,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns null', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.warning).to.be.null()
+        expect(result.warning).toBeNull()
       })
     })
 
@@ -944,7 +934,7 @@ describe('Return Logs - Details presenter', () => {
       it('returns "You are viewing a previous version. This is not the latest submission data."', () => {
         const result = DetailsPresenter.go(returnLog, auth)
 
-        expect(result.warning).to.equal({
+        expect(result.warning).toEqual({
           text: 'You are viewing a previous version. This is not the latest submission data.',
           iconFallbackText: 'Warning'
         })

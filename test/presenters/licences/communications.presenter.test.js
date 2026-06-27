@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test Helpers
 const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
 const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
@@ -46,7 +39,7 @@ describe('Licences - Communications presenter', () => {
   it('correctly presents the data', () => {
     const result = CommunicationsPresenter.go([notification], licence)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       backLink: {
         href: '/',
         text: 'Go back to search'

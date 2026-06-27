@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
 
@@ -24,7 +17,7 @@ describe('Bill Runs Review - Authorised presenter', () => {
     it('correctly presents the data', () => {
       const result = AuthorisedPresenter.go(reviewChargeReference)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         amendedAuthorisedVolume: 9.092,
         chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
         chargePeriod: '1 April 2023 to 31 March 2024',

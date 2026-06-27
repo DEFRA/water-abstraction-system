@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { engineTriggers } = require('../../../../../app/lib/static-lookups.lib.js')
 
@@ -36,7 +29,7 @@ describe('Bill Runs - Setup - Allowed Bill Run presenter', () => {
     it('correctly presents the data', () => {
       const result = AllowedBillRunPresenter.go(session, blockingResults)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region',
         billRunLink: null,
         billRunNumber: null,
@@ -59,7 +52,7 @@ describe('Bill Runs - Setup - Allowed Bill Run presenter', () => {
       it('returns "Both"', () => {
         const result = AllowedBillRunPresenter.go(session, blockingResults)
 
-        expect(result.chargeScheme).to.equal('Both')
+        expect(result.chargeScheme).toEqual('Both')
       })
     })
 
@@ -71,7 +64,7 @@ describe('Bill Runs - Setup - Allowed Bill Run presenter', () => {
       it('returns "Current"', () => {
         const result = AllowedBillRunPresenter.go(session, blockingResults)
 
-        expect(result.chargeScheme).to.equal('Current')
+        expect(result.chargeScheme).toEqual('Current')
       })
     })
 
@@ -83,7 +76,7 @@ describe('Bill Runs - Setup - Allowed Bill Run presenter', () => {
       it('returns "Current"', () => {
         const result = AllowedBillRunPresenter.go(session, blockingResults)
 
-        expect(result.chargeScheme).to.equal('Old')
+        expect(result.chargeScheme).toEqual('Old')
       })
     })
   })

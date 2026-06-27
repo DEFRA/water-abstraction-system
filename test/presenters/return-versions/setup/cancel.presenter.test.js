@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const CancelPresenter = require('../../../../app/presenters/return-versions/setup/cancel.presenter.js')
 
@@ -52,7 +45,7 @@ describe('Return Versions Setup - Cancel presenter', () => {
     it('correctly presents the data', () => {
       const result = CancelPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
           text: 'Back'
@@ -73,7 +66,7 @@ describe('Return Versions Setup - Cancel presenter', () => {
     it('returns the display version for the reason', () => {
       const result = CancelPresenter.go(session)
 
-      expect(result.reason).to.equal('Major change')
+      expect(result.reason).toEqual('Major change')
     })
   })
 
@@ -86,7 +79,7 @@ describe('Return Versions Setup - Cancel presenter', () => {
       it('returns null', () => {
         const result = CancelPresenter.go(session)
 
-        expect(result.returnRequirements).to.be.null()
+        expect(result.returnRequirements).toBeNull()
       })
     })
 
@@ -94,7 +87,7 @@ describe('Return Versions Setup - Cancel presenter', () => {
       it('returns a summary for each requirement in the session', () => {
         const result = CancelPresenter.go(session)
 
-        expect(result.returnRequirements).to.equal([
+        expect(result.returnRequirements).toEqual([
           'Winter and all year monthly requirements for returns, Bore hole in rear field.'
         ])
       })
@@ -106,7 +99,7 @@ describe('Return Versions Setup - Cancel presenter', () => {
       it('returns the licence version start date formatted as a long date', () => {
         const result = CancelPresenter.go(session)
 
-        expect(result.startDate).to.equal('1 January 2023')
+        expect(result.startDate).toEqual('1 January 2023')
       })
     })
 
@@ -121,7 +114,7 @@ describe('Return Versions Setup - Cancel presenter', () => {
       it('returns the start date parts formatted as a long date', () => {
         const result = CancelPresenter.go(session)
 
-        expect(result.startDate).to.equal('26 November 2023')
+        expect(result.startDate).toEqual('26 November 2023')
       })
     })
   })

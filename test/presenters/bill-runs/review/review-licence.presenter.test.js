@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
 
@@ -24,7 +17,7 @@ describe('Bill Runs Review - Review Licence presenter', () => {
     it('correctly presents the data', async () => {
       const result = ReviewLicencePresenter.go(reviewLicence)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         billRunId: '287aeb25-cf11-429d-8c6f-f98f06db021d',
         billRunTitle: 'South West two-part tariff',
         chargeVersions: [
@@ -121,7 +114,7 @@ describe('Bill Runs Review - Review Licence presenter', () => {
             it('returns "Change details"', () => {
               const result = ReviewLicencePresenter.go(reviewLicence)
 
-              expect(result.chargeVersions[0].chargeReferences[0].chargeReferenceLinkTitle).to.equal('Change details')
+              expect(result.chargeVersions[0].chargeReferences[0].chargeReferenceLinkTitle).toEqual('Change details')
             })
           })
 
@@ -134,7 +127,7 @@ describe('Bill Runs Review - Review Licence presenter', () => {
             it('returns "Change details"', () => {
               const result = ReviewLicencePresenter.go(reviewLicence)
 
-              expect(result.chargeVersions[0].chargeReferences[0].chargeReferenceLinkTitle).to.equal('Change details')
+              expect(result.chargeVersions[0].chargeReferences[0].chargeReferenceLinkTitle).toEqual('Change details')
             })
           })
 
@@ -147,7 +140,7 @@ describe('Bill Runs Review - Review Licence presenter', () => {
             it('returns "View details"', () => {
               const result = ReviewLicencePresenter.go(reviewLicence)
 
-              expect(result.chargeVersions[0].chargeReferences[0].chargeReferenceLinkTitle).to.equal('View details')
+              expect(result.chargeVersions[0].chargeReferences[0].chargeReferenceLinkTitle).toEqual('View details')
             })
           })
         })
@@ -157,7 +150,7 @@ describe('Bill Runs Review - Review Licence presenter', () => {
             it('returns false', () => {
               const result = ReviewLicencePresenter.go(reviewLicence)
 
-              expect(result.chargeVersions[0].chargeReferences[0].billableReturnsWarning).to.equal(false)
+              expect(result.chargeVersions[0].chargeReferences[0].billableReturnsWarning).toEqual(false)
             })
           })
 
@@ -169,7 +162,7 @@ describe('Bill Runs Review - Review Licence presenter', () => {
             it('returns false', () => {
               const result = ReviewLicencePresenter.go(reviewLicence)
 
-              expect(result.chargeVersions[0].chargeReferences[0].billableReturnsWarning).to.equal(false)
+              expect(result.chargeVersions[0].chargeReferences[0].billableReturnsWarning).toEqual(false)
             })
           })
 
@@ -181,7 +174,7 @@ describe('Bill Runs Review - Review Licence presenter', () => {
             it('returns true', () => {
               const result = ReviewLicencePresenter.go(reviewLicence)
 
-              expect(result.chargeVersions[0].chargeReferences[0].billableReturnsWarning).to.equal(true)
+              expect(result.chargeVersions[0].chargeReferences[0].billableReturnsWarning).toEqual(true)
             })
           })
         })

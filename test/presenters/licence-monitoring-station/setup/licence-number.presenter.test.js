@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const LicenceNumberPresenter = require('../../../../app/presenters/licence-monitoring-station/setup/licence-number.presenter.js')
 
@@ -25,14 +18,11 @@ describe('Licence Monitoring Station Setup - Licence Number Presenter', () => {
     it('returns page data for the view', () => {
       const result = LicenceNumberPresenter.go(session)
 
-      expect(result).to.equal(
-        {
-          licenceRef: 'LICENCE_REF',
-          monitoringStationLabel: 'LABEL',
-          pageTitle: 'Enter the licence number this threshold applies to'
-        },
-        { skip: ['backLink'] }
-      )
+      expect(result).toMatchObject({
+        licenceRef: 'LICENCE_REF',
+        monitoringStationLabel: 'LABEL',
+        pageTitle: 'Enter the licence number this threshold applies to'
+      })
     })
 
     describe('when checkPageVisited is true', () => {
@@ -43,7 +33,7 @@ describe('Licence Monitoring Station Setup - Licence Number Presenter', () => {
       it('returns the back link to the check page', () => {
         const result = LicenceNumberPresenter.go(session)
 
-        expect(result.backLink).to.equal(
+        expect(result.backLink).toEqual(
           `/system/licence-monitoring-station/setup/d9afac37-9754-4bfa-95f7-87ab26824423/check`
         )
       })
@@ -57,7 +47,7 @@ describe('Licence Monitoring Station Setup - Licence Number Presenter', () => {
       it('returns the back link to the stop or reduce page', () => {
         const result = LicenceNumberPresenter.go(session)
 
-        expect(result.backLink).to.equal(
+        expect(result.backLink).toEqual(
           `/system/licence-monitoring-station/setup/d9afac37-9754-4bfa-95f7-87ab26824423/stop-or-reduce`
         )
       })

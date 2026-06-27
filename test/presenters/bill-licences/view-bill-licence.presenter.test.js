@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const ViewCompensationChargeTransactionPresenter = require('../../../app/presenters/bill-licences/view-compensation-charge-transaction.presenter.js')
@@ -41,7 +36,7 @@ describe('View Bill Licence presenter', () => {
         it('returns the path to the remove bill licence endpoint', () => {
           const result = ViewBillLicencePresenter.go(billLicence)
 
-          expect(result.removeLicenceLink).to.equal('/system/bill-licences/a4fbaa27-a91c-4328-a1b8-774ade11027b/remove')
+          expect(result.removeLicenceLink).toEqual('/system/bill-licences/a4fbaa27-a91c-4328-a1b8-774ade11027b/remove')
         })
       })
 
@@ -53,7 +48,7 @@ describe('View Bill Licence presenter', () => {
         it('returns null', () => {
           const result = ViewBillLicencePresenter.go(billLicence)
 
-          expect(result.removeLicenceLink).to.be.null()
+          expect(result.removeLicenceLink).toBeNull()
         })
       })
     })
@@ -67,7 +62,7 @@ describe('View Bill Licence presenter', () => {
         it('returns the count and caption singular', () => {
           const result = ViewBillLicencePresenter.go(billLicence)
 
-          expect(result.tableCaption).to.equal('1 transaction')
+          expect(result.tableCaption).toEqual('1 transaction')
         })
       })
 
@@ -75,7 +70,7 @@ describe('View Bill Licence presenter', () => {
         it('returns the count and caption pluralised', () => {
           const result = ViewBillLicencePresenter.go(billLicence)
 
-          expect(result.tableCaption).to.equal('4 transactions')
+          expect(result.tableCaption).toEqual('4 transactions')
         })
       })
     })
@@ -88,7 +83,7 @@ describe('View Bill Licence presenter', () => {
         // transaction presenter tests exhaust what we expect back for all scenarios. What we are confirming though is
         // that depending on a transaction's charge type ViewBillLicencePresenter will call the relevant transaction
         // presenter. Plus, that things like the totals and the table caption is returned as expected.
-        expect(result).to.equal({
+        expect(result).toEqual({
           accountNumber: 'W88898987A',
           billId: '5a5b313b-e707-490a-a693-799339941e4f',
           creditTotal: '£10.00',
@@ -126,7 +121,7 @@ describe('View Bill Licence presenter', () => {
         // transaction presenter tests exhaust what we expect back for all scenarios. What we are confirming though is
         // that depending on a transaction's charge type ViewBillLicencePresenter will call the relevant transaction
         // presenter. Plus, that things like the totals and the table caption is returned as expected.
-        expect(result).to.equal({
+        expect(result).toEqual({
           accountNumber: 'W88898987A',
           billId: '5a5b313b-e707-490a-a693-799339941e4f',
           creditTotal: '£298.37',

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
 const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
@@ -44,7 +37,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
     it('returns page data for the view', () => {
       const result = CheckPresenter.go(session, companyContacts, [], null)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         accountSelected: 'Ferns Surfacing Limited',
         accountType: '',
         address: [],
@@ -89,7 +82,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.accountSelected).to.equal(session.billingAccount.company.name)
+        expect(result.accountSelected).toEqual(session.billingAccount.company.name)
       })
     })
 
@@ -105,7 +98,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.accountSelected).to.equal('Another billing account')
+        expect(result.accountSelected).toEqual('Another billing account')
       })
     })
   })
@@ -123,7 +116,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.searchInput).to.equal('Customer name')
+        expect(result.searchInput).toEqual('Customer name')
       })
     })
 
@@ -139,7 +132,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.searchInput).to.equal('')
+        expect(result.searchInput).toEqual('')
       })
     })
   })
@@ -157,7 +150,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.existingAccount).to.equal('New billing account')
+        expect(result.existingAccount).toEqual('New billing account')
       })
     })
 
@@ -173,7 +166,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.existingAccount).to.equal('')
+        expect(result.existingAccount).toEqual('')
       })
     })
 
@@ -189,7 +182,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.existingAccount).to.equal('Ferns Surfacing Limited')
+        expect(result.existingAccount).toEqual('Ferns Surfacing Limited')
       })
     })
   })
@@ -207,7 +200,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.accountType).to.equal('company')
+        expect(result.accountType).toEqual('company')
       })
     })
 
@@ -223,7 +216,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.accountType).to.equal('individual')
+        expect(result.accountType).toEqual('individual')
       })
     })
   })
@@ -241,7 +234,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.individualName).to.equal('Customer name')
+        expect(result.individualName).toEqual('Customer name')
       })
     })
 
@@ -257,7 +250,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.individualName).to.equal('')
+        expect(result.individualName).toEqual('')
       })
     })
   })
@@ -275,7 +268,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.addressSelected).to.equal(['Tutsham Farm', 'West Farleigh', 'Maidstone', 'Kent', 'ME15 0NE'])
+        expect(result.addressSelected).toEqual(['Tutsham Farm', 'West Farleigh', 'Maidstone', 'Kent', 'ME15 0NE'])
       })
     })
 
@@ -291,7 +284,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.addressSelected).to.equal(['New'])
+        expect(result.addressSelected).toEqual(['New'])
       })
     })
   })
@@ -309,7 +302,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.companySearch).to.equal('Company name')
+        expect(result.companySearch).toEqual('Company name')
       })
     })
 
@@ -325,7 +318,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.companySearch).to.equal('')
+        expect(result.companySearch).toEqual('')
       })
     })
   })
@@ -342,7 +335,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.companiesHouseName).to.equal(companysHouseResult.title)
+        expect(result.companiesHouseName).toEqual(companysHouseResult.title)
       })
     })
 
@@ -357,7 +350,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           null
         )
 
-        expect(result.companiesHouseName).to.equal('')
+        expect(result.companiesHouseName).toEqual('')
       })
     })
   })
@@ -375,7 +368,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.fao).to.equal('yes')
+        expect(result.fao).toEqual('yes')
       })
     })
 
@@ -391,7 +384,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           null
         )
 
-        expect(result.fao).to.equal('no')
+        expect(result.fao).toEqual('no')
       })
     })
   })
@@ -413,7 +406,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.contactSelected).to.equal(null)
+        expect(result.contactSelected).toEqual(null)
       })
     })
 
@@ -430,7 +423,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.contactSelected).to.equal('New contact')
+        expect(result.contactSelected).toEqual('New contact')
       })
     })
 
@@ -447,7 +440,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.contactSelected).to.equal(contact.$name())
+        expect(result.contactSelected).toEqual(contact.$name())
       })
     })
   })
@@ -470,7 +463,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.contactName).to.equal('Jon Snow')
+        expect(result.contactName).toEqual('Jon Snow')
       })
     })
 
@@ -486,7 +479,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.contactName).to.equal('')
+        expect(result.contactName).toEqual('')
       })
     })
   })
@@ -509,7 +502,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           impactedLicences
         )
 
-        expect(result.impactedLicences).to.equal(impactedLicences)
+        expect(result.impactedLicences).toEqual(impactedLicences)
       })
     })
 
@@ -524,7 +517,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           companysHouseResult
         )
 
-        expect(result.impactedLicences).to.be.undefined()
+        expect(result.impactedLicences).toBeUndefined()
       })
     })
   })
@@ -551,7 +544,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           null
         )
 
-        expect(result.address).to.equal(['ENVIRONMENT AGENCY', 'HORIZON HOUSE', 'BRISTOL', 'BS1 5AH'])
+        expect(result.address).toEqual(['ENVIRONMENT AGENCY', 'HORIZON HOUSE', 'BRISTOL', 'BS1 5AH'])
       })
     })
 
@@ -575,7 +568,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           null
         )
 
-        expect(result.address).to.equal(['ENVIRONMENT AGENCY', 'HORIZON HOUSE', 'BRISTOL', 'BS1 5AH'])
+        expect(result.address).toEqual(['ENVIRONMENT AGENCY', 'HORIZON HOUSE', 'BRISTOL', 'BS1 5AH'])
       })
     })
 
@@ -600,7 +593,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           null
         )
 
-        expect(result.address).to.equal(['ENVIRONMENT AGENCY', 'HORIZON HOUSE', 'BRISTOL', 'BS1 5AH', 'ENGLAND'])
+        expect(result.address).toEqual(['ENVIRONMENT AGENCY', 'HORIZON HOUSE', 'BRISTOL', 'BS1 5AH', 'ENGLAND'])
       })
     })
 
@@ -616,7 +609,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           null
         )
 
-        expect(result.address).to.equal([])
+        expect(result.address).toEqual([])
       })
     })
   })

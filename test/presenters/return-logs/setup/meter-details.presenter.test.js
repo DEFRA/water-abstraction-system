@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const MeterDetailsPresenter = require('../../../../app/presenters/return-logs/setup/meter-details.presenter.js')
 
@@ -24,7 +17,7 @@ describe('Return Logs Setup - Meter Details presenter', () => {
     it('correctly presents the data', () => {
       const result = MeterDetailsPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/meter-provided',
           text: 'Back'
@@ -48,7 +41,7 @@ describe('Return Logs Setup - Meter Details presenter', () => {
       it('returns the "meterMake" property populated to re-select the option', () => {
         const result = MeterDetailsPresenter.go(session)
 
-        expect(result.meterMake).to.equal('WATER')
+        expect(result.meterMake).toEqual('WATER')
       })
     })
   })
@@ -62,7 +55,7 @@ describe('Return Logs Setup - Meter Details presenter', () => {
       it('returns the "meterSerialNumber" property populated to re-select the option', () => {
         const result = MeterDetailsPresenter.go(session)
 
-        expect(result.meterSerialNumber).to.equal('1234')
+        expect(result.meterSerialNumber).toEqual('1234')
       })
     })
   })
@@ -76,7 +69,7 @@ describe('Return Logs Setup - Meter Details presenter', () => {
       it('returns the "meter10TimesDisplay" property populated to re-select the option', () => {
         const result = MeterDetailsPresenter.go(session)
 
-        expect(result.meter10TimesDisplay).to.equal('yes')
+        expect(result.meter10TimesDisplay).toEqual('yes')
       })
     })
 
@@ -88,7 +81,7 @@ describe('Return Logs Setup - Meter Details presenter', () => {
       it('returns the "meter10TimesDisplay" property populated to re-select the option', () => {
         const result = MeterDetailsPresenter.go(session)
 
-        expect(result.meter10TimesDisplay).to.equal('no')
+        expect(result.meter10TimesDisplay).toEqual('no')
       })
     })
   })

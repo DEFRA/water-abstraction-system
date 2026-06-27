@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -28,7 +21,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Presenter', () => {
     it('returns page data for the view', () => {
       const result = AbstractionAlertsPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         abstractionAlerts: null,
         backLink: {
           href: `/system/company-contacts/setup/${session.id}/contact-email`,
@@ -49,7 +42,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Presenter', () => {
         it('returns the "abstractionAlerts" value', () => {
           const result = AbstractionAlertsPresenter.go(session)
 
-          expect(result.abstractionAlerts).to.equal('yes')
+          expect(result.abstractionAlerts).toEqual('yes')
         })
       })
 
@@ -57,7 +50,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Presenter', () => {
         it('returns null', () => {
           const result = AbstractionAlertsPresenter.go(session)
 
-          expect(result.abstractionAlerts).to.be.null()
+          expect(result.abstractionAlerts).toBeNull()
         })
       })
     })
@@ -71,7 +64,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Presenter', () => {
         it('returns true', () => {
           const result = AbstractionAlertsPresenter.go(session)
 
-          expect(result.showSomeLicences).to.true()
+          expect(result.showSomeLicences).toBe(true)
         })
       })
 
@@ -79,7 +72,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Presenter', () => {
         it('returns false', () => {
           const result = AbstractionAlertsPresenter.go(session)
 
-          expect(result.showSomeLicences).to.false()
+          expect(result.showSomeLicences).toBe(false)
         })
       })
     })

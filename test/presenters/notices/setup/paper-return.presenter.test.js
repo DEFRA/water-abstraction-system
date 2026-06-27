@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
@@ -36,7 +29,7 @@ describe('Notices - Setup - Paper Return presenter', () => {
     it('returns page data for the view', () => {
       const result = PaperReturnPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/notices/setup/${session.id}/licence`,
           text: 'Back'
@@ -61,7 +54,7 @@ describe('Notices - Setup - Paper Return presenter', () => {
       it('returns the "returns" previously selected as checked', () => {
         const result = PaperReturnPresenter.go(session)
 
-        expect(result.returns).to.equal([
+        expect(result.returns).toEqual([
           {
             checked: true,
             hint: { text: '1 April 2002 to 31 March 2003' },
@@ -79,7 +72,7 @@ describe('Notices - Setup - Paper Return presenter', () => {
         it('correctly set the back link to the check page', () => {
           const result = PaperReturnPresenter.go(session)
 
-          expect(result.backLink).to.equal({
+          expect(result.backLink).toEqual({
             href: `/system/notices/setup/${session.id}/check-notice-type`,
             text: 'Back'
           })
