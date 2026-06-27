@@ -1,13 +1,8 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Proxyquire = require('proxyquire')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const serverConfig = require('../../config/server.config.js')
@@ -19,7 +14,7 @@ describe('Airbrake plugin', () => {
   let originalProxy
   let server
 
-  before(async () => {
+  beforeAll(async () => {
     // Spin up a real Hapi server instance (with all plugins, including Airbrake)
     server = await init()
   })
@@ -58,7 +53,7 @@ describe('Airbrake plugin', () => {
     it('calls airbrake.notify', async () => {
       await server.inject(path)
 
-      expect(server.app.airbrake.notify.called).to.be.true()
+      expect(server.app.airbrake.notify.called).toBe(true)
     })
   })
 
@@ -93,8 +88,8 @@ describe('Airbrake plugin', () => {
       it('calls gotWrapper to create a Request function', async () => {
         await AirbrakePluginWithStubs.register(fakeServer)
 
-        expect(gotWrapperStub.calledOnce).to.be.true()
-        expect(gotWrapperStub.firstCall.args[0]).to.equal({
+        expect(gotWrapperStub.calledOnce).toBe(true)
+        expect(gotWrapperStub.firstCall.args[0]).toEqual({
           proxy: 'http://proxy.local:8080'
         })
       })
@@ -102,9 +97,9 @@ describe('Airbrake plugin', () => {
       it('passes the Request function to Notifier', async () => {
         await AirbrakePluginWithStubs.register(fakeServer)
 
-        expect(NotifierStub.calledOnce).to.be.true()
+        expect(NotifierStub.calledOnce).toBe(true)
         const args = NotifierStub.firstCall.args[0]
-        expect(args.request).to.equal('fake-request-fn')
+        expect(args.request).toEqual('fake-request-fn')
       })
     })
 
@@ -116,15 +111,15 @@ describe('Airbrake plugin', () => {
       it('does not call gotWrapper', async () => {
         await AirbrakePluginWithStubs.register(fakeServer)
 
-        expect(gotWrapperStub.called).to.be.false()
+        expect(gotWrapperStub.called).toBe(false)
       })
 
       it('does not pass a request function to Notifier', async () => {
         await AirbrakePluginWithStubs.register(fakeServer)
 
-        expect(NotifierStub.calledOnce).to.be.true()
+        expect(NotifierStub.calledOnce).toBe(true)
         const args = NotifierStub.firstCall.args[0]
-        expect(args.request).to.be.undefined()
+        expect(args.request).toBeUndefined()
       })
     })
   })
