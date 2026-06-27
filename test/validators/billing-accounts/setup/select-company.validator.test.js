@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const SelectCompanyValidator = require('../../../../app/validators/billing-accounts/setup/select-company.validator.js')
 
@@ -21,8 +14,8 @@ describe('Billing Accounts - Setup - Select Company Validator', () => {
     it('returns with no errors', () => {
       const result = SelectCompanyValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -34,9 +27,9 @@ describe('Billing Accounts - Setup - Select Company Validator', () => {
     it('returns with errors', () => {
       const result = SelectCompanyValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Select a company from the list')
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeDefined()
+      expect(result.error.details[0].message).toEqual('Select a company from the list')
     })
   })
 })

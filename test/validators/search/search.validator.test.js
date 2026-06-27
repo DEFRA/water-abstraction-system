@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const SearchValidator = require('../../../app/validators/search/search.validator.js')
 
@@ -22,8 +15,8 @@ describe('Search - Search validator', () => {
       it('confirms the search is valid', () => {
         const result = SearchValidator.go(payload)
 
-        expect(result.error).to.not.exist()
-        expect(result.value.query).to.equal('This is a valid search term')
+        expect(result.error).toBeUndefined()
+        expect(result.value.query).toEqual('This is a valid search term')
       })
     })
 
@@ -35,8 +28,8 @@ describe('Search - Search validator', () => {
       it('confirms the search is valid', () => {
         const result = SearchValidator.go(payload)
 
-        expect(result.error).to.not.exist()
-        expect(result.value.query).to.not.exist()
+        expect(result.error).toBeUndefined()
+        expect(result.value.query).toBeUndefined()
       })
     })
 
@@ -48,8 +41,8 @@ describe('Search - Search validator', () => {
       it('confirms the search is valid', () => {
         const result = SearchValidator.go(payload)
 
-        expect(result.error).to.not.exist()
-        expect(result.value.query).to.equal('')
+        expect(result.error).toBeUndefined()
+        expect(result.value.query).toEqual('')
       })
     })
   })
@@ -63,8 +56,8 @@ describe('Search - Search validator', () => {
       it('fails validation with the error "Enter a licence number, customer name, returns ID, registered email address or monitoring station"', () => {
         const result = SearchValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal(
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual(
           'Enter a licence number, customer name, returns ID, registered email address or monitoring station'
         )
       })
@@ -80,8 +73,8 @@ describe('Search - Search validator', () => {
       it('fails validation with the error "Search query must be 100 characters or less"', () => {
         const result = SearchValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Search query must be 100 characters or less')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Search query must be 100 characters or less')
       })
     })
   })

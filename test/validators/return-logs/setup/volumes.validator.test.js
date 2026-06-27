@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const VolumesValidator = require('../../../../app/validators/return-logs/setup/volumes.validator.js')
 
@@ -22,7 +15,7 @@ describe('Return Logs Setup - Volumes validator', () => {
       it('confirms the payload is valid', () => {
         const result = VolumesValidator.go(payload)
 
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
   })
@@ -36,8 +29,8 @@ describe('Return Logs Setup - Volumes validator', () => {
       it('fails validation with the message "Volume must be a number or blank"', () => {
         const result = VolumesValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Volume must be a number or blank')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Volume must be a number or blank')
       })
     })
 
@@ -49,8 +42,8 @@ describe('Return Logs Setup - Volumes validator', () => {
       it('fails validation with the message "Enter a Volume with no more than 6 decimal places"', () => {
         const result = VolumesValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter a Volume with no more than 6 decimal places')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Enter a Volume with no more than 6 decimal places')
       })
     })
 
@@ -62,8 +55,8 @@ describe('Return Logs Setup - Volumes validator', () => {
       it('fails validation with the message "Volume cannot be negative"', () => {
         const result = VolumesValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Volume cannot be negative')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Volume cannot be negative')
       })
     })
 
@@ -75,8 +68,8 @@ describe('Return Logs Setup - Volumes validator', () => {
       it('fails validation with the message "Volume entered exceeds the maximum of 9999999999"', () => {
         const result = VolumesValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Volume entered exceeds the maximum of 9999999999')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Volume entered exceeds the maximum of 9999999999')
       })
     })
 
@@ -90,8 +83,8 @@ describe('Return Logs Setup - Volumes validator', () => {
       it('fails validation with the message "Volume must be blank or between 0 and 9999999999"', () => {
         const result = VolumesValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Volume must be blank or between 0 and 9999999999')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Volume must be blank or between 0 and 9999999999')
       })
     })
   })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ViewValidator = require('../../../app/validators/notices/view.validator.js')
 
@@ -26,12 +19,12 @@ describe('Notices - View validator', () => {
       it('confirms the data is valid', () => {
         const result = ViewValidator.go(payload)
 
-        expect(result.value).to.equal({
+        expect(result.value).toEqual({
           licence: '01/123',
           recipient: 'carol.shaw@atari.co.uk',
           status: 'sent'
         })
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -45,10 +38,10 @@ describe('Notices - View validator', () => {
       it('confirms the data is valid', () => {
         const result = ViewValidator.go(payload)
 
-        expect(result.value).to.equal({
+        expect(result.value).toEqual({
           licence: '01/123'
         })
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -60,8 +53,8 @@ describe('Notices - View validator', () => {
       it('confirms the data is valid', () => {
         const result = ViewValidator.go(payload)
 
-        expect(result.value).to.equal({})
-        expect(result.error).not.to.exist()
+        expect(result.value).toEqual({})
+        expect(result.error).toBeUndefined()
       })
     })
   })
@@ -79,9 +72,9 @@ describe('Notices - View validator', () => {
       it('fails validation', () => {
         const result = ViewValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error.details[0].message).to.equal('Licence number must be 25 characters or less')
-        expect(result.error.details[0].path[0]).to.equal('licence')
+        expect(result.value).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Licence number must be 25 characters or less')
+        expect(result.error.details[0].path[0]).toEqual('licence')
       })
     })
 
@@ -93,9 +86,9 @@ describe('Notices - View validator', () => {
       it('fails validation', () => {
         const result = ViewValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error.details[0].message).to.equal('Recipient must be 255 characters or less')
-        expect(result.error.details[0].path[0]).to.equal('recipient')
+        expect(result.value).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Recipient must be 255 characters or less')
+        expect(result.error.details[0].path[0]).toEqual('recipient')
       })
     })
 
@@ -107,9 +100,9 @@ describe('Notices - View validator', () => {
       it('fails validation', () => {
         const result = ViewValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error.details[0].message).to.equal('Select a valid status type')
-        expect(result.error.details[0].path[0]).to.equal('status')
+        expect(result.value).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select a valid status type')
+        expect(result.error.details[0].path[0]).toEqual('status')
       })
     })
   })

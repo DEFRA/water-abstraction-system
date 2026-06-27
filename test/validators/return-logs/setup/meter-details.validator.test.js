@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const MeterDetailsValidator = require('../../../../app/validators/return-logs/setup/meter-details.validator.js')
 
@@ -25,7 +18,7 @@ describe('Return Logs Setup - Meter Details validator', () => {
     it('confirms the data is valid', () => {
       const result = MeterDetailsValidator.go(payload)
 
-      expect(result.error).not.to.exist()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -46,8 +39,8 @@ describe('Return Logs Setup - Meter Details validator', () => {
       it('fails validation', () => {
         const result = MeterDetailsValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Make must be 310 characters or less')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Make must be 310 characters or less')
       })
     })
 
@@ -66,8 +59,8 @@ describe('Return Logs Setup - Meter Details validator', () => {
       it('fails validation', () => {
         const result = MeterDetailsValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Serial number must be 180 characters or less')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Serial number must be 180 characters or less')
       })
     })
   })
@@ -80,10 +73,10 @@ describe('Return Logs Setup - Meter Details validator', () => {
     it('fails validation', () => {
       const result = MeterDetailsValidator.go(payload)
 
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Enter the make of the meter')
-      expect(result.error.details[1].message).to.equal('Enter a serial number')
-      expect(result.error.details[2].message).to.equal('Select if the meter has a ×10 display')
+      expect(result.error).toBeDefined()
+      expect(result.error.details[0].message).toEqual('Enter the make of the meter')
+      expect(result.error.details[1].message).toEqual('Enter a serial number')
+      expect(result.error.details[2].message).toEqual('Select if the meter has a ×10 display')
     })
   })
 
@@ -95,9 +88,9 @@ describe('Return Logs Setup - Meter Details validator', () => {
     it('fails validation', () => {
       const result = MeterDetailsValidator.go(payload)
 
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Enter a serial number')
-      expect(result.error.details[1].message).to.equal('Select if the meter has a ×10 display')
+      expect(result.error).toBeDefined()
+      expect(result.error.details[0].message).toEqual('Enter a serial number')
+      expect(result.error.details[1].message).toEqual('Select if the meter has a ×10 display')
     })
   })
 
@@ -109,9 +102,9 @@ describe('Return Logs Setup - Meter Details validator', () => {
     it('fails validation', () => {
       const result = MeterDetailsValidator.go(payload)
 
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Enter the make of the meter')
-      expect(result.error.details[1].message).to.equal('Select if the meter has a ×10 display')
+      expect(result.error).toBeDefined()
+      expect(result.error.details[0].message).toEqual('Enter the make of the meter')
+      expect(result.error.details[1].message).toEqual('Select if the meter has a ×10 display')
     })
   })
 
@@ -123,9 +116,9 @@ describe('Return Logs Setup - Meter Details validator', () => {
     it('fails validation', () => {
       const result = MeterDetailsValidator.go(payload)
 
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Enter the make of the meter')
-      expect(result.error.details[1].message).to.equal('Enter a serial number')
+      expect(result.error).toBeDefined()
+      expect(result.error.details[0].message).toEqual('Enter the make of the meter')
+      expect(result.error.details[1].message).toEqual('Enter a serial number')
     })
   })
 })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const AdditionalSubmissionOptionsValidator = require('../../../../app/validators/return-versions/setup/additional-submission-options.validator.js')
 
@@ -14,7 +7,7 @@ describe('Return Versions Setup - Additional Submission Options validator', () =
   let payload
   let session
 
-  before(() => {
+  beforeAll(() => {
     payload = {
       additionalSubmissionOptions: ['multiple-upload']
     }
@@ -26,13 +19,13 @@ describe('Return Versions Setup - Additional Submission Options validator', () =
     it('confirms the data is valid', () => {
       const result = AdditionalSubmissionOptionsValidator.go(payload, session)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
   describe('when invalid data is provided', () => {
-    before(() => {
+    beforeAll(() => {
       payload = {
         options: ['Invalid option']
       }
@@ -41,16 +34,16 @@ describe('Return Versions Setup - Additional Submission Options validator', () =
     it('fails validation with the error message "Select additional submission options for the requirements for returns"', () => {
       const result = AdditionalSubmissionOptionsValidator.go(payload, session)
 
-      expect(result.value).to.exist()
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal(
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeDefined()
+      expect(result.error.details[0].message).toEqual(
         'Select additional submission options for the requirements for returns'
       )
     })
   })
 
   describe('when quarterly return submission is selected but requirements have a return cycle of summer', () => {
-    before(() => {
+    beforeAll(() => {
       session.requirements[0].returnsCycle = 'summer'
 
       payload = {
@@ -61,25 +54,25 @@ describe('Return Versions Setup - Additional Submission Options validator', () =
     it('fails validation with the error message "Quarterly returns submissions cannot be set for returns requirements in the summer cycle"', () => {
       const result = AdditionalSubmissionOptionsValidator.go(payload, session)
 
-      expect(result.value).to.exist()
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal(
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeDefined()
+      expect(result.error.details[0].message).toEqual(
         'Quarterly returns submissions cannot be set for returns requirements in the summer cycle'
       )
     })
   })
 
   describe('when no data is provided', () => {
-    before(() => {
+    beforeAll(() => {
       payload = {}
     })
 
     it('fails validation', () => {
       const result = AdditionalSubmissionOptionsValidator.go(payload, session)
 
-      expect(result.value).to.exist()
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal(
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeDefined()
+      expect(result.error.details[0].message).toEqual(
         'Select additional submission options for the requirements for returns'
       )
     })

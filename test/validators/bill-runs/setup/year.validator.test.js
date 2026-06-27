@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const YearValidator = require('../../../../app/validators/bill-runs/setup/year.validator.js')
 
@@ -15,8 +8,8 @@ describe('Bill Runs Setup Year validator', () => {
     it('confirms the data is valid', () => {
       const result = YearValidator.go({ year: '2022' })
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -25,9 +18,9 @@ describe('Bill Runs Setup Year validator', () => {
       it('fails validation', () => {
         const result = YearValidator.go({ year: '' })
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select the financial year')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select the financial year')
       })
     })
 
@@ -35,9 +28,9 @@ describe('Bill Runs Setup Year validator', () => {
       it('fails validation', () => {
         const result = YearValidator.go({ year: '2020' })
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select the financial year')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select the financial year')
       })
     })
   })

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Helpers
 const LicenceModel = require('../../../../../app/models/licence.model.js')
@@ -46,8 +41,8 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
   it('confirms the data is valid', () => {
     const result = LicenceRenewalValidator.go(payload, licenceRenewal)
 
-    expect(result.value).to.exist()
-    expect(result.error).not.to.exist()
+    expect(result.value).toBeDefined()
+    expect(result.error).toBeUndefined()
   })
 
   describe('when invalid data is provided', () => {
@@ -60,9 +55,9 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
       it('confirms the data is invalid', () => {
         const result = LicenceRenewalValidator.go(payload, licenceRenewal)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter a licence number')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Enter a licence number')
       })
     })
 
@@ -74,9 +69,9 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
       it('confirms the data is invalid', () => {
         const result = LicenceRenewalValidator.go(payload, licenceRenewal)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter a valid licence number')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Enter a valid licence number')
       })
     })
 
@@ -89,9 +84,9 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
         it('confirms the data is invalid', () => {
           const result = LicenceRenewalValidator.go(payload, licenceRenewal)
 
-          expect(result.value).to.exist()
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('The licence has ended')
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The licence has ended')
         })
       })
 
@@ -103,9 +98,9 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
         it('confirms the data is invalid', () => {
           const result = LicenceRenewalValidator.go(payload, licenceRenewal)
 
-          expect(result.value).to.exist()
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('The licence has ended')
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The licence has ended')
         })
       })
 
@@ -117,9 +112,9 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
         it('confirms the data is invalid', () => {
           const result = LicenceRenewalValidator.go(payload, licenceRenewal)
 
-          expect(result.value).to.exist()
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('The licence has ended')
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The licence has ended')
         })
       })
     })
@@ -133,9 +128,9 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
       it('confirms the data is invalid', () => {
         const result = LicenceRenewalValidator.go(payload, licenceRenewal)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('The licence does not have an expiry date')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('The licence does not have an expiry date')
       })
     })
 
@@ -147,9 +142,9 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
       it('confirms the data is invalid', () => {
         const result = LicenceRenewalValidator.go(payload, licenceRenewal)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('The licence expires in less than 90 days')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('The licence expires in less than 90 days')
       })
     })
   })

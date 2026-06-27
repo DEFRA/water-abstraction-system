@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const CompanySearchValidator = require('../../../../app/validators/billing-accounts/setup/company-search.validator.js')
 
@@ -21,8 +14,8 @@ describe('Billing Accounts - Setup - Company Search Validator', () => {
     it('returns with no errors', () => {
       const result = CompanySearchValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -35,9 +28,9 @@ describe('Billing Accounts - Setup - Company Search Validator', () => {
       it('returns with errors', () => {
         const result = CompanySearchValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter the Companies House number or company name')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Enter the Companies House number or company name')
       })
     })
 
@@ -49,9 +42,9 @@ describe('Billing Accounts - Setup - Company Search Validator', () => {
       it('returns with errors', () => {
         const result = CompanySearchValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal(
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual(
           'Companies House number or company name must be 100 characters or less'
         )
       })
