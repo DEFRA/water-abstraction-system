@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const BaseLicencesPresenter = require('../../../app/presenters/licences/base-licences.presenter.js')
 
@@ -27,7 +20,7 @@ describe('Licences - Base Licences presenter', () => {
       it('returns them formatted to two decimal places with their measure as an array', () => {
         const result = BaseLicencesPresenter.formatAbstractionAmounts(licenceVersionPurpose)
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           '109,300,000.00 cubic metres per year',
           '299,452.05 cubic metres per day',
           '47,486.00 cubic metres per hour',
@@ -47,7 +40,7 @@ describe('Licences - Base Licences presenter', () => {
       it('returns only those formatted to two decimal places with their measure as an array', () => {
         const result = BaseLicencesPresenter.formatAbstractionAmounts(licenceVersionPurpose)
 
-        expect(result).to.equal(['299,452.05 cubic metres per day', '13,190.98 litres per second'])
+        expect(result).toEqual(['299,452.05 cubic metres per day', '13,190.98 litres per second'])
       })
     })
 
@@ -61,7 +54,7 @@ describe('Licences - Base Licences presenter', () => {
       it('returns it formatted to two decimal places with its measure as an array', () => {
         const result = BaseLicencesPresenter.formatAbstractionAmounts(licenceVersionPurpose)
 
-        expect(result).to.equal(['109,300,000.00 cubic metres per year'])
+        expect(result).toEqual(['109,300,000.00 cubic metres per year'])
       })
     })
 
@@ -73,7 +66,7 @@ describe('Licences - Base Licences presenter', () => {
       it('returns an empty array', () => {
         const result = BaseLicencesPresenter.formatAbstractionAmounts(licenceVersionPurpose)
 
-        expect(result).to.be.empty()
+        expect(result).toHaveLength(0)
       })
     })
   })
@@ -91,7 +84,7 @@ describe('Licences - Base Licences presenter', () => {
       it('returns "null"', () => {
         const result = BaseLicencesPresenter.supplementaryBillingNotification(licence)
 
-        expect(result).to.be.null()
+        expect(result).toBeNull()
       })
     })
 
@@ -103,7 +96,7 @@ describe('Licences - Base Licences presenter', () => {
       it('returns a notification just for the "old charge scheme"', () => {
         const result = BaseLicencesPresenter.supplementaryBillingNotification(licence)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           text: 'This licence has been marked for the next supplementary bill run for the old charge scheme.',
           titleText: 'Important'
         })
@@ -118,7 +111,7 @@ describe('Licences - Base Licences presenter', () => {
       it('returns a notification just for the current charge scheme', () => {
         const result = BaseLicencesPresenter.supplementaryBillingNotification(licence)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           text: 'This licence has been marked for the next supplementary bill run.',
           titleText: 'Important'
         })
@@ -134,7 +127,7 @@ describe('Licences - Base Licences presenter', () => {
       it('returns a notification just for both charge schemes', () => {
         const result = BaseLicencesPresenter.supplementaryBillingNotification(licence)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           text: 'This licence has been marked for the next supplementary bill runs for the current and old charge schemes.',
           titleText: 'Important'
         })
@@ -149,7 +142,7 @@ describe('Licences - Base Licences presenter', () => {
       it('returns a notification just for TPT supplementary', () => {
         const result = BaseLicencesPresenter.supplementaryBillingNotification(licence)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           text: 'This licence has been marked for the next two-part tariff supplementary bill run.',
           titleText: 'Important'
         })
@@ -165,7 +158,7 @@ describe('Licences - Base Licences presenter', () => {
       it('returns a notification for TPT & PRESROC supplementary', () => {
         const result = BaseLicencesPresenter.supplementaryBillingNotification(licence)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           text: 'This licence has been marked for the next two-part tariff supplementary bill run and the supplementary bill run for the old charge scheme.',
           titleText: 'Important'
         })
@@ -181,7 +174,7 @@ describe('Licences - Base Licences presenter', () => {
       it('returns a notification for TPT & SROC supplementary', () => {
         const result = BaseLicencesPresenter.supplementaryBillingNotification(licence)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           text: 'This licence has been marked for the next two-part tariff supplementary bill run and the supplementary bill run.',
           titleText: 'Important'
         })
@@ -198,7 +191,7 @@ describe('Licences - Base Licences presenter', () => {
       it('returns a notification for TPT, PRESROC & SROC supplementary', () => {
         const result = BaseLicencesPresenter.supplementaryBillingNotification(licence)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           text: 'This licence has been marked for the next two-part tariff supplementary bill run and supplementary bill runs for the current and old charge schemes.',
           titleText: 'Important'
         })
@@ -211,7 +204,7 @@ describe('Licences - Base Licences presenter', () => {
       it('returns the word unchanged', () => {
         const result = BaseLicencesPresenter.pluralise('point', 1)
 
-        expect(result).to.equal('point')
+        expect(result).toEqual('point')
       })
     })
 
@@ -219,7 +212,7 @@ describe('Licences - Base Licences presenter', () => {
       it('returns the word pluralised', () => {
         const result = BaseLicencesPresenter.pluralise('point', 2)
 
-        expect(result).to.equal('points')
+        expect(result).toEqual('points')
       })
     })
   })
@@ -248,7 +241,7 @@ describe('Licences - Base Licences presenter', () => {
       it('should return the roles', () => {
         const result = BaseLicencesPresenter.userRoles(auth)
 
-        expect(result).to.equal(['role1', 'role2'])
+        expect(result).toEqual(['role1', 'role2'])
       })
     })
 
@@ -260,7 +253,7 @@ describe('Licences - Base Licences presenter', () => {
       it('should return an empty array', () => {
         const result = BaseLicencesPresenter.userRoles(auth)
 
-        expect(result).to.be.empty()
+        expect(result).toHaveLength(0)
       })
     })
   })

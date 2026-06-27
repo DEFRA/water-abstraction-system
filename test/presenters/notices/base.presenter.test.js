@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../support/fixtures/recipients.fixture.js')
@@ -37,8 +32,8 @@ describe('Notices - Base presenter', () => {
         it('returns a fixed array of 7 strings with all the address lines', () => {
           const result = BasePresenter.addressToCSV(address)
 
-          expect(result.length).to.equal(7)
-          expect(result).to.equal([
+          expect(result.length).toEqual(7)
+          expect(result).toEqual([
             'Returnsholder',
             '4',
             'Privet Drive',
@@ -60,8 +55,8 @@ describe('Notices - Base presenter', () => {
         it('returns a fixed array of 7 strings with some of the address lines, and missing strings at the end of the array', () => {
           const result = BasePresenter.addressToCSV(address)
 
-          expect(result.length).to.equal(7)
-          expect(result).to.equal(['Returnsholder', '4', 'Privet Drive', 'Little Whinging', 'WD25 7LR', '', ''])
+          expect(result.length).toEqual(7)
+          expect(result).toEqual(['Returnsholder', '4', 'Privet Drive', 'Little Whinging', 'WD25 7LR', '', ''])
         })
       })
 
@@ -81,8 +76,8 @@ describe('Notices - Base presenter', () => {
         it('returns a fixed array of 7 strings with the contact name as address line 1, and the "INVALID ADDRESS" message', () => {
           const result = BasePresenter.addressToCSV(address)
 
-          expect(result.length).to.equal(7)
-          expect(result).to.equal([
+          expect(result.length).toEqual(7)
+          expect(result).toEqual([
             'Returnsholder',
             'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
             '',
@@ -103,8 +98,8 @@ describe('Notices - Base presenter', () => {
       it('returns a fixed array of 7 empty strings', () => {
         const result = BasePresenter.addressToCSV(address)
 
-        expect(result.length).to.equal(7)
-        expect(result).to.equal(['', '', '', '', '', '', ''])
+        expect(result.length).toEqual(7)
+        expect(result).toEqual(['', '', '', '', '', '', ''])
       })
     })
   })
@@ -121,7 +116,7 @@ describe('Notices - Base presenter', () => {
 
           const expectedDate = new Date(`2025-01-30`)
 
-          expect(result).to.equal(expectedDate)
+          expect(result).toEqual(expectedDate)
         })
       })
 
@@ -135,7 +130,7 @@ describe('Notices - Base presenter', () => {
 
           const expectedDate = new Date(`2025-02-13`)
 
-          expect(result).to.equal(expectedDate)
+          expect(result).toEqual(expectedDate)
         })
       })
 
@@ -149,7 +144,7 @@ describe('Notices - Base presenter', () => {
 
           const expectedDate = new Date(`2025-01-13`)
 
-          expect(result).to.equal(expectedDate)
+          expect(result).toEqual(expectedDate)
         })
       })
     })
@@ -165,7 +160,7 @@ describe('Notices - Base presenter', () => {
 
           const expectedDate = new Date(`2025-01-29`)
 
-          expect(result).to.equal(expectedDate)
+          expect(result).toEqual(expectedDate)
         })
       })
 
@@ -179,7 +174,7 @@ describe('Notices - Base presenter', () => {
 
           const expectedDate = new Date(`2025-02-12`)
 
-          expect(result).to.equal(expectedDate)
+          expect(result).toEqual(expectedDate)
         })
       })
 
@@ -193,7 +188,7 @@ describe('Notices - Base presenter', () => {
 
           const expectedDate = new Date(`2025-01-12`)
 
-          expect(result).to.equal(expectedDate)
+          expect(result).toEqual(expectedDate)
         })
       })
     })
@@ -209,7 +204,7 @@ describe('Notices - Base presenter', () => {
 
           const expectedDate = new Date(`2025-01-29`)
 
-          expect(result).to.equal(expectedDate)
+          expect(result).toEqual(expectedDate)
         })
       })
 
@@ -223,7 +218,7 @@ describe('Notices - Base presenter', () => {
 
           const expectedDate = new Date(`2025-02-12`)
 
-          expect(result).to.equal(expectedDate)
+          expect(result).toEqual(expectedDate)
         })
       })
 
@@ -237,7 +232,7 @@ describe('Notices - Base presenter', () => {
 
           const expectedDate = new Date(`2025-01-12`)
 
-          expect(result).to.equal(expectedDate)
+          expect(result).toEqual(expectedDate)
         })
       })
     })
@@ -260,7 +255,7 @@ describe('Notices - Base presenter', () => {
       it('should return the correct text', () => {
         const result = BasePresenter.returnsPeriodText(returnsPeriod)
 
-        expect(result).to.equal('Winter and all year annual 1 November 2024 to 31 October 2025')
+        expect(result).toEqual('Winter and all year annual 1 November 2024 to 31 October 2025')
       })
     })
 
@@ -272,7 +267,7 @@ describe('Notices - Base presenter', () => {
       it('should return the correct text', () => {
         const result = BasePresenter.returnsPeriodText(returnsPeriod)
 
-        expect(result).to.equal('Summer annual 1 November 2024 to 31 October 2025')
+        expect(result).toEqual('Summer annual 1 November 2024 to 31 October 2025')
       })
     })
 
@@ -284,7 +279,7 @@ describe('Notices - Base presenter', () => {
       it('should return the correct text', () => {
         const result = BasePresenter.returnsPeriodText(returnsPeriod)
 
-        expect(result).to.equal('Quarterly 1 November 2024 to 31 October 2025')
+        expect(result).toEqual('Quarterly 1 November 2024 to 31 October 2025')
       })
     })
   })

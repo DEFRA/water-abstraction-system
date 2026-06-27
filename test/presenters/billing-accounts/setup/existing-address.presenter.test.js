@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -34,7 +27,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
     it('returns page data for the view', () => {
       const result = ExistingAddressPresenter.go(session, companyAddresses)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/account`,
           text: 'Back'
@@ -69,7 +62,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       it('returns the link for the "account" page', () => {
         const result = ExistingAddressPresenter.go(session, companyAddresses)
 
-        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/existing-account`)
+        expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/existing-account`)
       })
     })
 
@@ -81,7 +74,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       it('returns the link for the "account" page', () => {
         const result = ExistingAddressPresenter.go(session, companyAddresses)
 
-        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/select-company`)
+        expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/select-company`)
       })
     })
 
@@ -93,7 +86,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       it('returns the link for the "account-type" page', () => {
         const result = ExistingAddressPresenter.go(session, companyAddresses)
 
-        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/account-type`)
+        expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/account-type`)
       })
     })
 
@@ -106,7 +99,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       it('returns the link for the "account-type" page', () => {
         const result = ExistingAddressPresenter.go(session, companyAddresses)
 
-        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/account`)
+        expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/account`)
       })
     })
 
@@ -118,7 +111,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       it('returns the link for the "check" page', () => {
         const result = ExistingAddressPresenter.go(session, companyAddresses)
 
-        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
+        expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
     })
   })
@@ -128,7 +121,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       it('returns the correct page title', () => {
         const result = ExistingAddressPresenter.go(session, companyAddresses)
 
-        expect(result.pageTitle).to.equal(`Select an existing address for ${companyAddresses.company.name}`)
+        expect(result.pageTitle).toEqual(`Select an existing address for ${companyAddresses.company.name}`)
       })
     })
 
@@ -140,7 +133,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       it('returns the correct page title', () => {
         const result = ExistingAddressPresenter.go(session, companyAddresses)
 
-        expect(result.pageTitle).to.equal(`No addresses found for ${companyAddresses.company.name}`)
+        expect(result.pageTitle).toEqual(`No addresses found for ${companyAddresses.company.name}`)
       })
     })
   })

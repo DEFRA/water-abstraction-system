@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const StartDatePresenter = require('../../../../app/presenters/return-versions/setup/start-date.presenter.js')
 
@@ -34,7 +27,7 @@ describe('Return Versions Setup - Start Date presenter', () => {
     it('correctly presents the data', () => {
       const result = StartDatePresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         startDateDay: null,
         startDateMonth: null,
         startDateYear: null,
@@ -62,7 +55,7 @@ describe('Return Versions Setup - Start Date presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = StartDatePresenter.go(session)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
           text: 'Back'
         })
@@ -73,7 +66,7 @@ describe('Return Versions Setup - Start Date presenter', () => {
       it("returns a link back to the licence page's charge tab", () => {
         const result = StartDatePresenter.go(session)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
           text: 'Back'
         })
@@ -85,7 +78,7 @@ describe('Return Versions Setup - Start Date presenter', () => {
     it('returns the licence start date in long date format', () => {
       const result = StartDatePresenter.go(session)
 
-      expect(result.licenceVersionStartDate).to.equal('1 January 2023')
+      expect(result.licenceVersionStartDate).toEqual('1 January 2023')
     })
   })
 
@@ -100,10 +93,10 @@ describe('Return Versions Setup - Start Date presenter', () => {
 
         const { startDateDay, startDateMonth, startDateYear, startDateOption } = result
 
-        expect(startDateDay).to.be.null()
-        expect(startDateMonth).to.be.null()
-        expect(startDateYear).to.be.null()
-        expect(startDateOption).to.equal('licenceStartDate')
+        expect(startDateDay).toBeNull()
+        expect(startDateMonth).toBeNull()
+        expect(startDateYear).toBeNull()
+        expect(startDateOption).toEqual('licenceStartDate')
       })
     })
 
@@ -120,10 +113,10 @@ describe('Return Versions Setup - Start Date presenter', () => {
 
         const { startDateDay, startDateMonth, startDateYear, startDateOption } = result
 
-        expect(startDateDay).to.equal('26')
-        expect(startDateMonth).to.equal('11')
-        expect(startDateYear).to.equal('2023')
-        expect(startDateOption).to.equal('anotherStartDate')
+        expect(startDateDay).toEqual('26')
+        expect(startDateMonth).toEqual('11')
+        expect(startDateYear).toEqual('2023')
+        expect(startDateOption).toEqual('anotherStartDate')
       })
     })
   })

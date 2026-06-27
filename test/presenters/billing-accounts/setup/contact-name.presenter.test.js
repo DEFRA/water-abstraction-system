@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
 
@@ -28,7 +21,7 @@ describe('Billing Accounts - Setup - Contact Name Presenter', () => {
     it('returns page data for the view', () => {
       const result = ContactNamePresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/contact`,
           text: 'Back'
@@ -45,7 +38,7 @@ describe('Billing Accounts - Setup - Contact Name Presenter', () => {
       it('returns null', () => {
         const result = ContactNamePresenter.go(session)
 
-        expect(result.contactName).to.equal(null)
+        expect(result.contactName).toEqual(null)
       })
     })
 
@@ -57,7 +50,7 @@ describe('Billing Accounts - Setup - Contact Name Presenter', () => {
       it('returns the selected contact name', () => {
         const result = ContactNamePresenter.go(session)
 
-        expect(result.contactName).to.equal(session.contactName)
+        expect(result.contactName).toEqual(session.contactName)
       })
     })
   })
@@ -74,7 +67,7 @@ describe('Billing Accounts - Setup - Contact Name Presenter', () => {
       it('returns the correct back link', () => {
         const result = ContactNamePresenter.go(session)
 
-        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/contact`)
+        expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/contact`)
       })
     })
 
@@ -90,7 +83,7 @@ describe('Billing Accounts - Setup - Contact Name Presenter', () => {
       it('returns the correct back link', () => {
         const result = ContactNamePresenter.go(session)
 
-        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
+        expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
     })
   })

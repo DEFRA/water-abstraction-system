@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../../app/models/bill-run.model.js')
@@ -29,22 +22,22 @@ describe('Create Bill Run Event presenter', () => {
     it('correctly presents the data', () => {
       const result = CreateBillRunEventPresenter.go(billRun)
 
-      expect(result.batch).to.exist()
-      expect(result.batch.id).to.equal(billRun.id)
-      expect(result.batch.type).to.equal(billRun.batchType)
-      expect(result.batch.source).to.equal(billRun.source)
-      expect(result.batch.status).to.equal(billRun.status)
-      expect(result.batch.summer).to.equal(billRun.summer)
-      expect(result.batch.netTotal).to.equal(billRun.netTotal)
+      expect(result.batch).toBeDefined()
+      expect(result.batch.id).toEqual(billRun.id)
+      expect(result.batch.type).toEqual(billRun.batchType)
+      expect(result.batch.source).toEqual(billRun.source)
+      expect(result.batch.status).toEqual(billRun.status)
+      expect(result.batch.summer).toEqual(billRun.summer)
+      expect(result.batch.netTotal).toEqual(billRun.netTotal)
 
-      expect(result.batch.dateCreated).to.equal(billRun.createdAt)
-      expect(result.batch.dateUpdated).to.equal(billRun.updatedAt)
-      expect(result.batch.invoiceCount).to.equal(billRun.invoiceCount)
-      expect(result.batch.invoiceValue).to.equal(billRun.invoiceValue)
-      expect(result.batch.creditNoteCount).to.equal(billRun.creditNoteCount)
-      expect(result.batch.creditNoteValue).to.equal(billRun.creditNoteValue)
+      expect(result.batch.dateCreated).toEqual(billRun.createdAt)
+      expect(result.batch.dateUpdated).toEqual(billRun.updatedAt)
+      expect(result.batch.invoiceCount).toEqual(billRun.invoiceCount)
+      expect(result.batch.invoiceValue).toEqual(billRun.invoiceValue)
+      expect(result.batch.creditNoteCount).toEqual(billRun.creditNoteCount)
+      expect(result.batch.creditNoteValue).toEqual(billRun.creditNoteValue)
 
-      expect(result.batch.region).to.equal({
+      expect(result.batch.region).toEqual({
         id: billRun.region.id,
         code: billRun.region.chargeRegionId,
         name: billRun.region.name,
@@ -53,8 +46,8 @@ describe('Create Bill Run Event presenter', () => {
         numericCode: billRun.region.naldRegionId
       })
 
-      expect(result.batch.endYear).to.equal({ yearEnding: billRun.toFinancialYearEnding })
-      expect(result.batch.startYear).to.equal({ yearEnding: billRun.fromFinancialYearEnding })
+      expect(result.batch.endYear).toEqual({ yearEnding: billRun.toFinancialYearEnding })
+      expect(result.batch.startYear).toEqual({ yearEnding: billRun.fromFinancialYearEnding })
     })
   })
 })

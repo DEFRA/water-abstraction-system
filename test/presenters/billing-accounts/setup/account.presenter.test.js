@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
 
@@ -26,7 +19,7 @@ describe('Billing Accounts - Setup - Account Presenter', () => {
     it('returns page data for the view', () => {
       const result = AccountPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         accountSelected: null,
         backLink: {
           href: `/system/billing-accounts/${session.billingAccount.id}`,
@@ -50,7 +43,7 @@ describe('Billing Accounts - Setup - Account Presenter', () => {
     it('returns page data for the view', () => {
       const result = AccountPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         accountSelected: 'another',
         backLink: {
           href: `/system/billing-accounts/${session.billingAccount.id}`,
@@ -73,7 +66,7 @@ describe('Billing Accounts - Setup - Account Presenter', () => {
     it('returns page data for the view', () => {
       const result = AccountPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         accountSelected: 'customer',
         backLink: {
           href: `/system/billing-accounts/${session.billingAccount.id}`,

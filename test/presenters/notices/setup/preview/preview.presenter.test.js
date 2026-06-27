@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = require('node:http2').constants
@@ -93,7 +88,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             referenceCode
           )
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             address: [
               'Clean Water Limited',
               'c/o Bob Bobbles',
@@ -157,7 +152,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             referenceCode
           )
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             address: 'hello@example.com',
             backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
             contents: 'Dear licence holder,\r\n',
@@ -234,7 +229,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             referenceCode
           )
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             address: [
               'Clean Water Limited',
               'c/o Bob Bobbles',
@@ -304,7 +299,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             referenceCode
           )
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             address: 'hello@example.com',
             backLink: { href: `/system/notices/setup/${sessionId}/preview/${contactHashId}/check-alert`, text: 'Back' },
             contents: 'Dear licence contact,\r\n',
@@ -364,7 +359,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
         referenceCode
       )
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         address: 'hello@example.com',
         backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
         contents: 'error',

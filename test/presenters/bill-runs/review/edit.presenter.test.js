@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
 
@@ -26,7 +19,7 @@ describe('Bill Runs Review - Edit presenter', () => {
     it('correctly presents the data', () => {
       const result = EditPresenter.go(reviewChargeElement, elementIndex)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         authorisedQuantity: 9.092,
         billableReturns: 0,
         chargeDescription: 'Spray Irrigation - Direct',
@@ -49,7 +42,7 @@ describe('Bill Runs Review - Edit presenter', () => {
       it("returns the charge reference's lower authorised volume", () => {
         const result = EditPresenter.go(reviewChargeElement)
 
-        expect(result.authorisedQuantity).to.equal(5)
+        expect(result.authorisedQuantity).toEqual(5)
       })
     })
 
@@ -61,7 +54,7 @@ describe('Bill Runs Review - Edit presenter', () => {
       it("returns the charge element's lower authorised volume", () => {
         const result = EditPresenter.go(reviewChargeElement)
 
-        expect(result.authorisedQuantity).to.equal(9.092)
+        expect(result.authorisedQuantity).toEqual(9.092)
       })
     })
   })

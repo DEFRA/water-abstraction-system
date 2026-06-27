@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ReasonPresenter = require('../../../../app/presenters/return-versions/setup/reason.presenter.js')
 
@@ -35,7 +28,7 @@ describe('Return Versions Setup - Reason presenter', () => {
     it('correctly presents the data', () => {
       const result = ReasonPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/start-date',
           text: 'Back'
@@ -58,7 +51,7 @@ describe('Return Versions Setup - Reason presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = ReasonPresenter.go(session)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
           text: 'Back'
         })
@@ -69,7 +62,7 @@ describe('Return Versions Setup - Reason presenter', () => {
       it('returns a link back to the "start-date" page', () => {
         const result = ReasonPresenter.go(session)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/start-date',
           text: 'Back'
         })
@@ -86,7 +79,7 @@ describe('Return Versions Setup - Reason presenter', () => {
       it('returns a populated reason', () => {
         const result = ReasonPresenter.go(session)
 
-        expect(result.reason).to.equal('major-change')
+        expect(result.reason).toEqual('major-change')
       })
     })
 
@@ -94,7 +87,7 @@ describe('Return Versions Setup - Reason presenter', () => {
       it('returns an empty reason', () => {
         const result = ReasonPresenter.go(session)
 
-        expect(result.reason).to.be.null()
+        expect(result.reason).toBeNull()
       })
     })
   })

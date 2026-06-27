@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
 
@@ -26,7 +19,7 @@ describe('Billing Accounts - Setup - Company Search Presenter', () => {
     it('returns page data for the view', () => {
       const result = CompanySearchPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/account-type`,
           text: 'Back'
@@ -43,7 +36,7 @@ describe('Billing Accounts - Setup - Company Search Presenter', () => {
       it('returns null', () => {
         const result = CompanySearchPresenter.go(session)
 
-        expect(result.companySearch).to.equal(null)
+        expect(result.companySearch).toEqual(null)
       })
     })
 
@@ -55,7 +48,7 @@ describe('Billing Accounts - Setup - Company Search Presenter', () => {
       it('returns the company search value', () => {
         const result = CompanySearchPresenter.go(session)
 
-        expect(result.companySearch).to.equal(session.companySearch)
+        expect(result.companySearch).toEqual(session.companySearch)
       })
     })
   })

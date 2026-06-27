@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 
@@ -24,7 +17,7 @@ describe('Users - Internal - Setup - Check Presenter', () => {
     it('returns page data for the view', () => {
       const result = CheckPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         access: null,
         activeNavBar: 'users',
         email: session.email,
@@ -47,7 +40,7 @@ describe('Users - Internal - Setup - Check Presenter', () => {
       it('returns null', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.access).to.be.null()
+        expect(result.access).toBeNull()
       })
     })
 
@@ -59,7 +52,7 @@ describe('Users - Internal - Setup - Check Presenter', () => {
       it('returns the users access status', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.access).to.equal('Enabled')
+        expect(result.access).toEqual('Enabled')
       })
     })
   })
@@ -69,7 +62,7 @@ describe('Users - Internal - Setup - Check Presenter', () => {
       it('returns true', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.showEmailChangeLink).to.be.true()
+        expect(result.showEmailChangeLink).toBe(true)
       })
     })
 
@@ -81,7 +74,7 @@ describe('Users - Internal - Setup - Check Presenter', () => {
       it('returns true', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.showEmailChangeLink).to.be.true()
+        expect(result.showEmailChangeLink).toBe(true)
       })
     })
 
@@ -93,7 +86,7 @@ describe('Users - Internal - Setup - Check Presenter', () => {
       it('returns false', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.showEmailChangeLink).to.be.false()
+        expect(result.showEmailChangeLink).toBe(false)
       })
     })
   })

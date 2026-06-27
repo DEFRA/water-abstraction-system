@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
 
@@ -83,7 +76,7 @@ describe('Notices - View Notice presenter', () => {
   it('correctly presents the data', () => {
     const result = ViewNoticePresenter.go(notice, notifications)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       backLink: { href: '/system/notices', text: 'Go back to notices' },
       notifications: [
         {
@@ -136,7 +129,7 @@ describe('Notices - View Notice presenter', () => {
           it('returns only the populated address lines as an array', () => {
             const result = ViewNoticePresenter.go(notice, notifications)
 
-            expect(result.notifications[0].recipient).to.equal([
+            expect(result.notifications[0].recipient).toEqual([
               'Clean Water Limited',
               'c/o Bob Bobbles',
               'Water Lane',
@@ -160,7 +153,7 @@ describe('Notices - View Notice presenter', () => {
           it('returns only the populated address lines as an array', () => {
             const result = ViewNoticePresenter.go(notice, notifications)
 
-            expect(result.notifications[0].recipient).to.equal([
+            expect(result.notifications[0].recipient).toEqual([
               'Clean Water Limited',
               'c/o Bob Bobbles',
               'Water Lane',
@@ -177,7 +170,7 @@ describe('Notices - View Notice presenter', () => {
         it('returns the recipient email in an array', () => {
           const result = ViewNoticePresenter.go(notice, notifications)
 
-          expect(result.notifications[1].recipient).to.equal(['shaw.carol@atari.com'])
+          expect(result.notifications[1].recipient).toEqual(['shaw.carol@atari.com'])
         })
       })
     })

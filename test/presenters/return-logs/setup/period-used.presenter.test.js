@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const PeriodUsedPresenter = require('../../../../app/presenters/return-logs/setup/period-used.presenter.js')
 
@@ -28,7 +21,7 @@ describe('Return Logs Setup - Period Used presenter', () => {
     it('correctly presents the data', () => {
       const result = PeriodUsedPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         abstractionPeriod: '1 April to 31 March',
         backLink: {
           href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/single-volume',
@@ -58,7 +51,7 @@ describe('Return Logs Setup - Period Used presenter', () => {
       it('returns the "periodDateUsedOptions" property populated to re-select the option', () => {
         const result = PeriodUsedPresenter.go(session)
 
-        expect(result.periodDateUsedOptions).to.equal('default')
+        expect(result.periodDateUsedOptions).toEqual('default')
       })
     })
 
@@ -70,7 +63,7 @@ describe('Return Logs Setup - Period Used presenter', () => {
       it('returns the "periodDateUsedOptions" property populated to re-select the option', () => {
         const result = PeriodUsedPresenter.go(session)
 
-        expect(result.periodDateUsedOptions).to.equal('custom-dates')
+        expect(result.periodDateUsedOptions).toEqual('custom-dates')
       })
     })
   })
@@ -86,9 +79,9 @@ describe('Return Logs Setup - Period Used presenter', () => {
       it('returns the "periodUsedFrom" properties populated to re-select the option', () => {
         const result = PeriodUsedPresenter.go(session)
 
-        expect(result.periodUsedFromDay).to.equal('1')
-        expect(result.periodUsedFromMonth).to.equal('04')
-        expect(result.periodUsedFromYear).to.equal('2023')
+        expect(result.periodUsedFromDay).toEqual('1')
+        expect(result.periodUsedFromMonth).toEqual('04')
+        expect(result.periodUsedFromYear).toEqual('2023')
       })
     })
   })
@@ -104,9 +97,9 @@ describe('Return Logs Setup - Period Used presenter', () => {
       it('returns the "periodUsedTo" properties populated to re-select the option', () => {
         const result = PeriodUsedPresenter.go(session)
 
-        expect(result.periodUsedToDay).to.equal('31')
-        expect(result.periodUsedToMonth).to.equal('03')
-        expect(result.periodUsedToYear).to.equal('2024')
+        expect(result.periodUsedToDay).toEqual('31')
+        expect(result.periodUsedToMonth).toEqual('03')
+        expect(result.periodUsedToYear).toEqual('2024')
       })
     })
   })
@@ -124,7 +117,7 @@ describe('Return Logs Setup - Period Used presenter', () => {
     it('does not show the default abstraction period', () => {
       const result = PeriodUsedPresenter.go(session)
 
-      expect(result.showDefaultAbstractionPeriod).to.be.false()
+      expect(result.showDefaultAbstractionPeriod).toBe(false)
     })
   })
 })

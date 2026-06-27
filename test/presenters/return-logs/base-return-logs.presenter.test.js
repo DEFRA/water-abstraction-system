@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
 
@@ -24,7 +17,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
     it('returns the expected details', () => {
       const result = BaseReturnLogsPresenter.formatMeterDetails(testMeter)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         make: 'METER_MAKE',
         serialNumber: 'METER_SERIAL_NUMBER',
         xDisplay: 'No'
@@ -35,7 +28,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
       it('returns Yes for the xDisplay property', () => {
         const result = BaseReturnLogsPresenter.formatMeterDetails({ ...testMeter, multiplier: 10 })
 
-        expect(result.xDisplay).to.equal('Yes')
+        expect(result.xDisplay).toEqual('Yes')
       })
     })
 
@@ -43,7 +36,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
       it('returns null', () => {
         const result = BaseReturnLogsPresenter.formatMeterDetails(null)
 
-        expect(result).to.equal(null)
+        expect(result).toEqual(null)
       })
     })
 
@@ -51,7 +44,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
       it('returns null', () => {
         const result = BaseReturnLogsPresenter.formatMeterDetails({ ...testMeter, manufacturer: null })
 
-        expect(result).to.equal(null)
+        expect(result).toEqual(null)
       })
     })
   })
@@ -65,8 +58,8 @@ describe('Return Logs - Base Return Logs presenter', () => {
           unitNames.CUBIC_METRES
         )
 
-        expect(result).to.not.include({ text: 'Reading', format: 'numeric' })
-        expect(result).to.not.include({ text: 'End reading', format: 'numeric' })
+        expect(result).not.toContainEqual({ text: 'Reading', format: 'numeric' })
+        expect(result).not.toContainEqual({ text: 'End reading', format: 'numeric' })
       })
     })
 
@@ -79,7 +72,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
             unitNames.CUBIC_METRES
           )
 
-          expect(result).to.include({ text: 'Reading', format: 'numeric' })
+          expect(result).toContainEqual({ text: 'Reading', format: 'numeric' })
         })
       })
 
@@ -91,7 +84,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
             unitNames.CUBIC_METRES
           )
 
-          expect(result).to.include({ text: 'End reading', format: 'numeric' })
+          expect(result).toContainEqual({ text: 'End reading', format: 'numeric' })
         })
       })
     })
@@ -105,7 +98,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
             unitNames.GALLONS
           )
 
-          expect(result).to.include({ text: 'Gallons', format: 'numeric' })
+          expect(result).toContainEqual({ text: 'Gallons', format: 'numeric' })
         })
       })
 
@@ -117,7 +110,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
             unitNames.GALLONS
           )
 
-          expect(result).to.include({ text: 'Total gallons', format: 'numeric' })
+          expect(result).toContainEqual({ text: 'Total gallons', format: 'numeric' })
         })
       })
     })
@@ -131,7 +124,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
             unitNames.CUBIC_METRES
           )
 
-          expect(result).to.include({ text: 'Total cubic metres', format: 'numeric' })
+          expect(result).toContainEqual({ text: 'Total cubic metres', format: 'numeric' })
         })
       })
 
@@ -143,7 +136,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
             unitNames.CUBIC_METRES
           )
 
-          expect(result).to.include({ text: 'Cubic metres', format: 'numeric' })
+          expect(result).toContainEqual({ text: 'Cubic metres', format: 'numeric' })
         })
       })
     })
@@ -156,7 +149,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
           unitNames.CUBIC_METRES
         )
 
-        expect(result).to.include({ text: 'Details', format: 'numeric' })
+        expect(result).toContainEqual({ text: 'Details', format: 'numeric' })
       })
 
       it('is not present when the frequency is month', () => {
@@ -166,7 +159,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
           unitNames.CUBIC_METRES
         )
 
-        expect(result).to.not.include({ text: 'Details', format: 'numeric' })
+        expect(result).not.toContainEqual({ text: 'Details', format: 'numeric' })
       })
 
       it('is present when the frequency is month and "alwaysDisplayLinkHeader" is true', () => {
@@ -177,7 +170,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
           true
         )
 
-        expect(result).to.include({ text: 'Details', format: 'numeric' })
+        expect(result).toContainEqual({ text: 'Details', format: 'numeric' })
       })
     })
   })
@@ -216,29 +209,29 @@ describe('Return Logs - Base Return Logs presenter', () => {
         it('returns the month as a formatted string', () => {
           const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-          expect(result[0].month).to.equal('January 2023')
-          expect(result[1].month).to.equal('February 2023')
+          expect(result[0].month).toEqual('January 2023')
+          expect(result[1].month).toEqual('February 2023')
         })
 
         it('returns the monthlyTotal as a formatted string', () => {
           const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-          expect(result[0].monthlyTotal).to.equal('400')
-          expect(result[1].monthlyTotal).to.equal('500')
+          expect(result[0].monthlyTotal).toEqual('400')
+          expect(result[1].monthlyTotal).toEqual('500')
         })
 
         it('does not include a "reading" column', () => {
           const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-          expect(result[0].reading).to.not.exist()
-          expect(result[1].reading).to.not.exist()
+          expect(result[0].reading).toBeUndefined()
+          expect(result[1].reading).toBeUndefined()
         })
 
         it('does not include a "link" object', () => {
           const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-          expect(result[0].link).to.not.exist()
-          expect(result[1].link).to.not.exist()
+          expect(result[0].link).toBeUndefined()
+          expect(result[1].link).toBeUndefined()
         })
 
         describe('and the "userUnit" is not cubic metres', () => {
@@ -262,8 +255,8 @@ describe('Return Logs - Base Return Logs presenter', () => {
           it('converts non-cubic metre totals to cubic metres as a formatted string', () => {
             const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-            expect(result[0].unitTotal).to.equal('87,987.69932')
-            expect(result[1].unitTotal).to.equal('109,984.62415')
+            expect(result[0].unitTotal).toEqual('87,987.69932')
+            expect(result[1].unitTotal).toEqual('109,984.62415')
           })
         })
 
@@ -275,8 +268,8 @@ describe('Return Logs - Base Return Logs presenter', () => {
           it('still returns the monthlyTotal as null for the line with a null "quantity"', () => {
             const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-            expect(result[0].monthlyTotal).to.equal('400')
-            expect(result[1].monthlyTotal).to.be.null()
+            expect(result[0].monthlyTotal).toEqual('400')
+            expect(result[1].monthlyTotal).toBeNull()
           })
         })
 
@@ -290,8 +283,8 @@ describe('Return Logs - Base Return Logs presenter', () => {
           it('returns the monthlyTotal as null for all lines', () => {
             const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-            expect(result[0].monthlyTotal).to.be.null()
-            expect(result[1].monthlyTotal).to.be.null()
+            expect(result[0].monthlyTotal).toBeNull()
+            expect(result[1].monthlyTotal).toBeNull()
           })
         })
 
@@ -303,8 +296,8 @@ describe('Return Logs - Base Return Logs presenter', () => {
           it('returns the monthlyTotal as 0 for the line with a zero "quantity"', () => {
             const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-            expect(result[0].monthlyTotal).to.equal('400')
-            expect(result[1].monthlyTotal).to.equal('0')
+            expect(result[0].monthlyTotal).toEqual('400')
+            expect(result[1].monthlyTotal).toEqual('0')
           })
         })
 
@@ -318,8 +311,8 @@ describe('Return Logs - Base Return Logs presenter', () => {
           it('returns the monthlyTotal as 0 for all lines', () => {
             const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-            expect(result[0].monthlyTotal).to.equal('0')
-            expect(result[1].monthlyTotal).to.equal('0')
+            expect(result[0].monthlyTotal).toEqual('0')
+            expect(result[1].monthlyTotal).toEqual('0')
           })
         })
       })
@@ -332,8 +325,8 @@ describe('Return Logs - Base Return Logs presenter', () => {
         it('includes a reading column', () => {
           const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-          expect(result[0].reading).to.equal(111)
-          expect(result[1].reading).to.equal(222)
+          expect(result[0].reading).toEqual(111)
+          expect(result[1].reading).toEqual(222)
         })
       })
     })
@@ -371,26 +364,26 @@ describe('Return Logs - Base Return Logs presenter', () => {
         it('returns the month as a formatted string', () => {
           const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-          expect(result[0].month).to.equal('January 2023')
+          expect(result[0].month).toEqual('January 2023')
         })
 
         it('returns the monthlyTotal as a formatted string', () => {
           const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-          expect(result[0].monthlyTotal).to.equal('1,500')
+          expect(result[0].monthlyTotal).toEqual('1,500')
         })
 
         it('does not include a "reading" column', () => {
           const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-          expect(result[0].reading).to.not.exist()
+          expect(result[0].reading).toBeUndefined()
         })
 
         it('includes a "link" object', () => {
           const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines, id)
 
-          expect(result[0].link.href).to.equal('/system/return-submissions/e3cb54dc-f895-4918-bab7-0819fd870a1f/2023-0')
-          expect(result[0].link.text).to.equal('View daily volumes')
+          expect(result[0].link.href).toEqual('/system/return-submissions/e3cb54dc-f895-4918-bab7-0819fd870a1f/2023-0')
+          expect(result[0].link.text).toEqual('View daily volumes')
         })
 
         describe('and the "userUnit" is not cubic metres', () => {
@@ -420,7 +413,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
           it('converts non-cubic metre totals to cubic metres as a formatted string', () => {
             const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-            expect(result[0].unitTotal).to.equal('329,953.872449')
+            expect(result[0].unitTotal).toEqual('329,953.872449')
           })
         })
 
@@ -432,7 +425,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
           it('still returns the monthlyTotal as a formatted string', () => {
             const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-            expect(result[0].monthlyTotal).to.equal('1,000')
+            expect(result[0].monthlyTotal).toEqual('1,000')
           })
         })
 
@@ -446,7 +439,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
           it('returns the monthlyTotal as null', () => {
             const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-            expect(result[0].monthlyTotal).to.be.null()
+            expect(result[0].monthlyTotal).toBeNull()
           })
         })
       })
@@ -459,7 +452,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
         it('includes a "reading" column which is the last non-null meter reading', () => {
           const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-          expect(result[0].reading).to.equal(222)
+          expect(result[0].reading).toEqual(222)
         })
       })
     })

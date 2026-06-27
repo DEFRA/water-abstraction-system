@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -28,7 +21,7 @@ describe('Billing Accounts - Setup - FAO Presenter', () => {
     it('returns page data for the view', () => {
       const result = FAOPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/existing-address`,
           text: 'Back'
@@ -45,7 +38,7 @@ describe('Billing Accounts - Setup - FAO Presenter', () => {
       it('returns the link for the "existing-address" page', () => {
         const result = FAOPresenter.go(session)
 
-        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/existing-address`)
+        expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/existing-address`)
       })
     })
 
@@ -56,7 +49,7 @@ describe('Billing Accounts - Setup - FAO Presenter', () => {
           checkPageVisited: true
         })
 
-        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
+        expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
     })
   })

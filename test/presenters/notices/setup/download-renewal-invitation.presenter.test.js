@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const NoticeSessionFixture = require('../../../support/fixtures/notice-session.fixture.js')
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
@@ -39,7 +32,7 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
         'Licence,Renewal date,Expiry date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
         recipientRow
 
-      expect(result).to.equal(expected)
+      expect(result).toEqual(expected)
     })
   })
 
@@ -57,7 +50,7 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
         'Licence,Renewal date,Expiry date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
         recipientRow
 
-      expect(result).to.equal(expected)
+      expect(result).toEqual(expected)
     })
   })
 
@@ -76,7 +69,7 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
         'Licence,Renewal date,Expiry date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
         recipientRow
 
-      expect(result).to.equal(expected)
+      expect(result).toEqual(expected)
     })
   })
 })

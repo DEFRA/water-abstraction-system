@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ManualPresenter = require('../../../app/presenters/address/manual.presenter.js')
 
@@ -31,7 +24,7 @@ describe('Address - Manual Presenter', () => {
   it('correctly presents the data', () => {
     const result = ManualPresenter.go(session)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       activeNavBar: 'manage',
       addressLine1: null,
       addressLine2: null,
@@ -52,7 +45,7 @@ describe('Address - Manual Presenter', () => {
       it('returns null', () => {
         const result = ManualPresenter.go(session)
 
-        expect(result.addressLine1).to.equal(null)
+        expect(result.addressLine1).toEqual(null)
       })
     })
 
@@ -64,7 +57,7 @@ describe('Address - Manual Presenter', () => {
       it('returns the set value', () => {
         const result = ManualPresenter.go(session)
 
-        expect(result.addressLine1).to.equal('Fake Farm')
+        expect(result.addressLine1).toEqual('Fake Farm')
       })
     })
   })
@@ -74,7 +67,7 @@ describe('Address - Manual Presenter', () => {
       it('returns null', () => {
         const result = ManualPresenter.go(session)
 
-        expect(result.addressLine2).to.equal(null)
+        expect(result.addressLine2).toEqual(null)
       })
     })
 
@@ -86,7 +79,7 @@ describe('Address - Manual Presenter', () => {
       it('returns the set value', () => {
         const result = ManualPresenter.go(session)
 
-        expect(result.addressLine2).to.equal('1 Fake Street')
+        expect(result.addressLine2).toEqual('1 Fake Street')
       })
     })
   })
@@ -96,7 +89,7 @@ describe('Address - Manual Presenter', () => {
       it('returns null', () => {
         const result = ManualPresenter.go(session)
 
-        expect(result.addressLine3).to.equal(null)
+        expect(result.addressLine3).toEqual(null)
       })
     })
 
@@ -108,7 +101,7 @@ describe('Address - Manual Presenter', () => {
       it('returns the set value', () => {
         const result = ManualPresenter.go(session)
 
-        expect(result.addressLine3).to.equal('Fake Village')
+        expect(result.addressLine3).toEqual('Fake Village')
       })
     })
   })
@@ -118,7 +111,7 @@ describe('Address - Manual Presenter', () => {
       it('returns null', () => {
         const result = ManualPresenter.go(session)
 
-        expect(result.addressLine4).to.equal(null)
+        expect(result.addressLine4).toEqual(null)
       })
     })
 
@@ -130,7 +123,7 @@ describe('Address - Manual Presenter', () => {
       it('returns the set value', () => {
         const result = ManualPresenter.go(session)
 
-        expect(result.addressLine4).to.equal('Fake City')
+        expect(result.addressLine4).toEqual('Fake City')
       })
     })
   })
@@ -144,7 +137,7 @@ describe('Address - Manual Presenter', () => {
       it('returns a link to the "select" address page', () => {
         const result = ManualPresenter.go(session)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/select',
           text: 'Back'
         })
@@ -155,7 +148,7 @@ describe('Address - Manual Presenter', () => {
       it('returns a link to the "postcode" page', () => {
         const result = ManualPresenter.go(session)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/postcode',
           text: 'Back'
         })
@@ -168,7 +161,7 @@ describe('Address - Manual Presenter', () => {
       it('returns null', () => {
         const result = ManualPresenter.go(session)
 
-        expect(result.pageTitleCaption).to.equal(null)
+        expect(result.pageTitleCaption).toEqual(null)
       })
     })
 
@@ -180,7 +173,7 @@ describe('Address - Manual Presenter', () => {
       it('returns the set value', () => {
         const result = ManualPresenter.go(session)
 
-        expect(result.pageTitleCaption).to.equal('Super awesome caption')
+        expect(result.pageTitleCaption).toEqual('Super awesome caption')
       })
     })
   })
@@ -194,7 +187,7 @@ describe('Address - Manual Presenter', () => {
       it('returns null', () => {
         const result = ManualPresenter.go(session)
 
-        expect(result.postcode).to.equal(null)
+        expect(result.postcode).toEqual(null)
       })
     })
 
@@ -202,7 +195,7 @@ describe('Address - Manual Presenter', () => {
       it('returns the set value', () => {
         const result = ManualPresenter.go(session)
 
-        expect(result.postcode).to.equal('SW1A 1AA')
+        expect(result.postcode).toEqual('SW1A 1AA')
       })
     })
   })

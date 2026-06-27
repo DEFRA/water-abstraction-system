@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const ReturnVersionModel = require('../../app/models/return-version.model.js')
@@ -29,7 +22,7 @@ describe('Base presenter', () => {
       it('correctly returns the value in pounds, for example, 1149', async () => {
         const result = BasePresenter.convertPenceToPounds(valueInPence)
 
-        expect(result).to.equal(1149)
+        expect(result).toEqual(1149)
       })
     })
 
@@ -41,7 +34,7 @@ describe('Base presenter', () => {
       it('correctly returns the value in pounds, for example, 1149.01', async () => {
         const result = BasePresenter.convertPenceToPounds(valueInPence)
 
-        expect(result).to.equal(1149.01)
+        expect(result).toEqual(1149.01)
       })
     })
   })
@@ -54,7 +47,7 @@ describe('Base presenter', () => {
       it('returns null', async () => {
         const result = BasePresenter.formatAbstractionDate(day, month)
 
-        expect(result).to.be.null()
+        expect(result).toBeNull()
       })
     })
 
@@ -67,7 +60,7 @@ describe('Base presenter', () => {
       it('correctly formats the given date, for example, 12 September', async () => {
         const result = BasePresenter.formatAbstractionDate(day, month)
 
-        expect(result).to.equal('12 September')
+        expect(result).toEqual('12 September')
       })
     })
   })
@@ -82,7 +75,7 @@ describe('Base presenter', () => {
       it('returns null', async () => {
         const result = BasePresenter.formatAbstractionPeriod(startDay, startMonth, endDay, endMonth)
 
-        expect(result).to.be.null()
+        expect(result).toBeNull()
       })
     })
 
@@ -97,7 +90,7 @@ describe('Base presenter', () => {
       it('correctly formats the given period, for example, 1 April to 12 September', async () => {
         const result = BasePresenter.formatAbstractionPeriod(startDay, startMonth, endDay, endMonth)
 
-        expect(result).to.equal('1 April to 12 September')
+        expect(result).toEqual('1 April to 12 September')
       })
     })
   })
@@ -122,7 +115,7 @@ describe('Base presenter', () => {
         return BasePresenter.formatChargingModuleDate(date)
       })
 
-      expect(results).to.equal([
+      expect(results).toEqual([
         '01-JAN-2021',
         '01-FEB-2021',
         '01-MAR-2021',
@@ -151,7 +144,7 @@ describe('Base presenter', () => {
         it('returns the email', () => {
           const result = BasePresenter.formatEmail(email)
 
-          expect(result).to.equal('person@test.com')
+          expect(result).toEqual('person@test.com')
         })
 
         describe('but it is not lowercase', () => {
@@ -162,7 +155,7 @@ describe('Base presenter', () => {
           it('returns the email in lower case', () => {
             const result = BasePresenter.formatEmail(email)
 
-            expect(result).to.equal('person@test.com')
+            expect(result).toEqual('person@test.com')
           })
         })
       })
@@ -171,7 +164,7 @@ describe('Base presenter', () => {
         it('returns null', () => {
           const result = BasePresenter.formatEmail()
 
-          expect(result).to.be.null()
+          expect(result).toBeNull()
         })
       })
     })
@@ -188,7 +181,7 @@ describe('Base presenter', () => {
       it('returns "2023 to 2024"', () => {
         const result = BasePresenter.formatFinancialYear(financialYearEnding)
 
-        expect(result).to.equal('2023 to 2024')
+        expect(result).toEqual('2023 to 2024')
       })
     })
   })
@@ -198,7 +191,7 @@ describe('Base presenter', () => {
       it('correctly formats the given date, for example, 12 September 2021', async () => {
         const result = BasePresenter.formatLongDate(new Date('2021-09-12T14:41:10.511Z'))
 
-        expect(result).to.equal('12 September 2021')
+        expect(result).toEqual('12 September 2021')
       })
     })
 
@@ -206,7 +199,7 @@ describe('Base presenter', () => {
       it('correctly formats the given date, for example, 12 September 2021', async () => {
         const result = BasePresenter.formatLongDate('2021-09-12')
 
-        expect(result).to.equal('12 September 2021')
+        expect(result).toEqual('12 September 2021')
       })
     })
 
@@ -214,7 +207,7 @@ describe('Base presenter', () => {
       it('correctly returns invalid date', async () => {
         const result = BasePresenter.formatLongDate(new Date('2021-09-50'))
 
-        expect(result).to.equal('Invalid Date')
+        expect(result).toEqual('Invalid Date')
       })
     })
 
@@ -222,7 +215,7 @@ describe('Base presenter', () => {
       it('correctly returns invalid date', async () => {
         const result = BasePresenter.formatLongDate('2021-09-50')
 
-        expect(result).to.equal('Invalid Date')
+        expect(result).toEqual('Invalid Date')
       })
     })
 
@@ -230,7 +223,7 @@ describe('Base presenter', () => {
       it('correctly returns null', async () => {
         const result = BasePresenter.formatLongDate(undefined)
 
-        expect(result).to.be.null()
+        expect(result).toBeNull()
       })
     })
   })
@@ -239,7 +232,7 @@ describe('Base presenter', () => {
     it('correctly formats the given date, for example, 12 September 2021 at 14:41:10', async () => {
       const result = BasePresenter.formatLongDateTime(new Date('2021-09-12T14:41:10.511Z'))
 
-      expect(result).to.equal('12 September 2021 at 14:41:10')
+      expect(result).toEqual('12 September 2021 at 14:41:10')
     })
   })
 
@@ -254,7 +247,7 @@ describe('Base presenter', () => {
       it('correctly returns the value as a money string with commas and a symbol, for example, £1,149.50', async () => {
         const result = BasePresenter.formatMoney(valueInPence)
 
-        expect(result).to.equal('£1,149.50')
+        expect(result).toEqual('£1,149.50')
       })
     })
 
@@ -267,7 +260,7 @@ describe('Base presenter', () => {
         it('correctly returns the value as a positive money string with commas and a symbol, for example, £1,149.50', async () => {
           const result = BasePresenter.formatMoney(valueInPence)
 
-          expect(result).to.equal('£1,149.50')
+          expect(result).toEqual('£1,149.50')
         })
       })
 
@@ -275,7 +268,7 @@ describe('Base presenter', () => {
         it('correctly returns the value as a positive money string with commas and a symbol, for example, -£1,149.50', async () => {
           const result = BasePresenter.formatMoney(valueInPence, true)
 
-          expect(result).to.equal('-£1,149.50')
+          expect(result).toEqual('-£1,149.50')
         })
       })
     })
@@ -297,7 +290,7 @@ describe('Base presenter', () => {
       it('returns the water abstraction alert notice type', () => {
         const result = BasePresenter.formatNoticeType(subtype, alertType)
 
-        expect(result).to.equal('Stop alert')
+        expect(result).toEqual('Stop alert')
       })
     })
 
@@ -309,7 +302,7 @@ describe('Base presenter', () => {
       it('returns the mapping for the notice subtype', () => {
         const result = BasePresenter.formatNoticeType(subtype, alertType)
 
-        expect(result).to.equal('Returns invitation')
+        expect(result).toEqual('Returns invitation')
       })
     })
   })
@@ -319,7 +312,7 @@ describe('Base presenter', () => {
       it('formats the number for display', () => {
         const result = BasePresenter.formatNumber(12345.67)
 
-        expect(result).to.equal('12,345.67')
+        expect(result).toEqual('12,345.67')
       })
     })
 
@@ -327,7 +320,7 @@ describe('Base presenter', () => {
       it('formats the number for display to 6 decimal places', () => {
         const result = BasePresenter.formatNumber(12345.67894566)
 
-        expect(result).to.equal('12,345.678946')
+        expect(result).toEqual('12,345.678946')
       })
     })
 
@@ -335,7 +328,7 @@ describe('Base presenter', () => {
       it('returns null', () => {
         const result = BasePresenter.formatNumber(null)
 
-        expect(result).to.equal(null)
+        expect(result).toEqual(null)
       })
     })
 
@@ -343,7 +336,7 @@ describe('Base presenter', () => {
       it('returns null', () => {
         const result = BasePresenter.formatNumber(undefined)
 
-        expect(result).to.equal(null)
+        expect(result).toEqual(null)
       })
     })
   })
@@ -354,7 +347,7 @@ describe('Base presenter', () => {
     it('correctly returns the value as pounds, for example, 1149.50', async () => {
       const result = BasePresenter.formatPounds(valueInPence)
 
-      expect(result).to.equal('1149.50')
+      expect(result).toEqual('1149.50')
     })
   })
 
@@ -369,7 +362,7 @@ describe('Base presenter', () => {
       it('returns the purpose description', () => {
         const result = BasePresenter.formatPurposes(purposes)
 
-        expect(result).to.equal(['Spray Irrigation - Direct'])
+        expect(result).toEqual(['Spray Irrigation - Direct'])
       })
     })
 
@@ -381,7 +374,7 @@ describe('Base presenter', () => {
       it('returns the purpose description', () => {
         const result = BasePresenter.formatPurposes(purposes)
 
-        expect(result).to.equal(['Spray Irrigation - Direct (This is an alias)'])
+        expect(result).toEqual(['Spray Irrigation - Direct (This is an alias)'])
       })
     })
 
@@ -397,7 +390,7 @@ describe('Base presenter', () => {
       it('returns the purpose descriptions as a comma separated string', () => {
         const result = BasePresenter.formatPurposes(purposes)
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           'Spray Irrigation - Direct',
           'Spray Irrigation - Anti Frost',
           'Spray Irrigation - Storage'
@@ -417,7 +410,7 @@ describe('Base presenter', () => {
       it('returns the purpose descriptions as a comma separated string', () => {
         const result = BasePresenter.formatPurposes(purposes)
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           'Spray Irrigation - Direct (This is an alias)',
           'Spray Irrigation - Anti Frost',
           'Spray Irrigation - Storage'
@@ -432,7 +425,7 @@ describe('Base presenter', () => {
         it('returns the formatted value of 100 cubic metres converted to gallons to 6 decimal places', () => {
           const result = BasePresenter.formatQuantityToUnit(100, 'gal')
 
-          expect(result).to.equal('21,996.92483')
+          expect(result).toEqual('21,996.92483')
         })
       })
 
@@ -440,7 +433,7 @@ describe('Base presenter', () => {
         it('returns 0 as a string', () => {
           const result = BasePresenter.formatQuantityToUnit(0, 'gal')
 
-          expect(result).to.equal('0')
+          expect(result).toEqual('0')
         })
       })
     })
@@ -449,7 +442,7 @@ describe('Base presenter', () => {
       it('returns null', () => {
         const result = BasePresenter.formatQuantityToUnit(null, 'someUnit')
 
-        expect(result).to.equal(null)
+        expect(result).toEqual(null)
       })
     })
   })
@@ -459,7 +452,7 @@ describe('Base presenter', () => {
       it('returns the restriction type in sentence case', () => {
         const result = BasePresenter.formatRestrictionType('stop_or_reduce')
 
-        expect(result).to.equal('Stop or reduce')
+        expect(result).toEqual('Stop or reduce')
       })
     })
 
@@ -467,7 +460,7 @@ describe('Base presenter', () => {
       it('returns the restriction type in sentence case', () => {
         const result = BasePresenter.formatRestrictionType('stop')
 
-        expect(result).to.equal('Stop')
+        expect(result).toEqual('Stop')
       })
     })
   })
@@ -477,36 +470,36 @@ describe('Base presenter', () => {
 
     describe('when status is "due"', () => {
       describe('and the end date is greater than or equal to the current date', () => {
-        before(() => {
+        beforeAll(() => {
           testReturnLog = { endDate: today(), status: 'due' }
         })
 
         it('returns "not due yet"', () => {
           const result = BasePresenter.formatReturnLogStatus(testReturnLog)
 
-          expect(result).to.equal('not due yet')
+          expect(result).toEqual('not due yet')
         })
       })
 
       describe('and the end date is less than the current date', () => {
-        before(() => {
+        beforeAll(() => {
           testReturnLog = { endDate: yesterday(), status: 'due' }
         })
 
         describe('and the due date is null', () => {
-          before(() => {
+          beforeAll(() => {
             testReturnLog.dueDate = null
           })
 
           it('returns "open"', () => {
             const result = BasePresenter.formatReturnLogStatus(testReturnLog)
 
-            expect(result).to.equal('open')
+            expect(result).toEqual('open')
           })
         })
 
         describe('and the due date is more than 28 days in the future', () => {
-          before(() => {
+          beforeAll(() => {
             const inFuture = today()
 
             inFuture.setDate(inFuture.getDate() + 29)
@@ -517,81 +510,81 @@ describe('Base presenter', () => {
           it('returns "open"', () => {
             const result = BasePresenter.formatReturnLogStatus(testReturnLog)
 
-            expect(result).to.equal('open')
+            expect(result).toEqual('open')
           })
         })
 
         describe('and the due date is in the next 28 days', () => {
-          before(() => {
+          beforeAll(() => {
             testReturnLog = { dueDate: tomorrow(), status: 'due' }
           })
 
           it('returns "due"', () => {
             const result = BasePresenter.formatReturnLogStatus(testReturnLog)
 
-            expect(result).to.equal('due')
+            expect(result).toEqual('due')
           })
         })
 
         describe('and the due date is equal to the current date', () => {
-          before(() => {
+          beforeAll(() => {
             testReturnLog = { dueDate: today(), status: 'due' }
           })
 
           it('returns "due"', () => {
             const result = BasePresenter.formatReturnLogStatus(testReturnLog)
 
-            expect(result).to.equal('due')
+            expect(result).toEqual('due')
           })
         })
 
         describe('and the due date is less than the current date', () => {
-          before(() => {
+          beforeAll(() => {
             testReturnLog = { dueDate: yesterday(), status: 'due' }
           })
 
           it('returns "overdue"', () => {
             const result = BasePresenter.formatReturnLogStatus(testReturnLog)
 
-            expect(result).to.equal('overdue')
+            expect(result).toEqual('overdue')
           })
         })
       })
     })
 
     describe('when status is "received"', () => {
-      before(() => {
+      beforeAll(() => {
         testReturnLog = { dueDate: null, status: 'received' }
       })
 
       it('returns "received"', () => {
         const result = BasePresenter.formatReturnLogStatus(testReturnLog)
 
-        expect(result).to.equal('received')
+        expect(result).toEqual('received')
       })
     })
 
     describe('when status is "completed"', () => {
-      before(() => {
+      beforeAll(() => {
         testReturnLog = { dueDate: null, status: 'completed' }
       })
 
       it('returns "complete"', () => {
         const result = BasePresenter.formatReturnLogStatus(testReturnLog)
 
-        expect(result).to.equal('complete')
+        expect(result).toEqual('complete')
       })
     })
 
     describe('when status is "void"', () => {
-      before(() => {
+      beforeAll(() => {
         testReturnLog = { dueDate: null, status: 'void' }
       })
 
       it('returns "void"', () => {
         const result = BasePresenter.formatReturnLogStatus(testReturnLog)
 
-        expect(result).to.equal('void')
+        expect(result).toEqual('void')
       })
     })
   })
@@ -617,7 +610,7 @@ describe('Base presenter', () => {
       it('returns null', () => {
         const result = BasePresenter.formatValidationResult(validationResult)
 
-        expect(result).to.be.null()
+        expect(result).toBeNull()
       })
     })
 
@@ -646,7 +639,7 @@ describe('Base presenter', () => {
       it('returns the validation result formatted for our view pages', () => {
         const result = BasePresenter.formatValidationResult(validationResult)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           errorList: [
             {
               href: '#email',
@@ -718,7 +711,7 @@ describe('Base presenter', () => {
       it('returns the validation result formatted for our view pages', () => {
         const result = BasePresenter.formatValidationResult(validationResult)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           errorList: [
             { href: '#fromDate', text: 'Enter a valid from date' },
             {
@@ -782,7 +775,7 @@ describe('Base presenter', () => {
       it('returns the validation result formatted for our view pages', () => {
         const result = BasePresenter.formatValidationResult(validationResult)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           errorList: [
             {
               href: '#reference',
@@ -799,7 +792,7 @@ describe('Base presenter', () => {
     it('correctly formats the given value and unit, for example, 100 and Ml/d is formatted as 100Ml/d', () => {
       const result = BasePresenter.formatValueUnit(100, 'Ml/d')
 
-      expect(result).to.equal('100Ml/d')
+      expect(result).toEqual('100Ml/d')
     })
   })
 
@@ -822,7 +815,7 @@ describe('Base presenter', () => {
           it('returns null', () => {
             const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
 
-            expect(result).to.be.null()
+            expect(result).toBeNull()
           })
         })
 
@@ -844,7 +837,7 @@ describe('Base presenter', () => {
             it('returns null', () => {
               const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
 
-              expect(result).to.be.null()
+              expect(result).toBeNull()
             })
           })
 
@@ -856,7 +849,7 @@ describe('Base presenter', () => {
             it('returns only the reason', () => {
               const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
 
-              expect(result).to.equal('Minor Variation')
+              expect(result).toEqual('Minor Variation')
             })
           })
         })
@@ -871,7 +864,7 @@ describe('Base presenter', () => {
           it('returns just the "Created on" part', () => {
             const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
 
-            expect(result).to.equal(`Created on ${BasePresenter.formatLongDate(version.createdAt)}`)
+            expect(result).toEqual(`Created on ${BasePresenter.formatLongDate(version.createdAt)}`)
           })
         })
 
@@ -891,7 +884,7 @@ describe('Base presenter', () => {
               it('returns just the "Created on" part', () => {
                 const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
 
-                expect(result).to.equal(`Created on ${BasePresenter.formatLongDate(modLog.naldDate)}`)
+                expect(result).toEqual(`Created on ${BasePresenter.formatLongDate(modLog.naldDate)}`)
               })
             })
 
@@ -903,7 +896,7 @@ describe('Base presenter', () => {
               it('returns the "Created on" and "created by" parts', () => {
                 const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
 
-                expect(result).to.equal(
+                expect(result).toEqual(
                   `Created on ${BasePresenter.formatLongDate(modLog.naldDate)} by ${modLog.userId}`
                 )
               })
@@ -919,7 +912,7 @@ describe('Base presenter', () => {
               it('returns the "Reason" and "created on" parts', () => {
                 const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
 
-                expect(result).to.equal(`Minor Variation created on ${BasePresenter.formatLongDate(modLog.naldDate)}`)
+                expect(result).toEqual(`Minor Variation created on ${BasePresenter.formatLongDate(modLog.naldDate)}`)
               })
             })
 
@@ -931,7 +924,7 @@ describe('Base presenter', () => {
               it('returns the "Reason", "Created on" and "created by" parts', () => {
                 const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
 
-                expect(result).to.equal(
+                expect(result).toEqual(
                   `Minor Variation created on ${BasePresenter.formatLongDate(modLog.naldDate)} by ${modLog.userId}`
                 )
               })
@@ -957,7 +950,7 @@ describe('Base presenter', () => {
           it('returns null', () => {
             const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
 
-            expect(result).to.be.null()
+            expect(result).toBeNull()
           })
         })
 
@@ -979,7 +972,7 @@ describe('Base presenter', () => {
             it('returns null', () => {
               const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
 
-              expect(result).to.be.null()
+              expect(result).toBeNull()
             })
           })
 
@@ -991,7 +984,7 @@ describe('Base presenter', () => {
             it('returns only the reason', () => {
               const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
 
-              expect(result).to.equal('Minor Variation')
+              expect(result).toEqual('Minor Variation')
             })
           })
         })
@@ -1007,7 +1000,7 @@ describe('Base presenter', () => {
             it('returns just the "Created on" part', () => {
               const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
 
-              expect(result).to.equal(`Created on ${BasePresenter.formatLongDate(version.createdAt)}`)
+              expect(result).toEqual(`Created on ${BasePresenter.formatLongDate(version.createdAt)}`)
             })
           })
 
@@ -1019,7 +1012,7 @@ describe('Base presenter', () => {
             it('returns the "Created on" and "created by" parts', () => {
               const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
 
-              expect(result).to.equal(
+              expect(result).toEqual(
                 `Created on ${BasePresenter.formatLongDate(version.createdAt)} by ${version.user.username}`
               )
             })
@@ -1044,7 +1037,7 @@ describe('Base presenter', () => {
               it('returns just the "Created on" part', () => {
                 const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
 
-                expect(result).to.equal(`Created on ${BasePresenter.formatLongDate(modLog.naldDate)}`)
+                expect(result).toEqual(`Created on ${BasePresenter.formatLongDate(modLog.naldDate)}`)
               })
             })
 
@@ -1056,7 +1049,7 @@ describe('Base presenter', () => {
               it('returns the "Created on" and "created by" parts', () => {
                 const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
 
-                expect(result).to.equal(
+                expect(result).toEqual(
                   `Created on ${BasePresenter.formatLongDate(modLog.naldDate)} by ${modLog.userId}`
                 )
               })
@@ -1072,7 +1065,7 @@ describe('Base presenter', () => {
               it('returns the "Reason" and "created on" parts', () => {
                 const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
 
-                expect(result).to.equal(`Minor Variation created on ${BasePresenter.formatLongDate(modLog.naldDate)}`)
+                expect(result).toEqual(`Minor Variation created on ${BasePresenter.formatLongDate(modLog.naldDate)}`)
               })
             })
 
@@ -1084,7 +1077,7 @@ describe('Base presenter', () => {
               it('returns the "Reason", "Created on" and "created by" parts', () => {
                 const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
 
-                expect(result).to.equal(
+                expect(result).toEqual(
                   `Minor Variation created on ${BasePresenter.formatLongDate(modLog.naldDate)} by ${modLog.userId}`
                 )
               })
@@ -1100,7 +1093,7 @@ describe('Base presenter', () => {
       const number = 123
       const result = BasePresenter.leftPadZeroes(number, 7)
 
-      expect(result).to.equal('0000123')
+      expect(result).toEqual('0000123')
     })
   })
 
@@ -1115,7 +1108,7 @@ describe('Base presenter', () => {
       it('correctly returns the value in sentence case, for example, High', async () => {
         const result = BasePresenter.sentenceCase(valueToSentenceCase)
 
-        expect(result).to.equal('High')
+        expect(result).toEqual('High')
       })
     })
 
@@ -1127,7 +1120,7 @@ describe('Base presenter', () => {
       it('correctly returns the value in sentence case, for example, Spray irrigation', async () => {
         const result = BasePresenter.sentenceCase(valueToSentenceCase)
 
-        expect(result).to.equal('Spray irrigation')
+        expect(result).toEqual('Spray irrigation')
       })
     })
 
@@ -1139,7 +1132,7 @@ describe('Base presenter', () => {
       it('correctly returns the value in sentence case, for example, Spray irrigation - direct', async () => {
         const result = BasePresenter.sentenceCase(valueToSentenceCase)
 
-        expect(result).to.equal('Spray irrigation - direct')
+        expect(result).toEqual('Spray irrigation - direct')
       })
     })
 
@@ -1151,7 +1144,7 @@ describe('Base presenter', () => {
       it('correctly returns the value in sentence case, for example, Spray irrigation', async () => {
         const result = BasePresenter.sentenceCase(valueToSentenceCase)
 
-        expect(result).to.equal('Spray irrigation')
+        expect(result).toEqual('Spray irrigation')
       })
     })
   })
@@ -1167,7 +1160,7 @@ describe('Base presenter', () => {
       it('correctly returns the value in title case, for example, High', async () => {
         const result = BasePresenter.titleCase(valueToTitleCase)
 
-        expect(result).to.equal('High')
+        expect(result).toEqual('High')
       })
     })
 
@@ -1179,7 +1172,7 @@ describe('Base presenter', () => {
       it('correctly returns the value in title case, for example, Spray Irrigation', async () => {
         const result = BasePresenter.titleCase(valueToTitleCase)
 
-        expect(result).to.equal('Spray Irrigation')
+        expect(result).toEqual('Spray Irrigation')
       })
     })
 
@@ -1191,7 +1184,7 @@ describe('Base presenter', () => {
       it('correctly returns the value in title case, for example, Spray Irrigation - Direct', async () => {
         const result = BasePresenter.titleCase(valueToTitleCase)
 
-        expect(result).to.equal('Spray Irrigation - Direct')
+        expect(result).toEqual('Spray Irrigation - Direct')
       })
     })
 
@@ -1203,7 +1196,7 @@ describe('Base presenter', () => {
       it('correctly returns the value in title case', async () => {
         const result = BasePresenter.titleCase(valueToTitleCase)
 
-        expect(result).to.equal('Spray Irrigation')
+        expect(result).toEqual('Spray Irrigation')
       })
     })
 
@@ -1215,7 +1208,7 @@ describe('Base presenter', () => {
       it('correctly returns the value in title case', async () => {
         const result = BasePresenter.titleCase(valueToTitleCase)
 
-        expect(result).to.equal('(Text In Brackets)')
+        expect(result).toEqual('(Text In Brackets)')
       })
     })
   })

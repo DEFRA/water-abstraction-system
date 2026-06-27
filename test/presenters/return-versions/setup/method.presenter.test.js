@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const MethodPresenter = require('../../../../app/presenters/return-versions/setup/method.presenter.js')
 
@@ -60,7 +53,7 @@ describe('Return Versions - Setup - Method presenter', () => {
     it('correctly presents the data', () => {
       const result = MethodPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/reason',
           text: 'Back'
@@ -79,7 +72,7 @@ describe('Return Versions - Setup - Method presenter', () => {
     it('returns a link back to the "start-date" page', () => {
       const result = MethodPresenter.go(session)
 
-      expect(result.backLink).to.equal({
+      expect(result.backLink).toEqual({
         href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/reason',
         text: 'Back'
       })
@@ -91,7 +84,7 @@ describe('Return Versions - Setup - Method presenter', () => {
       it('returns true', () => {
         const result = MethodPresenter.go(session)
 
-        expect(result.displayCopyExisting).to.be.true()
+        expect(result.displayCopyExisting).toBe(true)
       })
     })
 
@@ -103,7 +96,7 @@ describe('Return Versions - Setup - Method presenter', () => {
       it('returns false', () => {
         const result = MethodPresenter.go(session)
 
-        expect(result.displayCopyExisting).to.be.false()
+        expect(result.displayCopyExisting).toBe(false)
       })
     })
   })
@@ -117,7 +110,7 @@ describe('Return Versions - Setup - Method presenter', () => {
       it('returns a populated method', () => {
         const result = MethodPresenter.go(session)
 
-        expect(result.method).to.equal('set-up-manually')
+        expect(result.method).toEqual('set-up-manually')
       })
     })
 
@@ -125,7 +118,7 @@ describe('Return Versions - Setup - Method presenter', () => {
       it('returns an empty method', () => {
         const result = MethodPresenter.go(session)
 
-        expect(result.method).to.be.null()
+        expect(result.method).toBeNull()
       })
     })
   })

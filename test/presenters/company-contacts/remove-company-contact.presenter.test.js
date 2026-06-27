@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 const { licenceEnds } = require('../../support/fixtures/licence.fixture.js')
@@ -31,7 +24,7 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
     it('returns page data for the view', () => {
       const result = RemoveCompanyContactPresenter.go(company, companyContact, licences)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/company-contacts/${companyContact.id}/contact-details`,
           text: 'Go back to contact details'
@@ -52,7 +45,7 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
         it('returns an empty array', () => {
           const result = RemoveCompanyContactPresenter.go(company, companyContact, licences)
 
-          expect(result.contact.licences).to.equal([])
+          expect(result.contact.licences).toEqual([])
         })
       })
 
@@ -67,7 +60,7 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
         it('returns the licence refs', () => {
           const result = RemoveCompanyContactPresenter.go(company, companyContact, licences)
 
-          expect(result.contact.licences).to.equal([licences[0].licenceRef])
+          expect(result.contact.licences).toEqual([licences[0].licenceRef])
         })
       })
     })
@@ -83,7 +76,7 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
           it('returns the warning', () => {
             const result = RemoveCompanyContactPresenter.go(company, companyContact, licences)
 
-            expect(result.warning).to.equal({
+            expect(result.warning).toEqual({
               iconFallbackText: 'Warning',
               text: 'Removing this contact means the licence holder will receive future water abstraction alerts by post.'
             })
@@ -99,7 +92,7 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
           it('does not return the warning', () => {
             const result = RemoveCompanyContactPresenter.go(company, companyContact, licences)
 
-            expect(result.warning).to.be.undefined()
+            expect(result.warning).toBeUndefined()
           })
         })
       })
@@ -113,7 +106,7 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
         it('does not return the warning', () => {
           const result = RemoveCompanyContactPresenter.go(company, companyContact, licences)
 
-          expect(result.warning).to.be.undefined()
+          expect(result.warning).toBeUndefined()
         })
       })
     })

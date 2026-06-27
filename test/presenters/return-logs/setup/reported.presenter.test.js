@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ReportedPresenter = require('../../../../app/presenters/return-logs/setup/reported.presenter.js')
 
@@ -24,7 +17,7 @@ describe('Return Logs Setup - Reported presenter', () => {
     it('correctly presents the data', () => {
       const result = ReportedPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: { href: `/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/submission`, text: 'Back' },
         reported: null,
         pageTitle: 'How was this return reported?',
@@ -43,7 +36,7 @@ describe('Return Logs Setup - Reported presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = ReportedPresenter.go(session)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: `/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check`,
           text: 'Back'
         })
@@ -54,7 +47,7 @@ describe('Return Logs Setup - Reported presenter', () => {
       it('returns a link back to the "Submission" page', () => {
         const result = ReportedPresenter.go(session)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: `/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/submission`,
           text: 'Back'
         })
@@ -71,7 +64,7 @@ describe('Return Logs Setup - Reported presenter', () => {
       it('returns the "reported" property populated to re-select the option', () => {
         const result = ReportedPresenter.go(session)
 
-        expect(result.reported).to.equal('meterReadings')
+        expect(result.reported).toEqual('meterReadings')
       })
     })
 
@@ -83,7 +76,7 @@ describe('Return Logs Setup - Reported presenter', () => {
       it('returns the "reported" property populated to re-select the option', () => {
         const result = ReportedPresenter.go(session)
 
-        expect(result.reported).to.equal('abstractionVolumes')
+        expect(result.reported).toEqual('abstractionVolumes')
       })
     })
   })

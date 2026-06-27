@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Thing under test
 const ViewReturnSubmissionPresenter = require('../../../app/presenters/return-submissions/view-return-submission.presenter.js')
@@ -37,7 +32,7 @@ describe('View Return Submissions presenter', () => {
       it('returns the expected result', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-        expect(result.backLink).to.equal(`/system/return-logs/${testReturnSubmission.returnLogId}/details`)
+        expect(result.backLink).toEqual(`/system/return-logs/${testReturnSubmission.returnLogId}/details`)
       })
     })
 
@@ -49,7 +44,7 @@ describe('View Return Submissions presenter', () => {
       it('returns the expected result', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-        expect(result.backLink).to.equal(
+        expect(result.backLink).toEqual(
           `/system/return-logs/${testReturnSubmission.returnLogId}/details?version=${testReturnSubmission.version}`
         )
       })
@@ -61,7 +56,7 @@ describe('View Return Submissions presenter', () => {
       it('returns the expected result', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-        expect(result.backLinkText).to.equal(`Go back to return ${testReturnSubmission.returnLog.returnReference}`)
+        expect(result.backLinkText).toEqual(`Go back to return ${testReturnSubmission.returnLog.returnReference}`)
       })
     })
 
@@ -73,7 +68,7 @@ describe('View Return Submissions presenter', () => {
       it('returns the expected result', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-        expect(result.backLinkText).to.equal(
+        expect(result.backLinkText).toEqual(
           `Go back to return ${testReturnSubmission.returnLog.returnReference} version ${testReturnSubmission.version}`
         )
       })
@@ -89,7 +84,7 @@ describe('View Return Submissions presenter', () => {
       it('returns false', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-        expect(result.displayReadings).to.equal(false)
+        expect(result.displayReadings).toEqual(false)
       })
     })
 
@@ -101,7 +96,7 @@ describe('View Return Submissions presenter', () => {
       it('returns true', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-        expect(result.displayReadings).to.equal(true)
+        expect(result.displayReadings).toEqual(true)
       })
     })
   })
@@ -115,7 +110,7 @@ describe('View Return Submissions presenter', () => {
       it('returns true', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-        expect(result.displayUnits).to.equal(true)
+        expect(result.displayUnits).toEqual(true)
       })
     })
 
@@ -127,7 +122,7 @@ describe('View Return Submissions presenter', () => {
       it('returns false', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-        expect(result.displayUnits).to.equal(false)
+        expect(result.displayUnits).toEqual(false)
       })
     })
   })
@@ -136,7 +131,7 @@ describe('View Return Submissions presenter', () => {
     it('returns the expected result', () => {
       const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-      expect(result.pageTitle).to.equal('Water abstracted February 2025')
+      expect(result.pageTitle).toEqual('Water abstracted February 2025')
     })
   })
 
@@ -144,7 +139,7 @@ describe('View Return Submissions presenter', () => {
     it('returns the expected result', () => {
       const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-      expect(result.returnReference).to.equal(testReturnSubmission.returnLog.returnReference)
+      expect(result.returnReference).toEqual(testReturnSubmission.returnLog.returnReference)
     })
   })
 
@@ -166,15 +161,15 @@ describe('View Return Submissions presenter', () => {
             return header.text
           })
 
-          expect(headers).to.equal(['Day', 'Cubic metres'])
+          expect(headers).toEqual(['Day', 'Cubic metres'])
         })
 
         it('includes the expected rows', () => {
           const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-          expect(result.tableData.rows.length).to.equal(28)
+          expect(result.tableData.rows.length).toEqual(28)
           // We use include() as a row can also include a reading key which we don't care about for volumes
-          expect(result.tableData.rows[0]).to.include({
+          expect(result.tableData.rows[0]).toMatchObject({
             cubicMetresQuantity: '1,000',
             date: '1 February 2025',
             unitQuantity: '1,000'
@@ -184,8 +179,8 @@ describe('View Return Submissions presenter', () => {
         it('includes the expected totals', () => {
           const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-          expect(result.tableData.cubicMetresTotal).to.equal('28,000')
-          expect(result.tableData.unitTotal).to.equal('28,000')
+          expect(result.tableData.cubicMetresTotal).toEqual('28,000')
+          expect(result.tableData.unitTotal).toEqual('28,000')
         })
       })
 
@@ -202,15 +197,15 @@ describe('View Return Submissions presenter', () => {
             return header.text
           })
 
-          expect(headers).to.equal(['Day', 'Gallons', 'Cubic metres'])
+          expect(headers).toEqual(['Day', 'Gallons', 'Cubic metres'])
         })
 
         it('includes the expected rows', () => {
           const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-          expect(result.tableData.rows.length).to.equal(28)
+          expect(result.tableData.rows.length).toEqual(28)
           // We use include() as a row can also include a reading key which we don't care about for volumes
-          expect(result.tableData.rows[0]).to.include({
+          expect(result.tableData.rows[0]).toMatchObject({
             cubicMetresQuantity: '1,000',
             date: '1 February 2025',
             unitQuantity: '219,969.248299'
@@ -220,8 +215,8 @@ describe('View Return Submissions presenter', () => {
         it('includes the expected totals', () => {
           const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-          expect(result.tableData.cubicMetresTotal).to.equal('28,000')
-          expect(result.tableData.unitTotal).to.equal('6,159,138.952372')
+          expect(result.tableData.cubicMetresTotal).toEqual('28,000')
+          expect(result.tableData.unitTotal).toEqual('6,159,138.952372')
         })
       })
     })
@@ -239,15 +234,15 @@ describe('View Return Submissions presenter', () => {
           return header.text
         })
 
-        expect(headers).to.equal(['Day', 'Reading', 'Cubic metres'])
+        expect(headers).toEqual(['Day', 'Reading', 'Cubic metres'])
       })
 
       it('includes the expected rows', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-        expect(result.tableData.rows.length).to.equal(28)
+        expect(result.tableData.rows.length).toEqual(28)
         // We use include() as a row can also include a reading key which we don't care about for volumes
-        expect(result.tableData.rows[0]).to.include({
+        expect(result.tableData.rows[0]).toMatchObject({
           reading: 1001,
           date: '1 February 2025'
         })
@@ -256,7 +251,7 @@ describe('View Return Submissions presenter', () => {
       it('includes the expected totals', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-        expect(result.tableData.cubicMetresTotal).to.equal('28,000')
+        expect(result.tableData.cubicMetresTotal).toEqual('28,000')
       })
     })
 
@@ -274,7 +269,7 @@ describe('View Return Submissions presenter', () => {
           return header.text
         })
 
-        expect(headers).to.equal(['Day', 'Reading', 'Gallons', 'Cubic metres'])
+        expect(headers).toEqual(['Day', 'Reading', 'Gallons', 'Cubic metres'])
       })
     })
 
@@ -291,15 +286,15 @@ describe('View Return Submissions presenter', () => {
           return header.text
         })
 
-        expect(headers).to.include('Day')
+        expect(headers).toContain('Day')
       })
 
       it('includes the expected rows', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-        expect(result.tableData.rows.length).to.equal(28)
-        expect(result.tableData.rows[0]).to.include({ date: '1 February 2025' })
-        expect(result.tableData.rows[27]).to.include({ date: '28 February 2025' })
+        expect(result.tableData.rows.length).toEqual(28)
+        expect(result.tableData.rows[0]).toMatchObject({ date: '1 February 2025' })
+        expect(result.tableData.rows[27]).toMatchObject({ date: '28 February 2025' })
       })
     })
 
@@ -317,15 +312,15 @@ describe('View Return Submissions presenter', () => {
           return header.text
         })
 
-        expect(headers).to.include('Week ending')
+        expect(headers).toContain('Week ending')
       })
 
       it('includes the expected rows that end within the month', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-3')
 
-        expect(result.tableData.rows.length).to.equal(4)
-        expect(result.tableData.rows[0]).to.include({ date: '5 April 2025' })
-        expect(result.tableData.rows).to.not.include({ date: '3 May 2025' })
+        expect(result.tableData.rows.length).toEqual(4)
+        expect(result.tableData.rows[0]).toMatchObject({ date: '5 April 2025' })
+        expect(result.tableData.rows).not.toContainEqual({ date: '3 May 2025' })
       })
     })
   })

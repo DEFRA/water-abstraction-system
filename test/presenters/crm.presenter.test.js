@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateUUID } = require('../../app/lib/general.lib.js')
 const { licence } = require('../support/fixtures/licence.fixture.js')
@@ -20,7 +13,7 @@ describe('CRM presenter', () => {
       it('returns "Yes, for all licences"', () => {
         const result = CRMPresenter.abstractionAlertsLabel('yes')
 
-        expect(result).to.equal('Yes, for all licences')
+        expect(result).toEqual('Yes, for all licences')
       })
     })
 
@@ -28,7 +21,7 @@ describe('CRM presenter', () => {
       it('returns "Yes, for some licences"', () => {
         const result = CRMPresenter.abstractionAlertsLabel('some')
 
-        expect(result).to.equal('Yes, for some licences')
+        expect(result).toEqual('Yes, for some licences')
       })
     })
 
@@ -36,7 +29,7 @@ describe('CRM presenter', () => {
       it('returns "No"', () => {
         const result = CRMPresenter.abstractionAlertsLabel('no')
 
-        expect(result).to.equal('No')
+        expect(result).toEqual('No')
       })
     })
   })
@@ -61,7 +54,7 @@ describe('CRM presenter', () => {
         it('returns the correct contact', () => {
           const result = CRMPresenter.formatContact(contact)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             link: `/system/company-contacts/${contact.id}/contact-details`,
             type: 'Abstraction alerts',
             name: 'Rachael Tyrell'
@@ -81,7 +74,7 @@ describe('CRM presenter', () => {
         it('returns the correct contact', () => {
           const result = CRMPresenter.formatContact(contact)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             link: `/system/company-contacts/${contact.id}/contact-details`,
             type: 'Additional contact',
             name: 'Rachael Tyrell'
@@ -105,7 +98,7 @@ describe('CRM presenter', () => {
         it('returns the correct contact', () => {
           const result = CRMPresenter.formatContact(contact, billingQueryArgs)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             link: `/system/billing-accounts/${contact.id}?company-id=${billingQueryId}`,
             type: 'Billing',
             name: 'Rachael Tyrell'
@@ -125,7 +118,7 @@ describe('CRM presenter', () => {
         it('returns the correct contact', () => {
           const result = CRMPresenter.formatContact(contact)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             link: `/system/users/external/${contact.id}/details?back=search`,
             type: 'Basic user',
             name: 'user@test.com'
@@ -145,7 +138,7 @@ describe('CRM presenter', () => {
         it('returns the correct contact', () => {
           const result = CRMPresenter.formatContact(contact)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             link: `/system/users/external/${contact.id}/details?back=search`,
             type: 'Primary user',
             name: 'user@test.com'
@@ -165,7 +158,7 @@ describe('CRM presenter', () => {
         it('returns the correct contact', () => {
           const result = CRMPresenter.formatContact(contact)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             link: `/system/users/external/${contact.id}/details?back=search`,
             type: 'Returns user',
             name: 'user@test.com'
@@ -190,7 +183,7 @@ describe('CRM presenter', () => {
           it('returns the correct contact', () => {
             const result = CRMPresenter.formatContact(contact, billingQueryArgs)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               link: `/system/companies/${contact.id}/licence-holder`,
               type: 'Licence holder',
               name: 'Rachael Tyrell'
@@ -206,7 +199,7 @@ describe('CRM presenter', () => {
           it('returns the correct contact', () => {
             const result = CRMPresenter.formatContact(contact, billingQueryArgs)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               link: `/system/companies/${contact.id}/address/${contact.addressId}/licence-holder?licence-id=${billingQueryId}`,
               type: 'Licence holder',
               name: 'Rachael Tyrell'
@@ -232,7 +225,7 @@ describe('CRM presenter', () => {
           it('returns the correct contact', () => {
             const result = CRMPresenter.formatContact(contact, billingQueryArgs)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               link: `/system/companies/${contact.id}/returns-to`,
               type: 'Returns to',
               name: 'Rachael Tyrell'
@@ -248,7 +241,7 @@ describe('CRM presenter', () => {
           it('returns the correct contact', () => {
             const result = CRMPresenter.formatContact(contact, billingQueryArgs)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               link: `/system/companies/${contact.id}/address/${contact.addressId}/returns-to?licence-id=${billingQueryId}`,
               type: 'Returns to',
               name: 'Rachael Tyrell'
@@ -281,7 +274,7 @@ describe('CRM presenter', () => {
         it('returns an empty array', () => {
           const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
 
-          expect(result).to.be.empty()
+          expect(result).toHaveLength(0)
         })
 
         describe('and there are existing "selectedLicences"', () => {
@@ -293,7 +286,7 @@ describe('CRM presenter', () => {
             it('returns the matching licence references', () => {
               const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
 
-              expect(result).to.equal([liveLicences[0].licenceRef])
+              expect(result).toEqual([liveLicences[0].licenceRef])
             })
           })
 
@@ -305,7 +298,7 @@ describe('CRM presenter', () => {
             it('returns the matching licence references (none)', () => {
               const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
 
-              expect(result).to.equal([])
+              expect(result).toEqual([])
             })
           })
         })
@@ -319,7 +312,7 @@ describe('CRM presenter', () => {
         it('returns an empty array', () => {
           const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
 
-          expect(result).to.be.empty()
+          expect(result).toHaveLength(0)
         })
       })
     })
@@ -337,7 +330,7 @@ describe('CRM presenter', () => {
         it('returns an empty array', () => {
           const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
 
-          expect(result).to.be.empty()
+          expect(result).toHaveLength(0)
         })
 
         describe('and there are existing "selectedLicences"', () => {
@@ -348,7 +341,7 @@ describe('CRM presenter', () => {
           it('returns an empty array', () => {
             const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
 
-            expect(result).to.be.empty()
+            expect(result).toHaveLength(0)
           })
         })
       })
@@ -361,7 +354,7 @@ describe('CRM presenter', () => {
         it('returns an empty array', () => {
           const result = CRMPresenter.selectedLiveLicences(liveLicences, selectedLicences, noticeSetting)
 
-          expect(result).to.be.empty()
+          expect(result).toHaveLength(0)
         })
       })
     })

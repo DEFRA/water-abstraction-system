@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 const { generateUUID, today } = require('../../../../app/lib/general.lib.js')
@@ -36,7 +29,7 @@ describe('Users - External - Licences Presenter', () => {
   it('correctly presents the data', () => {
     const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       activeNavBar: 'users',
       backLink: {
         href: '/system/users',
@@ -81,7 +74,7 @@ describe('Users - External - Licences Presenter', () => {
       it('returns "true"', () => {
         const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
 
-        expect(result.displayLicenceEndedMessage).to.be.true()
+        expect(result.displayLicenceEndedMessage).toBe(true)
       })
     })
 
@@ -95,7 +88,7 @@ describe('Users - External - Licences Presenter', () => {
       it('returns "false"', () => {
         const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
 
-        expect(result.displayLicenceEndedMessage).to.be.false()
+        expect(result.displayLicenceEndedMessage).toBe(false)
       })
     })
   })
@@ -106,7 +99,7 @@ describe('Users - External - Licences Presenter', () => {
         it('returns the link to the unlink licences journey', () => {
           const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
 
-          expect(result.unregisterActionLink).to.equal(`/system/users/external/${user.id}/setup?back=${back}`)
+          expect(result.unregisterActionLink).toEqual(`/system/users/external/${user.id}/setup?back=${back}`)
         })
       })
 
@@ -118,7 +111,7 @@ describe('Users - External - Licences Presenter', () => {
         it('returns "null"', () => {
           const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
 
-          expect(result.unregisterActionLink).to.be.null()
+          expect(result.unregisterActionLink).toBeNull()
         })
       })
 
@@ -130,7 +123,7 @@ describe('Users - External - Licences Presenter', () => {
         it('returns "null"', () => {
           const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
 
-          expect(result.unregisterActionLink).to.be.null()
+          expect(result.unregisterActionLink).toBeNull()
         })
       })
     })
@@ -143,7 +136,7 @@ describe('Users - External - Licences Presenter', () => {
       it('returns "null"', () => {
         const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
 
-        expect(result.unregisterActionLink).to.be.null()
+        expect(result.unregisterActionLink).toBeNull()
       })
     })
   })

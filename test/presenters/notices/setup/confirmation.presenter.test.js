@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
 
@@ -30,7 +23,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
   it('correctly presents the data', () => {
     const result = ConfirmationPresenter.go(event)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       forwardLink: `/system/notices/${event.id}`,
       monitoringStationLink: null,
       pageTitle: `Returns invitations sent`,
@@ -46,7 +39,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     it('correctly presents the data', () => {
       const result = ConfirmationPresenter.go(event)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         forwardLink: `/system/notices/${event.id}`,
         monitoringStationLink: null,
         pageTitle: `Returns invitations sent`,
@@ -63,7 +56,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     it('correctly presents the data', () => {
       const result = ConfirmationPresenter.go(event)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         forwardLink: `/system/notices/${event.id}`,
         monitoringStationLink: null,
         pageTitle: `Returns reminders sent`,
@@ -82,7 +75,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     it('correctly presents the data', () => {
       const result = ConfirmationPresenter.go(event)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         forwardLink: `/system/notices/${event.id}`,
         monitoringStationLink: '/system/monitoring-stations/123',
         pageTitle: 'Water abstraction alerts sent',
@@ -99,7 +92,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     it('correctly presents the data', () => {
       const result = ConfirmationPresenter.go(event)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         forwardLink: `/system/notices/${event.id}`,
         monitoringStationLink: null,
         pageTitle: 'Paper returns sent',
@@ -116,7 +109,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     it('correctly presents the data', () => {
       const result = ConfirmationPresenter.go(event)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         forwardLink: `/system/notices/${event.id}`,
         monitoringStationLink: null,
         pageTitle: 'Renewal invitations sent',

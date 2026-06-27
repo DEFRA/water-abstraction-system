@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ProfileDetailsPresenter = require('../../../app/presenters/users/profile-details.presenter.js')
 
@@ -21,7 +14,7 @@ describe('Users - Profile Details Presenter', () => {
     it('returns the basic page data for the view', () => {
       const result = ProfileDetailsPresenter.go(profileDetails)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         address: '',
         backLink: {
           href: '/',
@@ -59,7 +52,7 @@ describe('Users - Profile Details Presenter', () => {
     it('returns the basic page data for the view', () => {
       const result = ProfileDetailsPresenter.go(profileDetails)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         address: profileDetails.address,
         backLink: {
           href: '/',

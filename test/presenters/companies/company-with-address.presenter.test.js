@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 
@@ -29,7 +22,7 @@ describe('Companies - Company With Address Presenter', () => {
     it('returns page data for the view', () => {
       const result = CompanyWithAddressPresenter.go(company, address, role, licenceId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/licences/${licenceId}/contact-details`,
           text: 'Go back to contact details'
@@ -57,7 +50,7 @@ describe('Companies - Company With Address Presenter', () => {
         it('returns a link to the licence contact details page', () => {
           const result = CompanyWithAddressPresenter.go(company, address, role, licenceId)
 
-          expect(result.backLink).to.equal({
+          expect(result.backLink).toEqual({
             href: `/system/licences/${licenceId}/contact-details`,
             text: 'Go back to contact details'
           })
@@ -68,7 +61,7 @@ describe('Companies - Company With Address Presenter', () => {
         it('returns a link to the licence holder contacts page', () => {
           const result = CompanyWithAddressPresenter.go(company, address, role)
 
-          expect(result.backLink).to.equal({
+          expect(result.backLink).toEqual({
             href: `/system/companies/${company.id}/contacts`,
             text: 'Go back to licence holder contacts'
           })

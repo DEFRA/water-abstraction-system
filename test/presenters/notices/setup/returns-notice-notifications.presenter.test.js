@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
 const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
@@ -56,7 +49,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
   it('correctly presents the data', () => {
     const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 
-    expect(result).to.equal([
+    expect(result).toEqual([
       {
         contactType: recipients[0].contact_type,
         dueDate: dynamicEmailDueDate,
@@ -187,7 +180,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[0].messageRef).to.equal('returns invitation')
+            expect(result[0].messageRef).toEqual('returns invitation')
           })
         })
 
@@ -195,7 +188,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[1].messageRef).to.equal('returns invitation')
+            expect(result[1].messageRef).toEqual('returns invitation')
           })
         })
 
@@ -203,7 +196,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[4].messageRef).to.equal('returns invitation')
+            expect(result[4].messageRef).toEqual('returns invitation')
           })
         })
       })
@@ -213,7 +206,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[2].messageRef).to.equal('returns invitation')
+            expect(result[2].messageRef).toEqual('returns invitation')
           })
         })
 
@@ -221,7 +214,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[3].messageRef).to.equal('returns invitation')
+            expect(result[3].messageRef).toEqual('returns invitation')
           })
         })
 
@@ -229,7 +222,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[5].messageRef).to.equal('returns invitation')
+            expect(result[5].messageRef).toEqual('returns invitation')
           })
         })
       })
@@ -245,7 +238,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[0].messageRef).to.equal('returns reminder')
+            expect(result[0].messageRef).toEqual('returns reminder')
           })
         })
 
@@ -253,7 +246,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[1].messageRef).to.equal('returns reminder')
+            expect(result[1].messageRef).toEqual('returns reminder')
           })
         })
 
@@ -261,7 +254,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[4].messageRef).to.equal('returns reminder')
+            expect(result[4].messageRef).toEqual('returns reminder')
           })
         })
       })
@@ -271,7 +264,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[2].messageRef).to.equal('returns reminder')
+            expect(result[2].messageRef).toEqual('returns reminder')
           })
         })
 
@@ -279,7 +272,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[3].messageRef).to.equal('returns reminder')
+            expect(result[3].messageRef).toEqual('returns reminder')
           })
         })
 
@@ -287,7 +280,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[5].messageRef).to.equal('returns reminder')
+            expect(result[5].messageRef).toEqual('returns reminder')
           })
         })
       })
@@ -299,7 +292,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
       it('returns the expected "personalisation"', () => {
         const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 
-        expect(result[0].personalisation).to.equal({
+        expect(result[0].personalisation).toEqual({
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
           returnDueDate: formatLongDate(recipients[0].notificationDueDate)
@@ -311,7 +304,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
       it('returns the expected "personalisation"', () => {
         const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 
-        expect(result[2].personalisation).to.equal({
+        expect(result[2].personalisation).toEqual({
           address_line_1: 'Returnsholder',
           address_line_2: '4',
           address_line_3: 'Privet Drive',

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Thing under test
 const RemoveBillLicencePresenter = require('../../../app/presenters/bill-licences/remove-bill-licence.presenter.js')
@@ -26,7 +21,7 @@ describe('Remove Bill Licence presenter', () => {
     it('correctly presents the data', () => {
       const result = RemoveBillLicencePresenter.go(billLicence)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         accountName: 'Example Trading Ltd',
         accountNumber: 'T65757520A',
         billLicenceId: billLicence.id,
@@ -48,7 +43,7 @@ describe('Remove Bill Licence presenter', () => {
         it('returns the name of the company linked to the billing account', () => {
           const result = RemoveBillLicencePresenter.go(billLicence)
 
-          expect(result.accountName).to.equal('Example Trading Ltd')
+          expect(result.accountName).toEqual('Example Trading Ltd')
         })
       })
 
@@ -64,7 +59,7 @@ describe('Remove Bill Licence presenter', () => {
         it('returns the name of the agent company', () => {
           const result = RemoveBillLicencePresenter.go(billLicence)
 
-          expect(result.accountName).to.equal('Alan Broke')
+          expect(result.accountName).toEqual('Alan Broke')
         })
       })
     })
@@ -73,7 +68,7 @@ describe('Remove Bill Licence presenter', () => {
       it('returns the licence reference as part of the title', () => {
         const result = RemoveBillLicencePresenter.go(billLicence)
 
-        expect(result.pageTitle).to.equal("You're about to remove WA/055/0017/013 from the bill run")
+        expect(result.pageTitle).toEqual("You're about to remove WA/055/0017/013 from the bill run")
       })
     })
   })

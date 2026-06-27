@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const RemovePresenter = require('../../../app/presenters/licence-monitoring-station/remove.presenter.js')
 
@@ -24,7 +17,7 @@ describe('Licence Monitoring Station - Remove presenter', () => {
     it('correctly presents the data', () => {
       const result = RemovePresenter.go(licenceMonitoringStation)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: `/system/monitoring-stations/${monitoringStationId}/licence/${licenceId}`,
         licenceConditionTitle: 'Hands off flow threshold',
         licenceRef: '99/999',
@@ -48,7 +41,7 @@ describe('Licence Monitoring Station - Remove presenter', () => {
       it('returns the string "Not linked to a condition"', () => {
         const result = RemovePresenter.go(licenceMonitoringStation)
 
-        expect(result.linkedCondition).to.equal('Not linked to a condition')
+        expect(result.linkedCondition).toEqual('Not linked to a condition')
       })
     })
 
@@ -65,7 +58,7 @@ describe('Licence Monitoring Station - Remove presenter', () => {
       it('returns the condition title and NALD ID, which is the last set of digits of the "externalId"', () => {
         const result = RemovePresenter.go(licenceMonitoringStation)
 
-        expect(result.linkedCondition).to.equal('The condition title, NALD ID 98765')
+        expect(result.linkedCondition).toEqual('The condition title, NALD ID 98765')
       })
     })
   })
@@ -80,7 +73,7 @@ describe('Licence Monitoring Station - Remove presenter', () => {
       it('returns the correct "station" name', () => {
         const result = RemovePresenter.go(licenceMonitoringStation)
 
-        expect(result.station).to.equal('The Station')
+        expect(result.station).toEqual('The Station')
       })
     })
 
@@ -93,7 +86,7 @@ describe('Licence Monitoring Station - Remove presenter', () => {
       it('returns the correct "station" name', () => {
         const result = RemovePresenter.go(licenceMonitoringStation)
 
-        expect(result.station).to.equal('River Piddle at The Station')
+        expect(result.station).toEqual('River Piddle at The Station')
       })
     })
   })

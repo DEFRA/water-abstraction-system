@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
 const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
@@ -28,7 +21,7 @@ describe('Notifications - Notification error presenter', () => {
     it('returns null', () => {
       const result = NotificationErrorPresenter.go(notification)
 
-      expect(result).to.be.null()
+      expect(result).toBeNull()
     })
   })
 
@@ -45,7 +38,7 @@ describe('Notifications - Notification error presenter', () => {
       it("returns the notify status and Notify's error description", () => {
         const result = NotificationErrorPresenter.go(notification)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           status: 'permanent-failure',
           description: 'The provider could not deliver the message because the email address was wrong.'
         })
@@ -66,7 +59,7 @@ describe('Notifications - Notification error presenter', () => {
         it('returns our generic status and our own error description', () => {
           const result = NotificationErrorPresenter.go(notification)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             status: 'Failed to send to Notify',
             description: 'Address lines must not start with any of the following characters: @ ( ) = [ ] ” \\\\ / , < >'
           })
@@ -82,7 +75,7 @@ describe('Notifications - Notification error presenter', () => {
         it('returns our generic status and our own error description', () => {
           const result = NotificationErrorPresenter.go(notification)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             status: 'Failed to send to Notify',
             description: 'The last line of address must be a real UK postcode or another country'
           })
@@ -98,7 +91,7 @@ describe('Notifications - Notification error presenter', () => {
         it('returns our generic status and description', () => {
           const result = NotificationErrorPresenter.go(notification)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             status: 'Failed to send to Notify',
             description: 'Internal system error'
           })
@@ -113,7 +106,7 @@ describe('Notifications - Notification error presenter', () => {
         it('returns our generic status and our "No error logged" description', () => {
           const result = NotificationErrorPresenter.go(notification)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             status: 'Failed to send to Notify',
             description: 'No error logged'
           })
@@ -128,7 +121,7 @@ describe('Notifications - Notification error presenter', () => {
         it('returns our generic status and our "No error logged" description', () => {
           const result = NotificationErrorPresenter.go(notification)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             status: 'Failed to send to Notify',
             description: 'No error logged'
           })

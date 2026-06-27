@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
@@ -51,7 +46,7 @@ describe('Licence Versions - View presenter', () => {
     it('returns page data for the view', () => {
       const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/licences/${licenceVersion.licence.id}/history`,
           text: 'Go back to history'
@@ -83,7 +78,7 @@ describe('Licence Versions - View presenter', () => {
       it('returns "licence issued"', () => {
         const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-        expect(result.changeType).to.equal('licence issued')
+        expect(result.changeType).toEqual('licence issued')
       })
     })
 
@@ -95,7 +90,7 @@ describe('Licence Versions - View presenter', () => {
       it('returns "no licence issued"', () => {
         const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-        expect(result.changeType).to.equal('no licence issued')
+        expect(result.changeType).toEqual('no licence issued')
       })
     })
   })
@@ -108,7 +103,7 @@ describe('Licence Versions - View presenter', () => {
     it('returns the "conditionTypes"', () => {
       const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-      expect(result.conditionTypes).to.equal([
+      expect(result.conditionTypes).toEqual([
         {
           conditions: [
             {
@@ -143,7 +138,7 @@ describe('Licence Versions - View presenter', () => {
       it('returns the email address', () => {
         const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-        expect(result.errorInDataEmail).to.equal('notify@test.gov.uk')
+        expect(result.errorInDataEmail).toEqual('notify@test.gov.uk')
       })
     })
 
@@ -155,7 +150,7 @@ describe('Licence Versions - View presenter', () => {
       it('returns null', () => {
         const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-        expect(result.errorInDataEmail).to.be.null()
+        expect(result.errorInDataEmail).toBeNull()
       })
     })
   })
@@ -171,7 +166,7 @@ describe('Licence Versions - View presenter', () => {
       it('returns the licence details', () => {
         const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-        expect(result.licenceDetails).to.equal({
+        expect(result.licenceDetails).toEqual({
           address: ['12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
           applicationNumber: 'R.1',
           endDate: '1 February 2024',
@@ -186,7 +181,7 @@ describe('Licence Versions - View presenter', () => {
       it('returns the licence details', () => {
         const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-        expect(result.licenceDetails).to.equal({
+        expect(result.licenceDetails).toEqual({
           address: ['12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
           applicationNumber: null,
           endDate: null,
@@ -203,7 +198,7 @@ describe('Licence Versions - View presenter', () => {
       it('returns null', () => {
         const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-        expect(result.notes).to.be.null()
+        expect(result.notes).toBeNull()
       })
     })
 
@@ -216,7 +211,7 @@ describe('Licence Versions - View presenter', () => {
         it('returns the notes', () => {
           const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-          expect(result.notes).to.equal({
+          expect(result.notes).toEqual({
             additionalNotes: [],
             firstNote: 'Whole licence trade'
           })
@@ -231,7 +226,7 @@ describe('Licence Versions - View presenter', () => {
         it('returns null', () => {
           const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-          expect(result.notes).to.be.null()
+          expect(result.notes).toBeNull()
         })
       })
     })
@@ -242,7 +237,7 @@ describe('Licence Versions - View presenter', () => {
       it('returns null', () => {
         const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-        expect(result.pagination).to.be.null()
+        expect(result.pagination).toBeNull()
       })
     })
 
@@ -270,7 +265,7 @@ describe('Licence Versions - View presenter', () => {
         it('returns the "previous" and "next" links', () => {
           const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-          expect(result.pagination).to.equal({
+          expect(result.pagination).toEqual({
             next: {
               href: `/system/licence-versions/${nextLicenceVersion.id}`,
               labelText: 'Starting 1 January 2025',
@@ -293,7 +288,7 @@ describe('Licence Versions - View presenter', () => {
         it('returns the "next" link', () => {
           const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-          expect(result.pagination).to.equal({
+          expect(result.pagination).toEqual({
             next: {
               href: `/system/licence-versions/${nextLicenceVersion.id}`,
               labelText: 'Starting 1 January 2025',
@@ -311,7 +306,7 @@ describe('Licence Versions - View presenter', () => {
         it('returns the "previous" link', () => {
           const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-          expect(result.pagination).to.equal({
+          expect(result.pagination).toEqual({
             previous: {
               href: `/system/licence-versions/${previousLicenceVersion.id}`,
               labelText: 'Starting 1 January 2019',
@@ -328,7 +323,7 @@ describe('Licence Versions - View presenter', () => {
       it('returns an empty array', () => {
         const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-        expect(result.points).to.equal([])
+        expect(result.points).toEqual([])
       })
     })
 
@@ -346,7 +341,7 @@ describe('Licence Versions - View presenter', () => {
       it('returns the points', () => {
         const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-        expect(result.points).to.equal([
+        expect(result.points).toEqual([
           {
             bgsReference: 'TL 14/123',
             category: 'Single Point',
@@ -406,7 +401,7 @@ describe('Licence Versions - View presenter', () => {
       it('returns the points ordered by the description and no duplicates', () => {
         const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-        expect(result.points).to.equal([
+        expect(result.points).toEqual([
           {
             bgsReference: 'TL 14/123',
             category: 'Single Point',
@@ -481,7 +476,7 @@ describe('Licence Versions - View presenter', () => {
       it('should return the purposes', () => {
         const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-        expect(result.purposes).to.equal([
+        expect(result.purposes).toEqual([
           {
             abstractionAmounts: [],
             abstractionAmountsTitle: 'Abstraction amount',
@@ -502,7 +497,7 @@ describe('Licence Versions - View presenter', () => {
       it('should return an empty array', () => {
         const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-        expect(result.purposes).to.equal([])
+        expect(result.purposes).toEqual([])
       })
     })
   })

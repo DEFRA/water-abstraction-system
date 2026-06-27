@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const BasePresenter = require('../../../app/presenters/monitoring-stations/base.presenter.js')
 
@@ -40,7 +33,7 @@ describe('Monitoring Stations - Base presenter', () => {
       it('returns "Flow restriction type and threshold"', () => {
         const result = BasePresenter.determineRestrictionHeading(licenceMonitoringStations)
 
-        expect(result).to.equal('Flow restriction type and threshold')
+        expect(result).toEqual('Flow restriction type and threshold')
       })
     })
 
@@ -52,7 +45,7 @@ describe('Monitoring Stations - Base presenter', () => {
       it('returns "Flow restriction type and threshold"', () => {
         const result = BasePresenter.determineRestrictionHeading(licenceMonitoringStations)
 
-        expect(result).to.equal('Level restriction type and threshold')
+        expect(result).toEqual('Level restriction type and threshold')
       })
     })
 
@@ -69,7 +62,7 @@ describe('Monitoring Stations - Base presenter', () => {
       it('returns "Flow and level restriction type and threshold"', () => {
         const result = BasePresenter.determineRestrictionHeading(licenceMonitoringStations)
 
-        expect(result).to.equal('Flow and level restriction type and threshold')
+        expect(result).toEqual('Flow and level restriction type and threshold')
       })
     })
   })
@@ -78,7 +71,7 @@ describe('Monitoring Stations - Base presenter', () => {
     it('returns each licence monitoring station formatted as a restriction for display', () => {
       const results = BasePresenter.formatRestrictions(licenceMonitoringStations)
 
-      expect(results).to.equal([
+      expect(results).toEqual([
         {
           abstractionPeriod: '1 April to 31 August',
           action: null,
@@ -104,7 +97,7 @@ describe('Monitoring Stations - Base presenter', () => {
       it('sets the action in the result', () => {
         const results = BasePresenter.formatRestrictions(licenceMonitoringStations)
 
-        expect(results[0].action).to.equal(licenceMonitoringStations[0].action)
+        expect(results[0].action).toEqual(licenceMonitoringStations[0].action)
       })
     })
 
@@ -125,8 +118,8 @@ describe('Monitoring Stations - Base presenter', () => {
         it('sets the alert details in the result', () => {
           const results = BasePresenter.formatRestrictions(licenceMonitoringStations)
 
-          expect(results[0].alert).to.equal('Warning')
-          expect(results[0].alertDate).to.equal('10 September 2025')
+          expect(results[0].alert).toEqual('Warning')
+          expect(results[0].alertDate).toEqual('10 September 2025')
         })
       })
 
@@ -134,8 +127,8 @@ describe('Monitoring Stations - Base presenter', () => {
         it('sets only the alert in the result', () => {
           const results = BasePresenter.formatRestrictions(licenceMonitoringStations)
 
-          expect(results[0].alert).to.equal('Warning')
-          expect(results[0].alertDate).to.equal('')
+          expect(results[0].alert).toEqual('Warning')
+          expect(results[0].alertDate).toEqual('')
         })
       })
     })
@@ -165,9 +158,9 @@ describe('Monitoring Stations - Base presenter', () => {
       it('returns the count of licence monitoring stations (LMS) for the licence the LMS is linked to', () => {
         const result = BasePresenter.formatRestrictions(licenceMonitoringStations)
 
-        expect(result[0].restrictionCount).to.equal(2)
-        expect(result[1].restrictionCount).to.equal(2)
-        expect(result[2].restrictionCount).to.equal(1)
+        expect(result[0].restrictionCount).toEqual(2)
+        expect(result[1].restrictionCount).toEqual(2)
+        expect(result[2].restrictionCount).toEqual(1)
       })
     })
   })
