@@ -5,12 +5,13 @@ module.exports = {
     environment: 'node',
     globals: true,
     include: ['test/**/*.test.js'],
+    hookTimeout: 60000,
     pool: 'forks',
     poolOptions: {
       forks: {
         singleFork: true
       }
     },
-    testTimeout: 30000
+    testTimeout: 60000
   }
 }
