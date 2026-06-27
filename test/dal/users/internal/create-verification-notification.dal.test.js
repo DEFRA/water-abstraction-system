@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { beforeEach, describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const NotificationModel = require('../../../../app/models/notification.model.js')
 const { domains } = require('../../../../config/server.config.js')
@@ -31,12 +24,12 @@ describe('Users - Internal - Create Verification Notification DAL', () => {
 
       const notification = await NotificationModel.query().where('recipient', email).limit(1).first()
 
-      expect(notification.messageRef).to.equal('new_internal_user_email')
-      expect(notification.messageType).to.equal('email')
-      expect(notification.personalisation).to.equal({
+      expect(notification.messageRef).toEqual('new_internal_user_email')
+      expect(notification.messageType).toEqual('email')
+      expect(notification.personalisation).toEqual({
         unique_create_password_link: `${domains.internal}/reset_password_change_password?resetGuid=${resetGuid}`
       })
-      expect(notification.recipient).to.equal(email)
+      expect(notification.recipient).toEqual(email)
     })
   })
 })

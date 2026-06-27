@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, after, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
 const { compareStrings, generateUUID } = require('../../../app/lib/general.lib.js')
@@ -22,7 +15,7 @@ describe('DAL - Fetch Impacted Licences dal', () => {
   let multiUseLicenceRef
   let singleUseLicenceRef
 
-  before(async () => {
+  beforeAll(async () => {
     // NOTE: We want to confirm the results are sorted. So, of the two references generated, we'll use the 'higher'
     // one to create our first record, to confirm the order isn't a fluke of the order in which the records were created
     const licenceRefs = [generateLicenceRef(), generateLicenceRef()].sort((referenceString, compareString) => {
@@ -40,7 +33,7 @@ describe('DAL - Fetch Impacted Licences dal', () => {
     ]
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const chargeVersion of chargeVersions) {
       await chargeVersion.$query().delete()
     }
@@ -50,7 +43,7 @@ describe('DAL - Fetch Impacted Licences dal', () => {
     it('returns an array of unique licence references', async () => {
       const result = await FetchImpactedLicencesDal.go(billingAccountId)
 
-      expect(result).to.equal([multiUseLicenceRef, singleUseLicenceRef])
+      expect(result).toEqual([multiUseLicenceRef, singleUseLicenceRef])
     })
   })
 
@@ -58,7 +51,7 @@ describe('DAL - Fetch Impacted Licences dal', () => {
     it('returns an empty array', async () => {
       const result = await FetchImpactedLicencesDal.go(generateUUID())
 
-      expect(result).to.equal([])
+      expect(result).toEqual([])
     })
   })
 })

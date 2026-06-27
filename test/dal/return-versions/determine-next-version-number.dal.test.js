@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, after, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
@@ -18,13 +11,13 @@ describe('DAL - Return Versions - Determine Next Version Number dal', () => {
   let licenceId
   let returnVersions
 
-  before(() => {
+  beforeAll(() => {
     licenceId = generateUUID()
 
     returnVersions = []
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const returnVersion of returnVersions) {
       await returnVersion.$query().delete()
     }
@@ -34,12 +27,12 @@ describe('DAL - Return Versions - Determine Next Version Number dal', () => {
     it('returns "1" as the next version number', async () => {
       const result = await DetermineNextVersionNumberDal.go(licenceId)
 
-      expect(result).to.equal(1)
+      expect(result).toEqual(1)
     })
   })
 
   describe('when return versions exist for the licence', () => {
-    before(async () => {
+    beforeAll(async () => {
       returnVersions = [
         await ReturnVersionHelper.add({ licenceId, version: 1 }),
         await ReturnVersionHelper.add({ licenceId, version: 2 })
@@ -49,7 +42,7 @@ describe('DAL - Return Versions - Determine Next Version Number dal', () => {
     it('returns the next version number', async () => {
       const result = await DetermineNextVersionNumberDal.go(licenceId)
 
-      expect(result).to.equal(3)
+      expect(result).toEqual(3)
     })
   })
 })

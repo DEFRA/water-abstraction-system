@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
@@ -21,12 +14,12 @@ describe('Company Contacts - Fetch Company Contact dal', () => {
   let companyContact
   let contact
 
-  before(async () => {
+  beforeAll(async () => {
     contact = await ContactHelper.add()
     companyContact = await CompanyContactHelper.add({ companyId, contactId: contact.id })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await companyContact.$query().delete()
     await contact.$query().delete()
   })
@@ -35,7 +28,7 @@ describe('Company Contacts - Fetch Company Contact dal', () => {
     it('returns the company contact and associated contact record', async () => {
       const result = await FetchCompanyContactDal.go(companyContact.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         abstractionAlertLicences: null,
         abstractionAlerts: false,
         companyId,

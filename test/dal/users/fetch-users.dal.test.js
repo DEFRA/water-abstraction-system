@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const DatabaseConfig = require('../../../config/database.config.js')
@@ -36,7 +31,7 @@ describe('Users - Fetch Users DAL', () => {
   let licenceEntities
   let pageNumber
 
-  before(async () => {
+  beforeAll(async () => {
     // NOTE: In general we try to use the seeded users in our tests. However, the external users we seed do not have
     // corresponding `LicenceEntityRole` records. These are what differentiate, for example, a primary user from a
     // returns user. But to create a `LicenceEntityRole` record we need a `LicenceEntity`, and a `LicenceDocument`.
@@ -153,7 +148,7 @@ describe('Users - Fetch Users DAL', () => {
     Sinon.restore()
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const licenceEntity of licenceEntities) {
       for (const licenceEntityRole of licenceEntity.licenceEntityRoles) {
         await licenceEntityRole.$query().delete()
@@ -182,20 +177,20 @@ describe('Users - Fetch Users DAL', () => {
 
       // Assert the total is equal to or greater than our seeded count plus created users. Other tests may create
       // records, so we don't assert exactly
-      expect(total).to.be.at.least(seededUsersLength + 3)
+      expect(total).toBeGreaterThanOrEqual(seededUsersLength + 3)
 
       // Assert the results contain all our seeded users
       for (let i = 0; i < seededUsersLength; i++) {
         const userData = UsersFixture.user(i)
 
-        expect(results).contains(UsersFixture.transformToFetchUsersResult(userData))
+        expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
       }
 
       // Assert it contains those we created
-      expect(results).contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
-      expect(results).contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
-      expect(results).contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
-      expect(results).contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
+      expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+      expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+      expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+      expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(externalNoneUser))
     })
   })
 
@@ -218,7 +213,7 @@ describe('Users - Fetch Users DAL', () => {
           const userData = UsersFixture.user(i)
 
           if (userData.username.toUpperCase().includes(filters.email)) {
-            expect(results).contains(UsersFixture.transformToFetchUsersResult(userData))
+            expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
           }
         }
       })
@@ -233,15 +228,15 @@ describe('Users - Fetch Users DAL', () => {
           const userData = UsersFixture.user(i)
 
           if (!skipAssertions.includes(userData.username)) {
-            expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
+            expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
           }
         }
 
         // Assert the results do not contain those we created
-        expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
-        expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
-        expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
-        expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
+        expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+        expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+        expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+        expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalNoneUser))
       })
     })
 
@@ -260,8 +255,8 @@ describe('Users - Fetch Users DAL', () => {
           const { results } = await FetchUsersDal.go(filters, pageNumber)
 
           // Assert the results contain our seeded internal basic user and created external user
-          expect(results).contains(UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess()))
-          expect(results).contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+          expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess()))
+          expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
         })
 
         it('excludes those that do not match', async () => {
@@ -274,14 +269,14 @@ describe('Users - Fetch Users DAL', () => {
             const userData = UsersFixture.user(i)
 
             if (!skipAssertions.includes(userData.username)) {
-              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
+              expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
 
           // Assert the results do not contain the other two we created
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
 
         describe('as well as "Type"', () => {
@@ -294,7 +289,7 @@ describe('Users - Fetch Users DAL', () => {
               const { results } = await FetchUsersDal.go(filters, pageNumber)
 
               // Assert the results _only _contain our created external user
-              expect(results).contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+              expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
             })
 
             it('excludes those that do not match', async () => {
@@ -307,14 +302,14 @@ describe('Users - Fetch Users DAL', () => {
                 const userData = UsersFixture.user(i)
 
                 if (!skipAssertions.includes(userData.username)) {
-                  expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
+                  expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
                 }
               }
 
               // Assert the results do not contain the other two we created
-              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
-              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
-              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
+              expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+              expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+              expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalNoneUser))
             })
           })
 
@@ -327,7 +322,7 @@ describe('Users - Fetch Users DAL', () => {
               const { results } = await FetchUsersDal.go(filters, pageNumber)
 
               // Assert the results _only _contain our seeded external user
-              expect(results).contains(UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess()))
+              expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess()))
             })
 
             it('excludes those that do not match', async () => {
@@ -340,15 +335,15 @@ describe('Users - Fetch Users DAL', () => {
                 const userData = UsersFixture.user(i)
 
                 if (!skipAssertions.includes(userData.username)) {
-                  expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
+                  expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
                 }
               }
 
               // Assert the results do not contain the created external users
-              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
-              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
-              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
-              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
+              expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+              expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+              expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+              expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalNoneUser))
             })
           })
         })
@@ -365,7 +360,7 @@ describe('Users - Fetch Users DAL', () => {
           const { results } = await FetchUsersDal.go(filters, pageNumber)
 
           // Assert the results contain our seeded billing and data user
-          expect(results).contains(UsersFixture.transformToFetchUsersResult(UsersFixture.billingAndData()))
+          expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(UsersFixture.billingAndData()))
         })
 
         it('excludes those that do not match', async () => {
@@ -378,15 +373,15 @@ describe('Users - Fetch Users DAL', () => {
             const userData = UsersFixture.user(i)
 
             if (!skipAssertions.includes(userData.username)) {
-              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
+              expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
 
           // Assert the results do not contain those we created
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
       })
 
@@ -401,7 +396,9 @@ describe('Users - Fetch Users DAL', () => {
           const { results } = await FetchUsersDal.go(filters, pageNumber)
 
           // Assert the results contain our seeded national permitting service user
-          expect(results).contains(UsersFixture.transformToFetchUsersResult(UsersFixture.nationalPermittingService()))
+          expect(results).toContainEqual(
+            UsersFixture.transformToFetchUsersResult(UsersFixture.nationalPermittingService())
+          )
         })
 
         it('excludes those that do not match', async () => {
@@ -414,15 +411,15 @@ describe('Users - Fetch Users DAL', () => {
             const userData = UsersFixture.user(i)
 
             if (!skipAssertions.includes(userData.username)) {
-              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
+              expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
 
           // Assert the results do not contain those we created
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
       })
 
@@ -437,7 +434,7 @@ describe('Users - Fetch Users DAL', () => {
           const { results } = await FetchUsersDal.go(filters, pageNumber)
 
           // Assert the results contain our seeded national permitting service user
-          expect(results).contains(UsersFixture.transformToFetchUsersResult(UsersFixture.digitiseApprover()))
+          expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(UsersFixture.digitiseApprover()))
         })
 
         it('excludes those that do not match', async () => {
@@ -450,15 +447,15 @@ describe('Users - Fetch Users DAL', () => {
             const userData = UsersFixture.user(i)
 
             if (!skipAssertions.includes(userData.username)) {
-              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
+              expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
 
           // Assert the results do not contain those we created
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
       })
 
@@ -473,7 +470,7 @@ describe('Users - Fetch Users DAL', () => {
           const { results } = await FetchUsersDal.go(filters, pageNumber)
 
           // Assert the results contain our seeded national permitting service user
-          expect(results).contains(UsersFixture.transformToFetchUsersResult(UsersFixture.digitiseEditor()))
+          expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(UsersFixture.digitiseEditor()))
         })
 
         it('excludes those that do not match', async () => {
@@ -486,15 +483,15 @@ describe('Users - Fetch Users DAL', () => {
             const userData = UsersFixture.user(i)
 
             if (!skipAssertions.includes(userData.username)) {
-              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
+              expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
 
           // Assert the results do not contain those we created
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
       })
 
@@ -510,10 +507,10 @@ describe('Users - Fetch Users DAL', () => {
 
           // Assert the results contain our external users from the seed data. The ones we added as part of the test
           // setup have `LicenceEntityRoles` so have at least a 'basic' permission level.
-          expect(results).contains(UsersFixture.transformToFetchUsersResult(UsersFixture.external()))
-          expect(results).contains(UsersFixture.transformToFetchUsersResult(UsersFixture.jonLee()))
-          expect(results).contains(UsersFixture.transformToFetchUsersResult(UsersFixture.rachelStevens()))
-          expect(results).contains(UsersFixture.transformToFetchUsersResult(UsersFixture.tinaBarrett()))
+          expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(UsersFixture.external()))
+          expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(UsersFixture.jonLee()))
+          expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(UsersFixture.rachelStevens()))
+          expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(UsersFixture.tinaBarrett()))
         })
 
         it('excludes those that do not match', async () => {
@@ -531,14 +528,14 @@ describe('Users - Fetch Users DAL', () => {
             const userData = UserHelper.select(i)
 
             if (!skipAssertions.includes(userData.username)) {
-              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
+              expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
 
           // Assert the results do not contain those we created
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
         })
       })
 
@@ -553,7 +550,7 @@ describe('Users - Fetch Users DAL', () => {
           const { results } = await FetchUsersDal.go(filters, pageNumber)
 
           // Assert the results contain our created external primary user
-          expect(results).contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
         })
 
         it('excludes those that do not match', async () => {
@@ -566,14 +563,14 @@ describe('Users - Fetch Users DAL', () => {
             const userData = UserHelper.select(i)
 
             if (!skipAssertions.includes(userData.username)) {
-              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
+              expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
 
           // Assert the results do not contain the others we created
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
       })
 
@@ -588,7 +585,7 @@ describe('Users - Fetch Users DAL', () => {
           const { results } = await FetchUsersDal.go(filters, pageNumber)
 
           // Assert the results contain our created external returns user
-          expect(results).contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+          expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
         })
 
         it('excludes those that do not match', async () => {
@@ -601,14 +598,14 @@ describe('Users - Fetch Users DAL', () => {
             const userData = UserHelper.select(i)
 
             if (!skipAssertions.includes(userData.username)) {
-              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
+              expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
 
           // Assert the results do not contain the others we created
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
       })
     })
@@ -629,13 +626,13 @@ describe('Users - Fetch Users DAL', () => {
             const userData = UsersFixture.user(i)
 
             if (userData.enabled && userData.password !== 'VOID' && !userData.lastLogin) {
-              expect(results).contains(UsersFixture.transformToFetchUsersResult(userData))
+              expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
 
           // Assert the results contain the ones we created that are 'awaiting' (enabled, not locked, and no lastLogin)
-          expect(results).contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
-          expect(results).contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
+          expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
 
         it('excludes those that do not match', async () => {
@@ -647,13 +644,13 @@ describe('Users - Fetch Users DAL', () => {
             const userData = UsersFixture.user(i)
 
             if (!userData.enabled || userData.lastLogin) {
-              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
+              expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
 
           // Assert the results do not contain the created users we disabled, locked or have a login.
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
         })
       })
 
@@ -670,12 +667,12 @@ describe('Users - Fetch Users DAL', () => {
             const userData = UsersFixture.user(i)
 
             if (!userData.enabled) {
-              expect(results).contains(UsersFixture.transformToFetchUsersResult(userData))
+              expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
 
           // Assert the results contain the one we created that is 'disabled'
-          expect(results).contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+          expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
         })
 
         it('excludes those that do not match', async () => {
@@ -686,14 +683,14 @@ describe('Users - Fetch Users DAL', () => {
             const userData = UsersFixture.user(i)
 
             if (userData.enabled) {
-              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
+              expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
 
           // Assert the results do not contain the created users we that are not 'disabled'
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
       })
 
@@ -710,7 +707,7 @@ describe('Users - Fetch Users DAL', () => {
             const userData = UsersFixture.user(i)
 
             if (userData.enabled && userData.password !== 'VOID' && userData.lastLogin) {
-              expect(results).contains(UsersFixture.transformToFetchUsersResult(userData))
+              expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
         })
@@ -724,15 +721,15 @@ describe('Users - Fetch Users DAL', () => {
             const userData = UsersFixture.user(i)
 
             if (!userData.enabled || !userData.lastLogin) {
-              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
+              expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
 
           // Assert the results do not contain those we created as they are either disabled, locked or awaiting
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
       })
 
@@ -749,7 +746,7 @@ describe('Users - Fetch Users DAL', () => {
             const userData = UsersFixture.user(i)
 
             if (userData.enabled && userData.password === 'VOID') {
-              expect(results).contains(UsersFixture.transformToFetchUsersResult(userData))
+              expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
         })
@@ -763,14 +760,14 @@ describe('Users - Fetch Users DAL', () => {
             const userData = UsersFixture.user(i)
 
             if (!userData.enabled || userData.password !== 'VOID') {
-              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
+              expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
 
           // Assert the results do not contain those we created which are not 'locked'
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
       })
     })
@@ -788,15 +785,15 @@ describe('Users - Fetch Users DAL', () => {
           const userData = UsersFixture.user(i)
 
           if (userData.application === 'water_vml') {
-            expect(results).contains(UsersFixture.transformToFetchUsersResult(userData))
+            expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
           }
         }
 
         // Assert the results contain the ones we created
-        expect(results).contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
-        expect(results).contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
-        expect(results).contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
-        expect(results).contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
+        expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+        expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+        expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+        expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(externalNoneUser))
       })
 
       it('excludes those that do not match', async () => {
@@ -807,7 +804,7 @@ describe('Users - Fetch Users DAL', () => {
           const userData = UsersFixture.user(i)
 
           if (userData.application !== 'water_vml') {
-            expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
+            expect(results).not.toContainEqual(UsersFixture.transformToFetchUsersResult(userData))
           }
         }
       })
@@ -825,7 +822,7 @@ describe('Users - Fetch Users DAL', () => {
     it('can return the selected page', async () => {
       const result = await FetchUsersDal.go(filters, pageNumber)
 
-      expect(result.results).not.to.be.empty()
+      expect(result.results).not.toHaveLength(0)
     })
   })
 })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const NotificationHelper = require('../../../support/helpers/notification.helper.js')
 const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
@@ -47,7 +40,7 @@ describe('Users - Internal - Fetch Notifications DAL', () => {
     ]
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const notification of notifications) {
       await notification.$query().delete()
     }
@@ -57,7 +50,7 @@ describe('Users - Internal - Fetch Notifications DAL', () => {
     it('returns the matching notifications and the total', async () => {
       const result = await FetchNotificationsDal.go(user.username)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         notifications: [
           {
             createdAt: notifications[3].createdAt,
@@ -83,7 +76,7 @@ describe('Users - Internal - Fetch Notifications DAL', () => {
     it('returns an empty array and zero', async () => {
       const result = await FetchNotificationsDal.go('mystery.user@wrls.gov.uk')
 
-      expect(result).to.equal({ notifications: [], totalNumber: 0 })
+      expect(result).toEqual({ notifications: [], totalNumber: 0 })
     })
   })
 })

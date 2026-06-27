@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CompanyHelper = require('../../../support/helpers/company.helper.js')
 const LicenceDocumentHeaderHelper = require('../../../support/helpers/licence-document-header.helper.js')
@@ -33,7 +26,7 @@ describe('Users - External - Fetch Verifications DAL', () => {
   let userVerificationData2
   let userVerificationData3
 
-  before(async () => {
+  beforeAll(async () => {
     userEntity = await LicenceEntityHelper.add()
     user = await UserHelper.add({ licenceEntityId: userEntity.id, username: userEntity.name })
 
@@ -66,7 +59,7 @@ describe('Users - External - Fetch Verifications DAL', () => {
     )
   })
 
-  after(async () => {
+  afterAll(async () => {
     await userVerificationData3.clean()
     await userVerificationData2.clean()
     await userVerificationData1.clean()
@@ -84,7 +77,7 @@ describe('Users - External - Fetch Verifications DAL', () => {
     it('returns the matching verifications and the total', async () => {
       const result = await FetchVerificationsDal.go(user.licenceEntityId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         totalNumber: 3,
         verifications: [
           {
@@ -208,7 +201,7 @@ describe('Users - External - Fetch Verifications DAL', () => {
     it('returns an empty array and zero', async () => {
       const result = await FetchVerificationsDal.go('c02ac8b8-e5d4-41f3-b3df-3a370c95ff0a')
 
-      expect(result).to.equal({ verifications: [], totalNumber: 0 })
+      expect(result).toEqual({ verifications: [], totalNumber: 0 })
     })
   })
 })

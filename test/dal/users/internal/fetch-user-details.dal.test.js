@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
@@ -29,7 +22,7 @@ describe('Users - Internal - Fetch User Details DAL', () => {
     it('returns the requested user', async () => {
       const result = await FetchUserDetailsDal.go(user.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         id: user.id,
         userId: user.userId,
         username: user.username,

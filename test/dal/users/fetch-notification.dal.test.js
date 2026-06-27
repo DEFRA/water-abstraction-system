@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
 const NotificationHelper = require('../../support/helpers/notification.helper.js')
@@ -19,7 +12,7 @@ describe('Users - Fetch Notification DAL', () => {
   let notification
   let user
 
-  before(async () => {
+  beforeAll(async () => {
     user = UsersFixture.billingAndData()
   })
 
@@ -37,7 +30,7 @@ describe('Users - Fetch Notification DAL', () => {
     it('returns the matching notification', async () => {
       const result = await FetchNotificationDal.go(notification.id, user.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         createdAt: notification.createdAt,
         id: notification.id,
         messageRef: 'password_reset_email',
@@ -56,7 +49,7 @@ describe('Users - Fetch Notification DAL', () => {
     it('returns undefined', async () => {
       const result = await FetchNotificationDal.go('317aaa08-723d-4cb3-8f3b-5ab6a37b573f', user.id)
 
-      expect(result).to.be.undefined()
+      expect(result).toBeUndefined()
     })
   })
 })
