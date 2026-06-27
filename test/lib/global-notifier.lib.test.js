@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const BaseNotifierLib = require('../../app/lib/base-notifier.lib.js')
@@ -35,7 +30,7 @@ describe('GlobalNotifierLib class', () => {
       it('throws an error', () => {
         expect(() => {
           return new GlobalNotifierLib(null, airbrakeFake)
-        }).to.throw()
+        }).toThrow()
       })
     })
 
@@ -43,7 +38,7 @@ describe('GlobalNotifierLib class', () => {
       it('throws an error', () => {
         expect(() => {
           return new GlobalNotifierLib(pinoFake)
-        }).to.throw()
+        }).toThrow()
       })
     })
   })

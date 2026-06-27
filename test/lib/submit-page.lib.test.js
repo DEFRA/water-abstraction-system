@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const YarStub = require('../support/stubs/yar.stub.js')
@@ -31,28 +26,28 @@ describe('SubmitPageLib', () => {
     })
 
     describe('when called with the instruction to clear filters', () => {
-      before(() => {
+      beforeAll(() => {
         payload = { clearFilters: 'reset' }
       })
 
       it('clears the specified filter object from the session and returns TRUE', () => {
         const result = SubmitPageLib.clearFilters(payload, yarStub, filterKey)
 
-        expect(yarStub.clear.calledWith(filterKey)).to.be.true()
-        expect(result).to.be.true()
+        expect(yarStub.clear.calledWith(filterKey)).toBe(true)
+        expect(result).toBe(true)
       })
     })
 
     describe('when there is no instruction to clear filters', () => {
-      before(() => {
+      beforeAll(() => {
         payload = {}
       })
 
       it('leaves the specified filter object untouched and returns FALSE', () => {
         const result = SubmitPageLib.clearFilters(payload, yarStub, filterKey)
 
-        expect(yarStub.clear.called).to.be.false()
-        expect(result).to.be.false()
+        expect(yarStub.clear.called).toBe(false)
+        expect(result).toBe(false)
       })
     })
   })
@@ -63,38 +58,38 @@ describe('SubmitPageLib', () => {
     let payload
 
     describe('when the payload is empty', () => {
-      before(() => {
+      beforeAll(() => {
         payload = {}
       })
 
       it('adds the key to the payload as an empty array', () => {
         SubmitPageLib.handleOneOptionSelected(payload, key)
 
-        expect(payload).to.equal({ propertyToCheck: [] })
+        expect(payload).toEqual({ propertyToCheck: [] })
       })
     })
 
     describe('when the payload contains a string', () => {
-      before(() => {
+      beforeAll(() => {
         payload = { propertyToCheck: 'checkBoxValue' }
       })
 
       it('returns the key in the payload with the string converted to an array', () => {
         SubmitPageLib.handleOneOptionSelected(payload, key)
 
-        expect(payload).to.equal({ propertyToCheck: ['checkBoxValue'] })
+        expect(payload).toEqual({ propertyToCheck: ['checkBoxValue'] })
       })
     })
 
     describe('when the payload contains an array', () => {
-      before(() => {
+      beforeAll(() => {
         payload = { propertyToCheck: ['checkBoxValue', 'anotherCheckBoxValue'] }
       })
 
       it('does not alter the payload', () => {
         SubmitPageLib.handleOneOptionSelected(payload, key)
 
-        expect(payload).to.equal({ propertyToCheck: ['checkBoxValue', 'anotherCheckBoxValue'] })
+        expect(payload).toEqual({ propertyToCheck: ['checkBoxValue', 'anotherCheckBoxValue'] })
       })
     })
   })
@@ -109,7 +104,7 @@ describe('SubmitPageLib', () => {
     })
 
     describe('when no filters have been saved', () => {
-      before(() => {
+      beforeAll(() => {
         yarStub = YarStub.build(Sinon)
         yarStub.get.returns(null)
       })
@@ -117,12 +112,12 @@ describe('SubmitPageLib', () => {
       it('returns the expected results, "openFilter" is set to FALSE', () => {
         const result = SubmitPageLib.processSavedFilters(yarStub, filterKey)
 
-        expect(result).to.equal({ openFilter: false })
+        expect(result).toEqual({ openFilter: false })
       })
     })
 
     describe('when filters have been saved with empty values', () => {
-      before(() => {
+      beforeAll(() => {
         yarStub = YarStub.build(Sinon)
         yarStub.get.returns({ regions: [], status: null })
       })
@@ -130,12 +125,12 @@ describe('SubmitPageLib', () => {
       it('returns the expected results, "openFilter" is set to FALSE', () => {
         const result = SubmitPageLib.processSavedFilters(yarStub, filterKey)
 
-        expect(result).to.equal({ regions: [], status: null, openFilter: false })
+        expect(result).toEqual({ regions: [], status: null, openFilter: false })
       })
     })
 
     describe('when a filter with array values been saved', () => {
-      before(() => {
+      beforeAll(() => {
         yarStub = YarStub.build(Sinon)
         yarStub.get.returns({ regions: ['south', 'north'] })
       })
@@ -143,12 +138,12 @@ describe('SubmitPageLib', () => {
       it('returns the expected results, "openFilter" is set to TRUE', () => {
         const result = SubmitPageLib.processSavedFilters(yarStub, filterKey)
 
-        expect(result).to.equal({ regions: ['south', 'north'], openFilter: true })
+        expect(result).toEqual({ regions: ['south', 'north'], openFilter: true })
       })
     })
 
     describe('when a filter with non array values been saved', () => {
-      before(() => {
+      beforeAll(() => {
         yarStub = YarStub.build(Sinon)
         yarStub.get.returns({ status: 'review' })
       })
@@ -156,7 +151,7 @@ describe('SubmitPageLib', () => {
       it('returns the expected results, "openFilter" is set to TRUE', () => {
         const result = SubmitPageLib.processSavedFilters(yarStub, filterKey)
 
-        expect(result).to.equal({ status: 'review', openFilter: true })
+        expect(result).toEqual({ status: 'review', openFilter: true })
       })
     })
   })

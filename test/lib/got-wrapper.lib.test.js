@@ -3,12 +3,7 @@
 const { HTTP_STATUS_CREATED, HTTP_STATUS_OK } = require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Nock = require('nock')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const expect = Code.expect
 
 // Thing under test
 const { gotWrapper } = require('../../app/lib/got-wrapper.lib.js')
@@ -37,8 +32,8 @@ describe('GotWrapperLib', () => {
     it('calls back with response and body', async () => {
       const result = await wrapRequest(request, 'http://example.com/get')
 
-      expect(result.res.statusCode).to.equal(HTTP_STATUS_OK)
-      expect(result.body).to.equal('hello world')
+      expect(result.res.statusCode).toEqual(HTTP_STATUS_OK)
+      expect(result.body).toEqual('hello world')
     })
   })
 
@@ -55,8 +50,8 @@ describe('GotWrapperLib', () => {
         headers: { 'content-type': 'text/plain' }
       })
 
-      expect(result.res.statusCode).to.equal(HTTP_STATUS_CREATED)
-      expect(result.body).to.equal('created')
+      expect(result.res.statusCode).toEqual(HTTP_STATUS_CREATED)
+      expect(result.body).toEqual('created')
     })
   })
 
@@ -68,9 +63,9 @@ describe('GotWrapperLib', () => {
     it('calls back with error', async () => {
       const result = await wrapRequest(request, 'http://example.com/get')
 
-      expect(result.err).to.exist()
-      expect(result.res).to.be.null()
-      expect(result.body).to.be.null()
+      expect(result.err).toBeDefined()
+      expect(result.res).toBeNull()
+      expect(result.body).toBeNull()
     })
   })
 })

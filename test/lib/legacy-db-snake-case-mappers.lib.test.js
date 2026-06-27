@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const LegacyDbSnakeCaseMappersLib = require('../../app/lib/legacy-db-snake-case-mappers.lib.js')
 
@@ -22,8 +15,8 @@ describe('Legacy DB Snake Case Mappers lib', () => {
       it('returns an object containing knex wrapIdentifier() and postProcessResponse() hooks', (options) => {
         const result = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers()
 
-        expect(result).to.include('wrapIdentifier')
-        expect(result).to.include('postProcessResponse')
+        expect(result).toHaveProperty('wrapIdentifier')
+        expect(result).toHaveProperty('postProcessResponse')
       })
     })
 
@@ -42,7 +35,7 @@ describe('Legacy DB Snake Case Mappers lib', () => {
         const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
         const result = identifierMapping.postProcessResponse(dbResult)
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           {
             addressLine1: '10 Downing Street',
             purpose: 'Residence of the prime minster',
@@ -64,7 +57,7 @@ describe('Legacy DB Snake Case Mappers lib', () => {
           const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
           const result = identifierMapping.wrapIdentifier('addressLine1', origWrap)
 
-          expect(result).to.equal('address_line_1')
+          expect(result).toEqual('address_line_1')
         })
       })
 
@@ -73,7 +66,7 @@ describe('Legacy DB Snake Case Mappers lib', () => {
           const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
           const result = identifierMapping.wrapIdentifier('purpose', origWrap)
 
-          expect(result).to.equal('purpose')
+          expect(result).toEqual('purpose')
         })
       })
 
@@ -82,7 +75,7 @@ describe('Legacy DB Snake Case Mappers lib', () => {
           const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
           const result = identifierMapping.wrapIdentifier('isOccupied', origWrap)
 
-          expect(result).to.equal('is_occupied')
+          expect(result).toEqual('is_occupied')
         })
       })
 
@@ -91,7 +84,7 @@ describe('Legacy DB Snake Case Mappers lib', () => {
           const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
           const result = identifierMapping.wrapIdentifier('section127Agreement', origWrap)
 
-          expect(result).to.equal('section_127_agreement')
+          expect(result).toEqual('section_127_agreement')
         })
       })
 
@@ -100,7 +93,7 @@ describe('Legacy DB Snake Case Mappers lib', () => {
           const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
           const result = identifierMapping.wrapIdentifier('crm_v2', origWrap)
 
-          expect(result).to.equal('crm_v2')
+          expect(result).toEqual('crm_v2')
         })
       })
 
@@ -109,7 +102,7 @@ describe('Legacy DB Snake Case Mappers lib', () => {
           const identifierMapping = LegacyDbSnakeCaseMappersLib.legacyDbSnakeCaseMappers(options)
           const result = identifierMapping.wrapIdentifier('foo_v2', origWrap)
 
-          expect(result).to.equal('foo_v_2')
+          expect(result).toEqual('foo_v_2')
         })
       })
     })
