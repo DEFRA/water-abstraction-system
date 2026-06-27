@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { NOTIFY_TEMPLATES } = require('../../app/lib/notify-templates.lib.js')
@@ -52,7 +47,7 @@ describe('BaseNotifierLib class', () => {
 
         testNotifier.omg(message)
 
-        expect(pinoFake.info.calledOnceWith({}, message)).to.be.true()
+        expect(pinoFake.info.calledOnceWith({}, message)).toBe(true)
       })
     })
 
@@ -62,7 +57,7 @@ describe('BaseNotifierLib class', () => {
 
         testNotifier.omg(message, { id })
 
-        expect(pinoFake.info.calledOnceWith({ id }, message)).to.be.true()
+        expect(pinoFake.info.calledOnceWith({ id }, message)).toBe(true)
       })
     })
 
@@ -71,7 +66,7 @@ describe('BaseNotifierLib class', () => {
 
       testNotifier.omg(message)
 
-      expect(airbrakeFake.notify.notCalled).to.be.true()
+      expect(airbrakeFake.notify.notCalled).toBe(true)
     })
 
     it('does not log an "error" message', () => {
@@ -79,7 +74,7 @@ describe('BaseNotifierLib class', () => {
 
       testNotifier.omg(message)
 
-      expect(pinoFake.error.notCalled).to.be.true()
+      expect(pinoFake.error.notCalled).toBe(true)
     })
   })
 
@@ -100,9 +95,9 @@ describe('BaseNotifierLib class', () => {
 
           const logPacketArgs = pinoFake.error.args[0]
 
-          expect(logPacketArgs[0].err).to.be.an.error()
-          expect(logPacketArgs[0].err.message).to.equal(message)
-          expect(logPacketArgs[1]).to.equal(message)
+          expect(logPacketArgs[0].err).toBeInstanceOf(Error)
+          expect(logPacketArgs[0].err.message).toEqual(message)
+          expect(logPacketArgs[1]).toEqual(message)
         })
 
         it('sends the expected notification to "Errbit"', () => {
@@ -112,9 +107,9 @@ describe('BaseNotifierLib class', () => {
 
           const { error, session } = airbrakeFake.notify.args[0][0]
 
-          expect(error).to.be.an.error()
-          expect(error.message).to.equal(message)
-          expect(session).to.equal({ message })
+          expect(error).toBeInstanceOf(Error)
+          expect(error.message).toEqual(message)
+          expect(session).toEqual({ message })
         })
       })
 
@@ -126,10 +121,10 @@ describe('BaseNotifierLib class', () => {
 
           const logPacketArgs = pinoFake.error.args[0]
 
-          expect(logPacketArgs[0].err).to.be.an.error()
-          expect(logPacketArgs[0].err.message).to.equal(message)
-          expect(logPacketArgs[0].id).to.equal(id)
-          expect(logPacketArgs[1]).to.equal(message)
+          expect(logPacketArgs[0].err).toBeInstanceOf(Error)
+          expect(logPacketArgs[0].err.message).toEqual(message)
+          expect(logPacketArgs[0].id).toEqual(id)
+          expect(logPacketArgs[1]).toEqual(message)
         })
 
         it('sends the expected notification to "Errbit"', () => {
@@ -139,9 +134,9 @@ describe('BaseNotifierLib class', () => {
 
           const { error, session } = airbrakeFake.notify.args[0][0]
 
-          expect(error).to.be.an.error()
-          expect(error.message).to.equal(message)
-          expect(session).to.equal({ id, message })
+          expect(error).toBeInstanceOf(Error)
+          expect(error.message).toEqual(message)
+          expect(session).toEqual({ id, message })
         })
       })
 
@@ -153,10 +148,10 @@ describe('BaseNotifierLib class', () => {
 
           const logPacketArgs = pinoFake.error.args[0]
 
-          expect(logPacketArgs[0].err).to.be.an.error()
-          expect(logPacketArgs[0].err.message).to.equal(testError.message)
-          expect(logPacketArgs[0].id).to.equal(id)
-          expect(logPacketArgs[1]).to.equal(message)
+          expect(logPacketArgs[0].err).toBeInstanceOf(Error)
+          expect(logPacketArgs[0].err.message).toEqual(testError.message)
+          expect(logPacketArgs[0].id).toEqual(id)
+          expect(logPacketArgs[1]).toEqual(message)
         })
 
         it('sends the expected notification to "Errbit"', () => {
@@ -166,9 +161,9 @@ describe('BaseNotifierLib class', () => {
 
           const { error, session } = airbrakeFake.notify.args[0][0]
 
-          expect(error).to.be.an.error()
-          expect(error.message).to.equal(testError.message)
-          expect(session).to.equal({ id, message })
+          expect(error).toBeInstanceOf(Error)
+          expect(error.message).toEqual(testError.message)
+          expect(session).toEqual({ id, message })
         })
       })
 
@@ -180,9 +175,9 @@ describe('BaseNotifierLib class', () => {
 
           const logPacketArgs = pinoFake.error.args[0]
 
-          expect(logPacketArgs[0].err).to.be.an.error()
-          expect(logPacketArgs[0].err.message).to.equal(testError.message)
-          expect(logPacketArgs[1]).to.equal(message)
+          expect(logPacketArgs[0].err).toBeInstanceOf(Error)
+          expect(logPacketArgs[0].err.message).toEqual(testError.message)
+          expect(logPacketArgs[1]).toEqual(message)
         })
 
         it('sends the expected notification to "Errbit"', () => {
@@ -192,9 +187,9 @@ describe('BaseNotifierLib class', () => {
 
           const { error, session } = airbrakeFake.notify.args[0][0]
 
-          expect(error).to.be.an.error()
-          expect(error.message).to.equal(testError.message)
-          expect(session).to.equal({ message })
+          expect(error).toBeInstanceOf(Error)
+          expect(error.message).toEqual(testError.message)
+          expect(session).toEqual({ message })
         })
       })
     })
@@ -226,15 +221,15 @@ describe('BaseNotifierLib class', () => {
         pinoFake.error.callsFake(async () => {
           const firstCallArgs = pinoFake.error.firstCall.args
 
-          expect(firstCallArgs[0].err).to.be.an.error()
-          expect(firstCallArgs[0].err.message).to.equal(message)
-          expect(firstCallArgs[1]).to.equal(message)
+          expect(firstCallArgs[0].err).toBeInstanceOf(Error)
+          expect(firstCallArgs[0].err.message).toEqual(message)
+          expect(firstCallArgs[1]).toEqual(message)
 
           const secondCallArgs = pinoFake.error.secondCall.args
 
-          expect(secondCallArgs[0]).to.be.an.error()
-          expect(secondCallArgs[0].message).to.equal(airbrakeFailure.message)
-          expect(secondCallArgs[1]).to.equal('BaseNotifierLib - Airbrake failed')
+          expect(secondCallArgs[0]).toBeInstanceOf(Error)
+          expect(secondCallArgs[0].message).toEqual(airbrakeFailure.message)
+          expect(secondCallArgs[1]).toEqual('BaseNotifierLib - Airbrake failed')
         })
       })
     })
@@ -258,15 +253,15 @@ describe('BaseNotifierLib class', () => {
         pinoFake.error.callsFake(async () => {
           const firstCallArgs = pinoFake.error.firstCall.args
 
-          expect(firstCallArgs[0].err).to.be.an.error()
-          expect(firstCallArgs[0].err.message).to.equal(message)
-          expect(firstCallArgs[1]).to.equal(message)
+          expect(firstCallArgs[0].err).toBeInstanceOf(Error)
+          expect(firstCallArgs[0].err.message).toEqual(message)
+          expect(firstCallArgs[1]).toEqual(message)
 
           const secondCallArgs = pinoFake.error.secondCall.args
 
-          expect(secondCallArgs[0]).to.be.an.error()
-          expect(secondCallArgs[0].message).to.equal(airbrakeError.message)
-          expect(secondCallArgs[1]).to.equal('BaseNotifierLib - Airbrake errored')
+          expect(secondCallArgs[0]).toBeInstanceOf(Error)
+          expect(secondCallArgs[0].message).toEqual(airbrakeError.message)
+          expect(secondCallArgs[1]).toEqual('BaseNotifierLib - Airbrake errored')
         })
       })
     })
@@ -289,9 +284,9 @@ describe('BaseNotifierLib class', () => {
 
           const args = createEmailRequestFake.send.firstCall.args
 
-          expect(args[0]).to.equal(NOTIFY_TEMPLATES.system.statusAlert)
-          expect(args[1]).to.equal(NotifyConfig.alertEmailAddresses)
-          expect(args[2].personalisation.content).to.endWith(message)
+          expect(args[0]).toEqual(NOTIFY_TEMPLATES.system.statusAlert)
+          expect(args[1]).toEqual(NotifyConfig.alertEmailAddresses)
+          expect(args[2].personalisation.content.endsWith(message)).toBe(true)
         })
       })
 
@@ -303,9 +298,9 @@ describe('BaseNotifierLib class', () => {
 
           const args = createEmailRequestFake.send.firstCall.args
 
-          expect(args[0]).to.equal(NOTIFY_TEMPLATES.system.statusAlert)
-          expect(args[1]).to.equal(NotifyConfig.alertEmailAddresses)
-          expect(args[2].personalisation.content).to.endWith(`${message} with: ${error}`)
+          expect(args[0]).toEqual(NOTIFY_TEMPLATES.system.statusAlert)
+          expect(args[1]).toEqual(NotifyConfig.alertEmailAddresses)
+          expect(args[2].personalisation.content.endsWith(`${message} with: ${error}`)).toBe(true)
         })
       })
 
@@ -322,12 +317,12 @@ describe('BaseNotifierLib class', () => {
           const firstArgs = createEmailRequestFake.send.firstCall.args
           const secondArgs = createEmailRequestFake.send.secondCall.args
 
-          expect(firstArgs[0]).to.equal(NOTIFY_TEMPLATES.system.statusAlert)
-          expect(firstArgs[1]).to.equal('admin-internal@wrls.gov.uk')
-          expect(firstArgs[2].personalisation.content).to.endWith(`${message} with: ${error}`)
-          expect(secondArgs[0]).to.equal(NOTIFY_TEMPLATES.system.statusAlert)
-          expect(secondArgs[1]).to.equal('admin@wrls.gov.uk')
-          expect(secondArgs[2].personalisation.content).to.endWith(`${message} with: ${error}`)
+          expect(firstArgs[0]).toEqual(NOTIFY_TEMPLATES.system.statusAlert)
+          expect(firstArgs[1]).toEqual('admin-internal@wrls.gov.uk')
+          expect(firstArgs[2].personalisation.content.endsWith(`${message} with: ${error}`)).toBe(true)
+          expect(secondArgs[0]).toEqual(NOTIFY_TEMPLATES.system.statusAlert)
+          expect(secondArgs[1]).toEqual('admin@wrls.gov.uk')
+          expect(secondArgs[2].personalisation.content.endsWith(`${message} with: ${error}`)).toBe(true)
         })
       })
     })
@@ -350,9 +345,9 @@ describe('BaseNotifierLib class', () => {
         pinoFake.error.callsFake(async () => {
           const firstCallArgs = pinoFake.error.firstCall.args
 
-          expect(firstCallArgs[0]).to.be.an.error()
-          expect(firstCallArgs[0].message).to.equal('CreateEmailRequest errored')
-          expect(firstCallArgs[1]).to.equal('BaseNotifierLib - CreateEmailRequest errored')
+          expect(firstCallArgs[0]).toBeInstanceOf(Error)
+          expect(firstCallArgs[0].message).toEqual('CreateEmailRequest errored')
+          expect(firstCallArgs[1]).toEqual('BaseNotifierLib - CreateEmailRequest errored')
         })
       })
     })
@@ -368,7 +363,7 @@ describe('BaseNotifierLib class', () => {
 
       testNotifier.flush()
 
-      expect(airbrakeFake.flush.called).to.be.true()
+      expect(airbrakeFake.flush.called).toBe(true)
     })
   })
 
@@ -389,7 +384,7 @@ describe('BaseNotifierLib class', () => {
     it('creates a new Airbrake Notifier instance with config', () => {
       const testNotifier = new BaseNotifierLib(pinoFake)
 
-      expect(testNotifier._notifier._opt).to.include({
+      expect(testNotifier._notifier._opt).toMatchObject({
         host: 'air',
         projectKey: 'hosts',
         projectId: 1,

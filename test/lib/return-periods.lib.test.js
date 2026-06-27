@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { afterEach, describe, it, before, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 const { returnPeriodDates } = require('../../app/lib/static-lookups.lib.js')
 const ReturnCycleHelper = require('../support/helpers/return-cycle.helper.js')
@@ -37,7 +32,7 @@ describe('Return Period lib', () => {
       let allYearReturnCycle
       let testYear
 
-      before(async () => {
+      beforeAll(async () => {
         allYearReturnCycle = await ReturnCycleHelper.select(0, false)
         testYear = allYearReturnCycle.startDate.getFullYear()
       })
@@ -45,7 +40,7 @@ describe('Return Period lib', () => {
       it('should return the return periods for that cycle', () => {
         const results = ReturnPeriodLib.determineReturnsPeriods(allYearReturnCycle)
 
-        expect(results).to.equal([
+        expect(results).toEqual([
           {
             dueDate: new Date(`${testYear}-07-28`),
             endDate: new Date(`${testYear}-06-30`),
@@ -84,7 +79,7 @@ describe('Return Period lib', () => {
       it('should return the "allYear" period', () => {
         const result = ReturnPeriodLib.determineUpcomingReturnsPeriods()
 
-        expect(result.allYear).to.equal({
+        expect(result.allYear).toEqual({
           dueDate: dates.dueDate,
           endDate: dates.endDate,
           startDate: dates.startDate,
@@ -101,7 +96,7 @@ describe('Return Period lib', () => {
       it('should return the "summer" period', () => {
         const result = ReturnPeriodLib.determineUpcomingReturnsPeriods()
 
-        expect(result.summer).to.equal({
+        expect(result.summer).toEqual({
           dueDate: dates.dueDate,
           endDate: dates.endDate,
           startDate: dates.startDate,
@@ -121,7 +116,7 @@ describe('Return Period lib', () => {
         it('should return the "quarterFour" period', () => {
           const result = ReturnPeriodLib.determineUpcomingReturnsPeriods(testDate)
 
-          expect(result.quarterFour).to.equal({
+          expect(result.quarterFour).toEqual({
             dueDate: dates.dueDate,
             endDate: dates.endDate,
             startDate: dates.startDate,
@@ -140,7 +135,7 @@ describe('Return Period lib', () => {
         it('should return the "quarterFour" period in the upcoming year', () => {
           const result = ReturnPeriodLib.determineUpcomingReturnsPeriods(testDate)
 
-          expect(result.quarterFour).to.equal({
+          expect(result.quarterFour).toEqual({
             dueDate: dates.dueDate,
             endDate: dates.endDate,
             startDate: dates.startDate,
@@ -159,7 +154,7 @@ describe('Return Period lib', () => {
         it('should return the "quarterFour" period for next year', () => {
           const result = ReturnPeriodLib.determineUpcomingReturnsPeriods(testDate)
 
-          expect(result.quarterFour).to.equal({
+          expect(result.quarterFour).toEqual({
             dueDate: dates.dueDate,
             endDate: dates.endDate,
             startDate: dates.startDate,
@@ -180,7 +175,7 @@ describe('Return Period lib', () => {
         it('should return the "quarterOne" period', () => {
           const result = ReturnPeriodLib.determineUpcomingReturnsPeriods(testDate)
 
-          expect(result.quarterOne).to.equal({
+          expect(result.quarterOne).toEqual({
             dueDate: dates.dueDate,
             endDate: dates.endDate,
             startDate: dates.startDate,
@@ -199,7 +194,7 @@ describe('Return Period lib', () => {
         it('should return the "quarterOne" period in the upcoming year', () => {
           const result = ReturnPeriodLib.determineUpcomingReturnsPeriods(testDate)
 
-          expect(result.quarterOne).to.equal({
+          expect(result.quarterOne).toEqual({
             dueDate: dates.dueDate,
             endDate: dates.endDate,
             startDate: dates.startDate,
@@ -218,7 +213,7 @@ describe('Return Period lib', () => {
         it('should return the "quarterOne" period for next year', () => {
           const result = ReturnPeriodLib.determineUpcomingReturnsPeriods(testDate)
 
-          expect(result.quarterOne).to.equal({
+          expect(result.quarterOne).toEqual({
             dueDate: dates.dueDate,
             endDate: dates.endDate,
             startDate: dates.startDate,
@@ -239,7 +234,7 @@ describe('Return Period lib', () => {
         it('should return the "quarterTwo" period', () => {
           const result = ReturnPeriodLib.determineUpcomingReturnsPeriods(testDate)
 
-          expect(result.quarterTwo).to.equal({
+          expect(result.quarterTwo).toEqual({
             dueDate: dates.dueDate,
             endDate: dates.endDate,
             startDate: dates.startDate,
@@ -258,7 +253,7 @@ describe('Return Period lib', () => {
         it('should return the "quarterTwo" period in the upcoming year', () => {
           const result = ReturnPeriodLib.determineUpcomingReturnsPeriods(testDate)
 
-          expect(result.quarterTwo).to.equal({
+          expect(result.quarterTwo).toEqual({
             dueDate: dates.dueDate,
             endDate: dates.endDate,
             startDate: dates.startDate,
@@ -277,7 +272,7 @@ describe('Return Period lib', () => {
         it('should return the "quarterTwo" period for next year', () => {
           const result = ReturnPeriodLib.determineUpcomingReturnsPeriods(testDate)
 
-          expect(result.quarterTwo).to.equal({
+          expect(result.quarterTwo).toEqual({
             dueDate: dates.dueDate,
             endDate: dates.endDate,
             startDate: dates.startDate,
@@ -301,7 +296,7 @@ describe('Return Period lib', () => {
         it('should return the "quarterThree" period', () => {
           const result = ReturnPeriodLib.determineUpcomingReturnsPeriods(testDate)
 
-          expect(result.quarterThree).to.equal({
+          expect(result.quarterThree).toEqual({
             dueDate: dueDateNextYear,
             endDate: dates.endDate,
             startDate: dates.startDate,
@@ -326,7 +321,7 @@ describe('Return Period lib', () => {
           const endDate = new Date(dates.endDate)
           endDate.setFullYear(endDate.getFullYear() - 1)
 
-          expect(result.quarterThree).to.equal({
+          expect(result.quarterThree).toEqual({
             dueDate: dates.dueDate,
             endDate,
             startDate,
@@ -348,7 +343,7 @@ describe('Return Period lib', () => {
         it('should return the "quarterThree" period in the upcoming year', () => {
           const result = ReturnPeriodLib.determineUpcomingReturnsPeriods(testDate)
 
-          expect(result.quarterThree).to.equal({
+          expect(result.quarterThree).toEqual({
             dueDate: dueDateNextYear,
             endDate: dates.endDate,
             startDate: dates.startDate,
@@ -370,7 +365,7 @@ describe('Return Period lib', () => {
         it('should return the "quarterThree" period for next year', () => {
           const result = ReturnPeriodLib.determineUpcomingReturnsPeriods(testDate)
 
-          expect(result.quarterThree).to.equal({
+          expect(result.quarterThree).toEqual({
             dueDate: dueDateNextYear,
             endDate: dates.endDate,
             startDate: dates.startDate,
@@ -391,7 +386,7 @@ describe('Return Period lib', () => {
         it('should return the return periods with the name and dates', () => {
           const result = ReturnPeriodLib.determineUpcomingReturnPeriods(testDate)
 
-          expect(result).to.equal([
+          expect(result).toEqual([
             {
               ..._getPeriodDates(returnPeriodDates.quarterFour, year),
               name: 'quarterFour',
@@ -436,7 +431,7 @@ describe('Return Period lib', () => {
         it('should return the return periods with the name and dates', () => {
           const result = ReturnPeriodLib.determineUpcomingReturnPeriods(testDate)
 
-          expect(result).to.equal([
+          expect(result).toEqual([
             {
               ..._getPeriodDates(returnPeriodDates.quarterOne, year),
               name: 'quarterOne',
@@ -481,7 +476,7 @@ describe('Return Period lib', () => {
         it('should return the return periods with the name and dates', () => {
           const result = ReturnPeriodLib.determineUpcomingReturnPeriods(testDate)
 
-          expect(result).to.equal([
+          expect(result).toEqual([
             {
               ..._getPeriodDates(returnPeriodDates.quarterTwo, year),
               name: 'quarterTwo',
@@ -526,7 +521,7 @@ describe('Return Period lib', () => {
         it('should return the return periods with the name and dates', () => {
           const result = ReturnPeriodLib.determineUpcomingReturnPeriods(testDate)
 
-          expect(result).to.equal([
+          expect(result).toEqual([
             {
               ..._getSummerDates(year, lastYear),
               name: 'summer',
@@ -571,7 +566,7 @@ describe('Return Period lib', () => {
         it('should return the return periods with the name and dates', () => {
           const result = ReturnPeriodLib.determineUpcomingReturnPeriods(testDate)
 
-          expect(result).to.equal([
+          expect(result).toEqual([
             {
               ..._getPeriodDatesQuarterThree(year),
               name: 'quarterThree',
@@ -614,7 +609,7 @@ describe('Return Period lib', () => {
         it('should return the return periods with the name and dates', () => {
           const result = ReturnPeriodLib.determineUpcomingReturnPeriods(testDate)
 
-          expect(result).to.equal([
+          expect(result).toEqual([
             {
               ..._getPeriodDatesQuarterThree(lastYear),
               name: 'quarterThree',

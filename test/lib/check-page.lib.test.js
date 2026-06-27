@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Thing under test
 const CheckPageLib = require('../../app/lib/check-page.lib.js')
@@ -36,7 +31,7 @@ describe('CheckPage Lib', () => {
       it('should return updated url to use "/check"', () => {
         const result = CheckPageLib.checkUrl(session, '/system/name')
 
-        expect(result).to.equal('/system/check')
+        expect(result).toEqual('/system/check')
       })
     })
 
@@ -44,7 +39,7 @@ describe('CheckPage Lib', () => {
       it('should return the original url', () => {
         const result = CheckPageLib.checkUrl(session, '/system/name')
 
-        expect(result).to.equal('/system/name')
+        expect(result).toEqual('/system/name')
       })
     })
   })
@@ -53,7 +48,7 @@ describe('CheckPage Lib', () => {
     it('should only update the "checkPageVisited" property to true', async () => {
       await CheckPageLib.markCheckPageVisited(session)
 
-      expect(session).to.equal({
+      expect(session).toEqual({
         $update: session.$update,
         checkPageVisited: true,
         extraSessionData: 'some extra data'
@@ -65,7 +60,7 @@ describe('CheckPage Lib', () => {
     it('should only update the "checkPageVisited" property to false', async () => {
       await CheckPageLib.markCheckPageNotVisited(session)
 
-      expect(session).to.equal({
+      expect(session).toEqual({
         $update: session.$update,
         checkPageVisited: false,
         extraSessionData: 'some extra data'

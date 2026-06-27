@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const AbstractionPeriodLib = require('../../app/lib/abstraction-period.lib.js')
 
@@ -51,7 +44,7 @@ describe('Determine Abstraction Periods service', () => {
           endMonth
         )
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           {
             startDate: new Date('2022-04-01'),
             endDate: new Date('2022-12-31')
@@ -81,7 +74,7 @@ describe('Determine Abstraction Periods service', () => {
           endMonth
         )
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           {
             startDate: new Date('2022-11-01'),
             endDate: new Date('2022-12-31')
@@ -107,7 +100,7 @@ describe('Determine Abstraction Periods service', () => {
           endMonth
         )
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           {
             startDate: new Date('2022-12-01'),
             endDate: new Date('2022-12-31')
@@ -137,7 +130,7 @@ describe('Determine Abstraction Periods service', () => {
           endMonth
         )
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           {
             startDate: new Date('2023-01-01'),
             endDate: new Date('2023-02-28')
@@ -172,7 +165,7 @@ describe('Determine Abstraction Periods service', () => {
           endMonth
         )
 
-        expect(result).to.equal([])
+        expect(result).toEqual([])
       })
     })
 
@@ -193,7 +186,7 @@ describe('Determine Abstraction Periods service', () => {
           endMonth
         )
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           {
             startDate: new Date('2023-01-01'),
             endDate: new Date('2023-01-31')
@@ -219,7 +212,7 @@ describe('Determine Abstraction Periods service', () => {
           endMonth
         )
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           {
             startDate: new Date('2023-01-01'),
             endDate: new Date('2023-02-28')
@@ -254,7 +247,7 @@ describe('Determine Abstraction Periods service', () => {
           endMonth
         )
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           {
             startDate: new Date('2022-11-01'),
             endDate: new Date('2022-12-31')
@@ -280,7 +273,7 @@ describe('Determine Abstraction Periods service', () => {
           endMonth
         )
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           {
             startDate: new Date('2022-12-01'),
             endDate: new Date('2023-01-31')
@@ -306,7 +299,7 @@ describe('Determine Abstraction Periods service', () => {
           endMonth
         )
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           {
             startDate: new Date('2023-01-01'),
             endDate: new Date('2023-02-28')
@@ -332,7 +325,7 @@ describe('Determine Abstraction Periods service', () => {
           endMonth
         )
 
-        expect(result).to.equal([])
+        expect(result).toEqual([])
       })
     })
   })
