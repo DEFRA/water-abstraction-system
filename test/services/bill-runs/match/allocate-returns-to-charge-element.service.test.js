@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const AllocateReturnsToChargeElementService = require('../../../../app/services/bill-runs/match/allocate-returns-to-charge-element.service.js')
 
@@ -30,7 +23,7 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeReference.allocatedQuantity).to.equal(32)
+          expect(chargeReference.allocatedQuantity).toEqual(32)
         })
 
         it('allocates 32 to the charge element and adds chargeDatesOverlap property as "false"', () => {
@@ -38,9 +31,9 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeElement.allocatedQuantity).to.equal(32)
-          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(32)
-          expect(chargeElement.chargeDatesOverlap).to.be.false()
+          expect(chargeElement.allocatedQuantity).toEqual(32)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).toEqual(32)
+          expect(chargeElement.chargeDatesOverlap).toBe(false)
         })
 
         it('allocates all 32 from the return log', () => {
@@ -48,15 +41,15 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(matchingReturns[0].allocatedQuantity).to.equal(32)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(0)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(0)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(0)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(0)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(0)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(0)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).to.equal(0)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).to.equal(0)
+          expect(matchingReturns[0].allocatedQuantity).toEqual(32)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).toEqual(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).toEqual(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).toEqual(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).toEqual(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).toEqual(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).toEqual(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).toEqual(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).toEqual(0)
         })
       })
 
@@ -71,8 +64,8 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeReference.volume).to.equal(10)
-          expect(chargeReference.allocatedQuantity).to.equal(10)
+          expect(chargeReference.volume).toEqual(10)
+          expect(chargeReference.allocatedQuantity).toEqual(10)
         })
 
         it('allocates 10 to the charge element', () => {
@@ -80,9 +73,9 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeElement.authorisedAnnualQuantity).to.equal(32)
-          expect(chargeElement.allocatedQuantity).to.equal(10)
-          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(10)
+          expect(chargeElement.authorisedAnnualQuantity).toEqual(32)
+          expect(chargeElement.allocatedQuantity).toEqual(10)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).toEqual(10)
         })
 
         it('allocates 10 from the return log', () => {
@@ -90,15 +83,15 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(matchingReturns[0].allocatedQuantity).to.equal(10)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(0)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(0)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(2)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(4)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(4)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(4)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).to.equal(4)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).to.equal(4)
+          expect(matchingReturns[0].allocatedQuantity).toEqual(10)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).toEqual(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).toEqual(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).toEqual(2)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).toEqual(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).toEqual(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).toEqual(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).toEqual(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).toEqual(4)
         })
       })
 
@@ -113,8 +106,8 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeReference.volume).to.equal(32)
-          expect(chargeReference.allocatedQuantity).to.equal(10)
+          expect(chargeReference.volume).toEqual(32)
+          expect(chargeReference.allocatedQuantity).toEqual(10)
         })
 
         it('allocates 10 to the charge element', () => {
@@ -122,9 +115,9 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeElement.authorisedAnnualQuantity).to.equal(10)
-          expect(chargeElement.allocatedQuantity).to.equal(10)
-          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(10)
+          expect(chargeElement.authorisedAnnualQuantity).toEqual(10)
+          expect(chargeElement.allocatedQuantity).toEqual(10)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).toEqual(10)
         })
 
         it('allocates 10 from the return log', () => {
@@ -132,15 +125,15 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(matchingReturns[0].allocatedQuantity).to.equal(10)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(0)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(0)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(2)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(4)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(4)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(4)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).to.equal(4)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).to.equal(4)
+          expect(matchingReturns[0].allocatedQuantity).toEqual(10)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).toEqual(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).toEqual(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).toEqual(2)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).toEqual(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).toEqual(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).toEqual(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).toEqual(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).toEqual(4)
         })
       })
 
@@ -161,8 +154,8 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeReference.volume).to.equal(3.5)
-          expect(chargeReference.allocatedQuantity).to.equal(3)
+          expect(chargeReference.volume).toEqual(3.5)
+          expect(chargeReference.allocatedQuantity).toEqual(3)
         })
 
         it('allocates 3 to the charge element', () => {
@@ -170,9 +163,9 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeElement.authorisedAnnualQuantity).to.equal(3)
-          expect(chargeElement.allocatedQuantity).to.equal(3)
-          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(3)
+          expect(chargeElement.authorisedAnnualQuantity).toEqual(3)
+          expect(chargeElement.allocatedQuantity).toEqual(3)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).toEqual(3)
         })
 
         it('allocates 3 from the return log', () => {
@@ -180,15 +173,15 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(matchingReturns[0].allocatedQuantity).to.equal(3)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(1)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(4)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(4)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(4)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(4)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(4)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).to.equal(4)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).to.equal(4)
+          expect(matchingReturns[0].allocatedQuantity).toEqual(3)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).toEqual(1)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).toEqual(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).toEqual(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).toEqual(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).toEqual(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).toEqual(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).toEqual(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).toEqual(4)
         })
       })
 
@@ -204,7 +197,7 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeReference.allocatedQuantity).to.equal(28)
+          expect(chargeReference.allocatedQuantity).toEqual(28)
         })
 
         it('allocates 28 to the charge element', () => {
@@ -212,8 +205,8 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeElement.allocatedQuantity).to.equal(28)
-          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(28)
+          expect(chargeElement.allocatedQuantity).toEqual(28)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).toEqual(28)
         })
 
         it('does not include the line outside of the charge period and allocates 28 from the return log', () => {
@@ -221,15 +214,15 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(matchingReturns[0].allocatedQuantity).to.equal(28)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(4)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).to.equal(0)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).to.equal(0)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).to.equal(0)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).to.equal(0)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).to.equal(0)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).to.equal(0)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).to.equal(0)
+          expect(matchingReturns[0].allocatedQuantity).toEqual(28)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).toEqual(4)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[1].unallocated).toEqual(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[2].unallocated).toEqual(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[3].unallocated).toEqual(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[4].unallocated).toEqual(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[5].unallocated).toEqual(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[6].unallocated).toEqual(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[7].unallocated).toEqual(0)
         })
       })
 
@@ -245,9 +238,9 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeElement.allocatedQuantity).to.equal(32)
-          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(32)
-          expect(chargeElement.chargeDatesOverlap).to.be.true()
+          expect(chargeElement.allocatedQuantity).toEqual(32)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).toEqual(32)
+          expect(chargeElement.chargeDatesOverlap).toBe(true)
         })
       })
 
@@ -263,9 +256,9 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeElement.allocatedQuantity).to.equal(28)
-          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(28)
-          expect(chargeElement.chargeDatesOverlap).to.be.true()
+          expect(chargeElement.allocatedQuantity).toEqual(28)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).toEqual(28)
+          expect(chargeElement.chargeDatesOverlap).toBe(true)
         })
       })
 
@@ -280,13 +273,13 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeReference.allocatedQuantity).to.equal(0)
+          expect(chargeReference.allocatedQuantity).toEqual(0)
 
-          expect(chargeElement.allocatedQuantity).to.equal(0)
-          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(0)
+          expect(chargeElement.allocatedQuantity).toEqual(0)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).toEqual(0)
 
-          expect(matchingReturns[0].allocatedQuantity).to.equal(0)
-          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).to.equal(4)
+          expect(matchingReturns[0].allocatedQuantity).toEqual(0)
+          expect(matchingReturns[0].returnSubmissions[0].returnSubmissionLines[0].unallocated).toEqual(4)
         })
       })
 
@@ -301,12 +294,12 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeReference.allocatedQuantity).to.equal(0)
+          expect(chargeReference.allocatedQuantity).toEqual(0)
 
-          expect(chargeElement.allocatedQuantity).to.equal(0)
-          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(0)
+          expect(chargeElement.allocatedQuantity).toEqual(0)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).toEqual(0)
 
-          expect(matchingReturns[0].allocatedQuantity).to.equal(0)
+          expect(matchingReturns[0].allocatedQuantity).toEqual(0)
         })
       })
     })
@@ -322,7 +315,7 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeReference.allocatedQuantity).to.equal(32)
+          expect(chargeReference.allocatedQuantity).toEqual(32)
         })
 
         it('fully allocates up to authorised amount of 32 to the charge element', () => {
@@ -330,8 +323,8 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeElement.allocatedQuantity).to.equal(32)
-          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(32)
+          expect(chargeElement.allocatedQuantity).toEqual(32)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).toEqual(32)
         })
 
         it('allocates 32 from the return log', () => {
@@ -339,7 +332,7 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(matchingReturns[0].allocatedQuantity).to.equal(32)
+          expect(matchingReturns[0].allocatedQuantity).toEqual(32)
         })
 
         describe('and 10 has already been allocated to the reference/element from another return', () => {
@@ -353,7 +346,7 @@ describe('Allocate Returns to Charge Element Service', () => {
 
             AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-            expect(chargeReference.allocatedQuantity).to.equal(32)
+            expect(chargeReference.allocatedQuantity).toEqual(32)
           })
 
           it('fully allocates up to authorised amount of 32 to the charge element', () => {
@@ -361,8 +354,8 @@ describe('Allocate Returns to Charge Element Service', () => {
 
             AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-            expect(chargeElement.allocatedQuantity).to.equal(32)
-            expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(22)
+            expect(chargeElement.allocatedQuantity).toEqual(32)
+            expect(chargeElement.returnLogs[0].allocatedQuantity).toEqual(22)
           })
 
           it('allocates 22 from the return log', () => {
@@ -370,7 +363,7 @@ describe('Allocate Returns to Charge Element Service', () => {
 
             AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-            expect(matchingReturns[0].allocatedQuantity).to.equal(22)
+            expect(matchingReturns[0].allocatedQuantity).toEqual(22)
           })
         })
 
@@ -385,7 +378,7 @@ describe('Allocate Returns to Charge Element Service', () => {
 
             AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-            expect(chargeReference.allocatedQuantity).to.equal(32)
+            expect(chargeReference.allocatedQuantity).toEqual(32)
           })
 
           it('the fully allocated amount of 32 to the charge element is unaltered by the due return', () => {
@@ -393,8 +386,8 @@ describe('Allocate Returns to Charge Element Service', () => {
 
             AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-            expect(chargeElement.allocatedQuantity).to.equal(32)
-            expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(0)
+            expect(chargeElement.allocatedQuantity).toEqual(32)
+            expect(chargeElement.returnLogs[0].allocatedQuantity).toEqual(0)
           })
 
           it('allocates 0 from the return log', () => {
@@ -402,7 +395,7 @@ describe('Allocate Returns to Charge Element Service', () => {
 
             AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-            expect(matchingReturns[0].allocatedQuantity).to.equal(0)
+            expect(matchingReturns[0].allocatedQuantity).toEqual(0)
           })
         })
       })
@@ -417,8 +410,8 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeReference.volume).to.equal(32)
-          expect(chargeReference.allocatedQuantity).to.equal(10)
+          expect(chargeReference.volume).toEqual(32)
+          expect(chargeReference.allocatedQuantity).toEqual(10)
         })
 
         it('fully allocates up to authorised amount of 10 to the charge element', () => {
@@ -426,9 +419,9 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeElement.authorisedAnnualQuantity).to.equal(10)
-          expect(chargeElement.allocatedQuantity).to.equal(10)
-          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(10)
+          expect(chargeElement.authorisedAnnualQuantity).toEqual(10)
+          expect(chargeElement.allocatedQuantity).toEqual(10)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).toEqual(10)
         })
 
         it('allocates 10 from the return log', () => {
@@ -436,7 +429,7 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(matchingReturns[0].allocatedQuantity).to.equal(10)
+          expect(matchingReturns[0].allocatedQuantity).toEqual(10)
         })
       })
 
@@ -450,8 +443,8 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeReference.volume).to.equal(10)
-          expect(chargeReference.allocatedQuantity).to.equal(10)
+          expect(chargeReference.volume).toEqual(10)
+          expect(chargeReference.allocatedQuantity).toEqual(10)
         })
 
         it('allocates the charge references authorised amount of 10 to the charge element', () => {
@@ -459,9 +452,9 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(chargeElement.authorisedAnnualQuantity).to.equal(32)
-          expect(chargeElement.allocatedQuantity).to.equal(10)
-          expect(chargeElement.returnLogs[0].allocatedQuantity).to.equal(10)
+          expect(chargeElement.authorisedAnnualQuantity).toEqual(32)
+          expect(chargeElement.allocatedQuantity).toEqual(10)
+          expect(chargeElement.returnLogs[0].allocatedQuantity).toEqual(10)
         })
 
         it('allocates 10 from the return log', () => {
@@ -469,7 +462,7 @@ describe('Allocate Returns to Charge Element Service', () => {
 
           AllocateReturnsToChargeElementService.go(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
-          expect(matchingReturns[0].allocatedQuantity).to.equal(10)
+          expect(matchingReturns[0].allocatedQuantity).toEqual(10)
         })
       })
     })

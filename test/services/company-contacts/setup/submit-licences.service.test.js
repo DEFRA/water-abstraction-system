@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
@@ -52,14 +47,14 @@ describe('Company Contacts - Setup - Licences Service', () => {
     it('saves the submitted value', async () => {
       await SubmitLicencesService.go(session.id, payload)
 
-      expect(session.abstractionAlertLicences).to.equal([licence.id])
-      expect(session.$update.called).to.be.true()
+      expect(session.abstractionAlertLicences).toEqual([licence.id])
+      expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
       const result = await SubmitLicencesService.go(session.id, payload)
 
-      expect(result).to.equal({ redirectUrl: `/system/company-contacts/setup/${session.id}/check` })
+      expect(result).toEqual({ redirectUrl: `/system/company-contacts/setup/${session.id}/check` })
     })
   })
 
@@ -71,7 +66,7 @@ describe('Company Contacts - Setup - Licences Service', () => {
     it('returns page data for the view, with errors', async () => {
       const result = await SubmitLicencesService.go(session.id, payload)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
           text: 'Back'

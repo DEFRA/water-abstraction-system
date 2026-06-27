@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const EventHelper = require('../../support/helpers/event.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
@@ -22,7 +15,7 @@ describe('Notifications - Fetch Notification service', () => {
   let notice
   let notification
 
-  before(async () => {
+  beforeAll(async () => {
     licence = await LicenceHelper.add()
 
     notice = await EventHelper.add(NoticesFixture.returnsPaperForm())
@@ -34,7 +27,7 @@ describe('Notifications - Fetch Notification service', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     await notice.$query().delete()
     await licence.$query().delete()
   })
@@ -49,7 +42,7 @@ describe('Notifications - Fetch Notification service', () => {
         it('returns the matching notification with its related event and licence data', async () => {
           const result = await FetchNotificationService.go(notification.id, licence.id)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             licence: {
               id: licence.id,
               licenceRef: licence.licenceRef
@@ -100,7 +93,7 @@ describe('Notifications - Fetch Notification service', () => {
         it('returns the matching notification with its related event and licence data', async () => {
           const result = await FetchNotificationService.go(notification.id, licence.id)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             licence: {
               id: licence.id,
               licenceRef: licence.licenceRef
@@ -143,7 +136,7 @@ describe('Notifications - Fetch Notification service', () => {
         it('returns the matching notification with its related event and licence data', async () => {
           const result = await FetchNotificationService.go(notification.id, licence.id)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             licence: {
               id: licence.id,
               licenceRef: licence.licenceRef
@@ -184,7 +177,7 @@ describe('Notifications - Fetch Notification service', () => {
         it('returns the matching notification with its related event and licence data', async () => {
           const result = await FetchNotificationService.go(notification.id, licence.id)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             licence: {
               id: licence.id,
               licenceRef: licence.licenceRef
@@ -223,7 +216,7 @@ describe('Notifications - Fetch Notification service', () => {
       it('returns null licence data (it makes no difference to the notification data returned)', async () => {
         const result = await FetchNotificationService.go(notification.id)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           licence: null,
           notification: {
             createdAt: notification.createdAt,

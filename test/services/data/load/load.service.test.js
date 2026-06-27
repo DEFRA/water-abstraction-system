@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
@@ -61,22 +54,22 @@ describe('Load service', () => {
 
         const licence = await LicenceModel.query().findById(licences[0])
 
-        expect(licence.licenceRef).to.equal(licenceRef)
+        expect(licence.licenceRef).toEqual(licenceRef)
 
         const billRun = await BillRunModel.query().findById(billRuns[0])
 
-        expect(billRun.regionId).to.equal(region.id)
-        expect(billRun.status).to.equal('sent')
+        expect(billRun.regionId).toEqual(region.id)
+        expect(billRun.status).toEqual('sent')
       })
 
       it('returns the generated and used IDs for the entities', async () => {
         const result = await LoadService.go(payload)
 
-        expect(result.licences).to.exist()
-        expect(result.licences).not.to.be.empty()
+        expect(result.licences).toBeDefined()
+        expect(result.licences).not.toHaveLength(0)
 
-        expect(result.billRuns).to.exist()
-        expect(result.billRuns).not.to.be.empty()
+        expect(result.billRuns).toBeDefined()
+        expect(result.billRuns).not.toHaveLength(0)
       })
 
       describe('that includes an entity instance with a lookup', () => {
@@ -108,7 +101,7 @@ describe('Load service', () => {
 
           const chargeReference = await ChargeReferenceModel.query().findById('fa3c73d0-0459-41f0-b6cf-0e0758775ca4')
 
-          expect(chargeReference.chargeCategoryId).to.equal(chargeCategory.id)
+          expect(chargeReference.chargeCategoryId).toEqual(chargeCategory.id)
         })
       })
 
@@ -121,7 +114,7 @@ describe('Load service', () => {
             .first('isTest')
             .where('licenceId', result.licences[0])
 
-          expect(licence.isTest).to.be.true()
+          expect(licence.isTest).toBe(true)
         })
       })
     })
@@ -132,10 +125,12 @@ describe('Load service', () => {
       })
 
       it('throws an exception', async () => {
-        const result = await expect(LoadService.go(payload)).to.reject()
+        const result = await LoadService.go(payload).catch((e) => {
+          return e
+        })
 
-        expect(result).to.be.instanceOf(ExpandedError)
-        expect(result.entityKey).to.equal('cats')
+        expect(result).toBeInstanceOf(ExpandedError)
+        expect(result.entityKey).toEqual('cats')
       })
     })
 
@@ -143,7 +138,7 @@ describe('Load service', () => {
       it('returns an empty result', async () => {
         const result = await LoadService.go(null)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
       })
     })
   })

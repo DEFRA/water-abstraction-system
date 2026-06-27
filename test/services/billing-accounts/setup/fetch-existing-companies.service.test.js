@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CompanyModel = require('../../../../app/models/company.model.js')
 const CompanyHelper = require('../../../support/helpers/company.helper.js')
@@ -19,7 +12,7 @@ describe('Billing Accounts - Setup - Fetch Existing Companies service', () => {
   let fakeCompany
   let fakeLtdCompany
 
-  before(async () => {
+  beforeAll(async () => {
     fakeLtdCompany = await CompanyHelper.add({
       name: 'Fake Ltd'
     })
@@ -31,7 +24,7 @@ describe('Billing Accounts - Setup - Fetch Existing Companies service', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await acmeFakeCompany.$query().delete()
     await fakeCompany.$query().delete()
     await fakeLtdCompany.$query().delete()
@@ -41,7 +34,7 @@ describe('Billing Accounts - Setup - Fetch Existing Companies service', () => {
     it('returns the matching companies', async () => {
       const result = await FetchExistingCompaniesService.go('Fake')
 
-      expect(result).to.equal([
+      expect(result).toEqual([
         CompanyModel.fromJson({
           exact: true,
           id: fakeCompany.id,

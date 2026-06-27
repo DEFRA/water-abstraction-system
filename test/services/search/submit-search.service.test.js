@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Thing under test
 const SubmitSearchService = require('../../../app/services/search/submit-search.service.js')
@@ -52,9 +47,9 @@ describe('Search - Submit Search service', () => {
     it('sets the session value and returns a redirect to the search results page', async () => {
       const result = await SubmitSearchService.go(auth, payload, yar)
 
-      expect(yarSpy.calledWithExactly('searchQuery', 'searchthis')).to.be.true()
-      expect(yarSpy.calledWithExactly('searchResultType', 'monitoringStation')).to.be.true()
-      expect(result).to.equal({ redirect: '/system/search?page=1' })
+      expect(yarSpy.calledWithExactly('searchQuery', 'searchthis')).toBe(true)
+      expect(yarSpy.calledWithExactly('searchResultType', 'monitoringStation')).toBe(true)
+      expect(result).toEqual({ redirect: '/system/search?page=1' })
     })
   })
 
@@ -66,7 +61,7 @@ describe('Search - Submit Search service', () => {
     it('returns an error message', async () => {
       const result = await SubmitSearchService.go(auth, payload, yar)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         filterItems: [
           {
             checked: false,
@@ -106,7 +101,7 @@ describe('Search - Submit Search service', () => {
         showResults: false
       })
 
-      expect(yarSpy.called).to.be.false()
+      expect(yarSpy.called).toBe(false)
     })
   })
 
@@ -118,9 +113,9 @@ describe('Search - Submit Search service', () => {
     it('sets the session value and returns a redirect to the search results page', async () => {
       const result = await SubmitSearchService.go(auth, payload, yar)
 
-      expect(yarSpy.calledWithExactly('searchQuery', 'searchthis')).to.be.true()
-      expect(yarSpy.calledWithExactly('searchResultType', 'all')).to.be.true()
-      expect(result).to.equal({ redirect: '/system/search?page=1' })
+      expect(yarSpy.calledWithExactly('searchQuery', 'searchthis')).toBe(true)
+      expect(yarSpy.calledWithExactly('searchResultType', 'all')).toBe(true)
+      expect(result).toEqual({ redirect: '/system/search?page=1' })
     })
   })
 
@@ -132,8 +127,8 @@ describe('Search - Submit Search service', () => {
     it('redirects to the blank search page without setting session values', async () => {
       const result = await SubmitSearchService.go(auth, payload, yar)
 
-      expect(yarSpy.called).to.be.false()
-      expect(result).to.equal({ redirect: '/system/search' })
+      expect(yarSpy.called).toBe(false)
+      expect(result).toEqual({ redirect: '/system/search' })
     })
   })
 
@@ -145,8 +140,8 @@ describe('Search - Submit Search service', () => {
     it('redirects to the blank search page without setting session values', async () => {
       const result = await SubmitSearchService.go(auth, payload, yar)
 
-      expect(yarSpy.called).to.be.false()
-      expect(result).to.equal({ redirect: '/system/search' })
+      expect(yarSpy.called).toBe(false)
+      expect(result).toEqual({ redirect: '/system/search' })
     })
   })
 })

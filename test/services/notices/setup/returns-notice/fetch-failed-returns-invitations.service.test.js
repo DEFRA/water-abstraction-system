@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const EventHelper = require('../../../../support/helpers/event.helper.js')
 const NoticesFixture = require('../../../../support/fixtures/notices.fixture.js')
@@ -54,7 +47,7 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
         it('returns an object with empty properties', async () => {
           const result = await FetchFailedReturnsInvitationsService.go(notice.id)
 
-          expect(result).to.equal({ dueDate: null, licenceRefs: [], notificationIds: [], returnLogIds: [] })
+          expect(result).toEqual({ dueDate: null, licenceRefs: [], notificationIds: [], returnLogIds: [] })
         })
       })
 
@@ -101,7 +94,7 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
             it('returns the failed notification IDs plus the unique licence refs and return logs IDs from them, and a calculated due date', async () => {
               const result = await FetchFailedReturnsInvitationsService.go(notice.id)
 
-              expect(result).to.equal({
+              expect(result).toEqual({
                 dueDate: futureDueDate('letter'),
                 licenceRefs,
                 notificationIds: [notifications[1].id, notifications[2].id].sort((referenceString, compareString) => {
@@ -140,7 +133,7 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
             it('returns the failed notification IDs plus the unique licence refs and return logs IDs from them, and a calculated due date', async () => {
               const result = await FetchFailedReturnsInvitationsService.go(notice.id)
 
-              expect(result).to.equal({
+              expect(result).toEqual({
                 dueDate: new Date('2025-04-28'),
                 licenceRefs,
                 notificationIds: [notifications[1].id, notifications[2].id].sort((referenceString, compareString) => {
@@ -178,7 +171,7 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
           it('returns an object with empty properties', async () => {
             const result = await FetchFailedReturnsInvitationsService.go(notice.id)
 
-            expect(result).to.equal({ dueDate: null, licenceRefs: [], notificationIds: [], returnLogIds: [] })
+            expect(result).toEqual({ dueDate: null, licenceRefs: [], notificationIds: [], returnLogIds: [] })
           })
         })
       })
@@ -188,7 +181,7 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
       it('returns an object with empty properties', async () => {
         const result = await FetchFailedReturnsInvitationsService.go('1f0e0086-7bc4-4ef2-a696-35ea1e79d224')
 
-        expect(result).to.equal({ dueDate: null, licenceRefs: [], notificationIds: [], returnLogIds: [] })
+        expect(result).toEqual({ dueDate: null, licenceRefs: [], notificationIds: [], returnLogIds: [] })
       })
     })
   })
@@ -197,7 +190,7 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
     it('returns an object with empty properties', async () => {
       const result = await FetchFailedReturnsInvitationsService.go('1f0e0086-7bc4-4ef2-a696-35ea1e79d224')
 
-      expect(result).to.equal({ dueDate: null, licenceRefs: [], notificationIds: [], returnLogIds: [] })
+      expect(result).toEqual({ dueDate: null, licenceRefs: [], notificationIds: [], returnLogIds: [] })
     })
   })
 })

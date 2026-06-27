@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, after, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { tomorrow, yesterday } = require('../../support/general.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
@@ -40,7 +33,7 @@ describe('Reports - Fetch Invalid Addresses service', () => {
   let returnsToRevokedTomorrow
   let returnsToSpecialCharacters
 
-  before(async () => {
+  beforeAll(async () => {
     noInvalidAddress = {
       licenceDocumentHeader: await LicenceDocumentHeaderHelper.add({ licenceRef: '03/28/01/0164' }),
       licence: await LicenceHelper.add({ licenceRef: '03/28/01/0164' })
@@ -82,7 +75,7 @@ describe('Reports - Fetch Invalid Addresses service', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     await noInvalidAddress.licence.$query().delete()
     await noInvalidAddress.licenceDocumentHeader.$query().delete()
     await currentLicenceHolder.licence.$query().delete()
@@ -103,8 +96,8 @@ describe('Reports - Fetch Invalid Addresses service', () => {
     it('returns a list of licences that are missing postcode and country fields', async () => {
       const results = await FetchInvalidAddressesService.go()
 
-      expect(results.length).to.greaterThan(4)
-      expect(results).contains({
+      expect(results.length).toBeGreaterThan(4)
+      expect(results).toContainEqual({
         licence_ref: '03/28/01/0165',
         licence_ends: null,
         contact_role: 'Licence holder',
@@ -117,7 +110,7 @@ describe('Reports - Fetch Invalid Addresses service', () => {
         postcode: null,
         country: null
       })
-      expect(results).contains({
+      expect(results).toContainEqual({
         licence_ref: '03/28/01/0166',
         licence_ends: tomorrow(),
         contact_role: 'Licence holder',
@@ -130,7 +123,7 @@ describe('Reports - Fetch Invalid Addresses service', () => {
         postcode: null,
         country: null
       })
-      expect(results).contains({
+      expect(results).toContainEqual({
         licence_ref: '03/28/01/0166',
         licence_ends: tomorrow(),
         contact_role: 'Licence holder',
@@ -143,7 +136,7 @@ describe('Reports - Fetch Invalid Addresses service', () => {
         postcode: null,
         country: null
       })
-      expect(results).contains({
+      expect(results).toContainEqual({
         licence_ref: '03/28/01/0168',
         licence_ends: tomorrow(),
         contact_role: 'Returns to',
@@ -156,7 +149,7 @@ describe('Reports - Fetch Invalid Addresses service', () => {
         postcode: null,
         country: null
       })
-      expect(results).contains({
+      expect(results).toContainEqual({
         licence_ref: '03/28/01/0169',
         licence_ends: tomorrow(),
         contact_role: 'Returns to',
@@ -169,7 +162,7 @@ describe('Reports - Fetch Invalid Addresses service', () => {
         postcode: null,
         country: null
       })
-      expect(results).contains({
+      expect(results).toContainEqual({
         licence_ref: '03/28/01/0170',
         licence_ends: null,
         contact_role: 'Returns to',

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { pause } = require('../../../../app/lib/general.lib.js')
@@ -53,23 +48,23 @@ describe('Bill Runs - Cancel - Submit Cancel Bill Run service', () => {
       it('unassigns the bill run from those licences with supplementary year records', async () => {
         await SubmitCancelBillBunService.go(billRunId)
 
-        expect(unassignBillRunStub.called).to.be.true()
+        expect(unassignBillRunStub.called).toBe(true)
       })
 
       it('deletes the bill run in the background and does not throw an error', async () => {
         await SubmitCancelBillBunService.go(billRunId)
 
-        expect(cancelBillRunStub.called).to.be.true()
-        expect(deleteBillRunStub.called).to.be.true()
+        expect(cancelBillRunStub.called).toBe(true)
+        expect(deleteBillRunStub.called).toBe(true)
 
         // NOTE: We have faked the DeleteBillRunService taking some time to complete so we can test that
         // SubmitCancelBillBunService returns control back to us whilst the delete is still in progress. We then pause
         // and allow the delete to complete to confirm that it was running in the background.
-        expect(deleteDoneFake.called).to.be.false()
+        expect(deleteDoneFake.called).toBe(false)
 
         await pause(500)
 
-        expect(deleteDoneFake.called).to.be.true()
+        expect(deleteDoneFake.called).toBe(true)
       })
     })
 
@@ -82,15 +77,15 @@ describe('Bill Runs - Cancel - Submit Cancel Bill Run service', () => {
       })
 
       it('does not unassign the bill run from those licences with supplementary year records', async () => {
-        await expect(SubmitCancelBillBunService.go(billRunId)).to.reject()
+        await expect(SubmitCancelBillBunService.go(billRunId)).rejects.toThrow()
 
-        expect(unassignBillRunStub.called).to.equal(false)
+        expect(unassignBillRunStub.called).toEqual(false)
       })
 
       it('does not delete the bill run and throws an error', async () => {
-        await expect(SubmitCancelBillBunService.go(billRunId)).to.reject()
+        await expect(SubmitCancelBillBunService.go(billRunId)).rejects.toThrow()
 
-        expect(deleteBillRunStub.called).to.equal(false)
+        expect(deleteBillRunStub.called).toEqual(false)
       })
     })
   })

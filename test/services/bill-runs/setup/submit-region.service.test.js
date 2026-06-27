@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const RegionHelper = require('../../../support/helpers/region.helper.js')
@@ -64,9 +59,9 @@ describe('Bill Runs - Setup - Submit Region service', () => {
         it('saves the submitted region ID and its name and returns an object confirming setup is complete', async () => {
           const result = await SubmitRegionService.go(session.id, payload)
 
-          expect(session.region).to.equal(region.id)
-          expect(session.regionName).to.equal(region.displayName)
-          expect(result.setupComplete).to.be.true()
+          expect(session.region).toEqual(region.id)
+          expect(session.regionName).toEqual(region.displayName)
+          expect(result.setupComplete).toBe(true)
         })
       })
 
@@ -82,9 +77,9 @@ describe('Bill Runs - Setup - Submit Region service', () => {
         it('saves the submitted region ID and its name and returns an object confirming setup is not complete', async () => {
           const result = await SubmitRegionService.go(session.id, payload)
 
-          expect(session.region).to.equal(region.id)
-          expect(session.regionName).to.equal(region.displayName)
-          expect(result.setupComplete).to.be.false()
+          expect(session.region).toEqual(region.id)
+          expect(session.regionName).toEqual(region.displayName)
+          expect(result.setupComplete).toBe(false)
         })
       })
 
@@ -100,9 +95,9 @@ describe('Bill Runs - Setup - Submit Region service', () => {
         it('saves the submitted region ID and its name and returns an object confirming setup is not complete', async () => {
           const result = await SubmitRegionService.go(session.id, payload)
 
-          expect(session.region).to.equal(region.id)
-          expect(session.regionName).to.equal(region.displayName)
-          expect(result.setupComplete).to.be.false()
+          expect(session.region).toEqual(region.id)
+          expect(session.regionName).toEqual(region.displayName)
+          expect(result.setupComplete).toBe(false)
         })
       })
     })
@@ -122,7 +117,7 @@ describe('Bill Runs - Setup - Submit Region service', () => {
         it('returns page data needed to re-render the view including the validation error', async () => {
           const result = await SubmitRegionService.go(session.id, payload)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'bill-runs',
             backlink: `/system/bill-runs/setup/${session.id}/type`,
             error: {

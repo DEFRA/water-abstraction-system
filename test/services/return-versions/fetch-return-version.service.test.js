@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const RequirementsForReturnsSeeder = require('../../support/seeders/requirements-for-returns.seeder.js')
 const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
@@ -40,7 +33,7 @@ describe('Return Versions - Fetch Return Version service', () => {
     it('returns the matching return version and the pagination array', async () => {
       const result = await FetchReturnVersionService.go(seededReturnVersion.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         returnVersion: {
           createdAt: seededReturnVersion.createdAt,
           createdBy: seededUser.userId,

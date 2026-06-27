@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const YarStub = require('../../support/stubs/yar.stub.js')
@@ -74,7 +69,7 @@ describe('Monitoring Stations - View service', () => {
     it('returns the page data for the view', async () => {
       const result = await ViewService.go(auth, monitoringStation.id, yarStub)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         notification: 'Tag removed for 99/999/9999',
         backLink: { href: '/', text: 'Go back to search' },
         buttons: {

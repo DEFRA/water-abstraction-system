@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -47,7 +42,7 @@ describe('Annual Process billing period service', () => {
       it('returns false (bill run is empty)', async () => {
         const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [])
 
-        expect(result).to.be.false()
+        expect(result).toBe(false)
       })
     })
 
@@ -74,7 +69,7 @@ describe('Annual Process billing period service', () => {
         it('returns true (bill run is not empty)', async () => {
           const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
 
-          expect(result).to.be.true()
+          expect(result).toBe(true)
         })
       })
 
@@ -100,7 +95,7 @@ describe('Annual Process billing period service', () => {
         it('returns true (bill run is not empty)', async () => {
           const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
 
-          expect(result).to.be.true()
+          expect(result).toBe(true)
         })
 
         it('only persists the bill licences with transactions', async () => {
@@ -108,8 +103,8 @@ describe('Annual Process billing period service', () => {
 
           const result = await BillModel.query().findOne('billRunId', billRun.id).withGraphFetched('billLicences')
 
-          expect(result.billLicences.length).to.equal(1)
-          expect(result.billLicences[0].licenceId).to.equal(billingAccount.chargeVersions[0].licence.id)
+          expect(result.billLicences.length).toEqual(1)
+          expect(result.billLicences[0].licenceId).toEqual(billingAccount.chargeVersions[0].licence.id)
         })
       })
 
@@ -128,7 +123,7 @@ describe('Annual Process billing period service', () => {
         it('returns false (bill run is empty)', async () => {
           const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
         })
       })
     })
@@ -146,10 +141,12 @@ describe('Annual Process billing period service', () => {
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])).to.reject()
+        const error = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount]).catch((e) => {
+          return e
+        })
 
-        expect(error).to.be.an.instanceOf(BillRunError)
-        expect(error.code).to.equal(BillRunModel.errorCodes.failedToPrepareTransactions)
+        expect(error).toBeInstanceOf(BillRunError)
+        expect(error.code).toEqual(BillRunModel.errorCodes.failedToPrepareTransactions)
       })
     })
 
@@ -159,10 +156,12 @@ describe('Annual Process billing period service', () => {
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])).to.reject()
+        const error = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount]).catch((e) => {
+          return e
+        })
 
-        expect(error).to.be.an.instanceOf(BillRunError)
-        expect(error.code).to.equal(BillRunModel.errorCodes.failedToCreateCharge)
+        expect(error).toBeInstanceOf(BillRunError)
+        expect(error.code).toEqual(BillRunModel.errorCodes.failedToCreateCharge)
       })
     })
   })

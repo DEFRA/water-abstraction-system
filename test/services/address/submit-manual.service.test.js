@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../support/stubs/session.stub.js')
@@ -65,17 +60,17 @@ describe('Address - Submit Manual Service', () => {
       it('saves the submitted address and returns the specified redirect URL', async () => {
         const result = await SubmitManualService.go(sessionId, payload)
 
-        expect(result).to.equal({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
+        expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
-        expect(session.addressJourney.address).to.equal({
+        expect(session.addressJourney.address).toEqual({
           addressLine1: 'Fake Farm',
           addressLine2: '1 Fake street',
           addressLine3: 'Fake Village',
           addressLine4: 'Fake City',
           postcode: 'SW1A 1AA'
         })
-        expect(session.addressJourney.backUrl).to.equal(`/system/address/${session.id}/manual`)
-        expect(session.$update.called).to.be.true()
+        expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/manual`)
+        expect(session.$update.called).toBe(true)
       })
     })
 
@@ -88,7 +83,7 @@ describe('Address - Submit Manual Service', () => {
         it('returns page data needed to re-render the view including the validation error', async () => {
           const result = await SubmitManualService.go(sessionId, payload)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             error: {
               addressLine1: { text: 'Enter address line 1' },
               errorList: [
@@ -127,7 +122,7 @@ describe('Address - Submit Manual Service', () => {
         it('returns page data needed to re-render the view including the validation error', async () => {
           const result = await SubmitManualService.go(sessionId, payload)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             error: {
               errorList: [
                 {

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const FetchLicenceMonitoringStationService = require('../../../app/services/licence-monitoring-station/fetch-licence-monitoring-station.service.js')
@@ -50,7 +45,7 @@ describe('Licence Monitoring Station - Remove service', () => {
     it('returns the page data for the view', async () => {
       const result = await RemoveService.go(licenceMonitoringStationId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: `/system/monitoring-stations/${monitoringStationId}/licence/${licenceId}`,
         licenceConditionTitle: 'Hands off flow threshold',
         licenceRef: '99/999/9999',

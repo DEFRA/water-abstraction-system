@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillRunModel = require('../../../app/models/bill-run.model.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
@@ -27,19 +20,19 @@ describe('Create Bill Run service', () => {
     it('returns the new bill run instance containing the defaults', async () => {
       const result = await CreateBillRunService.go(region.id, financialYearEndings)
 
-      expect(result).to.be.an.instanceOf(BillRunModel)
+      expect(result).toBeInstanceOf(BillRunModel)
 
-      expect(result.fromFinancialYearEnding).to.equal(2023)
-      expect(result.toFinancialYearEnding).to.equal(2024)
-      expect(result.batchType).to.equal('supplementary')
-      expect(result.scheme).to.equal('sroc')
-      expect(result.source).to.equal('wrls')
-      expect(result.externalId).to.be.null()
-      expect(result.status).to.equal('queued')
-      expect(result.errorCode).to.be.null()
+      expect(result.fromFinancialYearEnding).toEqual(2023)
+      expect(result.toFinancialYearEnding).toEqual(2024)
+      expect(result.batchType).toEqual('supplementary')
+      expect(result.scheme).toEqual('sroc')
+      expect(result.source).toEqual('wrls')
+      expect(result.externalId).toBeNull()
+      expect(result.status).toEqual('queued')
+      expect(result.errorCode).toBeNull()
 
-      expect(result.region).to.be.an.instanceOf(RegionModel)
-      expect(result.region.id).to.equal(region.id)
+      expect(result.region).toBeInstanceOf(RegionModel)
+      expect(result.region.id).toEqual(region.id)
     })
   })
 
@@ -61,19 +54,19 @@ describe('Create Bill Run service', () => {
         errorCode
       })
 
-      expect(result).to.be.an.instanceOf(BillRunModel)
+      expect(result).toBeInstanceOf(BillRunModel)
 
-      expect(result.fromFinancialYearEnding).to.equal(2023)
-      expect(result.toFinancialYearEnding).to.equal(2024)
-      expect(result.batchType).to.equal(batchType)
-      expect(result.scheme).to.equal(scheme)
-      expect(result.source).to.equal(source)
-      expect(result.externalId).to.equal(externalId)
-      expect(result.status).to.equal('error')
-      expect(result.errorCode).to.equal(errorCode)
+      expect(result.fromFinancialYearEnding).toEqual(2023)
+      expect(result.toFinancialYearEnding).toEqual(2024)
+      expect(result.batchType).toEqual(batchType)
+      expect(result.scheme).toEqual(scheme)
+      expect(result.source).toEqual(source)
+      expect(result.externalId).toEqual(externalId)
+      expect(result.status).toEqual('error')
+      expect(result.errorCode).toEqual(errorCode)
 
-      expect(result.region).to.be.an.instanceOf(RegionModel)
-      expect(result.region.id).to.equal(region.id)
+      expect(result.region).toBeInstanceOf(RegionModel)
+      expect(result.region.id).toEqual(region.id)
     })
   })
 
@@ -84,18 +77,18 @@ describe('Create Bill Run service', () => {
     it('returns the new bill run instance containing the provided values', async () => {
       const result = await CreateBillRunService.go(region.id, financialYearEndings, { externalId, status })
 
-      expect(result).to.be.an.instanceOf(BillRunModel)
+      expect(result).toBeInstanceOf(BillRunModel)
 
-      expect(result.fromFinancialYearEnding).to.equal(2023)
-      expect(result.toFinancialYearEnding).to.equal(2024)
-      expect(result.batchType).to.equal('supplementary')
-      expect(result.scheme).to.equal('sroc')
-      expect(result.source).to.equal('wrls')
-      expect(result.externalId).to.equal(externalId)
-      expect(result.status).to.equal('error')
+      expect(result.fromFinancialYearEnding).toEqual(2023)
+      expect(result.toFinancialYearEnding).toEqual(2024)
+      expect(result.batchType).toEqual('supplementary')
+      expect(result.scheme).toEqual('sroc')
+      expect(result.source).toEqual('wrls')
+      expect(result.externalId).toEqual(externalId)
+      expect(result.status).toEqual('error')
 
-      expect(result.region).to.be.an.instanceOf(RegionModel)
-      expect(result.region.id).to.equal(region.id)
+      expect(result.region).toBeInstanceOf(RegionModel)
+      expect(result.region.id).toEqual(region.id)
     })
   })
 })

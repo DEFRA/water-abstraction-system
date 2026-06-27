@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
@@ -58,16 +53,16 @@ describe('Bill Runs Review - Submit Edit Service', () => {
           // Check we save the change
           const [patchObject] = patchStub.args[0]
 
-          expect(patchObject).to.equal({ amendedAllocated: 25 })
+          expect(patchObject).toEqual({ amendedAllocated: 25 })
 
           // Check we add the flash message
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('banner')
-          expect(bannerMessage).to.equal('The billable returns for this licence have been updated')
+          expect(flashType).toEqual('banner')
+          expect(bannerMessage).toEqual('The billable returns for this licence have been updated')
 
           // Check we return an empty object (controller knows POST was successful so redirects)
-          expect(result).to.equal({})
+          expect(result).toEqual({})
         })
       })
 
@@ -82,16 +77,16 @@ describe('Bill Runs Review - Submit Edit Service', () => {
           // Check we save the change
           const [patchObject] = patchStub.args[0]
 
-          expect(patchObject).to.equal({ amendedAllocated: 12 })
+          expect(patchObject).toEqual({ amendedAllocated: 12 })
 
           // Check we add the flash message
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('banner')
-          expect(bannerMessage).to.equal('The billable returns for this licence have been updated')
+          expect(flashType).toEqual('banner')
+          expect(bannerMessage).toEqual('The billable returns for this licence have been updated')
 
           // Check we return an empty object (controller knows POST was successful so redirects)
-          expect(result).to.equal({})
+          expect(result).toEqual({})
         })
       })
     })
@@ -106,13 +101,13 @@ describe('Bill Runs Review - Submit Edit Service', () => {
           const result = await SubmitEditService.go(reviewChargeElement.id, elementIndex, yarStub, payload)
 
           // Check we didn't save
-          expect(patchStub.called).to.be.false()
+          expect(patchStub.called).toBe(false)
 
           // Check we didn't add the flash message
-          expect(yarStub.flash.called).to.be.false()
+          expect(yarStub.flash.called).toBe(false)
 
           // Check we return page data including error (controller knows POST failed so re-renders)
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'bill-runs',
             customQuantitySelected: false,
             customQuantityValue: undefined,
@@ -147,13 +142,13 @@ describe('Bill Runs Review - Submit Edit Service', () => {
           const result = await SubmitEditService.go(reviewChargeElement.id, elementIndex, yarStub, payload)
 
           // Check we didn't save
-          expect(patchStub.called).to.be.false()
+          expect(patchStub.called).toBe(false)
 
           // Check we didn't add the flash message
-          expect(yarStub.flash.called).to.be.false()
+          expect(yarStub.flash.called).toBe(false)
 
           // Check we return page data including error (controller knows POST failed so re-renders)
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'bill-runs',
             customQuantitySelected: true,
             customQuantityValue: -0.1,

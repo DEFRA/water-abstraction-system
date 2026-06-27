@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const LicenceModel = require('../../../../app/models/licence.model.js')
@@ -65,21 +60,21 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
         it('saves the submitted value', async () => {
           await SubmitLicenceNumberService.go(session.id, payload)
 
-          expect(session.licenceRef).to.equal(payload.licenceRef)
-          expect(session.$update.called).to.be.true()
+          expect(session.licenceRef).toEqual(payload.licenceRef)
+          expect(session.$update.called).toBe(true)
         })
 
         it('saves the licence id', async () => {
           await SubmitLicenceNumberService.go(session.id, payload)
 
-          expect(session.licenceId).to.equal(licence.id)
+          expect(session.licenceId).toEqual(licence.id)
         })
 
         describe('and the check page has not been visited', () => {
           it('returns a false value so the controller can redirect to the next page', async () => {
             const result = await SubmitLicenceNumberService.go(session.id, payload)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               checkPageVisited: false
             })
           })
@@ -97,7 +92,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
           it('still returns a false value so the controller can redirect to the check page', async () => {
             const result = await SubmitLicenceNumberService.go(session.id, payload)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               checkPageVisited: false
             })
           })
@@ -117,7 +112,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
           it('returns a falsy value so the controller can redirect to the next page', async () => {
             const result = await SubmitLicenceNumberService.go(session.id, payload)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               checkPageVisited: undefined
             })
           })
@@ -135,13 +130,13 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
           it('leaves the checkPageVisited flag in the session as true', async () => {
             await SubmitLicenceNumberService.go(session.id, payload)
 
-            expect(session.checkPageVisited).to.be.true()
+            expect(session.checkPageVisited).toBe(true)
           })
 
           it('returns a true value so the controller can redirect to the next page', async () => {
             const result = await SubmitLicenceNumberService.go(session.id, payload)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               checkPageVisited: true
             })
           })
@@ -160,7 +155,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
     it('returns page data for the view, with errors', async () => {
       const result = await SubmitLicenceNumberService.go(session.id, payload)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         error: { text: 'Licence could not be found' },
         backLink: `/system/licence-monitoring-station/setup/${session.id}/stop-or-reduce`,
         licenceRef: '1234567890',
@@ -178,7 +173,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
     it('returns page data for the view, with errors', async () => {
       const result = await SubmitLicenceNumberService.go(session.id, payload)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         error: { text: 'Enter a licence number' },
         backLink: `/system/licence-monitoring-station/setup/${session.id}/stop-or-reduce`,
         licenceRef: null,

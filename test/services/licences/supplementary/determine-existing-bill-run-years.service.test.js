@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
@@ -24,7 +17,7 @@ describe('Determine Existing Bill Run Years Service', () => {
     let twoPartTariff
 
     describe('and the bill run type is two-part tariff', () => {
-      before(() => {
+      beforeAll(() => {
         twoPartTariff = true
       })
 
@@ -44,7 +37,7 @@ describe('Determine Existing Bill Run Years Service', () => {
         it('does not return any years', async () => {
           const result = await DetermineExistingBillRunYearsService.go(regionId, years, twoPartTariff)
 
-          expect(result).to.equal([])
+          expect(result).toEqual([])
         })
       })
 
@@ -67,13 +60,13 @@ describe('Determine Existing Bill Run Years Service', () => {
         it('returns the years that a bill run exists for', async () => {
           const result = await DetermineExistingBillRunYearsService.go(regionId, years, twoPartTariff)
 
-          expect(result).to.equal([2023, 2024])
+          expect(result).toEqual([2023, 2024])
         })
       })
     })
 
     describe('and the bill run type is annual (two-part tariff is false)', () => {
-      before(() => {
+      beforeAll(() => {
         twoPartTariff = false
       })
 
@@ -92,7 +85,7 @@ describe('Determine Existing Bill Run Years Service', () => {
         it('does not return any years', async () => {
           const result = await DetermineExistingBillRunYearsService.go(regionId, years, twoPartTariff)
 
-          expect(result).to.equal([])
+          expect(result).toEqual([])
         })
       })
 
@@ -115,7 +108,7 @@ describe('Determine Existing Bill Run Years Service', () => {
         it('returns the years that a bill run exists for', async () => {
           const result = await DetermineExistingBillRunYearsService.go(regionId, years, twoPartTariff)
 
-          expect(result).to.equal([2023, 2024])
+          expect(result).toEqual([2023, 2024])
         })
       })
     })

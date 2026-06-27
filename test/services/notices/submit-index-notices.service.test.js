@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
@@ -48,13 +43,13 @@ describe('Notices - Submit Index Notices service', () => {
       it('returns a result that tells the controller to redirect to the index page', async () => {
         const result = await SubmitIndexNoticesService.go(payload, yarStub, auth)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
       })
 
       it('clears the "noticesFilter" object from the session', async () => {
         await SubmitIndexNoticesService.go(payload, yarStub, auth)
 
-        expect(yarStub.clear.called).to.be.true()
+        expect(yarStub.clear.called).toBe(true)
       })
     })
 
@@ -66,7 +61,7 @@ describe('Notices - Submit Index Notices service', () => {
       it('returns a result that tells the controller to redirect to the index page', async () => {
         const result = await SubmitIndexNoticesService.go(payload, yarStub, auth)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
       })
 
       it('saves a default "noticesFilter" object in the session', async () => {
@@ -74,8 +69,8 @@ describe('Notices - Submit Index Notices service', () => {
 
         const setArgs = yarStub.set.args[0]
 
-        expect(setArgs[0]).to.equal('noticesFilter')
-        expect(setArgs[1]).to.equal({
+        expect(setArgs[0]).toEqual('noticesFilter')
+        expect(setArgs[1]).toEqual({
           noticeTypes: [],
           fromDate: undefined,
           reference: null,
@@ -110,7 +105,7 @@ describe('Notices - Submit Index Notices service', () => {
         it('returns a result that tells the controller to redirect to the index page', async () => {
           const result = await SubmitIndexNoticesService.go(payload, yarStub, auth)
 
-          expect(result).to.equal({})
+          expect(result).toEqual({})
         })
 
         it('saves the submitted filters as the "noticesFilter" object in the session', async () => {
@@ -118,8 +113,8 @@ describe('Notices - Submit Index Notices service', () => {
 
           const setArgs = yarStub.set.args[0]
 
-          expect(setArgs[0]).to.equal('noticesFilter')
-          expect(setArgs[1]).to.equal({
+          expect(setArgs[0]).toEqual('noticesFilter')
+          expect(setArgs[1]).toEqual({
             noticeTypes: [],
             fromDate: '2023-04-01',
             reference: payload.reference,
@@ -144,7 +139,7 @@ describe('Notices - Submit Index Notices service', () => {
         it('returns a result that tells the controller to redirect to the index page', async () => {
           const result = await SubmitIndexNoticesService.go(payload, yarStub, auth)
 
-          expect(result).to.equal({})
+          expect(result).toEqual({})
         })
 
         it('saves the submitted filters as the "noticesFilter" object in the session', async () => {
@@ -152,8 +147,8 @@ describe('Notices - Submit Index Notices service', () => {
 
           const setArgs = yarStub.set.args[0]
 
-          expect(setArgs[0]).to.equal('noticesFilter')
-          expect(setArgs[1]).to.equal({
+          expect(setArgs[0]).toEqual('noticesFilter')
+          expect(setArgs[1]).toEqual({
             noticeTypes: ['stop'],
             fromDate: '2023-04-01',
             reference: payload.reference,
@@ -178,7 +173,7 @@ describe('Notices - Submit Index Notices service', () => {
         it('returns a result that tells the controller to redirect to the index page', async () => {
           const result = await SubmitIndexNoticesService.go(payload, yarStub, auth)
 
-          expect(result).to.equal({})
+          expect(result).toEqual({})
         })
 
         it('saves the submitted filters as the "noticesFilter" object in the session', async () => {
@@ -186,8 +181,8 @@ describe('Notices - Submit Index Notices service', () => {
 
           const setArgs = yarStub.set.args[0]
 
-          expect(setArgs[0]).to.equal('noticesFilter')
-          expect(setArgs[1]).to.equal({
+          expect(setArgs[0]).toEqual('noticesFilter')
+          expect(setArgs[1]).toEqual({
             noticeTypes: payload.noticeTypes,
             fromDate: '2023-04-01',
             reference: payload.reference,
@@ -225,7 +220,7 @@ describe('Notices - Submit Index Notices service', () => {
         it('returns the page data for the view, including any errors', async () => {
           const result = await SubmitIndexNoticesService.go(payload, yarStub, auth, '2')
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'notices',
             error: {
               errorList: [{ href: '#fromDate', text: 'Enter a valid from date' }],
@@ -315,7 +310,7 @@ describe('Notices - Submit Index Notices service', () => {
         it('returns the page data for the view, including any errors', async () => {
           const result = await SubmitIndexNoticesService.go(payload, yarStub, auth)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'notices',
             error: {
               errorList: [{ href: '#fromDate', text: 'Enter a valid from date' }],

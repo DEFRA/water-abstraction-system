@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const WorkflowModel = require('../../../../app/models/workflow.model.js')
@@ -61,20 +56,20 @@ describe('Process Time Limited Licences service', () => {
         .whereIn('licenceId', [fetchResults[0].id, fetchResults[1].id])
         .orderBy('createdAt', 'asc')
 
-      expect(results).to.have.length(2)
+      expect(results).toHaveLength(2)
 
-      expect(results[0].licenceId).to.equal(fetchResults[0].id)
-      expect(results[0].licenceVersionId).to.equal(fetchResults[0].licenceVersionId)
-      expect(results[0].status).to.equal('to_setup')
-      expect(results[0].data).to.equal({
+      expect(results[0].licenceId).toEqual(fetchResults[0].id)
+      expect(results[0].licenceVersionId).toEqual(fetchResults[0].licenceVersionId)
+      expect(results[0].status).toEqual('to_setup')
+      expect(results[0].data).toEqual({
         chargeVersion: null,
         timeLimitedChargeVersionId: fetchResults[0].chargeVersionId
       })
 
-      expect(results[1].licenceId).to.equal(fetchResults[1].id)
-      expect(results[1].licenceVersionId).to.equal(fetchResults[1].licenceVersionId)
-      expect(results[1].status).to.equal('to_setup')
-      expect(results[1].data).to.equal({
+      expect(results[1].licenceId).toEqual(fetchResults[1].id)
+      expect(results[1].licenceVersionId).toEqual(fetchResults[1].licenceVersionId)
+      expect(results[1].status).toEqual('to_setup')
+      expect(results[1].data).toEqual({
         chargeVersion: null,
         timeLimitedChargeVersionId: fetchResults[1].chargeVersionId
       })
@@ -85,10 +80,10 @@ describe('Process Time Limited Licences service', () => {
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Time limited job complete')).to.be.true()
-      expect(logDataArg.timeTakenMs).to.exist()
-      expect(logDataArg.timeTakenSs).to.exist()
-      expect(logDataArg.count).to.exist()
+      expect(notifierStub.omg.calledWith('Time limited job complete')).toBe(true)
+      expect(logDataArg.timeTakenMs).toBeDefined()
+      expect(logDataArg.timeTakenSs).toBeDefined()
+      expect(logDataArg.count).toBeDefined()
     })
   })
 
@@ -107,7 +102,7 @@ describe('Process Time Limited Licences service', () => {
         .whereIn('licenceId', [])
         .orderBy('createdAt', 'asc')
 
-      expect(results).to.be.empty()
+      expect(results).toHaveLength(0)
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
@@ -115,10 +110,10 @@ describe('Process Time Limited Licences service', () => {
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Time limited job complete')).to.be.true()
-      expect(logDataArg.timeTakenMs).to.exist()
-      expect(logDataArg.timeTakenSs).to.exist()
-      expect(logDataArg.count).to.exist()
+      expect(notifierStub.omg.calledWith('Time limited job complete')).toBe(true)
+      expect(logDataArg.timeTakenMs).toBeDefined()
+      expect(logDataArg.timeTakenSs).toBeDefined()
+      expect(logDataArg.count).toBeDefined()
     })
   })
 
@@ -132,9 +127,9 @@ describe('Process Time Limited Licences service', () => {
 
       const args = notifierStub.omfg.firstCall.args
 
-      expect(args[0]).to.equal('Time limited job failed')
-      expect(args[1]).to.be.null()
-      expect(args[2]).to.be.an.error()
+      expect(args[0]).toEqual('Time limited job failed')
+      expect(args[1]).toBeNull()
+      expect(args[2]).toBeInstanceOf(Error)
     })
 
     it('notifies the team by calling "redAlert()"', async () => {
@@ -142,11 +137,11 @@ describe('Process Time Limited Licences service', () => {
 
       const args = notifierStub.redAlert.firstCall.args
 
-      expect(args[0]).to.equal('Time limited job failed')
+      expect(args[0]).toEqual('Time limited job failed')
     })
 
     it('does not throw an error', async () => {
-      await expect(ProcessTimeLimitedLicencesService.go()).not.to.reject()
+      await ProcessTimeLimitedLicencesService.go()
     })
   })
 })

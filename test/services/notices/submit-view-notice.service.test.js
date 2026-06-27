@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
@@ -105,13 +100,13 @@ describe('Notices - Submit View Notice service', () => {
       it('returns a result that tells the controller to redirect to the index page', async () => {
         const result = await SubmitViewNoticeService.go(noticeId, payload, yarStub)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
       })
 
       it('clears the "noticesFilter" object from the session', async () => {
         await SubmitViewNoticeService.go(noticeId, payload, yarStub)
 
-        expect(yarStub.clear.called).to.be.true()
+        expect(yarStub.clear.called).toBe(true)
       })
     })
 
@@ -123,7 +118,7 @@ describe('Notices - Submit View Notice service', () => {
       it('returns a result that tells the controller to redirect to the index page', async () => {
         const result = await SubmitViewNoticeService.go(noticeId, payload, yarStub)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
       })
 
       it('saves a default "noticesFilter" object in the session', async () => {
@@ -131,8 +126,8 @@ describe('Notices - Submit View Notice service', () => {
 
         const setArgs = yarStub.set.args[0]
 
-        expect(setArgs[0]).to.equal(`noticeFilter-${noticeId}`)
-        expect(setArgs[1]).to.equal({
+        expect(setArgs[0]).toEqual(`noticeFilter-${noticeId}`)
+        expect(setArgs[1]).toEqual({
           licence: null,
           recipient: null,
           status: null
@@ -152,7 +147,7 @@ describe('Notices - Submit View Notice service', () => {
       it('returns a result that tells the controller to redirect to the index page', async () => {
         const result = await SubmitViewNoticeService.go(noticeId, payload, yarStub)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
       })
 
       it('saves the submitted filters as the "noticesFilter" object in the session', async () => {
@@ -160,8 +155,8 @@ describe('Notices - Submit View Notice service', () => {
 
         const setArgs = yarStub.set.args[0]
 
-        expect(setArgs[0]).to.equal(`noticeFilter-${noticeId}`)
-        expect(setArgs[1]).to.equal({
+        expect(setArgs[0]).toEqual(`noticeFilter-${noticeId}`)
+        expect(setArgs[1]).toEqual({
           licence: '01/123',
           recipient: 'carol.shaw@atari.co.uk',
           status: 'sent'
@@ -184,7 +179,7 @@ describe('Notices - Submit View Notice service', () => {
         it('returns the page data for the view, including any errors', async () => {
           const result = await SubmitViewNoticeService.go(noticeId, payload, yarStub)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'notices',
             error: {
               errorList: [{ href: '#licence', text: 'Licence number must be 25 characters or less' }],
@@ -276,7 +271,7 @@ describe('Notices - Submit View Notice service', () => {
         it('returns the page data for the view, including any errors', async () => {
           const result = await SubmitViewNoticeService.go(noticeId, payload, yarStub)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'notices',
             error: {
               errorList: [{ href: '#licence', text: 'Licence number must be 25 characters or less' }],

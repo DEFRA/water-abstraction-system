@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const AddressHelper = require('../../../support/helpers/address.helper.js')
@@ -93,9 +88,9 @@ describe('Notices - Setup - Process Add Recipient service', () => {
 
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
-          expect(session.additionalRecipients).equal([
+          expect(flashType).toEqual('notification')
+          expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Additional recipient added' })
+          expect(session.additionalRecipients).toEqual([
             {
               contact: {
                 address1: 'ENVIRONMENT AGENCY',
@@ -114,8 +109,8 @@ describe('Notices - Setup - Process Add Recipient service', () => {
               message_type: 'Letter'
             }
           ])
-          expect(session.selectedRecipients).equal([contactHashId])
-          expect(session.addressJourney.redirectUrl).equal(`/system/notices/setup/${sessionId}/add-recipient`)
+          expect(session.selectedRecipients).toEqual([contactHashId])
+          expect(session.addressJourney.redirectUrl).toEqual(`/system/notices/setup/${sessionId}/add-recipient`)
         })
       })
 
@@ -156,9 +151,9 @@ describe('Notices - Setup - Process Add Recipient service', () => {
 
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
-          expect(session.additionalRecipients).equal([
+          expect(flashType).toEqual('notification')
+          expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Additional recipient added' })
+          expect(session.additionalRecipients).toEqual([
             {
               contact: {
                 name: 'Fake Other',
@@ -192,8 +187,8 @@ describe('Notices - Setup - Process Add Recipient service', () => {
               message_type: 'Letter'
             }
           ])
-          expect(session.selectedRecipients).equal(['78de9d5db4c52b66818004e2b0dc4392', contactHashId])
-          expect(session.addressJourney.redirectUrl).equal(`/system/notices/setup/${sessionId}/add-recipient`)
+          expect(session.selectedRecipients).toEqual(['78de9d5db4c52b66818004e2b0dc4392', contactHashId])
+          expect(session.addressJourney.redirectUrl).toEqual(`/system/notices/setup/${sessionId}/add-recipient`)
         })
       })
     })
@@ -235,9 +230,9 @@ describe('Notices - Setup - Process Add Recipient service', () => {
 
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
-          expect(session.additionalRecipients).equal([
+          expect(flashType).toEqual('notification')
+          expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Additional recipient added' })
+          expect(session.additionalRecipients).toEqual([
             {
               contact: {
                 address1: '1 Faux Ferme',
@@ -256,8 +251,8 @@ describe('Notices - Setup - Process Add Recipient service', () => {
               message_type: 'Letter'
             }
           ])
-          expect(session.selectedRecipients).equal([contactHashId])
-          expect(session.addressJourney.redirectUrl).equal(`/system/notices/setup/${sessionId}/add-recipient`)
+          expect(session.selectedRecipients).toEqual([contactHashId])
+          expect(session.addressJourney.redirectUrl).toEqual(`/system/notices/setup/${sessionId}/add-recipient`)
         })
       })
     })

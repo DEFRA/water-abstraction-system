@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
 const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
@@ -94,7 +87,7 @@ describe('Fetch Bill Licence Summary service', () => {
 
       // NOTE: Transactions would not ordinarily be empty. But the format of the transactions will differ depending on
       // scheme so we get into that in later tests.
-      expect(result).to.equal({
+      expect(result).toEqual({
         id: billLicence.id,
         licenceId: billLicence.licenceId,
         licenceRef,
@@ -162,7 +155,7 @@ describe('Fetch Bill Licence Summary service', () => {
     it('returns no result', async () => {
       const result = await FetchBillLicenceSummaryService.go('93112100-152b-4860-abea-2adee11dcd69')
 
-      expect(result).to.be.undefined()
+      expect(result).toBeUndefined()
     })
   })
 })

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
@@ -66,7 +61,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
     it('continues the journey', async () => {
       const result = await SubmitRestoreService.go(session.id, yarStub, auth)
 
-      expect(result).to.equal({ redirectUrl: `/system/companies/${company.id}/contacts` })
+      expect(result).toEqual({ redirectUrl: `/system/companies/${company.id}/contacts` })
     })
 
     it('persists the company contact details', async () => {
@@ -74,7 +69,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
 
       const [actualContact] = UpdateCompanyContactDal.go.args[0]
 
-      expect(actualContact).to.equal({
+      expect(actualContact).toEqual({
         id: companyContact.id,
         abstractionAlerts: true,
         contactId: companyContact.contact.id,
@@ -89,14 +84,14 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
 
       const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-      expect(flashType).to.equal('notification')
-      expect(bannerMessage).to.equal({ titleText: 'Contact restored', text: `${session.name} was restored.` })
+      expect(flashType).toEqual('notification')
+      expect(bannerMessage).toEqual({ titleText: 'Contact restored', text: `${session.name} was restored.` })
     })
 
     it('clears the session', async () => {
       await SubmitRestoreService.go(session.id, yarStub, auth)
 
-      expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
+      expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
     })
 
     describe('the "abstractionAlerts" property', () => {
@@ -106,7 +101,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
 
           const [actualContact] = UpdateCompanyContactDal.go.args[0]
 
-          expect(actualContact.abstractionAlerts).to.be.true()
+          expect(actualContact.abstractionAlerts).toBe(true)
         })
       })
 
@@ -125,7 +120,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
 
           const [actualContact] = UpdateCompanyContactDal.go.args[0]
 
-          expect(actualContact.abstractionAlerts).to.be.false()
+          expect(actualContact.abstractionAlerts).toBe(false)
         })
       })
     })
@@ -146,7 +141,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
 
           const [actualContact] = UpdateCompanyContactDal.go.args[0]
 
-          expect(actualContact.email).to.equal('erice@test.com')
+          expect(actualContact.email).toEqual('erice@test.com')
         })
       })
     })

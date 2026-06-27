@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
@@ -47,8 +42,8 @@ describe('Notices - Setup - Abstraction Alerts -Process Remove Threshold service
       it('saves the "licenceMonitoringStationId" to the session to be excluded from the list', async () => {
         await ProcessRemoveThresholdService.go(session.id, licenceMonitoringStations.one.id, yarStub)
 
-        expect(session.removedThresholds).to.equal([licenceMonitoringStations.one.id])
-        expect(session.$update.called).to.be.true()
+        expect(session.removedThresholds).toEqual([licenceMonitoringStations.one.id])
+        expect(session.$update.called).toBe(true)
       })
     })
 
@@ -64,7 +59,7 @@ describe('Notices - Setup - Abstraction Alerts -Process Remove Threshold service
       it('saves the "licenceMonitoringStationId" to the session with the existing "removedThresholds"', async () => {
         await ProcessRemoveThresholdService.go(session.id, licenceMonitoringStations.one.id, yarStub)
 
-        expect(session.removedThresholds).to.equal([licenceMonitoringStations.one.id, licenceMonitoringStations.one.id])
+        expect(session.removedThresholds).toEqual([licenceMonitoringStations.one.id, licenceMonitoringStations.one.id])
       })
     })
 
@@ -82,8 +77,8 @@ describe('Notices - Setup - Abstraction Alerts -Process Remove Threshold service
         // Check we add the flash message
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-        expect(flashType).to.equal('notification')
-        expect(bannerMessage).to.equal({
+        expect(flashType).toEqual('notification')
+        expect(bannerMessage).toEqual({
           text: `Removed ${licenceMonitoringStations.one.licence.licenceRef} Reduce 1000m`,
           titleText: 'Updated'
         })

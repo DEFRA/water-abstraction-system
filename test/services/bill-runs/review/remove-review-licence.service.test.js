@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
 const ReviewChargeElementModel = require('../../../../app/models/review-charge-element.model.js')
@@ -55,12 +48,12 @@ describe('Bill Runs Review - Remove Review Licence service', () => {
     it('will remove the records relating to the review licence from the review tables', async () => {
       await RemoveReviewLicenceService.go(reviewLicence.id)
 
-      expect(await ReviewLicenceModel.query().findById(reviewLicence.id)).to.be.undefined()
-      expect(await ReviewReturnModel.query().findById(reviewReturnId)).to.be.undefined()
-      expect(await ReviewChargeVersionModel.query().findById(reviewChargeVersionId)).to.be.undefined()
-      expect(await ReviewChargeReferenceModel.query().findById(reviewChargeReferenceId)).to.be.undefined()
-      expect(await ReviewChargeElementModel.query().findById(reviewChargeElementId)).to.be.undefined()
-      expect(await ReviewChargeElementReturnModel.query().findById(reviewChargeElementReturnId)).to.be.undefined()
+      expect(await ReviewLicenceModel.query().findById(reviewLicence.id)).toBeUndefined()
+      expect(await ReviewReturnModel.query().findById(reviewReturnId)).toBeUndefined()
+      expect(await ReviewChargeVersionModel.query().findById(reviewChargeVersionId)).toBeUndefined()
+      expect(await ReviewChargeReferenceModel.query().findById(reviewChargeReferenceId)).toBeUndefined()
+      expect(await ReviewChargeElementModel.query().findById(reviewChargeElementId)).toBeUndefined()
+      expect(await ReviewChargeElementReturnModel.query().findById(reviewChargeElementReturnId)).toBeUndefined()
     })
   })
 })

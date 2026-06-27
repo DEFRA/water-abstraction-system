@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const FetchReturnSubmissionService = require('../../../app/services/return-submissions/fetch-return-submission.service.js')
@@ -50,10 +45,10 @@ describe('View Return Submission service', () => {
 
     // We only check a few items here -- the key thing is that the mock return log was fetched and successfully
     // passed to the presenter
-    expect(result).to.include({
+    expect(result).toMatchObject({
       pageTitle: 'Water abstracted January 2025'
     })
-    expect(result.tableData).to.include({ unitTotal: '1,000' })
+    expect(result.tableData).toMatchObject({ unitTotal: '1,000' })
   })
 })
 

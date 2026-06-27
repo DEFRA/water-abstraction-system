@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, after, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
 
@@ -17,7 +10,7 @@ describe('Licences - Fetch Workflows service', () => {
   let workflow
   let additionalWorkflow
 
-  before(async () => {
+  beforeAll(async () => {
     workflow = await WorkflowHelper.add()
 
     additionalWorkflow = await WorkflowHelper.add({
@@ -26,7 +19,7 @@ describe('Licences - Fetch Workflows service', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await additionalWorkflow.$query().delete()
     await workflow.$query().delete()
   })
@@ -35,7 +28,7 @@ describe('Licences - Fetch Workflows service', () => {
     it('returns the matching workflow data', async () => {
       const result = await FetchWorkflowsService.go(workflow.licenceId)
 
-      expect(result).to.equal([
+      expect(result).toEqual([
         {
           createdAt: workflow.createdAt,
           data: {

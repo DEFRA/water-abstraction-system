@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
@@ -65,7 +58,7 @@ describe('Licence Monitoring Station Setup - Fetch Full Condition Service', () =
         return condition.id
       })
 
-      expect(ids).to.equal([conditionA.id, conditionB.id])
+      expect(ids).toEqual([conditionA.id, conditionB.id])
     })
 
     it('does not return conditions from other licences', async () => {
@@ -75,7 +68,7 @@ describe('Licence Monitoring Station Setup - Fetch Full Condition Service', () =
         return condition.id
       })
 
-      expect(ids).to.not.include(anotherLicenceCondition.id)
+      expect(ids).not.toContainEqual(anotherLicenceCondition.id)
     })
 
     it('does not return non-CES conditions', async () => {
@@ -85,7 +78,7 @@ describe('Licence Monitoring Station Setup - Fetch Full Condition Service', () =
         return condition.id
       })
 
-      expect(ids).to.not.include(nonCessationCondition.id)
+      expect(ids).not.toContainEqual(nonCessationCondition.id)
     })
 
     it('does not return superseded conditions', async () => {
@@ -95,7 +88,7 @@ describe('Licence Monitoring Station Setup - Fetch Full Condition Service', () =
         return condition.id
       })
 
-      expect(ids).to.not.include(supersededCondition.id)
+      expect(ids).not.toContainEqual(supersededCondition.id)
     })
   })
 })

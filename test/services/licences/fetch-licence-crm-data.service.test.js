@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, after, afterEach, before, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const DatabaseConfig = require('../../../config/database.config.js')
@@ -21,7 +16,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
   let page
   let roles
 
-  before(async () => {
+  beforeAll(async () => {
     page = undefined
 
     crmData = await CRMSeeder.seed()
@@ -31,7 +26,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
     licence = crmData.licence.record
   })
 
-  after(async () => {
+  afterAll(async () => {
     await crmData.clean()
   })
 
@@ -43,7 +38,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
     it('returns the matching licence contacts', async () => {
       const result = await FetchLicenceCRMDataService.go(licence.id, roles)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         contacts: [
           {
             addressId: null,
@@ -102,7 +97,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
       it('returns the matching licence contacts including the billing contact (even with a NALD GAP charge version)', async () => {
         const result = await FetchLicenceCRMDataService.go(crmData.otherLicence.record.id, roles)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           contacts: [
             {
               addressId: null,
@@ -141,7 +136,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
           const result = await FetchLicenceCRMDataService.go(licence.id, roles, page)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             contacts: [
               {
                 addressId: null,
@@ -163,7 +158,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
           const result = await FetchLicenceCRMDataService.go(licence.id, roles, page)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             contacts: [
               {
                 addressId: null,
@@ -185,7 +180,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
         it('returns the matching contacts for the page (the second page) with the total number', async () => {
           const result = await FetchLicenceCRMDataService.go(licence.id, roles, page)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             contacts: [
               {
                 addressId: null,

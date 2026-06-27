@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, afterEach, before } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const NoticeSessionFixture = require('../../../support/fixtures/notice-session.fixture.js')
@@ -31,7 +26,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
   })
 
   describe('when the notice type is an "abstraction alert"', () => {
-    before(() => {
+    beforeAll(() => {
       recipient = RecipientsFixture.alertNoticePrimaryUser()
       session = NoticeSessionFixture.abstractionAlertStop(recipient.licence_refs[0])
 
@@ -45,7 +40,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
 
       const recipientRow = _transformAbstractionAlertRecipientToRow(recipient, session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         data:
           // Headers
           'Licence,Abstraction periods,Measure type,Threshold,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
@@ -57,7 +52,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
   })
 
   describe('when the notice type is "paper returns"', () => {
-    before(() => {
+    beforeAll(() => {
       recipient = RecipientsFixture.returnsNoticeLicenceHolder()
       session = NoticeSessionFixture.paperReturn(recipient.licence_refs[0])
 
@@ -71,7 +66,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
 
       const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         data:
           // Headers
           'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
@@ -83,7 +78,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
   })
 
   describe('when the notice type is a "returns reminder"', () => {
-    before(() => {
+    beforeAll(() => {
       recipient = RecipientsFixture.returnsNoticeLicenceHolder()
       session = NoticeSessionFixture.standardReminder(recipient.licence_refs[0])
 
@@ -97,7 +92,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
 
       const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         data:
           // Headers
           'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
@@ -109,7 +104,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
   })
 
   describe('when the notice type is a "returns invitation"', () => {
-    before(() => {
+    beforeAll(() => {
       recipient = RecipientsFixture.returnsNoticeLicenceHolder()
       session = NoticeSessionFixture.standardInvitation(recipient.licence_refs[0])
 
@@ -123,7 +118,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
 
       const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         data:
           // Headers
           'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
@@ -135,7 +130,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
   })
 
   describe('when the notice type is a "renewal invitation"', () => {
-    before(() => {
+    beforeAll(() => {
       recipient = RecipientsFixture.renewalInvitationLicenceHolder()
       session = NoticeSessionFixture.adHocRenewalInvitation(recipient.licence_refs[0])
 
@@ -149,7 +144,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
 
       const recipientRow = _transformRenewalRecipientToRow(recipient, session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         data:
           // Headers
           'Licence,Renewal date,Expiry date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -43,9 +38,9 @@ describe('Bill Runs - Setup - Year service', () => {
     it('returns page data for the view', async () => {
       const result = await YearService.go(session.id)
 
-      expect(yearsStub.calledWith(regionId, true)).to.be.true()
+      expect(yearsStub.calledWith(regionId, true)).toBe(true)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'bill-runs',
         backlink: `/system/bill-runs/setup/${session.id}/region`,
         financialYearsData: [{ text: '2023 to 2024', value: 2024, checked: true }],

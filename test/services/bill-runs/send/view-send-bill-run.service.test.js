@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
@@ -55,7 +50,7 @@ describe('Bill Runs - View Send Bill Run service', () => {
     it('will fetch the data and format it for use in the send bill run page', async () => {
       const result = await ViewSendBillRunService.go(billRunId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'bill-runs',
         backLink: `/system/bill-runs/${billRunId}`,
         billRunNumber: 10101,
@@ -72,7 +67,7 @@ describe('Bill Runs - View Send Bill Run service', () => {
 
   describe('when a bill run with a matching ID does not exist', () => {
     it('throws an exception', async () => {
-      await expect(ViewSendBillRunService.go('testId')).to.reject()
+      await expect(ViewSendBillRunService.go('testId')).rejects.toThrow()
     })
   })
 })

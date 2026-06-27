@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const FetchLicencesService = require('../../../../app/services/licences/end-dates/fetch-licences.service.js')
@@ -57,9 +52,9 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
       const firstLicence = licences[0]
       const lastLicence = licences[licences.length - 1]
 
-      expect(processLicenceStub.callCount).to.equal(licences.length)
-      expect(processLicenceStub.getCall(0).firstArg).to.equal(firstLicence)
-      expect(processLicenceStub.getCall(licences.length - 1).firstArg).to.equal(lastLicence)
+      expect(processLicenceStub.callCount).toEqual(licences.length)
+      expect(processLicenceStub.getCall(0).firstArg).toEqual(firstLicence)
+      expect(processLicenceStub.getCall(licences.length - 1).firstArg).toEqual(lastLicence)
     })
 
     it('processes them in batches', async () => {
@@ -68,7 +63,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
       // Check the expected number of batches (100 items / 10 per batch = 10 batches)
       const expectedBatches = Math.ceil(licences.length / batchSize)
 
-      expect(processLicenceStub.getCalls().length / batchSize).to.equal(expectedBatches)
+      expect(processLicenceStub.getCalls().length / batchSize).toEqual(expectedBatches)
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
@@ -76,10 +71,10 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Check all licence end dates complete')).to.be.true()
-      expect(logDataArg.timeTakenMs).to.exist()
-      expect(logDataArg.timeTakenSs).to.exist()
-      expect(logDataArg.count).to.exist()
+      expect(notifierStub.omg.calledWith('Check all licence end dates complete')).toBe(true)
+      expect(logDataArg.timeTakenMs).toBeDefined()
+      expect(logDataArg.timeTakenSs).toBeDefined()
+      expect(logDataArg.count).toBeDefined()
     })
   })
 
@@ -107,7 +102,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
 
       const args = notifierStub.omg.firstCall.args
 
-      expect(args[1].timeTakenSs).to.be.lessThan(3n)
+      expect(args[1].timeTakenSs).toBeLessThan(3n)
     })
   })
 
@@ -121,9 +116,9 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
 
       const args = notifierStub.omfg.firstCall.args
 
-      expect(args[0]).to.equal('Check all licence end dates failed')
-      expect(args[1]).to.be.null()
-      expect(args[2]).to.be.an.error()
+      expect(args[0]).toEqual('Check all licence end dates failed')
+      expect(args[1]).toBeNull()
+      expect(args[2]).toBeInstanceOf(Error)
     })
   })
 })

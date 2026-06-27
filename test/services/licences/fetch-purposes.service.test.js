@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, after, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
@@ -29,7 +22,7 @@ describe('Licences - Fetch Purposes service', () => {
   let source
 
   describe('when the licence has licence versions, licence version purposes, points, purposes, and sources', () => {
-    before(async () => {
+    beforeAll(async () => {
       licence = await LicenceHelper.add()
 
       licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id })
@@ -51,7 +44,7 @@ describe('Licences - Fetch Purposes service', () => {
       })
     })
 
-    after(async () => {
+    afterAll(async () => {
       await licence.$query().delete()
       await licenceVersion.$query().delete()
       await licenceVersionPurpose.$query().delete()
@@ -62,7 +55,7 @@ describe('Licences - Fetch Purposes service', () => {
     it('returns the matching licence version purposes, points, purposes, and sources', async () => {
       const result = await FetchPurposesService.go(licence.id)
 
-      expect(result).to.equal([
+      expect(result).toEqual([
         {
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 3,
@@ -101,29 +94,29 @@ describe('Licences - Fetch Purposes service', () => {
   })
 
   describe('when the licence has no current licence versions', () => {
-    before(async () => {
+    beforeAll(async () => {
       licence = await LicenceHelper.add()
     })
 
-    after(async () => {
+    afterAll(async () => {
       await licence.$query().delete()
     })
 
     it('returns an empty array', async () => {
       const result = await FetchPurposesService.go(licence.id)
 
-      expect(result).to.equal([])
+      expect(result).toEqual([])
     })
   })
 
   describe('when the licence has licence versions but no licence version purposes, points or purposes', () => {
-    before(async () => {
+    beforeAll(async () => {
       licence = await LicenceHelper.add()
 
       licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id })
     })
 
-    after(async () => {
+    afterAll(async () => {
       await licence.$query().delete()
       await licenceVersion.$query().delete()
     })
@@ -131,7 +124,7 @@ describe('Licences - Fetch Purposes service', () => {
     it('returns an empty array', async () => {
       const result = await FetchPurposesService.go(licence.id)
 
-      expect(result).to.equal([])
+      expect(result).toEqual([])
     })
   })
 })

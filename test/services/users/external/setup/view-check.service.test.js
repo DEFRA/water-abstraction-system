@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
@@ -44,7 +39,7 @@ describe('Users - External - Setup - View Check Service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewCheckService.go(session.id, yarStub)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'users',
         licences: ['All licences'],
         links: {
@@ -67,8 +62,8 @@ describe('Users - External - Setup - View Check Service', () => {
     it('sets the "checkPageVisited" flag to "true"', async () => {
       await ViewCheckService.go(session.id, yarStub)
 
-      expect(session.checkPageVisited).to.be.true()
-      expect(session.$update.called).to.be.true()
+      expect(session.checkPageVisited).toBe(true)
+      expect(session.$update.called).toBe(true)
     })
 
     describe('when there is a notification', () => {
@@ -79,7 +74,7 @@ describe('Users - External - Setup - View Check Service', () => {
       it('displays the notification', async () => {
         const result = await ViewCheckService.go(session.id, yarStub)
 
-        expect(result.notification).to.equal('Test notification')
+        expect(result.notification).toEqual('Test notification')
       })
     })
   })

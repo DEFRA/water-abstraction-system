@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const ContactModel = require('../../../app/models/contact.model.js')
@@ -38,7 +33,7 @@ describe('Return Versions - View service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewService.go(returnVersionId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/licences/${returnVersion.licence.id}/set-up`,
           text: 'Go back to licence set up'

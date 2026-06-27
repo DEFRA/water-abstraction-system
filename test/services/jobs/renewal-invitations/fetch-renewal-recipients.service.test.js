@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const RecipientScenariosSeeder = require('../../../support/seeders/recipient-scenarios.seeder.js')
 
@@ -17,7 +10,7 @@ describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => 
   let expiredDate
   let scenarios
 
-  before(async () => {
+  beforeAll(async () => {
     scenarios = {}
 
     // 1) Licence holder only
@@ -25,7 +18,7 @@ describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => 
     scenarios.licenceHolder = await RecipientScenariosSeeder.licenceHolderOnly([], expiredDate)
   })
 
-  after(async () => {
+  afterAll(async () => {
     await RecipientScenariosSeeder.clean(scenarios)
   })
 
@@ -35,7 +28,7 @@ describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => 
 
       const expectedResults = _transformToResult(scenarios.licenceHolder)
 
-      expect(result).to.equal(expectedResults)
+      expect(result).toEqual(expectedResults)
     })
   })
 })

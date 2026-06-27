@@ -3,12 +3,7 @@
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const LookupCompanysHouseNumberRequest = require('../../../../app/requests/companies-house/lookup-companies-house-number.request.js')
@@ -41,7 +36,7 @@ describe('Billing Accounts - Setup - Fetch Company service', () => {
     it('returns the matching company', async () => {
       const result = await FetchCompanyService.go(companiesHouseNumber)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         companiesHouseNumber: body.company_number,
         title: body.company_name
       })
@@ -64,7 +59,7 @@ describe('Billing Accounts - Setup - Fetch Company service', () => {
     it('returns an empty array', async () => {
       const result = await FetchCompanyService.go(companiesHouseNumber)
 
-      expect(result).to.equal(null)
+      expect(result).toEqual(null)
     })
   })
 })

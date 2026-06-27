@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const LicenceSupplementaryYearModel = require('../../../app/models/licence-supplementary-year.model.js')
@@ -44,15 +39,15 @@ describe('Bill Runs - Unassign Licences To Bill Run service', () => {
 
       const patchArgs = licenceSupplementaryYearPatch.args[0][0]
 
-      expect(patchArgs.billRunId).to.be.null()
+      expect(patchArgs.billRunId).toBeNull()
 
       const whereInArgs = licenceSupplementaryYearWhereIn.args[0]
 
-      expect(whereInArgs).to.equal(['licenceId', licenceIds])
+      expect(whereInArgs).toEqual(['licenceId', licenceIds])
 
       const whereArgs = licenceSupplementaryYearWhere.args[0]
 
-      expect(whereArgs).to.equal(['billRunId', '091c3d3f-0328-4b10-b1a1-3eccf55416a0'])
+      expect(whereArgs).toEqual(['billRunId', '091c3d3f-0328-4b10-b1a1-3eccf55416a0'])
     })
   })
 })

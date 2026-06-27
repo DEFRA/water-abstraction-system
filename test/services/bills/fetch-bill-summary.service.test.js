@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillHelper = require('../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
@@ -90,7 +83,7 @@ describe('Fetch Bill Summary service', () => {
     it('will fetch the data used in the remove bill page', async () => {
       const result = await FetchBillSummaryService.go(bill.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         id: bill.id,
         netAmount: 1045,
         billingAccount: {
@@ -151,7 +144,7 @@ describe('Fetch Bill Summary service', () => {
     it('returns no result', async () => {
       const result = await FetchBillSummaryService.go('93112100-152b-4860-abea-2adee11dcd69')
 
-      expect(result).to.be.undefined()
+      expect(result).toBeUndefined()
     })
   })
 })

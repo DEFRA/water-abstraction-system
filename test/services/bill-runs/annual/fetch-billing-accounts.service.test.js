@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
 const BillingAccountModel = require('../../../../app/models/billing-account.model.js')
@@ -36,12 +29,12 @@ describe('Fetch Billing Accounts service', () => {
   let minimumChargeChangeReason
   let region
 
-  before(async () => {
+  beforeAll(async () => {
     minimumChargeChangeReason = ChangeReasonHelper.select(CHANGE_REASON_NEW_LICENCE_PART_INDEX)
   })
 
   describe('when the billing account should NOT be considered for the annual bill run', () => {
-    before(() => {
+    beforeAll(() => {
       region = RegionHelper.select(REGION_MIDLANDS_INDEX)
     })
 
@@ -66,7 +59,7 @@ describe('Fetch Billing Accounts service', () => {
           return result.id === billingAccount.id
         })
 
-        expect(hasBillingAccountId).to.be.false()
+        expect(hasBillingAccountId).toBe(false)
       })
     })
 
@@ -86,7 +79,7 @@ describe('Fetch Billing Accounts service', () => {
           return result.id === billingAccount.id
         })
 
-        expect(hasBillingAccountId).to.be.false()
+        expect(hasBillingAccountId).toBe(false)
       })
     })
 
@@ -109,7 +102,7 @@ describe('Fetch Billing Accounts service', () => {
           return result.id === billingAccount.id
         })
 
-        expect(hasBillingAccountId).to.be.false()
+        expect(hasBillingAccountId).toBe(false)
       })
     })
 
@@ -132,7 +125,7 @@ describe('Fetch Billing Accounts service', () => {
           return result.id === billingAccount.id
         })
 
-        expect(hasBillingAccountId).to.be.false()
+        expect(hasBillingAccountId).toBe(false)
       })
     })
 
@@ -151,7 +144,7 @@ describe('Fetch Billing Accounts service', () => {
           return result.id === billingAccount.id
         })
 
-        expect(hasBillingAccountId).to.be.false()
+        expect(hasBillingAccountId).toBe(false)
       })
     })
 
@@ -170,7 +163,7 @@ describe('Fetch Billing Accounts service', () => {
           return result.id === billingAccount.id
         })
 
-        expect(hasBillingAccountId).to.be.false()
+        expect(hasBillingAccountId).toBe(false)
       })
     })
 
@@ -187,7 +180,7 @@ describe('Fetch Billing Accounts service', () => {
           return result.id === billingAccount.id
         })
 
-        expect(hasBillingAccountId).to.be.false()
+        expect(hasBillingAccountId).toBe(false)
       })
     })
   })
@@ -198,7 +191,7 @@ describe('Fetch Billing Accounts service', () => {
     let chargeReference
     let chargeVersion
 
-    before(async () => {
+    beforeAll(async () => {
       region = RegionHelper.select(REGION_ANGLIAN_INDEX)
       licence = await LicenceHelper.add({ regionId: region.id })
       billingAccount = await BillingAccountHelper.add()
@@ -226,8 +219,8 @@ describe('Fetch Billing Accounts service', () => {
         return result.id === billingAccount.id
       })
 
-      expect(billingAccountRecord).to.be.instanceOf(BillingAccountModel)
-      expect(billingAccountRecord.accountNumber).to.equal(billingAccount.accountNumber)
+      expect(billingAccountRecord).toBeInstanceOf(BillingAccountModel)
+      expect(billingAccountRecord.accountNumber).toEqual(billingAccount.accountNumber)
     })
 
     describe('that have applicable related charge versions', () => {
@@ -240,12 +233,12 @@ describe('Fetch Billing Accounts service', () => {
 
         const { chargeVersions } = billingAccountRecord
 
-        expect(chargeVersions[0].id).to.equal(chargeVersion.id)
-        expect(chargeVersions[0].scheme).to.equal('sroc')
-        expect(chargeVersions[0].startDate).to.equal(new Date('2023-11-01'))
-        expect(chargeVersions[0].endDate).to.be.null()
-        expect(chargeVersions[0].billingAccountId).to.equal(billingAccount.id)
-        expect(chargeVersions[0].status).to.equal('current')
+        expect(chargeVersions[0].id).toEqual(chargeVersion.id)
+        expect(chargeVersions[0].scheme).toEqual('sroc')
+        expect(chargeVersions[0].startDate).toEqual(new Date('2023-11-01'))
+        expect(chargeVersions[0].endDate).toBeNull()
+        expect(chargeVersions[0].billingAccountId).toEqual(billingAccount.id)
+        expect(chargeVersions[0].status).toEqual('current')
       })
 
       it('includes the licence and region in each result', async () => {
@@ -257,13 +250,13 @@ describe('Fetch Billing Accounts service', () => {
 
         const { licence } = billingAccountRecord.chargeVersions[0]
 
-        expect(licence.id).to.equal(licence.id)
-        expect(licence.licenceRef).to.equal(licence.licenceRef)
-        expect(licence.waterUndertaker).to.equal(false)
-        expect(licence.historicalAreaCode).to.equal('SAAR')
-        expect(licence.regionalChargeArea).to.equal('Southern')
-        expect(licence.region.id).to.equal(region.id)
-        expect(licence.region.chargeRegionId).to.equal(region.chargeRegionId)
+        expect(licence.id).toEqual(licence.id)
+        expect(licence.licenceRef).toEqual(licence.licenceRef)
+        expect(licence.waterUndertaker).toEqual(false)
+        expect(licence.historicalAreaCode).toEqual('SAAR')
+        expect(licence.regionalChargeArea).toEqual('Southern')
+        expect(licence.region.id).toEqual(region.id)
+        expect(licence.region.chargeRegionId).toEqual(region.chargeRegionId)
       })
 
       it('includes the change reason in each result', async () => {
@@ -275,8 +268,8 @@ describe('Fetch Billing Accounts service', () => {
 
         const { changeReason } = billingAccountRecord.chargeVersions[0]
 
-        expect(changeReason.id).to.equal(changeReason.id)
-        expect(changeReason.triggersMinimumCharge).to.equal(changeReason.triggersMinimumCharge)
+        expect(changeReason.id).toEqual(changeReason.id)
+        expect(changeReason.triggersMinimumCharge).toEqual(changeReason.triggersMinimumCharge)
       })
 
       it('includes the charge references, charge category and charge elements in each result', async () => {
@@ -288,9 +281,9 @@ describe('Fetch Billing Accounts service', () => {
 
         const { chargeReferences } = billingAccountRecord.chargeVersions[0]
 
-        expect(chargeReferences).to.have.length(1)
+        expect(chargeReferences).toHaveLength(1)
 
-        expect(chargeReferences[0]).to.equal({
+        expect(chargeReferences[0]).toEqual({
           id: chargeReference.id,
           source: 'non-tidal',
           loss: 'low',
@@ -345,8 +338,8 @@ describe('Fetch Billing Accounts service', () => {
 
         const { chargeVersions } = billingAccountRecord
 
-        expect(chargeVersions.length).to.equal(1)
-        expect(chargeVersions[0].id).to.equal(chargeVersion.id)
+        expect(chargeVersions.length).toEqual(1)
+        expect(chargeVersions[0].id).toEqual(chargeVersion.id)
       })
     })
   })

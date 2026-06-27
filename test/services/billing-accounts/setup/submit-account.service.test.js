@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
@@ -50,21 +45,18 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
     it('saves the submitted value', async () => {
       await SubmitAccountService.go(session.id, payload)
 
-      expect(session).to.equal(
-        {
-          accountSelected: billingAccount.company.id,
-          searchInput: null
-        },
-        { skip: ['billingAccount', 'id'] }
-      )
+      expect(session).toMatchObject({
+        accountSelected: billingAccount.company.id,
+        searchInput: null
+      })
 
-      expect(session.$update.called).to.be.true()
+      expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
       const result = await SubmitAccountService.go(session.id, payload)
 
-      expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/existing-address`)
+      expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/existing-address`)
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
@@ -82,21 +74,18 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       it('saves the submitted value', async () => {
         await SubmitAccountService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            accountSelected: billingAccount.company.id,
-            searchInput: null
-          },
-          { skip: ['billingAccount', 'id'] }
-        )
+        expect(session).toMatchObject({
+          accountSelected: billingAccount.company.id,
+          searchInput: null
+        })
 
-        expect(session.$update.called).to.be.true()
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitAccountService.go(session.id, payload)
 
-        expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/existing-address`)
+        expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/existing-address`)
       })
     })
 
@@ -112,21 +101,18 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       it('saves the submitted value and deletes the other previously saved data', async () => {
         await SubmitAccountService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            ..._anotherExpectedValues(session),
-            accountSelected: billingAccount.company.id,
-            searchInput: null
-          },
-          { skip: ['billingAccount', 'id'] }
-        )
-        expect(session.$update.called).to.be.true()
+        expect(session).toMatchObject({
+          ..._anotherExpectedValues(session),
+          accountSelected: billingAccount.company.id,
+          searchInput: null
+        })
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitAccountService.go(session.id, payload)
 
-        expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/existing-address`)
+        expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/existing-address`)
       })
     })
   })
@@ -142,20 +128,17 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
     it('saves the submitted values', async () => {
       await SubmitAccountService.go(session.id, payload)
 
-      expect(session).to.equal(
-        {
-          accountSelected: 'another',
-          searchInput: 'Customer Name'
-        },
-        { skip: ['billingAccount', 'id'] }
-      )
-      expect(session.$update.called).to.be.true()
+      expect(session).toMatchObject({
+        accountSelected: 'another',
+        searchInput: 'Customer Name'
+      })
+      expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
       const result = await SubmitAccountService.go(session.id, payload)
 
-      expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/existing-account`)
+      expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/existing-account`)
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
@@ -174,20 +157,17 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       it('saves the submitted values', async () => {
         await SubmitAccountService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            accountSelected: 'another',
-            searchInput: 'Customer Name'
-          },
-          { skip: ['billingAccount', 'id'] }
-        )
-        expect(session.$update.called).to.be.true()
+        expect(session).toMatchObject({
+          accountSelected: 'another',
+          searchInput: 'Customer Name'
+        })
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitAccountService.go(session.id, payload)
 
-        expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/existing-account`)
+        expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/existing-account`)
       })
     })
 
@@ -203,21 +183,18 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       it('saves the submitted value and deletes the other previously saved data', async () => {
         await SubmitAccountService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            ..._customerExpectedValues(session),
-            accountSelected: 'another',
-            searchInput: 'Customer Name'
-          },
-          { skip: ['billingAccount', 'id'] }
-        )
-        expect(session.$update.called).to.be.true()
+        expect(session).toMatchObject({
+          ..._customerExpectedValues(session),
+          accountSelected: 'another',
+          searchInput: 'Customer Name'
+        })
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitAccountService.go(session.id, payload)
 
-        expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/existing-account`)
+        expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/existing-account`)
       })
     })
   })
@@ -231,7 +208,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       it('returns page data for the view, with errors', async () => {
         const result = await SubmitAccountService.go(session.id, payload)
 
-        expect(result.error).to.equal({
+        expect(result.error).toEqual({
           errorList: [
             {
               href: '#accountSelected',
@@ -253,7 +230,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       it('returns page data for the view, with errors', async () => {
         const result = await SubmitAccountService.go(session.id, payload)
 
-        expect(result.error).to.equal({
+        expect(result.error).toEqual({
           errorList: [
             {
               href: '#searchInput',
@@ -276,7 +253,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       it('returns page data for the view, with errors', async () => {
         const result = await SubmitAccountService.go(session.id, payload)
 
-        expect(result.error).to.equal({
+        expect(result.error).toEqual({
           errorList: [
             {
               href: '#searchInput',

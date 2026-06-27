@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const YarStub = require('../../support/stubs/yar.stub.js')
@@ -55,7 +50,7 @@ describe('Users - View profile details service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewProfileDetailsService.go(userId, yarStub)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: '/',
           text: 'Go back to search'
@@ -80,8 +75,8 @@ describe('Users - View profile details service', () => {
       it('returns the notification', async () => {
         const result = await ViewProfileDetailsService.go(userId, yarStub)
 
-        expect(yarStub.flash.calledWith('notification')).to.be.true()
-        expect(result.notification).to.equal(testNotification)
+        expect(yarStub.flash.calledWith('notification')).toBe(true)
+        expect(result.notification).toEqual(testNotification)
       })
     })
   })
@@ -93,10 +88,12 @@ describe('Users - View profile details service', () => {
     })
 
     it('throws the error', async () => {
-      const error = await expect(ViewProfileDetailsService.go(userId, yarStub)).to.reject()
+      const error = await ViewProfileDetailsService.go(userId, yarStub).catch((e) => {
+        return e
+      })
 
-      expect(error).to.exist()
-      expect(error.message).to.equal('Model query error')
+      expect(error).toBeDefined()
+      expect(error.message).toEqual('Model query error')
     })
   })
 })

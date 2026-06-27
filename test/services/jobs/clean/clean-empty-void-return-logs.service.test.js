@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
@@ -48,10 +43,10 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
 
           const existsResults = await ReturnLogModel.query().whereIn('id', [returnLog.id])
 
-          expect(existsResults).to.have.length(0)
+          expect(existsResults).toHaveLength(0)
 
           // We can't check the exact count in case the test deletes void return logs created by other tests
-          expect(result).to.be.greaterThan(0)
+          expect(result).toBeGreaterThan(0)
         })
       })
 
@@ -65,11 +60,11 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
 
           const existsResults = await ReturnLogModel.query().whereIn('id', [returnLog.id])
 
-          expect(existsResults).to.have.length(1)
+          expect(existsResults).toHaveLength(1)
 
           // Like in the previous tests, we can't check the exact count in case the test deletes void return logs
           // created by other tests. We just want to check we are always getting a number
-          expect(typeof result).to.equal('number')
+          expect(typeof result).toEqual('number')
         })
       })
     })
@@ -85,11 +80,11 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
 
         const existsResults = await ReturnLogModel.query().whereIn('id', [returnLog.id])
 
-        expect(existsResults).to.have.length(1)
+        expect(existsResults).toHaveLength(1)
 
         // Like in the previous tests, we can't check the exact count in case the test deletes void return logs created
         // by other tests. We just want to check we are always getting a number
-        expect(typeof result).to.equal('number')
+        expect(typeof result).toEqual('number')
       })
     })
   })
@@ -105,7 +100,7 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
     })
 
     it('does not throw an error', async () => {
-      await expect(CleanEmptyVoidReturnLogsService.go()).not.to.reject()
+      await expect(CleanEmptyVoidReturnLogsService.go()).resolves.toBeDefined()
     })
 
     it('logs the error', async () => {
@@ -113,9 +108,9 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
 
       const errorLogArgs = notifierStub.omfg.firstCall.args
 
-      expect(notifierStub.omfg.calledWith('Clean job failed')).to.be.true()
-      expect(errorLogArgs[1]).to.equal({ job: 'clean-empty-void-return-logs' })
-      expect(errorLogArgs[2]).to.be.instanceOf(Error)
+      expect(notifierStub.omfg.calledWith('Clean job failed')).toBe(true)
+      expect(errorLogArgs[1]).toEqual({ job: 'clean-empty-void-return-logs' })
+      expect(errorLogArgs[2]).toBeInstanceOf(Error)
     })
 
     it('still returns a count', async () => {
@@ -123,7 +118,7 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
 
       // Like in the previous tests, we can't check the exact count in case the test deletes void return logs created
       // by other tests. We just want to check we are always getting a number
-      expect(typeof result).to.equal('number')
+      expect(typeof result).toEqual('number')
     })
   })
 })

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
@@ -52,18 +47,15 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     it('saves the submitted value', async () => {
       await SubmitFAOService.go(session.id, payload)
 
-      expect(session).to.equal(
-        {
-          fao: 'yes'
-        },
-        { skip: ['addressSelected', 'billingAccount', 'id'] }
-      )
+      expect(session).toMatchObject({
+        fao: 'yes'
+      })
     })
 
     it('continues the journey', async () => {
       const result = await SubmitFAOService.go(session.id, payload)
 
-      expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/contact`)
+      expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/contact`)
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
@@ -81,19 +73,16 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       it('saves the submitted value', async () => {
         await SubmitFAOService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            fao: 'yes'
-          },
-          { skip: ['addressSelected', 'billingAccount', 'id'] }
-        )
-        expect(session.$update.called).to.be.true()
+        expect(session).toMatchObject({
+          fao: 'yes'
+        })
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitFAOService.go(session.id, payload)
 
-        expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/contact`)
+        expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/contact`)
       })
     })
 
@@ -113,20 +102,17 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       it('saves the submitted value', async () => {
         await SubmitFAOService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            checkPageVisited: true,
-            fao: 'yes'
-          },
-          { skip: ['addressSelected', 'billingAccount', 'id'] }
-        )
-        expect(session.$update.called).to.be.true()
+        expect(session).toMatchObject({
+          checkPageVisited: true,
+          fao: 'yes'
+        })
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitFAOService.go(session.id, payload)
 
-        expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
+        expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
     })
 
@@ -146,23 +132,20 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       it('saves the submitted value', async () => {
         await SubmitFAOService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            addressJourney: null,
-            checkPageVisited: false,
-            contactName: null,
-            contactSelected: null,
-            fao: 'yes'
-          },
-          { skip: ['addressSelected', 'billingAccount', 'id'] }
-        )
-        expect(session.$update.called).to.be.true()
+        expect(session).toMatchObject({
+          addressJourney: null,
+          checkPageVisited: false,
+          contactName: null,
+          contactSelected: null,
+          fao: 'yes'
+        })
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitFAOService.go(session.id, payload)
 
-        expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/contact`)
+        expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/contact`)
       })
     })
   })
@@ -177,19 +160,16 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     it('saves the submitted value', async () => {
       await SubmitFAOService.go(session.id, payload)
 
-      expect(session).to.equal(
-        {
-          fao: 'no'
-        },
-        { skip: ['addressSelected', 'billingAccount', 'id'] }
-      )
-      expect(session.$update.called).to.be.true()
+      expect(session).toMatchObject({
+        fao: 'no'
+      })
+      expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
       const result = await SubmitFAOService.go(session.id, payload)
 
-      expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
+      expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
@@ -207,19 +187,16 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       it('saves the submitted value', async () => {
         await SubmitFAOService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            fao: 'no'
-          },
-          { skip: ['addressSelected', 'billingAccount', 'id'] }
-        )
-        expect(session.$update.called).to.be.true()
+        expect(session).toMatchObject({
+          fao: 'no'
+        })
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitFAOService.go(session.id, payload)
 
-        expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
+        expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
     })
 
@@ -239,20 +216,17 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       it('saves the submitted value', async () => {
         await SubmitFAOService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            checkPageVisited: true,
-            fao: 'no'
-          },
-          { skip: ['addressSelected', 'billingAccount', 'id'] }
-        )
-        expect(session.$update.called).to.be.true()
+        expect(session).toMatchObject({
+          checkPageVisited: true,
+          fao: 'no'
+        })
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitFAOService.go(session.id, payload)
 
-        expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
+        expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
     })
 
@@ -274,23 +248,20 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       it('saves the submitted value', async () => {
         await SubmitFAOService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            addressJourney: null,
-            checkPageVisited: false,
-            contactName: null,
-            contactSelected: null,
-            fao: 'no'
-          },
-          { skip: ['addressSelected', 'billingAccount', 'id'] }
-        )
-        expect(session.$update.called).to.be.true()
+        expect(session).toMatchObject({
+          addressJourney: null,
+          checkPageVisited: false,
+          contactName: null,
+          contactSelected: null,
+          fao: 'no'
+        })
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitFAOService.go(session.id, payload)
 
-        expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
+        expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
     })
   })
@@ -315,20 +286,17 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       it('saves the submitted value', async () => {
         await SubmitFAOService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            addressJourney: _addressJourney(session),
-            fao: 'no'
-          },
-          { skip: ['addressSelected', 'billingAccount', 'id'] }
-        )
-        expect(session.$update.called).to.be.true()
+        expect(session).toMatchObject({
+          addressJourney: _addressJourney(session),
+          fao: 'no'
+        })
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitFAOService.go(session.id, payload)
 
-        expect(result.redirectUrl).to.equal(`/system/address/${session.id}/postcode`)
+        expect(result.redirectUrl).toEqual(`/system/address/${session.id}/postcode`)
       })
     })
   })
@@ -337,7 +305,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     it('returns page data for the view, with errors', async () => {
       const result = await SubmitFAOService.go(session.id, {})
 
-      expect(result.error).to.equal({
+      expect(result.error).toEqual({
         errorList: [
           {
             href: '#fao',

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
@@ -59,7 +54,7 @@ describe('Bill Runs - Setup - Check service', () => {
         it('returns the data needed to review and create the bill run', async () => {
           const result = await CheckService.go(session.id)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'bill-runs',
             backLink: `/system/bill-runs/setup/${sessionId}/region`,
             billRunLink: null,
@@ -102,7 +97,7 @@ describe('Bill Runs - Setup - Check service', () => {
         it('returns the data needed to confirm why the bill run cannot be created', async () => {
           const result = await CheckService.go(session.id)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'bill-runs',
             backLink: `/system/bill-runs/setup/${sessionId}/region`,
             billRunLink: '/system/bill-runs/c0608545-9870-4605-a407-5ff49f8a5182',
@@ -148,7 +143,7 @@ describe('Bill Runs - Setup - Check service', () => {
           it('returns the data needed to review and create the bill run', async () => {
             const result = await CheckService.go(session.id)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               activeNavBar: 'bill-runs',
               backLink: `/system/bill-runs/setup/${sessionId}/year`,
               billRunLink: null,
@@ -191,7 +186,7 @@ describe('Bill Runs - Setup - Check service', () => {
           it('returns the data needed to confirm why the bill run cannot be created', async () => {
             const result = await CheckService.go(session.id)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               activeNavBar: 'bill-runs',
               backLink: `/system/bill-runs/setup/${sessionId}/year`,
               billRunLink: '/system/bill-runs/c0608545-9870-4605-a407-5ff49f8a5182',
@@ -233,7 +228,7 @@ describe('Bill Runs - Setup - Check service', () => {
           it('returns the data needed to review and create the bill run', async () => {
             const result = await CheckService.go(session.id)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               activeNavBar: 'bill-runs',
               backLink: `/system/bill-runs/setup/${sessionId}/season`,
               billRunLink: null,
@@ -276,7 +271,7 @@ describe('Bill Runs - Setup - Check service', () => {
           it('returns the data needed to confirm why the bill run cannot be created', async () => {
             const result = await CheckService.go(session.id)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               activeNavBar: 'bill-runs',
               backLink: `/system/bill-runs/setup/${sessionId}/season`,
               billRunLink: '/system/bill-runs/c0608545-9870-4605-a407-5ff49f8a5182',
@@ -319,7 +314,7 @@ describe('Bill Runs - Setup - Check service', () => {
         it('returns the data needed to review and create the bill run', async () => {
           const result = await CheckService.go(session.id)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'bill-runs',
             backLink: `/system/bill-runs/setup/${sessionId}/region`,
             billRunLink: null,
@@ -371,7 +366,7 @@ describe('Bill Runs - Setup - Check service', () => {
         it('returns the data needed to confirm why the bill runs cannot be created', async () => {
           const result = await CheckService.go(session.id)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'bill-runs',
             backLink: `/system/bill-runs/setup/${sessionId}/region`,
             billRunLink: '/system/bill-runs/c0608545-9870-4605-a407-5ff49f8a5182',
@@ -413,7 +408,7 @@ describe('Bill Runs - Setup - Check service', () => {
         it('returns the data needed to review and create the "current" SROC bill run', async () => {
           const result = await CheckService.go(session.id)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'bill-runs',
             backLink: `/system/bill-runs/setup/${sessionId}/region`,
             billRunLink: null,
@@ -455,7 +450,7 @@ describe('Bill Runs - Setup - Check service', () => {
         it('returns the data needed to review and create the "old" PRESROC bill run', async () => {
           const result = await CheckService.go(session.id)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'bill-runs',
             backLink: `/system/bill-runs/setup/${sessionId}/region`,
             billRunLink: null,
@@ -491,7 +486,7 @@ describe('Bill Runs - Setup - Check service', () => {
             it('returns the data needed to confirm why the bill run cannot be created', async () => {
               const result = await CheckService.go(session.id)
 
-              expect(result).to.equal({
+              expect(result).toEqual({
                 activeNavBar: 'bill-runs',
                 backLink: `/system/bill-runs/setup/${sessionId}/region`,
                 billRunLink: null,
@@ -525,7 +520,7 @@ describe('Bill Runs - Setup - Check service', () => {
             it('returns the data needed to review and create the "old" PRESROC bill run', async () => {
               const result = await CheckService.go(session.id)
 
-              expect(result).to.equal({
+              expect(result).toEqual({
                 activeNavBar: 'bill-runs',
                 backLink: `/system/bill-runs/setup/${sessionId}/region`,
                 billRunLink: null,

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
@@ -45,7 +40,7 @@ describe('Return Logs - Download Return Log Service', () => {
 
     const expectedFilename = `${returnReference}_${formatDateObjectToISO(startDate)}_${formatDateObjectToISO(endDate)}_v${returnSubmissions[0].version}.csv`
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       data: expectedData,
       filename: expectedFilename,
       type: 'text/csv'

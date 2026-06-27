@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const FetchTableNamesService = require('../../../../app/services/jobs/export/fetch-table-names.service.js')
 
@@ -15,18 +8,20 @@ describe('Fetch table names', () => {
     it('returns a list of the schemas table names', async () => {
       const result = await FetchTableNamesService.go('water')
 
-      expect(result).to.include('billing_charge_categories')
-      expect(result).to.include('charge_purposes')
-      expect(result).to.include('billing_batches')
+      expect(result).toContain('billing_charge_categories')
+      expect(result).toContain('charge_purposes')
+      expect(result).toContain('billing_batches')
     })
   })
 
   describe('when not given a schema name', () => {
     it('throws an error', async () => {
-      const result = await expect(FetchTableNamesService.go()).to.reject()
+      const result = await FetchTableNamesService.go().catch((e) => {
+        return e
+      })
 
-      expect(result).to.be.an.error()
-      expect(result.message).to.equal('Error: Unable to fetch table names')
+      expect(result).toBeInstanceOf(Error)
+      expect(result.message).toEqual('Error: Unable to fetch table names')
     })
   })
 })

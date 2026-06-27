@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_OK } = require('node:http2').constants
@@ -111,7 +106,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewPreviewService.go(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'notices',
         address: 'primary.user@important.com',
         backLink: {
@@ -207,7 +202,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewPreviewService.go(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'notices',
         address: 'primary.user@important.com',
         backLink: {
@@ -273,7 +268,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewPreviewService.go(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'notices',
         address: recipients[0].email,
         backLink: {

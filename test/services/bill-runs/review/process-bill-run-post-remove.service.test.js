@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
@@ -58,17 +53,17 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
         it('sets the status of the bill run to "empty" and returns "true"', async () => {
           const result = await ProcessBillRunPostRemoveService.go(billRunId)
 
-          expect(result).to.be.true()
+          expect(result).toBe(true)
 
           // Check we set the bill run status
-          expect(billRunPatchStub.calledOnce).to.be.true()
-          expect(billRunPatchStub.firstCall.firstArg).to.equal({ status: 'empty' }, { skip: ['updatedAt'] })
+          expect(billRunPatchStub.calledOnce).toBe(true)
+          expect(billRunPatchStub.firstCall.firstArg).toMatchObject({ status: 'empty' })
         })
 
         it('does not trigger the generate two-part tariff bill run process', async () => {
           await ProcessBillRunPostRemoveService.go(billRunId)
 
-          expect(generateTwoPartTariffBillRunStub.called).to.be.false()
+          expect(generateTwoPartTariffBillRunStub.called).toBe(false)
         })
       })
 
@@ -82,16 +77,16 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
         it('does not change the bill run status and returns "false"', async () => {
           const result = await ProcessBillRunPostRemoveService.go(billRunId)
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
 
           // Check we not change the bill run status
-          expect(billRunPatchStub.called).to.be.false()
+          expect(billRunPatchStub.called).toBe(false)
         })
 
         it('does not trigger the generate two-part tariff bill run process', async () => {
           await ProcessBillRunPostRemoveService.go(billRunId)
 
-          expect(generateTwoPartTariffBillRunStub.called).to.be.false()
+          expect(generateTwoPartTariffBillRunStub.called).toBe(false)
         })
       })
     })
@@ -111,15 +106,15 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
         it('triggers the generate two-part tariff bill run process and returns "true"', async () => {
           const result = await ProcessBillRunPostRemoveService.go(billRunId)
 
-          expect(result).to.be.true()
+          expect(result).toBe(true)
 
-          expect(generateTwoPartTariffBillRunStub.called).to.be.true()
+          expect(generateTwoPartTariffBillRunStub.called).toBe(true)
         })
 
         it('does change the status of the bill run to "empty"', async () => {
           await ProcessBillRunPostRemoveService.go(billRunId)
 
-          expect(billRunPatchStub.calledOnce).to.be.false()
+          expect(billRunPatchStub.calledOnce).toBe(false)
         })
       })
 
@@ -133,15 +128,15 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
         it('does not trigger the generate two-part tariff bill run process and returns "false"', async () => {
           const result = await ProcessBillRunPostRemoveService.go(billRunId)
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
 
-          expect(generateTwoPartTariffBillRunStub.called).to.be.false()
+          expect(generateTwoPartTariffBillRunStub.called).toBe(false)
         })
 
         it('does change the status of the bill run', async () => {
           await ProcessBillRunPostRemoveService.go(billRunId)
 
-          expect(billRunPatchStub.calledOnce).to.be.false()
+          expect(billRunPatchStub.calledOnce).toBe(false)
         })
       })
     })

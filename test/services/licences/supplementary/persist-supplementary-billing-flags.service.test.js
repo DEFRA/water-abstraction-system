@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
@@ -33,13 +28,13 @@ describe('Persist Supplementary Billing Flags Service', () => {
     let srocFlag
     let twoPartTariffFinancialYears
 
-    before(async () => {
+    beforeAll(async () => {
       testLicence = await LicenceHelper.add()
     })
 
     describe('and supplementary billing flags', () => {
       describe('and two-part tariff financial years', () => {
-        before(() => {
+        beforeAll(() => {
           preSrocFlag = true
           srocFlag = true
           twoPartTariffFinancialYears = [2022, 2023]
@@ -55,9 +50,9 @@ describe('Persist Supplementary Billing Flags Service', () => {
 
           const licence = await LicenceModel.query().findById(testLicence.id)
 
-          expect(licence.id).to.equal(testLicence.id)
-          expect(licence.includeInPresrocBilling).to.equal('yes')
-          expect(licence.includeInSrocBilling).to.equal(true)
+          expect(licence.id).toEqual(testLicence.id)
+          expect(licence.includeInPresrocBilling).toEqual('yes')
+          expect(licence.includeInSrocBilling).toEqual(true)
         })
 
         it('calls `CreateLicenceSupplementaryYearsService` to handle persisting the financial years', async () => {
@@ -68,12 +63,12 @@ describe('Persist Supplementary Billing Flags Service', () => {
             testLicence.id
           )
 
-          expect(CreateLicenceSupplementaryYearService.go.called).to.be.true()
+          expect(CreateLicenceSupplementaryYearService.go.called).toBe(true)
         })
       })
 
       describe('but no two-part tariff financial years', () => {
-        before(() => {
+        beforeAll(() => {
           preSrocFlag = false
           srocFlag = false
           twoPartTariffFinancialYears = []
@@ -89,9 +84,9 @@ describe('Persist Supplementary Billing Flags Service', () => {
 
           const licence = await LicenceModel.query().findById(testLicence.id)
 
-          expect(licence.id).to.equal(testLicence.id)
-          expect(licence.includeInPresrocBilling).to.equal('no')
-          expect(licence.includeInSrocBilling).to.equal(false)
+          expect(licence.id).toEqual(testLicence.id)
+          expect(licence.includeInPresrocBilling).toEqual('no')
+          expect(licence.includeInSrocBilling).toEqual(false)
         })
 
         it('does not call `CreateLicenceSupplementaryYearsService`', async () => {
@@ -102,7 +97,7 @@ describe('Persist Supplementary Billing Flags Service', () => {
             testLicence.id
           )
 
-          expect(CreateLicenceSupplementaryYearService.go.called).to.be.false()
+          expect(CreateLicenceSupplementaryYearService.go.called).toBe(false)
         })
       })
     })

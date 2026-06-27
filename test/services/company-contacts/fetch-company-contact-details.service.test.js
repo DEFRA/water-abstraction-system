@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach, after, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
@@ -23,7 +16,7 @@ describe('Company Contacts - Fetch Company Contact Details service', () => {
   let licenceRole
   let user
 
-  before(async () => {
+  beforeAll(async () => {
     contact = await ContactHelper.add()
 
     user = UserHelper.select()
@@ -39,7 +32,7 @@ describe('Company Contacts - Fetch Company Contact Details service', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     await contact.$query().delete()
   })
 
@@ -59,7 +52,7 @@ describe('Company Contacts - Fetch Company Contact Details service', () => {
         it('returns the matching company contact with "abstractionAlertsCount" as 0', async () => {
           const result = await FetchCompanyContactDetailsService.go(companyContact.id)
 
-          expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, licenceRole, 0))
+          expect(result).toEqual(_transformToFetchResult(companyContact, contact, user, licenceRole, 0))
         })
       })
 
@@ -77,7 +70,7 @@ describe('Company Contacts - Fetch Company Contact Details service', () => {
         it('returns the matching company contact with "abstractionAlertsCount" as 1', async () => {
           const result = await FetchCompanyContactDetailsService.go(companyContact.id)
 
-          expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, licenceRole, 1))
+          expect(result).toEqual(_transformToFetchResult(companyContact, contact, user, licenceRole, 1))
         })
       })
     })
@@ -105,7 +98,7 @@ describe('Company Contacts - Fetch Company Contact Details service', () => {
           it('returns the matching company contact with "abstractionAlertsCount" as 0', async () => {
             const result = await FetchCompanyContactDetailsService.go(companyContact.id)
 
-            expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, licenceRole, 0))
+            expect(result).toEqual(_transformToFetchResult(companyContact, contact, user, licenceRole, 0))
           })
         })
 
@@ -121,7 +114,7 @@ describe('Company Contacts - Fetch Company Contact Details service', () => {
           it('returns the matching company contact with "abstractionAlertsCount" as 1', async () => {
             const result = await FetchCompanyContactDetailsService.go(companyContact.id)
 
-            expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, licenceRole, 1))
+            expect(result).toEqual(_transformToFetchResult(companyContact, contact, user, licenceRole, 1))
           })
         })
       })

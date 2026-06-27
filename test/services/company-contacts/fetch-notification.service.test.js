@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach, after, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const EventHelper = require('../../support/helpers/event.helper.js')
 const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
@@ -22,7 +15,7 @@ describe('Company Contacts - Fetch Notification service', () => {
   let notice
   let notification
 
-  before(async () => {
+  beforeAll(async () => {
     notice = await EventHelper.add(NoticesFixture.returnsInvitation())
   })
 
@@ -30,7 +23,7 @@ describe('Company Contacts - Fetch Notification service', () => {
     email = `${generateUUID()}@test.com`
   })
 
-  after(async () => {
+  afterAll(async () => {
     await notice.$query().delete()
   })
 
@@ -49,7 +42,7 @@ describe('Company Contacts - Fetch Notification service', () => {
     it('returns a notification', async () => {
       const result = await FetchNotificationService.go(email)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         id: notification.id
       })
     })
@@ -67,7 +60,7 @@ describe('Company Contacts - Fetch Notification service', () => {
       it('returns undefined', async () => {
         const result = await FetchNotificationService.go(email)
 
-        expect(result).to.be.undefined()
+        expect(result).toBeUndefined()
       })
     })
 
@@ -83,7 +76,7 @@ describe('Company Contacts - Fetch Notification service', () => {
       it('returns undefined', async () => {
         const result = await FetchNotificationService.go(email)
 
-        expect(result).to.be.undefined()
+        expect(result).toBeUndefined()
       })
     })
   })

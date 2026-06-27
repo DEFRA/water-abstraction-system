@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -52,15 +47,15 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
       it('saves the submitted option', async () => {
         await SubmitMeterProvidedService.go(session.id, payload, yarStub)
 
-        expect(session.meterProvided).to.equal('yes')
-        expect(session.$update.called).to.be.true()
+        expect(session.meterProvided).toEqual('yes')
+        expect(session.$update.called).toBe(true)
       })
 
       describe('and the user has selected "yes" to a meter being provided', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
           const result = await SubmitMeterProvidedService.go(session.id, payload, yarStub)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             checkPageVisited: undefined,
             meterProvided: 'yes',
             reported: 'abstractionVolumes'
@@ -77,7 +72,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
           it('returns the correct details the controller needs to redirect the journey', async () => {
             const result = await SubmitMeterProvidedService.go(session.id, payload, yarStub)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               checkPageVisited: undefined,
               meterProvided: 'no',
               reported: 'abstractionVolumes'
@@ -106,11 +101,11 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
             it('removes the previously entered meter details from the session data', async () => {
               await SubmitMeterProvidedService.go(session.id, payload, yarStub)
 
-              expect(session.meterProvided).to.equal('no')
-              expect(session.meterMake).to.be.null()
-              expect(session.meterSerialNumber).to.be.null()
-              expect(session.meter10TimesDisplay).to.be.null()
-              expect(session.$update.called).to.be.true()
+              expect(session.meterProvided).toEqual('no')
+              expect(session.meterMake).toBeNull()
+              expect(session.meterSerialNumber).toBeNull()
+              expect(session.meter10TimesDisplay).toBeNull()
+              expect(session.$update.called).toBe(true)
             })
           })
         })
@@ -128,7 +123,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
           it('returns the correct details the controller needs to redirect the journey', async () => {
             const result = await SubmitMeterProvidedService.go(session.id, payload, yarStub)
 
-            expect(result).to.equal({ checkPageVisited: true, meterProvided: 'no', reported: 'abstractionVolumes' })
+            expect(result).toEqual({ checkPageVisited: true, meterProvided: 'no', reported: 'abstractionVolumes' })
           })
 
           it('sets the notification message title to "Updated" and the text to "Reporting details changed" ', async () => {
@@ -136,8 +131,8 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
 
             const [flashType, notification] = yarStub.flash.args[0]
 
-            expect(flashType).to.equal('notification')
-            expect(notification).to.equal({ titleText: 'Updated', text: 'Reporting details changed' })
+            expect(flashType).toEqual('notification')
+            expect(notification).toEqual({ titleText: 'Updated', text: 'Reporting details changed' })
           })
         })
       })
@@ -151,22 +146,19 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
       it('returns the page data for the view', async () => {
         const result = await SubmitMeterProvidedService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal(
-          {
-            backLink: { href: `/system/return-logs/setup/${session.id}/units`, text: 'Back' },
-            meterProvided: null,
-            pageTitle: 'Have meter details been provided?',
-            pageTitleCaption: 'Return reference 12345'
-          },
-          { skip: ['sessionId', 'error'] }
-        )
+        expect(result).toMatchObject({
+          backLink: { href: `/system/return-logs/setup/${session.id}/units`, text: 'Back' },
+          meterProvided: null,
+          pageTitle: 'Have meter details been provided?',
+          pageTitleCaption: 'Return reference 12345'
+        })
       })
 
       describe('because the user has not selected anything', () => {
         it('includes an error for the radio form element', async () => {
           const result = await SubmitMeterProvidedService.go(session.id, payload, yarStub)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             errorList: [
               {
                 href: '#meterProvided',

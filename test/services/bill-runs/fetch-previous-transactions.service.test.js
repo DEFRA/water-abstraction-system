@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const PreviousBillingDataSeeder = require('../../support/seeders/previous-billing-data.seeder.js')
 
@@ -19,19 +12,19 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
   let twoPartTariff
   let twoPartTariffFlag
 
-  before(async () => {
+  beforeAll(async () => {
     seededData = await PreviousBillingDataSeeder.seed()
 
     standard = seededData.standard
     twoPartTariff = seededData.twoPartTariff
   })
 
-  after(async () => {
+  afterAll(async () => {
     await PreviousBillingDataSeeder.zap(seededData)
   })
 
   describe('when a "standard" supplementary bill run is being created', () => {
-    before(() => {
+    beforeAll(() => {
       twoPartTariffFlag = false
     })
 
@@ -58,11 +51,11 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
             twoPartTariffFlag
           )
 
-          expect(results).to.have.length(1)
+          expect(results).toHaveLength(1)
 
           const expectedDebit = standard.supplementaryBillRun.bills[0].billLicences[0].transactions[1]
 
-          expect(results[0]).to.equal({
+          expect(results[0]).toEqual({
             authorisedDays: expectedDebit.authorisedDays,
             billableDays: expectedDebit.billableDays,
             waterUndertaker: expectedDebit.waterUndertaker,
@@ -109,11 +102,11 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
             twoPartTariffFlag
           )
 
-          expect(results).to.have.length(1)
+          expect(results).toHaveLength(1)
 
           const expectedDebit = standard.annualBillRun.bills[0].billLicences[0].transactions[0]
 
-          expect(results[0]).to.equal({
+          expect(results[0]).toEqual({
             authorisedDays: expectedDebit.authorisedDays,
             billableDays: expectedDebit.billableDays,
             waterUndertaker: expectedDebit.waterUndertaker,
@@ -157,7 +150,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
             twoPartTariffFlag
           )
 
-          expect(results).to.have.length(0)
+          expect(results).toHaveLength(0)
         })
       })
     })
@@ -171,13 +164,13 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
           twoPartTariffFlag
         )
 
-        expect(results).to.have.length(0)
+        expect(results).toHaveLength(0)
       })
     })
   })
 
   describe('when a "two-part tariff" supplementary bill run is being created', () => {
-    before(() => {
+    beforeAll(() => {
       twoPartTariffFlag = true
     })
 
@@ -204,11 +197,11 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
             twoPartTariffFlag
           )
 
-          expect(results).to.have.length(1)
+          expect(results).toHaveLength(1)
 
           const expectedDebit = twoPartTariff.supplementaryBillRun.bills[0].billLicences[0].transactions[1]
 
-          expect(results[0]).to.equal({
+          expect(results[0]).toEqual({
             authorisedDays: expectedDebit.authorisedDays,
             billableDays: expectedDebit.billableDays,
             waterUndertaker: expectedDebit.waterUndertaker,
@@ -255,11 +248,11 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
             twoPartTariffFlag
           )
 
-          expect(results).to.have.length(1)
+          expect(results).toHaveLength(1)
 
           const expectedDebit = twoPartTariff.annualBillRun.bills[0].billLicences[0].transactions[0]
 
-          expect(results[0]).to.equal({
+          expect(results[0]).toEqual({
             authorisedDays: expectedDebit.authorisedDays,
             billableDays: expectedDebit.billableDays,
             waterUndertaker: expectedDebit.waterUndertaker,
@@ -303,7 +296,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
             twoPartTariffFlag
           )
 
-          expect(results).to.have.length(0)
+          expect(results).toHaveLength(0)
         })
       })
     })
@@ -317,7 +310,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
           twoPartTariffFlag
         )
 
-        expect(results).to.have.length(0)
+        expect(results).toHaveLength(0)
       })
     })
   })
@@ -345,7 +338,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
   //   it('returns no results', async () => {
   //     const result = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
 
-  //     expect(result).to.be.empty()
+  //     expect(result).toHaveLength(0)
   //   })
   // })
 
@@ -360,8 +353,8 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
   //     it('returns results', async () => {
   //       const results = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
 
-  //       expect(results).to.have.length(1)
-  //       expect(results[0].credit).to.be.false()
+  //       expect(results).toHaveLength(1)
+  //       expect(results[0].credit).toBe(false)
   //     })
 
   //     describe('followed by another bill run for the same licence and billing account', () => {
@@ -388,7 +381,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
   //               financialYearEnding
   //             )
 
-  //             expect(results).to.be.empty()
+  //             expect(results).toHaveLength(0)
   //           })
   //         })
 
@@ -409,8 +402,8 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
   //               financialYearEnding
   //             )
 
-  //             expect(results).to.have.length(1)
-  //             expect(results[0].credit).to.be.false()
+  //             expect(results).toHaveLength(1)
+  //             expect(results[0].credit).toBe(false)
   //           })
   //         })
   //       })
@@ -439,9 +432,9 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
   //               financialYearEnding
   //             )
 
-  //             expect(results).to.have.length(1)
-  //             expect(results[0].credit).to.be.false()
-  //             expect(results[0].description).to.equal('follow up')
+  //             expect(results).toHaveLength(1)
+  //             expect(results[0].credit).toBe(false)
+  //             expect(results[0].description).toEqual('follow up')
   //           })
   //         })
 
@@ -462,17 +455,17 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
   //               financialYearEnding
   //             )
 
-  //             expect(results).to.have.length(2)
+  //             expect(results).toHaveLength(2)
   //             expect(
   //               results.every((transaction) => {
   //                 return !transaction.credit
   //               })
-  //             ).to.be.true()
+  //             ).toBe(true)
   //             expect(
   //               results.find((transaction) => {
   //                 return transaction.description === 'follow up'
   //               })
-  //             ).to.exist()
+  //             ).toBeDefined()
   //           })
   //         })
   //       })
@@ -492,7 +485,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
   //     it('returns no results', async () => {
   //       const results = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
 
-  //       expect(results).to.be.empty()
+  //       expect(results).toHaveLength(0)
   //     })
   //   })
 
@@ -509,7 +502,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
   //     it('returns no results', async () => {
   //       const results = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
 
-  //       expect(results).to.be.empty()
+  //       expect(results).toHaveLength(0)
   //     })
   //   })
   // })

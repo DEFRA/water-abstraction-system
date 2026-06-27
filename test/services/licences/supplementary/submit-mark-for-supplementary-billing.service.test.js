@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
@@ -48,16 +43,13 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
           const licenceSupplementaryYears = await LicenceSupplementaryYearModel.query().where('licenceId', licence.id)
 
-          expect(result).to.equal({ error: null })
-          expect(licenceSupplementaryYears[0]).to.equal(
-            {
-              licenceId: licence.id,
-              billRunId: null,
-              twoPartTariff: true,
-              financialYearEnd: 2023
-            },
-            { skip: ['id', 'createdAt', 'updatedAt'] }
-          )
+          expect(result).toEqual({ error: null })
+          expect(licenceSupplementaryYears[0]).toMatchObject({
+            licenceId: licence.id,
+            billRunId: null,
+            twoPartTariff: true,
+            financialYearEnd: 2023
+          })
         })
 
         it('does not flag the licence for supplementary billing for the pre sroc years', async () => {
@@ -65,7 +57,7 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
           const updatedLicence = await LicenceModel.query().findById(licence.id)
 
-          expect(updatedLicence.includeInPresrocBilling).to.equal('no')
+          expect(updatedLicence.includeInPresrocBilling).toEqual('no')
         })
       })
     })
@@ -83,16 +75,13 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
           const licenceSupplementaryYears = await LicenceSupplementaryYearModel.query().where('licenceId', licence.id)
 
-          expect(result).to.equal({ error: null })
-          expect(licenceSupplementaryYears[0]).to.equal(
-            {
-              licenceId: licence.id,
-              billRunId: null,
-              twoPartTariff: true,
-              financialYearEnd: 2023
-            },
-            { skip: ['id', 'createdAt', 'updatedAt'] }
-          )
+          expect(result).toEqual({ error: null })
+          expect(licenceSupplementaryYears[0]).toMatchObject({
+            licenceId: licence.id,
+            billRunId: null,
+            twoPartTariff: true,
+            financialYearEnd: 2023
+          })
         })
 
         it('flags the licence for supplementary billing for the pre sroc years', async () => {
@@ -100,7 +89,7 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
           const updatedLicence = await LicenceModel.query().findById(licence.id)
 
-          expect(updatedLicence.includeInPresrocBilling).to.equal('yes')
+          expect(updatedLicence.includeInPresrocBilling).toEqual('yes')
         })
       })
     })
@@ -118,8 +107,8 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
           const updatedLicence = await LicenceModel.query().findById(licence.id)
 
-          expect(result).to.equal({ error: null })
-          expect(updatedLicence.includeInPresrocBilling).to.equal('yes')
+          expect(result).toEqual({ error: null })
+          expect(updatedLicence.includeInPresrocBilling).toEqual('yes')
         })
       })
     })
@@ -142,7 +131,7 @@ describe('Submit Mark For Supplementary Billing Service', () => {
         it('returns the page data with an error for the view', async () => {
           const result = await SubmitMarkForSupplementaryBillingService.go(licence.id, payload)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             backLink: {
               href: `/system/licences/${licence.id}/set-up`,
               text: 'Back'

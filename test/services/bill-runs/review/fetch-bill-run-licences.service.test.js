@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
@@ -29,7 +24,7 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
   let testLicenceReview
   let testLicenceNoIssues
 
-  before(async () => {
+  beforeAll(async () => {
     region = RegionHelper.select()
 
     billRun = await BillRunHelper.add({
@@ -76,7 +71,7 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
     Sinon.restore()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testLicenceNoIssues.$query().delete()
     await testLicenceReview.$query().delete()
     await testLicenceReady.$query().delete()
@@ -93,7 +88,7 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
     it('returns details of the bill run and the licences in it', async () => {
       const result = await FetchBillRunLicencesService.go(billRun.id, filters, page)
 
-      expect(result).to.equal({
+      expect(result).toMatchObject({
         billRun: {
           id: billRun.id,
           batchType: 'two_part_tariff',
@@ -163,7 +158,7 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
         it('returns the matching licences', async () => {
           const result = await FetchBillRunLicencesService.go(billRun.id, filters, page)
 
-          expect(result.licences).equals({
+          expect(result.licences).toMatchObject({
             results: [
               {
                 id: testLicenceNoIssues.id,
@@ -188,7 +183,7 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
         it('returns the matching licences', async () => {
           const result = await FetchBillRunLicencesService.go(billRun.id, filters, page)
 
-          expect(result.licences).equals({
+          expect(result.licences).toMatchObject({
             results: [
               {
                 id: testLicenceReady.id,
@@ -213,7 +208,7 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
         it('returns the matching licences', async () => {
           const result = await FetchBillRunLicencesService.go(billRun.id, filters, page)
 
-          expect(result.licences).equals({
+          expect(result.licences).toMatchObject({
             results: [
               {
                 id: testLicenceReview.id,
@@ -249,7 +244,7 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
         it('returns the matching licences', async () => {
           const result = await FetchBillRunLicencesService.go(billRun.id, filters, page)
 
-          expect(result.licences).equals({
+          expect(result.licences).toMatchObject({
             results: [
               {
                 id: testLicenceReview.id,
@@ -274,7 +269,7 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
         it('returns the matching licences', async () => {
           const result = await FetchBillRunLicencesService.go(billRun.id, filters, page)
 
-          expect(result.licences).equals({
+          expect(result.licences).toMatchObject({
             results: [
               {
                 id: testLicenceReady.id,
@@ -300,7 +295,7 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
       it('returns the matching licences', async () => {
         const result = await FetchBillRunLicencesService.go(billRun.id, filters, page)
 
-        expect(result.licences).equals({
+        expect(result.licences).toMatchObject({
           results: [
             {
               id: testLicenceReview.id,
@@ -325,7 +320,7 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
       it('returns the matching licences', async () => {
         const result = await FetchBillRunLicencesService.go(billRun.id, filters, page)
 
-        expect(result.licences).equals({
+        expect(result.licences).toMatchObject({
           results: [
             {
               id: testLicenceReady.id,
@@ -354,7 +349,7 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
     it('can return the selected page of licences', async () => {
       const result = await FetchBillRunLicencesService.go(billRun.id, filters, page)
 
-      expect(result.licences.results).not.to.be.empty()
+      expect(result.licences.results).not.toHaveLength(0)
     })
   })
 })

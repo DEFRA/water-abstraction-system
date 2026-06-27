@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const DetermineBillingPeriodsService = require('../../../app/services/bill-runs/determine-billing-periods.service.js')
 
@@ -23,8 +16,8 @@ describe('Bill Runs - Determine Billing Periods service', () => {
     it('returns a single billing period for the financial year provided', () => {
       const result = DetermineBillingPeriodsService.go(billRunType, financialYearEnding)
 
-      expect(result).to.have.length(1)
-      expect(result[0]).to.equal({
+      expect(result).toHaveLength(1)
+      expect(result[0]).toEqual({
         startDate: new Date('2024-04-01'),
         endDate: new Date('2025-03-31')
       })
@@ -40,8 +33,8 @@ describe('Bill Runs - Determine Billing Periods service', () => {
     it('returns a single billing period for the financial year provided', () => {
       const result = DetermineBillingPeriodsService.go(billRunType, financialYearEnding)
 
-      expect(result).to.have.length(1)
-      expect(result[0]).to.equal({
+      expect(result).toHaveLength(1)
+      expect(result[0]).toEqual({
         startDate: new Date('2023-04-01'),
         endDate: new Date('2024-03-31')
       })
@@ -57,8 +50,8 @@ describe('Bill Runs - Determine Billing Periods service', () => {
     it('returns a single billing period for the financial year provided', () => {
       const result = DetermineBillingPeriodsService.go(billRunType, financialYearEnding)
 
-      expect(result).to.have.length(1)
-      expect(result[0]).to.equal({
+      expect(result).toHaveLength(1)
+      expect(result[0]).toEqual({
         startDate: new Date('2023-04-01'),
         endDate: new Date('2024-03-31')
       })
@@ -78,8 +71,8 @@ describe('Bill Runs - Determine Billing Periods service', () => {
       it('returns a billing period for each year from the start of the period', () => {
         const result = DetermineBillingPeriodsService.go(billRunType, financialYearEnding)
 
-        expect(result).to.have.length(3)
-        expect(result).to.equal([
+        expect(result).toHaveLength(3)
+        expect(result).toEqual([
           { startDate: new Date('2024-04-01'), endDate: new Date('2025-03-31') },
           { startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') },
           { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
@@ -95,8 +88,8 @@ describe('Bill Runs - Determine Billing Periods service', () => {
       it('returns six billing periods ending with the financial year end provided', () => {
         const result = DetermineBillingPeriodsService.go(billRunType, financialYearEnding)
 
-        expect(result).to.have.length(6)
-        expect(result).to.equal([
+        expect(result).toHaveLength(6)
+        expect(result).toEqual([
           { startDate: new Date('2027-04-01'), endDate: new Date('2028-03-31') },
           { startDate: new Date('2026-04-01'), endDate: new Date('2027-03-31') },
           { startDate: new Date('2025-04-01'), endDate: new Date('2026-03-31') },
@@ -118,7 +111,7 @@ describe('Bill Runs - Determine Billing Periods service', () => {
       it('returns no billing periods', () => {
         const result = DetermineBillingPeriodsService.go(billRunType, financialYearEnding)
 
-        expect(result).to.be.empty()
+        expect(result).toHaveLength(0)
       })
     })
   })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AddressHelper = require('../../../support/helpers/address.helper.js')
 const CompanyHelper = require('../../../support/helpers/company.helper.js')
@@ -22,7 +15,7 @@ describe('Billing Accounts - Setup - Fetch Existing Addresses service', () => {
   let companyAddressDuplicate
   let companyWithNoAddress
 
-  before(async () => {
+  beforeAll(async () => {
     address = await AddressHelper.add()
     company = await CompanyHelper.add()
     companyWithNoAddress = await CompanyHelper.add()
@@ -37,7 +30,7 @@ describe('Billing Accounts - Setup - Fetch Existing Addresses service', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await address.$query().delete()
     await company.$query().delete()
     await companyAddress.$query().delete()
@@ -49,7 +42,7 @@ describe('Billing Accounts - Setup - Fetch Existing Addresses service', () => {
     it('returns the company name and matching addresses', async () => {
       const result = await FetchCompanyAddressesService.go(company.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         company: {
           id: company.id,
           name: company.name
@@ -74,7 +67,7 @@ describe('Billing Accounts - Setup - Fetch Existing Addresses service', () => {
     it('returns the company name and an empty addresses array', async () => {
       const result = await FetchCompanyAddressesService.go(companyWithNoAddress.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         company: {
           id: companyWithNoAddress.id,
           name: companyWithNoAddress.name

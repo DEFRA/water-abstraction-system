@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ChangeReasonHelper = require('../../support/helpers/change-reason.helper.js')
 const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
@@ -27,7 +20,7 @@ describe('Determine Minimum Charge service', () => {
   let noMinimumChargeChangeReason
   let chargeVersion
 
-  before(() => {
+  beforeAll(() => {
     minimumChargeChangeReason = ChangeReasonHelper.select(CHANGE_REASON_NEW_LICENCE_PART_INDEX)
     noMinimumChargeChangeReason = ChangeReasonHelper.select(CHANGE_REASON_CHARGE_CANCELLED_INDEX)
   })
@@ -46,7 +39,7 @@ describe('Determine Minimum Charge service', () => {
       it('returns true', async () => {
         const result = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
 
-        expect(result).to.be.true()
+        expect(result).toBe(true)
       })
     })
 
@@ -63,7 +56,7 @@ describe('Determine Minimum Charge service', () => {
       it('returns false', async () => {
         const result = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
 
-        expect(result).to.be.false()
+        expect(result).toBe(false)
       })
     })
   })
@@ -81,7 +74,7 @@ describe('Determine Minimum Charge service', () => {
     it('returns false', async () => {
       const result = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
 
-      expect(result).to.be.false()
+      expect(result).toBe(false)
     })
   })
 })

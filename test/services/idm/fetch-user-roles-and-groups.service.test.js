@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const GroupHelper = require('../../support/helpers/group.helper.js')
 const RoleHelper = require('../../support/helpers/role.helper.js')
@@ -21,15 +14,13 @@ const GROUP_ENV_OFFICER_INDEX = 0
 const ROLE_RETURNS_INDEX = 0
 const ROLE_HOF_NOTIFICATIONS_INDEX = 0
 
-const { SKIP_COMPARE_LIST: skip } = UserHelper
-
 describe('Fetch User Roles And Groups service', () => {
   let duplicateRoleForUser
   let groupForUser
   let roleForUser
   let user
 
-  before(async () => {
+  beforeAll(async () => {
     user = await UserHelper.add({ application: 'water_admin', enabled: true, username: 'unit.test@wrls.gov.uk' })
 
     // Select a role and assign it directly to the user
@@ -47,7 +38,7 @@ describe('Fetch User Roles And Groups service', () => {
     it('returns the user', async () => {
       const result = await FetchUserRolesAndGroupsService.go(user.userId)
 
-      expect(result.user).to.equal(user, { skip })
+      expect(result.user).toMatchObject(user)
     })
 
     it("returns the user's roles", async () => {
@@ -57,14 +48,14 @@ describe('Fetch User Roles And Groups service', () => {
         return role.role
       })
 
-      expect(roles).to.have.length(3)
+      expect(roles).toHaveLength(3)
 
       // 1 via the user role
-      expect(roles).to.include('returns')
+      expect(roles).toContain('returns')
 
       // 2 via the user group
-      expect(roles).to.include('hof_notifications')
-      expect(roles).to.include('manage_gauging_station_licence_links')
+      expect(roles).toContain('hof_notifications')
+      expect(roles).toContain('manage_gauging_station_licence_links')
     })
 
     it("returns the user's groups", async () => {
@@ -74,8 +65,8 @@ describe('Fetch User Roles And Groups service', () => {
         return group.group
       })
 
-      expect(groups).to.have.length(1)
-      expect(groups).to.include(groupForUser.group)
+      expect(groups).toHaveLength(1)
+      expect(groups).toContainEqual(groupForUser.group)
     })
 
     describe('and the user is assigned a role they also have through a group', () => {
@@ -93,11 +84,11 @@ describe('Fetch User Roles And Groups service', () => {
         })
 
         // 1 via the user role (ignoring the duplicate hof_notifications)
-        expect(roles).to.include('returns')
+        expect(roles).toContain('returns')
 
         // 2 via the user group (environment officer has 2 roles in group_roles)
-        expect(roles).to.include('hof_notifications')
-        expect(roles).to.include('manage_gauging_station_licence_links')
+        expect(roles).toContain('hof_notifications')
+        expect(roles).toContain('manage_gauging_station_licence_links')
       })
     })
   })
@@ -108,19 +99,19 @@ describe('Fetch User Roles And Groups service', () => {
     it('returns "null" for "user"', async () => {
       const result = await FetchUserRolesAndGroupsService.go(unknownUserId)
 
-      expect(result.user).to.be.null()
+      expect(result.user).toBeNull()
     })
 
     it('returns an empty roles array', async () => {
       const result = await FetchUserRolesAndGroupsService.go(unknownUserId)
 
-      expect(result.roles).to.be.empty()
+      expect(result.roles).toHaveLength(0)
     })
 
     it('returns an empty groups array', async () => {
       const result = await FetchUserRolesAndGroupsService.go(unknownUserId)
 
-      expect(result.groups).to.be.empty()
+      expect(result.groups).toHaveLength(0)
     })
   })
 })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ChangeReasonHelper = require('../../support/helpers/change-reason.helper.js')
 const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
@@ -93,7 +86,7 @@ describe('Licences - Fetch Charge Versions service', () => {
     it('returns the matching charge versions data', async () => {
       const result = await FetchChargeVersionsService.go(licenceId)
 
-      expect(result).to.equal([
+      expect(result).toEqual([
         {
           changeReason: {
             description: changeReason.description

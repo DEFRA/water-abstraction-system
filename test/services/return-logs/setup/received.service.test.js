@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -41,27 +36,24 @@ describe('Return Logs - Setup - Received service', () => {
     it('fetches the current setup session record', async () => {
       const result = await ReceivedService.go(session.id)
 
-      expect(result.sessionId).to.equal(session.id)
+      expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
       const result = await ReceivedService.go(session.id)
 
-      expect(result).to.equal(
-        {
-          backLink: {
-            href: '/system/return-logs/8280a3bb-aefb-4603-b71f-a58cef9169f3/details',
-            text: 'Back'
-          },
-          pageTitle: 'When was the return received?',
-          pageTitleCaption: 'Return reference 012345',
-          receivedDateOption: null,
-          receivedDateDay: null,
-          receivedDateMonth: null,
-          receivedDateYear: null
+      expect(result).toMatchObject({
+        backLink: {
+          href: '/system/return-logs/8280a3bb-aefb-4603-b71f-a58cef9169f3/details',
+          text: 'Back'
         },
-        { skip: ['sessionId', 'todaysDate', 'yesterdaysDate'] }
-      )
+        pageTitle: 'When was the return received?',
+        pageTitleCaption: 'Return reference 012345',
+        receivedDateOption: null,
+        receivedDateDay: null,
+        receivedDateMonth: null,
+        receivedDateYear: null
+      })
     })
   })
 })

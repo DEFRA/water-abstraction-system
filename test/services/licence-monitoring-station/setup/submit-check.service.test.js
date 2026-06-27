@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const LicenceMonitoringStationModel = require('../../../../app/models/licence-monitoring-station.model.js')
@@ -71,7 +66,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
         .where('monitoringStationId', sessionData.monitoringStationId)
         .first()
 
-      expect(result.monitoringStationId).to.exist()
+      expect(result.monitoringStationId).toBeDefined()
     })
 
     it('persists the abstraction period', async () => {
@@ -81,10 +76,10 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
         .where('monitoringStationId', sessionData.monitoringStationId)
         .first()
 
-      expect(result.abstractionPeriodStartDay).to.equal(sessionData.abstractionPeriodStartDay)
-      expect(result.abstractionPeriodStartMonth).to.equal(sessionData.abstractionPeriodStartMonth)
-      expect(result.abstractionPeriodEndDay).to.equal(sessionData.abstractionPeriodEndDay)
-      expect(result.abstractionPeriodEndMonth).to.equal(sessionData.abstractionPeriodEndMonth)
+      expect(result.abstractionPeriodStartDay).toEqual(sessionData.abstractionPeriodStartDay)
+      expect(result.abstractionPeriodStartMonth).toEqual(sessionData.abstractionPeriodStartMonth)
+      expect(result.abstractionPeriodEndDay).toEqual(sessionData.abstractionPeriodEndDay)
+      expect(result.abstractionPeriodEndMonth).toEqual(sessionData.abstractionPeriodEndMonth)
     })
 
     it('persists the user that created the tag', async () => {
@@ -94,19 +89,19 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
         .where('monitoringStationId', sessionData.monitoringStationId)
         .first()
 
-      expect(result.createdBy).to.equal(userId)
+      expect(result.createdBy).toEqual(userId)
     })
 
     it('deletes the session', async () => {
       await SubmitCheckService.go(session.id, userId, yarStub)
 
-      expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
+      expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
     })
 
     it('continues the journey', async () => {
       const result = await SubmitCheckService.go(session.id, userId, yarStub)
 
-      expect(result).to.equal(sessionData.monitoringStationId)
+      expect(result).toEqual(sessionData.monitoringStationId)
     })
 
     it('sets the notification message title to "Success" and the text to "Tag for licence ... added" ', async () => {
@@ -114,8 +109,8 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
 
       const [flashType, notification] = yarStub.flash.args[0]
 
-      expect(flashType).to.equal('notification')
-      expect(notification).to.equal({
+      expect(flashType).toEqual('notification')
+      expect(notification).toEqual({
         titleText: 'Success',
         text: `Tag for licence ${session.licenceRef} added`
       })
@@ -137,7 +132,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
           .where('monitoringStationId', sessionData.monitoringStationId)
           .first()
 
-        expect(result.measureType).to.equal('flow')
+        expect(result.measureType).toEqual('flow')
       })
     })
 
@@ -157,7 +152,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
           .where('monitoringStationId', sessionData.monitoringStationId)
           .first()
 
-        expect(result.measureType).to.equal('level')
+        expect(result.measureType).toEqual('level')
       })
     })
 
@@ -177,7 +172,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
           .where('monitoringStationId', sessionData.monitoringStationId)
           .first()
 
-        expect(result.restrictionType).to.equal('stop')
+        expect(result.restrictionType).toEqual('stop')
       })
     })
 
@@ -198,7 +193,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
             .where('monitoringStationId', sessionData.monitoringStationId)
             .first()
 
-          expect(result.restrictionType).to.equal('reduce')
+          expect(result.restrictionType).toEqual('reduce')
         })
       })
 
@@ -218,7 +213,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
             .where('monitoringStationId', sessionData.monitoringStationId)
             .first()
 
-          expect(result.restrictionType).to.equal('stop_or_reduce')
+          expect(result.restrictionType).toEqual('stop_or_reduce')
         })
       })
     })
@@ -239,7 +234,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
           .where('monitoringStationId', sessionData.monitoringStationId)
           .first()
 
-        expect(result.licenceVersionPurposeConditionId).to.equal(sessionData.conditionId)
+        expect(result.licenceVersionPurposeConditionId).toEqual(sessionData.conditionId)
       })
     })
 
@@ -251,7 +246,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
           .where('monitoringStationId', sessionData.monitoringStationId)
           .first()
 
-        expect(result.licenceVersionPurposeConditionId).to.be.null()
+        expect(result.licenceVersionPurposeConditionId).toBeNull()
       })
     })
   })

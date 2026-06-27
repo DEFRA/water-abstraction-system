@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const ExpandedErrorError = require('../../../app/errors/expanded.error.js')
@@ -64,13 +59,15 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
         })
 
         it('throws an error', async () => {
-          const error = await expect(GenerateTwoPartTariffBillRunService.go(billRunDetails.id)).to.reject()
+          const error = await GenerateTwoPartTariffBillRunService.go(billRunDetails.id).catch((e) => {
+            return e
+          })
 
-          expect(error).to.be.an.instanceOf(ExpandedErrorError)
-          expect(error.message).to.equal('Cannot process a two-part tariff bill run that is not in a valid state')
-          expect(error.batchType).to.equal(billRun.batchType)
-          expect(error.billRunId).to.equal(billRun.id)
-          expect(error.status).to.equal(billRun.status)
+          expect(error).toBeInstanceOf(ExpandedErrorError)
+          expect(error.message).toEqual('Cannot process a two-part tariff bill run that is not in a valid state')
+          expect(error.batchType).toEqual(billRun.batchType)
+          expect(error.billRunId).toEqual(billRun.id)
+          expect(error.status).toEqual(billRun.status)
         })
       })
 
@@ -83,15 +80,15 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
         it('sets the bill run status to "processing"', async () => {
           await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
 
-          expect(billRunPatchStub.calledOnce).to.be.true()
-          expect(billRunPatchStub.firstCall.firstArg).to.equal({ status: 'processing' }, { skip: ['updatedAt'] })
+          expect(billRunPatchStub.calledOnce).toBe(true)
+          expect(billRunPatchStub.firstCall.firstArg).toMatchObject({ status: 'processing' })
         })
 
         it('triggers the "generate annual bill run" service', async () => {
           await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
 
-          expect(generateAnnualStub.calledOnce).to.be.true()
-          expect(generateSupplementaryStub.called).to.be.false()
+          expect(generateAnnualStub.calledOnce).toBe(true)
+          expect(generateSupplementaryStub.called).toBe(false)
         })
       })
     })
@@ -108,13 +105,15 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
         })
 
         it('throws an error', async () => {
-          const error = await expect(GenerateTwoPartTariffBillRunService.go(billRunDetails.id)).to.reject()
+          const error = await GenerateTwoPartTariffBillRunService.go(billRunDetails.id).catch((e) => {
+            return e
+          })
 
-          expect(error).to.be.an.instanceOf(ExpandedErrorError)
-          expect(error.message).to.equal('Cannot process a two-part tariff bill run that is not in a valid state')
-          expect(error.batchType).to.equal(billRun.batchType)
-          expect(error.billRunId).to.equal(billRun.id)
-          expect(error.status).to.equal(billRun.status)
+          expect(error).toBeInstanceOf(ExpandedErrorError)
+          expect(error.message).toEqual('Cannot process a two-part tariff bill run that is not in a valid state')
+          expect(error.batchType).toEqual(billRun.batchType)
+          expect(error.billRunId).toEqual(billRun.id)
+          expect(error.status).toEqual(billRun.status)
         })
       })
 
@@ -127,15 +126,15 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
         it('sets the bill run status to "processing"', async () => {
           await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
 
-          expect(billRunPatchStub.calledOnce).to.be.true()
-          expect(billRunPatchStub.firstCall.firstArg).to.equal({ status: 'processing' }, { skip: ['updatedAt'] })
+          expect(billRunPatchStub.calledOnce).toBe(true)
+          expect(billRunPatchStub.firstCall.firstArg).toMatchObject({ status: 'processing' })
         })
 
         it('triggers the "generate supplementary bill run" service', async () => {
           await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
 
-          expect(generateSupplementaryStub.calledOnce).to.be.true()
-          expect(generateAnnualStub.called).to.be.false()
+          expect(generateSupplementaryStub.calledOnce).toBe(true)
+          expect(generateAnnualStub.called).toBe(false)
         })
       })
 
@@ -148,14 +147,14 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
         it('does not update the bill run status', async () => {
           await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
 
-          expect(billRunPatchStub.called).to.be.false()
+          expect(billRunPatchStub.called).toBe(false)
         })
 
         it('triggers the "generate supplementary bill run" service', async () => {
           await GenerateTwoPartTariffBillRunService.go(billRunDetails.id)
 
-          expect(generateSupplementaryStub.calledOnce).to.be.true()
-          expect(generateAnnualStub.called).to.be.false()
+          expect(generateSupplementaryStub.calledOnce).toBe(true)
+          expect(generateAnnualStub.called).toBe(false)
         })
       })
     })

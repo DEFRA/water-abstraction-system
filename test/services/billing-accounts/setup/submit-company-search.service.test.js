@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
@@ -50,14 +45,14 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
     it('saves the submitted value', async () => {
       await SubmitCompanySearchService.go(session.id, payload)
 
-      expect(session.companySearch).to.equal(payload.companySearch)
-      expect(session.$update.called).to.be.true()
+      expect(session.companySearch).toEqual(payload.companySearch)
+      expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
       const result = await SubmitCompanySearchService.go(session.id, payload)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/select-company`
       })
     })
@@ -78,14 +73,14 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
     it('saves the submitted value', async () => {
       await SubmitCompanySearchService.go(session.id, payload)
 
-      expect(session.companySearch).to.equal(payload.companySearch)
-      expect(session.$update.called).to.be.true()
+      expect(session.companySearch).toEqual(payload.companySearch)
+      expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
       const result = await SubmitCompanySearchService.go(session.id, payload)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/select-company`
       })
     })
@@ -107,22 +102,19 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
     it('saves the submitted value', async () => {
       await SubmitCompanySearchService.go(session.id, payload)
 
-      expect(session.companySearch).to.equal(payload.companySearch)
-      expect(session.checkPageVisited).to.equal(true)
-      expect(session.$update.called).to.be.true()
+      expect(session.companySearch).toEqual(payload.companySearch)
+      expect(session.checkPageVisited).toEqual(true)
+      expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
       await SubmitCompanySearchService.go(session.id, payload)
 
-      expect(session).to.equal(
-        {
-          checkPageVisited: true,
-          companySearch: payload.companySearch
-        },
-        { skip: ['billingAccount', 'id'] }
-      )
-      expect(session.$update.called).to.be.true()
+      expect(session).toMatchObject({
+        checkPageVisited: true,
+        companySearch: payload.companySearch
+      })
+      expect(session.$update.called).toBe(true)
     })
   })
 
@@ -142,26 +134,23 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
     it('saves the submitted value', async () => {
       await SubmitCompanySearchService.go(session.id, payload)
 
-      expect(session.companySearch).to.equal(payload.companySearch)
-      expect(session.$update.called).to.be.true()
+      expect(session.companySearch).toEqual(payload.companySearch)
+      expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
       await SubmitCompanySearchService.go(session.id, payload)
 
-      expect(session).to.equal(
-        {
-          addressJourney: null,
-          addressSelected: null,
-          checkPageVisited: false,
-          companiesHouseNumber: false,
-          companySearch: payload.companySearch,
-          contactSelected: null,
-          contactName: null,
-          fao: null
-        },
-        { skip: ['billingAccount', 'id'] }
-      )
+      expect(session).toMatchObject({
+        addressJourney: null,
+        addressSelected: null,
+        checkPageVisited: false,
+        companiesHouseNumber: false,
+        companySearch: payload.companySearch,
+        contactSelected: null,
+        contactName: null,
+        fao: null
+      })
     })
   })
 
@@ -174,7 +163,7 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
       it('returns page data for the view, with errors', async () => {
         const result = await SubmitCompanySearchService.go(session.id, payload)
 
-        expect(result.error).to.equal({
+        expect(result.error).toEqual({
           errorList: [
             {
               href: '#companySearch',
@@ -198,7 +187,7 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
       it('returns page data for the view, with errors', async () => {
         const result = await SubmitCompanySearchService.go(session.id, payload)
 
-        expect(result.error).to.equal({
+        expect(result.error).toEqual({
           errorList: [
             {
               href: '#companySearch',

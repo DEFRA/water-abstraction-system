@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AddressHelper = require('../../../support/helpers/address.helper.js')
 const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
@@ -53,7 +46,7 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
   let reviewLicence
   let reviewReturn
 
-  before(async () => {
+  beforeAll(async () => {
     address = await AddressHelper.add()
     company = await CompanyHelper.add()
     contact = await ContactHelper.add()
@@ -126,7 +119,7 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
     it('returns the match', async () => {
       const result = await FetchReviewLicenceService.go(reviewLicence.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         id: reviewLicence.id,
         billRunId: reviewLicence.billRunId,
         licenceId: reviewLicence.licenceId,
@@ -286,7 +279,7 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
     it('returns nothing', async () => {
       const result = await FetchReviewLicenceService.go('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
 
-      expect(result).to.be.undefined()
+      expect(result).toBeUndefined()
     })
   })
 })

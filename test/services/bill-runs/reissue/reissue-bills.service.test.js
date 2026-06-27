@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillHelper = require('../../../support/helpers/bill.helper.js')
@@ -53,7 +48,7 @@ describe('Reissue Bills service', () => {
       it('returns "false"', async () => {
         const result = await ReissueBillsService.go(reissueBillRun)
 
-        expect(result).to.be.false()
+        expect(result).toBe(false)
       })
     })
 
@@ -86,7 +81,7 @@ describe('Reissue Bills service', () => {
       it('returns "true"', async () => {
         const result = await ReissueBillsService.go(reissueBillRun)
 
-        expect(result).to.be.true()
+        expect(result).toBe(true)
       })
 
       it('persists all bills', async () => {
@@ -98,7 +93,7 @@ describe('Reissue Bills service', () => {
           reissueBillThree.bills[0].billRunId
         ])
 
-        expect(result).to.have.length(3)
+        expect(result).toHaveLength(3)
       })
 
       it('persists all bill licences', async () => {
@@ -110,7 +105,7 @@ describe('Reissue Bills service', () => {
           reissueBillThree.billLicences[0].billId
         ])
 
-        expect(result).to.have.length(3)
+        expect(result).toHaveLength(3)
       })
 
       it('persists all transactions', async () => {
@@ -122,7 +117,7 @@ describe('Reissue Bills service', () => {
           reissueBillThree.transactions[0].billLicenceId
         ])
 
-        expect(result).to.have.length(3)
+        expect(result).toHaveLength(3)
       })
     })
   })

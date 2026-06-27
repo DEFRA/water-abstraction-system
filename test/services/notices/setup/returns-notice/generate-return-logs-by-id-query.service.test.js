@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
 const { db } = require('../../../../../db/db.js')
@@ -18,7 +11,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
   let returnLogIds
   let returnLogs
 
-  before(async () => {
+  beforeAll(async () => {
     let returnLog
 
     returnLogs = []
@@ -44,7 +37,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const returnLog of returnLogs) {
       await returnLog.$query().delete()
     }
@@ -54,7 +47,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
     it('returns the expected query and bindings', () => {
       const result = GenerateReturnLogsByIdQueryService.go(returnLogIds)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         bindings: [returnLogIds],
         query: `
   SELECT
@@ -79,7 +72,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
       const { bindings, query } = GenerateReturnLogsByIdQueryService.go(returnLogIds)
       const { rows } = await db.raw(query, bindings)
 
-      expect(rows).to.equal([
+      expect(rows).toEqual([
         {
           due_date: returnLogs[0].dueDate,
           end_date: returnLogs[0].endDate,

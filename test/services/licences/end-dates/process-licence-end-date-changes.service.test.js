@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const LicenceEndDateChangeHelper = require('../../../support/helpers/licence-end-date-change.helper.js')
@@ -50,14 +45,14 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
     it('processes the changed licence for supplementary billing flags', async () => {
       await ProcessLicenceEndDateChangesService.go()
 
-      expect(processBillingFlagsStub.called).to.be.true()
+      expect(processBillingFlagsStub.called).toBe(true)
     })
 
     describe('and the app is managing "requirements for returns"', () => {
       it('processes the changed licence for reissuing return logs', async () => {
         await ProcessLicenceEndDateChangesService.go()
 
-        expect(processReturnLogsStub.called).to.be.true()
+        expect(processReturnLogsStub.called).toBe(true)
       })
     })
 
@@ -67,7 +62,7 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
 
         const result = await LicenceEndDateChangeModel.query().findById(licenceEndDateChange.id)
 
-        expect(result).to.be.undefined()
+        expect(result).toBeUndefined()
       })
 
       it('logs the completed licence change', async () => {
@@ -75,8 +70,8 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
 
         const logDataArg = notifierStub.omg.firstCall.args[1]
 
-        expect(notifierStub.omg.calledWith('Process licence end date change complete')).to.be.true()
-        expect(logDataArg).to.equal({
+        expect(notifierStub.omg.calledWith('Process licence end date change complete')).toBe(true)
+        expect(logDataArg).toEqual({
           id: licenceEndDateChange.id,
           licenceId: licenceEndDateChange.licenceId,
           dateType: licenceEndDateChange.dateType,
@@ -91,10 +86,10 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
 
         const logDataArg = notifierStub.omg.secondCall.args[1]
 
-        expect(notifierStub.omg.calledWith('Process licence end date changes complete')).to.be.true()
-        expect(logDataArg.timeTakenMs).to.exist()
-        expect(logDataArg.timeTakenSs).to.exist()
-        expect(logDataArg.count).to.exist()
+        expect(notifierStub.omg.calledWith('Process licence end date changes complete')).toBe(true)
+        expect(logDataArg.timeTakenMs).toBeDefined()
+        expect(logDataArg.timeTakenSs).toBeDefined()
+        expect(logDataArg.count).toBeDefined()
       })
     })
   })
@@ -110,8 +105,8 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
 
         const errorLogArgs = notifierStub.omfg.firstCall.args
 
-        expect(notifierStub.omfg.calledWith('Process licence end date change failed')).to.be.true()
-        expect(errorLogArgs[1]).to.equal({
+        expect(notifierStub.omfg.calledWith('Process licence end date change failed')).toBe(true)
+        expect(errorLogArgs[1]).toEqual({
           id: licenceEndDateChange.id,
           licenceId: licenceEndDateChange.licenceId,
           dateType: licenceEndDateChange.dateType,
@@ -119,7 +114,7 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
           naldDate: licenceEndDateChange.naldDate,
           wrlsDate: licenceEndDateChange.wrlsDate
         })
-        expect(errorLogArgs[2]).to.be.instanceOf(Error)
+        expect(errorLogArgs[2]).toBeInstanceOf(Error)
       })
     })
 
@@ -135,9 +130,9 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
 
         const errorLogArgs = notifierStub.omfg.firstCall.args
 
-        expect(notifierStub.omfg.calledWith('Process licence end date changes failed')).to.be.true()
-        expect(errorLogArgs[1]).to.be.null()
-        expect(errorLogArgs[2]).to.be.instanceOf(Error)
+        expect(notifierStub.omfg.calledWith('Process licence end date changes failed')).toBe(true)
+        expect(errorLogArgs[1]).toBeNull()
+        expect(errorLogArgs[2]).toBeInstanceOf(Error)
       })
     })
   })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
 const { db } = require('../../../../../db/db.js')
@@ -22,7 +15,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
   let noticeType
   let returnLogs
 
-  before(async () => {
+  beforeAll(async () => {
     let returnLog
 
     licenceRef = generateLicenceRef()
@@ -53,7 +46,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
     returnLogs.push(returnLog)
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const returnLog of returnLogs) {
       await returnLog.$query().delete()
     }
@@ -71,10 +64,10 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
         const todayAsString = new Date().toISOString().split('T')[0]
 
         // NOTE: The first param is the current time as a string so testing it starts with todays date is sufficient
-        expect(result.bindings[0]).to.startWith(todayAsString)
-        expect(result.bindings[1]).to.equal(licenceRef)
+        expect(result.bindings[0].startsWith(todayAsString)).toBe(true)
+        expect(result.bindings[1]).toEqual(licenceRef)
 
-        expect(result.query).to.equal(`
+        expect(result.query).toEqual(`
   SELECT
     rl.due_date,
     rl.end_date,
@@ -103,10 +96,10 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
         const todayAsString = new Date().toISOString().split('T')[0]
 
         // NOTE: The first param is the current time as a string so testing it starts with todays date is sufficient
-        expect(result.bindings[0]).to.startWith(todayAsString)
-        expect(result.bindings[1]).to.equal(licenceRef)
+        expect(result.bindings[0].startsWith(todayAsString)).toBe(true)
+        expect(result.bindings[1]).toEqual(licenceRef)
 
-        expect(result.query).to.equal(`
+        expect(result.query).toEqual(`
   SELECT
     rl.due_date,
     rl.end_date,
@@ -135,7 +128,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
         const { bindings, query } = GenerateReturnLogsByLicenceQueryService.go(licenceRef, noticeType)
         const { rows } = await db.raw(query, bindings)
 
-        expect(rows).to.equal([
+        expect(rows).toEqual([
           {
             due_date: returnLogs[4].dueDate,
             end_date: returnLogs[4].endDate,
@@ -157,7 +150,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
         const { bindings, query } = GenerateReturnLogsByLicenceQueryService.go(licenceRef, noticeType)
         const { rows } = await db.raw(query, bindings)
 
-        expect(rows).to.equal([
+        expect(rows).toEqual([
           {
             due_date: returnLogs[0].dueDate,
             end_date: returnLogs[0].endDate,

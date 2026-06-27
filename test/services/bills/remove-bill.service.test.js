@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillingAccountModel = require('../../../app/models/billing-account.model.js')
@@ -32,7 +27,7 @@ describe('Remove Bill service', () => {
     it('returns page data for the view', async () => {
       const result = await RemoveBillService.go(testId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'bill-runs',
         accountName: 'Example Trading Ltd',
         accountNumber: 'T65757520A',

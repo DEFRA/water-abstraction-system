@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const GeneralLib = require('../../../../app/lib/general.lib.js')
@@ -67,7 +62,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
         it('returns the result with the PRE-SROC flag set to true and the other flags unchanged', async () => {
           const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
             startDate: chargeVersion.startDate,
             endDate: null,
@@ -95,7 +90,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             it('returns the result with the SROC flag set to true and the other flags unchanged', async () => {
               const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
 
-              expect(result).to.equal({
+              expect(result).toEqual({
                 licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
                 startDate: chargeVersion.startDate,
                 endDate: null,
@@ -117,7 +112,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             it('returns the result with the SROC flag and two-part tariff set to true', async () => {
               const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
 
-              expect(result).to.equal({
+              expect(result).toEqual({
                 licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
                 startDate: chargeVersion.startDate,
                 endDate: null,
@@ -139,7 +134,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             it('returns the result with the SROC flag set to true and the other flags unchanged', async () => {
               const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
 
-              expect(result).to.equal({
+              expect(result).toEqual({
                 licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
                 startDate: chargeVersion.startDate,
                 endDate: null,
@@ -167,7 +162,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             it('returns the result with the SROC flag and two-part tariff set to true', async () => {
               const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
 
-              expect(result).to.equal({
+              expect(result).toEqual({
                 licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
                 startDate: chargeVersion.startDate,
                 endDate: null,
@@ -189,7 +184,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             it('returns the result with the SROC flag and two-part tariff set to true', async () => {
               const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
 
-              expect(result).to.equal({
+              expect(result).toEqual({
                 licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
                 startDate: chargeVersion.startDate,
                 endDate: null,
@@ -211,7 +206,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             it('returns the result with the SROC flag and two-part tariff set to true', async () => {
               const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
 
-              expect(result).to.equal({
+              expect(result).toEqual({
                 licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
                 startDate: chargeVersion.startDate,
                 endDate: null,
@@ -239,7 +234,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             it('returns the result with the SROC flag set to true and the other flags unchanged', async () => {
               const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
 
-              expect(result).to.equal({
+              expect(result).toEqual({
                 licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
                 startDate: chargeVersion.startDate,
                 endDate: null,
@@ -261,7 +256,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             it('returns the result with only the two-part tariff set to true', async () => {
               const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
 
-              expect(result).to.equal({
+              expect(result).toEqual({
                 licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
                 startDate: chargeVersion.startDate,
                 endDate: null,
@@ -283,7 +278,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             it('returns the result with the PRE-SROC and SROC flags unchanged and the two-part tariff flag as false', async () => {
               const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
 
-              expect(result).to.equal({
+              expect(result).toEqual({
                 licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
                 startDate: chargeVersion.startDate,
                 endDate: null,
@@ -310,7 +305,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
       it('returns the result with the PRE-SROC and SROC flags unchanged and the two-part tariff flag as false', async () => {
         const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
           startDate: chargeVersion.startDate,
           endDate: null,

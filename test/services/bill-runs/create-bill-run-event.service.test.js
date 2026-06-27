@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
@@ -46,18 +41,18 @@ describe('Create Bill Run Event service', () => {
     it('creates an event record', async () => {
       const result = await CreateBillRunEventService.go(billRun, issuer)
 
-      expect(result).to.be.an.instanceOf(EventModel)
+      expect(result).toBeInstanceOf(EventModel)
 
-      expect(result.type).to.equal('billing-batch')
-      expect(result.subtype).to.equal(billRun.batchType)
-      expect(result.issuer).to.equal(issuer)
-      expect(result.licences).to.equal([])
-      expect(result.status).to.equal('start')
-      expect(result.createdAt).to.equal(testDate)
-      expect(result.updatedAt).to.equal(testDate)
+      expect(result.type).toEqual('billing-batch')
+      expect(result.subtype).toEqual(billRun.batchType)
+      expect(result.issuer).toEqual(issuer)
+      expect(result.licences).toEqual([])
+      expect(result.status).toEqual('start')
+      expect(result.createdAt).toEqual(testDate)
+      expect(result.updatedAt).toEqual(testDate)
 
-      expect(result.metadata).to.exist()
-      expect(result.metadata.batch.id).to.equal(billRun.id)
+      expect(result.metadata).toBeDefined()
+      expect(result.metadata.batch.id).toEqual(billRun.id)
     })
   })
 })

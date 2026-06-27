@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ApplyQuantitiesService = require('../../../../app/services/return-logs/setup/apply-quantities.service.js')
 
@@ -15,7 +8,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
 
   describe('when called with meter readings', () => {
     describe('and the unit of measurement is cubic metres', () => {
-      before(() => {
+      beforeAll(() => {
         session = {
           lines: [
             {
@@ -44,7 +37,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
       it('updates the session data with the correct quantities', () => {
         const result = ApplyQuantitiesService.go(session)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           lines: [
             {
               endDate: '2023-04-30T00:00:00.000Z',
@@ -76,7 +69,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
       })
 
       describe('and the start reading is 100', () => {
-        before(() => {
+        beforeAll(() => {
           session = {
             lines: [
               {
@@ -105,7 +98,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
         it('updates the session data with the correct quantities', () => {
           const result = ApplyQuantitiesService.go(session)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             lines: [
               {
                 endDate: '2023-04-30T00:00:00.000Z',
@@ -139,7 +132,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
     })
 
     describe('and the unit of measurement is gallons', () => {
-      before(() => {
+      beforeAll(() => {
         session = {
           lines: [
             {
@@ -168,7 +161,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
       it('updates the session data with the correct quantities', () => {
         const result = ApplyQuantitiesService.go(session)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           lines: [
             {
               endDate: '2023-04-30T00:00:00.000Z',
@@ -200,7 +193,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
       })
 
       describe('and the meter has a x10 display', () => {
-        before(() => {
+        beforeAll(() => {
           session = {
             lines: [
               {
@@ -229,7 +222,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
         it('updates the session data with the correct quantities', () => {
           const result = ApplyQuantitiesService.go(session)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             lines: [
               {
                 endDate: '2023-04-30T00:00:00.000Z',
@@ -265,7 +258,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
 
   describe('when called with volumes', () => {
     describe('and the unit of measurement was previously megalitres but has changed to cubic metres', () => {
-      before(() => {
+      beforeAll(() => {
         session = {
           lines: [
             {
@@ -295,7 +288,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
       it('updates the session data with the correct quantities', () => {
         const result = ApplyQuantitiesService.go(session)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           lines: [
             {
               endDate: '2023-04-30T00:00:00.000Z',

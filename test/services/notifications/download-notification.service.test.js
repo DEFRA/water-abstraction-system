@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const FetchDownloadNotificationService = require('../../../app/services/notifications/fetch-notification-download.service.js')
@@ -35,7 +30,7 @@ describe('Notifications - Download Notification service', () => {
     it('returns pdf data', async () => {
       const result = await DownloadNotificationService.go(notificationId)
 
-      expect(result).to.equal(pdf)
+      expect(result).toEqual(pdf)
     })
   })
 })

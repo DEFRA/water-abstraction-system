@@ -1,13 +1,8 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
 const Proxyquire = require('proxyquire')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 describe('Compress schema folder service', () => {
   let tarCreateStub
@@ -33,7 +28,7 @@ describe('Compress schema folder service', () => {
 
     const result = await CompressSchemaFolderService.go(schemaFolderPath)
 
-    expect(tarCreateStub.calledOnce).to.be.true()
-    expect(result).to.equal(expectedTarballPath)
+    expect(tarCreateStub.calledOnce).toBe(true)
+    expect(result).toEqual(expectedTarballPath)
   })
 })

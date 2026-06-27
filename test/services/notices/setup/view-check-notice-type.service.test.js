@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -47,7 +42,7 @@ describe('Notices - Setup - View Check Notice Type service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewCheckNoticeTypeService.go(session.id, yarStub)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'notices',
         licenceRef,
         links: {
@@ -66,8 +61,8 @@ describe('Notices - Setup - View Check Notice Type service', () => {
     it('should set the "checkPageVisited" flag', async () => {
       await ViewCheckNoticeTypeService.go(session.id, yarStub)
 
-      expect(session.checkPageVisited).to.be.true()
-      expect(session.$update.called).to.be.true()
+      expect(session.checkPageVisited).toBe(true)
+      expect(session.$update.called).toBe(true)
     })
 
     describe('when there is a notification', () => {
@@ -79,7 +74,7 @@ describe('Notices - Setup - View Check Notice Type service', () => {
       it('should set the notification', async () => {
         const result = await ViewCheckNoticeTypeService.go(session.id, yarStub)
 
-        expect(result.notification).to.equal('Test notification')
+        expect(result.notification).toEqual('Test notification')
       })
     })
   })

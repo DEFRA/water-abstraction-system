@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Thing under test
 const HapiPinoLogInTestService = require('../../../app/services/plugins//hapi-pino-log-in-test.service.js')
@@ -21,7 +16,7 @@ describe('Hapi Pino Log In Test service', () => {
       it('returns an empty object - hapi-pino is not silenced', () => {
         const result = HapiPinoLogInTestService.go(true)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
       })
     })
 
@@ -29,7 +24,7 @@ describe('Hapi Pino Log In Test service', () => {
       it('returns an object containing config to silence hapi-pino', () => {
         const result = HapiPinoLogInTestService.go(false)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           logEvents: false,
           ignoredEventTags: { log: ['DEBUG', 'INFO'], request: ['DEBUG', 'INFO'] }
         })
@@ -46,7 +41,7 @@ describe('Hapi Pino Log In Test service', () => {
       it('returns an empty object - hapi-pino is not silenced', () => {
         const result = HapiPinoLogInTestService.go(false)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
       })
     })
 
@@ -54,7 +49,7 @@ describe('Hapi Pino Log In Test service', () => {
       it('returns an empty object - hapi-pino is not silenced', () => {
         const result = HapiPinoLogInTestService.go(true)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
       })
     })
   })

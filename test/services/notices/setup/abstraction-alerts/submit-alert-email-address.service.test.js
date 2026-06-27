@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
@@ -50,14 +45,14 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
       it('saves the submitted value', async () => {
         await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
-        expect(session.alertEmailAddress).to.equal('admin@defra.gov.uk')
-        expect(session.$update.called).to.be.true()
+        expect(session.alertEmailAddress).toEqual('admin@defra.gov.uk')
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
       })
     })
 
@@ -69,14 +64,14 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
       it('saves the submitted value', async () => {
         await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
-        expect(session.alertEmailAddress).to.equal('test@defra.gov.uk')
-        expect(session.$update.called).to.be.true()
+        expect(session.alertEmailAddress).toEqual('test@defra.gov.uk')
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
       })
     })
   })
@@ -86,8 +81,8 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
       it('updates the session "alertEmailAddress" property to the users username', async () => {
         await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
-        expect(session.alertEmailAddress).to.equal(auth.credentials.user.username)
-        expect(session.$update.called).to.be.true()
+        expect(session.alertEmailAddress).toEqual(auth.credentials.user.username)
+        expect(session.$update.called).toBe(true)
       })
     })
 
@@ -98,8 +93,8 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
       it('updates the session "alertEmailAddress" property to the payload "otherUser" value', async () => {
         await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
-        expect(session.alertEmailAddress).to.equal('test@defra.go.uk')
-        expect(session.$update.called).to.be.true()
+        expect(session.alertEmailAddress).toEqual('test@defra.go.uk')
+        expect(session.$update.called).toBe(true)
       })
     })
 
@@ -111,7 +106,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
       it('returns page data for the view, with errors', async () => {
         const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'notices',
           alertEmailAddressOptions: {
             otherUserChecked: false,
@@ -148,7 +143,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
       it('returns page data for the view, with errors', async () => {
         const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'notices',
           alertEmailAddressOptions: {
             otherUserChecked: true,
@@ -185,7 +180,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
       it('returns page data for the view, with errors', async () => {
         const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'notices',
           alertEmailAddressOptions: {
             otherUserChecked: true,

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, after, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -30,7 +25,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
   let sessionData
   let yarStub
 
-  before(() => {
+  beforeAll(() => {
     referenceCode = generateNoticeReferenceCode('RINV-')
 
     const testDate = new Date('2024-12-01')
@@ -48,7 +43,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
     fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
-  after(() => {
+  afterAll(() => {
     clock.restore()
   })
 
@@ -65,14 +60,14 @@ describe('Notices - Setup - Submit Returns Period service', () => {
       it('saves the submitted value', async () => {
         await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
 
-        expect(session.returnsPeriod).to.equal('quarterFour')
-        expect(session.$update.called).to.be.true()
+        expect(session.returnsPeriod).toEqual('quarterFour')
+        expect(session.$update.called).toBe(true)
       })
 
       it('saves the determined returns period', async () => {
         await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
 
-        expect(session.determinedReturnsPeriod).to.equal({
+        expect(session.determinedReturnsPeriod).toEqual({
           // The dates would be strings and not date objects when saved to the database
           dueDate: new Date('2025-04-28'),
           endDate: new Date('2025-03-31'),
@@ -86,7 +81,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
       it('returns the redirect route', async () => {
         const result = await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           redirect: `${session.id}/check-notice-type`
         })
       })
@@ -107,8 +102,8 @@ describe('Notices - Setup - Submit Returns Period service', () => {
         // Check we add the flash message
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-        expect(flashType).to.equal('notification')
-        expect(bannerMessage).to.equal({
+        expect(flashType).toEqual('notification')
+        expect(bannerMessage).toEqual({
           text: 'Returns period updated',
           titleText: 'Updated'
         })
@@ -129,7 +124,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
       it('correctly presents the data with the error', async () => {
         const result = await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'notices',
           backLink: {
             href: `/system/notices/setup/${session.id}/notice-type`,

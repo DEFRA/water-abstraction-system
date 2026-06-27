@@ -1,11 +1,6 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 const Sinon = require('sinon')
 
 // Test helpers
@@ -60,9 +55,9 @@ describe('Return Logs - Setup - Submit Submission service', () => {
         it('saves the submitted option to the session and returns the redirect as "reported"', async () => {
           const result = await SubmitSubmissionService.go(session.id, payload)
 
-          expect(session.journey).to.equal('enterReturn')
-          expect(result.redirect).to.equal('reported')
-          expect(session.$update.called).to.be.true()
+          expect(session.journey).toEqual('enterReturn')
+          expect(result.redirect).toEqual('reported')
+          expect(session.$update.called).toBe(true)
         })
       })
 
@@ -74,9 +69,9 @@ describe('Return Logs - Setup - Submit Submission service', () => {
         it('saves the submitted option to the session and returns the redirect as "check"', async () => {
           const result = await SubmitSubmissionService.go(session.id, payload)
 
-          expect(session.journey).to.equal('nilReturn')
-          expect(result.redirect).to.equal('check')
-          expect(session.$update.called).to.be.true()
+          expect(session.journey).toEqual('nilReturn')
+          expect(result.redirect).toEqual('check')
+          expect(session.$update.called).toBe(true)
         })
       })
 
@@ -93,19 +88,19 @@ describe('Return Logs - Setup - Submit Submission service', () => {
           const refreshedReturnLog = await returnLog.$query()
 
           // Check the status has been set to received
-          expect(refreshedReturnLog.status).to.equal('received')
+          expect(refreshedReturnLog.status).toEqual('received')
 
           // Check the received date has been set to what was recorded in the session
-          expect(refreshedReturnLog.receivedDate).to.equal(new Date(session.receivedDate))
+          expect(refreshedReturnLog.receivedDate).toEqual(new Date(session.receivedDate))
 
           // Check the updated at timestamp has been set
-          expect(refreshedReturnLog.updatedAt).to.be.greaterThan(returnLog.updatedAt)
+          expect(refreshedReturnLog.updatedAt.getTime()).toBeGreaterThan(returnLog.updatedAt.getTime())
 
           // Check the session got deleted
-          expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
+          expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
 
           // Check the redirect takes will tell the controller to redirect to the return received confirmation page
-          expect(result.redirect).to.equal('confirm-received')
+          expect(result.redirect).toEqual('confirm-received')
         })
       })
 
@@ -123,8 +118,8 @@ describe('Return Logs - Setup - Submit Submission service', () => {
         it('updates "checkPageVisited" to false in the session data', async () => {
           await SubmitSubmissionService.go(session.id, payload)
 
-          expect(session.checkPageVisited).to.be.false()
-          expect(session.$update.called).to.be.true()
+          expect(session.checkPageVisited).toBe(false)
+          expect(session.$update.called).toBe(true)
         })
       })
     })
@@ -137,7 +132,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
       it('includes an error for the radio form element', async () => {
         const result = await SubmitSubmissionService.go(session.id, payload)
 
-        expect(result.error.errorList).to.equal([
+        expect(result.error.errorList).toEqual([
           { href: '#journey', text: 'Select what you want to do with this return' }
         ])
       })
@@ -145,7 +140,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
       it('returns the page data for the view', async () => {
         const result = await SubmitSubmissionService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           backLink: { href: `/system/return-logs/setup/${session.id}/received`, text: 'Back' },
           beenReceived: false,
           error: {

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const LicenceVersionPurposeConditionHelper = require('../../../support/helpers/licence-version-purpose-condition.helper.js')
@@ -70,23 +65,23 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
     it('saves the submitted value', async () => {
       await SubmitFullConditionService.go(session.id, payload)
 
-      expect(session.conditionId).to.equal(payload.condition)
-      expect(session.$update.called).to.be.true()
+      expect(session.conditionId).toEqual(payload.condition)
+      expect(session.$update.called).toBe(true)
     })
 
     it('saves the abstraction period', async () => {
       await SubmitFullConditionService.go(session.id, payload)
 
-      expect(session.abstractionPeriodEndDay).to.equal(31)
-      expect(session.abstractionPeriodEndMonth).to.equal(3)
-      expect(session.abstractionPeriodStartDay).to.equal(1)
-      expect(session.abstractionPeriodStartMonth).to.equal(1)
+      expect(session.abstractionPeriodEndDay).toEqual(31)
+      expect(session.abstractionPeriodEndMonth).toEqual(3)
+      expect(session.abstractionPeriodStartDay).toEqual(1)
+      expect(session.abstractionPeriodStartMonth).toEqual(1)
     })
 
     it('saves the condition display text', async () => {
       await SubmitFullConditionService.go(session.id, payload)
 
-      expect(session.conditionDisplayText).to.equal(
+      expect(session.conditionDisplayText).toEqual(
         'LICENCE_VERSION_CONDITION_TYPE_DISPLAY_TITLE 1: NOTES (Additional information 1: PARAM_1) (Additional information 2: PARAM_2)'
       )
     })
@@ -99,7 +94,7 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
       it('returns true for abstractionPeriod', async () => {
         const result = await SubmitFullConditionService.go(session.id, payload)
 
-        expect(result).to.equal({ abstractionPeriod: true })
+        expect(result).toEqual({ abstractionPeriod: true })
       })
     })
 
@@ -107,7 +102,7 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
       it('returns false for abstractionPeriod', async () => {
         const result = await SubmitFullConditionService.go(session.id, payload)
 
-        expect(result).to.equal({ abstractionPeriod: false })
+        expect(result).toEqual({ abstractionPeriod: false })
       })
     })
   })
@@ -120,7 +115,7 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
     it('returns page data for the view, with errors', async () => {
       const result = await SubmitFullConditionService.go(session.id, payload)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         error: { text: 'Select a condition' },
         ...pageData
       })

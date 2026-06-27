@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const DetermineBillLicenceFlagsService = require('../../../../app/services/licences/supplementary/determine-bill-licence-flags.service.js')
@@ -43,7 +38,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
   describe('when given a valid payload', () => {
     describe('with a chargeVersionId & workflowId', () => {
-      before(() => {
+      beforeAll(() => {
         payload = {
           chargeVersionId: '77c7f37a-7587-4df5-a569-95e88276346e',
           workflowId: 'd8777561-a9c4-4bc4-b649-2c1ce4626fbb'
@@ -66,7 +61,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).to.be.true()
+          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -74,10 +69,10 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
-          expect(logDataArg.timeTakenMs).to.exist()
-          expect(logDataArg.timeTakenSs).to.exist()
-          expect(logDataArg.licenceId).to.exist()
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(logDataArg.timeTakenMs).toBeDefined()
+          expect(logDataArg.timeTakenSs).toBeDefined()
+          expect(logDataArg.licenceId).toBeDefined()
         })
       })
 
@@ -97,7 +92,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).to.be.true()
+          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -105,16 +100,16 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
-          expect(logDataArg.timeTakenMs).to.exist()
-          expect(logDataArg.timeTakenSs).to.exist()
-          expect(logDataArg.licenceId).to.exist()
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(logDataArg.timeTakenMs).toBeDefined()
+          expect(logDataArg.timeTakenSs).toBeDefined()
+          expect(logDataArg.licenceId).toBeDefined()
         })
       })
     })
 
     describe('with a workflowId', () => {
-      before(() => {
+      beforeAll(() => {
         payload = {
           workflowId: 'f582f073-f5cb-4225-8e37-e7f05dc42a36'
         }
@@ -136,7 +131,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).to.be.true()
+          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -144,10 +139,10 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
-          expect(logDataArg.timeTakenMs).to.exist()
-          expect(logDataArg.timeTakenSs).to.exist()
-          expect(logDataArg.licenceId).to.exist()
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(logDataArg.timeTakenMs).toBeDefined()
+          expect(logDataArg.timeTakenSs).toBeDefined()
+          expect(logDataArg.licenceId).toBeDefined()
         })
       })
 
@@ -167,7 +162,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).to.be.true()
+          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -175,16 +170,16 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
-          expect(logDataArg.timeTakenMs).to.exist()
-          expect(logDataArg.timeTakenSs).to.exist()
-          expect(logDataArg.licenceId).to.exist()
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(logDataArg.timeTakenMs).toBeDefined()
+          expect(logDataArg.timeTakenSs).toBeDefined()
+          expect(logDataArg.licenceId).toBeDefined()
         })
       })
     })
 
     describe('with a returnLogId', () => {
-      before(() => {
+      beforeAll(() => {
         payload = {
           returnLogId: 'v1:5:1/11/11/*11/1111:11142960:2022-11-01:2023-10-31'
         }
@@ -206,7 +201,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).to.be.true()
+          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -214,10 +209,10 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
-          expect(logDataArg.timeTakenMs).to.exist()
-          expect(logDataArg.timeTakenSs).to.exist()
-          expect(logDataArg.licenceId).to.exist()
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(logDataArg.timeTakenMs).toBeDefined()
+          expect(logDataArg.timeTakenSs).toBeDefined()
+          expect(logDataArg.licenceId).toBeDefined()
         })
       })
 
@@ -237,7 +232,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).to.be.true()
+          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -245,16 +240,16 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
-          expect(logDataArg.timeTakenMs).to.exist()
-          expect(logDataArg.timeTakenSs).to.exist()
-          expect(logDataArg.licenceId).to.exist()
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(logDataArg.timeTakenMs).toBeDefined()
+          expect(logDataArg.timeTakenSs).toBeDefined()
+          expect(logDataArg.licenceId).toBeDefined()
         })
       })
     })
 
     describe('with an importedLicence', () => {
-      before(() => {
+      beforeAll(() => {
         payload = {
           licenceId: 'b5f81330-bec5-4c3e-95dd-267c10836fea',
           changedDateDetails: {
@@ -282,7 +277,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).to.be.true()
+          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -290,10 +285,10 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
-          expect(logDataArg.timeTakenMs).to.exist()
-          expect(logDataArg.timeTakenSs).to.exist()
-          expect(logDataArg.licenceId).to.exist()
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(logDataArg.timeTakenMs).toBeDefined()
+          expect(logDataArg.timeTakenSs).toBeDefined()
+          expect(logDataArg.licenceId).toBeDefined()
         })
       })
 
@@ -313,7 +308,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).to.be.true()
+          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -321,16 +316,16 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
-          expect(logDataArg.timeTakenMs).to.exist()
-          expect(logDataArg.timeTakenSs).to.exist()
-          expect(logDataArg.licenceId).to.exist()
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(logDataArg.timeTakenMs).toBeDefined()
+          expect(logDataArg.timeTakenSs).toBeDefined()
+          expect(logDataArg.licenceId).toBeDefined()
         })
       })
     })
 
     describe('with a licence Id', () => {
-      before(() => {
+      beforeAll(() => {
         payload = {
           licenceId: 'b5f81330-bec5-4c3e-95dd-267c10836fea'
         }
@@ -352,16 +347,16 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).to.be.true()
+          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService.go(payload)
           const logDataArg = notifierStub.omg.firstCall.args[1]
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
-          expect(logDataArg.timeTakenMs).to.exist()
-          expect(logDataArg.timeTakenSs).to.exist()
-          expect(logDataArg.licenceId).to.exist()
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(logDataArg.timeTakenMs).toBeDefined()
+          expect(logDataArg.timeTakenSs).toBeDefined()
+          expect(logDataArg.licenceId).toBeDefined()
         })
       })
 
@@ -381,22 +376,22 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
               false,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).to.be.true()
+          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService.go(payload)
           const logDataArg = notifierStub.omg.firstCall.args[1]
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
-          expect(logDataArg.timeTakenMs).to.exist()
-          expect(logDataArg.timeTakenSs).to.exist()
-          expect(logDataArg.licenceId).to.exist()
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(logDataArg.timeTakenMs).toBeDefined()
+          expect(logDataArg.timeTakenSs).toBeDefined()
+          expect(logDataArg.licenceId).toBeDefined()
         })
       })
     })
 
     describe('with a bill licence Id', () => {
-      before(() => {
+      beforeAll(() => {
         payload = {
           billLicenceId: 'b5f81330-bec5-4c3e-95dd-267c10836fea'
         }
@@ -418,7 +413,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).to.be.true()
+          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -426,10 +421,10 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
-          expect(logDataArg.timeTakenMs).to.exist()
-          expect(logDataArg.timeTakenSs).to.exist()
-          expect(logDataArg.licenceId).to.exist()
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(logDataArg.timeTakenMs).toBeDefined()
+          expect(logDataArg.timeTakenSs).toBeDefined()
+          expect(logDataArg.licenceId).toBeDefined()
         })
       })
 
@@ -449,7 +444,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).to.be.true()
+          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -457,10 +452,10 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
-          expect(logDataArg.timeTakenMs).to.exist()
-          expect(logDataArg.timeTakenSs).to.exist()
-          expect(logDataArg.licenceId).to.exist()
+          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(logDataArg.timeTakenMs).toBeDefined()
+          expect(logDataArg.timeTakenSs).toBeDefined()
+          expect(logDataArg.licenceId).toBeDefined()
         })
       })
     })
@@ -468,7 +463,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
   describe('when given an invalid payload', () => {
     describe('with no ids', () => {
-      before(() => {
+      beforeAll(() => {
         payload = {}
       })
 
@@ -477,9 +472,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
         const args = notifierStub.omfg.firstCall.args
 
-        expect(args[0]).to.equal('Supplementary Billing Flag failed')
-        expect(args[1]).to.equal(payload)
-        expect(args[2]).to.be.an.error()
+        expect(args[0]).toEqual('Supplementary Billing Flag failed')
+        expect(args[1]).toEqual(payload)
+        expect(args[2]).toBeInstanceOf(Error)
       })
     })
   })

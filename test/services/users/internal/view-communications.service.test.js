@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const UsersFixture = require('../../../support/fixtures/users.fixture.js')
@@ -44,7 +39,7 @@ describe('Users - Internal - View Communications Service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewCommunicationsService.go(user.id, page)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'users',
         activeSecondaryNav: 'communications',
         pagination: {

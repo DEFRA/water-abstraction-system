@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -42,7 +37,7 @@ describe('Bill Runs - Review - Submit Review Service', () => {
       it('clears the filter object from the session', async () => {
         await SubmitReviewService.go(billRunId, payload, yarStub)
 
-        expect(yarStub.clear.called).to.be.true()
+        expect(yarStub.clear.called).toBe(true)
       })
     })
 
@@ -56,8 +51,8 @@ describe('Bill Runs - Review - Submit Review Service', () => {
 
         const setArgs = yarStub.set.args[0]
 
-        expect(setArgs[0]).to.equal(`review-${billRunId}`)
-        expect(setArgs[1]).to.equal({
+        expect(setArgs[0]).toEqual(`review-${billRunId}`)
+        expect(setArgs[1]).toEqual({
           issues: [],
           licenceHolderNumber: null,
           licenceStatus: null,
@@ -81,8 +76,8 @@ describe('Bill Runs - Review - Submit Review Service', () => {
 
         const setArgs = yarStub.set.args[0]
 
-        expect(setArgs[0]).to.equal(`review-${billRunId}`)
-        expect(setArgs[1]).to.equal({
+        expect(setArgs[0]).toEqual(`review-${billRunId}`)
+        expect(setArgs[1]).toEqual({
           issues: ['abs-outside-period', 'aggregate-factor'],
           licenceHolderNumber: 'A Licence Holder Ltd',
           licenceStatus: 'review',

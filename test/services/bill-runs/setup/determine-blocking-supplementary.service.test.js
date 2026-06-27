@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
@@ -90,7 +85,7 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
     it('returns the match and determines that only the "old" engine can be triggered', async () => {
       const result = await DetermineBlockingSupplementaryService.go(regionId)
 
-      expect(result).to.equal({ matches: [srocMatch], toFinancialYearEnding: 2022, trigger: engineTriggers.old })
+      expect(result).toEqual({ matches: [srocMatch], toFinancialYearEnding: 2022, trigger: engineTriggers.old })
     })
   })
 
@@ -113,7 +108,7 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
     it('returns the match and determines that only the "current" engine can be triggered', async () => {
       const result = await DetermineBlockingSupplementaryService.go(regionId)
 
-      expect(result).to.equal({ matches: [preSrocMatch], toFinancialYearEnding, trigger: engineTriggers.current })
+      expect(result).toEqual({ matches: [preSrocMatch], toFinancialYearEnding, trigger: engineTriggers.current })
     })
   })
 
@@ -141,7 +136,7 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
     it('returns both matches and determines that "neither" engine can be triggered', async () => {
       const result = await DetermineBlockingSupplementaryService.go(regionId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         matches: [srocMatch, preSrocMatch],
         toFinancialYearEnding,
         trigger: engineTriggers.neither
@@ -168,7 +163,7 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
     it('returns no matches and determines that "both" engines can be triggered', async () => {
       const result = await DetermineBlockingSupplementaryService.go(regionId)
 
-      expect(result).to.equal({ matches: [], toFinancialYearEnding, trigger: engineTriggers.both })
+      expect(result).toEqual({ matches: [], toFinancialYearEnding, trigger: engineTriggers.both })
     })
   })
 
@@ -194,7 +189,7 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
       it("determines the 'toFinancialEndYear' to be the outstanding bill run's but allows both to be triggered", async () => {
         const result = await DetermineBlockingSupplementaryService.go(regionId)
 
-        expect(result).to.equal({ matches: [], toFinancialYearEnding: 2024, trigger: engineTriggers.both })
+        expect(result).toEqual({ matches: [], toFinancialYearEnding: 2024, trigger: engineTriggers.both })
       })
     })
   })
@@ -222,7 +217,7 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
       it("determines the 'toFinancialEndYear' to be 0 and that 'neither' engine can be triggered", async () => {
         const result = await DetermineBlockingSupplementaryService.go(regionId)
 
-        expect(result).to.equal({ matches: [], toFinancialYearEnding: 0, trigger: engineTriggers.neither })
+        expect(result).toEqual({ matches: [], toFinancialYearEnding: 0, trigger: engineTriggers.neither })
       })
     })
 
@@ -249,7 +244,7 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
       it("determines the 'toFinancialEndYear' to be the outstanding bill run's and only allows 'old' to be triggered", async () => {
         const result = await DetermineBlockingSupplementaryService.go(regionId)
 
-        expect(result).to.equal({ matches: [], toFinancialYearEnding: 2022, trigger: engineTriggers.old })
+        expect(result).toEqual({ matches: [], toFinancialYearEnding: 2022, trigger: engineTriggers.old })
       })
     })
   })

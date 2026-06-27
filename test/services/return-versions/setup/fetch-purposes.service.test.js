@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../../../support/helpers/licence-version-purpose.helper.js')
@@ -60,15 +53,15 @@ describe('Return Versions - Setup - Fetch Purposes service', () => {
     it('fetches the data', async () => {
       const result = await FetchPurposesService.go(licenceVersion.id)
 
-      expect(result[0]).to.equal({
+      expect(result[0]).toEqual({
         id: purposes[1].id,
         description: 'Heat Pump'
       })
-      expect(result[1]).to.equal({
+      expect(result[1]).toEqual({
         id: purposes[2].id,
         description: 'Horticultural Watering'
       })
-      expect(result[2]).to.equal({
+      expect(result[2]).toEqual({
         id: purposes[0].id,
         description: 'Large Garden Watering'
       })
@@ -79,7 +72,7 @@ describe('Return Versions - Setup - Fetch Purposes service', () => {
     it('returns an empty result', async () => {
       const result = await FetchPurposesService.go('5505ca34-270a-4dfb-894c-168c8a4d6e23')
 
-      expect(result).to.be.empty()
+      expect(result).toHaveLength(0)
     })
   })
 })
