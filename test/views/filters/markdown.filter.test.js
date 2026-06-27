@@ -1,19 +1,12 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const MarkdownFilter = require('../../../app/views/filters/markdown.filter.js')
 
 describe('Markdown filter', () => {
   let testMarkdown
 
-  before(() => {
+  beforeAll(() => {
     testMarkdown = _testMarkdown()
   })
 
@@ -21,7 +14,7 @@ describe('Markdown filter', () => {
     it('correctly converts the markdown to HTML', async () => {
       const result = await MarkdownFilter.markdown(testMarkdown)
 
-      expect(result).to.equal(
+      expect(result).toEqual(
         '<p>Hello,</p>\n' +
           '<p>This is a reminder that your water abstraction licence 4/30/12/*G/0303/R02 Swaton will expire in 4 months&#39; time.</p>\n' +
           '<p>If you have already sent your renewal application, or do not want to renew this licence, you can ignore this email.</p>\n' +
