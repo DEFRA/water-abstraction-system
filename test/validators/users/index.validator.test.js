@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const IndexValidator = require('../../../app/validators/users/index.validator.js')
 
@@ -22,13 +15,13 @@ describe('Users - Index validator', () => {
       it('confirms the data is valid', () => {
         const result = IndexValidator.go(payload)
 
-        expect(result.value).to.equal({
+        expect(result.value).toEqual({
           email: 'test@test.com',
           permissions: 'basic',
           status: 'enabled',
           type: 'water_admin'
         })
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -44,10 +37,10 @@ describe('Users - Index validator', () => {
       it('confirms the data is valid', () => {
         const result = IndexValidator.go(payload)
 
-        expect(result.value).to.equal({
+        expect(result.value).toEqual({
           email: 'test@test.com'
         })
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -59,8 +52,8 @@ describe('Users - Index validator', () => {
       it('confirms the data is valid', () => {
         const result = IndexValidator.go(payload)
 
-        expect(result.value).to.equal({})
-        expect(result.error).not.to.exist()
+        expect(result.value).toEqual({})
+        expect(result.error).toBeUndefined()
       })
     })
   })
@@ -78,9 +71,9 @@ describe('Users - Index validator', () => {
       it('fails validation', () => {
         const result = IndexValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error.details[0].message).to.equal('Email must be 255 characters or less')
-        expect(result.error.details[0].path[0]).to.equal('email')
+        expect(result.value).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Email must be 255 characters or less')
+        expect(result.error.details[0].path[0]).toEqual('email')
       })
     })
 
@@ -92,9 +85,9 @@ describe('Users - Index validator', () => {
       it('fails validation', () => {
         const result = IndexValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error.details[0].message).to.equal('Select a valid permission')
-        expect(result.error.details[0].path[0]).to.equal('permissions')
+        expect(result.value).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select a valid permission')
+        expect(result.error.details[0].path[0]).toEqual('permissions')
       })
     })
 
@@ -106,9 +99,9 @@ describe('Users - Index validator', () => {
       it('fails validation', () => {
         const result = IndexValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error.details[0].message).to.equal('Select a valid status')
-        expect(result.error.details[0].path[0]).to.equal('status')
+        expect(result.value).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select a valid status')
+        expect(result.error.details[0].path[0]).toEqual('status')
       })
     })
 
@@ -120,9 +113,9 @@ describe('Users - Index validator', () => {
       it('fails validation', () => {
         const result = IndexValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error.details[0].message).to.equal('Select a valid type')
-        expect(result.error.details[0].path[0]).to.equal('type')
+        expect(result.value).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select a valid type')
+        expect(result.error.details[0].path[0]).toEqual('type')
       })
     })
   })

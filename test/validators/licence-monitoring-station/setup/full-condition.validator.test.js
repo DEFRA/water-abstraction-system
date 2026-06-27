@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const FullConditionValidator = require('../../../../app/validators/licence-monitoring-station/setup/full-condition.validator.js')
 
@@ -24,8 +17,8 @@ describe('Full Condition Validator', () => {
       it('returns with no errors', () => {
         const result = FullConditionValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -39,8 +32,8 @@ describe('Full Condition Validator', () => {
       it('returns with no errors', () => {
         const result = FullConditionValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
       })
     })
   })
@@ -54,9 +47,9 @@ describe('Full Condition Validator', () => {
       it('returns with errors', () => {
         const result = FullConditionValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select a condition')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select a condition')
       })
     })
 
@@ -70,9 +63,9 @@ describe('Full Condition Validator', () => {
       it('returns with errors', () => {
         const result = FullConditionValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('"condition" must be a valid GUID')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('"condition" must be a valid GUID')
       })
     })
   })

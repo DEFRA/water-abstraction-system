@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const PeriodUsedValidator = require('../../../../app/validators/return-logs/setup/period-used.validator.js')
 
@@ -25,7 +18,7 @@ describe('Return Logs Setup - Period Used validator', () => {
       it('confirms the payload is valid', () => {
         const result = PeriodUsedValidator.go(payload, startDate, endDate)
 
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -45,7 +38,7 @@ describe('Return Logs Setup - Period Used validator', () => {
       it('confirms the payload is valid', () => {
         const result = PeriodUsedValidator.go(payload, startDate, endDate)
 
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
   })
@@ -59,8 +52,8 @@ describe('Return Logs Setup - Period Used validator', () => {
       it('fails validation with the message "Select what period was used for this volume"', () => {
         const result = PeriodUsedValidator.go(payload, startDate, endDate)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select what period was used for this volume')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select what period was used for this volume')
       })
     })
 
@@ -72,9 +65,9 @@ describe('Return Logs Setup - Period Used validator', () => {
       it('fails validation with the message "Enter a valid from date" and "Enter a valid to date"', () => {
         const result = PeriodUsedValidator.go(payload, startDate, endDate)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter a valid to date')
-        expect(result.error.details[1].message).to.equal('Enter a valid from date')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Enter a valid to date')
+        expect(result.error.details[1].message).toEqual('Enter a valid from date')
       })
     })
 
@@ -94,9 +87,9 @@ describe('Return Logs Setup - Period Used validator', () => {
       it('fails validation with the message "Enter a valid from date" and "Enter a valid to date"', () => {
         const result = PeriodUsedValidator.go(payload, startDate, endDate)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter a valid to date')
-        expect(result.error.details[1].message).to.equal('Enter a valid from date')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Enter a valid to date')
+        expect(result.error.details[1].message).toEqual('Enter a valid from date')
       })
     })
 
@@ -116,9 +109,9 @@ describe('Return Logs Setup - Period Used validator', () => {
       it('fails validation with the message "Enter a valid from date" and "Enter a valid to date"', () => {
         const result = PeriodUsedValidator.go(payload, startDate, endDate)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter a valid to date')
-        expect(result.error.details[1].message).to.equal('Enter a valid from date')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Enter a valid to date')
+        expect(result.error.details[1].message).toEqual('Enter a valid from date')
       })
     })
 
@@ -138,8 +131,8 @@ describe('Return Logs Setup - Period Used validator', () => {
       it('fails validation with the message "The to date must be within the return periods end date"', () => {
         const result = PeriodUsedValidator.go(payload, startDate, endDate)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('The to date must be within the return periods end date')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('The to date must be within the return periods end date')
       })
     })
 
@@ -159,8 +152,8 @@ describe('Return Logs Setup - Period Used validator', () => {
       it('fails validation with the message "Enter a valid from date" and "Enter a valid to date"', () => {
         const result = PeriodUsedValidator.go(payload, startDate, endDate)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('The from date must be before the to date')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('The from date must be before the to date')
       })
     })
   })

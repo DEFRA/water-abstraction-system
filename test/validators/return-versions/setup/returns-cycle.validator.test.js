@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ReturnsCycleValidator = require('../../../../app/validators/return-versions/setup/returns-cycle.validator.js')
 
@@ -14,7 +7,7 @@ describe('Return Versions Setup - Returns Cycle validator', () => {
   let payload
   let session
 
-  before(() => {
+  beforeAll(() => {
     payload = {
       returnsCycle: 'winter-and-all-year'
     }
@@ -26,12 +19,12 @@ describe('Return Versions Setup - Returns Cycle validator', () => {
     it('confirms the data is valid', async () => {
       const result = ReturnsCycleValidator.go(payload, session)
 
-      expect(result.value.returnsCycle).to.exist()
+      expect(result.value.returnsCycle).toBeDefined()
     })
   })
 
   describe('when invalid data is provided', () => {
-    before(() => {
+    beforeAll(() => {
       payload = {
         returnsCycle: 'ABC123'
       }
@@ -40,12 +33,12 @@ describe('Return Versions Setup - Returns Cycle validator', () => {
     it('fails validation with the error message "Select the returns cycle for the requirements for returns"', () => {
       const result = ReturnsCycleValidator.go(payload, session)
 
-      expect(result.error.details[0].message).to.equal('Select the returns cycle for the requirements for returns')
+      expect(result.error.details[0].message).toEqual('Select the returns cycle for the requirements for returns')
     })
   })
 
   describe('when a user selects summer but quarterly returns is marked true', () => {
-    before(() => {
+    beforeAll(() => {
       payload = {
         returnsCycle: 'summer'
       }
@@ -56,14 +49,14 @@ describe('Return Versions Setup - Returns Cycle validator', () => {
     it('fails validation with the error message "Quarterly returns submissions cannot be set for returns requirements in the summer cycle"', () => {
       const result = ReturnsCycleValidator.go(payload, session)
 
-      expect(result.error.details[0].message).to.equal(
+      expect(result.error.details[0].message).toEqual(
         'Quarterly returns submissions cannot be set for returns requirements in the summer cycle'
       )
     })
   })
 
   describe('when a user selects summer but quarterly returns is marked false', () => {
-    before(() => {
+    beforeAll(() => {
       payload = {
         returnsCycle: 'summer'
       }
@@ -74,19 +67,19 @@ describe('Return Versions Setup - Returns Cycle validator', () => {
     it('confirms the data is valid', () => {
       const result = ReturnsCycleValidator.go(payload, session)
 
-      expect(result.value.returnsCycle).to.exist()
+      expect(result.value.returnsCycle).toBeDefined()
     })
   })
 
   describe('when no data is provided', () => {
-    before(() => {
+    beforeAll(() => {
       payload = {}
     })
 
     it('fails validation', () => {
       const result = ReturnsCycleValidator.go(payload, session)
 
-      expect(result.error.details[0].message).to.equal('Select the returns cycle for the requirements for returns')
+      expect(result.error.details[0].message).toEqual('Select the returns cycle for the requirements for returns')
     })
   })
 })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
@@ -21,8 +14,8 @@ describe('Billing Accounts - Setup - Contact Validator', () => {
           contactSelected: 'new'
         })
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -32,8 +25,8 @@ describe('Billing Accounts - Setup - Contact Validator', () => {
           contactSelected: generateUUID()
         })
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
       })
     })
   })
@@ -43,9 +36,9 @@ describe('Billing Accounts - Setup - Contact Validator', () => {
       it('returns with errors', () => {
         const result = ContactValidator.go({})
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select a contact')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select a contact')
       })
     })
   })

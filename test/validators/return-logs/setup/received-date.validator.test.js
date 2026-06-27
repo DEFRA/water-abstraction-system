@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { today } = require('../../../../app/lib/general.lib.js')
 
@@ -29,7 +22,7 @@ describe('Return Logs Setup - Received Date validator', () => {
       it('confirms the payload is valid', () => {
         const result = ReceivedDateValidator.go(payload, returnStartDate)
 
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -43,7 +36,7 @@ describe('Return Logs Setup - Received Date validator', () => {
       it('confirms the payload is valid', () => {
         const result = ReceivedDateValidator.go(payload, returnStartDate)
 
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -60,7 +53,7 @@ describe('Return Logs Setup - Received Date validator', () => {
       it('confirms the payload is valid', () => {
         const result = ReceivedDateValidator.go(payload, returnStartDate)
 
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
   })
@@ -74,8 +67,8 @@ describe('Return Logs Setup - Received Date validator', () => {
       it('fails validation with the message "Select the return received date"', () => {
         const result = ReceivedDateValidator.go(payload, returnStartDate)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select the return received date')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select the return received date')
       })
     })
 
@@ -92,8 +85,8 @@ describe('Return Logs Setup - Received Date validator', () => {
         it('fails validation with the message "Enter a return received date"', () => {
           const result = ReceivedDateValidator.go(payload, returnStartDate)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a return received date')
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Enter a return received date')
         })
       })
 
@@ -107,8 +100,8 @@ describe('Return Logs Setup - Received Date validator', () => {
         it('fails validation with the message "Enter a real received date"', () => {
           const result = ReceivedDateValidator.go(payload, returnStartDate)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a real received date')
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Enter a real received date')
         })
       })
 
@@ -122,8 +115,8 @@ describe('Return Logs Setup - Received Date validator', () => {
         it('fails validation with the message "Enter a real received date"', () => {
           const result = ReceivedDateValidator.go(payload, returnStartDate)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a real received date')
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Enter a real received date')
         })
       })
 
@@ -137,8 +130,8 @@ describe('Return Logs Setup - Received Date validator', () => {
         it('fails validation with the message "Enter a real received date"', () => {
           const result = ReceivedDateValidator.go(payload, returnStartDate)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a real received date')
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Enter a real received date')
         })
       })
 
@@ -152,8 +145,8 @@ describe('Return Logs Setup - Received Date validator', () => {
         it('fails validation with the message "Enter a real received date"', () => {
           const result = ReceivedDateValidator.go(payload, returnStartDate)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a real received date')
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Enter a real received date')
         })
       })
 
@@ -167,8 +160,8 @@ describe('Return Logs Setup - Received Date validator', () => {
         it('fails validation with the message "Received date must be the return period start date or after it"', () => {
           const result = ReceivedDateValidator.go(payload, returnStartDate)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal(
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual(
             'Received date must be the return period start date or after it'
           )
         })
@@ -189,8 +182,8 @@ describe('Return Logs Setup - Received Date validator', () => {
         it('fails validation with the message "Received date must be either todays date or in the past"', () => {
           const result = ReceivedDateValidator.go(payload, returnStartDate)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal("Received date must be either today's date or in the past")
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual("Received date must be either today's date or in the past")
         })
       })
     })

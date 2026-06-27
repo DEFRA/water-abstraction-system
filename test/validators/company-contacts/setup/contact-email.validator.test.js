@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ContactEmailValidator = require('../../../../app/validators/company-contacts/setup/contact-email.validator.js')
 
@@ -21,8 +14,8 @@ describe('Company Contacts - Setup - Contact Email Validator', () => {
     it('returns with no errors', () => {
       const result = ContactEmailValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -35,9 +28,9 @@ describe('Company Contacts - Setup - Contact Email Validator', () => {
       it('returns with errors', () => {
         const result = ContactEmailValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter an email address for the contact')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Enter an email address for the contact')
       })
     })
 
@@ -49,9 +42,9 @@ describe('Company Contacts - Setup - Contact Email Validator', () => {
       it('returns with errors', () => {
         const result = ContactEmailValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal(
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual(
           'Enter an email address in the correct format, like name@example.co.uk '
         )
       })
@@ -65,9 +58,9 @@ describe('Company Contacts - Setup - Contact Email Validator', () => {
       it('returns with errors', () => {
         const result = ContactEmailValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Email must be 100 characters or less')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Email must be 100 characters or less')
       })
     })
   })

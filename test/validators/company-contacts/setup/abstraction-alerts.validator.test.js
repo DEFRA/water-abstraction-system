@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const AbstractionAlertsValidator = require('../../../../app/validators/company-contacts/setup/abstraction-alerts.validator.js')
 
@@ -21,8 +14,8 @@ describe('Company Contacts - Setup - Abstraction Alerts Validator', () => {
     it('returns with no errors', () => {
       const result = AbstractionAlertsValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -35,9 +28,9 @@ describe('Company Contacts - Setup - Abstraction Alerts Validator', () => {
       it('returns with errors', () => {
         const result = AbstractionAlertsValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Should the contact get water abstraction alerts')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Should the contact get water abstraction alerts')
       })
     })
   })

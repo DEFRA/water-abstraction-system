@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ContactTypeValidator = require('../../../../app/validators/notices/setup/contact-type.validator.js')
 
@@ -24,8 +17,8 @@ describe('Contact Type Validator', () => {
     it('returns with no errors', () => {
       const result = ContactTypeValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -40,8 +33,8 @@ describe('Contact Type Validator', () => {
     it('returns with no errors', () => {
       const result = ContactTypeValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -53,9 +46,9 @@ describe('Contact Type Validator', () => {
     it('returns with errors', () => {
       const result = ContactTypeValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Select how to contact the recipient')
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeDefined()
+      expect(result.error.details[0].message).toEqual('Select how to contact the recipient')
     })
   })
 
@@ -69,9 +62,9 @@ describe('Contact Type Validator', () => {
     it('returns with errors', () => {
       const result = ContactTypeValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Enter an email address')
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeDefined()
+      expect(result.error.details[0].message).toEqual('Enter an email address')
     })
   })
 
@@ -86,9 +79,9 @@ describe('Contact Type Validator', () => {
     it('returns with errors', () => {
       const result = ContactTypeValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal(
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeDefined()
+      expect(result.error.details[0].message).toEqual(
         'Enter an email address in the correct format, like name@example.com'
       )
     })
@@ -104,9 +97,9 @@ describe('Contact Type Validator', () => {
     it('returns with errors', () => {
       const result = ContactTypeValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Enter the recipients name')
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeDefined()
+      expect(result.error.details[0].message).toEqual('Enter the recipients name')
     })
   })
 })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const CheckValidator = require('../../../../app/validators/return-logs/setup/check.validator.js')
 
@@ -44,7 +37,7 @@ describe('Return Logs Setup - Check validator', () => {
       it('confirms the session data is valid', () => {
         const result = CheckValidator.go(session)
 
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -56,7 +49,7 @@ describe('Return Logs Setup - Check validator', () => {
       it('confirms the session data is valid', () => {
         const result = CheckValidator.go(session)
 
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
   })
@@ -89,8 +82,8 @@ describe('Return Logs Setup - Check validator', () => {
       it('fails validation with the message "At least one return line must contain a value."', () => {
         const result = CheckValidator.go(session)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('At least one return line must contain a value.')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('At least one return line must contain a value.')
       })
     })
 
@@ -102,8 +95,8 @@ describe('Return Logs Setup - Check validator', () => {
       it('fails validation with the message "At least one return line must contain a value."', () => {
         const result = CheckValidator.go(session)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('At least one return line must contain a value.')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('At least one return line must contain a value.')
       })
     })
   })

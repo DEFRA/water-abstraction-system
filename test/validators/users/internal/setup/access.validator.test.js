@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const AccessValidator = require('../../../../../app/validators/users/internal/setup/access.validator.js')
 
@@ -21,8 +14,8 @@ describe('Users - Internal - Setup - Access Validator', () => {
     it('returns with no errors', () => {
       const result = AccessValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -35,9 +28,9 @@ describe('Users - Internal - Setup - Access Validator', () => {
       it('fails validation', () => {
         const result = AccessValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select access for the user')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select access for the user')
       })
     })
 
@@ -49,9 +42,9 @@ describe('Users - Internal - Setup - Access Validator', () => {
       it('fails validation', () => {
         const result = AccessValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select a valid access option for the user')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select a valid access option for the user')
       })
     })
   })

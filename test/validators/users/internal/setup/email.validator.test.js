@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const EmailValidator = require('../../../../../app/validators/users/internal/setup/email.validator.js')
 
@@ -26,8 +19,8 @@ describe('Users - Internal - Setup - Email Validator', () => {
     it('returns with no errors', () => {
       const result = EmailValidator.go(payload, emailExists)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -40,9 +33,9 @@ describe('Users - Internal - Setup - Email Validator', () => {
       it('returns with errors', () => {
         const result = EmailValidator.go(payload, emailExists)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter an email address for this user')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Enter an email address for this user')
       })
     })
 
@@ -54,9 +47,9 @@ describe('Users - Internal - Setup - Email Validator', () => {
       it('returns with errors', () => {
         const result = EmailValidator.go(payload, emailExists)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal(
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual(
           'Enter an email address in the correct format, like name@environment-agency.gov.uk'
         )
       })
@@ -70,9 +63,9 @@ describe('Users - Internal - Setup - Email Validator', () => {
       it('returns with errors', () => {
         const result = EmailValidator.go(payload, emailExists)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Email must be 100 characters or less')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Email must be 100 characters or less')
       })
     })
 
@@ -84,9 +77,9 @@ describe('Users - Internal - Setup - Email Validator', () => {
       it('returns with errors', () => {
         const result = EmailValidator.go(payload, emailExists)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal(
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual(
           'Enter a gov.uk email address, like name@environment-agency.gov.uk'
         )
       })
@@ -101,9 +94,9 @@ describe('Users - Internal - Setup - Email Validator', () => {
       it('returns with errors', () => {
         const result = EmailValidator.go(payload, emailExists)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter a different email address than one that already exists')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Enter a different email address than one that already exists')
       })
     })
   })

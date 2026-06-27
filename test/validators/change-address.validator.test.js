@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ChangeAddressValidator = require('../../app/validators/change-address.validator.js')
 
@@ -57,8 +50,8 @@ describe('Create Bill Run validator', () => {
       it('confirms the data is valid', () => {
         const result = ChangeAddressValidator.go(data)
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -74,9 +67,9 @@ describe('Create Bill Run validator', () => {
       it('confirms the data is valid', () => {
         const result = ChangeAddressValidator.go(data)
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
-        expect(result.value.address.id).to.equal(data.address.id)
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
+        expect(result.value.address.id).toEqual(data.address.id)
       })
     })
 
@@ -93,9 +86,9 @@ describe('Create Bill Run validator', () => {
       it('confirms the data is valid', () => {
         const result = ChangeAddressValidator.go(data)
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
-        expect(result.value.agentCompany.id).to.equal(data.agentCompany.id)
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
+        expect(result.value.agentCompany.id).toEqual(data.agentCompany.id)
       })
     })
 
@@ -112,9 +105,9 @@ describe('Create Bill Run validator', () => {
       it('confirms the data is valid', () => {
         const result = ChangeAddressValidator.go(data)
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
-        expect(result.value.contact.id).to.equal(data.contact.id)
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
+        expect(result.value.contact.id).toEqual(data.contact.id)
       })
     })
   })
@@ -131,9 +124,9 @@ describe('Create Bill Run validator', () => {
       it('returns an error', () => {
         const result = ChangeAddressValidator.go(data)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('"address" is required')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('"address" is required')
       })
     })
 
@@ -155,9 +148,9 @@ describe('Create Bill Run validator', () => {
         it('returns an error', () => {
           const result = ChangeAddressValidator.go(data)
 
-          expect(result.value).to.exist()
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).startsWith('"agentCompany.type" must be one of')
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message.startsWith('"agentCompany.type" must be one of')).toBe(true)
         })
       })
 
@@ -169,9 +162,11 @@ describe('Create Bill Run validator', () => {
         it('returns an error', () => {
           const result = ChangeAddressValidator.go(data)
 
-          expect(result.value).to.exist()
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).startsWith('"agentCompany.organisationType" must be one of')
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message.startsWith('"agentCompany.organisationType" must be one of')).toBe(
+            true
+          )
         })
       })
     })
@@ -194,9 +189,9 @@ describe('Create Bill Run validator', () => {
         it('returns an error', () => {
           const result = ChangeAddressValidator.go(data)
 
-          expect(result.value).to.exist()
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).startsWith('"contact.type" must be one of')
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message.startsWith('"contact.type" must be one of')).toBe(true)
         })
       })
 
@@ -208,9 +203,9 @@ describe('Create Bill Run validator', () => {
         it('returns an error', () => {
           const result = ChangeAddressValidator.go(data)
 
-          expect(result.value).to.exist()
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).startsWith('"contact.source" must be one of')
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message.startsWith('"contact.source" must be one of')).toBe(true)
         })
       })
     })
