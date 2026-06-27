@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const fs = require('fs')
@@ -49,7 +44,7 @@ describe('Delete Files service', () => {
 
       const folderExists = fs.existsSync(folderNameWithPath)
 
-      expect(folderExists).to.be.false()
+      expect(folderExists).toBe(false)
     })
 
     it('deletes anything inside the folder', async () => {
@@ -57,7 +52,7 @@ describe('Delete Files service', () => {
 
       const fileExists = fs.existsSync(filenameWithPath)
 
-      expect(fileExists).to.be.false()
+      expect(fileExists).toBe(false)
     })
   })
 
@@ -65,7 +60,7 @@ describe('Delete Files service', () => {
     it('returns without throwing an error', async () => {
       const fakeFolder = 'FAKE_FILE'
 
-      await expect(DeleteFilesService.go(fakeFolder)).not.to.reject()
+      await expect(DeleteFilesService.go(fakeFolder)).resolves.toBeUndefined()
     })
   })
 
@@ -75,7 +70,7 @@ describe('Delete Files service', () => {
 
       const fileExists = fs.existsSync(filenameWithPath)
 
-      expect(fileExists).to.be.false()
+      expect(fileExists).toBe(false)
     })
   })
 
@@ -83,7 +78,7 @@ describe('Delete Files service', () => {
     it('returns without throwing an error', async () => {
       const fakeFile = 'FAKE_FILE'
 
-      await expect(DeleteFilesService.go(fakeFile)).not.to.reject()
+      await expect(DeleteFilesService.go(fakeFile)).resolves.toBeUndefined()
     })
   })
 
@@ -93,7 +88,7 @@ describe('Delete Files service', () => {
 
       await DeleteFilesService.go(noFile)
 
-      expect(notifierStub.omfg.calledWith('Delete file service errored')).to.be.true()
+      expect(notifierStub.omfg.calledWith('Delete file service errored')).toBe(true)
     })
   })
 })

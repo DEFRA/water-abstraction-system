@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const EventHelper = require('../../support/helpers/event.helper.js')
 const NotificationHelper = require('../../support/helpers/notification.helper.js')
@@ -23,7 +16,7 @@ describe('Notices - Fetch Notice service', () => {
   let notificationEmail
   let notificationLetter
 
-  before(async () => {
+  beforeAll(async () => {
     event = await EventHelper.add({
       issuer: 'admin-internal@wrls.gov.uk',
       licences: ['01/123', '01/124'],
@@ -112,7 +105,7 @@ describe('Notices - Fetch Notice service', () => {
     it('returns the matching notice and associated notifications ordered by recipient name', async () => {
       const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
-      expect(result.notice).to.equal({
+      expect(result.notice).toEqual({
         createdAt: event.createdAt,
         id: event.id,
         referenceCode: event.referenceCode,
@@ -123,7 +116,7 @@ describe('Notices - Fetch Notice service', () => {
         alertType: 'warning'
       })
 
-      expect(result.notifications).to.equal([
+      expect(result.notifications).toEqual([
         {
           id: notificationLetter.id,
           recipientName: 'Clean Water Limited',
@@ -144,7 +137,7 @@ describe('Notices - Fetch Notice service', () => {
         }
       ])
 
-      expect(result.totalNumber).to.equal(2)
+      expect(result.totalNumber).toEqual(2)
     })
   })
 
@@ -158,7 +151,7 @@ describe('Notices - Fetch Notice service', () => {
         it('returns the matching notifications', async () => {
           const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
-          expect(result.notifications).to.equal([
+          expect(result.notifications).toEqual([
             {
               id: notificationEmail.id,
               recipientName: 'shaw.carol@atari.com',
@@ -170,13 +163,13 @@ describe('Notices - Fetch Notice service', () => {
             }
           ])
 
-          expect(result.totalNumber).to.equal(1)
+          expect(result.totalNumber).toEqual(1)
         })
 
         it('excludes those that do not match', async () => {
           const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
-          expect(result.notifications).not.contains({
+          expect(result.notifications).not.toContainEqual({
             id: notificationLetter.id,
             recipientName: 'Clean Water Limited',
             licences: ['01/123'],
@@ -196,15 +189,15 @@ describe('Notices - Fetch Notice service', () => {
         it('returns the matching notifications (none in this case)', async () => {
           const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
-          expect(result.notifications).to.be.empty()
+          expect(result.notifications).toHaveLength(0)
 
-          expect(result.totalNumber).to.equal(0)
+          expect(result.totalNumber).toEqual(0)
         })
 
         it('excludes those that do not match (all in this case)', async () => {
           const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
-          expect(result.notifications).not.contains({
+          expect(result.notifications).not.toContainEqual({
             id: notificationEmail.id,
             recipientName: 'shaw.carol@atari.com',
             licences: ['01/124'],
@@ -214,7 +207,7 @@ describe('Notices - Fetch Notice service', () => {
             status: 'error'
           })
 
-          expect(result.notifications).not.contains({
+          expect(result.notifications).not.toContainEqual({
             id: notificationLetter.id,
             recipientName: 'Clean Water Limited',
             licences: ['01/123'],
@@ -234,7 +227,7 @@ describe('Notices - Fetch Notice service', () => {
         it('returns the matching notifications', async () => {
           const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
-          expect(result.notifications).to.equal([
+          expect(result.notifications).toEqual([
             {
               id: notificationLetter.id,
               recipientName: 'Clean Water Limited',
@@ -246,13 +239,13 @@ describe('Notices - Fetch Notice service', () => {
             }
           ])
 
-          expect(result.totalNumber).to.equal(1)
+          expect(result.totalNumber).toEqual(1)
         })
 
         it('excludes those that do not match', async () => {
           const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
-          expect(result.notifications).not.contains({
+          expect(result.notifications).not.toContainEqual({
             id: notificationEmail.id,
             recipientName: 'shaw.carol@atari.com',
             licences: ['01/124'],
@@ -274,7 +267,7 @@ describe('Notices - Fetch Notice service', () => {
       it('returns the matching notifications', async () => {
         const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
-        expect(result.notifications).to.equal([
+        expect(result.notifications).toEqual([
           {
             id: notificationLetter.id,
             recipientName: 'Clean Water Limited',
@@ -286,13 +279,13 @@ describe('Notices - Fetch Notice service', () => {
           }
         ])
 
-        expect(result.totalNumber).to.equal(1)
+        expect(result.totalNumber).toEqual(1)
       })
 
       it('excludes those that do not match', async () => {
         const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
-        expect(result.notifications).not.contains({
+        expect(result.notifications).not.toContainEqual({
           id: notificationEmail.id,
           recipientName: 'shaw.carol@atari.com',
           licences: ['01/124'],
@@ -312,7 +305,7 @@ describe('Notices - Fetch Notice service', () => {
       it('returns the matching notifications', async () => {
         const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
-        expect(result.notifications).to.equal([
+        expect(result.notifications).toEqual([
           {
             id: notificationEmail.id,
             recipientName: 'shaw.carol@atari.com',
@@ -324,13 +317,13 @@ describe('Notices - Fetch Notice service', () => {
           }
         ])
 
-        expect(result.totalNumber).to.equal(1)
+        expect(result.totalNumber).toEqual(1)
       })
 
       it('excludes those that do not match', async () => {
         const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
-        expect(result.notifications).not.contains({
+        expect(result.notifications).not.toContainEqual({
           id: notificationLetter.id,
           recipientName: 'Clean Water Limited',
           licences: ['01/123'],
@@ -347,7 +340,7 @@ describe('Notices - Fetch Notice service', () => {
     it('returns an empty result', async () => {
       const result = await FetchNoticeService.go('1f0e0086-7bc4-4ef2-a696-35ea1e79d224', pageNumber, filters)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         notice: undefined,
         notifications: [],
         totalNumber: 0

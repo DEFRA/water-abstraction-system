@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
@@ -58,8 +53,8 @@ describe('Notices - Setup - Submit Select Recipients service', () => {
     it('saves the submitted value', async () => {
       await SubmitSelectRecipientsService.go(session.id, payload, yarStub)
 
-      expect(session.selectedRecipients).to.equal(['123'])
-      expect(session.$update.called).to.be.true()
+      expect(session.selectedRecipients).toEqual(['123'])
+      expect(session.$update.called).toBe(true)
     })
 
     it('sets a flash message', async () => {
@@ -68,8 +63,8 @@ describe('Notices - Setup - Submit Select Recipients service', () => {
       // Check we add the flash message
       const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-      expect(flashType).to.equal('notification')
-      expect(bannerMessage).to.equal({
+      expect(flashType).toEqual('notification')
+      expect(bannerMessage).toEqual({
         text: 'The recipients have been changed. Check details before sending invitations.',
         titleText: 'Updated'
       })
@@ -78,7 +73,7 @@ describe('Notices - Setup - Submit Select Recipients service', () => {
     it('continues the journey', async () => {
       const result = await SubmitSelectRecipientsService.go(session.id, payload, yarStub)
 
-      expect(result).to.equal({})
+      expect(result).toEqual({})
     })
   })
 
@@ -91,7 +86,7 @@ describe('Notices - Setup - Submit Select Recipients service', () => {
       it('returns page data for the view, with errors', async () => {
         const result = await SubmitSelectRecipientsService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           backLink: {
             href: `/system/notices/setup/${session.id}/check`,
             text: 'Back'

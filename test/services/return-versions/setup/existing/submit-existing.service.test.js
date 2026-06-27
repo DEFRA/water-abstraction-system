@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
@@ -90,26 +85,26 @@ describe('Return Versions - Setup - Submit Existing service', () => {
       it('returns the correct details the controller needs to redirect the journey', async () => {
         const result = await SubmitExistingService.go(session.id, payload)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
       })
 
       it('saves the selected existing return requirements', async () => {
         await SubmitExistingService.go(session.id, payload)
 
-        expect(session.requirements).to.equal([_transformedReturnRequirement()])
-        expect(session.$update.called).to.be.true()
+        expect(session.requirements).toEqual([_transformedReturnRequirement()])
+        expect(session.$update.called).toBe(true)
       })
 
       it('saves the return versions "multipleUpload" state', async () => {
         await SubmitExistingService.go(session.id, payload)
 
-        expect(session.multipleUpload).to.equal(false)
+        expect(session.multipleUpload).toEqual(false)
       })
 
       it('saves the return versions "quarterlyReturns" state', async () => {
         await SubmitExistingService.go(session.id, payload)
 
-        expect(session.quarterlyReturns).to.equal(false)
+        expect(session.quarterlyReturns).toEqual(false)
       })
     })
 
@@ -121,26 +116,23 @@ describe('Return Versions - Setup - Submit Existing service', () => {
       it('returns page data for the view', async () => {
         const result = await SubmitExistingService.go(session.id, payload)
 
-        expect(result).to.equal(
-          {
-            pageTitle: 'Use previous requirements for returns',
-            pageTitleCaption: 'Licence 01/ABC',
-            backLink: {
-              href: `/system/return-versions/setup/${session.id}/method`,
-              text: 'Back'
-            },
-            existingOptions: [{ value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }],
-            licenceRef: '01/ABC'
+        expect(result).toMatchObject({
+          pageTitle: 'Use previous requirements for returns',
+          pageTitleCaption: 'Licence 01/ABC',
+          backLink: {
+            href: `/system/return-versions/setup/${session.id}/method`,
+            text: 'Back'
           },
-          { skip: ['sessionId', 'error'] }
-        )
+          existingOptions: [{ value: '60b5d10d-1372-4fb2-b222-bfac81da69ab', text: '1 January 2023' }],
+          licenceRef: '01/ABC'
+        })
       })
 
       describe('because the user has not submitted anything', () => {
         it('includes an error for the input element', async () => {
           const result = await SubmitExistingService.go(session.id, payload)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             errorList: [
               {
                 href: '#existing',

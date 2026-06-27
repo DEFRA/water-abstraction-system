@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -72,14 +67,14 @@ describe('Return Versions Setup - Submit Reason service', () => {
       it('saves the submitted value', async () => {
         await SubmitReasonService.go(session.id, payload, yarStub)
 
-        expect(session.reason).to.equal('new-licence')
+        expect(session.reason).toEqual('new-licence')
       })
 
       describe('and the page has been not been visited', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
           const result = await SubmitReasonService.go(session.id, payload, yarStub)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             checkPageVisited: false
           })
         })
@@ -95,7 +90,7 @@ describe('Return Versions Setup - Submit Reason service', () => {
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
           const result = await SubmitReasonService.go(session.id, payload, yarStub)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             checkPageVisited: true
           })
         })
@@ -105,8 +100,8 @@ describe('Return Versions Setup - Submit Reason service', () => {
 
           const [flashType, notification] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ titleText: 'Updated', text: 'Return version updated' })
+          expect(flashType).toEqual('notification')
+          expect(notification).toEqual({ titleText: 'Updated', text: 'Return version updated' })
         })
       })
     })
@@ -119,26 +114,23 @@ describe('Return Versions Setup - Submit Reason service', () => {
       it('returns page data for the view', async () => {
         const result = await SubmitReasonService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal(
-          {
-            pageTitle: 'Select the reason for the requirements for returns',
-            pageTitleCaption: `Licence ${session.licence.licenceRef}`,
-            backLink: {
-              href: `/system/return-versions/setup/${session.id}/start-date`,
-              text: 'Back'
-            },
-            licenceRef: '01/ABC',
-            reason: null
+        expect(result).toMatchObject({
+          pageTitle: 'Select the reason for the requirements for returns',
+          pageTitleCaption: `Licence ${session.licence.licenceRef}`,
+          backLink: {
+            href: `/system/return-versions/setup/${session.id}/start-date`,
+            text: 'Back'
           },
-          { skip: ['sessionId', 'error'] }
-        )
+          licenceRef: '01/ABC',
+          reason: null
+        })
       })
 
       describe('because the user has not submitted anything', () => {
         it('includes an error for the input element', async () => {
           const result = await SubmitReasonService.go(session.id, payload, yarStub)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             errorList: [
               {
                 href: '#reason',

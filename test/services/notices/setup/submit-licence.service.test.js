@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -72,14 +67,14 @@ describe('Notices - Setup - Submit Licence service', () => {
       it('saves the submitted value', async () => {
         await SubmitLicenceService.go(session.id, payload, yarStub)
 
-        expect(session.licenceRef).to.equal(licenceRef)
-        expect(session.$update.called).to.be.true()
+        expect(session.licenceRef).toEqual(licenceRef)
+        expect(session.$update.called).toBe(true)
       })
 
       it('returns the redirect url', async () => {
         const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal({ redirectUrl: 'check-notice-type' })
+        expect(result).toEqual({ redirectUrl: 'check-notice-type' })
       })
 
       describe('for a "paper return" notice type', () => {
@@ -95,7 +90,7 @@ describe('Notices - Setup - Submit Licence service', () => {
           it('returns a redirect to the "paper-return" page', async () => {
             const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
-            expect(result).to.equal({ redirectUrl: 'paper-return' })
+            expect(result).toEqual({ redirectUrl: 'paper-return' })
           })
         })
 
@@ -111,7 +106,7 @@ describe('Notices - Setup - Submit Licence service', () => {
           it('returns a redirect to the "check-notice-type" page', async () => {
             const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
-            expect(result).to.equal({ redirectUrl: 'check-notice-type' })
+            expect(result).toEqual({ redirectUrl: 'check-notice-type' })
           })
         })
       })
@@ -128,14 +123,14 @@ describe('Notices - Setup - Submit Licence service', () => {
         it('calls the "processRenewalsNoticeLicenceSubmissionStub"', async () => {
           await SubmitLicenceService.go(session.id, payload, yarStub)
 
-          expect(processRenewalsNoticeLicenceSubmissionStub.calledOnceWithExactly(payload)).to.be.true()
+          expect(processRenewalsNoticeLicenceSubmissionStub.calledOnceWithExactly(payload)).toBe(true)
         })
 
         describe('and the check page has not been visited', () => {
           it('returns a redirect to the "check-notice-type" page', async () => {
             const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
-            expect(result).to.equal({ redirectUrl: 'check-notice-type' })
+            expect(result).toEqual({ redirectUrl: 'check-notice-type' })
           })
         })
 
@@ -151,7 +146,7 @@ describe('Notices - Setup - Submit Licence service', () => {
           it('returns a redirect to the "check-notice-type" page', async () => {
             const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
-            expect(result).to.equal({ redirectUrl: 'check-notice-type' })
+            expect(result).toEqual({ redirectUrl: 'check-notice-type' })
           })
         })
       })
@@ -169,7 +164,7 @@ describe('Notices - Setup - Submit Licence service', () => {
           it('returns a redirect to the "check-notice-type" page', async () => {
             const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
-            expect(result).to.equal({ redirectUrl: 'check-notice-type' })
+            expect(result).toEqual({ redirectUrl: 'check-notice-type' })
           })
         })
 
@@ -185,7 +180,7 @@ describe('Notices - Setup - Submit Licence service', () => {
           it('returns a redirect to the "returns-period" page', async () => {
             const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
-            expect(result).to.equal({ redirectUrl: 'returns-period' })
+            expect(result).toEqual({ redirectUrl: 'returns-period' })
           })
         })
       })
@@ -203,13 +198,13 @@ describe('Notices - Setup - Submit Licence service', () => {
           it('redirects to the check notice type page', async () => {
             const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
-            expect(result.redirectUrl).to.equal('check-notice-type')
+            expect(result.redirectUrl).toEqual('check-notice-type')
           })
 
           it('updates the sessions "checkPageVisited" flag', async () => {
             await SubmitLicenceService.go(session.id, payload, yarStub)
 
-            expect(session.checkPageVisited).to.be.false()
+            expect(session.checkPageVisited).toBe(false)
           })
 
           it('sets a flash message', async () => {
@@ -217,8 +212,8 @@ describe('Notices - Setup - Submit Licence service', () => {
 
             const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-            expect(flashType).to.equal('notification')
-            expect(bannerMessage).to.equal({
+            expect(flashType).toEqual('notification')
+            expect(bannerMessage).toEqual({
               text: 'Licence number updated',
               titleText: 'Updated'
             })
@@ -237,13 +232,13 @@ describe('Notices - Setup - Submit Licence service', () => {
           it('redirects to the check notice type page', async () => {
             const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
-            expect(result.redirectUrl).to.equal('check-notice-type')
+            expect(result.redirectUrl).toEqual('check-notice-type')
           })
 
           it('does not set a flash message', async () => {
             await SubmitLicenceService.go(session.id, payload, yarStub)
 
-            expect(yarStub.flash.args[0]).to.be.undefined()
+            expect(yarStub.flash.args[0]).toBeUndefined()
           })
         })
       })
@@ -265,7 +260,7 @@ describe('Notices - Setup - Submit Licence service', () => {
       it('returns page data needed to re-render the view including the validation error', async () => {
         const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'notices',
           backLink: {
             href: `/system/notices/setup/${session.id}/notice-type`,

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
@@ -62,14 +57,14 @@ describe('Bill Runs - Setup - Submit Check service', () => {
       it('triggers creation of the bill run and returns empty page data', async () => {
         const result = await SubmitCheckService.go(session.id, auth)
 
-        expect(createStub.called).to.be.true()
-        expect(result).to.equal({})
+        expect(createStub.called).toBe(true)
+        expect(result).toEqual({})
       })
 
       it('deletes the session data', async () => {
         await SubmitCheckService.go(session.id, auth)
 
-        expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
+        expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
       })
     })
 
@@ -101,7 +96,7 @@ describe('Bill Runs - Setup - Submit Check service', () => {
       it('returns page data needed to re-render the view', async () => {
         const result = await SubmitCheckService.go(session.id, auth)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'bill-runs',
           error: true,
           backLink: `/system/bill-runs/setup/${session.id}/region`,

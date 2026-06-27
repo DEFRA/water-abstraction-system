@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
@@ -86,22 +81,22 @@ describe('Return Versions - Setup - Submit Method service', () => {
       it('saves the submitted value', async () => {
         await SubmitMethodService.go(session.id, payload)
 
-        expect(session.method).to.equal('useAbstractionData')
-        expect(session.$update.called).to.be.true()
+        expect(session.method).toEqual('useAbstractionData')
+        expect(session.$update.called).toBe(true)
       })
 
       describe('and the user has selected to use abstraction data', () => {
         it('returns the route to check page', async () => {
           const result = await SubmitMethodService.go(session.id, payload)
 
-          expect(result.redirect).to.equal('check')
+          expect(result.redirect).toEqual('check')
         })
 
         it('returns the route to check page', async () => {
           await SubmitMethodService.go(session.id, payload)
 
-          expect(session.requirements).to.equal(_generatedReturnRequirements())
-          expect(session.$update.called).to.be.true()
+          expect(session.requirements).toEqual(_generatedReturnRequirements())
+          expect(session.$update.called).toBe(true)
         })
       })
 
@@ -115,7 +110,7 @@ describe('Return Versions - Setup - Submit Method service', () => {
         it('returns the route for the select an existing requirement page', async () => {
           const result = await SubmitMethodService.go(session.id, payload)
 
-          expect(result.redirect).to.equal('existing')
+          expect(result.redirect).toEqual('existing')
         })
       })
 
@@ -129,7 +124,7 @@ describe('Return Versions - Setup - Submit Method service', () => {
         it('returns the route for the select purpose page', async () => {
           const result = await SubmitMethodService.go(session.id, payload)
 
-          expect(result.redirect).to.equal('purpose/0')
+          expect(result.redirect).toEqual('purpose/0')
         })
       })
     })
@@ -142,27 +137,24 @@ describe('Return Versions - Setup - Submit Method service', () => {
       it('returns page data for the view', async () => {
         const result = await SubmitMethodService.go(session.id, payload)
 
-        expect(result).to.equal(
-          {
-            pageTitle: 'How do you want to set up the requirements for returns?',
-            pageTitleCaption: 'Licence 01/ABC',
-            backLink: {
-              href: `/system/return-versions/setup/${session.id}/reason`,
-              text: 'Back'
-            },
-            displayCopyExisting: true,
-            licenceRef: '01/ABC',
-            method: null
+        expect(result).toMatchObject({
+          pageTitle: 'How do you want to set up the requirements for returns?',
+          pageTitleCaption: 'Licence 01/ABC',
+          backLink: {
+            href: `/system/return-versions/setup/${session.id}/reason`,
+            text: 'Back'
           },
-          { skip: ['sessionId', 'error'] }
-        )
+          displayCopyExisting: true,
+          licenceRef: '01/ABC',
+          method: null
+        })
       })
 
       describe('because the user has not submitted anything', () => {
         it('includes an error for the input element', async () => {
           const result = await SubmitMethodService.go(session.id, payload)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             errorList: [
               {
                 href: '#method',

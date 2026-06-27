@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things to stub
 const DetermineSearchItemsService = require('../../../app/services/search/determine-search-items.service.js')
@@ -62,7 +57,7 @@ describe('Search - Find All Search Matches service', () => {
     it('returns all the matching data', async () => {
       const result = await FindAllSearchMatchesService.go(query, resultType, page, userScopes)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         results: [
           {
             exact: true,

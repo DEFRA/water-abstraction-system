@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const FetchBillLicenceSummaryService = require('../../../app/services/bill-licences/fetch-bill-licence-summary.service.js')
@@ -29,7 +24,7 @@ describe('Remove Bill Licence service', () => {
     it('returns page data for the view', async () => {
       const result = await RemoveBillLicenceService.go(testId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         accountName: 'Example Trading Ltd',
         accountNumber: 'T65757520A',
         activeNavBar: 'bill-runs',

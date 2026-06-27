@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const NoticeSessionFixture = require('../../../../support/fixtures/notice-session.fixture.js')
 const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
@@ -21,7 +14,7 @@ describe('Notices - Setup - Returns Notice - Fetch Paper Returns Recipients serv
   let setDueDateReturnLog
   let scenarios
 
-  before(async () => {
+  beforeAll(async () => {
     scenarios = {}
 
     // 1) Licence holder only
@@ -36,14 +29,14 @@ describe('Notices - Setup - Returns Notice - Fetch Paper Returns Recipients serv
     )
   })
 
-  after(async () => {
+  afterAll(async () => {
     await setDueDateReturnLog.$query().delete()
 
     await RecipientScenariosSeeder.clean(scenarios)
   })
 
   describe('when service is called for sending or checking recipients', () => {
-    before(() => {
+    beforeAll(() => {
       download = false
     })
 
@@ -61,12 +54,12 @@ describe('Notices - Setup - Returns Notice - Fetch Paper Returns Recipients serv
       sendingResult[0].latest_due_date = setDueDateReturnLog.dueDate
       sendingResult[0].notificationDueDate = null
 
-      expect(results).to.equal(sendingResult)
+      expect(results).toEqual(sendingResult)
     })
   })
 
   describe('when the service is called for generating a download', () => {
-    before(() => {
+    beforeAll(() => {
       download = true
     })
 
@@ -79,7 +72,7 @@ describe('Notices - Setup - Returns Notice - Fetch Paper Returns Recipients serv
 
       downloadingResult[0].notificationDueDate = new Date('2025-04-28')
 
-      expect(results).to.equal(downloadingResult)
+      expect(results).toEqual(downloadingResult)
     })
   })
 })

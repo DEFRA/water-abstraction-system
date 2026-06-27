@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
@@ -21,7 +14,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
   let licence
   let metadata
 
-  before(async () => {
+  beforeAll(async () => {
     metadata = {
       description: 'BOREHOLE AT AVALON',
       isCurrent: true,
@@ -50,7 +43,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     let returnLog
     let returnSubmission
 
-    before(async () => {
+    beforeAll(async () => {
       returnLog = await ReturnLogHelper.add({
         licenceRef: licence.licenceRef,
         metadata,
@@ -72,7 +65,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
 
       const matchingSession = await SessionModel.query().findById(sessionId)
 
-      expect(matchingSession.data).to.equal({
+      expect(matchingSession.data).toEqual({
         beenReceived: true,
         dueDate: null,
         endDate: '2022-06-01T00:00:00.000Z',
@@ -120,7 +113,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     })
 
     describe('and a zero quantity is specified', () => {
-      before(async () => {
+      beforeAll(async () => {
         returnLog = await ReturnLogHelper.add({
           licenceRef: licence.licenceRef,
           metadata,
@@ -142,12 +135,12 @@ describe('Return Logs - Setup - Initiate Session service', () => {
 
         const matchingSession = await SessionModel.query().findById(sessionId)
 
-        expect(matchingSession.data.lines[0].quantity).to.equal(0)
+        expect(matchingSession.data.lines[0].quantity).toEqual(0)
       })
     })
 
     describe('and a unit is specified', () => {
-      before(async () => {
+      beforeAll(async () => {
         returnLog = await ReturnLogHelper.add({
           licenceRef: licence.licenceRef,
           metadata,
@@ -168,12 +161,12 @@ describe('Return Logs - Setup - Initiate Session service', () => {
 
         const matchingSession = await SessionModel.query().findById(sessionId)
 
-        expect(matchingSession.data.units).to.equal('megalitres')
+        expect(matchingSession.data.units).toEqual('megalitres')
       })
     })
 
     describe('and no unit is specified', () => {
-      before(async () => {
+      beforeAll(async () => {
         returnLog = await ReturnLogHelper.add({
           licenceRef: licence.licenceRef,
           metadata,
@@ -191,12 +184,12 @@ describe('Return Logs - Setup - Initiate Session service', () => {
 
         const matchingSession = await SessionModel.query().findById(sessionId)
 
-        expect(matchingSession.data.units).to.equal('cubicMetres')
+        expect(matchingSession.data.units).toEqual('cubicMetres')
       })
     })
 
     describe('and meter details are specified', () => {
-      before(async () => {
+      beforeAll(async () => {
         returnLog = await ReturnLogHelper.add({
           licenceRef: licence.licenceRef,
           metadata,
@@ -229,16 +222,16 @@ describe('Return Logs - Setup - Initiate Session service', () => {
 
         const matchingSession = await SessionModel.query().findById(sessionId)
 
-        expect(matchingSession.data.meter10TimesDisplay).to.equal('yes')
-        expect(matchingSession.data.meterMake).to.equal('METER_MAKE')
-        expect(matchingSession.data.meterSerialNumber).to.equal('METER_SERIAL_NUMBER')
-        expect(matchingSession.data.meterProvided).to.equal('yes')
-        expect(matchingSession.reported).to.equal('meterReadings')
+        expect(matchingSession.data.meter10TimesDisplay).toEqual('yes')
+        expect(matchingSession.data.meterMake).toEqual('METER_MAKE')
+        expect(matchingSession.data.meterSerialNumber).toEqual('METER_SERIAL_NUMBER')
+        expect(matchingSession.data.meterProvided).toEqual('yes')
+        expect(matchingSession.reported).toEqual('meterReadings')
       })
     })
 
     describe('and it is a nil return', () => {
-      before(async () => {
+      beforeAll(async () => {
         returnLog = await ReturnLogHelper.add({
           licenceRef: licence.licenceRef,
           metadata,
@@ -259,7 +252,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
 
         const matchingSession = await SessionModel.query().findById(sessionId)
 
-        expect(matchingSession.data.journey).to.equal('nilReturn')
+        expect(matchingSession.data.journey).toEqual('nilReturn')
       })
 
       it('populates the lines array with placeholder data', async () => {
@@ -269,7 +262,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
 
         const matchingSession = await SessionModel.query().findById(sessionId)
 
-        expect(matchingSession.data.lines).to.equal([
+        expect(matchingSession.data.lines).toEqual([
           {
             endDate: '2022-04-30T00:00:00.000Z',
             startDate: '2022-04-01T00:00:00.000Z'
@@ -286,7 +279,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
   describe('when the return log has been received but not submitted', () => {
     let returnLog
 
-    before(async () => {
+    beforeAll(async () => {
       returnLog = await ReturnLogHelper.add({
         licenceRef: licence.licenceRef,
         metadata,
@@ -302,7 +295,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
 
       const matchingSession = await SessionModel.query().findById(sessionId)
 
-      expect(matchingSession.data.beenReceived).to.be.true()
+      expect(matchingSession.data.beenReceived).toBe(true)
     })
 
     it('populates the lines array with placeholder data', async () => {
@@ -312,7 +305,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
 
       const matchingSession = await SessionModel.query().findById(sessionId)
 
-      expect(matchingSession.data.lines).to.equal([
+      expect(matchingSession.data.lines).toEqual([
         {
           endDate: '2022-04-30T00:00:00.000Z',
           startDate: '2022-04-01T00:00:00.000Z'
@@ -328,7 +321,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
   describe('when the return log has not been received or submitted', () => {
     let returnLog
 
-    before(async () => {
+    beforeAll(async () => {
       returnLog = await ReturnLogHelper.add({
         licenceRef: licence.licenceRef,
         metadata,
@@ -344,7 +337,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
 
       const matchingSession = await SessionModel.query().findById(sessionId)
 
-      expect(matchingSession.data.beenReceived).to.be.false()
+      expect(matchingSession.data.beenReceived).toBe(false)
     })
 
     it('does not include submission-specific fields', async () => {
@@ -354,7 +347,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
 
       const matchingSession = await SessionModel.query().findById(sessionId)
 
-      expect(matchingSession.data).to.not.include([
+      expect(matchingSession.data).not.toContain([
         'journey',
         'nilReturn',
         'meter10TimesDisplay',

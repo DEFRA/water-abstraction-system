@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const RegionHelper = require('../../../support/helpers/region.helper.js')
@@ -84,7 +79,7 @@ describe('Bill Runs - Review - View Review Service', () => {
     it('returns the page data for the view', async () => {
       const result = await ViewReviewService.go(billRunId, yarStub, page)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'bill-runs',
         filters: {
           issues: [],
@@ -156,7 +151,7 @@ describe('Bill Runs - Review - View Review Service', () => {
       it('returns blank filters and that the controls should be closed', async () => {
         const result = await ViewReviewService.go(billRunId, yarStub, page)
 
-        expect(result.filters.openFilter).to.be.false()
+        expect(result.filters.openFilter).toBe(false)
       })
     })
 
@@ -168,7 +163,7 @@ describe('Bill Runs - Review - View Review Service', () => {
       it('returns blank filters and that the controls should be closed', async () => {
         const result = await ViewReviewService.go(billRunId, yarStub, page)
 
-        expect(result.filters.openFilter).to.be.false()
+        expect(result.filters.openFilter).toBe(false)
       })
     })
 
@@ -183,7 +178,7 @@ describe('Bill Runs - Review - View Review Service', () => {
       it('returns the saved filters and that the controls should be open', async () => {
         const result = await ViewReviewService.go(billRunId, yarStub, page)
 
-        expect(result.filters.openFilter).to.be.true()
+        expect(result.filters.openFilter).toBe(true)
       })
     })
   })

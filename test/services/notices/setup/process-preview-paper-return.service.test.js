@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
@@ -82,19 +77,19 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
     it('returns generated pdf as an array buffer', async () => {
       const result = await ProcessPreviewPaperReturnService.go(session.id, contactHashId, returnLogId)
 
-      expect(result).to.be.instanceOf(ArrayBuffer)
+      expect(result).toBeInstanceOf(ArrayBuffer)
       // The encoded string is 9 chars
-      expect(result.byteLength).to.equal(9)
+      expect(result.byteLength).toEqual(9)
     })
 
     it('should call "GeneratePaperReturnRequest"', async () => {
       await ProcessPreviewPaperReturnService.go(session.id, contactHashId, returnLogId)
 
-      expect(GeneratePaperReturnRequest.send.calledOnce).to.be.true()
+      expect(GeneratePaperReturnRequest.send.calledOnce).toBe(true)
 
       const actualCallArgs = GeneratePaperReturnRequest.send.getCall(0).args[0]
 
-      expect(actualCallArgs).to.equal({
+      expect(actualCallArgs).toEqual({
         address: {
           address_line_1: 'Harry Potter',
           address_line_2: '1',

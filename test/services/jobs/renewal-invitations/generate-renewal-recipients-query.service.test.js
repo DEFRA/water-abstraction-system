@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const RecipientScenariosSeeder = require('../../../support/seeders/recipient-scenarios.seeder.js')
 const { db } = require('../../../../db/db.js')
@@ -26,7 +19,7 @@ WHERE
   let expiredDate
   let scenarios
 
-  before(async () => {
+  beforeAll(async () => {
     scenarios = {}
 
     // 1) Licence holder only
@@ -55,7 +48,7 @@ WHERE
     )
   })
 
-  after(async () => {
+  afterAll(async () => {
     await RecipientScenariosSeeder.clean(scenarios)
   })
 
@@ -64,10 +57,12 @@ WHERE
     it('returns the expected query', () => {
       const query = GenerateRenewalRecipientsQueryService.go(expiringLicencesQuery)
 
-      expect(query).to.startWith(`
+      expect(
+        query.startsWith(`
     WITH
       expiring_licences AS (
         ${expiringLicencesQuery}`)
+      ).toBe(true)
     })
   })
 
@@ -80,7 +75,7 @@ WHERE
 
         const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolder)
 
-        expect(rows).to.equal(expectedResults)
+        expect(rows).toEqual(expectedResults)
       })
     })
 
@@ -94,10 +89,10 @@ WHERE
           scenarios.licenceHolderMultipleLicences
         )
 
-        expect(rows).to.contain(expectedResults[0])
+        expect(rows).toContainEqual(expectedResults[0])
         // We could test rows contains the second licence holder recipient recorded in the scenario, but they are the
         // same so it would also return true and not prove anything
-        expect(expectedResults[0]).to.equal(expectedResults[1])
+        expect(expectedResults[0]).toEqual(expectedResults[1])
       })
     })
 
@@ -109,10 +104,10 @@ WHERE
 
         const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.primaryUser)
 
-        expect(rows).to.contain(expectedResults[1])
+        expect(rows).toContainEqual(expectedResults[1])
 
         // NOTE: When a licence is registered expectedResults[0] will always reference the licence holder
-        expect(rows).not.to.contain(expectedResults[0])
+        expect(rows).not.toContainEqual(expectedResults[0])
       })
     })
 
@@ -126,10 +121,10 @@ WHERE
           scenarios.primaryUserMultipleLicences
         )
 
-        expect(rows).to.contain(expectedResults[1])
+        expect(rows).toContainEqual(expectedResults[1])
 
         // NOTE: When a licence is registered, expectedResults[0] will always reference the licence holder
-        expect(rows).not.to.contain(expectedResults[0])
+        expect(rows).not.toContainEqual(expectedResults[0])
       })
     })
   })

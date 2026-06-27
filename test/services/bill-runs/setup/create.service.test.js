@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -50,10 +45,10 @@ describe('Bill Runs - Setup - Create service', () => {
     it('triggers both bill run engines', async () => {
       await CreateService.go(session, blockingResults, user)
 
-      expect(
-        startBillRunProcessServiceStub.calledWith(regionId, 'supplementary', 'carol.shaw@atari.com', 2025)
-      ).to.be.true()
-      expect(legacyCreateBillRunRequestStub.calledWith('supplementary', regionId, 2025, user, false)).to.be.true()
+      expect(startBillRunProcessServiceStub.calledWith(regionId, 'supplementary', 'carol.shaw@atari.com', 2025)).toBe(
+        true
+      )
+      expect(legacyCreateBillRunRequestStub.calledWith('supplementary', regionId, 2025, user, false)).toBe(true)
     })
   })
 
@@ -69,8 +64,8 @@ describe('Bill Runs - Setup - Create service', () => {
     it('triggers only the "current" bill run engine', async () => {
       await CreateService.go(session, blockingResults, user)
 
-      expect(startBillRunProcessServiceStub.calledWith(regionId, 'annual', 'carol.shaw@atari.com', 2025)).to.be.true()
-      expect(legacyCreateBillRunRequestStub.called).to.be.false()
+      expect(startBillRunProcessServiceStub.calledWith(regionId, 'annual', 'carol.shaw@atari.com', 2025)).toBe(true)
+      expect(legacyCreateBillRunRequestStub.called).toBe(false)
     })
   })
 
@@ -86,8 +81,8 @@ describe('Bill Runs - Setup - Create service', () => {
     it('triggers only the "old" bill run engine', async () => {
       await CreateService.go(session, blockingResults, user)
 
-      expect(startBillRunProcessServiceStub.called).to.be.false()
-      expect(legacyCreateBillRunRequestStub.calledWith('two_part_tariff', regionId, 2022, user, true)).to.be.true()
+      expect(startBillRunProcessServiceStub.called).toBe(false)
+      expect(legacyCreateBillRunRequestStub.calledWith('two_part_tariff', regionId, 2022, user, true)).toBe(true)
     })
   })
 })

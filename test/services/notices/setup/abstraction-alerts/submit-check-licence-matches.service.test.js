@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
@@ -57,19 +52,19 @@ describe('Notices - Setup - Abstraction Alerts - Submit Check Licence Matches se
       it('saves the "licenceRefs" to the session', async () => {
         await SubmitCheckLicenceMatchesService.go(session.id)
 
-        expect(session.licenceRefs).to.equal([
+        expect(session.licenceRefs).toEqual([
           licenceMonitoringStations.one.licence.licenceRef,
           licenceMonitoringStations.two.licence.licenceRef,
           licenceMonitoringStations.three.licence.licenceRef
         ])
 
-        expect(session.$update.called).to.be.true()
+        expect(session.$update.called).toBe(true)
       })
 
       it('saves the "relevantLicenceMonitoringStations" to the session', async () => {
         await SubmitCheckLicenceMatchesService.go(session.id)
 
-        expect(session.relevantLicenceMonitoringStations).to.equal([
+        expect(session.relevantLicenceMonitoringStations).toEqual([
           licenceMonitoringStations.one,
           licenceMonitoringStations.two,
           licenceMonitoringStations.three
@@ -89,13 +84,13 @@ describe('Notices - Setup - Abstraction Alerts - Submit Check Licence Matches se
       it('saves the "licenceRefs" to the session with duplicates removed', async () => {
         await SubmitCheckLicenceMatchesService.go(session.id)
 
-        expect(session.licenceRefs).to.equal([licenceMonitoringStations.one.licence.licenceRef])
+        expect(session.licenceRefs).toEqual([licenceMonitoringStations.one.licence.licenceRef])
       })
 
       it('saves the "relevantLicenceMonitoringStations" to the session', async () => {
         await SubmitCheckLicenceMatchesService.go(session.id)
 
-        expect(session.relevantLicenceMonitoringStations).to.equal([
+        expect(session.relevantLicenceMonitoringStations).toEqual([
           licenceMonitoringStations.one,
           licenceMonitoringStationDuplicate
         ])
@@ -114,13 +109,13 @@ describe('Notices - Setup - Abstraction Alerts - Submit Check Licence Matches se
       it('saves the "licenceRefs" to the session without the removed thresholds', async () => {
         await SubmitCheckLicenceMatchesService.go(session.id)
 
-        expect(session.licenceRefs).to.equal([licenceMonitoringStations.three.licence.licenceRef])
+        expect(session.licenceRefs).toEqual([licenceMonitoringStations.three.licence.licenceRef])
       })
 
       it('saves the "relevantLicenceMonitoringStations" to the session', async () => {
         await SubmitCheckLicenceMatchesService.go(session.id)
 
-        expect(session.relevantLicenceMonitoringStations).to.equal([licenceMonitoringStations.three])
+        expect(session.relevantLicenceMonitoringStations).toEqual([licenceMonitoringStations.three])
       })
     })
   })

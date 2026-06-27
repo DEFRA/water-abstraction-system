@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
@@ -46,7 +41,7 @@ describe('Return Logs - Submit Details Service', () => {
         // Check we save the status change
         const [patchObject] = patchStub.args[0]
 
-        expect(patchObject).to.equal({ underQuery: true }, { skip: ['updatedAt'] })
+        expect(patchObject).toMatchObject({ underQuery: true })
       })
     })
 
@@ -61,7 +56,7 @@ describe('Return Logs - Submit Details Service', () => {
         // Check we save the status change
         const [patchObject] = patchStub.args[0]
 
-        expect(patchObject).to.equal({ underQuery: false }, { skip: ['updatedAt'] })
+        expect(patchObject).toMatchObject({ underQuery: false })
       })
     })
   })

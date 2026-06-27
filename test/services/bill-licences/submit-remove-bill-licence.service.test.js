@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const BillLicenceModel = require('../../../app/models/bill-licence.model.js')
@@ -57,27 +52,25 @@ describe('Bill Licences - Submit Remove Bill Licence service', () => {
     it('calls the "UnassignLicencesToBillRunService" to unassign any licence supplementary year records from the bill run', async () => {
       await SubmitRemoveBillLicenceService.go(billLicence.id, user)
 
-      expect(unassignLicencesToBillRunStub.called).to.be.true()
+      expect(unassignLicencesToBillRunStub.called).toBe(true)
     })
 
     it('calls the "ProcessBillingFlagService" to check if the licence needs a supplementary billing flag', async () => {
       await SubmitRemoveBillLicenceService.go(billLicence.id, user)
 
-      expect(processBillingFlagStub.called).to.be.true()
+      expect(processBillingFlagStub.called).toBe(true)
     })
 
     it('sends a request to the legacy service to delete the bill licence', async () => {
       await SubmitRemoveBillLicenceService.go(billLicence.id, user)
 
-      expect(legacyDeleteBillLicenceRequestStub.called).to.be.true()
+      expect(legacyDeleteBillLicenceRequestStub.called).toBe(true)
     })
 
     it('returns the path to the legacy bill run processing page with invoice ID option', async () => {
       const result = await SubmitRemoveBillLicenceService.go(billLicence.id, user)
 
-      expect(result).to.equal(
-        `/billing/batch/${billLicence.bill.billRunId}/processing?invoiceId=${billLicence.bill.id}`
-      )
+      expect(result).toEqual(`/billing/batch/${billLicence.bill.billRunId}/processing?invoiceId=${billLicence.bill.id}`)
     })
   })
 })

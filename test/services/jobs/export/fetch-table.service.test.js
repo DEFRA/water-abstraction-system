@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const FetchTableService = require('../../../../app/services/jobs/export/fetch-table.service.js')
 
@@ -29,13 +22,13 @@ describe('Fetch table service', () => {
     it('returns the table column names', async () => {
       const result = await FetchTableService.go(tableName, schemaName)
 
-      expect(result.headers).to.equal(regionsColumnInfo)
+      expect(result.headers).toEqual(regionsColumnInfo)
     })
 
     it('returns the query to fetch the regions table', async () => {
       const result = await FetchTableService.go(tableName, schemaName)
 
-      expect(result.rows).to.be.an.instanceof(Promise)
+      expect(result.rows).toBeInstanceOf(Promise)
     })
   })
 })

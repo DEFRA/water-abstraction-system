@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
@@ -91,73 +84,67 @@ describe('Notices - Setup - Create Notifications service', () => {
     it('returns the created the abstraction alert notifications', async () => {
       const results = await CreateNotificationsService.go(session, recipients, noticeId)
 
-      expect(results).to.have.length(2)
+      expect(results).toHaveLength(2)
 
-      expect(results[0]).to.equal(
-        {
-          contactType: recipients[0].contact_type,
-          dueDate: null,
-          eventId: noticeId,
-          licenceMonitoringStationId: session.licenceMonitoringStations[0].id,
-          licences: recipients[0].licence_refs,
-          messageRef: 'abstraction alert stop',
-          messageType: 'email',
-          pdf: null,
-          personalisation: {
-            alertType: 'stop',
-            condition_text: '',
-            flow_or_level: 'flow',
-            issuer_email_address: 'admin-internal@wrls.gov.uk',
-            label: 'DEATH STAR',
-            licenceGaugingStationId: session.licenceMonitoringStations[0].id,
-            licenceId: session.licenceMonitoringStations[0].licence.id,
-            licenceRef: session.licenceMonitoringStations[0].licence.licenceRef,
-            monitoring_station_name: 'DEATH STAR',
-            sending_alert_type: 'stop',
-            source: '',
-            thresholdUnit: 'm3/s',
-            thresholdValue: 50
-          },
-          recipient: recipients[0].email,
-          returnLogIds: null,
-          status: 'pending',
-          templateId: NOTIFY_TEMPLATES.alerts.email.stop
+      expect(results[0]).toMatchObject({
+        contactType: recipients[0].contact_type,
+        dueDate: null,
+        eventId: noticeId,
+        licenceMonitoringStationId: session.licenceMonitoringStations[0].id,
+        licences: recipients[0].licence_refs,
+        messageRef: 'abstraction alert stop',
+        messageType: 'email',
+        pdf: null,
+        personalisation: {
+          alertType: 'stop',
+          condition_text: '',
+          flow_or_level: 'flow',
+          issuer_email_address: 'admin-internal@wrls.gov.uk',
+          label: 'DEATH STAR',
+          licenceGaugingStationId: session.licenceMonitoringStations[0].id,
+          licenceId: session.licenceMonitoringStations[0].licence.id,
+          licenceRef: session.licenceMonitoringStations[0].licence.licenceRef,
+          monitoring_station_name: 'DEATH STAR',
+          sending_alert_type: 'stop',
+          source: '',
+          thresholdUnit: 'm3/s',
+          thresholdValue: 50
         },
-        { skip: ['createdAt', 'id', 'updatedAt'] }
-      )
+        recipient: recipients[0].email,
+        returnLogIds: null,
+        status: 'pending',
+        templateId: NOTIFY_TEMPLATES.alerts.email.stop
+      })
 
-      expect(results[1]).to.equal(
-        {
-          contactType: recipients[1].contact_type,
-          dueDate: null,
-          eventId: noticeId,
-          licenceMonitoringStationId: session.licenceMonitoringStations[1].id,
-          licences: recipients[1].licence_refs,
-          messageRef: 'abstraction alert stop',
-          messageType: 'email',
-          pdf: null,
-          personalisation: {
-            alertType: 'stop',
-            condition_text: '',
-            flow_or_level: 'flow',
-            issuer_email_address: 'admin-internal@wrls.gov.uk',
-            label: 'DEATH STAR',
-            licenceGaugingStationId: session.licenceMonitoringStations[1].id,
-            licenceId: session.licenceMonitoringStations[1].licence.id,
-            licenceRef: session.licenceMonitoringStations[1].licence.licenceRef,
-            monitoring_station_name: 'DEATH STAR',
-            sending_alert_type: 'stop',
-            source: '',
-            thresholdUnit: 'Ml/d',
-            thresholdValue: 500
-          },
-          recipient: recipients[1].email,
-          returnLogIds: null,
-          status: 'pending',
-          templateId: NOTIFY_TEMPLATES.alerts.email.stop
+      expect(results[1]).toMatchObject({
+        contactType: recipients[1].contact_type,
+        dueDate: null,
+        eventId: noticeId,
+        licenceMonitoringStationId: session.licenceMonitoringStations[1].id,
+        licences: recipients[1].licence_refs,
+        messageRef: 'abstraction alert stop',
+        messageType: 'email',
+        pdf: null,
+        personalisation: {
+          alertType: 'stop',
+          condition_text: '',
+          flow_or_level: 'flow',
+          issuer_email_address: 'admin-internal@wrls.gov.uk',
+          label: 'DEATH STAR',
+          licenceGaugingStationId: session.licenceMonitoringStations[1].id,
+          licenceId: session.licenceMonitoringStations[1].licence.id,
+          licenceRef: session.licenceMonitoringStations[1].licence.licenceRef,
+          monitoring_station_name: 'DEATH STAR',
+          sending_alert_type: 'stop',
+          source: '',
+          thresholdUnit: 'Ml/d',
+          thresholdValue: 500
         },
-        { skip: ['createdAt', 'id', 'updatedAt'] }
-      )
+        recipient: recipients[1].email,
+        returnLogIds: null,
+        status: 'pending',
+        templateId: NOTIFY_TEMPLATES.alerts.email.stop
+      })
     })
   })
 
@@ -234,85 +221,79 @@ describe('Notices - Setup - Create Notifications service', () => {
     it('returns the created the paper return notifications', async () => {
       const results = await CreateNotificationsService.go(session, recipients, noticeId)
 
-      expect(results).to.have.length(2)
+      expect(results).toHaveLength(2)
 
-      expect(results[0]).to.equal(
-        {
-          contactType: recipients[0].contact_type,
-          dueDate: new Date(session.dueReturns[0].dueDate),
-          eventId: noticeId,
-          licenceMonitoringStationId: null,
-          licences: recipients[0].licence_refs,
-          messageRef: 'paper return',
-          messageType: 'letter',
-          pdf: null,
-          personalisation: {
-            address_line_1: 'Returnsholder',
-            address_line_2: '4',
-            address_line_3: 'Privet Drive',
-            address_line_4: 'Little Whinging',
-            address_line_5: 'Surrey',
-            address_line_6: 'WD25 7LR',
-            due_date: '28 April 2025',
-            end_date: '31 March 2025',
-            format_id: '10059610',
-            is_two_part_tariff: false,
-            licence_ref: session.licenceRef,
-            naldAreaCode: 'RIDIN',
-            purpose: 'Spray Irrigation - Direct',
-            qr_url: session.dueReturns[0].returnLogId,
-            region_code: 3,
-            region_name: 'North East',
-            returns_frequency: 'month',
-            site_description: 'BOREHOLE AT AVALON',
-            start_date: '1 April 2024'
-          },
-          recipient: null,
-          returnLogIds: session.selectedReturns,
-          status: 'pending',
-          templateId: null
+      expect(results[0]).toMatchObject({
+        contactType: recipients[0].contact_type,
+        dueDate: new Date(session.dueReturns[0].dueDate),
+        eventId: noticeId,
+        licenceMonitoringStationId: null,
+        licences: recipients[0].licence_refs,
+        messageRef: 'paper return',
+        messageType: 'letter',
+        pdf: null,
+        personalisation: {
+          address_line_1: 'Returnsholder',
+          address_line_2: '4',
+          address_line_3: 'Privet Drive',
+          address_line_4: 'Little Whinging',
+          address_line_5: 'Surrey',
+          address_line_6: 'WD25 7LR',
+          due_date: '28 April 2025',
+          end_date: '31 March 2025',
+          format_id: '10059610',
+          is_two_part_tariff: false,
+          licence_ref: session.licenceRef,
+          naldAreaCode: 'RIDIN',
+          purpose: 'Spray Irrigation - Direct',
+          qr_url: session.dueReturns[0].returnLogId,
+          region_code: 3,
+          region_name: 'North East',
+          returns_frequency: 'month',
+          site_description: 'BOREHOLE AT AVALON',
+          start_date: '1 April 2024'
         },
-        { skip: ['createdAt', 'id', 'updatedAt'] }
-      )
+        recipient: null,
+        returnLogIds: session.selectedReturns,
+        status: 'pending',
+        templateId: null
+      })
 
-      expect(results[1]).to.equal(
-        {
-          contactType: recipients[1].contact_type,
-          dueDate: new Date(session.dueReturns[0].dueDate),
-          eventId: noticeId,
-          licenceMonitoringStationId: null,
-          licences: recipients[1].licence_refs,
-          messageRef: 'paper return',
-          messageType: 'letter',
-          pdf: null,
-          personalisation: {
-            address_line_1: 'Returnsto',
-            address_line_2: '4',
-            address_line_3: 'Privet Drive',
-            address_line_4: 'Little Whinging',
-            address_line_5: 'Surrey',
-            address_line_6: 'WD25 7LR',
-            due_date: '28 April 2025',
-            end_date: '31 March 2025',
-            format_id: '10059610',
-            is_two_part_tariff: false,
-            licence_ref: session.licenceRef,
-            naldAreaCode: 'RIDIN',
-            purpose: 'Spray Irrigation - Direct',
-            qr_url: session.dueReturns[0].returnLogId,
-            region_code: 3,
-            region_name: 'North East',
-            returns_frequency: 'month',
-            site_description: 'BOREHOLE AT AVALON',
-            start_date: '1 April 2024'
-          },
-          recipient: null,
-          returnLogIds: session.selectedReturns,
-          status: 'pending',
-          templateId: null
+      expect(results[1]).toMatchObject({
+        contactType: recipients[1].contact_type,
+        dueDate: new Date(session.dueReturns[0].dueDate),
+        eventId: noticeId,
+        licenceMonitoringStationId: null,
+        licences: recipients[1].licence_refs,
+        messageRef: 'paper return',
+        messageType: 'letter',
+        pdf: null,
+        personalisation: {
+          address_line_1: 'Returnsto',
+          address_line_2: '4',
+          address_line_3: 'Privet Drive',
+          address_line_4: 'Little Whinging',
+          address_line_5: 'Surrey',
+          address_line_6: 'WD25 7LR',
+          due_date: '28 April 2025',
+          end_date: '31 March 2025',
+          format_id: '10059610',
+          is_two_part_tariff: false,
+          licence_ref: session.licenceRef,
+          naldAreaCode: 'RIDIN',
+          purpose: 'Spray Irrigation - Direct',
+          qr_url: session.dueReturns[0].returnLogId,
+          region_code: 3,
+          region_name: 'North East',
+          returns_frequency: 'month',
+          site_description: 'BOREHOLE AT AVALON',
+          start_date: '1 April 2024'
         },
-        { skip: ['createdAt', 'id', 'updatedAt'] }
-      )
+        recipient: null,
+        returnLogIds: session.selectedReturns,
+        status: 'pending',
+        templateId: null
+      })
     })
   })
 
@@ -349,67 +330,61 @@ describe('Notices - Setup - Create Notifications service', () => {
     it('returns the created the returns notifications', async () => {
       const results = await CreateNotificationsService.go(session, recipients, noticeId)
 
-      expect(results).to.have.length(2)
+      expect(results).toHaveLength(2)
 
-      expect(results[0]).to.equal(
-        {
-          contactType: recipients[0].contact_type,
-          dueDate: futureDueDate('letter'),
-          eventId: noticeId,
-          licenceMonitoringStationId: null,
-          licences: recipients[0].licence_refs,
-          messageRef: 'returns invitation',
-          messageType: 'letter',
-          pdf: null,
-          personalisation: {
-            address_line_1: 'Returnsholder',
-            address_line_2: '4',
-            address_line_3: 'Privet Drive',
-            address_line_4: 'Little Whinging',
-            address_line_5: 'Surrey',
-            address_line_6: 'WD25 7LR',
-            name: 'Returnsholder',
-            periodEndDate: null,
-            periodStartDate: null,
-            returnDueDate: formatLongDate(futureDueDate('letter'))
-          },
-          recipient: null,
-          returnLogIds: recipients[0].return_log_ids,
-          status: 'pending',
-          templateId: NOTIFY_TEMPLATES.invitations.standard.letter['licence holder']
+      expect(results[0]).toMatchObject({
+        contactType: recipients[0].contact_type,
+        dueDate: futureDueDate('letter'),
+        eventId: noticeId,
+        licenceMonitoringStationId: null,
+        licences: recipients[0].licence_refs,
+        messageRef: 'returns invitation',
+        messageType: 'letter',
+        pdf: null,
+        personalisation: {
+          address_line_1: 'Returnsholder',
+          address_line_2: '4',
+          address_line_3: 'Privet Drive',
+          address_line_4: 'Little Whinging',
+          address_line_5: 'Surrey',
+          address_line_6: 'WD25 7LR',
+          name: 'Returnsholder',
+          periodEndDate: null,
+          periodStartDate: null,
+          returnDueDate: formatLongDate(futureDueDate('letter'))
         },
-        { skip: ['createdAt', 'id', 'updatedAt'] }
-      )
+        recipient: null,
+        returnLogIds: recipients[0].return_log_ids,
+        status: 'pending',
+        templateId: NOTIFY_TEMPLATES.invitations.standard.letter['licence holder']
+      })
 
-      expect(results[1]).to.equal(
-        {
-          contactType: recipients[1].contact_type,
-          dueDate: futureDueDate('letter'),
-          eventId: noticeId,
-          licenceMonitoringStationId: null,
-          licences: recipients[1].licence_refs,
-          messageRef: 'returns invitation',
-          messageType: 'letter',
-          pdf: null,
-          personalisation: {
-            name: 'Returnsto',
-            periodEndDate: null,
-            address_line_1: 'Returnsto',
-            address_line_2: '4',
-            address_line_3: 'Privet Drive',
-            address_line_4: 'Little Whinging',
-            address_line_5: 'Surrey',
-            address_line_6: 'WD25 7LR',
-            periodStartDate: null,
-            returnDueDate: formatLongDate(futureDueDate('letter'))
-          },
-          recipient: null,
-          returnLogIds: recipients[1].return_log_ids,
-          status: 'pending',
-          templateId: NOTIFY_TEMPLATES.invitations.standard.letter['returns to']
+      expect(results[1]).toMatchObject({
+        contactType: recipients[1].contact_type,
+        dueDate: futureDueDate('letter'),
+        eventId: noticeId,
+        licenceMonitoringStationId: null,
+        licences: recipients[1].licence_refs,
+        messageRef: 'returns invitation',
+        messageType: 'letter',
+        pdf: null,
+        personalisation: {
+          name: 'Returnsto',
+          periodEndDate: null,
+          address_line_1: 'Returnsto',
+          address_line_2: '4',
+          address_line_3: 'Privet Drive',
+          address_line_4: 'Little Whinging',
+          address_line_5: 'Surrey',
+          address_line_6: 'WD25 7LR',
+          periodStartDate: null,
+          returnDueDate: formatLongDate(futureDueDate('letter'))
         },
-        { skip: ['createdAt', 'id', 'updatedAt'] }
-      )
+        recipient: null,
+        returnLogIds: recipients[1].return_log_ids,
+        status: 'pending',
+        templateId: NOTIFY_TEMPLATES.invitations.standard.letter['returns to']
+      })
     })
   })
 
@@ -437,60 +412,54 @@ describe('Notices - Setup - Create Notifications service', () => {
     it('returns the created returns notifications', async () => {
       const results = await CreateNotificationsService.go(session, recipients, noticeId)
 
-      expect(results).to.have.length(2)
+      expect(results).toHaveLength(2)
 
-      expect(results[0]).to.equal(
-        {
-          contactType: recipients[0].contact_type,
-          dueDate: null,
-          eventId: noticeId,
-          licenceMonitoringStationId: null,
-          licences: recipients[0].licence_refs,
-          messageRef: 'renewal invitation',
-          messageType: 'letter',
-          pdf: null,
-          personalisation: {
-            address_line_1: 'Renewal licence holder',
-            address_line_2: '4',
-            address_line_3: 'Privet Drive',
-            address_line_4: 'Little Whinging',
-            address_line_5: 'Surrey',
-            address_line_6: 'WD25 7LR',
-            expiryDate: '1 January 2022',
-            licenceRef: recipients[0].licence_refs[0],
-            name: 'Renewal licence holder',
-            renewalDate: '3 November 2021'
-          },
-          recipient: null,
-          returnLogIds: null,
-          status: 'pending',
-          templateId: NOTIFY_TEMPLATES.renewalInvitations.standard.letter['single licence']
+      expect(results[0]).toMatchObject({
+        contactType: recipients[0].contact_type,
+        dueDate: null,
+        eventId: noticeId,
+        licenceMonitoringStationId: null,
+        licences: recipients[0].licence_refs,
+        messageRef: 'renewal invitation',
+        messageType: 'letter',
+        pdf: null,
+        personalisation: {
+          address_line_1: 'Renewal licence holder',
+          address_line_2: '4',
+          address_line_3: 'Privet Drive',
+          address_line_4: 'Little Whinging',
+          address_line_5: 'Surrey',
+          address_line_6: 'WD25 7LR',
+          expiryDate: '1 January 2022',
+          licenceRef: recipients[0].licence_refs[0],
+          name: 'Renewal licence holder',
+          renewalDate: '3 November 2021'
         },
-        { skip: ['createdAt', 'id', 'updatedAt'] }
-      )
+        recipient: null,
+        returnLogIds: null,
+        status: 'pending',
+        templateId: NOTIFY_TEMPLATES.renewalInvitations.standard.letter['single licence']
+      })
 
-      expect(results[1]).to.equal(
-        {
-          contactType: recipients[1].contact_type,
-          dueDate: null,
-          eventId: noticeId,
-          licenceMonitoringStationId: null,
-          licences: recipients[1].licence_refs,
-          messageRef: 'renewal invitation',
-          messageType: 'email',
-          pdf: null,
-          personalisation: {
-            expiryDate: '1 January 2022',
-            licenceRef: recipients[1].licence_refs[0],
-            renewalDate: '3 November 2021'
-          },
-          recipient: recipients[1].email,
-          returnLogIds: null,
-          status: 'pending',
-          templateId: NOTIFY_TEMPLATES.renewalInvitations.standard.email['single licence']
+      expect(results[1]).toMatchObject({
+        contactType: recipients[1].contact_type,
+        dueDate: null,
+        eventId: noticeId,
+        licenceMonitoringStationId: null,
+        licences: recipients[1].licence_refs,
+        messageRef: 'renewal invitation',
+        messageType: 'email',
+        pdf: null,
+        personalisation: {
+          expiryDate: '1 January 2022',
+          licenceRef: recipients[1].licence_refs[0],
+          renewalDate: '3 November 2021'
         },
-        { skip: ['createdAt', 'id', 'updatedAt'] }
-      )
+        recipient: recipients[1].email,
+        returnLogIds: null,
+        status: 'pending',
+        templateId: NOTIFY_TEMPLATES.renewalInvitations.standard.email['single licence']
+      })
     })
   })
 })

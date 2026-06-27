@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const { db } = require('../../../db/db.js')
@@ -27,7 +22,7 @@ describe('Check Busy Bill Runs service', () => {
     it('returns "both"', async () => {
       const result = await CheckBusyBillRunsService.go()
 
-      expect(result).to.equal('both')
+      expect(result).toEqual('both')
     })
   })
 
@@ -39,7 +34,7 @@ describe('Check Busy Bill Runs service', () => {
     it('returns "cancelling"', async () => {
       const result = await CheckBusyBillRunsService.go()
 
-      expect(result).to.equal('cancelling')
+      expect(result).toEqual('cancelling')
     })
   })
 
@@ -51,7 +46,7 @@ describe('Check Busy Bill Runs service', () => {
     it('returns "building"', async () => {
       const result = await CheckBusyBillRunsService.go()
 
-      expect(result).to.equal('building')
+      expect(result).toEqual('building')
     })
   })
 
@@ -63,7 +58,7 @@ describe('Check Busy Bill Runs service', () => {
     it('returns "none"', async () => {
       const result = await CheckBusyBillRunsService.go()
 
-      expect(result).to.equal('none')
+      expect(result).toEqual('none')
     })
   })
 })

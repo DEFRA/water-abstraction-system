@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillHelper = require('../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
@@ -78,7 +71,7 @@ describe('Bill Runs - Unflag Unbilled Supplementary Licences service', () => {
 
             const licenceToBeChecked = await stdSupplementary.licenceNotBilledInBillRun.$query()
 
-            expect(licenceToBeChecked.includeInSrocBilling).to.be.false()
+            expect(licenceToBeChecked.includeInSrocBilling).toBe(false)
           })
         })
 
@@ -88,7 +81,7 @@ describe('Bill Runs - Unflag Unbilled Supplementary Licences service', () => {
 
             const licenceToBeChecked = await stdSupplementary.licenceNotBilledInBillRunAndWorkflow.$query()
 
-            expect(licenceToBeChecked.includeInSrocBilling).to.be.true()
+            expect(licenceToBeChecked.includeInSrocBilling).toBe(true)
           })
         })
 
@@ -98,7 +91,7 @@ describe('Bill Runs - Unflag Unbilled Supplementary Licences service', () => {
 
             const licenceToBeChecked = await stdSupplementary.licenceNotBilledInBillRunAndUpdated.$query()
 
-            expect(licenceToBeChecked.includeInSrocBilling).to.be.true()
+            expect(licenceToBeChecked.includeInSrocBilling).toBe(true)
           })
         })
       })
@@ -109,7 +102,7 @@ describe('Bill Runs - Unflag Unbilled Supplementary Licences service', () => {
 
           const licenceToBeChecked = await stdSupplementary.licenceBilledInBillRun.$query()
 
-          expect(licenceToBeChecked.includeInSrocBilling).to.be.true()
+          expect(licenceToBeChecked.includeInSrocBilling).toBe(true)
         })
       })
     })
@@ -120,7 +113,7 @@ describe('Bill Runs - Unflag Unbilled Supplementary Licences service', () => {
 
         const licenceToBeChecked = await stdSupplementary.licenceNotInBillRun.$query()
 
-        expect(licenceToBeChecked.includeInSrocBilling).to.be.true()
+        expect(licenceToBeChecked.includeInSrocBilling).toBe(true)
       })
     })
   })
@@ -194,7 +187,7 @@ describe('Bill Runs - Unflag Unbilled Supplementary Licences service', () => {
 
             const licenceSupYearToBeChecked = await tptSupplementary.licenceNotBilledInBillRunSupYear.$query()
 
-            expect(licenceSupYearToBeChecked).not.exists()
+            expect(licenceSupYearToBeChecked).toBeUndefined()
           })
         })
 
@@ -205,7 +198,7 @@ describe('Bill Runs - Unflag Unbilled Supplementary Licences service', () => {
             const licenceSupYearToBeChecked =
               await tptSupplementary.licenceNotBilledInBillRunAndWorkflowSupYear.$query()
 
-            expect(licenceSupYearToBeChecked).exists()
+            expect(licenceSupYearToBeChecked).toBeDefined()
           })
         })
 
@@ -215,7 +208,7 @@ describe('Bill Runs - Unflag Unbilled Supplementary Licences service', () => {
 
             const licenceSupYearToBeChecked = await tptSupplementary.licenceNotBilledInBillRunAndUpdatedSupYear.$query()
 
-            expect(licenceSupYearToBeChecked).exists()
+            expect(licenceSupYearToBeChecked).toBeDefined()
           })
         })
       })
@@ -226,7 +219,7 @@ describe('Bill Runs - Unflag Unbilled Supplementary Licences service', () => {
 
           const licenceSupYearToBeChecked = await tptSupplementary.licenceBilledInBillRunSupYear.$query()
 
-          expect(licenceSupYearToBeChecked).exists()
+          expect(licenceSupYearToBeChecked).toBeDefined()
         })
       })
     })
@@ -237,7 +230,7 @@ describe('Bill Runs - Unflag Unbilled Supplementary Licences service', () => {
 
         const licenceSupYearToBeChecked = await tptSupplementary.licenceNotInBillRunSupYear.$query()
 
-        expect(licenceSupYearToBeChecked).exists()
+        expect(licenceSupYearToBeChecked).toBeDefined()
       })
     })
   })

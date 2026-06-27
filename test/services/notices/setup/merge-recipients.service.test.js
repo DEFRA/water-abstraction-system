@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
 
@@ -31,7 +24,7 @@ describe('Notices - Setup - Merge Recipients service', () => {
       it('returns just the fetched recipients', () => {
         const results = MergeRecipientsService.go(session, fetchedRecipients)
 
-        expect(results).to.equal([
+        expect(results).toEqual([
           {
             contact: fetchedRecipients[0].contact,
             contact_hash_id: fetchedRecipients[0].contact_hash_id,
@@ -68,7 +61,7 @@ describe('Notices - Setup - Merge Recipients service', () => {
       it('returns just the selected fetched recipients', () => {
         const results = MergeRecipientsService.go(session, fetchedRecipients)
 
-        expect(results).to.equal([
+        expect(results).toEqual([
           {
             contact: fetchedRecipients[0].contact,
             contact_hash_id: fetchedRecipients[0].contact_hash_id,
@@ -100,7 +93,7 @@ describe('Notices - Setup - Merge Recipients service', () => {
         it('returns all fetched and additional recipients', () => {
           const results = MergeRecipientsService.go(session, fetchedRecipients)
 
-          expect(results).to.equal([
+          expect(results).toEqual([
             {
               contact: fetchedRecipients[0].contact,
               contact_hash_id: fetchedRecipients[0].contact_hash_id,
@@ -156,7 +149,7 @@ describe('Notices - Setup - Merge Recipients service', () => {
         it('returns only the fetched recipients', () => {
           const results = MergeRecipientsService.go(session, fetchedRecipients)
 
-          expect(results).to.equal([
+          expect(results).toEqual([
             {
               contact: fetchedRecipients[0].contact,
               contact_hash_id: fetchedRecipients[0].contact_hash_id,
@@ -200,7 +193,7 @@ describe('Notices - Setup - Merge Recipients service', () => {
         it('returns all fetched recipients and additional recipients without duplicates', () => {
           const results = MergeRecipientsService.go(session, fetchedRecipients)
 
-          expect(results).to.equal([
+          expect(results).toEqual([
             {
               contact: fetchedRecipients[0].contact,
               contact_hash_id: fetchedRecipients[0].contact_hash_id,
@@ -257,7 +250,7 @@ describe('Notices - Setup - Merge Recipients service', () => {
         it('returns just the selected fetched recipients', () => {
           const results = MergeRecipientsService.go(session, fetchedRecipients)
 
-          expect(results).to.equal([
+          expect(results).toEqual([
             {
               contact: fetchedRecipients[0].contact,
               contact_hash_id: fetchedRecipients[0].contact_hash_id,
@@ -287,7 +280,7 @@ describe('Notices - Setup - Merge Recipients service', () => {
         it('returns just the selected additional recipients', () => {
           const results = MergeRecipientsService.go(session, fetchedRecipients)
 
-          expect(results).to.equal([
+          expect(results).toEqual([
             {
               contact: additionalRecipient.contact,
               contact_hash_id: additionalRecipient.contact_hash_id,
@@ -320,7 +313,7 @@ describe('Notices - Setup - Merge Recipients service', () => {
         it('returns only the selected fetched and additional recipients', () => {
           const results = MergeRecipientsService.go(session, fetchedRecipients)
 
-          expect(results).to.equal([
+          expect(results).toEqual([
             {
               contact: fetchedRecipients[0].contact,
               contact_hash_id: fetchedRecipients[0].contact_hash_id,

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
@@ -46,20 +41,17 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
     it('saves the submitted value', async () => {
       await SubmitAccountTypeService.go(session.id, payload)
 
-      expect(session).to.equal(
-        {
-          accountType: 'company',
-          individualName: null
-        },
-        { skip: ['billingAccount', 'id'] }
-      )
-      expect(session.$update.called).to.be.true()
+      expect(session).toMatchObject({
+        accountType: 'company',
+        individualName: null
+      })
+      expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
       const result = await SubmitAccountTypeService.go(session.id, payload)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/company-search`
       })
     })
@@ -79,20 +71,17 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
       it('saves the submitted value', async () => {
         await SubmitAccountTypeService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            accountType: 'company',
-            individualName: null
-          },
-          { skip: ['billingAccount', 'id'] }
-        )
-        expect(session.$update.called).to.be.true()
+        expect(session).toMatchObject({
+          accountType: 'company',
+          individualName: null
+        })
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitAccountTypeService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/company-search`
         })
       })
@@ -114,21 +103,18 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
       it('saves the submitted value', async () => {
         await SubmitAccountTypeService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            accountType: 'company',
-            checkPageVisited: true,
-            individualName: null
-          },
-          { skip: ['billingAccount', 'id'] }
-        )
-        expect(session.$update.called).to.be.true()
+        expect(session).toMatchObject({
+          accountType: 'company',
+          checkPageVisited: true,
+          individualName: null
+        })
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitAccountTypeService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
         })
       })
@@ -146,21 +132,18 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
       it('saves the submitted value', async () => {
         await SubmitAccountTypeService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            ..._commonExpectedValues(),
-            accountType: 'company',
-            individualName: null
-          },
-          { skip: ['billingAccount', 'id'] }
-        )
-        expect(session.$update.called).to.be.true()
+        expect(session).toMatchObject({
+          ..._commonExpectedValues(),
+          accountType: 'company',
+          individualName: null
+        })
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitAccountTypeService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/company-search`
         })
       })
@@ -175,20 +158,17 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
     it('saves the submitted value', async () => {
       await SubmitAccountTypeService.go(session.id, payload)
 
-      expect(session).to.equal(
-        {
-          accountType: 'individual',
-          individualName: 'John Doe'
-        },
-        { skip: ['billingAccount', 'id'] }
-      )
-      expect(session.$update.called).to.be.true()
+      expect(session).toMatchObject({
+        accountType: 'individual',
+        individualName: 'John Doe'
+      })
+      expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
       const result = await SubmitAccountTypeService.go(session.id, payload)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
       })
     })
@@ -209,20 +189,17 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
       it('saves the submitted value', async () => {
         await SubmitAccountTypeService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            accountType: 'individual',
-            individualName: 'John Doe'
-          },
-          { skip: ['billingAccount', 'id'] }
-        )
-        expect(session.$update.called).to.be.true()
+        expect(session).toMatchObject({
+          accountType: 'individual',
+          individualName: 'John Doe'
+        })
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitAccountTypeService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
         })
       })
@@ -245,21 +222,18 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
       it('saves the submitted value', async () => {
         await SubmitAccountTypeService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            accountType: 'individual',
-            checkPageVisited: true,
-            individualName: 'John Doe'
-          },
-          { skip: ['billingAccount', 'id'] }
-        )
-        expect(session.$update.called).to.be.true()
+        expect(session).toMatchObject({
+          accountType: 'individual',
+          checkPageVisited: true,
+          individualName: 'John Doe'
+        })
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitAccountTypeService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
         })
       })
@@ -277,23 +251,20 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
       it('saves the submitted value', async () => {
         await SubmitAccountTypeService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            ..._commonExpectedValues(),
-            accountType: 'individual',
-            companiesHouseNumber: null,
-            companySearch: null,
-            individualName: 'John Doe'
-          },
-          { skip: ['billingAccount', 'id'] }
-        )
-        expect(session.$update.called).to.be.true()
+        expect(session).toMatchObject({
+          ..._commonExpectedValues(),
+          accountType: 'individual',
+          companiesHouseNumber: null,
+          companySearch: null,
+          individualName: 'John Doe'
+        })
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitAccountTypeService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
         })
       })
@@ -316,23 +287,20 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
       it('saves the submitted value', async () => {
         await SubmitAccountTypeService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            ..._commonExpectedValues(),
-            accountType: 'individual',
-            companiesHouseNumber: null,
-            companySearch: null,
-            individualName: 'Jane Doe'
-          },
-          { skip: ['billingAccount', 'id'] }
-        )
-        expect(session.$update.called).to.be.true()
+        expect(session).toMatchObject({
+          ..._commonExpectedValues(),
+          accountType: 'individual',
+          companiesHouseNumber: null,
+          companySearch: null,
+          individualName: 'Jane Doe'
+        })
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitAccountTypeService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
         })
       })
@@ -348,7 +316,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
       it('returns page data for the view, with errors', async () => {
         const result = await SubmitAccountTypeService.go(session.id, payload)
 
-        expect(result.error).to.equal({
+        expect(result.error).toEqual({
           errorList: [
             {
               href: '#accountType',
@@ -370,7 +338,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
       it('returns page data for the view, with errors', async () => {
         const result = await SubmitAccountTypeService.go(session.id, payload)
 
-        expect(result.error).to.equal({
+        expect(result.error).toEqual({
           errorList: [
             {
               href: '#individualName',

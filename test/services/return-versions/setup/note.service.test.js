@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -59,25 +54,22 @@ describe('Return Versions Setup - Note service', () => {
     it('fetches the current setup session record', async () => {
       const result = await NoteService.go(session.id)
 
-      expect(result.sessionId).to.equal(session.id)
+      expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
       const result = await NoteService.go(session.id)
 
-      expect(result).to.equal(
-        {
-          pageTitle: 'Add a note',
-          pageTitleCaption: 'Licence 01/ABC',
-          backLink: {
-            href: `/system/return-versions/setup/${session.id}/check`,
-            text: 'Back'
-          },
-          licenceRef: '01/ABC',
-          note: null
+      expect(result).toMatchObject({
+        pageTitle: 'Add a note',
+        pageTitleCaption: 'Licence 01/ABC',
+        backLink: {
+          href: `/system/return-versions/setup/${session.id}/check`,
+          text: 'Back'
         },
-        { skip: ['sessionId'] }
-      )
+        licenceRef: '01/ABC',
+        note: null
+      })
     })
   })
 })

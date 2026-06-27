@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
 
@@ -32,7 +25,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Relevant Licence Monito
       alertType
     )
 
-    expect(result).to.equal([
+    expect(result).toEqual([
       licenceMonitoringStations.one,
       licenceMonitoringStations.two,
       licenceMonitoringStations.three
@@ -52,7 +45,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Relevant Licence Monito
         alertType
       )
 
-      expect(result).to.equal([licenceMonitoringStations.two])
+      expect(result).toEqual([licenceMonitoringStations.two])
     })
 
     describe('and a licence monitoring station has the "restrictionType" "stop_or_reduce"', () => {
@@ -66,7 +59,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Relevant Licence Monito
           alertType
         )
 
-        expect(result).to.equal([licenceMonitoringStations.two])
+        expect(result).toEqual([licenceMonitoringStations.two])
       })
     })
   })
@@ -82,7 +75,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Relevant Licence Monito
         alertType
       )
 
-      expect(result).to.equal([licenceMonitoringStations.one, licenceMonitoringStations.three])
+      expect(result).toEqual([licenceMonitoringStations.one, licenceMonitoringStations.three])
     })
 
     describe('and a licence monitoring station has the "restrictionType" "stop_or_reduce"', () => {
@@ -96,7 +89,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Relevant Licence Monito
           alertType
         )
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           licenceMonitoringStations.one,
           licenceMonitoringStations.two,
           licenceMonitoringStations.three

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
@@ -49,7 +44,7 @@ describe('Company Contacts - View Contact Details Service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewContactDetailsService.go(companyContact.id, auth, yarStub)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeSecondaryNav: 'contact-details',
         additionalContact: true,
         backLink: {

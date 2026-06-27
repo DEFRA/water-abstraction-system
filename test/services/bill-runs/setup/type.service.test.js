@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -36,7 +31,7 @@ describe('Bill Runs - Setup - Type service', () => {
     it('returns page data for the view', async () => {
       const result = await TypeService.go(session.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'bill-runs',
         backlink: '/system/bill-runs',
         pageTitle: 'Select the bill run type',

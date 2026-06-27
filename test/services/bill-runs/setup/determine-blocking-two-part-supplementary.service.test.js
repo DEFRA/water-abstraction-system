@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
@@ -75,7 +70,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
     it('returns the match and determines that neither engine can be triggered', async () => {
       const result = await DetermineBlockingTwoPartSupplementaryService.go(regionId, year)
 
-      expect(result).to.equal({ matches: [match], toFinancialYearEnding: year, trigger: engineTriggers.neither })
+      expect(result).toEqual({ matches: [match], toFinancialYearEnding: year, trigger: engineTriggers.neither })
     })
   })
 
@@ -95,7 +90,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
     it('returns no matches and determines that the "current" engine can be triggered', async () => {
       const result = await DetermineBlockingTwoPartSupplementaryService.go(regionId, year)
 
-      expect(result).to.equal({ matches: [], toFinancialYearEnding: year, trigger: engineTriggers.current })
+      expect(result).toEqual({ matches: [], toFinancialYearEnding: year, trigger: engineTriggers.current })
     })
   })
 
@@ -109,7 +104,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
     it("determines the 'toFinancialEndYear' to be 0 and that 'neither' engine can be triggered", async () => {
       const result = await DetermineBlockingTwoPartSupplementaryService.go(regionId, year)
 
-      expect(result).to.equal({ matches: [], toFinancialYearEnding: 0, trigger: engineTriggers.neither })
+      expect(result).toEqual({ matches: [], toFinancialYearEnding: 0, trigger: engineTriggers.neither })
     })
   })
 })

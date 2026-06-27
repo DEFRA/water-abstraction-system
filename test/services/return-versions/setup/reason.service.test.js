@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -57,25 +52,22 @@ describe('Return Versions Setup - Reason service', () => {
     it('fetches the current setup session record', async () => {
       const result = await ReasonService.go(session.id)
 
-      expect(result.sessionId).to.equal(session.id)
+      expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
       const result = await ReasonService.go(session.id)
 
-      expect(result).to.equal(
-        {
-          pageTitle: 'Select the reason for the requirements for returns',
-          pageTitleCaption: `Licence ${session.licence.licenceRef}`,
-          backLink: {
-            href: `/system/return-versions/setup/${session.id}/start-date`,
-            text: 'Back'
-          },
-          licenceRef: '01/ABC',
-          reason: null
+      expect(result).toMatchObject({
+        pageTitle: 'Select the reason for the requirements for returns',
+        pageTitleCaption: `Licence ${session.licence.licenceRef}`,
+        backLink: {
+          href: `/system/return-versions/setup/${session.id}/start-date`,
+          text: 'Back'
         },
-        { skip: ['sessionId'] }
-      )
+        licenceRef: '01/ABC',
+        reason: null
+      })
     })
   })
 })

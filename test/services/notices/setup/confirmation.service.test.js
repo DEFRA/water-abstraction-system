@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
 const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
@@ -31,7 +24,7 @@ describe('Notices - Setup - Confirmation service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewConfirmationService.go(event.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'notices',
         forwardLink: `/system/notices/${event.id}`,
         monitoringStationLink: null,

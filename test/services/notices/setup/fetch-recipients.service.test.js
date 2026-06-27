@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
@@ -64,14 +59,14 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService.go(session, download)
 
-        expect(fetchAbstractionAlertRecipientsStub.calledOnceWith(session)).to.be.true()
+        expect(fetchAbstractionAlertRecipientsStub.calledOnceWith(session)).toBe(true)
 
-        expect(fetchReturnsInvitationRecipientsStub.called).to.be.false()
-        expect(fetchRenewalInvitationRecipientsStub.called).to.be.false()
-        expect(fetchPaperReturnsRecipientsStub.called).to.be.false()
-        expect(fetchReturnsReminderRecipientsStub.called).to.be.false()
+        expect(fetchReturnsInvitationRecipientsStub.called).toBe(false)
+        expect(fetchRenewalInvitationRecipientsStub.called).toBe(false)
+        expect(fetchPaperReturnsRecipientsStub.called).toBe(false)
+        expect(fetchReturnsReminderRecipientsStub.called).toBe(false)
 
-        expect(results).to.equal(recipients)
+        expect(results).toEqual(recipients)
       })
     })
   })
@@ -99,14 +94,14 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService.go(session, download)
 
-        expect(fetchPaperReturnsRecipientsStub.calledOnceWith(session, download)).to.be.true()
+        expect(fetchPaperReturnsRecipientsStub.calledOnceWith(session, download)).toBe(true)
 
-        expect(fetchAbstractionAlertRecipientsStub.called).to.be.false()
-        expect(fetchRenewalInvitationRecipientsStub.called).to.be.false()
-        expect(fetchReturnsInvitationRecipientsStub.called).to.be.false()
-        expect(fetchReturnsReminderRecipientsStub.called).to.be.false()
+        expect(fetchAbstractionAlertRecipientsStub.called).toBe(false)
+        expect(fetchRenewalInvitationRecipientsStub.called).toBe(false)
+        expect(fetchReturnsInvitationRecipientsStub.called).toBe(false)
+        expect(fetchReturnsReminderRecipientsStub.called).toBe(false)
 
-        expect(results).to.equal(recipients)
+        expect(results).toEqual(recipients)
       })
     })
 
@@ -125,14 +120,14 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService.go(session, download)
 
-        expect(fetchPaperReturnsRecipientsStub.calledOnceWith(session, download)).to.be.true()
+        expect(fetchPaperReturnsRecipientsStub.calledOnceWith(session, download)).toBe(true)
 
-        expect(fetchAbstractionAlertRecipientsStub.called).to.be.false()
-        expect(fetchRenewalInvitationRecipientsStub.called).to.be.false()
-        expect(fetchReturnsInvitationRecipientsStub.called).to.be.false()
-        expect(fetchReturnsReminderRecipientsStub.called).to.be.false()
+        expect(fetchAbstractionAlertRecipientsStub.called).toBe(false)
+        expect(fetchRenewalInvitationRecipientsStub.called).toBe(false)
+        expect(fetchReturnsInvitationRecipientsStub.called).toBe(false)
+        expect(fetchReturnsReminderRecipientsStub.called).toBe(false)
 
-        expect(results).to.equal(recipients)
+        expect(results).toEqual(recipients)
       })
     })
   })
@@ -157,14 +152,14 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService.go(session, download)
 
-        expect(fetchRenewalInvitationRecipientsStub.calledOnceWith(session)).to.be.true()
+        expect(fetchRenewalInvitationRecipientsStub.calledOnceWith(session)).toBe(true)
 
-        expect(fetchAbstractionAlertRecipientsStub.called).to.be.false()
-        expect(fetchPaperReturnsRecipientsStub.called).to.be.false()
-        expect(fetchReturnsInvitationRecipientsStub.called).to.be.false()
-        expect(fetchReturnsReminderRecipientsStub.called).to.be.false()
+        expect(fetchAbstractionAlertRecipientsStub.called).toBe(false)
+        expect(fetchPaperReturnsRecipientsStub.called).toBe(false)
+        expect(fetchReturnsInvitationRecipientsStub.called).toBe(false)
+        expect(fetchReturnsReminderRecipientsStub.called).toBe(false)
 
-        expect(results).to.equal(recipients)
+        expect(results).toEqual(recipients)
       })
     })
   })
@@ -192,14 +187,14 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService.go(session, download)
 
-        expect(fetchReturnsInvitationRecipientsStub.calledOnceWith(session, download)).to.be.true()
+        expect(fetchReturnsInvitationRecipientsStub.calledOnceWith(session, download)).toBe(true)
 
-        expect(fetchAbstractionAlertRecipientsStub.called).to.be.false()
-        expect(fetchPaperReturnsRecipientsStub.called).to.be.false()
-        expect(fetchRenewalInvitationRecipientsStub.called).to.be.false()
-        expect(fetchReturnsReminderRecipientsStub.called).to.be.false()
+        expect(fetchAbstractionAlertRecipientsStub.called).toBe(false)
+        expect(fetchPaperReturnsRecipientsStub.called).toBe(false)
+        expect(fetchRenewalInvitationRecipientsStub.called).toBe(false)
+        expect(fetchReturnsReminderRecipientsStub.called).toBe(false)
 
-        expect(results).to.equal(recipients)
+        expect(results).toEqual(recipients)
       })
     })
 
@@ -218,14 +213,14 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService.go(session, download)
 
-        expect(fetchReturnsInvitationRecipientsStub.calledOnceWith(session, download)).to.be.true()
+        expect(fetchReturnsInvitationRecipientsStub.calledOnceWith(session, download)).toBe(true)
 
-        expect(fetchAbstractionAlertRecipientsStub.called).to.be.false()
-        expect(fetchPaperReturnsRecipientsStub.called).to.be.false()
-        expect(fetchRenewalInvitationRecipientsStub.called).to.be.false()
-        expect(fetchReturnsReminderRecipientsStub.called).to.be.false()
+        expect(fetchAbstractionAlertRecipientsStub.called).toBe(false)
+        expect(fetchPaperReturnsRecipientsStub.called).toBe(false)
+        expect(fetchRenewalInvitationRecipientsStub.called).toBe(false)
+        expect(fetchReturnsReminderRecipientsStub.called).toBe(false)
 
-        expect(results).to.equal(recipients)
+        expect(results).toEqual(recipients)
       })
     })
   })
@@ -253,14 +248,14 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService.go(session, download)
 
-        expect(fetchReturnsReminderRecipientsStub.calledOnceWith(session, download)).to.be.true()
+        expect(fetchReturnsReminderRecipientsStub.calledOnceWith(session, download)).toBe(true)
 
-        expect(fetchAbstractionAlertRecipientsStub.called).to.be.false()
-        expect(fetchPaperReturnsRecipientsStub.called).to.be.false()
-        expect(fetchRenewalInvitationRecipientsStub.called).to.be.false()
-        expect(fetchReturnsInvitationRecipientsStub.called).to.be.false()
+        expect(fetchAbstractionAlertRecipientsStub.called).toBe(false)
+        expect(fetchPaperReturnsRecipientsStub.called).toBe(false)
+        expect(fetchRenewalInvitationRecipientsStub.called).toBe(false)
+        expect(fetchReturnsInvitationRecipientsStub.called).toBe(false)
 
-        expect(results).to.equal(recipients)
+        expect(results).toEqual(recipients)
       })
     })
 
@@ -279,14 +274,14 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService.go(session, download)
 
-        expect(fetchReturnsReminderRecipientsStub.calledOnceWith(session, download)).to.be.true()
+        expect(fetchReturnsReminderRecipientsStub.calledOnceWith(session, download)).toBe(true)
 
-        expect(fetchAbstractionAlertRecipientsStub.called).to.be.false()
-        expect(fetchPaperReturnsRecipientsStub.called).to.be.false()
-        expect(fetchRenewalInvitationRecipientsStub.called).to.be.false()
-        expect(fetchReturnsInvitationRecipientsStub.called).to.be.false()
+        expect(fetchAbstractionAlertRecipientsStub.called).toBe(false)
+        expect(fetchPaperReturnsRecipientsStub.called).toBe(false)
+        expect(fetchRenewalInvitationRecipientsStub.called).toBe(false)
+        expect(fetchReturnsInvitationRecipientsStub.called).toBe(false)
 
-        expect(results).to.equal(recipients)
+        expect(results).toEqual(recipients)
       })
     })
   })

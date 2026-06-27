@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const CompressSchemaFolderService = require('../../../../app/services/jobs/export/compress-schema-folder.service.js')
@@ -42,10 +37,10 @@ describe('Schema export service', () => {
     it('calls the different services that export a schema', async () => {
       await SchemaExportService.go('water')
 
-      expect(FetchTableNamesServiceStub.called).to.be.true()
-      expect(CompressSchemaFolderServiceStub.called).to.be.true()
-      expect(SendToS3BucketServiceStub.called).to.be.true()
-      expect(DeleteFilesServiceStub.called).to.be.true()
+      expect(FetchTableNamesServiceStub.called).toBe(true)
+      expect(CompressSchemaFolderServiceStub.called).toBe(true)
+      expect(SendToS3BucketServiceStub.called).toBe(true)
+      expect(DeleteFilesServiceStub.called).toBe(true)
     })
 
     it('calls the ExportTableService with the different table names as arguments', async () => {
@@ -57,7 +52,7 @@ describe('Schema export service', () => {
         return call.args
       })
 
-      expect(allArgs).to.equal(tableNames)
+      expect(allArgs).toEqual(tableNames)
     })
 
     it('creates a folder name for the schema table files to be saved in', async () => {
@@ -70,7 +65,7 @@ describe('Schema export service', () => {
         return call.args
       })
 
-      expect(args).to.equal(expectedFolderPath)
+      expect(args).toEqual(expectedFolderPath)
     })
   })
 
@@ -97,15 +92,15 @@ describe('Schema export service', () => {
 
       await SchemaExportService.go('water')
 
-      expect(notifierStub.omfg.calledWith('Error: Failed to export schema water')).to.be.true()
-      expect(SendToS3BucketServiceStub.called).to.be.false()
-      expect(CompressSchemaFolderServiceStub.called).to.be.false()
+      expect(notifierStub.omfg.calledWith('Error: Failed to export schema water')).toBe(true)
+      expect(SendToS3BucketServiceStub.called).toBe(false)
+      expect(CompressSchemaFolderServiceStub.called).toBe(false)
     })
 
     it('cleans up the files', async () => {
       await SchemaExportService.go('water')
 
-      expect(DeleteFilesServiceStub.called).to.be.true()
+      expect(DeleteFilesServiceStub.called).toBe(true)
     })
   })
 })

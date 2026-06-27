@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
 const NotificationHelper = require('../../../support/helpers/notification.helper.js')
@@ -53,7 +46,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
 
       const result = await notification.$query()
 
-      expect(result).equal({
+      expect(result).toEqual({
         alternateNoticeId: null,
         contactType: null,
         createdAt: new Date(notification.createdAt),
@@ -108,7 +101,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
 
       const result = await notification.$query()
 
-      expect(result).equal({
+      expect(result).toEqual({
         alternateNoticeId: null,
         contactType: null,
         createdAt: new Date(notification.createdAt),
@@ -139,7 +132,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
 
       const result = await notification2.$query()
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         alternateNoticeId: null,
         contactType: null,
         createdAt: new Date(notification2.createdAt),

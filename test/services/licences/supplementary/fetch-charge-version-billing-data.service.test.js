@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillHelper = require('../../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
@@ -27,7 +20,7 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
     let srocChargeReference
     let srocChargeVersion
 
-    before(async () => {
+    beforeAll(async () => {
       licence = await LicenceHelper.add()
       // Add sroc charge version and charge reference
       srocChargeVersion = await ChargeVersionHelper.add({ licenceId: licence.id, startDate: new Date('2023-04-01') })
@@ -49,7 +42,7 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
       it('fetches the charge version data', async () => {
         const result = await FetchChargeVersionBillingDataService.go(preSrocChargeVersion.id)
 
-        expect(result.chargeVersion).to.equal({
+        expect(result.chargeVersion).toEqual({
           id: preSrocChargeVersion.id,
           scheme: 'alcs',
           startDate: preSrocChargeVersion.startDate,
@@ -73,7 +66,7 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
       it('does not fetch any bill runs data', async () => {
         const result = await FetchChargeVersionBillingDataService.go(preSrocChargeVersion.id)
 
-        expect(result.srocBillRuns).to.not.exist()
+        expect(result.srocBillRuns).toBeUndefined()
       })
     })
 
@@ -81,7 +74,7 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
       it('fetches the charge version data', async () => {
         const result = await FetchChargeVersionBillingDataService.go(srocChargeVersion.id)
 
-        expect(result.chargeVersion).to.equal({
+        expect(result.chargeVersion).toEqual({
           id: srocChargeVersion.id,
           scheme: 'sroc',
           startDate: srocChargeVersion.startDate,
@@ -106,7 +99,7 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
         let srocAnnualBillRun
         let srocSupplementaryBillRun
 
-        before(async () => {
+        beforeAll(async () => {
           // Add an annual sroc bill run
           srocAnnualBillRun = await BillRunHelper.add({
             batchType: 'annual',
@@ -133,7 +126,7 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
         it('fetches the bill runs in ascending order', async () => {
           const result = await FetchChargeVersionBillingDataService.go(srocChargeVersion.id)
 
-          expect(result.srocBillRuns).to.equal([
+          expect(result.srocBillRuns).toEqual([
             {
               regionId: srocSupplementaryBillRun.regionId,
               scheme: 'sroc',
@@ -151,7 +144,7 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
       })
 
       describe('when the licence has been included in a pre sroc bill run', () => {
-        before(async () => {
+        beforeAll(async () => {
           // Add a pre sroc supplementary bill run
           const preSrocAnnualBillRun = await BillRunHelper.add({
             batchType: 'annual',
@@ -167,14 +160,14 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
         it('fetches only the sroc bill runs', async () => {
           const result = await FetchChargeVersionBillingDataService.go(srocChargeVersion.id)
 
-          expect(result.srocBillRuns.length).to.equal(2)
-          expect(result.srocBillRuns[0].scheme).to.equal('sroc')
-          expect(result.srocBillRuns[1].scheme).to.equal('sroc')
+          expect(result.srocBillRuns.length).toEqual(2)
+          expect(result.srocBillRuns[0].scheme).toEqual('sroc')
+          expect(result.srocBillRuns[1].scheme).toEqual('sroc')
         })
       })
 
       describe('when the licence has been included in a sroc bill run for financial year end 2023', () => {
-        before(async () => {
+        beforeAll(async () => {
           // Add a sroc supplementary bill run
           const preSrocAnnualBillRun = await BillRunHelper.add({
             batchType: 'annual',
@@ -190,16 +183,16 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
         it('fetches only the bill runs that have a financial year end >= to the charge version start date', async () => {
           const result = await FetchChargeVersionBillingDataService.go(srocChargeVersion.id)
 
-          expect(result.srocBillRuns.length).to.equal(2)
-          expect(result.srocBillRuns[0].toFinancialYearEnding).to.equal(2024)
-          expect(result.srocBillRuns[1].toFinancialYearEnding).to.equal(2025)
+          expect(result.srocBillRuns.length).toEqual(2)
+          expect(result.srocBillRuns[0].toFinancialYearEnding).toEqual(2024)
+          expect(result.srocBillRuns[1].toFinancialYearEnding).toEqual(2025)
         })
       })
 
       describe('when the licence has been in an errored bill run', () => {
         let reviewBillRun
 
-        before(async () => {
+        beforeAll(async () => {
           // Add a errored bill run
           const erroredBillRun = await BillRunHelper.add({
             batchType: 'annual',
@@ -237,10 +230,10 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
         it('only fetches bills run with a status of sent, ready or review', async () => {
           const result = await FetchChargeVersionBillingDataService.go(srocChargeVersion.id)
 
-          expect(result.srocBillRuns.length).to.equal(3)
-          expect(result.srocBillRuns[0].toFinancialYearEnding).to.equal(2024)
-          expect(result.srocBillRuns[1].toFinancialYearEnding).to.equal(2025)
-          expect(result.srocBillRuns[1].toFinancialYearEnding).to.equal(2025)
+          expect(result.srocBillRuns.length).toEqual(3)
+          expect(result.srocBillRuns[0].toFinancialYearEnding).toEqual(2024)
+          expect(result.srocBillRuns[1].toFinancialYearEnding).toEqual(2025)
+          expect(result.srocBillRuns[1].toFinancialYearEnding).toEqual(2025)
         })
       })
     })

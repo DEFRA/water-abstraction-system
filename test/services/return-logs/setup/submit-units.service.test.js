@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -51,16 +46,16 @@ describe('Return Logs Setup - Submit Units service', () => {
       it('saves the submitted option', async () => {
         await SubmitUnitsService.go(session.id, payload, yarStub)
 
-        expect(session.units).to.equal('litres')
-        expect(session.unitSymbol).to.equal('l')
-        expect(session.$update.called).to.be.true()
+        expect(session.units).toEqual('litres')
+        expect(session.unitSymbol).toEqual('l')
+        expect(session.$update.called).toBe(true)
       })
 
       describe('and the page has been not been visited', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
           const result = await SubmitUnitsService.go(session.id, payload, yarStub)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             checkPageVisited: undefined
           })
         })
@@ -76,7 +71,7 @@ describe('Return Logs Setup - Submit Units service', () => {
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
           const result = await SubmitUnitsService.go(session.id, payload, yarStub)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             checkPageVisited: true
           })
         })
@@ -86,8 +81,8 @@ describe('Return Logs Setup - Submit Units service', () => {
 
           const [flashType, notification] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ titleText: 'Updated', text: 'Reporting details changed' })
+          expect(flashType).toEqual('notification')
+          expect(notification).toEqual({ titleText: 'Updated', text: 'Reporting details changed' })
         })
       })
     })
@@ -100,22 +95,19 @@ describe('Return Logs Setup - Submit Units service', () => {
       it('returns the page data for the view', async () => {
         const result = await SubmitUnitsService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal(
-          {
-            backLink: { href: `/system/return-logs/setup/${session.id}/reported`, text: 'Back' },
-            pageTitle: 'Which units were used?',
-            pageTitleCaption: 'Return reference 12345',
-            units: null
-          },
-          { skip: ['sessionId', 'error'] }
-        )
+        expect(result).toMatchObject({
+          backLink: { href: `/system/return-logs/setup/${session.id}/reported`, text: 'Back' },
+          pageTitle: 'Which units were used?',
+          pageTitleCaption: 'Return reference 12345',
+          units: null
+        })
       })
 
       describe('because the user has not selected anything', () => {
         it('includes an error for the radio form element', async () => {
           const result = await SubmitUnitsService.go(session.id, payload, yarStub)
 
-          expect(result.error.units).to.equal({ text: 'Select which units were used' })
+          expect(result.error.units).toEqual({ text: 'Select which units were used' })
         })
       })
     })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
 
@@ -24,7 +17,7 @@ describe('Fetch Licence Has Requirements service', () => {
     it('returns true', async () => {
       const result = await FetchLicenceHasRequirementsService.go(licenceId)
 
-      expect(result).to.be.true()
+      expect(result).toBe(true)
     })
   })
 
@@ -32,7 +25,7 @@ describe('Fetch Licence Has Requirements service', () => {
     it('returns false', async () => {
       const result = await FetchLicenceHasRequirementsService.go('ed3b9b1a-94e0-480c-8ad6-60e05f5fa9f4')
 
-      expect(result).to.be.false()
+      expect(result).toBe(false)
     })
   })
 })

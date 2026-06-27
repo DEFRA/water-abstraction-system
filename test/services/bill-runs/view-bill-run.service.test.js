@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const FetchBillRunService = require('../../../app/services/bill-runs/fetch-bill-run.service.js')
@@ -34,7 +29,7 @@ describe('View Bill Run service', () => {
       it('will fetch the data and format it for use in the empty bill run page', async () => {
         const result = await ViewBillRunService.go(testId)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'bill-runs',
           backLink: '/system/bill-runs',
           billRunNumber: 10003,
@@ -62,7 +57,7 @@ describe('View Bill Run service', () => {
       it('will fetch the data and format it for use in the errored bill run page', async () => {
         const result = await ViewBillRunService.go(testId)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'bill-runs',
           backLink: '/system/bill-runs',
           billRunNumber: 10003,
@@ -90,7 +85,7 @@ describe('View Bill Run service', () => {
         it('will fetch the data and format it for use in the view bill run page', async () => {
           const result = await ViewBillRunService.go(testId)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'bill-runs',
             billsCount: '2 Annual bills',
             billRunNumber: 10003,
@@ -161,7 +156,7 @@ describe('View Bill Run service', () => {
         it('will fetch the data and format it for use in the view bill run page', async () => {
           const result = await ViewBillRunService.go(testId)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'bill-runs',
             billsCount: '1 Annual bill',
             billRunNumber: 10003,
@@ -219,7 +214,7 @@ describe('View Bill Run service', () => {
     })
 
     it('throws an exception', async () => {
-      await expect(ViewBillRunService.go('testId')).to.reject()
+      await expect(ViewBillRunService.go('testId')).rejects.toThrow()
     })
   })
 })

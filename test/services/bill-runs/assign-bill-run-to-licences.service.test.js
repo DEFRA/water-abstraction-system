@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
@@ -65,7 +58,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
 
             const result = await unassignedSameRegionAndYear.licenceSupplementaryYear.$query().select()
 
-            expect(result.billRunId).to.equal(billRun.id)
+            expect(result.billRunId).toEqual(billRun.id)
           })
         })
 
@@ -87,7 +80,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
 
             const result = await unassignedDifferentRegionSameYear.licenceSupplementaryYear.$query().select()
 
-            expect(result.billRunId).not.to.equal(billRun.id)
+            expect(result.billRunId).not.toEqual(billRun.id)
           })
         })
       })
@@ -110,7 +103,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
 
           const result = await unassignedSameRegionAndYearNonTpt.licenceSupplementaryYear.$query().select()
 
-          expect(result.billRunId).not.to.equal(billRun.id)
+          expect(result.billRunId).not.toEqual(billRun.id)
         })
       })
     })
@@ -133,7 +126,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
 
         const result = await unassignedSameRegionDifferentYear.licenceSupplementaryYear.$query().select()
 
-        expect(result.billRunId).not.to.equal(billRun.id)
+        expect(result.billRunId).not.toEqual(billRun.id)
       })
     })
   })
@@ -157,7 +150,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
 
       const result = await assignedSameRegionAndYear.licenceSupplementaryYear.$query().select()
 
-      expect(result.billRunId).not.to.equal(billRun.id)
+      expect(result.billRunId).not.toEqual(billRun.id)
     })
   })
 })

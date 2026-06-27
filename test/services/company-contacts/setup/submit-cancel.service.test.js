@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
@@ -45,7 +40,7 @@ describe('Company Contacts - Setup - Cancel Service', () => {
     it('continues the journey', async () => {
       const result = await SubmitCancelService.go(session.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         redirectUrl: `/system/companies/${company.id}/contacts`
       })
     })
@@ -53,7 +48,7 @@ describe('Company Contacts - Setup - Cancel Service', () => {
     it('clears the session', async () => {
       await SubmitCancelService.go(session.id)
 
-      expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
+      expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
     })
 
     describe('and the company contact is being edited', () => {
@@ -71,7 +66,7 @@ describe('Company Contacts - Setup - Cancel Service', () => {
       it('continues the journey', async () => {
         const result = await SubmitCancelService.go(session.id)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           redirectUrl: `/system/company-contacts/${sessionData.companyContact.id}/contact-details`
         })
       })

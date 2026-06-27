@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
@@ -74,7 +69,7 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
       it('returns false (bill run is empty)', async () => {
         const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
 
-        expect(result).to.be.false()
+        expect(result).toBe(false)
       })
     })
 
@@ -110,7 +105,7 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
             it('returns false (bill run is empty)', async () => {
               const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
 
-              expect(result).to.be.false()
+              expect(result).toBe(false)
             })
           })
         })
@@ -146,7 +141,7 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
             it('returns false (bill run is empty)', async () => {
               const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
 
-              expect(result).to.be.false()
+              expect(result).toBe(false)
             })
           })
         })
@@ -227,7 +222,7 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
         it('returns true (bill run is not empty)', async () => {
           const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
 
-          expect(result).to.be.true()
+          expect(result).toBe(true)
         })
       })
     })
@@ -258,10 +253,12 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)).to.reject()
+        const error = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions).catch((e) => {
+          return e
+        })
 
-        expect(error).to.be.an.instanceOf(BillRunError)
-        expect(error.code).to.equal(BillRunModel.errorCodes.failedToPrepareTransactions)
+        expect(error).toBeInstanceOf(BillRunError)
+        expect(error.code).toEqual(BillRunModel.errorCodes.failedToPrepareTransactions)
       })
     })
 
@@ -273,10 +270,12 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)).to.reject()
+        const error = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions).catch((e) => {
+          return e
+        })
 
-        expect(error).to.be.an.instanceOf(BillRunError)
-        expect(error.code).to.equal(BillRunModel.errorCodes.failedToCreateCharge)
+        expect(error).toBeInstanceOf(BillRunError)
+        expect(error.code).toEqual(BillRunModel.errorCodes.failedToCreateCharge)
       })
     })
   })

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -53,26 +48,23 @@ describe('Return Versions Setup - Abstraction Period service', () => {
     it('fetches the current setup session record', async () => {
       const result = await AbstractionPeriodService.go(session.id, requirementIndex)
 
-      expect(result.sessionId).to.equal(session.id)
+      expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
       const result = await AbstractionPeriodService.go(session.id, requirementIndex)
 
-      expect(result).to.equal(
-        {
-          pageTitle: 'Enter the abstraction period for the requirements for returns',
-          pageTitleCaption: 'Licence 01/ABC',
-          abstractionPeriod: null,
-          backLink: {
-            href: `/system/return-versions/setup/${session.id}/points/0`,
-            text: 'Back'
-          },
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC'
+      expect(result).toMatchObject({
+        pageTitle: 'Enter the abstraction period for the requirements for returns',
+        pageTitleCaption: 'Licence 01/ABC',
+        abstractionPeriod: null,
+        backLink: {
+          href: `/system/return-versions/setup/${session.id}/points/0`,
+          text: 'Back'
         },
-        { skip: ['sessionId'] }
-      )
+        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        licenceRef: '01/ABC'
+      })
     })
   })
 })

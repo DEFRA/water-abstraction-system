@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
@@ -42,14 +37,14 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
       it('saves the submitted value', async () => {
         await SubmitAlertTypeService.go(session.id, payload)
 
-        expect(session.alertType).to.equal('stop')
-        expect(session.$update.called).to.be.true()
+        expect(session.alertType).toEqual('stop')
+        expect(session.$update.called).toBe(true)
       })
 
       it('returns an empty object (no page data is needed for a redirect)', async () => {
         const result = await SubmitAlertTypeService.go(session.id, payload)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
       })
     })
 
@@ -66,15 +61,15 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
       it('sets the "alertThresholds" to an empty array', async () => {
         await SubmitAlertTypeService.go(session.id, payload)
 
-        expect(session.alertThresholds).to.equal([])
-        expect(session.$update.called).to.be.true()
+        expect(session.alertThresholds).toEqual([])
+        expect(session.$update.called).toBe(true)
       })
 
       it('sets the "removedThresholds" to an empty array', async () => {
         await SubmitAlertTypeService.go(session.id, payload)
 
-        expect(session.removedThresholds).to.equal([])
-        expect(session.$update.called).to.be.true()
+        expect(session.removedThresholds).toEqual([])
+        expect(session.$update.called).toBe(true)
       })
     })
 
@@ -91,8 +86,8 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
       it('does not change the existing "alertThresholds"', async () => {
         await SubmitAlertTypeService.go(session.id, payload)
 
-        expect(session.alertThresholds).to.equal(['100-flow'])
-        expect(session.$update.called).to.be.true()
+        expect(session.alertThresholds).toEqual(['100-flow'])
+        expect(session.$update.called).toBe(true)
       })
     })
   })
@@ -106,7 +101,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
       it('returns page data for the view, with errors', async () => {
         const result = await SubmitAlertTypeService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'notices',
           alertTypeOptions: [
             {
@@ -179,7 +174,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
       it('returns page data for the view, with errors (and the selected alert type checked)', async () => {
         const result = await SubmitAlertTypeService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'notices',
           alertTypeOptions: [
             {

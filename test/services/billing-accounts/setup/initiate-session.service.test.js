@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
@@ -22,14 +17,14 @@ describe('Billing Accounts - Setup - Initiate Session service', () => {
   const billingAccount = billingAccountData.billingAccount
 
   describe('when called', () => {
-    before(async () => {
+    beforeAll(async () => {
       Sinon.stub(FetchViewBillingAccountService, 'go').returns(billingAccountData)
     })
 
     it('creates a new session record containing details of the billing account', async () => {
       const result = await InitiateSessionService.go(billingAccount.id)
 
-      expect(result.data).to.equal({
+      expect(result.data).toEqual({
         billingAccount
       })
     })

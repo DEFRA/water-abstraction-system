@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
@@ -53,13 +48,13 @@ describe('Bill Runs - Cancel Bill Run service', () => {
         // Check we set the bill run status
         const [patchObject] = billRunPatchStub.args[0]
 
-        expect(patchObject).to.equal({ status: 'cancel' }, { skip: ['updatedAt'] })
+        expect(patchObject).toMatchObject({ status: 'cancel' })
       })
 
       it('returns an instance of the bill run including its external ID and status set to "cancel"', async () => {
         const result = await CancelBillBunService.go(billRunId)
 
-        expect(result).to.equal({ id: billRunId, externalId, status: 'cancel' })
+        expect(result).toEqual({ id: billRunId, externalId, status: 'cancel' })
       })
     })
 
@@ -77,20 +72,20 @@ describe('Bill Runs - Cancel Bill Run service', () => {
         await CancelBillBunService.go(billRunId)
 
         // Check we do not change the bill run status
-        expect(billRunPatchStub.called).to.be.false()
+        expect(billRunPatchStub.called).toBe(false)
       })
 
       it('returns an instance of the bill run including its external ID and status unchanged', async () => {
         const result = await CancelBillBunService.go(billRunId)
 
-        expect(result).to.equal({ id: billRunId, externalId, status: 'sent' })
+        expect(result).toEqual({ id: billRunId, externalId, status: 'sent' })
       })
     })
   })
 
   describe('when the bill run does not exist', () => {
     it('throws as error', async () => {
-      await expect(CancelBillBunService.go('47e66de7-f05f-42d2-8fef-640b55150919')).to.reject()
+      await expect(CancelBillBunService.go('47e66de7-f05f-42d2-8fef-640b55150919')).rejects.toThrow()
     })
   })
 })

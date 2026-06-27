@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
@@ -63,13 +58,13 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       const deletedSession = await SessionModel.query().findById(session.id)
 
-      expect(deletedSession).to.be.undefined()
+      expect(deletedSession).toBeUndefined()
     })
 
     it('returns the redirect URL', async () => {
       const result = await SubmitCheckService.go(session.id, yarStub, auth)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         redirectUrl: `/system/companies/${company.id}/contacts`
       })
     })
@@ -79,7 +74,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       const actualContact = CreateCompanyContactDal.go.args[0]
 
-      expect(actualContact).to.equal([
+      expect(actualContact).toEqual([
         company.id,
         {
           abstractionAlertLicences: null,
@@ -96,8 +91,8 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-      expect(flashType).to.equal('notification')
-      expect(bannerMessage).to.equal({ titleText: 'Contact added', text: `Eric was added to this company` })
+      expect(flashType).toEqual('notification')
+      expect(bannerMessage).toEqual({ titleText: 'Contact added', text: `Eric was added to this company` })
     })
 
     describe('the "abstractionAlerts" property', () => {
@@ -107,7 +102,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
           const actualContact = CreateCompanyContactDal.go.args[0][1]
 
-          expect(actualContact.abstractionAlerts).to.be.true()
+          expect(actualContact.abstractionAlerts).toBe(true)
         })
       })
 
@@ -123,7 +118,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
           const actualContact = CreateCompanyContactDal.go.args[0][1]
 
-          expect(actualContact.abstractionAlerts).to.be.true()
+          expect(actualContact.abstractionAlerts).toBe(true)
         })
       })
 
@@ -139,7 +134,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
           const actualContact = CreateCompanyContactDal.go.args[0][1]
 
-          expect(actualContact.abstractionAlerts).to.be.false()
+          expect(actualContact.abstractionAlerts).toBe(false)
         })
       })
     })
@@ -166,7 +161,7 @@ describe('Company Contacts - Setup - Check Service', () => {
           const actualContact = CreateCompanyContactDal.go.args[0][1]
           const expectedAbstractionAlertLicences = JSON.stringify(abstractionAlertLicences)
 
-          expect(actualContact.abstractionAlertLicences).to.equal(expectedAbstractionAlertLicences)
+          expect(actualContact.abstractionAlertLicences).toEqual(expectedAbstractionAlertLicences)
         })
       })
 
@@ -176,7 +171,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
           const actualContact = CreateCompanyContactDal.go.args[0][1]
 
-          expect(actualContact.abstractionAlertLicences).to.be.null()
+          expect(actualContact.abstractionAlertLicences).toBeNull()
         })
       })
     })
@@ -193,7 +188,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
         const actualContact = CreateCompanyContactDal.go.args[0][1]
 
-        expect(actualContact.email).to.equal('erice@test.com')
+        expect(actualContact.email).toEqual('erice@test.com')
       })
     })
   })
@@ -212,7 +207,7 @@ describe('Company Contacts - Setup - Check Service', () => {
     it('returns the redirect URL', async () => {
       const result = await SubmitCheckService.go(session.id, yarStub, auth)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         redirectUrl: `/system/company-contacts/${companyContact.id}/contact-details`
       })
     })
@@ -222,7 +217,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       const [actualContact] = UpdateCompanyContactDal.go.args[0]
 
-      expect(actualContact).to.equal({
+      expect(actualContact).toEqual({
         id: companyContact.id,
         abstractionAlertLicences: null,
         abstractionAlerts: true,
@@ -238,8 +233,8 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-      expect(flashType).to.equal('notification')
-      expect(bannerMessage).to.equal({ titleText: 'Updated', text: `Contact details updated.` })
+      expect(flashType).toEqual('notification')
+      expect(bannerMessage).toEqual({ titleText: 'Updated', text: `Contact details updated.` })
     })
 
     describe('the "abstractionAlerts" property', () => {
@@ -249,7 +244,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
           const [actualContact] = UpdateCompanyContactDal.go.args[0]
 
-          expect(actualContact.abstractionAlerts).to.be.true()
+          expect(actualContact.abstractionAlerts).toBe(true)
         })
       })
 
@@ -265,7 +260,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
           const [actualContact] = UpdateCompanyContactDal.go.args[0]
 
-          expect(actualContact.abstractionAlerts).to.be.true()
+          expect(actualContact.abstractionAlerts).toBe(true)
         })
       })
 
@@ -281,7 +276,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
           const [actualContact] = UpdateCompanyContactDal.go.args[0]
 
-          expect(actualContact.abstractionAlerts).to.be.false()
+          expect(actualContact.abstractionAlerts).toBe(false)
         })
       })
     })
@@ -308,7 +303,7 @@ describe('Company Contacts - Setup - Check Service', () => {
           const [actualContact] = UpdateCompanyContactDal.go.args[0]
           const expectedAbstractionAlertLicences = JSON.stringify(abstractionAlertLicences)
 
-          expect(actualContact.abstractionAlertLicences).to.equal(expectedAbstractionAlertLicences)
+          expect(actualContact.abstractionAlertLicences).toEqual(expectedAbstractionAlertLicences)
         })
       })
 
@@ -318,7 +313,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
           const [actualContact] = UpdateCompanyContactDal.go.args[0]
 
-          expect(actualContact.abstractionAlertLicences).to.be.null()
+          expect(actualContact.abstractionAlertLicences).toBeNull()
         })
       })
     })
@@ -336,7 +331,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
           const [actualContact] = UpdateCompanyContactDal.go.args[0]
 
-          expect(actualContact.email).to.equal('erice@test.com')
+          expect(actualContact.email).toEqual('erice@test.com')
         })
       })
     })

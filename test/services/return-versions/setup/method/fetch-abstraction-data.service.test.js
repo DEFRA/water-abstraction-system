@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceAbstractionDataSeeder = require('../../../../support/seeders/licence-abstraction-data.seeder.js')
 
@@ -16,7 +9,7 @@ const FetchAbstractionDataService = require('../../../../../app/services/return-
 describe('Return Versions - Setup - Fetch Abstraction Data service', () => {
   let seedData
 
-  before(async () => {
+  beforeAll(async () => {
     seedData = await LicenceAbstractionDataSeeder.seed()
   })
 
@@ -24,7 +17,7 @@ describe('Return Versions - Setup - Fetch Abstraction Data service', () => {
     it('returns the abstraction data for the licence and licence version', async () => {
       const result = await FetchAbstractionDataService.go(seedData.licenceId, seedData.licenceVersions.currentId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         id: seedData.licenceId,
         licenceRef: seedData.licenceRef,
         waterUndertaker: false,

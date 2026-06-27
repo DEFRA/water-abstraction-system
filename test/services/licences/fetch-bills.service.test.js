@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillHelper = require('../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
@@ -63,7 +56,7 @@ describe('Licences - Fetch Bills service', () => {
       it('returns results', async () => {
         const result = await FetchBillService.go(licence.id)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           bills: [
             {
               accountNumber: 'T21404193A',
@@ -110,7 +103,7 @@ describe('Licences - Fetch Bills service', () => {
       it('returns no results', async () => {
         const result = await FetchBillService.go(licence.id)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           bills: [],
           totalNumber: 0
         })
@@ -127,7 +120,7 @@ describe('Licences - Fetch Bills service', () => {
     it('returns no results', async () => {
       const result = await FetchBillService.go(licence.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         bills: [],
         totalNumber: 0
       })

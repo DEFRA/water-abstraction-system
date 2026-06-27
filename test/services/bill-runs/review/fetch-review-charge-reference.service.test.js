@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
@@ -33,7 +26,7 @@ describe('Bill Runs Review - Fetch Review Charge Reference service', () => {
   let reviewChargeReference
   let reviewLicence
 
-  before(async () => {
+  beforeAll(async () => {
     const region = RegionHelper.select()
 
     billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id, status: 'review' })
@@ -67,7 +60,7 @@ describe('Bill Runs Review - Fetch Review Charge Reference service', () => {
     it('returns the match', async () => {
       const result = await FetchReviewChargeReferenceService.go(reviewChargeReference.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         id: reviewChargeReference.id,
         abatementAgreement: 1,
         aggregate: 1,
@@ -120,7 +113,7 @@ describe('Bill Runs Review - Fetch Review Charge Reference service', () => {
     it('returns nothing', async () => {
       const result = await FetchReviewChargeReferenceService.go('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
 
-      expect(result).to.be.undefined()
+      expect(result).toBeUndefined()
     })
   })
 })

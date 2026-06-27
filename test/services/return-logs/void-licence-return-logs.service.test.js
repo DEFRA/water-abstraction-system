@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
@@ -32,7 +25,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
   let reissuedReturnLog2
 
   describe('when we are reissuing return logs because a licence end date has been added', () => {
-    before(async () => {
+    beforeAll(async () => {
       changeDate = new Date('2022-12-31')
 
       licenceRef = LicenceHelper.generateLicenceRef()
@@ -40,7 +33,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
     })
 
     describe('and the licence has one return log on a different return cycle [A]', () => {
-      before(async () => {
+      beforeAll(async () => {
         differentReturnCycleReturnLog = await ReturnLogHelper.add({
           endDate: new Date('2023-10-31'),
           licenceRef,
@@ -50,7 +43,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
       })
 
       describe('and one return log for the matching return cycle that ends before the "change date" [B]', () => {
-        before(async () => {
+        beforeAll(async () => {
           endsBeforeTheChangeDateReturnLog = await ReturnLogHelper.add({
             endDate: new Date('2022-09-30'),
             licenceRef,
@@ -59,7 +52,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
         })
 
         describe('and one return log for the matching return cycle that is after the "change date" [C]', () => {
-          before(async () => {
+          beforeAll(async () => {
             returnReference = ReturnRequirementHelper.generateReference()
             endsAfterTheChangeDateReturnLog = await ReturnLogHelper.add({
               endDate: new Date('2023-03-31'),
@@ -70,7 +63,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
           })
 
           describe('and now the reissued return log [D]', () => {
-            before(async () => {
+            beforeAll(async () => {
               reissuedReturnLog1 = await ReturnLogHelper.add({
                 endDate: changeDate,
                 licenceRef,
@@ -87,16 +80,16 @@ describe('Return Logs - Void Licence Return Logs service', () => {
               let returnLogBeingChecked
 
               returnLogBeingChecked = await differentReturnCycleReturnLog.$query()
-              expect(returnLogBeingChecked.status).to.equal('due')
+              expect(returnLogBeingChecked.status).toEqual('due')
 
               returnLogBeingChecked = await endsBeforeTheChangeDateReturnLog.$query()
-              expect(returnLogBeingChecked.status).to.equal('due')
+              expect(returnLogBeingChecked.status).toEqual('due')
 
               returnLogBeingChecked = await endsAfterTheChangeDateReturnLog.$query()
-              expect(returnLogBeingChecked.status).to.equal('void')
+              expect(returnLogBeingChecked.status).toEqual('void')
 
               returnLogBeingChecked = await reissuedReturnLog1.$query()
-              expect(reissuedReturnLog1.status).to.equal('due')
+              expect(reissuedReturnLog1.status).toEqual('due')
             })
           })
         })
@@ -105,7 +98,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
   })
 
   describe('when we are reissuing return logs because a licence end date has been changed to a future date', () => {
-    before(async () => {
+    beforeAll(async () => {
       changeDate = new Date('2022-12-31')
 
       licenceRef = LicenceHelper.generateLicenceRef()
@@ -113,7 +106,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
     })
 
     describe('and the licence has one return log on a different return cycle [A]', () => {
-      before(async () => {
+      beforeAll(async () => {
         differentReturnCycleReturnLog = await ReturnLogHelper.add({
           endDate: new Date('2023-10-31'),
           licenceRef,
@@ -123,7 +116,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
       })
 
       describe('and one return log for the matching return cycle that ends before the "change date" [B]', () => {
-        before(async () => {
+        beforeAll(async () => {
           endsBeforeTheChangeDateReturnLog = await ReturnLogHelper.add({
             endDate: new Date('2022-09-30'),
             licenceRef,
@@ -132,7 +125,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
         })
 
         describe('and one return log for the matching return cycle that matched the "change date" [C]', () => {
-          before(async () => {
+          beforeAll(async () => {
             returnReference = ReturnRequirementHelper.generateReference()
             endsAfterTheChangeDateReturnLog = await ReturnLogHelper.add({
               endDate: changeDate,
@@ -143,7 +136,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
           })
 
           describe('and now the reissued return log [D]', () => {
-            before(async () => {
+            beforeAll(async () => {
               reissuedReturnLog1 = await ReturnLogHelper.add({
                 endDate: new Date('2023-03-31'),
                 licenceRef,
@@ -160,16 +153,16 @@ describe('Return Logs - Void Licence Return Logs service', () => {
               let returnLogBeingChecked
 
               returnLogBeingChecked = await differentReturnCycleReturnLog.$query()
-              expect(returnLogBeingChecked.status).to.equal('due')
+              expect(returnLogBeingChecked.status).toEqual('due')
 
               returnLogBeingChecked = await endsBeforeTheChangeDateReturnLog.$query()
-              expect(returnLogBeingChecked.status).to.equal('due')
+              expect(returnLogBeingChecked.status).toEqual('due')
 
               returnLogBeingChecked = await endsAfterTheChangeDateReturnLog.$query()
-              expect(returnLogBeingChecked.status).to.equal('void')
+              expect(returnLogBeingChecked.status).toEqual('void')
 
               returnLogBeingChecked = await reissuedReturnLog1.$query()
-              expect(reissuedReturnLog1.status).to.equal('due')
+              expect(reissuedReturnLog1.status).toEqual('due')
             })
           })
         })
@@ -178,7 +171,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
   })
 
   describe('when we are reissuing return logs because a return version has been superseded', () => {
-    before(async () => {
+    beforeAll(async () => {
       changeDate = new Date('2022-04-01')
 
       licenceRef = LicenceHelper.generateLicenceRef()
@@ -186,7 +179,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
     })
 
     describe('and the licence has an existing return log for the superseded return version [A]', () => {
-      before(async () => {
+      beforeAll(async () => {
         existingReturnLog = await ReturnLogHelper.add({
           endDate: new Date('2023-03-31'),
           licenceRef,
@@ -196,7 +189,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
       })
 
       describe('and now the reissued return log [B]', () => {
-        before(async () => {
+        beforeAll(async () => {
           returnReference = ReturnRequirementHelper.generateReference()
           reissuedReturnLog1 = await ReturnLogHelper.add({
             endDate: new Date('2023-03-31'),
@@ -215,17 +208,17 @@ describe('Return Logs - Void Licence Return Logs service', () => {
           let returnLogBeingChecked
 
           returnLogBeingChecked = await existingReturnLog.$query()
-          expect(returnLogBeingChecked.status).to.equal('void')
+          expect(returnLogBeingChecked.status).toEqual('void')
 
           returnLogBeingChecked = await reissuedReturnLog1.$query()
-          expect(returnLogBeingChecked.status).to.equal('due')
+          expect(returnLogBeingChecked.status).toEqual('due')
         })
       })
     })
   })
 
   describe('when we are reissuing return logs because a return version has been added', () => {
-    before(async () => {
+    beforeAll(async () => {
       changeDate = new Date('2022-09-01')
 
       licenceRef = LicenceHelper.generateLicenceRef()
@@ -233,7 +226,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
     })
 
     describe('and the licence has an existing return log for the existing return version [A]', () => {
-      before(async () => {
+      beforeAll(async () => {
         returnReference = ReturnRequirementHelper.generateReference()
 
         existingReturnLog = await ReturnLogHelper.add({
@@ -245,7 +238,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
       })
 
       describe('and now the reissued return logs [B]', () => {
-        before(async () => {
+        beforeAll(async () => {
           reissuedReturnLog1 = await ReturnLogHelper.add({
             endDate: new Date('2022-08-31'),
             licenceRef,
@@ -270,13 +263,13 @@ describe('Return Logs - Void Licence Return Logs service', () => {
           let returnLogBeingChecked
 
           returnLogBeingChecked = await existingReturnLog.$query()
-          expect(returnLogBeingChecked.status).to.equal('void')
+          expect(returnLogBeingChecked.status).toEqual('void')
 
           returnLogBeingChecked = await reissuedReturnLog1.$query()
-          expect(returnLogBeingChecked.status).to.equal('due')
+          expect(returnLogBeingChecked.status).toEqual('due')
 
           returnLogBeingChecked = await reissuedReturnLog2.$query()
-          expect(returnLogBeingChecked.status).to.equal('due')
+          expect(returnLogBeingChecked.status).toEqual('due')
         })
       })
     })

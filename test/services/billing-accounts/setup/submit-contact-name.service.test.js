@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
@@ -50,14 +45,14 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
     it('saves the submitted value', async () => {
       await SubmitContactNameService.go(session.id, payload)
 
-      expect(session.contactName).to.equal(payload.contactName)
-      expect(session.$update.called).to.be.true()
+      expect(session.contactName).toEqual(payload.contactName)
+      expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
       const result = await SubmitContactNameService.go(session.id, payload)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
       })
     })
@@ -77,14 +72,14 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
       it('saves the submitted value', async () => {
         await SubmitContactNameService.go(session.id, payload)
 
-        expect(session.contactName).to.equal(payload.contactName)
-        expect(session.$update.called).to.be.true()
+        expect(session.contactName).toEqual(payload.contactName)
+        expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
         const result = await SubmitContactNameService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
         })
       })
@@ -106,15 +101,15 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
       it('saves the submitted value', async () => {
         await SubmitContactNameService.go(session.id, payload)
 
-        expect(session.contactName).to.equal(payload.contactName)
-        expect(session.checkPageVisited).to.equal(true)
-        expect(session.$update.called).to.be.true()
+        expect(session.contactName).toEqual(payload.contactName)
+        expect(session.checkPageVisited).toEqual(true)
+        expect(session.$update.called).toBe(true)
       })
 
       it('returns to the check page', async () => {
         const result = await SubmitContactNameService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
         })
       })
@@ -140,16 +135,16 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
       it('saves the submitted value', async () => {
         await SubmitContactNameService.go(session.id, payload)
 
-        expect(session.contactName).to.equal(payload.contactName)
-        expect(session.checkPageVisited).to.equal(false)
+        expect(session.contactName).toEqual(payload.contactName)
+        expect(session.checkPageVisited).toEqual(false)
 
-        expect(session.$update.called).to.be.true()
+        expect(session.$update.called).toBe(true)
       })
 
       it('returns to the check page', async () => {
         const result = await SubmitContactNameService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
         })
       })
@@ -165,7 +160,7 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
       it('returns page data for the view, with errors', async () => {
         const result = await SubmitContactNameService.go(session.id, payload)
 
-        expect(result.error).to.equal({
+        expect(result.error).toEqual({
           errorList: [
             {
               href: '#contactName',
@@ -189,7 +184,7 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
       it('returns page data for the view, with errors', async () => {
         const result = await SubmitContactNameService.go(session.id, payload)
 
-        expect(result.error).to.equal({
+        expect(result.error).toEqual({
           errorList: [
             {
               href: '#contactName',

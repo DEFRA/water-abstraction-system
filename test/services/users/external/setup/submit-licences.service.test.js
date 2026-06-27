@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
@@ -48,17 +43,17 @@ describe('Users - External - Setup - Submit Licences Service', () => {
     it('saves the submitted value', async () => {
       await SubmitLicencesService.go(session.id, payload, yarStub)
 
-      expect(session).to.equal({
+      expect(session).toEqual({
         ...session,
         allLicences: true
       })
-      expect(session.$update.called).to.be.true()
+      expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
       const result = await SubmitLicencesService.go(session.id, payload, yarStub)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         redirectUrl: `/system/users/external/setup/${session.id}/check`
       })
     })
@@ -82,7 +77,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
             it('does not set a notification', async () => {
               await SubmitLicencesService.go(session.id, payload, yarStub)
 
-              expect(yarStub.flash.called).to.be.false()
+              expect(yarStub.flash.called).toBe(false)
             })
           })
 
@@ -105,8 +100,8 @@ describe('Users - External - Setup - Submit Licences Service', () => {
 
                 const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-                expect(flashType).to.equal('notification')
-                expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Licences to unregister updated' })
+                expect(flashType).toEqual('notification')
+                expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Licences to unregister updated' })
               })
             })
 
@@ -129,8 +124,8 @@ describe('Users - External - Setup - Submit Licences Service', () => {
 
                 const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-                expect(flashType).to.equal('notification')
-                expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Licences to unregister updated' })
+                expect(flashType).toEqual('notification')
+                expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Licences to unregister updated' })
               })
             })
 
@@ -153,8 +148,8 @@ describe('Users - External - Setup - Submit Licences Service', () => {
 
                 const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-                expect(flashType).to.equal('notification')
-                expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Licences to unregister updated' })
+                expect(flashType).toEqual('notification')
+                expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Licences to unregister updated' })
               })
             })
           })
@@ -165,7 +160,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
         it('does not set a notification', async () => {
           await SubmitLicencesService.go(session.id, payload, yarStub)
 
-          expect(yarStub.flash.called).to.be.false()
+          expect(yarStub.flash.called).toBe(false)
         })
       })
     })
@@ -179,7 +174,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
     it('returns page data for the view, with errors', async () => {
       const result = await SubmitLicencesService.go(session.id, payload, yarStub)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         error: {
           licences: {
             text: 'Select licences to unregister'

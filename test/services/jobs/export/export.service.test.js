@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
@@ -39,7 +34,7 @@ describe('Export Service', () => {
       return call.args
     })
 
-    expect(allArgs).to.equal(schemaNames)
+    expect(allArgs).toEqual(schemaNames)
   })
 
   it('logs the time taken to export the db', async () => {
@@ -47,7 +42,7 @@ describe('Export Service', () => {
 
     const args = notifierStub.omg.firstCall.args
 
-    expect(args[0]).to.equal('DB export complete')
-    expect(args[1].timeTakenMs).to.exist()
+    expect(args[0]).toEqual('DB export complete')
+    expect(args[1].timeTakenMs).toBeDefined()
   })
 })

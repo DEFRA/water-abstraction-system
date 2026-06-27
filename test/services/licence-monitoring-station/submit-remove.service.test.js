@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
@@ -33,7 +28,7 @@ describe('Licence Monitoring Station - Submit Remove service', () => {
 
       const refreshedSession = await licenceMonitoringStation.$query()
 
-      expect(refreshedSession.deletedAt).to.not.be.null()
+      expect(refreshedSession.deletedAt).not.toBeNull()
     })
 
     it('sets the notification message title to "Updated" and the text to "Tag removed for 99/999/9999" ', async () => {
@@ -41,8 +36,8 @@ describe('Licence Monitoring Station - Submit Remove service', () => {
 
       const [flashType, notification] = yarStub.flash.args[0]
 
-      expect(flashType).to.equal('notification')
-      expect(notification).to.equal({ titleText: 'Updated', text: 'Tag removed for 99/999/9999' })
+      expect(flashType).toEqual('notification')
+      expect(notification).toEqual({ titleText: 'Updated', text: 'Tag removed for 99/999/9999' })
     })
   })
 })

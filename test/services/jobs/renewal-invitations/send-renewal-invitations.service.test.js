@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
@@ -67,7 +62,7 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
     it('returns the recipients', async () => {
       const result = await SendRenewalInvitations.go(days)
 
-      expect(result).to.equal(recipients)
+      expect(result).toEqual(recipients)
     })
 
     it('creates a notice for renewal invitations', async () => {
@@ -76,21 +71,21 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
       const [firstArg, secondArg, thirdArg] = createNoticeStub.firstCall.args
 
       // Argument 1: Notice type
-      expect(firstArg).to.contain({
+      expect(firstArg).toMatchObject({
         name: 'Renewals: invitation',
         noticeType: 'renewalInvitations',
         subType: 'renewalInvitation'
       })
 
-      expect(firstArg.referenceCode).to.startWith('REIN-')
-      expect(firstArg.expiryDate.getTime()).to.equal(expiredDate.getTime())
-      expect(firstArg.renewalDate.getTime()).to.equal(expectedRenewalDate.getTime())
+      expect(firstArg.referenceCode).toMatch(/^REIN-/)
+      expect(firstArg.expiryDate.getTime()).toEqual(expiredDate.getTime())
+      expect(firstArg.renewalDate.getTime()).toEqual(expectedRenewalDate.getTime())
 
       // Argument 2: The Recipients List
-      expect(secondArg).to.equal(recipients)
+      expect(secondArg).toEqual(recipients)
 
       // Argument 3: The issuer email
-      expect(thirdArg).to.equal('notify@test.gov.uk')
+      expect(thirdArg).toEqual('notify@test.gov.uk')
     })
 
     it('creates the notifications', async () => {
@@ -99,21 +94,21 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
       const [firstArg, secondArg, thirdArg] = createNotificationStub.firstCall.args
 
       // Argument 1: Notice type
-      expect(firstArg).to.contain({
+      expect(firstArg).toMatchObject({
         name: 'Renewals: invitation',
         noticeType: 'renewalInvitations',
         subType: 'renewalInvitation'
       })
 
-      expect(firstArg.referenceCode).to.startWith('REIN-')
-      expect(firstArg.expiryDate.getTime()).to.equal(expiredDate.getTime())
-      expect(firstArg.renewalDate.getTime()).to.equal(expectedRenewalDate.getTime())
+      expect(firstArg.referenceCode).toMatch(/^REIN-/)
+      expect(firstArg.expiryDate.getTime()).toEqual(expiredDate.getTime())
+      expect(firstArg.renewalDate.getTime()).toEqual(expectedRenewalDate.getTime())
 
       // Argument 2: The Recipients List
-      expect(secondArg).to.equal(recipients)
+      expect(secondArg).toEqual(recipients)
 
       // Argument 3: The notice id
-      expect(thirdArg).to.equal(noticeId)
+      expect(thirdArg).toEqual(noticeId)
     })
 
     it('sends the notice', async () => {
@@ -122,10 +117,10 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
       const [firstArg, secondArg] = sendNoticeStub.firstCall.args
 
       // Argument 1: The notice
-      expect(firstArg).to.contain({ id: noticeId })
+      expect(firstArg).toMatchObject({ id: noticeId })
 
       // Argument 2: The notifications
-      expect(secondArg).to.equal(notifications)
+      expect(secondArg).toEqual(notifications)
     })
   })
 
@@ -137,15 +132,15 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
     it('returns the empty recipients', async () => {
       const result = await SendRenewalInvitations.go(days)
 
-      expect(result).to.equal([])
+      expect(result).toEqual([])
     })
 
     it('does not call the services', async () => {
       await SendRenewalInvitations.go(days)
 
-      expect(createNoticeStub.called).to.be.false()
-      expect(createNotificationStub.called).to.be.false()
-      expect(sendNoticeStub.called).to.be.false()
+      expect(createNoticeStub.called).toBe(false)
+      expect(createNotificationStub.called).toBe(false)
+      expect(sendNoticeStub.called).toBe(false)
     })
   })
 })

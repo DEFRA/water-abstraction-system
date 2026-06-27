@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillRunChargeVersionYearHelper = require('../../../support/helpers/bill-run-charge-version-year.helper.js')
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
@@ -39,9 +32,9 @@ describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
           return l.id === licenceVersion.id
         })
 
-        expect(result.id).to.be.equal(licenceVersion.id)
-        expect(result.licenceId).to.be.equal(licence.id)
-        expect(result.chargeVersionExists).to.be.equal(false)
+        expect(result.id).to.be.toEqual(licenceVersion.id)
+        expect(result.licenceId).to.be.toEqual(licence.id)
+        expect(result.chargeVersionExists).to.be.toEqual(false)
       })
     })
 
@@ -57,9 +50,9 @@ describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
           return l.id === licenceVersion.id
         })
 
-        expect(result.id).to.be.equal(licenceVersion.id)
-        expect(result.licenceId).to.be.equal(licence.id)
-        expect(result.chargeVersionExists).to.be.equal(true)
+        expect(result.id).to.be.toEqual(licenceVersion.id)
+        expect(result.licenceId).to.be.toEqual(licence.id)
+        expect(result.chargeVersionExists).to.be.toEqual(true)
       })
     })
   })
@@ -77,7 +70,7 @@ describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
           return l.licenceId === licence.id
         })
 
-        expect(results).to.be.empty()
+        expect(results).toHaveLength(0)
       })
     })
 
@@ -94,7 +87,7 @@ describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
           return l.licenceId === licence.id
         })
 
-        expect(results).to.be.empty()
+        expect(results).toHaveLength(0)
       })
     })
 
@@ -119,7 +112,7 @@ describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
           return l.licenceId === licence.id
         })
 
-        expect(results).to.be.empty()
+        expect(results).toHaveLength(0)
       })
     })
 
@@ -135,7 +128,7 @@ describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
           return l.licenceId === licence.id
         })
 
-        expect(results).to.be.empty()
+        expect(results).toHaveLength(0)
       })
     })
   })

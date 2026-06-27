@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const AddressHelper = require('../../support/helpers/address.helper.js')
@@ -53,11 +48,11 @@ describe('Change address service', () => {
 
         const newAddress = await AddressModel.query().where('postcode', address.postcode).first()
 
-        expect(result.billingAccountAddress.addressId).to.equal(newAddress.id)
-        expect(result.address.address1).to.equal('1 Matrix Rd')
-        expect(result.address.address5).to.equal('Testington')
-        expect(result.agentCompany).to.be.null()
-        expect(result.contact).to.be.null()
+        expect(result.billingAccountAddress.addressId).toEqual(newAddress.id)
+        expect(result.address.address1).toEqual('1 Matrix Rd')
+        expect(result.address.address5).toEqual('Testington')
+        expect(result.agentCompany).toBeNull()
+        expect(result.contact).toBeNull()
       })
     })
 
@@ -87,15 +82,15 @@ describe('Change address service', () => {
 
             const reFetchedExistingAddress = await existingAddress.$query()
 
-            expect(reFetchedExistingAddress.id).to.equal(existingAddress.id)
-            expect(reFetchedExistingAddress.createdAt).to.equal(existingAddress.createdAt)
-            expect(reFetchedExistingAddress.address1).to.equal(address.addressLine1)
+            expect(reFetchedExistingAddress.id).toEqual(existingAddress.id)
+            expect(reFetchedExistingAddress.createdAt).toEqual(existingAddress.createdAt)
+            expect(reFetchedExistingAddress.address1).toEqual(address.addressLine1)
           })
 
           it('links the billing account address record to the existing address', async () => {
             const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
 
-            expect(result.billingAccountAddress.addressId).to.equal(existingAddress.id)
+            expect(result.billingAccountAddress.addressId).toEqual(existingAddress.id)
           })
         })
 
@@ -105,9 +100,9 @@ describe('Change address service', () => {
 
             const result = await AddressModel.query().where('uprn', address.uprn)
 
-            expect(result.length).to.equal(1)
-            expect(result[0].address1).to.equal(address.addressLine1)
-            expect(result[0].postcode).to.equal(address.postcode)
+            expect(result.length).toEqual(1)
+            expect(result[0].address1).toEqual(address.addressLine1)
+            expect(result[0].postcode).toEqual(address.postcode)
           })
 
           it('links the billing account address record to the new address', async () => {
@@ -115,7 +110,7 @@ describe('Change address service', () => {
 
             const newAddress = await AddressModel.query().where('uprn', address.uprn).first()
 
-            expect(result.billingAccountAddress.addressId).to.equal(newAddress.id)
+            expect(result.billingAccountAddress.addressId).toEqual(newAddress.id)
           })
         })
       })
@@ -130,8 +125,8 @@ describe('Change address service', () => {
 
           const result = await AddressModel.query().where('postcode', address.postcode)
 
-          expect(result.length).to.equal(1)
-          expect(result[0].address1).to.equal('2 Matrix Rd')
+          expect(result.length).toEqual(1)
+          expect(result[0].address1).toEqual('2 Matrix Rd')
         })
 
         it('links the billing account address record to the new address', async () => {
@@ -139,7 +134,7 @@ describe('Change address service', () => {
 
           const newAddress = await AddressModel.query().findById(result.address.id)
 
-          expect(result.billingAccountAddress.addressId).to.equal(newAddress.id)
+          expect(result.billingAccountAddress.addressId).toEqual(newAddress.id)
         })
       })
 
@@ -157,16 +152,16 @@ describe('Change address service', () => {
 
           const reFetchedExistingAddress = await existingAddress.$query()
 
-          expect(reFetchedExistingAddress.id).to.equal(existingAddress.id)
-          expect(reFetchedExistingAddress.address1).to.equal(existingAddress.address1)
-          expect(reFetchedExistingAddress.createdAt).to.equal(existingAddress.createdAt)
-          expect(reFetchedExistingAddress.updatedAt).to.equal(existingAddress.updatedAt)
+          expect(reFetchedExistingAddress.id).toEqual(existingAddress.id)
+          expect(reFetchedExistingAddress.address1).toEqual(existingAddress.address1)
+          expect(reFetchedExistingAddress.createdAt).toEqual(existingAddress.createdAt)
+          expect(reFetchedExistingAddress.updatedAt).toEqual(existingAddress.updatedAt)
         })
 
         it('links the billing account address record to the existing address', async () => {
           const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
 
-          expect(result.billingAccountAddress.addressId).to.equal(existingAddress.id)
+          expect(result.billingAccountAddress.addressId).toEqual(existingAddress.id)
         })
       })
     })
@@ -196,15 +191,15 @@ describe('Change address service', () => {
 
           const reFetchedExistingCompany = await existingCompany.$query()
 
-          expect(reFetchedExistingCompany.id).to.equal(existingCompany.id)
-          expect(reFetchedExistingCompany.createdAt).to.equal(existingCompany.createdAt)
-          expect(reFetchedExistingCompany.name).to.equal(agentCompany.name)
+          expect(reFetchedExistingCompany.id).toEqual(existingCompany.id)
+          expect(reFetchedExistingCompany.createdAt).toEqual(existingCompany.createdAt)
+          expect(reFetchedExistingCompany.name).toEqual(agentCompany.name)
         })
 
         it('links the billing account address record to the existing company', async () => {
           const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
 
-          expect(result.billingAccountAddress.companyId).to.equal(existingCompany.id)
+          expect(result.billingAccountAddress.companyId).toEqual(existingCompany.id)
         })
       })
 
@@ -214,8 +209,8 @@ describe('Change address service', () => {
 
           const result = await CompanyModel.query().where('companyNumber', agentCompany.companyNumber)
 
-          expect(result.length).to.equal(1)
-          expect(result[0].name).to.equal(agentCompany.name)
+          expect(result.length).toEqual(1)
+          expect(result[0].name).toEqual(agentCompany.name)
         })
 
         it('links the billing account address record to the new company', async () => {
@@ -223,7 +218,7 @@ describe('Change address service', () => {
 
           const newCompany = await CompanyModel.query().where('companyNumber', agentCompany.companyNumber).first()
 
-          expect(result.billingAccountAddress.companyId).to.equal(newCompany.id)
+          expect(result.billingAccountAddress.companyId).toEqual(newCompany.id)
         })
       })
 
@@ -241,16 +236,16 @@ describe('Change address service', () => {
 
           const reFetchedExistingCompany = await existingCompany.$query()
 
-          expect(reFetchedExistingCompany.id).to.equal(existingCompany.id)
-          expect(reFetchedExistingCompany.name).to.equal(existingCompany.name)
-          expect(reFetchedExistingCompany.createdAt).to.equal(existingCompany.createdAt)
-          expect(reFetchedExistingCompany.updatedAt).to.equal(existingCompany.updatedAt)
+          expect(reFetchedExistingCompany.id).toEqual(existingCompany.id)
+          expect(reFetchedExistingCompany.name).toEqual(existingCompany.name)
+          expect(reFetchedExistingCompany.createdAt).toEqual(existingCompany.createdAt)
+          expect(reFetchedExistingCompany.updatedAt).toEqual(existingCompany.updatedAt)
         })
 
         it('links the billing account address record to the existing company', async () => {
           const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
 
-          expect(result.billingAccountAddress.companyId).to.equal(existingCompany.id)
+          expect(result.billingAccountAddress.companyId).toEqual(existingCompany.id)
         })
       })
     })
@@ -273,7 +268,7 @@ describe('Change address service', () => {
 
           const result = await ContactModel.query().where('department', 'Humanoid Risk Assessment')
 
-          expect(result.length).to.equal(1)
+          expect(result.length).toEqual(1)
         })
 
         it('links the billing account address record to the new contact', async () => {
@@ -281,7 +276,7 @@ describe('Change address service', () => {
 
           const newContact = await ContactModel.query().findById(result.contact.id)
 
-          expect(result.billingAccountAddress.contactId).to.equal(newContact.id)
+          expect(result.billingAccountAddress.contactId).toEqual(newContact.id)
         })
       })
 
@@ -299,9 +294,9 @@ describe('Change address service', () => {
 
           const result = await ContactModel.query().where('lastName', 'Villa')
 
-          expect(result.length).to.equal(1)
-          expect(result[0].firstName).to.equal('Margarita')
-          expect(result[0].lastName).to.equal('Villa')
+          expect(result.length).toEqual(1)
+          expect(result[0].firstName).toEqual('Margarita')
+          expect(result[0].lastName).toEqual('Villa')
         })
 
         it('links the billing account address record to the new contact', async () => {
@@ -309,7 +304,7 @@ describe('Change address service', () => {
 
           const newContact = await ContactModel.query().findById(result.contact.id)
 
-          expect(result.billingAccountAddress.contactId).to.equal(newContact.id)
+          expect(result.billingAccountAddress.contactId).toEqual(newContact.id)
         })
       })
     })
@@ -350,11 +345,13 @@ describe('Change address service', () => {
             result.billingAccountAddress.id
           )
 
-          expect(newBillingAccountAddress.id).to.equal(existingBillingAccountAddress.id)
-          expect(newBillingAccountAddress.addressId).not.to.equal(existingBillingAccountAddress.addressId)
-          expect(newBillingAccountAddress.endDate).to.be.null()
-          expect(newBillingAccountAddress.createdAt).to.equal(existingBillingAccountAddress.createdAt)
-          expect(newBillingAccountAddress.updatedAt).to.be.above(existingBillingAccountAddress.updatedAt)
+          expect(newBillingAccountAddress.id).toEqual(existingBillingAccountAddress.id)
+          expect(newBillingAccountAddress.addressId).not.toEqual(existingBillingAccountAddress.addressId)
+          expect(newBillingAccountAddress.endDate).toBeNull()
+          expect(newBillingAccountAddress.createdAt).toEqual(existingBillingAccountAddress.createdAt)
+          expect(newBillingAccountAddress.updatedAt.getTime()).toBeGreaterThan(
+            existingBillingAccountAddress.updatedAt.getTime()
+          )
         })
       })
 
@@ -378,11 +375,15 @@ describe('Change address service', () => {
             result.billingAccountAddress.id
           )
 
-          expect(newBillingAccountAddress.id).not.to.equal(existingBillingAccountAddress.id)
-          expect(newBillingAccountAddress.addressId).not.to.equal(existingBillingAccountAddress.addressId)
-          expect(newBillingAccountAddress.endDate).to.be.null()
-          expect(newBillingAccountAddress.createdAt).to.be.above(existingBillingAccountAddress.createdAt)
-          expect(newBillingAccountAddress.updatedAt).to.be.above(existingBillingAccountAddress.updatedAt)
+          expect(newBillingAccountAddress.id).not.toEqual(existingBillingAccountAddress.id)
+          expect(newBillingAccountAddress.addressId).not.toEqual(existingBillingAccountAddress.addressId)
+          expect(newBillingAccountAddress.endDate).toBeNull()
+          expect(newBillingAccountAddress.createdAt.getTime()).toBeGreaterThan(
+            existingBillingAccountAddress.createdAt.getTime()
+          )
+          expect(newBillingAccountAddress.updatedAt.getTime()).toBeGreaterThan(
+            existingBillingAccountAddress.updatedAt.getTime()
+          )
         })
 
         it("updates the end date of the existing record to yesterday's date", async () => {
@@ -391,8 +392,10 @@ describe('Change address service', () => {
           const reFetchedExistingBillingAccountAddress = await existingBillingAccountAddress.$query()
           const yesterday = new Date(2023, 8, 3)
 
-          expect(reFetchedExistingBillingAccountAddress.endDate).to.equal(yesterday)
-          expect(reFetchedExistingBillingAccountAddress.updatedAt).to.be.above(existingBillingAccountAddress.updatedAt)
+          expect(reFetchedExistingBillingAccountAddress.endDate).toEqual(yesterday)
+          expect(reFetchedExistingBillingAccountAddress.updatedAt.getTime()).toBeGreaterThan(
+            existingBillingAccountAddress.updatedAt.getTime()
+          )
         })
       })
     })
@@ -404,7 +407,7 @@ describe('Change address service', () => {
     })
 
     it('throws an error', async () => {
-      await expect(ChangeAddressService.go(billingAccount, address, agentCompany, contact)).to.reject()
+      await expect(ChangeAddressService.go(billingAccount, address, agentCompany, contact)).rejects.toThrow()
     })
   })
 
@@ -428,21 +431,21 @@ describe('Change address service', () => {
     })
 
     it('throws an error', async () => {
-      await expect(ChangeAddressService.go(billingAccount, address, agentCompany, contact)).to.reject()
+      await expect(ChangeAddressService.go(billingAccount, address, agentCompany, contact)).rejects.toThrow()
     })
 
     it('no changes are made to the DB', async () => {
-      await expect(ChangeAddressService.go(billingAccount, address, agentCompany, contact)).to.reject()
+      await expect(ChangeAddressService.go(billingAccount, address, agentCompany, contact)).rejects.toThrow()
 
       const resultAddresses = await AddressModel.query().where('postcode', address.postcode)
       const resultCompanies = await CompanyModel.query().where('name', agentCompany.name)
       const resultContacts = await ContactModel.query().where('department', contact.department)
       const resultBillingAccountAddresses = await BillingAccountAddressModel.query().findById(billingAccount.id)
 
-      expect(resultAddresses).to.be.empty()
-      expect(resultCompanies).to.be.empty()
-      expect(resultContacts).to.be.empty()
-      expect(resultBillingAccountAddresses).to.be.undefined()
+      expect(resultAddresses).toHaveLength(0)
+      expect(resultCompanies).toHaveLength(0)
+      expect(resultContacts).toHaveLength(0)
+      expect(resultBillingAccountAddresses).toBeUndefined()
     })
   })
 })

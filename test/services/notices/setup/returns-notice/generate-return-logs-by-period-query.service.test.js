@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
 const { db } = require('../../../../../db/db.js')
@@ -21,7 +14,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
   let returnLogs
   let returnsPeriod
 
-  before(async () => {
+  beforeAll(async () => {
     returnsPeriod = {
       dueDate: null,
       endDate: new Date('2025-03-31'),
@@ -57,7 +50,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
     await _addReturnLog(returnLogs, { ...returnsPeriod, startDate: new Date('2023-04-01') })
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const returnLog of returnLogs) {
       await returnLog.$query().delete()
     }
@@ -65,7 +58,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
 
   describe('when called', () => {
     describe('and the notice type is "invitations"', () => {
-      before(() => {
+      beforeAll(() => {
         noticeType = NoticeType.INVITATIONS
         licencesToExclude = []
       })
@@ -73,7 +66,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
       it('returns the expected query and bindings', () => {
         const result = GenerateReturnLogsByPeriodQueryService.go(noticeType, licencesToExclude, returnsPeriod)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           bindings: [
             returnsPeriod.startDate,
             returnsPeriod.endDate,
@@ -106,7 +99,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
     })
 
     describe('and the notice type is "reminders"', () => {
-      before(() => {
+      beforeAll(() => {
         noticeType = NoticeType.REMINDERS
         licencesToExclude = []
       })
@@ -114,7 +107,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
       it('returns the expected query and bindings', () => {
         const result = GenerateReturnLogsByPeriodQueryService.go(noticeType, licencesToExclude, returnsPeriod)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           bindings: [
             returnsPeriod.startDate,
             returnsPeriod.endDate,
@@ -149,12 +142,12 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
 
   describe('when executed', () => {
     describe('and the notice type is "invitations"', () => {
-      before(() => {
+      beforeAll(() => {
         noticeType = NoticeType.INVITATIONS
       })
 
       describe('and there are licences to exclude', () => {
-        before(() => {
+        beforeAll(() => {
           licencesToExclude = [returnLogs[1].licenceRef]
         })
 
@@ -166,23 +159,23 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
           )
           const { rows } = await db.raw(query, bindings)
 
-          expect(rows).to.include(_transformToResult(returnLogs[0]))
+          expect(rows).toContainEqual(_transformToResult(returnLogs[0]))
 
           // This matches on all other parameters but the licence is excluded
-          expect(rows).not.to.include(_transformToResult(returnLogs[1]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[1]))
 
-          expect(rows).not.to.include(_transformToResult(returnLogs[2]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[3]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[4]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[5]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[6]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[7]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[8]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[2]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[3]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[4]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[5]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[6]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[7]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[8]))
         })
       })
 
       describe('and there are NO licences to exclude', () => {
-        before(() => {
+        beforeAll(() => {
           licencesToExclude = []
         })
 
@@ -194,27 +187,27 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
           )
           const { rows } = await db.raw(query, bindings)
 
-          expect(rows).to.include(_transformToResult(returnLogs[0]))
-          expect(rows).to.include(_transformToResult(returnLogs[1]))
+          expect(rows).toContainEqual(_transformToResult(returnLogs[0]))
+          expect(rows).toContainEqual(_transformToResult(returnLogs[1]))
 
-          expect(rows).not.to.include(_transformToResult(returnLogs[2]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[3]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[4]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[5]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[6]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[7]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[8]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[2]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[3]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[4]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[5]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[6]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[7]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[8]))
         })
       })
     })
 
     describe('and the notice type is "reminders"', () => {
-      before(() => {
+      beforeAll(() => {
         noticeType = NoticeType.REMINDERS
       })
 
       describe('and there are licences to exclude', () => {
-        before(() => {
+        beforeAll(() => {
           licencesToExclude = [returnLogs[3].licenceRef]
         })
 
@@ -226,23 +219,23 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
           )
           const { rows } = await db.raw(query, bindings)
 
-          expect(rows).to.include(_transformToResult(returnLogs[2]))
+          expect(rows).toContainEqual(_transformToResult(returnLogs[2]))
 
           // This matches on all other parameters but the licence is excluded
-          expect(rows).not.to.include(_transformToResult(returnLogs[3]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[3]))
 
-          expect(rows).not.to.include(_transformToResult(returnLogs[0]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[1]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[4]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[5]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[6]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[7]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[8]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[0]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[1]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[4]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[5]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[6]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[7]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[8]))
         })
       })
 
       describe('and there are NO licences to exclude', () => {
-        before(() => {
+        beforeAll(() => {
           licencesToExclude = []
         })
 
@@ -254,16 +247,16 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
           )
           const { rows } = await db.raw(query, bindings)
 
-          expect(rows).to.include(_transformToResult(returnLogs[2]))
-          expect(rows).to.include(_transformToResult(returnLogs[3]))
+          expect(rows).toContainEqual(_transformToResult(returnLogs[2]))
+          expect(rows).toContainEqual(_transformToResult(returnLogs[3]))
 
-          expect(rows).not.to.include(_transformToResult(returnLogs[0]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[1]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[4]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[5]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[6]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[7]))
-          expect(rows).not.to.include(_transformToResult(returnLogs[8]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[0]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[1]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[4]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[5]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[6]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[7]))
+          expect(rows).not.toContainEqual(_transformToResult(returnLogs[8]))
         })
       })
     })

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -74,7 +69,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
         it('saves the volume for May as null', async () => {
           await SubmitVolumesService.go(session.id, payload, yarStub, yearMonth)
 
-          expect(session.lines).to.equal([
+          expect(session.lines).toEqual([
             {
               endDate: '2023-04-30T00:00:00.000Z',
               quantity: 100,
@@ -94,7 +89,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
               startDate: '2023-06-01T00:00:00.000Z'
             }
           ])
-          expect(session.$update.called).to.be.true()
+          expect(session.$update.called).toBe(true)
         })
 
         it('sets the notification message title to "Updated" and the text to "Volumes have been updated" ', async () => {
@@ -102,8 +97,8 @@ describe('Return Logs Setup - Submit Volumes service', () => {
 
           const [flashType, notification] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ titleText: 'Updated', text: 'Volumes have been updated' })
+          expect(flashType).toEqual('notification')
+          expect(notification).toEqual({ titleText: 'Updated', text: 'Volumes have been updated' })
         })
       })
 
@@ -116,7 +111,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
         it('saves the volume for June as 200', async () => {
           await SubmitVolumesService.go(session.id, payload, yarStub, yearMonth)
 
-          expect(session.lines).to.equal([
+          expect(session.lines).toEqual([
             {
               endDate: '2023-04-30T00:00:00.000Z',
               quantity: 100,
@@ -141,8 +136,8 @@ describe('Return Logs Setup - Submit Volumes service', () => {
 
           const [flashType, notification] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ titleText: 'Updated', text: 'Volumes have been updated' })
+          expect(flashType).toEqual('notification')
+          expect(notification).toEqual({ titleText: 'Updated', text: 'Volumes have been updated' })
         })
       })
     })
@@ -156,7 +151,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
       it('returns the page data for the view', async () => {
         const result = await SubmitVolumesService.go(session.id, payload, yarStub, yearMonth)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           error: {
             errorList: [
               {
@@ -186,7 +181,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
         it('includes an error for the radio form element', async () => {
           const result = await SubmitVolumesService.go(session.id, payload, yarStub, yearMonth)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             errorList: [
               {
                 href: '#2023-04-30T00:00:00.000Z',

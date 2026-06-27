@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillRunError = require('../../../app/errors/bill-run.error.js')
@@ -58,11 +53,11 @@ describe('Bill Runs - Send Transactions service', () => {
     it('updates the transactions with the responses from the Charging Module API', async () => {
       const results = await SendTransactionsService.go(transactions, billRunExternalId, accountNumber, licence)
 
-      expect(results).length(2)
-      expect(results[0].status).to.equal('charge_created')
-      expect(results[0].externalId).to.equal('7e752fa6-a19c-4779-b28c-6e536f028795')
-      expect(results[1].status).to.equal('charge_created')
-      expect(results[1].externalId).to.equal('a2086da4-e3b6-4b83-afe1-0e2e5255efaf')
+      expect(results).toHaveLength(2)
+      expect(results[0].status).toEqual('charge_created')
+      expect(results[0].externalId).toEqual('7e752fa6-a19c-4779-b28c-6e536f028795')
+      expect(results[1].status).toEqual('charge_created')
+      expect(results[1].externalId).toEqual('a2086da4-e3b6-4b83-afe1-0e2e5255efaf')
     })
   })
 
@@ -75,12 +70,13 @@ describe('Bill Runs - Send Transactions service', () => {
     })
 
     it('throws a BillRunError with the correct code', async () => {
-      const error = await expect(
+      await expect(
         SendTransactionsService.go(transactions, billRunExternalId, accountNumber, licence)
-      ).to.reject()
+      ).rejects.toBeInstanceOf(BillRunError)
 
-      expect(error).to.be.an.instanceOf(BillRunError)
-      expect(error.code).to.equal(BillRunModel.errorCodes.failedToCreateCharge)
+      await expect(
+        SendTransactionsService.go(transactions, billRunExternalId, accountNumber, licence)
+      ).rejects.toMatchObject({ code: BillRunModel.errorCodes.failedToCreateCharge })
     })
   })
 })

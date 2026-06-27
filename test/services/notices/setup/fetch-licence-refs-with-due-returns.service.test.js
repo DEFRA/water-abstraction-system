@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
@@ -26,7 +19,7 @@ describe('Notices - Setup - Fetch Licence Refs With Due Returns service', () => 
   let noticeType
   let returnLogs
 
-  before(async () => {
+  beforeAll(async () => {
     // Start with the helper defaults, set to match the period we are interested in
     const defaultDates = { endDate: returnsPeriod.endDate, startDate: returnsPeriod.startDate }
 
@@ -70,7 +63,7 @@ describe('Notices - Setup - Fetch Licence Refs With Due Returns service', () => 
     await _addReturnLog(returnLogs, { ...defaultDates, dueDate })
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const returnLog of returnLogs) {
       await returnLog.$query().delete()
     }
@@ -84,16 +77,16 @@ describe('Notices - Setup - Fetch Licence Refs With Due Returns service', () => 
     it('correctly returns the expected licence refs', async () => {
       const results = await FetchLicenceRefsWithDueReturnsService.go(returnsPeriod, noticeType)
 
-      expect(results).to.include(distinctInvitationLicenceRef)
-      expect(results).to.include(returnLogs[2].licenceRef)
+      expect(results).toContainEqual(distinctInvitationLicenceRef)
+      expect(results).toContainEqual(returnLogs[2].licenceRef)
 
-      expect(results).to.not.include(returnLogs[3].licenceRef)
-      expect(results).to.not.include(returnLogs[4].licenceRef)
-      expect(results).to.not.include(returnLogs[5].licenceRef)
-      expect(results).to.not.include(returnLogs[6].licenceRef)
+      expect(results).not.toContainEqual(returnLogs[3].licenceRef)
+      expect(results).not.toContainEqual(returnLogs[4].licenceRef)
+      expect(results).not.toContainEqual(returnLogs[5].licenceRef)
+      expect(results).not.toContainEqual(returnLogs[6].licenceRef)
 
-      expect(results).to.not.include(distinctReminderLicenceRef)
-      expect(results).to.not.include(returnLogs[9].licenceRef)
+      expect(results).not.toContainEqual(distinctReminderLicenceRef)
+      expect(results).not.toContainEqual(returnLogs[9].licenceRef)
     })
 
     it('returns a distinct list of licence refs', async () => {
@@ -103,7 +96,7 @@ describe('Notices - Setup - Fetch Licence Refs With Due Returns service', () => 
         return licenceRef === distinctInvitationLicenceRef
       })
 
-      expect(knownDuplicateLicenceRef).have.length(1)
+      expect(knownDuplicateLicenceRef).toHaveLength(1)
     })
   })
 
@@ -115,15 +108,15 @@ describe('Notices - Setup - Fetch Licence Refs With Due Returns service', () => 
     it('correctly returns the expected licence refs', async () => {
       const results = await FetchLicenceRefsWithDueReturnsService.go(returnsPeriod, noticeType)
 
-      expect(results).to.include(distinctReminderLicenceRef)
-      expect(results).to.include(returnLogs[8].licenceRef)
+      expect(results).toContainEqual(distinctReminderLicenceRef)
+      expect(results).toContainEqual(returnLogs[8].licenceRef)
 
-      expect(results).to.not.include(distinctInvitationLicenceRef)
-      expect(results).to.not.include(returnLogs[2].licenceRef)
-      expect(results).to.not.include(returnLogs[3].licenceRef)
-      expect(results).to.not.include(returnLogs[4].licenceRef)
-      expect(results).to.not.include(returnLogs[5].licenceRef)
-      expect(results).to.not.include(returnLogs[6].licenceRef)
+      expect(results).not.toContainEqual(distinctInvitationLicenceRef)
+      expect(results).not.toContainEqual(returnLogs[2].licenceRef)
+      expect(results).not.toContainEqual(returnLogs[3].licenceRef)
+      expect(results).not.toContainEqual(returnLogs[4].licenceRef)
+      expect(results).not.toContainEqual(returnLogs[5].licenceRef)
+      expect(results).not.toContainEqual(returnLogs[6].licenceRef)
     })
 
     it('returns a distinct list of licence refs', async () => {
@@ -133,7 +126,7 @@ describe('Notices - Setup - Fetch Licence Refs With Due Returns service', () => 
         return licenceRef === distinctReminderLicenceRef
       })
 
-      expect(knownDuplicateLicenceRef).have.length(1)
+      expect(knownDuplicateLicenceRef).toHaveLength(1)
     })
   })
 })

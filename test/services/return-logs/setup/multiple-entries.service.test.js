@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -45,29 +40,26 @@ describe('Return Logs Setup - Multiple Entries service', () => {
     it('fetches the current setup session record', async () => {
       const result = await MultipleEntriesService.go(session.id)
 
-      expect(result.sessionId).to.equal(session.id)
+      expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
       const result = await MultipleEntriesService.go(session.id)
 
-      expect(result).to.equal(
-        {
-          backLink: {
-            href: `/system/return-logs/setup/${session.id}/check`,
-            text: 'Back'
-          },
-          endDate: '1 May 2023',
-          frequency: 'monthly',
-          lineCount: 2,
-          measurementType: 'volumes',
-          multipleEntries: null,
-          pageTitle: 'Enter multiple monthly volumes',
-          pageTitleCaption: 'Return reference 012345',
-          startDate: '1 April 2023'
+      expect(result).toMatchObject({
+        backLink: {
+          href: `/system/return-logs/setup/${session.id}/check`,
+          text: 'Back'
         },
-        { skip: ['sessionId'] }
-      )
+        endDate: '1 May 2023',
+        frequency: 'monthly',
+        lineCount: 2,
+        measurementType: 'volumes',
+        multipleEntries: null,
+        pageTitle: 'Enter multiple monthly volumes',
+        pageTitleCaption: 'Return reference 012345',
+        startDate: '1 April 2023'
+      })
     })
   })
 })

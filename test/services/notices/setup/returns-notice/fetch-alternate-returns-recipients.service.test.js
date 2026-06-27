@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
@@ -20,7 +13,7 @@ describe('Notices - Setup - Returns Notice - Fetch Alternate Returns Recipients 
   let returnLog
   let scenarios
 
-  before(async () => {
+  beforeAll(async () => {
     scenarios = {}
 
     // 1) Licence holder only
@@ -29,7 +22,7 @@ describe('Notices - Setup - Returns Notice - Fetch Alternate Returns Recipients 
     scenarios.licenceHolder = await RecipientScenariosSeeder.licenceHolderOnly([returnLog])
   })
 
-  after(async () => {
+  afterAll(async () => {
     await RecipientScenariosSeeder.clean(scenarios)
   })
 
@@ -41,7 +34,7 @@ describe('Notices - Setup - Returns Notice - Fetch Alternate Returns Recipients 
 
       sendingResult[0].notificationDueDate = notificationDueDate
 
-      expect(results).to.equal(sendingResult)
+      expect(results).toEqual(sendingResult)
     })
   })
 })

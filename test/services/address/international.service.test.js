@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { countryLookup } = require('../../../app/presenters/address/base-address.presenter.js')
@@ -51,7 +46,7 @@ describe('Address - International Service', () => {
     it('returns page data for the view', async () => {
       const result = await InternationalService.go(sessionId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'manage',
         addressLine1: null,
         addressLine2: null,

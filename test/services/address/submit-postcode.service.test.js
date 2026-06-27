@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../support/stubs/session.stub.js')
@@ -58,10 +53,10 @@ describe('Address - Submit Postcode Service', () => {
       it('saves the submitted postcode and returns an empty object (tells controller to redirect to next page)', async () => {
         const result = await SubmitPostcodeService.go(sessionId, payload)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
 
-        expect(session.addressJourney.address.postcode).to.equal('SW1A 1AA')
-        expect(session.$update.called).to.be.true()
+        expect(session.addressJourney.address.postcode).toEqual('SW1A 1AA')
+        expect(session.$update.called).toBe(true)
       })
     })
 
@@ -74,7 +69,7 @@ describe('Address - Submit Postcode Service', () => {
         it('returns page data needed to re-render the view including the validation error', async () => {
           const result = await SubmitPostcodeService.go(sessionId, payload)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             error: {
               errorList: [
                 {
@@ -105,7 +100,7 @@ describe('Address - Submit Postcode Service', () => {
         it('returns page data needed to re-render the view including the validation error', async () => {
           const result = await SubmitPostcodeService.go(sessionId, payload)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             error: {
               errorList: [
                 {

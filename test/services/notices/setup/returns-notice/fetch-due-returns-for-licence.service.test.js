@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const RegionHelper = require('../../../../support/helpers/region.helper.js')
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
@@ -20,7 +13,7 @@ describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence servi
   let returnLogs
   let region
 
-  before(async () => {
+  beforeAll(async () => {
     licenceRef = generateLicenceRef()
 
     region = RegionHelper.select()
@@ -78,7 +71,7 @@ describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence servi
     returnLogs.push(returnLog)
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const returnLog of returnLogs) {
       await returnLog.$query().delete()
     }
@@ -88,7 +81,7 @@ describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence servi
     it('returns the "due" returns for the licence', async () => {
       const result = await FetchDueReturnsForLicence.go(licenceRef)
 
-      expect(result).to.equal([
+      expect(result).toEqual([
         {
           dueDate: null,
           endDate: returnLogs[1].endDate,

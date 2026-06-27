@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModel = require('../../../../../app/models/session.model.js')
@@ -44,7 +39,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
       it('returns the session Id and a formatted data object', async () => {
         const result = await InitiateEditSessionService.go(id)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           access: 'enabled',
           data: {
             access: 'enabled',
@@ -64,7 +59,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
 
         const matchingSession = await SessionModel.query().findById(result.id)
 
-        expect(matchingSession.data).to.equal({
+        expect(matchingSession.data).toEqual({
           access: 'enabled',
           email: 'bob.bobbles@environment-agency.gov.uk',
           permission: 'basic',
@@ -98,7 +93,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
       it('returns the session Id and a formatted data object', async () => {
         const result = await InitiateEditSessionService.go(id)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           access: 'enabled',
           data: {
             access: 'enabled',
@@ -118,7 +113,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
 
         const matchingSession = await SessionModel.query().findById(result.id)
 
-        expect(matchingSession.data).to.equal({
+        expect(matchingSession.data).toEqual({
           access: 'enabled',
           email: 'bob.bobbles@environment-agency.gov.uk',
           permission: 'nps_ar_approver',
@@ -152,7 +147,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
       it('returns the users access status of "enabled"', async () => {
         const result = await InitiateEditSessionService.go(id)
 
-        expect(result.access).to.equal('enabled')
+        expect(result.access).toEqual('enabled')
       })
     })
 
@@ -173,7 +168,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
       it('returns the users access status of "disabled"', async () => {
         const result = await InitiateEditSessionService.go(id)
 
-        expect(result.access).to.equal('disabled')
+        expect(result.access).toEqual('disabled')
       })
     })
   })

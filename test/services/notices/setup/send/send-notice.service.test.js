@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const NoticesFixture = require('../../../../support/fixtures/notices.fixture.js')
@@ -60,23 +55,23 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       it('sends the main notice', async () => {
         await SendNoticeService.go(notice, notifications)
 
-        expect(sendMainNoticeStub.calledOnce).to.be.true()
-        expect(sendMainNoticeStub.firstCall.args[0]).to.equal(notice)
-        expect(sendMainNoticeStub.firstCall.args[1]).to.equal(notifications)
+        expect(sendMainNoticeStub.calledOnce).toBe(true)
+        expect(sendMainNoticeStub.firstCall.args[0]).toEqual(notice)
+        expect(sendMainNoticeStub.firstCall.args[1]).toEqual(notifications)
       })
 
       it('checks the main notice for the need to send an alternate notice', async () => {
         await SendNoticeService.go(notice, notifications)
 
-        expect(sendAlternateNoticeStub.calledOnce).to.be.true()
-        expect(sendMainNoticeStub.firstCall.args[0]).to.equal(notice)
+        expect(sendAlternateNoticeStub.calledOnce).toBe(true)
+        expect(sendMainNoticeStub.firstCall.args[0]).toEqual(notice)
       })
 
       it('updates both the main and alternate notices', async () => {
         await SendNoticeService.go(notice, notifications)
 
-        expect(updateEventServiceStub.calledOnce).to.be.true()
-        expect(updateEventServiceStub.firstCall.args[0]).to.equal([notice.id, '270d3a69-4cf7-4c90-8459-fbc35d725bd6'])
+        expect(updateEventServiceStub.calledOnce).toBe(true)
+        expect(updateEventServiceStub.firstCall.args[0]).toEqual([notice.id, '270d3a69-4cf7-4c90-8459-fbc35d725bd6'])
       })
 
       it('logs the time taken', async () => {
@@ -84,10 +79,10 @@ describe('Notices - Setup - Send - Send Notice service', () => {
 
         const args = notifierStub.omg.firstCall.args
 
-        expect(args[0]).to.equal('Send notice complete')
-        expect(args[1].timeTakenMs).to.exist()
-        expect(args[1].count).to.equal(1)
-        expect(args[1].noticeId).to.equal(notice.id)
+        expect(args[0]).toEqual('Send notice complete')
+        expect(args[1].timeTakenMs).toBeDefined()
+        expect(args[1].count).toEqual(1)
+        expect(args[1].noticeId).toEqual(notice.id)
       })
     })
 
@@ -100,23 +95,23 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       it('sends the main notice', async () => {
         await SendNoticeService.go(notice, notifications)
 
-        expect(sendMainNoticeStub.calledOnce).to.be.true()
-        expect(sendMainNoticeStub.firstCall.args[0]).to.equal(notice)
-        expect(sendMainNoticeStub.firstCall.args[1]).to.equal(notifications)
+        expect(sendMainNoticeStub.calledOnce).toBe(true)
+        expect(sendMainNoticeStub.firstCall.args[0]).toEqual(notice)
+        expect(sendMainNoticeStub.firstCall.args[1]).toEqual(notifications)
       })
 
       it('checks the main notice for the need to send an alternate notice', async () => {
         await SendNoticeService.go(notice, notifications)
 
-        expect(sendAlternateNoticeStub.calledOnce).to.be.true()
-        expect(sendMainNoticeStub.firstCall.args[0]).to.equal(notice)
+        expect(sendAlternateNoticeStub.calledOnce).toBe(true)
+        expect(sendMainNoticeStub.firstCall.args[0]).toEqual(notice)
       })
 
       it('updates both the main and alternate notices', async () => {
         await SendNoticeService.go(notice, notifications)
 
-        expect(updateEventServiceStub.calledOnce).to.be.true()
-        expect(updateEventServiceStub.firstCall.args[0]).to.equal([notice.id, '270d3a69-4cf7-4c90-8459-fbc35d725bd6'])
+        expect(updateEventServiceStub.calledOnce).toBe(true)
+        expect(updateEventServiceStub.firstCall.args[0]).toEqual([notice.id, '270d3a69-4cf7-4c90-8459-fbc35d725bd6'])
       })
     })
 
@@ -129,22 +124,22 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       it('sends the main notice', async () => {
         await SendNoticeService.go(notice, notifications)
 
-        expect(sendMainNoticeStub.calledOnce).to.be.true()
-        expect(sendMainNoticeStub.firstCall.args[0]).to.equal(notice)
-        expect(sendMainNoticeStub.firstCall.args[1]).to.equal(notifications)
+        expect(sendMainNoticeStub.calledOnce).toBe(true)
+        expect(sendMainNoticeStub.firstCall.args[0]).toEqual(notice)
+        expect(sendMainNoticeStub.firstCall.args[1]).toEqual(notifications)
       })
 
       it('does not attempt to send an alternate notice', async () => {
         await SendNoticeService.go(notice, notifications)
 
-        expect(sendAlternateNoticeStub.called).to.be.false()
+        expect(sendAlternateNoticeStub.called).toBe(false)
       })
 
       it('only updates the main notice', async () => {
         await SendNoticeService.go(notice, notifications)
 
-        expect(updateEventServiceStub.calledOnce).to.be.true()
-        expect(updateEventServiceStub.firstCall.args[0]).to.equal([notice.id])
+        expect(updateEventServiceStub.calledOnce).toBe(true)
+        expect(updateEventServiceStub.firstCall.args[0]).toEqual([notice.id])
       })
 
       it('logs the time taken', async () => {
@@ -152,10 +147,10 @@ describe('Notices - Setup - Send - Send Notice service', () => {
 
         const args = notifierStub.omg.firstCall.args
 
-        expect(args[0]).to.equal('Send notice complete')
-        expect(args[1].timeTakenMs).to.exist()
-        expect(args[1].count).to.equal(1)
-        expect(args[1].noticeId).to.equal(notice.id)
+        expect(args[0]).toEqual('Send notice complete')
+        expect(args[1].timeTakenMs).toBeDefined()
+        expect(args[1].count).toEqual(1)
+        expect(args[1].noticeId).toEqual(notice.id)
       })
     })
   })
@@ -173,10 +168,10 @@ describe('Notices - Setup - Send - Send Notice service', () => {
 
       const args = notifierStub.omfg.firstCall.args
 
-      expect(args[0]).to.equal('Send notice failed')
-      expect(args[1].notice.id).to.equal(notice.id)
-      expect(args[2]).to.be.an.error()
-      expect(args[2].name).to.equal('Computer says no')
+      expect(args[0]).toEqual('Send notice failed')
+      expect(args[1].notice.id).toEqual(notice.id)
+      expect(args[2]).toBeInstanceOf(Error)
+      expect(args[2].name).toEqual('Computer says no')
     })
   })
 })

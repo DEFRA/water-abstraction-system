@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
@@ -49,17 +44,17 @@ describe('Company Contacts - Setup - Contact Email Service', () => {
     it('saves the submitted value', async () => {
       await SubmitContactEmailService.go(session.id, payload, yarStub)
 
-      expect(session).to.equal({
+      expect(session).toEqual({
         ...session,
         email: 'eric@test.com'
       })
-      expect(session.$update.called).to.be.true()
+      expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
       const result = await SubmitContactEmailService.go(session.id, payload, yarStub)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         redirectUrl: `/system/company-contacts/setup/${session.id}/abstraction-alerts`
       })
     })
@@ -81,7 +76,7 @@ describe('Company Contacts - Setup - Contact Email Service', () => {
             it('does not set a notification', async () => {
               await SubmitContactEmailService.go(session.id, payload, yarStub)
 
-              expect(yarStub.flash.called).to.be.false()
+              expect(yarStub.flash.called).toBe(false)
             })
           })
 
@@ -95,8 +90,8 @@ describe('Company Contacts - Setup - Contact Email Service', () => {
 
               const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-              expect(flashType).to.equal('notification')
-              expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Email address updated' })
+              expect(flashType).toEqual('notification')
+              expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Email address updated' })
             })
           })
         })
@@ -106,7 +101,7 @@ describe('Company Contacts - Setup - Contact Email Service', () => {
         it('does not set a notification', async () => {
           await SubmitContactEmailService.go(session.id, payload, yarStub)
 
-          expect(yarStub.flash.called).to.be.false()
+          expect(yarStub.flash.called).toBe(false)
         })
       })
     })
@@ -120,7 +115,7 @@ describe('Company Contacts - Setup - Contact Email Service', () => {
     it('returns page data for the view, with errors', async () => {
       const result = await SubmitContactEmailService.go(session.id, payload, yarStub)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/company-contacts/setup/${session.id}/contact-name`,
           text: 'Back'

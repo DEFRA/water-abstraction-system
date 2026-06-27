@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const NoBillingPeriodsError = require('../../../app/errors/no-billing-periods.error.js')
@@ -71,13 +66,13 @@ describe('Start Bill Run Process service', () => {
 
         const financialYearEndings = InitiateBillRunService.go.firstCall.args[0]
 
-        expect(financialYearEndings).to.equal({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
+        expect(financialYearEndings).toEqual({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
       })
 
       it('starts processing the bill run', async () => {
         await StartBillRunProcessService.go(regionId, userEmail)
 
-        expect(AnnualProcessBillRunService.go.called).to.be.true()
+        expect(AnnualProcessBillRunService.go.called).toBe(true)
       })
     })
 
@@ -100,13 +95,13 @@ describe('Start Bill Run Process service', () => {
 
         const financialYearEndings = InitiateBillRunService.go.firstCall.args[0]
 
-        expect(financialYearEndings).to.equal({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
+        expect(financialYearEndings).toEqual({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
       })
 
       it('starts processing the bill run', async () => {
         await StartBillRunProcessService.go(regionId, userEmail)
 
-        expect(SupplementaryProcessBillRunService.go.called).to.be.true()
+        expect(SupplementaryProcessBillRunService.go.called).toBe(true)
       })
     })
 
@@ -129,13 +124,13 @@ describe('Start Bill Run Process service', () => {
 
         const financialYearEndings = InitiateBillRunService.go.firstCall.args[0]
 
-        expect(financialYearEndings).to.equal({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
+        expect(financialYearEndings).toEqual({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
       })
 
       it('starts processing the bill run', async () => {
         await StartBillRunProcessService.go(regionId, userEmail)
 
-        expect(TwoPartTariffProcessBillRunService.go.called).to.be.true()
+        expect(TwoPartTariffProcessBillRunService.go.called).toBe(true)
       })
     })
 
@@ -158,13 +153,13 @@ describe('Start Bill Run Process service', () => {
 
         const financialYearEndings = InitiateBillRunService.go.firstCall.args[0]
 
-        expect(financialYearEndings).to.equal({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
+        expect(financialYearEndings).toEqual({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
       })
 
       it('starts processing the bill run', async () => {
         await StartBillRunProcessService.go(regionId, userEmail)
 
-        expect(TwoPartTariffSupplementaryProcessBillRunService.go.called).to.be.true()
+        expect(TwoPartTariffSupplementaryProcessBillRunService.go.called).toBe(true)
       })
     })
   })
@@ -176,7 +171,7 @@ describe('Start Bill Run Process service', () => {
       })
 
       it('throws an error', async () => {
-        await expect(StartBillRunProcessService.go(regionId, userEmail)).to.reject()
+        await expect(StartBillRunProcessService.go(regionId, userEmail)).rejects.toThrow()
       })
     })
 
@@ -186,9 +181,11 @@ describe('Start Bill Run Process service', () => {
       })
 
       it('throws a NoBillingPeriodsError', async () => {
-        const result = await expect(StartBillRunProcessService.go(regionId, userEmail)).to.reject()
+        const result = await StartBillRunProcessService.go(regionId, userEmail).catch((e) => {
+          return e
+        })
 
-        expect(result).to.be.instanceOf(NoBillingPeriodsError)
+        expect(result).toBeInstanceOf(NoBillingPeriodsError)
       })
     })
   })

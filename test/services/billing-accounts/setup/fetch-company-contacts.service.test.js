@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CompanyHelper = require('../../../support/helpers/company.helper.js')
 const CompanyContactHelper = require('../../../support/helpers/company-contact.helper.js')
@@ -22,7 +15,7 @@ describe('Billing Accounts - Setup - Fetch Company Contacts service', () => {
   let companyWithNoContact
   let contact
 
-  before(async () => {
+  beforeAll(async () => {
     contact = await ContactHelper.add()
     company = await CompanyHelper.add()
     companyWithNoContact = await CompanyHelper.add()
@@ -37,7 +30,7 @@ describe('Billing Accounts - Setup - Fetch Company Contacts service', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await company.$query().delete()
     await companyContact.$query().delete()
     await companyContactDuplicate.$query().delete()
@@ -49,7 +42,7 @@ describe('Billing Accounts - Setup - Fetch Company Contacts service', () => {
     it('returns the company name and matching contact', async () => {
       const result = await FetchCompanyContactsService.go(company.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         company: {
           id: company.id,
           name: company.name
@@ -75,7 +68,7 @@ describe('Billing Accounts - Setup - Fetch Company Contacts service', () => {
     it('returns the company name and an empty contacts array', async () => {
       const result = await FetchCompanyContactsService.go(companyWithNoContact.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         company: {
           id: companyWithNoContact.id,
           name: companyWithNoContact.name

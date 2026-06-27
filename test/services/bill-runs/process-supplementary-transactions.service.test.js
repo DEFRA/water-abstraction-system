@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ProcessSupplementaryTransactionsService = require('../../../app/services/bill-runs/process-supplementary-transactions.service.js')
 
@@ -43,8 +36,8 @@ describe('Bill Runs - Process Supplementary Transactions service', () => {
               billLicenceId
             )
 
-            expect(result).to.have.length(1)
-            expect(result[0]).to.equal(generatedTransactions[2])
+            expect(result).toHaveLength(1)
+            expect(result[0]).toEqual(generatedTransactions[2])
           })
         })
 
@@ -64,7 +57,7 @@ describe('Bill Runs - Process Supplementary Transactions service', () => {
               billLicenceId
             )
 
-            expect(result).to.be.empty()
+            expect(result).toHaveLength(0)
           })
         })
 
@@ -79,9 +72,9 @@ describe('Bill Runs - Process Supplementary Transactions service', () => {
           it('returns only the previous transactions', async () => {
             const result = await ProcessSupplementaryTransactionsService.go(previousTransactions, [], billLicenceId)
 
-            expect(result).to.have.length(2)
-            expect(result[0].purposes).to.equal(['I_WILL_NOT_BE_REMOVED_1'])
-            expect(result[1].purposes).to.equal(['I_WILL_NOT_BE_REMOVED_2'])
+            expect(result).toHaveLength(2)
+            expect(result[0].purposes).toEqual(['I_WILL_NOT_BE_REMOVED_1'])
+            expect(result[1].purposes).toEqual(['I_WILL_NOT_BE_REMOVED_2'])
           })
         })
 
@@ -101,10 +94,10 @@ describe('Bill Runs - Process Supplementary Transactions service', () => {
               billLicenceId
             )
 
-            expect(result).to.have.length(2)
-            expect(result[0].purposes).to.equal('GENERATED_TRANSACTION_3')
-            expect(result[1].purposes).to.equal(['I_WILL_NOT_BE_REMOVED'])
-            expect(result[1].credit).to.be.true()
+            expect(result).toHaveLength(2)
+            expect(result[0].purposes).toEqual('GENERATED_TRANSACTION_3')
+            expect(result[1].purposes).toEqual(['I_WILL_NOT_BE_REMOVED'])
+            expect(result[1].credit).toBe(true)
           })
         })
       })
@@ -114,10 +107,10 @@ describe('Bill Runs - Process Supplementary Transactions service', () => {
       it('returns the generated transactions unchanged', async () => {
         const result = await ProcessSupplementaryTransactionsService.go([], generatedTransactions, billLicenceId)
 
-        expect(result).to.have.length(3)
-        expect(result[0].purposes).to.equal('GENERATED_TRANSACTION_1')
-        expect(result[1].purposes).to.equal('GENERATED_TRANSACTION_2')
-        expect(result[2].purposes).to.equal('GENERATED_TRANSACTION_3')
+        expect(result).toHaveLength(3)
+        expect(result[0].purposes).toEqual('GENERATED_TRANSACTION_1')
+        expect(result[1].purposes).toEqual('GENERATED_TRANSACTION_2')
+        expect(result[2].purposes).toEqual('GENERATED_TRANSACTION_3')
       })
     })
   })

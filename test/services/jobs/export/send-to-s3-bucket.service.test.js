@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3')
@@ -33,12 +28,12 @@ describe('Send to S3 bucket service', () => {
       await SendToS3BucketService.go(filePath)
 
       // Test that the S3 Client was called once
-      expect(s3Stub.calledOnce).to.be.true()
+      expect(s3Stub.calledOnce).toBe(true)
 
       // Get the first call and test that it was called with PutObjectCommand
       const calledCommand = s3Stub.getCall(0).firstArg
 
-      expect(calledCommand).to.be.an.instanceof(PutObjectCommand)
+      expect(calledCommand).toBeInstanceOf(PutObjectCommand)
     })
   })
 
@@ -47,9 +42,9 @@ describe('Send to S3 bucket service', () => {
       const fileName = 'FakeFolder'
 
       it('does not upload a file to the S3 bucket', async () => {
-        await expect(SendToS3BucketService.go(fileName)).to.reject()
+        await expect(SendToS3BucketService.go(fileName)).rejects.toThrow()
 
-        expect(s3Stub.called).to.be.false()
+        expect(s3Stub.called).toBe(false)
       })
     })
   })

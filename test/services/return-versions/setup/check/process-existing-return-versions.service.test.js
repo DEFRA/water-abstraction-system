@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const FetchCurrentReturnVersionsDal = require('../../../../../app/dal/return-versions/fetch-current-return-versions.dal.js')
@@ -54,11 +49,11 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
     it('sets the "endDate" of the existing record, a null "endDate" is returned for the new return version', async () => {
       const result = await ProcessExistingReturnVersionsService.go(licenceId, newVersionStartDate)
 
-      expect(result).to.be.null()
+      expect(result).toBeNull()
 
-      expect(updateReturnVersionEndDateStub.calledOnce).to.be.true()
-      expect(updateReturnVersionEndDateStub.firstCall.args[0]).to.equal('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
-      expect(updateReturnVersionEndDateStub.firstCall.args[1]).to.equal(new Date('2024-05-31'))
+      expect(updateReturnVersionEndDateStub.calledOnce).toBe(true)
+      expect(updateReturnVersionEndDateStub.firstCall.args[0]).toEqual('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
+      expect(updateReturnVersionEndDateStub.firstCall.args[1]).toEqual(new Date('2024-05-31'))
     })
   })
 
@@ -79,11 +74,11 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
     it('sets the "endDate" of the existing record and an "endDate" is returned for the new return version', async () => {
       const result = await ProcessExistingReturnVersionsService.go(licenceId, newVersionStartDate)
 
-      expect(result).to.equal(new Date('2024-07-01'))
+      expect(result).toEqual(new Date('2024-07-01'))
 
-      expect(updateReturnVersionEndDateStub.calledOnce).to.be.true()
-      expect(updateReturnVersionEndDateStub.firstCall.args[0]).to.equal('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
-      expect(updateReturnVersionEndDateStub.firstCall.args[1]).to.equal(new Date('2024-05-31'))
+      expect(updateReturnVersionEndDateStub.calledOnce).toBe(true)
+      expect(updateReturnVersionEndDateStub.firstCall.args[0]).toEqual('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
+      expect(updateReturnVersionEndDateStub.firstCall.args[1]).toEqual(new Date('2024-05-31'))
     })
   })
 
@@ -104,10 +99,10 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
     it('an "endDate" is returned for the new return version and no changes are made', async () => {
       const result = await ProcessExistingReturnVersionsService.go(licenceId, newVersionStartDate)
 
-      expect(result).to.equal(new Date('2024-04-20'))
+      expect(result).toEqual(new Date('2024-04-20'))
 
-      expect(updateReturnVersionEndDateStub.called).to.be.false()
-      expect(updateReturnVersionStatusStub.called).to.be.false()
+      expect(updateReturnVersionEndDateStub.called).toBe(false)
+      expect(updateReturnVersionStatusStub.called).toBe(false)
     })
   })
 
@@ -128,11 +123,11 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
     it('sets the "status" of the existing record, a null end date is returned for the new return version', async () => {
       const result = await ProcessExistingReturnVersionsService.go(licenceId, newVersionStartDate)
 
-      expect(result).to.be.null()
+      expect(result).toBeNull()
 
-      expect(updateReturnVersionStatusStub.calledOnce).to.be.true()
-      expect(updateReturnVersionStatusStub.firstCall.args[0]).to.equal('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
-      expect(updateReturnVersionStatusStub.firstCall.args[1]).to.equal('superseded')
+      expect(updateReturnVersionStatusStub.calledOnce).toBe(true)
+      expect(updateReturnVersionStatusStub.firstCall.args[0]).toEqual('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
+      expect(updateReturnVersionStatusStub.firstCall.args[1]).toEqual('superseded')
     })
   })
 
@@ -153,11 +148,11 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
     it('sets the "status" of the existing record and an "endDate" is returned for the new return version', async () => {
       const result = await ProcessExistingReturnVersionsService.go(licenceId, newVersionStartDate)
 
-      expect(result).to.equal(new Date('2024-07-01'))
+      expect(result).toEqual(new Date('2024-07-01'))
 
-      expect(updateReturnVersionStatusStub.calledOnce).to.be.true()
-      expect(updateReturnVersionStatusStub.firstCall.args[0]).to.equal('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
-      expect(updateReturnVersionStatusStub.firstCall.args[1]).to.equal('superseded')
+      expect(updateReturnVersionStatusStub.calledOnce).toBe(true)
+      expect(updateReturnVersionStatusStub.firstCall.args[0]).toEqual('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
+      expect(updateReturnVersionStatusStub.firstCall.args[1]).toEqual('superseded')
     })
   })
 
@@ -190,11 +185,11 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
     it('the correct "endDate" is returned for the existing return version and the previous ones endDate is updated', async () => {
       const result = await ProcessExistingReturnVersionsService.go(licenceId, newVersionStartDate)
 
-      expect(result).to.equal(new Date('2025-05-11'))
+      expect(result).toEqual(new Date('2025-05-11'))
 
-      expect(updateReturnVersionEndDateStub.calledOnce).to.be.true()
-      expect(updateReturnVersionEndDateStub.firstCall.args[0]).to.equal('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
-      expect(updateReturnVersionEndDateStub.firstCall.args[1]).to.equal(new Date('2025-03-31'))
+      expect(updateReturnVersionEndDateStub.calledOnce).toBe(true)
+      expect(updateReturnVersionEndDateStub.firstCall.args[0]).toEqual('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
+      expect(updateReturnVersionEndDateStub.firstCall.args[1]).toEqual(new Date('2025-03-31'))
     })
   })
 })

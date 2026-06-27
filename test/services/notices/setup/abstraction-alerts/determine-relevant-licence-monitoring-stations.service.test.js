@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
 
@@ -50,7 +43,7 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
       alertType
     )
 
-    expect(result).to.equal([licenceMonitoringStationOne, licenceMonitoringStationTwo, licenceMonitoringStationThree])
+    expect(result).toEqual([licenceMonitoringStationOne, licenceMonitoringStationTwo, licenceMonitoringStationThree])
   })
 
   describe('when there are "selectedLicenceMonitoringStations"', () => {
@@ -65,7 +58,7 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
         alertType
       )
 
-      expect(result).to.equal([licenceMonitoringStationOne])
+      expect(result).toEqual([licenceMonitoringStationOne])
     })
   })
 
@@ -82,9 +75,9 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
         alertType
       )
 
-      expect(result.length).to.equal(2)
+      expect(result.length).toEqual(2)
 
-      expect(result).to.equal([licenceMonitoringStationTwo, licenceMonitoringStationThree])
+      expect(result).toEqual([licenceMonitoringStationTwo, licenceMonitoringStationThree])
     })
   })
 
@@ -103,7 +96,7 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
         alertType
       )
 
-      expect(result).to.equal([licenceMonitoringStationTwo])
+      expect(result).toEqual([licenceMonitoringStationTwo])
     })
 
     describe('and a licence monitoring station has the "restrictionType" "stop_or_reduce"', () => {
@@ -124,7 +117,7 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
           alertType
         )
 
-        expect(result).to.equal([licenceMonitoringStationTwo])
+        expect(result).toEqual([licenceMonitoringStationTwo])
       })
     })
   })
@@ -144,7 +137,7 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
         alertType
       )
 
-      expect(result).to.equal([licenceMonitoringStationOne])
+      expect(result).toEqual([licenceMonitoringStationOne])
     })
 
     describe('and a licence monitoring station has the "restrictionType" "stop_or_reduce"', () => {
@@ -165,7 +158,7 @@ describe('Notices Setup - Abstraction Alerts - Determine relevant licence monito
           alertType
         )
 
-        expect(result).to.equal([licenceMonitoringStationOne, licenceMonitoringStationTwo])
+        expect(result).toEqual([licenceMonitoringStationOne, licenceMonitoringStationTwo])
       })
     })
   })

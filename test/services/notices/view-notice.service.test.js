@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
@@ -109,7 +104,7 @@ describe('Notices - View Notice service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewNoticeService.go(fetchResults.notice.id, yarStub, page)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'notices',
         backLink: { href: '/system/notices', text: 'Go back to notices' },
         filters: {
@@ -178,7 +173,7 @@ describe('Notices - View Notice service', () => {
       it('returns blank filters and that the controls should be closed', async () => {
         const result = await ViewNoticeService.go(fetchResults.notice.id, yarStub, page)
 
-        expect(result.filters.openFilter).to.be.false()
+        expect(result.filters.openFilter).toBe(false)
       })
     })
 
@@ -191,7 +186,7 @@ describe('Notices - View Notice service', () => {
       it('returns blank filters and that the controls should be closed', async () => {
         const result = await ViewNoticeService.go(fetchResults.notice.id, yarStub, page)
 
-        expect(result.filters.openFilter).to.be.false()
+        expect(result.filters.openFilter).toBe(false)
       })
     })
 
@@ -207,8 +202,8 @@ describe('Notices - View Notice service', () => {
       it('returns the saved filters and that the controls should be open', async () => {
         const result = await ViewNoticeService.go(fetchResults.notice.id, yarStub, page)
 
-        expect(result.filters.recipient).to.equal('carol.shaw@wrls.gov.uk')
-        expect(result.filters.openFilter).to.be.true()
+        expect(result.filters.recipient).toEqual('carol.shaw@wrls.gov.uk')
+        expect(result.filters.openFilter).toBe(true)
       })
     })
   })
@@ -226,7 +221,7 @@ describe('Notices - View Notice service', () => {
     it('defaults to 1', async () => {
       const result = await ViewNoticeService.go(fetchResults.notice.id, yarStub, page)
 
-      expect(result.pageTitle).to.equal('Warning alert')
+      expect(result.pageTitle).toEqual('Warning alert')
     })
   })
 })

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const AbstractionAlertSessionDataFixture = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
@@ -64,7 +59,7 @@ describe('Notices - Setup - Preview - View Preview Check Alert service', () => {
     it('returns the page data for the view', async () => {
       const result = await ViewPreviewCheckAlertService.go(testRecipient.contact_hash_id, session.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'notices',
         backLink: {
           href: `/system/notices/setup/${session.id}/check`,

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_NOT_FOUND } = require('node:http2').constants
@@ -41,37 +36,34 @@ describe('Return Versions - Setup - Initiate Session service', () => {
 
           const { data } = result
 
-          expect(data).to.equal(
-            {
-              checkPageVisited: false,
-              licence: {
-                id: '3cc3eb61-34fe-449c-ab28-611f55a9280d',
-                currentVersionStartDate: licence.licenceVersions[0].startDate,
-                endDate: licence.expiredDate,
-                licenceRef: '01/94/56/9693',
-                licenceHolder: 'Licence Holder Ltd',
-                returnVersions: [
-                  {
-                    id: '0758a3a7-8008-4513-a461-69054e2a1c1f',
-                    startDate: licence.returnVersions[0].startDate,
-                    reason: 'new-licence',
-                    modLogs: [
-                      {
-                        id: 'c496a62c-f5e6-4899-9f49-114aabafb43e',
-                        reasonDescription: 'Record Loaded During Migration'
-                      }
-                    ]
-                  }
-                ],
-                startDate: licence.startDate,
-                waterUndertaker: false
-              },
-              multipleUpload: false,
-              journey,
-              requirements: [{}]
+          expect(data).toMatchObject({
+            checkPageVisited: false,
+            licence: {
+              id: '3cc3eb61-34fe-449c-ab28-611f55a9280d',
+              currentVersionStartDate: licence.licenceVersions[0].startDate,
+              endDate: licence.expiredDate,
+              licenceRef: '01/94/56/9693',
+              licenceHolder: 'Licence Holder Ltd',
+              returnVersions: [
+                {
+                  id: '0758a3a7-8008-4513-a461-69054e2a1c1f',
+                  startDate: licence.returnVersions[0].startDate,
+                  reason: 'new-licence',
+                  modLogs: [
+                    {
+                      id: 'c496a62c-f5e6-4899-9f49-114aabafb43e',
+                      reasonDescription: 'Record Loaded During Migration'
+                    }
+                  ]
+                }
+              ],
+              startDate: licence.startDate,
+              waterUndertaker: false
             },
-            { skip: ['id'] }
-          )
+            multipleUpload: false,
+            journey,
+            requirements: [{}]
+          })
         })
       })
 
@@ -88,37 +80,34 @@ describe('Return Versions - Setup - Initiate Session service', () => {
 
           const { data } = result
 
-          expect(data).to.equal(
-            {
-              checkPageVisited: false,
-              licence: {
-                id: '3cc3eb61-34fe-449c-ab28-611f55a9280d',
-                currentVersionStartDate: licence.licenceVersions[0].startDate,
-                endDate: null,
-                licenceRef: '01/94/56/9693',
-                licenceHolder: 'Licence Holder Ltd',
-                returnVersions: [
-                  {
-                    id: '0758a3a7-8008-4513-a461-69054e2a1c1f',
-                    startDate: licence.returnVersions[0].startDate,
-                    reason: 'new-licence',
-                    modLogs: [
-                      {
-                        id: 'c496a62c-f5e6-4899-9f49-114aabafb43e',
-                        reasonDescription: 'Record Loaded During Migration'
-                      }
-                    ]
-                  }
-                ],
-                startDate: licence.startDate,
-                waterUndertaker: false
-              },
-              multipleUpload: false,
-              journey,
-              requirements: [{}]
+          expect(data).toMatchObject({
+            checkPageVisited: false,
+            licence: {
+              id: '3cc3eb61-34fe-449c-ab28-611f55a9280d',
+              currentVersionStartDate: licence.licenceVersions[0].startDate,
+              endDate: null,
+              licenceRef: '01/94/56/9693',
+              licenceHolder: 'Licence Holder Ltd',
+              returnVersions: [
+                {
+                  id: '0758a3a7-8008-4513-a461-69054e2a1c1f',
+                  startDate: licence.returnVersions[0].startDate,
+                  reason: 'new-licence',
+                  modLogs: [
+                    {
+                      id: 'c496a62c-f5e6-4899-9f49-114aabafb43e',
+                      reasonDescription: 'Record Loaded During Migration'
+                    }
+                  ]
+                }
+              ],
+              startDate: licence.startDate,
+              waterUndertaker: false
             },
-            { skip: ['id'] }
-          )
+            multipleUpload: false,
+            journey,
+            requirements: [{}]
+          })
         })
       })
     })
@@ -130,18 +119,17 @@ describe('Return Versions - Setup - Initiate Session service', () => {
       })
 
       it('throws a Boom not found error', async () => {
-        const error = await expect(
-          InitiateSessionService.go('e456e538-4d55-4552-84f7-6a7636eb1945', journey)
-        ).to.reject()
-
-        expect(error.isBoom).to.be.true()
-        expect(error.data).to.equal({ id: 'e456e538-4d55-4552-84f7-6a7636eb1945' })
-
-        const { statusCode, error: errorType, message } = error.output.payload
-
-        expect(statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
-        expect(errorType).to.equal('Not Found')
-        expect(message).to.equal('Licence for new return requirement not found')
+        await expect(InitiateSessionService.go('e456e538-4d55-4552-84f7-6a7636eb1945', journey)).rejects.toMatchObject({
+          isBoom: true,
+          data: { id: 'e456e538-4d55-4552-84f7-6a7636eb1945' },
+          output: {
+            payload: {
+              statusCode: HTTP_STATUS_NOT_FOUND,
+              error: 'Not Found',
+              message: 'Licence for new return requirement not found'
+            }
+          }
+        })
       })
     })
   })

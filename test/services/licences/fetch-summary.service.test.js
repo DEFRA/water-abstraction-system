@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, after, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
@@ -54,7 +47,7 @@ describe('Licences - Fetch Summary service', () => {
   let userEntity
   let workflow
 
-  before(async () => {
+  beforeAll(async () => {
     region = RegionHelper.select(REGION_SOUTHERN_INDEX)
 
     licence = await LicenceHelper.add({
@@ -139,7 +132,7 @@ describe('Licences - Fetch Summary service', () => {
     await WorkflowHelper.add({ deletedAt: new Date('2023-06-01'), licenceId: licence.id })
   })
 
-  after(async () => {
+  afterAll(async () => {
     // await licenceEntity.$query().delete()
     // await licenceEntityRole.$query().delete()
     await workflow.$query().delete()
@@ -168,7 +161,7 @@ describe('Licences - Fetch Summary service', () => {
     it('returns results', async () => {
       const result = await FetchSummaryService.go(licence.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         id: licence.id,
         expiredDate: null,
         issueDate: null,

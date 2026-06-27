@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const FetchPointsService = require('../../../../../app/services/return-versions/setup/fetch-points.service.js')
@@ -83,45 +78,42 @@ describe('Return Versions - Setup - Check service', () => {
     it('fetches the current setup session record', async () => {
       const result = await CheckService.go(session.id, yarStub)
 
-      expect(result.sessionId).to.equal(session.id)
+      expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
       const result = await CheckService.go(session.id, yarStub)
 
-      expect(result).to.equal(
-        {
-          licenceRef: '01/ABC',
-          multipleUpload: false,
-          note: {
-            actions: [
-              {
-                href: 'note',
-                text: 'Add a note'
-              }
-            ],
-            text: 'No notes added'
-          },
-          notification: undefined,
-          pageTitle: 'Check the requirements for returns for Turbo Kid',
-          pageTitleCaption: 'Licence 01/ABC',
-          quarterlyReturnSubmissions: false,
-          quarterlyReturns: undefined,
-          reason: 'Major change',
-          reasonLink: `/system/return-versions/setup/${session.id}/reason`,
-          requirements: [],
-          returnsRequired: true,
-          startDate: '1 January 2023'
+      expect(result).toMatchObject({
+        licenceRef: '01/ABC',
+        multipleUpload: false,
+        note: {
+          actions: [
+            {
+              href: 'note',
+              text: 'Add a note'
+            }
+          ],
+          text: 'No notes added'
         },
-        { skip: ['sessionId'] }
-      )
+        notification: undefined,
+        pageTitle: 'Check the requirements for returns for Turbo Kid',
+        pageTitleCaption: 'Licence 01/ABC',
+        quarterlyReturnSubmissions: false,
+        quarterlyReturns: undefined,
+        reason: 'Major change',
+        reasonLink: `/system/return-versions/setup/${session.id}/reason`,
+        requirements: [],
+        returnsRequired: true,
+        startDate: '1 January 2023'
+      })
     })
 
     it('updates the session record to indicate user has visited the "check" page', async () => {
       await CheckService.go(session.id, yarStub)
 
-      expect(session.checkPageVisited).to.be.true()
-      expect(session.$update.called).to.be.true()
+      expect(session.checkPageVisited).toBe(true)
+      expect(session.$update.called).toBe(true)
     })
   })
 })

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
@@ -67,13 +62,13 @@ describe('Bill Runs - Setup - Determine Blocking Annual Bill Run service', () =>
     it('returns the match and determines that neither engine can be triggered', async () => {
       const result = await DetermineBlockingAnnualService.go(regionId)
 
-      expect(result).to.equal({ matches: [match], toFinancialYearEnding, trigger: engineTriggers.neither })
+      expect(result).toEqual({ matches: [match], toFinancialYearEnding, trigger: engineTriggers.neither })
     })
 
     it('does not bother to check for live bill runs', async () => {
       await DetermineBlockingAnnualService.go(regionId, toFinancialYearEnding)
 
-      expect(fetchLiveBillRunStub.called).to.be.false()
+      expect(fetchLiveBillRunStub.called).toBe(false)
     })
   })
 
@@ -90,7 +85,7 @@ describe('Bill Runs - Setup - Determine Blocking Annual Bill Run service', () =>
       it('returns no matches and determines that the "current" engine can be triggered', async () => {
         const result = await DetermineBlockingAnnualService.go(regionId)
 
-        expect(result).to.equal({ matches: [], toFinancialYearEnding, trigger: engineTriggers.current })
+        expect(result).toEqual({ matches: [], toFinancialYearEnding, trigger: engineTriggers.current })
       })
     })
 
@@ -105,7 +100,7 @@ describe('Bill Runs - Setup - Determine Blocking Annual Bill Run service', () =>
       it('returns the match and determines that neither engine can be triggered', async () => {
         const result = await DetermineBlockingAnnualService.go(regionId)
 
-        expect(result).to.equal({ matches: [match], toFinancialYearEnding, trigger: engineTriggers.neither })
+        expect(result).toEqual({ matches: [match], toFinancialYearEnding, trigger: engineTriggers.neither })
       })
     })
   })

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Helpers
 const LicenceModel = require('../../../../../app/models/licence.model.js')
@@ -57,7 +52,7 @@ describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Sub
       it('returns the expected result', async () => {
         const result = await ProcessRenewalsNoticeLicenceSubmission.go(payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           additionalSessionData: { expiryDate: licenceExpiryDate, renewalDate },
           validationResult: null
         })
@@ -74,7 +69,7 @@ describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Sub
           it('returns a validation error', async () => {
             const result = await ProcessRenewalsNoticeLicenceSubmission.go(payload)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               additionalSessionData: {},
               validationResult: {
                 errorList: [{ href: '#licenceRef', text: 'Enter a licence number' }],
@@ -94,7 +89,7 @@ describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Sub
           it('returns a validation error', async () => {
             const result = await ProcessRenewalsNoticeLicenceSubmission.go(payload)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               additionalSessionData: {},
               validationResult: {
                 errorList: [

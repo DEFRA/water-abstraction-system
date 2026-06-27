@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Thing under test
 const DetermineReturnsPeriodService = require('../../../../app/services/notices/setup/determine-returns-period.service.js')
@@ -31,7 +26,7 @@ describe('Notices - Setup - Determine Returns Period service', () => {
     it('should return the returns period and summer "false"', () => {
       const result = DetermineReturnsPeriodService.go(returnsPeriod)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         returnsPeriod: {
           dueDate: new Date('2025-04-28'),
           endDate: new Date('2025-03-31'),
@@ -52,7 +47,7 @@ describe('Notices - Setup - Determine Returns Period service', () => {
     it('should return the returns period and summer "true"', () => {
       const result = DetermineReturnsPeriodService.go(returnsPeriod)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         returnsPeriod: {
           dueDate: new Date('2025-11-28'),
           endDate: new Date('2025-10-31'),

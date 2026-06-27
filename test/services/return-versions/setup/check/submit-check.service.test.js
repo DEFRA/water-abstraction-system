@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
@@ -176,24 +171,22 @@ describe('Return Versions - Setup - Submit Check service', () => {
     it('creates the new return version and associated data', async () => {
       await SubmitCheckService.go(session.id, userId)
 
-      expect(createReturnVersionStub.called).to.be.true()
-      expect(createReturnVersionStub.firstCall.args[0]).to.equal(generatedReturnVersionData)
+      expect(createReturnVersionStub.called).toBe(true)
+      expect(createReturnVersionStub.firstCall.args[0]).toEqual(generatedReturnVersionData)
     })
 
     it('processes existing return logs for the licence', async () => {
       await SubmitCheckService.go(session.id, userId)
 
-      expect(processLicenceReturnLogsStub.called).to.be.true()
-      expect(processLicenceReturnLogsStub.firstCall.args[0]).to.equal(
-        generatedReturnVersionData.returnVersion.licenceId
-      )
+      expect(processLicenceReturnLogsStub.called).toBe(true)
+      expect(processLicenceReturnLogsStub.firstCall.args[0]).toEqual(generatedReturnVersionData.returnVersion.licenceId)
 
       // The change date is the new return version start date minus one day
       const expectedChangeDate = new Date(generatedReturnVersionData.returnVersion.startDate)
 
       expectedChangeDate.setDate(expectedChangeDate.getDate() - 1)
 
-      expect(processLicenceReturnLogsStub.firstCall.args[1]).to.equal(expectedChangeDate)
+      expect(processLicenceReturnLogsStub.firstCall.args[1]).toEqual(expectedChangeDate)
     })
 
     describe('and the setup journey', () => {
@@ -201,7 +194,7 @@ describe('Return Versions - Setup - Submit Check service', () => {
         it('does NOT attempt to void all return logs in the period it covers', async () => {
           await SubmitCheckService.go(session.id, userId)
 
-          expect(voidReturnLogsStub.called).to.be.false()
+          expect(voidReturnLogsStub.called).toBe(false)
         })
       })
 
@@ -217,10 +210,10 @@ describe('Return Versions - Setup - Submit Check service', () => {
         it('does attempt to void all return logs in the period it covers', async () => {
           await SubmitCheckService.go(session.id, userId)
 
-          expect(voidReturnLogsStub.called).to.be.true()
-          expect(voidReturnLogsStub.firstCall.args[0]).to.equal(sessionData.licence.licenceRef)
-          expect(voidReturnLogsStub.firstCall.args[1]).to.equal(generatedReturnVersionData.returnVersion.startDate)
-          expect(voidReturnLogsStub.firstCall.args[2]).to.equal(generatedReturnVersionData.returnVersion.endDate)
+          expect(voidReturnLogsStub.called).toBe(true)
+          expect(voidReturnLogsStub.firstCall.args[0]).toEqual(sessionData.licence.licenceRef)
+          expect(voidReturnLogsStub.firstCall.args[1]).toEqual(generatedReturnVersionData.returnVersion.startDate)
+          expect(voidReturnLogsStub.firstCall.args[2]).toEqual(generatedReturnVersionData.returnVersion.endDate)
         })
       })
     })
@@ -229,7 +222,7 @@ describe('Return Versions - Setup - Submit Check service', () => {
       it('skips processing existing return versions', async () => {
         await SubmitCheckService.go(session.id, userId)
 
-        expect(processExistingReturnVersionsStub.called).to.be.false()
+        expect(processExistingReturnVersionsStub.called).toBe(false)
       })
     })
 
@@ -247,11 +240,11 @@ describe('Return Versions - Setup - Submit Check service', () => {
       it('processes existing return versions impacted by the new return version', async () => {
         await SubmitCheckService.go(session.id, userId)
 
-        expect(processExistingReturnVersionsStub.called).to.be.true()
-        expect(processExistingReturnVersionsStub.firstCall.args[0]).to.equal(
+        expect(processExistingReturnVersionsStub.called).toBe(true)
+        expect(processExistingReturnVersionsStub.firstCall.args[0]).toEqual(
           generatedReturnVersionData.returnVersion.licenceId
         )
-        expect(processExistingReturnVersionsStub.firstCall.args[1]).to.equal(
+        expect(processExistingReturnVersionsStub.firstCall.args[1]).toEqual(
           generatedReturnVersionData.returnVersion.startDate
         )
       })
@@ -262,7 +255,7 @@ describe('Return Versions - Setup - Submit Check service', () => {
         it('does NOT update the existing return logs as succeeded', async () => {
           await SubmitCheckService.go(session.id, userId)
 
-          expect(updateSucceededReturnLogsStub.called).to.be.false()
+          expect(updateSucceededReturnLogsStub.called).toBe(false)
         })
       })
 
@@ -284,8 +277,8 @@ describe('Return Versions - Setup - Submit Check service', () => {
         it('updates the existing return logs as succeeded', async () => {
           await SubmitCheckService.go(session.id, userId)
 
-          expect(updateSucceededReturnLogsStub.called).to.be.true()
-          expect(updateSucceededReturnLogsStub.firstCall.args[0]).to.equal(sessionData.licence.licenceRef)
+          expect(updateSucceededReturnLogsStub.called).toBe(true)
+          expect(updateSucceededReturnLogsStub.firstCall.args[0]).toEqual(sessionData.licence.licenceRef)
         })
       })
     })
@@ -296,13 +289,13 @@ describe('Return Versions - Setup - Submit Check service', () => {
       })
 
       it('logs the error and rethrows it', async () => {
-        await expect(SubmitCheckService.go(session.id, userId)).to.reject()
+        await expect(SubmitCheckService.go(session.id, userId)).rejects.toThrow()
 
         const args = notifierStub.omfg.firstCall.args
 
-        expect(args[0]).to.equal('Failed to create return version')
-        expect(args[1]).to.equal(session)
-        expect(args[2]).to.be.an.error()
+        expect(args[0]).toEqual('Failed to create return version')
+        expect(args[1]).toEqual(session)
+        expect(args[2]).toBeInstanceOf(Error)
       })
     })
   })

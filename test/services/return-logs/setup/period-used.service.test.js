@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -43,29 +38,26 @@ describe('Return Logs Setup - Period used service', () => {
     it('fetches the current setup session record', async () => {
       const result = await PeriodUsedService.go(session.id)
 
-      expect(result.sessionId).to.equal(session.id)
+      expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
       const result = await PeriodUsedService.go(session.id)
 
-      expect(result).to.equal(
-        {
-          abstractionPeriod: '1 April to 31 March',
-          backLink: { href: `/system/return-logs/setup/${session.id}/single-volume`, text: 'Back' },
-          pageTitle: 'What period was used for this volume?',
-          pageTitleCaption: 'Return reference 012345',
-          periodDateUsedOptions: null,
-          periodUsedFromDay: null,
-          periodUsedFromMonth: null,
-          periodUsedFromYear: null,
-          periodUsedToDay: null,
-          periodUsedToMonth: null,
-          periodUsedToYear: null,
-          showDefaultAbstractionPeriod: true
-        },
-        { skip: ['sessionId'] }
-      )
+      expect(result).toMatchObject({
+        abstractionPeriod: '1 April to 31 March',
+        backLink: { href: `/system/return-logs/setup/${session.id}/single-volume`, text: 'Back' },
+        pageTitle: 'What period was used for this volume?',
+        pageTitleCaption: 'Return reference 012345',
+        periodDateUsedOptions: null,
+        periodUsedFromDay: null,
+        periodUsedFromMonth: null,
+        periodUsedFromYear: null,
+        periodUsedToDay: null,
+        periodUsedToMonth: null,
+        periodUsedToYear: null,
+        showDefaultAbstractionPeriod: true
+      })
     })
   })
 })

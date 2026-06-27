@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
@@ -60,7 +55,7 @@ describe('Bill Runs - Setup - Determine Blocking Bill Run service', () => {
         it('returns an empty "matches", "toFinancialYearEnding" is the current financial year end, and "trigger" is current', async () => {
           const result = await DetermineBlockingBillRunService.go(session)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             matches: [],
             toFinancialYearEnding: currentFinancialEndYear,
             trigger: engineTriggers.current
@@ -80,7 +75,7 @@ describe('Bill Runs - Setup - Determine Blocking Bill Run service', () => {
         it('returns "matches" set, "toFinancialYearEnding" is the current financial year end, and "trigger" is neither', async () => {
           const result = await DetermineBlockingBillRunService.go(session)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             matches: [{ id: '5612815f-9f67-4ac1-b697-d9ab7789274c' }],
             toFinancialYearEnding: currentFinancialEndYear,
             trigger: engineTriggers.neither
@@ -111,7 +106,7 @@ describe('Bill Runs - Setup - Determine Blocking Bill Run service', () => {
         it('returns an empty "matches", "toFinancialYearEnding" is as selected, and "trigger" is old', async () => {
           const result = await DetermineBlockingBillRunService.go(session)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             matches: [],
             toFinancialYearEnding: 2023,
             trigger: engineTriggers.old
@@ -131,7 +126,7 @@ describe('Bill Runs - Setup - Determine Blocking Bill Run service', () => {
         it('returns "matches" set, "toFinancialYearEnding" is as selected, and "trigger" is neither', async () => {
           const result = await DetermineBlockingBillRunService.go(session)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             matches: [{ id: 'dfbbc7ac-b15b-483a-afcf-a7c01ac377d1' }],
             toFinancialYearEnding: 2023,
             trigger: engineTriggers.neither
@@ -165,7 +160,7 @@ describe('Bill Runs - Setup - Determine Blocking Bill Run service', () => {
         it('returns an empty "matches", "toFinancialYearEnding" is the current financial year end, and "trigger" is both', async () => {
           const result = await DetermineBlockingBillRunService.go(session)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             matches: [],
             toFinancialYearEnding: currentFinancialEndYear,
             trigger: engineTriggers.both
@@ -185,7 +180,7 @@ describe('Bill Runs - Setup - Determine Blocking Bill Run service', () => {
         it('returns "matches" set, "toFinancialYearEnding" is the current financial year end, and "trigger" is old', async () => {
           const result = await DetermineBlockingBillRunService.go(session)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             matches: [{ id: '5612815f-9f67-4ac1-b697-d9ab7789274c' }],
             toFinancialYearEnding: currentFinancialEndYear,
             trigger: engineTriggers.old
@@ -205,7 +200,7 @@ describe('Bill Runs - Setup - Determine Blocking Bill Run service', () => {
         it('returns "matches" set, "toFinancialYearEnding" is the current financial year end, and "trigger" is current', async () => {
           const result = await DetermineBlockingBillRunService.go(session)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             matches: [{ id: '5612815f-9f67-4ac1-b697-d9ab7789274c' }],
             toFinancialYearEnding: currentFinancialEndYear,
             trigger: engineTriggers.current
@@ -225,7 +220,7 @@ describe('Bill Runs - Setup - Determine Blocking Bill Run service', () => {
         it('returns "matches" set, "toFinancialYearEnding" is the current financial year end, and "trigger" is neither', async () => {
           const result = await DetermineBlockingBillRunService.go(session)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             matches: [{ id: '5612815f-9f67-4ac1-b697-d9ab7789274c' }, { id: 'fb837754-7a95-4b39-97d6-2a0694bd912c' }],
             toFinancialYearEnding: currentFinancialEndYear,
             trigger: engineTriggers.neither
@@ -255,7 +250,7 @@ describe('Bill Runs - Setup - Determine Blocking Bill Run service', () => {
         it('returns an empty "matches", "toFinancialYearEnding" is as selected, and "trigger" is current', async () => {
           const result = await DetermineBlockingBillRunService.go(session)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             matches: [],
             toFinancialYearEnding: 2024,
             trigger: engineTriggers.current
@@ -275,7 +270,7 @@ describe('Bill Runs - Setup - Determine Blocking Bill Run service', () => {
         it('returns "matches" set, "toFinancialYearEnding" is as selected, and "trigger" is neither', async () => {
           const result = await DetermineBlockingBillRunService.go(session)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             matches: [{ id: 'dfbbc7ac-b15b-483a-afcf-a7c01ac377d1' }],
             toFinancialYearEnding: 2024,
             trigger: engineTriggers.neither

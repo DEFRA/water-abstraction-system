@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const FetchExistingLicenceDetailsService = require('../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js')
@@ -34,7 +29,7 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
     let changeDate
 
     describe('with a future revoked date', () => {
-      before(() => {
+      beforeAll(() => {
         changeDate = new Date('2030-04-01')
       })
 
@@ -48,18 +43,18 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
             it('always returns the licenceId, regionId, startDate and endDate', async () => {
               const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
 
-              expect(result.licenceId).to.equal('aad74a3d-59ea-4c18-8091-02b0f8b0a147')
-              expect(result.regionId).to.equal('ff92e0b1-3934-430b-8b16-5b89a3ea258f')
-              expect(result.startDate).to.equal(null)
-              expect(result.endDate).to.equal(new Date('2025-03-31'))
+              expect(result.licenceId).toEqual('aad74a3d-59ea-4c18-8091-02b0f8b0a147')
+              expect(result.regionId).toEqual('ff92e0b1-3934-430b-8b16-5b89a3ea258f')
+              expect(result.startDate).toEqual(null)
+              expect(result.endDate).toEqual(new Date('2025-03-31'))
             })
 
             it('returns the correct flags', async () => {
               const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
 
-              expect(result.flagForPreSrocSupplementary).to.equal(false)
-              expect(result.flagForSrocSupplementary).to.equal(false)
-              expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
+              expect(result.flagForPreSrocSupplementary).toEqual(false)
+              expect(result.flagForSrocSupplementary).toEqual(false)
+              expect(result.flagForTwoPartTariffSupplementary).toEqual(false)
             })
           })
 
@@ -71,18 +66,18 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
             it('always returns the licenceId, regionId, startDate and endDate', async () => {
               const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
 
-              expect(result.licenceId).to.equal('aad74a3d-59ea-4c18-8091-02b0f8b0a147')
-              expect(result.regionId).to.equal('ff92e0b1-3934-430b-8b16-5b89a3ea258f')
-              expect(result.startDate).to.equal(null)
-              expect(result.endDate).to.equal(new Date('2025-03-31'))
+              expect(result.licenceId).toEqual('aad74a3d-59ea-4c18-8091-02b0f8b0a147')
+              expect(result.regionId).toEqual('ff92e0b1-3934-430b-8b16-5b89a3ea258f')
+              expect(result.startDate).toEqual(null)
+              expect(result.endDate).toEqual(new Date('2025-03-31'))
             })
 
             it('returns the correct flags', async () => {
               const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
 
-              expect(result.flagForPreSrocSupplementary).to.equal(false)
-              expect(result.flagForSrocSupplementary).to.equal(false)
-              expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
+              expect(result.flagForPreSrocSupplementary).toEqual(false)
+              expect(result.flagForSrocSupplementary).toEqual(false)
+              expect(result.flagForTwoPartTariffSupplementary).toEqual(false)
             })
           })
         })
@@ -96,9 +91,9 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
             it('returns the correct flags', async () => {
               const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
 
-              expect(result.flagForPreSrocSupplementary).to.equal(true)
-              expect(result.flagForSrocSupplementary).to.equal(true)
-              expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
+              expect(result.flagForPreSrocSupplementary).toEqual(true)
+              expect(result.flagForSrocSupplementary).toEqual(true)
+              expect(result.flagForTwoPartTariffSupplementary).toEqual(false)
             })
           })
 
@@ -110,9 +105,9 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
             it('returns the correct flags', async () => {
               const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
 
-              expect(result.flagForPreSrocSupplementary).to.equal(false)
-              expect(result.flagForSrocSupplementary).to.equal(false)
-              expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
+              expect(result.flagForPreSrocSupplementary).toEqual(false)
+              expect(result.flagForSrocSupplementary).toEqual(false)
+              expect(result.flagForTwoPartTariffSupplementary).toEqual(false)
             })
           })
         })
@@ -120,7 +115,7 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
     })
 
     describe('with an sroc lapsed date of "2022-04-01"', () => {
-      before(() => {
+      beforeAll(() => {
         changeDate = new Date('2022-04-01')
       })
 
@@ -133,9 +128,9 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
           it('returns the correct flags', async () => {
             const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
 
-            expect(result.flagForPreSrocSupplementary).to.equal(false)
-            expect(result.flagForSrocSupplementary).to.equal(false)
-            expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
+            expect(result.flagForPreSrocSupplementary).toEqual(false)
+            expect(result.flagForSrocSupplementary).toEqual(false)
+            expect(result.flagForTwoPartTariffSupplementary).toEqual(false)
           })
         })
 
@@ -147,9 +142,9 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
           it('returns the correct flags', async () => {
             const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
 
-            expect(result.flagForPreSrocSupplementary).to.equal(false)
-            expect(result.flagForSrocSupplementary).to.equal(false)
-            expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
+            expect(result.flagForPreSrocSupplementary).toEqual(false)
+            expect(result.flagForSrocSupplementary).toEqual(false)
+            expect(result.flagForTwoPartTariffSupplementary).toEqual(false)
           })
         })
       })
@@ -163,9 +158,9 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
           it('returns the correct flags', async () => {
             const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
 
-            expect(result.flagForPreSrocSupplementary).to.equal(true)
-            expect(result.flagForSrocSupplementary).to.equal(true)
-            expect(result.flagForTwoPartTariffSupplementary).to.equal(true)
+            expect(result.flagForPreSrocSupplementary).toEqual(true)
+            expect(result.flagForSrocSupplementary).toEqual(true)
+            expect(result.flagForTwoPartTariffSupplementary).toEqual(true)
           })
         })
 
@@ -177,16 +172,16 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
           it('returns the correct flags', async () => {
             const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
 
-            expect(result.flagForPreSrocSupplementary).to.equal(false)
-            expect(result.flagForSrocSupplementary).to.equal(true)
-            expect(result.flagForTwoPartTariffSupplementary).to.equal(true)
+            expect(result.flagForPreSrocSupplementary).toEqual(false)
+            expect(result.flagForSrocSupplementary).toEqual(true)
+            expect(result.flagForTwoPartTariffSupplementary).toEqual(true)
           })
         })
       })
     })
 
     describe('with a pre-sroc expired date of "2019-01-01"', () => {
-      before(() => {
+      beforeAll(() => {
         changeDate = new Date('2019-01-01')
       })
 
@@ -199,9 +194,9 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
           it('returns the correct flags', async () => {
             const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
 
-            expect(result.flagForPreSrocSupplementary).to.equal(false)
-            expect(result.flagForSrocSupplementary).to.equal(false)
-            expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
+            expect(result.flagForPreSrocSupplementary).toEqual(false)
+            expect(result.flagForSrocSupplementary).toEqual(false)
+            expect(result.flagForTwoPartTariffSupplementary).toEqual(false)
           })
         })
 
@@ -213,9 +208,9 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
           it('returns the correct flags', async () => {
             const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
 
-            expect(result.flagForPreSrocSupplementary).to.equal(false)
-            expect(result.flagForSrocSupplementary).to.equal(false)
-            expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
+            expect(result.flagForPreSrocSupplementary).toEqual(false)
+            expect(result.flagForSrocSupplementary).toEqual(false)
+            expect(result.flagForTwoPartTariffSupplementary).toEqual(false)
           })
         })
       })
@@ -229,9 +224,9 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
           it('returns the correct flags', async () => {
             const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
 
-            expect(result.flagForPreSrocSupplementary).to.equal(true)
-            expect(result.flagForSrocSupplementary).to.equal(true)
-            expect(result.flagForTwoPartTariffSupplementary).to.equal(true)
+            expect(result.flagForPreSrocSupplementary).toEqual(true)
+            expect(result.flagForSrocSupplementary).toEqual(true)
+            expect(result.flagForTwoPartTariffSupplementary).toEqual(true)
           })
         })
 
@@ -243,9 +238,9 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
           it('returns the correct flags', async () => {
             const result = await DetermineImportedLicenceFlagsService.go(licenceId, changeDate)
 
-            expect(result.flagForPreSrocSupplementary).to.equal(true)
-            expect(result.flagForSrocSupplementary).to.equal(true)
-            expect(result.flagForTwoPartTariffSupplementary).to.equal(true)
+            expect(result.flagForPreSrocSupplementary).toEqual(true)
+            expect(result.flagForSrocSupplementary).toEqual(true)
+            expect(result.flagForTwoPartTariffSupplementary).toEqual(true)
           })
         })
       })

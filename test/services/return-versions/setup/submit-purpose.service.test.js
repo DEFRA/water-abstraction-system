@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -97,17 +92,17 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
       it('saves the submitted value', async () => {
         await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
 
-        expect(session.requirements[0].purposes).to.equal([
+        expect(session.requirements[0].purposes).toEqual([
           { alias: 'great warm machine', description: 'Heat Pump', id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f' }
         ])
-        expect(session.$update.called).to.be.true()
+        expect(session.$update.called).toBe(true)
       })
 
       describe('and the page has been not been visited', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
           const result = await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             checkPageVisited: false
           })
         })
@@ -123,7 +118,7 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
           const result = await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             checkPageVisited: true
           })
         })
@@ -133,8 +128,8 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
 
           const [flashType, notification] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(notification).to.equal({
+          expect(flashType).toEqual('notification')
+          expect(notification).toEqual({
             titleText: 'Updated',
             text: 'Requirements for returns updated'
           })
@@ -151,7 +146,7 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
         it('returns page data for the view', async () => {
           const result = await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             error: {
               errorList: [
                 {
@@ -195,7 +190,7 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
         it('returns page data for the view', async () => {
           const result = await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             error: {
               errorList: [
                 {

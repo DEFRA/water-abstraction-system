@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const DatesService = require('../../../../app/services/data/dates/dates.service.js')
 
@@ -17,66 +10,67 @@ describe('Data - Dates service', () => {
   it('returns the current billing periods', () => {
     const result = DatesService.go()
 
-    expect(result.billingPeriods).to.exist()
+    expect(result.billingPeriods).toBeDefined()
 
-    expect(result.billingPeriods.annual).to.exist()
-    expect(result.billingPeriods.annual).to.have.length(1)
-    expect(result.billingPeriods.annual[0].startDate).to.be.instanceOf(Date)
-    expect(result.billingPeriods.annual[0].endDate).to.be.instanceOf(Date)
+    expect(result.billingPeriods.annual).toBeDefined()
+    expect(result.billingPeriods.annual).toHaveLength(1)
+    expect(result.billingPeriods.annual[0].startDate).toBeInstanceOf(Date)
+    expect(result.billingPeriods.annual[0].endDate).toBeInstanceOf(Date)
 
-    expect(result.billingPeriods.supplementary).to.exist()
-    expect(result.billingPeriods.supplementary.length).to.be.between(1, 6)
-    expect(result.billingPeriods.supplementary[0].startDate).to.be.instanceOf(Date)
-    expect(result.billingPeriods.supplementary[0].endDate).to.be.instanceOf(Date)
+    expect(result.billingPeriods.supplementary).toBeDefined()
+    expect(result.billingPeriods.supplementary.length).toBeGreaterThanOrEqual(1)
+    expect(result.billingPeriods.supplementary.length).toBeLessThanOrEqual(6)
+    expect(result.billingPeriods.supplementary[0].startDate).toBeInstanceOf(Date)
+    expect(result.billingPeriods.supplementary[0].endDate).toBeInstanceOf(Date)
 
-    expect(result.billingPeriods.twoPartTariff).to.exist()
-    expect(result.billingPeriods.twoPartTariff).to.have.length(1)
-    expect(result.billingPeriods.twoPartTariff[0].startDate).to.be.instanceOf(Date)
-    expect(result.billingPeriods.twoPartTariff[0].endDate).to.be.instanceOf(Date)
+    expect(result.billingPeriods.twoPartTariff).toBeDefined()
+    expect(result.billingPeriods.twoPartTariff).toHaveLength(1)
+    expect(result.billingPeriods.twoPartTariff[0].startDate).toBeInstanceOf(Date)
+    expect(result.billingPeriods.twoPartTariff[0].endDate).toBeInstanceOf(Date)
 
-    expect(result.billingPeriods.twoPartSupplementary).to.exist()
-    expect(result.billingPeriods.twoPartSupplementary).to.have.length(1)
-    expect(result.billingPeriods.twoPartSupplementary[0].startDate).to.be.instanceOf(Date)
-    expect(result.billingPeriods.twoPartSupplementary[0].endDate).to.be.instanceOf(Date)
+    expect(result.billingPeriods.twoPartSupplementary).toBeDefined()
+    expect(result.billingPeriods.twoPartSupplementary).toHaveLength(1)
+    expect(result.billingPeriods.twoPartSupplementary[0].startDate).toBeInstanceOf(Date)
+    expect(result.billingPeriods.twoPartSupplementary[0].endDate).toBeInstanceOf(Date)
   })
 
   it('returns the current financial year', () => {
     const result = DatesService.go()
 
-    expect(result.currentFinancialYear).to.exist()
-    expect(result.currentFinancialYear.startDate).to.be.instanceOf(Date)
-    expect(result.currentFinancialYear.endDate).to.be.instanceOf(Date)
+    expect(result.currentFinancialYear).toBeDefined()
+    expect(result.currentFinancialYear.startDate).toBeInstanceOf(Date)
+    expect(result.currentFinancialYear.endDate).toBeInstanceOf(Date)
   })
 
   it('returns the current summer return cycle', () => {
     const result = DatesService.go()
 
-    expect(result.currentSummerReturnCycle).to.exist()
-    expect(result.currentSummerReturnCycle.startDate).to.be.instanceOf(Date)
-    expect(result.currentSummerReturnCycle.endDate).to.be.instanceOf(Date)
+    expect(result.currentSummerReturnCycle).toBeDefined()
+    expect(result.currentSummerReturnCycle.startDate).toBeInstanceOf(Date)
+    expect(result.currentSummerReturnCycle.endDate).toBeInstanceOf(Date)
   })
 
   it('returns the current winter return cycle', () => {
     const result = DatesService.go()
 
-    expect(result.currentWinterReturnCycle).to.exist()
-    expect(result.currentWinterReturnCycle.startDate).to.be.instanceOf(Date)
-    expect(result.currentWinterReturnCycle.endDate).to.be.instanceOf(Date)
+    expect(result.currentWinterReturnCycle).toBeDefined()
+    expect(result.currentWinterReturnCycle.startDate).toBeInstanceOf(Date)
+    expect(result.currentWinterReturnCycle.endDate).toBeInstanceOf(Date)
   })
 
   it('returns the current returns periods', () => {
     const result = DatesService.go()
 
-    expect(result.firstReturnPeriod).to.exist()
-    expect(result.firstReturnPeriod.name).to.exist()
-    expect(result.firstReturnPeriod.startDate).to.be.instanceOf(Date)
-    expect(result.firstReturnPeriod.endDate).to.be.instanceOf(Date)
-    expect(result.firstReturnPeriod.dueDate).to.be.instanceOf(Date)
+    expect(result.firstReturnPeriod).toBeDefined()
+    expect(result.firstReturnPeriod.name).toBeDefined()
+    expect(result.firstReturnPeriod.startDate).toBeInstanceOf(Date)
+    expect(result.firstReturnPeriod.endDate).toBeInstanceOf(Date)
+    expect(result.firstReturnPeriod.dueDate).toBeInstanceOf(Date)
 
-    expect(result.secondReturnPeriod).to.exist()
-    expect(result.secondReturnPeriod.name).to.exist()
-    expect(result.secondReturnPeriod.startDate).to.be.instanceOf(Date)
-    expect(result.secondReturnPeriod.endDate).to.be.instanceOf(Date)
-    expect(result.secondReturnPeriod.dueDate).to.be.instanceOf(Date)
+    expect(result.secondReturnPeriod).toBeDefined()
+    expect(result.secondReturnPeriod.name).toBeDefined()
+    expect(result.secondReturnPeriod.startDate).toBeInstanceOf(Date)
+    expect(result.secondReturnPeriod.endDate).toBeInstanceOf(Date)
+    expect(result.secondReturnPeriod.dueDate).toBeInstanceOf(Date)
   })
 })

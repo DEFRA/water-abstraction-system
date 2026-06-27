@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const NoticesFixture = require('../../../../support/fixtures/notices.fixture.js')
@@ -127,8 +122,8 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         await SendMainNoticeService.go(notice, notifications)
 
         // Check we record the Notify responses against the notifications
-        expect(notificationPatchStub.calledTwice).to.be.true()
-        expect(notificationPatchStub.firstCall.args[0]).to.equal({
+        expect(notificationPatchStub.calledTwice).toBe(true)
+        expect(notificationPatchStub.firstCall.args[0]).toEqual({
           pdf: undefined,
           plaintext: letterPlaintext,
           notifyError: undefined,
@@ -136,7 +131,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
           notifyStatus: 'created',
           status: 'pending'
         })
-        expect(notificationPatchStub.secondCall.args[0]).to.equal({
+        expect(notificationPatchStub.secondCall.args[0]).toEqual({
           pdf: undefined,
           plaintext: emailPlaintext,
           notifyError: undefined,
@@ -150,8 +145,8 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         await SendMainNoticeService.go(notice, notifications)
 
         // We only check the notification status for emails
-        expect(checkNotificationStatusStub.calledOnce).to.be.true()
-        expect(checkNotificationStatusStub.firstCall.args[0]).to.equal({
+        expect(checkNotificationStatusStub.calledOnce).toBe(true)
+        expect(checkNotificationStatusStub.firstCall.args[0]).toEqual({
           ...notifications[1],
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
           notifyStatus: 'created',
@@ -183,8 +178,8 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         await SendMainNoticeService.go(notice, notifications)
 
         // Check we record the Notify responses against the notifications
-        expect(notificationPatchStub.calledTwice).to.be.true()
-        expect(notificationPatchStub.firstCall.args[0]).to.equal({
+        expect(notificationPatchStub.calledTwice).toBe(true)
+        expect(notificationPatchStub.firstCall.args[0]).toEqual({
           pdf: undefined,
           plaintext: undefined,
           notifyError:
@@ -193,7 +188,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
           notifyStatus: undefined,
           status: 'error'
         })
-        expect(notificationPatchStub.secondCall.args[0]).to.equal({
+        expect(notificationPatchStub.secondCall.args[0]).toEqual({
           pdf: undefined,
           plaintext: emailPlaintext,
           notifyError: undefined,
@@ -209,8 +204,8 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         // NOTE: We still call CheckNotificationStatusService because we know it has logic to only check pending
         // notifications. So, we don't worry about that in SendNoticeService, even though we've rigged our test to fail
         // the email notification.
-        expect(checkNotificationStatusStub.calledOnce).to.be.true()
-        expect(checkNotificationStatusStub.firstCall.args[0]).to.equal({
+        expect(checkNotificationStatusStub.calledOnce).toBe(true)
+        expect(checkNotificationStatusStub.firstCall.args[0]).toEqual({
           ...notifications[1],
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
           notifyStatus: 'created',
@@ -236,7 +231,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
       it('sends the notice, records the Notify responses, including errors', async () => {
         await SendMainNoticeService.go(notice, [notifications[1]])
 
-        expect(checkNotificationStatusStub.called).to.be.false()
+        expect(checkNotificationStatusStub.called).toBe(false)
       })
     })
   })
@@ -279,8 +274,8 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         await SendMainNoticeService.go(notice, notifications)
 
         // Check we record the Notify responses against the notifications
-        expect(notificationPatchStub.calledOnce).to.be.true()
-        expect(notificationPatchStub.firstCall.args[0]).to.equal({
+        expect(notificationPatchStub.calledOnce).toBe(true)
+        expect(notificationPatchStub.firstCall.args[0]).toEqual({
           pdf: Buffer.from('mock file'),
           plaintext: null,
           notifyError: undefined,
@@ -294,7 +289,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         await SendMainNoticeService.go(notice, notifications)
 
         // We only check the notification status for emails
-        expect(checkNotificationStatusStub.called).to.be.false()
+        expect(checkNotificationStatusStub.called).toBe(false)
       })
     })
 
@@ -312,8 +307,8 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         await SendMainNoticeService.go(notice, notifications)
 
         // Check we record the Notify responses against the notifications
-        expect(notificationPatchStub.calledOnce).to.be.true()
-        expect(notificationPatchStub.firstCall.args[0]).to.equal({
+        expect(notificationPatchStub.calledOnce).toBe(true)
+        expect(notificationPatchStub.firstCall.args[0]).toEqual({
           pdf: Buffer.from('mock file'),
           plaintext: undefined,
           notifyError: '{"status":404,"message":"Request failed with status code 404"}',
@@ -327,7 +322,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         await SendMainNoticeService.go(notice, notifications)
 
         // We only check the notification status for emails
-        expect(checkNotificationStatusStub.called).to.be.false()
+        expect(checkNotificationStatusStub.called).toBe(false)
       })
     })
   })
