@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach, after, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillingAccountHelper = require('../support/helpers/billing-account.helper.js')
 const BillingAccountModel = require('../../app/models/billing-account.model.js')
@@ -45,7 +38,7 @@ describe('Charge Version model', () => {
   let testReviewChargeVersions
   let testUser
 
-  before(async () => {
+  beforeAll(async () => {
     // Link billing account
     testBillingAccount = await BillingAccountHelper.add()
 
@@ -102,7 +95,7 @@ describe('Charge Version model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const billRunChargeVersionYear of testBillRunChargeVersionYears) {
       await billRunChargeVersionYear.$query().delete()
     }
@@ -131,8 +124,8 @@ describe('Charge Version model', () => {
     it('can successfully run a basic query', async () => {
       const result = await ChargeVersionModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(ChargeVersionModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(ChargeVersionModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -141,17 +134,17 @@ describe('Charge Version model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeVersionModel.query().innerJoinRelated('billingAccount')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the billing account', async () => {
         const result = await ChargeVersionModel.query().findById(testRecord.id).withGraphFetched('billingAccount')
 
-        expect(result).to.be.instanceOf(ChargeVersionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ChargeVersionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.billingAccount).to.be.an.instanceOf(BillingAccountModel)
-        expect(result.billingAccount).to.equal(testBillingAccount)
+        expect(result.billingAccount).toBeInstanceOf(BillingAccountModel)
+        expect(result.billingAccount).toEqual(testBillingAccount)
       })
     })
 
@@ -159,7 +152,7 @@ describe('Charge Version model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeVersionModel.query().innerJoinRelated('billRunChargeVersionYears')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge references', async () => {
@@ -167,13 +160,13 @@ describe('Charge Version model', () => {
           .findById(testRecord.id)
           .withGraphFetched('billRunChargeVersionYears')
 
-        expect(result).to.be.instanceOf(ChargeVersionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ChargeVersionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.billRunChargeVersionYears).to.be.an.array()
-        expect(result.billRunChargeVersionYears[0]).to.be.an.instanceOf(BillRunChargeVersionYearModel)
-        expect(result.billRunChargeVersionYears).to.include(testBillRunChargeVersionYears[0])
-        expect(result.billRunChargeVersionYears).to.include(testBillRunChargeVersionYears[1])
+        expect(result.billRunChargeVersionYears).toBeInstanceOf(Array)
+        expect(result.billRunChargeVersionYears[0]).toBeInstanceOf(BillRunChargeVersionYearModel)
+        expect(result.billRunChargeVersionYears).toContainEqual(testBillRunChargeVersionYears[0])
+        expect(result.billRunChargeVersionYears).toContainEqual(testBillRunChargeVersionYears[1])
       })
     })
 
@@ -181,17 +174,17 @@ describe('Charge Version model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeVersionModel.query().innerJoinRelated('changeReason')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the change reason', async () => {
         const result = await ChargeVersionModel.query().findById(testRecord.id).withGraphFetched('changeReason')
 
-        expect(result).to.be.instanceOf(ChargeVersionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ChargeVersionModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.changeReason).to.be.an.instanceOf(ChangeReasonModel)
-        expect(result.changeReason).to.equal(testChangeReason, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.changeReason).toBeInstanceOf(ChangeReasonModel)
+        expect(result.changeReason).toMatchObject(testChangeReason)
       })
     })
 
@@ -199,19 +192,19 @@ describe('Charge Version model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeVersionModel.query().innerJoinRelated('chargeReferences')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge references', async () => {
         const result = await ChargeVersionModel.query().findById(testRecord.id).withGraphFetched('chargeReferences')
 
-        expect(result).to.be.instanceOf(ChargeVersionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ChargeVersionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.chargeReferences).to.be.an.array()
-        expect(result.chargeReferences[0]).to.be.an.instanceOf(ChargeReferenceModel)
-        expect(result.chargeReferences).to.include(testChargeReferences[0])
-        expect(result.chargeReferences).to.include(testChargeReferences[1])
+        expect(result.chargeReferences).toBeInstanceOf(Array)
+        expect(result.chargeReferences[0]).toBeInstanceOf(ChargeReferenceModel)
+        expect(result.chargeReferences).toContainEqual(testChargeReferences[0])
+        expect(result.chargeReferences).toContainEqual(testChargeReferences[1])
       })
     })
 
@@ -219,17 +212,17 @@ describe('Charge Version model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeVersionModel.query().innerJoinRelated('chargeVersionNote')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the note', async () => {
         const result = await ChargeVersionModel.query().findById(testRecord.id).withGraphFetched('chargeVersionNote')
 
-        expect(result).to.be.instanceOf(ChargeVersionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ChargeVersionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.chargeVersionNote).to.be.an.instanceOf(ChargeVersionNoteModel)
-        expect(result.chargeVersionNote).to.equal(testNote)
+        expect(result.chargeVersionNote).toBeInstanceOf(ChargeVersionNoteModel)
+        expect(result.chargeVersionNote).toEqual(testNote)
       })
     })
 
@@ -237,17 +230,17 @@ describe('Charge Version model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeVersionModel.query().innerJoinRelated('licence')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence', async () => {
         const result = await ChargeVersionModel.query().findById(testRecord.id).withGraphFetched('licence')
 
-        expect(result).to.be.instanceOf(ChargeVersionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ChargeVersionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licence).to.be.an.instanceOf(LicenceModel)
-        expect(result.licence).to.equal(testLicence)
+        expect(result.licence).toBeInstanceOf(LicenceModel)
+        expect(result.licence).toEqual(testLicence)
       })
     })
 
@@ -255,19 +248,19 @@ describe('Charge Version model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeVersionModel.query().innerJoinRelated('modLogs')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the mod logs', async () => {
         const result = await ChargeVersionModel.query().findById(testRecord.id).withGraphFetched('modLogs')
 
-        expect(result).to.be.instanceOf(ChargeVersionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ChargeVersionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.modLogs).to.be.an.array()
-        expect(result.modLogs[0]).to.be.an.instanceOf(ModLogModel)
-        expect(result.modLogs).to.include(testModLogs[0])
-        expect(result.modLogs).to.include(testModLogs[1])
+        expect(result.modLogs).toBeInstanceOf(Array)
+        expect(result.modLogs[0]).toBeInstanceOf(ModLogModel)
+        expect(result.modLogs).toContainEqual(testModLogs[0])
+        expect(result.modLogs).toContainEqual(testModLogs[1])
       })
     })
 
@@ -275,19 +268,19 @@ describe('Charge Version model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeVersionModel.query().innerJoinRelated('reviewChargeVersions')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the review charge versions', async () => {
         const result = await ChargeVersionModel.query().findById(testRecord.id).withGraphFetched('reviewChargeVersions')
 
-        expect(result).to.be.instanceOf(ChargeVersionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ChargeVersionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.reviewChargeVersions).to.be.an.array()
-        expect(result.reviewChargeVersions[0]).to.be.an.instanceOf(ReviewChargeVersionModel)
-        expect(result.reviewChargeVersions).to.include(testReviewChargeVersions[0])
-        expect(result.reviewChargeVersions).to.include(testReviewChargeVersions[1])
+        expect(result.reviewChargeVersions).toBeInstanceOf(Array)
+        expect(result.reviewChargeVersions[0]).toBeInstanceOf(ReviewChargeVersionModel)
+        expect(result.reviewChargeVersions).toContainEqual(testReviewChargeVersions[0])
+        expect(result.reviewChargeVersions).toContainEqual(testReviewChargeVersions[1])
       })
     })
   })
@@ -322,7 +315,7 @@ describe('Charge Version model', () => {
       it('returns the charge version "created at" time stamp', () => {
         const result = fetchedRecord.$createdAt()
 
-        expect(result).to.equal(fetchedRecord.createdAt)
+        expect(result).toEqual(fetchedRecord.createdAt)
       })
     })
 
@@ -352,7 +345,7 @@ describe('Charge Version model', () => {
       it('returns the first mod log NALD date', () => {
         const result = fetchedRecord.$createdAt()
 
-        expect(result).to.equal(new Date('2012-06-01'))
+        expect(result).toEqual(new Date('2012-06-01'))
       })
     })
   })
@@ -392,7 +385,7 @@ describe('Charge Version model', () => {
         it('returns the WRLS user name', () => {
           const result = fetchedRecord.$createdBy()
 
-          expect(result).to.equal(testUser.username)
+          expect(result).toEqual(testUser.username)
         })
       })
 
@@ -406,7 +399,7 @@ describe('Charge Version model', () => {
         it('still returns the WRLS user name', () => {
           const result = fetchedRecord.$createdBy()
 
-          expect(result).to.equal(testUser.username)
+          expect(result).toEqual(testUser.username)
         })
       })
     })
@@ -424,7 +417,7 @@ describe('Charge Version model', () => {
         it('returns null', () => {
           const result = fetchedRecord.$createdBy()
 
-          expect(result).to.be.null()
+          expect(result).toBeNull()
         })
       })
 
@@ -454,7 +447,7 @@ describe('Charge Version model', () => {
         it('returns the first mod log NALD user ID', () => {
           const result = fetchedRecord.$createdBy()
 
-          expect(result).to.equal('FIRST')
+          expect(result).toEqual('FIRST')
         })
       })
     })
@@ -493,8 +486,8 @@ describe('Charge Version model', () => {
         it('returns an empty array', () => {
           const result = fetchedRecord.$notes()
 
-          expect(result).to.be.an.array()
-          expect(result).to.be.empty()
+          expect(result).toBeInstanceOf(Array)
+          expect(result).toHaveLength(0)
         })
       })
 
@@ -509,7 +502,7 @@ describe('Charge Version model', () => {
         it('returns an array containing just the single note', () => {
           const result = fetchedRecord.$notes()
 
-          expect(result).to.equal(['Top site bore hole'])
+          expect(result).toEqual(['Top site bore hole'])
         })
       })
     })
@@ -527,8 +520,8 @@ describe('Charge Version model', () => {
         it('returns an empty array', () => {
           const result = fetchedRecord.$notes()
 
-          expect(result).to.be.an.array()
-          expect(result).to.be.empty()
+          expect(result).toBeInstanceOf(Array)
+          expect(result).toHaveLength(0)
         })
       })
 
@@ -559,8 +552,8 @@ describe('Charge Version model', () => {
           it('returns an empty array', () => {
             const result = fetchedRecord.$notes()
 
-            expect(result).to.be.an.array()
-            expect(result).to.be.empty()
+            expect(result).toBeInstanceOf(Array)
+            expect(result).toHaveLength(0)
           })
         })
 
@@ -590,7 +583,7 @@ describe('Charge Version model', () => {
           it('returns an array containing just the notes from the mod logs with them', () => {
             const result = fetchedRecord.$notes()
 
-            expect(result).to.equal(['Transfer per app 12-DEF'])
+            expect(result).toEqual(['Transfer per app 12-DEF'])
           })
         })
       })
@@ -624,7 +617,7 @@ describe('Charge Version model', () => {
       it('returns the charge version reason', () => {
         const result = fetchedRecord.$reason()
 
-        expect(result).to.equal(testChangeReason.description)
+        expect(result).toEqual(testChangeReason.description)
       })
     })
 
@@ -641,7 +634,7 @@ describe('Charge Version model', () => {
         it('returns null', () => {
           const result = fetchedRecord.$reason()
 
-          expect(result).to.be.null()
+          expect(result).toBeNull()
         })
       })
 
@@ -672,7 +665,7 @@ describe('Charge Version model', () => {
           it('returns null', () => {
             const result = fetchedRecord.$reason()
 
-            expect(result).to.be.null()
+            expect(result).toBeNull()
           })
         })
       })
@@ -703,7 +696,7 @@ describe('Charge Version model', () => {
         it('returns the NALD reason description', () => {
           const result = fetchedRecord.$reason()
 
-          expect(result).to.equal('Formal Variation')
+          expect(result).toEqual('Formal Variation')
         })
       })
     })

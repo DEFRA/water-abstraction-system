@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ReturnSubmissionLineHelper = require('../support/helpers/return-submission-line.helper.js')
 const ReturnSubmissionLineModel = require('../../app/models/return-submission-line.model.js')
@@ -24,7 +17,7 @@ describe('Return Submission model', () => {
   let testReturnLog
   let testReturnSubmissionLines
 
-  before(async () => {
+  beforeAll(async () => {
     testReturnLog = await ReturnLogHelper.add()
 
     testRecord = await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id })
@@ -43,7 +36,7 @@ describe('Return Submission model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testReturnLog.$query().delete()
 
     for (const returnSubmissionLine of testReturnSubmissionLines) {
@@ -57,8 +50,8 @@ describe('Return Submission model', () => {
     it('can successfully run a basic query', async () => {
       const result = await ReturnSubmissionModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(ReturnSubmissionModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(ReturnSubmissionModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -67,17 +60,17 @@ describe('Return Submission model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReturnSubmissionModel.query().innerJoinRelated('returnLog')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the return log', async () => {
         const result = await ReturnSubmissionModel.query().findById(testRecord.id).withGraphFetched('returnLog')
 
-        expect(result).to.be.instanceOf(ReturnSubmissionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReturnSubmissionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.returnLog).to.be.an.instanceOf(ReturnLogModel)
-        expect(result.returnLog).to.equal(testReturnLog)
+        expect(result.returnLog).toBeInstanceOf(ReturnLogModel)
+        expect(result.returnLog).toEqual(testReturnLog)
       })
     })
 
@@ -85,7 +78,7 @@ describe('Return Submission model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReturnSubmissionModel.query().innerJoinRelated('returnSubmissionLines')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the return submission lines', async () => {
@@ -93,13 +86,13 @@ describe('Return Submission model', () => {
           .findById(testRecord.id)
           .withGraphFetched('returnSubmissionLines')
 
-        expect(result).to.be.instanceOf(ReturnSubmissionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReturnSubmissionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.returnSubmissionLines).to.be.an.array()
-        expect(result.returnSubmissionLines[0]).to.be.an.instanceOf(ReturnSubmissionLineModel)
-        expect(result.returnSubmissionLines).to.include(testReturnSubmissionLines[0])
-        expect(result.returnSubmissionLines).to.include(testReturnSubmissionLines[1])
+        expect(result.returnSubmissionLines).toBeInstanceOf(Array)
+        expect(result.returnSubmissionLines[0]).toBeInstanceOf(ReturnSubmissionLineModel)
+        expect(result.returnSubmissionLines).toContainEqual(testReturnSubmissionLines[0])
+        expect(result.returnSubmissionLines).toContainEqual(testReturnSubmissionLines[1])
       })
     })
   })
@@ -130,9 +123,9 @@ describe('Return Submission model', () => {
     it('applies readings to the return submission lines', () => {
       applyReadingsTestRecord.$applyReadings()
 
-      expect(applyReadingsTestRecord.returnSubmissionLines[0].reading).to.equal(1)
-      expect(applyReadingsTestRecord.returnSubmissionLines[1].reading).to.equal(2)
-      expect(applyReadingsTestRecord.returnSubmissionLines[2].reading).be.null()
+      expect(applyReadingsTestRecord.returnSubmissionLines[0].reading).toEqual(1)
+      expect(applyReadingsTestRecord.returnSubmissionLines[1].reading).toEqual(2)
+      expect(applyReadingsTestRecord.returnSubmissionLines[2].reading).toBeNull()
     })
   })
 
@@ -151,7 +144,7 @@ describe('Return Submission model', () => {
       it('returns the first meter', () => {
         const result = meterTestRecord.$meter()
 
-        expect(result).to.equal({ serialNumber: 'METER_1' })
+        expect(result).toEqual({ serialNumber: 'METER_1' })
       })
     })
 
@@ -163,7 +156,7 @@ describe('Return Submission model', () => {
       it('returns null', () => {
         const result = meterTestRecord.$meter()
 
-        expect(result).to.be.null()
+        expect(result).toBeNull()
       })
     })
   })
@@ -179,7 +172,7 @@ describe('Return Submission model', () => {
       it('returns the method', () => {
         const result = methodTestRecord.$method()
 
-        expect(result).to.equal('METHOD')
+        expect(result).toEqual('METHOD')
       })
     })
 
@@ -191,7 +184,7 @@ describe('Return Submission model', () => {
       it('returns the method as abstractionVolumes', () => {
         const result = methodTestRecord.$method()
 
-        expect(result).to.equal('abstractionVolumes')
+        expect(result).toEqual('abstractionVolumes')
       })
     })
   })
@@ -207,7 +200,7 @@ describe('Return Submission model', () => {
       it('returns the unit', () => {
         const result = unitsTestRecord.$units()
 
-        expect(result).to.equal('UNITS')
+        expect(result).toEqual('UNITS')
       })
     })
 
@@ -219,7 +212,7 @@ describe('Return Submission model', () => {
       it('returns the units as cubic metres', () => {
         const result = unitsTestRecord.$units()
 
-        expect(result).to.equal(unitNames.CUBIC_METRES)
+        expect(result).toEqual(unitNames.CUBIC_METRES)
       })
     })
   })

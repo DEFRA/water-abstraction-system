@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ChargeElementHelper = require('../support/helpers/charge-element.helper.js')
 const ChargeElementModel = require('../../app/models/charge-element.model.js')
@@ -28,7 +21,7 @@ describe('Purpose model', () => {
   let testRecord
   let testReturnRequirementPurposes
 
-  before(async () => {
+  beforeAll(async () => {
     testRecord = PurposeHelper.select()
 
     testChargeElements = []
@@ -60,7 +53,7 @@ describe('Purpose model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const chargeElement of testChargeElements) {
       await chargeElement.$query().delete()
     }
@@ -82,8 +75,8 @@ describe('Purpose model', () => {
     it('can successfully run a basic query', async () => {
       const result = await PurposeModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(PurposeModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(PurposeModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -92,19 +85,19 @@ describe('Purpose model', () => {
       it('can successfully run a related query', async () => {
         const query = await PurposeModel.query().innerJoinRelated('chargeElements')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge elements', async () => {
         const result = await PurposeModel.query().findById(testRecord.id).withGraphFetched('chargeElements')
 
-        expect(result).to.be.instanceOf(PurposeModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(PurposeModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.chargeElements).to.be.an.array()
-        expect(result.chargeElements[0]).to.be.an.instanceOf(ChargeElementModel)
-        expect(result.chargeElements).to.include(testChargeElements[0])
-        expect(result.chargeElements).to.include(testChargeElements[1])
+        expect(result.chargeElements).toBeInstanceOf(Array)
+        expect(result.chargeElements[0]).toBeInstanceOf(ChargeElementModel)
+        expect(result.chargeElements).toContainEqual(testChargeElements[0])
+        expect(result.chargeElements).toContainEqual(testChargeElements[1])
       })
     })
 
@@ -112,19 +105,19 @@ describe('Purpose model', () => {
       it('can successfully run a related query', async () => {
         const query = await PurposeModel.query().innerJoinRelated('chargeReferences')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge references', async () => {
         const result = await PurposeModel.query().findById(testRecord.id).withGraphFetched('chargeReferences')
 
-        expect(result).to.be.instanceOf(PurposeModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(PurposeModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.chargeReferences).to.be.an.array()
-        expect(result.chargeReferences[0]).to.be.an.instanceOf(ChargeReferenceModel)
-        expect(result.chargeReferences).to.include(testChargeReferences[0])
-        expect(result.chargeReferences).to.include(testChargeReferences[1])
+        expect(result.chargeReferences).toBeInstanceOf(Array)
+        expect(result.chargeReferences[0]).toBeInstanceOf(ChargeReferenceModel)
+        expect(result.chargeReferences).toContainEqual(testChargeReferences[0])
+        expect(result.chargeReferences).toContainEqual(testChargeReferences[1])
       })
     })
 
@@ -132,19 +125,19 @@ describe('Purpose model', () => {
       it('can successfully run a related query', async () => {
         const query = await PurposeModel.query().innerJoinRelated('licenceVersionPurposes')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence version purposes', async () => {
         const result = await PurposeModel.query().findById(testRecord.id).withGraphFetched('licenceVersionPurposes')
 
-        expect(result).to.be.instanceOf(PurposeModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(PurposeModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceVersionPurposes).to.be.an.array()
-        expect(result.licenceVersionPurposes[0]).to.be.an.instanceOf(LicenceVersionPurposeModel)
-        expect(result.licenceVersionPurposes).to.include(testLicenceVersionPurposes[0])
-        expect(result.licenceVersionPurposes).to.include(testLicenceVersionPurposes[1])
+        expect(result.licenceVersionPurposes).toBeInstanceOf(Array)
+        expect(result.licenceVersionPurposes[0]).toBeInstanceOf(LicenceVersionPurposeModel)
+        expect(result.licenceVersionPurposes).toContainEqual(testLicenceVersionPurposes[0])
+        expect(result.licenceVersionPurposes).toContainEqual(testLicenceVersionPurposes[1])
       })
     })
 
@@ -152,19 +145,19 @@ describe('Purpose model', () => {
       it('can successfully run a related query', async () => {
         const query = await PurposeModel.query().innerJoinRelated('returnRequirementPurposes')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the return requirement purposes', async () => {
         const result = await PurposeModel.query().findById(testRecord.id).withGraphFetched('returnRequirementPurposes')
 
-        expect(result).to.be.instanceOf(PurposeModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(PurposeModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.returnRequirementPurposes).to.be.an.array()
-        expect(result.returnRequirementPurposes[0]).to.be.an.instanceOf(ReturnRequirementPurposeModel)
-        expect(result.returnRequirementPurposes).to.include(testReturnRequirementPurposes[0])
-        expect(result.returnRequirementPurposes).to.include(testReturnRequirementPurposes[1])
+        expect(result.returnRequirementPurposes).toBeInstanceOf(Array)
+        expect(result.returnRequirementPurposes[0]).toBeInstanceOf(ReturnRequirementPurposeModel)
+        expect(result.returnRequirementPurposes).toContainEqual(testReturnRequirementPurposes[0])
+        expect(result.returnRequirementPurposes).toContainEqual(testReturnRequirementPurposes[1])
       })
     })
   })

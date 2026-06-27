@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
@@ -28,7 +21,7 @@ describe('Mod Log model', () => {
   let testRecord
   let testReturnVersion
 
-  before(async () => {
+  beforeAll(async () => {
     testLicence = await LicenceHelper.add()
     testChargeVersion = await ChargeVersionHelper.add({
       licenceId: testLicence.id,
@@ -49,7 +42,7 @@ describe('Mod Log model', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testLicence.$query().delete()
     await testChargeVersion.$query().delete()
     await testLicenceVersion.$query().delete()
@@ -62,8 +55,8 @@ describe('Mod Log model', () => {
     it('can successfully run a basic query', async () => {
       const result = await ModLogModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(ModLogModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(ModLogModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -72,17 +65,17 @@ describe('Mod Log model', () => {
       it('can successfully run a related query', async () => {
         const query = await ModLogModel.query().innerJoinRelated('chargeVersion')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge version', async () => {
         const result = await ModLogModel.query().findById(testRecord.id).withGraphFetched('chargeVersion')
 
-        expect(result).to.be.instanceOf(ModLogModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ModLogModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.chargeVersion).to.be.an.instanceOf(ChargeVersionModel)
-        expect(result.chargeVersion).to.equal(testChargeVersion)
+        expect(result.chargeVersion).toBeInstanceOf(ChargeVersionModel)
+        expect(result.chargeVersion).toEqual(testChargeVersion)
       })
     })
 
@@ -90,17 +83,17 @@ describe('Mod Log model', () => {
       it('can successfully run a related query', async () => {
         const query = await ModLogModel.query().innerJoinRelated('licence')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence', async () => {
         const result = await ModLogModel.query().findById(testRecord.id).withGraphFetched('licence')
 
-        expect(result).to.be.instanceOf(ModLogModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ModLogModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licence).to.be.an.instanceOf(LicenceModel)
-        expect(result.licence).to.equal(testLicence)
+        expect(result.licence).toBeInstanceOf(LicenceModel)
+        expect(result.licence).toEqual(testLicence)
       })
     })
 
@@ -108,17 +101,17 @@ describe('Mod Log model', () => {
       it('can successfully run a related query', async () => {
         const query = await ModLogModel.query().innerJoinRelated('licenceVersion')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence version', async () => {
         const result = await ModLogModel.query().findById(testRecord.id).withGraphFetched('licenceVersion')
 
-        expect(result).to.be.instanceOf(ModLogModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ModLogModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceVersion).to.be.an.instanceOf(LicenceVersionModel)
-        expect(result.licenceVersion).to.equal(testLicenceVersion)
+        expect(result.licenceVersion).toBeInstanceOf(LicenceVersionModel)
+        expect(result.licenceVersion).toEqual(testLicenceVersion)
       })
     })
 
@@ -126,17 +119,17 @@ describe('Mod Log model', () => {
       it('can successfully run a related query', async () => {
         const query = await ModLogModel.query().innerJoinRelated('returnVersion')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the return version', async () => {
         const result = await ModLogModel.query().findById(testRecord.id).withGraphFetched('returnVersion')
 
-        expect(result).to.be.instanceOf(ModLogModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ModLogModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.returnVersion).to.be.an.instanceOf(ReturnVersionModel)
-        expect(result.returnVersion).to.equal(testReturnVersion)
+        expect(result.returnVersion).toBeInstanceOf(ReturnVersionModel)
+        expect(result.returnVersion).toEqual(testReturnVersion)
       })
     })
   })

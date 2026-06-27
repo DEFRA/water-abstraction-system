@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AddressHelper = require('../support/helpers/address.helper.js')
 const BillHelper = require('../support/helpers/bill.helper.js')
@@ -30,7 +23,7 @@ describe('Billing Account model', () => {
   let testCompany
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     testCompany = await CompanyHelper.add()
 
     testRecord = await BillingAccountHelper.add({ companyId: testCompany.id })
@@ -65,7 +58,7 @@ describe('Billing Account model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testCompany.$query().delete()
 
     for (const billingAccountAddress of testBillingAccountAddresses) {
@@ -87,8 +80,8 @@ describe('Billing Account model', () => {
     it('can successfully run a basic query', async () => {
       const result = await BillingAccountModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(BillingAccountModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(BillingAccountModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -97,7 +90,7 @@ describe('Billing Account model', () => {
       it('can successfully run a related query', async () => {
         const query = await BillingAccountModel.query().innerJoinRelated('billingAccountAddresses')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the billing account addresses', async () => {
@@ -105,13 +98,13 @@ describe('Billing Account model', () => {
           .findById(testRecord.id)
           .withGraphFetched('billingAccountAddresses')
 
-        expect(result).to.be.instanceOf(BillingAccountModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(BillingAccountModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.billingAccountAddresses).to.be.an.array()
-        expect(result.billingAccountAddresses[0]).to.be.an.instanceOf(BillingAccountAddressModel)
-        expect(result.billingAccountAddresses).to.include(testBillingAccountAddresses[0])
-        expect(result.billingAccountAddresses).to.include(testBillingAccountAddresses[1])
+        expect(result.billingAccountAddresses).toBeInstanceOf(Array)
+        expect(result.billingAccountAddresses[0]).toBeInstanceOf(BillingAccountAddressModel)
+        expect(result.billingAccountAddresses).toContainEqual(testBillingAccountAddresses[0])
+        expect(result.billingAccountAddresses).toContainEqual(testBillingAccountAddresses[1])
       })
     })
 
@@ -119,19 +112,19 @@ describe('Billing Account model', () => {
       it('can successfully run a related query', async () => {
         const query = await BillingAccountModel.query().innerJoinRelated('bills')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the bills', async () => {
         const result = await BillingAccountModel.query().findById(testRecord.id).withGraphFetched('bills')
 
-        expect(result).to.be.instanceOf(BillingAccountModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(BillingAccountModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.bills).to.be.an.array()
-        expect(result.bills[0]).to.be.an.instanceOf(BillModel)
-        expect(result.bills).to.include(testBills[0])
-        expect(result.bills).to.include(testBills[1])
+        expect(result.bills).toBeInstanceOf(Array)
+        expect(result.bills[0]).toBeInstanceOf(BillModel)
+        expect(result.bills).toContainEqual(testBills[0])
+        expect(result.bills).toContainEqual(testBills[1])
       })
     })
 
@@ -139,19 +132,19 @@ describe('Billing Account model', () => {
       it('can successfully run a related query', async () => {
         const query = await BillingAccountModel.query().innerJoinRelated('chargeVersions')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge versions', async () => {
         const result = await BillingAccountModel.query().findById(testRecord.id).withGraphFetched('chargeVersions')
 
-        expect(result).to.be.instanceOf(BillingAccountModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(BillingAccountModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.chargeVersions).to.be.an.array()
-        expect(result.chargeVersions[0]).to.be.an.instanceOf(ChargeVersionModel)
-        expect(result.chargeVersions).to.include(testChargeVersions[0])
-        expect(result.chargeVersions).to.include(testChargeVersions[1])
+        expect(result.chargeVersions).toBeInstanceOf(Array)
+        expect(result.chargeVersions[0]).toBeInstanceOf(ChargeVersionModel)
+        expect(result.chargeVersions).toContainEqual(testChargeVersions[0])
+        expect(result.chargeVersions).toContainEqual(testChargeVersions[1])
       })
     })
 
@@ -159,17 +152,17 @@ describe('Billing Account model', () => {
       it('can successfully run a related query', async () => {
         const query = await BillingAccountModel.query().innerJoinRelated('company')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the company', async () => {
         const result = await BillingAccountModel.query().findById(testRecord.id).withGraphFetched('company')
 
-        expect(result).to.be.instanceOf(BillingAccountModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(BillingAccountModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.company).to.be.an.instanceOf(CompanyModel)
-        expect(result.company).to.equal(testCompany)
+        expect(result.company).toBeInstanceOf(CompanyModel)
+        expect(result.company).toEqual(testCompany)
       })
     })
   })
@@ -179,7 +172,7 @@ describe('Billing Account model', () => {
     let alternateBillingAccount
     let fetchedRecord
 
-    before(async () => {
+    beforeAll(async () => {
       // Link the alternate billing account we'll use in instance method testing to the same company as the test record.
       // We'll link the 'current' billing account address to a different company to prove it takes precedence
       alternateBillingAccount = await BillingAccountHelper.add({ companyId: testCompany.id })
@@ -214,7 +207,7 @@ describe('Billing Account model', () => {
 
           const result = fetchedRecord.$accountName()
 
-          expect(result).to.equal('Example Trading Ltd')
+          expect(result).toEqual('Example Trading Ltd')
         })
       })
 
@@ -226,7 +219,7 @@ describe('Billing Account model', () => {
 
           const result = fetchedRecord.$accountName()
 
-          expect(result).to.equal('Acme Ltd (UK)')
+          expect(result).toEqual('Acme Ltd (UK)')
         })
       })
 
@@ -235,7 +228,7 @@ describe('Billing Account model', () => {
           it('returns undefined', () => {
             const result = BillingAccountModel.fromJson(testRecord).$accountName()
 
-            expect(result).to.be.undefined()
+            expect(result).toBeUndefined()
           })
         })
 
@@ -243,7 +236,7 @@ describe('Billing Account model', () => {
           it('returns the company name', () => {
             const result = BillingAccountModel.fromJson({ ...testRecord, company: testCompany }).$accountName()
 
-            expect(result).to.equal('Example Trading Ltd')
+            expect(result).toEqual('Example Trading Ltd')
           })
         })
       })
@@ -257,8 +250,8 @@ describe('Billing Account model', () => {
 
             const result = fetchedRecord.$addressLines()
 
-            expect(result).to.be.an.array()
-            expect(result).to.be.empty()
+            expect(result).toBeInstanceOf(Array)
+            expect(result).toHaveLength(0)
           })
         })
 
@@ -270,7 +263,7 @@ describe('Billing Account model', () => {
 
             const result = fetchedRecord.$addressLines()
 
-            expect(result).to.equal([
+            expect(result).toEqual([
               'ENVIRONMENT AGENCY',
               'HORIZON HOUSE',
               'DEANERY ROAD',
@@ -286,8 +279,8 @@ describe('Billing Account model', () => {
         it('returns an empty array', () => {
           const result = BillingAccountModel.fromJson(testRecord).$addressLines()
 
-          expect(result).to.be.an.array()
-          expect(result).to.be.empty()
+          expect(result).toBeInstanceOf(Array)
+          expect(result).toHaveLength(0)
         })
       })
     })
@@ -299,7 +292,7 @@ describe('Billing Account model', () => {
 
           const result = fetchedRecord.$companyName()
 
-          expect(result).to.equal('Example Trading Ltd')
+          expect(result).toEqual('Example Trading Ltd')
         })
       })
 
@@ -311,7 +304,7 @@ describe('Billing Account model', () => {
 
           const result = fetchedRecord.$companyName()
 
-          expect(result).to.equal('Acme Ltd (UK)')
+          expect(result).toEqual('Acme Ltd (UK)')
         })
       })
     })
@@ -323,7 +316,7 @@ describe('Billing Account model', () => {
 
           const result = fetchedRecord.$contactName()
 
-          expect(result).to.be.null()
+          expect(result).toBeNull()
         })
       })
 
@@ -335,7 +328,7 @@ describe('Billing Account model', () => {
 
           const result = fetchedRecord.$contactName()
 
-          expect(result).to.equal('Bugs Bunny')
+          expect(result).toEqual('Bugs Bunny')
         })
       })
 
@@ -343,7 +336,7 @@ describe('Billing Account model', () => {
         it('returns null', async () => {
           const result = BillingAccountModel.fromJson(testRecord).$contactName()
 
-          expect(result).to.be.null()
+          expect(result).toBeNull()
         })
       })
     })
@@ -354,7 +347,7 @@ describe('Billing Account model', () => {
 
         const result = fetchedRecord.$displayAddress()
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           'Acme Ltd (UK)',
           'Bugs Bunny',
           'ENVIRONMENT AGENCY',

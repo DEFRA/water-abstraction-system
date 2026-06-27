@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceVersionPurposeConditionHelper = require('../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeConditionModel = require('../../app/models/licence-version-purpose-condition.model.js')
@@ -19,7 +12,7 @@ describe('Licence Version Purposes Condition Type model', () => {
   let testLicenceVersionPurposeCondition
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     testRecord = LicenceVersionPurposeConditionTypeHelper.select()
 
     testLicenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
@@ -27,7 +20,7 @@ describe('Licence Version Purposes Condition Type model', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testLicenceVersionPurposeCondition.$query().delete()
   })
 
@@ -35,8 +28,8 @@ describe('Licence Version Purposes Condition Type model', () => {
     it('can successfully run a basic query', async () => {
       const result = await LicenceVersionPurposeConditionTypeModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(LicenceVersionPurposeConditionTypeModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(LicenceVersionPurposeConditionTypeModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -47,7 +40,7 @@ describe('Licence Version Purposes Condition Type model', () => {
           'licenceVersionPurposeConditions'
         )
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence version purpose condition', async () => {
@@ -55,14 +48,14 @@ describe('Licence Version Purposes Condition Type model', () => {
           .findById(testRecord.id)
           .withGraphFetched('licenceVersionPurposeConditions')
 
-        expect(result).to.be.instanceOf(LicenceVersionPurposeConditionTypeModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceVersionPurposeConditionTypeModel)
+        expect(result.id).toEqual(testRecord.id)
 
         const foundRecord = result.licenceVersionPurposeConditions.find((record) => {
           return record.id === testLicenceVersionPurposeCondition.id
         })
 
-        expect(foundRecord).to.be.an.instanceOf(LicenceVersionPurposeConditionModel)
+        expect(foundRecord).toBeInstanceOf(LicenceVersionPurposeConditionModel)
       })
     })
   })

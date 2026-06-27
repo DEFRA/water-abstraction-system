@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ChargeVersionNoteHelper = require('../support/helpers/charge-version-note.helper.js')
 const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
@@ -58,7 +51,7 @@ describe('User model', () => {
   let testUserRole
   let testUserGroup
 
-  before(async () => {
+  beforeAll(async () => {
     testRecord = UserHelper.select(USER_DIGITISE_EDITOR_INDEX)
 
     testRole = RoleHelper.select(ROLE_AR_USER_INDEX)
@@ -105,7 +98,7 @@ describe('User model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const testChargeVersionNote of testChargeVersionNotes) {
       await testChargeVersionNote.$query().delete()
     }
@@ -123,8 +116,8 @@ describe('User model', () => {
     it('can successfully run a basic query', async () => {
       const result = await UserModel.query().where('userId', testRecord.userId).limit(1).first()
 
-      expect(result).to.be.an.instanceOf(UserModel)
-      expect(result.userId).to.equal(testRecord.userId)
+      expect(result).toBeInstanceOf(UserModel)
+      expect(result.userId).toEqual(testRecord.userId)
     })
   })
 
@@ -133,7 +126,7 @@ describe('User model', () => {
       it('can successfully run a related query', async () => {
         const query = await UserModel.query().innerJoinRelated('chargeVersionNotes')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge version notes', async () => {
@@ -143,13 +136,13 @@ describe('User model', () => {
           .first()
           .withGraphFetched('chargeVersionNotes')
 
-        expect(result).to.be.instanceOf(UserModel)
-        expect(result.userId).to.equal(testRecord.userId)
+        expect(result).toBeInstanceOf(UserModel)
+        expect(result.userId).toEqual(testRecord.userId)
 
-        expect(result.chargeVersionNotes).to.be.an.array()
-        expect(result.chargeVersionNotes[0]).to.be.an.instanceOf(ChargeVersionNoteModel)
-        expect(result.chargeVersionNotes).includes(testChargeVersionNotes[0])
-        expect(result.chargeVersionNotes).includes(testChargeVersionNotes[1])
+        expect(result.chargeVersionNotes).toBeInstanceOf(Array)
+        expect(result.chargeVersionNotes[0]).toBeInstanceOf(ChargeVersionNoteModel)
+        expect(result.chargeVersionNotes).toContainEqual(testChargeVersionNotes[0])
+        expect(result.chargeVersionNotes).toContainEqual(testChargeVersionNotes[1])
       })
     })
 
@@ -157,7 +150,7 @@ describe('User model', () => {
       it('can successfully run a related query', async () => {
         const query = await UserModel.query().innerJoinRelated('createdCompanyContacts')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the created company contacts', async () => {
@@ -167,13 +160,13 @@ describe('User model', () => {
           .first()
           .withGraphFetched('createdCompanyContacts')
 
-        expect(result).to.be.instanceOf(UserModel)
-        expect(result.userId).to.equal(testRecord.userId)
+        expect(result).toBeInstanceOf(UserModel)
+        expect(result.userId).toEqual(testRecord.userId)
 
-        expect(result.createdCompanyContacts).to.be.an.array()
-        expect(result.createdCompanyContacts[0]).to.be.an.instanceOf(CompanyContactModel)
-        expect(result.createdCompanyContacts).includes(testCreatedCompanyContacts[0])
-        expect(result.createdCompanyContacts).includes(testCreatedCompanyContacts[1])
+        expect(result.createdCompanyContacts).toBeInstanceOf(Array)
+        expect(result.createdCompanyContacts[0]).toBeInstanceOf(CompanyContactModel)
+        expect(result.createdCompanyContacts).toContainEqual(testCreatedCompanyContacts[0])
+        expect(result.createdCompanyContacts).toContainEqual(testCreatedCompanyContacts[1])
       })
     })
 
@@ -181,7 +174,7 @@ describe('User model', () => {
       it('can successfully run a related query', async () => {
         const query = await UserModel.query().innerJoinRelated('groups')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the groups', async () => {
@@ -191,13 +184,13 @@ describe('User model', () => {
           .first()
           .withGraphFetched('groups')
 
-        expect(result).to.be.instanceOf(UserModel)
-        expect(result.userId).to.equal(testRecord.userId)
+        expect(result).toBeInstanceOf(UserModel)
+        expect(result.userId).toMatchObject(testRecord.userId)
 
-        expect(result.groups).to.be.an.array()
-        expect(result.groups).to.have.length(1)
-        expect(result.groups[0]).to.be.an.instanceOf(GroupModel)
-        expect(result.groups[0]).to.equal(testGroup, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.groups).toBeInstanceOf(Array)
+        expect(result.groups).toHaveLength(1)
+        expect(result.groups[0]).toBeInstanceOf(GroupModel)
+        expect(result.groups[0]).toMatchObject(testGroup)
       })
     })
 
@@ -218,17 +211,17 @@ describe('User model', () => {
       it('can successfully run a related query', async () => {
         const query = await UserModel.query().innerJoinRelated('licenceEntity')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence entity', async () => {
         const result = await UserModel.query().findById(testUser.id).withGraphFetched('licenceEntity')
 
-        expect(result).to.be.instanceOf(UserModel)
-        expect(result.id).to.equal(testUser.id)
+        expect(result).toBeInstanceOf(UserModel)
+        expect(result.id).toEqual(testUser.id)
 
-        expect(result.licenceEntity).to.be.an.instanceOf(LicenceEntityModel)
-        expect(result.licenceEntity).to.equal(testLicenceEntity)
+        expect(result.licenceEntity).toBeInstanceOf(LicenceEntityModel)
+        expect(result.licenceEntity).toEqual(testLicenceEntity)
       })
     })
 
@@ -247,7 +240,7 @@ describe('User model', () => {
       it('can successfully run a related query', async () => {
         const query = await UserModel.query().innerJoinRelated('licenceMonitoringStations')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence monitoring stations', async () => {
@@ -257,13 +250,13 @@ describe('User model', () => {
           .first()
           .withGraphFetched('licenceMonitoringStations')
 
-        expect(result).to.be.instanceOf(UserModel)
-        expect(result.userId).to.equal(testRecord.userId)
+        expect(result).toBeInstanceOf(UserModel)
+        expect(result.userId).toEqual(testRecord.userId)
 
-        expect(result.licenceMonitoringStations).to.be.an.array()
-        expect(result.licenceMonitoringStations[0]).to.be.an.instanceOf(LicenceMonitoringStationModel)
-        expect(result.licenceMonitoringStations).to.include(testLicenceMonitoringStations[0])
-        expect(result.licenceMonitoringStations).to.include(testLicenceMonitoringStations[1])
+        expect(result.licenceMonitoringStations).toBeInstanceOf(Array)
+        expect(result.licenceMonitoringStations[0]).toBeInstanceOf(LicenceMonitoringStationModel)
+        expect(result.licenceMonitoringStations).toContainEqual(testLicenceMonitoringStations[0])
+        expect(result.licenceMonitoringStations).toContainEqual(testLicenceMonitoringStations[1])
       })
     })
 
@@ -282,7 +275,7 @@ describe('User model', () => {
       it('can successfully run a related query', async () => {
         const query = await UserModel.query().innerJoinRelated('licenceUnregistrations')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence unregistrations', async () => {
@@ -292,13 +285,13 @@ describe('User model', () => {
           .first()
           .withGraphFetched('licenceUnregistrations')
 
-        expect(result).to.be.instanceOf(UserModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(UserModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceUnregistrations).to.be.an.array()
-        expect(result.licenceUnregistrations[0]).to.be.an.instanceOf(LicenceUnregistrationModel)
-        expect(result.licenceUnregistrations).to.include(testLicenceUnregistrations[0])
-        expect(result.licenceUnregistrations).to.include(testLicenceUnregistrations[1])
+        expect(result.licenceUnregistrations).toBeInstanceOf(Array)
+        expect(result.licenceUnregistrations[0]).toBeInstanceOf(LicenceUnregistrationModel)
+        expect(result.licenceUnregistrations).toContainEqual(testLicenceUnregistrations[0])
+        expect(result.licenceUnregistrations).toContainEqual(testLicenceUnregistrations[1])
       })
     })
 
@@ -317,7 +310,7 @@ describe('User model', () => {
       it('can successfully run a related query', async () => {
         const query = await UserModel.query().innerJoinRelated('returnVersions')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the return versions', async () => {
@@ -327,13 +320,13 @@ describe('User model', () => {
           .first()
           .withGraphFetched('returnVersions')
 
-        expect(result).to.be.instanceOf(UserModel)
-        expect(result.userId).to.equal(testRecord.userId)
+        expect(result).toBeInstanceOf(UserModel)
+        expect(result.userId).toEqual(testRecord.userId)
 
-        expect(result.returnVersions).to.be.an.array()
-        expect(result.returnVersions[0]).to.be.an.instanceOf(ReturnVersionModel)
-        expect(result.returnVersions).to.include(testReturnVersions[0])
-        expect(result.returnVersions).to.include(testReturnVersions[1])
+        expect(result.returnVersions).toBeInstanceOf(Array)
+        expect(result.returnVersions[0]).toBeInstanceOf(ReturnVersionModel)
+        expect(result.returnVersions).toContainEqual(testReturnVersions[0])
+        expect(result.returnVersions).toContainEqual(testReturnVersions[1])
       })
     })
 
@@ -341,7 +334,7 @@ describe('User model', () => {
       it('can successfully run a related query', async () => {
         const query = await UserModel.query().innerJoinRelated('roles')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the roles', async () => {
@@ -351,13 +344,13 @@ describe('User model', () => {
           .first()
           .withGraphFetched('roles')
 
-        expect(result).to.be.instanceOf(UserModel)
-        expect(result.userId).to.equal(testRecord.userId)
+        expect(result).toBeInstanceOf(UserModel)
+        expect(result.userId).toMatchObject(testRecord.userId)
 
-        expect(result.roles).to.be.an.array()
-        expect(result.roles).to.have.length(1)
-        expect(result.roles[0]).to.be.an.instanceOf(RoleModel)
-        expect(result.roles[0]).to.equal(testRole, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.roles).toBeInstanceOf(Array)
+        expect(result.roles).toHaveLength(1)
+        expect(result.roles[0]).toBeInstanceOf(RoleModel)
+        expect(result.roles[0]).toMatchObject(testRole)
       })
     })
 
@@ -365,7 +358,7 @@ describe('User model', () => {
       it('can successfully run a related query', async () => {
         const query = await UserModel.query().innerJoinRelated('updatedCompanyContacts')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the updated company contacts', async () => {
@@ -375,13 +368,13 @@ describe('User model', () => {
           .first()
           .withGraphFetched('updatedCompanyContacts')
 
-        expect(result).to.be.instanceOf(UserModel)
-        expect(result.userId).to.equal(testRecord.userId)
+        expect(result).toBeInstanceOf(UserModel)
+        expect(result.userId).toEqual(testRecord.userId)
 
-        expect(result.updatedCompanyContacts).to.be.an.array()
-        expect(result.updatedCompanyContacts[0]).to.be.an.instanceOf(CompanyContactModel)
-        expect(result.updatedCompanyContacts).includes(testUpdatedCompanyContacts[0])
-        expect(result.updatedCompanyContacts).includes(testUpdatedCompanyContacts[1])
+        expect(result.updatedCompanyContacts).toBeInstanceOf(Array)
+        expect(result.updatedCompanyContacts[0]).toBeInstanceOf(CompanyContactModel)
+        expect(result.updatedCompanyContacts).toContainEqual(testUpdatedCompanyContacts[0])
+        expect(result.updatedCompanyContacts).toContainEqual(testUpdatedCompanyContacts[1])
       })
     })
 
@@ -389,7 +382,7 @@ describe('User model', () => {
       it('can successfully run a related query', async () => {
         const query = await UserModel.query().innerJoinRelated('userGroups')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the user groups', async () => {
@@ -399,13 +392,13 @@ describe('User model', () => {
           .first()
           .withGraphFetched('userGroups')
 
-        expect(result).to.be.instanceOf(UserModel)
-        expect(result.userId).to.equal(testRecord.userId)
+        expect(result).toBeInstanceOf(UserModel)
+        expect(result.userId).toMatchObject(testRecord.userId)
 
-        expect(result.userGroups).to.be.an.array()
-        expect(result.userGroups).to.have.length(1)
-        expect(result.userGroups[0]).to.be.an.instanceOf(UserGroupModel)
-        expect(result.userGroups[0]).to.equal(testUserGroup, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.userGroups).toBeInstanceOf(Array)
+        expect(result.userGroups).toHaveLength(1)
+        expect(result.userGroups[0]).toBeInstanceOf(UserGroupModel)
+        expect(result.userGroups[0]).toMatchObject(testUserGroup)
       })
     })
 
@@ -413,7 +406,7 @@ describe('User model', () => {
       it('can successfully run a related query', async () => {
         const query = await UserModel.query().innerJoinRelated('userRoles')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the user roles', async () => {
@@ -423,13 +416,13 @@ describe('User model', () => {
           .limit(1)
           .first()
 
-        expect(result).to.be.instanceOf(UserModel)
-        expect(result.userId).to.equal(testRecord.userId)
+        expect(result).toBeInstanceOf(UserModel)
+        expect(result.userId).toMatchObject(testRecord.userId)
 
-        expect(result.userRoles).to.be.an.array()
-        expect(result.userRoles).to.have.length(1)
-        expect(result.userRoles[0]).to.be.an.instanceOf(UserRoleModel)
-        expect(result.userRoles[0]).to.equal(testUserRole, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.userRoles).toBeInstanceOf(Array)
+        expect(result.userRoles).toHaveLength(1)
+        expect(result.userRoles[0]).toBeInstanceOf(UserRoleModel)
+        expect(result.userRoles[0]).toMatchObject(testUserRole)
       })
     })
   })
@@ -439,7 +432,7 @@ describe('User model', () => {
       const result = UserModel.generateHashedPassword('password')
 
       // Hashed passwords always begin with $
-      expect(result.charAt(0)).to.equal('$')
+      expect(result.charAt(0)).toEqual('$')
     })
   })
 
@@ -458,7 +451,7 @@ describe('User model', () => {
       it('returns true', async () => {
         const result = internalTestRecord.$internal()
 
-        expect(result).to.be.true()
+        expect(result).toBe(true)
       })
     })
 
@@ -470,7 +463,7 @@ describe('User model', () => {
       it('returns false', async () => {
         const result = internalTestRecord.$internal()
 
-        expect(result).to.be.false()
+        expect(result).toBe(false)
       })
     })
 
@@ -482,7 +475,7 @@ describe('User model', () => {
       it('returns false', async () => {
         const result = internalTestRecord.$internal()
 
-        expect(result).to.be.false()
+        expect(result).toBe(false)
       })
     })
 
@@ -494,7 +487,7 @@ describe('User model', () => {
       it('returns false', async () => {
         const result = internalTestRecord.$internal()
 
-        expect(result).to.be.false()
+        expect(result).toBe(false)
       })
     })
   })
@@ -525,7 +518,7 @@ describe('User model', () => {
         it('returns "None" permissions', async () => {
           const result = permissionRecord.$permissions()
 
-          expect(result).to.equal(userPermissions.none)
+          expect(result).toEqual(userPermissions.none)
         })
       })
 
@@ -556,7 +549,7 @@ describe('User model', () => {
               it('returns "None" permissions', async () => {
                 const result = permissionRecord.$permissions()
 
-                expect(result).to.equal(userPermissions.none)
+                expect(result).toEqual(userPermissions.none)
               })
             })
 
@@ -575,7 +568,7 @@ describe('User model', () => {
                 it('returns "Admin" permissions', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.admin)
+                  expect(result).toEqual(userPermissions.admin)
                 })
               })
 
@@ -593,7 +586,7 @@ describe('User model', () => {
                 it('returns "None" permissions', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.none)
+                  expect(result).toEqual(userPermissions.none)
                 })
               })
             })
@@ -613,7 +606,7 @@ describe('User model', () => {
                 it('returns "Primary user" permissions', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.primary_user)
+                  expect(result).toEqual(userPermissions.primary_user)
                 })
               })
 
@@ -631,7 +624,7 @@ describe('User model', () => {
                 it('returns "None" permissions', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.none)
+                  expect(result).toEqual(userPermissions.none)
                 })
               })
             })
@@ -651,7 +644,7 @@ describe('User model', () => {
                 it('returns "Returns user" permissions', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.returns_user)
+                  expect(result).toEqual(userPermissions.returns_user)
                 })
               })
 
@@ -669,7 +662,7 @@ describe('User model', () => {
                 it('returns "None" permissions', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.none)
+                  expect(result).toEqual(userPermissions.none)
                 })
               })
             })
@@ -689,7 +682,7 @@ describe('User model', () => {
                 it('returns "Basic access" permissions', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.basic)
+                  expect(result).toEqual(userPermissions.basic)
                 })
               })
 
@@ -707,7 +700,7 @@ describe('User model', () => {
                 it('returns "None" permissions', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.none)
+                  expect(result).toEqual(userPermissions.none)
                 })
               })
             })
@@ -733,7 +726,7 @@ describe('User model', () => {
                 it('returns the highest role by order of precedence', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.primary_user)
+                  expect(result).toEqual(userPermissions.primary_user)
                 })
               })
 
@@ -757,7 +750,7 @@ describe('User model', () => {
                 it('returns "None" permissions', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.none)
+                  expect(result).toEqual(userPermissions.none)
                 })
               })
             })
@@ -772,7 +765,7 @@ describe('User model', () => {
               it('returns "None" permissions', async () => {
                 const result = permissionRecord.$permissions()
 
-                expect(result).to.equal(userPermissions.none)
+                expect(result).toEqual(userPermissions.none)
               })
             })
 
@@ -791,7 +784,7 @@ describe('User model', () => {
                 it('returns "None" permissions', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.none)
+                  expect(result).toEqual(userPermissions.none)
                 })
               })
 
@@ -809,7 +802,7 @@ describe('User model', () => {
                 it('returns "None" permissions', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.none)
+                  expect(result).toEqual(userPermissions.none)
                 })
               })
             })
@@ -829,7 +822,7 @@ describe('User model', () => {
                 it('returns "None" permissions', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.none)
+                  expect(result).toEqual(userPermissions.none)
                 })
               })
 
@@ -847,7 +840,7 @@ describe('User model', () => {
                 it('returns "None" permissions', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.none)
+                  expect(result).toEqual(userPermissions.none)
                 })
               })
             })
@@ -867,7 +860,7 @@ describe('User model', () => {
                 it('returns "None" permissions', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.none)
+                  expect(result).toEqual(userPermissions.none)
                 })
               })
 
@@ -885,7 +878,7 @@ describe('User model', () => {
                 it('returns "None" permissions', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.none)
+                  expect(result).toEqual(userPermissions.none)
                 })
               })
             })
@@ -905,7 +898,7 @@ describe('User model', () => {
                 it('returns "None" permissions', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.none)
+                  expect(result).toEqual(userPermissions.none)
                 })
               })
 
@@ -923,7 +916,7 @@ describe('User model', () => {
                 it('returns "None" permissions', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.none)
+                  expect(result).toEqual(userPermissions.none)
                 })
               })
             })
@@ -949,7 +942,7 @@ describe('User model', () => {
                 it('returns "None" permissions', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.none)
+                  expect(result).toEqual(userPermissions.none)
                 })
               })
 
@@ -973,7 +966,7 @@ describe('User model', () => {
                 it('returns "None" permissions', async () => {
                   const result = permissionRecord.$permissions()
 
-                  expect(result).to.equal(userPermissions.none)
+                  expect(result).toEqual(userPermissions.none)
                 })
               })
             })
@@ -993,7 +986,7 @@ describe('User model', () => {
           it('returns null', () => {
             const result = permissionRecord.$permissions()
 
-            expect(result).to.be.null()
+            expect(result).toBeNull()
           })
         })
 
@@ -1005,7 +998,7 @@ describe('User model', () => {
           it('returns null', () => {
             const result = permissionRecord.$permissions()
 
-            expect(result).to.be.null()
+            expect(result).toBeNull()
           })
         })
       })
@@ -1020,7 +1013,7 @@ describe('User model', () => {
           it('returns "Basic" permissions', () => {
             const result = permissionRecord.$permissions()
 
-            expect(result).to.equal(userPermissions.basic)
+            expect(result).toEqual(userPermissions.basic)
           })
         })
 
@@ -1033,7 +1026,7 @@ describe('User model', () => {
             it('returns the matching permissions', () => {
               const result = permissionRecord.$permissions()
 
-              expect(result).to.equal(userPermissions.nps)
+              expect(result).toEqual(userPermissions.nps)
             })
           })
 
@@ -1045,7 +1038,7 @@ describe('User model', () => {
             it('returns the matching "Digitise!" permissions', () => {
               const result = permissionRecord.$permissions()
 
-              expect(result).to.equal(userPermissions.nps_ar_approver)
+              expect(result).toEqual(userPermissions.nps_ar_approver)
             })
           })
         })
@@ -1068,7 +1061,7 @@ describe('User model', () => {
       it('returns "disabled"', async () => {
         const result = statusTestRecord.$status()
 
-        expect(result).to.equal('disabled')
+        expect(result).toEqual('disabled')
       })
     })
 
@@ -1085,7 +1078,7 @@ describe('User model', () => {
         it('returns "locked"', async () => {
           const result = statusTestRecord.$status()
 
-          expect(result).to.equal('locked')
+          expect(result).toEqual('locked')
         })
       })
 
@@ -1098,7 +1091,7 @@ describe('User model', () => {
           it('returns "enabled"', async () => {
             const result = statusTestRecord.$status()
 
-            expect(result).to.equal('enabled')
+            expect(result).toEqual('enabled')
           })
         })
 
@@ -1110,7 +1103,7 @@ describe('User model', () => {
           it('returns "awaiting"', async () => {
             const result = statusTestRecord.$status()
 
-            expect(result).to.equal('awaiting')
+            expect(result).toEqual('awaiting')
           })
         })
       })

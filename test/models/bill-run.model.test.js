@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillHelper = require('../support/helpers/bill.helper.js')
 const BillModel = require('../../app/models/bill.model.js')
@@ -28,7 +21,7 @@ describe('Bill Run model', () => {
   let testRegion
   let testReviewLicences
 
-  before(async () => {
+  beforeAll(async () => {
     // Link regions
     testRegion = RegionHelper.select()
 
@@ -60,7 +53,7 @@ describe('Bill Run model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const bill of testBills) {
       await bill.$query().delete()
     }
@@ -80,8 +73,8 @@ describe('Bill Run model', () => {
     it('can successfully run a basic query', async () => {
       const result = await BillRunModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(BillRunModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(BillRunModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -90,17 +83,17 @@ describe('Bill Run model', () => {
       it('can successfully run a related query', async () => {
         const query = await BillRunModel.query().innerJoinRelated('region')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the region', async () => {
         const result = await BillRunModel.query().findById(testRecord.id).withGraphFetched('region')
 
-        expect(result).to.be.instanceOf(BillRunModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(BillRunModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.region).to.be.an.instanceOf(RegionModel)
-        expect(result.region).to.equal(testRegion, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.region).toBeInstanceOf(RegionModel)
+        expect(result.region).toMatchObject(testRegion)
       })
     })
 
@@ -108,19 +101,19 @@ describe('Bill Run model', () => {
       it('can successfully run a related query', async () => {
         const query = await BillRunModel.query().innerJoinRelated('bills')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the bills', async () => {
         const result = await BillRunModel.query().findById(testRecord.id).withGraphFetched('bills')
 
-        expect(result).to.be.instanceOf(BillRunModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(BillRunModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.bills).to.be.an.array()
-        expect(result.bills[0]).to.be.an.instanceOf(BillModel)
-        expect(result.bills).to.include(testBills[0])
-        expect(result.bills).to.include(testBills[1])
+        expect(result.bills).toBeInstanceOf(Array)
+        expect(result.bills[0]).toBeInstanceOf(BillModel)
+        expect(result.bills).toContainEqual(testBills[0])
+        expect(result.bills).toContainEqual(testBills[1])
       })
     })
 
@@ -128,19 +121,19 @@ describe('Bill Run model', () => {
       it('can successfully run a related query', async () => {
         const query = await BillRunModel.query().innerJoinRelated('billRunVolumes')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the bills', async () => {
         const result = await BillRunModel.query().findById(testRecord.id).withGraphFetched('billRunVolumes')
 
-        expect(result).to.be.instanceOf(BillRunModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(BillRunModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.billRunVolumes).to.be.an.array()
-        expect(result.billRunVolumes[0]).to.be.an.instanceOf(BillRunVolumeModel)
-        expect(result.billRunVolumes).to.include(testBillRunVolumes[0])
-        expect(result.billRunVolumes).to.include(testBillRunVolumes[1])
+        expect(result.billRunVolumes).toBeInstanceOf(Array)
+        expect(result.billRunVolumes[0]).toBeInstanceOf(BillRunVolumeModel)
+        expect(result.billRunVolumes).toContainEqual(testBillRunVolumes[0])
+        expect(result.billRunVolumes).toContainEqual(testBillRunVolumes[1])
       })
     })
 
@@ -148,19 +141,19 @@ describe('Bill Run model', () => {
       it('can successfully run a related query', async () => {
         const query = await BillRunModel.query().innerJoinRelated('reviewLicences')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the review licences', async () => {
         const result = await BillRunModel.query().findById(testRecord.id).withGraphFetched('reviewLicences')
 
-        expect(result).to.be.instanceOf(BillRunModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(BillRunModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.reviewLicences).to.be.an.array()
-        expect(result.reviewLicences[0]).to.be.an.instanceOf(ReviewLicenceModel)
-        expect(result.reviewLicences).to.include(testReviewLicences[0])
-        expect(result.reviewLicences).to.include(testReviewLicences[1])
+        expect(result.reviewLicences).toBeInstanceOf(Array)
+        expect(result.reviewLicences[0]).toBeInstanceOf(ReviewLicenceModel)
+        expect(result.reviewLicences).toContainEqual(testReviewLicences[0])
+        expect(result.reviewLicences).toContainEqual(testReviewLicences[1])
       })
     })
   })
@@ -170,7 +163,7 @@ describe('Bill Run model', () => {
       it('returns the requested error code', async () => {
         const result = BillRunModel.errorCodes.failedToCreateBillRun
 
-        expect(result).to.equal(50)
+        expect(result).toEqual(50)
       })
     })
   })

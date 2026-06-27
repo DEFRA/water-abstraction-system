@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
@@ -19,7 +12,7 @@ describe('Licence End Date Change model', () => {
   let testLicence
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     // Link licence
     testLicence = await LicenceHelper.add()
 
@@ -27,7 +20,7 @@ describe('Licence End Date Change model', () => {
     testRecord = await LicenceEndDateChangeHelper.add({ licenceId: testLicence.id })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testLicence.$query().delete()
 
     await testRecord.$query().delete()
@@ -37,8 +30,8 @@ describe('Licence End Date Change model', () => {
     it('can successfully run a basic query', async () => {
       const result = await LicenceEndDateChangeModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(LicenceEndDateChangeModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(LicenceEndDateChangeModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -47,17 +40,17 @@ describe('Licence End Date Change model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceEndDateChangeModel.query().innerJoinRelated('licence')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence', async () => {
         const result = await LicenceEndDateChangeModel.query().findById(testRecord.id).withGraphFetched('licence')
 
-        expect(result).to.be.instanceOf(LicenceEndDateChangeModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceEndDateChangeModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licence).to.be.an.instanceOf(LicenceModel)
-        expect(result.licence).to.equal(testLicence)
+        expect(result.licence).toBeInstanceOf(LicenceModel)
+        expect(result.licence).toEqual(testLicence)
       })
     })
   })

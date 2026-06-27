@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillRunHelper = require('../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../app/models/bill-run.model.js')
@@ -25,7 +18,7 @@ describe('Region model', () => {
   let testLicences
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     testRecord = RegionHelper.select()
 
     testBillRuns = []
@@ -53,7 +46,7 @@ describe('Region model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const billRun of testBillRuns) {
       await billRun.$query().delete()
     }
@@ -71,8 +64,8 @@ describe('Region model', () => {
     it('can successfully run a basic query', async () => {
       const result = await RegionModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(RegionModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(RegionModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -81,19 +74,19 @@ describe('Region model', () => {
       it('can successfully run a related query', async () => {
         const query = await RegionModel.query().innerJoinRelated('billRuns')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the bill runs', async () => {
         const result = await RegionModel.query().findById(testRecord.id).withGraphFetched('billRuns')
 
-        expect(result).to.be.instanceOf(RegionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(RegionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.billRuns).to.be.an.array()
-        expect(result.billRuns[0]).to.be.an.instanceOf(BillRunModel)
-        expect(result.billRuns).to.include(testBillRuns[0])
-        expect(result.billRuns).to.include(testBillRuns[1])
+        expect(result.billRuns).toBeInstanceOf(Array)
+        expect(result.billRuns[0]).toBeInstanceOf(BillRunModel)
+        expect(result.billRuns).toContainEqual(testBillRuns[0])
+        expect(result.billRuns).toContainEqual(testBillRuns[1])
       })
     })
 
@@ -101,19 +94,19 @@ describe('Region model', () => {
       it('can successfully run a related query', async () => {
         const query = await RegionModel.query().innerJoinRelated('companies')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the companies', async () => {
         const result = await RegionModel.query().findById(testRecord.id).withGraphFetched('companies')
 
-        expect(result).to.be.instanceOf(RegionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(RegionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.companies).to.be.an.array()
-        expect(result.companies[0]).to.be.an.instanceOf(CompanyModel)
-        expect(result.companies).to.include(testCompanies[0])
-        expect(result.companies).to.include(testCompanies[1])
+        expect(result.companies).toBeInstanceOf(Array)
+        expect(result.companies[0]).toBeInstanceOf(CompanyModel)
+        expect(result.companies).toContainEqual(testCompanies[0])
+        expect(result.companies).toContainEqual(testCompanies[1])
       })
     })
 
@@ -121,19 +114,19 @@ describe('Region model', () => {
       it('can successfully run a related query', async () => {
         const query = await RegionModel.query().innerJoinRelated('licences')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licences', async () => {
         const result = await RegionModel.query().findById(testRecord.id).withGraphFetched('licences')
 
-        expect(result).to.be.instanceOf(RegionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(RegionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licences).to.be.an.array()
-        expect(result.licences[0]).to.be.an.instanceOf(LicenceModel)
-        expect(result.licences).to.include(testLicences[0])
-        expect(result.licences).to.include(testLicences[1])
+        expect(result.licences).toBeInstanceOf(Array)
+        expect(result.licences[0]).toBeInstanceOf(LicenceModel)
+        expect(result.licences).toContainEqual(testLicences[0])
+        expect(result.licences).toContainEqual(testLicences[1])
       })
     })
   })

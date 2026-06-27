@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, before, after, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
@@ -23,8 +16,6 @@ const { randomRegionCode } = require('../support/general.js')
 // Thing under test
 const ReturnVersionModel = require('../../app/models/return-version.model.js')
 
-const { SKIP_COMPARE_LIST: skip } = UserHelper
-
 describe('Return Version model', () => {
   let testLicence
   let testModLogs
@@ -32,7 +23,7 @@ describe('Return Version model', () => {
   let testReturnRequirements
   let testUser
 
-  before(async () => {
+  beforeAll(async () => {
     testLicence = await LicenceHelper.add()
 
     testUser = UserHelper.select()
@@ -57,7 +48,7 @@ describe('Return Version model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const modLog of testModLogs) {
       await modLog.$query().delete()
     }
@@ -73,8 +64,8 @@ describe('Return Version model', () => {
     it('can successfully run a basic query', async () => {
       const result = await ReturnVersionModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(ReturnVersionModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(ReturnVersionModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -83,17 +74,17 @@ describe('Return Version model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReturnVersionModel.query().innerJoinRelated('licence')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence', async () => {
         const result = await ReturnVersionModel.query().findById(testRecord.id).withGraphFetched('licence')
 
-        expect(result).to.be.instanceOf(ReturnVersionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReturnVersionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licence).to.be.an.instanceOf(LicenceModel)
-        expect(result.licence).to.equal(testLicence)
+        expect(result.licence).toBeInstanceOf(LicenceModel)
+        expect(result.licence).toEqual(testLicence)
       })
     })
 
@@ -101,19 +92,19 @@ describe('Return Version model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReturnVersionModel.query().innerJoinRelated('modLogs')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the mod logs', async () => {
         const result = await ReturnVersionModel.query().findById(testRecord.id).withGraphFetched('modLogs')
 
-        expect(result).to.be.instanceOf(ReturnVersionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReturnVersionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.modLogs).to.be.an.array()
-        expect(result.modLogs[0]).to.be.an.instanceOf(ModLogModel)
-        expect(result.modLogs).to.include(testModLogs[0])
-        expect(result.modLogs).to.include(testModLogs[1])
+        expect(result.modLogs).toBeInstanceOf(Array)
+        expect(result.modLogs[0]).toBeInstanceOf(ModLogModel)
+        expect(result.modLogs).toContainEqual(testModLogs[0])
+        expect(result.modLogs).toContainEqual(testModLogs[1])
       })
     })
 
@@ -121,19 +112,19 @@ describe('Return Version model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReturnVersionModel.query().innerJoinRelated('returnRequirements')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the return requirements', async () => {
         const result = await ReturnVersionModel.query().findById(testRecord.id).withGraphFetched('returnRequirements')
 
-        expect(result).to.be.instanceOf(ReturnVersionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReturnVersionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.returnRequirements).to.be.an.array()
-        expect(result.returnRequirements[0]).to.be.an.instanceOf(ReturnRequirementModel)
-        expect(result.returnRequirements).to.include(testReturnRequirements[0])
-        expect(result.returnRequirements).to.include(testReturnRequirements[1])
+        expect(result.returnRequirements).toBeInstanceOf(Array)
+        expect(result.returnRequirements[0]).toBeInstanceOf(ReturnRequirementModel)
+        expect(result.returnRequirements).toContainEqual(testReturnRequirements[0])
+        expect(result.returnRequirements).toContainEqual(testReturnRequirements[1])
       })
     })
 
@@ -141,17 +132,17 @@ describe('Return Version model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReturnVersionModel.query().innerJoinRelated('user')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the user', async () => {
         const result = await ReturnVersionModel.query().findById(testRecord.id).withGraphFetched('user')
 
-        expect(result).to.be.instanceOf(ReturnVersionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReturnVersionModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.user).to.be.an.instanceOf(UserModel)
-        expect(result.user).to.equal(testUser, { skip })
+        expect(result.user).toBeInstanceOf(UserModel)
+        expect(result.user).toMatchObject({ ...testUser, password: expect.any(String) })
       })
     })
   })
@@ -183,7 +174,7 @@ describe('Return Version model', () => {
       it('returns the return version "created at" time stamp', () => {
         const result = fetchedRecord.$createdAt()
 
-        expect(result).to.equal(createdAtTestRecord.createdAt)
+        expect(result).toEqual(createdAtTestRecord.createdAt)
       })
     })
 
@@ -213,7 +204,7 @@ describe('Return Version model', () => {
       it('returns the first mod log NALD date', () => {
         const result = fetchedRecord.$createdAt()
 
-        expect(result).to.equal(new Date('2012-06-01'))
+        expect(result).toEqual(new Date('2012-06-01'))
       })
     })
   })
@@ -248,7 +239,7 @@ describe('Return Version model', () => {
         it('returns the WRLS user name', () => {
           const result = fetchedRecord.$createdBy()
 
-          expect(result).to.equal(testUser.username)
+          expect(result).toEqual(testUser.username)
         })
       })
 
@@ -262,7 +253,7 @@ describe('Return Version model', () => {
         it('still returns the WRLS user name', () => {
           const result = fetchedRecord.$createdBy()
 
-          expect(result).to.equal(testUser.username)
+          expect(result).toEqual(testUser.username)
         })
       })
     })
@@ -280,7 +271,7 @@ describe('Return Version model', () => {
         it('returns null', () => {
           const result = fetchedRecord.$createdBy()
 
-          expect(result).to.be.null()
+          expect(result).toBeNull()
         })
       })
 
@@ -310,7 +301,7 @@ describe('Return Version model', () => {
         it('returns the first mod log NALD user ID', () => {
           const result = fetchedRecord.$createdBy()
 
-          expect(result).to.equal('FIRST')
+          expect(result).toEqual('FIRST')
         })
       })
     })
@@ -344,8 +335,8 @@ describe('Return Version model', () => {
         it('returns an empty array', () => {
           const result = fetchedRecord.$notes()
 
-          expect(result).to.be.an.array()
-          expect(result).to.be.empty()
+          expect(result).toBeInstanceOf(Array)
+          expect(result).toHaveLength(0)
         })
       })
 
@@ -359,7 +350,7 @@ describe('Return Version model', () => {
         it('returns an array containing just the single note', () => {
           const result = fetchedRecord.$notes()
 
-          expect(result).to.equal(['Top site bore hole'])
+          expect(result).toEqual(['Top site bore hole'])
         })
       })
     })
@@ -396,8 +387,8 @@ describe('Return Version model', () => {
           it('returns an empty array', () => {
             const result = fetchedRecord.$notes()
 
-            expect(result).to.be.an.array()
-            expect(result).to.be.empty()
+            expect(result).toBeInstanceOf(Array)
+            expect(result).toHaveLength(0)
           })
         })
 
@@ -427,7 +418,7 @@ describe('Return Version model', () => {
           it('returns an array containing just the notes from the mod logs with them', () => {
             const result = fetchedRecord.$notes()
 
-            expect(result).to.equal(['Transfer per app 12-DEF'])
+            expect(result).toEqual(['Transfer per app 12-DEF'])
           })
         })
       })
@@ -461,7 +452,7 @@ describe('Return Version model', () => {
           it('returns all the notes in one array, mod log first and return version last', () => {
             const result = fetchedRecord.$notes()
 
-            expect(result).to.equal(['New Licence per app 9-ABC', 'Transfer per app 12-DEF', 'Top site bore hole'])
+            expect(result).toEqual(['New Licence per app 9-ABC', 'Transfer per app 12-DEF', 'Top site bore hole'])
           })
         })
       })
@@ -522,7 +513,7 @@ describe('Return Version model', () => {
           it('returns the mapped reason description', () => {
             const result = fetchedRecord.$reason()
 
-            expect(result).to.equal('Major change')
+            expect(result).toEqual('Major change')
           })
         })
       })
@@ -557,7 +548,7 @@ describe('Return Version model', () => {
             it('returns the NALD reason description', () => {
               const result = fetchedRecord.$reason()
 
-              expect(result).to.equal('New licence')
+              expect(result).toEqual('New licence')
             })
           })
 
@@ -585,7 +576,7 @@ describe('Return Version model', () => {
             it('returns the unknown reason', () => {
               const result = fetchedRecord.$reason()
 
-              expect(result).to.equal('unknown-reason')
+              expect(result).toEqual('unknown-reason')
             })
           })
         })
@@ -605,7 +596,7 @@ describe('Return Version model', () => {
         it('returns null', () => {
           const result = fetchedRecord.$reason()
 
-          expect(result).to.be.null()
+          expect(result).toBeNull()
         })
       })
 
@@ -634,7 +625,7 @@ describe('Return Version model', () => {
           it('returns the NALD reason description', () => {
             const result = fetchedRecord.$reason()
 
-            expect(result).to.equal('New licence')
+            expect(result).toEqual('New licence')
           })
         })
 
@@ -662,7 +653,7 @@ describe('Return Version model', () => {
           it('returns null', () => {
             const result = fetchedRecord.$reason()
 
-            expect(result).to.be.null()
+            expect(result).toBeNull()
           })
         })
       })

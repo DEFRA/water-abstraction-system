@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const EventHelper = require('../support/helpers/event.helper.js')
 const NotificationHelper = require('../support/helpers/notification.helper.js')
@@ -19,7 +12,7 @@ describe('Event model', () => {
   let testNotifications
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     testRecord = await EventHelper.add()
 
     testNotifications = []
@@ -32,7 +25,7 @@ describe('Event model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const notification of testNotifications) {
       await notification.$query().delete()
     }
@@ -44,8 +37,8 @@ describe('Event model', () => {
     it('can successfully run a basic query', async () => {
       const result = await EventModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(EventModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(EventModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -54,19 +47,19 @@ describe('Event model', () => {
       it('can successfully run a related query', async () => {
         const query = await EventModel.query().innerJoinRelated('notifications')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the notifications', async () => {
         const result = await EventModel.query().findById(testRecord.id).withGraphFetched('notifications')
 
-        expect(result).to.be.instanceOf(EventModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(EventModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.notifications).to.be.an.array()
-        expect(result.notifications[0]).to.be.an.instanceOf(NotificationModel)
-        expect(result.notifications).to.include(testNotifications[0])
-        expect(result.notifications).to.include(testNotifications[1])
+        expect(result.notifications).toBeInstanceOf(Array)
+        expect(result.notifications[0]).toBeInstanceOf(NotificationModel)
+        expect(result.notifications).toContainEqual(testNotifications[0])
+        expect(result.notifications).toContainEqual(testNotifications[1])
       })
     })
   })

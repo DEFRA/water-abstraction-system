@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ChangeReasonHelper = require('../support/helpers/change-reason.helper.js')
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
@@ -21,7 +14,7 @@ describe('Change Reason model', () => {
   let testChargeVersions
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     testRecord = ChangeReasonHelper.select(CHANGE_REASON_SUCCESSION_REMAINDER_INDEX)
 
     // Link charge versions
@@ -33,7 +26,7 @@ describe('Change Reason model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const chargeVersion of testChargeVersions) {
       await chargeVersion.$query().delete()
     }
@@ -43,8 +36,8 @@ describe('Change Reason model', () => {
     it('can successfully run a basic query', async () => {
       const result = await ChangeReasonModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(ChangeReasonModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(ChangeReasonModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -53,19 +46,19 @@ describe('Change Reason model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChangeReasonModel.query().innerJoinRelated('chargeVersions')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge versions', async () => {
         const result = await ChangeReasonModel.query().findById(testRecord.id).withGraphFetched('chargeVersions')
 
-        expect(result).to.be.instanceOf(ChangeReasonModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ChangeReasonModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.chargeVersions).to.be.an.array()
-        expect(result.chargeVersions[0]).to.be.an.instanceOf(ChargeVersionModel)
-        expect(result.chargeVersions).to.include(testChargeVersions[0])
-        expect(result.chargeVersions).to.include(testChargeVersions[1])
+        expect(result.chargeVersions).toBeInstanceOf(Array)
+        expect(result.chargeVersions[0]).toBeInstanceOf(ChargeVersionModel)
+        expect(result.chargeVersions).toContainEqual(testChargeVersions[0])
+        expect(result.chargeVersions).toContainEqual(testChargeVersions[1])
       })
     })
   })

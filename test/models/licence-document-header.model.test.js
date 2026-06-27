@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceEntityRoleHelper = require('../support/helpers/licence-entity-role.helper.js')
 const LicenceEntityRoleModel = require('../../app/models/licence-entity-role.model.js')
@@ -22,7 +15,7 @@ describe('Licence Document Header model', () => {
   let testLicence
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     testLicenceEntityRole = await LicenceEntityRoleHelper.add()
     testLicence = await LicenceHelper.add()
 
@@ -32,7 +25,7 @@ describe('Licence Document Header model', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testLicenceEntityRole.$query().delete()
     await testLicence.$query().delete()
 
@@ -43,8 +36,8 @@ describe('Licence Document Header model', () => {
     it('can successfully run a basic query', async () => {
       const result = await LicenceDocumentHeaderModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(LicenceDocumentHeaderModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(LicenceDocumentHeaderModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -53,17 +46,17 @@ describe('Licence Document Header model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceDocumentHeaderModel.query().innerJoinRelated('licence')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence', async () => {
         const result = await LicenceDocumentHeaderModel.query().findById(testRecord.id).withGraphFetched('licence')
 
-        expect(result).to.be.instanceOf(LicenceDocumentHeaderModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceDocumentHeaderModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licence).to.be.an.instanceOf(LicenceModel)
-        expect(result.licence).to.equal(testLicence)
+        expect(result.licence).toBeInstanceOf(LicenceModel)
+        expect(result.licence).toEqual(testLicence)
       })
     })
 
@@ -71,7 +64,7 @@ describe('Licence Document Header model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceDocumentHeaderModel.query().innerJoinRelated('licenceEntityRoles')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence entity roles', async () => {
@@ -79,13 +72,13 @@ describe('Licence Document Header model', () => {
           .findById(testRecord.id)
           .withGraphFetched('licenceEntityRoles')
 
-        expect(result).to.be.instanceOf(LicenceDocumentHeaderModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceDocumentHeaderModel)
+        expect(result.id).toEqual(testRecord.id)
 
         const [licenceEntityRole] = result.licenceEntityRoles
 
-        expect(licenceEntityRole).to.be.an.instanceOf(LicenceEntityRoleModel)
-        expect(licenceEntityRole).to.equal(testLicenceEntityRole)
+        expect(licenceEntityRole).toBeInstanceOf(LicenceEntityRoleModel)
+        expect(licenceEntityRole).toEqual(testLicenceEntityRole)
       })
     })
   })

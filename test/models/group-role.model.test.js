@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupModel = require('../../app/models/group.model.js')
@@ -26,7 +19,7 @@ describe('Group Role model', () => {
   let testRecord
   let testRole
 
-  before(async () => {
+  beforeAll(async () => {
     testRecord = GroupRoleHelper.select(GROUP_ROLE_BILLING_DATA_INDEX)
 
     testGroup = GroupHelper.select(GROUP_BILLING_DATA_INDEX)
@@ -37,8 +30,8 @@ describe('Group Role model', () => {
     it('can successfully run a basic query', async () => {
       const result = await GroupRoleModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(GroupRoleModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(GroupRoleModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -47,17 +40,17 @@ describe('Group Role model', () => {
       it('can successfully run a related query', async () => {
         const query = await GroupRoleModel.query().innerJoinRelated('role')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the role', async () => {
         const result = await GroupRoleModel.query().findById(testRecord.id).withGraphFetched('role')
 
-        expect(result).to.be.instanceOf(GroupRoleModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(GroupRoleModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.role).to.be.an.instanceOf(RoleModel)
-        expect(result.role).to.equal(testRole, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.role).toBeInstanceOf(RoleModel)
+        expect(result.role).toMatchObject(testRole)
       })
     })
 
@@ -65,17 +58,17 @@ describe('Group Role model', () => {
       it('can successfully run a related query', async () => {
         const query = await GroupRoleModel.query().innerJoinRelated('group')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the group', async () => {
         const result = await GroupRoleModel.query().findById(testRecord.id).withGraphFetched('group')
 
-        expect(result).to.be.instanceOf(GroupRoleModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(GroupRoleModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.group).to.be.an.instanceOf(GroupModel)
-        expect(result.group).to.equal(testGroup, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.group).toBeInstanceOf(GroupModel)
+        expect(result.group).toMatchObject(testGroup)
       })
     })
   })

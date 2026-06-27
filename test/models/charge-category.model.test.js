@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ChargeCategoryHelper = require('../support/helpers/charge-category.helper.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
@@ -19,7 +12,7 @@ describe('Charge Category model', () => {
   let testChargeReferences
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     testRecord = ChargeCategoryHelper.select()
 
     // Link charge references
@@ -34,7 +27,7 @@ describe('Charge Category model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const chargeReference of testChargeReferences) {
       await chargeReference.$query().delete()
     }
@@ -44,8 +37,8 @@ describe('Charge Category model', () => {
     it('can successfully run a basic query', async () => {
       const result = await ChargeCategoryModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(ChargeCategoryModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(ChargeCategoryModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -54,19 +47,19 @@ describe('Charge Category model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeCategoryModel.query().innerJoinRelated('chargeReferences')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge references', async () => {
         const result = await ChargeCategoryModel.query().findById(testRecord.id).withGraphFetched('chargeReferences')
 
-        expect(result).to.be.instanceOf(ChargeCategoryModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ChargeCategoryModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.chargeReferences).to.be.an.array()
-        expect(result.chargeReferences[0]).to.be.an.instanceOf(ChargeReferenceModel)
-        expect(result.chargeReferences).to.include(testChargeReferences[0])
-        expect(result.chargeReferences).to.include(testChargeReferences[1])
+        expect(result.chargeReferences).toBeInstanceOf(Array)
+        expect(result.chargeReferences[0]).toBeInstanceOf(ChargeReferenceModel)
+        expect(result.chargeReferences).toContainEqual(testChargeReferences[0])
+        expect(result.chargeReferences).toContainEqual(testChargeReferences[1])
       })
     })
   })
