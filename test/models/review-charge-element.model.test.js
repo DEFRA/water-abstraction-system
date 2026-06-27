@@ -12,6 +12,7 @@ const ChargeElementHelper = require('../support/helpers/charge-element.helper.js
 const ChargeElementModel = require('../../app/models/charge-element.model.js')
 const ReviewChargeElementHelper = require('../support/helpers/review-charge-element.helper.js')
 const ReviewChargeElementReturnHelper = require('../support/helpers/review-charge-element-return.helper.js')
+const ReviewChargeElementReturnModel = require('../../app/models/review-charge-element-return.model.js')
 const ReviewChargeReferenceHelper = require('../support/helpers/review-charge-reference.helper.js')
 const ReviewChargeReferenceModel = require('../../app/models/review-charge-reference.model.js')
 const ReviewReturnHelper = require('../support/helpers/review-return.helper.js')
@@ -92,6 +93,28 @@ describe('Review Charge Element model', () => {
 
         expect(result.chargeElement).to.be.an.instanceOf(ChargeElementModel)
         expect(result.chargeElement).to.equal(testChargeElement)
+      })
+    })
+
+    describe('when linking to review charge element returns', () => {
+      it('can successfully run a related query', async () => {
+        const query = await ReviewChargeElementModel.query().innerJoinRelated('reviewChargeElementReturns')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the review charge element returns', async () => {
+        const result = await ReviewChargeElementModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('reviewChargeElementReturns')
+
+        expect(result).to.be.instanceOf(ReviewChargeElementModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.reviewChargeElementReturns).to.be.an.array()
+        expect(result.reviewChargeElementReturns[0]).to.be.an.instanceOf(ReviewChargeElementReturnModel)
+        expect(result.reviewChargeElementReturns).to.include(testReviewChargeElementReturns[0])
+        expect(result.reviewChargeElementReturns).to.include(testReviewChargeElementReturns[1])
       })
     })
 
