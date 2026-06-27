@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -25,19 +25,27 @@ describe('Licence Document model', () => {
   before(async () => {
     // Link to licence
     testLicence = await LicenceHelper.add()
-    const { licenceRef } = testLicence
 
     // Test record
-    testRecord = await LicenceDocumentHelper.add({ licenceRef })
-    const { id: licenceDocumentId } = testRecord
+    testRecord = await LicenceDocumentHelper.add({ licenceRef: testLicence.licenceRef })
 
     // Link to licence document roles
     testLicenceDocumentRoles = []
     for (let i = 0; i < 2; i++) {
-      const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ licenceDocumentId })
+      const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ licenceDocumentId: testRecord.id })
 
       testLicenceDocumentRoles.push(licenceDocumentRole)
     }
+  })
+
+  after(async () => {
+    await testLicence.$query().delete()
+
+    for (const licenceDocumentRole of testLicenceDocumentRoles) {
+      await licenceDocumentRole.$query().delete()
+    }
+
+    await testRecord.$query().delete()
   })
 
   describe('Basic query', () => {

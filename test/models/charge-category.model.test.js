@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -21,14 +21,22 @@ describe('Charge Category model', () => {
 
   before(async () => {
     testRecord = ChargeCategoryHelper.select()
-    const { id } = testRecord
 
     // Link charge references
     testChargeReferences = []
     for (let i = 0; i < 2; i++) {
-      const chargeReference = await ChargeReferenceHelper.add({ description: `CE ${i}`, chargeCategoryId: id })
+      const chargeReference = await ChargeReferenceHelper.add({
+        description: `CE ${i}`,
+        chargeCategoryId: testRecord.id
+      })
 
       testChargeReferences.push(chargeReference)
+    }
+  })
+
+  after(async () => {
+    for (const chargeReference of testChargeReferences) {
+      await chargeReference.$query().delete()
     }
   })
 

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -28,6 +28,12 @@ describe('Licence Unregistration model', () => {
     testLicence = await LicenceHelper.add()
     testUser = UserHelper.select()
     testRecord = await LicenceUnregistrationHelper.add({ createdBy: testUser.id, licenceId: testLicence.id })
+  })
+
+  after(async () => {
+    await testLicence.$query().delete()
+
+    await testRecord.$query().delete()
   })
 
   describe('Basic query', () => {

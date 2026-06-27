@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -40,18 +40,19 @@ describe('Charge Reference model', () => {
   before(async () => {
     // Link purpose
     testPurpose = PurposeHelper.select()
-    const { id: purposeId } = testPurpose
 
     // Link charge version
     testChargeVersion = await ChargeVersionHelper.add()
-    const { id: chargeVersionId } = testChargeVersion
 
     // Link charge category
     testChargeCategory = ChargeCategoryHelper.select()
-    const { id: chargeCategoryId } = testChargeCategory
 
     // Test record
-    testRecord = await ChargeReferenceHelper.add({ chargeCategoryId, chargeVersionId, purposeId })
+    testRecord = await ChargeReferenceHelper.add({
+      chargeCategoryId: testChargeCategory.id,
+      chargeVersionId: testChargeVersion.id,
+      purposeId: testPurpose.id
+    })
     const { id } = testRecord
 
     // Link bill run volumes
@@ -85,6 +86,28 @@ describe('Charge Reference model', () => {
 
       testTransactions.push(transaction)
     }
+  })
+
+  after(async () => {
+    await testChargeVersion.$query().delete()
+
+    for (const billRunVolume of testBillRunVolumes) {
+      await billRunVolume.$query().delete()
+    }
+
+    for (const chargeElement of testChargeElements) {
+      await chargeElement.$query().delete()
+    }
+
+    for (const reviewChargeReference of testReviewChargeReferences) {
+      await reviewChargeReference.$query().delete()
+    }
+
+    for (const transaction of testTransactions) {
+      await transaction.$query().delete()
+    }
+
+    await testRecord.$query().delete()
   })
 
   describe('Basic query', () => {

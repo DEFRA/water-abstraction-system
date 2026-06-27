@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -27,6 +27,12 @@ describe('Source model', () => {
       const point = await PointHelper.add({ sourceId: testRecord.id })
 
       testPoints.push(point)
+    }
+  })
+
+  after(async () => {
+    for (const point of testPoints) {
+      await point.$query().delete()
     }
   })
 

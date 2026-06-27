@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -24,6 +24,7 @@ describe('Review Return model', () => {
   let testRecord
   let testReturnLog
   let testReviewChargeElements
+  let testReviewChargeElementReturns
   let testReviewLicence
 
   before(async () => {
@@ -33,16 +34,34 @@ describe('Review Return model', () => {
     testRecord = await ReviewReturnHelper.add({ returnLogId: testReturnLog.id, reviewLicenceId: testReviewLicence.id })
 
     testReviewChargeElements = []
+    testReviewChargeElementReturns = []
     for (let i = 0; i < 2; i++) {
       const testReviewChargeElement = await ReviewChargeElementHelper.add()
 
       testReviewChargeElements.push(testReviewChargeElement)
 
-      await ReviewChargeElementReturnHelper.add({
+      const reviewChargeElementReturn = await ReviewChargeElementReturnHelper.add({
         reviewReturnId: testRecord.id,
         reviewChargeElementId: testReviewChargeElement.id
       })
+
+      testReviewChargeElementReturns.push(reviewChargeElementReturn)
     }
+  })
+
+  after(async () => {
+    await testReturnLog.$query().delete()
+    await testReviewLicence.$query().delete()
+
+    for (const reviewChargeElement of testReviewChargeElements) {
+      await reviewChargeElement.$query().delete()
+    }
+
+    for (const reviewChargeElementReturn of testReviewChargeElementReturns) {
+      await reviewChargeElementReturn.$query().delete()
+    }
+
+    await testRecord.$query().delete()
   })
 
   describe('Basic query', () => {

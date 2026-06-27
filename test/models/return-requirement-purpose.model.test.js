@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -40,6 +40,12 @@ describe('Return Requirement Purpose model', () => {
       returnRequirementId: testReturnRequirement.id,
       secondaryPurposeId: testSecondaryPurpose.id
     })
+  })
+
+  after(async () => {
+    await testReturnRequirement.$query().delete()
+
+    await testRecord.$query().delete()
   })
 
   describe('Basic query', () => {

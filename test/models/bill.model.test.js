@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -28,14 +28,12 @@ describe('Bill model', () => {
   before(async () => {
     // Link bill runs
     testBillRun = await BillRunHelper.add()
-    const { id: billRunId } = testBillRun
 
     // Link billing accounts
     testBillingAccount = await BillingAccountHelper.add()
-    const { id: billingAccountId } = testBillingAccount
 
     // Test record
-    testRecord = await BillHelper.add({ billingAccountId, billRunId })
+    testRecord = await BillHelper.add({ billingAccountId: testBillingAccount.id, billRunId: testBillRun.id })
     const { id } = testRecord
 
     // Link bill licences
@@ -45,6 +43,17 @@ describe('Bill model', () => {
 
       testBillLicences.push(billLicence)
     }
+  })
+
+  after(async () => {
+    await testBillRun.$query().delete()
+    await testBillingAccount.$query().delete()
+
+    for (const billLicence of testBillLicences) {
+      await billLicence.$query().delete()
+    }
+
+    await testRecord.$query().delete()
   })
 
   describe('Basic query', () => {

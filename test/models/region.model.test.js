@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -50,6 +50,20 @@ describe('Region model', () => {
       })
 
       testLicences.push(licence)
+    }
+  })
+
+  after(async () => {
+    for (const billRun of testBillRuns) {
+      await billRun.$query().delete()
+    }
+
+    for (const company of testCompanies) {
+      await company.$query().delete()
+    }
+
+    for (const licence of testLicences) {
+      await licence.$query().delete()
     }
   })
 

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -25,6 +25,12 @@ describe('Licence End Date Change model', () => {
 
     // Test record
     testRecord = await LicenceEndDateChangeHelper.add({ licenceId: testLicence.id })
+  })
+
+  after(async () => {
+    await testLicence.$query().delete()
+
+    await testRecord.$query().delete()
   })
 
   describe('Basic query', () => {

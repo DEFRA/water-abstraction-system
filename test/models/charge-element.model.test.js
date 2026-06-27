@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -28,14 +28,12 @@ describe('Charge Element model', () => {
   before(async () => {
     // Link charge reference
     testChargeReference = await ChargeReferenceHelper.add()
-    const { id: chargeReferenceId } = testChargeReference
 
     // Link purpose
     testPurpose = PurposeHelper.select()
-    const { id: purposeId } = testPurpose
 
     // Test record
-    testRecord = await ChargeElementHelper.add({ chargeReferenceId, purposeId })
+    testRecord = await ChargeElementHelper.add({ chargeReferenceId: testChargeReference.id, purposeId: testPurpose.id })
 
     // Link review charge elements
     testReviewChargeElements = []
@@ -44,6 +42,16 @@ describe('Charge Element model', () => {
 
       testReviewChargeElements.push(reviewChargeElement)
     }
+  })
+
+  after(async () => {
+    await testChargeReference.$query().delete()
+
+    for (const reviewChargeElement of testReviewChargeElements) {
+      await reviewChargeElement.$query().delete()
+    }
+
+    await testRecord.$query().delete()
   })
 
   describe('Basic query', () => {
