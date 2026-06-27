@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_FOUND, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
@@ -31,7 +26,7 @@ describe('Bill Runs controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -98,10 +93,10 @@ describe('Bill Runs controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Bill runs (page 2 of 30)')
-          expect(response.payload).to.contain('Previous')
-          expect(response.payload).to.contain('Next')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Bill runs (page 2 of 30)')
+          expect(response.payload).toContain('Previous')
+          expect(response.payload).toContain('Next')
         })
       })
     })
@@ -119,8 +114,8 @@ describe('Bill Runs controller', () => {
         it('redirects to the bill runs page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal('/system/bill-runs')
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual('/system/bill-runs')
         })
       })
 
@@ -135,9 +130,9 @@ describe('Bill Runs controller', () => {
           it('re-renders the bill runs page with an error', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('There is a problem')
-            expect(response.payload).to.contain('Bill runs')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('There is a problem')
+            expect(response.payload).toContain('Bill runs')
           })
         })
       })
@@ -159,10 +154,10 @@ describe('Bill Runs controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('2 Annual bills')
-            expect(response.payload).to.contain('1 water company')
-            expect(response.payload).to.contain('1 other abstractor')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('2 Annual bills')
+            expect(response.payload).toContain('1 water company')
+            expect(response.payload).toContain('1 other abstractor')
           })
         })
 
@@ -174,11 +169,11 @@ describe('Bill Runs controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('1 Annual bill')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('1 Annual bill')
             // NOTE: If we only have 1 bill group we show a single table with no caption
-            expect(response.payload).not.to.contain('1 water company')
-            expect(response.payload).not.to.contain('1 other abstractor')
+            expect(response.payload).not.toContain('1 water company')
+            expect(response.payload).not.toContain('1 other abstractor')
           })
         })
       })
@@ -203,9 +198,9 @@ describe('Bill Runs controller', () => {
         it('returns a 200 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('You&#39;re about to cancel this bill run')
-          expect(response.payload).to.contain('Two-part tariff')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('You&#39;re about to cancel this bill run')
+          expect(response.payload).toContain('Two-part tariff')
         })
       })
     })
@@ -223,8 +218,8 @@ describe('Bill Runs controller', () => {
         it('redirects to the bill runs page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal('/system/bill-runs')
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual('/system/bill-runs')
         })
       })
 
@@ -240,8 +235,8 @@ describe('Bill Runs controller', () => {
           it('returns the error page', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Sorry, there is a problem with the service')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Sorry, there is a problem with the service')
           })
         })
       })
@@ -266,9 +261,9 @@ describe('Bill Runs controller', () => {
         it('returns a 200 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('You&#39;re about to send this bill run')
-          expect(response.payload).to.contain('Two-part tariff')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('You&#39;re about to send this bill run')
+          expect(response.payload).toContain('Two-part tariff')
         })
       })
     })
@@ -286,8 +281,8 @@ describe('Bill Runs controller', () => {
         it('redirects to the legacy processing bill run page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal('/billing/batch/97db1a27-8308-4aba-b463-8a6af2558b28/processing')
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual('/billing/batch/97db1a27-8308-4aba-b463-8a6af2558b28/processing')
         })
       })
 
@@ -303,8 +298,8 @@ describe('Bill Runs controller', () => {
           it('returns the error page', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Sorry, there is a problem with the service')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Sorry, there is a problem with the service')
           })
         })
       })
@@ -325,8 +320,8 @@ describe('Bill Runs controller', () => {
         it('redirects to the bill runs page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal('/system/bill-runs')
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual('/system/bill-runs')
         })
       })
 
@@ -342,8 +337,8 @@ describe('Bill Runs controller', () => {
           it('returns the error page', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Sorry, there is a problem with the service')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Sorry, there is a problem with the service')
           })
         })
       })

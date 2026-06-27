@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
@@ -59,7 +54,7 @@ describe('Return Logs - Setup - Controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -88,8 +83,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('redirects to the returned page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/check`)
         })
       })
     })
@@ -126,9 +121,9 @@ describe('Return Logs - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Return 10032788 received')
-          expect(response.payload).to.contain('View returns for 01/117')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Return 10032788 received')
+          expect(response.payload).toContain('View returns for 01/117')
         })
       })
     })
@@ -148,8 +143,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('redirects to the licence returns page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal('/system/licences/91aff99a-3204-4727-86bd-7bdf3ef24533/returns')
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual('/system/licences/91aff99a-3204-4727-86bd-7bdf3ef24533/returns')
         })
       })
     })
@@ -172,8 +167,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('redirects to the "guidance" page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Help to enter multiple volumes or readings into a return')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Help to enter multiple volumes or readings into a return')
         })
       })
     })
@@ -193,8 +188,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('You are about to cancel this return submission')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('You are about to cancel this return submission')
         })
       })
     })
@@ -210,8 +205,8 @@ describe('Return Logs - Setup - Controller', () => {
             _postOptions(path, { returnLogId: '4ddbac0e-a176-420a-8176-4ce410327641' })
           )
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal('/system/return-logs/4ddbac0e-a176-420a-8176-4ce410327641/details')
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual('/system/return-logs/4ddbac0e-a176-420a-8176-4ce410327641/details')
         })
       })
     })
@@ -231,8 +226,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Check details and enter new volumes or readings')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Check details and enter new volumes or readings')
         })
       })
     })
@@ -246,8 +241,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('redirects to the confirmed page on success', async () => {
           const response = await server.inject(_postOptions(path, {}))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(
             '/system/return-logs/setup/confirmed/168026d8-f29b-4165-8726-734c6b14adec'
           )
         })
@@ -267,10 +262,10 @@ describe('Return Logs - Setup - Controller', () => {
         it('re-renders the page with an error message', async () => {
           const response = await server.inject(_postOptions(path, {}))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Check details and enter new volumes or readings')
-          expect(response.payload).to.contain('There is a problem')
-          expect(response.payload).to.contain(
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Check details and enter new volumes or readings')
+          expect(response.payload).toContain('There is a problem')
+          expect(response.payload).toContain(
             'Returns with an abstraction volume of 0 should be recorded as a nil return.'
           )
         })
@@ -294,8 +289,8 @@ describe('Return Logs - Setup - Controller', () => {
       it('redirects on success', async () => {
         const result = await server.inject(_getOptions(path))
 
-        expect(result.statusCode).to.equal(HTTP_STATUS_FOUND)
-        expect(result.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+        expect(result.statusCode).toEqual(HTTP_STATUS_FOUND)
+        expect(result.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/check`)
       })
     })
   })
@@ -316,8 +311,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Have meter details been provided?')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Have meter details been provided?')
         })
       })
     })
@@ -332,8 +327,8 @@ describe('Return Logs - Setup - Controller', () => {
           it('redirects to the "meter details" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/meter-details`)
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/meter-details`)
           })
         })
 
@@ -346,8 +341,8 @@ describe('Return Logs - Setup - Controller', () => {
             it('redirects to the "single volume" page', async () => {
               const response = await server.inject(_postOptions(path, {}))
 
-              expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-              expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/single-volume`)
+              expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+              expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/single-volume`)
             })
           })
 
@@ -359,8 +354,8 @@ describe('Return Logs - Setup - Controller', () => {
             it('redirects to the "check" page', async () => {
               const response = await server.inject(_postOptions(path, {}))
 
-              expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-              expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+              expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+              expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/check`)
             })
           })
 
@@ -372,8 +367,8 @@ describe('Return Logs - Setup - Controller', () => {
             it('redirects to the "check" page', async () => {
               const response = await server.inject(_postOptions(path, {}))
 
-              expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-              expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+              expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+              expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/check`)
             })
           })
         })
@@ -394,9 +389,9 @@ describe('Return Logs - Setup - Controller', () => {
         it('re-renders the page with an error message', async () => {
           const response = await server.inject(_postOptions(path, {}))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select if meter details have been provided')
-          expect(response.payload).to.contain('There is a problem')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select if meter details have been provided')
+          expect(response.payload).toContain('There is a problem')
         })
       })
     })
@@ -419,8 +414,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Meter details')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Meter details')
         })
       })
     })
@@ -439,8 +434,8 @@ describe('Return Logs - Setup - Controller', () => {
           it('redirects to the "check" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/check`)
           })
         })
 
@@ -457,8 +452,8 @@ describe('Return Logs - Setup - Controller', () => {
           it('redirects to the "check" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/check`)
           })
         })
 
@@ -475,8 +470,8 @@ describe('Return Logs - Setup - Controller', () => {
           it('redirects to the "single-volume" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/single-volume`)
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/single-volume`)
           })
         })
 
@@ -495,9 +490,9 @@ describe('Return Logs - Setup - Controller', () => {
           it('re-renders the page with an error message', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Enter the make of the meter')
-            expect(response.payload).to.contain('There is a problem')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Enter the make of the meter')
+            expect(response.payload).toContain('There is a problem')
           })
         })
       })
@@ -522,8 +517,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Enter multiple daily volumes')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Enter multiple daily volumes')
         })
       })
     })
@@ -537,8 +532,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('redirects to the "check" page', async () => {
           const response = await server.inject(_postOptions(path, {}))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/check`)
         })
       })
 
@@ -555,9 +550,9 @@ describe('Return Logs - Setup - Controller', () => {
           it('re-renders the page with an error message', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Enter 12 daily volumes')
-            expect(response.payload).to.contain('There is a problem')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Enter 12 daily volumes')
+            expect(response.payload).toContain('There is a problem')
           })
         })
       })
@@ -581,8 +576,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Add a note')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Add a note')
         })
       })
     })
@@ -596,8 +591,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('redirects to the "check" page', async () => {
           const response = await server.inject(_postOptions(path, { journey: 'selectedOption' }))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/check`)
         })
       })
 
@@ -610,8 +605,8 @@ describe('Return Logs - Setup - Controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('There is a problem')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('There is a problem')
           })
         })
       })
@@ -636,8 +631,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('What period was used for this volume?')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('What period was used for this volume?')
         })
       })
     })
@@ -651,8 +646,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('redirects to the "check" page', async () => {
           const response = await server.inject(_postOptions(path, {}))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/check`)
         })
       })
 
@@ -671,9 +666,9 @@ describe('Return Logs - Setup - Controller', () => {
         it('re-renders the page with an error message', async () => {
           const response = await server.inject(_postOptions(path, {}))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select what period was used for this volume')
-          expect(response.payload).to.contain('There is a problem')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select what period was used for this volume')
+          expect(response.payload).toContain('There is a problem')
         })
       })
     })
@@ -691,8 +686,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Water abstracted April 2023')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Water abstracted April 2023')
         })
       })
     })
@@ -707,8 +702,8 @@ describe('Return Logs - Setup - Controller', () => {
           it('redirects to the "check" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/check`)
           })
         })
 
@@ -733,10 +728,10 @@ describe('Return Logs - Setup - Controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Water abstracted April 2023')
-            expect(response.payload).to.contain('There is a problem')
-            expect(response.payload).to.contain('Reading must be a number or blank')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Water abstracted April 2023')
+            expect(response.payload).toContain('There is a problem')
+            expect(response.payload).toContain('Reading must be a number or blank')
           })
         })
       })
@@ -759,8 +754,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('When was the return received?')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('When was the return received?')
         })
       })
     })
@@ -775,8 +770,8 @@ describe('Return Logs - Setup - Controller', () => {
           it('redirects to the "submission" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/submission`)
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/submission`)
           })
         })
 
@@ -788,8 +783,8 @@ describe('Return Logs - Setup - Controller', () => {
           it('redirects to the "check" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/check`)
           })
         })
 
@@ -813,9 +808,9 @@ describe('Return Logs - Setup - Controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Select the return received date')
-            expect(response.payload).to.contain('There is a problem')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Select the return received date')
+            expect(response.payload).toContain('There is a problem')
           })
         })
       })
@@ -838,8 +833,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('How was this return reported?')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('How was this return reported?')
         })
       })
     })
@@ -855,8 +850,8 @@ describe('Return Logs - Setup - Controller', () => {
             it('redirects to the "start-reading" page', async () => {
               const response = await server.inject(_postOptions(path, {}))
 
-              expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-              expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/start-reading`)
+              expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+              expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/start-reading`)
             })
           })
 
@@ -868,8 +863,8 @@ describe('Return Logs - Setup - Controller', () => {
             it('redirects to the "units" page', async () => {
               const response = await server.inject(_postOptions(path, {}))
 
-              expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-              expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/units`)
+              expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+              expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/units`)
             })
           })
         })
@@ -883,8 +878,8 @@ describe('Return Logs - Setup - Controller', () => {
             it('redirects to the "start-reading" page', async () => {
               const response = await server.inject(_postOptions(path, {}))
 
-              expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-              expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/start-reading`)
+              expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+              expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/start-reading`)
             })
           })
 
@@ -899,8 +894,8 @@ describe('Return Logs - Setup - Controller', () => {
             it('redirects to the "check" page', async () => {
               const response = await server.inject(_postOptions(path, {}))
 
-              expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-              expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+              expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+              expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/check`)
             })
           })
         })
@@ -920,9 +915,9 @@ describe('Return Logs - Setup - Controller', () => {
           it('re-renders the page with an error message', async () => {
             const response = await server.inject(_postOptions(path))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Select how this return was reported')
-            expect(response.payload).to.contain('There is a problem')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Select how this return was reported')
+            expect(response.payload).toContain('There is a problem')
           })
         })
       })
@@ -941,8 +936,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Abstraction return')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Abstraction return')
         })
       })
     })
@@ -957,8 +952,8 @@ describe('Return Logs - Setup - Controller', () => {
           it('redirects to the "reported" page', async () => {
             const response = await server.inject(_postOptions(path, { journey: 'enterReturn' }))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/reported`)
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/reported`)
           })
         })
 
@@ -970,8 +965,8 @@ describe('Return Logs - Setup - Controller', () => {
           it('redirects to the "check" page', async () => {
             const response = await server.inject(_postOptions(path, { journey: 'nilReturn' }))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/check`)
           })
         })
 
@@ -986,8 +981,8 @@ describe('Return Logs - Setup - Controller', () => {
           it('redirects to the "confirmed" page', async () => {
             const response = await server.inject(_postOptions(path, { journey: 'recordReceipt' }))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(
               '/system/return-logs/setup/confirmed/fb875afa-de26-44d3-9255-370020cceb3b'
             )
           })
@@ -1001,8 +996,8 @@ describe('Return Logs - Setup - Controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('There is a problem')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('There is a problem')
           })
         })
       })
@@ -1026,8 +1021,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Is it a single volume?')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Is it a single volume?')
         })
       })
     })
@@ -1045,8 +1040,8 @@ describe('Return Logs - Setup - Controller', () => {
           it('redirects to the "period used" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/period-used`)
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/period-used`)
           })
         })
 
@@ -1060,8 +1055,8 @@ describe('Return Logs - Setup - Controller', () => {
           it('redirects to the "check answers" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/check`)
           })
         })
       })
@@ -1083,9 +1078,9 @@ describe('Return Logs - Setup - Controller', () => {
         it('re-renders the page with an error message', async () => {
           const response = await server.inject(_postOptions(path))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('SINGLE_VOLUME_ERROR')
-          expect(response.payload).to.contain('There is a problem')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('SINGLE_VOLUME_ERROR')
+          expect(response.payload).toContain('There is a problem')
         })
       })
     })
@@ -1108,8 +1103,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Enter the start meter reading')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Enter the start meter reading')
         })
       })
     })
@@ -1124,8 +1119,8 @@ describe('Return Logs - Setup - Controller', () => {
           it('redirects to the "units" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/units`)
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/units`)
           })
         })
 
@@ -1137,8 +1132,8 @@ describe('Return Logs - Setup - Controller', () => {
           it('redirects to the "check" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/check`)
           })
         })
       })
@@ -1157,9 +1152,9 @@ describe('Return Logs - Setup - Controller', () => {
         it('re-renders the page with an error message', async () => {
           const response = await server.inject(_postOptions(path))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Enter a start meter reading')
-          expect(response.payload).to.contain('There is a problem')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Enter a start meter reading')
+          expect(response.payload).toContain('There is a problem')
         })
       })
     })
@@ -1181,8 +1176,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Which units were used?')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Which units were used?')
         })
       })
     })
@@ -1197,8 +1192,8 @@ describe('Return Logs - Setup - Controller', () => {
           it('redirects to the "meter provided" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/meter-provided`)
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/meter-provided`)
           })
         })
 
@@ -1210,8 +1205,8 @@ describe('Return Logs - Setup - Controller', () => {
           it('redirects to the "check" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/check`)
           })
         })
 
@@ -1230,9 +1225,9 @@ describe('Return Logs - Setup - Controller', () => {
           it('re-renders the page with an error message', async () => {
             const response = await server.inject(_postOptions(path))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Select which units were used')
-            expect(response.payload).to.contain('There is a problem')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Select which units were used')
+            expect(response.payload).toContain('There is a problem')
           })
         })
       })
@@ -1251,8 +1246,8 @@ describe('Return Logs - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Water abstracted April 2023')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Water abstracted April 2023')
         })
       })
     })
@@ -1267,8 +1262,8 @@ describe('Return Logs - Setup - Controller', () => {
           it('redirects to the "check" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(`/system/return-logs/setup/${sessionId}/check`)
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(`/system/return-logs/setup/${sessionId}/check`)
           })
         })
 
@@ -1291,10 +1286,10 @@ describe('Return Logs - Setup - Controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path))
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Water abstracted April 2023')
-            expect(response.payload).to.contain('There is a problem')
-            expect(response.payload).to.contain('Volume must be a number or blank')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Water abstracted April 2023')
+            expect(response.payload).toContain('There is a problem')
+            expect(response.payload).toContain('Volume must be a number or blank')
           })
         })
       })

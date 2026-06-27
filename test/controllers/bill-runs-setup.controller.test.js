@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
@@ -34,7 +29,7 @@ describe('Bill Runs Setup controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -69,8 +64,8 @@ describe('Bill Runs Setup controller', () => {
         it('redirects to select bill run type page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/bill-runs/setup/${session.id}/type`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/bill-runs/setup/${session.id}/type`)
         })
       })
     })
@@ -105,9 +100,9 @@ describe('Bill Runs Setup controller', () => {
           it('returns the "check" page displaying the existing bill run', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('This bill run already exists')
-            expect(response.payload).to.contain('c0608545-9870-4605-a407-5ff49f8a5182')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('This bill run already exists')
+            expect(response.payload).toContain('c0608545-9870-4605-a407-5ff49f8a5182')
           })
         })
 
@@ -133,8 +128,8 @@ describe('Bill Runs Setup controller', () => {
           it('returns the "check" page displaying the bill run to be created', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Check the bill run to be created')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Check the bill run to be created')
           })
         })
       })
@@ -150,8 +145,8 @@ describe('Bill Runs Setup controller', () => {
         it('redirects to the bill runs page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal('/system/bill-runs')
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual('/system/bill-runs')
         })
       })
 
@@ -180,9 +175,9 @@ describe('Bill Runs Setup controller', () => {
         it('re-renders the "check" page displaying the existing bill run', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('This bill run already exists')
-          expect(response.payload).to.contain('c0608545-9870-4605-a407-5ff49f8a5182')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('This bill run already exists')
+          expect(response.payload).toContain('c0608545-9870-4605-a407-5ff49f8a5182')
         })
       })
     })
@@ -203,8 +198,8 @@ describe('Bill Runs Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain(
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain(
             'There are no licences marked for two-part tariff supplementary billing in the Test region'
           )
         })
@@ -232,8 +227,8 @@ describe('Bill Runs Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select the region')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select the region')
         })
       })
     })
@@ -252,8 +247,8 @@ describe('Bill Runs Setup controller', () => {
           it('redirects to the "check" page', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(
               '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/check'
             )
           })
@@ -267,8 +262,8 @@ describe('Bill Runs Setup controller', () => {
           it('redirects to the "select financial year" page', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(
               '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/year'
             )
           })
@@ -291,9 +286,9 @@ describe('Bill Runs Setup controller', () => {
         it('re-renders the page with an error message', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select a region')
-          expect(response.payload).to.contain('There is a problem')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select a region')
+          expect(response.payload).toContain('There is a problem')
         })
       })
     })
@@ -315,8 +310,8 @@ describe('Bill Runs Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select the season')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select the season')
         })
       })
     })
@@ -332,8 +327,8 @@ describe('Bill Runs Setup controller', () => {
         it('redirects to the "check" page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(
             '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/check'
           )
         })
@@ -354,9 +349,9 @@ describe('Bill Runs Setup controller', () => {
         it('re-renders the page with an error message', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select the season')
-          expect(response.payload).to.contain('There is a problem')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select the season')
+          expect(response.payload).toContain('There is a problem')
         })
       })
     })
@@ -378,8 +373,8 @@ describe('Bill Runs Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select the bill run type')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select the bill run type')
         })
       })
     })
@@ -395,8 +390,8 @@ describe('Bill Runs Setup controller', () => {
         it('redirects to select a region page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(
             '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/region'
           )
         })
@@ -417,9 +412,9 @@ describe('Bill Runs Setup controller', () => {
         it('re-renders the page with an error message', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select the bill run type')
-          expect(response.payload).to.contain('There is a problem')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select the bill run type')
+          expect(response.payload).toContain('There is a problem')
         })
       })
     })
@@ -450,8 +445,8 @@ describe('Bill Runs Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select the financial year')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select the financial year')
         })
       })
 
@@ -467,8 +462,8 @@ describe('Bill Runs Setup controller', () => {
         it('redirects to the no licences endpoint', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(
             '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/no-licences'
           )
         })
@@ -489,8 +484,8 @@ describe('Bill Runs Setup controller', () => {
           it('redirects to the "check"', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(
               '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/check'
             )
           })
@@ -504,8 +499,8 @@ describe('Bill Runs Setup controller', () => {
           it('redirects to the select season', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual(
               '/system/bill-runs/setup/e009b394-8405-4358-86af-1a9eb31298a5/season'
             )
           })
@@ -527,9 +522,9 @@ describe('Bill Runs Setup controller', () => {
         it('re-renders the page with an error message', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select a financial year')
-          expect(response.payload).to.contain('There is a problem')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select a financial year')
+          expect(response.payload).toContain('There is a problem')
         })
       })
     })

@@ -3,12 +3,7 @@
 const { HTTP_STATUS_OK } = require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const ViewManageService = require('../../app/services/manage/view-manage.service.js')
@@ -20,7 +15,7 @@ describe('Manage controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -49,8 +44,8 @@ describe('Manage controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions())
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Manage reports and notices')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Manage reports and notices')
         })
       })
     })

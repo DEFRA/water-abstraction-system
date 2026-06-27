@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { afterEach, before, beforeEach, describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
@@ -47,7 +42,7 @@ describe('Users Setup controller', () => {
   let userId
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -80,8 +75,8 @@ describe('Users Setup controller', () => {
       it('initiates a session and redirects to the "Select the licences to unlink" page', async () => {
         const response = await server.inject(postOptions)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-        expect(response.headers.location).to.equal(`/system/users/external/setup/${sessionId}/licences`)
+        expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+        expect(response.headers.location).toEqual(`/system/users/external/setup/${sessionId}/licences`)
       })
     })
   })
@@ -100,8 +95,8 @@ describe('Users Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('You are about to cancel unregistering these licences')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('You are about to cancel unregistering these licences')
         })
       })
     })
@@ -123,8 +118,8 @@ describe('Users Setup controller', () => {
         it('redirects to the Users page', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/users/external/${userId}/licences?back=users`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/users/external/${userId}/licences?back=users`)
         })
       })
     })
@@ -144,8 +139,8 @@ describe('Users Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Check licences to unregister')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Check licences to unregister')
         })
       })
     })
@@ -167,8 +162,8 @@ describe('Users Setup controller', () => {
         it('redirects to the Users page', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/users/external/${userId}/licences?back=users`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/users/external/${userId}/licences?back=users`)
         })
       })
     })
@@ -188,8 +183,8 @@ describe('Users Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select licences to unregister')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select licences to unregister')
         })
       })
     })
@@ -211,8 +206,8 @@ describe('Users Setup controller', () => {
         it('redirects to the Users page', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/users/external/setup/${sessionId}/check`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/users/external/setup/${sessionId}/check`)
         })
       })
     })
@@ -231,8 +226,8 @@ describe('Users Setup controller', () => {
       it('initiates a session and redirects to the "Enter an email address for the user" page', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-        expect(response.headers.location).to.equal(`/system/users/internal/setup/${id}/email`)
+        expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+        expect(response.headers.location).toEqual(`/system/users/internal/setup/${id}/email`)
       })
     })
   })
@@ -261,8 +256,8 @@ describe('Users Setup controller', () => {
       it('initiates a session with the users data and redirects to the "Check user" page', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-        expect(response.headers.location).to.equal(`/system/users/internal/setup/${id}/check`)
+        expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+        expect(response.headers.location).toEqual(`/system/users/internal/setup/${id}/check`)
       })
     })
   })
@@ -281,8 +276,8 @@ describe('Users Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select access for the user')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select access for the user')
         })
       })
     })
@@ -302,8 +297,8 @@ describe('Users Setup controller', () => {
         it('redirects to the Check page', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/users/internal/setup/${sessionId}/check`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/users/internal/setup/${sessionId}/check`)
         })
       })
 
@@ -320,8 +315,8 @@ describe('Users Setup controller', () => {
         it('re-renders the page with an error message', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select access for the user')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select access for the user')
         })
       })
     })
@@ -341,8 +336,8 @@ describe('Users Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('You are about to cancel this user')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('You are about to cancel this user')
         })
       })
     })
@@ -362,8 +357,8 @@ describe('Users Setup controller', () => {
         it('redirects to the Users page', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal('/system/users')
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual('/system/users')
         })
       })
     })
@@ -383,8 +378,8 @@ describe('Users Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Check user')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Check user')
         })
       })
     })
@@ -404,8 +399,8 @@ describe('Users Setup controller', () => {
         it('redirects to the Users page', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal('/system/users')
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual('/system/users')
         })
       })
     })
@@ -425,8 +420,8 @@ describe('Users Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Enter an email address for the user')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Enter an email address for the user')
         })
       })
     })
@@ -446,8 +441,8 @@ describe('Users Setup controller', () => {
         it('redirects to the Select permissions for the user page', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/users/internal/setup/${sessionId}/permissions`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/users/internal/setup/${sessionId}/permissions`)
         })
       })
 
@@ -464,9 +459,9 @@ describe('Users Setup controller', () => {
         it('re-renders the page with an error message', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Enter a gov.uk email address, like name@environment-agency.gov.uk')
-          expect(response.payload).to.contain('Enter an email address for the user')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Enter a gov.uk email address, like name@environment-agency.gov.uk')
+          expect(response.payload).toContain('Enter an email address for the user')
         })
       })
     })
@@ -486,8 +481,8 @@ describe('Users Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select permissions for the user')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select permissions for the user')
         })
       })
     })
@@ -507,8 +502,8 @@ describe('Users Setup controller', () => {
         it('redirects to the Check page', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/users/internal/setup/${sessionId}/check`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/users/internal/setup/${sessionId}/check`)
         })
       })
 
@@ -525,9 +520,9 @@ describe('Users Setup controller', () => {
         it('re-renders the page with an error message', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select a permission')
-          expect(response.payload).to.contain('Select permissions for the user')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select a permission')
+          expect(response.payload).toContain('Select permissions for the user')
         })
       })
     })

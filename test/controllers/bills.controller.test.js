@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_FOUND, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
@@ -28,7 +23,7 @@ describe('Bills controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -67,9 +62,9 @@ describe('Bills controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Bill for Mr B Blobby')
-            expect(response.payload).to.contain('2 licences')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Bill for Mr B Blobby')
+            expect(response.payload).toContain('2 licences')
           })
         })
 
@@ -81,10 +76,10 @@ describe('Bills controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Bill for Mr B Blobby')
-            expect(response.payload).to.contain('2 transactions')
-            expect(response.payload).to.contain('Current')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Bill for Mr B Blobby')
+            expect(response.payload).toContain('2 transactions')
+            expect(response.payload).toContain('Current')
           })
         })
 
@@ -96,10 +91,10 @@ describe('Bills controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Bill for Mr B Blobby')
-            expect(response.payload).to.contain('2 transactions')
-            expect(response.payload).to.contain('Old')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Bill for Mr B Blobby')
+            expect(response.payload).toContain('2 transactions')
+            expect(response.payload).toContain('Old')
           })
         })
       })
@@ -127,8 +122,8 @@ describe('Bills controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('about to remove the bill for T65757520A from the bill run')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('about to remove the bill for T65757520A from the bill run')
         })
       })
     })
@@ -148,8 +143,8 @@ describe('Bills controller', () => {
         it('redirects to the legacy processing bill run page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal('/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing')
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual('/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing')
         })
       })
 
@@ -165,8 +160,8 @@ describe('Bills controller', () => {
           it('returns the error page', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Sorry, there is a problem with the service')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Sorry, there is a problem with the service')
           })
         })
       })

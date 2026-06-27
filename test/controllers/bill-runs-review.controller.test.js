@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
@@ -37,7 +32,7 @@ describe('Bill Runs Review controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -119,9 +114,9 @@ describe('Bill Runs Review controller', () => {
           it('returns a 200 response', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Southern (Test Replica) two-part tariff')
-            expect(response.payload).to.contain('Showing all 2 licences')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Southern (Test Replica) two-part tariff')
+            expect(response.payload).toContain('Showing all 2 licences')
           })
         })
 
@@ -133,9 +128,9 @@ describe('Bill Runs Review controller', () => {
           it('returns a 200 response', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Southern (Test Replica) two-part tariff')
-            expect(response.payload).to.contain('Showing all 2 licences')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Southern (Test Replica) two-part tariff')
+            expect(response.payload).toContain('Showing all 2 licences')
           })
         })
       })
@@ -152,8 +147,8 @@ describe('Bill Runs Review controller', () => {
         it('redirects to the review licences page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal('/system/bill-runs/review/97db1a27-8308-4aba-b463-8a6af2558b28')
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual('/system/bill-runs/review/97db1a27-8308-4aba-b463-8a6af2558b28')
         })
       })
     })
@@ -202,10 +197,10 @@ describe('Bill Runs Review controller', () => {
         it('returns a 200 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Spray Irrigation - Direct')
-          expect(response.payload).to.contain('Element 1 of 1')
-          expect(response.payload).to.contain('Matched returns')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Spray Irrigation - Direct')
+          expect(response.payload).toContain('Element 1 of 1')
+          expect(response.payload).toContain('Matched returns')
         })
       })
     })
@@ -239,10 +234,10 @@ describe('Bill Runs Review controller', () => {
         it('returns a 200 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Set the billable returns quantity for this bill run')
-          expect(response.payload).to.contain('Spray Irrigation - Direct')
-          expect(response.payload).to.contain('Billable returns')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Set the billable returns quantity for this bill run')
+          expect(response.payload).toContain('Spray Irrigation - Direct')
+          expect(response.payload).toContain('Billable returns')
         })
       })
     })
@@ -260,8 +255,8 @@ describe('Bill Runs Review controller', () => {
         it('redirects to the Review charge element page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(
             '/system/bill-runs/review/charge-element/a1840523-a04c-4c64-bff7-4a515e8ba1c1/1'
           )
         })
@@ -291,10 +286,10 @@ describe('Bill Runs Review controller', () => {
         it('re-renders the page with an error message', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Set the billable returns quantity for this bill ru')
-          expect(response.payload).to.contain('There is a problem')
-          expect(response.payload).to.contain('Select the billable quantity')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Set the billable returns quantity for this bill ru')
+          expect(response.payload).toContain('There is a problem')
+          expect(response.payload).toContain('Select the billable quantity')
         })
       })
     })
@@ -328,12 +323,12 @@ describe('Bill Runs Review controller', () => {
         it('returns a 200 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Charge reference 4.6.5')
-          expect(response.payload).to.contain(
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Charge reference 4.6.5')
+          expect(response.payload).toContain(
             'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model'
           )
-          expect(response.payload).to.contain('Reference details')
+          expect(response.payload).toContain('Reference details')
         })
       })
     })
@@ -365,12 +360,12 @@ describe('Bill Runs Review controller', () => {
         it('returns a 200 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Set the authorised volume')
-          expect(response.payload).to.contain(
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Set the authorised volume')
+          expect(response.payload).toContain(
             'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model'
           )
-          expect(response.payload).to.contain('Total billable returns')
+          expect(response.payload).toContain('Total billable returns')
         })
       })
     })
@@ -388,8 +383,8 @@ describe('Bill Runs Review controller', () => {
         it('redirects to the Review charge reference page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(
             '/system/bill-runs/review/charge-reference/7c09753d-f606-4deb-a929-4bc8aa7acb8d'
           )
         })
@@ -412,10 +407,10 @@ describe('Bill Runs Review controller', () => {
         it('re-renders the page with an error message', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Set the authorised volume')
-          expect(response.payload).to.contain('There is a problem')
-          expect(response.payload).to.contain('The authorised volume must be a number')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Set the authorised volume')
+          expect(response.payload).toContain('There is a problem')
+          expect(response.payload).toContain('The authorised volume must be a number')
         })
       })
     })
@@ -448,9 +443,9 @@ describe('Bill Runs Review controller', () => {
         it('returns a 200 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Set the adjustment factors')
-          expect(response.payload).to.contain(
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Set the adjustment factors')
+          expect(response.payload).toContain(
             'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model'
           )
         })
@@ -470,8 +465,8 @@ describe('Bill Runs Review controller', () => {
         it('redirects to the Review charge reference page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(
             '/system/bill-runs/review/charge-reference/7c09753d-f606-4deb-a929-4bc8aa7acb8d'
           )
         })
@@ -498,10 +493,10 @@ describe('Bill Runs Review controller', () => {
         it('re-renders the page with an error message', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Set the adjustment factors')
-          expect(response.payload).to.contain('There is a problem')
-          expect(response.payload).to.contain('The aggregate factor must be a number')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Set the adjustment factors')
+          expect(response.payload).toContain('There is a problem')
+          expect(response.payload).toContain('The aggregate factor must be a number')
         })
       })
     })
@@ -523,8 +518,8 @@ describe('Bill Runs Review controller', () => {
         it('redirects to the Review charge reference page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(
             '/system/bill-runs/review/charge-reference/7c09753d-f606-4deb-a929-4bc8aa7acb8d'
           )
         })
@@ -614,11 +609,11 @@ describe('Bill Runs Review controller', () => {
         it('returns a 200 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Licence 13/43/028/S/045')
-          expect(response.payload).to.contain('/system/return-logs/e63573be-d66e-4c89-9af3-b292d744a28e')
-          expect(response.payload).to.contain('two-part tariff')
-          expect(response.payload).to.contain('Test Road. Points 1 and 2.')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Licence 13/43/028/S/045')
+          expect(response.payload).toContain('/system/return-logs/e63573be-d66e-4c89-9af3-b292d744a28e')
+          expect(response.payload).toContain('two-part tariff')
+          expect(response.payload).toContain('Test Road. Points 1 and 2.')
         })
       })
     })
@@ -632,8 +627,8 @@ describe('Bill Runs Review controller', () => {
         it('redirects to the Review licence page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(
             '/system/bill-runs/review/licence/deaffa60-6488-4e54-a402-485d43aca1af'
           )
         })
@@ -666,8 +661,8 @@ describe('Bill Runs Review controller', () => {
         it('returns a 200 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('You&#39;re about to remove 01/123/ABC from the bill run')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('You&#39;re about to remove 01/123/ABC from the bill run')
         })
       })
     })
@@ -691,8 +686,8 @@ describe('Bill Runs Review controller', () => {
           it('redirects to the Review bill run page', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal('/system/bill-runs/review/97db1a27-8308-4aba-b463-8a6af2558b28')
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual('/system/bill-runs/review/97db1a27-8308-4aba-b463-8a6af2558b28')
           })
         })
       })
@@ -711,8 +706,8 @@ describe('Bill Runs Review controller', () => {
           it('redirects to the Bill runs page', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal('/system/bill-runs')
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual('/system/bill-runs')
           })
         })
       })

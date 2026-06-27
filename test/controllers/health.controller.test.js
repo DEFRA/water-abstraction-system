@@ -3,12 +3,7 @@
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const DatabaseHealthCheckService = require('../../app/services/health/database-health-check.service.js')
@@ -22,7 +17,7 @@ describe('Health controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -48,13 +43,13 @@ describe('Health controller', () => {
     it('returns a 500 error', async () => {
       const response = await server.inject(options)
 
-      expect(response.statusCode).to.equal(HTTP_STATUS_INTERNAL_SERVER_ERROR)
+      expect(response.statusCode).toEqual(HTTP_STATUS_INTERNAL_SERVER_ERROR)
     })
 
     it('causes Airbrake to send a notification', async () => {
       await server.inject(options)
 
-      expect(airbrakeStub.called).to.equal(true)
+      expect(airbrakeStub.called).toEqual(true)
     })
   })
 
@@ -72,7 +67,7 @@ describe('Health controller', () => {
       it('returns stats about each table', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
       })
     })
   })
@@ -102,7 +97,7 @@ describe('Health controller', () => {
       it('returns stats about each table', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
       })
     })
   })

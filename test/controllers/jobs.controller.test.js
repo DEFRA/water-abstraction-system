@@ -3,12 +3,7 @@
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const ExportService = require('../../app/services/jobs/export/export.service.js')
@@ -28,7 +23,7 @@ describe('Jobs controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -59,7 +54,7 @@ describe('Jobs controller', () => {
         it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
+          expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
         })
       })
     })
@@ -79,7 +74,7 @@ describe('Jobs controller', () => {
         it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
+          expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
         })
       })
     })
@@ -99,7 +94,7 @@ describe('Jobs controller', () => {
         it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
+          expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
         })
       })
     })
@@ -119,7 +114,7 @@ describe('Jobs controller', () => {
         it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
+          expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
         })
       })
     })
@@ -139,7 +134,7 @@ describe('Jobs controller', () => {
         it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
+          expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
         })
       })
     })
@@ -159,7 +154,7 @@ describe('Jobs controller', () => {
         it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
+          expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
         })
       })
     })
@@ -179,13 +174,13 @@ describe('Jobs controller', () => {
         it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
+          expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
         })
 
         it('calls the "ProcessRenewalInvitationsService"', async () => {
           await server.inject(options)
 
-          expect(ProcessRenewalInvitationsService.go.called).to.be.true()
+          expect(ProcessRenewalInvitationsService.go.called).toBe(true)
         })
       })
     })
@@ -206,7 +201,7 @@ describe('Jobs controller', () => {
           it('returns a 204 response', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
+            expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
           })
         })
       })
@@ -226,7 +221,7 @@ describe('Jobs controller', () => {
           it('returns a 204 response', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
+            expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
           })
         })
       })
@@ -241,7 +236,7 @@ describe('Jobs controller', () => {
         it('returns a 404 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
+          expect(response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
         })
       })
     })

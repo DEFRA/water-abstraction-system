@@ -3,12 +3,7 @@
 const { HTTP_STATUS_OK } = require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const ViewReturnSubmissionService = require('../../app/services/return-submissions/view-return-submission.service.js')
@@ -21,7 +16,7 @@ describe('Return Submissions controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -59,16 +54,16 @@ describe('Return Submissions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Return Submission')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Return Submission')
         })
 
         it('passes the parameters to the service', async () => {
           await server.inject(options)
 
           const calls = ViewReturnSubmissionService.go.firstCall
-          expect(calls.args).to.contain('d1f4826a-a8b1-479a-ac25-07b491ebcddd')
-          expect(calls.args).to.contain('2025-02')
+          expect(calls.args).toContain('d1f4826a-a8b1-479a-ac25-07b491ebcddd')
+          expect(calls.args).toContain('2025-02')
         })
       })
     })

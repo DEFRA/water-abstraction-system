@@ -3,12 +3,7 @@
 const { HTTP_STATUS_OK, HTTP_STATUS_FOUND } = require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 const { generateUUID } = require('../../app/lib/general.lib.js')
 
@@ -42,7 +37,7 @@ describe('Company Contacts Setup controller', () => {
   let sessionId
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -81,8 +76,8 @@ describe('Company Contacts Setup controller', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-        expect(response.headers.location).to.equal(`/system/company-contacts/setup/${id}/contact-name`)
+        expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+        expect(response.headers.location).toEqual(`/system/company-contacts/setup/${id}/contact-name`)
       })
     })
   })
@@ -109,8 +104,8 @@ describe('Company Contacts Setup controller', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-        expect(response.headers.location).to.equal(`/system/company-contacts/setup/${id}/check`)
+        expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+        expect(response.headers.location).toEqual(`/system/company-contacts/setup/${id}/check`)
       })
     })
   })
@@ -133,8 +128,8 @@ describe('Company Contacts Setup controller', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Abstraction alerts')
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain('Abstraction alerts')
       })
     })
 
@@ -154,8 +149,8 @@ describe('Company Contacts Setup controller', () => {
       it('redirects to companies contacts setup check page', async () => {
         const response = await server.inject(postOptions)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-        expect(response.headers.location).to.equal(`/system/company-contacts/setup/${sessionId}/check`)
+        expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+        expect(response.headers.location).toEqual(`/system/company-contacts/setup/${sessionId}/check`)
       })
     })
   })
@@ -178,8 +173,8 @@ describe('Company Contacts Setup controller', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Cancel')
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain('Cancel')
       })
     })
 
@@ -199,8 +194,8 @@ describe('Company Contacts Setup controller', () => {
       it('redirects to companies contacts setup contact email page', async () => {
         const response = await server.inject(postOptions)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-        expect(response.headers.location).to.equal(`/system/companies/${companyId}/contacts`)
+        expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+        expect(response.headers.location).toEqual(`/system/companies/${companyId}/contacts`)
       })
     })
   })
@@ -223,8 +218,8 @@ describe('Company Contacts Setup controller', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Check')
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain('Check')
       })
     })
 
@@ -244,8 +239,8 @@ describe('Company Contacts Setup controller', () => {
       it('redirects to companies contacts setup contact email page', async () => {
         const response = await server.inject(postOptions)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-        expect(response.headers.location).to.equal(`/system/companies/${companyId}/contacts`)
+        expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+        expect(response.headers.location).toEqual(`/system/companies/${companyId}/contacts`)
       })
     })
   })
@@ -268,8 +263,8 @@ describe('Company Contacts Setup controller', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Contact name')
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain('Contact name')
       })
     })
 
@@ -287,8 +282,8 @@ describe('Company Contacts Setup controller', () => {
       it('redirects to companies contacts setup contact email page', async () => {
         const response = await server.inject(postOptions)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-        expect(response.headers.location).to.equal(`/system/company-contacts/setup/${sessionId}/contact-email`)
+        expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+        expect(response.headers.location).toEqual(`/system/company-contacts/setup/${sessionId}/contact-email`)
       })
     })
   })
@@ -311,8 +306,8 @@ describe('Company Contacts Setup controller', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Contact email')
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain('Contact email')
       })
     })
 
@@ -332,8 +327,8 @@ describe('Company Contacts Setup controller', () => {
       it('redirects to companies contacts check page', async () => {
         const response = await server.inject(postOptions)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-        expect(response.headers.location).to.equal(`/system/company-contacts/setup/${sessionId}/abstraction-alerts`)
+        expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+        expect(response.headers.location).toEqual(`/system/company-contacts/setup/${sessionId}/abstraction-alerts`)
       })
     })
   })
@@ -356,8 +351,8 @@ describe('Company Contacts Setup controller', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Licences')
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain('Licences')
       })
     })
 
@@ -375,8 +370,8 @@ describe('Company Contacts Setup controller', () => {
       it('redirects to the company contacts setup check page', async () => {
         const response = await server.inject(postOptions)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-        expect(response.headers.location).to.equal(`/system/company-contacts/setup/${sessionId}/check`)
+        expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+        expect(response.headers.location).toEqual(`/system/company-contacts/setup/${sessionId}/check`)
       })
     })
   })
@@ -399,8 +394,8 @@ describe('Company Contacts Setup controller', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Restore')
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+        expect(response.payload).toContain('Restore')
       })
     })
 
@@ -421,8 +416,8 @@ describe('Company Contacts Setup controller', () => {
       it('redirects to companies contacts check page', async () => {
         const response = await server.inject(postOptions)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-        expect(response.headers.location).to.equal(`/system/companies/${companyId}/contacts`)
+        expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+        expect(response.headers.location).toEqual(`/system/companies/${companyId}/contacts`)
       })
     })
   })

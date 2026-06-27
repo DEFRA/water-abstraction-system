@@ -4,12 +4,7 @@ const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED, HTTP_STATUS_INTERNAL_SERVE
   require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const Boom = require('@hapi/boom')
@@ -32,7 +27,7 @@ describe('Billing Accounts controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -72,8 +67,8 @@ describe('Billing Accounts controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Billing account for Ferns Surfacing Limited')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Billing account for Ferns Surfacing Limited')
           })
         })
       })
@@ -98,8 +93,8 @@ describe('Billing Accounts controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Billing account for Ferns Surfacing Limited')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Billing account for Ferns Surfacing Limited')
           })
         })
       })
@@ -124,8 +119,8 @@ describe('Billing Accounts controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Billing account for Ferns Surfacing Limited')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Billing account for Ferns Surfacing Limited')
           })
         })
       })
@@ -162,8 +157,8 @@ describe('Billing Accounts controller', () => {
         const response = await server.inject(options)
         const payload = JSON.parse(response.payload)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_CREATED)
-        expect(payload).to.equal(validResponse)
+        expect(response.statusCode).toEqual(HTTP_STATUS_CREATED)
+        expect(payload).toEqual(validResponse)
       })
     })
 
@@ -183,8 +178,8 @@ describe('Billing Accounts controller', () => {
           const response = await server.inject(options)
           const payload = JSON.parse(response.payload)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_BAD_REQUEST)
-          expect(payload.message).to.equal('"address" is required')
+          expect(response.statusCode).toEqual(HTTP_STATUS_BAD_REQUEST)
+          expect(payload.message).toEqual('"address" is required')
         })
       })
 
@@ -202,8 +197,8 @@ describe('Billing Accounts controller', () => {
           const response = await server.inject(options)
           const payload = JSON.parse(response.payload)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_INTERNAL_SERVER_ERROR)
-          expect(payload.message).to.equal('An internal server error occurred')
+          expect(response.statusCode).toEqual(HTTP_STATUS_INTERNAL_SERVER_ERROR)
+          expect(payload.message).toEqual('An internal server error occurred')
         })
       })
     })
