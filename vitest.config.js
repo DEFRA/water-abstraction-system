@@ -21,6 +21,7 @@ module.exports = {
     },
     environment: 'node',
     globals: true,
+    globalSetup: ['test/global-setup.js'],
     hookTimeout: 60000,
     include: ['test/**/*.test.js'],
     forks: {

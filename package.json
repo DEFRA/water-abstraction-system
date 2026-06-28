@@ -19,10 +19,8 @@
     "rollback:all:test": "NODE_ENV=test knex migrate:rollback --all",
     "seed": "knex seed:run --knexfile knexfile.application.js",
     "lint": "eslint .",
-    "pretest": "NODE_ENV=test node db/clean.js",
     "test": "NODE_ENV=test vitest run",
     "test:ci": "NODE_ENV=test vitest run --coverage",
-    "test:skip": "NODE_ENV=test vitest run",
     "postinstall": "npm run build",
     "version": "npx --yes auto-changelog -p --commit-limit false && git add CHANGELOG.md"
   },
