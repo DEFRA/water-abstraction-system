@@ -27,6 +27,11 @@ module.exports = {
       singleFork: true
     },
     pool: 'forks',
+    sequence: {
+      shuffle: {
+        files: true
+      }
+    },
     testTimeout: 60000
   }
 }
