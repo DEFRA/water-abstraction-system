@@ -6,7 +6,12 @@ const MarkdownFilter = require('../../../app/views/filters/markdown.filter.js')
 describe('Markdown filter', () => {
   let testMarkdown
 
-  beforeAll(() => {
+  beforeAll(async () => {
+    // NOTE: The markdown filter uses globalThis.GlobalMarked which is normally set by the views plugin when the Hapi
+    // server boots. In tests we set it directly to avoid a dependency on the plugin loading.
+    const { marked } = await import('marked')
+
+    globalThis.GlobalMarked = marked
     testMarkdown = _testMarkdown()
   })
 
