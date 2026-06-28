@@ -10,6 +10,7 @@ jobs:
     # You must use a Linux environment when using service containers or container jobs
     runs-on: ubuntu-latest
     env:
+      CI: true
       ADMIN_CLIENT_ID: shortvaluefullofnumbersandlettersinlowercase
       AIRBRAKE_HOST: https://my-errbit-instance.com
       AIRBRAKE_KEY: longvaluefullofnumbersandlettersinlowercase
@@ -137,8 +138,9 @@ jobs:
           npm run migrate:test
 
       - name: Run unit tests
+        timeout-minutes: 5
         run: |
-          npm test
+          npm run test:coverage
 
       - name: Code coverage
         uses: livewing/lcov-job-summary@f61677de6678fb6f860c8d1d35c5b4540b64b1d3 #v1.3.0
