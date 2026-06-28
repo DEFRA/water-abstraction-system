@@ -23,10 +23,8 @@ module.exports = {
     include: ['test/**/*.test.js'],
     hookTimeout: 60000,
     pool: 'forks',
-    poolOptions: {
-      forks: {
-        singleFork: true
-      }
+    forks: {
+      singleFork: true
     },
     testTimeout: 60000
   }
