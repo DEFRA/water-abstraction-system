@@ -23,6 +23,7 @@ module.exports = {
     globals: true,
     globalSetup: ['test/global-setup.js'],
     hookTimeout: 60000,
+    setupFiles: ['test/setup.js'],
     include: ['test/**/*.test.js'],
     forks: {
       singleFork: true
