@@ -10,9 +10,10 @@ module.exports = {
         'app/plugins/hapi-pino.plugin.js',
         'app/plugins/stop.plugin.js',
         'app/plugins/views.plugin.js',
-        'config/notify.config.js',
+        'config/**',
         'db/seeds/**',
-        'templates/**'
+        'templates/**',
+        'test/**'
       ],
       provider: 'v8',
       reporter: ['lcov'],
@@ -20,8 +21,8 @@ module.exports = {
     },
     environment: 'node',
     globals: true,
-    include: ['test/**/*.test.js'],
     hookTimeout: 60000,
+    include: ['test/**/*.test.js'],
     pool: 'forks',
     forks: {
       singleFork: true
