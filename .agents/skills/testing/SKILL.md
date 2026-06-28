@@ -46,14 +46,6 @@ const SubjectUnderTest = require('../../app/services/subject-under-test.service.
   })
   ```
 
-## Lifecycle hooks
-
-Lab's `before` and `after` hooks are `beforeAll` and `afterAll` in Vitest:
-
-- `beforeAll` — runs once before all tests in the current `describe` scope
-- `afterAll` — runs once after all tests in the current `describe` scope
-- `beforeEach` / `afterEach` — unchanged
-
 ## Sinon
 
 - Always call `Sinon.restore()` in `afterEach` whenever stubs are used
@@ -61,7 +53,8 @@ Lab's `before` and `after` hooks are `beforeAll` and `afterAll` in Vitest:
 
 ## Assertions
 
-Vitest assertions use `.toEqual()`, `.toBe()`, etc. directly on `expect()`:
+- Vitest assertions use `.toEqual()`, `.toBe()`, etc. directly on `expect()`:
+- Never inline computed values directly in `expect()` — assign them to a variable first, then wrap in the array at the assertion. Always leave a blank line between the assignment and the `expect()`:
 
 ```js
 // wrong
@@ -72,26 +65,6 @@ const expectedResult = SomeSeeder.transform(record)
 
 expect(results).toEqual([expectedResult])
 ```
-
-Common assertion mappings from the old `@hapi/code` style:
-
-| Old (`@hapi/code`) | New (Vitest) |
-|---|---|
-| `.to.equal(x)` | `.toEqual(x)` |
-| `.to.be.true()` | `.toBe(true)` |
-| `.to.be.false()` | `.toBe(false)` |
-| `.to.be.null()` | `.toBeNull()` |
-| `.to.be.undefined()` | `.toBeUndefined()` |
-| `.to.exist()` | `.toBeDefined()` |
-| `.to.not.exist()` | `.toBeUndefined()` |
-| `.to.include(x)` / `.to.contain(x)` | `.toContain(x)` |
-| `.to.have.length(n)` | `.toHaveLength(n)` |
-| `.to.be.instanceOf(X)` / `.to.be.an.instanceOf(X)` | `.toBeInstanceOf(X)` |
-| `.to.be.an.array()` | `.toBeInstanceOf(Array)` |
-| `.to.be.an.error()` | `.toBeInstanceOf(Error)` |
-| `.to.be.empty()` | `.toHaveLength(0)` |
-| `await expect(fn).to.reject()` | `await expect(fn).rejects.toThrow()` |
-| `await expect(fn).to.reject(E, 'msg')` | `await expect(fn).rejects.toThrow('msg')` |
 
 For comparing objects while ignoring specific fields (e.g. timestamps), use `.toMatchObject()`:
 
