@@ -22,6 +22,7 @@ module.exports = {
     environment: 'node',
     globals: true,
     globalSetup: ['test/global-setup.js'],
+    globalTeardown: ['test/global-teardown.js'],
     hookTimeout: 60000,
     setupFiles: ['test/setup.js'],
     include: ['test/**/*.test.js'],
