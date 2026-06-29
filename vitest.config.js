@@ -15,7 +15,7 @@ module.exports = {
         'templates/**',
         'test/**'
       ],
-      provider: 'istanbul',
+      provider: 'v8',
       reporter: ['lcov'],
       reportsDirectory: 'coverage'
     },
