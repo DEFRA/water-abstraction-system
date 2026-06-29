@@ -20,7 +20,8 @@ describe('Charging Module Token Cache plugin', () => {
     server = await init()
   })
 
-  afterEach(() => {
+  afterEach(async () => {
+    await server.stop()
     Sinon.restore()
   })
 

@@ -19,7 +19,7 @@ const SessionNotFoundError = require('../../app/errors/session-not-found.error.j
 const GlobalNotifierStub = require('../support/stubs/global-notifier.stub.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Error Pages plugin', () => {
   let handler
@@ -29,7 +29,7 @@ describe('Error Pages plugin', () => {
 
   beforeAll(async () => {
     // Create server before running the tests
-    server = await init()
+    server = await createServer()
 
     notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub

@@ -33,8 +33,9 @@ describe('Notify Token Cache plugin', () => {
     )
   })
 
-  afterEach(() => {
+  afterEach(async () => {
     clock.restore()
+    await server.stop()
     Sinon.restore()
   })
 

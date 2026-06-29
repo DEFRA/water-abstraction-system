@@ -8,7 +8,7 @@ const Sinon = require('sinon')
 const serverConfig = require('../../config/server.config.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Airbrake plugin', () => {
   let originalProxy
@@ -16,7 +16,7 @@ describe('Airbrake plugin', () => {
 
   beforeAll(async () => {
     // Spin up a real Hapi server instance (with all plugins, including Airbrake)
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(() => {

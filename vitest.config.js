@@ -34,7 +34,7 @@ module.exports = {
     // set), hanging the whole run. We deliberately leave `isolate` at its default (true) rather than following the
     // guide's `isolate: false` mapping, so each file still runs in a fresh process and memory stays bounded across
     // the full suite.
-    maxWorkers: 1,
+    maxWorkers: '50%',
     sequence: {
       shuffle: {
         files: true

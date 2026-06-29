@@ -7,9 +7,15 @@ const GlobalNotifierLib = require('../../app/lib/global-notifier.lib.js')
 const { init } = require('../../app/server.js')
 
 describe('Global Notifier plugin', () => {
+  let server
+
   beforeEach(async () => {
     // Create server before each test
-    await init()
+    server = await init()
+  })
+
+  afterEach(async () => {
+    await server.stop()
   })
 
   describe('Global Notifier Plugin', () => {
