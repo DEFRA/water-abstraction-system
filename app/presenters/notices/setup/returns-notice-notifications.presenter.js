@@ -68,7 +68,7 @@ function _email(recipient, noticeId, session) {
     messageType,
     messageRef: MESSAGE_REFS[noticeType][journey],
     personalisation: {
-      licencenumber: recipient.licence_refs[0],
+      licenceNumber: recipient.licence_refs[0],
       periodEndDate: formatLongDate(determinedReturnsPeriod?.endDate),
       periodStartDate: formatLongDate(determinedReturnsPeriod?.startDate),
       returnDueDate: formatLongDate(recipient.notificationDueDate)
@@ -95,7 +95,7 @@ function _letter(recipient, noticeId, session) {
     messageRef: MESSAGE_REFS[noticeType][journey],
     personalisation: {
       ...address,
-      licencenumber: recipient.licence_refs[0],
+      licenceNumber: recipient.licence_refs[0],
       periodEndDate: formatLongDate(determinedReturnsPeriod?.endDate),
       periodStartDate: formatLongDate(determinedReturnsPeriod?.startDate),
       returnDueDate: formatLongDate(recipient.notificationDueDate),
