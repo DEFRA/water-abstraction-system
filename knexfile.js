@@ -38,6 +38,12 @@ const test = {
   connection: {
     ...defaultConnection,
     database: DatabaseConfig.testDatabase
+  },
+  pool: {
+    // Setting min to 0 means no idle connections are pre-created. When a test file that does not use the database
+    // reaches its afterAll teardown and we call db.destroy(), no real PostgreSQL connections are established — only
+    // the tarn reaper is spun up and immediately torn down again.
+    min: 0
   }
 }
 

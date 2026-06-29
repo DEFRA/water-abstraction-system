@@ -14,12 +14,10 @@
  */
 
 afterAll(async () => {
-  // Only destroy the pool if db/db.js was actually imported during this run. Requiring it here when it was never
-  // imported would open a fresh connection just to immediately tear it down.
-  const dbModulePath = require.resolve('../db/db.js')
-
-  if (require.cache[dbModulePath]) {
-    const { db } = require('../db/db.js')
-    await db.destroy()
-  }
+  // Always destroy the Knex pool after each test file. Knex's pool library (tarn) creates a setInterval reaper on
+  // every instance — even idle ones — which keeps the fork process alive after tests complete. db.destroy() is the
+  // only thing that stops it. With pool.min set to 0 in the test knex config, requiring db here when it was never
+  // imported by the test file creates no real connections, so the destroy is cheap.
+  const { db } = require('../db/db.js')
+  await db.destroy()
 })
