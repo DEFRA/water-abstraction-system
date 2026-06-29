@@ -68,7 +68,7 @@
     "tar": "^7.5.7"
   },
   "devDependencies": {
-    "@vitest/coverage-v8": "4.1.9",
+    "@vitest/coverage-istanbul": "4.1.9",
     "eslint": "^9.14.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsdoc": "^62.9.0",
