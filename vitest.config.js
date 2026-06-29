@@ -28,6 +28,7 @@ module.exports = {
     forks: {
       singleFork: true
     },
+    maxWorkers: 2,
     pool: 'forks',
     sequence: {
       shuffle: {
