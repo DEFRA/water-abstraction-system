@@ -14,6 +14,12 @@
  */
 
 afterAll(async () => {
+  // Diagnostic: print a timestamp so we can see which file's teardown is running (or hanging) in the CI log.
+  // Remove once the root cause of the hang is confirmed and fixed.
+  const ts = () => new Date().toISOString()
+
+  process.stderr.write(`[vitest/setup ${ts()}] db.destroy() starting\n`)
+
   // Always destroy the Knex pool after each test file. Knex's pool library (tarn) creates a setInterval reaper on
   // every instance — even idle ones — which keeps the fork process alive after tests complete. db.destroy() is the
   // only thing that stops it. With pool.min set to 0 in the test knex config, requiring db here when it was never
@@ -21,14 +27,13 @@ afterAll(async () => {
   const { db } = require('../db/db.js')
   await db.destroy()
 
-  // Diagnostic: report any handles still alive after teardown. process.stderr is unbuffered so this appears in CI
-  // logs immediately. The last occurrence in the log (just before the step timeout) identifies what is preventing
-  // the fork from exiting. Remove once the root cause is confirmed and fixed.
+  process.stderr.write(`[vitest/setup ${ts()}] db.destroy() complete\n`)
+
   const handles = process._getActiveHandles()
 
   if (handles.length > 0) {
     const names = handles.map((h) => h.constructor?.name ?? String(h)).join(', ')
 
-    process.stderr.write(`[vitest/setup] ${handles.length} open handle(s) after teardown: ${names}\n`)
+    process.stderr.write(`[vitest/setup ${ts()}] ${handles.length} open handle(s) after teardown: ${names}\n`)
   }
 })
