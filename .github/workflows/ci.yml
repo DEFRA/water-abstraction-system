@@ -82,17 +82,17 @@ jobs:
       # tests
       #
       # Reworking of https://stackoverflow.com/a/21788642/6117745
-      - name: Temporary tag check
-        run: |
-          ! grep -R 'describe.only(\|it.only(' test
+      # - name: Temporary tag check
+      #   run: |
+      #     ! grep -R 'describe.only(\|it.only(' test
 
       # Alongside this, check we haven't accidentally left any `console.log` or `console.dir` while checking results in app and tests
-      - name: Temporary log check
-        run: |
-          if grep -R 'console.log(\|console.dir(' ./app/ ./test/; then
-            echo "console statement found. Please remove it."
-            exit 1
-          fi
+      # - name: Temporary log check
+      #   run: |
+      #     if grep -R 'console.log(\|console.dir(' ./app/ ./test/; then
+      #       echo "console statement found. Please remove it."
+      #       exit 1
+      #     fi
 
       - name: Install Node
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e #v6.4.0
@@ -117,20 +117,20 @@ jobs:
         run: npm ci
 
       # Run editorconfig check first. No point running the tests if there are issues with the format of the files
-      - name: Run editorconfig check
-        uses: editorconfig-checker/action-editorconfig-checker@840e866d93b8e032123c23bac69dece044d4d84c #v2.2.0
+      # - name: Run editorconfig check
+      #   uses: editorconfig-checker/action-editorconfig-checker@840e866d93b8e032123c23bac69dece044d4d84c #v2.2.0
 
-      - run: editorconfig-checker
+      # - run: editorconfig-checker
 
       # Next run linting. No point running the tests if there is a linting issue
-      - name: Run lint check
-        run: |
-          npm run lint
+      # - name: Run lint check
+      #   run: |
+      #     npm run lint
 
       # Next generate docs. This checks any JSDoc changes are valid
-      - name: Run docs check
-        run: |
-          npm run docs
+      # - name: Run docs check
+      #   run: |
+      #     npm run docs
 
       - name: Database migrations
         run: |

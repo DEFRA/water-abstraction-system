@@ -20,4 +20,15 @@ afterAll(async () => {
   // imported by the test file creates no real connections, so the destroy is cheap.
   const { db } = require('../db/db.js')
   await db.destroy()
+
+  // Diagnostic: report any handles still alive after teardown. process.stderr is unbuffered so this appears in CI
+  // logs immediately. The last occurrence in the log (just before the step timeout) identifies what is preventing
+  // the fork from exiting. Remove once the root cause is confirmed and fixed.
+  const handles = process._getActiveHandles()
+
+  if (handles.length > 0) {
+    const names = handles.map((h) => h.constructor?.name ?? String(h)).join(', ')
+
+    process.stderr.write(`[vitest/setup] ${handles.length} open handle(s) after teardown: ${names}\n`)
+  }
 })
