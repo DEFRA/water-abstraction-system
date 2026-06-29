@@ -20,7 +20,7 @@
     "seed": "knex seed:run --knexfile knexfile.application.js",
     "lint": "eslint .",
     "test": "NODE_ENV=test vitest run",
-    "test:ci": "NODE_ENV=test vitest run --coverage test/presenters/users/base-users.presenter.test.js",
+    "test:ci": "NODE_ENV=test vitest run --coverage test/presenters/users/base-users.presenter.test.js test/controllers/root.controller.test.js",
     "postinstall": "npm run build",
     "version": "npx --yes auto-changelog -p --commit-limit false && git add CHANGELOG.md"
   },

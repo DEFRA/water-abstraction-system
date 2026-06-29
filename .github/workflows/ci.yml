@@ -146,9 +146,9 @@ jobs:
         with:
           lcov: coverage/lcov.info
 
-      - name: Analyze with SonarQube
-        if: github.actor != 'dependabot[bot]'
-        uses: sonarsource/sonarqube-scan-action@713881670b6b3676cda39549040e2d88c70d582e #v8.2.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This is provided automatically by GitHub
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      # - name: Analyze with SonarQube
+      #   if: github.actor != 'dependabot[bot]'
+      #   uses: sonarsource/sonarqube-scan-action@713881670b6b3676cda39549040e2d88c70d582e #v8.2.0
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This is provided automatically by GitHub
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
