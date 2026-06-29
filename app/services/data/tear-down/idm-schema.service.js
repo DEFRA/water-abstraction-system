@@ -10,14 +10,26 @@ const { db } = require('../../../../db/db.js')
 /**
  * Removes all data created for acceptance tests from the idm schema
  *
+ * @param {string} [userEmail] - specific user email to delete from public.users
  * @returns {Promise<object>}
  */
-async function go() {
-  return _deleteAllTestData()
+async function go(userEmail) {
+  return _deleteAllTestData(userEmail)
 }
 
-async function _deleteAllTestData() {
+async function _deleteAllTestData(userEmail) {
+  const userEmailClause = userEmail ? `OR "username" = '${userEmail}'` : ''
+
   return db.raw(`
+  DELETE
+  FROM
+    "public"."users"
+  WHERE
+    "username" LIKE '%@example.com'
+    OR "username" LIKE '%@e'
+    OR "username" LIKE 'regression.tests%'
+    ${userEmailClause};
+
   DELETE
   FROM
     "idm"."users"

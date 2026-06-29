@@ -36,8 +36,10 @@ async function seed(_request, h) {
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-async function tearDown(_request, h) {
-  await TearDownService.go()
+async function tearDown(request, h) {
+  const { licenceRef, companyName, userEmail } = request.payload ?? {}
+
+  await TearDownService.go(licenceRef, companyName, userEmail)
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }

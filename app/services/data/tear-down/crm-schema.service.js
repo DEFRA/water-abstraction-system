@@ -10,13 +10,27 @@ const { db } = require('../../../../db/db.js')
 /**
  * Removes all data created for acceptance tests from the crm schema
  *
+ * @param {string} companyName
+ * @param {string} licenceRef
  * @returns {Promise<object>}
  */
-async function go() {
-  return _deleteAllTestData()
+async function go(companyName, licenceRef) {
+  return _deleteAllTestData(companyName, licenceRef)
 }
 
-async function _deleteAllTestData() {
+async function _deleteAllTestData(companyName, licenceRef) {
+  const licenceRefs = ['AT/TE/ST/01/01', 'AT/TE/ST/01/02', 'AT/TE/ST/01/03', 'AT/TE/ST/01/04']
+
+  if (licenceRef) {
+    licenceRefs.push(licenceRef)
+  }
+
+  const licenceRefsSQL = licenceRefs
+    .map((ref) => {
+      return `'${ref}'`
+    })
+    .join(', ')
+
   return db.raw(`
   ALTER TABLE crm.document_header DISABLE TRIGGER ALL;
   ALTER TABLE crm_v2.addresses DISABLE TRIGGER ALL;
@@ -51,6 +65,7 @@ async function _deleteAllTestData() {
       "c"."is_test" = TRUE
       OR "c"."name" IN ('Big Farm Co Ltd', 'Test Farm Co Ltd')
       OR "c"."name" LIKE 'Big Farm Co Ltd%'
+      OR "c"."name" = '${companyName}'
     )
     AND "iaa"."invoice_account_id" = "ia"."invoice_account_id"
     AND "ia"."company_id" = "c"."company_id";
@@ -70,6 +85,7 @@ async function _deleteAllTestData() {
       "c"."is_test" = TRUE
       OR "c"."name" IN ('Big Farm Co Ltd', 'Test Farm Co Ltd')
       OR "c"."name" LIKE 'Big Farm Co Ltd%'
+      OR "c"."name" = '${companyName}'
     )
     AND "ia"."company_id" = "c"."company_id";
 
@@ -80,7 +96,8 @@ async function _deleteAllTestData() {
   WHERE
     "cc"."is_test" = TRUE
     OR "c"."name" IN ('Big Farm Co Ltd', 'Test Farm Co Ltd')
-    OR "c"."name" LIKE 'Big Farm Co Ltd%';
+    OR "c"."name" LIKE 'Big Farm Co Ltd%'
+    OR "c"."name" = '${companyName}';
 
   DELETE
   FROM
@@ -88,7 +105,8 @@ async function _deleteAllTestData() {
   WHERE
     "c"."is_test" = TRUE
     OR "c"."name" IN ('Big Farm Co Ltd', 'Test Farm Co Ltd')
-    OR "c"."name" LIKE 'Big Farm Co Ltd%';
+    OR "c"."name" LIKE 'Big Farm Co Ltd%'
+    OR "c"."name" = '${companyName}';
 
   DELETE
   FROM
@@ -107,10 +125,13 @@ async function _deleteAllTestData() {
     "crm_v2"."documents" AS "d"
       USING "crm"."document_header" AS "dh"
   WHERE
-    jsonb_path_query_first(
-      "dh"."metadata",
-      '$.dataType'
-    ) #>> '{}' = 'acceptance-test-setup'
+    (
+      jsonb_path_query_first(
+        "dh"."metadata",
+        '$.dataType'
+      ) #>> '{}' = 'acceptance-test-setup'
+      OR "dh"."system_external_id" IN (${licenceRefsSQL})
+    )
     AND "d"."document_ref" = "dh"."system_external_id";
 
   DELETE
@@ -135,6 +156,7 @@ async function _deleteAllTestData() {
       OR "e"."entity_nm" LIKE 'regression.tests.%'
       OR "e"."entity_nm" LIKE 'Big Farm Co Ltd%'
       OR "e"."entity_nm" LIKE 'Test Farm Co Ltd%'
+      OR "e"."entity_nm" = '${companyName}'
       OR "e"."source" = 'acceptance-test-setup'
     );
 
@@ -148,6 +170,7 @@ async function _deleteAllTestData() {
     OR "entity_nm" LIKE 'regression.tests.%'
     OR "entity_nm" LIKE 'Big Farm Co Ltd%'
     OR "entity_nm" LIKE 'Test Farm Co Ltd%'
+    OR "entity_nm" = '${companyName}'
     OR "source" = 'acceptance-test-setup';
 
   DELETE
@@ -157,7 +180,8 @@ async function _deleteAllTestData() {
     jsonb_path_query_first(
       "metadata",
       '$.dataType'
-    ) #>> '{}' = 'acceptance-test-setup';
+    ) #>> '{}' = 'acceptance-test-setup'
+    OR "system_external_id" IN (${licenceRefsSQL});
 
   ALTER TABLE crm.document_header ENABLE TRIGGER ALL;
   ALTER TABLE crm_v2.addresses ENABLE TRIGGER ALL;

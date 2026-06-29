@@ -10,13 +10,26 @@ const { db } = require('../../../../db/db.js')
 /**
  * Removes all data created for acceptance tests from the water schema
  *
+ * @param {string} licenceRef
  * @returns {Promise<object>}
  */
-async function go() {
-  return _deleteAllTestData()
+async function go(licenceRef) {
+  return _deleteAllTestData(licenceRef)
 }
 
-async function _deleteAllTestData() {
+async function _deleteAllTestData(licenceRef) {
+  const licenceRefs = ['AT/TE/ST/01/01', 'AT/TE/ST/01/02', 'AT/TE/ST/01/03', 'AT/TE/ST/01/04']
+
+  if (licenceRef) {
+    licenceRefs.push(licenceRef)
+  }
+
+  const licenceRefsSQL = licenceRefs
+    .map((ref) => {
+      return `'${ref}'`
+    })
+    .join(', ')
+
   return db.raw(`
   ALTER TABLE water.billing_batch_charge_version_years DISABLE TRIGGER ALL;
   ALTER TABLE water.billing_batches DISABLE TRIGGER ALL;
@@ -32,7 +45,6 @@ async function _deleteAllTestData() {
   ALTER TABLE water.licences DISABLE TRIGGER ALL;
   ALTER TABLE water.licence_supplementary_years DISABLE TRIGGER ALL;
   ALTER TABLE water.licence_versions DISABLE TRIGGER ALL;
-  ALTER TABLE water.licence_version_holders DISABLE TRIGGER ALL;
   ALTER TABLE water.licence_version_purposes DISABLE TRIGGER ALL;
   ALTER TABLE water.licence_version_purpose_conditions DISABLE TRIGGER ALL;
   ALTER TABLE water.return_requirement_purposes DISABLE TRIGGER ALL;
@@ -484,7 +496,7 @@ async function _deleteAllTestData() {
       OR EXISTS (
         SELECT 1
         FROM jsonb_array_elements_text("e"."licences") AS l
-        WHERE l = ANY(array['AT/TE/ST/01/01', 'AT/TE/ST/01/02', 'AT/TE/ST/01/03', 'AT/TE/ST/01/04'])
+        WHERE l IN (${licenceRefsSQL})
       )
     )
     AND "sn"."event_id" = "e"."event_id";
@@ -499,7 +511,7 @@ async function _deleteAllTestData() {
       OR EXISTS (
         SELECT 1
         FROM jsonb_array_elements_text("licences") AS l
-        WHERE l = ANY(array['AT/TE/ST/01/01', 'AT/TE/ST/01/02', 'AT/TE/ST/01/03', 'AT/TE/ST/01/04'])
+        WHERE l IN (${licenceRefsSQL})
       )
   );
 
@@ -523,7 +535,6 @@ async function _deleteAllTestData() {
   ALTER TABLE water.licences ENABLE TRIGGER ALL;
   ALTER TABLE water.licence_supplementary_years ENABLE TRIGGER ALL;
   ALTER TABLE water.licence_versions ENABLE TRIGGER ALL;
-  ALTER TABLE water.licence_version_holders ENABLE TRIGGER ALL;
   ALTER TABLE water.licence_version_purposes ENABLE TRIGGER ALL;
   ALTER TABLE water.licence_version_purpose_conditions ENABLE TRIGGER ALL;
   ALTER TABLE water.return_requirement_purposes ENABLE TRIGGER ALL;

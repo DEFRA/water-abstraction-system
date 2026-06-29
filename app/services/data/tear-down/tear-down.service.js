@@ -14,13 +14,22 @@ const WaterSchemaService = require('./water-schema.service.js')
 
 /**
  * Removes all data created for acceptance tests
+ *
+ * @param {string} licenceRef
+ * @param {string} companyName
+ * @param {string} userEmail
  */
-async function go() {
+async function go(licenceRef, companyName, userEmail) {
   const startTime = currentTimeInNanoseconds()
 
-  await Promise.all([CrmSchemaService.go(), IdmSchemaService.go(), PermitSchemaService.go(), ReturnsSchemaService.go()])
+  await Promise.all([
+    CrmSchemaService.go(companyName, licenceRef),
+    IdmSchemaService.go(userEmail),
+    PermitSchemaService.go(),
+    ReturnsSchemaService.go()
+  ])
 
-  await WaterSchemaService.go()
+  await WaterSchemaService.go(licenceRef)
 
   calculateAndLogTimeTaken(startTime, 'Tear down complete')
 }
