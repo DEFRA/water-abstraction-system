@@ -25,8 +25,8 @@ const HapiPinoPlugin = {
     ...HapiPinoLogInTestService.go(LogConfig.logInTest),
     // When not in the production environment we want a 'pretty' version of the JSON to make it easier to grok what
     // has happened. pino-pretty runs in a worker thread (via thread-stream), so we only enable it in development.
-    // Spawning it in test would leave worker threads alive after each Hapi server is created, preventing the Vitest
-    // fork from exiting and hanging the suite. Test logging is suppressed via HapiPinoLogInTestService anyway.
+    // There is no value spawning it in test where logging is suppressed via HapiPinoLogInTestService, and it avoids
+    // leaving worker threads alive after each Hapi server is created.
     transport:
       process.env.NODE_ENV === 'development' ? { target: 'pino-pretty', options: { colorize: true } } : undefined,
     // Redact Authorization headers, see https://getpino.io/#/docs/redaction
