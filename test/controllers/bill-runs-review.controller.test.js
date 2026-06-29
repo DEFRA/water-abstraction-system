@@ -24,7 +24,7 @@ const ViewReviewLicenceService = require('../../app/services/bill-runs/review/vi
 const ViewReviewService = require('../../app/services/bill-runs/review/view-review.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Bill Runs Review controller', () => {
   let options
@@ -33,7 +33,7 @@ describe('Bill Runs Review controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

@@ -19,7 +19,7 @@ const ViewCancelBillRunService = require('../../app/services/bill-runs/cancel/vi
 const ViewSendBillRunService = require('../../app/services/bill-runs/send/view-send-bill-run.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Bill Runs controller', () => {
   let options
@@ -27,7 +27,7 @@ describe('Bill Runs controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

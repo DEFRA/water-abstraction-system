@@ -12,7 +12,7 @@ const ChangeAddressService = require('../../app/services/billing-accounts/change
 const ViewBillingAccountService = require('../../app/services/billing-accounts/view-billing-account.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Billing Accounts controller', () => {
   // Though the ChangeAddressValidator accepts a payload with an empty address PayLoadCleanerPlugin will strip it
@@ -28,7 +28,7 @@ describe('Billing Accounts controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   // Create server before each test

@@ -10,7 +10,7 @@ const DatabaseHealthCheckService = require('../../app/services/health/database-h
 const InfoService = require('../../app/services/health/info.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Health controller', () => {
   let airbrakeStub
@@ -18,7 +18,7 @@ describe('Health controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

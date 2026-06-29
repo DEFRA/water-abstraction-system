@@ -9,14 +9,14 @@ const Sinon = require('sinon')
 const ViewService = require('../../app/services/return-versions/view.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Return Versions controller', () => {
   let server
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

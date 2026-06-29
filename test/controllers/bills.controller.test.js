@@ -14,7 +14,7 @@ const SubmitRemoveBillService = require('../../app/services/bills/submit-remove-
 const ViewBillService = require('../../app/services/bills/view-bill.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Bills controller', () => {
   const rootPath = '/bills/64924759-8142-4a08-9d1e-1e902cd9d316'
@@ -24,7 +24,7 @@ describe('Bills controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

@@ -44,7 +44,7 @@ const UnitsService = require('../../app/services/return-logs/setup/units.service
 const VolumesService = require('../../app/services/return-logs/setup/volumes.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 const sessionId = 'f01efb63-4d27-4be7-ab10-54cf177f1908'
 
@@ -55,7 +55,7 @@ describe('Return Logs - Setup - Controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(() => {

@@ -10,7 +10,7 @@ const CheckAllLicenceEndDatesService = require('../../app/services/licences/end-
 const ProcessLicenceEndDateChangesService = require('../../app/services/licences/end-dates/process-licence-end-date-changes.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Licences End Dates controller', () => {
   let options
@@ -18,7 +18,7 @@ describe('Licences End Dates controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

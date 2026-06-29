@@ -16,7 +16,7 @@ const ViewHistoryService = require('../../app/services/companies/view-history.se
 const ViewLicencesService = require('../../app/services/companies/view-licences.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Companies controller', () => {
   let options
@@ -24,7 +24,7 @@ describe('Companies controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

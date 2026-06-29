@@ -10,7 +10,7 @@ const ViewLicenceService = require('../../app/services/monitoring-stations/view-
 const ViewService = require('../../app/services/monitoring-stations/view.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Monitoring stations controller', () => {
   let options
@@ -18,7 +18,7 @@ describe('Monitoring stations controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

@@ -12,7 +12,7 @@ const RemoveService = require('../../app/services/licence-monitoring-station/rem
 const SubmitRemoveService = require('../../app/services/licence-monitoring-station/submit-remove.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 const licenceMonitoringStationId = 'ab4aff2b-cb01-4070-b896-948d80d61f96'
 
@@ -21,7 +21,7 @@ describe('Licence Monitoring Station - Controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(() => {

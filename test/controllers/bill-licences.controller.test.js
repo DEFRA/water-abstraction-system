@@ -14,7 +14,7 @@ const SubmitRemoveBillLicenceService = require('../../app/services/bill-licences
 const ViewBillLicenceService = require('../../app/services/bill-licences/view-bill-licence.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Bill Licences controller', () => {
   let options
@@ -22,7 +22,7 @@ describe('Bill Licences controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

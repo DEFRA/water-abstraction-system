@@ -18,7 +18,7 @@ const SubmitPostcodeService = require('../../app/services/address/submit-postcod
 const SubmitSelectAddressService = require('../../app/services/address/submit-select.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Address controller', () => {
   let options
@@ -27,7 +27,7 @@ describe('Address controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

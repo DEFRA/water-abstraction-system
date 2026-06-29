@@ -32,7 +32,7 @@ const ViewFaoService = require('../../app/services/billing-accounts/setup/view-f
 const ViewSelectCompanyService = require('../../app/services/billing-accounts/setup/view-select-company.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Billing Accounts Setup controller', () => {
   let billingAccountId
@@ -41,7 +41,7 @@ describe('Billing Accounts Setup controller', () => {
   let sessionId
 
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

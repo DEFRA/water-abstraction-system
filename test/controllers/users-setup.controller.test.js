@@ -29,7 +29,7 @@ const ViewInternalEmailService = require('../../app/services/users/internal/setu
 const ViewInternalPermissionsService = require('../../app/services/users/internal/setup/view-permissions.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 const { postRequestOptions } = require('../support/general.js')
 
@@ -43,7 +43,7 @@ describe('Users Setup controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(() => {

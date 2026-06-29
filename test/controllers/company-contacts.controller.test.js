@@ -15,7 +15,7 @@ const ViewContactDetailsService = require('../../app/services/company-contacts/v
 const ViewRemoveCompanyContactService = require('../../app/services/company-contacts/view-remove-company-contact.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 const { postRequestOptions } = require('../support/general.js')
 
 describe('Company Contacts controller', () => {
@@ -25,7 +25,7 @@ describe('Company Contacts controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

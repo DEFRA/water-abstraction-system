@@ -9,7 +9,7 @@ const Sinon = require('sinon')
 const ViewReturnSubmissionService = require('../../app/services/return-submissions/view-return-submission.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Return Submissions controller', () => {
   let options
@@ -17,7 +17,7 @@ describe('Return Submissions controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(() => {

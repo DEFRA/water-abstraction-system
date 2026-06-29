@@ -14,7 +14,7 @@ const ViewCommunicationsService = require('../../app/services/return-logs/view-c
 const ViewDetailsService = require('../../app/services/return-logs/view-details.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Return Logs controller', () => {
   const returnLogId = '168026d8-f29b-4165-8726-734c6b14adec'
@@ -24,7 +24,7 @@ describe('Return Logs controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(() => {

@@ -27,7 +27,7 @@ const ViewSetUpService = require('../../app/services/licences/view-set-up.servic
 const ViewSummaryService = require('../../app/services/licences/view-summary.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Licences controller', () => {
   let options
@@ -35,7 +35,7 @@ describe('Licences controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

@@ -7,7 +7,7 @@ const Sinon = require('sinon')
 const { HTTP_STATUS_OK } = require('node:http2').constants
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 const ViewService = require('../../app/services/licence-versions/view.service.js')
 
 describe('Licence Versions controller', () => {
@@ -16,7 +16,7 @@ describe('Licence Versions controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

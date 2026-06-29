@@ -15,7 +15,7 @@ const SubmitViewNoticeService = require('../../app/services/notices/submit-view-
 const ViewNoticeService = require('../../app/services/notices/view-notice.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Notices controller', () => {
   let options
@@ -24,7 +24,7 @@ describe('Notices controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

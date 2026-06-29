@@ -12,14 +12,14 @@ const SeedService = require('../../app/services/data/seed/seed.service.js')
 const TearDownService = require('../../app/services/data/tear-down/tear-down.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Data controller', () => {
   let server
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

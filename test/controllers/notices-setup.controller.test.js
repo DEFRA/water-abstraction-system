@@ -51,7 +51,7 @@ const ViewReturnsPeriodService = require('../../app/services/notices/setup/view-
 const ViewSelectRecipientsService = require('../../app/services/notices/setup/view-select-recipients.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Notices Setup controller', () => {
   const basePath = '/notices/setup'
@@ -63,7 +63,7 @@ describe('Notices Setup controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

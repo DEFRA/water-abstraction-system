@@ -3,14 +3,14 @@
 const { HTTP_STATUS_OK } = require('node:http2').constants
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Root controller: GET /', () => {
   let server
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   it('displays the correct message', async () => {

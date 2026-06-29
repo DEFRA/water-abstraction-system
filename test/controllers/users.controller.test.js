@@ -24,7 +24,7 @@ const ViewNotificationService = require('../../app/services/users/view-notificat
 const ViewProfileDetailsService = require('../../app/services/users/view-profile-details.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Users controller', () => {
   let id
@@ -36,7 +36,7 @@ describe('Users controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

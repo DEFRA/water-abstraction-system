@@ -22,7 +22,7 @@ const TypeService = require('../../app/services/bill-runs/setup/type.service.js'
 const YearService = require('../../app/services/bill-runs/setup/year.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Bill Runs Setup controller', () => {
   let options
@@ -30,7 +30,7 @@ describe('Bill Runs Setup controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   // Create server before each test

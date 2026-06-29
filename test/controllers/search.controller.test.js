@@ -12,14 +12,14 @@ const SubmitSearchService = require('../../app/services/search/submit-search.ser
 const ViewSearchService = require('../../app/services/search/view-search.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Search controller', () => {
   let server
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

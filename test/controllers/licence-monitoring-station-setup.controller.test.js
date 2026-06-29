@@ -23,7 +23,7 @@ const SubmitThresholdAndUnitService = require('../../app/services/licence-monito
 const ThresholdAndUnitService = require('../../app/services/licence-monitoring-station/setup/threshold-and-unit.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 const sessionId = 'b0ebf12a-c238-4c48-9526-64513a8df935'
 
@@ -33,7 +33,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(() => {

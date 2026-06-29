@@ -16,7 +16,7 @@ const ProcessReturnLogsService = require('../../app/services/jobs/return-logs/pr
 const ProcessTimeLimitedLicencesService = require('../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Jobs controller', () => {
   let options
@@ -24,7 +24,7 @@ describe('Jobs controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(() => {

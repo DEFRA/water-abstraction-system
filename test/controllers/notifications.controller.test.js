@@ -17,7 +17,7 @@ const ViewNotificationService = require('../../app/services/notifications/view-n
 const notifyConfig = require('../../config/notify.config.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Notifications controller', () => {
   let licence
@@ -26,7 +26,7 @@ describe('Notifications controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

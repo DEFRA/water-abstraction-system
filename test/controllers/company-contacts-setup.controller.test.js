@@ -26,7 +26,7 @@ const ViewLicencesService = require('../../app/services/company-contacts/setup/v
 const ViewRestoreService = require('../../app/services/company-contacts/setup/view-restore.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 const { postRequestOptions } = require('../support/general.js')
 
@@ -38,7 +38,7 @@ describe('Company Contacts Setup controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

@@ -44,7 +44,7 @@ const SubmitSiteDescriptionService = require('../../app/services/return-versions
 const SubmitStartDateService = require('../../app/services/return-versions/setup/submit-start-date.service.js')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 const sessionId = '64924759-8142-4a08-9d1e-1e902cd9d316'
 const requirementIndex = 0
@@ -54,7 +54,7 @@ describe('Return Versions controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {

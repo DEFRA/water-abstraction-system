@@ -6,7 +6,7 @@ const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
 const Sinon = require('sinon')
 
 // For running our service
-const { init } = require('../../app/server.js')
+const { createServer } = require('../support/server.js')
 
 describe('Check controller', () => {
   let options
@@ -14,7 +14,7 @@ describe('Check controller', () => {
 
   // Create server before running the tests
   beforeAll(async () => {
-    server = await init()
+    server = await createServer()
   })
 
   beforeEach(async () => {
