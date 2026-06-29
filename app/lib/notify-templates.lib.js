@@ -36,14 +36,14 @@ const NOTIFY_TEMPLATES = Object.freeze({
   invitations: {
     adhoc: {
       email: {
-        'primary user': '7bb89469-1dbc-458a-9526-fad8ab71285f',
-        'returns user': 'cbc4efe2-f3b5-4642-8f6d-3532df73ee94',
-        'single use': '7bb89469-1dbc-458a-9526-fad8ab71285f'
+        'primary user': '543e5de5-8056-4704-a552-bf4e9084c2ef',
+        'returns user': 'fcea4350-5ee0-4a93-a438-a46ff17844c4',
+        'single use': '543e5de5-8056-4704-a552-bf4e9084c2ef'
       },
       letter: {
-        'licence holder': '4b47cf1c-043c-4a0c-8659-5be06cb2b860',
-        'returns to': '73b4c395-4423-4976-8ab4-c82e2cb6beee',
-        'single use': '4b47cf1c-043c-4a0c-8659-5be06cb2b860'
+        'licence holder': 'c2c1de42-561f-4f1c-a65f-327f52e91266',
+        'returns to': '7af9dd97-863c-40bb-bd79-ff15f1580fc6',
+        'single use': 'c2c1de42-561f-4f1c-a65f-327f52e91266'
       }
     },
     standard: {

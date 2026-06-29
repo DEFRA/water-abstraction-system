@@ -348,6 +348,7 @@ describe('Notices - Setup - Create Notifications service', () => {
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR',
+          licencenumber: recipients[0].licence_refs[0],
           name: 'Returnsholder',
           periodEndDate: null,
           periodStartDate: null,
@@ -377,6 +378,7 @@ describe('Notices - Setup - Create Notifications service', () => {
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR',
+          licencenumber: recipients[1].licence_refs[0],
           periodStartDate: null,
           returnDueDate: formatLongDate(futureDueDate('letter'))
         },

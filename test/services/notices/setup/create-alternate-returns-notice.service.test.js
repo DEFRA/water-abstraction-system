@@ -88,6 +88,7 @@ describe('Notices - Setup - Create Alternate Returns Notice service', () => {
         address_line_4: 'Little Whinging',
         address_line_5: 'Surrey',
         address_line_6: 'WD25 7LR',
+        licencenumber: recipient.licence_refs[0],
         periodStartDate: '1 April 2024'
       },
       recipient: null,
