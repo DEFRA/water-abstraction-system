@@ -137,6 +137,7 @@ jobs:
           npm run migrate:test
 
       - name: Run unit tests
+        timeout-minutes: 10
         run: |
           npm run test:ci
 
