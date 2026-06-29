@@ -21,7 +21,9 @@ const { init } = require('../../app/server.js')
 async function createServer() {
   const server = await init()
 
-  afterAll(() => server.stop())
+  afterAll(() => {
+    server.stop()
+  })
 
   return server
 }
