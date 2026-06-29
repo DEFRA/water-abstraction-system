@@ -282,6 +282,10 @@ async function go(payload) {
     return result
   }
 
+  // As we migrate to playwright we are removing the need for setting 'test' to true.
+  const playwright = payload?.playwright || false
+  delete payload.playwright
+
   // From the payload grab the entities to load; regions, licences, chargeVersions etc
   const entityKeys = Object.keys(payload)
 
@@ -303,7 +307,7 @@ async function go(payload) {
       const { id } = await loadHelper.helper.add(instance)
 
       // Check if we need to apply our 'fudge' solution for setting `is_test` flags
-      if (loadHelper.test) {
+      if (loadHelper.test && !playwright) {
         await _applyTestFlag(loadHelper.legacy, id)
       }
 

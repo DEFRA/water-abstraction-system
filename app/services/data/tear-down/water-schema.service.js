@@ -30,6 +30,11 @@ async function _deleteAllTestData(licenceRef) {
     })
     .join(', ')
 
+  //TODO: We need to handle isTest - conditional if the licenceRef is provided then we don't need to delete the
+  // test data we rely on the licenceRef and joins
+
+  //TODO: same across schemas - we need to ensure we delete through links
+
   return db.raw(`
   ALTER TABLE water.billing_batch_charge_version_years DISABLE TRIGGER ALL;
   ALTER TABLE water.billing_batches DISABLE TRIGGER ALL;
