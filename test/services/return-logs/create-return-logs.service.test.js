@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ReturnCyclesFixture = require('../../support/fixtures/return-cycles.fixture.js')
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
@@ -46,7 +39,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-              expect(results).to.equal([`${returnLogPrefix}:2024-11-01:2025-10-31`])
+              expect(results).toEqual([`${returnLogPrefix}:2024-11-01:2025-10-31`])
             })
           })
 
@@ -70,7 +63,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-11-01:2025-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-11-01:2025-05-01`])
               })
             })
 
@@ -88,7 +81,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-11-01:2024-11-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-11-01:2024-11-01`])
               })
             })
 
@@ -104,7 +97,7 @@ describe('Return Logs - Create Return Logs service', () => {
                   returnRequirement.returnVersion.licence.expiredDate
                 )
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -118,7 +111,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-05-01:2025-10-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-05-01:2025-10-31`])
               })
             })
 
@@ -132,7 +125,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-10-31:2025-10-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-10-31:2025-10-31`])
               })
             })
           })
@@ -148,7 +141,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-11-01:2025-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-11-01:2025-05-01`])
               })
             })
 
@@ -162,7 +155,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-11-01:2024-11-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-11-01:2024-11-01`])
               })
             })
 
@@ -174,7 +167,7 @@ describe('Return Logs - Create Return Logs service', () => {
               it('will return an empty array', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -188,7 +181,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-05-01:2025-10-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-05-01:2025-10-31`])
               })
             })
 
@@ -202,7 +195,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-10-31:2025-10-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-10-31:2025-10-31`])
               })
             })
           })
@@ -219,7 +212,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-              expect(results).to.equal([`${returnLogPrefix}:2024-11-01:2025-10-31`])
+              expect(results).toEqual([`${returnLogPrefix}:2024-11-01:2025-10-31`])
             })
           })
 
@@ -243,7 +236,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-11-01:2025-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-11-01:2025-05-01`])
               })
             })
 
@@ -261,7 +254,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-11-01:2024-11-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-11-01:2024-11-01`])
               })
             })
 
@@ -277,7 +270,7 @@ describe('Return Logs - Create Return Logs service', () => {
                   returnRequirement.returnVersion.licence.expiredDate
                 )
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -291,7 +284,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-05-01:2025-10-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-05-01:2025-10-31`])
               })
             })
 
@@ -305,7 +298,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-10-31:2025-10-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-10-31:2025-10-31`])
               })
             })
           })
@@ -321,7 +314,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-11-01:2025-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-11-01:2025-05-01`])
               })
             })
 
@@ -335,7 +328,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-11-01:2024-11-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-11-01:2024-11-01`])
               })
             })
 
@@ -347,7 +340,7 @@ describe('Return Logs - Create Return Logs service', () => {
               it('will return an empty array', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -361,7 +354,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-05-01:2025-10-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-05-01:2025-10-31`])
               })
             })
 
@@ -375,7 +368,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-10-31:2025-10-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-10-31:2025-10-31`])
               })
             })
           })
@@ -401,7 +394,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-              expect(results).to.equal([`${returnLogPrefix}:2025-11-01:2026-10-31`])
+              expect(results).toEqual([`${returnLogPrefix}:2025-11-01:2026-10-31`])
             })
           })
 
@@ -425,7 +418,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-11-01:2026-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-11-01:2026-05-01`])
               })
             })
 
@@ -443,7 +436,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-11-01:2025-11-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-11-01:2025-11-01`])
               })
             })
 
@@ -459,7 +452,7 @@ describe('Return Logs - Create Return Logs service', () => {
                   returnRequirement.returnVersion.licence.expiredDate
                 )
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -473,7 +466,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2026-05-01:2026-10-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2026-05-01:2026-10-31`])
               })
             })
 
@@ -487,7 +480,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2026-10-31:2026-10-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2026-10-31:2026-10-31`])
               })
             })
           })
@@ -503,7 +496,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-11-01:2026-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-11-01:2026-05-01`])
               })
             })
 
@@ -517,7 +510,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-11-01:2025-11-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-11-01:2025-11-01`])
               })
             })
 
@@ -529,7 +522,7 @@ describe('Return Logs - Create Return Logs service', () => {
               it('will return an empty array', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -543,7 +536,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2026-05-01:2026-10-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2026-05-01:2026-10-31`])
               })
             })
 
@@ -557,7 +550,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2026-10-31:2026-10-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2026-10-31:2026-10-31`])
               })
             })
           })
@@ -574,7 +567,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-              expect(results).to.equal([`${returnLogPrefix}:2025-11-01:2026-10-31`])
+              expect(results).toEqual([`${returnLogPrefix}:2025-11-01:2026-10-31`])
             })
           })
 
@@ -598,7 +591,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-11-01:2026-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-11-01:2026-05-01`])
               })
             })
 
@@ -616,7 +609,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-11-01:2025-11-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-11-01:2025-11-01`])
               })
             })
 
@@ -632,7 +625,7 @@ describe('Return Logs - Create Return Logs service', () => {
                   returnRequirement.returnVersion.licence.expiredDate
                 )
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -646,7 +639,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2026-05-01:2026-10-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2026-05-01:2026-10-31`])
               })
             })
 
@@ -660,7 +653,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2026-10-31:2026-10-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2026-10-31:2026-10-31`])
               })
             })
           })
@@ -676,7 +669,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-11-01:2026-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-11-01:2026-05-01`])
               })
             })
 
@@ -690,7 +683,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-11-01:2025-11-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-11-01:2025-11-01`])
               })
             })
 
@@ -702,7 +695,7 @@ describe('Return Logs - Create Return Logs service', () => {
               it('will return an empty array', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -716,7 +709,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2026-05-01:2026-10-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2026-05-01:2026-10-31`])
               })
             })
 
@@ -730,7 +723,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2026-10-31:2026-10-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2026-10-31:2026-10-31`])
               })
             })
           })
@@ -768,7 +761,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
           const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-          expect(results).to.equal([`${returnLogPrefix}:${formattedStartDate}:${formattedEndDate}`])
+          expect(results).toEqual([`${returnLogPrefix}:${formattedStartDate}:${formattedEndDate}`])
         })
       })
     })
@@ -790,7 +783,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-              expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2025-03-31`])
+              expect(results).toEqual([`${returnLogPrefix}:2024-04-01:2025-03-31`])
             })
           })
 
@@ -814,7 +807,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-04-01:2024-05-01`])
               })
             })
 
@@ -832,7 +825,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-04-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-04-01:2024-04-01`])
               })
             })
 
@@ -848,7 +841,7 @@ describe('Return Logs - Create Return Logs service', () => {
                   returnRequirement.returnVersion.licence.expiredDate
                 )
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -862,7 +855,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-05-01:2025-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-05-01:2025-03-31`])
               })
             })
 
@@ -876,7 +869,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-03-31:2025-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-03-31:2025-03-31`])
               })
             })
           })
@@ -892,7 +885,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-04-01:2024-05-01`])
               })
             })
 
@@ -906,7 +899,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-04-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-04-01:2024-04-01`])
               })
             })
 
@@ -918,7 +911,7 @@ describe('Return Logs - Create Return Logs service', () => {
               it('will return an empty array', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -932,7 +925,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-05-01:2025-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-05-01:2025-03-31`])
               })
             })
 
@@ -946,7 +939,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-03-31:2025-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-03-31:2025-03-31`])
               })
             })
           })
@@ -963,7 +956,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-              expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2025-03-31`])
+              expect(results).toEqual([`${returnLogPrefix}:2024-04-01:2025-03-31`])
             })
           })
 
@@ -987,7 +980,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-04-01:2024-05-01`])
               })
             })
 
@@ -1005,7 +998,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-04-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-04-01:2024-04-01`])
               })
             })
 
@@ -1021,7 +1014,7 @@ describe('Return Logs - Create Return Logs service', () => {
                   returnRequirement.returnVersion.licence.expiredDate
                 )
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -1035,7 +1028,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-05-01:2025-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-05-01:2025-03-31`])
               })
             })
 
@@ -1049,7 +1042,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-03-31:2025-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-03-31:2025-03-31`])
               })
             })
           })
@@ -1065,7 +1058,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-04-01:2024-05-01`])
               })
             })
 
@@ -1079,7 +1072,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-04-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-04-01:2024-04-01`])
               })
             })
 
@@ -1091,7 +1084,7 @@ describe('Return Logs - Create Return Logs service', () => {
               it('will return an empty array', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -1105,7 +1098,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-05-01:2025-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-05-01:2025-03-31`])
               })
             })
 
@@ -1119,7 +1112,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-03-31:2025-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-03-31:2025-03-31`])
               })
             })
           })
@@ -1136,7 +1129,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-              expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2025-03-31`])
+              expect(results).toEqual([`${returnLogPrefix}:2024-04-01:2025-03-31`])
             })
           })
 
@@ -1160,7 +1153,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-04-01:2024-05-01`])
               })
             })
 
@@ -1178,7 +1171,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-07-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-04-01:2024-07-01`])
               })
             })
 
@@ -1194,7 +1187,7 @@ describe('Return Logs - Create Return Logs service', () => {
                   returnRequirement.returnVersion.licence.expiredDate
                 )
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -1208,7 +1201,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-05-01:2025-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-05-01:2025-03-31`])
               })
             })
 
@@ -1222,7 +1215,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-06-30:2025-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-06-30:2025-03-31`])
               })
             })
           })
@@ -1238,7 +1231,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-04-01:2024-05-01`])
               })
             })
 
@@ -1252,7 +1245,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-07-27`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-04-01:2024-07-27`])
               })
             })
 
@@ -1266,7 +1259,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-07-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-04-01:2024-07-01`])
               })
             })
 
@@ -1278,7 +1271,7 @@ describe('Return Logs - Create Return Logs service', () => {
               it('will return an empty array', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -1292,7 +1285,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-05-01:2025-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-05-01:2025-03-31`])
               })
             })
 
@@ -1306,7 +1299,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2024-06-30:2025-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2024-06-30:2025-03-31`])
               })
             })
           })
@@ -1330,7 +1323,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-              expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2026-03-31`])
+              expect(results).toEqual([`${returnLogPrefix}:2025-04-01:2026-03-31`])
             })
           })
 
@@ -1354,7 +1347,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2025-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-04-01:2025-05-01`])
               })
             })
 
@@ -1372,7 +1365,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2025-04-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-04-01:2025-04-01`])
               })
             })
 
@@ -1388,7 +1381,7 @@ describe('Return Logs - Create Return Logs service', () => {
                   returnRequirement.returnVersion.licence.expiredDate
                 )
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -1402,7 +1395,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-05-01:2026-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-05-01:2026-03-31`])
               })
             })
 
@@ -1416,7 +1409,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2026-03-31:2026-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2026-03-31:2026-03-31`])
               })
             })
           })
@@ -1432,7 +1425,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2025-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-04-01:2025-05-01`])
               })
             })
 
@@ -1446,7 +1439,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2025-04-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-04-01:2025-04-01`])
               })
             })
 
@@ -1458,7 +1451,7 @@ describe('Return Logs - Create Return Logs service', () => {
               it('will return an empty array', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -1472,7 +1465,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-05-01:2026-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-05-01:2026-03-31`])
               })
             })
 
@@ -1486,7 +1479,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2026-03-31:2026-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2026-03-31:2026-03-31`])
               })
             })
           })
@@ -1503,7 +1496,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-              expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2026-03-31`])
+              expect(results).toEqual([`${returnLogPrefix}:2025-04-01:2026-03-31`])
             })
           })
 
@@ -1527,7 +1520,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2025-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-04-01:2025-05-01`])
               })
             })
 
@@ -1545,7 +1538,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2025-04-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-04-01:2025-04-01`])
               })
             })
 
@@ -1561,7 +1554,7 @@ describe('Return Logs - Create Return Logs service', () => {
                   returnRequirement.returnVersion.licence.expiredDate
                 )
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -1575,7 +1568,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-05-01:2026-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-05-01:2026-03-31`])
               })
             })
 
@@ -1589,7 +1582,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2026-03-31:2026-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2026-03-31:2026-03-31`])
               })
             })
           })
@@ -1605,7 +1598,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2025-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-04-01:2025-05-01`])
               })
             })
 
@@ -1619,7 +1612,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2025-04-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-04-01:2025-04-01`])
               })
             })
 
@@ -1631,7 +1624,7 @@ describe('Return Logs - Create Return Logs service', () => {
               it('will return an empty array', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -1645,7 +1638,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-05-01:2026-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-05-01:2026-03-31`])
               })
             })
 
@@ -1659,7 +1652,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2026-03-31:2026-03-31`])
+                expect(results).toEqual([`${returnLogPrefix}:2026-03-31:2026-03-31`])
               })
             })
           })
@@ -1676,7 +1669,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-              expect(results).to.equal([
+              expect(results).toEqual([
                 `${returnLogPrefix}:2025-04-01:2025-06-30`,
                 `${returnLogPrefix}:2025-07-01:2025-09-30`,
                 `${returnLogPrefix}:2025-10-01:2025-12-31`,
@@ -1705,7 +1698,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2025-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-04-01:2025-05-01`])
               })
             })
 
@@ -1723,7 +1716,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([
+                expect(results).toEqual([
                   `${returnLogPrefix}:2025-04-01:2025-06-30`,
                   `${returnLogPrefix}:2025-07-01:2025-07-01`
                 ])
@@ -1742,7 +1735,7 @@ describe('Return Logs - Create Return Logs service', () => {
                   returnRequirement.returnVersion.licence.expiredDate
                 )
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -1756,7 +1749,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([
+                expect(results).toEqual([
                   `${returnLogPrefix}:2025-05-01:2025-06-30`,
                   `${returnLogPrefix}:2025-07-01:2025-09-30`,
                   `${returnLogPrefix}:2025-10-01:2025-12-31`,
@@ -1775,7 +1768,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([
+                expect(results).toEqual([
                   `${returnLogPrefix}:2025-06-30:2025-06-30`,
                   `${returnLogPrefix}:2025-07-01:2025-09-30`,
                   `${returnLogPrefix}:2025-10-01:2025-12-31`,
@@ -1796,7 +1789,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2025-05-01`])
+                expect(results).toEqual([`${returnLogPrefix}:2025-04-01:2025-05-01`])
               })
             })
 
@@ -1810,7 +1803,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([
+                expect(results).toEqual([
                   `${returnLogPrefix}:2025-04-01:2025-06-30`,
                   `${returnLogPrefix}:2025-07-01:2025-07-27`
                 ])
@@ -1827,7 +1820,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([
+                expect(results).toEqual([
                   `${returnLogPrefix}:2025-04-01:2025-06-30`,
                   `${returnLogPrefix}:2025-07-01:2025-07-01`
                 ])
@@ -1842,7 +1835,7 @@ describe('Return Logs - Create Return Logs service', () => {
               it('will return an empty array', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
-                expect(results).to.be.empty()
+                expect(results).toHaveLength(0)
               })
             })
 
@@ -1856,7 +1849,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([
+                expect(results).toEqual([
                   `${returnLogPrefix}:2025-05-01:2025-06-30`,
                   `${returnLogPrefix}:2025-07-01:2025-09-30`,
                   `${returnLogPrefix}:2025-10-01:2025-12-31`,
@@ -1875,7 +1868,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-                expect(results).to.equal([
+                expect(results).toEqual([
                   `${returnLogPrefix}:2025-06-30:2025-06-30`,
                   `${returnLogPrefix}:2025-07-01:2025-09-30`,
                   `${returnLogPrefix}:2025-10-01:2025-12-31`,
@@ -1914,7 +1907,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
           const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-          expect(results).to.equal([`${returnLogPrefix}:${formattedStartDate}:${formattedEndDate}`])
+          expect(results).toEqual([`${returnLogPrefix}:${formattedStartDate}:${formattedEndDate}`])
         })
       })
     })

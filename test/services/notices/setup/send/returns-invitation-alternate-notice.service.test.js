@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const NoticesFixture = require('../../../../support/fixtures/notices.fixture.js')
@@ -61,8 +56,8 @@ describe('Notices - Setup - Send - Returns Invitation Alternate Notice service',
     it('creates the alternate notice and notifications', async () => {
       await ReturnsInvitationAlternateNoticeService.go(mainNotice)
 
-      expect(createAlternateReturnsNoticeStub.calledOnce).to.be.true()
-      expect(createAlternateReturnsNoticeStub.firstCall.args).to.equal([
+      expect(createAlternateReturnsNoticeStub.calledOnce).toBe(true)
+      expect(createAlternateReturnsNoticeStub.firstCall.args).toEqual([
         mainNotice,
         failedNotification.licences,
         failedNotification.dueDate,
@@ -73,7 +68,7 @@ describe('Notices - Setup - Send - Returns Invitation Alternate Notice service',
     it('returns the notice, notification IDs, and notifications', async () => {
       const result = await ReturnsInvitationAlternateNoticeService.go(mainNotice)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         notice: alternateNotice,
         notificationIds: [failedNotification.id],
         notifications: [alternateNotification]
@@ -93,13 +88,13 @@ describe('Notices - Setup - Send - Returns Invitation Alternate Notice service',
     it('does not create the alternate notice', async () => {
       await ReturnsInvitationAlternateNoticeService.go(mainNotice)
 
-      expect(createAlternateReturnsNoticeStub.called).to.be.false()
+      expect(createAlternateReturnsNoticeStub.called).toBe(false)
     })
 
     it('returns null', async () => {
       const result = await ReturnsInvitationAlternateNoticeService.go(mainNotice)
 
-      expect(result).to.be.null()
+      expect(result).toBeNull()
     })
   })
 })

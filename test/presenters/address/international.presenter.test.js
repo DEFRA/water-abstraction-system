@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { countryLookup } = require('../../../app/presenters/address/base-address.presenter.js')
 
@@ -34,7 +27,7 @@ describe('Address - International Presenter', () => {
   it('correctly presents the data', () => {
     const result = InternationalPresenter.go(session)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       activeNavBar: 'manage',
       addressLine1: null,
       addressLine2: null,
@@ -56,7 +49,7 @@ describe('Address - International Presenter', () => {
       it('returns null', () => {
         const result = InternationalPresenter.go(session)
 
-        expect(result.addressLine1).to.equal(null)
+        expect(result.addressLine1).toEqual(null)
       })
     })
 
@@ -68,7 +61,7 @@ describe('Address - International Presenter', () => {
       it('returns the set value', () => {
         const result = InternationalPresenter.go(session)
 
-        expect(result.addressLine1).to.equal('Fake Farm')
+        expect(result.addressLine1).toEqual('Fake Farm')
       })
     })
   })
@@ -78,7 +71,7 @@ describe('Address - International Presenter', () => {
       it('returns null', () => {
         const result = InternationalPresenter.go(session)
 
-        expect(result.addressLine2).to.equal(null)
+        expect(result.addressLine2).toEqual(null)
       })
     })
 
@@ -90,7 +83,7 @@ describe('Address - International Presenter', () => {
       it('returns the set value', () => {
         const result = InternationalPresenter.go(session)
 
-        expect(result.addressLine2).to.equal('1 Fake Street')
+        expect(result.addressLine2).toEqual('1 Fake Street')
       })
     })
   })
@@ -100,7 +93,7 @@ describe('Address - International Presenter', () => {
       it('returns null', () => {
         const result = InternationalPresenter.go(session)
 
-        expect(result.addressLine3).to.equal(null)
+        expect(result.addressLine3).toEqual(null)
       })
     })
 
@@ -112,7 +105,7 @@ describe('Address - International Presenter', () => {
       it('returns the set value', () => {
         const result = InternationalPresenter.go(session)
 
-        expect(result.addressLine3).to.equal('Fake Village')
+        expect(result.addressLine3).toEqual('Fake Village')
       })
     })
   })
@@ -122,7 +115,7 @@ describe('Address - International Presenter', () => {
       it('returns null', () => {
         const result = InternationalPresenter.go(session)
 
-        expect(result.addressLine4).to.equal(null)
+        expect(result.addressLine4).toEqual(null)
       })
     })
 
@@ -134,7 +127,7 @@ describe('Address - International Presenter', () => {
       it('returns the set value', () => {
         const result = InternationalPresenter.go(session)
 
-        expect(result.addressLine4).to.equal('Fake City')
+        expect(result.addressLine4).toEqual('Fake City')
       })
     })
   })
@@ -144,7 +137,7 @@ describe('Address - International Presenter', () => {
       it('returns the list of countries with the "Select a country" option selected', () => {
         const result = InternationalPresenter.go(session)
 
-        expect(result.country).to.equal(countryLookup())
+        expect(result.country).toEqual(countryLookup())
       })
     })
 
@@ -156,7 +149,7 @@ describe('Address - International Presenter', () => {
       it('returns the list of countries with the matching country selected', () => {
         const result = InternationalPresenter.go(session)
 
-        expect(result.country).to.equal(countryLookup('France'))
+        expect(result.country).toEqual(countryLookup('France'))
       })
     })
   })
@@ -166,7 +159,7 @@ describe('Address - International Presenter', () => {
       it('returns null', () => {
         const result = InternationalPresenter.go(session)
 
-        expect(result.pageTitleCaption).to.equal(null)
+        expect(result.pageTitleCaption).toEqual(null)
       })
     })
 
@@ -178,7 +171,7 @@ describe('Address - International Presenter', () => {
       it('returns the set value', () => {
         const result = InternationalPresenter.go(session)
 
-        expect(result.pageTitleCaption).to.equal('Super awesome caption')
+        expect(result.pageTitleCaption).toEqual('Super awesome caption')
       })
     })
   })
@@ -188,7 +181,7 @@ describe('Address - International Presenter', () => {
       it('returns null', () => {
         const result = InternationalPresenter.go(session)
 
-        expect(result.postcode).to.equal(null)
+        expect(result.postcode).toEqual(null)
       })
     })
 
@@ -200,7 +193,7 @@ describe('Address - International Presenter', () => {
       it('returns the set value', () => {
         const result = InternationalPresenter.go(session)
 
-        expect(result.postcode).to.equal('SW1A 1AA')
+        expect(result.postcode).toEqual('SW1A 1AA')
       })
     })
   })

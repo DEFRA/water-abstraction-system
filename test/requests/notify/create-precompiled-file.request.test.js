@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED } = require('node:http2').constants
@@ -50,21 +45,21 @@ describe('Notify - Create precompiled file request', () => {
     it('returns a "true" success status', async () => {
       const result = await CreatePrecompiledFileRequest.send(content, referenceCode)
 
-      expect(result.succeeded).to.be.true()
+      expect(result.succeeded).toBe(true)
     })
 
     it('returns the result from Notify in the "response"', async () => {
       const result = await CreatePrecompiledFileRequest.send(content, referenceCode)
 
-      expect(result.response.body).to.equal(response.body)
+      expect(result.response.body).toEqual(response.body)
     })
 
     it('calls NotifyRequest.post with the correct arguments', async () => {
       await CreatePrecompiledFileRequest.send(content, referenceCode)
 
-      expect(NotifyRequest.post.calledOnce).to.be.true()
-      expect(NotifyRequest.post.firstCall.args[0]).to.equal('v2/notifications/letter')
-      expect(NotifyRequest.post.firstCall.args[1]).to.equal({ content: 'VGVzdCBkYXRh', reference: referenceCode })
+      expect(NotifyRequest.post.calledOnce).toBe(true)
+      expect(NotifyRequest.post.firstCall.args[0]).toEqual('v2/notifications/letter')
+      expect(NotifyRequest.post.firstCall.args[1]).toEqual({ content: 'VGVzdCBkYXRh', reference: referenceCode })
     })
   })
 
@@ -93,13 +88,13 @@ describe('Notify - Create precompiled file request', () => {
       it('returns a "false" success status', async () => {
         const result = await CreatePrecompiledFileRequest.send(content, referenceCode)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
         const result = await CreatePrecompiledFileRequest.send(content, referenceCode)
 
-        expect(result.response.body).to.equal(response.body)
+        expect(result.response.body).toEqual(response.body)
       })
     })
   })

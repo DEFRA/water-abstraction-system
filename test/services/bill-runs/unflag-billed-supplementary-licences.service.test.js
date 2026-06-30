@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillHelper = require('../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
@@ -75,7 +68,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
             const licenceToBeChecked = await presrocSupplementary.licenceToBeUnflagged.$query()
 
-            expect(licenceToBeChecked.includeInPresrocBilling).to.equal('no')
+            expect(licenceToBeChecked.includeInPresrocBilling).toEqual('no')
           })
         })
 
@@ -85,7 +78,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
             const licenceToBeChecked = await presrocSupplementary.licenceInWorkflow.$query()
 
-            expect(licenceToBeChecked.includeInPresrocBilling).to.equal('yes')
+            expect(licenceToBeChecked.includeInPresrocBilling).toEqual('yes')
           })
         })
 
@@ -95,7 +88,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
             const licenceToBeChecked = await presrocSupplementary.licenceFlaggedAfterBillRunCreated.$query()
 
-            expect(licenceToBeChecked.includeInPresrocBilling).to.equal('yes')
+            expect(licenceToBeChecked.includeInPresrocBilling).toEqual('yes')
           })
         })
       })
@@ -106,7 +99,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
           const licenceToBeChecked = await presrocSupplementary.licenceNotInRegion.$query()
 
-          expect(licenceToBeChecked.includeInPresrocBilling).to.equal('yes')
+          expect(licenceToBeChecked.includeInPresrocBilling).toEqual('yes')
         })
       })
     })
@@ -169,7 +162,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
             const licenceToBeChecked = await srocSupplementary.licenceToBeUnflagged.$query()
 
-            expect(licenceToBeChecked.includeInSrocBilling).to.be.false()
+            expect(licenceToBeChecked.includeInSrocBilling).toBe(false)
           })
         })
 
@@ -179,7 +172,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
             const licenceToBeChecked = await srocSupplementary.licenceInWorkflow.$query()
 
-            expect(licenceToBeChecked.includeInSrocBilling).to.be.true()
+            expect(licenceToBeChecked.includeInSrocBilling).toBe(true)
           })
         })
 
@@ -189,7 +182,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
             const licenceToBeChecked = await srocSupplementary.licenceFlaggedAfterBillRunCreated.$query()
 
-            expect(licenceToBeChecked.includeInSrocBilling).to.be.true()
+            expect(licenceToBeChecked.includeInSrocBilling).toBe(true)
           })
         })
       })
@@ -200,7 +193,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
           const licenceToBeChecked = await srocSupplementary.licenceNotInBillRun.$query()
 
-          expect(licenceToBeChecked.includeInSrocBilling).to.be.true()
+          expect(licenceToBeChecked.includeInSrocBilling).toBe(true)
         })
       })
     })
@@ -269,7 +262,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
           const licenceSupYearToBeChecked = await tptSupplementary.licenceToBeUnflaggedSupYear.$query()
 
-          expect(licenceSupYearToBeChecked).not.exists()
+          expect(licenceSupYearToBeChecked).toBeUndefined()
         })
       })
 
@@ -279,7 +272,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
           const licenceSupYearToBeChecked = await tptSupplementary.licenceInWorkflowSupYear.$query()
 
-          expect(licenceSupYearToBeChecked).exists()
+          expect(licenceSupYearToBeChecked).toBeDefined()
         })
       })
 
@@ -289,7 +282,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
           const licenceSupYearToBeChecked = await tptSupplementary.licenceInBillRunButUpdatedSupYear.$query()
 
-          expect(licenceSupYearToBeChecked).exists()
+          expect(licenceSupYearToBeChecked).toBeDefined()
         })
       })
     })
@@ -300,7 +293,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
         const licenceSupYearToBeChecked = await tptSupplementary.licenceNotInBillRunSupYear.$query()
 
-        expect(licenceSupYearToBeChecked).exists()
+        expect(licenceSupYearToBeChecked).toBeDefined()
       })
     })
   })

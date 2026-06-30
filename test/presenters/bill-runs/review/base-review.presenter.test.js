@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const BaseReviewPresenter = require('../../../../app/presenters/bill-runs/review/base-review.presenter.js')
 
@@ -23,7 +16,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
     it('returns the sum of "amendedAllocated" for the review charge elements passed in', () => {
       const result = BaseReviewPresenter.calculateTotalBillableReturns(reviewChargeElements)
 
-      expect(result).to.equal(63.500502)
+      expect(result).toEqual(63.500502)
     })
   })
 
@@ -38,7 +31,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it('returns an empty array', () => {
         const result = BaseReviewPresenter.formatAdditionalCharges(chargeReference)
 
-        expect(result).to.be.empty()
+        expect(result).toHaveLength(0)
       })
     })
 
@@ -50,7 +43,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it('returns an array containing the charge formatted for display', () => {
         const result = BaseReviewPresenter.formatAdditionalCharges(chargeReference)
 
-        expect(result).to.equal(['Supported source Foo source'])
+        expect(result).toEqual(['Supported source Foo source'])
       })
     })
 
@@ -62,7 +55,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it('returns an array containing the charge formatted for display', () => {
         const result = BaseReviewPresenter.formatAdditionalCharges(chargeReference)
 
-        expect(result).to.equal(['Public Water Supply'])
+        expect(result).toEqual(['Public Water Supply'])
       })
     })
 
@@ -74,7 +67,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it('returns an array containing the charges formatted for display', () => {
         const result = BaseReviewPresenter.formatAdditionalCharges(chargeReference)
 
-        expect(result).to.equal(['Supported source Foo source', 'Public Water Supply'])
+        expect(result).toEqual(['Supported source Foo source', 'Public Water Supply'])
       })
     })
   })
@@ -90,7 +83,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it('returns an empty array', () => {
         const result = BaseReviewPresenter.formatAdjustments(reviewChargeReference)
 
-        expect(result).to.be.empty()
+        expect(result).toHaveLength(0)
       })
     })
 
@@ -103,7 +96,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
         it('includes it in the array returned', () => {
           const result = BaseReviewPresenter.formatAdjustments(reviewChargeReference)
 
-          expect(result).to.include('Abatement agreement (0.3)')
+          expect(result).toContain('Abatement agreement (0.3)')
         })
       })
 
@@ -115,7 +108,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
         it('does not add include it in the array returned', () => {
           const result = BaseReviewPresenter.formatAdjustments(reviewChargeReference)
 
-          expect(result).to.not.include('Abatement agreement (1)')
+          expect(result).not.toContain('Abatement agreement (1)')
         })
       })
     })
@@ -128,7 +121,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it('includes it in the array returned', () => {
         const result = BaseReviewPresenter.formatAdjustments(reviewChargeReference)
 
-        expect(result).to.include('Winter discount')
+        expect(result).toContain('Winter discount')
       })
     })
 
@@ -140,7 +133,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it('includes it in the array returned', () => {
         const result = BaseReviewPresenter.formatAdjustments(reviewChargeReference)
 
-        expect(result).to.include('Two part tariff agreement')
+        expect(result).toContain('Two part tariff agreement')
       })
     })
 
@@ -152,7 +145,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it('includes it in the array returned', () => {
         const result = BaseReviewPresenter.formatAdjustments(reviewChargeReference)
 
-        expect(result).to.include('Canal and River trust agreement')
+        expect(result).toContain('Canal and River trust agreement')
       })
     })
   })
@@ -166,7 +159,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
     it("returns the review charge version's charge period formatted for display", () => {
       const result = BaseReviewPresenter.formatChargePeriod(reviewChargeVersion)
 
-      expect(result).to.equal('1 April 2024 to 30 September 2024')
+      expect(result).toEqual('1 April 2024 to 30 September 2024')
     })
   })
 
@@ -196,7 +189,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it("will return the review element's charge periods formatted for display", () => {
         const result = BaseReviewPresenter.formatChargePeriods(reviewChargeElement)
 
-        expect(result).to.equal(['24 May 2023 to 31 December 2023', '1 January 2024 to 31 March 2024'])
+        expect(result).toEqual(['24 May 2023 to 31 December 2023', '1 January 2024 to 31 March 2024'])
       })
     })
 
@@ -210,7 +203,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it("will return the review element's charge periods formatted for display", () => {
         const result = BaseReviewPresenter.formatChargePeriods(reviewChargeElement, chargePeriod)
 
-        expect(result).to.equal(['24 May 2023 to 31 December 2023', '1 January 2024 to 31 March 2024'])
+        expect(result).toEqual(['24 May 2023 to 31 December 2023', '1 January 2024 to 31 March 2024'])
       })
     })
   })
@@ -226,7 +219,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it('returns an empty array', () => {
         const result = BaseReviewPresenter.formatIssues(issues)
 
-        expect(result).to.be.empty()
+        expect(result).toHaveLength(0)
       })
     })
 
@@ -238,7 +231,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it('returns an array containing the one value', () => {
         const result = BaseReviewPresenter.formatIssues(issues)
 
-        expect(result).to.equal(['Aggregate'])
+        expect(result).toEqual(['Aggregate'])
       })
     })
 
@@ -250,7 +243,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it('returns an array containing all values', () => {
         const result = BaseReviewPresenter.formatIssues(issues)
 
-        expect(result).to.equal(['Aggregate', 'No returns received'])
+        expect(result).toEqual(['Aggregate', 'No returns received'])
       })
     })
   })
@@ -266,7 +259,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it('returns "overdue"', () => {
         const result = BaseReviewPresenter.formatReturnStatus(reviewReturn)
 
-        expect(result).to.equal('overdue')
+        expect(result).toEqual('overdue')
       })
     })
 
@@ -278,7 +271,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it('returns "query"', () => {
         const result = BaseReviewPresenter.formatReturnStatus(reviewReturn)
 
-        expect(result).to.equal('query')
+        expect(result).toEqual('query')
       })
     })
 
@@ -290,7 +283,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it('returns whatever is the status of the review return', () => {
         const result = BaseReviewPresenter.formatReturnStatus(reviewReturn)
 
-        expect(result).to.equal('completed')
+        expect(result).toEqual('completed')
       })
     })
   })
@@ -306,7 +299,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it('returns "/"', () => {
         const result = BaseReviewPresenter.formatReturnTotals(reviewReturn)
 
-        expect(result).to.equal('/')
+        expect(result).toEqual('/')
       })
     })
 
@@ -318,7 +311,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it('returns "/"', () => {
         const result = BaseReviewPresenter.formatReturnTotals(reviewReturn)
 
-        expect(result).to.equal('/')
+        expect(result).toEqual('/')
       })
     })
 
@@ -330,7 +323,7 @@ describe('Bill Runs Review - Base Review presenter', () => {
       it('returns "10.1 ML / 15 ML"', () => {
         const result = BaseReviewPresenter.formatReturnTotals(reviewReturn)
 
-        expect(result).to.equal('10.1 ML / 15 ML')
+        expect(result).toEqual('10.1 ML / 15 ML')
       })
     })
   })

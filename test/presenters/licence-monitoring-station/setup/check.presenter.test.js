@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const CheckPresenter = require('../../../../app/presenters/licence-monitoring-station/setup/check.presenter.js')
 
@@ -38,25 +31,22 @@ describe('Licence Monitoring Station Setup - Check Presenter', () => {
     it('returns page data for the view with default session data', () => {
       const result = CheckPresenter.go(session)
 
-      expect(result).to.equal(
-        {
-          abstractionPeriod: '1 January to 31 December',
-          abstractionPeriodManuallyEntered: false,
-          condition: 'CONDITION_DISPLAY_TEXT',
-          licenceRef: 'LICENCE_REF',
-          monitoringStationLabel: 'LABEL',
-          pageTitle: 'Check the restriction details',
-          threshold: '100Ml/d',
-          type: 'Stop'
-        },
-        { skip: ['links'] }
-      )
+      expect(result).toMatchObject({
+        abstractionPeriod: '1 January to 31 December',
+        abstractionPeriodManuallyEntered: false,
+        condition: 'CONDITION_DISPLAY_TEXT',
+        licenceRef: 'LICENCE_REF',
+        monitoringStationLabel: 'LABEL',
+        pageTitle: 'Check the restriction details',
+        threshold: '100Ml/d',
+        type: 'Stop'
+      })
     })
 
     it('returns correct change links', () => {
       const result = CheckPresenter.go(session)
 
-      expect(result.links).to.equal({
+      expect(result.links).toEqual({
         threshold: '/system/licence-monitoring-station/setup/b9593e3f-865e-4594-a686-2be8910a876b/threshold-and-unit',
         type: '/system/licence-monitoring-station/setup/b9593e3f-865e-4594-a686-2be8910a876b/stop-or-reduce',
         licenceNumber: '/system/licence-monitoring-station/setup/b9593e3f-865e-4594-a686-2be8910a876b/licence-number',
@@ -75,7 +65,7 @@ describe('Licence Monitoring Station Setup - Check Presenter', () => {
       it('correctly sets "abstractionPeriodManuallyEntered" to "true"', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.abstractionPeriodManuallyEntered).to.be.true()
+        expect(result.abstractionPeriodManuallyEntered).toBe(true)
       })
     })
 
@@ -87,7 +77,7 @@ describe('Licence Monitoring Station Setup - Check Presenter', () => {
       it('correctly sets "abstractionPeriodManuallyEntered" to "false"', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.abstractionPeriodManuallyEntered).to.be.false()
+        expect(result.abstractionPeriodManuallyEntered).toBe(false)
       })
     })
 
@@ -100,7 +90,7 @@ describe('Licence Monitoring Station Setup - Check Presenter', () => {
         it('correctly sets "type" as "Stop"', () => {
           const result = CheckPresenter.go(session)
 
-          expect(result.type).to.equal('Stop')
+          expect(result.type).toEqual('Stop')
         })
       })
 
@@ -117,7 +107,7 @@ describe('Licence Monitoring Station Setup - Check Presenter', () => {
           it('correctly sets "type" as "Reduce with a maximum volume limit"', () => {
             const result = CheckPresenter.go(session)
 
-            expect(result.type).to.equal('Reduce with a maximum volume limit')
+            expect(result.type).toEqual('Reduce with a maximum volume limit')
           })
         })
 
@@ -129,7 +119,7 @@ describe('Licence Monitoring Station Setup - Check Presenter', () => {
           it('correctly sets "type" as "Reduce"', () => {
             const result = CheckPresenter.go(session)
 
-            expect(result.type).to.equal('Reduce')
+            expect(result.type).toEqual('Reduce')
           })
         })
       })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, after, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
@@ -22,7 +15,7 @@ describe('Fetch Return Versions service', () => {
   let draftReturnVersion
   let supersededReturnVersion
 
-  before(async () => {
+  beforeAll(async () => {
     // NOTE: We add these 2, both with the same start date to ensure the order that they are returned as expected
     supersededReturnVersion = await ReturnVersionHelper.add({
       startDate,
@@ -51,7 +44,7 @@ describe('Fetch Return Versions service', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await currentReturnVersion.$query().delete()
     await currentReturnVersionModLog.$query().delete()
     await draftReturnVersion.$query().delete()
@@ -62,7 +55,7 @@ describe('Fetch Return Versions service', () => {
     it('returns the matching return versions data', async () => {
       const result = await FetchReturnVersionsService.go(supersededReturnVersion.licenceId)
 
-      expect(result).to.equal([
+      expect(result).toEqual([
         {
           id: currentReturnVersion.id,
           startDate: new Date('2022-04-01'),

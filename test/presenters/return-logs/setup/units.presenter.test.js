@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const UnitsPresenter = require('../../../../app/presenters/return-logs/setup/units.presenter.js')
 
@@ -24,7 +17,7 @@ describe('Return Logs Setup - Units presenter', () => {
     it('correctly presents the data', () => {
       const result = UnitsPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: { href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported', text: 'Back' },
         pageTitle: 'Which units were used?',
         pageTitleCaption: 'Return reference 012345',
@@ -43,7 +36,7 @@ describe('Return Logs Setup - Units presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = UnitsPresenter.go(session)
 
-        expect(result.backLink.href).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink.href).toEqual('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
       })
     })
 
@@ -51,7 +44,7 @@ describe('Return Logs Setup - Units presenter', () => {
       it('returns a link back to the "Reported" page on', () => {
         const result = UnitsPresenter.go(session)
 
-        expect(result.backLink.href).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported')
+        expect(result.backLink.href).toEqual('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported')
       })
     })
 
@@ -63,7 +56,7 @@ describe('Return Logs Setup - Units presenter', () => {
       it('returns a link back to the "Start reading" page on', () => {
         const result = UnitsPresenter.go(session)
 
-        expect(result.backLink.href).to.equal(
+        expect(result.backLink.href).toEqual(
           '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/start-reading'
         )
       })
@@ -79,7 +72,7 @@ describe('Return Logs Setup - Units presenter', () => {
       it('returns the "units" property populated to re-select the option', () => {
         const result = UnitsPresenter.go(session)
 
-        expect(result.units).to.equal('cubicMetres')
+        expect(result.units).toEqual('cubicMetres')
       })
     })
 
@@ -91,7 +84,7 @@ describe('Return Logs Setup - Units presenter', () => {
       it('returns the "units" property populated to re-select the option', () => {
         const result = UnitsPresenter.go(session)
 
-        expect(result.units).to.equal('litres')
+        expect(result.units).toEqual('litres')
       })
     })
 
@@ -103,7 +96,7 @@ describe('Return Logs Setup - Units presenter', () => {
       it('returns the "units" property populated to re-select the option', () => {
         const result = UnitsPresenter.go(session)
 
-        expect(result.units).to.equal('megalitres')
+        expect(result.units).toEqual('megalitres')
       })
     })
 
@@ -115,7 +108,7 @@ describe('Return Logs Setup - Units presenter', () => {
       it('returns the "units" property populated to re-select the option', () => {
         const result = UnitsPresenter.go(session)
 
-        expect(result.units).to.equal('gallons')
+        expect(result.units).toEqual('gallons')
       })
     })
   })

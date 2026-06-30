@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const FrequencyReportedValidator = require('../../../../app/validators/return-versions/setup/frequency-reported.validator.js')
 
@@ -23,8 +16,8 @@ describe('Return Versions Setup - Frequency reported validator', () => {
     it('confirms the data is valid', async () => {
       const result = FrequencyReportedValidator.go(payload)
 
-      expect(result.value.frequencyReported).to.equal('month')
-      expect(result.error).not.to.exist()
+      expect(result.value.frequencyReported).toEqual('month')
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -38,7 +31,7 @@ describe('Return Versions Setup - Frequency reported validator', () => {
     it('fails validation', () => {
       const result = FrequencyReportedValidator.go(payload)
 
-      expect(result.error.details[0].message).to.equal('Select how often readings or volumes are reported')
+      expect(result.error.details[0].message).toEqual('Select how often readings or volumes are reported')
     })
   })
 
@@ -50,7 +43,7 @@ describe('Return Versions Setup - Frequency reported validator', () => {
     it('fails validation', () => {
       const result = FrequencyReportedValidator.go(payload)
 
-      expect(result.error.details[0].message).to.equal('Select how often readings or volumes are reported')
+      expect(result.error.details[0].message).toEqual('Select how often readings or volumes are reported')
     })
   })
 })

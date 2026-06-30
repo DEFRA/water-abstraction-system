@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillHelper = require('../support/helpers/bill.helper.js')
 const BillingAccountHelper = require('../support/helpers/billing-account.helper.js')
@@ -25,7 +18,7 @@ describe('Bill model', () => {
   let testBillRun
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     // Link bill runs
     testBillRun = await BillRunHelper.add()
 
@@ -45,7 +38,7 @@ describe('Bill model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testBillRun.$query().delete()
     await testBillingAccount.$query().delete()
 
@@ -60,8 +53,8 @@ describe('Bill model', () => {
     it('can successfully run a basic query', async () => {
       const result = await BillModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(BillModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(BillModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -70,17 +63,17 @@ describe('Bill model', () => {
       it('can successfully run a related query', async () => {
         const query = await BillModel.query().innerJoinRelated('billingAccount')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the billing account', async () => {
         const result = await BillModel.query().findById(testRecord.id).withGraphFetched('billingAccount')
 
-        expect(result).to.be.instanceOf(BillModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(BillModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.billingAccount).to.be.an.instanceOf(BillingAccountModel)
-        expect(result.billingAccount).to.equal(testBillingAccount)
+        expect(result.billingAccount).toBeInstanceOf(BillingAccountModel)
+        expect(result.billingAccount).toEqual(testBillingAccount)
       })
     })
 
@@ -88,17 +81,17 @@ describe('Bill model', () => {
       it('can successfully run a related query', async () => {
         const query = await BillModel.query().innerJoinRelated('billRun')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the bill run', async () => {
         const result = await BillModel.query().findById(testRecord.id).withGraphFetched('billRun')
 
-        expect(result).to.be.instanceOf(BillModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(BillModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.billRun).to.be.an.instanceOf(BillRunModel)
-        expect(result.billRun).to.equal(testBillRun)
+        expect(result.billRun).toBeInstanceOf(BillRunModel)
+        expect(result.billRun).toEqual(testBillRun)
       })
     })
 
@@ -106,19 +99,19 @@ describe('Bill model', () => {
       it('can successfully run a related query', async () => {
         const query = await BillModel.query().innerJoinRelated('billLicences')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the bill licences', async () => {
         const result = await BillModel.query().findById(testRecord.id).withGraphFetched('billLicences')
 
-        expect(result).to.be.instanceOf(BillModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(BillModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.billLicences).to.be.an.array()
-        expect(result.billLicences[0]).to.be.an.instanceOf(BillLicenceModel)
-        expect(result.billLicences).to.include(testBillLicences[0])
-        expect(result.billLicences).to.include(testBillLicences[1])
+        expect(result.billLicences).toBeInstanceOf(Array)
+        expect(result.billLicences[0]).toBeInstanceOf(BillLicenceModel)
+        expect(result.billLicences).toContainEqual(testBillLicences[0])
+        expect(result.billLicences).toContainEqual(testBillLicences[1])
       })
     })
   })

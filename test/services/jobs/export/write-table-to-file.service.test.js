@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Code = require('@hapi/code')
-const Lab = require('@hapi/lab')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { data: chargeCategories } = require('../../../../db/seeds/data/charge-categories.js')
@@ -93,7 +88,7 @@ describe('Write table to file service', () => {
 
       await WriteTableToFileService.go(dataTest.headers, dataTest.rows, schemaFolderPath, tableName)
 
-      expect(fs.existsSync(filePath)).to.be.true()
+      expect(fs.existsSync(filePath)).toBe(true)
     })
 
     it('should write the correct data to the file', async () => {
@@ -112,7 +107,7 @@ describe('Write table to file service', () => {
       await WriteTableToFileService.go(dataTest.headers, dataTest.rows, schemaFolderPath, tableName)
       const file = fs.readFileSync(filePath, 'utf-8')
 
-      expect(file).to.equal(csvHeaders + csvValues)
+      expect(file).toEqual(csvHeaders + csvValues)
     })
   })
 })

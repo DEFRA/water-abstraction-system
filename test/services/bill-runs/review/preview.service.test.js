@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } = require('node:http2').constants
@@ -77,7 +72,7 @@ describe('Bill Runs Review - Preview service', () => {
 
             const generatedTransaction = calculateChargeRequestStub.args[0][0]
 
-            expect(generatedTransaction).to.equal({
+            expect(generatedTransaction).toEqual({
               abatementFactor: 1,
               actualVolume: 9.092,
               adjustmentFactor: 1,
@@ -108,9 +103,9 @@ describe('Bill Runs Review - Preview service', () => {
 
             const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-            expect(yarStub.flash.called).to.be.true()
-            expect(flashType).to.equal('charge')
-            expect(bannerMessage).to.equal('Based on this information the example charge is £20.00')
+            expect(yarStub.flash.called).toBe(true)
+            expect(flashType).toEqual('charge')
+            expect(bannerMessage).toEqual('Based on this information the example charge is £20.00')
           })
         })
 
@@ -125,7 +120,7 @@ describe('Bill Runs Review - Preview service', () => {
 
             const generatedTransaction = calculateChargeRequestStub.args[0][0]
 
-            expect(generatedTransaction).to.equal({
+            expect(generatedTransaction).toEqual({
               abatementFactor: 1,
               actualVolume: 9.092,
               adjustmentFactor: 1,
@@ -156,9 +151,9 @@ describe('Bill Runs Review - Preview service', () => {
 
             const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-            expect(yarStub.flash.called).to.be.true()
-            expect(flashType).to.equal('charge')
-            expect(bannerMessage).to.equal('Based on this information the example charge is £20.00')
+            expect(yarStub.flash.called).toBe(true)
+            expect(flashType).toEqual('charge')
+            expect(bannerMessage).toEqual('Based on this information the example charge is £20.00')
           })
         })
       })
@@ -184,9 +179,9 @@ describe('Bill Runs Review - Preview service', () => {
 
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-          expect(yarStub.flash.called).to.be.true()
-          expect(flashType).to.equal('charge')
-          expect(bannerMessage).to.equal('Could not calculate a charge. "section127Agreement" must be [true].')
+          expect(yarStub.flash.called).toBe(true)
+          expect(flashType).toEqual('charge')
+          expect(bannerMessage).toEqual('Could not calculate a charge. "section127Agreement" must be [true].')
         })
       })
     })
@@ -201,13 +196,13 @@ describe('Bill Runs Review - Preview service', () => {
       it('adds a flash message stating the example charge is £0.00 and skips calling the Charging Module API', async () => {
         await PreviewService.go(reviewChargeReference.id, yarStub)
 
-        expect(calculateChargeRequestStub.called).to.be.false()
+        expect(calculateChargeRequestStub.called).toBe(false)
 
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-        expect(yarStub.flash.called).to.be.true()
-        expect(flashType).to.equal('charge')
-        expect(bannerMessage).to.equal('Based on this information the example charge is £0.00')
+        expect(yarStub.flash.called).toBe(true)
+        expect(flashType).toEqual('charge')
+        expect(bannerMessage).toEqual('Based on this information the example charge is £0.00')
       })
     })
   })

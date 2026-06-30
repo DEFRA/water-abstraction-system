@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, after, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
@@ -23,7 +16,7 @@ describe('DAL - Return Versions - Update Succeeded Return Logs dal', () => {
   let returnVersions
   let updatedAt
 
-  before(async () => {
+  beforeAll(async () => {
     licence = await LicenceHelper.add()
 
     updatedAt = yesterday()
@@ -67,7 +60,7 @@ describe('DAL - Return Versions - Update Succeeded Return Logs dal', () => {
     ]
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const returnVersion of returnVersions) {
       await returnVersion.$query().delete()
     }
@@ -92,19 +85,16 @@ describe('DAL - Return Versions - Update Succeeded Return Logs dal', () => {
         .where('licenceRef', licence.licenceRef)
         .orderBy([{ column: 'startDate', order: 'asc' }])
 
-      expect(results).to.equal(
-        [
-          { id: returnLogs[0].id, current: 'false' },
-          { id: returnLogs[1].id, current: 'false' },
-          { id: returnLogs[2].id, current: 'true' }
-        ],
-        { skip: ['updatedAt'] }
-      )
+      expect(results).toMatchObject([
+        { id: returnLogs[0].id, current: 'false' },
+        { id: returnLogs[1].id, current: 'false' },
+        { id: returnLogs[2].id, current: 'true' }
+      ])
 
       // Also check we updated `updatedAt` but only on those records we set isCurrent to false
-      expect(results[0].updatedAt).to.be.greaterThan(updatedAt)
-      expect(results[1].updatedAt).to.be.greaterThan(updatedAt)
-      expect(results[2].updatedAt).to.equal(updatedAt)
+      expect(results[0].updatedAt.getTime()).toBeGreaterThan(updatedAt.getTime())
+      expect(results[1].updatedAt.getTime()).toBeGreaterThan(updatedAt.getTime())
+      expect(results[2].updatedAt).toEqual(updatedAt)
     })
   })
 })

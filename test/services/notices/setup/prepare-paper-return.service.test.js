@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const ReturnLogFixture = require('../../../support/fixtures/return-logs.fixture.js')
@@ -81,7 +76,7 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
     it('returns the request object', async () => {
       const result = await PreparePaperReturnService.go(notification)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         response: {
           body: buffer
         },
@@ -92,18 +87,18 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
     it('returns the generated pdf as an array buffer', async () => {
       const result = await PreparePaperReturnService.go(notification)
 
-      expect(result.response.body).to.be.instanceOf(ArrayBuffer)
+      expect(result.response.body).toBeInstanceOf(ArrayBuffer)
       // The encoded string is 9 chars
-      expect(result.response.body.byteLength).to.equal(9)
+      expect(result.response.body.byteLength).toEqual(9)
     })
 
     it('should call "GeneratePaperReturnRequest" with the page data for the provided "returnLogId"', async () => {
       await PreparePaperReturnService.go(notification)
 
-      expect(GeneratePaperReturnRequest.send.calledOnce).to.be.true()
+      expect(GeneratePaperReturnRequest.send.calledOnce).toBe(true)
 
       const actualCallArgs = GeneratePaperReturnRequest.send.getCall(0).args[0]
-      expect(actualCallArgs).to.equal({
+      expect(actualCallArgs).toEqual({
         address: {
           address_line_1: 'Harry Potter',
           address_line_2: '1',

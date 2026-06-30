@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
@@ -25,7 +18,7 @@ describe('Review Charge Version model', () => {
   let testRecord
   let testReviewLicence
 
-  before(async () => {
+  beforeAll(async () => {
     testChargeVersion = await ChargeVersionHelper.add()
     testReviewLicence = await ReviewLicenceHelper.add()
 
@@ -37,7 +30,7 @@ describe('Review Charge Version model', () => {
     testChargeReference = await ReviewChargeReferenceHelper.add({ reviewChargeVersionId: testRecord.id })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testChargeVersion.$query().delete()
     await testReviewLicence.$query().delete()
     await testChargeReference.$query().delete()
@@ -49,8 +42,8 @@ describe('Review Charge Version model', () => {
     it('can successfully run a basic query', async () => {
       const result = await ReviewChargeVersionModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(ReviewChargeVersionModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(ReviewChargeVersionModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -59,17 +52,17 @@ describe('Review Charge Version model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReviewChargeVersionModel.query().innerJoinRelated('chargeVersion')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge version', async () => {
         const result = await ReviewChargeVersionModel.query().findById(testRecord.id).withGraphFetched('chargeVersion')
 
-        expect(result).to.be.instanceOf(ReviewChargeVersionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReviewChargeVersionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.chargeVersion).to.be.an.instanceOf(ChargeVersionModel)
-        expect(result.chargeVersion).to.equal(testChargeVersion)
+        expect(result.chargeVersion).toBeInstanceOf(ChargeVersionModel)
+        expect(result.chargeVersion).toEqual(testChargeVersion)
       })
     })
 
@@ -77,7 +70,7 @@ describe('Review Charge Version model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReviewChargeVersionModel.query().innerJoinRelated('reviewChargeReferences')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the review charge reference', async () => {
@@ -85,13 +78,13 @@ describe('Review Charge Version model', () => {
           .findById(testRecord.id)
           .withGraphFetched('reviewChargeReferences')
 
-        expect(result).to.be.instanceOf(ReviewChargeVersionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReviewChargeVersionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.reviewChargeReferences).to.be.an.array()
-        expect(result.reviewChargeReferences).to.have.length(1)
-        expect(result.reviewChargeReferences[0]).to.be.an.instanceOf(ReviewChargeReferenceModel)
-        expect(result.reviewChargeReferences[0]).to.equal(testChargeReference)
+        expect(result.reviewChargeReferences).toBeInstanceOf(Array)
+        expect(result.reviewChargeReferences).toHaveLength(1)
+        expect(result.reviewChargeReferences[0]).toBeInstanceOf(ReviewChargeReferenceModel)
+        expect(result.reviewChargeReferences[0]).toEqual(testChargeReference)
       })
     })
 
@@ -99,17 +92,17 @@ describe('Review Charge Version model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReviewChargeVersionModel.query().innerJoinRelated('reviewLicence')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the review licence', async () => {
         const result = await ReviewChargeVersionModel.query().findById(testRecord.id).withGraphFetched('reviewLicence')
 
-        expect(result).to.be.instanceOf(ReviewChargeVersionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReviewChargeVersionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.reviewLicence).to.be.an.instanceOf(ReviewLicenceModel)
-        expect(result.reviewLicence).to.equal(testReviewLicence)
+        expect(result.reviewLicence).toBeInstanceOf(ReviewLicenceModel)
+        expect(result.reviewLicence).toEqual(testReviewLicence)
       })
     })
   })

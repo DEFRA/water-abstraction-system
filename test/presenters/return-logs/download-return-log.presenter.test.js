@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
 const ReturnLogsFixture = require('../../support/fixtures/return-logs.fixture.js')
@@ -19,7 +12,7 @@ describe('Return Logs - Download Return Log presenter', () => {
 
   describe('the "data" property', () => {
     describe('when provided with a returnLog submitted using "abstraction volumes"', () => {
-      before(() => {
+      beforeAll(() => {
         returnLog = ReturnLogsFixture.returnLog('month')
         returnLog.returnSubmissions = [ReturnLogsFixture.returnSubmission(returnLog, 'estimated')]
       })
@@ -29,7 +22,7 @@ describe('Return Logs - Download Return Log presenter', () => {
 
         const rows = result.data.split('\n')
 
-        expect(rows[0]).to.equal('end date,reading,volume')
+        expect(rows[0]).toEqual('end date,reading,volume')
 
         // Drop the first header row
         rows.shift()
@@ -39,13 +32,13 @@ describe('Return Logs - Download Return Log presenter', () => {
         for (let i = 0; i < rows.length - 1; i++) {
           const { quantity, endDate } = returnLog.returnSubmissions[0].returnSubmissionLines[i]
 
-          expect(rows[i]).to.equal(`${formatDateObjectToISO(endDate)},,${quantity}`)
+          expect(rows[i]).toEqual(`${formatDateObjectToISO(endDate)},,${quantity}`)
         }
       })
     })
 
     describe('when provided with a returnLog submitted using "readings"', () => {
-      before(() => {
+      beforeAll(() => {
         returnLog = ReturnLogsFixture.returnLog('month')
         returnLog.returnSubmissions = [ReturnLogsFixture.returnSubmission(returnLog, 'measured')]
       })
@@ -55,7 +48,7 @@ describe('Return Logs - Download Return Log presenter', () => {
 
         const rows = result.data.split('\n')
 
-        expect(rows[0]).to.equal('end date,reading,volume')
+        expect(rows[0]).toEqual('end date,reading,volume')
 
         // Drop the first header row
         rows.shift()
@@ -65,14 +58,14 @@ describe('Return Logs - Download Return Log presenter', () => {
         for (let i = 0; i < rows.length - 1; i++) {
           const { quantity, reading, endDate } = returnLog.returnSubmissions[0].returnSubmissionLines[i]
 
-          expect(rows[i]).to.equal(`${formatDateObjectToISO(endDate)},${reading},${quantity}`)
+          expect(rows[i]).toEqual(`${formatDateObjectToISO(endDate)},${reading},${quantity}`)
         }
       })
     })
   })
 
   describe('the "filename" property', () => {
-    before(() => {
+    beforeAll(() => {
       returnLog = ReturnLogsFixture.returnLog('month')
       returnLog.returnSubmissions = [ReturnLogsFixture.returnSubmission(returnLog, 'estimated')]
     })
@@ -83,7 +76,7 @@ describe('Return Logs - Download Return Log presenter', () => {
       const { endDate, returnReference, returnSubmissions, startDate } = returnLog
       const { version } = returnSubmissions[0]
 
-      expect(result.filename).to.equal(
+      expect(result.filename).toEqual(
         `${returnReference}_${formatDateObjectToISO(startDate)}_${formatDateObjectToISO(endDate)}_v${version}.csv`
       )
     })

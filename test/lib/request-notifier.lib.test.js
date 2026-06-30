@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Thing under test
 const RequestNotifierLib = require('../../app/lib/request-notifier.lib.js')
@@ -34,7 +29,7 @@ describe('RequestNotifierLib class', () => {
 
         testNotifier.omg(message)
 
-        expect(pinoFake.info.calledOnceWith({ req: { id } }, message)).to.be.true()
+        expect(pinoFake.info.calledOnceWith({ req: { id } }, message)).toBe(true)
       })
     })
 
@@ -44,7 +39,7 @@ describe('RequestNotifierLib class', () => {
 
         testNotifier.omg(message, { name: 'foo' })
 
-        expect(pinoFake.info.calledOnceWith({ name: 'foo', req: { id } }, message)).to.be.true()
+        expect(pinoFake.info.calledOnceWith({ name: 'foo', req: { id } }, message)).toBe(true)
       })
     })
   })
@@ -60,10 +55,10 @@ describe('RequestNotifierLib class', () => {
 
         const logPacketArgs = pinoFake.error.args[0]
 
-        expect(logPacketArgs[0].err).to.be.an.error()
-        expect(logPacketArgs[0].err.message).to.equal(message)
-        expect(logPacketArgs[0].req.id).to.equal(id)
-        expect(logPacketArgs[1]).to.equal(message)
+        expect(logPacketArgs[0].err).toBeInstanceOf(Error)
+        expect(logPacketArgs[0].err.message).toEqual(message)
+        expect(logPacketArgs[0].req.id).toEqual(id)
+        expect(logPacketArgs[1]).toEqual(message)
       })
 
       it('sends the expected notification to "Errbit"', () => {
@@ -73,9 +68,9 @@ describe('RequestNotifierLib class', () => {
 
         const { error, session } = airbrakeFake.notify.args[0][0]
 
-        expect(error).to.be.an.error()
-        expect(error.message).to.equal(message)
-        expect(session).to.equal({ message, req: { id } })
+        expect(error).toBeInstanceOf(Error)
+        expect(error.message).toEqual(message)
+        expect(session).toEqual({ message, req: { id } })
       })
     })
 
@@ -87,11 +82,11 @@ describe('RequestNotifierLib class', () => {
 
         const logPacketArgs = pinoFake.error.args[0]
 
-        expect(logPacketArgs[0].err).to.be.an.error()
-        expect(logPacketArgs[0].err.message).to.equal(message)
-        expect(logPacketArgs[0].req.id).to.equal(id)
-        expect(logPacketArgs[0].name).to.equal('foo')
-        expect(logPacketArgs[1]).to.equal(message)
+        expect(logPacketArgs[0].err).toBeInstanceOf(Error)
+        expect(logPacketArgs[0].err.message).toEqual(message)
+        expect(logPacketArgs[0].req.id).toEqual(id)
+        expect(logPacketArgs[0].name).toEqual('foo')
+        expect(logPacketArgs[1]).toEqual(message)
       })
 
       it('sends the expected notification to "Errbit"', () => {
@@ -101,9 +96,9 @@ describe('RequestNotifierLib class', () => {
 
         const { error, session } = airbrakeFake.notify.args[0][0]
 
-        expect(error).to.be.an.error()
-        expect(error.message).to.equal(message)
-        expect(session).to.equal({ name: 'foo', message, req: { id } })
+        expect(error).toBeInstanceOf(Error)
+        expect(error.message).toEqual(message)
+        expect(session).toEqual({ name: 'foo', message, req: { id } })
       })
     })
 
@@ -115,11 +110,11 @@ describe('RequestNotifierLib class', () => {
 
         const logPacketArgs = pinoFake.error.args[0]
 
-        expect(logPacketArgs[0].err).to.be.an.error()
-        expect(logPacketArgs[0].err.message).to.equal(testError.message)
-        expect(logPacketArgs[0].req.id).to.equal(id)
-        expect(logPacketArgs[0].name).to.equal('foo')
-        expect(logPacketArgs[1]).to.equal(message)
+        expect(logPacketArgs[0].err).toBeInstanceOf(Error)
+        expect(logPacketArgs[0].err.message).toEqual(testError.message)
+        expect(logPacketArgs[0].req.id).toEqual(id)
+        expect(logPacketArgs[0].name).toEqual('foo')
+        expect(logPacketArgs[1]).toEqual(message)
       })
 
       it('sends the expected notification to "Errbit"', () => {
@@ -129,9 +124,9 @@ describe('RequestNotifierLib class', () => {
 
         const { error, session } = airbrakeFake.notify.args[0][0]
 
-        expect(error).to.be.an.error()
-        expect(error.message).to.equal(testError.message)
-        expect(session).to.equal({ name: 'foo', message, req: { id } })
+        expect(error).toBeInstanceOf(Error)
+        expect(error.message).toEqual(testError.message)
+        expect(session).toEqual({ name: 'foo', message, req: { id } })
       })
     })
 
@@ -143,10 +138,10 @@ describe('RequestNotifierLib class', () => {
 
         const logPacketArgs = pinoFake.error.args[0]
 
-        expect(logPacketArgs[0].err).to.be.an.error()
-        expect(logPacketArgs[0].err.message).to.equal(testError.message)
-        expect(logPacketArgs[0].req.id).to.equal(id)
-        expect(logPacketArgs[1]).to.equal(message)
+        expect(logPacketArgs[0].err).toBeInstanceOf(Error)
+        expect(logPacketArgs[0].err.message).toEqual(testError.message)
+        expect(logPacketArgs[0].req.id).toEqual(id)
+        expect(logPacketArgs[1]).toEqual(message)
       })
 
       it('sends the expected notification to "Errbit"', () => {
@@ -156,9 +151,9 @@ describe('RequestNotifierLib class', () => {
 
         const { error, session } = airbrakeFake.notify.args[0][0]
 
-        expect(error).to.be.an.error()
-        expect(error.message).to.equal(testError.message)
-        expect(session).to.equal({ message, req: { id } })
+        expect(error).toBeInstanceOf(Error)
+        expect(error.message).toEqual(testError.message)
+        expect(session).toEqual({ message, req: { id } })
       })
     })
   })

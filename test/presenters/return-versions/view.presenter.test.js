@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ContactModel = require('../../../app/models/contact.model.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
@@ -29,7 +22,7 @@ describe('Return Versions - View presenter', () => {
   it('correctly presents the data', () => {
     const result = ViewPresenter.go(returnVersionData)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       backLink: {
         href: `/system/licences/${returnVersion.licence.id}/set-up`,
         text: 'Go back to licence set up'
@@ -74,7 +67,7 @@ describe('Return Versions - View presenter', () => {
       it('returns "Yes"', () => {
         const result = ViewPresenter.go(returnVersionData)
 
-        expect(result.multipleUpload).to.equal('Yes')
+        expect(result.multipleUpload).toEqual('Yes')
       })
     })
 
@@ -82,7 +75,7 @@ describe('Return Versions - View presenter', () => {
       it('returns "No"', () => {
         const result = ViewPresenter.go(returnVersionData)
 
-        expect(result.multipleUpload).to.equal('No')
+        expect(result.multipleUpload).toEqual('No')
       })
     })
   })
@@ -97,7 +90,7 @@ describe('Return Versions - View presenter', () => {
       it('returns "null"', () => {
         const result = ViewPresenter.go(returnVersionData)
 
-        expect(result.notes).to.be.null()
+        expect(result.notes).toBeNull()
       })
     })
 
@@ -110,7 +103,7 @@ describe('Return Versions - View presenter', () => {
       it('returns the note', () => {
         const result = ViewPresenter.go(returnVersionData)
 
-        expect(result.notes).to.equal({
+        expect(result.notes).toEqual({
           additionalNotes: [],
           firstNote: 'A note on the return version record'
         })
@@ -126,7 +119,7 @@ describe('Return Versions - View presenter', () => {
       it('returns the note', () => {
         const result = ViewPresenter.go(returnVersionData)
 
-        expect(result.notes).to.equal({
+        expect(result.notes).toEqual({
           additionalNotes: [],
           firstNote: 'Mod log note 1'
         })
@@ -142,7 +135,7 @@ describe('Return Versions - View presenter', () => {
       it('returns the notes, with the mod log notes taking precedence over those on the return version', () => {
         const result = ViewPresenter.go(returnVersionData)
 
-        expect(result.notes).to.equal({
+        expect(result.notes).toEqual({
           additionalNotes: ['Mod log note 2', 'A note on the return version record'],
           firstNote: 'Mod log note 1'
         })
@@ -154,7 +147,7 @@ describe('Return Versions - View presenter', () => {
     it('returns the title incorporating the return versions start date', () => {
       const result = ViewPresenter.go(returnVersionData)
 
-      expect(result.pageTitle).to.equal('Requirements for returns starting 1 April 2022')
+      expect(result.pageTitle).toEqual('Requirements for returns starting 1 April 2022')
     })
   })
 
@@ -163,7 +156,7 @@ describe('Return Versions - View presenter', () => {
       it('returns null', () => {
         const result = ViewPresenter.go(returnVersionData)
 
-        expect(result.pagination).to.be.null()
+        expect(result.pagination).toBeNull()
       })
     })
 
@@ -191,7 +184,7 @@ describe('Return Versions - View presenter', () => {
         it('returns the "previous" and "next" links', () => {
           const result = ViewPresenter.go(returnVersionData)
 
-          expect(result.pagination).to.equal({
+          expect(result.pagination).toEqual({
             next: {
               href: `/system/return-versions/${nextReturnVersion.id}`,
               labelText: 'Starting 1 January 2025',
@@ -214,7 +207,7 @@ describe('Return Versions - View presenter', () => {
         it('returns the "next" link', () => {
           const result = ViewPresenter.go(returnVersionData)
 
-          expect(result.pagination).to.equal({
+          expect(result.pagination).toEqual({
             next: {
               href: `/system/return-versions/${nextReturnVersion.id}`,
               labelText: 'Starting 1 January 2025',
@@ -232,7 +225,7 @@ describe('Return Versions - View presenter', () => {
         it('returns the "previous" link', () => {
           const result = ViewPresenter.go(returnVersionData)
 
-          expect(result.pagination).to.equal({
+          expect(result.pagination).toEqual({
             previous: {
               href: `/system/return-versions/${previousReturnVersion.id}`,
               labelText: 'Starting 1 January 2019',
@@ -253,7 +246,7 @@ describe('Return Versions - View presenter', () => {
       it('returns "Yes"', () => {
         const result = ViewPresenter.go(returnVersionData)
 
-        expect(result.quarterlyReturns).to.equal('Yes')
+        expect(result.quarterlyReturns).toEqual('Yes')
       })
     })
 
@@ -261,7 +254,7 @@ describe('Return Versions - View presenter', () => {
       it('returns "No"', () => {
         const result = ViewPresenter.go(returnVersionData)
 
-        expect(result.quarterlyReturns).to.equal('No')
+        expect(result.quarterlyReturns).toEqual('No')
       })
     })
   })
@@ -275,7 +268,7 @@ describe('Return Versions - View presenter', () => {
       it('returns true', () => {
         const result = ViewPresenter.go(returnVersionData)
 
-        expect(result.quarterlyReturnSubmissions).to.be.true()
+        expect(result.quarterlyReturnSubmissions).toBe(true)
       })
     })
 
@@ -283,7 +276,7 @@ describe('Return Versions - View presenter', () => {
       it('returns false', () => {
         const result = ViewPresenter.go(returnVersionData)
 
-        expect(result.quarterlyReturnSubmissions).to.be.false()
+        expect(result.quarterlyReturnSubmissions).toBe(false)
       })
     })
   })
@@ -296,7 +289,7 @@ describe('Return Versions - View presenter', () => {
 
           const { abstractionPeriod } = result.requirements[0]
 
-          expect(abstractionPeriod).to.equal('1 April to 31 October')
+          expect(abstractionPeriod).toEqual('1 April to 31 October')
         })
       })
 
@@ -311,7 +304,7 @@ describe('Return Versions - View presenter', () => {
         it('returns an empty string', () => {
           const result = ViewPresenter.go(returnVersionData)
 
-          expect(result.requirements[0].abstractionPeriod).to.equal('')
+          expect(result.requirements[0].abstractionPeriod).toEqual('')
         })
       })
     })
@@ -323,7 +316,7 @@ describe('Return Versions - View presenter', () => {
 
           const { agreementsExceptions } = result.requirements[0]
 
-          expect(agreementsExceptions).to.equal('None')
+          expect(agreementsExceptions).toEqual('None')
         })
       })
 
@@ -337,7 +330,7 @@ describe('Return Versions - View presenter', () => {
 
           const { agreementsExceptions } = result.requirements[0]
 
-          expect(agreementsExceptions).to.equal('Gravity fill')
+          expect(agreementsExceptions).toEqual('Gravity fill')
         })
       })
 
@@ -352,7 +345,7 @@ describe('Return Versions - View presenter', () => {
 
           const { agreementsExceptions } = result.requirements[0]
 
-          expect(agreementsExceptions).to.equal('Gravity fill and Transfer re-abstraction scheme')
+          expect(agreementsExceptions).toEqual('Gravity fill and Transfer re-abstraction scheme')
         })
       })
 
@@ -369,7 +362,7 @@ describe('Return Versions - View presenter', () => {
 
           const { agreementsExceptions } = result.requirements[0]
 
-          expect(agreementsExceptions).to.equal(
+          expect(agreementsExceptions).toEqual(
             'Gravity fill, Transfer re-abstraction scheme, Two-part tariff, and 56 returns exception'
           )
         })
@@ -383,7 +376,7 @@ describe('Return Versions - View presenter', () => {
 
         const { points } = result.requirements[0]
 
-        expect(points).to.equal(['At National Grid Reference SE 4044 7262 (Borehole in top field)'])
+        expect(points).toEqual(['At National Grid Reference SE 4044 7262 (Borehole in top field)'])
       })
     })
 
@@ -398,7 +391,7 @@ describe('Return Versions - View presenter', () => {
 
           const { purposes } = result.requirements[0]
 
-          expect(purposes).to.equal(['Spray Irrigation - Direct (spray indiscreetly)'])
+          expect(purposes).toEqual(['Spray Irrigation - Direct (spray indiscreetly)'])
         })
       })
 
@@ -408,7 +401,7 @@ describe('Return Versions - View presenter', () => {
 
           const { purposes } = result.requirements[0]
 
-          expect(purposes).to.equal(['Spray Irrigation - Direct'])
+          expect(purposes).toEqual(['Spray Irrigation - Direct'])
         })
       })
     })
@@ -424,7 +417,7 @@ describe('Return Versions - View presenter', () => {
 
           const { returnsCycle } = result.requirements[0]
 
-          expect(returnsCycle).to.equal('Summer')
+          expect(returnsCycle).toEqual('Summer')
         })
       })
 
@@ -434,7 +427,7 @@ describe('Return Versions - View presenter', () => {
 
           const { returnsCycle } = result.requirements[0]
 
-          expect(returnsCycle).to.equal('Winter and all year')
+          expect(returnsCycle).toEqual('Winter and all year')
         })
       })
     })
@@ -446,7 +439,7 @@ describe('Return Versions - View presenter', () => {
 
           const { siteDescription } = result.requirements[0]
 
-          expect(siteDescription).to.equal('Borehole in field')
+          expect(siteDescription).toEqual('Borehole in field')
         })
       })
 
@@ -460,7 +453,7 @@ describe('Return Versions - View presenter', () => {
 
           const { siteDescription } = result.requirements[0]
 
-          expect(siteDescription).to.equal('')
+          expect(siteDescription).toEqual('')
         })
       })
     })
@@ -472,7 +465,7 @@ describe('Return Versions - View presenter', () => {
 
           const { title } = result.requirements[0]
 
-          expect(title).to.equal('Borehole in field')
+          expect(title).toEqual('Borehole in field')
         })
       })
 
@@ -486,7 +479,7 @@ describe('Return Versions - View presenter', () => {
 
           const { title } = result.requirements[0]
 
-          expect(title).to.equal('')
+          expect(title).toEqual('')
         })
       })
     })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
@@ -88,7 +81,7 @@ describe('Licences - Fetch Conditions service', () => {
     it('return the matching conditions', async () => {
       const result = await FetchConditionsService.go(licenceVersion.id)
 
-      expect(result).to.equal([
+      expect(result).toEqual([
         {
           id: licenceVersionPurposeConditionType.id,
           displayTitle: licenceVersionPurposeConditionType.displayTitle,
@@ -140,7 +133,7 @@ describe('Licences - Fetch Conditions service', () => {
     it('returns no conditions', async () => {
       const result = await FetchConditionsService.go(licenceVersion.id)
 
-      expect(result).to.equal([])
+      expect(result).toEqual([])
     })
   })
 })

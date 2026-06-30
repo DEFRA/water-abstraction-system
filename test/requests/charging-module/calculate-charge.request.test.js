@@ -3,12 +3,7 @@
 const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
@@ -52,20 +47,20 @@ describe('Charging Module Calculate Charge request', () => {
     it('returns a "true" success status', async () => {
       const result = await CalculateChargeRequest.send(transactionData)
 
-      expect(result.succeeded).to.be.true()
+      expect(result.succeeded).toBe(true)
     })
 
     it('returns the results of the calculation in the "response"', async () => {
       const result = await CalculateChargeRequest.send(transactionData)
 
-      expect(result.response.body.calculation.chargeValue).to.equal(7000)
-      expect(result.response.body.calculation.baseCharge).to.equal(9700)
-      expect(result.response.body.calculation.waterCompanyChargeValue).to.equal(800)
-      expect(result.response.body.calculation.supportedSourceValue).to.equal(3500)
-      expect(result.response.body.calculation.winterOnlyFactor).to.be.null()
-      expect(result.response.body.calculation.section130Factor).to.be.null()
-      expect(result.response.body.calculation.section127Factor).to.equal(0.5)
-      expect(result.response.body.calculation.compensationChargePercent).to.be.null()
+      expect(result.response.body.calculation.chargeValue).toEqual(7000)
+      expect(result.response.body.calculation.baseCharge).toEqual(9700)
+      expect(result.response.body.calculation.waterCompanyChargeValue).toEqual(800)
+      expect(result.response.body.calculation.supportedSourceValue).toEqual(3500)
+      expect(result.response.body.calculation.winterOnlyFactor).toBeNull()
+      expect(result.response.body.calculation.section130Factor).toBeNull()
+      expect(result.response.body.calculation.section127Factor).toEqual(0.5)
+      expect(result.response.body.calculation.compensationChargePercent).toBeNull()
     })
   })
 
@@ -93,15 +88,15 @@ describe('Charging Module Calculate Charge request', () => {
       it('returns a "false" success status', async () => {
         const result = await CalculateChargeRequest.send(transactionData)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
         const result = await CalculateChargeRequest.send(transactionData)
 
-        expect(result.response.body.statusCode).to.equal(HTTP_STATUS_UNAUTHORIZED)
-        expect(result.response.body.error).to.equal('Unauthorized')
-        expect(result.response.body.message).to.equal('Invalid JWT: Token format not valid')
+        expect(result.response.body.statusCode).toEqual(HTTP_STATUS_UNAUTHORIZED)
+        expect(result.response.body.error).toEqual('Unauthorized')
+        expect(result.response.body.message).toEqual('Invalid JWT: Token format not valid')
       })
     })
 
@@ -116,15 +111,15 @@ describe('Charging Module Calculate Charge request', () => {
       it('returns a "false" success status', async () => {
         const result = await CalculateChargeRequest.send(transactionData)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
         const result = await CalculateChargeRequest.send(transactionData)
 
-        expect(result.response.statusCode).not.to.exist()
-        expect(result.response.body).not.to.exist()
-        expect(result.response.message).to.equal("Timeout awaiting 'request' for 5000ms")
+        expect(result.response.statusCode).toBeUndefined()
+        expect(result.response.body).toBeUndefined()
+        expect(result.response.message).toEqual("Timeout awaiting 'request' for 5000ms")
       })
     })
   })

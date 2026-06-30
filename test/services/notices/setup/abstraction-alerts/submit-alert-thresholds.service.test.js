@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
@@ -49,7 +44,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
     it('continues the journey', async () => {
       const result = await SubmitAlertThresholdsService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).toEqual({})
     })
 
     describe('and updates the session ', () => {
@@ -63,8 +58,8 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
         it('saves the submitted value as an array', async () => {
           await SubmitAlertThresholdsService.go(session.id, payload)
 
-          expect(session.alertThresholds).to.equal([licenceMonitoringStations.one.thresholdGroup])
-          expect(session.$update.called).to.be.true()
+          expect(session.alertThresholds).toEqual([licenceMonitoringStations.one.thresholdGroup])
+          expect(session.$update.called).toBe(true)
         })
       })
 
@@ -72,12 +67,12 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
         it('saves the submitted values as an array', async () => {
           await SubmitAlertThresholdsService.go(session.id, payload)
 
-          expect(session.alertThresholds).to.equal([
+          expect(session.alertThresholds).toEqual([
             licenceMonitoringStations.one.thresholdGroup,
             licenceMonitoringStations.two.thresholdGroup
           ])
 
-          expect(session.$update.called).to.be.true()
+          expect(session.$update.called).toBe(true)
         })
       })
     })
@@ -104,7 +99,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
       it('returns page data for the view, with errors', async () => {
         const result = await SubmitAlertThresholdsService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           error: {
             alertThresholds: {
               text: 'Select applicable threshold(s)'
@@ -153,7 +148,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
       it('returns page data for the view, with errors, and all the thresholds unselected', async () => {
         const result = await SubmitAlertThresholdsService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           error: {
             alertThresholds: {
               text: 'Select applicable threshold(s)'

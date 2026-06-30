@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
@@ -20,7 +13,7 @@ describe('Fetch Region service', () => {
     it('returns results', async () => {
       const result = await FetchRegionService.go(region.naldRegionId)
 
-      expect(result.id).to.equal(region.id)
+      expect(result.id).toEqual(region.id)
     })
   })
 
@@ -28,7 +21,7 @@ describe('Fetch Region service', () => {
     it('returns no results', async () => {
       const result = await FetchRegionService.go(21)
 
-      expect(result).to.be.undefined()
+      expect(result).toBeUndefined()
     })
   })
 })

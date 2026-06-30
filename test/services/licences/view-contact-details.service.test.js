@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
@@ -68,7 +63,7 @@ describe('Licences - View Contact Details service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewContactDetailsService.go(licenceId, auth)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeSecondaryNav: 'contact-details',
         backLink: {
           href: '/',

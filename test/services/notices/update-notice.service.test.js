@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const EventHelper = require('../../support/helpers/event.helper.js')
 const NotificationHelper = require('../../support/helpers/notification.helper.js')
@@ -29,7 +22,7 @@ describe('Notices - Update Notice service', () => {
   let sentAndReturnedNotice
   let sentNotice
 
-  before(async () => {
+  beforeAll(async () => {
     const noticeData = {
       issuer: 'admin-internal@wrls.gov.uk',
       licences: ['01/123'],
@@ -118,7 +111,7 @@ describe('Notices - Update Notice service', () => {
     ]
   })
 
-  after(async () => {
+  afterAll(async () => {
     notIncludedNotice.$query().delete()
     notNotificationNotice.$query().delete()
     cancelledNotice.$query().delete()
@@ -141,59 +134,59 @@ describe('Notices - Update Notice service', () => {
       // Check notice with only sent notifications - SENT
       let refreshedNotice = await sentNotice.$query()
 
-      expect(refreshedNotice.metadata.error).to.equal(0)
-      expect(refreshedNotice.overallStatus).to.equal('sent')
-      expect(refreshedNotice.statusCounts).to.equal({ cancelled: 0, error: 0, pending: 0, returned: 0, sent: 1 })
+      expect(refreshedNotice.metadata.error).toEqual(0)
+      expect(refreshedNotice.overallStatus).toEqual('sent')
+      expect(refreshedNotice.statusCounts).toEqual({ cancelled: 0, error: 0, pending: 0, returned: 0, sent: 1 })
 
       // Check notice with only cancelled notifications - CANCELLED
       refreshedNotice = await cancelledNotice.$query()
 
-      expect(refreshedNotice.metadata.error).to.equal(0)
-      expect(refreshedNotice.overallStatus).to.equal('cancelled')
-      expect(refreshedNotice.statusCounts).to.equal({ cancelled: 1, error: 0, pending: 0, returned: 0, sent: 0 })
+      expect(refreshedNotice.metadata.error).toEqual(0)
+      expect(refreshedNotice.overallStatus).toEqual('cancelled')
+      expect(refreshedNotice.statusCounts).toEqual({ cancelled: 1, error: 0, pending: 0, returned: 0, sent: 0 })
 
       // Check notice with a sent and pending notification - PENDING
       refreshedNotice = await sentAndPendingNotice.$query()
 
-      expect(refreshedNotice.metadata.error).to.equal(0)
-      expect(refreshedNotice.overallStatus).to.equal('pending')
-      expect(refreshedNotice.statusCounts).to.equal({ cancelled: 0, error: 0, pending: 1, returned: 0, sent: 1 })
+      expect(refreshedNotice.metadata.error).toEqual(0)
+      expect(refreshedNotice.overallStatus).toEqual('pending')
+      expect(refreshedNotice.statusCounts).toEqual({ cancelled: 0, error: 0, pending: 1, returned: 0, sent: 1 })
 
       // Check notice with a sent and errored notification - ERROR
       refreshedNotice = await sentAndErroredNotice.$query()
 
-      expect(refreshedNotice.metadata.error).to.equal(1)
-      expect(refreshedNotice.overallStatus).to.equal('error')
-      expect(refreshedNotice.statusCounts).to.equal({ cancelled: 0, error: 1, pending: 0, returned: 0, sent: 1 })
+      expect(refreshedNotice.metadata.error).toEqual(1)
+      expect(refreshedNotice.overallStatus).toEqual('error')
+      expect(refreshedNotice.statusCounts).toEqual({ cancelled: 0, error: 1, pending: 0, returned: 0, sent: 1 })
 
       // Check notice with a sent and returned notification - RETURNED
       refreshedNotice = await sentAndReturnedNotice.$query()
 
-      expect(refreshedNotice.metadata.error).to.equal(0)
-      expect(refreshedNotice.overallStatus).to.equal('returned')
-      expect(refreshedNotice.statusCounts).to.equal({ cancelled: 0, error: 0, pending: 0, returned: 1, sent: 1 })
+      expect(refreshedNotice.metadata.error).toEqual(0)
+      expect(refreshedNotice.overallStatus).toEqual('returned')
+      expect(refreshedNotice.statusCounts).toEqual({ cancelled: 0, error: 0, pending: 0, returned: 1, sent: 1 })
 
       // Check notice with a sent and cancelled notification - SENT
       refreshedNotice = await sentAndCancelledNotice.$query()
 
-      expect(refreshedNotice.metadata.error).to.equal(0)
-      expect(refreshedNotice.overallStatus).to.equal('sent')
-      expect(refreshedNotice.statusCounts).to.equal({ cancelled: 1, error: 0, pending: 0, returned: 0, sent: 1 })
+      expect(refreshedNotice.metadata.error).toEqual(0)
+      expect(refreshedNotice.overallStatus).toEqual('sent')
+      expect(refreshedNotice.statusCounts).toEqual({ cancelled: 1, error: 0, pending: 0, returned: 0, sent: 1 })
 
       // Check notice with one of each notification - RETURNED
       refreshedNotice = await oneOfEachNotice.$query()
 
-      expect(refreshedNotice.metadata.error).to.equal(1)
-      expect(refreshedNotice.overallStatus).to.equal('returned')
-      expect(refreshedNotice.statusCounts).to.equal({ cancelled: 1, error: 1, pending: 1, returned: 1, sent: 1 })
+      expect(refreshedNotice.metadata.error).toEqual(1)
+      expect(refreshedNotice.overallStatus).toEqual('returned')
+      expect(refreshedNotice.statusCounts).toEqual({ cancelled: 1, error: 1, pending: 1, returned: 1, sent: 1 })
 
       // Check our notice that is not a notification did not get updated
       refreshedNotice = await notNotificationNotice.$query()
-      expect(refreshedNotice).to.equal(notNotificationNotice)
+      expect(refreshedNotice).toEqual(notNotificationNotice)
 
       // Check our notification notice that was not included did not get updated
       refreshedNotice = await notIncludedNotice.$query()
-      expect(refreshedNotice).to.equal(notIncludedNotice)
+      expect(refreshedNotice).toEqual(notIncludedNotice)
     })
   })
 })

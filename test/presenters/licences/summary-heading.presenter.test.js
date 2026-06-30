@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceModel = require('../../../app/models/licence.model.js')
 const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
@@ -28,7 +21,7 @@ describe('Licences - Summary Heading presenter', () => {
     it('correctly presents the data', () => {
       const result = SummaryHeadingPresenter.go(licence, summary)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: '/',
           text: 'Go back to search'
@@ -56,7 +49,7 @@ describe('Licences - Summary Heading presenter', () => {
       it('returns the text with the "startDate"', () => {
         const result = SummaryHeadingPresenter.go(licence, summary)
 
-        expect(result.currentVersion).to.equal('The current version of the licence starting 1 April 2019')
+        expect(result.currentVersion).toEqual('The current version of the licence starting 1 April 2019')
       })
     })
 
@@ -72,7 +65,7 @@ describe('Licences - Summary Heading presenter', () => {
       it('returns the text with the licence versions "startDate"', () => {
         const result = SummaryHeadingPresenter.go(licence, summary)
 
-        expect(result.currentVersion).to.equal('The current version of the licence starting 1 January 2021')
+        expect(result.currentVersion).toEqual('The current version of the licence starting 1 January 2021')
       })
     })
   })
@@ -83,7 +76,7 @@ describe('Licences - Summary Heading presenter', () => {
         it('returns the licence name', () => {
           const result = SummaryHeadingPresenter.go(licence, summary)
 
-          expect(result.pageTitleCaption).to.equal('Between two ferns')
+          expect(result.pageTitleCaption).toEqual('Between two ferns')
         })
       })
 
@@ -95,7 +88,7 @@ describe('Licences - Summary Heading presenter', () => {
         it('returns null', () => {
           const result = SummaryHeadingPresenter.go(licence, summary)
 
-          expect(result.pageTitleCaption).to.be.null()
+          expect(result.pageTitleCaption).toBeNull()
         })
       })
     })
@@ -108,7 +101,7 @@ describe('Licences - Summary Heading presenter', () => {
       it('returns "Unregistered licence"', () => {
         const result = SummaryHeadingPresenter.go(licence, summary)
 
-        expect(result.pageTitleCaption).to.equal('Unregistered licence')
+        expect(result.pageTitleCaption).toEqual('Unregistered licence')
       })
     })
   })
@@ -122,7 +115,7 @@ describe('Licences - Summary Heading presenter', () => {
       it('returns the warning', () => {
         const result = SummaryHeadingPresenter.go(licence, summary)
 
-        expect(result.warning).to.equal({
+        expect(result.warning).toEqual({
           iconFallbackText: 'Warning',
           text: 'This licence expired on 1 April 2019'
         })
@@ -139,7 +132,7 @@ describe('Licences - Summary Heading presenter', () => {
       it('returns false', () => {
         const result = SummaryHeadingPresenter.go(licence, summary)
 
-        expect(result.workflowWarning).to.be.false()
+        expect(result.workflowWarning).toBe(false)
       })
     })
 
@@ -152,7 +145,7 @@ describe('Licences - Summary Heading presenter', () => {
         it('returns false', () => {
           const result = SummaryHeadingPresenter.go(licence, summary)
 
-          expect(result.workflowWarning).to.be.false()
+          expect(result.workflowWarning).toBe(false)
         })
       })
 
@@ -160,7 +153,7 @@ describe('Licences - Summary Heading presenter', () => {
         it('returns true', () => {
           const result = SummaryHeadingPresenter.go(licence, summary)
 
-          expect(result.workflowWarning).to.be.true()
+          expect(result.workflowWarning).toBe(true)
         })
       })
     })

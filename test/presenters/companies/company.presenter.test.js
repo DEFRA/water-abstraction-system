@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 const { formatLongDate } = require('../../../app/presenters/base.presenter.js')
@@ -44,7 +37,7 @@ describe('Companies - Company Presenter', () => {
     it('returns page data for the view', () => {
       const result = CompanyPresenter.go(companyDetails, role)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/companies/${companyDetails.id}/contacts`,
           text: 'Go back to licence holder contacts'
@@ -89,7 +82,7 @@ describe('Companies - Company Presenter', () => {
           it('returns an array of all address properties', () => {
             const result = CompanyPresenter.go(companyDetails, role)
 
-            expect(result.companyAddresses[1].address).to.equal([
+            expect(result.companyAddresses[1].address).toEqual([
               'The Tyrell Plaza',
               'Floor 667 (Above the Smog)',
               'Southbank Industrial Sector',
@@ -106,7 +99,7 @@ describe('Companies - Company Presenter', () => {
           it('returns an array of the address properties that are present', () => {
             const result = CompanyPresenter.go(companyDetails, role)
 
-            expect(result.companyAddresses[0].address).to.equal([
+            expect(result.companyAddresses[0].address).toEqual([
               'The Tyrell Spire',
               'Floor 667 (Above the Smog)',
               'Southbank Industrial Sector',

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const FetchExistingRequirementsService = require('../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js')
@@ -34,7 +29,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
       it('returns the saved value', async () => {
         const result = await GenerateFromExistingRequirementsService.go(returnVersionId)
 
-        expect(result.multipleUpload).to.be.false()
+        expect(result.multipleUpload).toBe(false)
       })
     })
 
@@ -48,7 +43,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
       it('returns the saved value', async () => {
         const result = await GenerateFromExistingRequirementsService.go(returnVersionId)
 
-        expect(result.quarterlyReturns).to.be.false()
+        expect(result.quarterlyReturns).toBe(false)
       })
     })
 
@@ -62,7 +57,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
       it('returns the details of its return requirements transformed for use in the journey', async () => {
         const result = await GenerateFromExistingRequirementsService.go(returnVersionId)
 
-        expect(result.requirements).to.equal([
+        expect(result.requirements).toEqual([
           {
             points: [fetchResult.returnRequirements[0].points[0].id],
             purposes: [
@@ -125,7 +120,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
       it('returns the details of its return requirements transformed, falling back to point description for the missing site description', async () => {
         const result = await GenerateFromExistingRequirementsService.go(returnVersionId)
 
-        expect(result.requirements).to.equal([
+        expect(result.requirements).toEqual([
           {
             points: [fetchResult.returnRequirements[0].points[0].id],
             purposes: [
@@ -180,7 +175,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
 
   describe('when a matching return version does not exist', () => {
     it('throws an error', async () => {
-      await expect(GenerateFromExistingRequirementsService.go('6d436e7b-c3c9-493c-97f3-b397c899c926')).to.reject()
+      await expect(GenerateFromExistingRequirementsService.go('6d436e7b-c3c9-493c-97f3-b397c899c926')).rejects.toThrow()
     })
   })
 })

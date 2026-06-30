@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupModel = require('../../app/models/group.model.js')
@@ -27,8 +20,6 @@ const ROLE_AR_USER_INDEX = 6
 const USER_DIGITISE_EDITOR_INDEX = 11
 const USER_ROLE_AR_USER_INDEX = 0
 
-const { SKIP_COMPARE_LIST: skip } = UserHelper
-
 describe('Role model', () => {
   let testGroup
   let testGroupRole
@@ -36,7 +27,7 @@ describe('Role model', () => {
   let testUser
   let testUserRole
 
-  before(async () => {
+  beforeAll(async () => {
     // This combination has one match in group roles and so ensures we only get one result making testing clearer
     testRecord = RoleHelper.select(ROLE_AR_USER_INDEX)
     testGroup = GroupHelper.select(GROUP_SUPER_INDEX)
@@ -49,8 +40,8 @@ describe('Role model', () => {
     it('can successfully run a basic query', async () => {
       const result = await RoleModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(RoleModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(RoleModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -59,19 +50,19 @@ describe('Role model', () => {
       it('can successfully run a related query', async () => {
         const query = await RoleModel.query().innerJoinRelated('groupRoles')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the group roles', async () => {
         const result = await RoleModel.query().findById(testRecord.id).withGraphFetched('groupRoles')
 
-        expect(result).to.be.instanceOf(RoleModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(RoleModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.groupRoles).to.be.an.array()
-        expect(result.groupRoles).to.have.length(1)
-        expect(result.groupRoles[0]).to.be.an.instanceOf(GroupRoleModel)
-        expect(result.groupRoles[0]).to.equal(testGroupRole, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.groupRoles).toBeInstanceOf(Array)
+        expect(result.groupRoles).toHaveLength(1)
+        expect(result.groupRoles[0]).toBeInstanceOf(GroupRoleModel)
+        expect(result.groupRoles[0]).toMatchObject(testGroupRole)
       })
     })
 
@@ -79,19 +70,19 @@ describe('Role model', () => {
       it('can successfully run a related query', async () => {
         const query = await RoleModel.query().innerJoinRelated('userRoles')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the user roles', async () => {
         const result = await RoleModel.query().findById(testRecord.id).withGraphFetched('userRoles')
 
-        expect(result).to.be.instanceOf(RoleModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(RoleModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.userRoles).to.be.an.array()
-        expect(result.userRoles).to.have.length(1)
-        expect(result.userRoles[0]).to.be.an.instanceOf(UserRoleModel)
-        expect(result.userRoles[0]).to.equal(testUserRole, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.userRoles).toBeInstanceOf(Array)
+        expect(result.userRoles).toHaveLength(1)
+        expect(result.userRoles[0]).toBeInstanceOf(UserRoleModel)
+        expect(result.userRoles[0]).toMatchObject(testUserRole)
       })
     })
 
@@ -99,19 +90,19 @@ describe('Role model', () => {
       it('can successfully run a related query', async () => {
         const query = await RoleModel.query().innerJoinRelated('groups')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the groups', async () => {
         const result = await RoleModel.query().findById(testRecord.id).withGraphFetched('groups')
 
-        expect(result).to.be.instanceOf(RoleModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(RoleModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.groups).to.be.an.array()
-        expect(result.groups).to.have.length(1)
-        expect(result.groups[0]).to.be.an.instanceOf(GroupModel)
-        expect(result.groups[0]).to.equal(testGroup, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.groups).toBeInstanceOf(Array)
+        expect(result.groups).toHaveLength(1)
+        expect(result.groups[0]).toBeInstanceOf(GroupModel)
+        expect(result.groups[0]).toMatchObject(testGroup)
       })
     })
 
@@ -119,19 +110,19 @@ describe('Role model', () => {
       it('can successfully run a related query', async () => {
         const query = await RoleModel.query().innerJoinRelated('users')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the users', async () => {
         const result = await RoleModel.query().findById(testRecord.id).withGraphFetched('users')
 
-        expect(result).to.be.instanceOf(RoleModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(RoleModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.users).to.be.an.array()
-        expect(result.users).to.have.length(1)
-        expect(result.users[0]).to.be.an.instanceOf(UserModel)
-        expect(result.users[0]).to.equal(testUser, { skip })
+        expect(result.users).toBeInstanceOf(Array)
+        expect(result.users).toHaveLength(1)
+        expect(result.users[0]).toBeInstanceOf(UserModel)
+        expect(result.users[0]).toMatchObject({ ...testUser, password: expect.any(String) })
       })
     })
   })

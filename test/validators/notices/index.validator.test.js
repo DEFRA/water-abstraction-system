@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { today } = require('../../../app/lib/general.lib.js')
 
@@ -27,7 +20,7 @@ describe('Notices - Index validator', () => {
       it('confirms the data is valid', () => {
         const result = IndexValidator.go(payload)
 
-        expect(result.value).to.equal({
+        expect(result.value).toEqual({
           noticeTypes: ['reduce', 'stop'],
           sentBy: 'test@test.com',
           sentFromDay: '1',
@@ -40,7 +33,7 @@ describe('Notices - Index validator', () => {
           statuses: ['error', 'sent'],
           toDate: new Date('2024-04-28')
         })
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -58,7 +51,7 @@ describe('Notices - Index validator', () => {
       it('confirms the data is valid', () => {
         const result = IndexValidator.go(payload)
 
-        expect(result.value).to.equal({
+        expect(result.value).toEqual({
           fromDate: new Date('2024-04-01'),
           noticeTypes: [],
           sentFromDay: '1',
@@ -67,7 +60,7 @@ describe('Notices - Index validator', () => {
           statuses: [],
           toDate: undefined
         })
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -79,8 +72,8 @@ describe('Notices - Index validator', () => {
       it('confirms the data is valid', () => {
         const result = IndexValidator.go(payload)
 
-        expect(result.value).to.equal({ fromDate: undefined, toDate: undefined })
-        expect(result.error).not.to.exist()
+        expect(result.value).toEqual({ fromDate: undefined, toDate: undefined })
+        expect(result.error).toBeUndefined()
       })
     })
   })
@@ -98,9 +91,9 @@ describe('Notices - Index validator', () => {
       it('fails validation', () => {
         const result = IndexValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error.details[0].message).to.equal('Reference must be 11 characters or less')
-        expect(result.error.details[0].path[0]).to.equal('reference')
+        expect(result.value).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Reference must be 11 characters or less')
+        expect(result.error.details[0].path[0]).toEqual('reference')
       })
     })
 
@@ -112,9 +105,9 @@ describe('Notices - Index validator', () => {
       it('fails validation', () => {
         const result = IndexValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error.details[0].message).to.equal('Sent by must be 255 characters or less')
-        expect(result.error.details[0].path[0]).to.equal('sentBy')
+        expect(result.value).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Sent by must be 255 characters or less')
+        expect(result.error.details[0].path[0]).toEqual('sentBy')
       })
     })
 
@@ -127,9 +120,9 @@ describe('Notices - Index validator', () => {
         it('fails validation', () => {
           const result = IndexValidator.go(payload)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a valid from date')
-          expect(result.error.details[0].path[0]).to.equal('fromDate')
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Enter a valid from date')
+          expect(result.error.details[0].path[0]).toEqual('fromDate')
         })
       })
 
@@ -141,9 +134,9 @@ describe('Notices - Index validator', () => {
         it('fails validation', () => {
           const result = IndexValidator.go(payload)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a valid from date')
-          expect(result.error.details[0].path[0]).to.equal('fromDate')
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Enter a valid from date')
+          expect(result.error.details[0].path[0]).toEqual('fromDate')
         })
       })
 
@@ -155,9 +148,9 @@ describe('Notices - Index validator', () => {
         it('fails validation', () => {
           const result = IndexValidator.go(payload)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a valid from date')
-          expect(result.error.details[0].path[0]).to.equal('fromDate')
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Enter a valid from date')
+          expect(result.error.details[0].path[0]).toEqual('fromDate')
         })
       })
     })
@@ -172,9 +165,9 @@ describe('Notices - Index validator', () => {
       it('fails validation', () => {
         const result = IndexValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error.details[0].message).to.equal("From date must be either today's date or in the past")
-        expect(result.error.details[0].path[0]).to.equal('fromDate')
+        expect(result.value).toBeDefined()
+        expect(result.error.details[0].message).toEqual("From date must be either today's date or in the past")
+        expect(result.error.details[0].path[0]).toEqual('fromDate')
       })
     })
 
@@ -187,9 +180,9 @@ describe('Notices - Index validator', () => {
         it('fails validation', () => {
           const result = IndexValidator.go(payload)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a valid to date')
-          expect(result.error.details[0].path[0]).to.equal('toDate')
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Enter a valid to date')
+          expect(result.error.details[0].path[0]).toEqual('toDate')
         })
       })
 
@@ -201,9 +194,9 @@ describe('Notices - Index validator', () => {
         it('fails validation', () => {
           const result = IndexValidator.go(payload)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a valid to date')
-          expect(result.error.details[0].path[0]).to.equal('toDate')
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Enter a valid to date')
+          expect(result.error.details[0].path[0]).toEqual('toDate')
         })
       })
 
@@ -215,9 +208,9 @@ describe('Notices - Index validator', () => {
         it('fails validation', () => {
           const result = IndexValidator.go(payload)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a valid to date')
-          expect(result.error.details[0].path[0]).to.equal('toDate')
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Enter a valid to date')
+          expect(result.error.details[0].path[0]).toEqual('toDate')
         })
       })
     })
@@ -232,9 +225,9 @@ describe('Notices - Index validator', () => {
       it('fails validation', () => {
         const result = IndexValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error.details[0].message).to.equal("To date must be either today's date or in the past")
-        expect(result.error.details[0].path[0]).to.equal('toDate')
+        expect(result.value).toBeDefined()
+        expect(result.error.details[0].message).toEqual("To date must be either today's date or in the past")
+        expect(result.error.details[0].path[0]).toEqual('toDate')
       })
     })
 
@@ -246,9 +239,9 @@ describe('Notices - Index validator', () => {
       it('fails validation', () => {
         const result = IndexValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error.details[0].message).to.equal('The from date must be before the to date')
-        expect(result.error.details[0].path[0]).to.equal('fromDate')
+        expect(result.value).toBeDefined()
+        expect(result.error.details[0].message).toEqual('The from date must be before the to date')
+        expect(result.error.details[0].path[0]).toEqual('fromDate')
       })
     })
 
@@ -260,9 +253,9 @@ describe('Notices - Index validator', () => {
       it('fails validation', () => {
         const result = IndexValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error.details[0].message).to.equal('Select a valid notice type')
-        expect(result.error.details[0].path[0]).to.equal('noticeTypes')
+        expect(result.value).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select a valid notice type')
+        expect(result.error.details[0].path[0]).toEqual('noticeTypes')
       })
     })
 
@@ -274,9 +267,9 @@ describe('Notices - Index validator', () => {
       it('fails validation', () => {
         const result = IndexValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error.details[0].message).to.equal('Select a valid status')
-        expect(result.error.details[0].path[0]).to.equal('statuses')
+        expect(result.value).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select a valid status')
+        expect(result.error.details[0].path[0]).toEqual('statuses')
       })
     })
   })

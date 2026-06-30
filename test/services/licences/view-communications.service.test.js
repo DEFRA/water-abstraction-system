@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test Helpers
 const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
@@ -78,7 +73,7 @@ describe('Licences - View Communications service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewCommunicationsService.go(licenceId, auth, page)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeSecondaryNav: 'communications',
         backLink: {
           href: '/',

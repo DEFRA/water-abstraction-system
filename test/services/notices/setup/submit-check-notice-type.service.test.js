@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -56,7 +51,7 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
       it('adds the "addressJourney" property to the session configured for going back to contact-type', async () => {
         await SubmitCheckNoticeTypeService.go(sessionId)
 
-        expect(session).to.equal({
+        expect(session).toEqual({
           dueReturns: [],
           id: sessionId,
           licenceRef: '01/123',
@@ -98,7 +93,7 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
       it('adds the "addressJourney" property to the session configured for going back to recipient-name', async () => {
         await SubmitCheckNoticeTypeService.go(sessionId)
 
-        expect(session).to.equal({
+        expect(session).toEqual({
           dueReturns: [],
           id: sessionId,
           licenceRef: '01/123',

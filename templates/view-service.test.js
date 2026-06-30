@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('__STUBS_SESSION_PATH__')
@@ -37,7 +32,7 @@ describe('__DESCRIBE_LABEL__', () => {
     it('returns page data for the view', async () => {
       const result = await __MODULE_NAME__.go(session.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: '',
           text: 'Back'

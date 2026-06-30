@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
 const { tomorrow } = require('../../support/general.js')
@@ -19,7 +12,7 @@ describe('Reports - View invalid addresses presenter', () => {
     it('returns the basic page data', async () => {
       const result = await ViewInvalidAddressesPresenter.go([])
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: { href: '/system/manage', text: 'Go back to manage' },
         invalidAddresses: [],
         pageTitle: 'Invalid addresses',
@@ -32,7 +25,7 @@ describe('Reports - View invalid addresses presenter', () => {
     it('returns the formatted page data', async () => {
       const result = await ViewInvalidAddressesPresenter.go(_invalidAddresses())
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: { href: '/system/manage', text: 'Go back to manage' },
         invalidAddresses: [
           {

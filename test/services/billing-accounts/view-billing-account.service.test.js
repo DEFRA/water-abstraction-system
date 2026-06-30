@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../support/fixtures/billing-accounts.fixture.js')
@@ -48,7 +43,7 @@ describe('Billing Accounts - View Billing Account service', () => {
         companyId
       )
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         address: [
           'Ferns Surfacing Limited',
           'Test Testingson',

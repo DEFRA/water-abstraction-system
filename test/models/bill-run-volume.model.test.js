@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillRunHelper = require('../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../app/models/bill-run.model.js')
@@ -22,7 +15,7 @@ describe('Bill Run Volume model', () => {
   let testChargeReference
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     // Link bill runs
     testBillRun = await BillRunHelper.add()
 
@@ -37,7 +30,7 @@ describe('Bill Run Volume model', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testBillRun.$query().delete()
     await testChargeReference.$query().delete()
 
@@ -48,8 +41,8 @@ describe('Bill Run Volume model', () => {
     it('can successfully run a basic query', async () => {
       const result = await BillRunVolumeModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(BillRunVolumeModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(BillRunVolumeModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -58,17 +51,17 @@ describe('Bill Run Volume model', () => {
       it('can successfully run a related query', async () => {
         const query = await BillRunVolumeModel.query().innerJoinRelated('billRun')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the bill run', async () => {
         const result = await BillRunVolumeModel.query().findById(testRecord.id).withGraphFetched('billRun')
 
-        expect(result).to.be.instanceOf(BillRunVolumeModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(BillRunVolumeModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.billRun).to.be.an.instanceOf(BillRunModel)
-        expect(result.billRun).to.equal(testBillRun)
+        expect(result.billRun).toBeInstanceOf(BillRunModel)
+        expect(result.billRun).toEqual(testBillRun)
       })
     })
 
@@ -76,17 +69,17 @@ describe('Bill Run Volume model', () => {
       it('can successfully run a related query', async () => {
         const query = await BillRunVolumeModel.query().innerJoinRelated('chargeReference')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge reference', async () => {
         const result = await BillRunVolumeModel.query().findById(testRecord.id).withGraphFetched('chargeReference')
 
-        expect(result).to.be.instanceOf(BillRunVolumeModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(BillRunVolumeModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.chargeReference).to.be.an.instanceOf(ChargeReferenceModel)
-        expect(result.chargeReference).to.equal(testChargeReference)
+        expect(result.chargeReference).toBeInstanceOf(ChargeReferenceModel)
+        expect(result.chargeReference).toEqual(testChargeReference)
       })
     })
   })
@@ -96,7 +89,7 @@ describe('Bill Run Volume model', () => {
       it('returns the requested status code', async () => {
         const result = BillRunVolumeModel.twoPartTariffStatuses.noReturnsSubmitted
 
-        expect(result).to.equal(10)
+        expect(result).toEqual(10)
       })
     })
   })
@@ -106,19 +99,19 @@ describe('Bill Run Volume model', () => {
       it('returns the status', () => {
         const result = testRecord.$twoPartTariffStatus()
 
-        expect(result).to.equal('returnLineOverlapsChargePeriod')
+        expect(result).toEqual('returnLineOverlapsChargePeriod')
       })
     })
 
     describe('when the two-part tariff status is not set', () => {
-      before(async () => {
+      beforeAll(async () => {
         testRecord = await BillRunVolumeHelper.add()
       })
 
       it('returns null', () => {
         const result = testRecord.$twoPartTariffStatus()
 
-        expect(result).to.be.null()
+        expect(result).toBeNull()
       })
     })
   })

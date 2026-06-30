@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things to stub
 const ReturnCycleModel = require('../../../../app/models/return-cycle.model.js')
@@ -70,18 +65,15 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
 
         const [insertObject] = insertStub.args[0]
 
-        expect(insertStub.callCount).to.equal(1)
-        expect(insertObject).to.equal(
-          {
-            dueDate: null,
-            endDate: cycleData.endDate,
-            startDate: cycleData.startDate,
-            summer: true,
-            submittedInWrls: true
-          },
-          { skip: ['createdAt', 'updatedAt'] }
-        )
-        expect(result).to.equal(cycleData)
+        expect(insertStub.callCount).toEqual(1)
+        expect(insertObject).toMatchObject({
+          dueDate: null,
+          endDate: cycleData.endDate,
+          startDate: cycleData.startDate,
+          summer: true,
+          submittedInWrls: true
+        })
+        expect(result).toEqual(cycleData)
       })
     })
 
@@ -93,7 +85,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
       it('returns the matching summer cycle', async () => {
         const result = await CheckReturnCycleService.go(summer)
 
-        expect(result).to.equal(cycleData)
+        expect(result).toEqual(cycleData)
       })
     })
   })
@@ -121,18 +113,15 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
 
         const [insertObject] = insertStub.args[0]
 
-        expect(insertStub.callCount).to.equal(1)
-        expect(insertObject).to.equal(
-          {
-            dueDate: null,
-            endDate: cycleData.endDate,
-            startDate: cycleData.startDate,
-            summer: false,
-            submittedInWrls: true
-          },
-          { skip: ['createdAt', 'updatedAt'] }
-        )
-        expect(result).to.equal(cycleData)
+        expect(insertStub.callCount).toEqual(1)
+        expect(insertObject).toMatchObject({
+          dueDate: null,
+          endDate: cycleData.endDate,
+          startDate: cycleData.startDate,
+          summer: false,
+          submittedInWrls: true
+        })
+        expect(result).toEqual(cycleData)
       })
     })
 
@@ -144,7 +133,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
       it('returns the matching all year return cycle', async () => {
         const result = await CheckReturnCycleService.go(summer)
 
-        expect(result).to.equal(cycleData)
+        expect(result).toEqual(cycleData)
       })
     })
   })

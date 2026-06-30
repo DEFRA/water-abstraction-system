@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
@@ -53,7 +48,7 @@ describe('Users - Index Users service', () => {
 
     it('returns page data for the view', async () => {
       const result = await IndexUsersService.go(yarStub, auth, page)
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'users',
         filters: {
           email: null,
@@ -99,7 +94,7 @@ describe('Users - Index Users service', () => {
       it('returns blank filters and that the controls should be closed', async () => {
         const result = await IndexUsersService.go(yarStub, auth, page)
 
-        expect(result.filters.openFilter).to.be.false()
+        expect(result.filters.openFilter).toBe(false)
       })
     })
 
@@ -112,7 +107,7 @@ describe('Users - Index Users service', () => {
       it('returns blank filters and that the controls should be closed', async () => {
         const result = await IndexUsersService.go(yarStub, auth, page)
 
-        expect(result.filters.openFilter).to.be.false()
+        expect(result.filters.openFilter).toBe(false)
       })
     })
 
@@ -128,7 +123,7 @@ describe('Users - Index Users service', () => {
       it('returns the saved filters and that the controls should be open', async () => {
         const result = await IndexUsersService.go(yarStub, auth, page)
 
-        expect(result.filters.openFilter).to.be.true()
+        expect(result.filters.openFilter).toBe(true)
       })
     })
   })
@@ -142,7 +137,7 @@ describe('Users - Index Users service', () => {
     it('sets the notification', async () => {
       const result = await IndexUsersService.go(yarStub, auth, page)
 
-      expect(result.notification).to.equal('Test notification')
+      expect(result.notification).toEqual('Test notification')
     })
   })
 })

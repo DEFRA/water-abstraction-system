@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -50,7 +45,7 @@ describe('Licence Monitoring Station Setup - Check Service', () => {
     it('returns the expected output', async () => {
       const result = await CheckService.go(session.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         abstractionPeriod: '1 February to 3 April',
         abstractionPeriodManuallyEntered: true,
         condition: 'None',
@@ -72,8 +67,8 @@ describe('Licence Monitoring Station Setup - Check Service', () => {
     it('sets the "checkPageVisited" flag to "true"', async () => {
       await CheckService.go(session.id)
 
-      expect(session.checkPageVisited).to.be.true()
-      expect(session.$update.called).to.be.true()
+      expect(session.checkPageVisited).toBe(true)
+      expect(session.$update.called).toBe(true)
     })
   })
 })

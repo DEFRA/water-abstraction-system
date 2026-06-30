@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { afterEach, beforeEach, describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
@@ -69,13 +64,13 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
     it('deletes the session', async () => {
       await SubmitCheckService.go(auth, session.id, yarStub)
 
-      expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
+      expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
     })
 
     it('returns the redirect URL', async () => {
       const result = await SubmitCheckService.go(auth, session.id, yarStub)
 
-      expect(result).to.equal({ redirectUrl: '/system/users' })
+      expect(result).toEqual({ redirectUrl: '/system/users' })
     })
 
     it('sets a notification', async () => {
@@ -83,8 +78,8 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
 
       const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-      expect(flashType).to.equal('notification')
-      expect(bannerMessage).to.equal({
+      expect(flashType).toEqual('notification')
+      expect(bannerMessage).toEqual({
         titleText: 'User added',
         text: `We have emailed ${session.email} instructions to complete their account set up.`
       })
@@ -93,7 +88,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
     it('sends a verification email', async () => {
       await SubmitCheckService.go(auth, session.id, yarStub)
 
-      expect(SendVerificationEmailService.go.calledWith(notification)).to.be.true()
+      expect(SendVerificationEmailService.go.calledWith(notification)).toBe(true)
     })
   })
 
@@ -112,7 +107,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
     it('returns the redirect URL', async () => {
       const result = await SubmitCheckService.go(auth, session.id, yarStub)
 
-      expect(result).to.equal({ redirectUrl: '/system/users' })
+      expect(result).toEqual({ redirectUrl: '/system/users' })
     })
 
     describe('when the email has changed', () => {
@@ -137,7 +132,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
       it('creates a new password reset link', async () => {
         await SubmitCheckService.go(auth, session.id, yarStub)
 
-        expect(CreateVerificationNotificationDal.go.calledWith(session.email, newResetGuid)).to.be.true()
+        expect(CreateVerificationNotificationDal.go.calledWith(session.email, newResetGuid)).toBe(true)
       })
 
       it('sets a notification', async () => {
@@ -145,8 +140,8 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
 
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-        expect(flashType).to.equal('notification')
-        expect(bannerMessage).to.equal({
+        expect(flashType).toEqual('notification')
+        expect(bannerMessage).toEqual({
           titleText: 'User updated',
           text: `We have emailed ${session.email} instructions to complete their account set up.`
         })
@@ -155,7 +150,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
       it('sends a verification email', async () => {
         await SubmitCheckService.go(auth, session.id, yarStub)
 
-        expect(SendVerificationEmailService.go.calledWith(notification)).to.be.true()
+        expect(SendVerificationEmailService.go.calledWith(notification)).toBe(true)
       })
     })
 
@@ -165,8 +160,8 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
 
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-        expect(flashType).to.equal('notification')
-        expect(bannerMessage).to.equal({
+        expect(flashType).toEqual('notification')
+        expect(bannerMessage).toEqual({
           titleText: 'User updated',
           text: `User ${session.email} has been updated.`
         })
@@ -175,7 +170,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
       it('does not send a verification email', async () => {
         await SubmitCheckService.go(auth, session.id, yarStub)
 
-        expect(SendVerificationEmailService.go.called).to.be.false()
+        expect(SendVerificationEmailService.go.called).toBe(false)
       })
     })
   })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const SessionHelper = require('../support/helpers/session.helper.js')
 const SessionModel = require('../../app/models/session.model.js')
@@ -18,7 +11,7 @@ describe('DAL - Delete session dal', () => {
   let session
   let sessionId
 
-  before(async () => {
+  beforeAll(async () => {
     session = await SessionHelper.add()
     sessionId = session.id
   })
@@ -29,7 +22,7 @@ describe('DAL - Delete session dal', () => {
 
       const session = await SessionModel.query().findById(sessionId)
 
-      expect(session).to.be.undefined()
+      expect(session).toBeUndefined()
     })
   })
 })

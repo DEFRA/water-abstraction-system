@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -66,7 +61,7 @@ describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => 
 
         const keys = Object.keys(result)
 
-        expect(keys).to.have.length(2)
+        expect(keys).toHaveLength(2)
       })
 
       it('is keyed with the billing account id', async () => {
@@ -75,7 +70,7 @@ describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => 
         const entries = Object.entries(result)
 
         entries.forEach(([key, value]) => {
-          expect(key).to.equal(value.billingAccountId)
+          expect(key).toEqual(value.billingAccountId)
         })
       })
 
@@ -89,7 +84,7 @@ describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => 
             return key === billingAccount.id
           })
 
-          expect(value.accountNumber).to.equal(matchingBillingAccount.accountNumber)
+          expect(value.accountNumber).toEqual(matchingBillingAccount.accountNumber)
         })
       })
     })
@@ -104,7 +99,7 @@ describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => 
 
         const keys = Object.entries(result)
 
-        expect(keys).to.have.length(3)
+        expect(keys).toHaveLength(3)
       })
 
       it('is keyed with the bill id and licence id', async () => {
@@ -117,7 +112,7 @@ describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => 
         const entries = Object.entries(result)
 
         entries.forEach(([key, value]) => {
-          expect(key).to.equal(`${value.billId}-${value.licenceId}`)
+          expect(key).toEqual(`${value.billId}-${value.licenceId}`)
         })
       })
 
@@ -135,7 +130,7 @@ describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => 
             return key === `${value.billId}-${licence.id}`
           })
 
-          expect(value.licenceRef).to.equal(matchingLicence.licenceRef)
+          expect(value.licenceRef).toEqual(matchingLicence.licenceRef)
         })
       })
     })

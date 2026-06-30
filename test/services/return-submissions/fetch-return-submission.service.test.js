@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
@@ -53,42 +48,42 @@ describe('Fetch Return Submission service', () => {
     it('fetches the return submission', async () => {
       const result = await FetchReturnSubmissionService.go(testReturnSubmission.id)
 
-      expect(result).to.be.an.instanceOf(ReturnSubmissionModel)
-      expect(result.id).to.equal(testReturnSubmission.id)
+      expect(result).toBeInstanceOf(ReturnSubmissionModel)
+      expect(result.id).toEqual(testReturnSubmission.id)
     })
 
     it('includes the expected metadata', async () => {
       const result = await FetchReturnSubmissionService.go(testReturnSubmission.id)
 
-      expect(result.metadata.units).to.equal('Ml')
+      expect(result.metadata.units).toEqual('Ml')
     })
 
     it('includes the return log id, submission version and current version used for the back link', async () => {
       const result = await FetchReturnSubmissionService.go(testReturnSubmission.id)
 
-      expect(result.returnLogId).to.equal(testReturnSubmission.returnLogId)
-      expect(result.version).to.equal(testReturnSubmission.version)
-      expect(result.current).to.equal(testReturnSubmission.current)
+      expect(result.returnLogId).toEqual(testReturnSubmission.returnLogId)
+      expect(result.version).toEqual(testReturnSubmission.version)
+      expect(result.current).toEqual(testReturnSubmission.current)
     })
 
     it('includes the linked return submission lines, ordered by start date', async () => {
       const result = await FetchReturnSubmissionService.go(testReturnSubmission.id)
       const { returnSubmissionLines } = result
 
-      expect(returnSubmissionLines).to.have.length(2)
-      expect(returnSubmissionLines[0]).to.be.an.instanceOf(ReturnSubmissionLineModel)
-      expect(returnSubmissionLines[1]).to.be.an.instanceOf(ReturnSubmissionLineModel)
-      expect(returnSubmissionLines[0].startDate.toISOString()).to.equal('2023-01-01T00:00:00.000Z')
-      expect(returnSubmissionLines[1].startDate.toISOString()).to.equal('2023-03-01T00:00:00.000Z')
+      expect(returnSubmissionLines).toHaveLength(2)
+      expect(returnSubmissionLines[0]).toBeInstanceOf(ReturnSubmissionLineModel)
+      expect(returnSubmissionLines[1]).toBeInstanceOf(ReturnSubmissionLineModel)
+      expect(returnSubmissionLines[0].startDate.toISOString()).toEqual('2023-01-01T00:00:00.000Z')
+      expect(returnSubmissionLines[1].startDate.toISOString()).toEqual('2023-03-01T00:00:00.000Z')
     })
 
     it('includes the linked return log with its reference and frequency', async () => {
       const result = await FetchReturnSubmissionService.go(testReturnSubmission.id)
       const { returnLog } = result
 
-      expect(returnLog).to.be.an.instanceOf(ReturnLogModel)
-      expect(returnLog.returnReference).to.equal(testReturnLog.returnReference)
-      expect(returnLog.returnsFrequency).to.equal(testReturnLog.returnsFrequency)
+      expect(returnLog).toBeInstanceOf(ReturnLogModel)
+      expect(returnLog.returnReference).toEqual(testReturnLog.returnReference)
+      expect(returnLog.returnsFrequency).toEqual(testReturnLog.returnsFrequency)
     })
   })
 })

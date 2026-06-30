@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceMonitoringStationHelper = require('../../../support/helpers/licence-monitoring-station.helper.js')
 
@@ -47,8 +40,8 @@ describe('Job - Notification Status - Update Abstraction Alerts service', () => 
 
       const updatedResult = await licenceMonitoringStation.$query()
 
-      expect(updatedResult.status).to.equal('resume')
-      expect(updatedResult.statusUpdatedAt).to.equal(notification.createdAt)
+      expect(updatedResult.status).toEqual('resume')
+      expect(updatedResult.statusUpdatedAt).toEqual(notification.createdAt)
     })
 
     it('does not update other licence monitoring stations', async () => {
@@ -56,8 +49,8 @@ describe('Job - Notification Status - Update Abstraction Alerts service', () => 
 
       const updatedResult = await licenceMonitoringStationUnTouched.$query()
 
-      expect(updatedResult.status).to.equal('warning')
-      expect(updatedResult.statusUpdatedAt).to.equal(new Date('2025-08-02'))
+      expect(updatedResult.status).toEqual('warning')
+      expect(updatedResult.statusUpdatedAt).toEqual(new Date('2025-08-02'))
     })
   })
 
@@ -79,8 +72,8 @@ describe('Job - Notification Status - Update Abstraction Alerts service', () => 
 
       const updatedResult = await licenceMonitoringStation.$query()
 
-      expect(updatedResult.status).to.equal('stop')
-      expect(updatedResult.statusUpdatedAt).to.equal(new Date('2025-08-11'))
+      expect(updatedResult.status).toEqual('stop')
+      expect(updatedResult.statusUpdatedAt).toEqual(new Date('2025-08-11'))
     })
   })
 })

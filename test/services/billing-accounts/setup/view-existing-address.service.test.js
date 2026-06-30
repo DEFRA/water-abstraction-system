@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
@@ -62,7 +57,7 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
       it('returns page data for the view', async () => {
         const result = await ViewExistingAddressService.go(session.id)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           backLink: {
             href: `/system/billing-accounts/setup/${session.id}/account`,
             text: 'Back'
@@ -104,7 +99,7 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
       it('returns page data for the view', async () => {
         const result = await ViewExistingAddressService.go(session.id)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           backLink: {
             href: `/system/billing-accounts/setup/${session.id}/existing-account`,
             text: 'Back'
@@ -147,7 +142,7 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
       it('returns page data for the view', async () => {
         const result = await ViewExistingAddressService.go(session.id)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           backLink: {
             href: `/system/billing-accounts/setup/${session.id}/account-type`,
             text: 'Back'

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const TransactionHelper = require('../support/helpers/transaction.helper.js')
@@ -55,10 +50,10 @@ describe('GeneralLib', () => {
 
         const logDataArg = notifierStub.omg.args[0][1]
 
-        expect(notifierStub.omg.calledWith('I am the test with no data')).to.be.true()
-        expect(logDataArg.timeTakenMs).to.exist()
-        expect(logDataArg.timeTakenSs).to.exist()
-        expect(logDataArg.name).not.to.exist()
+        expect(notifierStub.omg.calledWith('I am the test with no data')).toBe(true)
+        expect(logDataArg.timeTakenMs).toBeDefined()
+        expect(logDataArg.timeTakenSs).toBeDefined()
+        expect(logDataArg.name).toBeUndefined()
       })
     })
 
@@ -68,9 +63,9 @@ describe('GeneralLib', () => {
 
         const logDataArg = notifierStub.omg.args[0][1]
 
-        expect(notifierStub.omg.calledWith('I am the test with data')).to.be.true()
-        expect(logDataArg.timeTakenMs).to.exist()
-        expect(logDataArg.name).to.exist()
+        expect(notifierStub.omg.calledWith('I am the test with data')).toBe(true)
+        expect(logDataArg.timeTakenMs).toBeDefined()
+        expect(logDataArg.name).toBeDefined()
       })
     })
   })
@@ -88,7 +83,7 @@ describe('GeneralLib', () => {
       it('returns null', () => {
         const result = GeneralLib.convertFromCubicMetres(quantity, units)
 
-        expect(result).to.be.null()
+        expect(result).toBeNull()
       })
     })
 
@@ -101,7 +96,7 @@ describe('GeneralLib', () => {
       it('returns the same quantity (1000)', () => {
         const result = GeneralLib.convertFromCubicMetres(quantity, units)
 
-        expect(result).to.equal(1000)
+        expect(result).toEqual(1000)
       })
     })
 
@@ -114,7 +109,7 @@ describe('GeneralLib', () => {
       it('returns the quantity converted to litres (1000000)', () => {
         const result = GeneralLib.convertFromCubicMetres(quantity, units)
 
-        expect(result).to.equal(1000000)
+        expect(result).toEqual(1000000)
       })
     })
 
@@ -127,7 +122,7 @@ describe('GeneralLib', () => {
       it('returns the quantity converted to megalitres (1)', () => {
         const result = GeneralLib.convertFromCubicMetres(quantity, units)
 
-        expect(result).to.equal(1)
+        expect(result).toEqual(1)
       })
     })
 
@@ -140,7 +135,7 @@ describe('GeneralLib', () => {
       it('returns the quantity converted to gallons (21996.9248299) rounded to 6 decimal places', () => {
         const result = GeneralLib.convertFromCubicMetres(quantity, units)
 
-        expect(result).to.equal(21996.92483)
+        expect(result).toEqual(21996.92483)
       })
     })
 
@@ -153,7 +148,7 @@ describe('GeneralLib', () => {
       it('returns the quantity converted to megalitres (0.001235)', () => {
         const result = GeneralLib.convertFromCubicMetres(quantity, units)
 
-        expect(result).to.equal(0.001235)
+        expect(result).toEqual(0.001235)
       })
     })
   })
@@ -171,7 +166,7 @@ describe('GeneralLib', () => {
       it('returns null', () => {
         const result = GeneralLib.convertToCubicMetres(quantity, units)
 
-        expect(result).to.be.null()
+        expect(result).toBeNull()
       })
     })
 
@@ -184,7 +179,7 @@ describe('GeneralLib', () => {
       it('returns the same quantity (1000)', () => {
         const result = GeneralLib.convertToCubicMetres(quantity, units)
 
-        expect(result).to.equal(1000)
+        expect(result).toEqual(1000)
       })
     })
 
@@ -197,7 +192,7 @@ describe('GeneralLib', () => {
       it('returns the quantity converted to cubic metres (1)', () => {
         const result = GeneralLib.convertToCubicMetres(quantity, units)
 
-        expect(result).to.equal(1)
+        expect(result).toEqual(1)
       })
     })
 
@@ -210,7 +205,7 @@ describe('GeneralLib', () => {
       it('returns the quantity converted to cubic metres (1000000)', () => {
         const result = GeneralLib.convertToCubicMetres(quantity, units)
 
-        expect(result).to.equal(1000000)
+        expect(result).toEqual(1000000)
       })
     })
 
@@ -223,7 +218,7 @@ describe('GeneralLib', () => {
       it('returns the quantity converted to cubic metres (4.546090000001814) rounded to 6 decimal places', () => {
         const result = GeneralLib.convertToCubicMetres(quantity, units)
 
-        expect(result).to.equal(4.54609)
+        expect(result).toEqual(4.54609)
       })
     })
 
@@ -236,7 +231,7 @@ describe('GeneralLib', () => {
       it('returns the quantity converted to cubic metres (2018)', () => {
         const result = GeneralLib.convertToCubicMetres(quantity, units)
 
-        expect(result).to.equal(2018)
+        expect(result).toEqual(2018)
       })
     })
   })
@@ -251,8 +246,8 @@ describe('GeneralLib', () => {
     it('returns the current date and time as an ISO string', () => {
       const result = GeneralLib.currentTimeInNanoseconds()
 
-      expect(typeof result).to.equal('bigint')
-      expect(result).to.be.greaterThan(timeBeforeTest)
+      expect(typeof result).toEqual('bigint')
+      expect(result).toBeGreaterThan(timeBeforeTest)
     })
   })
 
@@ -268,8 +263,8 @@ describe('GeneralLib', () => {
         it('returns the correct start and end dates for the financial year', () => {
           const result = GeneralLib.determineCurrentFinancialYear()
 
-          expect(result.startDate).to.equal(new Date('2023-04-01'))
-          expect(result.endDate).to.equal(new Date('2024-03-31'))
+          expect(result.startDate).toEqual(new Date('2023-04-01'))
+          expect(result.endDate).toEqual(new Date('2024-03-31'))
         })
       })
 
@@ -283,8 +278,8 @@ describe('GeneralLib', () => {
         it('returns the correct start and end dates for the financial year', () => {
           const result = GeneralLib.determineCurrentFinancialYear()
 
-          expect(result.startDate).to.equal(new Date('2023-04-01'))
-          expect(result.endDate).to.equal(new Date('2024-03-31'))
+          expect(result.startDate).toEqual(new Date('2023-04-01'))
+          expect(result.endDate).toEqual(new Date('2024-03-31'))
         })
       })
     })
@@ -302,8 +297,8 @@ describe('GeneralLib', () => {
 
       const [flashType, notification] = yarStub.flash.args[0]
 
-      expect(flashType).to.equal('notification')
-      expect(notification).to.equal({ titleText: 'Updated', text: 'Changes made' })
+      expect(flashType).toEqual('notification')
+      expect(notification).toEqual({ titleText: 'Updated', text: 'Changes made' })
     })
 
     it('returns the overridden notification { titleText: "Fancy new title", text: "better text" }', () => {
@@ -311,8 +306,8 @@ describe('GeneralLib', () => {
 
       const [flashType, notification] = yarStub.flash.args[0]
 
-      expect(flashType).to.equal('notification')
-      expect(notification).to.equal({ titleText: 'Fancy new title', text: 'better text' })
+      expect(flashType).toEqual('notification')
+      expect(notification).toEqual({ titleText: 'Fancy new title', text: 'better text' })
     })
   })
 
@@ -327,7 +322,7 @@ describe('GeneralLib', () => {
     it('returns the flash notification', () => {
       const result = GeneralLib.readFlashNotification(yarStub)
 
-      expect(result).to.equal({ text: 'Changes made', title: 'Updated' })
+      expect(result).toEqual({ text: 'Changes made', title: 'Updated' })
     })
   })
 
@@ -335,8 +330,8 @@ describe('GeneralLib', () => {
     it('generates a 6 character reference code with the given prefix', () => {
       const result = GeneralLib.generateNoticeReferenceCode('TEST-')
 
-      expect(result.startsWith('TEST-')).to.be.true()
-      expect(result.length).to.equal(11)
+      expect(result.startsWith('TEST-')).toBe(true)
+      expect(result.length).toEqual(11)
     })
   })
 
@@ -349,9 +344,9 @@ describe('GeneralLib', () => {
       const uuid2 = GeneralLib.generateUUID()
       const uuid3 = GeneralLib.generateUUID()
 
-      expect(uuid1).not.to.equal(uuid2)
-      expect(uuid1).not.to.equal(uuid3)
-      expect(uuid2).not.to.equal(uuid3)
+      expect(uuid1).not.toEqual(uuid2)
+      expect(uuid1).not.toEqual(uuid3)
+      expect(uuid2).not.toEqual(uuid3)
     })
   })
 
@@ -364,10 +359,10 @@ describe('GeneralLib', () => {
       const after = new Date().getTime()
       const difference = after - before
 
-      expect(difference).to.be.at.least(245)
+      expect(difference).toBeGreaterThanOrEqual(245)
       // We give some wiggle room of 50 milliseconds to allow for environment
       // differences
-      expect(difference).not.to.be.greaterThan(300)
+      expect(difference).not.toBeGreaterThan(300)
     })
   })
 
@@ -395,7 +390,7 @@ describe('GeneralLib', () => {
       it('returns false', () => {
         const result = GeneralLib.periodsOverlap(referencePeriod, checkPeriod)
 
-        expect(result).to.equal(false)
+        expect(result).toEqual(false)
       })
     })
 
@@ -419,7 +414,7 @@ describe('GeneralLib', () => {
       it('returns true', () => {
         const result = GeneralLib.periodsOverlap(referencePeriod, checkPeriod)
 
-        expect(result).to.equal(true)
+        expect(result).toEqual(true)
       })
     })
 
@@ -443,7 +438,7 @@ describe('GeneralLib', () => {
       it('returns true', () => {
         const result = GeneralLib.periodsOverlap(referencePeriod, checkPeriod)
 
-        expect(result).to.equal(true)
+        expect(result).toEqual(true)
       })
     })
 
@@ -467,7 +462,7 @@ describe('GeneralLib', () => {
       it('returns true', () => {
         const result = GeneralLib.periodsOverlap(referencePeriod, checkPeriod)
 
-        expect(result).to.equal(true)
+        expect(result).toEqual(true)
       })
     })
 
@@ -491,7 +486,7 @@ describe('GeneralLib', () => {
       it('returns true', () => {
         const result = GeneralLib.periodsOverlap(referencePeriod, checkPeriod)
 
-        expect(result).to.equal(true)
+        expect(result).toEqual(true)
       })
     })
 
@@ -515,7 +510,7 @@ describe('GeneralLib', () => {
       it('returns true', () => {
         const result = GeneralLib.periodsOverlap(referencePeriod, checkPeriod)
 
-        expect(result).to.equal(true)
+        expect(result).toEqual(true)
       })
     })
   })
@@ -533,9 +528,9 @@ describe('GeneralLib', () => {
       it('returns the provided array grouped by the given group size', () => {
         const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
 
-        expect(result.length).to.equal(4)
+        expect(result.length).toEqual(4)
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           [1, 2], // Group One
           [3, 4], // Group two
           [5, 6], // Group three
@@ -561,9 +556,9 @@ describe('GeneralLib', () => {
       it('returns the provided array grouped by the given group size', () => {
         const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
 
-        expect(result.length).to.equal(3)
+        expect(result.length).toEqual(3)
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           [{ number: 1 }, { number: 2 }, { number: 3 }], // Group One
           [{ number: 4 }, { number: 5 }, { number: 6 }], // Group two
           [{ number: 7 }] // Group three
@@ -580,9 +575,9 @@ describe('GeneralLib', () => {
       it('returns an empty array', () => {
         const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
 
-        expect(result.length).to.equal(0)
+        expect(result.length).toEqual(0)
 
-        expect(result).to.equal([])
+        expect(result).toEqual([])
       })
     })
 
@@ -595,9 +590,9 @@ describe('GeneralLib', () => {
       it('returns the provided array (not grouped)', () => {
         const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
 
-        expect(result.length).to.equal(7)
+        expect(result.length).toEqual(7)
 
-        expect(result).to.equal([1, 2, 3, 4, 5, 6, 7])
+        expect(result).toEqual([1, 2, 3, 4, 5, 6, 7])
       })
     })
 
@@ -610,9 +605,9 @@ describe('GeneralLib', () => {
       it('returns the provided array grouped by the given group size', () => {
         const result = GeneralLib.splitArrayIntoGroups(testArray, testGroupSize)
 
-        expect(result.length).to.equal(1)
+        expect(result.length).toEqual(1)
 
-        expect(result).to.equal([[1, 2]])
+        expect(result).toEqual([[1, 2]])
       })
     })
   })
@@ -627,7 +622,7 @@ describe('GeneralLib', () => {
     it('returns the current date and time as an ISO string', () => {
       const result = GeneralLib.timestampForPostgres()
 
-      expect(result).to.equal('2015-10-21T20:31:57.000Z')
+      expect(result).toEqual('2015-10-21T20:31:57.000Z')
     })
   })
 
@@ -642,7 +637,7 @@ describe('GeneralLib', () => {
       const result = GeneralLib.today()
 
       // We compare ISO strings as its a clearer way of ensuring the result is as expected
-      expect(result.toISOString()).to.equal('2025-10-19T00:00:00.000Z')
+      expect(result.toISOString()).toEqual('2025-10-19T00:00:00.000Z')
     })
   })
 
@@ -676,7 +671,7 @@ describe('GeneralLib', () => {
       it('returns true', () => {
         const result = GeneralLib.transactionsMatch(leftTransaction, rightTransaction)
 
-        expect(result).to.be.true()
+        expect(result).toBe(true)
       })
     })
 
@@ -689,7 +684,7 @@ describe('GeneralLib', () => {
         it('returns false', () => {
           const result = GeneralLib.transactionsMatch(leftTransaction, rightTransaction)
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
         })
       })
 
@@ -701,7 +696,7 @@ describe('GeneralLib', () => {
         it('returns false', () => {
           const result = GeneralLib.transactionsMatch(leftTransaction, rightTransaction)
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
         })
       })
 
@@ -713,7 +708,7 @@ describe('GeneralLib', () => {
         it('returns false', () => {
           const result = GeneralLib.transactionsMatch(leftTransaction, rightTransaction)
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
         })
       })
 
@@ -725,7 +720,7 @@ describe('GeneralLib', () => {
         it('returns false', () => {
           const result = GeneralLib.transactionsMatch(leftTransaction, rightTransaction)
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
         })
       })
 
@@ -737,7 +732,7 @@ describe('GeneralLib', () => {
         it('returns false', () => {
           const result = GeneralLib.transactionsMatch(leftTransaction, rightTransaction)
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
         })
       })
 
@@ -749,7 +744,7 @@ describe('GeneralLib', () => {
         it('returns false', () => {
           const result = GeneralLib.transactionsMatch(leftTransaction, rightTransaction)
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
         })
       })
 
@@ -761,7 +756,7 @@ describe('GeneralLib', () => {
         it('returns false', () => {
           const result = GeneralLib.transactionsMatch(leftTransaction, rightTransaction)
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
         })
       })
 
@@ -773,7 +768,7 @@ describe('GeneralLib', () => {
         it('returns false', () => {
           const result = GeneralLib.transactionsMatch(leftTransaction, rightTransaction)
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
         })
       })
 
@@ -785,7 +780,7 @@ describe('GeneralLib', () => {
         it('returns false', () => {
           const result = GeneralLib.transactionsMatch(leftTransaction, rightTransaction)
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
         })
       })
 
@@ -797,7 +792,7 @@ describe('GeneralLib', () => {
         it('returns false', () => {
           const result = GeneralLib.transactionsMatch(leftTransaction, rightTransaction)
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
         })
       })
 
@@ -809,7 +804,7 @@ describe('GeneralLib', () => {
         it('returns false', () => {
           const result = GeneralLib.transactionsMatch(leftTransaction, rightTransaction)
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
         })
       })
 
@@ -821,7 +816,7 @@ describe('GeneralLib', () => {
         it('returns false', () => {
           const result = GeneralLib.transactionsMatch(leftTransaction, rightTransaction)
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
         })
       })
 
@@ -833,7 +828,7 @@ describe('GeneralLib', () => {
         it('returns false', () => {
           const result = GeneralLib.transactionsMatch(leftTransaction, rightTransaction)
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
         })
       })
     })
@@ -850,7 +845,7 @@ describe('GeneralLib', () => {
       it('returns an array with the single licence', () => {
         const result = GeneralLib.transformStringOfLicencesToArray(licences)
 
-        expect(result).to.equal(['123'])
+        expect(result).toEqual(['123'])
       })
     })
 
@@ -863,7 +858,7 @@ describe('GeneralLib', () => {
         it('returns an array with multiple licences', () => {
           const result = GeneralLib.transformStringOfLicencesToArray(licences)
 
-          expect(result).to.equal(['123', '456', '789'])
+          expect(result).toEqual(['123', '456', '789'])
         })
 
         describe('and there are extra spaces', () => {
@@ -874,7 +869,7 @@ describe('GeneralLib', () => {
           it('returns an array with multiple licences', () => {
             const result = GeneralLib.transformStringOfLicencesToArray(licences)
 
-            expect(result).to.equal(['123', '456', '789'])
+            expect(result).toEqual(['123', '456', '789'])
           })
         })
       })
@@ -887,7 +882,7 @@ describe('GeneralLib', () => {
         it('returns an array with multiple licences', () => {
           const result = GeneralLib.transformStringOfLicencesToArray(licences)
 
-          expect(result).to.equal(['123', '456', '789'])
+          expect(result).toEqual(['123', '456', '789'])
         })
       })
 
@@ -899,7 +894,7 @@ describe('GeneralLib', () => {
         it('returns an array with only one item', () => {
           const result = GeneralLib.transformStringOfLicencesToArray(licences)
 
-          expect(result).to.equal(['123 456 789'])
+          expect(result).toEqual(['123 456 789'])
         })
       })
     })
@@ -910,7 +905,7 @@ describe('GeneralLib', () => {
       it('returns a negative number', () => {
         const result = GeneralLib.compareStrings('010', '100')
 
-        expect(result).to.be.below(0)
+        expect(result).toBeLessThan(0)
       })
     })
 
@@ -918,7 +913,7 @@ describe('GeneralLib', () => {
       it('returns a postive number', () => {
         const result = GeneralLib.compareStrings('100', '010')
 
-        expect(result).to.be.above(0)
+        expect(result).toBeGreaterThan(0)
       })
     })
 
@@ -926,7 +921,7 @@ describe('GeneralLib', () => {
       it('returns zero', () => {
         const result = GeneralLib.compareStrings('100', '100')
 
-        expect(result).to.equal(0)
+        expect(result).toEqual(0)
       })
     })
   })

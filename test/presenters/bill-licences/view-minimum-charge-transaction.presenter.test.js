@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ViewMinimumChargeTransactionPresenter = require('../../../app/presenters/bill-licences/view-minimum-charge-transaction.presenter.js')
 
@@ -29,8 +22,8 @@ describe('View Minimum Charge Transaction presenter', () => {
       it('returns the credit property populated and the debit empty', () => {
         const result = ViewMinimumChargeTransactionPresenter.go(transaction)
 
-        expect(result.creditAmount).to.equal('£24.01')
-        expect(result.debitAmount).to.equal('')
+        expect(result.creditAmount).toEqual('£24.01')
+        expect(result.debitAmount).toEqual('')
       })
     })
 
@@ -42,15 +35,15 @@ describe('View Minimum Charge Transaction presenter', () => {
       it('returns the debit property populated and the credit empty', () => {
         const result = ViewMinimumChargeTransactionPresenter.go(transaction)
 
-        expect(result.creditAmount).to.equal('')
-        expect(result.debitAmount).to.equal('£24.01')
+        expect(result.creditAmount).toEqual('')
+        expect(result.debitAmount).toEqual('£24.01')
       })
     })
 
     it('correctly presents the data', () => {
       const result = ViewMinimumChargeTransactionPresenter.go(transaction)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         billableDays: '',
         chargeType: 'minimum_charge',
         creditAmount: '',

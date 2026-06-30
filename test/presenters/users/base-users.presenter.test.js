@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
@@ -40,7 +33,7 @@ describe('Users - Base Users presenter', () => {
       it('returns "All licences"', () => {
         const result = BaseUsersPresenter.formatLicencesToUnlink(session)
 
-        expect(result).to.equal(['All licences'])
+        expect(result).toEqual(['All licences'])
       })
     })
 
@@ -53,7 +46,7 @@ describe('Users - Base Users presenter', () => {
       it('returns the selected licence references', () => {
         const result = BaseUsersPresenter.formatLicencesToUnlink(session)
 
-        expect(result).to.equal([session.licences[0].licenceRef])
+        expect(result).toEqual([session.licences[0].licenceRef])
       })
     })
   })
@@ -75,7 +68,7 @@ describe('Users - Base Users presenter', () => {
         it('returns the details for navigating back to "search"', () => {
           const result = BaseUsersPresenter.sourceNavigation(requestedQueryValue, canManageAccounts)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'search',
             backLink: {
               href: '/',
@@ -100,7 +93,7 @@ describe('Users - Base Users presenter', () => {
         it('returns the details for navigating back to "search"', () => {
           const result = BaseUsersPresenter.sourceNavigation(requestedQueryValue, canManageAccounts)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'search',
             backLink: {
               href: '/',
@@ -119,7 +112,7 @@ describe('Users - Base Users presenter', () => {
         it('returns the details for navigating back to "users"', () => {
           const result = BaseUsersPresenter.sourceNavigation(requestedQueryValue, canManageAccounts)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'users',
             backLink: {
               href: '/system/users',
@@ -138,7 +131,7 @@ describe('Users - Base Users presenter', () => {
         it('returns the details for navigating back to "users"', () => {
           const result = BaseUsersPresenter.sourceNavigation(requestedQueryValue, canManageAccounts)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'users',
             backLink: {
               href: '/system/users',

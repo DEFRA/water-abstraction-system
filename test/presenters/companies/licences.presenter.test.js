@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
@@ -41,7 +34,7 @@ describe('Companies - Licences presenter', () => {
     it('returns page data for the view', () => {
       const result = LicencesPresenter.go(company, licences)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: '/',
           text: 'Go back to search'
@@ -70,7 +63,7 @@ describe('Companies - Licences presenter', () => {
         it('returns the selected company name and a null id', () => {
           const result = LicencesPresenter.go(company, licences)
 
-          expect(result.licences[0].currentLicenceHolder).to.equal({
+          expect(result.licences[0].currentLicenceHolder).toEqual({
             id: null,
             name: company.name
           })
@@ -86,7 +79,7 @@ describe('Companies - Licences presenter', () => {
         it('returns the current licence holder name and id for the licence', () => {
           const result = LicencesPresenter.go(company, licences)
 
-          expect(result.licences[0].currentLicenceHolder).to.equal({
+          expect(result.licences[0].currentLicenceHolder).toEqual({
             id: licences[0].currentLicenceHolderId,
             name: 'Wallace Corporation'
           })
@@ -99,7 +92,7 @@ describe('Companies - Licences presenter', () => {
         it('returns null', () => {
           const result = LicencesPresenter.go(company, licences)
 
-          expect(result.licences[0].status).to.equal(null)
+          expect(result.licences[0].status).toEqual(null)
         })
       })
 
@@ -111,7 +104,7 @@ describe('Companies - Licences presenter', () => {
         it('returns the reason for the licence end', () => {
           const result = LicencesPresenter.go(company, licences)
 
-          expect(result.licences[0].status).to.equal('expired')
+          expect(result.licences[0].status).toEqual('expired')
         })
       })
 
@@ -123,7 +116,7 @@ describe('Companies - Licences presenter', () => {
         it('returns null', () => {
           const result = LicencesPresenter.go(company, licences)
 
-          expect(result.licences[0].status).to.equal(null)
+          expect(result.licences[0].status).toEqual(null)
         })
       })
     })

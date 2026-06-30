@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ViewManageService = require('../../../app/services/manage/view-manage.service.js')
 
@@ -21,7 +14,7 @@ describe('Manage - View Manage service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewManageService.go(userAuth)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'manage',
         manageUsers: { show: false, links: { createAccount: false } },
         pageTitle: 'Manage',

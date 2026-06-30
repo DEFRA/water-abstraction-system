@@ -2,13 +2,6 @@
 
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = require('node:http2').constants
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const NotifyUpdatePresenter = require('../../../app/presenters/notifications/notify-update.presenter.js')
 
@@ -44,7 +37,7 @@ describe('Notifications - Notify Update presenter', () => {
   it('correctly returns notify result', () => {
     const result = NotifyUpdatePresenter.go(notifyResult)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       notifyId: 'a8023182-5cb3-4ee3-b777-2fb82cde7fc5',
       notifyStatus: 'created',
       plaintext: 'Dear licence holder,\r\n',
@@ -74,7 +67,7 @@ describe('Notifications - Notify Update presenter', () => {
     it('correctly returns notify data with the error', () => {
       const result = NotifyUpdatePresenter.go(notifyResult)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         notifyError:
           '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"BadRequestError","message":"Missing personalisation: returnDueDate"}]}',
         status: 'error'

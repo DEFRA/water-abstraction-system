@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const AdditionalSubmissionOptionsPresenter = require('../../../../app/presenters/return-versions/setup/additional-submission-options.presenter.js')
 
@@ -37,7 +30,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
     it('correctly presents the data without additional submission options', () => {
       const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-      expect(result).to.be.equal({
+      expect(result).to.be.toEqual({
         backLink: {
           href: `/system/return-versions/setup/${session.id}/check`,
           text: 'Back'
@@ -59,7 +52,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
     it('returns a link back to the "check" page', () => {
       const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-      expect(result.backLink).to.equal({
+      expect(result.backLink).toEqual({
         href: `/system/return-versions/setup/${session.id}/check`,
         text: 'Back'
       })
@@ -75,7 +68,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       it('returns true', () => {
         const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-        expect(result.multipleUpload).to.be.true()
+        expect(result.multipleUpload).toBe(true)
       })
     })
 
@@ -87,7 +80,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       it('returns false', () => {
         const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-        expect(result.multipleUpload).to.be.false()
+        expect(result.multipleUpload).toBe(false)
       })
     })
   })
@@ -101,7 +94,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       it('returns true', () => {
         const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-        expect(result.quarterlyReturns).to.be.true()
+        expect(result.quarterlyReturns).toBe(true)
       })
     })
 
@@ -113,7 +106,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       it('returns false', () => {
         const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-        expect(result.quarterlyReturns).to.be.undefined()
+        expect(result.quarterlyReturns).toBeUndefined()
       })
     })
   })
@@ -127,7 +120,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       it('returns true', () => {
         const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-        expect(result.quarterlyReturnSubmissions).to.be.true()
+        expect(result.quarterlyReturnSubmissions).toBe(true)
       })
     })
 
@@ -139,7 +132,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       it('returns true', () => {
         const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-        expect(result.quarterlyReturnSubmissions).to.be.false()
+        expect(result.quarterlyReturnSubmissions).toBe(false)
       })
     })
   })
@@ -153,7 +146,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       it('returns true', () => {
         const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-        expect(result.noAdditionalOptions).to.be.true()
+        expect(result.noAdditionalOptions).toBe(true)
       })
     })
 
@@ -165,7 +158,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       it('returns false', () => {
         const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-        expect(result.noAdditionalOptions).to.be.false()
+        expect(result.noAdditionalOptions).toBe(false)
       })
     })
 
@@ -173,7 +166,7 @@ describe('Return Versions Setup - Additional Submission Options presenter', () =
       it('returns false', () => {
         const result = AdditionalSubmissionOptionsPresenter.go(session)
 
-        expect(result.noAdditionalOptions).to.be.undefined()
+        expect(result.noAdditionalOptions).toBeUndefined()
       })
     })
   })

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, before, afterEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const CRMContactsSeeder = require('../../support/seeders/crm-contacts.seeder.js')
@@ -31,7 +26,7 @@ describe('Companies - Fetch Licences dal', () => {
   let otherLicenceVersion
   let pageNumber
 
-  before(async () => {
+  beforeAll(async () => {
     // This is the licence and details we expect to retrieve
     licence = await LicenceHelper.add({
       licenceRef: `02/${generateRandomInteger(10, 99)}/${generateRandomInteger(100, 999)}`
@@ -89,7 +84,7 @@ describe('Companies - Fetch Licences dal', () => {
     Sinon.restore()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await licenceHolder.clean()
 
     await otherLicenceVersion.$query().delete()
@@ -104,7 +99,7 @@ describe('Companies - Fetch Licences dal', () => {
     it('returns licences linked to the company where it is the licence holder', async () => {
       const result = await FetchLicencesDal.go(companyId, pageNumber)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         licences: [
           {
             expiredDate: null,

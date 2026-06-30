@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const FetchReturnLogsForLicenceService = require('../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js')
@@ -42,7 +37,7 @@ describe('Prepare Return Logs Service', () => {
         it('preps the returns correctly', async () => {
           await PrepareReturnLogService.go(licence, billingPeriod)
 
-          expect(licence.returnLogs[0]).to.equal({
+          expect(licence.returnLogs[0]).toEqual({
             id: 'v1:1:01/977:14959864:2022-04-01:2023-03-31',
             returnReference: '14959864',
             description: 'The Description',
@@ -105,7 +100,7 @@ describe('Prepare Return Logs Service', () => {
         it('flags the return as outside the abstraction period', async () => {
           await PrepareReturnLogService.go(licence, billingPeriod)
 
-          expect(licence.returnLogs[0].abstractionOutsidePeriod).to.be.true()
+          expect(licence.returnLogs[0].abstractionOutsidePeriod).toBe(true)
         })
       })
 
@@ -121,7 +116,7 @@ describe('Prepare Return Logs Service', () => {
         it('flags the return as a nil return', async () => {
           await PrepareReturnLogService.go(licence, billingPeriod)
 
-          expect(licence.returnLogs[0].nilReturn).to.be.true()
+          expect(licence.returnLogs[0].nilReturn).toBe(true)
         })
       })
     })
@@ -134,7 +129,7 @@ describe('Prepare Return Logs Service', () => {
       it('assigns no return logs to the licence', async () => {
         await PrepareReturnLogService.go(licence, billingPeriod)
 
-        expect(licence.returnLogs).to.be.empty()
+        expect(licence.returnLogs).toHaveLength(0)
       })
     })
   })

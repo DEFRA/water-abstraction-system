@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ReturnCyclesFixture = require('../../support/fixtures/return-cycles.fixture.js')
 const ReturnRequirementsFixture = require('../../support/fixtures/return-requirements.fixture.js')
@@ -34,7 +27,7 @@ describe('Return Logs - Generate Return Log service', () => {
 
         const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           dueDate: null,
           endDate: new Date('2026-03-31'),
           licenceRef: returnRequirement.returnVersion.licence.licenceRef,
@@ -95,7 +88,7 @@ describe('Return Logs - Generate Return Log service', () => {
         it('returns the earliest end date from the licence, return version, or return cycle', () => {
           const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
 
-          expect(result.endDate).to.equal(new Date('2025-08-31'))
+          expect(result.endDate).toEqual(new Date('2025-08-31'))
         })
       })
 
@@ -105,7 +98,7 @@ describe('Return Logs - Generate Return Log service', () => {
 
           const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-          expect(result.returnId).to.equal(`${returnLogPrefix}:2025-04-01:2026-03-31`)
+          expect(result.returnId).toEqual(`${returnLogPrefix}:2025-04-01:2026-03-31`)
         })
       })
 
@@ -120,7 +113,7 @@ describe('Return Logs - Generate Return Log service', () => {
             it('returns true', () => {
               const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
 
-              expect(result.metadata.isFinal).to.be.true()
+              expect(result.metadata.isFinal).toBe(true)
             })
           })
 
@@ -128,7 +121,7 @@ describe('Return Logs - Generate Return Log service', () => {
             it('returns false', () => {
               const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
 
-              expect(result.metadata.isFinal).to.be.false()
+              expect(result.metadata.isFinal).toBe(false)
             })
           })
         })
@@ -138,7 +131,7 @@ describe('Return Logs - Generate Return Log service', () => {
             it('returns the alias as part of the purposes data', () => {
               const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
 
-              expect(result.metadata.purposes[0].alias).to.equal('Purpose alias for testing')
+              expect(result.metadata.purposes[0].alias).toEqual('Purpose alias for testing')
             })
           })
 
@@ -150,7 +143,7 @@ describe('Return Logs - Generate Return Log service', () => {
             it('returns the purposes data without an "alias" property', () => {
               const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
 
-              expect(result.metadata.purposes[0].alias).to.not.exist()
+              expect(result.metadata.purposes[0].alias).toBeUndefined()
             })
           })
         })
@@ -160,7 +153,7 @@ describe('Return Logs - Generate Return Log service', () => {
             it('returns the "nald" property with period details set to the abstraction period', () => {
               const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
 
-              expect(result.metadata.nald).to.equal({
+              expect(result.metadata.nald).toEqual({
                 regionCode: 4,
                 areaCode: 'SAAR',
                 formatId: returnRequirement.reference,
@@ -185,7 +178,7 @@ describe('Return Logs - Generate Return Log service', () => {
             it('returns the "nald" property with period details set to "null"', () => {
               const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
 
-              expect(result.metadata.nald).to.equal({
+              expect(result.metadata.nald).toEqual({
                 regionCode: 4,
                 areaCode: 'SAAR',
                 formatId: returnRequirement.reference,
@@ -207,7 +200,7 @@ describe('Return Logs - Generate Return Log service', () => {
         it('returns false when the return versions quarterly-returns flag is false', () => {
           const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
 
-          expect(result.quarterly).to.equal(false)
+          expect(result.quarterly).toEqual(false)
         })
       })
 
@@ -216,7 +209,7 @@ describe('Return Logs - Generate Return Log service', () => {
           it('returns the reporting frequency as-is', () => {
             const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
 
-            expect(result.returnsFrequency).to.equal('day')
+            expect(result.returnsFrequency).toEqual('day')
           })
         })
 
@@ -228,7 +221,7 @@ describe('Return Logs - Generate Return Log service', () => {
           it('returns the reporting frequency as "week"', () => {
             const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
 
-            expect(result.returnsFrequency).to.equal('week')
+            expect(result.returnsFrequency).toEqual('week')
           })
         })
       })
@@ -245,7 +238,7 @@ describe('Return Logs - Generate Return Log service', () => {
 
         const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           dueDate: null,
           endDate: new Date('2025-04-01'),
           licenceRef: returnRequirement.returnVersion.licence.licenceRef,
@@ -306,7 +299,7 @@ describe('Return Logs - Generate Return Log service', () => {
       it('returns null', () => {
         const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
 
-        expect(result).to.be.null()
+        expect(result).toBeNull()
       })
     })
   })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceDocumentHeaderHelper = require('../../../support/helpers/licence-document-header.helper.js')
 const LicenceEntityHelper = require('../../../support/helpers/licence-entity.helper.js')
@@ -25,7 +18,7 @@ describe('Users - External - Fetch User Details DAL', () => {
   let user
   let userEntity
 
-  before(async () => {
+  beforeAll(async () => {
     const companyEntityId = generateUUID()
 
     userEntity = await LicenceEntityHelper.add()
@@ -41,7 +34,7 @@ describe('Users - External - Fetch User Details DAL', () => {
     licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({ companyEntityId, licenceRef: licence.licenceRef })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await licenceDocumentHeader.$query().delete()
     await licence.$query().delete()
     await licenceEntityRole.$query().delete()
@@ -53,7 +46,7 @@ describe('Users - External - Fetch User Details DAL', () => {
     it('returns the requested user', async () => {
       const result = await FetchUserDetailsDal.go(user.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         application: user.application,
         enabled: user.enabled,
         groups: [],

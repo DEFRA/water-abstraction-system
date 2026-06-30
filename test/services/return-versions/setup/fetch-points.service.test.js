@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeHelper = require('../../../support/helpers/licence-version-purpose.helper.js')
@@ -21,7 +14,7 @@ describe('Return Versions - Setup - Fetch Points service', () => {
   let licenceVersion
   let points
 
-  before(async () => {
+  beforeAll(async () => {
     points = await _points()
 
     // Create the initial licenceId
@@ -54,9 +47,9 @@ describe('Return Versions - Setup - Fetch Points service', () => {
       // sort the results in the fetch, which means we cannot guarantee what order they'll be in for the test. So, to
       // avoid intermittent failures we check that the results contain each point we expect, and has the expected number
       // of results
-      expect(results).to.have.length(3)
+      expect(results).toHaveLength(3)
 
-      expect(results).to.contain(
+      expect(results).toContainEqual(
         PointModel.fromJson({
           id: points[0].id,
           description: 'I am the shared point',
@@ -67,7 +60,7 @@ describe('Return Versions - Setup - Fetch Points service', () => {
         })
       )
 
-      expect(results).to.contain(
+      expect(results).toContainEqual(
         PointModel.fromJson({
           id: points[1].id,
           description: 'I am point 1',
@@ -78,7 +71,7 @@ describe('Return Versions - Setup - Fetch Points service', () => {
         })
       )
 
-      expect(results).to.contain(
+      expect(results).toContainEqual(
         PointModel.fromJson({
           id: points[2].id,
           description: 'I am point 2',
@@ -95,7 +88,7 @@ describe('Return Versions - Setup - Fetch Points service', () => {
     it('returns an empty array', async () => {
       const results = await FetchPointsService.go('7f665e1b-a2cf-4241-9dc9-9351edc16533')
 
-      expect(results).to.be.empty()
+      expect(results).toHaveLength(0)
     })
   })
 })

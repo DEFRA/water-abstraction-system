@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const NoticesFixture = require('../../../support/fixtures/notices.fixture.js')
@@ -31,7 +26,7 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
   let returnsInvitation
   let oneDayBeforeRetentionStartDate
 
-  before(async () => {
+  beforeAll(async () => {
     const retentionStartDate = today()
 
     retentionStartDate.setDate(retentionStartDate.getDate() - DAYS_OF_RETENTION)
@@ -82,7 +77,7 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
     Sinon.restore()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await abstractionAlert.$query().delete()
     await notPending.$query().delete()
     await olderThanRetentionPeriod.$query().delete()
@@ -93,21 +88,21 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
     const results = await FetchNotificationsService.go()
 
     for (const result of results) {
-      expect(result.status).to.equal('pending')
-      expect(result.createdAt).to.be.at.least(oneDayBeforeRetentionStartDate)
+      expect(result.status).toEqual('pending')
+      expect(result.createdAt.getTime()).toBeGreaterThanOrEqual(oneDayBeforeRetentionStartDate.getTime())
     }
   })
 
   it('contains the test records we expect and excludes those we do not', async () => {
     const results = await FetchNotificationsService.go()
 
-    expect(results).contains(_transformToResult(returnsInvitation))
+    expect(results).toContainEqual(_transformToResult(returnsInvitation))
 
-    expect(results).contains(_transformToResult(abstractionAlert))
+    expect(results).toContainEqual(_transformToResult(abstractionAlert))
 
-    expect(results).not.contains(_transformToResult(olderThanRetentionPeriod))
+    expect(results).not.toContainEqual(_transformToResult(olderThanRetentionPeriod))
 
-    expect(results).not.contains(_transformToResult(notPending))
+    expect(results).not.toContainEqual(_transformToResult(notPending))
   })
 })
 

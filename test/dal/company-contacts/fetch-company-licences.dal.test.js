@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const {
   exLicenceHolderWithSingleLicences,
@@ -22,7 +15,7 @@ const FetchCompanyLicencesDal = require('../../../app/dal/company-contacts/fetch
 describe('Company Contacts - Fetch Company Licences Dal', () => {
   let scenarios
 
-  before(async () => {
+  beforeAll(async () => {
     scenarios = {}
 
     scenarios.licence = await licenceHolderWithSingleLicence()
@@ -41,7 +34,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     scenarios.multpleLicences = await licenceHolderWithMultipleLicences()
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const scenario of Object.values(scenarios)) {
       await scenario.clean()
     }
@@ -51,7 +44,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     it('returns the matching licences', async () => {
       const result = await FetchCompanyLicencesDal.go(scenarios.licence.company.id)
 
-      expect(result).to.equal([
+      expect(result).toEqual([
         {
           id: scenarios.licence.licence.id,
           licenceRef: scenarios.licence.licence.licenceRef
@@ -64,7 +57,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     it('returns an empty array', async () => {
       const result = await FetchCompanyLicencesDal.go(scenarios.expiredPast.company.id)
 
-      expect(result).to.equal([])
+      expect(result).toEqual([])
     })
   })
 
@@ -72,7 +65,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     it('returns an empty array', async () => {
       const result = await FetchCompanyLicencesDal.go(scenarios.lapsedPast.company.id)
 
-      expect(result).to.equal([])
+      expect(result).toEqual([])
     })
   })
 
@@ -80,7 +73,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     it('returns an empty array', async () => {
       const result = await FetchCompanyLicencesDal.go(scenarios.revokedPast.company.id)
 
-      expect(result).to.equal([])
+      expect(result).toEqual([])
     })
   })
 
@@ -88,7 +81,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     it('returns an empty array', async () => {
       const result = await FetchCompanyLicencesDal.go(scenarios.endedToday.company.id)
 
-      expect(result).to.equal([])
+      expect(result).toEqual([])
     })
   })
 
@@ -96,7 +89,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     it('returns an empty array', async () => {
       const result = await FetchCompanyLicencesDal.go(scenarios.mixedDates.company.id)
 
-      expect(result).to.equal([])
+      expect(result).toEqual([])
     })
   })
 
@@ -104,7 +97,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     it('returns the licences', async () => {
       const result = await FetchCompanyLicencesDal.go(scenarios.expiredFuture.company.id)
 
-      expect(result).to.equal([
+      expect(result).toEqual([
         {
           id: scenarios.expiredFuture.licence.id,
           licenceRef: scenarios.expiredFuture.licence.licenceRef
@@ -117,7 +110,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     it('returns the licences', async () => {
       const result = await FetchCompanyLicencesDal.go(scenarios.lapsedFuture.company.id)
 
-      expect(result).to.equal([
+      expect(result).toEqual([
         {
           id: scenarios.lapsedFuture.licence.id,
           licenceRef: scenarios.lapsedFuture.licence.licenceRef
@@ -130,7 +123,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     it('returns the licences', async () => {
       const result = await FetchCompanyLicencesDal.go(scenarios.revokedFuture.company.id)
 
-      expect(result).to.equal([
+      expect(result).toEqual([
         {
           id: scenarios.revokedFuture.licence.id,
           licenceRef: scenarios.revokedFuture.licence.licenceRef
@@ -143,7 +136,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     it('returns an empty array', async () => {
       const result = await FetchCompanyLicencesDal.go(generateUUID())
 
-      expect(result).to.equal([])
+      expect(result).toEqual([])
     })
   })
 
@@ -151,7 +144,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
     it('returns an empty array', async () => {
       const result = await FetchCompanyLicencesDal.go(scenarios.licenceCurrentVersion.company.id)
 
-      expect(result).to.equal([])
+      expect(result).toEqual([])
     })
   })
 
@@ -172,7 +165,7 @@ describe('Company Contacts - Fetch Company Licences Dal', () => {
         return a.licenceRef.localeCompare(b.licenceRef)
       })
 
-      expect(result).to.equal(expectedLicences)
+      expect(result).toEqual(expectedLicences)
     })
   })
 })

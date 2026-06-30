@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const BaseCheckPresenter = require('../../../../../app/presenters/bill-runs/setup/check/base-check.presenter.js')
 
@@ -24,7 +17,7 @@ describe('Bill Runs - Setup - Base Check presenter', () => {
       it('returns a link to the region page', async () => {
         const result = await BaseCheckPresenter.checkPageBackLink(session)
 
-        expect(result).to.equal('/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region')
+        expect(result).toEqual('/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region')
       })
     })
 
@@ -41,7 +34,7 @@ describe('Bill Runs - Setup - Base Check presenter', () => {
         it('returns a link to the financial year page', async () => {
           const result = await BaseCheckPresenter.checkPageBackLink(session)
 
-          expect(result).to.equal('/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/year')
+          expect(result).toEqual('/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/year')
         })
       })
 
@@ -53,7 +46,7 @@ describe('Bill Runs - Setup - Base Check presenter', () => {
         it('returns a link to the season page', async () => {
           const result = await BaseCheckPresenter.checkPageBackLink(session)
 
-          expect(result).to.equal('/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/season')
+          expect(result).toEqual('/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/season')
         })
       })
     })
@@ -66,7 +59,7 @@ describe('Bill Runs - Setup - Base Check presenter', () => {
       it('returns a link to the financial year page', async () => {
         const result = await BaseCheckPresenter.checkPageBackLink(session)
 
-        expect(result).to.equal('/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/year')
+        expect(result).toEqual('/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/year')
       })
     })
   })

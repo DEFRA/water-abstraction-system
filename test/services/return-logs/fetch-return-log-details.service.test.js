@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
@@ -24,7 +19,7 @@ describe('Return Logs - Fetch Return Log Details service', () => {
   let returnSubmissions = []
   let version
 
-  before(async () => {
+  beforeAll(async () => {
     licence = await LicenceHelper.add()
     returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef })
   })
@@ -39,7 +34,7 @@ describe('Return Logs - Fetch Return Log Details service', () => {
     Sinon.restore()
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const returnSubmission of returnSubmissions) {
       for (const returnSubmissionLine of returnSubmission.returnSubmissionLines) {
         await returnSubmissionLine.$query().delete()
@@ -57,7 +52,7 @@ describe('Return Logs - Fetch Return Log Details service', () => {
       it('fetches the matching return log with the linked licence and no submissions', async () => {
         const result = await FetchReturnLogDetailsService.go(returnLog.id)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           dueDate: returnLog.dueDate,
           endDate: returnLog.endDate,
           id: returnLog.id,
@@ -86,7 +81,7 @@ describe('Return Logs - Fetch Return Log Details service', () => {
     })
 
     describe('and the return log has submissions', () => {
-      before(async () => {
+      beforeAll(async () => {
         returnSubmissions = await Promise.all([
           ReturnSubmissionHelper.add({ returnLogId: returnLog.id, version: 1, notes: 'NOTES_V1' }),
           ReturnSubmissionHelper.add({ returnLogId: returnLog.id, version: 2, notes: 'NOTES_V2' }),
@@ -125,65 +120,60 @@ describe('Return Logs - Fetch Return Log Details service', () => {
       it('fetches the matching return log with the linked licence and all submission versions', async () => {
         const result = await FetchReturnLogDetailsService.go(returnLog.id)
 
-        expect(result).to.equal(
-          {
-            dueDate: returnLog.dueDate,
-            endDate: returnLog.endDate,
-            id: returnLog.id,
-            receivedDate: returnLog.receivedDate,
-            returnId: returnLog.returnId,
-            returnsFrequency: returnLog.returnsFrequency,
-            returnReference: returnLog.returnReference,
-            startDate: returnLog.startDate,
-            status: returnLog.status,
-            underQuery: returnLog.underQuery,
-            siteDescription: returnLog.metadata.description,
-            periodStartDay: returnLog.metadata.nald.periodStartDay,
-            periodStartMonth: returnLog.metadata.nald.periodStartMonth,
-            periodEndDay: returnLog.metadata.nald.periodEndDay,
-            periodEndMonth: returnLog.metadata.nald.periodEndMonth,
-            purposes: returnLog.metadata.purposes,
-            current: returnLog.metadata.isCurrent,
-            twoPartTariff: returnLog.metadata.isTwoPartTariff,
-            licence: {
-              id: licence.id,
-              licenceRef: licence.licenceRef
-            },
-            versions: [
-              {
-                createdAt: returnSubmissions[2].createdAt,
-                id: returnSubmissions[2].id,
-                notes: returnSubmissions[2].notes,
-                userId: returnSubmissions[2].userId,
-                version: returnSubmissions[2].version
-              },
-              {
-                createdAt: returnSubmissions[1].createdAt,
-                id: returnSubmissions[1].id,
-                notes: returnSubmissions[1].notes,
-                userId: returnSubmissions[1].userId,
-                version: returnSubmissions[1].version
-              },
-              {
-                createdAt: returnSubmissions[0].createdAt,
-                id: returnSubmissions[0].id,
-                notes: returnSubmissions[0].notes,
-                userId: returnSubmissions[0].userId,
-                version: returnSubmissions[0].version
-              }
-            ]
+        expect(result).toMatchObject({
+          dueDate: returnLog.dueDate,
+          endDate: returnLog.endDate,
+          id: returnLog.id,
+          receivedDate: returnLog.receivedDate,
+          returnId: returnLog.returnId,
+          returnsFrequency: returnLog.returnsFrequency,
+          returnReference: returnLog.returnReference,
+          startDate: returnLog.startDate,
+          status: returnLog.status,
+          underQuery: returnLog.underQuery,
+          siteDescription: returnLog.metadata.description,
+          periodStartDay: returnLog.metadata.nald.periodStartDay,
+          periodStartMonth: returnLog.metadata.nald.periodStartMonth,
+          periodEndDay: returnLog.metadata.nald.periodEndDay,
+          periodEndMonth: returnLog.metadata.nald.periodEndMonth,
+          purposes: returnLog.metadata.purposes,
+          current: returnLog.metadata.isCurrent,
+          twoPartTariff: returnLog.metadata.isTwoPartTariff,
+          licence: {
+            id: licence.id,
+            licenceRef: licence.licenceRef
           },
-          {
-            skip: ['returnSubmissions']
-          }
-        )
+          versions: [
+            {
+              createdAt: returnSubmissions[2].createdAt,
+              id: returnSubmissions[2].id,
+              notes: returnSubmissions[2].notes,
+              userId: returnSubmissions[2].userId,
+              version: returnSubmissions[2].version
+            },
+            {
+              createdAt: returnSubmissions[1].createdAt,
+              id: returnSubmissions[1].id,
+              notes: returnSubmissions[1].notes,
+              userId: returnSubmissions[1].userId,
+              version: returnSubmissions[1].version
+            },
+            {
+              createdAt: returnSubmissions[0].createdAt,
+              id: returnSubmissions[0].id,
+              notes: returnSubmissions[0].notes,
+              userId: returnSubmissions[0].userId,
+              version: returnSubmissions[0].version
+            }
+          ]
+        })
       })
 
       describe('and when no version is specified', () => {
         it('selects the latest submission', async () => {
           const result = await FetchReturnLogDetailsService.go(returnLog.id)
 
-          expect(result.returnSubmissions).to.equal([
+          expect(result.returnSubmissions).toEqual([
             {
               createdAt: returnSubmissions[2].createdAt,
               id: returnSubmissions[2].id,
@@ -215,7 +205,7 @@ describe('Return Logs - Fetch Return Log Details service', () => {
         it('automatically applies readings to the submission', async () => {
           await FetchReturnLogDetailsService.go(returnLog.id)
 
-          expect(returnSubmissions[2].$applyReadings.calledOnce).to.be.true()
+          expect(returnSubmissions[2].$applyReadings.calledOnce).toBe(true)
         })
       })
 
@@ -227,7 +217,7 @@ describe('Return Logs - Fetch Return Log Details service', () => {
         it('selects the matching submission', async () => {
           const result = await FetchReturnLogDetailsService.go(returnLog.id, version)
 
-          expect(result.returnSubmissions).to.equal([
+          expect(result.returnSubmissions).toEqual([
             {
               createdAt: returnSubmissions[1].createdAt,
               id: returnSubmissions[1].id,
@@ -252,7 +242,7 @@ describe('Return Logs - Fetch Return Log Details service', () => {
         it('automatically applies readings to the submission', async () => {
           await FetchReturnLogDetailsService.go(returnLog.id, version)
 
-          expect(returnSubmissions[1].$applyReadings.calledOnce).to.be.true()
+          expect(returnSubmissions[1].$applyReadings.calledOnce).toBe(true)
         })
       })
     })

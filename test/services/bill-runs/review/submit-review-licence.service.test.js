@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
@@ -55,13 +50,13 @@ describe('Bill Runs Review - Submit Review Licence Service', () => {
         // Check we save the status change
         const [patchObject] = patchStub.args[0]
 
-        expect(patchObject).to.equal({ status: 'ready' })
+        expect(patchObject).toEqual({ status: 'ready' })
 
         // Check we add the flash message
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-        expect(flashType).to.equal('banner')
-        expect(bannerMessage).to.equal('Licence changed to ready.')
+        expect(flashType).toEqual('banner')
+        expect(bannerMessage).toEqual('Licence changed to ready.')
       })
     })
 
@@ -77,13 +72,13 @@ describe('Bill Runs Review - Submit Review Licence Service', () => {
           // Check we save the status change
           const [patchObject] = patchStub.args[0]
 
-          expect(patchObject).to.equal({ progress: true })
+          expect(patchObject).toEqual({ progress: true })
 
           // Check we add the flash message
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('banner')
-          expect(bannerMessage).to.equal('This licence has been marked.')
+          expect(flashType).toEqual('banner')
+          expect(bannerMessage).toEqual('This licence has been marked.')
         })
       })
 
@@ -98,13 +93,13 @@ describe('Bill Runs Review - Submit Review Licence Service', () => {
           // Check we save the status change
           const [patchObject] = patchStub.args[0]
 
-          expect(patchObject).to.equal({ progress: false })
+          expect(patchObject).toEqual({ progress: false })
 
           // Check we add the flash message
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('banner')
-          expect(bannerMessage).to.equal('The progress mark for this licence has been removed.')
+          expect(flashType).toEqual('banner')
+          expect(bannerMessage).toEqual('The progress mark for this licence has been removed.')
         })
       })
     })

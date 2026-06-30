@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateAccountNumber } = require('../../support/helpers/billing-account.helper.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
@@ -32,7 +25,7 @@ describe('Licences - Bills presenter', () => {
     it('correctly presents the data', () => {
       const result = BillsPresenter.go([bill], licence)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: '/',
           text: 'Go back to search'
@@ -62,7 +55,7 @@ describe('Licences - Bills presenter', () => {
           it('correctly formats the "billNumber" to the invoice number', () => {
             const result = BillsPresenter.go([bill], licence)
 
-            expect(result.bills[0].billNumber).to.equal('WAC0003872T')
+            expect(result.bills[0].billNumber).toEqual('WAC0003872T')
           })
         })
 
@@ -75,7 +68,7 @@ describe('Licences - Bills presenter', () => {
           it('correctly formats the "billNumber" to "De minimis bill"', () => {
             const result = BillsPresenter.go([bill], licence)
 
-            expect(result.bills[0].billNumber).to.equal('De minimis bill')
+            expect(result.bills[0].billNumber).toEqual('De minimis bill')
           })
         })
 
@@ -88,7 +81,7 @@ describe('Licences - Bills presenter', () => {
           it('correctly formats the "billNumber" to "NALD revised bill"', () => {
             const result = BillsPresenter.go([bill], licence)
 
-            expect(result.bills[0].billNumber).to.equal('NALD revised bill')
+            expect(result.bills[0].billNumber).toEqual('NALD revised bill')
           })
         })
 
@@ -101,7 +94,7 @@ describe('Licences - Bills presenter', () => {
           it('correctly formats the "billNumber" to "Zero value bill"', () => {
             const result = BillsPresenter.go([bill], licence)
 
-            expect(result.bills[0].billNumber).to.equal('Zero value bill')
+            expect(result.bills[0].billNumber).toEqual('Zero value bill')
           })
         })
 
@@ -113,7 +106,7 @@ describe('Licences - Bills presenter', () => {
           it('returns an empty string', () => {
             const result = BillsPresenter.go([bill], licence)
 
-            expect(result.bills[0].billNumber).to.equal('')
+            expect(result.bills[0].billNumber).toEqual('')
           })
         })
       })

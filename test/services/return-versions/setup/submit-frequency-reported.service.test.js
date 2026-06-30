@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -75,15 +70,15 @@ describe('Return Versions Setup - Submit Frequency Reported service', () => {
       it('saves the submitted value', async () => {
         await SubmitFrequencyReportedService.go(session.id, requirementIndex, payload, yarStub)
 
-        expect(session.requirements[0].frequencyReported).to.equal('week')
-        expect(session.$update.called).to.be.true()
+        expect(session.requirements[0].frequencyReported).toEqual('week')
+        expect(session.$update.called).toBe(true)
       })
 
       describe('and the page has been not been visited', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
           const result = await SubmitFrequencyReportedService.go(session.id, requirementIndex, payload, yarStub)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             checkPageVisited: false
           })
         })
@@ -102,7 +97,7 @@ describe('Return Versions Setup - Submit Frequency Reported service', () => {
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
           const result = await SubmitFrequencyReportedService.go(session.id, requirementIndex, payload, yarStub)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             checkPageVisited: true
           })
         })
@@ -112,8 +107,8 @@ describe('Return Versions Setup - Submit Frequency Reported service', () => {
 
           const [flashType, notification] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(notification).to.equal({
+          expect(flashType).toEqual('notification')
+          expect(notification).toEqual({
             titleText: 'Updated',
             text: 'Requirements for returns updated'
           })
@@ -129,27 +124,24 @@ describe('Return Versions Setup - Submit Frequency Reported service', () => {
       it('returns the page data for the view', async () => {
         const result = await SubmitFrequencyReportedService.go(session.id, requirementIndex, payload, yarStub)
 
-        expect(result).to.equal(
-          {
-            pageTitle: 'Select how often readings or volumes are reported',
-            pageTitleCaption: 'Licence 01/ABC',
-            backLink: {
-              href: `/system/return-versions/setup/${session.id}/frequency-collected/0`,
-              text: 'Back'
-            },
-            frequencyReported: null,
-            licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            licenceRef: '01/ABC'
+        expect(result).toMatchObject({
+          pageTitle: 'Select how often readings or volumes are reported',
+          pageTitleCaption: 'Licence 01/ABC',
+          backLink: {
+            href: `/system/return-versions/setup/${session.id}/frequency-collected/0`,
+            text: 'Back'
           },
-          { skip: ['sessionId', 'error'] }
-        )
+          frequencyReported: null,
+          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+          licenceRef: '01/ABC'
+        })
       })
 
       describe('because the user has not submitted anything', () => {
         it('includes an error for the input element', async () => {
           const result = await SubmitFrequencyReportedService.go(session.id, requirementIndex, payload, yarStub)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             errorList: [
               {
                 href: '#frequencyReported',

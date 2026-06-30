@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
@@ -38,7 +33,7 @@ describe('Jobs - Renewal Invitations - Process Renewal Invitations service', () 
   it('calls the "SendRenewalInvitations"', async () => {
     await ProcessRenewalInvitationsService.go(days)
 
-    expect(SendRenewalInvitations.go.calledWith(days)).to.be.true()
+    expect(SendRenewalInvitations.go.calledWith(days)).toBe(true)
   })
 
   it('logs the time taken in milliseconds and seconds', async () => {
@@ -46,9 +41,9 @@ describe('Jobs - Renewal Invitations - Process Renewal Invitations service', () 
 
     const logDataArg = notifierStub.omg.firstCall.args[1]
 
-    expect(notifierStub.omg.calledWith('Renewals invitation status job complete')).to.be.true()
-    expect(logDataArg.timeTakenMs).to.exist()
-    expect(logDataArg.timeTakenSs).to.exist()
-    expect(logDataArg.count).to.equal(1)
+    expect(notifierStub.omg.calledWith('Renewals invitation status job complete')).toBe(true)
+    expect(logDataArg.timeTakenMs).toBeDefined()
+    expect(logDataArg.timeTakenSs).toBeDefined()
+    expect(logDataArg.count).toEqual(1)
   })
 })

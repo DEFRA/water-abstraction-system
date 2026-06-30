@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
@@ -20,7 +13,7 @@ describe('Determine Return Log Flags Service', () => {
     let licence
 
     describe('for a licence that is already flagged for billing', () => {
-      before(async () => {
+      beforeAll(async () => {
         licence = await LicenceHelper.add({ includeInPresrocBilling: 'yes', includeInSrocBilling: true })
         returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef })
       })
@@ -28,38 +21,38 @@ describe('Determine Return Log Flags Service', () => {
       it('always returns the licenceId, regionId, startDate and endDate', async () => {
         const result = await DetermineReturnLogFlagsService.go(returnLog.id)
 
-        expect(result.licenceId).to.equal(licence.id)
-        expect(result.regionId).to.equal(licence.regionId)
-        expect(result.startDate).to.equal(returnLog.startDate)
-        expect(result.endDate).to.equal(returnLog.endDate)
+        expect(result.licenceId).toEqual(licence.id)
+        expect(result.regionId).toEqual(licence.regionId)
+        expect(result.startDate).toEqual(returnLog.startDate)
+        expect(result.endDate).toEqual(returnLog.endDate)
       })
 
       describe('and the return is not two-part tariff, ending after the 1st of April 2022 (sroc)', () => {
         it('returns the correct flags', async () => {
           const result = await DetermineReturnLogFlagsService.go(returnLog.id)
 
-          expect(result.flagForPreSrocSupplementary).to.equal(true)
-          expect(result.flagForSrocSupplementary).to.equal(true)
-          expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
+          expect(result.flagForPreSrocSupplementary).toEqual(true)
+          expect(result.flagForSrocSupplementary).toEqual(true)
+          expect(result.flagForTwoPartTariffSupplementary).toEqual(false)
         })
       })
 
       describe('and the return is two-part tariff, ending after the 1st of April 2022 (sroc)', () => {
-        before(async () => {
+        beforeAll(async () => {
           returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef, metadata: { isTwoPartTariff: true } })
         })
 
         it('returns the correct flags', async () => {
           const result = await DetermineReturnLogFlagsService.go(returnLog.id)
 
-          expect(result.flagForPreSrocSupplementary).to.equal(true)
-          expect(result.flagForSrocSupplementary).to.equal(true)
-          expect(result.flagForTwoPartTariffSupplementary).to.equal(true)
+          expect(result.flagForPreSrocSupplementary).toEqual(true)
+          expect(result.flagForSrocSupplementary).toEqual(true)
+          expect(result.flagForTwoPartTariffSupplementary).toEqual(true)
         })
       })
 
       describe('and the return started before the 1st of April 2022 (sroc)', () => {
-        before(async () => {
+        beforeAll(async () => {
           returnLog = await ReturnLogHelper.add({
             licenceRef: licence.licenceRef,
             startDate: new Date('2021-04-01'),
@@ -70,15 +63,15 @@ describe('Determine Return Log Flags Service', () => {
         it('returns the correct flags', async () => {
           const result = await DetermineReturnLogFlagsService.go(returnLog.id)
 
-          expect(result.flagForPreSrocSupplementary).to.equal(true)
-          expect(result.flagForSrocSupplementary).to.equal(true)
-          expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
+          expect(result.flagForPreSrocSupplementary).toEqual(true)
+          expect(result.flagForSrocSupplementary).toEqual(true)
+          expect(result.flagForTwoPartTariffSupplementary).toEqual(false)
         })
       })
     })
 
     describe('for a licence that is not already flagged for billing', () => {
-      before(async () => {
+      beforeAll(async () => {
         licence = await LicenceHelper.add()
         returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef })
       })
@@ -86,38 +79,38 @@ describe('Determine Return Log Flags Service', () => {
       it('always returns the licenceId, regionId, startDate and endDate', async () => {
         const result = await DetermineReturnLogFlagsService.go(returnLog.id)
 
-        expect(result.licenceId).to.equal(licence.id)
-        expect(result.regionId).to.equal(licence.regionId)
-        expect(result.startDate).to.equal(returnLog.startDate)
-        expect(result.endDate).to.equal(returnLog.endDate)
+        expect(result.licenceId).toEqual(licence.id)
+        expect(result.regionId).toEqual(licence.regionId)
+        expect(result.startDate).toEqual(returnLog.startDate)
+        expect(result.endDate).toEqual(returnLog.endDate)
       })
 
       describe('and the return is not two-part tariff, ending after the 1st of April 2022 (sroc)', () => {
         it('returns the correct flags', async () => {
           const result = await DetermineReturnLogFlagsService.go(returnLog.id)
 
-          expect(result.flagForPreSrocSupplementary).to.equal(false)
-          expect(result.flagForSrocSupplementary).to.equal(true)
-          expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
+          expect(result.flagForPreSrocSupplementary).toEqual(false)
+          expect(result.flagForSrocSupplementary).toEqual(true)
+          expect(result.flagForTwoPartTariffSupplementary).toEqual(false)
         })
       })
 
       describe('and the return is two-part tariff, ending after the 1st of April 2022 (sroc)', () => {
-        before(async () => {
+        beforeAll(async () => {
           returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef, metadata: { isTwoPartTariff: true } })
         })
 
         it('returns the correct flags', async () => {
           const result = await DetermineReturnLogFlagsService.go(returnLog.id)
 
-          expect(result.flagForPreSrocSupplementary).to.equal(false)
-          expect(result.flagForSrocSupplementary).to.equal(false)
-          expect(result.flagForTwoPartTariffSupplementary).to.equal(true)
+          expect(result.flagForPreSrocSupplementary).toEqual(false)
+          expect(result.flagForSrocSupplementary).toEqual(false)
+          expect(result.flagForTwoPartTariffSupplementary).toEqual(true)
         })
       })
 
       describe('and the return started before the 1st of April 2022 (sroc)', () => {
-        before(async () => {
+        beforeAll(async () => {
           returnLog = await ReturnLogHelper.add({
             licenceRef: licence.licenceRef,
             startDate: new Date('2021-04-01'),
@@ -128,9 +121,9 @@ describe('Determine Return Log Flags Service', () => {
         it('returns the correct flags', async () => {
           const result = await DetermineReturnLogFlagsService.go(returnLog.id)
 
-          expect(result.flagForPreSrocSupplementary).to.equal(true)
-          expect(result.flagForSrocSupplementary).to.equal(false)
-          expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
+          expect(result.flagForPreSrocSupplementary).toEqual(true)
+          expect(result.flagForSrocSupplementary).toEqual(false)
+          expect(result.flagForTwoPartTariffSupplementary).toEqual(false)
         })
       })
     })

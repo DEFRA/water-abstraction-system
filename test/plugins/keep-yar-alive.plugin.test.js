@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_OK } = require('node:http2').constants
@@ -64,7 +59,7 @@ describe('Keep Yar Alive plugin', () => {
   })
 
   it('registers successfully', () => {
-    expect(server.registrations.keepYarAlive).to.exist()
+    expect(server.registrations.keepYarAlive).toBeDefined()
   })
 
   describe('when the route does not have the "skipSessionTouch" setting applied', () => {
@@ -77,12 +72,12 @@ describe('Keep Yar Alive plugin', () => {
     it('touches the Yar session to update the TTL and keep it alive', async () => {
       const response = await server.inject('/')
 
-      expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-      expect(response.result).to.equal('ok')
+      expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+      expect(response.result).toEqual('ok')
 
-      expect(yarStub.touch.called).to.be.true()
+      expect(yarStub.touch.called).toBe(true)
 
-      expect(globalThis.GlobalNotifier.omfg.called).to.be.false()
+      expect(globalThis.GlobalNotifier.omfg.called).toBe(false)
     })
   })
 
@@ -96,12 +91,12 @@ describe('Keep Yar Alive plugin', () => {
     it('skips touching the Yar session', async () => {
       const res = await server.inject('/skip')
 
-      expect(res.statusCode).to.equal(HTTP_STATUS_OK)
-      expect(res.result).to.equal('skipped')
+      expect(res.statusCode).toEqual(HTTP_STATUS_OK)
+      expect(res.result).toEqual('skipped')
 
-      expect(yarStub.touch.called).to.be.false()
+      expect(yarStub.touch.called).toBe(false)
 
-      expect(globalThis.GlobalNotifier.omfg.called).to.be.false()
+      expect(globalThis.GlobalNotifier.omfg.called).toBe(false)
     })
   })
 
@@ -109,12 +104,12 @@ describe('Keep Yar Alive plugin', () => {
     it('skips touching the Yar session', async () => {
       const res = await server.inject('/skip')
 
-      expect(res.statusCode).to.equal(HTTP_STATUS_OK)
-      expect(res.result).to.equal('skipped')
+      expect(res.statusCode).toEqual(HTTP_STATUS_OK)
+      expect(res.result).toEqual('skipped')
 
-      expect(yarStub.touch.called).to.be.false()
+      expect(yarStub.touch.called).toBe(false)
 
-      expect(globalThis.GlobalNotifier.omfg.called).to.be.false()
+      expect(globalThis.GlobalNotifier.omfg.called).toBe(false)
     })
   })
 
@@ -129,10 +124,10 @@ describe('Keep Yar Alive plugin', () => {
     it('handles Yar errors gracefully', async () => {
       const response = await server.inject('/')
 
-      expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-      expect(response.result).to.equal('ok')
+      expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+      expect(response.result).toEqual('ok')
 
-      expect(globalThis.GlobalNotifier.omfg.firstCall.args[0]).to.include('Failed to keep session alive')
+      expect(globalThis.GlobalNotifier.omfg.firstCall.args[0]).toContain('Failed to keep session alive')
     })
   })
 })

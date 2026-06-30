@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const DetermineSearchItemsService = require('../../../app/services/search/determine-search-items.service.js')
 
@@ -25,7 +18,7 @@ describe('Search - Determine Search Items service', () => {
     it('returns the correct list', () => {
       const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-      expect(result).to.equal(['billingAccount', 'licenceHolder', 'licence', 'monitoringStation', 'returnLog', 'user'])
+      expect(result).toEqual(['billingAccount', 'licenceHolder', 'licence', 'monitoringStation', 'returnLog', 'user'])
     })
   })
 
@@ -38,7 +31,7 @@ describe('Search - Determine Search Items service', () => {
 
     it('returns only the billing account type', () => {
       const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
-      expect(result).to.equal(['billingAccount'])
+      expect(result).toEqual(['billingAccount'])
     })
   })
 
@@ -51,7 +44,7 @@ describe('Search - Determine Search Items service', () => {
 
     it('returns only the licence holder type', () => {
       const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
-      expect(result).to.equal(['licenceHolder'])
+      expect(result).toEqual(['licenceHolder'])
     })
   })
 
@@ -64,7 +57,7 @@ describe('Search - Determine Search Items service', () => {
 
     it('returns only the licence type', () => {
       const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
-      expect(result).to.equal(['licence'])
+      expect(result).toEqual(['licence'])
     })
   })
 
@@ -77,7 +70,7 @@ describe('Search - Determine Search Items service', () => {
 
     it('returns only the monitoring station type', () => {
       const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
-      expect(result).to.equal(['monitoringStation'])
+      expect(result).toEqual(['monitoringStation'])
     })
   })
 
@@ -90,7 +83,7 @@ describe('Search - Determine Search Items service', () => {
 
     it('returns only the return log type', () => {
       const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
-      expect(result).to.equal(['returnLog'])
+      expect(result).toEqual(['returnLog'])
     })
   })
 
@@ -104,7 +97,7 @@ describe('Search - Determine Search Items service', () => {
     it('returns only the user type', () => {
       const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-      expect(result).to.equal(['user'])
+      expect(result).toEqual(['user'])
     })
   })
 
@@ -122,7 +115,7 @@ describe('Search - Determine Search Items service', () => {
       it('returns no search types', () => {
         const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-        expect(result).to.equal([])
+        expect(result).toEqual([])
       })
     })
 
@@ -134,7 +127,7 @@ describe('Search - Determine Search Items service', () => {
       it('returns search types that do not include billing accounts', () => {
         const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-        expect(result).to.not.include('billingAccount')
+        expect(result).not.toContain('billingAccount')
       })
     })
   })
@@ -153,7 +146,7 @@ describe('Search - Determine Search Items service', () => {
       it('returns the billing account type', () => {
         const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-        expect(result).to.equal(['billingAccount'])
+        expect(result).toEqual(['billingAccount'])
       })
     })
 
@@ -165,7 +158,7 @@ describe('Search - Determine Search Items service', () => {
       it('returns the billing account type', () => {
         const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-        expect(result).to.include('billingAccount')
+        expect(result).toContain('billingAccount')
       })
     })
 
@@ -177,7 +170,7 @@ describe('Search - Determine Search Items service', () => {
       it('does not return the billing account type', () => {
         const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-        expect(result).to.not.include('billingAccount')
+        expect(result).not.toContain('billingAccount')
       })
     })
   })
@@ -196,7 +189,7 @@ describe('Search - Determine Search Items service', () => {
       it('returns the billing account type', () => {
         const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-        expect(result).to.include('billingAccount')
+        expect(result).toContain('billingAccount')
       })
     })
 
@@ -208,7 +201,7 @@ describe('Search - Determine Search Items service', () => {
       it('returns the billing account type', () => {
         const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-        expect(result).to.include('billingAccount')
+        expect(result).toContain('billingAccount')
       })
     })
   })
@@ -227,7 +220,7 @@ describe('Search - Determine Search Items service', () => {
       it('does not return the billing account type', () => {
         const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-        expect(result).to.not.include('billingAccount')
+        expect(result).not.toContain('billingAccount')
       })
     })
 
@@ -239,7 +232,7 @@ describe('Search - Determine Search Items service', () => {
       it('does not return the billing account type', () => {
         const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-        expect(result).to.not.include('billingAccount')
+        expect(result).not.toContain('billingAccount')
       })
     })
 
@@ -251,7 +244,7 @@ describe('Search - Determine Search Items service', () => {
       it('does not return the billing account type', () => {
         const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-        expect(result).to.not.include('billingAccount')
+        expect(result).not.toContain('billingAccount')
       })
     })
   })
@@ -270,7 +263,7 @@ describe('Search - Determine Search Items service', () => {
       it('returns the licence type', () => {
         const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-        expect(result).to.include('licence')
+        expect(result).toContain('licence')
       })
     })
 
@@ -282,7 +275,7 @@ describe('Search - Determine Search Items service', () => {
       it('returns the licence type', () => {
         const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-        expect(result).to.include('licence')
+        expect(result).toContain('licence')
       })
     })
   })
@@ -301,7 +294,7 @@ describe('Search - Determine Search Items service', () => {
       it('does not return the licence type', () => {
         const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-        expect(result).to.not.include('licence')
+        expect(result).not.toContain('licence')
       })
     })
 
@@ -313,7 +306,7 @@ describe('Search - Determine Search Items service', () => {
       it('does not return the licence type', () => {
         const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-        expect(result).to.not.include('licence')
+        expect(result).not.toContain('licence')
       })
     })
 
@@ -325,7 +318,7 @@ describe('Search - Determine Search Items service', () => {
       it('does not return the licence type', () => {
         const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-        expect(result).to.not.include('licence')
+        expect(result).not.toContain('licence')
       })
     })
   })
@@ -344,7 +337,7 @@ describe('Search - Determine Search Items service', () => {
       it('returns the return log type', () => {
         const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-        expect(result).to.include('returnLog')
+        expect(result).toContain('returnLog')
       })
     })
   })
@@ -363,7 +356,7 @@ describe('Search - Determine Search Items service', () => {
       it('does not return the return log type', () => {
         const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-        expect(result).to.not.include('returnLog')
+        expect(result).not.toContain('returnLog')
       })
     })
 
@@ -375,7 +368,7 @@ describe('Search - Determine Search Items service', () => {
       it('does not return the return log type', () => {
         const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-        expect(result).to.not.include('returnLog')
+        expect(result).not.toContain('returnLog')
       })
     })
   })

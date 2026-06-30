@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -81,8 +76,8 @@ describe('Return Versions Setup - Submit Remove service', () => {
     it('deletes the selected requirement from the session data', async () => {
       await SubmitRemoveService.go(session.id, requirementIndex, yarStub)
 
-      expect(session.requirements[requirementIndex]).not.to.exist()
-      expect(session.$update.called).to.be.true()
+      expect(session.requirements[requirementIndex]).toBeUndefined()
+      expect(session.$update.called).toBe(true)
     })
 
     it('sets the notification message to "Requirements removed"', async () => {
@@ -90,8 +85,8 @@ describe('Return Versions Setup - Submit Remove service', () => {
 
       const [flashType, notification] = yarStub.flash.args[0]
 
-      expect(flashType).to.equal('notification')
-      expect(notification).to.equal({ title: 'Removed', text: 'Requirement removed' })
+      expect(flashType).toEqual('notification')
+      expect(notification).toEqual({ title: 'Removed', text: 'Requirement removed' })
     })
   })
 })

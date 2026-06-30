@@ -3,12 +3,7 @@
 const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
@@ -47,14 +42,14 @@ describe('Charging Module Create Transaction request', () => {
     it('returns a "true" success status', async () => {
       const result = await CreateTransactionRequest.send(billRunId, transactionData)
 
-      expect(result.succeeded).to.be.true()
+      expect(result.succeeded).toBe(true)
     })
 
     it('returns the CM transaction ID and our ID in the "response"', async () => {
       const result = await CreateTransactionRequest.send(billRunId, transactionData)
 
-      expect(result.response.body.transaction.id).to.equal('fd88e6c5-8da8-4e4f-b22f-c66554cd5bf3')
-      expect(result.response.body.transaction.clientId).to.equal(transactionData.billingTransactionId)
+      expect(result.response.body.transaction.id).toEqual('fd88e6c5-8da8-4e4f-b22f-c66554cd5bf3')
+      expect(result.response.body.transaction.clientId).toEqual(transactionData.billingTransactionId)
     })
   })
 
@@ -82,15 +77,15 @@ describe('Charging Module Create Transaction request', () => {
       it('returns a "false" success status', async () => {
         const result = await CreateTransactionRequest.send(billRunId, transactionData)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
         const result = await CreateTransactionRequest.send(billRunId, transactionData)
 
-        expect(result.response.body.statusCode).to.equal(HTTP_STATUS_UNAUTHORIZED)
-        expect(result.response.body.error).to.equal('Unauthorized')
-        expect(result.response.body.message).to.equal('Invalid JWT: Token format not valid')
+        expect(result.response.body.statusCode).toEqual(HTTP_STATUS_UNAUTHORIZED)
+        expect(result.response.body.error).toEqual('Unauthorized')
+        expect(result.response.body.message).toEqual('Invalid JWT: Token format not valid')
       })
     })
 
@@ -105,15 +100,15 @@ describe('Charging Module Create Transaction request', () => {
       it('returns a "false" success status', async () => {
         const result = await CreateTransactionRequest.send(billRunId, transactionData)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
         const result = await CreateTransactionRequest.send(billRunId, transactionData)
 
-        expect(result.response.statusCode).not.to.exist()
-        expect(result.response.body).not.to.exist()
-        expect(result.response.message).to.equal("Timeout awaiting 'request' for 5000ms")
+        expect(result.response.statusCode).toBeUndefined()
+        expect(result.response.body).toBeUndefined()
+        expect(result.response.message).toEqual("Timeout awaiting 'request' for 5000ms")
       })
     })
   })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ViewBillRunPresenter = require('../../../app/presenters/bill-runs/view-bill-run.presenter.js')
 
@@ -23,7 +16,7 @@ describe('View Bill Run presenter', () => {
     it('correctly presents the data', () => {
       const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         billsCount: '8 Supplementary bills',
         billRunNumber: 10010,
         billRunStatus: 'sent',
@@ -61,7 +54,7 @@ describe('View Bill Run presenter', () => {
         it('returns 1 plus the bill run type as singular (1 Supplementary bill)', () => {
           const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
-          expect(result.billsCount).to.equal('1 Supplementary bill')
+          expect(result.billsCount).toEqual('1 Supplementary bill')
         })
       })
 
@@ -75,7 +68,7 @@ describe('View Bill Run presenter', () => {
           it('returns the sum plus the bill run type pluralised (12 Supplementary bills)', () => {
             const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
-            expect(result.billsCount).to.equal('12 Supplementary bills')
+            expect(result.billsCount).toEqual('12 Supplementary bills')
           })
         })
 
@@ -87,7 +80,7 @@ describe('View Bill Run presenter', () => {
           it('returns the sum plus the bill run type pluralised and zero value as singular (12 Supplementary bills and 1 zero value bill)', () => {
             const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
-            expect(result.billsCount).to.equal('12 Supplementary bills and 1 zero value bill')
+            expect(result.billsCount).toEqual('12 Supplementary bills and 1 zero value bill')
           })
         })
 
@@ -100,7 +93,7 @@ describe('View Bill Run presenter', () => {
           it('returns the sum plus the bill run type and zero value pluralised (12 Supplementary bills and 2 zero value bills)', () => {
             const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
-            expect(result.billsCount).to.equal('12 Supplementary bills and 2 zero value bills')
+            expect(result.billsCount).toEqual('12 Supplementary bills and 2 zero value bills')
           })
         })
       })
@@ -111,7 +104,7 @@ describe('View Bill Run presenter', () => {
         it('returns the value converted to pounds, formatted as money and showing as a debit (£707.00)', () => {
           const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
-          expect(result.billRunTotal).to.equal('£707.00')
+          expect(result.billRunTotal).toEqual('£707.00')
         })
       })
 
@@ -123,7 +116,7 @@ describe('View Bill Run presenter', () => {
         it('returns the value converted to pounds, formatted as money and showing as a debit (£0.00)', () => {
           const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
-          expect(result.billRunTotal).to.equal('£0.00')
+          expect(result.billRunTotal).toEqual('£0.00')
         })
       })
 
@@ -135,7 +128,7 @@ describe('View Bill Run presenter', () => {
         it('returns the value converted to pounds, formatted as money and showing as a credit (£707.00 credit)', () => {
           const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
-          expect(result.billRunTotal).to.equal('£707.00 credit')
+          expect(result.billRunTotal).toEqual('£707.00 credit')
         })
       })
     })
@@ -149,7 +142,7 @@ describe('View Bill Run presenter', () => {
         it('returns the count singular (1 credit note)', () => {
           const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
-          expect(result.creditsCount).to.equal('1 credit note')
+          expect(result.creditsCount).toEqual('1 credit note')
         })
       })
 
@@ -157,7 +150,7 @@ describe('View Bill Run presenter', () => {
         it('returns the count pluralised (2 credit notes)', () => {
           const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
-          expect(result.creditsCount).to.equal('2 credit notes')
+          expect(result.creditsCount).toEqual('2 credit notes')
         })
       })
     })
@@ -171,7 +164,7 @@ describe('View Bill Run presenter', () => {
         it('returns the count singular (1 invoice)', () => {
           const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
-          expect(result.debitsCount).to.equal('1 invoice')
+          expect(result.debitsCount).toEqual('1 invoice')
         })
       })
 
@@ -179,7 +172,7 @@ describe('View Bill Run presenter', () => {
         it('returns the count pluralised (6 invoices)', () => {
           const result = ViewBillRunPresenter.go(billRun, billSummaries)
 
-          expect(result.debitsCount).to.equal('6 invoices')
+          expect(result.debitsCount).toEqual('6 invoices')
         })
       })
     })

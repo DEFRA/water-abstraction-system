@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateReturnId } = require('../../../support/helpers/return-log.helper.js')
@@ -38,56 +31,56 @@ describe('Persist Allocated Licence to Results service', () => {
           .withGraphFetched('reviewChargeVersions.reviewChargeReferences.reviewChargeElements.reviewReturns')
 
         // Check the licence persisted correctly
-        expect(result[0].billRunId).to.equal(billRunId)
-        expect(result[0].licenceId).to.equal(testLicence.id)
-        expect(result[0].licenceRef).to.equal(testLicence.licenceRef)
-        expect(result[0].licenceHolder).to.equal(testLicence.licenceHolder)
-        expect(result[0].issues).to.equal('')
-        expect(result[0].status).to.equal(testLicence.status)
+        expect(result[0].billRunId).toEqual(billRunId)
+        expect(result[0].licenceId).toEqual(testLicence.id)
+        expect(result[0].licenceRef).toEqual(testLicence.licenceRef)
+        expect(result[0].licenceHolder).toEqual(testLicence.licenceHolder)
+        expect(result[0].issues).toEqual('')
+        expect(result[0].status).toEqual(testLicence.status)
 
         // Check the licence return logs persisted correctly
         const { reviewReturns } = result[0]
 
-        expect(reviewReturns).to.have.length(1)
-        expect(reviewReturns[0].reviewLicenceId).to.equal(result[0].id)
-        expect(reviewReturns[0].returnId).to.equal(testLicence.returnLogs[0].returnId)
-        expect(reviewReturns[0].returnLogId).to.equal(testLicence.returnLogs[0].id)
-        expect(reviewReturns[0].returnReference).to.equal(testLicence.returnLogs[0].returnReference)
-        expect(reviewReturns[0].quantity).to.equal(testLicence.returnLogs[0].quantity)
-        expect(reviewReturns[0].allocated).to.equal(testLicence.returnLogs[0].allocatedQuantity)
-        expect(reviewReturns[0].underQuery).to.equal(testLicence.returnLogs[0].underQuery)
-        expect(reviewReturns[0].returnStatus).to.equal(testLicence.returnLogs[0].status)
-        expect(reviewReturns[0].nilReturn).to.equal(testLicence.returnLogs[0].nilReturn)
-        expect(reviewReturns[0].abstractionOutsidePeriod).to.equal(testLicence.returnLogs[0].abstractionOutsidePeriod)
-        expect(reviewReturns[0].receivedDate).to.equal(testLicence.returnLogs[0].receivedDate)
-        expect(reviewReturns[0].dueDate).to.equal(testLicence.returnLogs[0].dueDate)
-        expect(reviewReturns[0].purposes).to.equal(testLicence.returnLogs[0].purposes)
-        expect(reviewReturns[0].description).to.equal(testLicence.returnLogs[0].description)
-        expect(reviewReturns[0].startDate).to.equal(testLicence.returnLogs[0].startDate)
-        expect(reviewReturns[0].endDate).to.equal(testLicence.returnLogs[0].endDate)
-        expect(reviewReturns[0].issues).to.equal('')
+        expect(reviewReturns).toHaveLength(1)
+        expect(reviewReturns[0].reviewLicenceId).toEqual(result[0].id)
+        expect(reviewReturns[0].returnId).toEqual(testLicence.returnLogs[0].returnId)
+        expect(reviewReturns[0].returnLogId).toEqual(testLicence.returnLogs[0].id)
+        expect(reviewReturns[0].returnReference).toEqual(testLicence.returnLogs[0].returnReference)
+        expect(reviewReturns[0].quantity).toEqual(testLicence.returnLogs[0].quantity)
+        expect(reviewReturns[0].allocated).toEqual(testLicence.returnLogs[0].allocatedQuantity)
+        expect(reviewReturns[0].underQuery).toEqual(testLicence.returnLogs[0].underQuery)
+        expect(reviewReturns[0].returnStatus).toEqual(testLicence.returnLogs[0].status)
+        expect(reviewReturns[0].nilReturn).toEqual(testLicence.returnLogs[0].nilReturn)
+        expect(reviewReturns[0].abstractionOutsidePeriod).toEqual(testLicence.returnLogs[0].abstractionOutsidePeriod)
+        expect(reviewReturns[0].receivedDate).toEqual(testLicence.returnLogs[0].receivedDate)
+        expect(reviewReturns[0].dueDate).toEqual(testLicence.returnLogs[0].dueDate)
+        expect(reviewReturns[0].purposes).toEqual(testLicence.returnLogs[0].purposes)
+        expect(reviewReturns[0].description).toEqual(testLicence.returnLogs[0].description)
+        expect(reviewReturns[0].startDate).toEqual(testLicence.returnLogs[0].startDate)
+        expect(reviewReturns[0].endDate).toEqual(testLicence.returnLogs[0].endDate)
+        expect(reviewReturns[0].issues).toEqual('')
 
         // Check the charge version persisted correctly
         const { reviewChargeVersions } = result[0]
         const { chargeVersions: testChargeVersions } = testLicence
 
-        expect(reviewChargeVersions).to.have.length(1)
-        expect(reviewChargeVersions[0].reviewLicenceId).to.equal(result[0].id)
-        expect(reviewChargeVersions[0].chargeVersionId).to.equal(testChargeVersions[0].id)
-        expect(reviewChargeVersions[0].changeReason).to.equal(testChargeVersions[0].changeReason.description)
-        expect(reviewChargeVersions[0].chargePeriodStartDate).to.equal(testChargeVersions[0].chargePeriod.startDate)
-        expect(reviewChargeVersions[0].chargePeriodEndDate).to.equal(testChargeVersions[0].chargePeriod.endDate)
+        expect(reviewChargeVersions).toHaveLength(1)
+        expect(reviewChargeVersions[0].reviewLicenceId).toEqual(result[0].id)
+        expect(reviewChargeVersions[0].chargeVersionId).toEqual(testChargeVersions[0].id)
+        expect(reviewChargeVersions[0].changeReason).toEqual(testChargeVersions[0].changeReason.description)
+        expect(reviewChargeVersions[0].chargePeriodStartDate).toEqual(testChargeVersions[0].chargePeriod.startDate)
+        expect(reviewChargeVersions[0].chargePeriodEndDate).toEqual(testChargeVersions[0].chargePeriod.endDate)
 
         // Check the charge reference persisted correctly
         // NOTE: As the aggregate is null on the charge reference the service returns 1
         const { reviewChargeReferences } = reviewChargeVersions[0]
 
-        expect(reviewChargeReferences).to.have.length(1)
-        expect(reviewChargeReferences[0].reviewChargeVersionId).to.equal(result[0].reviewChargeVersions[0].id)
-        expect(reviewChargeReferences[0].chargeReferenceId).to.equal(testChargeVersions[0].chargeReferences[0].id)
-        expect(reviewChargeReferences[0].aggregate).to.equal(1)
-        expect(reviewChargeReferences[0].authorisedVolume).to.equal(testChargeVersions[0].chargeReferences[0].volume)
-        expect(reviewChargeReferences[0].amendedAuthorisedVolume).to.equal(
+        expect(reviewChargeReferences).toHaveLength(1)
+        expect(reviewChargeReferences[0].reviewChargeVersionId).toEqual(result[0].reviewChargeVersions[0].id)
+        expect(reviewChargeReferences[0].chargeReferenceId).toEqual(testChargeVersions[0].chargeReferences[0].id)
+        expect(reviewChargeReferences[0].aggregate).toEqual(1)
+        expect(reviewChargeReferences[0].authorisedVolume).toEqual(testChargeVersions[0].chargeReferences[0].volume)
+        expect(reviewChargeReferences[0].amendedAuthorisedVolume).toEqual(
           testChargeVersions[0].chargeReferences[0].volume
         )
 
@@ -95,24 +88,24 @@ describe('Persist Allocated Licence to Results service', () => {
         const { reviewChargeElements } = reviewChargeReferences[0]
         const { chargeReferences } = testChargeVersions[0]
 
-        expect(reviewChargeElements).to.have.length(1)
-        expect(reviewChargeElements[0].reviewChargeReferenceId).to.equal(
+        expect(reviewChargeElements).toHaveLength(1)
+        expect(reviewChargeElements[0].reviewChargeReferenceId).toEqual(
           result[0].reviewChargeVersions[0].reviewChargeReferences[0].id
         )
-        expect(reviewChargeElements[0].allocated).to.equal(chargeReferences[0].chargeElements[0].allocatedQuantity)
-        expect(reviewChargeElements[0].amendedAllocated).to.equal(
+        expect(reviewChargeElements[0].allocated).toEqual(chargeReferences[0].chargeElements[0].allocatedQuantity)
+        expect(reviewChargeElements[0].amendedAllocated).toEqual(
           chargeReferences[0].chargeElements[0].allocatedQuantity
         )
-        expect(reviewChargeElements[0].chargeElementId).to.equal(chargeReferences[0].chargeElements[0].id)
-        expect(reviewChargeElements[0].chargeDatesOverlap).to.equal(
+        expect(reviewChargeElements[0].chargeElementId).toEqual(chargeReferences[0].chargeElements[0].id)
+        expect(reviewChargeElements[0].chargeDatesOverlap).toEqual(
           chargeReferences[0].chargeElements[0].chargeDatesOverlap
         )
-        expect(reviewChargeElements[0].issues).to.equal('')
-        expect(reviewChargeElements[0].status).to.equal(chargeReferences[0].chargeElements[0].status)
+        expect(reviewChargeElements[0].issues).toEqual('')
+        expect(reviewChargeElements[0].status).toEqual(chargeReferences[0].chargeElements[0].status)
 
         // Check the charge elements relationship to the return persisted
-        expect(reviewChargeElements[0].reviewReturns).to.have.length(1)
-        expect(reviewChargeElements[0].reviewReturns[0].returnLogId).to.equal(testLicence.returnLogs[0].id)
+        expect(reviewChargeElements[0].reviewReturns).toHaveLength(1)
+        expect(reviewChargeElements[0].reviewReturns[0].returnLogId).toEqual(testLicence.returnLogs[0].id)
       })
     })
 
@@ -135,15 +128,15 @@ describe('Persist Allocated Licence to Results service', () => {
           .withGraphFetched('reviewChargeVersions.reviewChargeReferences.reviewChargeElements')
           .withGraphFetched('reviewChargeVersions.reviewChargeReferences.reviewChargeElements.reviewReturns')
 
-        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeReferenceId).to.equal(
+        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeReferenceId).toEqual(
           testLicence.chargeVersions[0].chargeReferences[0].id
         )
-        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].aggregate).to.equal(0.5)
+        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].aggregate).toEqual(0.5)
 
         // NOTE: At the time of persisting the data the aggregate and amendedAggregate columns are both persisted with
         // the source data. The amended column is then used for if the user updates the value during the bill-runs
         // review process
-        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].amendedAggregate).to.equal(0.5)
+        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].amendedAggregate).toEqual(0.5)
       })
 
       it('persists the charge element with no matched return', async () => {
@@ -157,17 +150,17 @@ describe('Persist Allocated Licence to Results service', () => {
           .withGraphFetched('reviewChargeVersions.reviewChargeReferences.reviewChargeElements')
           .withGraphFetched('reviewChargeVersions.reviewChargeReferences.reviewChargeElements.reviewReturns')
 
-        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements).to.have.length(1)
+        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements).toHaveLength(1)
         expect(
           result[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].chargeElementId
-        ).to.equal(testLicence.chargeVersions[0].chargeReferences[0].chargeElements[0].id)
+        ).toEqual(testLicence.chargeVersions[0].chargeReferences[0].chargeElements[0].id)
 
         expect(
           result[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].reviewReturns
-        ).to.have.length(0)
+        ).toHaveLength(0)
         expect(
           result[0].reviewChargeVersions[0].reviewChargeReferences[0].reviewChargeElements[0].reviewReturns
-        ).to.equal([])
+        ).toEqual([])
       })
     })
 
@@ -188,15 +181,15 @@ describe('Persist Allocated Licence to Results service', () => {
           .withGraphFetched('reviewChargeVersions.reviewChargeReferences.reviewChargeElements')
           .withGraphFetched('reviewChargeVersions.reviewChargeReferences.reviewChargeElements.reviewReturns')
 
-        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeReferenceId).to.equal(
+        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeReferenceId).toEqual(
           testLicence.chargeVersions[0].chargeReferences[0].id
         )
-        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeAdjustment).to.equal(0.25)
+        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeAdjustment).toEqual(0.25)
 
         // NOTE: At the time of persisting the data the chargeAdjustment and amendedChargeAdjustment columns are both
         // persisted with the source data. The amended column is then used for if the user updates the value during the
         // bill-runs review process
-        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].amendedChargeAdjustment).to.equal(0.25)
+        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].amendedChargeAdjustment).toEqual(0.25)
       })
     })
 
@@ -218,10 +211,10 @@ describe('Persist Allocated Licence to Results service', () => {
           .withGraphFetched('reviewChargeVersions.reviewChargeReferences.reviewChargeElements.reviewReturns')
 
         // NOTE: A user cannot update the abatement agreement on the UI, hence no amendedAbatementAgreement column
-        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeReferenceId).to.equal(
+        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].chargeReferenceId).toEqual(
           testLicence.chargeVersions[0].chargeReferences[0].id
         )
-        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].abatementAgreement).to.equal(0.17)
+        expect(result[0].reviewChargeVersions[0].reviewChargeReferences[0].abatementAgreement).toEqual(0.17)
       })
     })
   })

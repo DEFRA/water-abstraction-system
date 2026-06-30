@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const FinancialAgreementHelper = require('../../../../support/helpers/financial-agreement.helper.js')
 const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
@@ -21,7 +14,7 @@ describe('Return Versions - Setup - Determine Two-Part Tariff Agreement service'
 
   let startDate
 
-  before(async () => {
+  beforeAll(async () => {
     const section126 = FinancialAgreementHelper.select(2)
     const twoPartTariff = FinancialAgreementHelper.select(3)
 
@@ -46,50 +39,50 @@ describe('Return Versions - Setup - Determine Two-Part Tariff Agreement service'
   })
 
   describe('when the selected start date is before the first two-part tariff licence agreement starts', () => {
-    before(() => {
+    beforeAll(() => {
       startDate = new Date('1998-04-01')
     })
 
     it('returns false', async () => {
       const result = await DetermineTwoPartTariffAgreementService.go(licenceRef, startDate)
 
-      expect(result).to.be.false()
+      expect(result).toBe(false)
     })
   })
 
   describe('when the selected start date is after the "current" two-part tariff licence agreement starts', () => {
-    before(() => {
+    beforeAll(() => {
       startDate = new Date('2024-04-01')
     })
 
     it('returns true', async () => {
       const result = await DetermineTwoPartTariffAgreementService.go(licenceRef, startDate)
 
-      expect(result).to.be.true()
+      expect(result).toBe(true)
     })
   })
 
   describe('when the selected start date is after the first two-part tariff licence agreement ends but before the "current" agreement starts', () => {
-    before(() => {
+    beforeAll(() => {
       startDate = new Date('2016-04-01')
     })
 
     it('returns false', async () => {
       const result = await DetermineTwoPartTariffAgreementService.go(licenceRef, startDate)
 
-      expect(result).to.be.false()
+      expect(result).toBe(false)
     })
   })
 
   describe('when the licence ref is unknown', () => {
-    before(() => {
+    beforeAll(() => {
       startDate = new Date('2024-04-01')
     })
 
     it('returns false', async () => {
       const result = await DetermineTwoPartTariffAgreementService.go(generateLicenceRef(), startDate)
 
-      expect(result).to.be.false()
+      expect(result).toBe(false)
     })
   })
 })

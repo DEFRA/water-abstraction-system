@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
 
@@ -28,7 +21,7 @@ describe('Notices - Index Notices presenter', () => {
   it('correctly presents the data', () => {
     const result = IndexNoticesPresenter.go(notices, auth)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       helperText: 'Create a returns invitation, reminder or paper return notice',
       links: {
         adhoc: {
@@ -146,7 +139,7 @@ describe('Notices - Index Notices presenter', () => {
       it('returns the correct helper text', () => {
         const result = IndexNoticesPresenter.go(notices, auth)
 
-        expect(result.helperText).to.equal(
+        expect(result.helperText).toEqual(
           'Create a renewals invitation, returns invitation, reminder or paper return notice'
         )
       })
@@ -160,7 +153,7 @@ describe('Notices - Index Notices presenter', () => {
       it('returns the correct helper text', () => {
         const result = IndexNoticesPresenter.go(notices, auth)
 
-        expect(result.helperText).to.equal('Create a returns invitation, reminder or paper return notice')
+        expect(result.helperText).toEqual('Create a returns invitation, reminder or paper return notice')
       })
     })
 
@@ -172,7 +165,7 @@ describe('Notices - Index Notices presenter', () => {
       it('returns the correct helper text', () => {
         const result = IndexNoticesPresenter.go(notices, auth)
 
-        expect(result.helperText).to.equal('Create a renewals invitation')
+        expect(result.helperText).toEqual('Create a renewals invitation')
       })
     })
 
@@ -184,7 +177,7 @@ describe('Notices - Index Notices presenter', () => {
       it('returns null', () => {
         const result = IndexNoticesPresenter.go(notices, auth)
 
-        expect(result.helperText).to.be.null()
+        expect(result.helperText).toBeNull()
       })
     })
   })
@@ -195,10 +188,10 @@ describe('Notices - Index Notices presenter', () => {
         it('returns the alert type', () => {
           const results = IndexNoticesPresenter.go(notices, auth)
 
-          expect(results.notices[0].type).to.equal('Reduce alert')
-          expect(results.notices[1].type).to.equal('Resume alert')
-          expect(results.notices[2].type).to.equal('Stop alert')
-          expect(results.notices[3].type).to.equal('Warning alert')
+          expect(results.notices[0].type).toEqual('Reduce alert')
+          expect(results.notices[1].type).toEqual('Resume alert')
+          expect(results.notices[2].type).toEqual('Stop alert')
+          expect(results.notices[3].type).toEqual('Warning alert')
         })
       })
 
@@ -206,12 +199,12 @@ describe('Notices - Index Notices presenter', () => {
         it('returns the notice type', () => {
           const results = IndexNoticesPresenter.go(notices, auth)
 
-          expect(results.notices[4].type).to.equal('HOF warning')
-          expect(results.notices[5].type).to.equal('Renewal')
-          expect(results.notices[6].type).to.equal('Renewals invitation')
-          expect(results.notices[7].type).to.equal('Returns invitation')
-          expect(results.notices[8].type).to.equal('Paper return')
-          expect(results.notices[9].type).to.equal('Returns reminder')
+          expect(results.notices[4].type).toEqual('HOF warning')
+          expect(results.notices[5].type).toEqual('Renewal')
+          expect(results.notices[6].type).toEqual('Renewals invitation')
+          expect(results.notices[7].type).toEqual('Returns invitation')
+          expect(results.notices[8].type).toEqual('Paper return')
+          expect(results.notices[9].type).toEqual('Returns reminder')
         })
       })
     })
@@ -226,7 +219,7 @@ describe('Notices - Index Notices presenter', () => {
       it('returns all of the links', () => {
         const result = IndexNoticesPresenter.go(notices, auth)
 
-        expect(result.links).to.equal({
+        expect(result.links).toEqual({
           adhoc: {
             href: '/system/notices/setup/adhoc',
             text: 'Create an ad-hoc notice'
@@ -247,7 +240,7 @@ describe('Notices - Index Notices presenter', () => {
       it('returns none of the links', () => {
         const result = IndexNoticesPresenter.go(notices, auth)
 
-        expect(result.links).to.equal({})
+        expect(result.links).toEqual({})
       })
     })
 
@@ -259,7 +252,7 @@ describe('Notices - Index Notices presenter', () => {
       it('returns all of the links', () => {
         const result = IndexNoticesPresenter.go(notices, auth)
 
-        expect(result.links).to.equal({
+        expect(result.links).toEqual({
           adhoc: {
             href: '/system/notices/setup/adhoc',
             text: 'Create an ad-hoc notice'
@@ -280,7 +273,7 @@ describe('Notices - Index Notices presenter', () => {
       it('returns all of the links', () => {
         const result = IndexNoticesPresenter.go(notices, auth)
 
-        expect(result.links).to.equal({
+        expect(result.links).toEqual({
           adhoc: {
             href: '/system/notices/setup/adhoc',
             text: 'Create an ad-hoc notice'

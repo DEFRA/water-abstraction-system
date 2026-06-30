@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const { db } = require('../../../../db/db.js')
@@ -17,11 +10,11 @@ const GenerateRenewalInvitationLicenceQueryDal = require('../../../../app/dal/no
 describe('Notices - Setup - Generate Renewal Invitation Licence Query DAL', () => {
   let licence
 
-  before(async () => {
+  beforeAll(async () => {
     licence = await LicenceHelper.add()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await licence.$query().delete()
   })
 
@@ -29,7 +22,7 @@ describe('Notices - Setup - Generate Renewal Invitation Licence Query DAL', () =
     it('returns the expected query and bindings', () => {
       const result = GenerateRenewalInvitationLicenceQueryDal.go(licence.licenceRef)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         bindings: [licence.licenceRef],
         query: `SELECT l.licence_ref FROM public.licences l WHERE l.licence_ref = ?`
       })
@@ -41,7 +34,7 @@ describe('Notices - Setup - Generate Renewal Invitation Licence Query DAL', () =
       const { bindings, query } = GenerateRenewalInvitationLicenceQueryDal.go(licence.licenceRef)
       const { rows } = await db.raw(query, bindings)
 
-      expect(rows).to.equal([{ licence_ref: licence.licenceRef }])
+      expect(rows).toEqual([{ licence_ref: licence.licenceRef }])
     })
   })
 })

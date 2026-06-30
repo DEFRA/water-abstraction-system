@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -59,8 +54,8 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
       it('saves the submitted value', async () => {
         await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
 
-        expect(session.noAdditionalOptions).to.be.true()
-        expect(session.$update.called).to.be.true()
+        expect(session.noAdditionalOptions).toBe(true)
+        expect(session.$update.called).toBe(true)
       })
 
       it('sets the notification message to "Updated"', async () => {
@@ -68,8 +63,8 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
 
         const [flashType, notification] = yarStub.flash.args[0]
 
-        expect(flashType).to.equal('notification')
-        expect(notification).to.equal({
+        expect(flashType).toEqual('notification')
+        expect(notification).toEqual({
           title: 'Updated',
           text: 'Additional submission options updated'
         })
@@ -86,7 +81,7 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
       it('saves the submitted value', async () => {
         await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
 
-        expect(session.multipleUpload).to.be.true()
+        expect(session.multipleUpload).toBe(true)
       })
 
       it('sets the notification message to "Updated"', async () => {
@@ -94,8 +89,8 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
 
         const [flashType, notification] = yarStub.flash.args[0]
 
-        expect(flashType).to.equal('notification')
-        expect(notification).to.equal({
+        expect(flashType).toEqual('notification')
+        expect(notification).toEqual({
           title: 'Updated',
           text: 'Additional submission options updated'
         })
@@ -112,7 +107,7 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
       it('saves the submitted value', async () => {
         await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
 
-        expect(session.quarterlyReturns).to.be.true()
+        expect(session.quarterlyReturns).toBe(true)
       })
 
       it('sets the notification message to "Updated"', async () => {
@@ -120,8 +115,8 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
 
         const [flashType, notification] = yarStub.flash.args[0]
 
-        expect(flashType).to.equal('notification')
-        expect(notification).to.equal({
+        expect(flashType).toEqual('notification')
+        expect(notification).toEqual({
           title: 'Updated',
           text: 'Additional submission options updated'
         })
@@ -136,29 +131,26 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
       it('returns page data for the view', async () => {
         const result = await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal(
-          {
-            backLink: {
-              href: `/system/return-versions/setup/${session.id}/check`,
-              text: 'Back'
-            },
-            pageTitle: 'Select any additional submission options for the return requirements',
-            pageTitleCaption: 'Licence 01/ABC',
-            licenceRef: '01/ABC',
-            multipleUpload: false,
-            noAdditionalOptions: undefined,
-            quarterlyReturnSubmissions: false,
-            quarterlyReturns: undefined
+        expect(result).toMatchObject({
+          backLink: {
+            href: `/system/return-versions/setup/${session.id}/check`,
+            text: 'Back'
           },
-          { skip: ['id', 'sessionId', 'error', 'licenceId'] }
-        )
+          pageTitle: 'Select any additional submission options for the return requirements',
+          pageTitleCaption: 'Licence 01/ABC',
+          licenceRef: '01/ABC',
+          multipleUpload: false,
+          noAdditionalOptions: undefined,
+          quarterlyReturnSubmissions: false,
+          quarterlyReturns: undefined
+        })
       })
 
       describe('because the user has not checked anything', () => {
         it('includes an error for the checkbox element', async () => {
           const result = await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             errorList: [
               {
                 href: '#additionalSubmissionOptions',

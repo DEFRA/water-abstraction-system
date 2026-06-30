@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const LicenceSupplementaryYearHelper = require('../../../support/helpers/licence-supplementary-year.helper.js')
@@ -33,16 +26,13 @@ describe('Create Licence Supplementary Years Service', () => {
 
         const result = await _fetchLicenceSupplementaryYears(licenceId)
 
-        expect(result).to.have.length(1)
-        expect(result[0]).to.equal(
-          {
-            licenceId,
-            billRunId: null,
-            financialYearEnd: financialYearEnds[0],
-            twoPartTariff
-          },
-          { skip: ['id'] }
-        )
+        expect(result).toHaveLength(1)
+        expect(result[0]).toMatchObject({
+          licenceId,
+          billRunId: null,
+          financialYearEnd: financialYearEnds[0],
+          twoPartTariff
+        })
       })
     })
 
@@ -57,8 +47,8 @@ describe('Create Licence Supplementary Years Service', () => {
 
           const result = await _fetchLicenceSupplementaryYears(licenceId)
 
-          expect(result).to.have.length(1)
-          expect(result[0].licenceId).to.equal(licenceId)
+          expect(result).toHaveLength(1)
+          expect(result[0].licenceId).toEqual(licenceId)
         })
       })
 
@@ -79,9 +69,9 @@ describe('Create Licence Supplementary Years Service', () => {
 
           const result = await _fetchLicenceSupplementaryYears(licenceId)
 
-          expect(result).to.have.length(2)
-          expect(result[0].billRunId).to.equal(billRunId)
-          expect(result[1].billRunId).to.equal(null)
+          expect(result).toHaveLength(2)
+          expect(result[0].billRunId).toEqual(billRunId)
+          expect(result[1].billRunId).toEqual(null)
         })
       })
     })

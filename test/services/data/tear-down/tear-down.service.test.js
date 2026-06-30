@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const CrmSchemaService = require('../../../../app/services/data/tear-down/crm-schema.service.js')
@@ -51,13 +46,13 @@ describe('Tear down service', () => {
 
     const args = notifierStub.omg.firstCall.args
 
-    expect(args[0]).to.equal('Tear down complete')
-    expect(args[1].timeTakenMs).to.exist()
+    expect(args[0]).toEqual('Tear down complete')
+    expect(args[1].timeTakenMs).toBeDefined()
 
-    expect(crmSchemaServiceStub.called).to.be.true()
-    expect(idmSchemaServiceStub.called).to.be.true()
-    expect(permitSchemaServiceStub.called).to.be.true()
-    expect(returnsSchemaServiceStub.called).to.be.true()
-    expect(waterSchemaServiceStub.called).to.be.true()
+    expect(crmSchemaServiceStub.called).toBe(true)
+    expect(idmSchemaServiceStub.called).toBe(true)
+    expect(permitSchemaServiceStub.called).toBe(true)
+    expect(returnsSchemaServiceStub.called).toBe(true)
+    expect(waterSchemaServiceStub.called).toBe(true)
   })
 })

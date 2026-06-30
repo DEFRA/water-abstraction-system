@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 
@@ -26,7 +19,7 @@ describe('Companies - History presenter', () => {
     it('returns page data for the view', () => {
       const result = HistoryPresenter.go(company, licences)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: '/',
           text: 'Go back to search'

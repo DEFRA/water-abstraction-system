@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const CheckPresenter = require('../../../../../app/presenters/return-versions/setup/check/check.presenter.js')
 
@@ -37,7 +30,7 @@ describe('Return Versions Setup - Check presenter', () => {
     it('correctly presents the data', () => {
       const result = CheckPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         licenceRef: '01/ABC',
         multipleUpload: false,
         note: {
@@ -70,7 +63,7 @@ describe('Return Versions Setup - Check presenter', () => {
       it('returns the value', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.multipleUpload).to.be.true()
+        expect(result.multipleUpload).toBe(true)
       })
     })
 
@@ -78,7 +71,7 @@ describe('Return Versions Setup - Check presenter', () => {
       it('returns the value', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.multipleUpload).to.be.false()
+        expect(result.multipleUpload).toBe(false)
       })
     })
   })
@@ -92,7 +85,7 @@ describe('Return Versions Setup - Check presenter', () => {
       it('returns true', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.quarterlyReturns).to.be.true()
+        expect(result.quarterlyReturns).toBe(true)
       })
     })
 
@@ -104,7 +97,7 @@ describe('Return Versions Setup - Check presenter', () => {
       it('returns false', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.quarterlyReturns).to.be.false()
+        expect(result.quarterlyReturns).toBe(false)
       })
     })
 
@@ -112,7 +105,7 @@ describe('Return Versions Setup - Check presenter', () => {
       it('returns undefined', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.quarterlyReturns).to.be.undefined()
+        expect(result.quarterlyReturns).toBeUndefined()
       })
     })
   })
@@ -126,7 +119,7 @@ describe('Return Versions Setup - Check presenter', () => {
       it('returns true', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.quarterlyReturnSubmissions).to.be.true()
+        expect(result.quarterlyReturnSubmissions).toBe(true)
       })
     })
 
@@ -138,7 +131,7 @@ describe('Return Versions Setup - Check presenter', () => {
       it('returns false', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.quarterlyReturnSubmissions).to.be.false()
+        expect(result.quarterlyReturnSubmissions).toBe(false)
       })
     })
   })
@@ -154,7 +147,7 @@ describe('Return Versions Setup - Check presenter', () => {
       it('returns text with the note content and the change and delete a note action', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.note).to.equal({
+        expect(result.note).toEqual({
           actions: [
             {
               href: 'note',
@@ -174,7 +167,7 @@ describe('Return Versions Setup - Check presenter', () => {
       it('returns text with "No notes added" and the add a note action', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.note).to.equal({
+        expect(result.note).toEqual({
           actions: [
             {
               href: 'note',
@@ -191,8 +184,8 @@ describe('Return Versions Setup - Check presenter', () => {
     it('returns the page title combined with the licence holder name', () => {
       const result = CheckPresenter.go(session)
 
-      expect(result.pageTitle).to.equal('Check the requirements for returns for Turbo Kid')
-      expect(result.pageTitleCaption).to.equal('Licence 01/ABC')
+      expect(result.pageTitle).toEqual('Check the requirements for returns for Turbo Kid')
+      expect(result.pageTitleCaption).toEqual('Licence 01/ABC')
     })
   })
 
@@ -200,7 +193,7 @@ describe('Return Versions Setup - Check presenter', () => {
     it('returns the display version for the reason', () => {
       const result = CheckPresenter.go(session)
 
-      expect(result.reason).to.equal('Major change')
+      expect(result.reason).toEqual('Major change')
     })
   })
 
@@ -209,7 +202,7 @@ describe('Return Versions Setup - Check presenter', () => {
       it('returns a link to the "reason" page', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.reasonLink).to.equal('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/reason')
+        expect(result.reasonLink).toEqual('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/reason')
       })
     })
 
@@ -221,7 +214,7 @@ describe('Return Versions Setup - Check presenter', () => {
       it('returns a link to the "no-returns-required" page', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.reasonLink).to.equal(
+        expect(result.reasonLink).toEqual(
           '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/no-returns-required'
         )
       })
@@ -233,7 +226,7 @@ describe('Return Versions Setup - Check presenter', () => {
       it('returns the licence version start date formatted as a long date', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.startDate).to.equal('1 January 2023')
+        expect(result.startDate).toEqual('1 January 2023')
       })
     })
 
@@ -245,7 +238,7 @@ describe('Return Versions Setup - Check presenter', () => {
       it('returns the start date parts formatted as a long date', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.startDate).to.equal('26 November 2023')
+        expect(result.startDate).toEqual('26 November 2023')
       })
     })
   })

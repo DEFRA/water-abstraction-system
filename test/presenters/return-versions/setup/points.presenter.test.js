@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const PointModel = require('../../../../app/models/point.model.js')
 
@@ -44,7 +37,7 @@ describe('Return Versions Setup - Points presenter', () => {
     it('correctly presents the data', () => {
       const result = PointsPresenter.go(session, requirementIndex, points)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/purpose/0',
           text: 'Back'
@@ -84,7 +77,7 @@ describe('Return Versions Setup - Points presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = PointsPresenter.go(session, requirementIndex, points)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
           text: 'Back'
         })
@@ -95,7 +88,7 @@ describe('Return Versions Setup - Points presenter', () => {
       it('returns a link back to the "purpose" page', () => {
         const result = PointsPresenter.go(session, requirementIndex, points)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/purpose/0',
           text: 'Back'
         })
@@ -112,7 +105,7 @@ describe('Return Versions Setup - Points presenter', () => {
       it('returns a At "National Grid Reference ..." point', () => {
         const result = PointsPresenter.go(session, requirementIndex, points)
 
-        expect(result.licencePoints).to.equal([
+        expect(result.licencePoints).toEqual([
           {
             id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
             description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
@@ -129,7 +122,7 @@ describe('Return Versions Setup - Points presenter', () => {
       it('returns a "Between National Grid References ..." point', () => {
         const result = PointsPresenter.go(session, requirementIndex, points)
 
-        expect(result.licencePoints).to.equal([
+        expect(result.licencePoints).toEqual([
           {
             id: '07820640-c95a-497b-87d6-9e0d3ef322db',
             description:
@@ -147,7 +140,7 @@ describe('Return Versions Setup - Points presenter', () => {
       it('returns a "Within the area formed by the straight lines running between National Grid References ..." point', () => {
         const result = PointsPresenter.go(session, requirementIndex, points)
 
-        expect(result.licencePoints).to.equal([
+        expect(result.licencePoints).toEqual([
           {
             id: '1c925e6c-a788-4a56-9c1e-ebb46c83ef73',
             description:
@@ -170,7 +163,7 @@ describe('Return Versions Setup - Points presenter', () => {
       it('returns a string containing the selected points concatenated', () => {
         const result = PointsPresenter.go(session, requirementIndex, points)
 
-        expect(result.selectedPointIds).to.equal(
+        expect(result.selectedPointIds).toEqual(
           'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6,1c925e6c-a788-4a56-9c1e-ebb46c83ef73'
         )
       })
@@ -180,7 +173,7 @@ describe('Return Versions Setup - Points presenter', () => {
       it('returns an empty string', () => {
         const result = PointsPresenter.go(session, requirementIndex, points)
 
-        expect(result.selectedPointIds).to.equal('')
+        expect(result.selectedPointIds).toEqual('')
       })
     })
   })

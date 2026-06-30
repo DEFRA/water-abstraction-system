@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
@@ -21,7 +14,7 @@ describe('Return Logs - Void Return Logs service', () => {
   let returnLogBeingChecked
 
   describe('when provided a licence ref with an end date', () => {
-    before(async () => {
+    beforeAll(async () => {
       licenceRef = 'return-logs-end-date'
       returnLogMatchingVersion = await ReturnLogHelper.add({
         endDate: new Date('2023-03-31'),
@@ -39,15 +32,15 @@ describe('Return Logs - Void Return Logs service', () => {
       await VoidReturnLogsService.go(licenceRef, new Date('2022-04-01'), new Date('2023-03-31'))
 
       returnLogBeingChecked = await returnLogMatchingVersion.$query()
-      expect(returnLogBeingChecked.status).to.equal('void')
+      expect(returnLogBeingChecked.status).toEqual('void')
 
       returnLogBeingChecked = await returnLogNotMatchingVersion.$query()
-      expect(returnLogBeingChecked.status).to.equal('due')
+      expect(returnLogBeingChecked.status).toEqual('due')
     })
   })
 
   describe('when provided a licence version id with no end date', () => {
-    before(async () => {
+    beforeAll(async () => {
       licenceRef = 'return-logs-no-end-date'
       returnLogBeingChecked = await ReturnLogHelper.add({
         endDate: new Date('2023-03-31'),
@@ -65,10 +58,10 @@ describe('Return Logs - Void Return Logs service', () => {
       await VoidReturnLogsService.go(licenceRef, new Date('2022-04-01'))
 
       returnLogBeingChecked = await returnLogMatchingVersion.$query()
-      expect(returnLogBeingChecked.status).to.equal('void')
+      expect(returnLogBeingChecked.status).toEqual('void')
 
       returnLogBeingChecked = await returnLogNotMatchingVersion.$query()
-      expect(returnLogBeingChecked.status).to.equal('void')
+      expect(returnLogBeingChecked.status).toEqual('void')
     })
   })
 
@@ -77,7 +70,7 @@ describe('Return Logs - Void Return Logs service', () => {
       returnLogBeingChecked = await VoidReturnLogsService.go('no-return-logs', new Date('2020-03-31'))
 
       returnLogBeingChecked = await ReturnLogModel.query().where('licenceRef', 'no-return-logs')
-      expect(returnLogBeingChecked).to.equal([])
+      expect(returnLogBeingChecked).toEqual([])
     })
   })
 })

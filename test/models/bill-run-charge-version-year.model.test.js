@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillRunHelper = require('../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../app/models/bill-run.model.js')
@@ -22,7 +15,7 @@ describe('Bill Run Charge Version Year model', () => {
   let testChargeVersion
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     // Link bill runs
     testBillRun = await BillRunHelper.add()
 
@@ -36,7 +29,7 @@ describe('Bill Run Charge Version Year model', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testBillRun.$query().delete()
     await testChargeVersion.$query().delete()
 
@@ -47,8 +40,8 @@ describe('Bill Run Charge Version Year model', () => {
     it('can successfully run a basic query', async () => {
       const result = await BillRunChargeVersionYearModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(BillRunChargeVersionYearModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(BillRunChargeVersionYearModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -57,17 +50,17 @@ describe('Bill Run Charge Version Year model', () => {
       it('can successfully run a related query', async () => {
         const query = await BillRunChargeVersionYearModel.query().innerJoinRelated('billRun')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the bill run', async () => {
         const result = await BillRunChargeVersionYearModel.query().findById(testRecord.id).withGraphFetched('billRun')
 
-        expect(result).to.be.instanceOf(BillRunChargeVersionYearModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(BillRunChargeVersionYearModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.billRun).to.be.an.instanceOf(BillRunModel)
-        expect(result.billRun).to.equal(testBillRun)
+        expect(result.billRun).toBeInstanceOf(BillRunModel)
+        expect(result.billRun).toEqual(testBillRun)
       })
     })
 
@@ -75,7 +68,7 @@ describe('Bill Run Charge Version Year model', () => {
       it('can successfully run a related query', async () => {
         const query = await BillRunChargeVersionYearModel.query().innerJoinRelated('chargeVersion')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge version', async () => {
@@ -83,11 +76,11 @@ describe('Bill Run Charge Version Year model', () => {
           .findById(testRecord.id)
           .withGraphFetched('chargeVersion')
 
-        expect(result).to.be.instanceOf(BillRunChargeVersionYearModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(BillRunChargeVersionYearModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.chargeVersion).to.be.an.instanceOf(ChargeVersionModel)
-        expect(result.chargeVersion).to.equal(testChargeVersion)
+        expect(result.chargeVersion).toBeInstanceOf(ChargeVersionModel)
+        expect(result.chargeVersion).toEqual(testChargeVersion)
       })
     })
   })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const FinancialAgreementHelper = require('../support/helpers/financial-agreement.helper.js')
 const LicenceAgreementHelper = require('../support/helpers/licence-agreement.helper.js')
@@ -21,7 +14,7 @@ describe('Financial Agreement model', () => {
   let testLicenceAgreements
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     // Test record
     testRecord = FinancialAgreementHelper.select(FINANCIAL_AGREEMENT_MVAL_INDEX)
 
@@ -34,7 +27,7 @@ describe('Financial Agreement model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const licenceAgreement of testLicenceAgreements) {
       await licenceAgreement.$query().delete()
     }
@@ -46,8 +39,8 @@ describe('Financial Agreement model', () => {
     it('can successfully run a basic query', async () => {
       const result = await FinancialAgreementModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(FinancialAgreementModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(FinancialAgreementModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -56,7 +49,7 @@ describe('Financial Agreement model', () => {
       it('can successfully run a related query', async () => {
         const query = await FinancialAgreementModel.query().innerJoinRelated('licenceAgreements')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence agreements', async () => {
@@ -64,13 +57,13 @@ describe('Financial Agreement model', () => {
           .findById(testRecord.id)
           .withGraphFetched('licenceAgreements')
 
-        expect(result).to.be.instanceOf(FinancialAgreementModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(FinancialAgreementModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceAgreements).to.be.an.array()
-        expect(result.licenceAgreements[0]).to.be.an.instanceOf(LicenceAgreementModel)
-        expect(result.licenceAgreements).to.include(testLicenceAgreements[0])
-        expect(result.licenceAgreements).to.include(testLicenceAgreements[1])
+        expect(result.licenceAgreements).toBeInstanceOf(Array)
+        expect(result.licenceAgreements[0]).toBeInstanceOf(LicenceAgreementModel)
+        expect(result.licenceAgreements).toContainEqual(testLicenceAgreements[0])
+        expect(result.licenceAgreements).toContainEqual(testLicenceAgreements[1])
       })
     })
   })

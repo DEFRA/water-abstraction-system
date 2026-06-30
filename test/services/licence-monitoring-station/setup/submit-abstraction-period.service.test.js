@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -48,18 +43,18 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
     it('saves the submitted value', async () => {
       await SubmitAbstractionPeriodService.go(session.id, payload)
 
-      expect(session.abstractionPeriodStartDay).to.equal('1')
-      expect(session.abstractionPeriodStartMonth).to.equal('2')
-      expect(session.abstractionPeriodEndDay).to.equal('3')
-      expect(session.abstractionPeriodEndMonth).to.equal('4')
+      expect(session.abstractionPeriodStartDay).toEqual('1')
+      expect(session.abstractionPeriodStartMonth).toEqual('2')
+      expect(session.abstractionPeriodEndDay).toEqual('3')
+      expect(session.abstractionPeriodEndMonth).toEqual('4')
 
-      expect(session.$update.called).to.be.true()
+      expect(session.$update.called).toBe(true)
     })
 
     it('returns an empty object in order to continue the journey', async () => {
       const result = await SubmitAbstractionPeriodService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).toEqual({})
     })
   })
 
@@ -71,27 +66,24 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
     it('returns page data for the view', async () => {
       const result = await SubmitAbstractionPeriodService.go(session.id, payload)
 
-      expect(result).to.equal(
-        {
-          abstractionPeriodStartDay: null,
-          abstractionPeriodStartMonth: null,
-          abstractionPeriodEndDay: null,
-          abstractionPeriodEndMonth: null,
-          backLink: {
-            href: `/system/licence-monitoring-station/setup/${session.id}/full-condition`,
-            text: 'Back'
-          },
-          monitoringStationLabel: 'LABEL',
-          pageTitle: 'Enter an abstraction period for licence LICENCE_REF'
+      expect(result).toMatchObject({
+        abstractionPeriodStartDay: null,
+        abstractionPeriodStartMonth: null,
+        abstractionPeriodEndDay: null,
+        abstractionPeriodEndMonth: null,
+        backLink: {
+          href: `/system/licence-monitoring-station/setup/${session.id}/full-condition`,
+          text: 'Back'
         },
-        { skip: ['error'] }
-      )
+        monitoringStationLabel: 'LABEL',
+        pageTitle: 'Enter an abstraction period for licence LICENCE_REF'
+      })
     })
 
     it('returns the validation error', async () => {
       const result = await SubmitAbstractionPeriodService.go(session.id, payload)
 
-      expect(result.error).to.equal({
+      expect(result.error).toEqual({
         errorList: [
           {
             href: '#abstractionPeriodStart',
@@ -115,7 +107,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       it('includes an error for both input elements', async () => {
         const result = await SubmitAbstractionPeriodService.go(session.id, payload)
 
-        expect(result.error).to.equal({
+        expect(result.error).toEqual({
           errorList: [
             {
               href: '#abstractionPeriodStart',
@@ -149,7 +141,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       it('includes an error for the start date input element', async () => {
         const result = await SubmitAbstractionPeriodService.go(session.id, payload)
 
-        expect(result.error).to.equal({
+        expect(result.error).toEqual({
           errorList: [
             {
               href: '#abstractionPeriodStart',
@@ -165,15 +157,12 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       it('includes what was submitted', async () => {
         const result = await SubmitAbstractionPeriodService.go(session.id, payload)
 
-        expect(result).to.equal(
-          {
-            abstractionPeriodStartDay: null,
-            abstractionPeriodStartMonth: null,
-            abstractionPeriodEndDay: '02',
-            abstractionPeriodEndMonth: '7'
-          },
-          { skip: ['error', 'activeNavBar', 'backLink', 'monitoringStationLabel', 'pageTitle'] }
-        )
+        expect(result).toMatchObject({
+          abstractionPeriodStartDay: null,
+          abstractionPeriodStartMonth: null,
+          abstractionPeriodEndDay: '02',
+          abstractionPeriodEndMonth: '7'
+        })
       })
     })
 
@@ -190,7 +179,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       it('includes an error for the end date input element', async () => {
         const result = await SubmitAbstractionPeriodService.go(session.id, payload)
 
-        expect(result.error).to.equal({
+        expect(result.error).toEqual({
           errorList: [
             {
               href: '#abstractionPeriodEnd',
@@ -206,15 +195,12 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       it('includes what was submitted', async () => {
         const result = await SubmitAbstractionPeriodService.go(session.id, payload)
 
-        expect(result).to.equal(
-          {
-            abstractionPeriodStartDay: '08',
-            abstractionPeriodStartMonth: '12',
-            abstractionPeriodEndDay: null,
-            abstractionPeriodEndMonth: null
-          },
-          { skip: ['error', 'activeNavBar', 'backLink', 'monitoringStationLabel', 'pageTitle'] }
-        )
+        expect(result).toMatchObject({
+          abstractionPeriodStartDay: '08',
+          abstractionPeriodStartMonth: '12',
+          abstractionPeriodEndDay: null,
+          abstractionPeriodEndMonth: null
+        })
       })
     })
 
@@ -231,7 +217,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       it('includes an error for both input elements', async () => {
         const result = await SubmitAbstractionPeriodService.go(session.id, payload)
 
-        expect(result.error).to.equal({
+        expect(result.error).toEqual({
           errorList: [
             {
               href: '#abstractionPeriodStart',
@@ -254,15 +240,12 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       it('includes what was submitted', async () => {
         const result = await SubmitAbstractionPeriodService.go(session.id, payload)
 
-        expect(result).to.equal(
-          {
-            abstractionPeriodStartDay: 'abc',
-            abstractionPeriodStartMonth: '123',
-            abstractionPeriodEndDay: 'abc',
-            abstractionPeriodEndMonth: '123'
-          },
-          { skip: ['error', 'activeNavBar', 'backLink', 'monitoringStationLabel', 'pageTitle'] }
-        )
+        expect(result).toMatchObject({
+          abstractionPeriodStartDay: 'abc',
+          abstractionPeriodStartMonth: '123',
+          abstractionPeriodEndDay: 'abc',
+          abstractionPeriodEndMonth: '123'
+        })
       })
     })
   })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ExistingValidator = require('../../../../app/validators/return-versions/setup/existing.validator.js')
 
@@ -28,8 +21,8 @@ describe('Return Versions Setup - Existing validator', () => {
     it('confirms the data is valid', () => {
       const result = ExistingValidator.go({ existing: '60b5d10d-1372-4fb2-b222-bfac81da69ab' }, returnVersions)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -38,9 +31,9 @@ describe('Return Versions Setup - Existing validator', () => {
       it('fails validation', () => {
         const result = ExistingValidator.go({ existing: '' }, returnVersions)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select a return version')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select a return version')
       })
     })
 
@@ -48,9 +41,9 @@ describe('Return Versions Setup - Existing validator', () => {
       it('fails validation', () => {
         const result = ExistingValidator.go({ existing: 'be1f32a8-599f-4622-ada7-9dd885f5fc80' }, returnVersions)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select a return version')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select a return version')
       })
     })
   })

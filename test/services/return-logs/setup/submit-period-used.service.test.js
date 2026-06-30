@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -70,27 +65,27 @@ describe('Return Logs Setup - Submit Period Used service', () => {
         it('saves the submitted option', async () => {
           await SubmitPeriodUsedService.go(session.id, payload)
 
-          expect(session.periodDateUsedOptions).to.equal('default')
-          expect(session.fromFullDate).to.equal('2023-04-01T00:00:00.000Z')
-          expect(session.toFullDate).to.equal('2024-03-31T00:00:00.000Z')
-          expect(session.$update.called).to.be.true()
+          expect(session.periodDateUsedOptions).toEqual('default')
+          expect(session.fromFullDate).toEqual('2023-04-01T00:00:00.000Z')
+          expect(session.toFullDate).toEqual('2024-03-31T00:00:00.000Z')
+          expect(session.$update.called).toBe(true)
         })
 
         it('applies the single volume to the applicable lines', async () => {
           await SubmitPeriodUsedService.go(session.id, payload)
 
-          expect(session.lines[0].quantity).to.equal(100)
-          expect(session.lines[1].quantity).to.equal(100)
-          expect(session.lines[2].quantity).to.equal(100)
-          expect(session.lines[3].quantity).to.equal(100)
-          expect(session.lines[4].quantity).to.equal(100)
-          expect(session.lines[5].quantity).to.equal(100)
-          expect(session.lines[6].quantity).to.equal(100)
-          expect(session.lines[7].quantity).to.equal(100)
-          expect(session.lines[8].quantity).to.equal(100)
-          expect(session.lines[9].quantity).to.equal(100)
-          expect(session.lines[10].quantity).to.equal(100)
-          expect(session.lines[11].quantity).to.equal(100)
+          expect(session.lines[0].quantity).toEqual(100)
+          expect(session.lines[1].quantity).toEqual(100)
+          expect(session.lines[2].quantity).toEqual(100)
+          expect(session.lines[3].quantity).toEqual(100)
+          expect(session.lines[4].quantity).toEqual(100)
+          expect(session.lines[5].quantity).toEqual(100)
+          expect(session.lines[6].quantity).toEqual(100)
+          expect(session.lines[7].quantity).toEqual(100)
+          expect(session.lines[8].quantity).toEqual(100)
+          expect(session.lines[9].quantity).toEqual(100)
+          expect(session.lines[10].quantity).toEqual(100)
+          expect(session.lines[11].quantity).toEqual(100)
         })
       })
 
@@ -110,33 +105,33 @@ describe('Return Logs Setup - Submit Period Used service', () => {
         it('saves the submitted option', async () => {
           await SubmitPeriodUsedService.go(session.id, payload)
 
-          expect(session.periodDateUsedOptions).to.equal('customDates')
-          expect(session.periodUsedFromDay).to.equal('15')
-          expect(session.periodUsedFromMonth).to.equal('08')
-          expect(session.periodUsedFromYear).to.equal('2023')
-          expect(session.periodUsedToDay).to.equal('20')
-          expect(session.periodUsedToMonth).to.equal('01')
-          expect(session.periodUsedToYear).to.equal('2024')
-          expect(session.fromFullDate).to.equal('2023-08-15T00:00:00.000Z')
-          expect(session.toFullDate).to.equal('2024-01-20T00:00:00.000Z')
-          expect(session.$update.called).to.be.true()
+          expect(session.periodDateUsedOptions).toEqual('customDates')
+          expect(session.periodUsedFromDay).toEqual('15')
+          expect(session.periodUsedFromMonth).toEqual('08')
+          expect(session.periodUsedFromYear).toEqual('2023')
+          expect(session.periodUsedToDay).toEqual('20')
+          expect(session.periodUsedToMonth).toEqual('01')
+          expect(session.periodUsedToYear).toEqual('2024')
+          expect(session.fromFullDate).toEqual('2023-08-15T00:00:00.000Z')
+          expect(session.toFullDate).toEqual('2024-01-20T00:00:00.000Z')
+          expect(session.$update.called).toBe(true)
         })
 
         it('applies the single volume to the applicable lines', async () => {
           await SubmitPeriodUsedService.go(session.id, payload)
 
-          expect(session.lines[0].quantity).to.not.exist()
-          expect(session.lines[1].quantity).to.not.exist()
-          expect(session.lines[2].quantity).to.not.exist()
-          expect(session.lines[3].quantity).to.not.exist()
-          expect(session.lines[4].quantity).to.not.exist()
-          expect(session.lines[5].quantity).to.equal(300)
-          expect(session.lines[6].quantity).to.equal(300)
-          expect(session.lines[7].quantity).to.equal(300)
-          expect(session.lines[8].quantity).to.equal(300)
-          expect(session.lines[9].quantity).to.not.exist()
-          expect(session.lines[10].quantity).to.not.exist()
-          expect(session.lines[11].quantity).to.not.exist()
+          expect(session.lines[0].quantity).toBeUndefined()
+          expect(session.lines[1].quantity).toBeUndefined()
+          expect(session.lines[2].quantity).toBeUndefined()
+          expect(session.lines[3].quantity).toBeUndefined()
+          expect(session.lines[4].quantity).toBeUndefined()
+          expect(session.lines[5].quantity).toEqual(300)
+          expect(session.lines[6].quantity).toEqual(300)
+          expect(session.lines[7].quantity).toEqual(300)
+          expect(session.lines[8].quantity).toEqual(300)
+          expect(session.lines[9].quantity).toBeUndefined()
+          expect(session.lines[10].quantity).toBeUndefined()
+          expect(session.lines[11].quantity).toBeUndefined()
         })
       })
     })
@@ -149,30 +144,27 @@ describe('Return Logs Setup - Submit Period Used service', () => {
       it('returns the page data for the view', async () => {
         const result = await SubmitPeriodUsedService.go(session.id, payload)
 
-        expect(result).to.equal(
-          {
-            abstractionPeriod: '1 April to 31 March',
-            backLink: { href: `/system/return-logs/setup/${session.id}/single-volume`, text: 'Back' },
-            pageTitle: 'What period was used for this volume?',
-            pageTitleCaption: 'Return reference 12345',
-            periodDateUsedOptions: null,
-            periodUsedFromDay: null,
-            periodUsedFromMonth: null,
-            periodUsedFromYear: null,
-            periodUsedToDay: null,
-            periodUsedToMonth: null,
-            periodUsedToYear: null,
-            showDefaultAbstractionPeriod: true
-          },
-          { skip: ['sessionId', 'error'] }
-        )
+        expect(result).toMatchObject({
+          abstractionPeriod: '1 April to 31 March',
+          backLink: { href: `/system/return-logs/setup/${session.id}/single-volume`, text: 'Back' },
+          pageTitle: 'What period was used for this volume?',
+          pageTitleCaption: 'Return reference 12345',
+          periodDateUsedOptions: null,
+          periodUsedFromDay: null,
+          periodUsedFromMonth: null,
+          periodUsedFromYear: null,
+          periodUsedToDay: null,
+          periodUsedToMonth: null,
+          periodUsedToYear: null,
+          showDefaultAbstractionPeriod: true
+        })
       })
 
       describe('because the user has not selected anything', () => {
         it('includes an error for the radio form element', async () => {
           const result = await SubmitPeriodUsedService.go(session.id, payload)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             errorList: [
               {
                 href: '#periodDateUsedOptions',

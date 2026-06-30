@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillingAccountAddressHelper = require('../support/helpers/billing-account-address.helper.js')
 const BillingAccountAddressModel = require('../../app/models/billing-account-address.model.js')
@@ -25,7 +18,7 @@ describe('Contact model', () => {
   let testLicenceDocumentRoles
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     // Test record
     testRecord = await ContactHelper.add()
 
@@ -57,7 +50,7 @@ describe('Contact model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const billingAccountAddress of testBillingAccountAddresses) {
       await billingAccountAddress.$query().delete()
     }
@@ -77,8 +70,8 @@ describe('Contact model', () => {
     it('can successfully run a basic query', async () => {
       const result = await ContactModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(ContactModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(ContactModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -87,19 +80,19 @@ describe('Contact model', () => {
       it('can successfully run a related query', async () => {
         const query = await ContactModel.query().innerJoinRelated('billingAccountAddresses')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the billing account addresses', async () => {
         const result = await ContactModel.query().findById(testRecord.id).withGraphFetched('billingAccountAddresses')
 
-        expect(result).to.be.instanceOf(ContactModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ContactModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.billingAccountAddresses).to.be.an.array()
-        expect(result.billingAccountAddresses[0]).to.be.an.instanceOf(BillingAccountAddressModel)
-        expect(result.billingAccountAddresses).to.include(testBillingAccountAddresses[0])
-        expect(result.billingAccountAddresses).to.include(testBillingAccountAddresses[1])
+        expect(result.billingAccountAddresses).toBeInstanceOf(Array)
+        expect(result.billingAccountAddresses[0]).toBeInstanceOf(BillingAccountAddressModel)
+        expect(result.billingAccountAddresses).toContainEqual(testBillingAccountAddresses[0])
+        expect(result.billingAccountAddresses).toContainEqual(testBillingAccountAddresses[1])
       })
     })
 
@@ -107,19 +100,19 @@ describe('Contact model', () => {
       it('can successfully run a related query', async () => {
         const query = await ContactModel.query().innerJoinRelated('companyContacts')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the company contacts', async () => {
         const result = await ContactModel.query().findById(testRecord.id).withGraphFetched('companyContacts')
 
-        expect(result).to.be.instanceOf(ContactModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ContactModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.companyContacts).to.be.an.array()
-        expect(result.companyContacts[0]).to.be.an.instanceOf(CompanyContactModel)
-        expect(result.companyContacts).to.include(testCompanyContacts[0])
-        expect(result.companyContacts).to.include(testCompanyContacts[1])
+        expect(result.companyContacts).toBeInstanceOf(Array)
+        expect(result.companyContacts[0]).toBeInstanceOf(CompanyContactModel)
+        expect(result.companyContacts).toContainEqual(testCompanyContacts[0])
+        expect(result.companyContacts).toContainEqual(testCompanyContacts[1])
       })
     })
 
@@ -127,19 +120,19 @@ describe('Contact model', () => {
       it('can successfully run a related query', async () => {
         const query = await ContactModel.query().innerJoinRelated('licenceDocumentRoles')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence document roles', async () => {
         const result = await ContactModel.query().findById(testRecord.id).withGraphFetched('licenceDocumentRoles')
 
-        expect(result).to.be.instanceOf(ContactModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ContactModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceDocumentRoles).to.be.an.array()
-        expect(result.licenceDocumentRoles[0]).to.be.an.instanceOf(LicenceDocumentRoleModel)
-        expect(result.licenceDocumentRoles).to.include(testLicenceDocumentRoles[0])
-        expect(result.licenceDocumentRoles).to.include(testLicenceDocumentRoles[1])
+        expect(result.licenceDocumentRoles).toBeInstanceOf(Array)
+        expect(result.licenceDocumentRoles[0]).toBeInstanceOf(LicenceDocumentRoleModel)
+        expect(result.licenceDocumentRoles).toContainEqual(testLicenceDocumentRoles[0])
+        expect(result.licenceDocumentRoles).toContainEqual(testLicenceDocumentRoles[1])
       })
     })
   })
@@ -178,7 +171,7 @@ describe('Contact model', () => {
         it('returns "Villar"', () => {
           const result = nameTestRecord.$name()
 
-          expect(result).to.equal('Villar')
+          expect(result).toEqual('Villar')
         })
 
         describe('and the salutation "Mrs"', () => {
@@ -189,7 +182,7 @@ describe('Contact model', () => {
           it('returns "Mrs Villar"', () => {
             const result = nameTestRecord.$name()
 
-            expect(result).to.equal('Mrs Villar')
+            expect(result).toEqual('Mrs Villar')
           })
 
           describe('and the initial "J"', () => {
@@ -200,7 +193,7 @@ describe('Contact model', () => {
             it('returns "Mrs J Villar"', () => {
               const result = nameTestRecord.$name()
 
-              expect(result).to.equal('Mrs J Villar')
+              expect(result).toEqual('Mrs J Villar')
             })
           })
         })
@@ -213,7 +206,7 @@ describe('Contact model', () => {
           it('returns "Margherita Villar"', () => {
             const result = nameTestRecord.$name()
 
-            expect(result).to.equal('Margherita Villar')
+            expect(result).toEqual('Margherita Villar')
           })
 
           describe('and the salutation "Mrs"', () => {
@@ -224,7 +217,7 @@ describe('Contact model', () => {
             it('returns "Mrs Margherita Villar"', () => {
               const result = nameTestRecord.$name()
 
-              expect(result).to.equal('Mrs Margherita Villar')
+              expect(result).toEqual('Mrs Margherita Villar')
             })
 
             describe('and the initial "J"', () => {
@@ -235,7 +228,7 @@ describe('Contact model', () => {
               it('returns "Mrs J Villar"', () => {
                 const result = nameTestRecord.$name()
 
-                expect(result).to.equal('Mrs J Villar')
+                expect(result).toEqual('Mrs J Villar')
               })
             })
           })
@@ -257,7 +250,7 @@ describe('Contact model', () => {
         it('returns "Humanoid Risk Assessment"', () => {
           const result = nameTestRecord.$name()
 
-          expect(result).to.equal('Humanoid Risk Assessment')
+          expect(result).toEqual('Humanoid Risk Assessment')
         })
       })
 
@@ -272,7 +265,7 @@ describe('Contact model', () => {
           it('returns "Vincent Anderson"', () => {
             const result = nameTestRecord.$name()
 
-            expect(result).to.equal('Vincent Anderson')
+            expect(result).toEqual('Vincent Anderson')
           })
         })
 
@@ -284,7 +277,7 @@ describe('Contact model', () => {
           it('returns "Mr Vincent Anderson"', () => {
             const result = nameTestRecord.$name()
 
-            expect(result).to.equal('Mr Vincent Anderson')
+            expect(result).toEqual('Mr Vincent Anderson')
           })
 
           describe('and the middle initial "P"', () => {
@@ -295,7 +288,7 @@ describe('Contact model', () => {
             it('returns "Mr V P Anderson"', () => {
               const result = nameTestRecord.$name()
 
-              expect(result).to.equal('Mr V P Anderson')
+              expect(result).toEqual('Mr V P Anderson')
             })
 
             describe('and the suffix "MBE"', () => {
@@ -306,7 +299,7 @@ describe('Contact model', () => {
               it('returns "Mr V P Anderson MBE"', () => {
                 const result = nameTestRecord.$name()
 
-                expect(result).to.equal('Mr V P Anderson MBE')
+                expect(result).toEqual('Mr V P Anderson MBE')
               })
             })
           })
@@ -320,7 +313,7 @@ describe('Contact model', () => {
           it('returns "V P Anderson"', () => {
             const result = nameTestRecord.$name()
 
-            expect(result).to.equal('V P Anderson')
+            expect(result).toEqual('V P Anderson')
           })
 
           describe('and the suffix "MBE"', () => {
@@ -331,7 +324,7 @@ describe('Contact model', () => {
             it('returns "V P Anderson MBE"', () => {
               const result = nameTestRecord.$name()
 
-              expect(result).to.equal('V P Anderson MBE')
+              expect(result).toEqual('V P Anderson MBE')
             })
           })
         })

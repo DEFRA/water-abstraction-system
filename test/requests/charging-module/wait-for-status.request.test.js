@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
@@ -46,19 +41,19 @@ describe('Charging Module Wait For Status request', () => {
       it('returns a "true" succeeded status', async () => {
         const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor)
 
-        expect(result.succeeded).to.be.true()
+        expect(result.succeeded).toBe(true)
       })
 
       it('returns the last status received', async () => {
         const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor)
 
-        expect(result.status).to.equal('billing_not_required')
+        expect(result.status).toEqual('billing_not_required')
       })
 
       it('returns the number of attempts', async () => {
         const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor)
 
-        expect(result.attempts).to.equal(1)
+        expect(result.attempts).toEqual(1)
       })
     })
 
@@ -76,19 +71,19 @@ describe('Charging Module Wait For Status request', () => {
       it('returns a "true" success status', async () => {
         const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor, maxNumberOfAttempts)
 
-        expect(result.succeeded).to.be.true()
+        expect(result.succeeded).toBe(true)
       })
 
       it('returns the last status received', async () => {
         const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor, maxNumberOfAttempts)
 
-        expect(result.status).to.equal('billed')
+        expect(result.status).toEqual('billed')
       })
 
       it('returns the number of attempts', async () => {
         const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor, maxNumberOfAttempts)
 
-        expect(result.attempts).to.equal(3)
+        expect(result.attempts).toEqual(3)
       })
     })
   })
@@ -106,19 +101,19 @@ describe('Charging Module Wait For Status request', () => {
     it('returns a "false" success status', async () => {
       const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor, maxNumberOfAttempts)
 
-      expect(result.succeeded).to.be.false()
+      expect(result.succeeded).toBe(false)
     })
 
     it('returns the last status received', async () => {
       const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor, maxNumberOfAttempts)
 
-      expect(result.status).to.equal('processing')
+      expect(result.status).toEqual('processing')
     })
 
     it('returns the number of attempts', async () => {
       const result = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor, maxNumberOfAttempts)
 
-      expect(result.attempts).to.equal(3)
+      expect(result.attempts).toEqual(3)
     })
   })
 
@@ -139,12 +134,14 @@ describe('Charging Module Wait For Status request', () => {
     })
 
     it('throws an error', async () => {
-      const error = await expect(ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor)).to.reject()
+      const error = await ChargingModuleWaitForStatusRequest.send(billRunId, statusesToWaitFor).catch((e) => {
+        return e
+      })
 
-      expect(error).to.be.instanceOf(ExpandedError)
-      expect(error.message).to.equal('Charging Module wait for status request failed')
-      expect(error.billRunExternalId).to.equal(billRunId)
-      expect(error.responseBody).to.equal({
+      expect(error).toBeInstanceOf(ExpandedError)
+      expect(error.message).toEqual('Charging Module wait for status request failed')
+      expect(error.billRunExternalId).toEqual(billRunId)
+      expect(error.responseBody).toEqual({
         statusCode: HTTP_STATUS_NOT_FOUND,
         error: 'Not Found',
         message: 'Not Found'

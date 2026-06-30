@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const IndexBillRunsPresenter = require('../../../app/presenters/bill-runs/index-bill-runs.presenter.js')
 
@@ -30,7 +23,7 @@ describe('Index Bill Runs presenter', () => {
     it('correctly presents the data', () => {
       const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-      expect(results).to.equal({
+      expect(results).toEqual({
         billRuns: [
           {
             id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
@@ -156,8 +149,8 @@ describe('Index Bill Runs presenter', () => {
         it('does not generate a href (returns null)', () => {
           const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-          expect(results.billRuns[0].link).to.be.null()
-          expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+          expect(results.billRuns[0].link).toBeNull()
+          expect(results.billRuns[1].link).toEqual('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
         })
       })
 
@@ -165,8 +158,8 @@ describe('Index Bill Runs presenter', () => {
         it('generates the href needed to link to the bill run', () => {
           const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-          expect(results.billRuns[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
-          expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+          expect(results.billRuns[0].link).toEqual('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
+          expect(results.billRuns[1].link).toEqual('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
         })
       })
 
@@ -174,8 +167,8 @@ describe('Index Bill Runs presenter', () => {
         it('generates the href needed to link to the bill run', () => {
           const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-          expect(results.billRuns[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
-          expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+          expect(results.billRuns[0].link).toEqual('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
+          expect(results.billRuns[1].link).toEqual('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
         })
       })
 
@@ -187,8 +180,8 @@ describe('Index Bill Runs presenter', () => {
         it('does not generate a href (returns null)', () => {
           const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-          expect(results.billRuns[0].link).to.be.null()
-          expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+          expect(results.billRuns[0].link).toBeNull()
+          expect(results.billRuns[1].link).toEqual('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
         })
       })
 
@@ -200,8 +193,8 @@ describe('Index Bill Runs presenter', () => {
         it('does not generate a href (returns null)', () => {
           const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-          expect(results.billRuns[0].link).to.be.null()
-          expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+          expect(results.billRuns[0].link).toBeNull()
+          expect(results.billRuns[1].link).toEqual('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
         })
       })
 
@@ -213,8 +206,8 @@ describe('Index Bill Runs presenter', () => {
         it('generates the href needed to link to the bill run', () => {
           const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-          expect(results.billRuns[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
-          expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+          expect(results.billRuns[0].link).toEqual('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
+          expect(results.billRuns[1].link).toEqual('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
         })
       })
 
@@ -231,10 +224,10 @@ describe('Index Bill Runs presenter', () => {
           it('generates the href needed to link to the old bill run review', () => {
             const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-            expect(results.billRuns[0].link).to.equal(
+            expect(results.billRuns[0].link).toEqual(
               '/billing/batch/31fec553-f2de-40cf-a8d7-a5fb65f5761b/two-part-tariff-review'
             )
-            expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+            expect(results.billRuns[1].link).toEqual('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
           })
         })
 
@@ -242,8 +235,8 @@ describe('Index Bill Runs presenter', () => {
           it('generates the href needed to link to bill run review', () => {
             const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-            expect(results.billRuns[0].link).to.equal('/system/bill-runs/review/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
-            expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+            expect(results.billRuns[0].link).toEqual('/system/bill-runs/review/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
+            expect(results.billRuns[1].link).toEqual('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
           })
         })
       })
@@ -256,8 +249,8 @@ describe('Index Bill Runs presenter', () => {
         it('does not generate a href (returns null)', () => {
           const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-          expect(results.billRuns[0].link).to.be.null()
-          expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+          expect(results.billRuns[0].link).toBeNull()
+          expect(results.billRuns[1].link).toEqual('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
         })
       })
 
@@ -269,8 +262,8 @@ describe('Index Bill Runs presenter', () => {
         it('generates the href needed to link to the bill run', () => {
           const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-          expect(results.billRuns[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
-          expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+          expect(results.billRuns[0].link).toEqual('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
+          expect(results.billRuns[1].link).toEqual('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
         })
       })
     })
@@ -284,7 +277,7 @@ describe('Index Bill Runs presenter', () => {
         it('does not generate a notification', () => {
           const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-          expect(results.notification).to.be.null()
+          expect(results.notification).toBeNull()
         })
       })
 
@@ -296,7 +289,7 @@ describe('Index Bill Runs presenter', () => {
         it('returns the correct notification details', () => {
           const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-          expect(results.notification).to.equal({
+          expect(results.notification).toEqual({
             text: 'Please wait for these bill runs to finish before creating another one.',
             titleText: 'Busy building and cancelling'
           })
@@ -311,7 +304,7 @@ describe('Index Bill Runs presenter', () => {
         it('returns the correct notification details', () => {
           const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-          expect(results.notification).to.equal({
+          expect(results.notification).toEqual({
             text: 'Please wait for this bill run to finish building before creating another one.',
             titleText: 'Busy building'
           })
@@ -326,7 +319,7 @@ describe('Index Bill Runs presenter', () => {
         it('returns the correct notification details', () => {
           const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-          expect(results.notification).to.equal({
+          expect(results.notification).toEqual({
             text: 'Please wait for this bill run to finish cancelling before creating another one.',
             titleText: 'Busy cancelling'
           })
@@ -339,7 +332,7 @@ describe('Index Bill Runs presenter', () => {
         it('returns the region items, "checked" is set to false on all regions', () => {
           const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-          expect(results.regionItems).to.equal([
+          expect(results.regionItems).toEqual([
             {
               checked: false,
               id: 'Anglian',
@@ -364,7 +357,7 @@ describe('Index Bill Runs presenter', () => {
         it('returns the region items, "checked" is set to true on the "Anglian" region', () => {
           const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-          expect(results.regionItems).to.equal([
+          expect(results.regionItems).toEqual([
             {
               checked: true,
               id: 'Anglian',
@@ -387,7 +380,7 @@ describe('Index Bill Runs presenter', () => {
         it('returns the bill run type items, "checked" is set to false on all bill run types', () => {
           const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-          expect(results.runTypeItems).to.equal([
+          expect(results.runTypeItems).toEqual([
             {
               checked: false,
               id: 'annual',
@@ -424,7 +417,7 @@ describe('Index Bill Runs presenter', () => {
         it('returns the bill run type items, "checked" is set to true on the "Supplementary" bill run type', () => {
           const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-          expect(results.runTypeItems).to.equal([
+          expect(results.runTypeItems).toEqual([
             {
               checked: false,
               id: 'annual',
@@ -459,7 +452,7 @@ describe('Index Bill Runs presenter', () => {
         it('returns the status type items, "checked" is set to false on all statuses', () => {
           const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-          expect(results.statusItems).to.equal([
+          expect(results.statusItems).toEqual([
             {
               checked: false,
               id: 'processing',
@@ -514,7 +507,7 @@ describe('Index Bill Runs presenter', () => {
         it('returns the status type items, "checked" is set to true on the "Empty" and "Sent" statuses', () => {
           const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-          expect(results.statusItems).to.equal([
+          expect(results.statusItems).toEqual([
             {
               checked: false,
               id: 'processing',
@@ -573,7 +566,7 @@ describe('Index Bill Runs presenter', () => {
           it('does not return a pound value', () => {
             const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-            expect(results.billRuns[0].total).to.equal('')
+            expect(results.billRuns[0].total).toEqual('')
           })
         })
       })
@@ -588,7 +581,7 @@ describe('Index Bill Runs presenter', () => {
           it('does not return a pound value', () => {
             const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
-            expect(results.billRuns[0].total).to.equal('')
+            expect(results.billRuns[0].total).toEqual('')
           })
         })
       })

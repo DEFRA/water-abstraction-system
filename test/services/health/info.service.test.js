@@ -3,13 +3,8 @@
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
 const Proxyquire = require('proxyquire')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const AddressFacadeViewHealthRequest = require('../../../app/requests/address-facade/view-health.request.js')
@@ -139,30 +134,32 @@ describe('Health - Info service', () => {
     it('returns details on each', async () => {
       const result = await InfoService.go()
 
-      expect(result).to.include([
-        'addressFacadeData',
-        'appData',
-        'chargingModuleData',
-        'gotenbergData',
-        'notifyData',
-        'redisConnectivityData',
-        'respData',
-        'virusScannerData'
-      ])
+      expect(Object.keys(result)).toEqual(
+        expect.arrayContaining([
+          'addressFacadeData',
+          'appData',
+          'chargingModuleData',
+          'gotenbergData',
+          'notifyData',
+          'redisConnectivityData',
+          'respData',
+          'virusScannerData'
+        ])
+      )
 
-      expect(result.appData).to.have.length(10)
-      expect(result.appData[0].name).to.equal('Import')
-      expect(result.appData[0].serviceName).to.equal('import')
-      expect(result.appData[0].version).to.equal('9.0.99')
-      expect(result.appData[0].commit).to.equal('99d0e8c')
+      expect(result.appData).toHaveLength(10)
+      expect(result.appData[0].name).toEqual('Import')
+      expect(result.appData[0].serviceName).toEqual('import')
+      expect(result.appData[0].version).toEqual('9.0.99')
+      expect(result.appData[0].commit).toEqual('99d0e8c')
 
-      expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
-      expect(result.redisConnectivityData).to.equal('Up and running')
-      expect(result.addressFacadeData).to.equal('hola')
-      expect(result.chargingModuleData).to.equal('v0.19.1')
-      expect(result.gotenbergData).to.equal('Up - Chromium Up')
-      expect(result.notifyData).to.equal('Up and running')
-      expect(result.respData).to.equal('Up and running')
+      expect(result.virusScannerData).toEqual('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
+      expect(result.redisConnectivityData).toEqual('Up and running')
+      expect(result.addressFacadeData).toEqual('hola')
+      expect(result.chargingModuleData).toEqual('v0.19.1')
+      expect(result.gotenbergData).toEqual('Up - Chromium Up')
+      expect(result.notifyData).toEqual('Up and running')
+      expect(result.respData).toEqual('Up and running')
     })
   })
 
@@ -197,26 +194,28 @@ describe('Health - Info service', () => {
       it('handles the error and still returns a result for the other services', async () => {
         const result = await InfoService.go()
 
-        expect(result).to.include([
-          'addressFacadeData',
-          'appData',
-          'chargingModuleData',
-          'gotenbergData',
-          'notifyData',
-          'redisConnectivityData',
-          'respData',
-          'virusScannerData'
-        ])
-        expect(result.appData).to.have.length(10)
-        expect(result.appData[0].version).to.equal('9.0.99')
+        expect(Object.keys(result)).toEqual(
+          expect.arrayContaining([
+            'addressFacadeData',
+            'appData',
+            'chargingModuleData',
+            'gotenbergData',
+            'notifyData',
+            'redisConnectivityData',
+            'respData',
+            'virusScannerData'
+          ])
+        )
+        expect(result.appData).toHaveLength(10)
+        expect(result.appData[0].version).toEqual('9.0.99')
 
-        expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
-        expect(result.redisConnectivityData).to.equal('ERROR: Redis check went boom')
-        expect(result.addressFacadeData).to.equal('hola')
-        expect(result.chargingModuleData).to.equal('v0.19.1')
-        expect(result.gotenbergData).to.equal('Up - Chromium Up')
-        expect(result.notifyData).to.equal('Up and running')
-        expect(result.respData).to.equal('Up and running')
+        expect(result.virusScannerData).toEqual('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
+        expect(result.redisConnectivityData).toEqual('ERROR: Redis check went boom')
+        expect(result.addressFacadeData).toEqual('hola')
+        expect(result.chargingModuleData).toEqual('v0.19.1')
+        expect(result.gotenbergData).toEqual('Up - Chromium Up')
+        expect(result.notifyData).toEqual('Up and running')
+        expect(result.respData).toEqual('Up and running')
       })
     })
   })
@@ -251,26 +250,28 @@ describe('Health - Info service', () => {
       it('handles the error and still returns a result for the other services', async () => {
         const result = await InfoService.go()
 
-        expect(result).to.include([
-          'addressFacadeData',
-          'appData',
-          'chargingModuleData',
-          'gotenbergData',
-          'notifyData',
-          'redisConnectivityData',
-          'respData',
-          'virusScannerData'
-        ])
-        expect(result.appData).to.have.length(10)
-        expect(result.appData[0].version).to.equal('9.0.99')
+        expect(Object.keys(result)).toEqual(
+          expect.arrayContaining([
+            'addressFacadeData',
+            'appData',
+            'chargingModuleData',
+            'gotenbergData',
+            'notifyData',
+            'redisConnectivityData',
+            'respData',
+            'virusScannerData'
+          ])
+        )
+        expect(result.appData).toHaveLength(10)
+        expect(result.appData[0].version).toEqual('9.0.99')
 
-        expect(result.virusScannerData).to.startWith('ERROR:')
-        expect(result.redisConnectivityData).to.equal('Up and running')
-        expect(result.addressFacadeData).to.equal('hola')
-        expect(result.chargingModuleData).to.equal('v0.19.1')
-        expect(result.gotenbergData).to.equal('Up - Chromium Up')
-        expect(result.notifyData).to.equal('Up and running')
-        expect(result.respData).to.equal('Up and running')
+        expect(result.virusScannerData).toMatch(/^ERROR:/)
+        expect(result.redisConnectivityData).toEqual('Up and running')
+        expect(result.addressFacadeData).toEqual('hola')
+        expect(result.chargingModuleData).toEqual('v0.19.1')
+        expect(result.gotenbergData).toEqual('Up - Chromium Up')
+        expect(result.notifyData).toEqual('Up and running')
+        expect(result.respData).toEqual('Up and running')
       })
     })
 
@@ -293,26 +294,28 @@ describe('Health - Info service', () => {
       it('handles the error and still returns a result for the other services', async () => {
         const result = await InfoService.go()
 
-        expect(result).to.include([
-          'addressFacadeData',
-          'appData',
-          'chargingModuleData',
-          'gotenbergData',
-          'notifyData',
-          'redisConnectivityData',
-          'respData',
-          'virusScannerData'
-        ])
-        expect(result.appData).to.have.length(10)
-        expect(result.appData[0].version).to.equal('9.0.99')
+        expect(Object.keys(result)).toEqual(
+          expect.arrayContaining([
+            'addressFacadeData',
+            'appData',
+            'chargingModuleData',
+            'gotenbergData',
+            'notifyData',
+            'redisConnectivityData',
+            'respData',
+            'virusScannerData'
+          ])
+        )
+        expect(result.appData).toHaveLength(10)
+        expect(result.appData[0].version).toEqual('9.0.99')
 
-        expect(result.virusScannerData).to.startWith('ERROR:')
-        expect(result.redisConnectivityData).to.equal('Up and running')
-        expect(result.addressFacadeData).to.equal('hola')
-        expect(result.chargingModuleData).to.equal('v0.19.1')
-        expect(result.gotenbergData).to.equal('Up - Chromium Up')
-        expect(result.notifyData).to.equal('Up and running')
-        expect(result.respData).to.equal('Up and running')
+        expect(result.virusScannerData).toMatch(/^ERROR:/)
+        expect(result.redisConnectivityData).toEqual('Up and running')
+        expect(result.addressFacadeData).toEqual('hola')
+        expect(result.chargingModuleData).toEqual('v0.19.1')
+        expect(result.gotenbergData).toEqual('Up - Chromium Up')
+        expect(result.notifyData).toEqual('Up and running')
+        expect(result.respData).toEqual('Up and running')
       })
     })
   })
@@ -347,26 +350,28 @@ describe('Health - Info service', () => {
       it('handles the error and still returns a result for the other services', async () => {
         const result = await InfoService.go()
 
-        expect(result).to.include([
-          'addressFacadeData',
-          'appData',
-          'chargingModuleData',
-          'gotenbergData',
-          'notifyData',
-          'redisConnectivityData',
-          'respData',
-          'virusScannerData'
-        ])
-        expect(result.appData).to.have.length(10)
-        expect(result.appData[0].version).to.equal('9.0.99')
+        expect(Object.keys(result)).toEqual(
+          expect.arrayContaining([
+            'addressFacadeData',
+            'appData',
+            'chargingModuleData',
+            'gotenbergData',
+            'notifyData',
+            'redisConnectivityData',
+            'respData',
+            'virusScannerData'
+          ])
+        )
+        expect(result.appData).toHaveLength(10)
+        expect(result.appData[0].version).toEqual('9.0.99')
 
-        expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
-        expect(result.redisConnectivityData).to.equal('Up and running')
-        expect(result.addressFacadeData).to.startWith('ERROR:')
-        expect(result.chargingModuleData).to.equal('v0.19.1')
-        expect(result.gotenbergData).to.equal('Up - Chromium Up')
-        expect(result.notifyData).to.equal('Up and running')
-        expect(result.respData).to.equal('Up and running')
+        expect(result.virusScannerData).toEqual('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
+        expect(result.redisConnectivityData).toEqual('Up and running')
+        expect(result.addressFacadeData).toMatch(/^ERROR:/)
+        expect(result.chargingModuleData).toEqual('v0.19.1')
+        expect(result.gotenbergData).toEqual('Up - Chromium Up')
+        expect(result.notifyData).toEqual('Up and running')
+        expect(result.respData).toEqual('Up and running')
       })
     })
 
@@ -385,26 +390,28 @@ describe('Health - Info service', () => {
       it('handles the error and still returns a result for the other services', async () => {
         const result = await InfoService.go()
 
-        expect(result).to.include([
-          'addressFacadeData',
-          'appData',
-          'chargingModuleData',
-          'gotenbergData',
-          'notifyData',
-          'redisConnectivityData',
-          'respData',
-          'virusScannerData'
-        ])
-        expect(result.appData).to.have.length(10)
-        expect(result.appData[0].version).to.equal('9.0.99')
+        expect(Object.keys(result)).toEqual(
+          expect.arrayContaining([
+            'addressFacadeData',
+            'appData',
+            'chargingModuleData',
+            'gotenbergData',
+            'notifyData',
+            'redisConnectivityData',
+            'respData',
+            'virusScannerData'
+          ])
+        )
+        expect(result.appData).toHaveLength(10)
+        expect(result.appData[0].version).toEqual('9.0.99')
 
-        expect(result.virusScannerData).to.equal('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
-        expect(result.redisConnectivityData).to.equal('Up and running')
-        expect(result.addressFacadeData).to.startWith('ERROR:')
-        expect(result.chargingModuleData).to.equal('v0.19.1')
-        expect(result.gotenbergData).to.equal('Up - Chromium Up')
-        expect(result.notifyData).to.equal('Up and running')
-        expect(result.respData).to.equal('Up and running')
+        expect(result.virusScannerData).toEqual('ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n')
+        expect(result.redisConnectivityData).toEqual('Up and running')
+        expect(result.addressFacadeData).toMatch(/^ERROR:/)
+        expect(result.chargingModuleData).toEqual('v0.19.1')
+        expect(result.gotenbergData).toEqual('Up - Chromium Up')
+        expect(result.notifyData).toEqual('Up and running')
+        expect(result.respData).toEqual('Up and running')
       })
     })
   })

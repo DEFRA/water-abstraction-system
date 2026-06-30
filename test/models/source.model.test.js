@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const PointHelper = require('../support/helpers/point.helper.js')
 const PointModel = require('../../app/models/point.model.js')
@@ -19,7 +12,7 @@ describe('Source model', () => {
   let testPoints
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     testRecord = SourceHelper.select()
 
     testPoints = []
@@ -30,7 +23,7 @@ describe('Source model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const point of testPoints) {
       await point.$query().delete()
     }
@@ -40,8 +33,8 @@ describe('Source model', () => {
     it('can successfully run a basic query', async () => {
       const result = await SourceModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(SourceModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(SourceModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -50,19 +43,19 @@ describe('Source model', () => {
       it('can successfully run a related query', async () => {
         const query = await SourceModel.query().innerJoinRelated('points')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the points', async () => {
         const result = await SourceModel.query().findById(testRecord.id).withGraphFetched('points')
 
-        expect(result).to.be.instanceOf(SourceModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(SourceModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.points).to.be.an.array()
-        expect(result.points[0]).to.be.an.instanceOf(PointModel)
-        expect(result.points).to.include(testPoints[0])
-        expect(result.points).to.include(testPoints[1])
+        expect(result.points).toBeInstanceOf(Array)
+        expect(result.points[0]).toBeInstanceOf(PointModel)
+        expect(result.points).toContainEqual(testPoints[0])
+        expect(result.points).toContainEqual(testPoints[1])
       })
     })
   })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const AccountTypeValidator = require('../../../../app/validators/billing-accounts/setup/account-type.validator.js')
 
@@ -18,8 +11,8 @@ describe('Billing Accounts - Setup - Account Type Validator', () => {
           accountType: 'company'
         })
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -30,8 +23,8 @@ describe('Billing Accounts - Setup - Account Type Validator', () => {
           individualName: 'John Doe'
         })
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -41,9 +34,9 @@ describe('Billing Accounts - Setup - Account Type Validator', () => {
           accountType: 'individual'
         })
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter the full name of the individual.')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Enter the full name of the individual.')
       })
     })
 
@@ -51,9 +44,9 @@ describe('Billing Accounts - Setup - Account Type Validator', () => {
       it('returns with errors', () => {
         const result = AccountTypeValidator.go({})
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select the account type')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select the account type')
       })
     })
 
@@ -63,9 +56,9 @@ describe('Billing Accounts - Setup - Account Type Validator', () => {
           accountType: 'wrong'
         })
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select the account type')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select the account type')
       })
     })
   })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ReturnsCyclePresenter = require('../../../../app/presenters/return-versions/setup/returns-cycle.presenter.js')
 
@@ -38,7 +31,7 @@ describe('Return Versions Setup - Returns Cycle presenter', () => {
     it('correctly presents the data', () => {
       const result = ReturnsCyclePresenter.go(session, requirementIndex)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/abstraction-period/0',
           text: 'Back'
@@ -62,7 +55,7 @@ describe('Return Versions Setup - Returns Cycle presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = ReturnsCyclePresenter.go(session, requirementIndex)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
           text: 'Back'
         })
@@ -73,7 +66,7 @@ describe('Return Versions Setup - Returns Cycle presenter', () => {
       it('returns a link back to the "abstraction-period" page', () => {
         const result = ReturnsCyclePresenter.go(session, requirementIndex)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/abstraction-period/0',
           text: 'Back'
         })
@@ -90,7 +83,7 @@ describe('Return Versions Setup - Returns Cycle presenter', () => {
       it('returns a populated frequency collected', () => {
         const result = ReturnsCyclePresenter.go(session, requirementIndex)
 
-        expect(result.returnsCycle).to.equal('summer')
+        expect(result.returnsCycle).toEqual('summer')
       })
     })
 
@@ -98,7 +91,7 @@ describe('Return Versions Setup - Returns Cycle presenter', () => {
       it('returns an empty frequency collected', () => {
         const result = ReturnsCyclePresenter.go(session, requirementIndex)
 
-        expect(result.returnsCycle).to.be.null()
+        expect(result.returnsCycle).toBeNull()
       })
     })
   })

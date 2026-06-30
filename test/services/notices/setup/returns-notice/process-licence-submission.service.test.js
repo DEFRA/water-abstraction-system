@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const CheckLicenceExistsDal = require('../../../../../app/dal/notices/setup/check-licence-exists.dal.js')
@@ -37,14 +32,14 @@ describe('Notices - Setup - Returns Notice - Process Returns Notice Licence Subm
     it('returns the due returns as additional session data', async () => {
       const result = await ProcessReturnsNoticeLicenceSubmission.go(payload)
 
-      expect(result.additionalSessionData).to.equal({ dueReturns })
+      expect(result.additionalSessionData).toEqual({ dueReturns })
     })
 
     describe('with a valid payload', () => {
       it('returns no validation error', async () => {
         const result = await ProcessReturnsNoticeLicenceSubmission.go(payload)
 
-        expect(result.validationResult).to.be.null()
+        expect(result.validationResult).toBeNull()
       })
     })
 
@@ -56,7 +51,7 @@ describe('Notices - Setup - Returns Notice - Process Returns Notice Licence Subm
       it('returns a validation error', async () => {
         const result = await ProcessReturnsNoticeLicenceSubmission.go(payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           additionalSessionData: { dueReturns: [] },
           validationResult: {
             errorList: [{ href: '#licenceRef', text: 'Enter a licence number' }],

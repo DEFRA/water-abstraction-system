@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const PointModel = require('../../app/models/point.model.js')
 const ViewLicencesFixture = require('../support/fixtures/view-licences.fixture.js')
@@ -29,7 +22,7 @@ describe('Licences presenter', () => {
         it('returns an array of the abstraction point descriptions', () => {
           const result = LicencePresenter.formatConditionTypes(conditions)
 
-          expect(result[0].conditions[0].abstractionPoints.descriptions).to.equal([
+          expect(result[0].conditions[0].abstractionPoints.descriptions).toEqual([
             'Within the area formed by the straight lines running between National Grid References SD 963 193, SD 963 193, SD 963 193 and SD 963 193 (RIVER OUSE AT BLETSOE)'
           ])
         })
@@ -40,7 +33,7 @@ describe('Licences presenter', () => {
           it('returns the string "Abstraction point"', () => {
             const result = LicencePresenter.formatConditionTypes(conditions)
 
-            expect(result[0].conditions[0].abstractionPoints.label).to.equal('Abstraction point')
+            expect(result[0].conditions[0].abstractionPoints.label).toEqual('Abstraction point')
           })
         })
 
@@ -75,7 +68,7 @@ describe('Licences presenter', () => {
           it('returns the string "Abstraction points"', () => {
             const result = LicencePresenter.formatConditionTypes(conditions)
 
-            expect(result[0].conditions[0].abstractionPoints.label).to.equal('Abstraction points')
+            expect(result[0].conditions[0].abstractionPoints.label).toEqual('Abstraction points')
           })
         })
       })
@@ -85,7 +78,7 @@ describe('Licences presenter', () => {
       it('returns the licence version purpose condition type description value', () => {
         const result = LicencePresenter.formatConditionTypes(conditions)
 
-        expect(result[0].conditions[0].conditionType).to.equal('Cessation Condition')
+        expect(result[0].conditions[0].conditionType).toEqual('Cessation Condition')
       })
     })
 
@@ -93,7 +86,7 @@ describe('Licences presenter', () => {
       it('returns the licence version purpose condition note value', () => {
         const result = LicencePresenter.formatConditionTypes(conditions)
 
-        expect(result[0].conditions[0].otherInformation).to.equal('DROUGHT CONDITION')
+        expect(result[0].conditions[0].otherInformation).toEqual('DROUGHT CONDITION')
       })
     })
 
@@ -107,7 +100,7 @@ describe('Licences presenter', () => {
         it('returns "param1" property as null', () => {
           const result = LicencePresenter.formatConditionTypes(conditions)
 
-          expect(result[0].conditions[0].param1).to.be.null()
+          expect(result[0].conditions[0].param1).toBeNull()
         })
       })
 
@@ -119,8 +112,8 @@ describe('Licences presenter', () => {
         it('returns the label as "Note 1" and value as the param1 value', () => {
           const result = LicencePresenter.formatConditionTypes(conditions)
 
-          expect(result[0].conditions[0].param1.label).to.equal('Note 1')
-          expect(result[0].conditions[0].param1.value).to.equal('01/05')
+          expect(result[0].conditions[0].param1.label).toEqual('Note 1')
+          expect(result[0].conditions[0].param1.value).toEqual('01/05')
         })
       })
 
@@ -128,8 +121,8 @@ describe('Licences presenter', () => {
         it('returns the param1Label value as the label and param1 as the value', () => {
           const result = LicencePresenter.formatConditionTypes(conditions)
 
-          expect(result[0].conditions[0].param1.label).to.equal('Start date')
-          expect(result[0].conditions[0].param1.value).to.equal('01/05')
+          expect(result[0].conditions[0].param1.label).toEqual('Start date')
+          expect(result[0].conditions[0].param1.value).toEqual('01/05')
         })
       })
     })
@@ -144,7 +137,7 @@ describe('Licences presenter', () => {
         it('returns "param2" property as null', () => {
           const result = LicencePresenter.formatConditionTypes(conditions)
 
-          expect(result[0].conditions[0].param2).to.be.null()
+          expect(result[0].conditions[0].param2).toBeNull()
         })
       })
 
@@ -156,8 +149,8 @@ describe('Licences presenter', () => {
         it('returns the label as "Note 2" and value as the param2 value', () => {
           const result = LicencePresenter.formatConditionTypes(conditions)
 
-          expect(result[0].conditions[0].param2.label).to.equal('Note 2')
-          expect(result[0].conditions[0].param2.value).to.equal('30/09')
+          expect(result[0].conditions[0].param2.label).toEqual('Note 2')
+          expect(result[0].conditions[0].param2.value).toEqual('30/09')
         })
       })
 
@@ -165,8 +158,8 @@ describe('Licences presenter', () => {
         it('returns the param2Label value as the label and param2 as the value', () => {
           const result = LicencePresenter.formatConditionTypes(conditions)
 
-          expect(result[0].conditions[0].param2.label).to.equal('End date')
-          expect(result[0].conditions[0].param2.value).to.equal('30/09')
+          expect(result[0].conditions[0].param2.label).toEqual('End date')
+          expect(result[0].conditions[0].param2.value).toEqual('30/09')
         })
       })
     })
@@ -175,7 +168,7 @@ describe('Licences presenter', () => {
       it('returns the licences purpose description value', () => {
         const result = LicencePresenter.formatConditionTypes(conditions)
 
-        expect(result[0].conditions[0].purpose).to.equal('Animal Watering & General Use In Non Farming Situations')
+        expect(result[0].conditions[0].purpose).toEqual('Animal Watering & General Use In Non Farming Situations')
       })
     })
 
@@ -183,7 +176,7 @@ describe('Licences presenter', () => {
       it('returns the licences subcode description value', () => {
         const result = LicencePresenter.formatConditionTypes(conditions)
 
-        expect(result[0].conditions[0].subcodeDescription).to.equal('Political - Hosepipe Ban')
+        expect(result[0].conditions[0].subcodeDescription).toEqual('Political - Hosepipe Ban')
       })
     })
 
@@ -191,7 +184,7 @@ describe('Licences presenter', () => {
       it('returns the licenceVersionPurposeConditionType "displayTitle" value', () => {
         const result = LicencePresenter.formatConditionTypes(conditions)
 
-        expect(result[0].displayTitle).to.equal('Political cessation condition')
+        expect(result[0].displayTitle).toEqual('Political cessation condition')
       })
     })
   })
@@ -212,7 +205,7 @@ describe('Licences presenter', () => {
     it('returns the formatted points', () => {
       const result = LicencePresenter.formatLicencePoints(points)
 
-      expect(result).to.equal([
+      expect(result).toEqual([
         {
           bgsReference: 'TL 14/123',
           category: 'Single Point',
@@ -243,7 +236,7 @@ describe('Licences presenter', () => {
         it('returns an empty string', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].bgsReference).to.equal('')
+          expect(result[0].bgsReference).toEqual('')
         })
       })
 
@@ -251,7 +244,7 @@ describe('Licences presenter', () => {
         it('returns the point bgs reference', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].bgsReference).to.equal('TL 14/123')
+          expect(result[0].bgsReference).toEqual('TL 14/123')
         })
       })
     })
@@ -265,7 +258,7 @@ describe('Licences presenter', () => {
         it('returns an empty string', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].category).to.equal('')
+          expect(result[0].category).toEqual('')
         })
       })
 
@@ -273,7 +266,7 @@ describe('Licences presenter', () => {
         it('returns the point category', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].category).to.equal('Single Point')
+          expect(result[0].category).toEqual('Single Point')
         })
       })
     })
@@ -282,7 +275,7 @@ describe('Licences presenter', () => {
       it('returns the point depth as a string', () => {
         const result = LicencePresenter.formatLicencePoints(points)
 
-        expect(result[0].depth).to.equal('123')
+        expect(result[0].depth).toEqual('123')
       })
     })
 
@@ -295,7 +288,7 @@ describe('Licences presenter', () => {
         it('returns an empty string', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].description).to.equal('')
+          expect(result[0].description).toEqual('')
         })
       })
 
@@ -303,7 +296,7 @@ describe('Licences presenter', () => {
         it('returns the point description', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].description).to.equal('RIVER OUSE AT BLETSOE')
+          expect(result[0].description).toEqual('RIVER OUSE AT BLETSOE')
         })
       })
     })
@@ -312,7 +305,7 @@ describe('Licences presenter', () => {
       it('returns the point grid reference', () => {
         const result = LicencePresenter.formatLicencePoints(points)
 
-        expect(result[0].gridReference).to.equal(
+        expect(result[0].gridReference).toEqual(
           'Within the area formed by the straight lines running between National Grid References SD 963 193, SD 963 193, SD 963 193 and SD 963 193 (RIVER OUSE AT BLETSOE)'
         )
       })
@@ -322,7 +315,7 @@ describe('Licences presenter', () => {
       it('returns the hydro intercept distance as a string', () => {
         const result = LicencePresenter.formatLicencePoints(points)
 
-        expect(result[0].hydroInterceptDistance).to.equal('8.01')
+        expect(result[0].hydroInterceptDistance).toEqual('8.01')
       })
     })
 
@@ -335,7 +328,7 @@ describe('Licences presenter', () => {
         it('returns an empty string', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].hydroReference).to.equal('')
+          expect(result[0].hydroReference).toEqual('')
         })
       })
 
@@ -343,7 +336,7 @@ describe('Licences presenter', () => {
         it('returns the point hydro reference', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].hydroReference).to.equal('TL 14/133')
+          expect(result[0].hydroReference).toEqual('TL 14/133')
         })
       })
     })
@@ -352,7 +345,7 @@ describe('Licences presenter', () => {
       it('returns the hydro offset distance as a string', () => {
         const result = LicencePresenter.formatLicencePoints(points)
 
-        expect(result[0].hydroOffsetDistance).to.equal('5.56')
+        expect(result[0].hydroOffsetDistance).toEqual('5.56')
       })
     })
 
@@ -365,7 +358,7 @@ describe('Licences presenter', () => {
         it('returns an empty string', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].locationNote).to.equal('')
+          expect(result[0].locationNote).toEqual('')
         })
       })
 
@@ -373,7 +366,7 @@ describe('Licences presenter', () => {
         it('returns the point location note', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].locationNote).to.equal('Castle Farm, The Loke, Gresham, Norfolk')
+          expect(result[0].locationNote).toEqual('Castle Farm, The Loke, Gresham, Norfolk')
         })
       })
     })
@@ -387,7 +380,7 @@ describe('Licences presenter', () => {
         it('returns an empty string', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].note).to.equal('')
+          expect(result[0].note).toEqual('')
         })
       })
 
@@ -395,7 +388,7 @@ describe('Licences presenter', () => {
         it('returns the point note', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].note).to.equal('WELL IS SPRING-FED')
+          expect(result[0].note).toEqual('WELL IS SPRING-FED')
         })
       })
     })
@@ -409,7 +402,7 @@ describe('Licences presenter', () => {
         it('returns an empty string', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].primaryType).to.equal('')
+          expect(result[0].primaryType).toEqual('')
         })
       })
 
@@ -417,7 +410,7 @@ describe('Licences presenter', () => {
         it('returns the point primary type', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].primaryType).to.equal('Groundwater')
+          expect(result[0].primaryType).toEqual('Groundwater')
         })
       })
     })
@@ -431,7 +424,7 @@ describe('Licences presenter', () => {
         it('returns an empty string', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].secondaryType).to.equal('')
+          expect(result[0].secondaryType).toEqual('')
         })
       })
 
@@ -439,7 +432,7 @@ describe('Licences presenter', () => {
         it('returns the point secondary type', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].secondaryType).to.equal('Borehole')
+          expect(result[0].secondaryType).toEqual('Borehole')
         })
       })
     })
@@ -453,7 +446,7 @@ describe('Licences presenter', () => {
         it('returns an empty string', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].sourceDescription).to.equal('')
+          expect(result[0].sourceDescription).toEqual('')
         })
       })
 
@@ -461,7 +454,7 @@ describe('Licences presenter', () => {
         it('returns the point source description', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].sourceDescription).to.equal('SURFACE WATER SOURCE OF SUPPLY')
+          expect(result[0].sourceDescription).toEqual('SURFACE WATER SOURCE OF SUPPLY')
         })
       })
     })
@@ -475,7 +468,7 @@ describe('Licences presenter', () => {
         it('returns an empty string', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].sourceType).to.equal('')
+          expect(result[0].sourceType).toEqual('')
         })
       })
 
@@ -483,7 +476,7 @@ describe('Licences presenter', () => {
         it('returns the point source type', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].sourceType).to.equal('Borehole')
+          expect(result[0].sourceType).toEqual('Borehole')
         })
       })
     })
@@ -497,7 +490,7 @@ describe('Licences presenter', () => {
         it('returns an empty string', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].wellReference).to.equal('')
+          expect(result[0].wellReference).toEqual('')
         })
       })
 
@@ -505,7 +498,7 @@ describe('Licences presenter', () => {
         it('returns the point well reference', () => {
           const result = LicencePresenter.formatLicencePoints(points)
 
-          expect(result[0].wellReference).to.equal('81312')
+          expect(result[0].wellReference).toEqual('81312')
         })
       })
     })
@@ -530,7 +523,7 @@ describe('Licences presenter', () => {
         it('returns an empty array', () => {
           const result = LicencePresenter.formatLicencePurposes(purposes)
 
-          expect(result[0].abstractionAmounts).to.equal([])
+          expect(result[0].abstractionAmounts).toEqual([])
         })
       })
 
@@ -538,7 +531,7 @@ describe('Licences presenter', () => {
         it('returns an array of abstraction amounts for each populated time frame', () => {
           const result = LicencePresenter.formatLicencePurposes(purposes)
 
-          expect(result[0].abstractionAmounts).to.equal([
+          expect(result[0].abstractionAmounts).toEqual([
             '180,000.00 cubic metres per year',
             '720.00 cubic metres per day',
             '144.00 cubic metres per hour',
@@ -559,7 +552,7 @@ describe('Licences presenter', () => {
         it('returns the `abstractionAmountsTitle` of "Abstraction amount"', () => {
           const result = LicencePresenter.formatLicencePurposes(purposes)
 
-          expect(result[0].abstractionAmountsTitle).to.equal('Abstraction amount')
+          expect(result[0].abstractionAmountsTitle).toEqual('Abstraction amount')
         })
       })
 
@@ -567,7 +560,7 @@ describe('Licences presenter', () => {
         it('returns the `abstractionAmountsTitle` of "Abstraction amounts"', () => {
           const result = LicencePresenter.formatLicencePurposes(purposes)
 
-          expect(result[0].abstractionAmountsTitle).to.equal('Abstraction amounts')
+          expect(result[0].abstractionAmountsTitle).toEqual('Abstraction amounts')
         })
       })
     })
@@ -591,7 +584,7 @@ describe('Licences presenter', () => {
         it('return the values display text joined with an ", and" (Unspecified Pump, Submersible Pump (Fixed), and Gravity & Sluice (Adjustable))', () => {
           const result = LicencePresenter.formatLicencePurposes(purposes)
 
-          expect(result[0].abstractionMethods).to.equal(
+          expect(result[0].abstractionMethods).toEqual(
             'Unspecified Pump, Submersible Pump (Fixed), and Gravity & Sluice (Adjustable)'
           )
         })
@@ -612,7 +605,7 @@ describe('Licences presenter', () => {
         it('return the values display text joined with an "and" (Unspecified Pump and Submersible Pump (Fixed))', () => {
           const result = LicencePresenter.formatLicencePurposes(purposes)
 
-          expect(result[0].abstractionMethods).to.equal('Unspecified Pump and Submersible Pump (Fixed)')
+          expect(result[0].abstractionMethods).toEqual('Unspecified Pump and Submersible Pump (Fixed)')
         })
       })
 
@@ -620,7 +613,7 @@ describe('Licences presenter', () => {
         it('return the values display text (Unspecified Pump)', () => {
           const result = LicencePresenter.formatLicencePurposes(purposes)
 
-          expect(result[0].abstractionMethods).to.equal('Unspecified Pump')
+          expect(result[0].abstractionMethods).toEqual('Unspecified Pump')
         })
       })
     })
@@ -641,7 +634,7 @@ describe('Licences presenter', () => {
         it('returns the text "Methods of abstraction" as the title', () => {
           const result = LicencePresenter.formatLicencePurposes(purposes)
 
-          expect(result[0].abstractionMethodsTitle).to.equal('Methods of abstraction')
+          expect(result[0].abstractionMethodsTitle).toEqual('Methods of abstraction')
         })
       })
 
@@ -649,7 +642,7 @@ describe('Licences presenter', () => {
         it('returns the text "Method of abstraction" as the title', () => {
           const result = LicencePresenter.formatLicencePurposes(purposes)
 
-          expect(result[0].abstractionMethodsTitle).to.equal('Method of abstraction')
+          expect(result[0].abstractionMethodsTitle).toEqual('Method of abstraction')
         })
       })
     })
@@ -659,7 +652,7 @@ describe('Licences presenter', () => {
         it('returns the purposes abstraction period', () => {
           const result = LicencePresenter.formatLicencePurposes(purposes)
 
-          expect(result[0].abstractionPeriod).to.equal('1 April to 31 October')
+          expect(result[0].abstractionPeriod).toEqual('1 April to 31 October')
         })
       })
     })
@@ -673,7 +666,7 @@ describe('Licences presenter', () => {
         it('returns an empty array for the abstraction points', () => {
           const result = LicencePresenter.formatLicencePurposes(purposes)
 
-          expect(result[0].abstractionPoints).to.equal([])
+          expect(result[0].abstractionPoints).toEqual([])
         })
       })
 
@@ -681,7 +674,7 @@ describe('Licences presenter', () => {
         it('returns the related points, formatted as an array of strings', () => {
           const result = LicencePresenter.formatLicencePurposes(purposes)
 
-          expect(result[0].abstractionPoints).to.equal(['At National Grid Reference TL 23198 88603'])
+          expect(result[0].abstractionPoints).toEqual(['At National Grid Reference TL 23198 88603'])
         })
       })
     })
@@ -691,7 +684,7 @@ describe('Licences presenter', () => {
         it('returns the `abstractionPointsTitle` of "Abstraction point"', () => {
           const result = LicencePresenter.formatLicencePurposes(purposes)
 
-          expect(result[0].abstractionPointsTitle).to.equal('Abstraction point')
+          expect(result[0].abstractionPointsTitle).toEqual('Abstraction point')
         })
       })
 
@@ -716,7 +709,7 @@ describe('Licences presenter', () => {
         it('returns the `abstractionPointsTitle` of "Abstraction points"', () => {
           const result = LicencePresenter.formatLicencePurposes(purposes)
 
-          expect(result[0].abstractionPointsTitle).to.equal('Abstraction points')
+          expect(result[0].abstractionPointsTitle).toEqual('Abstraction points')
         })
       })
     })
@@ -726,7 +719,7 @@ describe('Licences presenter', () => {
         it('returns the purpose description', () => {
           const result = LicencePresenter.formatLicencePurposes(purposes)
 
-          expect(result[0].purposeDescription).equal('Spray Irrigation - Storage')
+          expect(result[0].purposeDescription).toEqual('Spray Irrigation - Storage')
         })
       })
     })
@@ -743,7 +736,7 @@ describe('Licences presenter', () => {
       it('returns null', () => {
         const result = LicencePresenter.licenceEndsWarning(licence)
 
-        expect(result).to.be.null()
+        expect(result).toBeNull()
       })
     })
 
@@ -756,7 +749,7 @@ describe('Licences presenter', () => {
         it('returns null', () => {
           const result = LicencePresenter.licenceEndsWarning(licence)
 
-          expect(result).to.be.null()
+          expect(result).toBeNull()
         })
       })
 
@@ -768,7 +761,7 @@ describe('Licences presenter', () => {
         it('returns "This licence expired on 1 April 2019"', () => {
           const result = LicencePresenter.licenceEndsWarning(licence)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             iconFallbackText: 'Warning',
             text: 'This licence expired on 1 April 2019'
           })
@@ -784,7 +777,7 @@ describe('Licences presenter', () => {
         it('returns "This licence lapsed on 1 April 2019"', () => {
           const result = LicencePresenter.licenceEndsWarning(licence)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             iconFallbackText: 'Warning',
             text: 'This licence lapsed on 1 April 2019'
           })
@@ -800,7 +793,7 @@ describe('Licences presenter', () => {
         it('returns "This licence was revoked on 1 April 2019"', () => {
           const result = LicencePresenter.licenceEndsWarning(licence)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             iconFallbackText: 'Warning',
             text: 'This licence was revoked on 1 April 2019'
           })

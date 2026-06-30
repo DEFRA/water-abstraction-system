@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const LicenceModel = require('../../../../../app/models/licence.model.js')
@@ -44,7 +39,7 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
       it('generates return requirements setup data', async () => {
         const result = await GenerateFromAbstractionDataService.go(licenceId, licenceVersionId, startDate)
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           {
             points: ['d60b0dfe-ef2b-4bc2-a963-b74b25433127', '6c664140-f7ee-4e98-aa88-74590d3fd8fb'],
             purposes: [
@@ -125,11 +120,11 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
         const result = await GenerateFromAbstractionDataService.go(licenceId, licenceVersionId, startDate)
 
         // We assert the others haven't changed because of this
-        expect(result[0].frequencyCollected).to.equal('day')
-        expect(result[2].frequencyCollected).to.equal('week')
+        expect(result[0].frequencyCollected).toEqual('day')
+        expect(result[2].frequencyCollected).toEqual('week')
 
         // We then assert that the 3rd requirement (2nd after being sorted in results) has changed because of this
-        expect(result[1].frequencyCollected).to.equal('day')
+        expect(result[1].frequencyCollected).toEqual('day')
       })
     })
 
@@ -148,9 +143,9 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
       it('sets the agreements for each return requirement to be "two-part tariff"', async () => {
         const result = await GenerateFromAbstractionDataService.go(licenceId, licenceVersionId, startDate)
 
-        expect(result[0].agreementsExceptions).to.equal(['none'])
-        expect(result[1].agreementsExceptions).to.equal(['two-part-tariff'])
-        expect(result[2].agreementsExceptions).to.equal(['two-part-tariff'])
+        expect(result[0].agreementsExceptions).toEqual(['none'])
+        expect(result[1].agreementsExceptions).toEqual(['two-part-tariff'])
+        expect(result[2].agreementsExceptions).toEqual(['two-part-tariff'])
       })
     })
 
@@ -167,19 +162,21 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
       it('sets the collection and reporting frequencies to "day"', async () => {
         const result = await GenerateFromAbstractionDataService.go(licenceId, licenceVersionId, startDate)
 
-        expect(result[0].frequencyCollected).to.equal('day')
-        expect(result[0].frequencyReported).to.equal('day')
-        expect(result[1].frequencyCollected).to.equal('day')
-        expect(result[1].frequencyReported).to.equal('day')
-        expect(result[2].frequencyCollected).to.equal('day')
-        expect(result[2].frequencyReported).to.equal('day')
+        expect(result[0].frequencyCollected).toEqual('day')
+        expect(result[0].frequencyReported).toEqual('day')
+        expect(result[1].frequencyCollected).toEqual('day')
+        expect(result[1].frequencyReported).toEqual('day')
+        expect(result[2].frequencyCollected).toEqual('day')
+        expect(result[2].frequencyReported).toEqual('day')
       })
     })
   })
 
   describe('when called with a licence ID that does not exists', () => {
     it('throws an error', async () => {
-      await expect(GenerateFromAbstractionDataService.go('fc29a098-c1ab-4a2b-bc31-b713cccc505d', startDate)).to.reject()
+      await expect(
+        GenerateFromAbstractionDataService.go('fc29a098-c1ab-4a2b-bc31-b713cccc505d', startDate)
+      ).rejects.toThrow()
     })
   })
 })

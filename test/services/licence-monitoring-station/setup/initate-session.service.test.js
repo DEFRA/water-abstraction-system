@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const MonitoringStationHelper = require('../../../support/helpers/monitoring-station.helper.js')
@@ -18,7 +13,7 @@ const InitiateSessionService = require('../../../../app/services/licence-monitor
 describe('Licence Monitoring Station - Setup - Initiate Session service', () => {
   let monitoringStation
 
-  before(async () => {
+  beforeAll(async () => {
     monitoringStation = await MonitoringStationHelper.add()
   })
 
@@ -32,7 +27,7 @@ describe('Licence Monitoring Station - Setup - Initiate Session service', () => 
 
       const matchingSession = await SessionModel.query().findById(sessionId)
 
-      expect(matchingSession.data).to.equal({
+      expect(matchingSession.data).toEqual({
         monitoringStationId: monitoringStation.id,
         label: monitoringStation.label
       })

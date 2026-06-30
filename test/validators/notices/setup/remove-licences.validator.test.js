@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const RemoveLicencesValidator = require('../../../../app/validators/notices/setup/remove-licences.validator.js')
 
@@ -26,8 +19,8 @@ describe('Notices - Setup - Remove Licences validator', () => {
     it('confirms the data is valid', () => {
       const result = RemoveLicencesValidator.go(payload, licenceRefsWithDueReturns)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -40,9 +33,9 @@ describe('Notices - Setup - Remove Licences validator', () => {
       it('fails validation', () => {
         const result = RemoveLicencesValidator.go(payload, licenceRefsWithDueReturns)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('There are no returns due for licence 01/123')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('There are no returns due for licence 01/123')
       })
     })
 
@@ -54,9 +47,9 @@ describe('Notices - Setup - Remove Licences validator', () => {
       it('fails validation', () => {
         const result = RemoveLicencesValidator.go(payload, licenceRefsWithDueReturns)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('There are no returns due for licences 01/123, 678')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('There are no returns due for licences 01/123, 678')
       })
     })
   })

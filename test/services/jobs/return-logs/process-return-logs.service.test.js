@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const ReturnCyclesFixture = require('../../../support/fixtures/return-cycles.fixture.js')
@@ -59,12 +54,12 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
 
         const logDataArg = notifierStub.omg.firstCall.args[1]
 
-        expect(createReturnLogsStub.called).to.be.true()
-        expect(notifierStub.omg.calledWith('Return logs job complete')).to.be.true()
-        expect(logDataArg.timeTakenMs).to.exist()
-        expect(logDataArg.timeTakenSs).to.exist()
-        expect(logDataArg.count).to.equal(1)
-        expect(logDataArg.cycle).to.equal(cycle)
+        expect(createReturnLogsStub.called).toBe(true)
+        expect(notifierStub.omg.calledWith('Return logs job complete')).toBe(true)
+        expect(logDataArg.timeTakenMs).toBeDefined()
+        expect(logDataArg.timeTakenSs).toBeDefined()
+        expect(logDataArg.count).toEqual(1)
+        expect(logDataArg.cycle).toEqual(cycle)
       })
     })
 
@@ -80,12 +75,12 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
 
         const logDataArg = notifierStub.omg.firstCall.args[1]
 
-        expect(createReturnLogsStub.called).to.be.true()
-        expect(notifierStub.omg.calledWith('Return logs job complete')).to.be.true()
-        expect(logDataArg.timeTakenMs).to.exist()
-        expect(logDataArg.timeTakenSs).to.exist()
-        expect(logDataArg.count).to.equal(1)
-        expect(logDataArg.cycle).to.equal(cycle)
+        expect(createReturnLogsStub.called).toBe(true)
+        expect(notifierStub.omg.calledWith('Return logs job complete')).toBe(true)
+        expect(logDataArg.timeTakenMs).toBeDefined()
+        expect(logDataArg.timeTakenSs).toBeDefined()
+        expect(logDataArg.count).toEqual(1)
+        expect(logDataArg.cycle).toEqual(cycle)
       })
     })
 
@@ -99,11 +94,11 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
 
         const logDataArg = notifierStub.omg.firstCall.args[1]
 
-        expect(notifierStub.omg.calledWith('Return logs job complete')).to.be.true()
-        expect(logDataArg.timeTakenMs).to.exist()
-        expect(logDataArg.timeTakenSs).to.exist()
-        expect(logDataArg.count).to.equal(0)
-        expect(logDataArg.cycle).to.equal(cycle)
+        expect(notifierStub.omg.calledWith('Return logs job complete')).toBe(true)
+        expect(logDataArg.timeTakenMs).toBeDefined()
+        expect(logDataArg.timeTakenSs).toBeDefined()
+        expect(logDataArg.count).toEqual(0)
+        expect(logDataArg.cycle).toEqual(cycle)
       })
     })
   })
@@ -119,9 +114,9 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
 
         const args = notifierStub.omfg.firstCall.args
 
-        expect(args[0]).to.equal('Return logs job failed')
-        expect(args[1]).to.equal({ cycle })
-        expect(args[2]).to.be.an.error()
+        expect(args[0]).toEqual('Return logs job failed')
+        expect(args[1]).toEqual({ cycle })
+        expect(args[2]).toBeInstanceOf(Error)
       })
 
       it('notifies the team by calling "redAlert()"', async () => {
@@ -129,11 +124,11 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
 
         const args = notifierStub.redAlert.firstCall.args
 
-        expect(args[0]).to.equal('Return logs job failed')
+        expect(args[0]).toEqual('Return logs job failed')
       })
 
       it('does not throw an error', async () => {
-        await expect(ProcessReturnLogsService.go()).not.to.reject()
+        await ProcessReturnLogsService.go()
       })
     })
     describe('because the create return logs service errors', () => {
@@ -149,13 +144,13 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
 
         const args = notifierStub.omfg.firstCall.args
 
-        expect(args[0]).to.equal('Return logs creation errored')
-        expect(args[1].returnRequirement).to.equal(returnRequirement)
-        expect(args[2]).to.be.an.error()
+        expect(args[0]).toEqual('Return logs creation errored')
+        expect(args[1].returnRequirement).toEqual(returnRequirement)
+        expect(args[2]).toBeInstanceOf(Error)
       })
 
       it('does not throw an error', async () => {
-        await expect(ProcessReturnLogsService.go()).not.to.reject()
+        await ProcessReturnLogsService.go()
       })
     })
   })

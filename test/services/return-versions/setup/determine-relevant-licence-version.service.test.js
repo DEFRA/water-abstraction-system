@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 
@@ -77,7 +72,7 @@ describe('Return Versions - Setup - Determine Relevant Licence Version service',
       it('returns the relevant licence with no copyable return versions', async () => {
         const result = await DetermineRelevantLicenceVersionService.go(session)
 
-        expect(result).to.equal({ ...licenceVersion, copyableReturnVersions: [] })
+        expect(result).toEqual({ ...licenceVersion, copyableReturnVersions: [] })
       })
     })
 
@@ -96,7 +91,7 @@ describe('Return Versions - Setup - Determine Relevant Licence Version service',
       it('returns the relevant licence with latest existing return version as a copyable candidate', async () => {
         const result = await DetermineRelevantLicenceVersionService.go(session)
 
-        expect(result).to.equal({ ...licenceVersion, copyableReturnVersions: [session.licence.returnVersions[0]] })
+        expect(result).toEqual({ ...licenceVersion, copyableReturnVersions: [session.licence.returnVersions[0]] })
       })
     })
 
@@ -113,7 +108,7 @@ describe('Return Versions - Setup - Determine Relevant Licence Version service',
       it('returns the relevant licence with existing return versions that start during the period as a copyable candidates', async () => {
         const result = await DetermineRelevantLicenceVersionService.go(session)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           ...licenceVersion,
           copyableReturnVersions: [session.licence.returnVersions[0], session.licence.returnVersions[1]]
         })
@@ -133,7 +128,7 @@ describe('Return Versions - Setup - Determine Relevant Licence Version service',
       it('returns the relevant licence with no copyable return versions', async () => {
         const result = await DetermineRelevantLicenceVersionService.go(session)
 
-        expect(result).to.equal({ ...licenceVersion, copyableReturnVersions: [] })
+        expect(result).toEqual({ ...licenceVersion, copyableReturnVersions: [] })
       })
     })
   })

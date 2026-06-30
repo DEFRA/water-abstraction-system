@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -39,21 +34,18 @@ describe('Return Logs Setup - Reported service', () => {
     it('fetches the current setup session record', async () => {
       const result = await ReportedService.go(session.id)
 
-      expect(result.sessionId).to.equal(session.id)
+      expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
       const result = await ReportedService.go(session.id)
 
-      expect(result).to.equal(
-        {
-          backLink: { href: `/system/return-logs/setup/${session.id}/submission`, text: 'Back' },
-          pageTitle: 'How was this return reported?',
-          pageTitleCaption: 'Return reference 012345',
-          reported: null
-        },
-        { skip: ['sessionId'] }
-      )
+      expect(result).toMatchObject({
+        backLink: { href: `/system/return-logs/setup/${session.id}/submission`, text: 'Back' },
+        pageTitle: 'How was this return reported?',
+        pageTitleCaption: 'Return reference 012345',
+        reported: null
+      })
     })
   })
 })

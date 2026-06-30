@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const CancelPresenter = require('../../../../app/presenters/return-logs/setup/cancel.presenter.js')
 
@@ -35,7 +28,7 @@ describe('Return Logs Setup - Cancel presenter', () => {
     it('correctly presents the data', () => {
       const result = CancelPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         abstractionPeriod: '1 January to 31 December',
         backLink: { href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/check', text: 'Back' },
         pageTitle: 'You are about to cancel this return submission',
@@ -59,7 +52,7 @@ describe('Return Logs Setup - Cancel presenter', () => {
       it('returns the tariff as "Two-part"', () => {
         const result = CancelPresenter.go(session)
 
-        expect(result.tariff).to.equal('Two-part')
+        expect(result.tariff).toEqual('Two-part')
       })
     })
 
@@ -71,7 +64,7 @@ describe('Return Logs Setup - Cancel presenter', () => {
       it('returns the tariff as "Standard"', () => {
         const result = CancelPresenter.go(session)
 
-        expect(result.tariff).to.equal('Standard')
+        expect(result.tariff).toEqual('Standard')
       })
     })
   })

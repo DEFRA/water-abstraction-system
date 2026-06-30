@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
 const EventModel = require('../../../../app/models/event.model.js')
@@ -28,7 +21,7 @@ describe('Jobs - Notification Status - Fetch Critical Notices DAL', () => {
   let standardNoticeWithErrors
   let standardNoticeWithoutErrors
 
-  before(async () => {
+  beforeAll(async () => {
     // Scenario 1: Critical notice with notifications that have errors. This should be return by the DAL
     let noticeData = NoticesFixture.renewalInvitation()
 
@@ -85,7 +78,7 @@ describe('Jobs - Notification Status - Fetch Critical Notices DAL', () => {
     ]
   })
 
-  after(async () => {
+  afterAll(async () => {
     await notificationForCriticalNoticeWithErrors.$query().delete()
     await notificationForCriticalNoticeWithoutErrors.$query().delete()
     await notificationForStandardNoticeWithErrors.$query().delete()
@@ -100,7 +93,7 @@ describe('Jobs - Notification Status - Fetch Critical Notices DAL', () => {
     it('returns only the critical notices that have notifications with errors from those request (scenario 1)', async () => {
       const results = await FetchCriticalNoticesDal.go(noticeIds)
 
-      expect(results).to.include(
+      expect(results).toContainEqual(
         EventModel.fromJson({
           id: criticalNoticeWithErrors.id,
           issuer: criticalNoticeWithErrors.issuer,
@@ -110,7 +103,7 @@ describe('Jobs - Notification Status - Fetch Critical Notices DAL', () => {
       )
 
       // Scenario 2
-      expect(results).not.to.include(
+      expect(results).not.toContainEqual(
         EventModel.fromJson({
           id: standardNoticeWithErrors.id,
           issuer: standardNoticeWithErrors.issuer,
@@ -120,7 +113,7 @@ describe('Jobs - Notification Status - Fetch Critical Notices DAL', () => {
       )
 
       // Scenario 3
-      expect(results).not.to.include(
+      expect(results).not.toContain(
         EventModel.fromJson({
           id: criticalNoticeWithoutErrors.id,
           issuer: criticalNoticeWithoutErrors.issuer,
@@ -130,7 +123,7 @@ describe('Jobs - Notification Status - Fetch Critical Notices DAL', () => {
       )
 
       // Scenario 4
-      expect(results).not.to.include(
+      expect(results).not.toContain(
         EventModel.fromJson({
           id: standardNoticeWithoutErrors.id,
           issuer: standardNoticeWithoutErrors.issuer,

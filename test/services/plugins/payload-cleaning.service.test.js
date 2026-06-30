@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const PayloadCleaningService = require('../../../app/services/plugins/payload-cleaning.service.js')
 
@@ -20,7 +13,7 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject.customerName).to.equal('Bert & Ernie')
+      expect(cleanedObject.customerName).toEqual('Bert & Ernie')
     })
 
     it('can remove them from nested objects', () => {
@@ -34,9 +27,9 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject.details.firstName).to.equal('Bert')
+      expect(cleanedObject.details.firstName).toEqual('Bert')
 
-      expect(cleanedObject.details.lastName).to.equal('Ernie')
+      expect(cleanedObject.details.lastName).toEqual('Ernie')
     })
 
     it('can remove them from arrays', () => {
@@ -47,7 +40,7 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject.codes).to.equal(['ABD1', 'B1', 'C2'])
+      expect(cleanedObject.codes).toEqual(['ABD1', 'B1', 'C2'])
     })
 
     it('can remove them from objects in arrays', () => {
@@ -61,8 +54,8 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject.contacts[0].firstName).to.equal('Bert')
-      expect(cleanedObject.contacts[0].lastName).to.equal('Ernie')
+      expect(cleanedObject.contacts[0].firstName).toEqual('Bert')
+      expect(cleanedObject.contacts[0].lastName).toEqual('Ernie')
     })
   })
 
@@ -75,7 +68,7 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject).to.not.contain('customerName')
+      expect(cleanedObject).not.toHaveProperty('customerName')
     })
 
     it('removes them from nested objects', () => {
@@ -89,8 +82,8 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject.details).to.not.contain('firstName')
-      expect(cleanedObject.details).to.contain('lastName')
+      expect(cleanedObject.details).not.toHaveProperty('firstName')
+      expect(cleanedObject.details).toHaveProperty('lastName')
     })
 
     it('removes them from arrays', () => {
@@ -101,7 +94,7 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject.codes).to.equal(['ABD1', 'C2'])
+      expect(cleanedObject.codes).toEqual(['ABD1', 'C2'])
     })
 
     it('removes them from objects in arrays', () => {
@@ -115,8 +108,8 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject.contacts[0]).to.contain('firstName')
-      expect(cleanedObject.contacts[0]).to.not.contain('lastName')
+      expect(cleanedObject.contacts[0]).toHaveProperty('firstName')
+      expect(cleanedObject.contacts[0]).not.toHaveProperty('lastName')
     })
   })
 
@@ -129,7 +122,7 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject).to.not.contain('customerName')
+      expect(cleanedObject).not.toHaveProperty('customerName')
     })
 
     it('removes them from nested objects', () => {
@@ -143,8 +136,8 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject.details).to.not.contain('firstName')
-      expect(cleanedObject.details).to.contain('lastName')
+      expect(cleanedObject.details).not.toHaveProperty('firstName')
+      expect(cleanedObject.details).toHaveProperty('lastName')
     })
 
     it('removes them from arrays', () => {
@@ -155,7 +148,7 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject.codes).to.equal(['ABD1', 'C2'])
+      expect(cleanedObject.codes).toEqual(['ABD1', 'C2'])
     })
 
     it('removes them from objects in arrays', () => {
@@ -169,8 +162,8 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject.contacts[0]).to.contain('firstName')
-      expect(cleanedObject.contacts[0]).to.not.contain('lastName')
+      expect(cleanedObject.contacts[0]).toHaveProperty('firstName')
+      expect(cleanedObject.contacts[0]).not.toHaveProperty('lastName')
     })
   })
 
@@ -183,7 +176,7 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject).to.not.contain('customerName')
+      expect(cleanedObject).not.toHaveProperty('customerName')
     })
 
     it('removes them from nested objects', () => {
@@ -197,8 +190,8 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject.details).to.not.contain('firstName')
-      expect(cleanedObject.details).to.contain('lastName')
+      expect(cleanedObject.details).not.toHaveProperty('firstName')
+      expect(cleanedObject.details).toHaveProperty('lastName')
     })
 
     it('removes them from arrays', () => {
@@ -209,7 +202,7 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject.codes).to.equal(['ABD1', 'C2'])
+      expect(cleanedObject.codes).toEqual(['ABD1', 'C2'])
     })
 
     it('removes them from objects in arrays', () => {
@@ -223,8 +216,8 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject.contacts[0]).to.contain('firstName')
-      expect(cleanedObject.contacts[0]).to.not.contain('lastName')
+      expect(cleanedObject.contacts[0]).toHaveProperty('firstName')
+      expect(cleanedObject.contacts[0]).not.toHaveProperty('lastName')
     })
   })
 
@@ -238,7 +231,7 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject).to.equal(dirtyObject)
+      expect(cleanedObject).toEqual(dirtyObject)
     })
 
     it('leaves them untouched in nested objects', () => {
@@ -252,7 +245,7 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject).to.equal(dirtyObject)
+      expect(cleanedObject).toEqual(dirtyObject)
     })
 
     it('leaves them untouched in arrays', () => {
@@ -263,7 +256,7 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject).to.equal(dirtyObject)
+      expect(cleanedObject).toEqual(dirtyObject)
     })
   })
 
@@ -277,7 +270,7 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject).to.equal(dirtyObject)
+      expect(cleanedObject).toEqual(dirtyObject)
     })
 
     it('leaves them untouched in nested objects', () => {
@@ -291,7 +284,7 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject).to.equal(dirtyObject)
+      expect(cleanedObject).toEqual(dirtyObject)
     })
 
     it('leaves them untouched in arrays', () => {
@@ -302,7 +295,7 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject).to.equal(dirtyObject)
+      expect(cleanedObject).toEqual(dirtyObject)
     })
   })
 
@@ -315,7 +308,7 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject).to.equal(dirtyObject)
+      expect(cleanedObject).toEqual(dirtyObject)
     })
 
     it('leaves them untouched in nested objects', () => {
@@ -329,7 +322,7 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject).to.equal(dirtyObject)
+      expect(cleanedObject).toEqual(dirtyObject)
     })
 
     it('leaves them untouched in arrays', () => {
@@ -340,7 +333,7 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject).to.equal(dirtyObject)
+      expect(cleanedObject).toEqual(dirtyObject)
     })
   })
 
@@ -353,7 +346,7 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject).to.not.contain('customerName')
+      expect(cleanedObject).not.toHaveProperty('customerName')
     })
 
     it('removes it from nested objects', () => {
@@ -367,8 +360,8 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject.details).to.not.contain('firstName')
-      expect(cleanedObject.details).to.contain('lastName')
+      expect(cleanedObject.details).not.toHaveProperty('firstName')
+      expect(cleanedObject.details).toHaveProperty('lastName')
     })
 
     it('removes it from arrays', () => {
@@ -379,7 +372,7 @@ describe('Payload cleaning service', () => {
 
       const cleanedObject = PayloadCleaningService.go(dirtyObject)
 
-      expect(cleanedObject.codes).to.equal(['ABD1', 'C2'])
+      expect(cleanedObject.codes).toEqual(['ABD1', 'C2'])
     })
   })
 })

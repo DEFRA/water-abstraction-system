@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -61,17 +56,17 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
         .whereIn('licenceId', [fetchResults[0].licenceId, fetchResults[1].licenceId])
         .orderBy('createdAt', 'asc')
 
-      expect(results).to.have.length(2)
+      expect(results).toHaveLength(2)
 
-      expect(results[0].licenceVersionId).to.equal(fetchResults[0].id)
-      expect(results[0].licenceId).to.equal(fetchResults[0].licenceId)
-      expect(results[0].status).to.equal('to_setup')
-      expect(results[0].data).to.equal({ chargeVersion: null, chargeVersionExists: false })
+      expect(results[0].licenceVersionId).toEqual(fetchResults[0].id)
+      expect(results[0].licenceId).toEqual(fetchResults[0].licenceId)
+      expect(results[0].status).toEqual('to_setup')
+      expect(results[0].data).toEqual({ chargeVersion: null, chargeVersionExists: false })
 
-      expect(results[1].licenceVersionId).to.equal(fetchResults[1].id)
-      expect(results[1].licenceId).to.equal(fetchResults[1].licenceId)
-      expect(results[1].status).to.equal('to_setup')
-      expect(results[1].data).to.equal({ chargeVersion: null, chargeVersionExists: true })
+      expect(results[1].licenceVersionId).toEqual(fetchResults[1].id)
+      expect(results[1].licenceId).toEqual(fetchResults[1].licenceId)
+      expect(results[1].status).toEqual('to_setup')
+      expect(results[1].data).toEqual({ chargeVersion: null, chargeVersionExists: true })
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
@@ -79,10 +74,10 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Licence updates job complete')).to.be.true()
-      expect(logDataArg.timeTakenMs).to.exist()
-      expect(logDataArg.timeTakenSs).to.exist()
-      expect(logDataArg.count).to.exist()
+      expect(notifierStub.omg.calledWith('Licence updates job complete')).toBe(true)
+      expect(logDataArg.timeTakenMs).toBeDefined()
+      expect(logDataArg.timeTakenSs).toBeDefined()
+      expect(logDataArg.count).toBeDefined()
     })
   })
 
@@ -100,7 +95,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
 
       const results = await WorkflowModel.query().orderBy('createdAt', 'asc')
 
-      expect(results).to.equal(previousResults)
+      expect(results).toEqual(previousResults)
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
@@ -108,10 +103,10 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Licence updates job complete')).to.be.true()
-      expect(logDataArg.timeTakenMs).to.exist()
-      expect(logDataArg.timeTakenSs).to.exist()
-      expect(logDataArg.count).to.exist()
+      expect(notifierStub.omg.calledWith('Licence updates job complete')).toBe(true)
+      expect(logDataArg.timeTakenMs).toBeDefined()
+      expect(logDataArg.timeTakenSs).toBeDefined()
+      expect(logDataArg.count).toBeDefined()
     })
   })
 
@@ -125,9 +120,9 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
 
       const args = notifierStub.omfg.firstCall.args
 
-      expect(args[0]).to.equal('Licence updates job failed')
-      expect(args[1]).to.be.null()
-      expect(args[2]).to.be.an.error()
+      expect(args[0]).toEqual('Licence updates job failed')
+      expect(args[1]).toBeNull()
+      expect(args[2]).toBeInstanceOf(Error)
     })
 
     it('notifies the team by calling "redAlert()"', async () => {
@@ -135,11 +130,11 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
 
       const args = notifierStub.redAlert.firstCall.args
 
-      expect(args[0]).to.equal('Licence updates job failed')
+      expect(args[0]).toEqual('Licence updates job failed')
     })
 
     it('does not throw an error', async () => {
-      await expect(ProcessLicenceUpdatesService.go()).not.to.reject()
+      await ProcessLicenceUpdatesService.go()
     })
   })
 })

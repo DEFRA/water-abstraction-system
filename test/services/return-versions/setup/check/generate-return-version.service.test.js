@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
@@ -101,7 +96,7 @@ describe('Return Versions - Setup - Generate Return Version service', () => {
     it('generates a "standard" return version for persisting from the session data', async () => {
       const result = await GenerateReturnVersionService.go(session, userId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         returnRequirements: [
           {
             abstractionPeriodStartDay: '1',
@@ -157,7 +152,7 @@ describe('Return Versions - Setup - Generate Return Version service', () => {
         it('generates a return version with quarterly returns set to true', async () => {
           const result = await GenerateReturnVersionService.go(session, userId)
 
-          expect(result.returnVersion.quarterlyReturns).to.be.true()
+          expect(result.returnVersion.quarterlyReturns).toBe(true)
         })
       })
 
@@ -170,7 +165,7 @@ describe('Return Versions - Setup - Generate Return Version service', () => {
         it('generates a return version with quarterly returns set to false', async () => {
           const result = await GenerateReturnVersionService.go(session, userId)
 
-          expect(result.returnVersion.quarterlyReturns).to.be.false()
+          expect(result.returnVersion.quarterlyReturns).toBe(false)
         })
       })
     })
@@ -203,7 +198,7 @@ describe('Return Versions - Setup - Generate Return Version service', () => {
     it('generates a "no-returns-required" return version for persisting from the session data', async () => {
       const result = await GenerateReturnVersionService.go(session, userId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         returnRequirements: [],
         returnVersion: {
           createdBy: 12345,

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 const { licenceEnds } = require('../../support/fixtures/licence.fixture.js')
@@ -32,7 +25,7 @@ describe('Company Contacts - Contact Details presenter', () => {
     it('returns page data for the view', () => {
       const result = ContactDetailsPresenter.go(company, companyContact, licences)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         additionalContact: true,
         backLink: {
           href: `/system/companies/${company.id}/contacts`,
@@ -60,7 +53,7 @@ describe('Company Contacts - Contact Details presenter', () => {
           it('returns true', () => {
             const result = ContactDetailsPresenter.go(company, companyContact, licences)
 
-            expect(result.additionalContact).to.be.true()
+            expect(result.additionalContact).toBe(true)
           })
         })
 
@@ -72,7 +65,7 @@ describe('Company Contacts - Contact Details presenter', () => {
           it('returns false', () => {
             const result = ContactDetailsPresenter.go(company, companyContact, licences)
 
-            expect(result.additionalContact).to.be.false()
+            expect(result.additionalContact).toBe(false)
           })
         })
       })
@@ -82,7 +75,7 @@ describe('Company Contacts - Contact Details presenter', () => {
           it('returns the created text with the created at date and the created by username', () => {
             const result = ContactDetailsPresenter.go(company, companyContact, licences)
 
-            expect(result.contact.created).to.equal('1 January 2022 by nexus6.hunter@offworld.net')
+            expect(result.contact.created).toEqual('1 January 2022 by nexus6.hunter@offworld.net')
           })
         })
 
@@ -94,7 +87,7 @@ describe('Company Contacts - Contact Details presenter', () => {
           it('returns the created text with the created at date', () => {
             const result = ContactDetailsPresenter.go(company, companyContact, licences)
 
-            expect(result.contact.created).to.equal('1 January 2022')
+            expect(result.contact.created).toEqual('1 January 2022')
           })
         })
       })
@@ -104,7 +97,7 @@ describe('Company Contacts - Contact Details presenter', () => {
           it('returns the created text with the updated at date and the updated by username', () => {
             const result = ContactDetailsPresenter.go(company, companyContact, licences)
 
-            expect(result.contact.lastUpdated).to.equal('1 January 2022 by void.kampff@tyrell.com')
+            expect(result.contact.lastUpdated).toEqual('1 January 2022 by void.kampff@tyrell.com')
           })
         })
 
@@ -116,7 +109,7 @@ describe('Company Contacts - Contact Details presenter', () => {
           it('returns the created text with the created at date', () => {
             const result = ContactDetailsPresenter.go(company, companyContact, licences)
 
-            expect(result.contact.lastUpdated).to.equal('1 January 2022')
+            expect(result.contact.lastUpdated).toEqual('1 January 2022')
           })
         })
       })
@@ -126,7 +119,7 @@ describe('Company Contacts - Contact Details presenter', () => {
           it('returns an empty array', () => {
             const result = ContactDetailsPresenter.go(company, companyContact, licences)
 
-            expect(result.contact.licences).to.equal([])
+            expect(result.contact.licences).toEqual([])
           })
         })
 
@@ -141,7 +134,7 @@ describe('Company Contacts - Contact Details presenter', () => {
           it('returns the licence refs', () => {
             const result = ContactDetailsPresenter.go(company, companyContact, licences)
 
-            expect(result.contact.licences).to.equal([licences[0].licenceRef])
+            expect(result.contact.licences).toEqual([licences[0].licenceRef])
           })
         })
       })
@@ -152,7 +145,7 @@ describe('Company Contacts - Contact Details presenter', () => {
         it('returns null', () => {
           const result = ContactDetailsPresenter.go(company, companyContact, licences)
 
-          expect(result.warning).to.be.null()
+          expect(result.warning).toBeNull()
         })
       })
 
@@ -164,7 +157,7 @@ describe('Company Contacts - Contact Details presenter', () => {
         it('returns a warning object', () => {
           const result = ContactDetailsPresenter.go(company, companyContact, licences)
 
-          expect(result.warning).to.equal({
+          expect(result.warning).toEqual({
             text: 'One or more licences for abstraction alerts have ended. No alerts will be sent for these.',
             iconFallbackText: 'Warning'
           })

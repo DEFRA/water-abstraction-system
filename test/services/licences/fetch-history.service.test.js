@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, after, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
@@ -21,7 +14,7 @@ describe('Licences - Fetch History service', () => {
   let licenceVersionTwo
   let modLog
 
-  before(async () => {
+  beforeAll(async () => {
     licence = await LicenceHelper.add()
 
     licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id })
@@ -34,7 +27,7 @@ describe('Licences - Fetch History service', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await licence.$query().delete()
     await licenceVersion.$query().delete()
     await licenceVersionTwo.$query().delete()
@@ -45,7 +38,7 @@ describe('Licences - Fetch History service', () => {
     it('returns the matching licence versions', async () => {
       const result = await FetchHistoryService.go(licence.id)
 
-      expect(result).to.equal([
+      expect(result).toEqual([
         {
           administrative: true,
           createdAt: licenceVersionTwo.createdAt,

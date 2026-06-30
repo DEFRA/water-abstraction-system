@@ -3,12 +3,7 @@
 const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const GotenbergRequest = require('../../../app/requests/gotenberg.request.js')
@@ -51,13 +46,13 @@ describe('Gotenberg - Generate Paper Return Request', () => {
     it('returns a "true" success status', async () => {
       const result = await GeneratePaperReturnRequest.send(pageData)
 
-      expect(result.succeeded).to.be.true()
+      expect(result.succeeded).toBe(true)
     })
 
     it('returns the data', async () => {
       const result = await GeneratePaperReturnRequest.send(pageData)
 
-      expect(result.response).to.equal({
+      expect(result.response).toEqual({
         statusCode: HTTP_STATUS_NO_CONTENT,
         body: pdfBytes
       })
@@ -69,22 +64,22 @@ describe('Gotenberg - Generate Paper Return Request', () => {
 
         expect(
           GotenbergRequest.post.calledWithMatch('forms/chromium/convert/html', Sinon.match.instanceOf(FormData))
-        ).to.be.true()
+        ).toBe(true)
 
         // Check the html has been added to the form data
         const appendCall = FormData.prototype.append.getCall(0)
-        expect(appendCall).to.exist()
+        expect(appendCall).toBeDefined()
         const blob = appendCall.args[1]
-        expect(blob).to.be.instanceOf(Blob)
+        expect(blob).toBeInstanceOf(Blob)
         const content = await blob.text()
-        expect(content).to.include('<!DOCTYPE html>')
+        expect(content).toContain('<!DOCTYPE html>')
 
         // Check all append calls
-        expect(FormData.prototype.append.calledWith('marginTop', '0')).to.be.true()
-        expect(FormData.prototype.append.calledWith('marginBottom', '0')).to.be.true()
-        expect(FormData.prototype.append.calledWith('marginLeft', '0')).to.be.true()
-        expect(FormData.prototype.append.calledWith('marginRight', '0')).to.be.true()
-        expect(FormData.prototype.append.calledWith('preferCssPageSize', 'true')).to.be.true()
+        expect(FormData.prototype.append.calledWith('marginTop', '0')).toBe(true)
+        expect(FormData.prototype.append.calledWith('marginBottom', '0')).toBe(true)
+        expect(FormData.prototype.append.calledWith('marginLeft', '0')).toBe(true)
+        expect(FormData.prototype.append.calledWith('marginRight', '0')).toBe(true)
+        expect(FormData.prototype.append.calledWith('preferCssPageSize', 'true')).toBe(true)
       })
 
       it('containing the html', async () => {
@@ -92,24 +87,24 @@ describe('Gotenberg - Generate Paper Return Request', () => {
 
         expect(
           GotenbergRequest.post.calledWithMatch('forms/chromium/convert/html', Sinon.match.instanceOf(FormData))
-        ).to.be.true()
+        ).toBe(true)
 
         // Get the second call to append (index 0) - this should be the html file
         const appendCall = FormData.prototype.append.getCall(0)
-        expect(appendCall).to.exist()
+        expect(appendCall).toBeDefined()
 
         // Check that the second argument (the value being appended) is a Blob
         const blob = appendCall.args[1]
-        expect(blob).to.be.instanceOf(Blob)
+        expect(blob).toBeInstanceOf(Blob)
 
         // Verify the blob content contains '<!DOCTYPE html>'
         const content = await blob.text()
-        expect(content).to.include('<!DOCTYPE html>')
+        expect(content).toContain('<!DOCTYPE html>')
 
         // Verify the complete append call signature
-        expect(
-          FormData.prototype.append.calledWith('index.html', Sinon.match.instanceOf(Blob), 'index.html')
-        ).to.be.true()
+        expect(FormData.prototype.append.calledWith('index.html', Sinon.match.instanceOf(Blob), 'index.html')).toBe(
+          true
+        )
       })
 
       it('containing the footer', async () => {
@@ -117,22 +112,22 @@ describe('Gotenberg - Generate Paper Return Request', () => {
 
         expect(
           GotenbergRequest.post.calledWithMatch('forms/chromium/convert/html', Sinon.match.instanceOf(FormData))
-        ).to.be.true()
+        ).toBe(true)
 
         // Get the second call to append (index 1) - this should be the footer file
         const appendCall = FormData.prototype.append.getCall(1)
-        expect(appendCall).to.exist()
+        expect(appendCall).toBeDefined()
 
         // Check that the second argument (the value being appended) is a Blob
         const blob = appendCall.args[1]
-        expect(blob).to.be.instanceOf(Blob)
+        expect(blob).toBeInstanceOf(Blob)
 
         // Verify the blob content contains 'footer'
         const content = await blob.text()
-        expect(content).to.include('footer')
+        expect(content).toContain('footer')
 
         // Verify the complete append call signature
-        expect(FormData.prototype.append.calledWith('files', Sinon.match.instanceOf(Blob), 'footer.html')).to.be.true()
+        expect(FormData.prototype.append.calledWith('files', Sinon.match.instanceOf(Blob), 'footer.html')).toBe(true)
       })
     })
   })

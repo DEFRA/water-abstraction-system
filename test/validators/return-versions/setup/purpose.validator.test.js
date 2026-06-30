@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const PurposeValidator = require('../../../../app/validators/return-versions/setup/purpose.validator.js')
 
@@ -40,8 +33,8 @@ describe('Return Versions Setup - Purpose validator', () => {
       it('confirms the data is valid', () => {
         const result = PurposeValidator.go(purposes, validPurposeIds)
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -64,8 +57,8 @@ describe('Return Versions Setup - Purpose validator', () => {
       it('confirms the data is valid', () => {
         const result = PurposeValidator.go(purposes, validPurposeIds)
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -80,8 +73,8 @@ describe('Return Versions Setup - Purpose validator', () => {
       it('confirms the data is valid', () => {
         const result = PurposeValidator.go(purposes, validPurposeIds)
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -96,8 +89,8 @@ describe('Return Versions Setup - Purpose validator', () => {
       it('confirms the data is valid', () => {
         const result = PurposeValidator.go(purposes, validPurposeIds)
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
       })
     })
   })
@@ -111,9 +104,9 @@ describe('Return Versions Setup - Purpose validator', () => {
       it('fails validation', () => {
         const result = PurposeValidator.go(purposes, validPurposeIds)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select any purpose for the requirements for returns')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select any purpose for the requirements for returns')
       })
     })
 
@@ -125,9 +118,9 @@ describe('Return Versions Setup - Purpose validator', () => {
       it('fails validation', () => {
         const result = PurposeValidator.go(purposes, validPurposeIds)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select any purpose for the requirements for returns')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select any purpose for the requirements for returns')
       })
     })
 
@@ -147,9 +140,9 @@ describe('Return Versions Setup - Purpose validator', () => {
       it('fails validation', () => {
         const result = PurposeValidator.go(purposes, validPurposeIds)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Purpose description must be 100 characters or less')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Purpose description must be 100 characters or less')
       })
     })
 
@@ -161,9 +154,9 @@ describe('Return Versions Setup - Purpose validator', () => {
       it('fails validation', () => {
         const result = PurposeValidator.go(purposes, validPurposeIds)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select any purpose for the requirements for returns')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select any purpose for the requirements for returns')
       })
     })
   })

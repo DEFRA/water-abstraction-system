@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ReportedValidator = require('../../../../app/validators/return-logs/setup/reported.validator.js')
 
@@ -22,7 +15,7 @@ describe('Return Logs Setup - Reported validator', () => {
       it('confirms the payload is valid', () => {
         const result = ReportedValidator.go(payload)
 
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -34,7 +27,7 @@ describe('Return Logs Setup - Reported validator', () => {
       it('confirms the payload is valid', () => {
         const result = ReportedValidator.go(payload)
 
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
   })
@@ -48,8 +41,8 @@ describe('Return Logs Setup - Reported validator', () => {
       it('fails validation with the message "Select how this return was reported"', () => {
         const result = ReportedValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select how this return was reported')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select how this return was reported')
       })
     })
   })

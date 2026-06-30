@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const CompanyContactModel = require('../../../../app/models/company-contact.model.js')
@@ -59,7 +54,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
       const expectedSessionData = _expectedSessionData(companyContact, company, contact, licences)
 
-      expect(matchingSession).to.equal({
+      expect(matchingSession).toEqual({
         ...expectedSessionData,
         createdAt: matchingSession.createdAt,
         data: expectedSessionData,
@@ -81,7 +76,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
           const matchingSession = await SessionModel.query().findById(result.id)
 
-          expect(matchingSession.abstractionAlerts).to.equal('yes')
+          expect(matchingSession.abstractionAlerts).toEqual('yes')
         })
 
         describe('and there are abstraction alert licences', () => {
@@ -94,7 +89,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
             const matchingSession = await SessionModel.query().findById(result.id)
 
-            expect(matchingSession.abstractionAlerts).to.equal('some')
+            expect(matchingSession.abstractionAlerts).toEqual('some')
           })
         })
       })
@@ -105,7 +100,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
           const matchingSession = await SessionModel.query().findById(result.id)
 
-          expect(matchingSession.abstractionAlerts).to.equal('no')
+          expect(matchingSession.abstractionAlerts).toEqual('no')
         })
       })
     })
@@ -125,7 +120,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
           const matchingSession = await SessionModel.query().findById(result.id)
 
-          expect(matchingSession.abstractionAlerts).to.equal('yes')
+          expect(matchingSession.abstractionAlerts).toEqual('yes')
         })
 
         describe('and there are abstraction alert licences', () => {
@@ -138,7 +133,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
             const matchingSession = await SessionModel.query().findById(result.id)
 
-            expect(matchingSession.abstractionAlerts).to.equal('no')
+            expect(matchingSession.abstractionAlerts).toEqual('no')
           })
         })
       })
@@ -149,7 +144,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
           const matchingSession = await SessionModel.query().findById(result.id)
 
-          expect(matchingSession.abstractionAlerts).to.equal('no')
+          expect(matchingSession.abstractionAlerts).toEqual('no')
         })
       })
     })
@@ -161,7 +156,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
       const matchingSession = await SessionModel.query().findById(result.id)
 
-      expect(matchingSession.name).to.equal('Rachael Tyrell')
+      expect(matchingSession.name).toEqual('Rachael Tyrell')
     })
   })
 })

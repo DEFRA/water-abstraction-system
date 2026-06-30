@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const YarStub = require('../../support/stubs/yar.stub.js')
@@ -49,7 +44,7 @@ describe('Index Bill Runs service', () => {
     it('returns the page data for the view', async () => {
       const result = await IndexBillRunsService.go(yarStub, page)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'bill-runs',
         filters: { number: null, regions: [], runTypes: [], statuses: [], yearCreated: null, openFilter: false },
         billRuns: [
@@ -176,12 +171,12 @@ describe('Index Bill Runs service', () => {
       it('returns the page data for the view', async () => {
         const result = await IndexBillRunsService.go(yarStub, page)
 
-        expect(result.billRuns).to.have.length(2)
-        expect(result.filters.openFilter).to.be.false()
-        expect(result.pageTitle).to.equal('Bill runs')
-        expect(result.pagination.component).to.exist()
-        expect(result.pagination.numberOfPages).to.equal(3) // 70 results with 25 per page = 3 pages
-        expect(result.pagination.showingMessage).to.equal('Showing 2 of 70 bill runs')
+        expect(result.billRuns).toHaveLength(2)
+        expect(result.filters.openFilter).toBe(false)
+        expect(result.pageTitle).toEqual('Bill runs')
+        expect(result.pagination.component).toBeDefined()
+        expect(result.pagination.numberOfPages).toEqual(3) // 70 results with 25 per page = 3 pages
+        expect(result.pagination.showingMessage).toEqual('Showing 2 of 70 bill runs')
       })
     })
 
@@ -198,12 +193,12 @@ describe('Index Bill Runs service', () => {
       it('returns the page data for the view', async () => {
         const result = await IndexBillRunsService.go(yarStub, page)
 
-        expect(result.billRuns).to.have.length(2)
-        expect(result.filters.openFilter).to.be.false()
-        expect(result.pageTitle).to.equal('Bill runs')
-        expect(result.pagination.component).to.exist()
-        expect(result.pagination.numberOfPages).to.equal(3) // 70 results with 25 per page = 3 pages
-        expect(result.pagination.showingMessage).to.equal('Showing 2 of 70 bill runs')
+        expect(result.billRuns).toHaveLength(2)
+        expect(result.filters.openFilter).toBe(false)
+        expect(result.pageTitle).toEqual('Bill runs')
+        expect(result.pagination.component).toBeDefined()
+        expect(result.pagination.numberOfPages).toEqual(3) // 70 results with 25 per page = 3 pages
+        expect(result.pagination.showingMessage).toEqual('Showing 2 of 70 bill runs')
       })
     })
 
@@ -220,12 +215,12 @@ describe('Index Bill Runs service', () => {
       it('returns the page data for the view', async () => {
         const result = await IndexBillRunsService.go(yarStub, page)
 
-        expect(result.billRuns).to.be.empty()
-        expect(result.filters.openFilter).to.be.false()
-        expect(result.pageTitle).to.equal('Bill runs')
-        expect(result.pagination.component).to.exist()
-        expect(result.pagination.numberOfPages).to.equal(3) // 70 results with 25 per page = 3 pages
-        expect(result.pagination.showingMessage).to.equal('Showing 0 of 70 bill runs')
+        expect(result.billRuns).toHaveLength(0)
+        expect(result.filters.openFilter).toBe(false)
+        expect(result.pageTitle).toEqual('Bill runs')
+        expect(result.pagination.component).toBeDefined()
+        expect(result.pagination.numberOfPages).toEqual(3) // 70 results with 25 per page = 3 pages
+        expect(result.pagination.showingMessage).toEqual('Showing 0 of 70 bill runs')
       })
     })
   })
@@ -245,7 +240,7 @@ describe('Index Bill Runs service', () => {
       it('returns blank filters and that the controls should be closed', async () => {
         const result = await IndexBillRunsService.go(yarStub, page)
 
-        expect(result.filters).to.equal({
+        expect(result.filters).toEqual({
           number: null,
           regions: [],
           runTypes: [],
@@ -265,7 +260,7 @@ describe('Index Bill Runs service', () => {
       it('returns blank filters and that the controls should be closed', async () => {
         const result = await IndexBillRunsService.go(yarStub, page)
 
-        expect(result.filters).to.equal({
+        expect(result.filters).toEqual({
           number: null,
           regions: [],
           runTypes: [],
@@ -290,7 +285,7 @@ describe('Index Bill Runs service', () => {
       it('returns the saved filters and that the controls should be open', async () => {
         const result = await IndexBillRunsService.go(yarStub, page)
 
-        expect(result.filters).to.equal({
+        expect(result.filters).toEqual({
           number: null,
           regions: '1d562e9a-2104-41d9-aa75-c008a7ec9059',
           runTypes: [],

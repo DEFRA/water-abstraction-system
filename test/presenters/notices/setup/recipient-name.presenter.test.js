@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
@@ -27,7 +20,7 @@ describe('Notices - Setup - Recipient Name presenter', () => {
     it('returns page data for the view', () => {
       const result = RecipientNamePresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: { text: 'Back', href: `/system/notices/setup/${session.id}/select-recipients` },
         name: undefined,
         pageTitle: "Enter the recipient's name",
@@ -43,7 +36,7 @@ describe('Notices - Setup - Recipient Name presenter', () => {
       it('returns previously set name', () => {
         const result = RecipientNamePresenter.go(session)
 
-        expect(result.name).to.equal('Ronald Weasley')
+        expect(result.name).toEqual('Ronald Weasley')
       })
     })
   })

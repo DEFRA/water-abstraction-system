@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
@@ -39,7 +32,7 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
   it('correctly formats the data to a csv string', () => {
     const result = DownloadAbstractionAlertPresenter.go(testRecipients, session)
 
-    expect(result).to.equal(
+    expect(result).toEqual(
       // Headers
       'Licence,Abstraction periods,Measure type,Threshold,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
         // Row - Primary user
@@ -58,7 +51,7 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
     // We want to test the header includes the new line
     headers += '\n'
 
-    expect(headers).to.equal(
+    expect(headers).toEqual(
       'Licence,' +
         'Abstraction periods,' +
         'Measure type,' +
@@ -86,7 +79,7 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
       // We want to test the row includes the new line
       row += '\n'
 
-      expect(row).to.equal(
+      expect(row).toEqual(
         `"${recipients.additionalContact.licence_refs}",` + // Licence
           '"1 January to 31 March",' + // Abstraction periods
           '"level",' + // Measure type
@@ -114,7 +107,7 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
       // We want to test the row includes the new line
       row += '\n'
 
-      expect(row).to.equal(
+      expect(row).toEqual(
         `"${recipients.primaryUser.licence_refs}",` + // Licence
           '"1 February to 1 January",' + // Abstraction periods
           '"level",' + // Measure type
@@ -143,7 +136,7 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
         // We want to test the row includes the new line
         row += '\n'
 
-        expect(row).to.equal(
+        expect(row).toEqual(
           `"${recipients.licenceHolder.licence_refs}",` + // Licence
             '"1 January to 31 March",' + // Abstraction periods
             '"flow",' + // Measure type
@@ -183,7 +176,7 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
         // We want to test the row includes the new line
         row += '\n'
 
-        expect(row).to.equal(
+        expect(row).toEqual(
           `"${recipients.licenceHolder.licence_refs}",` + // Licence
             '"1 January to 31 March",' + // Abstraction periods
             '"flow",' + // Measure type
@@ -247,7 +240,7 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
     it('correctly returns the csv string, filename and type', () => {
       const result = DownloadAbstractionAlertPresenter.go(testRecipients, session)
 
-      expect(result).to.equal(
+      expect(result).toEqual(
         // Headers
         'Licence,Abstraction periods,Measure type,Threshold,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           // Row - licence holder

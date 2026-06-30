@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const FactorsValidator = require('../../../../app/validators/bill-runs/review/factors.validator.js')
 
@@ -21,8 +14,8 @@ describe('Bill Runs Review - Factors validator', () => {
     it('confirms the data is valid', () => {
       const result = FactorsValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -36,9 +29,9 @@ describe('Bill Runs Review - Factors validator', () => {
       it('fails the validation with the messages "Enter an aggregate factor" and "Enter a charge factor"', () => {
         const result = FactorsValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter an aggregate factor')
-        expect(result.error.details[1].message).to.equal('Enter a charge factor')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Enter an aggregate factor')
+        expect(result.error.details[1].message).toEqual('Enter a charge factor')
       })
     })
 
@@ -51,8 +44,8 @@ describe('Bill Runs Review - Factors validator', () => {
         it('fails the validation with the message "Enter a aggregate factor"', () => {
           const result = FactorsValidator.go(payload)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter an aggregate factor')
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Enter an aggregate factor')
         })
       })
 
@@ -64,8 +57,8 @@ describe('Bill Runs Review - Factors validator', () => {
         it('fails the validation with the message "The aggregate factor must be a number"', () => {
           const result = FactorsValidator.go(payload)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('The aggregate factor must be a number')
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The aggregate factor must be a number')
         })
       })
 
@@ -77,8 +70,8 @@ describe('Bill Runs Review - Factors validator', () => {
         it('fails the validation with the message "The aggregate factor must not have more than 15 decimal places"', () => {
           const result = FactorsValidator.go(payload)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal(
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual(
             'The aggregate factor must not have more than 15 decimal places'
           )
         })
@@ -92,8 +85,8 @@ describe('Bill Runs Review - Factors validator', () => {
         it('fails the validation with the message "The aggregate factor must be 0 or more"', () => {
           const result = FactorsValidator.go(payload)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('The aggregate factor must be 0 or more')
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The aggregate factor must be 0 or more')
         })
       })
 
@@ -107,10 +100,8 @@ describe('Bill Runs Review - Factors validator', () => {
         it('fails the validation with the message "The aggregate factor must be between 0 and 9007199254740991"', () => {
           const result = FactorsValidator.go(payload)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal(
-            'The aggregate factor must be between 0 and 9007199254740991'
-          )
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The aggregate factor must be between 0 and 9007199254740991')
         })
       })
     })
@@ -124,8 +115,8 @@ describe('Bill Runs Review - Factors validator', () => {
         it('fails the validation with the message "Enter a charge factor"', () => {
           const result = FactorsValidator.go(payload)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a charge factor')
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Enter a charge factor')
         })
       })
 
@@ -137,8 +128,8 @@ describe('Bill Runs Review - Factors validator', () => {
         it('fails the validation with the message "The charge factor must be a number"', () => {
           const result = FactorsValidator.go(payload)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('The charge factor must be a number')
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The charge factor must be a number')
         })
       })
 
@@ -150,10 +141,8 @@ describe('Bill Runs Review - Factors validator', () => {
         it('fails the validation with the message "The charge factor must not have more than 15 decimal places"', () => {
           const result = FactorsValidator.go(payload)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal(
-            'The charge factor must not have more than 15 decimal places'
-          )
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The charge factor must not have more than 15 decimal places')
         })
       })
 
@@ -165,8 +154,8 @@ describe('Bill Runs Review - Factors validator', () => {
         it('fails the validation with the message "The charge factor must be 0 or more"', () => {
           const result = FactorsValidator.go(payload)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('The charge factor must be 0 or more')
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The charge factor must be 0 or more')
         })
       })
 
@@ -180,8 +169,8 @@ describe('Bill Runs Review - Factors validator', () => {
         it('fails the validation with the message "The charge factor must be between 0 and 9007199254740991"', () => {
           const result = FactorsValidator.go(payload)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('The charge factor must be between 0 and 9007199254740991')
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The charge factor must be between 0 and 9007199254740991')
         })
       })
     })

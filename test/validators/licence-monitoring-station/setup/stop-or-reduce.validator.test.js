@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const StopOrReduceValidator = require('../../../../app/validators/licence-monitoring-station/setup/stop-or-reduce.validator.js')
 
@@ -24,7 +17,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce validator', () => {
       it('confirms the data is valid', () => {
         const result = StopOrReduceValidator.go(payload)
 
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -40,7 +33,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce validator', () => {
         it('confirms the data is valid', () => {
           const result = StopOrReduceValidator.go(payload)
 
-          expect(result.error).not.to.exist()
+          expect(result.error).toBeUndefined()
         })
       })
 
@@ -55,7 +48,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce validator', () => {
         it('confirms the data is valid', () => {
           const result = StopOrReduceValidator.go(payload)
 
-          expect(result.error).not.to.exist()
+          expect(result.error).toBeUndefined()
         })
       })
     })
@@ -70,8 +63,8 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce validator', () => {
       it('fails validation', () => {
         const result = StopOrReduceValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select if the licence holder needs to stop or reduce')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select if the licence holder needs to stop or reduce')
       })
     })
 
@@ -85,8 +78,8 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce validator', () => {
       it('fails validation', () => {
         const result = StopOrReduceValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal(
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual(
           'Select if the licence holder needs to stop abstraction when they reach a certain amount'
         )
       })

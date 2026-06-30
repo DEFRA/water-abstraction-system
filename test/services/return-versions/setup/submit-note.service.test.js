@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -75,17 +70,17 @@ describe('Return Versions Setup - Submit Note service', () => {
         it('saves the submitted value', async () => {
           await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-          expect(session.note).to.equal({
+          expect(session.note).toEqual({
             content: 'A new note related to return requirement',
             userEmail: 'carol.shaw@atari.com'
           })
-          expect(session.$update.called).to.be.true()
+          expect(session.$update.called).toBe(true)
         })
 
         it('returns the correct details the controller needs to redirect the journey', async () => {
           const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-          expect(result).to.equal({})
+          expect(result).toEqual({})
         })
 
         it('sets the notification message to "Added"', async () => {
@@ -93,8 +88,8 @@ describe('Return Versions Setup - Submit Note service', () => {
 
           const [flashType, notification] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ text: 'Note added', title: 'Added' })
+          expect(flashType).toEqual('notification')
+          expect(notification).toEqual({ text: 'Note added', title: 'Added' })
         })
       })
 
@@ -132,17 +127,17 @@ describe('Return Versions Setup - Submit Note service', () => {
         it('saves the submitted value', async () => {
           await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-          expect(session.note).to.equal({
+          expect(session.note).toEqual({
             content: 'An updated note related to return requirement',
             userEmail: 'carol.shaw@atari.com'
           })
-          expect(session.$update.called).to.be.true()
+          expect(session.$update.called).toBe(true)
         })
 
         it('returns the journey to redirect the page', async () => {
           const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-          expect(result).to.equal({})
+          expect(result).toEqual({})
         })
 
         it('sets the notification message to "Updated"', async () => {
@@ -150,8 +145,8 @@ describe('Return Versions Setup - Submit Note service', () => {
 
           const [flashType, notification] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ title: 'Updated', text: 'Note updated' })
+          expect(flashType).toEqual('notification')
+          expect(notification).toEqual({ title: 'Updated', text: 'Note updated' })
         })
       })
     })
@@ -164,26 +159,23 @@ describe('Return Versions Setup - Submit Note service', () => {
       it('returns page data for the view', async () => {
         const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-        expect(result).to.equal(
-          {
-            pageTitle: 'Add a note',
-            pageTitleCaption: 'Licence 01/ABC',
-            backLink: {
-              href: `/system/return-versions/setup/${session.id}/check`,
-              text: 'Back'
-            },
-            licenceRef: '01/ABC',
-            note: null
+        expect(result).toMatchObject({
+          pageTitle: 'Add a note',
+          pageTitleCaption: 'Licence 01/ABC',
+          backLink: {
+            href: `/system/return-versions/setup/${session.id}/check`,
+            text: 'Back'
           },
-          { skip: ['sessionId', 'error'] }
-        )
+          licenceRef: '01/ABC',
+          note: null
+        })
       })
 
       describe('because the user has not entered anything', () => {
         it('includes an error for the input element', async () => {
           const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             errorList: [
               {
                 href: '#note',
@@ -216,7 +208,7 @@ describe('Return Versions Setup - Submit Note service', () => {
         it('includes an error for the input element', async () => {
           const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             errorList: [
               {
                 href: '#note',

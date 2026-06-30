@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
@@ -177,12 +170,12 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
   // it is very large. Instead we assert that the dynamic sections are populated with the expected SQL.
   describe('when called', () => {
     describe('and the notice type is "invitations"', () => {
-      before(() => {
+      beforeAll(() => {
         noticeType = NoticeType.INVITATIONS
       })
 
       describe('and the query is NOT for generating a download', () => {
-        before(() => {
+        beforeAll(() => {
           download = false
         })
 
@@ -190,27 +183,27 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           const result = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
           // Confirm it will extract primary user recipients
-          expect(result).contains(primaryUserExpectedQuery)
+          expect(result).toContain(primaryUserExpectedQuery)
 
           // Confirm it will extract returns user recipients
-          expect(result).contains(returnsUserExpectedQuery)
+          expect(result).toContain(returnsUserExpectedQuery)
 
           // Confirm it will extract licence holder recipients
-          expect(result).contains(licenceHolderExpectedQuery)
+          expect(result).toContain(licenceHolderExpectedQuery)
 
           // Confirm it will extract returns to recipients
-          expect(result).contains(returnsToExpectedQuery)
+          expect(result).toContain(returnsToExpectedQuery)
 
           // Confirm it will process the results for sending
-          expect(result).contains(processForSendingExpectedQuery)
+          expect(result).toContain(processForSendingExpectedQuery)
 
           // Confirm it will NOT process the results for downloading
-          expect(result).not.contains(processForDownloadingExpectedQuery)
+          expect(result).not.toContain(processForDownloadingExpectedQuery)
         })
       })
 
       describe('and the query is for generating a download', () => {
-        before(() => {
+        beforeAll(() => {
           download = true
         })
 
@@ -218,33 +211,33 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           const result = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
           // Confirm it will extract primary user recipients
-          expect(result).contains(primaryUserExpectedQuery)
+          expect(result).toContain(primaryUserExpectedQuery)
 
           // Confirm it will extract returns user recipients
-          expect(result).contains(returnsUserExpectedQuery)
+          expect(result).toContain(returnsUserExpectedQuery)
 
           // Confirm it will extract licence holder recipients
-          expect(result).contains(licenceHolderExpectedQuery)
+          expect(result).toContain(licenceHolderExpectedQuery)
 
           // Confirm it will extract returns to recipients
-          expect(result).contains(returnsToExpectedQuery)
+          expect(result).toContain(returnsToExpectedQuery)
 
           // Confirm it will process the results for downloading
-          expect(result).contains(processForDownloadingExpectedQuery)
+          expect(result).toContain(processForDownloadingExpectedQuery)
 
           /// Confirm it will NOT process the results for sending
-          expect(result).not.contains(processForSendingExpectedQuery)
+          expect(result).not.toContain(processForSendingExpectedQuery)
         })
       })
     })
 
     describe('and the notice type is "reminders"', () => {
-      before(() => {
+      beforeAll(() => {
         noticeType = NoticeType.REMINDERS
       })
 
       describe('and the query is NOT for generating a download', () => {
-        before(() => {
+        beforeAll(() => {
           download = false
         })
 
@@ -252,27 +245,27 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           const result = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
           // Confirm it will extract primary user recipients
-          expect(result).contains(primaryUserExpectedQuery)
+          expect(result).toContain(primaryUserExpectedQuery)
 
           // Confirm it will extract returns user recipients
-          expect(result).contains(returnsUserExpectedQuery)
+          expect(result).toContain(returnsUserExpectedQuery)
 
           // Confirm it will extract licence holder recipients
-          expect(result).contains(licenceHolderExpectedQuery)
+          expect(result).toContain(licenceHolderExpectedQuery)
 
           // Confirm it will extract returns to recipients
-          expect(result).contains(returnsToExpectedQuery)
+          expect(result).toContain(returnsToExpectedQuery)
 
           // Confirm it will process the results for sending
-          expect(result).contains(processForSendingExpectedQuery)
+          expect(result).toContain(processForSendingExpectedQuery)
 
           // Confirm it will NOT process the results for downloading
-          expect(result).not.contains(processForDownloadingExpectedQuery)
+          expect(result).not.toContain(processForDownloadingExpectedQuery)
         })
       })
 
       describe('and the query is for generating a download', () => {
-        before(() => {
+        beforeAll(() => {
           download = true
         })
 
@@ -280,33 +273,33 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           const result = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
           // Confirm it will extract primary user recipients
-          expect(result).contains(primaryUserExpectedQuery)
+          expect(result).toContain(primaryUserExpectedQuery)
 
           // Confirm it will extract returns user recipients
-          expect(result).contains(returnsUserExpectedQuery)
+          expect(result).toContain(returnsUserExpectedQuery)
 
           // Confirm it will extract licence holder recipients
-          expect(result).contains(licenceHolderExpectedQuery)
+          expect(result).toContain(licenceHolderExpectedQuery)
 
           // Confirm it will extract returns to recipients
-          expect(result).contains(returnsToExpectedQuery)
+          expect(result).toContain(returnsToExpectedQuery)
 
           // Confirm it will process the results for downloading
-          expect(result).contains(processForDownloadingExpectedQuery)
+          expect(result).toContain(processForDownloadingExpectedQuery)
 
           /// Confirm it will NOT process the results for sending
-          expect(result).not.contains(processForSendingExpectedQuery)
+          expect(result).not.toContain(processForSendingExpectedQuery)
         })
       })
     })
 
     describe('and the notice type is "paper return"', () => {
-      before(() => {
+      beforeAll(() => {
         noticeType = NoticeType.PAPER_RETURN
       })
 
       describe('and the query is NOT for generating a download', () => {
-        before(() => {
+        beforeAll(() => {
           download = false
         })
 
@@ -314,27 +307,27 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           const result = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
           // Confirm it will NOT extract primary user recipients
-          expect(result).not.contains(primaryUserExpectedQuery)
+          expect(result).not.toContain(primaryUserExpectedQuery)
 
           // Confirm it will NOT extract returns user recipients
-          expect(result).not.contains(returnsUserExpectedQuery)
+          expect(result).not.toContain(returnsUserExpectedQuery)
 
           // Confirm it will extract licence holder recipients
-          expect(result).contains(licenceHolderExpectedQuery)
+          expect(result).toContain(licenceHolderExpectedQuery)
 
           // Confirm it will extract returns to recipients
-          expect(result).contains(returnsToExpectedQuery)
+          expect(result).toContain(returnsToExpectedQuery)
 
           // Confirm it will process the results for sending
-          expect(result).contains(processForSendingExpectedQuery)
+          expect(result).toContain(processForSendingExpectedQuery)
 
           // Confirm it will NOT process the results for downloading
-          expect(result).not.contains(processForDownloadingExpectedQuery)
+          expect(result).not.toContain(processForDownloadingExpectedQuery)
         })
       })
 
       describe('and the query is for generating a download', () => {
-        before(() => {
+        beforeAll(() => {
           download = true
         })
 
@@ -342,28 +335,28 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           const result = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
           // Confirm it will NOT extract primary user recipients
-          expect(result).not.contains(primaryUserExpectedQuery)
+          expect(result).not.toContain(primaryUserExpectedQuery)
 
           // Confirm it will NOT extract returns user recipients
-          expect(result).not.contains(returnsUserExpectedQuery)
+          expect(result).not.toContain(returnsUserExpectedQuery)
 
           // Confirm it will extract licence holder recipients
-          expect(result).contains(licenceHolderExpectedQuery)
+          expect(result).toContain(licenceHolderExpectedQuery)
 
           // Confirm it will extract returns to recipients
-          expect(result).contains(returnsToExpectedQuery)
+          expect(result).toContain(returnsToExpectedQuery)
 
           // Confirm it will process the results for downloading
-          expect(result).contains(processForDownloadingExpectedQuery)
+          expect(result).toContain(processForDownloadingExpectedQuery)
 
           /// Confirm it will NOT process the results for sending
-          expect(result).not.contains(processForSendingExpectedQuery)
+          expect(result).not.toContain(processForSendingExpectedQuery)
         })
       })
     })
 
     describe('and the notice type is "failed invitation"', () => {
-      before(() => {
+      beforeAll(() => {
         noticeType = NoticeType.ALTERNATE_INVITATION
         download = false
       })
@@ -372,28 +365,28 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         const result = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
         // Confirm it will NOT extract primary user recipients
-        expect(result).not.contains(primaryUserExpectedQuery)
+        expect(result).not.toContain(primaryUserExpectedQuery)
 
         // Confirm it will NOT extract returns user recipients
-        expect(result).not.contains(returnsUserExpectedQuery)
+        expect(result).not.toContain(returnsUserExpectedQuery)
 
         // Confirm it will extract licence holder recipients
-        expect(result).contains(licenceHolderExpectedQuery)
+        expect(result).toContain(licenceHolderExpectedQuery)
 
         // Confirm it will NOT extract returns to recipients
-        expect(result).not.contains(returnsToExpectedQuery)
+        expect(result).not.toContain(returnsToExpectedQuery)
 
         // Confirm it will process the results for sending
-        expect(result).contains(processForSendingExpectedQuery)
+        expect(result).toContain(processForSendingExpectedQuery)
 
         // Confirm it will NOT process the results for downloading
-        expect(result).not.contains(processForDownloadingExpectedQuery)
+        expect(result).not.toContain(processForDownloadingExpectedQuery)
       })
     })
   })
 
   describe('when executed', () => {
-    before(async () => {
+    beforeAll(async () => {
       scenarios = {}
       returnLogs = []
 
@@ -461,17 +454,17 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       })
     })
 
-    after(async () => {
+    afterAll(async () => {
       await RecipientScenariosSeeder.clean(scenarios)
     })
 
     describe('and the notice type is "invitations" or "reminders"', () => {
-      before(() => {
+      beforeAll(() => {
         noticeType = NoticeType.INVITATIONS
       })
 
       describe('and the query is NOT for generating a download', () => {
-        before(() => {
+        beforeAll(() => {
           download = false
         })
 
@@ -483,7 +476,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           // NOTE: Because sorting is done in the code not the query, there is no 'order by' to improve performance.
           // That means we cannot assert the order that the records come out. But we can assert the number of records,
           // and that all we expect are present
-          expect(rows.length).to.equal(10)
+          expect(rows.length).toEqual(10)
         })
 
         it('(Scenario 1) returns the licence holder when only the licence holder is present', async () => {
@@ -493,7 +486,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolderOnly)
 
-          expect(rows).to.contain(sendingResults[0])
+          expect(rows).toContainEqual(sendingResults[0])
         })
 
         it('(Scenario 2) returns both the licence holder and returns to when they are different', async () => {
@@ -505,8 +498,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
             scenarios.licenceHolderWithDifferentReturnsTo
           )
 
-          expect(rows).to.contain(sendingResults[0])
-          expect(rows).to.contain(sendingResults[1])
+          expect(rows).toContainEqual(sendingResults[0])
+          expect(rows).toContainEqual(sendingResults[1])
         })
 
         it('(Scenario 3) returns the licence holder when only it is present and the same for multiple licences', async () => {
@@ -518,10 +511,10 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
             scenarios.licenceHolderWithMultipleLicences
           )
 
-          expect(rows).to.contain(sendingResults[0])
+          expect(rows).toContainEqual(sendingResults[0])
           // We could test rows contains the second licence holder recipient recorded in the scenario, but they are the
           // same so it would also return true and not prove anything
-          expect(sendingResults[0]).to.equal(sendingResults[1])
+          expect(sendingResults[0]).toEqual(sendingResults[1])
         })
 
         it('(Scenario 4) returns only the licence holder when it and the returns to are the same', async () => {
@@ -533,9 +526,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
             scenarios.licenceHolderWithSameReturnsTo
           )
 
-          expect(rows).to.contain(sendingResults[0])
+          expect(rows).toContainEqual(sendingResults[0])
 
-          expect(rows).not.to.contain(sendingResults[1])
+          expect(rows).not.toContainEqual(sendingResults[1])
         })
 
         it('(Scenario 5) returns only the primary user when the licence is registered and there are no returns users', async () => {
@@ -545,10 +538,10 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.primaryUserOnly)
 
-          expect(rows).to.contain(sendingResults[1])
+          expect(rows).toContainEqual(sendingResults[1])
 
           // NOTE: When a licence is registered sendingResult[0] will always reference the licence holder
-          expect(rows).not.to.contain(sendingResults[0])
+          expect(rows).not.toContainEqual(sendingResults[0])
         })
 
         it('(Scenario 6) returns the primary user and returns user when the licence is registered and they are different', async () => {
@@ -560,10 +553,10 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
             scenarios.primaryUserWithDifferentReturnsAgent
           )
 
-          expect(rows).to.contain(sendingResults[1])
-          expect(rows).to.contain(sendingResults[2])
+          expect(rows).toContainEqual(sendingResults[1])
+          expect(rows).toContainEqual(sendingResults[2])
 
-          expect(rows).not.to.contain(sendingResults[0])
+          expect(rows).not.toContainEqual(sendingResults[0])
         })
 
         it('(Scenario 7) returns only the primary user when it is the same for multiple registered licences', async () => {
@@ -575,17 +568,17 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
             scenarios.primaryUserWithMultipleLicences
           )
 
-          expect(rows).to.contain(sendingResults[1])
+          expect(rows).toContainEqual(sendingResults[1])
 
           // sendingResults[1] and [3] reference the two primary users, with the same details. This means the
           // sendingResults for each are the same, which we prove here.
-          expect(sendingResults[1]).to.equal(sendingResults[3])
+          expect(sendingResults[1]).toEqual(sendingResults[3])
 
           // NOTE: Because we created two return logs with different licence refs, we have to create two licence
           // document headers with the same 'licence holder' to recreate linking the same primary user across multiple
           // licences. This means sendingResults[0] references the first licence holder, and [2] the second.
-          expect(rows).not.to.contain(sendingResults[0])
-          expect(rows).not.to.contain(sendingResults[2])
+          expect(rows).not.toContainEqual(sendingResults[0])
+          expect(rows).not.toContainEqual(sendingResults[2])
         })
 
         it('(Scenario 8) returns only the primary user when it and the returns user are the same for a registered licence', async () => {
@@ -597,15 +590,15 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
             scenarios.primaryUserWithSameReturnsAgent
           )
 
-          expect(rows).to.contain(sendingResults[1])
+          expect(rows).toContainEqual(sendingResults[1])
 
-          expect(rows).not.to.contain(sendingResults[0])
-          expect(rows).not.to.contain(sendingResults[2])
+          expect(rows).not.toContainEqual(sendingResults[0])
+          expect(rows).not.toContainEqual(sendingResults[2])
         })
       })
 
       describe('and the query is for generating a download', () => {
-        before(() => {
+        beforeAll(() => {
           download = true
         })
 
@@ -617,7 +610,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           // NOTE: Because sorting is done in the code not the query, there is no 'order by' to improve performance.
           // That means we cannot assert the order that the records come out. But we can assert the number of records,
           // and that all we expect are present
-          expect(rows.length).to.equal(13)
+          expect(rows.length).toEqual(13)
         })
 
         it('(Scenario 1) returns the licence holder when only the licence holder is present', async () => {
@@ -629,8 +622,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           // We created two return logs for the same licence  and licence holder. So we expect two results: one for each
           // return log
-          expect(rows).to.contain(downloadingResults[0])
-          expect(rows).to.contain(downloadingResults[1])
+          expect(rows).toContainEqual(downloadingResults[0])
+          expect(rows).toContainEqual(downloadingResults[1])
         })
 
         it('(Scenario 2) returns both the licence holder and returns to when they are different', async () => {
@@ -642,8 +635,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
             scenarios.licenceHolderWithDifferentReturnsTo
           )
 
-          expect(rows).to.contain(downloadingResults[0])
-          expect(rows).to.contain(downloadingResults[1])
+          expect(rows).toContainEqual(downloadingResults[0])
+          expect(rows).toContainEqual(downloadingResults[1])
         })
 
         it('(Scenario 3) returns the licence holder when only it is present and the same for multiple licences', async () => {
@@ -657,13 +650,13 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           // Unlike sending, because we want the return log information it means though the recipient details are the
           // same, the return logs are not. So, we get a row per return log for the licence holder.
-          expect(rows).to.contain(downloadingResults[0])
-          expect(rows).to.contain(downloadingResults[1])
+          expect(rows).toContainEqual(downloadingResults[0])
+          expect(rows).toContainEqual(downloadingResults[1])
 
           // downloadingResults[0] & [1], and [2] & [3] reference the two licence holders, with the same details. This
           // means the downloadingResults for each are the same, which we prove here.
-          expect(downloadingResults[0]).to.equal(downloadingResults[2])
-          expect(downloadingResults[1]).to.equal(downloadingResults[3])
+          expect(downloadingResults[0]).toEqual(downloadingResults[2])
+          expect(downloadingResults[1]).toEqual(downloadingResults[3])
         })
 
         it('(Scenario 4) returns only the licence holder when it and the returns to are the same', async () => {
@@ -675,9 +668,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
             scenarios.licenceHolderWithSameReturnsTo
           )
 
-          expect(rows).to.contain(downloadingResults[0])
+          expect(rows).toContainEqual(downloadingResults[0])
 
-          expect(rows).not.to.contain(downloadingResults[1])
+          expect(rows).not.toContainEqual(downloadingResults[1])
         })
 
         it('(Scenario 5) returns only the primary user when the licence is registered and there are no returns users', async () => {
@@ -687,10 +680,10 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios.primaryUserOnly)
 
-          expect(rows).to.contain(downloadingResults[1])
+          expect(rows).toContainEqual(downloadingResults[1])
 
           // NOTE: When a licence is registered downloadingResults[0] will always reference the licence holder
-          expect(rows).not.to.contain(downloadingResults[0])
+          expect(rows).not.toContainEqual(downloadingResults[0])
         })
 
         it('(Scenario 6) returns the primary user and returns user when the licence is registered and they are different', async () => {
@@ -702,10 +695,10 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
             scenarios.primaryUserWithDifferentReturnsAgent
           )
 
-          expect(rows).to.contain(downloadingResults[1])
-          expect(rows).to.contain(downloadingResults[2])
+          expect(rows).toContainEqual(downloadingResults[1])
+          expect(rows).toContainEqual(downloadingResults[2])
 
-          expect(rows).not.to.contain(downloadingResults[0])
+          expect(rows).not.toContainEqual(downloadingResults[0])
         })
 
         it('(Scenario 7) returns only the primary user when it is the same for multiple registered licences', async () => {
@@ -719,22 +712,22 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           // Unlike sending, because we want the return log information it means though the recipient details are the
           // same, the return logs are not. So, we get a row per return log for the primary user.
-          expect(rows).to.contain(downloadingResults[2])
-          expect(rows).to.contain(downloadingResults[3])
+          expect(rows).toContainEqual(downloadingResults[2])
+          expect(rows).toContainEqual(downloadingResults[3])
 
           // downloadingResults[2] & [3], and [6] & [7] reference the two primary users, with the same details. This
           // means the downloadingResults for each are the same, which we prove here.
-          expect(downloadingResults[2]).to.equal(downloadingResults[6])
-          expect(downloadingResults[3]).to.equal(downloadingResults[7])
+          expect(downloadingResults[2]).toEqual(downloadingResults[6])
+          expect(downloadingResults[3]).toEqual(downloadingResults[7])
 
           // NOTE: Because we created two return logs with different licence refs, we have to create two licence
           // document headers with the same 'licence holder' to recreate linking the same primary user across multiple
           // licences. This means downloadingResults[0] and [1] reference the first licence holder, and [4] and [5] the
           // second.
-          expect(rows).not.to.contain(downloadingResults[0])
-          expect(rows).not.to.contain(downloadingResults[1])
-          expect(rows).not.to.contain(downloadingResults[4])
-          expect(rows).not.to.contain(downloadingResults[5])
+          expect(rows).not.toContainEqual(downloadingResults[0])
+          expect(rows).not.toContainEqual(downloadingResults[1])
+          expect(rows).not.toContainEqual(downloadingResults[4])
+          expect(rows).not.toContainEqual(downloadingResults[5])
         })
 
         it('(Scenario 8) returns only the primary user when it and the returns user are the same for a registered licence', async () => {
@@ -746,21 +739,21 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
             scenarios.primaryUserWithSameReturnsAgent
           )
 
-          expect(rows).to.contain(downloadingResults[1])
+          expect(rows).toContainEqual(downloadingResults[1])
 
-          expect(rows).not.to.contain(downloadingResults[0])
-          expect(rows).not.to.contain(downloadingResults[2])
+          expect(rows).not.toContainEqual(downloadingResults[0])
+          expect(rows).not.toContainEqual(downloadingResults[2])
         })
       })
     })
 
     describe('and the notice type is "paper return"', () => {
-      before(() => {
+      beforeAll(() => {
         noticeType = NoticeType.PAPER_RETURN
       })
 
       describe('and the query is NOT for generating a download', () => {
-        before(() => {
+        beforeAll(() => {
           download = false
         })
 
@@ -772,7 +765,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           // NOTE: Because sorting is done in the code not the query, there is no 'order by' to improve performance.
           // That means we cannot assert the order that the records come out. But we can assert the number of records,
           // and that all we expect are present
-          expect(rows.length).to.equal(9)
+          expect(rows.length).toEqual(9)
         })
 
         it('(Scenario 1) returns the licence holder when only the licence holder is present', async () => {
@@ -782,7 +775,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolderOnly)
 
-          expect(rows).to.contain(sendingResults[0])
+          expect(rows).toContainEqual(sendingResults[0])
         })
 
         it('(Scenario 2) returns both the licence holder and returns to when they are different', async () => {
@@ -794,8 +787,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
             scenarios.licenceHolderWithDifferentReturnsTo
           )
 
-          expect(rows).to.contain(sendingResults[0])
-          expect(rows).to.contain(sendingResults[1])
+          expect(rows).toContainEqual(sendingResults[0])
+          expect(rows).toContainEqual(sendingResults[1])
         })
 
         it('(Scenario 3) returns the licence holder when only it is present and the same for multiple licences', async () => {
@@ -807,10 +800,10 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
             scenarios.licenceHolderWithMultipleLicences
           )
 
-          expect(rows).to.contain(sendingResults[0])
+          expect(rows).toContainEqual(sendingResults[0])
           // We could test rows contains the second licence holder recipient recorded in the scenario, but they are the
           // same so it would also return true and not prove anything
-          expect(sendingResults[0]).to.equal(sendingResults[1])
+          expect(sendingResults[0]).toEqual(sendingResults[1])
         })
 
         it('(Scenario 4) returns only the licence holder when it and the returns to are the same', async () => {
@@ -822,9 +815,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
             scenarios.licenceHolderWithSameReturnsTo
           )
 
-          expect(rows).to.contain(sendingResults[0])
+          expect(rows).toContainEqual(sendingResults[0])
 
-          expect(rows).not.to.contain(sendingResults[1])
+          expect(rows).not.toContainEqual(sendingResults[1])
         })
 
         it('(Scenario 5) returns the licence holder, not the primary user when the licence is registered and there are no returns users', async () => {
@@ -834,9 +827,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.primaryUserOnly)
 
-          expect(rows).to.contain(sendingResults[0])
+          expect(rows).toContainEqual(sendingResults[0])
 
-          expect(rows).not.to.contain(sendingResults[1])
+          expect(rows).not.toContainEqual(sendingResults[1])
         })
 
         it('(Scenario 6) returns the licence holder, not the primary user or returns user when the licence is registered and has a different returns user', async () => {
@@ -848,10 +841,10 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
             scenarios.primaryUserWithDifferentReturnsAgent
           )
 
-          expect(rows).to.contain(sendingResults[0])
+          expect(rows).toContainEqual(sendingResults[0])
 
-          expect(rows).not.to.contain(sendingResults[1])
-          expect(rows).not.to.contain(sendingResults[2])
+          expect(rows).not.toContainEqual(sendingResults[1])
+          expect(rows).not.toContainEqual(sendingResults[2])
         })
 
         it('(Scenario 7) returns the licence holder, not the primary user when it is the same for multiple registered licences', async () => {
@@ -867,13 +860,13 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           // document headers with the same 'licence holder' to recreate linking the same primary user across multiple
           // licences. This means sendingResults[0] references the first licence holder, and [2] the second. For paper
           // returns it's one of these we expect to see in the results. Either will do as they are both the same.
-          expect(rows).to.contain(sendingResults[0])
-          expect(sendingResults[0]).to.equal(sendingResults[2])
+          expect(rows).toContainEqual(sendingResults[0])
+          expect(sendingResults[0]).toEqual(sendingResults[2])
 
           // sendingResults[1] and [3] reference the two primary users, with the same details. We don't send paper
           // returns via email so they should not be included
-          expect(rows).not.to.contain(sendingResults[1])
-          expect(rows).not.to.contain(sendingResults[3])
+          expect(rows).not.toContainEqual(sendingResults[1])
+          expect(rows).not.toContainEqual(sendingResults[3])
         })
 
         it('(Scenario 8) returns the licence holder, not the primary user when it and the returns user are the same for a registered licence', async () => {
@@ -885,15 +878,15 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
             scenarios.primaryUserWithSameReturnsAgent
           )
 
-          expect(rows).to.contain(sendingResults[0])
+          expect(rows).toContainEqual(sendingResults[0])
 
-          expect(rows).not.to.contain(sendingResults[1])
-          expect(rows).not.to.contain(sendingResults[2])
+          expect(rows).not.toContainEqual(sendingResults[1])
+          expect(rows).not.toContainEqual(sendingResults[2])
         })
       })
 
       describe('and the query is for generating a download', () => {
-        before(() => {
+        beforeAll(() => {
           download = true
         })
 
@@ -905,7 +898,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           // NOTE: Because sorting is done in the code not the query, there is no 'order by' to improve performance.
           // That means we cannot assert the order that the records come out. But we can assert the number of records,
           // and that all we expect are present
-          expect(rows.length).to.equal(12)
+          expect(rows.length).toEqual(12)
         })
 
         it('(Scenario 1) returns the licence holder when only the licence holder is present', async () => {
@@ -917,8 +910,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           // We created two return logs for the same licence  and licence holder. So we expect two results: one for each
           // return log
-          expect(rows).to.contain(downloadingResults[0])
-          expect(rows).to.contain(downloadingResults[1])
+          expect(rows).toContainEqual(downloadingResults[0])
+          expect(rows).toContainEqual(downloadingResults[1])
         })
 
         it('(Scenario 2) returns both the licence holder and returns to when they are different', async () => {
@@ -928,8 +921,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios.licenceHolderOnly)
 
-          expect(rows).to.contain(downloadingResults[0])
-          expect(rows).to.contain(downloadingResults[1])
+          expect(rows).toContainEqual(downloadingResults[0])
+          expect(rows).toContainEqual(downloadingResults[1])
         })
 
         it('(Scenario 3) returns the licence holder when only it is present and the same for multiple licences', async () => {
@@ -943,13 +936,13 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           // Unlike sending, because we want the return log information it means though the recipient details are the
           // same, the return logs are not. So, we get a row per return log for the licence holder.
-          expect(rows).to.contain(downloadingResults[0])
-          expect(rows).to.contain(downloadingResults[1])
+          expect(rows).toContainEqual(downloadingResults[0])
+          expect(rows).toContainEqual(downloadingResults[1])
 
           // downloadingResults[0] & [1], and [2] & [3] reference the two licence holders, with the same details. This
           // means the downloadingResults for each are the same, which we prove here.
-          expect(downloadingResults[0]).to.equal(downloadingResults[2])
-          expect(downloadingResults[1]).to.equal(downloadingResults[3])
+          expect(downloadingResults[0]).toEqual(downloadingResults[2])
+          expect(downloadingResults[1]).toEqual(downloadingResults[3])
         })
 
         it('(Scenario 4) returns only the licence holder when it and the returns to are the same', async () => {
@@ -961,9 +954,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
             scenarios.licenceHolderWithSameReturnsTo
           )
 
-          expect(rows).to.contain(downloadingResults[0])
+          expect(rows).toContainEqual(downloadingResults[0])
 
-          expect(rows).not.to.contain(downloadingResults[1])
+          expect(rows).not.toContainEqual(downloadingResults[1])
         })
 
         it('(Scenario 5) returns the licence holder, not the primary user when the licence is registered and there are no returns users', async () => {
@@ -973,9 +966,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios.primaryUserOnly)
 
-          expect(rows).to.contain(downloadingResults[0])
+          expect(rows).toContainEqual(downloadingResults[0])
 
-          expect(rows).not.to.contain(downloadingResults[1])
+          expect(rows).not.toContainEqual(downloadingResults[1])
         })
 
         it('(Scenario 6) returns the licence holder, not the primary user or returns user when the licence is registered and has a different returns user', async () => {
@@ -987,10 +980,10 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
             scenarios.primaryUserWithDifferentReturnsAgent
           )
 
-          expect(rows).to.contain(downloadingResults[0])
+          expect(rows).toContainEqual(downloadingResults[0])
 
-          expect(rows).not.to.contain(downloadingResults[1])
-          expect(rows).not.to.contain(downloadingResults[2])
+          expect(rows).not.toContainEqual(downloadingResults[1])
+          expect(rows).not.toContainEqual(downloadingResults[2])
         })
 
         it('(Scenario 7) returns the licence holder, not the primary user when it is the same for multiple registered licences', async () => {
@@ -1004,8 +997,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           // Unlike sending, because we want the return log information it means though the recipient details are the
           // same, the return logs are not. So, we get a row per return log for the licence holder.
-          expect(rows).to.contain(downloadingResults[0])
-          expect(rows).to.contain(downloadingResults[1])
+          expect(rows).toContainEqual(downloadingResults[0])
+          expect(rows).toContainEqual(downloadingResults[1])
 
           // Because we created two return logs with different licence refs, we have to create two licence
           // document headers with the same 'licence holder' to recreate linking the same primary user across multiple
@@ -1013,15 +1006,15 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           // second.
           // However, as the licence holder details are the same, the downloadingResults will be the same, though the
           // query will just return one set
-          expect(downloadingResults[0]).to.equal(downloadingResults[4])
-          expect(downloadingResults[1]).to.equal(downloadingResults[5])
+          expect(downloadingResults[0]).toEqual(downloadingResults[4])
+          expect(downloadingResults[1]).toEqual(downloadingResults[5])
 
           // downloadingResults[2] & [3], and [6] & [7] reference the two primary users, with the same details. We don't
           // send paper returns via email so they should not be included
-          expect(rows).not.to.contain(downloadingResults[2])
-          expect(rows).not.to.contain(downloadingResults[3])
-          expect(rows).not.to.contain(downloadingResults[6])
-          expect(rows).not.to.contain(downloadingResults[7])
+          expect(rows).not.toContainEqual(downloadingResults[2])
+          expect(rows).not.toContainEqual(downloadingResults[3])
+          expect(rows).not.toContainEqual(downloadingResults[6])
+          expect(rows).not.toContainEqual(downloadingResults[7])
         })
 
         it('(Scenario 8) returns the licence holder, not the primary user when it and the returns user are the same for a registered licence', async () => {
@@ -1033,16 +1026,16 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
             scenarios.primaryUserWithSameReturnsAgent
           )
 
-          expect(rows).to.contain(downloadingResults[0])
+          expect(rows).toContainEqual(downloadingResults[0])
 
-          expect(rows).not.to.contain(downloadingResults[1])
-          expect(rows).not.to.contain(downloadingResults[2])
+          expect(rows).not.toContainEqual(downloadingResults[1])
+          expect(rows).not.toContainEqual(downloadingResults[2])
         })
       })
     })
 
     describe('and the notice type is "failed invitation"', () => {
-      before(() => {
+      beforeAll(() => {
         noticeType = NoticeType.ALTERNATE_INVITATION
         download = false
       })
@@ -1055,7 +1048,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         // NOTE: Because sorting is done in the code not the query, there is no 'order by' to improve performance.
         // That means we cannot assert the order that the records come out. But we can assert the number of records,
         // and that all we expect are present
-        expect(rows.length).to.equal(8)
+        expect(rows.length).toEqual(8)
       })
 
       it('(Scenario 1) returns the licence holder when only the licence holder is present', async () => {
@@ -1065,7 +1058,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
         const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolderOnly)
 
-        expect(rows).to.contain(sendingResults[0])
+        expect(rows).toContainEqual(sendingResults[0])
       })
 
       it('(Scenario 2) returns only the licence holder, even if the returns to is different', async () => {
@@ -1077,9 +1070,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           scenarios.licenceHolderWithDifferentReturnsTo
         )
 
-        expect(rows).to.contain(sendingResults[0])
+        expect(rows).toContainEqual(sendingResults[0])
 
-        expect(rows).not.to.contain(sendingResults[1])
+        expect(rows).not.toContainEqual(sendingResults[1])
       })
 
       it('(Scenario 3) returns the licence holder when only it is present and the same for multiple licences', async () => {
@@ -1091,10 +1084,10 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           scenarios.licenceHolderWithMultipleLicences
         )
 
-        expect(rows).to.contain(sendingResults[0])
+        expect(rows).toContainEqual(sendingResults[0])
         // We could test rows contains the second licence holder recipient recorded in the scenario, but they are the
         // same so it would also return true and not prove anything
-        expect(sendingResults[0]).to.equal(sendingResults[1])
+        expect(sendingResults[0]).toEqual(sendingResults[1])
       })
 
       it('(Scenario 4) returns only the licence holder when it and the returns to are the same', async () => {
@@ -1106,9 +1099,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           scenarios.licenceHolderWithSameReturnsTo
         )
 
-        expect(rows).to.contain(sendingResults[0])
+        expect(rows).toContainEqual(sendingResults[0])
 
-        expect(rows).not.to.contain(sendingResults[1])
+        expect(rows).not.toContainEqual(sendingResults[1])
       })
 
       it('(Scenario 5) returns the licence holder, not the primary user when the licence is registered and there are no returns users', async () => {
@@ -1118,9 +1111,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
         const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.primaryUserOnly)
 
-        expect(rows).to.contain(sendingResults[0])
+        expect(rows).toContainEqual(sendingResults[0])
 
-        expect(rows).not.to.contain(sendingResults[1])
+        expect(rows).not.toContainEqual(sendingResults[1])
       })
 
       it('(Scenario 6) returns the licence holder, not the primary user or returns user when the licence is registered and has a different returns user', async () => {
@@ -1132,10 +1125,10 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           scenarios.primaryUserWithDifferentReturnsAgent
         )
 
-        expect(rows).to.contain(sendingResults[0])
+        expect(rows).toContainEqual(sendingResults[0])
 
-        expect(rows).not.to.contain(sendingResults[1])
-        expect(rows).not.to.contain(sendingResults[2])
+        expect(rows).not.toContainEqual(sendingResults[1])
+        expect(rows).not.toContainEqual(sendingResults[2])
       })
 
       it('(Scenario 7) returns the licence holder, not the primary user when it is the same for multiple registered licences', async () => {
@@ -1151,13 +1144,13 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         // document headers with the same 'licence holder' to recreate linking the same primary user across multiple
         // licences. This means sendingResults[0] references the first licence holder, and [2] the second. For paper
         // returns it's one of these we expect to see in the results. Either will do as they are both the same.
-        expect(rows).to.contain(sendingResults[0])
-        expect(sendingResults[0]).to.equal(sendingResults[2])
+        expect(rows).toContainEqual(sendingResults[0])
+        expect(sendingResults[0]).toEqual(sendingResults[2])
 
         // sendingResults[1] and [3] reference the two primary users, with the same details. We don't send paper
         // returns via email so they should not be included
-        expect(rows).not.to.contain(sendingResults[1])
-        expect(rows).not.to.contain(sendingResults[3])
+        expect(rows).not.toContainEqual(sendingResults[1])
+        expect(rows).not.toContainEqual(sendingResults[3])
       })
 
       it('(Scenario 8) returns the licence holder, not the primary user when it and the returns user are the same for a registered licence', async () => {
@@ -1169,10 +1162,10 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           scenarios.primaryUserWithSameReturnsAgent
         )
 
-        expect(rows).to.contain(sendingResults[0])
+        expect(rows).toContainEqual(sendingResults[0])
 
-        expect(rows).not.to.contain(sendingResults[1])
-        expect(rows).not.to.contain(sendingResults[2])
+        expect(rows).not.toContainEqual(sendingResults[1])
+        expect(rows).not.toContainEqual(sendingResults[2])
       })
     })
   })

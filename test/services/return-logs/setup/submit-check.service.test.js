@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
@@ -114,64 +109,58 @@ describe('Return Logs Setup - Submit Check service', () => {
       await SubmitCheckService.go(session.id, user)
 
       const updatedReturnLog = await ReturnLogModel.query().findById(returnLog.id)
-      expect(updatedReturnLog.status).to.equal('completed')
+      expect(updatedReturnLog.status).toEqual('completed')
     })
 
     it('updates the return log received date', async () => {
       await SubmitCheckService.go(session.id, user)
 
       const updatedReturnLog = await ReturnLogModel.query().findById(returnLog.id)
-      expect(updatedReturnLog.receivedDate).to.equal(new Date('2024-01-01'))
+      expect(updatedReturnLog.receivedDate).toEqual(new Date('2024-01-01'))
     })
 
     it('updates the return log updatedAt date', async () => {
       await SubmitCheckService.go(session.id, user)
 
       const updatedReturnLog = await ReturnLogModel.query().findById(returnLog.id)
-      expect(updatedReturnLog.updatedAt).to.not.equal(returnLog.updatedAt)
+      expect(updatedReturnLog.updatedAt).not.toEqual(returnLog.updatedAt)
+    })
+
+    it('deletes the session', async () => {
+      await SubmitCheckService.go(session.id, user)
+
+      const deletedSession = await SessionModel.query().findById(session.id)
+      expect(deletedSession).toBeUndefined()
+    })
+
+    it('generates metadata for the return submission', async () => {
+      await SubmitCheckService.go(session.id, user)
+
+      const callArgs = generateReturnSubmissionMetadataStub.firstCall.args
+      expect(callArgs[0]).toBeInstanceOf(SessionModel)
     })
 
     it('calls CreateReturnSubmissionService with correct parameters', async () => {
-      it('deletes the session', async () => {
-        await SubmitCheckService.go(session.id, user)
+      await SubmitCheckService.go(session.id, user)
 
-        const deletedSession = await SessionModel.query().findById(session.id)
-        expect(deletedSession).to.not.exist()
-      })
+      const callArgs = createReturnSubmissionServiceStub.firstCall.args
+      expect(callArgs[0]).toEqual(mockGeneratedMetadata)
+      expect(callArgs[1]).toBeInstanceOf(SessionModel)
+      expect(callArgs[3]).toEqual(user)
+    })
 
-      it('generates metadata for the return submission', async () => {
-        await SubmitCheckService.go(session.id, user)
+    it('calls CreateReturnLinesService with correct parameters', async () => {
+      await SubmitCheckService.go(session.id, user)
 
-        const callArgs = generateReturnSubmissionMetadataStub.firstCall.args
-        expect(callArgs[0]).to.be.an.instanceOf(SessionModel)
-      })
+      const callArgs = createReturnLinesServiceStub.firstCall.args
+      expect(callArgs[0]).toEqual(mockNewReturnSubmissionId)
+      expect(callArgs[1]).toBeInstanceOf(SessionModel)
+    })
 
-      it('calls CreateReturnSubmissionService with correct parameters', async () => {
-        await SubmitCheckService.go(session.id, user)
+    it('returns the original returnLogId', async () => {
+      const result = await SubmitCheckService.go(session.id, user)
 
-        const callArgs = createReturnSubmissionServiceStub.firstCall.args
-        expect(callArgs[0]).to.equal(returnLog.id)
-        expect(callArgs[1]).to.equal(user.username)
-        expect(callArgs[2]).to.equal(mockGeneratedMetadata)
-        expect(callArgs[3]).to.equal(sessionData.data.journey === 'nilReturn')
-      })
-
-      it('calls CreateReturnLinesService with correct parameters', async () => {
-        await SubmitCheckService.go(session.id, user)
-
-        const callArgs = createReturnLinesServiceStub.firstCall.args
-        expect(callArgs[0]).to.equal(sessionData.data.lines)
-        expect(callArgs[1]).to.equal(mockNewReturnSubmissionId)
-        expect(callArgs[2]).to.equal(sessionData.data.returnsFrequency)
-        expect(callArgs[3]).to.equal(sessionData.data.units)
-        expect(callArgs[4]).to.equal(sessionData.data.meterProvided)
-      })
-
-      it('returns the original returnLogId', async () => {
-        const result = await SubmitCheckService.go(session.id, user)
-
-        expect(result).to.equal(returnLog.id)
-      })
+      expect(result).toEqual({ returnLogId: returnLog.id })
     })
 
     describe('and it is a nil return', () => {
@@ -198,7 +187,7 @@ describe('Return Logs Setup - Submit Check service', () => {
       it('returns the original returnLogId', async () => {
         const result = await SubmitCheckService.go(session.id, user)
 
-        expect(result).to.equal({ returnLogId: returnLog.id })
+        expect(result).toEqual({ returnLogId: returnLog.id })
       })
     })
   })
@@ -226,7 +215,7 @@ describe('Return Logs Setup - Submit Check service', () => {
     it('returns the page data including a validation error', async () => {
       const result = await SubmitCheckService.go(session.id, user)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         abstractionPeriod: null,
         displayReadings: false,
         displayUnits: false,

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_FORBIDDEN, HTTP_STATUS_OK } = require('node:http2').constants
@@ -68,14 +63,14 @@ describe('Initiate Bill Run service', () => {
 
       const billRun = await BillRunModel.query().findById(result.id)
 
-      expect(billRun.externalId).to.equal(responseBody.billRun.id)
-      expect(billRun.billRunNumber).to.equal(responseBody.billRun.billRunNumber)
+      expect(billRun.externalId).toEqual(responseBody.billRun.id)
+      expect(billRun.billRunNumber).toEqual(responseBody.billRun.billRunNumber)
     })
 
     it('creates a new event record', async () => {
       await InitiateBillRunService.go(financialYearEndings, regionId, batchType, user)
 
-      expect(CreateBillRunEventService.go.called).to.be.true()
+      expect(CreateBillRunEventService.go.called).toBe(true)
     })
 
     it('returns the new bill run', async () => {
@@ -83,11 +78,11 @@ describe('Initiate Bill Run service', () => {
 
       const billRun = await BillRunModel.query().findById(result.id)
 
-      expect(result.regionId).to.equal(billRun.regionId)
-      expect(result.scheme).to.equal('sroc')
-      expect(result.batchType).to.equal('supplementary')
-      expect(result.status).to.equal('queued')
-      expect(result.errorCode).to.be.null()
+      expect(result.regionId).toEqual(billRun.regionId)
+      expect(result.scheme).toEqual('sroc')
+      expect(result.batchType).toEqual('supplementary')
+      expect(result.status).toEqual('queued')
+      expect(result.errorCode).toBeNull()
     })
   })
 
@@ -116,11 +111,11 @@ describe('Initiate Bill Run service', () => {
 
         const billRun = await BillRunModel.query().findById(result.id)
 
-        expect(result.regionId).to.equal(billRun.regionId)
-        expect(result.scheme).to.equal('sroc')
-        expect(result.batchType).to.equal('supplementary')
-        expect(result.status).to.equal('error')
-        expect(result.errorCode).to.equal(50)
+        expect(result.regionId).toEqual(billRun.regionId)
+        expect(result.scheme).toEqual('sroc')
+        expect(result.batchType).toEqual('supplementary')
+        expect(result.status).toEqual('error')
+        expect(result.errorCode).toEqual(50)
       })
     })
   })

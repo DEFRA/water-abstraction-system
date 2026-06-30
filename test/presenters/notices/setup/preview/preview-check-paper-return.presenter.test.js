@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 
@@ -41,7 +34,7 @@ describe('Notices - Setup - Preview - Check Paper Return presenter', () => {
     it('returns page data for the view', () => {
       const result = PreviewCheckPaperReturnPresenter.go(session, contactHashId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
         pageTitle: 'Check the recipient previews',
         pageTitleCaption: 'Notice PRTF-WJUKBX',
@@ -82,7 +75,7 @@ describe('Notices - Setup - Preview - Check Paper Return presenter', () => {
           it('returns page data for the view', () => {
             const result = PreviewCheckPaperReturnPresenter.go(session, contactHashId)
 
-            expect(result.returnLogs).to.equal([
+            expect(result.returnLogs).toEqual([
               {
                 action: {
                   link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/paper-return/${dueReturn.returnLogId}`,
@@ -114,7 +107,7 @@ describe('Notices - Setup - Preview - Check Paper Return presenter', () => {
           it('returns page data for the view - with only the selected returns', () => {
             const result = PreviewCheckPaperReturnPresenter.go(session, contactHashId)
 
-            expect(result.returnLogs).to.equal([
+            expect(result.returnLogs).toEqual([
               {
                 action: {
                   link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/paper-return/${dueReturn.returnLogId}`,

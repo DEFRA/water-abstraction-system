@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -75,19 +70,19 @@ describe('Return Versions Setup - Submit Agreements and Exceptions service', () 
       it('saves the submitted value', async () => {
         await SubmitAgreementsExceptionsService.go(session.id, requirementIndex, payload, yarStub)
 
-        expect(session.requirements[0].agreementsExceptions).to.equal([
+        expect(session.requirements[0].agreementsExceptions).toEqual([
           'gravity-fill',
           'two-part-tariff',
           '56-returns-exception'
         ])
-        expect(session.$update.called).to.be.true()
+        expect(session.$update.called).toBe(true)
       })
 
       describe('and the page has been not been visited', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
           const result = await SubmitAgreementsExceptionsService.go(session.id, requirementIndex, payload, yarStub)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             checkPageVisited: false
           })
         })
@@ -97,8 +92,8 @@ describe('Return Versions Setup - Submit Agreements and Exceptions service', () 
 
           const [flashType, notification] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ titleText: 'Added', text: 'New requirement added' })
+          expect(flashType).toEqual('notification')
+          expect(notification).toEqual({ titleText: 'Added', text: 'New requirement added' })
         })
       })
 
@@ -115,7 +110,7 @@ describe('Return Versions Setup - Submit Agreements and Exceptions service', () 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
           const result = await SubmitAgreementsExceptionsService.go(session.id, requirementIndex, payload, yarStub)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             checkPageVisited: true
           })
         })
@@ -125,8 +120,8 @@ describe('Return Versions Setup - Submit Agreements and Exceptions service', () 
 
           const [flashType, notification] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(notification).to.equal({
+          expect(flashType).toEqual('notification')
+          expect(notification).toEqual({
             titleText: 'Updated',
             text: 'Requirements for returns updated'
           })
@@ -143,27 +138,24 @@ describe('Return Versions Setup - Submit Agreements and Exceptions service', () 
     it('returns page data for the view', async () => {
       const result = await SubmitAgreementsExceptionsService.go(session.id, requirementIndex, payload, yarStub)
 
-      expect(result).to.equal(
-        {
-          pageTitle: 'Select agreements and exceptions for the requirements for returns',
-          pageTitleCaption: 'Licence 01/ABC',
-          agreementsExceptions: null,
-          backLink: {
-            href: `/system/return-versions/setup/${session.id}/frequency-reported/0`,
-            text: 'Back'
-          },
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC'
+      expect(result).toMatchObject({
+        pageTitle: 'Select agreements and exceptions for the requirements for returns',
+        pageTitleCaption: 'Licence 01/ABC',
+        agreementsExceptions: null,
+        backLink: {
+          href: `/system/return-versions/setup/${session.id}/frequency-reported/0`,
+          text: 'Back'
         },
-        { skip: ['sessionId', 'error'] }
-      )
+        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        licenceRef: '01/ABC'
+      })
     })
 
     describe('because the user has not submitted anything', () => {
       it('includes an error for the input element', async () => {
         const result = await SubmitAgreementsExceptionsService.go(session.id, requirementIndex, payload, yarStub)
 
-        expect(result.error).to.equal({
+        expect(result.error).toEqual({
           errorList: [
             {
               href: '#agreementsExceptions',

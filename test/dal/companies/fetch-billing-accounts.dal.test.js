@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AddressHelper = require('../../support/helpers/address.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
@@ -22,7 +15,7 @@ describe('Companies - Fetch Billing Accounts dal', () => {
   let billingAccount
   let billingAccountAddress
 
-  before(async () => {
+  beforeAll(async () => {
     address = await AddressHelper.add()
     company = await CompanyHelper.add()
 
@@ -42,7 +35,7 @@ describe('Companies - Fetch Billing Accounts dal', () => {
   it('returns the billing accounts for the company', async () => {
     const result = await FetchCompanyDal.go(company.id)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       billingAccounts: [
         {
           accountNumber: billingAccount.accountNumber,

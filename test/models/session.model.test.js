@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const SessionHelper = require('../support/helpers/session.helper.js')
 
@@ -24,9 +17,9 @@ describe('Session model', () => {
     it('can successfully run a basic query', async () => {
       const result = await SessionModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(SessionModel)
-      expect(result.id).to.equal(testRecord.id)
-      expect(result.data).to.equal({})
+      expect(result).toBeInstanceOf(SessionModel)
+      expect(result.id).toEqual(testRecord.id)
+      expect(result.data).toEqual({})
     })
   })
 
@@ -40,7 +33,7 @@ describe('Session model', () => {
       it('adds nothing to the session instance properties', async () => {
         const result = await SessionModel.query().findById(testRecord.id)
 
-        expect(result).to.only.include(['id', 'data', 'createdAt', 'updatedAt'])
+        expect(Object.keys(result).sort()).toEqual(['id', 'data', 'createdAt', 'updatedAt'].sort())
       })
     })
 
@@ -61,11 +54,13 @@ describe('Session model', () => {
       it('adds its properties to the session instance properties', async () => {
         const result = await SessionModel.query().findById(testRecord.id)
 
-        expect(result).to.only.include(['id', 'data', 'createdAt', 'updatedAt', 'reason', 'licence', 'purposes'])
+        expect(Object.keys(result).sort()).toEqual(
+          ['id', 'data', 'createdAt', 'updatedAt', 'reason', 'licence', 'purposes'].sort()
+        )
 
-        expect(result.licence).to.equal({ licenceRef: '01/123/01', startDate: '2017-05-07T00:00:00.000Z' })
-        expect(result.purposes).to.equal(['foo', 'bar'])
-        expect(result.reason).to.equal('major-change')
+        expect(result.licence).toEqual({ licenceRef: '01/123/01', startDate: '2017-05-07T00:00:00.000Z' })
+        expect(result.purposes).toEqual(['foo', 'bar'])
+        expect(result.reason).toEqual('major-change')
       })
     })
   })
@@ -76,7 +71,7 @@ describe('Session model', () => {
       it('adds nothing to the session instance properties', async () => {
         const result = await SessionHelper.add()
 
-        expect(result).to.only.include(['id', 'data', 'createdAt', 'updatedAt'])
+        expect(Object.keys(result).sort()).toEqual(['id', 'data', 'createdAt', 'updatedAt'].sort())
       })
     })
 
@@ -99,11 +94,13 @@ describe('Session model', () => {
       it('adds its properties to the session instance properties', async () => {
         const result = await SessionHelper.add(testData)
 
-        expect(result).to.only.include(['id', 'data', 'createdAt', 'updatedAt', 'reason', 'licence', 'purposes'])
+        expect(Object.keys(result).sort()).toEqual(
+          ['id', 'data', 'createdAt', 'updatedAt', 'reason', 'licence', 'purposes'].sort()
+        )
 
-        expect(result.licence).to.equal({ licenceRef: '01/123/01', startDate: '2017-05-07T00:00:00.000Z' })
-        expect(result.purposes).to.equal(['foo', 'bar'])
-        expect(result.reason).to.equal('major-change')
+        expect(result.licence).toEqual({ licenceRef: '01/123/01', startDate: '2017-05-07T00:00:00.000Z' })
+        expect(result.purposes).toEqual(['foo', 'bar'])
+        expect(result.reason).toEqual('major-change')
       })
     })
   })
@@ -124,12 +121,12 @@ describe('Session model', () => {
 
         // NOTE: We do not expect it to be used. But Objection.js patch() returns a count of records effected so we also
         // return that as a result. As we are patching the instance this should only ever be 1
-        expect(result).to.equal(1)
+        expect(result).toEqual(1)
 
         const refreshedInstance = await SessionModel.query().findById(testRecord.id)
 
-        expect(refreshedInstance.data).to.equal({ reason: 'minor-change' })
-        expect(refreshedInstance.reason).to.equal('minor-change')
+        expect(refreshedInstance.data).toEqual({ reason: 'minor-change' })
+        expect(refreshedInstance.reason).toEqual('minor-change')
       })
     })
 
@@ -146,12 +143,12 @@ describe('Session model', () => {
 
         // NOTE: We do not expect it to be used. But Objection.js patch() returns a count of records effected so we also
         // return that as a result. As we are patching the instance this should only ever be 1
-        expect(result).to.equal(1)
+        expect(result).toEqual(1)
 
         const refreshedInstance = await SessionModel.query().findById(testRecord.id)
 
-        expect(refreshedInstance.data).to.equal({ reason: 'new-licence' })
-        expect(refreshedInstance.reason).to.equal('new-licence')
+        expect(refreshedInstance.data).toEqual({ reason: 'new-licence' })
+        expect(refreshedInstance.reason).toEqual('new-licence')
       })
     })
 
@@ -168,12 +165,12 @@ describe('Session model', () => {
 
         // NOTE: We do not expect it to be used. But Objection.js patch() returns a count of records effected so we also
         // return that as a result. As we are patching the instance this should only ever be 1
-        expect(result).to.equal(1)
+        expect(result).toEqual(1)
 
         const refreshedInstance = await SessionModel.query().findById(testRecord.id)
 
-        expect(refreshedInstance.data).to.equal({})
-        expect(refreshedInstance.reason).not.to.exist()
+        expect(refreshedInstance.data).toEqual({})
+        expect(refreshedInstance.reason).toBeUndefined()
       })
     })
   })

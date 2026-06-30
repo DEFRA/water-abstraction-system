@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const PrepareChargeVersionService = require('../../../../app/services/bill-runs/match/prepare-charge-version.service.js')
 
@@ -26,14 +19,14 @@ describe('Prepare Charge Version Service', () => {
     it('sorts the charge references by their subsistence charge', async () => {
       await PrepareChargeVersionService.go(chargeVersion, billingPeriod)
 
-      expect(chargeVersion.chargeReferences[0].chargeCategory.subsistenceCharge).to.equal(70000)
-      expect(chargeVersion.chargeReferences[1].chargeCategory.subsistenceCharge).to.equal(68400)
+      expect(chargeVersion.chargeReferences[0].chargeCategory.subsistenceCharge).toEqual(70000)
+      expect(chargeVersion.chargeReferences[1].chargeCategory.subsistenceCharge).toEqual(68400)
     })
 
     it('preps the charge elements correctly', async () => {
       await PrepareChargeVersionService.go(chargeVersion, billingPeriod)
 
-      expect(chargeVersion.chargeReferences[0].chargeElements[0]).to.equal({
+      expect(chargeVersion.chargeReferences[0].chargeElements[0]).toEqual({
         id: '8eac5976-d16c-4818-8bc8-384d958ce863',
         abstractionPeriodStartDay: 1,
         abstractionPeriodStartMonth: 3,

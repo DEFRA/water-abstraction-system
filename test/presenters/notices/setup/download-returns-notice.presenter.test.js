@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const NoticeSessionFixture = require('../../../support/fixtures/notice-session.fixture.js')
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
@@ -35,7 +28,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
-        expect(result).to.equal(
+        expect(result).toEqual(
           // Headers
           'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
@@ -53,7 +46,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
-        expect(result).to.equal(
+        expect(result).toEqual(
           // Headers
           'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
@@ -71,7 +64,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
-        expect(result).to.equal(
+        expect(result).toEqual(
           // Headers
           'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
@@ -89,7 +82,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
-        expect(result).to.equal(
+        expect(result).toEqual(
           // Headers
           'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
@@ -113,7 +106,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
-        expect(result).to.equal(
+        expect(result).toEqual(
           // Headers
           'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
@@ -131,7 +124,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
-        expect(result).to.equal(
+        expect(result).toEqual(
           // Headers
           'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
@@ -149,7 +142,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
-        expect(result).to.equal(
+        expect(result).toEqual(
           // Headers
           'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
@@ -167,7 +160,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
-        expect(result).to.equal(
+        expect(result).toEqual(
           // Headers
           'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
@@ -191,7 +184,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
-        expect(result).to.equal(
+        expect(result).toEqual(
           // Headers
           'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
@@ -209,7 +202,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
-        expect(result).to.equal(
+        expect(result).toEqual(
           // Headers
           'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
@@ -227,7 +220,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
-        expect(result).to.equal(
+        expect(result).toEqual(
           // Headers
           'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
@@ -245,7 +238,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
-        expect(result).to.equal(
+        expect(result).toEqual(
           // Headers
           'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow

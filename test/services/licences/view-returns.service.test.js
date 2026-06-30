@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
@@ -64,7 +59,7 @@ describe('Licences - View Returns service', () => {
       it('will return all the mandatory data and default values for use in the licence returns page', async () => {
         const result = await ViewReturnsService.go(licence.id, auth, page)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeSecondaryNav: 'returns',
           backLink: {
             text: 'Go back to search',

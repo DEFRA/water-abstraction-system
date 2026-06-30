@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const CompanyContactHelper = require('../../../support/helpers/company-contact.helper.js')
@@ -28,7 +23,7 @@ describe('Company Contacts - Update Company Contact dal', () => {
   let licenceRole
   let seedDate
 
-  before(async () => {
+  beforeAll(async () => {
     seedDate = new Date('2021-01-01')
     today = new Date('2025-06-02')
 
@@ -62,7 +57,7 @@ describe('Company Contacts - Update Company Contact dal', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     Sinon.restore()
     clock.restore()
 
@@ -78,26 +73,23 @@ describe('Company Contacts - Update Company Contact dal', () => {
         .findById(companyContact.id)
         .withGraphFetched('contact')
 
-      expect(updatedCompanyContactResult).to.equal(
-        {
-          id: companyContact.id,
-          abstractionAlerts: true,
-          abstractionAlertLicences: null,
-          companyId: companyContact.companyId,
-          contactId: contact.id,
-          createdAt: seedDate,
-          createdBy: null,
-          default: false,
-          deletedAt: null,
-          licenceRoleId: licenceRole.id,
-          startDate: new Date('2022-04-01'),
-          updatedAt: today,
-          updatedBy: user.id
-        },
-        { skip: ['contact'] }
-      )
+      expect(updatedCompanyContactResult).toMatchObject({
+        id: companyContact.id,
+        abstractionAlerts: true,
+        abstractionAlertLicences: null,
+        companyId: companyContact.companyId,
+        contactId: contact.id,
+        createdAt: seedDate,
+        createdBy: null,
+        default: false,
+        deletedAt: null,
+        licenceRoleId: licenceRole.id,
+        startDate: new Date('2022-04-01'),
+        updatedAt: today,
+        updatedBy: user.id
+      })
 
-      expect(updatedCompanyContactResult.contact).to.equal({
+      expect(updatedCompanyContactResult.contact).toEqual({
         contactType: 'department',
         createdAt: seedDate,
         dataSource: 'wrls',

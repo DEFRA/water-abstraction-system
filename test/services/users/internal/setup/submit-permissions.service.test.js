@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
@@ -59,17 +54,17 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
     it('saves the submitted value', async () => {
       await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
 
-      expect(session).to.equal({
+      expect(session).toEqual({
         ...session,
         permission: 'basic'
       })
-      expect(session.$update.called).to.be.true()
+      expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
       const result = await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         redirectUrl: `/system/users/internal/setup/${session.id}/check`
       })
     })
@@ -95,7 +90,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
             it('does not set a notification', async () => {
               await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
 
-              expect(yarStub.flash.called).to.be.false()
+              expect(yarStub.flash.called).toBe(false)
             })
           })
 
@@ -109,8 +104,8 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
 
               const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-              expect(flashType).to.equal('notification')
-              expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Permissions updated' })
+              expect(flashType).toEqual('notification')
+              expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Permissions updated' })
             })
           })
         })
@@ -120,7 +115,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
         it('does not set a notification', async () => {
           await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
 
-          expect(yarStub.flash.called).to.be.false()
+          expect(yarStub.flash.called).toBe(false)
         })
       })
     })
@@ -134,7 +129,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
     it('returns page data for the view, with errors', async () => {
       const result = await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'users',
         backLink: {
           href: `/system/users/internal/setup/${session.id}/email`,

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const ReturnLogsFixture = require('../../support/fixtures/return-logs.fixture.js')
@@ -54,7 +49,7 @@ describe('Return Logs - View Details service', () => {
   it('correctly fetches return log, return log notifications and transforms it via the presenter', async () => {
     const result = await ViewDetailsService.go(returnLog.id, { credentials: { scope: ['returns'] } }, 'RETURN_ID', 0)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       activeSecondaryNav: 'details',
       abstractionPeriod: '',
       actionButton: {

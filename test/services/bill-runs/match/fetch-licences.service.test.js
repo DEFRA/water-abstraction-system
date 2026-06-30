@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const FetchChargeVersionsService = require('../../../../app/services/bill-runs/match/fetch-charge-versions.service.js')
@@ -57,21 +52,21 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
       it('will fetch the data, format it and group the charge version by the licence', async () => {
         const result = await FetchLicencesService.go(billRun, billingPeriod)
 
-        expect(result).to.have.length(1)
-        expect(result[0].id).to.equal(licenceOne.id)
-        expect(result[0].licenceRef).to.equal(licenceOne.licenceRef)
-        expect(result[0].startDate).to.equal(licenceOne.startDate)
-        expect(result[0].expiredDate).to.equal(licenceOne.expiredDate)
-        expect(result[0].lapsedDate).to.equal(licenceOne.lapsedDate)
-        expect(result[0].revokedDate).to.equal(licenceOne.revokedDate)
-        expect(result[0].licenceHolder).to.equal('Mock Licence Holder')
+        expect(result).toHaveLength(1)
+        expect(result[0].id).toEqual(licenceOne.id)
+        expect(result[0].licenceRef).toEqual(licenceOne.licenceRef)
+        expect(result[0].startDate).toEqual(licenceOne.startDate)
+        expect(result[0].expiredDate).toEqual(licenceOne.expiredDate)
+        expect(result[0].lapsedDate).toEqual(licenceOne.lapsedDate)
+        expect(result[0].revokedDate).toEqual(licenceOne.revokedDate)
+        expect(result[0].licenceHolder).toEqual('Mock Licence Holder')
 
-        expect(result[0].chargeVersions).to.have.length(1)
-        expect(result[0].chargeVersions[0].id).to.equal('9407b74d-816c-44a2-9926-73a89a9da985')
-        expect(result[0].chargeVersions[0].startDate).to.equal('2022-04-01T00:00:00.000Z')
-        expect(result[0].chargeVersions[0].endDate).to.equal(null)
-        expect(result[0].chargeVersions[0].status).to.equal('current')
-        expect(result[0].chargeVersions[0].licence).to.equal(licenceOne)
+        expect(result[0].chargeVersions).toHaveLength(1)
+        expect(result[0].chargeVersions[0].id).toEqual('9407b74d-816c-44a2-9926-73a89a9da985')
+        expect(result[0].chargeVersions[0].startDate).toEqual('2022-04-01T00:00:00.000Z')
+        expect(result[0].chargeVersions[0].endDate).toEqual(null)
+        expect(result[0].chargeVersions[0].status).toEqual('current')
+        expect(result[0].chargeVersions[0].licence).toEqual(licenceOne)
       })
     })
 
@@ -115,15 +110,15 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
       it('will fetch the data, format it and group the charge versions by the licences', async () => {
         const result = await FetchLicencesService.go(billRun, billingPeriod)
 
-        expect(result).to.have.length(2)
-        expect(result[0].id).to.equal(licenceOne.id)
-        expect(result[1].id).to.equal(licenceTwo.id)
+        expect(result).toHaveLength(2)
+        expect(result[0].id).toEqual(licenceOne.id)
+        expect(result[1].id).toEqual(licenceTwo.id)
 
-        expect(result[0].chargeVersions).to.have.length(2)
-        expect(result[0].chargeVersions[0].id).to.equal('9407b74d-816c-44a2-9926-73a89a9da985')
-        expect(result[0].chargeVersions[1].id).to.equal('cbab5668-21db-4fe5-9af8-9bb823d9294f')
-        expect(result[1].chargeVersions).to.have.length(1)
-        expect(result[1].chargeVersions[0].id).to.equal('efe652ba-f42c-4113-a190-f3d9d829a640')
+        expect(result[0].chargeVersions).toHaveLength(2)
+        expect(result[0].chargeVersions[0].id).toEqual('9407b74d-816c-44a2-9926-73a89a9da985')
+        expect(result[0].chargeVersions[1].id).toEqual('cbab5668-21db-4fe5-9af8-9bb823d9294f')
+        expect(result[1].chargeVersions).toHaveLength(1)
+        expect(result[1].chargeVersions[0].id).toEqual('efe652ba-f42c-4113-a190-f3d9d829a640')
       })
     })
   })
@@ -136,7 +131,7 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
     it('will return an empty array', async () => {
       const result = await FetchLicencesService.go(billRun, billingPeriod)
 
-      expect(result).to.have.length(0)
+      expect(result).toHaveLength(0)
     })
   })
 })

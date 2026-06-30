@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
@@ -49,11 +44,11 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
     it('saves the submitted value', async () => {
       await SubmitAbstractionAlertsService.go(session.id, payload, yarStub)
 
-      expect(session).to.equal({
+      expect(session).toEqual({
         ...session,
         abstractionAlerts: 'yes'
       })
-      expect(session.$update.called).to.be.true()
+      expect(session.$update.called).toBe(true)
     })
 
     describe('the redirect URL', () => {
@@ -61,7 +56,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
         it('redirects to the check page', async () => {
           const result = await SubmitAbstractionAlertsService.go(session.id, payload, yarStub)
 
-          expect(result).to.equal({ redirectUrl: `/system/company-contacts/setup/${session.id}/check` })
+          expect(result).toEqual({ redirectUrl: `/system/company-contacts/setup/${session.id}/check` })
         })
       })
 
@@ -73,7 +68,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
         it('redirects to the check page', async () => {
           const result = await SubmitAbstractionAlertsService.go(session.id, payload, yarStub)
 
-          expect(result).to.equal({ redirectUrl: `/system/company-contacts/setup/${session.id}/check` })
+          expect(result).toEqual({ redirectUrl: `/system/company-contacts/setup/${session.id}/check` })
         })
       })
 
@@ -85,7 +80,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
         it('redirects to the licences page', async () => {
           const result = await SubmitAbstractionAlertsService.go(session.id, payload, yarStub)
 
-          expect(result).to.equal({ redirectUrl: `/system/company-contacts/setup/${session.id}/licences` })
+          expect(result).toEqual({ redirectUrl: `/system/company-contacts/setup/${session.id}/licences` })
         })
       })
     })
@@ -109,7 +104,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
             it('does not set a notification', async () => {
               await SubmitAbstractionAlertsService.go(session.id, payload, yarStub)
 
-              expect(yarStub.flash.called).to.be.false()
+              expect(yarStub.flash.called).toBe(false)
             })
           })
 
@@ -123,8 +118,8 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
 
               const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-              expect(flashType).to.equal('notification')
-              expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Water abstraction alerts updated' })
+              expect(flashType).toEqual('notification')
+              expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Water abstraction alerts updated' })
             })
           })
         })
@@ -134,7 +129,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
         it('does not set a notification', async () => {
           await SubmitAbstractionAlertsService.go(session.id, payload, yarStub)
 
-          expect(yarStub.flash.called).to.be.false()
+          expect(yarStub.flash.called).toBe(false)
         })
       })
     })
@@ -148,7 +143,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
     it('returns page data for the view, with errors', async () => {
       const result = await SubmitAbstractionAlertsService.go(session.id, payload, yarStub)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         abstractionAlerts: null,
         backLink: {
           href: `/system/company-contacts/setup/${session.id}/contact-email`,

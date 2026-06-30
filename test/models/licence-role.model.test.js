@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CompanyAddressHelper = require('../support/helpers/company-address.helper.js')
 const CompanyAddressModel = require('../../app/models/company-address.model.js')
@@ -25,7 +18,7 @@ describe('Licence Role model', () => {
   let testLicenceDocumentRoles
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     // Test record
     testRecord = await LicenceRoleHelper.select()
 
@@ -54,7 +47,7 @@ describe('Licence Role model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const companyAddress of testCompanyAddresses) {
       await companyAddress.$query().delete()
     }
@@ -72,8 +65,8 @@ describe('Licence Role model', () => {
     it('can successfully run a basic query', async () => {
       const result = await LicenceRoleModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(LicenceRoleModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(LicenceRoleModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -82,19 +75,19 @@ describe('Licence Role model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceRoleModel.query().innerJoinRelated('companyAddresses')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the company addresses', async () => {
         const result = await LicenceRoleModel.query().findById(testRecord.id).withGraphFetched('companyAddresses')
 
-        expect(result).to.be.instanceOf(LicenceRoleModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceRoleModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.companyAddresses).to.be.an.array()
-        expect(result.companyAddresses[0]).to.be.an.instanceOf(CompanyAddressModel)
-        expect(result.companyAddresses).to.include(testCompanyAddresses[0])
-        expect(result.companyAddresses).to.include(testCompanyAddresses[1])
+        expect(result.companyAddresses).toBeInstanceOf(Array)
+        expect(result.companyAddresses[0]).toBeInstanceOf(CompanyAddressModel)
+        expect(result.companyAddresses).toContainEqual(testCompanyAddresses[0])
+        expect(result.companyAddresses).toContainEqual(testCompanyAddresses[1])
       })
     })
 
@@ -102,19 +95,19 @@ describe('Licence Role model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceRoleModel.query().innerJoinRelated('companyContacts')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the company contacts', async () => {
         const result = await LicenceRoleModel.query().findById(testRecord.id).withGraphFetched('companyContacts')
 
-        expect(result).to.be.instanceOf(LicenceRoleModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceRoleModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.companyContacts).to.be.an.array()
-        expect(result.companyContacts[0]).to.be.an.instanceOf(CompanyContactModel)
-        expect(result.companyContacts).to.include(testCompanyContacts[0])
-        expect(result.companyContacts).to.include(testCompanyContacts[1])
+        expect(result.companyContacts).toBeInstanceOf(Array)
+        expect(result.companyContacts[0]).toBeInstanceOf(CompanyContactModel)
+        expect(result.companyContacts).toContainEqual(testCompanyContacts[0])
+        expect(result.companyContacts).toContainEqual(testCompanyContacts[1])
       })
     })
 
@@ -122,19 +115,19 @@ describe('Licence Role model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceRoleModel.query().innerJoinRelated('licenceDocumentRoles')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence document roles', async () => {
         const result = await LicenceRoleModel.query().findById(testRecord.id).withGraphFetched('licenceDocumentRoles')
 
-        expect(result).to.be.instanceOf(LicenceRoleModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceRoleModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceDocumentRoles).to.be.an.array()
-        expect(result.licenceDocumentRoles[0]).to.be.an.instanceOf(LicenceDocumentRoleModel)
-        expect(result.licenceDocumentRoles).to.include(testLicenceDocumentRoles[0])
-        expect(result.licenceDocumentRoles).to.include(testLicenceDocumentRoles[1])
+        expect(result.licenceDocumentRoles).toBeInstanceOf(Array)
+        expect(result.licenceDocumentRoles[0]).toBeInstanceOf(LicenceDocumentRoleModel)
+        expect(result.licenceDocumentRoles).toContainEqual(testLicenceDocumentRoles[0])
+        expect(result.licenceDocumentRoles).toContainEqual(testLicenceDocumentRoles[1])
       })
     })
   })

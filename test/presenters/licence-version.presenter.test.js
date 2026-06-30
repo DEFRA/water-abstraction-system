@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const LicenceVersionPresenter = require('../../app/presenters/licence-version.presenter.js')
 
@@ -25,7 +18,7 @@ describe('Licence version presenter', () => {
       it('returns a link object with hidden text "current licence version"', () => {
         const result = LicenceVersionPresenter.linkToLicenceVersion(licenceVersion)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           hiddenText: 'current licence version',
           href: `/system/licence-versions/${licenceVersion.id}`
         })
@@ -43,7 +36,7 @@ describe('Licence version presenter', () => {
       it('returns a link object with hidden text "licence version ending on {end date}"', () => {
         const result = LicenceVersionPresenter.linkToLicenceVersion(licenceVersion)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           hiddenText: 'licence version ending on 31 December 2022',
           href: `/system/licence-versions/${licenceVersion.id}`
         })

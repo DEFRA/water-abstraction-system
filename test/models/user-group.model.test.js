@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const GroupModel = require('../../app/models/group.model.js')
 const GroupHelper = require('../support/helpers/group.helper.js')
@@ -21,14 +14,12 @@ const GROUP_WIRS_INDEX = 2
 const USER_GROUP_WIRS_INDEX = 3
 const USER_WIRS_INDEX = 3
 
-const { SKIP_COMPARE_LIST: skip } = UserHelper
-
 describe('User Group model', () => {
   let testGroup
   let testRecord
   let testUser
 
-  before(async () => {
+  beforeAll(async () => {
     testRecord = UserGroupHelper.select(USER_GROUP_WIRS_INDEX)
 
     testGroup = GroupHelper.select(GROUP_WIRS_INDEX)
@@ -39,8 +30,8 @@ describe('User Group model', () => {
     it('can successfully run a basic query', async () => {
       const result = await UserGroupModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(UserGroupModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(UserGroupModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -49,17 +40,17 @@ describe('User Group model', () => {
       it('can successfully run a related query', async () => {
         const query = await UserGroupModel.query().innerJoinRelated('group')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the group', async () => {
         const result = await UserGroupModel.query().findById(testRecord.id).withGraphFetched('group')
 
-        expect(result).to.be.instanceOf(UserGroupModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(UserGroupModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.group).to.be.an.instanceOf(GroupModel)
-        expect(result.group).to.equal(testGroup, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.group).toBeInstanceOf(GroupModel)
+        expect(result.group).toMatchObject(testGroup)
       })
     })
 
@@ -67,17 +58,17 @@ describe('User Group model', () => {
       it('can successfully run a related query', async () => {
         const query = await UserGroupModel.query().innerJoinRelated('user')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the user', async () => {
         const result = await UserGroupModel.query().findById(testRecord.id).withGraphFetched('user')
 
-        expect(result).to.be.instanceOf(UserGroupModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(UserGroupModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.user).to.be.an.instanceOf(UserModel)
-        expect(result.user).to.equal(testUser, { skip })
+        expect(result.user).toBeInstanceOf(UserModel)
+        expect(result.user).toMatchObject({ ...testUser, password: expect.any(String) })
       })
     })
   })

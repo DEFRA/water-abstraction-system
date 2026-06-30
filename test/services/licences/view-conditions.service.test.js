@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
@@ -52,7 +47,7 @@ describe('Licences - View Conditions service', () => {
     it('correctly presents the data', async () => {
       const result = await ViewConditionsService.go(licence.id, auth)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeSecondaryNav: 'summary',
         activeSummarySubNav: 'conditions',
         backLink: {
@@ -109,7 +104,7 @@ describe('Licences - View Conditions service', () => {
     it('correctly presents the data', async () => {
       const result = await ViewConditionsService.go(licence.id, auth)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeSecondaryNav: 'summary',
         activeSummarySubNav: 'conditions',
         backLink: {

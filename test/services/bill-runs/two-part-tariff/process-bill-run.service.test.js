@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
@@ -53,9 +48,9 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
       it('sets the bill run status first to "processing" and then to "empty"', async () => {
         await ProcessBillRunService.go(billRun, billingPeriods)
 
-        expect(billRunPatchStub.calledTwice).to.be.true()
-        expect(billRunPatchStub.firstCall.firstArg).to.equal({ status: 'processing' })
-        expect(billRunPatchStub.secondCall.firstArg).to.equal({ status: 'empty' })
+        expect(billRunPatchStub.calledTwice).toBe(true)
+        expect(billRunPatchStub.firstCall.firstArg).toEqual({ status: 'processing' })
+        expect(billRunPatchStub.secondCall.firstArg).toEqual({ status: 'empty' })
       })
 
       it('logs the time taken', async () => {
@@ -63,10 +58,10 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
 
         const args = notifierStub.omg.firstCall.args
 
-        expect(args[0]).to.equal('Process bill run complete')
-        expect(args[1].timeTakenMs).to.exist()
-        expect(args[1].billRunId).to.equal(billRun.id)
-        expect(args[1].type).to.equal('two_part_tariff')
+        expect(args[0]).toEqual('Process bill run complete')
+        expect(args[1].timeTakenMs).toBeDefined()
+        expect(args[1].billRunId).toEqual(billRun.id)
+        expect(args[1].type).toEqual('two_part_tariff')
       })
     })
 
@@ -78,9 +73,9 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
       it('sets the bill run status first to "processing" and then to "review"', async () => {
         await ProcessBillRunService.go(billRun, billingPeriods)
 
-        expect(billRunPatchStub.calledTwice).to.be.true()
-        expect(billRunPatchStub.firstCall.firstArg).to.equal({ status: 'processing' })
-        expect(billRunPatchStub.secondCall.firstArg).to.equal({ status: 'review' })
+        expect(billRunPatchStub.calledTwice).toBe(true)
+        expect(billRunPatchStub.firstCall.firstArg).toEqual({ status: 'processing' })
+        expect(billRunPatchStub.secondCall.firstArg).toEqual({ status: 'review' })
       })
 
       it('logs the time taken', async () => {
@@ -88,10 +83,10 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
 
         const args = notifierStub.omg.firstCall.args
 
-        expect(args[0]).to.equal('Process bill run complete')
-        expect(args[1].timeTakenMs).to.exist()
-        expect(args[1].billRunId).to.equal(billRun.id)
-        expect(args[1].type).to.equal('two_part_tariff')
+        expect(args[0]).toEqual('Process bill run complete')
+        expect(args[1].timeTakenMs).toBeDefined()
+        expect(args[1].billRunId).toEqual(billRun.id)
+        expect(args[1].type).toEqual('two_part_tariff')
       })
     })
   })
@@ -106,7 +101,7 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
       it('calls HandleErroredBillRunService', async () => {
         await ProcessBillRunService.go(billRun, billingPeriods)
 
-        expect(HandleErroredBillRunService.go.called).to.be.true()
+        expect(HandleErroredBillRunService.go.called).toBe(true)
       })
 
       it('logs the error', async () => {
@@ -114,10 +109,10 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
 
         const args = notifierStub.omfg.firstCall.args
 
-        expect(args[0]).to.equal('Process bill run failed')
-        expect(args[1].billRun.id).to.equal(billRun.id)
-        expect(args[2]).to.be.an.error()
-        expect(args[2].name).to.equal('MatchAndAllocateService has gone pop')
+        expect(args[0]).toEqual('Process bill run failed')
+        expect(args[1].billRun.id).toEqual(billRun.id)
+        expect(args[2]).toBeInstanceOf(Error)
+        expect(args[2].name).toEqual('MatchAndAllocateService has gone pop')
       })
     })
   })

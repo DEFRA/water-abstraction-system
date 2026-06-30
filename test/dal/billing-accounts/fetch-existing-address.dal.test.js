@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, after, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AddressHelper = require('../../support/helpers/address.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
@@ -17,11 +10,11 @@ const FetchExistingAddress = require('../../../app/dal/billing-accounts/fetch-ex
 describe('DAL - Fetch Existing Address dal', () => {
   let address
 
-  before(async () => {
+  beforeAll(async () => {
     address = await AddressHelper.add()
   })
 
-  after(async () => {
+  afterAll(async () => {
     await address.$query().delete()
   })
 
@@ -29,7 +22,7 @@ describe('DAL - Fetch Existing Address dal', () => {
     it('returns the matching address', async () => {
       const result = await FetchExistingAddress.go(address.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         address1: address.address1,
         address2: address.address2,
         address3: address.address3,
@@ -46,7 +39,7 @@ describe('DAL - Fetch Existing Address dal', () => {
     it('returns "undefined', async () => {
       const result = await FetchExistingAddress.go(generateUUID())
 
-      expect(result).to.be.undefined()
+      expect(result).toBeUndefined()
     })
   })
 })

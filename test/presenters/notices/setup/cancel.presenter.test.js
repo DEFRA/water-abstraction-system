@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
@@ -31,7 +24,7 @@ describe('Notices - Setup - Cancel presenter', () => {
   it('correctly presents the data', () => {
     const result = CancelPresenter.go(session)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       backLink: { href: `/system/notices/setup/${session.id}/check`, text: 'Back' },
       pageTitle: 'You are about to cancel this notice',
       pageTitleCaption: 'Notice RNIV-1234',
@@ -46,7 +39,7 @@ describe('Notices - Setup - Cancel presenter', () => {
     it('correctly formats the summary list', () => {
       const result = CancelPresenter.go(session)
 
-      expect(result.summaryList).to.equal({
+      expect(result.summaryList).toEqual({
         text: 'Licence number',
         value: licenceRef
       })
@@ -66,7 +59,7 @@ describe('Notices - Setup - Cancel presenter', () => {
     it('correctly formats the summary list', () => {
       const result = CancelPresenter.go(session)
 
-      expect(result.summaryList).to.equal({
+      expect(result.summaryList).toEqual({
         text: 'Alert type',
         value: 'Stop'
       })
@@ -92,7 +85,7 @@ describe('Notices - Setup - Cancel presenter', () => {
       it('correctly formats the summary list', () => {
         const result = CancelPresenter.go(session)
 
-        expect(result.summaryList).to.equal({
+        expect(result.summaryList).toEqual({
           text: 'Returns period',
           value: 'Quarterly 1 April 2025 to 30 June 2025'
         })
@@ -117,7 +110,7 @@ describe('Notices - Setup - Cancel presenter', () => {
       it('correctly formats the summary list', () => {
         const result = CancelPresenter.go(session)
 
-        expect(result.summaryList).to.equal({
+        expect(result.summaryList).toEqual({
           text: 'Returns period',
           value: 'Quarterly 1 April 2025 to 30 June 2025'
         })
@@ -143,7 +136,7 @@ describe('Notices - Setup - Cancel presenter', () => {
         it('correctly formats the summary list', () => {
           const result = CancelPresenter.go(session)
 
-          expect(result.summaryList).to.equal({
+          expect(result.summaryList).toEqual({
             text: 'Returns period',
             value: 'Quarterly 1 April 2025 to 30 June 2025'
           })
@@ -168,7 +161,7 @@ describe('Notices - Setup - Cancel presenter', () => {
         it('correctly formats the summary list', () => {
           const result = CancelPresenter.go(session)
 
-          expect(result.summaryList).to.equal({
+          expect(result.summaryList).toEqual({
             text: 'Returns period',
             value: 'Summer annual 1 November 2024 to 31 October 2025'
           })
@@ -193,7 +186,7 @@ describe('Notices - Setup - Cancel presenter', () => {
         it('correctly formats the summary list', () => {
           const result = CancelPresenter.go(session)
 
-          expect(result.summaryList).to.equal({
+          expect(result.summaryList).toEqual({
             text: 'Returns period',
             value: 'Winter and all year annual 1 April 2024 to 31 March 2025'
           })

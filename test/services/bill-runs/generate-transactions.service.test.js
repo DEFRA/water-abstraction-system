@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const ChargeCategoryHelper = require('../../support/helpers/charge-category.helper.js')
@@ -114,15 +109,12 @@ describe('Generate Transactions service', () => {
         )
 
         // Should only return the 'standard' charge transaction line
-        expect(results).to.have.length(1)
+        expect(results).toHaveLength(1)
         // We skip checking 'purposes' as we test this elsewhere
-        expect(results[0]).to.equal(
-          {
-            ...expectedStandardChargeResult,
-            waterUndertaker
-          },
-          { skip: ['purposes', 'id'] }
-        )
+        expect(results[0]).toMatchObject({
+          ...expectedStandardChargeResult,
+          waterUndertaker
+        })
       })
 
       it('returns the charge element as JSON in the transaction line "purposes" property', () => {
@@ -137,7 +129,7 @@ describe('Generate Transactions service', () => {
 
         const parsedElements = JSON.parse(results[0].purposes)
 
-        expect(parsedElements[0].id).to.equal(chargeElement.id)
+        expect(parsedElements[0].id).toEqual(chargeElement.id)
       })
     })
 
@@ -153,15 +145,12 @@ describe('Generate Transactions service', () => {
         )
 
         // Should return both a 'standard' charge and 'compensation' charge transaction line
-        expect(results).to.have.length(2)
+        expect(results).toHaveLength(2)
         // We skip checking 'purposes' as we test this elsewhere
-        expect(results[0]).to.equal(
-          {
-            ...expectedStandardChargeResult,
-            waterUndertaker
-          },
-          { skip: ['purposes', 'id'] }
-        )
+        expect(results[0]).toMatchObject({
+          ...expectedStandardChargeResult,
+          waterUndertaker
+        })
       })
 
       it('returns a second compensation charge transaction', () => {
@@ -174,16 +163,13 @@ describe('Generate Transactions service', () => {
           waterUndertaker
         )
 
-        expect(results[1]).to.equal(
-          {
-            ...expectedStandardChargeResult,
-            waterUndertaker,
-            chargeType: 'compensation',
-            description:
-              'Compensation charge: calculated from the charge reference, activity description and regional environmental improvement charge; excludes any supported source additional charge and two-part tariff charge agreement'
-          },
-          { skip: ['purposes', 'id'] }
-        )
+        expect(results[1]).toMatchObject({
+          ...expectedStandardChargeResult,
+          waterUndertaker,
+          chargeType: 'compensation',
+          description:
+            'Compensation charge: calculated from the charge reference, activity description and regional environmental improvement charge; excludes any supported source additional charge and two-part tariff charge agreement'
+        })
       })
 
       it('returns the charge element as JSON in both transaction lines "purposes" property', () => {
@@ -199,8 +185,8 @@ describe('Generate Transactions service', () => {
         const parsedStandardElements = JSON.parse(results[0].purposes)
         const parsedCompensationElements = JSON.parse(results[1].purposes)
 
-        expect(parsedStandardElements[0].id).to.equal(chargeElement.id)
-        expect(parsedCompensationElements[0].id).to.equal(chargeElement.id)
+        expect(parsedStandardElements[0].id).toEqual(chargeElement.id)
+        expect(parsedCompensationElements[0].id).toEqual(chargeElement.id)
       })
     })
 
@@ -222,7 +208,7 @@ describe('Generate Transactions service', () => {
           waterUndertaker
         )
 
-        expect(results[0].newLicence).to.be.true()
+        expect(results[0].newLicence).toBe(true)
       })
     })
 
@@ -237,7 +223,7 @@ describe('Generate Transactions service', () => {
           waterUndertaker
         )
 
-        expect(results[0].newLicence).to.be.false()
+        expect(results[0].newLicence).toBe(false)
       })
     })
 
@@ -253,7 +239,7 @@ describe('Generate Transactions service', () => {
             waterUndertaker
           )
 
-          expect(results[0].description).to.equal(`Water abstraction charge: ${chargeReference.description}`)
+          expect(results[0].description).toEqual(`Water abstraction charge: ${chargeReference.description}`)
         })
       })
 
@@ -272,7 +258,7 @@ describe('Generate Transactions service', () => {
             waterUndertaker
           )
 
-          expect(results[0].description).to.equal(
+          expect(results[0].description).toEqual(
             `Two-part tariff first part water abstraction charge: ${chargeReference.description}`
           )
         })
@@ -300,7 +286,7 @@ describe('Generate Transactions service', () => {
         waterUndertaker
       )
 
-      expect(results).to.be.empty()
+      expect(results).toHaveLength(0)
     })
   })
 })

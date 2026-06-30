@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ErroredBillRunPresenter = require('../../../app/presenters/bill-runs/errored-bill-run.presenter.js')
 
@@ -21,7 +14,7 @@ describe('Errored Bill Run presenter', () => {
     it('correctly presents the data', () => {
       const result = ErroredBillRunPresenter.go(billRun)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: '/system/bill-runs',
         billRunNumber: 10010,
         billRunStatus: 'error',
@@ -45,7 +38,7 @@ describe('Errored Bill Run presenter', () => {
         it('returns the matching error message', () => {
           const result = ErroredBillRunPresenter.go(billRun)
 
-          expect(result.errorMessage).to.equal('Error when getting the Charging Module bill run summary.')
+          expect(result.errorMessage).toEqual('Error when getting the Charging Module bill run summary.')
         })
       })
 
@@ -57,7 +50,7 @@ describe('Errored Bill Run presenter', () => {
         it('returns the generic error message', () => {
           const result = ErroredBillRunPresenter.go(billRun)
 
-          expect(result.errorMessage).to.equal(
+          expect(result.errorMessage).toEqual(
             'No error code was assigned. We have no further information at this time.'
           )
         })

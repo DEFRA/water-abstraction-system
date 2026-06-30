@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -47,16 +42,16 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
       it('saves the submitted option', async () => {
         await SubmitStopOrReduceService.go(session.id, payload)
 
-        expect(session.stopOrReduce).to.equal('stop')
-        expect(session.reduceAtThreshold).to.equal(null)
-        expect(session.$update.called).to.be.true()
+        expect(session.stopOrReduce).toEqual('stop')
+        expect(session.reduceAtThreshold).toEqual(null)
+        expect(session.$update.called).toBe(true)
       })
 
       describe('and the page has been not been visited', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
           const result = await SubmitStopOrReduceService.go(session.id, payload)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             checkPageVisited: undefined
           })
         })
@@ -74,10 +69,10 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
           const result = await SubmitStopOrReduceService.go(session.id, payload)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             checkPageVisited: true
           })
-          expect(session.$update.called).to.be.true()
+          expect(session.$update.called).toBe(true)
         })
       })
     })
@@ -90,23 +85,20 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
       it('returns the page data for the view', async () => {
         const result = await SubmitStopOrReduceService.go(session.id, payload)
 
-        expect(result).to.equal(
-          {
-            backLink: `/system/licence-monitoring-station/setup/${session.id}/threshold-and-unit`,
-            monitoringStationLabel: 'Monitoring Station Label',
-            pageTitle: 'Does the licence holder need to stop or reduce at this threshold?',
-            stopOrReduce: null,
-            reduceAtThreshold: null
-          },
-          { skip: ['sessionId', 'error'] }
-        )
+        expect(result).toMatchObject({
+          backLink: `/system/licence-monitoring-station/setup/${session.id}/threshold-and-unit`,
+          monitoringStationLabel: 'Monitoring Station Label',
+          pageTitle: 'Does the licence holder need to stop or reduce at this threshold?',
+          stopOrReduce: null,
+          reduceAtThreshold: null
+        })
       })
 
       describe('because the user has not entered or selected anything', () => {
         it('includes an error for both input elements and radio elements', async () => {
           const result = await SubmitStopOrReduceService.go(session.id, payload)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             message: 'Select if the licence holder needs to stop or reduce',
             stopOrReduceRadioElement: {
               text: 'Select if the licence holder needs to stop or reduce'
@@ -126,7 +118,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
         it('includes an error for the reduceAtThreshold input elements', async () => {
           const result = await SubmitStopOrReduceService.go(session.id, payload)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             message: 'Select if the licence holder needs to stop abstraction when they reach a certain amount',
             stopOrReduceRadioElement: null,
             reduceAtThresholdRadioElement: {

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
 const UsersFixture = require('../../../support/fixtures/users.fixture.js')
@@ -31,7 +24,7 @@ describe('Users - External - Communications presenter', () => {
   it('correctly presents the data', () => {
     const result = CommunicationsPresenter.go(user, notifications, viewingUserScope, back)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       activeNavBar: 'users',
       backLink: {
         href: '/system/users',

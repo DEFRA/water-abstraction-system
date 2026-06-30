@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const RequirementsForReturnsSeeder = require('../../../../support/seeders/requirements-for-returns.seeder.js')
 
@@ -19,7 +12,7 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
   let seededReturnVersion
 
   describe('when a matching return version exists', () => {
-    before(async () => {
+    beforeAll(async () => {
       const seedData = await RequirementsForReturnsSeeder.seed()
 
       seededReturnVersion = seedData.returnVersion
@@ -30,7 +23,7 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
     it('returns the details of the requirements for returns', async () => {
       const result = await FetchExistingRequirementsService.go(seededReturnVersion.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         id: seededReturnVersion.id,
         multipleUpload: false,
         quarterlyReturns: false,
@@ -109,7 +102,7 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
     it('returns nothing', async () => {
       const result = await FetchExistingRequirementsService.go('7d0c235a-6556-47dc-8d18-3b2965d49703')
 
-      expect(result).to.be.undefined()
+      expect(result).toBeUndefined()
     })
   })
 })

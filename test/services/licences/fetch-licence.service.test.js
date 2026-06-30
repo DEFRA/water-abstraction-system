@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, after, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
@@ -23,7 +16,7 @@ describe('Licences - Fetch Licence service', () => {
   let licenceSupplementaryYear
   let additionalLicenceVersion
 
-  before(async () => {
+  beforeAll(async () => {
     licence = await LicenceHelper.add()
 
     licenceSupplementaryYear = await LicenceSupplementaryYearModel.add({
@@ -49,7 +42,7 @@ describe('Licences - Fetch Licence service', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await additionalLicenceVersion.$query().delete()
     await licence.$query().delete()
     await licenceSupplementaryYear.$query().delete()
@@ -60,8 +53,8 @@ describe('Licences - Fetch Licence service', () => {
     it('returns the matching licence', async () => {
       const result = await FetchLicenceService.go(licence.id)
 
-      expect(result).to.be.an.instanceOf(LicenceModel)
-      expect(result).to.equal({
+      expect(result).toBeInstanceOf(LicenceModel)
+      expect(result).toEqual({
         expiredDate: null,
         id: licence.id,
         includeInPresrocBilling: 'no',
@@ -87,7 +80,7 @@ describe('Licences - Fetch Licence service', () => {
     it('returns undefined', async () => {
       const result = await FetchLicenceService.go(generateUUID())
 
-      expect(result).to.be.undefined()
+      expect(result).toBeUndefined()
     })
   })
 })

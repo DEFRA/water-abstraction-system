@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
 const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
@@ -36,7 +29,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
     it('returns page data for the view', () => {
       const result = ContactPresenter.go(session, companyContacts)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/fao`,
           text: 'Back'
@@ -70,7 +63,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
       it('returns null', () => {
         const result = ContactPresenter.go(session, companyContacts)
 
-        expect(result.contactSelected).to.equal(null)
+        expect(result.contactSelected).toEqual(null)
       })
     })
 
@@ -82,7 +75,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
       it('returns the selected contact ID', () => {
         const result = ContactPresenter.go(session, companyContacts)
 
-        expect(result.contactSelected).to.equal(session.contactSelected)
+        expect(result.contactSelected).toEqual(session.contactSelected)
       })
     })
   })
@@ -92,7 +85,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
       it('returns the correct page title', () => {
         const result = ContactPresenter.go(session, companyContacts)
 
-        expect(result.pageTitle).to.equal(`Set up a contact for ${company.name}`)
+        expect(result.pageTitle).toEqual(`Set up a contact for ${company.name}`)
       })
     })
 
@@ -104,7 +97,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
       it('returns the correct page title', () => {
         const result = ContactPresenter.go(session, companyContacts)
 
-        expect(result.pageTitle).to.equal(`No company contacts found for "${company.name}"`)
+        expect(result.pageTitle).toEqual(`No company contacts found for "${company.name}"`)
       })
     })
   })
@@ -121,7 +114,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
       it('returns the correct back link', () => {
         const result = ContactPresenter.go(session, companyContacts)
 
-        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/fao`)
+        expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/fao`)
       })
     })
 
@@ -137,7 +130,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
       it('returns the correct back link', () => {
         const result = ContactPresenter.go(session, companyContacts)
 
-        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
+        expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
     })
   })

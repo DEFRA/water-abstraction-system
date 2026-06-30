@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things to stub
 const CheckBusyBillRunsService = require('../../../app/services/bill-runs/check-busy-bill-runs.service.js')
@@ -46,13 +41,13 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
       it('returns a result that tells the controller to redirect to the index page', async () => {
         const result = await SubmitIndexBillRunsService.go(payload, yarStub)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
       })
 
       it('clears the "billRunsFilter" object from the session', async () => {
         await SubmitIndexBillRunsService.go(payload, yarStub)
 
-        expect(yarStub.clear.called).to.be.true()
+        expect(yarStub.clear.called).toBe(true)
       })
     })
 
@@ -64,7 +59,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
       it('returns a result that tells the controller to redirect to the index page', async () => {
         const result = await SubmitIndexBillRunsService.go(payload, yarStub)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
       })
 
       it('saves a default "billRunsFilter" object in the session', async () => {
@@ -72,8 +67,8 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
 
         const setArgs = yarStub.set.args[0]
 
-        expect(setArgs[0]).to.equal('billRunsFilter')
-        expect(setArgs[1]).to.equal({ number: null, regions: [], runTypes: [], statuses: [], yearCreated: null })
+        expect(setArgs[0]).toEqual('billRunsFilter')
+        expect(setArgs[1]).toEqual({ number: null, regions: [], runTypes: [], statuses: [], yearCreated: null })
       })
     })
 
@@ -85,7 +80,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
       it('returns a result that tells the controller to redirect to the index page', async () => {
         const result = await SubmitIndexBillRunsService.go(payload, yarStub)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
       })
 
       it('saves the state of the filters as the "billRunsFilter" object in the session', async () => {
@@ -93,8 +88,8 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
 
         const setArgs = yarStub.set.args[0]
 
-        expect(setArgs[0]).to.equal('billRunsFilter')
-        expect(setArgs[1]).to.equal({ number: '1001', regions: [], runTypes: [], statuses: [], yearCreated: '2025' })
+        expect(setArgs[0]).toEqual('billRunsFilter')
+        expect(setArgs[1]).toEqual({ number: '1001', regions: [], runTypes: [], statuses: [], yearCreated: '2025' })
       })
 
       describe('and a single "Run type" filter has been selected ("runTypes" is a string)', () => {
@@ -107,8 +102,8 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
 
           const setArgs = yarStub.set.args[0]
 
-          expect(setArgs[0]).to.equal('billRunsFilter')
-          expect(setArgs[1]).to.equal({
+          expect(setArgs[0]).toEqual('billRunsFilter')
+          expect(setArgs[1]).toEqual({
             number: null,
             regions: [],
             runTypes: ['annual'],
@@ -130,8 +125,8 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
 
           const setArgs = yarStub.set.args[0]
 
-          expect(setArgs[0]).to.equal('billRunsFilter')
-          expect(setArgs[1]).to.equal({
+          expect(setArgs[0]).toEqual('billRunsFilter')
+          expect(setArgs[1]).toEqual({
             number: null,
             regions: [],
             runTypes: ['annual', 'supplementary'],
@@ -151,8 +146,8 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
 
           const setArgs = yarStub.set.args[0]
 
-          expect(setArgs[0]).to.equal('billRunsFilter')
-          expect(setArgs[1]).to.equal({
+          expect(setArgs[0]).toEqual('billRunsFilter')
+          expect(setArgs[1]).toEqual({
             number: null,
             regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059'],
             runTypes: [],
@@ -174,8 +169,8 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
 
           const setArgs = yarStub.set.args[0]
 
-          expect(setArgs[0]).to.equal('billRunsFilter')
-          expect(setArgs[1]).to.equal({
+          expect(setArgs[0]).toEqual('billRunsFilter')
+          expect(setArgs[1]).toEqual({
             number: null,
             regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059', 'fd3d1154-c83d-4580-bcd6-46bfc380f233'],
             runTypes: [],
@@ -195,8 +190,8 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
 
           const setArgs = yarStub.set.args[0]
 
-          expect(setArgs[0]).to.equal('billRunsFilter')
-          expect(setArgs[1]).to.equal({
+          expect(setArgs[0]).toEqual('billRunsFilter')
+          expect(setArgs[1]).toEqual({
             number: null,
             regions: [],
             runTypes: [],
@@ -218,8 +213,8 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
 
           const setArgs = yarStub.set.args[0]
 
-          expect(setArgs[0]).to.equal('billRunsFilter')
-          expect(setArgs[1]).to.equal({
+          expect(setArgs[0]).toEqual('billRunsFilter')
+          expect(setArgs[1]).toEqual({
             number: null,
             regions: [],
             runTypes: [],
@@ -246,7 +241,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         it('returns the page data for the view, including any errors', async () => {
           const result = await SubmitIndexBillRunsService.go(payload, yarStub, '2')
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'bill-runs',
             error: {
               errorList: [{ href: '#yearCreated', text: 'The Year created must be a number' }],
@@ -421,7 +416,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         it('returns the page data for the view, including any errors', async () => {
           const result = await SubmitIndexBillRunsService.go(payload, yarStub)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'bill-runs',
             error: {
               errorList: [{ href: '#yearCreated', text: 'The Year created must be a number' }],

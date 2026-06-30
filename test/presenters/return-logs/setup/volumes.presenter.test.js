@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const VolumesPresenter = require('../../../../app/presenters/return-logs/setup/volumes.presenter.js')
 
@@ -23,7 +16,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
     it('correctly presents the data', () => {
       const result = VolumesPresenter.go(session, yearMonth)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: { href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/check', text: 'Back' },
         inputLines: [
           {
@@ -49,7 +42,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
       it('returns the line data for April 2023', () => {
         const result = VolumesPresenter.go(session, yearMonth)
 
-        expect(result.inputLines).to.equal([
+        expect(result.inputLines).toEqual([
           {
             endDate: '2023-04-30T00:00:00.000Z',
             label: 'April 2023',
@@ -67,7 +60,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
         it('correctly formats the line label', () => {
           const result = VolumesPresenter.go(session, yearMonth)
 
-          expect(result.inputLines[0].label).to.equal('30 April 2023')
+          expect(result.inputLines[0].label).toEqual('30 April 2023')
         })
       })
 
@@ -79,7 +72,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
         it('correctly formats the line label', () => {
           const result = VolumesPresenter.go(session, yearMonth)
 
-          expect(result.inputLines[0].label).to.equal('Week ending 30 April 2023')
+          expect(result.inputLines[0].label).toEqual('Week ending 30 April 2023')
         })
       })
 
@@ -91,7 +84,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
         it('correctly formats the line label', () => {
           const result = VolumesPresenter.go(session, yearMonth)
 
-          expect(result.inputLines[0].label).to.equal('April 2023')
+          expect(result.inputLines[0].label).toEqual('April 2023')
         })
       })
 
@@ -103,7 +96,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
         it('includes the error message in the line data', () => {
           const result = VolumesPresenter.go(session, yearMonth)
 
-          expect(result.inputLines).to.equal([
+          expect(result.inputLines).toEqual([
             {
               endDate: '2023-04-30T00:00:00.000Z',
               error: 'There is an error on this line',
@@ -126,7 +119,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
       it('returns the page title for June', () => {
         const result = VolumesPresenter.go(session, yearMonth)
 
-        expect(result.pageTitle).to.equal('Water abstracted June 2023')
+        expect(result.pageTitle).toEqual('Water abstracted June 2023')
       })
     })
   })
@@ -140,7 +133,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
       it('returns the unit of measurement as "Cubic metres"', () => {
         const result = VolumesPresenter.go(session, yearMonth)
 
-        expect(result.units).to.equal('Cubic metres')
+        expect(result.units).toEqual('Cubic metres')
       })
     })
 
@@ -152,7 +145,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
       it('returns the unit of measurement as "Litres"', () => {
         const result = VolumesPresenter.go(session, yearMonth)
 
-        expect(result.units).to.equal('Litres')
+        expect(result.units).toEqual('Litres')
       })
     })
 
@@ -164,7 +157,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
       it('returns the unit of measurement as "Megalitres"', () => {
         const result = VolumesPresenter.go(session, yearMonth)
 
-        expect(result.units).to.equal('Megalitres')
+        expect(result.units).toEqual('Megalitres')
       })
     })
 
@@ -176,7 +169,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
       it('returns the unit of measurement as "Gallons"', () => {
         const result = VolumesPresenter.go(session, yearMonth)
 
-        expect(result.units).to.equal('Gallons')
+        expect(result.units).toEqual('Gallons')
       })
     })
   })

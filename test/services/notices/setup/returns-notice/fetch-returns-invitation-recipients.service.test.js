@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const NoticeSessionFixture = require('../../../../support/fixtures/notice-session.fixture.js')
 const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
@@ -24,7 +17,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
   let setDueDateReturnLog
   let scenarios
 
-  before(async () => {
+  beforeAll(async () => {
     scenarios = {}
 
     // 1) Licence holder only
@@ -58,19 +51,19 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
     ])
   })
 
-  after(async () => {
+  afterAll(async () => {
     await nullDueDateReturnLog.$query().delete()
     await setDueDateReturnLog.$query().delete()
     await RecipientScenariosSeeder.clean(scenarios)
   })
 
   describe('when the set up journey is "ad-hoc"', () => {
-    before(() => {
+    beforeAll(() => {
       session = NoticeSessionFixture.adHocInvitation(scenarios.licenceHolder.licenceHolderRecipient.licenceRefs[0])
     })
 
     describe('and the query is NOT for generating a download', () => {
-      before(() => {
+      beforeAll(() => {
         download = false
       })
 
@@ -90,12 +83,12 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
         // based on the due date status. If there are any nulls, it will calculate the date (today + 28/29 days).
         sendingResults[0].notificationDueDate = futureDueDate('letter')
 
-        expect(results).to.equal(sendingResults)
+        expect(results).toEqual(sendingResults)
       })
     })
 
     describe('and the query is for generating a download', () => {
-      before(() => {
+      beforeAll(() => {
         download = true
       })
 
@@ -111,18 +104,18 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
         downloadingResults[1].due_date_status = 'some nulls'
         downloadingResults[1].notificationDueDate = futureDueDate('letter')
 
-        expect(results).to.equal(downloadingResults)
+        expect(results).toEqual(downloadingResults)
       })
     })
   })
 
   describe('when the set up journey is "standard"', () => {
-    before(() => {
+    beforeAll(() => {
       session = NoticeSessionFixture.standardInvitation(scenarios.licenceHolder.licenceHolderRecipient.licenceRefs[0])
     })
 
     describe('and the query is NOT for generating a download', () => {
-      before(() => {
+      beforeAll(() => {
         download = false
       })
 
@@ -145,12 +138,12 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
         // calculate the date (today + 28/29 days).
         sendingResults[0].notificationDueDate = futureDueDate('letter')
 
-        expect(results).to.equal(sendingResults)
+        expect(results).toEqual(sendingResults)
       })
     })
 
     describe('and the query is for generating a download', () => {
-      before(() => {
+      beforeAll(() => {
         download = true
       })
 
@@ -167,7 +160,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
 
         downloadingResults[0].notificationDueDate = futureDueDate('letter')
 
-        expect(results).to.equal(downloadingResults)
+        expect(results).toEqual(downloadingResults)
       })
     })
   })

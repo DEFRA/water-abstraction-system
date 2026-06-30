@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ChargeElementHelper = require('../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
@@ -25,7 +18,7 @@ describe('Charge Element model', () => {
   let testReviewChargeElements
   let testPurpose
 
-  before(async () => {
+  beforeAll(async () => {
     // Link charge reference
     testChargeReference = await ChargeReferenceHelper.add()
 
@@ -44,7 +37,7 @@ describe('Charge Element model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testChargeReference.$query().delete()
 
     for (const reviewChargeElement of testReviewChargeElements) {
@@ -58,8 +51,8 @@ describe('Charge Element model', () => {
     it('can successfully run a basic query', async () => {
       const result = await ChargeElementModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(ChargeElementModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(ChargeElementModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -68,17 +61,17 @@ describe('Charge Element model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeElementModel.query().innerJoinRelated('chargeReference')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge reference', async () => {
         const result = await ChargeElementModel.query().findById(testRecord.id).withGraphFetched('chargeReference')
 
-        expect(result).to.be.instanceOf(ChargeElementModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ChargeElementModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.chargeReference).to.be.an.instanceOf(ChargeReferenceModel)
-        expect(result.chargeReference).to.equal(testChargeReference)
+        expect(result.chargeReference).toBeInstanceOf(ChargeReferenceModel)
+        expect(result.chargeReference).toEqual(testChargeReference)
       })
     })
 
@@ -86,17 +79,17 @@ describe('Charge Element model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeElementModel.query().innerJoinRelated('purpose')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the purposes use', async () => {
         const result = await ChargeElementModel.query().findById(testRecord.id).withGraphFetched('purpose')
 
-        expect(result).to.be.instanceOf(ChargeElementModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ChargeElementModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.purpose).to.be.an.instanceOf(PurposeModel)
-        expect(result.purpose).to.equal(testPurpose, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.purpose).toBeInstanceOf(PurposeModel)
+        expect(result.purpose).toMatchObject(testPurpose)
       })
     })
 
@@ -104,19 +97,19 @@ describe('Charge Element model', () => {
       it('can successfully run a related query', async () => {
         const query = await ChargeElementModel.query().innerJoinRelated('reviewChargeElements')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the review charge elements', async () => {
         const result = await ChargeElementModel.query().findById(testRecord.id).withGraphFetched('reviewChargeElements')
 
-        expect(result).to.be.instanceOf(ChargeElementModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ChargeElementModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.reviewChargeElements).to.be.an.array()
-        expect(result.reviewChargeElements[0]).to.be.an.instanceOf(ReviewChargeElementModel)
-        expect(result.reviewChargeElements).to.include(testReviewChargeElements[0])
-        expect(result.reviewChargeElements).to.include(testReviewChargeElements[1])
+        expect(result.reviewChargeElements).toBeInstanceOf(Array)
+        expect(result.reviewChargeElements[0]).toBeInstanceOf(ReviewChargeElementModel)
+        expect(result.reviewChargeElements).toContainEqual(testReviewChargeElements[0])
+        expect(result.reviewChargeElements).toContainEqual(testReviewChargeElements[1])
       })
     })
   })

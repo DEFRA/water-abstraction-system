@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
@@ -40,7 +33,7 @@ describe('Licences - History presenter', () => {
     it('correctly presents the data', () => {
       const result = HistoryPresenter.go(licenceHistory, licence)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: '/',
           text: 'Go back to search'

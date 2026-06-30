@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
@@ -31,7 +24,7 @@ describe('Licences - Returns presenter', () => {
     it('correctly presents the data', () => {
       const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           text: 'Go back to search',
           href: '/'
@@ -66,7 +59,7 @@ describe('Licences - Returns presenter', () => {
       it('returns the start and end date in long format (2 January 2020 to 1 February 2020)', () => {
         const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
 
-        expect(result.returns[0].dates).to.equal('2 January 2020 to 1 February 2020')
+        expect(result.returns[0].dates).toEqual('2 January 2020 to 1 February 2020')
       })
     })
 
@@ -75,7 +68,7 @@ describe('Licences - Returns presenter', () => {
         it('returns an empty string', () => {
           const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
 
-          expect(result.returns[0].description).to.equal('empty description')
+          expect(result.returns[0].description).toEqual('empty description')
         })
       })
 
@@ -89,7 +82,7 @@ describe('Licences - Returns presenter', () => {
         it('returns an empty string', () => {
           const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
 
-          expect(result.returns[0].description).to.equal('')
+          expect(result.returns[0].description).toEqual('')
         })
       })
     })
@@ -99,7 +92,7 @@ describe('Licences - Returns presenter', () => {
         it('returns the formatted due date', () => {
           const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
 
-          expect(result.returns[0].dueDate).to.equal('28 November 2020')
+          expect(result.returns[0].dueDate).toEqual('28 November 2020')
         })
       })
 
@@ -111,7 +104,7 @@ describe('Licences - Returns presenter', () => {
         it('returns an empty string', () => {
           const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
 
-          expect(result.returns[0].dueDate).to.equal('')
+          expect(result.returns[0].dueDate).toEqual('')
         })
       })
     })
@@ -122,7 +115,7 @@ describe('Licences - Returns presenter', () => {
       it('returns null', () => {
         const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
 
-        expect(result.noReturnsMessage).to.be.null()
+        expect(result.noReturnsMessage).toBeNull()
       })
     })
 
@@ -135,7 +128,7 @@ describe('Licences - Returns presenter', () => {
       it('returns the message "No requirements for returns have been set up for this licence."', () => {
         const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
 
-        expect(result.noReturnsMessage).to.equal('No requirements for returns have been set up for this licence.')
+        expect(result.noReturnsMessage).toEqual('No requirements for returns have been set up for this licence.')
       })
     })
 
@@ -147,7 +140,7 @@ describe('Licences - Returns presenter', () => {
       it('returns the message "No returns for this licence."', () => {
         const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
 
-        expect(result.noReturnsMessage).to.equal('No returns for this licence.')
+        expect(result.noReturnsMessage).toEqual('No returns for this licence.')
       })
     })
   })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 const ReturnVersionModel = require('../../../../../app/models/return-version.model.js')
@@ -35,35 +28,35 @@ describe('Return Versions Setup - Create Return Version service', () => {
         returnVersionData.returnVersion.licenceId
       )
 
-      expect(returnVersion).to.have.length(1)
-      expect(returnVersion[0].createdBy).to.equal(returnVersionData.returnVersion.createdBy)
-      expect(returnVersion[0].endDate).to.be.null()
-      expect(returnVersion[0].licenceId).to.equal(returnVersionData.returnVersion.licenceId)
-      expect(returnVersion[0].multipleUpload).to.be.true()
-      expect(returnVersion[0].notes).to.equal(returnVersionData.returnVersion.notes)
-      expect(returnVersion[0].reason).to.equal(returnVersionData.returnVersion.reason)
-      expect(returnVersion[0].startDate).to.equal(returnVersionData.returnVersion.startDate)
-      expect(returnVersion[0].status).to.equal(returnVersionData.returnVersion.status)
-      expect(returnVersion[0].version).to.equal(returnVersionData.returnVersion.version)
+      expect(returnVersion).toHaveLength(1)
+      expect(returnVersion[0].createdBy).toEqual(returnVersionData.returnVersion.createdBy)
+      expect(returnVersion[0].endDate).toBeNull()
+      expect(returnVersion[0].licenceId).toEqual(returnVersionData.returnVersion.licenceId)
+      expect(returnVersion[0].multipleUpload).toBe(true)
+      expect(returnVersion[0].notes).toEqual(returnVersionData.returnVersion.notes)
+      expect(returnVersion[0].reason).toEqual(returnVersionData.returnVersion.reason)
+      expect(returnVersion[0].startDate).toEqual(returnVersionData.returnVersion.startDate)
+      expect(returnVersion[0].status).toEqual(returnVersionData.returnVersion.status)
+      expect(returnVersion[0].version).toEqual(returnVersionData.returnVersion.version)
 
       const returnRequirement = await ReturnRequirementModel.query().where('returnVersionId', returnVersion[0].id)
       const requirementData = returnVersionData.returnRequirements[0]
 
-      expect(returnRequirement).to.have.length(1)
-      expect(returnRequirement[0].abstractionPeriodStartDay).to.equal(1)
-      expect(returnRequirement[0].abstractionPeriodStartMonth).to.equal(4)
-      expect(returnRequirement[0].abstractionPeriodEndDay).to.equal(31)
-      expect(returnRequirement[0].abstractionPeriodEndMonth).to.equal(3)
-      expect(returnRequirement[0].collectionFrequency).to.equal(requirementData.collectionFrequency)
-      expect(returnRequirement[0].fiftySixException).to.equal(requirementData.fiftySixException)
-      expect(returnRequirement[0].gravityFill).to.equal(requirementData.gravityFill)
-      expect(returnRequirement[0].reabstraction).to.equal(requirementData.reabstraction)
-      expect(returnRequirement[0].reportingFrequency).to.equal(requirementData.reportingFrequency)
-      expect(returnRequirement[0].returnsFrequency).to.equal(requirementData.returnsFrequency)
-      expect(returnRequirement[0].returnVersionId).to.equal(returnVersion[0].id)
-      expect(returnRequirement[0].siteDescription).to.equal(requirementData.siteDescription)
-      expect(returnRequirement[0].summer).to.equal(requirementData.summer)
-      expect(returnRequirement[0].twoPartTariff).to.equal(requirementData.twoPartTariff)
+      expect(returnRequirement).toHaveLength(1)
+      expect(returnRequirement[0].abstractionPeriodStartDay).toEqual(1)
+      expect(returnRequirement[0].abstractionPeriodStartMonth).toEqual(4)
+      expect(returnRequirement[0].abstractionPeriodEndDay).toEqual(31)
+      expect(returnRequirement[0].abstractionPeriodEndMonth).toEqual(3)
+      expect(returnRequirement[0].collectionFrequency).toEqual(requirementData.collectionFrequency)
+      expect(returnRequirement[0].fiftySixException).toEqual(requirementData.fiftySixException)
+      expect(returnRequirement[0].gravityFill).toEqual(requirementData.gravityFill)
+      expect(returnRequirement[0].reabstraction).toEqual(requirementData.reabstraction)
+      expect(returnRequirement[0].reportingFrequency).toEqual(requirementData.reportingFrequency)
+      expect(returnRequirement[0].returnsFrequency).toEqual(requirementData.returnsFrequency)
+      expect(returnRequirement[0].returnVersionId).toEqual(returnVersion[0].id)
+      expect(returnRequirement[0].siteDescription).toEqual(requirementData.siteDescription)
+      expect(returnRequirement[0].summer).toEqual(requirementData.summer)
+      expect(returnRequirement[0].twoPartTariff).toEqual(requirementData.twoPartTariff)
 
       const returnRequirementPoint = await ReturnRequirementPointModel.query().where(
         'returnRequirementId',
@@ -71,8 +64,8 @@ describe('Return Versions Setup - Create Return Version service', () => {
       )
       const pointData = returnVersionData.returnRequirements[0].points[0]
 
-      expect(returnRequirementPoint).to.have.length(1)
-      expect(returnRequirementPoint[0].pointId).to.equal(pointData)
+      expect(returnRequirementPoint).toHaveLength(1)
+      expect(returnRequirementPoint[0].pointId).toEqual(pointData)
 
       const returnRequirementPurpose = await ReturnRequirementPurposeModel.query().where(
         'returnRequirementId',
@@ -80,11 +73,11 @@ describe('Return Versions Setup - Create Return Version service', () => {
       )
       const purposeData = returnVersionData.returnRequirements[0].returnRequirementPurposes[0]
 
-      expect(returnRequirementPurpose).to.have.length(1)
-      expect(returnRequirementPurpose[0].alias).to.equal(purposeData.alias)
-      expect(returnRequirementPurpose[0].primaryPurposeId).to.equal(purposeData.primaryPurposeId)
-      expect(returnRequirementPurpose[0].purposeId).to.equal(purposeData.purposeId)
-      expect(returnRequirementPurpose[0].secondaryPurposeId).to.equal(purposeData.secondaryPurposeId)
+      expect(returnRequirementPurpose).toHaveLength(1)
+      expect(returnRequirementPurpose[0].alias).toEqual(purposeData.alias)
+      expect(returnRequirementPurpose[0].primaryPurposeId).toEqual(purposeData.primaryPurposeId)
+      expect(returnRequirementPurpose[0].purposeId).toEqual(purposeData.purposeId)
+      expect(returnRequirementPurpose[0].secondaryPurposeId).toEqual(purposeData.secondaryPurposeId)
     })
   })
 })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
 
@@ -45,7 +38,7 @@ describe('Notices - Setup - Preview - Preview Check Alert presenter', () => {
     it('returns page data for the view', () => {
       const result = PreviewCheckAlertPresenter.go(contactHashId, recipientLicenceRefs, session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: { href: `/system/notices/setup/${session.id}/check`, text: 'Back' },
         pageTitle: 'Check the recipient previews',
         pageTitleCaption: 'Notice WAA-XM0WMH',
@@ -92,7 +85,7 @@ describe('Notices - Setup - Preview - Preview Check Alert presenter', () => {
         it('returns only the thresholds that match the recipients licence refs', () => {
           const result = PreviewCheckAlertPresenter.go(contactHashId, recipientLicenceRefs, session)
 
-          expect(result.restrictions).to.equal([
+          expect(result.restrictions).toEqual([
             {
               abstractionPeriod: '1 January to 31 March',
               action: {
@@ -114,7 +107,7 @@ describe('Notices - Setup - Preview - Preview Check Alert presenter', () => {
           it('returns the correct action', () => {
             const result = PreviewCheckAlertPresenter.go(contactHashId, recipientLicenceRefs, session)
 
-            expect(result.restrictions[0].action).to.equal({
+            expect(result.restrictions[0].action).toEqual({
               link: `/system/notices/setup/${session.id}/preview/${contactHashId}/alert/${licenceMonitoringStations.two.id}`,
               text: 'Preview'
             })

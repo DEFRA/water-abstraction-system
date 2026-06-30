@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
 const ReturnLogModel = require('../../app/models/return-log.model.js')
@@ -28,7 +21,7 @@ describe('Review Return model', () => {
   let testReviewChargeElementReturns
   let testReviewLicence
 
-  before(async () => {
+  beforeAll(async () => {
     testReturnLog = await ReturnLogHelper.add()
     testReviewLicence = await ReviewLicenceHelper.add()
 
@@ -50,7 +43,7 @@ describe('Review Return model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testReturnLog.$query().delete()
     await testReviewLicence.$query().delete()
 
@@ -69,8 +62,8 @@ describe('Review Return model', () => {
     it('can successfully run a basic query', async () => {
       const result = await ReviewReturnModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(ReviewReturnModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(ReviewReturnModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -79,17 +72,17 @@ describe('Review Return model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReviewReturnModel.query().innerJoinRelated('returnLog')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the return log', async () => {
         const result = await ReviewReturnModel.query().findById(testRecord.id).withGraphFetched('returnLog')
 
-        expect(result).to.be.instanceOf(ReviewReturnModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReviewReturnModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.returnLog).to.be.an.instanceOf(ReturnLogModel)
-        expect(result.returnLog).to.equal(testReturnLog)
+        expect(result.returnLog).toBeInstanceOf(ReturnLogModel)
+        expect(result.returnLog).toEqual(testReturnLog)
       })
     })
 
@@ -97,19 +90,19 @@ describe('Review Return model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReviewReturnModel.query().innerJoinRelated('reviewChargeElements')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the review charge elements', async () => {
         const result = await ReviewReturnModel.query().findById(testRecord.id).withGraphFetched('reviewChargeElements')
 
-        expect(result).to.be.instanceOf(ReviewReturnModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReviewReturnModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.reviewChargeElements).to.be.an.array()
-        expect(result.reviewChargeElements[0]).to.be.an.instanceOf(ReviewChargeElementModel)
-        expect(result.reviewChargeElements).to.include(testReviewChargeElements[0])
-        expect(result.reviewChargeElements).to.include(testReviewChargeElements[1])
+        expect(result.reviewChargeElements).toBeInstanceOf(Array)
+        expect(result.reviewChargeElements[0]).toBeInstanceOf(ReviewChargeElementModel)
+        expect(result.reviewChargeElements).toContainEqual(testReviewChargeElements[0])
+        expect(result.reviewChargeElements).toContainEqual(testReviewChargeElements[1])
       })
     })
 
@@ -117,7 +110,7 @@ describe('Review Return model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReviewReturnModel.query().innerJoinRelated('reviewChargeElementReturns')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the review charge element returns', async () => {
@@ -125,13 +118,13 @@ describe('Review Return model', () => {
           .findById(testRecord.id)
           .withGraphFetched('reviewChargeElementReturns')
 
-        expect(result).to.be.instanceOf(ReviewReturnModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReviewReturnModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.reviewChargeElementReturns).to.be.an.array()
-        expect(result.reviewChargeElementReturns[0]).to.be.an.instanceOf(ReviewChargeElementReturnModel)
-        expect(result.reviewChargeElementReturns).to.include(testReviewChargeElementReturns[0])
-        expect(result.reviewChargeElementReturns).to.include(testReviewChargeElementReturns[1])
+        expect(result.reviewChargeElementReturns).toBeInstanceOf(Array)
+        expect(result.reviewChargeElementReturns[0]).toBeInstanceOf(ReviewChargeElementReturnModel)
+        expect(result.reviewChargeElementReturns).toContainEqual(testReviewChargeElementReturns[0])
+        expect(result.reviewChargeElementReturns).toContainEqual(testReviewChargeElementReturns[1])
       })
     })
 
@@ -139,17 +132,17 @@ describe('Review Return model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReviewReturnModel.query().innerJoinRelated('reviewLicence')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the review licence', async () => {
         const result = await ReviewReturnModel.query().findById(testRecord.id).withGraphFetched('reviewLicence')
 
-        expect(result).to.be.instanceOf(ReviewReturnModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReviewReturnModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.reviewLicence).to.be.an.instanceOf(ReviewLicenceModel)
-        expect(result.reviewLicence).to.equal(testReviewLicence)
+        expect(result.reviewLicence).toBeInstanceOf(ReviewLicenceModel)
+        expect(result.reviewLicence).toEqual(testReviewLicence)
       })
     })
   })

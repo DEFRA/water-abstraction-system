@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ReadingsValidator = require('../../../../app/validators/return-logs/setup/readings.validator.js')
 
@@ -45,7 +38,7 @@ describe('Return Logs Setup - Readings validator', () => {
       it('confirms the payload is valid', () => {
         const result = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
   })
@@ -60,8 +53,8 @@ describe('Return Logs Setup - Readings validator', () => {
       it('fails validation with the message "Reading must be a number or blank"', () => {
         const result = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Reading must be a number or blank')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Reading must be a number or blank')
       })
     })
 
@@ -74,8 +67,8 @@ describe('Return Logs Setup - Readings validator', () => {
       it('fails validation with the message "Reading cannot be negative"', () => {
         const result = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Reading cannot be negative')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Reading cannot be negative')
       })
     })
 
@@ -88,8 +81,8 @@ describe('Return Logs Setup - Readings validator', () => {
       it('fails validation with the message "The reading must be greater than or equal to the previous reading of 10"', () => {
         const result = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal(
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual(
           'The reading must be greater than or equal to the previous reading of 10'
         )
       })
@@ -104,8 +97,8 @@ describe('Return Logs Setup - Readings validator', () => {
       it('fails validation with the message "The reading must be greater than or equal to the previous reading of 100"', () => {
         const result = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal(
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual(
           'The reading must be greater than or equal to the previous reading of 100'
         )
       })
@@ -120,8 +113,8 @@ describe('Return Logs Setup - Readings validator', () => {
       it('fails validation with the message "The reading must be less than or equal to the subsequent reading of 300"', () => {
         const result = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal(
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual(
           'The reading must be less than or equal to the subsequent reading of 300'
         )
       })
@@ -136,8 +129,8 @@ describe('Return Logs Setup - Readings validator', () => {
       it('fails validation with the message "Each reading must be greater than or equal to the previous reading"', () => {
         const result = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal(
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual(
           'Each reading must be greater than or equal to the previous reading'
         )
       })
@@ -152,8 +145,8 @@ describe('Return Logs Setup - Readings validator', () => {
       it('fails validation with the message "Reading entered exceeds the maximum of 99999999999"', () => {
         const result = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Reading entered exceeds the maximum of 99999999999')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Reading entered exceeds the maximum of 99999999999')
       })
     })
 
@@ -166,8 +159,8 @@ describe('Return Logs Setup - Readings validator', () => {
       it('fails validation with the message "Reading must be blank or between 0 and 99999999999"', () => {
         const result = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Reading must be blank or between 0 and 99999999999')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Reading must be blank or between 0 and 99999999999')
       })
     })
   })

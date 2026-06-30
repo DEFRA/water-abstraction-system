@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ReturnCycleHelper = require('../support/helpers/return-cycle.helper.js')
 const ReturnLogModel = require('../../app/models/return-log.model.js')
@@ -19,7 +12,7 @@ describe('Return Cycle model', () => {
   let testRecord
   let testReturnLogs
 
-  before(async () => {
+  beforeAll(async () => {
     testRecord = await ReturnCycleHelper.select()
 
     testReturnLogs = []
@@ -30,7 +23,7 @@ describe('Return Cycle model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const returnLog of testReturnLogs) {
       await returnLog.$query().delete()
     }
@@ -40,8 +33,8 @@ describe('Return Cycle model', () => {
     it('can successfully run a basic query', async () => {
       const result = await ReturnCycleModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(ReturnCycleModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(ReturnCycleModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -50,19 +43,19 @@ describe('Return Cycle model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReturnCycleModel.query().innerJoinRelated('returnLogs')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the return log', async () => {
         const result = await ReturnCycleModel.query().findById(testRecord.id).withGraphFetched('returnLogs')
 
-        expect(result).to.be.instanceOf(ReturnCycleModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReturnCycleModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.returnLogs).to.be.an.array()
-        expect(result.returnLogs[0]).to.be.an.instanceOf(ReturnLogModel)
-        expect(result.returnLogs).to.include(testReturnLogs[0])
-        expect(result.returnLogs).to.include(testReturnLogs[1])
+        expect(result.returnLogs).toBeInstanceOf(Array)
+        expect(result.returnLogs[0]).toBeInstanceOf(ReturnLogModel)
+        expect(result.returnLogs).toContainEqual(testReturnLogs[0])
+        expect(result.returnLogs).toContainEqual(testReturnLogs[1])
       })
     })
   })

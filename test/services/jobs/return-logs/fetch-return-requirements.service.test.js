@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const PointHelper = require('../../../support/helpers/point.helper.js')
@@ -42,23 +35,23 @@ let secondaryPurpose
 
 describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
   describe('when the return cycle is "summer', () => {
-    before(async () => {
+    beforeAll(async () => {
       returnCycle = await ReturnCycleHelper.select(0, true)
     })
 
     describe('and there is a licence that does not end before the cycle starts', () => {
-      before(async () => {
+      beforeAll(async () => {
         region = RegionHelper.select()
         licence = await LicenceHelper.add({ regionId: region.id })
       })
 
       describe('and the licence has a return version that does not end before the cycle starts', () => {
-        before(async () => {
+        beforeAll(async () => {
           returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
         })
 
         describe('and the return version has a return requirement flagged as "summer"', () => {
-          before(async () => {
+          beforeAll(async () => {
             returnRequirement = await ReturnRequirementHelper.add({
               regionId: region.naldRegionId,
               returnVersionId: returnVersion.id,
@@ -92,13 +85,13 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
 
               const expectedResult = _expectedResult()
 
-              expect(results).to.include(expectedResult)
+              expect(results).toContainEqual(expectedResult)
             })
           })
 
           describe('and the return requirement has an existing return log for the given cycle', () => {
             describe("but the return log's status is 'void'", () => {
-              before(async () => {
+              beforeAll(async () => {
                 await ReturnLogHelper.add({
                   metadata: {
                     nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.reference }
@@ -114,12 +107,12 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
 
                 const expectedResult = _expectedResult()
 
-                expect(results).to.include(expectedResult)
+                expect(results).toContainEqual(expectedResult)
               })
             })
 
             describe("and the return log's status is anything other than 'void'", () => {
-              before(async () => {
+              beforeAll(async () => {
                 await ReturnLogHelper.add({
                   metadata: {
                     nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.reference }
@@ -135,14 +128,14 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
 
                 const resultIds = _resultIds(results)
 
-                expect(resultIds).not.to.include(returnRequirement.id)
+                expect(resultIds).not.toContainEqual(returnRequirement.id)
               })
             })
           })
         })
 
         describe('and the return version has a return requirement flagged as "winter & all year"', () => {
-          before(async () => {
+          beforeAll(async () => {
             returnRequirement = await ReturnRequirementHelper.add({
               regionId: region.naldRegionId,
               returnVersionId: returnVersion.id,
@@ -174,18 +167,18 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
 
             const resultIds = _resultIds(results)
 
-            expect(resultIds).not.to.include(returnRequirement.id)
+            expect(resultIds).not.toContainEqual(returnRequirement.id)
           })
         })
       })
 
       describe('and the licence has a return version that ends before the cycle starts', () => {
-        before(async () => {
+        beforeAll(async () => {
           returnVersion = await ReturnVersionHelper.add({ endDate: new Date('2022-04-30'), licenceId: licence.id })
         })
 
         describe('and return version has a return requirement flagged as "summer"', () => {
-          before(async () => {
+          beforeAll(async () => {
             returnRequirement = await ReturnRequirementHelper.add({
               regionId: region.naldRegionId,
               returnVersionId: returnVersion.id,
@@ -217,25 +210,25 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
 
             const resultIds = _resultIds(results)
 
-            expect(resultIds).not.to.include(returnRequirement.id)
+            expect(resultIds).not.toContainEqual(returnRequirement.id)
           })
         })
       })
     })
 
     describe('and there is a licence that ends before the cycle starts', () => {
-      before(async () => {
+      beforeAll(async () => {
         region = RegionHelper.select()
         licence = await LicenceHelper.add({ expiredDate: new Date('2022-04-30'), regionId: region.id })
       })
 
       describe('and the licence has a return version that does not end before the cycle starts', () => {
-        before(async () => {
+        beforeAll(async () => {
           returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
         })
 
         describe('and the return version has a return requirement flagged as "summer"', () => {
-          before(async () => {
+          beforeAll(async () => {
             returnRequirement = await ReturnRequirementHelper.add({
               regionId: region.naldRegionId,
               returnVersionId: returnVersion.id,
@@ -267,7 +260,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
 
             const resultIds = _resultIds(results)
 
-            expect(resultIds).not.to.include(returnRequirement.id)
+            expect(resultIds).not.toContainEqual(returnRequirement.id)
           })
         })
       })
@@ -275,23 +268,23 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
   })
 
   describe('when the return cycle is "winter & all year"', () => {
-    before(async () => {
+    beforeAll(async () => {
       returnCycle = await ReturnCycleHelper.select(0, false)
     })
 
     describe('and there is a licence that does not end before the cycle starts', () => {
-      before(async () => {
+      beforeAll(async () => {
         region = RegionHelper.select()
         licence = await LicenceHelper.add({ regionId: region.id })
       })
 
       describe('and the licence has a return version that does not end before the cycle starts', () => {
-        before(async () => {
+        beforeAll(async () => {
           returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
         })
 
         describe('and the return version has a return requirement flagged as "winter & all year"', () => {
-          before(async () => {
+          beforeAll(async () => {
             returnRequirement = await ReturnRequirementHelper.add({
               regionId: region.naldRegionId,
               returnVersionId: returnVersion.id,
@@ -325,13 +318,13 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
 
               const expectedResult = _expectedResult()
 
-              expect(results).to.include(expectedResult)
+              expect(results).toContainEqual(expectedResult)
             })
           })
 
           describe('but the return requirement has an existing return log for the given cycle', () => {
             describe("but the return log's status is 'void'", () => {
-              before(async () => {
+              beforeAll(async () => {
                 await ReturnLogHelper.add({
                   metadata: {
                     nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.reference }
@@ -347,12 +340,12 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
 
                 const expectedResult = _expectedResult()
 
-                expect(results).to.include(expectedResult)
+                expect(results).toContainEqual(expectedResult)
               })
             })
 
             describe("and the return log's status is anything other than 'void'", () => {
-              before(async () => {
+              beforeAll(async () => {
                 await ReturnLogHelper.add({
                   metadata: {
                     nald: { regionCode: region.naldRegionId, return_reference: returnRequirement.reference }
@@ -368,14 +361,14 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
 
                 const resultIds = _resultIds(results)
 
-                expect(resultIds).not.to.include(returnRequirement.id)
+                expect(resultIds).not.toContainEqual(returnRequirement.id)
               })
             })
           })
         })
 
         describe('and the return version has a return requirement flagged as "summer"', () => {
-          before(async () => {
+          beforeAll(async () => {
             returnRequirement = await ReturnRequirementHelper.add({
               regionId: region.naldRegionId,
               returnVersionId: returnVersion.id,
@@ -407,18 +400,18 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
 
             const resultIds = _resultIds(results)
 
-            expect(resultIds).not.to.include(returnRequirement.id)
+            expect(resultIds).not.toContainEqual(returnRequirement.id)
           })
         })
       })
 
       describe('and the licence has a return version that ends before the cycle starts', () => {
-        before(async () => {
+        beforeAll(async () => {
           returnVersion = await ReturnVersionHelper.add({ endDate: new Date('2022-04-30'), licenceId: licence.id })
         })
 
         describe('and the return version has a return requirement flagged as "winter & all year"', () => {
-          before(async () => {
+          beforeAll(async () => {
             returnRequirement = await ReturnRequirementHelper.add({
               regionId: region.naldRegionId,
               returnVersionId: returnVersion.id,
@@ -450,25 +443,25 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
 
             const resultIds = _resultIds(results)
 
-            expect(resultIds).not.to.include(returnRequirement.id)
+            expect(resultIds).not.toContainEqual(returnRequirement.id)
           })
         })
       })
     })
 
     describe('and there is a licence that ends before the cycle starts', () => {
-      before(async () => {
+      beforeAll(async () => {
         region = RegionHelper.select()
         licence = await LicenceHelper.add({ expiredDate: new Date('2022-04-30'), regionId: region.id })
       })
 
       describe('and the licence has a return version that does not end before the cycle starts', () => {
-        before(async () => {
+        beforeAll(async () => {
           returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
         })
 
         describe('and the return version has a return requirement flagged as "winter & all year"', () => {
-          before(async () => {
+          beforeAll(async () => {
             returnRequirement = await ReturnRequirementHelper.add({
               regionId: region.naldRegionId,
               returnVersionId: returnVersion.id,
@@ -500,7 +493,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
 
             const resultIds = _resultIds(results)
 
-            expect(resultIds).not.to.include(returnRequirement.id)
+            expect(resultIds).not.toContainEqual(returnRequirement.id)
           })
         })
       })

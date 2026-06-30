@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
 
@@ -24,7 +17,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type presenter', () => {
     it('returns page data for the view', () => {
       const result = AlertTypePresenter.go(sessionData)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         alertTypeOptions: [
           {
             checked: false,
@@ -74,7 +67,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type presenter', () => {
         it('returns page data for the view, with the option selected', () => {
           const result = AlertTypePresenter.go(sessionData)
 
-          expect(result.alertTypeOptions[0]).to.equal({
+          expect(result.alertTypeOptions[0]).toEqual({
             checked: true,
             hint: {
               text: 'Tell licence holders they may need to reduce or stop water abstraction soon.'
@@ -93,7 +86,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type presenter', () => {
         it('returns page data for the view, with the option selected', () => {
           const result = AlertTypePresenter.go(sessionData)
 
-          expect(result.alertTypeOptions[1]).to.equal({
+          expect(result.alertTypeOptions[1]).toEqual({
             checked: true,
             hint: {
               text: 'Tell licence holders they can take water at a reduced amount.'
@@ -112,7 +105,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type presenter', () => {
         it('returns page data for the view, with the option selected', () => {
           const result = AlertTypePresenter.go(sessionData)
 
-          expect(result.alertTypeOptions[2]).to.equal({
+          expect(result.alertTypeOptions[2]).toEqual({
             checked: true,
             hint: {
               text: 'Tell licence holders they must stop taking water.'
@@ -131,7 +124,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type presenter', () => {
         it('returns page data for the view, with the option selected', () => {
           const result = AlertTypePresenter.go(sessionData)
 
-          expect(result.alertTypeOptions[3]).to.equal({
+          expect(result.alertTypeOptions[3]).toEqual({
             checked: true,
             hint: {
               text: 'Tell licence holders they can take water at the normal amount.'

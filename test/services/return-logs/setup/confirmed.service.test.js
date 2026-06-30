@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const FetchReturnLogService = require('../../../../app/services/return-logs/setup/fetch-return-log.service.js')
@@ -53,7 +48,7 @@ describe('Return Logs - Setup - Confirmed service', () => {
     it('returns page data for the view', async () => {
       const result = await ConfirmedService.go(returnLogId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
         licenceRef: '01/117',
         pageTitle: 'Return 10032788 received',

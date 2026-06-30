@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
@@ -102,7 +97,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
   it('correctly returns the data', async () => {
     const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       licenceMonitoringStations: [
         {
           abstractionPeriodEndDay: 31,
@@ -188,7 +183,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
     it('does not return ended licences', async () => {
       const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         licenceMonitoringStations: [
           {
             abstractionPeriodEndDay: 31,
@@ -225,7 +220,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
         it('returns the "notes"', async () => {
           const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
 
-          expect(result.licenceMonitoringStations[1].notes).to.equal('I have a bad feeling about this')
+          expect(result.licenceMonitoringStations[1].notes).toEqual('I have a bad feeling about this')
         })
       })
 
@@ -233,7 +228,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
         it('returns null', async () => {
           const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
 
-          expect(result.licenceMonitoringStations[0].notes).to.equal(null)
+          expect(result.licenceMonitoringStations[0].notes).toEqual(null)
         })
       })
 
@@ -241,7 +236,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
         it('returns the weird notes', async () => {
           const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
 
-          expect(result.licenceMonitoringStations[2].notes).to.equal(
+          expect(result.licenceMonitoringStations[2].notes).toEqual(
             '"                   "             "                    "'
           )
         })
@@ -252,7 +247,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
       it('generates a "thresholdGroup" for each licence monitoring station', async () => {
         const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
 
-        expect(result.licenceMonitoringStations[0].thresholdGroup).to.equal('flow-100-m3/s')
+        expect(result.licenceMonitoringStations[0].thresholdGroup).toEqual('flow-100-m3/s')
       })
     })
   })

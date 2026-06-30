@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
@@ -20,7 +13,7 @@ describe('Return Versions - Setup - Fetch Relevant Licence Version service', () 
 
   let startDate
 
-  before(async () => {
+  beforeAll(async () => {
     licenceVersions.firstLicenceVersion = await LicenceVersionHelper.add({
       endDate: new Date('2012-08-12'),
       issue: 100,
@@ -62,14 +55,14 @@ describe('Return Versions - Setup - Fetch Relevant Licence Version service', () 
   })
 
   describe('when the selected start date is before the first licence version starts', () => {
-    before(() => {
+    beforeAll(() => {
       startDate = new Date('1998-04-01')
     })
 
     it('returns the first licence version for the licence', async () => {
       const result = await FetchRelevantLicenceVersionService.go(licenceId, startDate)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         endDate: licenceVersions.firstLicenceVersion.endDate,
         id: licenceVersions.firstLicenceVersion.id,
         startDate: licenceVersions.firstLicenceVersion.startDate
@@ -78,14 +71,14 @@ describe('Return Versions - Setup - Fetch Relevant Licence Version service', () 
   })
 
   describe('when the selected start date is after the last licence version ends', () => {
-    before(() => {
+    beforeAll(() => {
       startDate = new Date('2024-04-01')
     })
 
     it('returns the "current" licence version for the licence', async () => {
       const result = await FetchRelevantLicenceVersionService.go(licenceId, startDate)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         endDate: licenceVersions.currentLicence.endDate,
         id: licenceVersions.currentLicence.id,
         startDate: licenceVersions.currentLicence.startDate
@@ -94,14 +87,14 @@ describe('Return Versions - Setup - Fetch Relevant Licence Version service', () 
   })
 
   describe('when the selected start date is after the first licence version ends but before the "current" version starts', () => {
-    before(() => {
+    beforeAll(() => {
       startDate = new Date('2016-04-01')
     })
 
     it('returns the "relevant" licence version for the licence', async () => {
       const result = await FetchRelevantLicenceVersionService.go(licenceId, startDate)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         endDate: licenceVersions.secondLicenceVersion.endDate,
         id: licenceVersions.secondLicenceVersion.id,
         startDate: licenceVersions.secondLicenceVersion.startDate
@@ -116,14 +109,14 @@ describe('Return Versions - Setup - Fetch Relevant Licence Version service', () 
   // these tests to ensure we handle these exceptions.
   describe('when the selected start date is the same as the start date of multiple licence versions', () => {
     describe('and both have end dates (they are both superseded)', () => {
-      before(() => {
+      beforeAll(() => {
         startDate = new Date('2019-05-12')
       })
 
       it('returns the licence version with the latest end date', async () => {
         const result = await FetchRelevantLicenceVersionService.go(licenceId, startDate)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           endDate: licenceVersions.secondLicenceVersion.endDate,
           id: licenceVersions.secondLicenceVersion.id,
           startDate: licenceVersions.secondLicenceVersion.startDate
@@ -132,14 +125,14 @@ describe('Return Versions - Setup - Fetch Relevant Licence Version service', () 
     })
 
     describe('and one has an end date and the other is the "current" licence version', () => {
-      before(() => {
+      beforeAll(() => {
         startDate = new Date('2019-05-13')
       })
 
       it('returns the "current" licence version', async () => {
         const result = await FetchRelevantLicenceVersionService.go(licenceId, startDate)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           endDate: licenceVersions.currentLicence.endDate,
           id: licenceVersions.currentLicence.id,
           startDate: licenceVersions.currentLicence.startDate
@@ -149,14 +142,14 @@ describe('Return Versions - Setup - Fetch Relevant Licence Version service', () 
   })
 
   describe('when the licence ID is unknown', () => {
-    before(() => {
+    beforeAll(() => {
       startDate = new Date('2024-04-01')
     })
 
     it('returns "null"', async () => {
       const result = await FetchRelevantLicenceVersionService.go('1d7f6806-43b1-4cce-9ab1-adb28448aef2', startDate)
 
-      expect(result).to.be.null()
+      expect(result).toBeNull()
     })
   })
 })

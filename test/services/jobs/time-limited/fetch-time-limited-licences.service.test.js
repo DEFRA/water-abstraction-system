@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
@@ -65,9 +58,9 @@ describe('Fetch Time Limited Licences service', () => {
         return result.chargeVersionId === chargeVersionId
       })
 
-      expect(hasLicenceId).to.be.true()
-      expect(hasLicenceVersionId).to.be.true()
-      expect(hasChargeVersionId).to.be.true()
+      expect(hasLicenceId).toBe(true)
+      expect(hasLicenceVersionId).toBe(true)
+      expect(hasChargeVersionId).toBe(true)
     })
 
     describe('including those linked to soft-deleted workflow records', () => {
@@ -88,9 +81,9 @@ describe('Fetch Time Limited Licences service', () => {
           return result.chargeVersionId === chargeVersionId
         })
 
-        expect(hasLicenceId).to.be.true()
-        expect(hasLicenceVersionId).to.be.true()
-        expect(hasChargeVersionId).to.be.true()
+        expect(hasLicenceId).toBe(true)
+        expect(hasLicenceVersionId).toBe(true)
+        expect(hasChargeVersionId).toBe(true)
       })
     })
   })
@@ -133,9 +126,9 @@ describe('Fetch Time Limited Licences service', () => {
           return result.chargeVersionId === chargeVersionId
         })
 
-        expect(hasLicenceId).to.be.false()
-        expect(hasLicenceVersionId).to.be.false()
-        expect(hasChargeVersionId).to.be.false()
+        expect(hasLicenceId).toBe(false)
+        expect(hasLicenceVersionId).toBe(false)
+        expect(hasChargeVersionId).toBe(false)
       })
     })
 
@@ -174,9 +167,9 @@ describe('Fetch Time Limited Licences service', () => {
           return result.chargeVersionId === chargeVersionId
         })
 
-        expect(hasLicenceId).to.be.false()
-        expect(hasLicenceVersionId).to.be.false()
-        expect(hasChargeVersionId).to.be.false()
+        expect(hasLicenceId).toBe(false)
+        expect(hasLicenceVersionId).toBe(false)
+        expect(hasChargeVersionId).toBe(false)
       })
     })
 
@@ -215,9 +208,9 @@ describe('Fetch Time Limited Licences service', () => {
           return result.chargeVersionId === chargeVersionId
         })
 
-        expect(hasLicenceId).to.be.false()
-        expect(hasLicenceVersionId).to.be.false()
-        expect(hasChargeVersionId).to.be.false()
+        expect(hasLicenceId).toBe(false)
+        expect(hasLicenceVersionId).toBe(false)
+        expect(hasChargeVersionId).toBe(false)
       })
     })
 
@@ -256,9 +249,9 @@ describe('Fetch Time Limited Licences service', () => {
           return result.chargeVersionId === chargeVersionId
         })
 
-        expect(hasLicenceId).to.be.false()
-        expect(hasLicenceVersionId).to.be.false()
-        expect(hasChargeVersionId).to.be.false()
+        expect(hasLicenceId).toBe(false)
+        expect(hasLicenceVersionId).toBe(false)
+        expect(hasChargeVersionId).toBe(false)
       })
     })
 
@@ -296,9 +289,9 @@ describe('Fetch Time Limited Licences service', () => {
           return result.chargeVersionId === chargeVersionId
         })
 
-        expect(hasLicenceId).to.be.false()
-        expect(hasLicenceVersionId).to.be.false()
-        expect(hasChargeVersionId).to.be.false()
+        expect(hasLicenceId).toBe(false)
+        expect(hasLicenceVersionId).toBe(false)
+        expect(hasChargeVersionId).toBe(false)
       })
     })
 
@@ -336,9 +329,9 @@ describe('Fetch Time Limited Licences service', () => {
           return result.chargeVersionId === chargeVersionId
         })
 
-        expect(hasLicenceId).to.be.false()
-        expect(hasLicenceVersionId).to.be.false()
-        expect(hasChargeVersionId).to.be.false()
+        expect(hasLicenceId).toBe(false)
+        expect(hasLicenceVersionId).toBe(false)
+        expect(hasChargeVersionId).toBe(false)
       })
     })
 
@@ -376,9 +369,9 @@ describe('Fetch Time Limited Licences service', () => {
           return result.chargeVersionId === chargeVersionId
         })
 
-        expect(hasLicenceId).to.be.false()
-        expect(hasLicenceVersionId).to.be.false()
-        expect(hasChargeVersionId).to.be.false()
+        expect(hasLicenceId).toBe(false)
+        expect(hasLicenceVersionId).toBe(false)
+        expect(hasChargeVersionId).toBe(false)
       })
     })
 
@@ -416,9 +409,9 @@ describe('Fetch Time Limited Licences service', () => {
           return result.chargeVersionId === chargeVersionId
         })
 
-        expect(hasLicenceId).to.be.false()
-        expect(hasLicenceVersionId).to.be.false()
-        expect(hasChargeVersionId).to.be.false()
+        expect(hasLicenceId).toBe(false)
+        expect(hasLicenceVersionId).toBe(false)
+        expect(hasChargeVersionId).toBe(false)
       })
     })
   })

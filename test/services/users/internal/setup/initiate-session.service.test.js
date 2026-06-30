@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const SessionModel = require('../../../../../app/models/session.model.js')
 
@@ -18,7 +11,7 @@ describe('Users - Internal - Setup - Initiate Session service', () => {
     it('returns the session Id and an empty data object', async () => {
       const result = await InitiateSessionService.go()
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         data: {},
         id: result.id
       })
@@ -29,7 +22,7 @@ describe('Users - Internal - Setup - Initiate Session service', () => {
 
       const matchingSession = await SessionModel.query().findById(result.id)
 
-      expect(matchingSession.data).to.equal({})
+      expect(matchingSession.data).toEqual({})
     })
   })
 })

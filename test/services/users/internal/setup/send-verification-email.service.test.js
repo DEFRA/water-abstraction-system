@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const CheckNotificationStatusService = require('../../../../../app/services/notifications/check-notification-status.service.js')
@@ -100,17 +95,17 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
 
       const args = createEmailRequestStub.firstCall.args
 
-      expect(createEmailRequestStub.calledOnce).to.be.true()
-      expect(args[1]).to.equal(notification.recipient)
-      expect(args[2]).to.equal({ personalisation: notification.personalisation })
+      expect(createEmailRequestStub.calledOnce).toBe(true)
+      expect(args[1]).toEqual(notification.recipient)
+      expect(args[2]).toEqual({ personalisation: notification.personalisation })
     })
 
     it('records the Notify response to the notification', async () => {
       await SendVerificationEmailService.go(notification)
 
-      expect(updateNotificationDalStub.calledOnce).to.be.true()
-      expect(updateNotificationDalStub.firstCall.args[0]).to.equal(notification)
-      expect(updateNotificationDalStub.firstCall.args[1]).to.equal({
+      expect(updateNotificationDalStub.calledOnce).toBe(true)
+      expect(updateNotificationDalStub.firstCall.args[0]).toEqual(notification)
+      expect(updateNotificationDalStub.firstCall.args[1]).toEqual({
         notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
         notifyStatus: 'created',
         plaintext: verificationEmailPlaintext,
@@ -121,10 +116,10 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     it('checks the status of the updated notification', async () => {
       await SendVerificationEmailService.go(notification)
 
-      expect(checkNotificationStatusStub.calledOnce).to.be.true()
+      expect(checkNotificationStatusStub.calledOnce).toBe(true)
       const notificationPassedToCheck = checkNotificationStatusStub.firstCall.args[0]
 
-      expect(notificationPassedToCheck).to.equal(notification)
+      expect(notificationPassedToCheck).toEqual(notification)
     })
   })
 
@@ -150,18 +145,18 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     it('records the error against the notification', async () => {
       await SendVerificationEmailService.go(notification)
 
-      expect(updateNotificationDalStub.calledOnce).to.be.true()
+      expect(updateNotificationDalStub.calledOnce).toBe(true)
       const patchData = updateNotificationDalStub.firstCall.args[1]
 
-      expect(patchData.status).to.equal('error')
-      expect(patchData.notifyError).to.exist()
+      expect(patchData.status).toEqual('error')
+      expect(patchData.notifyError).toBeDefined()
     })
 
     it('does not wait or check the notification status', async () => {
       await SendVerificationEmailService.go(notification)
 
-      expect(pauseStub.called).to.be.false()
-      expect(checkNotificationStatusStub.called).to.be.false()
+      expect(pauseStub.called).toBe(false)
+      expect(checkNotificationStatusStub.called).toBe(false)
     })
   })
 
@@ -175,9 +170,9 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
 
       const args = notifierStub.omfg.firstCall.args
 
-      expect(args[0]).to.equal('Failed when trying to send internal user verification email')
-      expect(args[1]).to.equal({ notification })
-      expect(args[2]).to.be.an.error()
+      expect(args[0]).toEqual('Failed when trying to send internal user verification email')
+      expect(args[1]).toEqual({ notification })
+      expect(args[2]).toBeInstanceOf(Error)
     })
   })
 })

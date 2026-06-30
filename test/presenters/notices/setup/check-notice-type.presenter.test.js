@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -28,7 +21,7 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
     it('returns page data for the view', () => {
       const result = CheckNoticeTypePresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         ..._expectedPageData(session),
         noticeType: 'Returns invitation'
       })
@@ -42,7 +35,7 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
       it('returns page data including "licenceRef"', () => {
         const result = CheckNoticeTypePresenter.go(session)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           ..._expectedPageData(session),
           licenceRef,
           noticeType: 'Returns invitation'
@@ -64,7 +57,7 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
       it('returns page data including "returnsPeriodText"', () => {
         const result = CheckNoticeTypePresenter.go(session)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           ..._expectedPageData(session),
           noticeType: 'Returns invitation',
           returnsPeriodText: 'Summer annual 1 November 2024 to 31 October 2025'
@@ -80,7 +73,7 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
       it('returns page data', () => {
         const result = CheckNoticeTypePresenter.go(session)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           ..._expectedPageData(session),
           noticeType: 'Returns reminder'
         })
@@ -117,7 +110,7 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
       it('returns the page data', () => {
         const result = CheckNoticeTypePresenter.go(session)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           ..._expectedPageData(session),
           licenceRef,
           noticeType: 'Paper return',
@@ -133,7 +126,7 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
         it('returns an array of "selectedDueReturns"', () => {
           const result = CheckNoticeTypePresenter.go(session)
 
-          expect(result.returns).to.equal([
+          expect(result.returns).toEqual([
             '3135 - 1 April 2002 to 31 March 2003',
             '3135 - 1 April 2003 to 31 March 2004'
           ])
@@ -149,7 +142,7 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
       it('returns page data', () => {
         const result = CheckNoticeTypePresenter.go(session)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           ..._expectedPageData(session),
           noticeType: 'Renewals invitation'
         })

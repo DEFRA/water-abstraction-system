@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ThresholdAndUnitPresenter = require('../../../../app/presenters/licence-monitoring-station/setup/threshold-and-unit.presenter.js')
 
@@ -25,7 +18,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit presenter', () =
     it('correctly presents the data', () => {
       const result = ThresholdAndUnitPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: '/system/monitoring-stations/e1c44f9b-51c2-4aee-a518-5509d6f05869',
         displayUnits: [
           { value: 'Ml/d', text: 'Ml/d', hint: { text: 'megalitres per day' }, checked: false },
@@ -58,7 +51,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit presenter', () =
       it('returns a link back to the "check" page', () => {
         const result = ThresholdAndUnitPresenter.go(session)
 
-        expect(result.backLink).to.equal(
+        expect(result.backLink).toEqual(
           '/system/licence-monitoring-station/setup/56b6545a-c8e9-4ecd-95fb-927677954f22/check'
         )
       })
@@ -68,7 +61,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit presenter', () =
       it('returns a link back to the "Monitoring Station" page', () => {
         const result = ThresholdAndUnitPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/monitoring-stations/e1c44f9b-51c2-4aee-a518-5509d6f05869')
+        expect(result.backLink).toEqual('/system/monitoring-stations/e1c44f9b-51c2-4aee-a518-5509d6f05869')
       })
     })
   })
@@ -82,7 +75,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit presenter', () =
       it('returns the "displayUnits" property populated to re-select the option', () => {
         const result = ThresholdAndUnitPresenter.go(session)
 
-        expect(result.displayUnits).to.equal([
+        expect(result.displayUnits).toEqual([
           { value: 'Ml/d', text: 'Ml/d', hint: { text: 'megalitres per day' }, checked: false },
           { value: 'm3/s', text: 'm3/s', hint: { text: 'cubic metres per second' }, checked: false },
           { value: 'm3/d', text: 'm3/d', hint: { text: 'cubic metres per day' }, checked: false },
@@ -109,7 +102,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit presenter', () =
       it('returns the "threshold" property populated to re-select the option', () => {
         const result = ThresholdAndUnitPresenter.go(session)
 
-        expect(result.threshold).to.equal('1000')
+        expect(result.threshold).toEqual('1000')
       })
     })
   })

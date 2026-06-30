@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
@@ -25,8 +18,8 @@ describe('Billing Accounts - Setup - Account Validator', () => {
       it('returns with no errors', () => {
         const result = AccountValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -39,8 +32,8 @@ describe('Billing Accounts - Setup - Account Validator', () => {
         it('returns with no errors', () => {
           const result = AccountValidator.go(payload)
 
-          expect(result.value).to.exist()
-          expect(result.error).not.to.exist()
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeUndefined()
         })
       })
 
@@ -52,9 +45,9 @@ describe('Billing Accounts - Setup - Account Validator', () => {
         it('returns with errors', () => {
           const result = AccountValidator.go(payload)
 
-          expect(result.value).to.exist()
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter the name of an organisation or individual.')
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Enter the name of an organisation or individual.')
         })
       })
 
@@ -66,9 +59,9 @@ describe('Billing Accounts - Setup - Account Validator', () => {
         it('returns with errors', () => {
           const result = AccountValidator.go(payload)
 
-          expect(result.value).to.exist()
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Search query must be 100 characters or less')
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Search query must be 100 characters or less')
         })
       })
     })
@@ -82,9 +75,9 @@ describe('Billing Accounts - Setup - Account Validator', () => {
     it('returns with errors', () => {
       const result = AccountValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Select who should the bills go to')
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeDefined()
+      expect(result.error.details[0].message).toEqual('Select who should the bills go to')
     })
   })
 })

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, after, before } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -24,7 +19,7 @@ describe('Notices - Setup - View Returns Period service', () => {
   let session
   let sessionData
 
-  before(async () => {
+  beforeAll(async () => {
     referenceCode = generateNoticeReferenceCode('RINV-')
 
     sessionData = { referenceCode, noticeType: 'invitations' }
@@ -38,7 +33,7 @@ describe('Notices - Setup - View Returns Period service', () => {
     clock = Sinon.useFakeTimers(testDate)
   })
 
-  after(() => {
+  afterAll(() => {
     Sinon.restore()
     clock.restore()
   })
@@ -47,7 +42,7 @@ describe('Notices - Setup - View Returns Period service', () => {
     it('correctly presents the data', async () => {
       const result = await ReturnsPeriodService.go(session.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'notices',
         backLink: {
           href: `/system/notices/setup/${session.id}/notice-type`,

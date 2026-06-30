@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const UserSessionsFixture = require('../../../../support/fixtures/user-sessions.fixture.js')
 
@@ -23,7 +16,7 @@ describe('Users - External - Setup - Licences Presenter', () => {
   it('correctly presents the data', () => {
     const result = LicencesPresenter.go(session)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       activeNavBar: 'users',
       backLink: {
         href: `/system/users/external/${session.user.id}/licences`,
@@ -67,8 +60,8 @@ describe('Users - External - Setup - Licences Presenter', () => {
       it('does not include a divider or an "All licences" option', () => {
         const result = LicencesPresenter.go(session)
 
-        expect(result.checkBoxItems).to.not.include({ divider: 'or' })
-        expect(result.checkBoxItems).to.not.include({ behaviour: 'exclusive', text: 'All licences', value: 'all' })
+        expect(result.checkBoxItems).not.toContainEqual({ divider: 'or' })
+        expect(result.checkBoxItems).not.toContainEqual({ behaviour: 'exclusive', text: 'All licences', value: 'all' })
       })
     })
 
@@ -76,8 +69,8 @@ describe('Users - External - Setup - Licences Presenter', () => {
       it('includes a divider and an "All licences" option', () => {
         const result = LicencesPresenter.go(session)
 
-        expect(result.checkBoxItems).to.include({ divider: 'or' })
-        expect(result.checkBoxItems).to.include({
+        expect(result.checkBoxItems).toContainEqual({ divider: 'or' })
+        expect(result.checkBoxItems).toContainEqual({
           behaviour: 'exclusive',
           checked: false,
           text: 'All licences',
@@ -91,11 +84,11 @@ describe('Users - External - Setup - Licences Presenter', () => {
         it('returns the matching licence option as checked', () => {
           const result = LicencesPresenter.go(session)
 
-          expect(result.checkBoxItems[0].checked).to.be.false()
-          expect(result.checkBoxItems[1].checked).to.be.false()
+          expect(result.checkBoxItems[0].checked).toBe(false)
+          expect(result.checkBoxItems[1].checked).toBe(false)
 
           // The "All licences" option
-          expect(result.checkBoxItems[result.checkBoxItems.length - 1].checked).to.be.false()
+          expect(result.checkBoxItems[result.checkBoxItems.length - 1].checked).toBe(false)
         })
       })
 
@@ -107,11 +100,11 @@ describe('Users - External - Setup - Licences Presenter', () => {
         it('returns the matching licence option as checked', () => {
           const result = LicencesPresenter.go(session)
 
-          expect(result.checkBoxItems[0].checked).to.be.true()
-          expect(result.checkBoxItems[1].checked).to.be.false()
+          expect(result.checkBoxItems[0].checked).toBe(true)
+          expect(result.checkBoxItems[1].checked).toBe(false)
 
           // The "All licences" option
-          expect(result.checkBoxItems[result.checkBoxItems.length - 1].checked).to.be.false()
+          expect(result.checkBoxItems[result.checkBoxItems.length - 1].checked).toBe(false)
         })
       })
 
@@ -123,8 +116,8 @@ describe('Users - External - Setup - Licences Presenter', () => {
         it('returns the "All licences" option as checked', () => {
           const result = LicencesPresenter.go(session)
 
-          expect(result.checkBoxItems[result.checkBoxItems.length - 1].text).to.equal('All licences')
-          expect(result.checkBoxItems[result.checkBoxItems.length - 1].checked).to.be.true()
+          expect(result.checkBoxItems[result.checkBoxItems.length - 1].text).toEqual('All licences')
+          expect(result.checkBoxItems[result.checkBoxItems.length - 1].checked).toBe(true)
         })
       })
     })
@@ -139,7 +132,7 @@ describe('Users - External - Setup - Licences Presenter', () => {
       it('returns "false"', () => {
         const result = LicencesPresenter.go(session)
 
-        expect(result.showHint).to.be.false()
+        expect(result.showHint).toBe(false)
       })
     })
 
@@ -147,7 +140,7 @@ describe('Users - External - Setup - Licences Presenter', () => {
       it('returns "true"', () => {
         const result = LicencesPresenter.go(session)
 
-        expect(result.showHint).to.be.true()
+        expect(result.showHint).toBe(true)
       })
     })
   })

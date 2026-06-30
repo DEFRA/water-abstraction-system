@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const UserSessionsFixture = require('../../../../support/fixtures/user-sessions.fixture.js')
@@ -41,13 +36,13 @@ describe('Users - External - Setup - Submit Cancel service', () => {
     it('clears the session', async () => {
       await SubmitCancelService.go(session.id)
 
-      expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
+      expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
     })
 
     it('returns the redirect url', async () => {
       const result = await SubmitCancelService.go(session.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         redirectUrl: `/system/users/external/${session.user.id}/licences?back=${session.activeNavBar}`
       })
     })

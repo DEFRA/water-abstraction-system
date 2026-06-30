@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
@@ -38,7 +33,7 @@ describe('Users - External - Setup - View Licences Service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewLicencesService.go(session.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'users',
         backLink: {
           href: `/system/users/external/${sessionData.user.id}/licences`,

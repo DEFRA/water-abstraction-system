@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 const { generateUUID, today } = require('../../../app/lib/general.lib.js')
 
@@ -68,14 +63,14 @@ describe('Notifications - Process Returned Letter service', () => {
 
       const refreshedNotification = await notification.$query()
 
-      expect(refreshedNotification.status).to.equal('returned')
-      expect(refreshedNotification.returnedAt).to.equal(todaysDate)
+      expect(refreshedNotification.status).toEqual('returned')
+      expect(refreshedNotification.returnedAt).toEqual(todaysDate)
     })
 
     it('updates the linked notice to recalculate its overall status and status counts', async () => {
       await ProcessReturnedLetterService.go(payload)
 
-      expect(updateEventStub.calledWith([notification.eventId])).to.be.true()
+      expect(updateEventStub.calledWith([notification.eventId])).toBe(true)
     })
 
     it('logs the time taken in milliseconds and seconds, plus the payload and matching notification', async () => {
@@ -83,11 +78,11 @@ describe('Notifications - Process Returned Letter service', () => {
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Returned letter complete')).to.be.true()
-      expect(logDataArg.timeTakenMs).to.exist()
-      expect(logDataArg.timeTakenSs).to.exist()
-      expect(logDataArg.payload).to.equal(payload)
-      expect(logDataArg.notification).to.equal({
+      expect(notifierStub.omg.calledWith('Returned letter complete')).toBe(true)
+      expect(logDataArg.timeTakenMs).toBeDefined()
+      expect(logDataArg.timeTakenSs).toBeDefined()
+      expect(logDataArg.payload).toEqual(payload)
+      expect(logDataArg.notification).toEqual({
         id: notification.id,
         eventId: notification.eventId
       })
@@ -107,11 +102,11 @@ describe('Notifications - Process Returned Letter service', () => {
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Returned letter complete')).to.be.true()
-      expect(logDataArg.timeTakenMs).to.exist()
-      expect(logDataArg.timeTakenSs).to.exist()
-      expect(logDataArg.payload).to.equal(payload)
-      expect(logDataArg.notification).to.equal({})
+      expect(notifierStub.omg.calledWith('Returned letter complete')).toBe(true)
+      expect(logDataArg.timeTakenMs).toBeDefined()
+      expect(logDataArg.timeTakenSs).toBeDefined()
+      expect(logDataArg.payload).toEqual(payload)
+      expect(logDataArg.notification).toEqual({})
     })
   })
 
@@ -126,7 +121,7 @@ describe('Notifications - Process Returned Letter service', () => {
     })
 
     it('does not throw an error', async () => {
-      await expect(ProcessReturnedLetterService.go(payload)).not.to.reject()
+      await ProcessReturnedLetterService.go(payload)
     })
 
     it('logs the error', async () => {
@@ -134,9 +129,9 @@ describe('Notifications - Process Returned Letter service', () => {
 
       const errorLogArgs = notifierStub.omfg.firstCall.args
 
-      expect(notifierStub.omfg.calledWith('Returned letter failed')).to.be.true()
-      expect(errorLogArgs[1]).to.equal(payload)
-      expect(errorLogArgs[2]).to.be.instanceOf(Error)
+      expect(notifierStub.omfg.calledWith('Returned letter failed')).toBe(true)
+      expect(errorLogArgs[1]).toEqual(payload)
+      expect(errorLogArgs[2]).toBeInstanceOf(Error)
     })
   })
 })

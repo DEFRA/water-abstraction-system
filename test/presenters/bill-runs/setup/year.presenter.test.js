@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const YearPresenter = require('../../../../app/presenters/bill-runs/setup/year.presenter.js')
 
@@ -28,7 +21,7 @@ describe('Bill Runs - Setup - Year presenter', () => {
       it('correctly presents the data', () => {
         const result = YearPresenter.go(licenceSupplementaryYears, session)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           backlink: `/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region`,
           financialYearsData: [
             {
@@ -57,7 +50,7 @@ describe('Bill Runs - Setup - Year presenter', () => {
       it('correctly presents the data', () => {
         const result = YearPresenter.go(licenceSupplementaryYears, session)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           backlink: `/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region`,
           financialYearsData: [
             {
@@ -92,7 +85,7 @@ describe('Bill Runs - Setup - Year presenter', () => {
       it('correctly presents the data', () => {
         const result = YearPresenter.go(licenceSupplementaryYears, session)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           backlink: `/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region`,
           financialYearsData: _financialYearsData(null),
           pageTitle: 'Select the financial year',
@@ -110,7 +103,7 @@ describe('Bill Runs - Setup - Year presenter', () => {
       it('correctly presents the data', () => {
         const result = YearPresenter.go(licenceSupplementaryYears, session)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           backlink: `/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region`,
           financialYearsData: _financialYearsData('2022'),
           pageTitle: 'Select the financial year',

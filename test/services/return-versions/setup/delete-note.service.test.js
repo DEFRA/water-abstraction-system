@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -58,8 +53,8 @@ describe('Return Versions Setup - Delete Note service', () => {
   it('deletes the note from the session', async () => {
     await DeleteNoteService.go(session.id, yarStub)
 
-    expect(session.note).to.be.undefined()
-    expect(session.$update.called).to.be.true()
+    expect(session.note).toBeUndefined()
+    expect(session.$update.called).toBe(true)
   })
 
   it('sets the notification message to "Deleted"', async () => {
@@ -67,7 +62,7 @@ describe('Return Versions Setup - Delete Note service', () => {
 
     const [flashType, notification] = yarStub.flash.args[0]
 
-    expect(flashType).to.equal('notification')
-    expect(notification).to.equal({ title: 'Deleted', text: 'Note deleted' })
+    expect(flashType).toEqual('notification')
+    expect(notification).toEqual({ title: 'Deleted', text: 'Note deleted' })
   })
 })

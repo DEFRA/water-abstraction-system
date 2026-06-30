@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const CRMContactsSeeder = require('../../support/seeders/crm-contacts.seeder.js')
@@ -27,7 +22,7 @@ describe('Companies - Fetch History dal', () => {
   let licenceVersionSameLicenceDifferentCompany
   let pageNumber
 
-  before(async () => {
+  beforeAll(async () => {
     licence = await LicenceHelper.add()
 
     // A licence version linked to the company
@@ -52,7 +47,7 @@ describe('Companies - Fetch History dal', () => {
     Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1000)
   })
 
-  after(async () => {
+  afterAll(async () => {
     await licenceHolder.clean()
 
     await licence.$query().delete()
@@ -66,7 +61,7 @@ describe('Companies - Fetch History dal', () => {
     it('returns licences linked to the company where it is the licence holder', async () => {
       const result = await FetchHistoryDal.go(licenceHolder.company.id, pageNumber)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         licences: [
           {
             expiredDate: null,
