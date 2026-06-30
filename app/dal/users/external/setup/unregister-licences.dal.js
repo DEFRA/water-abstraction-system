@@ -6,7 +6,7 @@
  */
 
 const EventModel = require('../../../../models/event.model.js')
-const LicenceDocumentHeader = require('../../../../models/licence-document-header.model.js')
+const LicenceDocumentHeaderModel = require('../../../../models/licence-document-header.model.js')
 const { timestampForPostgres } = require('../../../../lib/general.lib.js')
 
 /**
@@ -80,7 +80,7 @@ function _licencesToUnlink(session) {
 }
 
 async function _unregisterLicence(licenceDocumentHeaderId, timestamp, trx) {
-  await LicenceDocumentHeader.query(trx)
+  await LicenceDocumentHeaderModel.query(trx)
     .findById(licenceDocumentHeaderId)
     .patch({ companyEntityId: null, updatedAt: timestamp })
 }
