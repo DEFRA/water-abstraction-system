@@ -7,7 +7,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 const { generateUUID } = require('../../app/lib/general.lib.js')
@@ -57,6 +57,10 @@ describe('Company Contacts Setup controller', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  after(async () => {
+    await server.stop()
   })
 
   describe('/company-contacts/setup/{companyId}', () => {
