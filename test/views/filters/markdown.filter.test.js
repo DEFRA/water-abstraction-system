@@ -19,7 +19,9 @@ describe('Markdown filter', () => {
   describe('when provided with a valid markdown string', () => {
     describe('when "Marked" has been set on globalThis via the plugin', () => {
       beforeEach(() => {
-        globalThis.GlobalMarked = { parse: Sinon.stub().returns('<h1>How to renew your licence</h1>\n<p>This is pretend test.</p>') }
+        globalThis.GlobalMarked = {
+          parse: Sinon.stub().returns('<h1>How to renew your licence</h1>\n<p>This is pretend test.</p>')
+        }
       })
 
       afterEach(() => {
