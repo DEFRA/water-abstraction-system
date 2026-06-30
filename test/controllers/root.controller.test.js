@@ -6,7 +6,7 @@ const { HTTP_STATUS_OK } = require('node:http2').constants
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // For running our service
@@ -18,6 +18,10 @@ describe('Root controller: GET /', () => {
   // Create server before running the tests
   before(async () => {
     server = await init()
+  })
+
+  after(async () => {
+    await server.stop()
   })
 
   it('displays the correct message', async () => {

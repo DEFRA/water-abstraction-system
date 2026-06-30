@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { afterEach, before, beforeEach, describe, it } = (exports.lab = Lab.script())
+const { after, afterEach, before, beforeEach, describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -62,6 +62,10 @@ describe('Users Setup controller', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  after(async () => {
+    await server.stop()
   })
 
   describe('/users/external/{id}/setup', () => {

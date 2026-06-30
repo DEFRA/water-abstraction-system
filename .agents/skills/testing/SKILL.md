@@ -51,6 +51,10 @@ const SubjectUnderTest = require('../../app/services/subject-under-test.service.
   })
   ```
 
+## Controller tests
+
+- Always call `await server.stop()` in `after`
+
 ## Sinon
 
 - Always call `Sinon.restore()` in `afterEach` whenever stubs are used
