@@ -452,16 +452,6 @@ async function _deleteAllTestData(licenceRef) {
 
   DELETE
   FROM
-    "water"."licence_version_holders" AS "lvh"
-    USING "water"."licence_versions" AS "lv",
-    "water"."licences" AS "l"
-  WHERE
-    "l"."is_test" = TRUE
-    AND "lvh"."licence_version_id" = "lv"."licence_version_id"
-    AND "lv"."licence_id" = "l"."licence_id";
-
-  DELETE
-  FROM
     "water"."licence_versions"
   WHERE
     "is_test" = TRUE;
@@ -522,9 +512,9 @@ async function _deleteAllTestData(licenceRef) {
 
   DELETE
   FROM
-    "water"."sessions"
+    "public"."sessions"
   WHERE
-    session_data::jsonb->>'companyName' = 'acceptance-test-company';
+    data::jsonb->>'companyName' = 'acceptance-test-company';
 
   ALTER TABLE water.billing_batch_charge_version_years ENABLE TRIGGER ALL;
   ALTER TABLE water.billing_batches ENABLE TRIGGER ALL;
