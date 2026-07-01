@@ -4,6 +4,7 @@ const ci = String(process.env.CI) === 'true' || false
 
 const vitestConfig = {
   test: {
+    cache: !ci,
     coverage: {
       // Only measure coverage for files changed since the last commit; in CI all files are always included
       changed: !ci,
@@ -27,6 +28,8 @@ const vitestConfig = {
       // Directory where lcov coverage reports are written
       reportsDirectory: 'coverage'
     },
+    // Base directory to scan for test files. Specified to speed up test discovery
+    dir: 'test',
     // Module(s) to run once before all test suites. We use it to clean and seed the database
     globalSetup: ['test/global-setup.js'],
     // Each entry is a separate Vitest project, allowing different runner settings per group of tests
