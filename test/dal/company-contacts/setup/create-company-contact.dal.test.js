@@ -28,7 +28,7 @@ describe('Company Contacts - Create Company Contact dal', () => {
 
     company = await CompanyHelper.add()
 
-    clock = Sinon.useFakeTimers(new Date('2021-01-01'))
+    clock = Sinon.useFakeTimers({ now: new Date('2021-01-01'), toFake: ['Date'] })
   })
 
   afterAll(async () => {

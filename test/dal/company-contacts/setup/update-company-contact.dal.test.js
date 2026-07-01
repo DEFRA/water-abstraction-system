@@ -27,7 +27,7 @@ describe('Company Contacts - Update Company Contact dal', () => {
     seedDate = new Date('2021-01-01')
     today = new Date('2025-06-02')
 
-    clock = Sinon.useFakeTimers(today)
+    clock = Sinon.useFakeTimers({ now: today, toFake: ['Date'] })
 
     licenceRole = LicenceRoleHelper.select('additionalContact')
 

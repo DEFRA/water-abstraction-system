@@ -18,7 +18,7 @@ describe('Create Bill Run Event service', () => {
 
   beforeEach(async () => {
     testDate = new Date(2015, 9, 21, 20, 31, 57)
-    clock = Sinon.useFakeTimers(testDate)
+    clock = Sinon.useFakeTimers({ now: testDate, toFake: ['Date'] })
   })
 
   afterEach(() => {

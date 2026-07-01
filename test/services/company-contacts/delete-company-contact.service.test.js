@@ -21,7 +21,7 @@ describe('Company contact - Delete company contact service', () => {
 
     today = new Date('2020-06-06')
 
-    clock = Sinon.useFakeTimers(today)
+    clock = Sinon.useFakeTimers({ now: today, toFake: ['Date'] })
   })
 
   afterEach(async () => {
