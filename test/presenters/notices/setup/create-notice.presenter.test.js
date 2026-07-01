@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
 const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
@@ -40,7 +33,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
     it('correctly presents the data', () => {
       const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         issuer: 'hello@world.com',
         licences: [...recipients[0].licence_refs, ...recipients[1].licence_refs, ...recipients[2].licence_refs],
         metadata: {
@@ -64,7 +57,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
       it('correctly return a JSON string containing an array of all licences from all recipients', () => {
         const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-        expect(result.licences).to.equal([
+        expect(result.licences).toEqual([
           ...recipients[0].licence_refs,
           ...recipients[1].licence_refs,
           ...recipients[2].licence_refs
@@ -77,7 +70,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
         it('correctly returns the "name"', () => {
           const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-          expect(result.metadata.name).to.equal('Water abstraction alert')
+          expect(result.metadata.name).toEqual('Water abstraction alert')
         })
       })
 
@@ -89,7 +82,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
         it('correctly returns the length of recipients', () => {
           const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-          expect(result.metadata.recipients).to.equal(3)
+          expect(result.metadata.recipients).toEqual(3)
         })
       })
 
@@ -98,7 +91,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
           it('return the noticeDatas value', () => {
             const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-            expect(result.metadata.options.sendingAlertType).to.equal('stop')
+            expect(result.metadata.options.sendingAlertType).toEqual('stop')
           })
         })
 
@@ -106,7 +99,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
           it('correctly returns the length of recipients', () => {
             const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-            expect(result.metadata.options.monitoringStationId).to.equal('123')
+            expect(result.metadata.options.monitoringStationId).toEqual('123')
           })
         })
       })
@@ -116,7 +109,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
       it('correctly returns the "subType"', () => {
         const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-        expect(result.subtype).to.equal('waterAbstractionAlerts')
+        expect(result.subtype).toEqual('waterAbstractionAlerts')
       })
     })
   })
@@ -153,7 +146,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
     it('correctly presents the data', () => {
       const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         issuer: 'hello@world.com',
         licences: [
           ...recipients[0].licence_refs,
@@ -188,7 +181,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
       it('correctly return a JSON string containing an array of all licences from all recipients', () => {
         const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-        expect(result.licences).to.equal([
+        expect(result.licences).toEqual([
           ...recipients[0].licence_refs,
           ...recipients[1].licence_refs,
           ...recipients[2].licence_refs,
@@ -203,7 +196,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
         it('correctly returns the "name"', () => {
           const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-          expect(result.metadata.name).to.equal('Returns: invitation')
+          expect(result.metadata.name).toEqual('Returns: invitation')
         })
       })
 
@@ -216,7 +209,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
           it('correctly returns the exclude licences', () => {
             const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-            expect(result.metadata.options.excludeLicences).to.equal(['123', '456'])
+            expect(result.metadata.options.excludeLicences).toEqual(['123', '456'])
           })
         })
 
@@ -228,7 +221,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
           it('correctly returns the exclude licences', () => {
             const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-            expect(result.metadata.options.excludeLicences).to.equal([])
+            expect(result.metadata.options.excludeLicences).toEqual([])
           })
         })
       })
@@ -241,7 +234,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
         it('correctly returns the length of recipients', () => {
           const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-          expect(result.metadata.recipients).to.equal(5)
+          expect(result.metadata.recipients).toEqual(5)
         })
       })
 
@@ -259,7 +252,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
           it('correctly returns the return cycle', () => {
             const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-            expect(result.metadata.returnCycle).to.equal({
+            expect(result.metadata.returnCycle).toEqual({
               dueDate: '2025-07-28',
               endDate: '2025-06-30',
               isSummer: true,
@@ -276,7 +269,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
           it('correctly returns the return cycle', () => {
             const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-            expect(result.metadata.returnCycle).to.equal({
+            expect(result.metadata.returnCycle).toEqual({
               dueDate: formatDateObjectToISO(futureDueDate()),
               endDate: null,
               startDate: null
@@ -290,7 +283,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
       it('correctly returns the "subType"', () => {
         const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-        expect(result.subtype).to.equal('returnInvitation')
+        expect(result.subtype).toEqual('returnInvitation')
       })
     })
   })
@@ -327,7 +320,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
     it('correctly presents the data', () => {
       const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         issuer: 'hello@world.com',
         licences: [
           ...recipients[0].licence_refs,
@@ -362,7 +355,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
       it('correctly return a JSON string containing an array of all licences from all recipients', () => {
         const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-        expect(result.licences).to.equal([
+        expect(result.licences).toEqual([
           ...recipients[0].licence_refs,
           ...recipients[1].licence_refs,
           ...recipients[2].licence_refs,
@@ -377,7 +370,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
         it('correctly returns the "name"', () => {
           const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-          expect(result.metadata.name).to.equal('Returns: reminder')
+          expect(result.metadata.name).toEqual('Returns: reminder')
         })
       })
 
@@ -390,7 +383,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
           it('correctly returns the exclude licences', () => {
             const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-            expect(result.metadata.options.excludeLicences).to.equal(['123', '456'])
+            expect(result.metadata.options.excludeLicences).toEqual(['123', '456'])
           })
         })
 
@@ -402,7 +395,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
           it('correctly returns the exclude licences', () => {
             const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-            expect(result.metadata.options.excludeLicences).to.equal([])
+            expect(result.metadata.options.excludeLicences).toEqual([])
           })
         })
       })
@@ -415,7 +408,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
         it('correctly returns the length of recipients', () => {
           const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-          expect(result.metadata.recipients).to.equal(5)
+          expect(result.metadata.recipients).toEqual(5)
         })
       })
 
@@ -433,7 +426,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
           it('correctly returns the return cycle', () => {
             const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-            expect(result.metadata.returnCycle).to.equal({
+            expect(result.metadata.returnCycle).toEqual({
               dueDate: '2025-07-28',
               endDate: '2025-06-30',
               isSummer: true,
@@ -450,7 +443,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
           it('correctly returns the return cycle', () => {
             const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-            expect(result.metadata.returnCycle).to.equal({
+            expect(result.metadata.returnCycle).toEqual({
               dueDate: formatDateObjectToISO(futureDueDate()),
               endDate: null,
               startDate: null
@@ -464,7 +457,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
       it('correctly returns the "subType"', () => {
         const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-        expect(result.subtype).to.equal('returnReminder')
+        expect(result.subtype).toEqual('returnReminder')
       })
     })
   })
@@ -489,7 +482,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
     it('correctly presents the data', () => {
       const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         issuer: 'hello@world.com',
         licences: [...recipients[0].licence_refs, ...recipients[1].licence_refs, ...recipients[2].licence_refs],
         metadata: {
@@ -511,7 +504,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
       it('correctly return a JSON string containing an array of all licences from all recipients', () => {
         const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-        expect(result.licences).to.equal([
+        expect(result.licences).toEqual([
           ...recipients[0].licence_refs,
           ...recipients[1].licence_refs,
           ...recipients[2].licence_refs
@@ -524,7 +517,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
         it('correctly returns the "name"', () => {
           const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-          expect(result.metadata.name).to.equal('Renewals: invitation')
+          expect(result.metadata.name).toEqual('Renewals: invitation')
         })
       })
 
@@ -536,7 +529,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
         it('correctly returns the length of recipients', () => {
           const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-          expect(result.metadata.recipients).to.equal(3)
+          expect(result.metadata.recipients).toEqual(3)
         })
       })
     })
@@ -545,7 +538,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
       it('correctly returns the "subType"', () => {
         const result = CreateNoticePresenter.go(noticeData, recipients, issuer)
 
-        expect(result.subtype).to.equal('renewalInvitation')
+        expect(result.subtype).toEqual('renewalInvitation')
       })
     })
   })

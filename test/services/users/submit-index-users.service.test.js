@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
@@ -50,13 +45,13 @@ describe('Users - Submit Index Users service', () => {
       it('returns a result that tells the controller to redirect to the index page', async () => {
         const result = await SubmitIndexUsersService.go(payload, yarStub, auth)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
       })
 
       it('clears the "usersFilter" object from the session', async () => {
         await SubmitIndexUsersService.go(payload, yarStub, auth)
 
-        expect(yarStub.clear.called).to.be.true()
+        expect(yarStub.clear.called).toBe(true)
       })
     })
 
@@ -68,7 +63,7 @@ describe('Users - Submit Index Users service', () => {
       it('returns a result that tells the controller to redirect to the index page', async () => {
         const result = await SubmitIndexUsersService.go(payload, yarStub, auth)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
       })
 
       it('saves a default "usersFilter" object in the session', async () => {
@@ -76,8 +71,8 @@ describe('Users - Submit Index Users service', () => {
 
         const setArgs = yarStub.set.args[0]
 
-        expect(setArgs[0]).to.equal('usersFilter')
-        expect(setArgs[1]).to.equal({
+        expect(setArgs[0]).toEqual('usersFilter')
+        expect(setArgs[1]).toEqual({
           email: null,
           permissions: null,
           status: null,
@@ -99,7 +94,7 @@ describe('Users - Submit Index Users service', () => {
       it('returns a result that tells the controller to redirect to the index page', async () => {
         const result = await SubmitIndexUsersService.go(payload, yarStub, auth)
 
-        expect(result).to.equal({})
+        expect(result).toEqual({})
       })
 
       it('saves the submitted filters as the "usersFilter" object in the session', async () => {
@@ -107,8 +102,8 @@ describe('Users - Submit Index Users service', () => {
 
         const setArgs = yarStub.set.args[0]
 
-        expect(setArgs[0]).to.equal('usersFilter')
-        expect(setArgs[1]).to.equal({
+        expect(setArgs[0]).toEqual('usersFilter')
+        expect(setArgs[1]).toEqual({
           email: 'test@test.com',
           permissions: 'basic',
           status: 'enabled',
@@ -134,7 +129,7 @@ describe('Users - Submit Index Users service', () => {
         it('returns the page data for the view, including any errors', async () => {
           const result = await SubmitIndexUsersService.go(payload, yarStub, auth, '2')
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             error: {
               errorList: [
                 {
@@ -214,7 +209,7 @@ describe('Users - Submit Index Users service', () => {
         it('returns the page data for the view, including any errors', async () => {
           const result = await SubmitIndexUsersService.go(payload, yarStub, auth)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             error: {
               errorList: [
                 {

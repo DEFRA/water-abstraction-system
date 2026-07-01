@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const PointHelper = require('../support/helpers/point.helper.js')
 const PointModel = require('../../app/models/point.model.js')
@@ -22,7 +15,7 @@ describe('Return Requirement Point model', () => {
   let testRecord
   let testReturnRequirement
 
-  before(async () => {
+  beforeAll(async () => {
     testPoint = await PointHelper.add()
     testReturnRequirement = await ReturnRequirementHelper.add()
 
@@ -32,7 +25,7 @@ describe('Return Requirement Point model', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testPoint.$query().delete()
     await testReturnRequirement.$query().delete()
 
@@ -43,8 +36,8 @@ describe('Return Requirement Point model', () => {
     it('can successfully run a basic query', async () => {
       const result = await ReturnRequirementPointModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(ReturnRequirementPointModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(ReturnRequirementPointModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -53,17 +46,17 @@ describe('Return Requirement Point model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReturnRequirementPointModel.query().innerJoinRelated('point')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the point', async () => {
         const result = await ReturnRequirementPointModel.query().findById(testRecord.id).withGraphFetched('point')
 
-        expect(result).to.be.instanceOf(ReturnRequirementPointModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReturnRequirementPointModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.point).to.be.an.instanceOf(PointModel)
-        expect(result.point).to.equal(testPoint)
+        expect(result.point).toBeInstanceOf(PointModel)
+        expect(result.point).toEqual(testPoint)
       })
     })
 
@@ -71,7 +64,7 @@ describe('Return Requirement Point model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReturnRequirementPointModel.query().innerJoinRelated('returnRequirement')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the return requirement', async () => {
@@ -79,11 +72,11 @@ describe('Return Requirement Point model', () => {
           .findById(testRecord.id)
           .withGraphFetched('returnRequirement')
 
-        expect(result).to.be.instanceOf(ReturnRequirementPointModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReturnRequirementPointModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.returnRequirement).to.be.an.instanceOf(ReturnRequirementModel)
-        expect(result.returnRequirement).to.equal(testReturnRequirement)
+        expect(result.returnRequirement).toBeInstanceOf(ReturnRequirementModel)
+        expect(result.returnRequirement).toEqual(testReturnRequirement)
       })
     })
   })

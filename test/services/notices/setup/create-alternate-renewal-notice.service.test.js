@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const EventModel = require('../../../../app/models/event.model.js')
@@ -53,58 +48,52 @@ describe('Notices - Setup - Create Alternate Renewal Notice service', () => {
   it('creates and then returns the alternate notice and associated notifications ready for sending', async () => {
     const result = await CreateAlternateRenewalNoticeService.go(notice, licenceRefs, expiryDate, renewalDate)
 
-    expect(result.notice).to.equal(
-      {
-        issuer: notice.issuer,
-        licences: notice.licences,
-        metadata: {
-          error: 0,
-          expiryDate: '2026-04-28',
-          name: 'Renewals: invitation',
-          options: { excludedLicences: [] },
-          recipients: 1,
-          renewalDate: '2026-01-28'
-        },
-        overallStatus: 'pending',
-        status: 'completed',
-        statusCounts: { cancelled: 0, error: 0, pending: 1, sent: 0 },
-        subtype: 'renewalInvitation',
-        triggerNoticeId: notice.id,
-        type: 'notification'
+    expect(result.notice).toMatchObject({
+      issuer: notice.issuer,
+      licences: notice.licences,
+      metadata: {
+        error: 0,
+        expiryDate: '2026-04-28',
+        name: 'Renewals: invitation',
+        options: { excludedLicences: [] },
+        recipients: 1,
+        renewalDate: '2026-01-28'
       },
-      { skip: ['createdAt', 'id', 'referenceCode', 'updatedAt'] }
-    )
+      overallStatus: 'pending',
+      status: 'completed',
+      statusCounts: { cancelled: 0, error: 0, pending: 1, sent: 0 },
+      subtype: 'renewalInvitation',
+      triggerNoticeId: notice.id,
+      type: 'notification'
+    })
 
-    expect(result.notifications).to.have.length(1)
-    expect(result.notifications[0]).to.equal(
-      {
-        contactType: 'licence holder',
-        dueDate: null,
-        eventId: result.notice.id,
-        licences: recipient.licence_refs,
-        licenceMonitoringStationId: null,
-        messageType: 'letter',
-        messageRef: 'renewal invitation',
-        pdf: null,
-        personalisation: {
-          address_line_1: 'Renewal licence holder',
-          address_line_2: '4',
-          address_line_3: 'Privet Drive',
-          address_line_4: 'Little Whinging',
-          address_line_5: 'Surrey',
-          address_line_6: 'WD25 7LR',
-          expiryDate: '28 April 2026',
-          licenceRef: notice.licences[0],
-          name: 'Renewal licence holder',
-          renewalDate: '28 January 2026'
-        },
-        recipient: null,
-        returnLogIds: null,
-        status: 'pending',
-        templateId: NOTIFY_TEMPLATES.renewalInvitations.standard.letter['single licence']
+    expect(result.notifications).toHaveLength(1)
+    expect(result.notifications[0]).toMatchObject({
+      contactType: 'licence holder',
+      dueDate: null,
+      eventId: result.notice.id,
+      licences: recipient.licence_refs,
+      licenceMonitoringStationId: null,
+      messageType: 'letter',
+      messageRef: 'renewal invitation',
+      pdf: null,
+      personalisation: {
+        address_line_1: 'Renewal licence holder',
+        address_line_2: '4',
+        address_line_3: 'Privet Drive',
+        address_line_4: 'Little Whinging',
+        address_line_5: 'Surrey',
+        address_line_6: 'WD25 7LR',
+        expiryDate: '28 April 2026',
+        licenceRef: notice.licences[0],
+        name: 'Renewal licence holder',
+        renewalDate: '28 January 2026'
       },
-      { skip: ['createdAt', 'id', 'updatedAt'] }
-    )
+      recipient: null,
+      returnLogIds: null,
+      status: 'pending',
+      templateId: NOTIFY_TEMPLATES.renewalInvitations.standard.letter['single licence']
+    })
 
     // We record this here to allow us to clean up in the afterEach()
     notificationId = result.notifications[0].id

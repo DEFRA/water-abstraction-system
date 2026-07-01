@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
@@ -51,13 +46,13 @@ describe('Users - External - Setup - Submit Check Service', () => {
     it('deletes the session record', async () => {
       await SubmitCheckService.go(session.id, yarStub, auth)
 
-      expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
+      expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
     })
 
     it('returns the redirect URL', async () => {
       const result = await SubmitCheckService.go(session.id, yarStub, auth)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         redirectUrl: `/system/users/external/${session.user.id}/licences?back=${session.activeNavBar}`
       })
     })
@@ -65,7 +60,7 @@ describe('Users - External - Setup - Submit Check Service', () => {
     it('unregisters the selected licences', async () => {
       await SubmitCheckService.go(session.id, yarStub, auth)
 
-      expect(UnregisterLicencesDal.go.calledWith(session, auth.credentials.user)).to.be.true()
+      expect(UnregisterLicencesDal.go.calledWith(session, auth.credentials.user)).toBe(true)
     })
 
     it('sets a notification', async () => {
@@ -73,8 +68,8 @@ describe('Users - External - Setup - Submit Check Service', () => {
 
       const [flashType, notificationData] = yarStub.flash.args[0]
 
-      expect(flashType).to.equal('notification')
-      expect(notificationData).to.equal({
+      expect(flashType).toEqual('notification')
+      expect(notificationData).toEqual({
         titleText: 'Updated',
         text: 'Licences unregistered.'
       })

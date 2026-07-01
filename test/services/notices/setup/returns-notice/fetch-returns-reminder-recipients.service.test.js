@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const NoticeSessionFixture = require('../../../../support/fixtures/notice-session.fixture.js')
 const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
@@ -22,7 +15,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
   let setDueDateReturnLog
   let scenarios
 
-  before(async () => {
+  beforeAll(async () => {
     scenarios = {}
 
     // 1) Licence holder only
@@ -46,19 +39,19 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await nullDueDateReturnLog.$query().delete()
     await setDueDateReturnLog.$query().delete()
     await RecipientScenariosSeeder.clean(scenarios)
   })
 
   describe('when the set up journey is "ad-hoc"', () => {
-    before(() => {
+    beforeAll(() => {
       session = NoticeSessionFixture.adHocReminder(scenarios.licenceHolder.licenceHolderRecipient.licenceRefs[0])
     })
 
     describe('and the query is NOT for generating a download', () => {
-      before(() => {
+      beforeAll(() => {
         download = false
       })
 
@@ -79,12 +72,12 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
         // to be the latest due date.
         sendingResults[0].notificationDueDate = setDueDateReturnLog.dueDate
 
-        expect(results).to.equal(sendingResults)
+        expect(results).toEqual(sendingResults)
       })
     })
 
     describe('and the query is for generating a download', () => {
-      before(() => {
+      beforeAll(() => {
         download = true
       })
 
@@ -95,18 +88,18 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
 
         downloadingResults[0].notificationDueDate = setDueDateReturnLog.dueDate
 
-        expect(results).to.equal(downloadingResults)
+        expect(results).toEqual(downloadingResults)
       })
     })
   })
 
   describe('when the set up journey is "standard"', () => {
-    before(() => {
+    beforeAll(() => {
       session = NoticeSessionFixture.standardReminder(scenarios.licenceHolder.licenceHolderRecipient.licenceRefs[0])
     })
 
     describe('and the query is NOT for generating a download', () => {
-      before(() => {
+      beforeAll(() => {
         download = false
       })
 
@@ -127,12 +120,12 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
         // to be the latest due date.
         sendingResults[0].notificationDueDate = setDueDateReturnLog.dueDate
 
-        expect(results).to.equal(sendingResults)
+        expect(results).toEqual(sendingResults)
       })
     })
 
     describe('and the query is for generating a download', () => {
-      before(() => {
+      beforeAll(() => {
         download = true
       })
 
@@ -143,7 +136,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
 
         downloadingResults[0].notificationDueDate = setDueDateReturnLog.dueDate
 
-        expect(results).to.equal(downloadingResults)
+        expect(results).toEqual(downloadingResults)
       })
     })
   })

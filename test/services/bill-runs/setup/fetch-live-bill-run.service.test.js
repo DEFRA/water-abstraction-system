@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
@@ -25,7 +18,7 @@ describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
   let notLiveBillRun
   let sameRegionBillRun
 
-  before(async () => {
+  beforeAll(async () => {
     differentRegionBillRun = await BillRunHelper.add({
       toFinancialYearEnding,
       regionId: differentRegion.id,
@@ -54,7 +47,7 @@ describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
     nonMatchingBillRunIds = [differentRegionBillRun.id, notLiveBillRun.id, sameRegionBillRun.id]
   })
 
-  after(async () => {
+  afterAll(async () => {
     await Promise.all([
       differentRegionBillRun.$query().delete(),
       matchingBillRun.$query().delete(),
@@ -69,7 +62,7 @@ describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
         it('returns the match', async () => {
           const result = await FetchLiveBillRunsService.go(matchingRegion.id, toFinancialYearEnding)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             id: matchingBillRun.id,
             batchType: matchingBillRun.batchType,
             billRunNumber: matchingBillRun.billRunNumber,
@@ -90,7 +83,7 @@ describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
         it('is not returned as the match', async () => {
           const result = await FetchLiveBillRunsService.go(matchingRegion.id, toFinancialYearEnding)
 
-          expect(nonMatchingBillRunIds).not.to.include(result.id)
+          expect(nonMatchingBillRunIds).not.toContainEqual(result.id)
         })
       })
     })
@@ -99,7 +92,7 @@ describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
       it('is not returned as the match', async () => {
         const result = await FetchLiveBillRunsService.go(matchingRegion.id, toFinancialYearEnding)
 
-        expect(nonMatchingBillRunIds).not.to.include(result.id)
+        expect(nonMatchingBillRunIds).not.toContainEqual(result.id)
       })
     })
   })
@@ -108,7 +101,7 @@ describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
     it('is not returned as the match', async () => {
       const result = await FetchLiveBillRunsService.go(matchingRegion.id, toFinancialYearEnding)
 
-      expect(nonMatchingBillRunIds).not.to.include(result.id)
+      expect(nonMatchingBillRunIds).not.toContainEqual(result.id)
     })
   })
 })

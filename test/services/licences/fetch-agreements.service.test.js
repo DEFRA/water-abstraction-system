@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, afterEach, before, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const FinancialAgreementHelper = require('../../support/helpers/financial-agreement.helper.js')
 const LicenceAgreementHelper = require('../../support/helpers/licence-agreement.helper.js')
@@ -24,7 +17,7 @@ describe('Licences - Fetch Agreements service', () => {
   let licenceAgreement
   let financialAgreement
 
-  before(async () => {
+  beforeAll(async () => {
     financialAgreement = FinancialAgreementHelper.select(FINANCIAL_AGREEMENT_S130U_INDEX)
   })
 
@@ -46,18 +39,15 @@ describe('Licences - Fetch Agreements service', () => {
       it('returns the matching agreements data', async () => {
         const results = await FetchAgreementsService.go(licenceAgreement.licenceRef)
 
-        expect(results[0]).to.equal(
-          {
-            endDate,
-            financialAgreement: {
-              id: financialAgreement.id,
-              code: financialAgreement.code
-            },
-            startDate,
-            signedOn
+        expect(results[0]).toMatchObject({
+          endDate,
+          financialAgreement: {
+            id: financialAgreement.id,
+            code: financialAgreement.code
           },
-          { skip: ['id'] }
-        )
+          startDate,
+          signedOn
+        })
       })
     })
 
@@ -75,7 +65,7 @@ describe('Licences - Fetch Agreements service', () => {
       it('does not return the agreements data', async () => {
         const results = await FetchAgreementsService.go(licenceAgreement.licenceRef)
 
-        expect(results).to.be.empty()
+        expect(results).toHaveLength(0)
       })
     })
   })

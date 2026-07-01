@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
@@ -50,7 +45,7 @@ describe('Notices - Setup - View Check service', () => {
   it('correctly presents the data', async () => {
     const result = await ViewCheckService.go(session.id, yarStub)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       activeNavBar: 'notices',
       canSendNotice: true,
       links: {
@@ -88,7 +83,7 @@ describe('Notices - Setup - View Check service', () => {
     it('initialises the "selectedRecipients" property in the session', async () => {
       await ViewCheckService.go(session.id, yarStub)
 
-      expect(sessionUpdateStub.called).to.be.true()
+      expect(sessionUpdateStub.called).toBe(true)
     })
   })
 
@@ -100,7 +95,7 @@ describe('Notices - Setup - View Check service', () => {
     it('leaves the "selectedRecipients" property alone', async () => {
       await ViewCheckService.go(session.id, yarStub)
 
-      expect(sessionUpdateStub.called).to.be.false()
+      expect(sessionUpdateStub.called).toBe(false)
     })
   })
 })

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const NoticesFixture = require('../../../../support/fixtures/notices.fixture.js')
@@ -62,8 +57,8 @@ describe('Notices - Setup - Send - Renewal Invitation Alternate Notice service',
       const expiryDate = new Date(mainNotice.metadata.expiryDate)
       const renewalDate = new Date(mainNotice.metadata.renewalDate)
 
-      expect(createAlternateRenewalNoticeStub.calledOnce).to.be.true()
-      expect(createAlternateRenewalNoticeStub.firstCall.args).to.equal([
+      expect(createAlternateRenewalNoticeStub.calledOnce).toBe(true)
+      expect(createAlternateRenewalNoticeStub.firstCall.args).toEqual([
         mainNotice,
         failedNotification.licences,
         expiryDate,
@@ -74,7 +69,7 @@ describe('Notices - Setup - Send - Renewal Invitation Alternate Notice service',
     it('returns the notice, notification IDs, and notifications', async () => {
       const result = await RenewalInvitationAlternateNoticeService.go(mainNotice)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         notice: alternateNotice,
         notificationIds: [failedNotification.id],
         notifications: [alternateNotification]
@@ -93,13 +88,13 @@ describe('Notices - Setup - Send - Renewal Invitation Alternate Notice service',
     it('does not create the alternate notice', async () => {
       await RenewalInvitationAlternateNoticeService.go(mainNotice)
 
-      expect(createAlternateRenewalNoticeStub.called).to.be.false()
+      expect(createAlternateRenewalNoticeStub.called).toBe(false)
     })
 
     it('returns null', async () => {
       const result = await RenewalInvitationAlternateNoticeService.go(mainNotice)
 
-      expect(result).to.be.null()
+      expect(result).toBeNull()
     })
   })
 })

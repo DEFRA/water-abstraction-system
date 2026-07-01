@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AddressHelper = require('../../support/helpers/address.helper.js')
 const BillHelper = require('../../support/helpers/bill.helper.js')
@@ -123,19 +116,19 @@ describe('Fetch Bill Run service', () => {
     it('returns the matching instance of BillRunModel', async () => {
       const { billRun: result } = await FetchBillRunService.go(testBillRun.id)
 
-      expect(result.id).to.equal(testBillRun.id)
-      expect(result).to.be.an.instanceOf(BillRunModel)
+      expect(result.id).toEqual(testBillRun.id)
+      expect(result).toBeInstanceOf(BillRunModel)
     })
 
     it('returns the matching bill run including the linked region', async () => {
       const { billRun: result } = await FetchBillRunService.go(testBillRun.id)
       const { region: returnedRegion } = result
 
-      expect(result.id).to.equal(testBillRun.id)
-      expect(result).to.be.an.instanceOf(BillRunModel)
+      expect(result.id).toEqual(testBillRun.id)
+      expect(result).toBeInstanceOf(BillRunModel)
 
-      expect(returnedRegion.id).to.equal(linkedRegion.id)
-      expect(returnedRegion).to.be.an.instanceOf(RegionModel)
+      expect(returnedRegion.id).toEqual(linkedRegion.id)
+      expect(returnedRegion).toBeInstanceOf(RegionModel)
     })
 
     it('returns a bill summary for each bill linked to the bill run', async () => {
@@ -150,8 +143,8 @@ describe('Fetch Bill Run service', () => {
         }
       )
 
-      expect(result).to.have.length(2)
-      expect(result).to.include({
+      expect(result).toHaveLength(2)
+      expect(result).toContainEqual({
         id: linkedBills[0].id,
         billingAccountId: linkedBills[0].billingAccountId,
         accountNumber: linkedBills[0].accountNumber,
@@ -162,7 +155,7 @@ describe('Fetch Bill Run service', () => {
         allLicences: firstBillsLicences.join(','),
         waterCompany: false
       })
-      expect(result).to.include({
+      expect(result).toContainEqual({
         id: linkedBills[1].id,
         billingAccountId: linkedBills[1].billingAccountId,
         accountNumber: linkedBills[1].accountNumber,
@@ -180,9 +173,9 @@ describe('Fetch Bill Run service', () => {
     it('returns a result with no values set', async () => {
       const result = await FetchBillRunService.go('93112100-152b-4860-abea-2adee11dcd69')
 
-      expect(result).to.exist()
-      expect(result.billRun).to.equal(undefined)
-      expect(result.billSummaries).to.equal([])
+      expect(result).toBeDefined()
+      expect(result.billRun).toEqual(undefined)
+      expect(result.billSummaries).toEqual([])
     })
   })
 })

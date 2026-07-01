@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
@@ -39,13 +34,13 @@ describe('Return Logs Setup - Submit Confirmed service', () => {
     it('returns the licenceId for the redirect', async () => {
       const result = await SubmitConfirmedService.go(returnLog.id)
 
-      expect(result).to.equal(licence.id)
+      expect(result).toEqual(licence.id)
     })
 
     it('sends the return to be processed by the "processBillingFlagsService"', async () => {
       await SubmitConfirmedService.go(returnLog.id)
 
-      expect(ProcessBillingFlagServiceStub.called).to.be.true()
+      expect(ProcessBillingFlagServiceStub.called).toBe(true)
     })
   })
 })

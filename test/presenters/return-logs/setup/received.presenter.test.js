@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 const { today } = require('../../../../app/lib/general.lib.js')
@@ -30,7 +23,7 @@ describe('Return Logs - Setup - Received presenter', () => {
     it('correctly presents the data', () => {
       const result = ReceivedPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         pageTitle: 'When was the return received?',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
         pageTitleCaption: 'Return reference 012345',
@@ -57,7 +50,7 @@ describe('Return Logs - Setup - Received presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = ReceivedPresenter.go(session)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check',
           text: 'Back'
         })
@@ -68,7 +61,7 @@ describe('Return Logs - Setup - Received presenter', () => {
       it('returns a link back to the view "Return Log" page', () => {
         const result = ReceivedPresenter.go(session)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/system/return-logs/8280a3bb-aefb-4603-b71f-a58cef9169f3/details',
           text: 'Back'
         })
@@ -87,10 +80,10 @@ describe('Return Logs - Setup - Received presenter', () => {
 
         const { receivedDateOption, receivedDateDay, receivedDateMonth, receivedDateYear } = result
 
-        expect(receivedDateDay).to.be.null()
-        expect(receivedDateMonth).to.be.null()
-        expect(receivedDateYear).to.be.null()
-        expect(receivedDateOption).to.equal('today')
+        expect(receivedDateDay).toBeNull()
+        expect(receivedDateMonth).toBeNull()
+        expect(receivedDateYear).toBeNull()
+        expect(receivedDateOption).toEqual('today')
       })
     })
 
@@ -104,10 +97,10 @@ describe('Return Logs - Setup - Received presenter', () => {
 
         const { receivedDateOption, receivedDateDay, receivedDateMonth, receivedDateYear } = result
 
-        expect(receivedDateDay).to.be.null()
-        expect(receivedDateMonth).to.be.null()
-        expect(receivedDateYear).to.be.null()
-        expect(receivedDateOption).to.equal('yesterday')
+        expect(receivedDateDay).toBeNull()
+        expect(receivedDateMonth).toBeNull()
+        expect(receivedDateYear).toBeNull()
+        expect(receivedDateOption).toEqual('yesterday')
       })
     })
 
@@ -124,10 +117,10 @@ describe('Return Logs - Setup - Received presenter', () => {
 
         const { receivedDateOption, receivedDateDay, receivedDateMonth, receivedDateYear } = result
 
-        expect(receivedDateDay).to.equal('26')
-        expect(receivedDateMonth).to.equal('11')
-        expect(receivedDateYear).to.equal('2023')
-        expect(receivedDateOption).to.equal('custom-date')
+        expect(receivedDateDay).toEqual('26')
+        expect(receivedDateMonth).toEqual('11')
+        expect(receivedDateYear).toEqual('2023')
+        expect(receivedDateOption).toEqual('custom-date')
       })
     })
   })

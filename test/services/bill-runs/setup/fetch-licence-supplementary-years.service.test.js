@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach, after, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceSupplementaryYearHelper = require('../../../support/helpers/licence-supplementary-year.helper.js')
@@ -21,11 +14,11 @@ describe('Bill Runs - Setup - Fetch Licence Supplementary Years service', () => 
   let licence
   let twoPartTariff
 
-  before(async () => {
+  beforeAll(async () => {
     licence = await LicenceHelper.add({ regionId })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await licence.$query().delete()
   })
 
@@ -45,7 +38,7 @@ describe('Bill Runs - Setup - Fetch Licence Supplementary Years service', () => 
     it('returns an array of the years selected for supplementary billing', async () => {
       const result = await FetchLicenceSupplementaryYearsService.go(regionId, twoPartTariff)
 
-      expect(result).to.equal([{ financialYearEnd: 2024 }, { financialYearEnd: 2023 }, { financialYearEnd: 2022 }])
+      expect(result).toEqual([{ financialYearEnd: 2024 }, { financialYearEnd: 2023 }, { financialYearEnd: 2022 }])
     })
   })
 
@@ -63,7 +56,7 @@ describe('Bill Runs - Setup - Fetch Licence Supplementary Years service', () => 
     it('returns an empty array', async () => {
       const result = await FetchLicenceSupplementaryYearsService.go(regionId, twoPartTariff)
 
-      expect(result).to.equal([])
+      expect(result).toEqual([])
     })
   })
 })

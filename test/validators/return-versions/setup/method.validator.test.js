@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const MethodValidator = require('../../../../app/validators/return-versions/setup/method.validator.js')
 
@@ -15,8 +8,8 @@ describe('Return Versions Setup - Method validator', () => {
     it('confirms the data is valid', () => {
       const result = MethodValidator.go({ method: 'useAbstractionData' })
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -25,9 +18,9 @@ describe('Return Versions Setup - Method validator', () => {
       it('fails validation', () => {
         const result = MethodValidator.go({ method: '' })
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select how you want to set up the requirements for returns')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select how you want to set up the requirements for returns')
       })
     })
 
@@ -35,9 +28,9 @@ describe('Return Versions Setup - Method validator', () => {
       it('fails validation', () => {
         const result = MethodValidator.go({ method: 'just-because' })
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select how you want to set up the requirements for returns')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select how you want to set up the requirements for returns')
       })
     })
   })

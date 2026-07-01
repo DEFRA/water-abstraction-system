@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -45,14 +40,14 @@ describe('Bill Runs - Setup - Submit Type service', () => {
       it('saves the submitted value', async () => {
         await SubmitTypeService.go(session.id, payload)
 
-        expect(session.type).to.equal('annual')
+        expect(session.type).toEqual('annual')
       })
 
       it('returns an empty object (no page data is needed for a redirect)', async () => {
         const result = await SubmitTypeService.go(session.id, payload)
 
-        expect(result).to.equal({})
-        expect(session.$update.called).to.be.true()
+        expect(result).toEqual({})
+        expect(session.$update.called).toBe(true)
       })
     })
 
@@ -65,7 +60,7 @@ describe('Bill Runs - Setup - Submit Type service', () => {
         it('returns page data needed to re-render the view including the validation error', async () => {
           const result = await SubmitTypeService.go(session.id, payload)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             activeNavBar: 'bill-runs',
             backlink: '/system/bill-runs',
             error: {

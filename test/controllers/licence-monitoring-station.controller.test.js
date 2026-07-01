@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
@@ -25,7 +20,7 @@ describe('Licence Monitoring Station - Controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -42,6 +37,10 @@ describe('Licence Monitoring Station - Controller', () => {
     Sinon.restore()
   })
 
+  afterAll(async () => {
+    await server.stop()
+  })
+
   describe('licence-monitoring-station/{licenceMonitoringStationId}/remove', () => {
     const path = 'remove'
 
@@ -54,8 +53,8 @@ describe('Licence Monitoring Station - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('You’re about to remove the tag for this licence')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('You’re about to remove the tag for this licence')
         })
       })
     })
@@ -71,8 +70,8 @@ describe('Licence Monitoring Station - Controller', () => {
         it('redirects to the view monitoring station page', async () => {
           const response = await server.inject(_postOptions(path, { monitoringStationId }))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/monitoring-stations/${monitoringStationId}`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/monitoring-stations/${monitoringStationId}`)
         })
       })
     })

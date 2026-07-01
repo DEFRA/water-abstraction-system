@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
 
@@ -32,8 +25,8 @@ describe('Notices - Setup - Alert Type validator', () => {
     it('returns with no errors', () => {
       const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
 
     describe('when the restriction type is "stop_or_reduce" and there are no other licence monitoring stations', () => {
@@ -49,9 +42,9 @@ describe('Notices - Setup - Alert Type validator', () => {
         it('returns with errors', () => {
           const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
-          expect(result.value).to.exist()
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal(
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual(
             'There are no thresholds with the stop restriction type, Select the type of alert you need to send'
           )
         })
@@ -65,8 +58,8 @@ describe('Notices - Setup - Alert Type validator', () => {
         it('returns with no errors', () => {
           const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
-          expect(result.value).to.exist()
-          expect(result.error).not.to.exist()
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeUndefined()
         })
       })
     })
@@ -81,9 +74,9 @@ describe('Notices - Setup - Alert Type validator', () => {
       it('returns with errors', () => {
         const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select the type of alert you need to send')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select the type of alert you need to send')
       })
     })
   })
@@ -99,8 +92,8 @@ describe('Notices - Setup - Alert Type validator', () => {
       it('returns with no errors', () => {
         const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -118,9 +111,9 @@ describe('Notices - Setup - Alert Type validator', () => {
         it('returns with errors', () => {
           const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
-          expect(result.value).to.exist()
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal(
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual(
             'There are no thresholds with the stop restriction type, Select the type of alert you need to send'
           )
         })
@@ -134,9 +127,9 @@ describe('Notices - Setup - Alert Type validator', () => {
         it('returns with errors', () => {
           const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
-          expect(result.value).to.exist()
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal(
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual(
             'There are no thresholds with the stop restriction type, Select the type of alert you need to send'
           )
         })
@@ -155,8 +148,8 @@ describe('Notices - Setup - Alert Type validator', () => {
       it('returns with no errors', () => {
         const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -174,9 +167,9 @@ describe('Notices - Setup - Alert Type validator', () => {
         it('returns with errors', () => {
           const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
-          expect(result.value).to.exist()
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal(
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual(
             'There are no thresholds with the reduce restriction type, Select the type of alert you need to send'
           )
         })
@@ -190,9 +183,9 @@ describe('Notices - Setup - Alert Type validator', () => {
         it('returns with errors', () => {
           const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
-          expect(result.value).to.exist()
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal(
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual(
             'There are no thresholds with the reduce restriction type, Select the type of alert you need to send'
           )
         })
@@ -211,8 +204,8 @@ describe('Notices - Setup - Alert Type validator', () => {
       it('returns with no errors', () => {
         const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -225,9 +218,9 @@ describe('Notices - Setup - Alert Type validator', () => {
         it('returns with errors', () => {
           const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
-          expect(result.value).to.exist()
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal(
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual(
             'There are no thresholds with the warning restriction type, Select the type of alert you need to send'
           )
         })
@@ -246,8 +239,8 @@ describe('Notices - Setup - Alert Type validator', () => {
       it('returns with no errors', () => {
         const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -260,9 +253,9 @@ describe('Notices - Setup - Alert Type validator', () => {
         it('returns with errors', () => {
           const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
 
-          expect(result.value).to.exist()
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal(
+          expect(result.value).toBeDefined()
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual(
             'There are no thresholds with the resume restriction type, Select the type of alert you need to send'
           )
         })

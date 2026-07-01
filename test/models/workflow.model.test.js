@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
@@ -19,13 +12,13 @@ describe('Workflow model', () => {
   let testLicence
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     testLicence = await LicenceHelper.add()
 
     testRecord = await WorkflowHelper.add({ licenceId: testLicence.id })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testLicence.$query().delete()
     await testRecord.$query().delete()
   })
@@ -34,8 +27,8 @@ describe('Workflow model', () => {
     it('can successfully run a basic query', async () => {
       const result = await WorkflowModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(WorkflowModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(WorkflowModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -44,17 +37,17 @@ describe('Workflow model', () => {
       it('can successfully run a related query', async () => {
         const query = await WorkflowModel.query().innerJoinRelated('licence')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence', async () => {
         const result = await WorkflowModel.query().findById(testRecord.id).withGraphFetched('licence')
 
-        expect(result).to.be.instanceOf(WorkflowModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(WorkflowModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licence).to.be.an.instanceOf(LicenceModel)
-        expect(result.licence).to.equal(testLicence)
+        expect(result.licence).toBeInstanceOf(LicenceModel)
+        expect(result.licence).toEqual(testLicence)
       })
     })
   })

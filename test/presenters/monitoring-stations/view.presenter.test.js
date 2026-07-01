@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ViewPresenter = require('../../../app/presenters/monitoring-stations/view.presenter.js')
 
@@ -56,7 +49,7 @@ describe('Monitoring Stations - View presenter', () => {
   it('correctly presents the data', () => {
     const result = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       backLink: { href: '/', text: 'Go back to search' },
       buttons: {
         createAlert: { href: '/system/notices/setup/alerts?monitoringStationId=f122d4bb-42bd-4af9-a081-1656f5a30b63' },
@@ -97,7 +90,7 @@ describe('Monitoring Stations - View presenter', () => {
         it('returns null', () => {
           const result = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
-          expect(result.buttons.createAlert).to.be.null()
+          expect(result.buttons.createAlert).toBeNull()
         })
       })
 
@@ -110,7 +103,7 @@ describe('Monitoring Stations - View presenter', () => {
           it('returns null', () => {
             const result = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
-            expect(result.buttons.createAlert).to.be.null()
+            expect(result.buttons.createAlert).toBeNull()
           })
         })
 
@@ -118,7 +111,7 @@ describe('Monitoring Stations - View presenter', () => {
           it('returns the "href" needed for the button', () => {
             const result = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
-            expect(result.buttons.createAlert).to.equal({
+            expect(result.buttons.createAlert).toEqual({
               href: '/system/notices/setup/alerts?monitoringStationId=f122d4bb-42bd-4af9-a081-1656f5a30b63'
             })
           })
@@ -132,7 +125,7 @@ describe('Monitoring Stations - View presenter', () => {
       it('returns the grid reference', () => {
         const result = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
-        expect(result.gridReference).to.equal('TL2664640047')
+        expect(result.gridReference).toEqual('TL2664640047')
       })
     })
 
@@ -144,7 +137,7 @@ describe('Monitoring Stations - View presenter', () => {
       it('returns an empty string', () => {
         const result = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
-        expect(result.gridReference).to.equal('')
+        expect(result.gridReference).toEqual('')
       })
     })
   })
@@ -158,7 +151,7 @@ describe('Monitoring Stations - View presenter', () => {
       it('returns the river name followed by the monitoring station name', () => {
         const result = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
-        expect(result.pageTitle).to.equal('Test river at BUSY POINT')
+        expect(result.pageTitle).toEqual('Test river at BUSY POINT')
       })
     })
 
@@ -166,7 +159,7 @@ describe('Monitoring Stations - View presenter', () => {
       it('returns just the monitoring station name', () => {
         const result = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
-        expect(result.pageTitle).to.equal('BUSY POINT')
+        expect(result.pageTitle).toEqual('BUSY POINT')
       })
     })
   })
@@ -180,7 +173,7 @@ describe('Monitoring Stations - View presenter', () => {
       it('returns the catchment name', () => {
         const result = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
-        expect(result.pageTitleCaption).to.equal('Test catchment')
+        expect(result.pageTitleCaption).toEqual('Test catchment')
       })
     })
 
@@ -188,7 +181,7 @@ describe('Monitoring Stations - View presenter', () => {
       it('returns null', () => {
         const result = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
-        expect(result.pageTitleCaption).to.be.null()
+        expect(result.pageTitleCaption).toBeNull()
       })
     })
   })
@@ -198,7 +191,7 @@ describe('Monitoring Stations - View presenter', () => {
       it('returns the abstraction period set when the licence was tagged formatted for display', () => {
         const result = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
-        expect(result.restrictions[0].abstractionPeriod).to.equal('1 April to 31 August')
+        expect(result.restrictions[0].abstractionPeriod).toEqual('1 April to 31 August')
       })
     })
   })
@@ -212,7 +205,7 @@ describe('Monitoring Stations - View presenter', () => {
       it('returns the station reference', () => {
         const result = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
-        expect(result.stationReference).to.equal('STN12345')
+        expect(result.stationReference).toEqual('STN12345')
       })
     })
 
@@ -220,7 +213,7 @@ describe('Monitoring Stations - View presenter', () => {
       it('returns an empty string', () => {
         const result = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
-        expect(result.stationReference).to.equal('')
+        expect(result.stationReference).toEqual('')
       })
     })
   })
@@ -234,7 +227,7 @@ describe('Monitoring Stations - View presenter', () => {
       it('returns the WSKI Id', () => {
         const result = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
-        expect(result.wiskiId).to.equal('WSK12345')
+        expect(result.wiskiId).toEqual('WSK12345')
       })
     })
 
@@ -242,7 +235,7 @@ describe('Monitoring Stations - View presenter', () => {
       it('returns an empty string', () => {
         const result = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
-        expect(result.wiskiId).to.equal('')
+        expect(result.wiskiId).toEqual('')
       })
     })
   })

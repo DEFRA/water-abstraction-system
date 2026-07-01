@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const NotifyErrorPresenter = require('../../../app/presenters/notifications/notify-error.presenter.js')
 
@@ -24,7 +17,7 @@ describe('Notifications - Notify Error presenter', () => {
   it('correctly returns an errored notification', () => {
     const result = NotifyErrorPresenter.go(statusCode, message, errors)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       notifyError: '{"status":"ENOTFOUND","message":"An error occurred","errors":["a specific error"]}',
       status: 'error'
     })

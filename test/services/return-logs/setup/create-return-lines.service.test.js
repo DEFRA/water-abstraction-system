@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateUUID, timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 const ReturnSubmissionLineModel = require('../../../../app/models/return-submission-line.model.js')
@@ -58,16 +51,16 @@ describe('Return Logs - Setup - Create New Return Lines service', () => {
 
       const result = await ReturnSubmissionLineModel.query().where('returnSubmissionId', returnSubmissionId)
 
-      expect(result[0].createdAt).to.equal(new Date(timestamp))
-      expect(result[0].endDate).to.equal(new Date('2024-11-01T00:00:00.000Z'))
-      expect(result[0].quantity).to.equal(16)
-      expect(result[1].quantity).to.equal(0)
-      expect(result[2].quantity).to.be.null()
-      expect(result[0].readingType).to.equal('estimated')
-      expect(result[0].returnSubmissionId).to.equal(returnSubmissionId)
-      expect(result[0].startDate).to.equal(new Date('2024-10-26T00:00:00.000Z'))
-      expect(result[0].timePeriod).to.equal('week')
-      expect(result[0].userUnit).to.equal('m³')
+      expect(result[0].createdAt).toEqual(new Date(timestamp))
+      expect(result[0].endDate).toEqual(new Date('2024-11-01T00:00:00.000Z'))
+      expect(result[0].quantity).toEqual(16)
+      expect(result[1].quantity).toEqual(0)
+      expect(result[2].quantity).toBeNull()
+      expect(result[0].readingType).toEqual('estimated')
+      expect(result[0].returnSubmissionId).toEqual(returnSubmissionId)
+      expect(result[0].startDate).toEqual(new Date('2024-10-26T00:00:00.000Z'))
+      expect(result[0].timePeriod).toEqual('week')
+      expect(result[0].userUnit).toEqual('m³')
     })
 
     describe('when called for a nil return', () => {
@@ -78,7 +71,7 @@ describe('Return Logs - Setup - Create New Return Lines service', () => {
       it('returns an empty array', async () => {
         const result = await CreateReturnLinesService.go(returnSubmissionId, session, timestamp)
 
-        expect(result).to.equal([])
+        expect(result).toEqual([])
       })
     })
 
@@ -95,7 +88,7 @@ describe('Return Logs - Setup - Create New Return Lines service', () => {
 
         const [result] = await ReturnSubmissionLineModel.query().where('returnSubmissionId', returnSubmissionId)
 
-        expect(result).to.not.exist()
+        expect(result).toBeUndefined()
       })
     })
   })

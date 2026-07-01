@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const ExpandedError = require('../../../app/errors/expanded.error.js')
@@ -48,7 +43,7 @@ describe('Send Transactions service', () => {
     })
 
     it('does not throw an error', async () => {
-      await expect(SendCustomerChangeService.go(billingAccount)).not.to.reject()
+      await SendCustomerChangeService.go(billingAccount)
     })
   })
 
@@ -60,11 +55,13 @@ describe('Send Transactions service', () => {
     })
 
     it('throws an error', async () => {
-      const result = await expect(SendCustomerChangeService.go(billingAccount)).to.reject()
+      const result = await SendCustomerChangeService.go(billingAccount).catch((e) => {
+        return e
+      })
 
-      expect(result).to.be.an.instanceOf(ExpandedError)
-      expect(result.message).to.equal('Customer change failed to send')
-      expect(result.billingAccountId).to.equal(billingAccount.id)
+      expect(result).toBeInstanceOf(ExpandedError)
+      expect(result.message).toEqual('Customer change failed to send')
+      expect(result.billingAccountId).toEqual(billingAccount.id)
     })
   })
 })

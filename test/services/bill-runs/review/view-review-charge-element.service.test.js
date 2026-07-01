@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
@@ -44,7 +39,7 @@ describe('Bill Runs - Review - View Review Charge Element Service', () => {
       it('returns page data for the view', async () => {
         const result = await ViewReviewChargeElementService.go(reviewChargeElement.id, elementIndex, yarStub)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'bill-runs',
           bannerMessage: 'The billable returns for this licence have been updated',
           pageTitle: 'Review charge element',
@@ -87,7 +82,7 @@ describe('Bill Runs - Review - View Review Charge Element Service', () => {
       it('returns page data for the view', async () => {
         const result = await ViewReviewChargeElementService.go(reviewChargeElement.id, elementIndex, yarStub)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'bill-runs',
           bannerMessage: undefined,
           pageTitle: 'Review charge element',

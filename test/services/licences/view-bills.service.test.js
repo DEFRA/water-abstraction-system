@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { generateUUID } = require('../../../app/lib/general.lib.js')
@@ -58,7 +53,7 @@ describe('Licences - View Bills service', () => {
       it('will return all the mandatory data and default values for use in the licence bills page', async () => {
         const result = await ViewBillsService.go(licenceId, auth)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeSecondaryNav: 'bills',
           backLink: {
             href: '/',

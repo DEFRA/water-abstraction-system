@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const SingleVolumePresenter = require('../../../../app/presenters/return-logs/setup/single-volume.presenter.js')
 
@@ -25,7 +18,7 @@ describe('Return Logs Setup - Single Volume presenter', () => {
     it('correctly presents the data', () => {
       const result = SingleVolumePresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/meter-provided',
           text: 'Back'
@@ -49,7 +42,7 @@ describe('Return Logs Setup - Single Volume presenter', () => {
       it('returns the "singleVolume" property populated to re-select the option', () => {
         const result = SingleVolumePresenter.go(session)
 
-        expect(result.singleVolume).to.equal('yes')
+        expect(result.singleVolume).toEqual('yes')
       })
     })
 
@@ -61,7 +54,7 @@ describe('Return Logs Setup - Single Volume presenter', () => {
       it('returns the "singleVolume" property populated to re-select the option', () => {
         const result = SingleVolumePresenter.go(session)
 
-        expect(result.singleVolume).to.equal('no')
+        expect(result.singleVolume).toEqual('no')
       })
     })
   })
@@ -75,7 +68,7 @@ describe('Return Logs Setup - Single Volume presenter', () => {
       it('returns the "singleVolumeQuantity" property populated to re-select the option', () => {
         const result = SingleVolumePresenter.go(session)
 
-        expect(result.singleVolumeQuantity).to.equal('1000')
+        expect(result.singleVolumeQuantity).toEqual('1000')
       })
     })
   })
@@ -89,7 +82,7 @@ describe('Return Logs Setup - Single Volume presenter', () => {
       it('returns the "units" property presenter correctly', () => {
         const result = SingleVolumePresenter.go(session)
 
-        expect(result.units).to.equal('cubic metres')
+        expect(result.units).toEqual('cubic metres')
       })
     })
 
@@ -101,7 +94,7 @@ describe('Return Logs Setup - Single Volume presenter', () => {
       it('returns the "units" property presenter correctly', () => {
         const result = SingleVolumePresenter.go(session)
 
-        expect(result.units).to.equal('litres')
+        expect(result.units).toEqual('litres')
       })
     })
   })
@@ -115,7 +108,7 @@ describe('Return Logs Setup - Single Volume presenter', () => {
       it('returns a link back to the "meter-details" page', () => {
         const result = SingleVolumePresenter.go(session)
 
-        expect(result.backLink.href).to.equal(
+        expect(result.backLink.href).toEqual(
           '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/meter-details'
         )
       })
@@ -129,7 +122,7 @@ describe('Return Logs Setup - Single Volume presenter', () => {
       it('returns a link back to the "meter-provided" page', () => {
         const result = SingleVolumePresenter.go(session)
 
-        expect(result.backLink.href).to.equal(
+        expect(result.backLink.href).toEqual(
           '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/meter-provided'
         )
       })

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -51,15 +46,15 @@ describe('Return Versions Setup - Add service', () => {
     it('adds another empty object to the requirement array in the current setup session record', async () => {
       await AddService.go(session.id)
 
-      expect(session.requirements.length).to.equal(2)
-      expect(session.requirements).to.equal([{}, {}])
-      expect(session.$update.called).to.be.true()
+      expect(session.requirements.length).toEqual(2)
+      expect(session.requirements).toEqual([{}, {}])
+      expect(session.$update.called).toBe(true)
     })
 
     it('returns the index of the new requirement', async () => {
       const result = await AddService.go(session.id)
 
-      expect(result).to.equal(1)
+      expect(result).toEqual(1)
     })
   })
 })

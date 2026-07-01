@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CRMContactsSeeder = require('../../support/seeders/crm-contacts.seeder.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
@@ -33,7 +26,7 @@ describe('Licence Versions - Fetch licence version dal', () => {
   let source
 
   describe('when there is licence version', () => {
-    before(async () => {
+    beforeAll(async () => {
       licence = await LicenceHelper.add()
 
       licenceHolder = await CRMContactsSeeder.licenceHolder({ licence }, 'Example Trading Ltd')
@@ -83,7 +76,7 @@ describe('Licence Versions - Fetch licence version dal', () => {
     it('returns the matching licence version and the pagination array (in order)', async () => {
       const result = await FetchLicenceVersionDal.go(licenceVersion.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         licenceVersion: {
           address: {
             address1: '4',

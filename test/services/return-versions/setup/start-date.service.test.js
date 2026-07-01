@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -56,30 +51,27 @@ describe('Return Versions Setup - Start Date service', () => {
     it('fetches the current setup session record', async () => {
       const result = await StartDateService.go(session.id)
 
-      expect(result.sessionId).to.equal(session.id)
+      expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
       const result = await StartDateService.go(session.id)
 
-      expect(result).to.equal(
-        {
-          pageTitle: 'Select the start date for the requirements for returns',
-          pageTitleCaption: 'Licence 01/ABC',
-          startDateDay: null,
-          startDateMonth: null,
-          startDateYear: null,
-          backLink: {
-            href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
-            text: 'Back'
-          },
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licenceRef: '01/ABC',
-          licenceVersionStartDate: '1 January 2023',
-          startDateOption: null
+      expect(result).toMatchObject({
+        pageTitle: 'Select the start date for the requirements for returns',
+        pageTitleCaption: 'Licence 01/ABC',
+        startDateDay: null,
+        startDateMonth: null,
+        startDateYear: null,
+        backLink: {
+          href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
+          text: 'Back'
         },
-        { skip: ['sessionId'] }
-      )
+        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        licenceRef: '01/ABC',
+        licenceVersionStartDate: '1 January 2023',
+        startDateOption: null
+      })
     })
   })
 })

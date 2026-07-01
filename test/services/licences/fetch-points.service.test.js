@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, after, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
@@ -26,7 +19,7 @@ describe('Licences - Fetch Points service', () => {
   let point
   let source
 
-  before(async () => {
+  beforeAll(async () => {
     licence = await LicenceHelper.add()
 
     licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id })
@@ -62,7 +55,7 @@ describe('Licences - Fetch Points service', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await licence.$query().delete()
     await licenceVersion.$query().delete()
     await licenceVersionPurpose.$query().delete()
@@ -74,7 +67,7 @@ describe('Licences - Fetch Points service', () => {
     it('returns the points and source', async () => {
       const result = await FetchPointsService.go(licence.id)
 
-      expect(result).to.equal([
+      expect(result).toEqual([
         {
           bgsReference: 'TL 14/123',
           category: 'Single Point',

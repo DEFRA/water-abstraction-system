@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -46,17 +41,17 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
       it('saves the submitted option', async () => {
         await SubmitSingleVolumeService.go(session.id, payload)
 
-        expect(session.singleVolume).to.equal('yes')
-        expect(session.singleVolumeQuantity).to.equal(1000)
+        expect(session.singleVolume).toEqual('yes')
+        expect(session.singleVolumeQuantity).toEqual(1000)
 
-        expect(session.$update.called).to.be.true()
+        expect(session.$update.called).toBe(true)
       })
 
       describe('and the user has previously selected "yes" to a single volume being provided', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
           const result = await SubmitSingleVolumeService.go(session.id, payload)
 
-          expect(result).to.equal({ singleVolume: 'yes' })
+          expect(result).toEqual({ singleVolume: 'yes' })
         })
       })
 
@@ -68,7 +63,7 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
           const result = await SubmitSingleVolumeService.go(session.id, payload)
 
-          expect(result).to.equal({ singleVolume: 'no' })
+          expect(result).toEqual({ singleVolume: 'no' })
         })
       })
     })
@@ -81,24 +76,21 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
       it('returns the page data for the view', async () => {
         const result = await SubmitSingleVolumeService.go(session.id, payload)
 
-        expect(result).to.equal(
-          {
-            backLink: { href: `/system/return-logs/setup/${session.id}/meter-provided`, text: 'Back' },
-            pageTitle: 'Is it a single volume?',
-            pageTitleCaption: 'Return reference 12345',
-            singleVolume: null,
-            singleVolumeQuantity: null,
-            units: 'litres'
-          },
-          { skip: ['sessionId', 'error'] }
-        )
+        expect(result).toMatchObject({
+          backLink: { href: `/system/return-logs/setup/${session.id}/meter-provided`, text: 'Back' },
+          pageTitle: 'Is it a single volume?',
+          pageTitleCaption: 'Return reference 12345',
+          singleVolume: null,
+          singleVolumeQuantity: null,
+          units: 'litres'
+        })
       })
 
       describe('because the user has not selected anything', () => {
         it('includes an error for the radio form element', async () => {
           const result = await SubmitSingleVolumeService.go(session.id, payload)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             errorList: [{ href: '#singleVolume', text: "Select if it's a single volume" }],
             singleVolume: { text: "Select if it's a single volume" }
           })
@@ -114,7 +106,7 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
         it('includes an error for the input form element', async () => {
           const result = await SubmitSingleVolumeService.go(session.id, payload)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             errorList: [{ href: '#singleVolumeQuantity', text: 'Enter a total amount greater than zero' }],
             singleVolumeQuantity: { text: 'Enter a total amount greater than zero' }
           })

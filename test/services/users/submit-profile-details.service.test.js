@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const YarStub = require('../../support/stubs/yar.stub.js')
@@ -54,8 +49,8 @@ describe('Users - Submit profile details service', () => {
       it('saves the user details', async () => {
         const result = await SubmitProfileDetailsService.go(userId, payload, yarStub)
 
-        expect(patchStub.called).to.be.true()
-        expect(whereStub.calledWith('userId', userId)).to.be.true()
+        expect(patchStub.called).toBe(true)
+        expect(whereStub.calledWith('userId', userId)).toBe(true)
         expect(
           patchStub.calledWith({
             'userData:contactDetails.address': payload.address,
@@ -64,15 +59,15 @@ describe('Users - Submit profile details service', () => {
             'userData:contactDetails.name': payload.name,
             'userData:contactDetails.tel': payload.tel
           })
-        ).to.be.true()
-        expect(result.navigationLinks).to.be.an.array()
+        ).toBe(true)
+        expect(result.navigationLinks).toBeInstanceOf(Array)
       })
 
       it('flashes a notification of successful update', async () => {
         await SubmitProfileDetailsService.go(userId, payload, yarStub)
 
-        expect(yarStub.flash.lastCall.args[0]).to.equal('notification')
-        expect(yarStub.flash.lastCall.args[1]).to.equal({
+        expect(yarStub.flash.lastCall.args[0]).toEqual('notification')
+        expect(yarStub.flash.lastCall.args[1]).toEqual({
           title: 'Updated',
           text: 'Profile details updated'
         })
@@ -90,7 +85,7 @@ describe('Users - Submit profile details service', () => {
               'userData:contactDetails.name': '',
               'userData:contactDetails.tel': ''
             })
-          ).to.be.true()
+          ).toBe(true)
         })
       })
     })
@@ -105,13 +100,13 @@ describe('Users - Submit profile details service', () => {
       it('does not save', async () => {
         await SubmitProfileDetailsService.go(userId, payload, yarStub)
 
-        expect(userModelQueryStub.notCalled).to.be.true()
+        expect(userModelQueryStub.notCalled).toBe(true)
       })
 
       it('returns the details required to redisplay the page including validation errors', async () => {
         const result = await SubmitProfileDetailsService.go(userId, payload, yarStub)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           address: '',
           backLink: {
             href: '/',
@@ -154,7 +149,7 @@ describe('Users - Submit profile details service', () => {
       it('does not flash a notification', async () => {
         await SubmitProfileDetailsService.go(userId, payload, yarStub)
 
-        expect(yarStub.flash.notCalled).to.be.true()
+        expect(yarStub.flash.notCalled).toBe(true)
       })
     })
   })
@@ -166,10 +161,12 @@ describe('Users - Submit profile details service', () => {
     })
 
     it('throws the error', async () => {
-      const error = await expect(SubmitProfileDetailsService.go(userId, {}, yarStub)).to.reject()
+      const error = await SubmitProfileDetailsService.go(userId, {}, yarStub).catch((e) => {
+        return e
+      })
 
-      expect(error).to.exist()
-      expect(error.message).to.equal('Model query error')
+      expect(error).toBeDefined()
+      expect(error.message).toEqual('Model query error')
     })
   })
 })

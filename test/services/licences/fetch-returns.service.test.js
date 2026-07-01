@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
@@ -18,7 +11,7 @@ describe('Licences - Fetch Returns service', () => {
   let licence
   let returnLogs
 
-  before(async () => {
+  beforeAll(async () => {
     returnLogs = []
 
     licence = await LicenceHelper.add()
@@ -57,7 +50,7 @@ describe('Licences - Fetch Returns service', () => {
     returnLogs.push(returnLog)
   })
 
-  after(async () => {
+  afterAll(async () => {
     await licence.$query().delete()
 
     for (const returnLog of returnLogs) {
@@ -69,7 +62,7 @@ describe('Licences - Fetch Returns service', () => {
     it('returns results', async () => {
       const result = await FetchReturnsService.go(licence.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         //  This should be ordered first by start date, then by return reference
         //
         // - 2020-05-01 - 123

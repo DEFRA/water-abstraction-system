@@ -1,17 +1,12 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
+const Boom = require('@hapi/boom')
 const { HTTP_STATUS_FOUND, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } =
   require('node:http2').constants
-const Boom = require('@hapi/boom')
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
@@ -39,7 +34,7 @@ describe('Licences controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -54,6 +49,10 @@ describe('Licences controller', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  afterAll(async () => {
+    await server.stop()
   })
 
   describe('/licences/{id}/bills', () => {
@@ -77,8 +76,8 @@ describe('Licences controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Bills')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Bills')
         })
       })
     })
@@ -105,8 +104,8 @@ describe('Licences controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Licence abstraction conditions')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Licence abstraction conditions')
         })
       })
     })
@@ -133,8 +132,8 @@ describe('Licences controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Communications')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Communications')
         })
       })
     })
@@ -161,8 +160,8 @@ describe('Licences controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Contact details')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Contact details')
         })
       })
     })
@@ -189,8 +188,8 @@ describe('Licences controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('History')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('History')
         })
       })
     })
@@ -219,8 +218,8 @@ describe('Licences controller', () => {
         it('redirects to select return start date page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/return-versions/setup/${session.id}/start-date`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/return-versions/setup/${session.id}/start-date`)
         })
       })
 
@@ -233,8 +232,8 @@ describe('Licences controller', () => {
           it('returns a 404 and page not found', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
-            expect(response.payload).to.contain('Page not found')
+            expect(response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
+            expect(response.payload).toContain('Page not found')
           })
         })
 
@@ -246,8 +245,8 @@ describe('Licences controller', () => {
           it('returns a 200 and there is a problem with the service page', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Sorry, there is a problem with the service')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Sorry, there is a problem with the service')
           })
         })
       })
@@ -275,8 +274,8 @@ describe('Licences controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Points')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Points')
         })
       })
     })
@@ -303,8 +302,8 @@ describe('Licences controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Purposes, periods and amounts')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Purposes, periods and amounts')
         })
       })
     })
@@ -333,8 +332,8 @@ describe('Licences controller', () => {
         it('redirects to select return start date page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/return-versions/setup/${session.id}/start-date`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/return-versions/setup/${session.id}/start-date`)
         })
       })
 
@@ -347,8 +346,8 @@ describe('Licences controller', () => {
           it('returns a 404 and page not found', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
-            expect(response.payload).to.contain('Page not found')
+            expect(response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
+            expect(response.payload).toContain('Page not found')
           })
         })
 
@@ -360,8 +359,8 @@ describe('Licences controller', () => {
           it('returns a 200 and there is a problem with the service page', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Sorry, there is a problem with the service')
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+            expect(response.payload).toContain('Sorry, there is a problem with the service')
           })
         })
       })
@@ -389,8 +388,8 @@ describe('Licences controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Returns')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Returns')
         })
       })
     })
@@ -417,8 +416,8 @@ describe('Licences controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Licence set up')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Licence set up')
         })
       })
     })
@@ -445,8 +444,8 @@ describe('Licences controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Licence summary')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Licence summary')
         })
       })
     })
@@ -466,7 +465,7 @@ describe('Licences controller', () => {
         it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
+          expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
         })
       })
     })
@@ -493,8 +492,8 @@ describe('Licences controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Mark for the supplementary bill run')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Mark for the supplementary bill run')
         })
       })
     })
@@ -512,8 +511,8 @@ describe('Licences controller', () => {
         it('redirects to the marked for supplementary billing page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(
             '/system/licences/7861814c-ca19-43f2-be11-3c612f0d744b/marked-for-supplementary-billing'
           )
         })
@@ -548,9 +547,9 @@ describe('Licences controller', () => {
         it('re-renders the page with an error message', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select at least one financial year')
-          expect(response.payload).to.contain('There is a problem')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Select at least one financial year')
+          expect(response.payload).toContain('There is a problem')
         })
       })
     })
@@ -581,8 +580,8 @@ describe('Licences controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('You&#39;ve marked this licence for the next supplementary bill run')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('You&#39;ve marked this licence for the next supplementary bill run')
         })
       })
     })

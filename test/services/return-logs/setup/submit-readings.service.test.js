@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -70,7 +65,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
         it('saves the reading for May as null', async () => {
           await SubmitReadingsService.go(session.id, payload, yarStub, yearMonth)
 
-          expect(session.lines).to.equal([
+          expect(session.lines).toEqual([
             {
               endDate: '2023-04-30T00:00:00.000Z',
               reading: 100,
@@ -87,7 +82,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
               startDate: '2023-06-01T00:00:00.000Z'
             }
           ])
-          expect(session.$update.called).to.be.true()
+          expect(session.$update.called).toBe(true)
         })
 
         it('sets the notification message title to "Updated" and the text to "Readings have been updated" ', async () => {
@@ -95,8 +90,8 @@ describe('Return Logs Setup - Submit Readings service', () => {
 
           const [flashType, notification] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ titleText: 'Updated', text: 'Readings have been updated' })
+          expect(flashType).toEqual('notification')
+          expect(notification).toEqual({ titleText: 'Updated', text: 'Readings have been updated' })
         })
       })
 
@@ -109,7 +104,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
         it('saves the reading for June as 200', async () => {
           await SubmitReadingsService.go(session.id, payload, yarStub, yearMonth)
 
-          expect(session.lines).to.equal([
+          expect(session.lines).toEqual([
             {
               endDate: '2023-04-30T00:00:00.000Z',
               reading: 100,
@@ -125,7 +120,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
               startDate: '2023-06-01T00:00:00.000Z'
             }
           ])
-          expect(session.$update.called).to.be.true()
+          expect(session.$update.called).toBe(true)
         })
 
         it('sets the notification message title to "Updated" and the text to "Readings have been updated" ', async () => {
@@ -133,8 +128,8 @@ describe('Return Logs Setup - Submit Readings service', () => {
 
           const [flashType, notification] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ titleText: 'Updated', text: 'Readings have been updated' })
+          expect(flashType).toEqual('notification')
+          expect(notification).toEqual({ titleText: 'Updated', text: 'Readings have been updated' })
         })
       })
     })
@@ -148,7 +143,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
       it('returns the page data for the view', async () => {
         const result = await SubmitReadingsService.go(session.id, payload, yarStub, yearMonth)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           error: {
             '2023-04-30T00:00:00.000Z': {
               text: 'Reading must be a number or blank'
@@ -182,7 +177,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
         it('includes an error for the radio form element', async () => {
           const result = await SubmitReadingsService.go(session.id, payload, yarStub, yearMonth)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             '2023-04-30T00:00:00.000Z': {
               text: 'Reading must be a number or blank'
             },

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things to stub
 const FindAllSearchMatchesService = require('../../../app/services/search/find-all-search-matches.service.js')
@@ -78,7 +73,7 @@ describe('Search - View Search service', () => {
     it('returns page data for the view', async () => {
       const result = await ViewSearchService.go(auth, yar, page)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         filterItems: [
           {
             checked: false,
@@ -157,7 +152,7 @@ describe('Search - View Search service', () => {
     it('returns page data for the blank search page', async () => {
       const result = await ViewSearchService.go(auth, yar, page)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         filterItems: [
           {
             checked: false,
@@ -206,7 +201,7 @@ describe('Search - View Search service', () => {
     it('returns page data for the blank search page', async () => {
       const result = await ViewSearchService.go(auth, yar, page)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         filterItems: [
           {
             checked: false,
@@ -256,7 +251,7 @@ describe('Search - View Search service', () => {
     it('still returns page data for the view', async () => {
       const result = await ViewSearchService.go(auth, yar, page)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         filterItems: [
           {
             checked: false,

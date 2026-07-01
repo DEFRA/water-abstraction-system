@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const AbstractionPeriodPresenter = require('../../../../app/presenters/return-versions/setup/abstraction-period.presenter.js')
 
@@ -38,7 +31,7 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
     it('correctly presents the data', () => {
       const result = AbstractionPeriodPresenter.go(session, requirementIndex)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         abstractionPeriod: null,
         backLink: {
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/points/0',
@@ -67,7 +60,7 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
       it('returns a populated abstraction period', () => {
         const result = AbstractionPeriodPresenter.go(session, requirementIndex)
 
-        expect(result.abstractionPeriod).to.equal({
+        expect(result.abstractionPeriod).toEqual({
           abstractionPeriodStartDay: '07',
           abstractionPeriodStartMonth: '12',
           abstractionPeriodEndDay: '22',
@@ -80,7 +73,7 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
       it('returns an empty abstraction period', () => {
         const result = AbstractionPeriodPresenter.go(session, requirementIndex)
 
-        expect(result.abstractionPeriod).to.be.null()
+        expect(result.abstractionPeriod).toBeNull()
       })
     })
   })
@@ -94,7 +87,7 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = AbstractionPeriodPresenter.go(session, requirementIndex)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
           text: 'Back'
         })
@@ -105,7 +98,7 @@ describe('Return Versions Setup - Abstraction Period presenter', () => {
       it('returns a link back to the "points" page', () => {
         const result = AbstractionPeriodPresenter.go(session, requirementIndex)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/points/0',
           text: 'Back'
         })

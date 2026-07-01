@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -85,7 +80,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
         it('returns a result that tells the controller to redirect to the next page in the journey', async () => {
           const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
-          expect(result).to.equal({ checkPageVisited: false, journey: 'returns-required' })
+          expect(result).toEqual({ checkPageVisited: false, journey: 'returns-required' })
         })
 
         describe('where the user selected "licence start date"', () => {
@@ -98,20 +93,20 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           it('saves the submitted date details and the relevant licence version', async () => {
             await SubmitStartDateService.go(session.id, payload, yarStub)
 
-            expect(session.startDateOptions).to.equal('licenceStartDate')
-            expect(session.startDateDay).not.to.exist()
-            expect(session.startDateMonth).not.to.exist()
-            expect(session.startDateYear).not.to.exist()
-            expect(new Date(session.returnVersionStartDate)).to.equal(new Date('2023-01-01'))
+            expect(session.startDateOptions).toEqual('licenceStartDate')
+            expect(session.startDateDay).toBeUndefined()
+            expect(session.startDateMonth).toBeUndefined()
+            expect(session.startDateYear).toBeUndefined()
+            expect(new Date(session.returnVersionStartDate)).toEqual(new Date('2023-01-01'))
 
-            expect(session.licenceVersion).to.equal({
+            expect(session.licenceVersion).toEqual({
               copyableReturnVersions: relevantLicenceVersion.copyableReturnVersions,
               endDate: relevantLicenceVersion.endDate,
               id: relevantLicenceVersion.id,
               startDate: new Date('2023-01-01')
             })
 
-            expect(session.$update.called).to.be.true()
+            expect(session.$update.called).toBe(true)
           })
         })
 
@@ -128,20 +123,20 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           it('saves the submitted date details and the relevant licence version', async () => {
             await SubmitStartDateService.go(session.id, payload, yarStub)
 
-            expect(session.startDateOptions).to.equal('anotherStartDate')
-            expect(session.startDateDay).to.equal('26')
-            expect(session.startDateMonth).to.equal('11')
-            expect(session.startDateYear).to.equal('2023')
-            expect(new Date(session.returnVersionStartDate)).to.equal(new Date('2023-11-26'))
+            expect(session.startDateOptions).toEqual('anotherStartDate')
+            expect(session.startDateDay).toEqual('26')
+            expect(session.startDateMonth).toEqual('11')
+            expect(session.startDateYear).toEqual('2023')
+            expect(new Date(session.returnVersionStartDate)).toEqual(new Date('2023-11-26'))
 
-            expect(session.licenceVersion).to.equal({
+            expect(session.licenceVersion).toEqual({
               copyableReturnVersions: relevantLicenceVersion.copyableReturnVersions,
               endDate: relevantLicenceVersion.endDate,
               id: relevantLicenceVersion.id,
               startDate: new Date('2023-01-01')
             })
 
-            expect(session.$update.called).to.be.true()
+            expect(session.$update.called).toBe(true)
           })
         })
 
@@ -158,8 +153,8 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
             it('does not set the "quarterly returns" flag in the session', async () => {
               await SubmitStartDateService.go(session.id, payload, yarStub)
 
-              expect(session.quarterlyReturns).not.to.exist()
-              expect(session.$update.called).to.be.true()
+              expect(session.quarterlyReturns).toBeUndefined()
+              expect(session.$update.called).toBe(true)
             })
           })
 
@@ -176,7 +171,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
             it('sets the "quarterly returns" flag to "true" in the session', async () => {
               await SubmitStartDateService.go(session.id, payload, yarStub)
 
-              expect(session.quarterlyReturns).to.be.true()
+              expect(session.quarterlyReturns).toBe(true)
             })
           })
         })
@@ -185,7 +180,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           it('does not set the "quarterly returns" flag in the session', async () => {
             await SubmitStartDateService.go(session.id, payload, yarStub)
 
-            expect(session.quarterlyReturns).not.to.exist()
+            expect(session.quarterlyReturns).toBeUndefined()
           })
         })
       })
@@ -221,7 +216,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           it('returns a result that tells the controller to redirect back to the "check" page', async () => {
             const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               checkPageVisited: true,
               journey: 'returns-required'
             })
@@ -232,14 +227,14 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
 
             const [flashType, notification] = yarStub.flash.args[0]
 
-            expect(flashType).to.equal('notification')
-            expect(notification).to.equal({ titleText: 'Updated', text: 'Return version updated' })
+            expect(flashType).toEqual('notification')
+            expect(notification).toEqual({ titleText: 'Updated', text: 'Return version updated' })
           })
 
           it('does not change the relevant licence version for the session', async () => {
             await SubmitStartDateService.go(session.id, payload, yarStub)
 
-            expect(session.licenceVersion).to.equal({
+            expect(session.licenceVersion).toEqual({
               copyableReturnVersions: relevantLicenceVersion.copyableReturnVersions,
               endDate: relevantLicenceVersion.endDate,
               id: relevantLicenceVersion.id,
@@ -263,7 +258,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           it('returns a result that tells the controller to redirect back to the "check" page', async () => {
             const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               checkPageVisited: true,
               journey: 'returns-required'
             })
@@ -274,14 +269,14 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
 
             const [flashType, notification] = yarStub.flash.args[0]
 
-            expect(flashType).to.equal('notification')
-            expect(notification).to.equal({ titleText: 'Updated', text: 'Return version updated' })
+            expect(flashType).toEqual('notification')
+            expect(notification).toEqual({ titleText: 'Updated', text: 'Return version updated' })
           })
 
           it('does not change the relevant licence version for the session', async () => {
             await SubmitStartDateService.go(session.id, payload, yarStub)
 
-            expect(session.licenceVersion).to.equal({
+            expect(session.licenceVersion).toEqual({
               copyableReturnVersions: relevantLicenceVersion.copyableReturnVersions,
               endDate: relevantLicenceVersion.endDate,
               id: relevantLicenceVersion.id,
@@ -314,28 +309,28 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           it('returns a result that tells the controller to redirect to the next page in the journey', async () => {
             const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
-            expect(result).to.equal({ checkPageVisited: false, journey: 'returns-required' })
+            expect(result).toEqual({ checkPageVisited: false, journey: 'returns-required' })
           })
 
           it('does not set the notification message', async () => {
             await SubmitStartDateService.go(session.id, payload, yarStub)
 
-            expect(yarStub.flash.called).to.be.false()
+            expect(yarStub.flash.called).toBe(false)
           })
 
           it('updates the relevant licence version for the session and resets the session', async () => {
             await SubmitStartDateService.go(session.id, payload, yarStub)
 
-            expect(session.licenceVersion).to.equal({
+            expect(session.licenceVersion).toEqual({
               copyableReturnVersions: [],
               endDate: new Date('2022-12-31'),
               id: newRelevantLicenceVersion.id,
               startDate: new Date('2020-04-01')
             })
 
-            expect(session.method).not.to.exist()
-            expect(session.checkPageVisited).to.be.false()
-            expect(session.requirements).to.equal([{}])
+            expect(session.method).toBeUndefined()
+            expect(session.checkPageVisited).toBe(false)
+            expect(session.requirements).toEqual([{}])
           })
         })
       })
@@ -349,31 +344,28 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
       it('returns the page data for the view', async () => {
         const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal(
-          {
-            pageTitle: 'Select the start date for the requirements for returns',
-            pageTitleCaption: 'Licence 01/ABC',
-            startDateDay: null,
-            startDateMonth: null,
-            startDateYear: null,
-            backLink: {
-              href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
-              text: 'Back'
-            },
-            licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            licenceRef: '01/ABC',
-            licenceVersionStartDate: '1 January 2023',
-            startDateOption: null
+        expect(result).toMatchObject({
+          pageTitle: 'Select the start date for the requirements for returns',
+          pageTitleCaption: 'Licence 01/ABC',
+          startDateDay: null,
+          startDateMonth: null,
+          startDateYear: null,
+          backLink: {
+            href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
+            text: 'Back'
           },
-          { skip: ['sessionId', 'error'] }
-        )
+          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+          licenceRef: '01/ABC',
+          licenceVersionStartDate: '1 January 2023',
+          startDateOption: null
+        })
       })
 
       describe('because the user has not selected anything', () => {
         it('includes an error for the radio form element', async () => {
           const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             errorList: [
               {
                 href: '#startDateOptions',
@@ -398,7 +390,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
         it('includes an error for the date input element', async () => {
           const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             errorList: [
               {
                 href: '#anotherStartDate',
@@ -412,10 +404,10 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
         it('includes what was submitted', async () => {
           const result = await SubmitStartDateService.go(session.id, payload, yarStub)
 
-          expect(result.startDateDay).to.equal('a')
-          expect(result.startDateMonth).to.equal('b')
-          expect(result.startDateYear).to.equal('c')
-          expect(result.startDateOption).to.equal('anotherStartDate')
+          expect(result.startDateDay).toEqual('a')
+          expect(result.startDateMonth).toEqual('b')
+          expect(result.startDateYear).toEqual('c')
+          expect(result.startDateOption).toEqual('anotherStartDate')
         })
       })
     })

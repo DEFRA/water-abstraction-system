@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
 const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
@@ -43,7 +36,7 @@ describe('Notifications - Notification Table presenter', () => {
       it('correctly presents the data', () => {
         const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           {
             link: {
               hiddenText: 'sent 2 April 2025 via email',
@@ -67,7 +60,7 @@ describe('Notifications - Notification Table presenter', () => {
       it('correctly presents the data', () => {
         const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           {
             link: {
               hiddenText: 'sent 2 April 2025 via email',
@@ -91,7 +84,7 @@ describe('Notifications - Notification Table presenter', () => {
       it('correctly presents the data', () => {
         const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           {
             link: {
               hiddenText: 'sent 2 April 2025 via email',
@@ -124,7 +117,7 @@ describe('Notifications - Notification Table presenter', () => {
       it('correctly presents the data', () => {
         const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           {
             link: {
               hiddenText: 'sent 9 October 2025 via email',
@@ -148,7 +141,7 @@ describe('Notifications - Notification Table presenter', () => {
       it('correctly presents the data', () => {
         const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           {
             link: {
               hiddenText: 'sent 9 October 2025 via email',
@@ -170,7 +163,7 @@ describe('Notifications - Notification Table presenter', () => {
       it('correctly presents the data', () => {
         const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           {
             link: {
               hiddenText: 'sent 9 October 2025 via email',
@@ -195,7 +188,7 @@ describe('Notifications - Notification Table presenter', () => {
     it('returns an empty array', () => {
       const result = NotificationsTablePresenter.go([], licenceId, returnLogId, companyContactId)
 
-      expect(result).to.equal([])
+      expect(result).toEqual([])
     })
   })
 })

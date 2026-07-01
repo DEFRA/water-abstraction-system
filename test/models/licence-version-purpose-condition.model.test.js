@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceMonitoringStationHelper = require('../support/helpers/licence-monitoring-station.helper.js')
 const LicenceMonitoringStationModel = require('../../app/models/licence-monitoring-station.model.js')
@@ -25,7 +18,7 @@ describe('Licence Version Purpose Condition model', () => {
   let testLicenceVersionPurpose
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     testLicenceVersionPurposeConditionType = LicenceVersionPurposeConditionTypeHelper.select()
     testLicenceVersionPurpose = await LicenceVersionPurposeHelper.add()
 
@@ -44,7 +37,7 @@ describe('Licence Version Purpose Condition model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testLicenceVersionPurpose.$query().delete()
 
     for (const licenceMonitoringStation of testLicenceMonitoringStations) {
@@ -58,8 +51,8 @@ describe('Licence Version Purpose Condition model', () => {
     it('can successfully run a basic query', async () => {
       const result = await LicenceVersionPurposeConditionModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(LicenceVersionPurposeConditionModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(LicenceVersionPurposeConditionModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -68,7 +61,7 @@ describe('Licence Version Purpose Condition model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceVersionPurposeConditionModel.query().innerJoinRelated('licenceMonitoringStations')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence monitoring stations', async () => {
@@ -76,13 +69,13 @@ describe('Licence Version Purpose Condition model', () => {
           .findById(testRecord.id)
           .withGraphFetched('licenceMonitoringStations')
 
-        expect(result).to.be.instanceOf(LicenceVersionPurposeConditionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceVersionPurposeConditionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceMonitoringStations).to.be.an.array()
-        expect(result.licenceMonitoringStations[0]).to.be.an.instanceOf(LicenceMonitoringStationModel)
-        expect(result.licenceMonitoringStations).to.include(testLicenceMonitoringStations[0])
-        expect(result.licenceMonitoringStations).to.include(testLicenceMonitoringStations[1])
+        expect(result.licenceMonitoringStations).toBeInstanceOf(Array)
+        expect(result.licenceMonitoringStations[0]).toBeInstanceOf(LicenceMonitoringStationModel)
+        expect(result.licenceMonitoringStations).toContainEqual(testLicenceMonitoringStations[0])
+        expect(result.licenceMonitoringStations).toContainEqual(testLicenceMonitoringStations[1])
       })
     })
 
@@ -90,7 +83,7 @@ describe('Licence Version Purpose Condition model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceVersionPurposeConditionModel.query().innerJoinRelated('licenceVersionPurpose')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence version purpose', async () => {
@@ -98,11 +91,11 @@ describe('Licence Version Purpose Condition model', () => {
           .findById(testRecord.id)
           .withGraphFetched('licenceVersionPurpose')
 
-        expect(result).to.be.instanceOf(LicenceVersionPurposeConditionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceVersionPurposeConditionModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceVersionPurpose).to.be.an.instanceOf(LicenceVersionPurposeModel)
-        expect(result.licenceVersionPurpose).to.equal(testLicenceVersionPurpose)
+        expect(result.licenceVersionPurpose).toBeInstanceOf(LicenceVersionPurposeModel)
+        expect(result.licenceVersionPurpose).toEqual(testLicenceVersionPurpose)
       })
     })
 
@@ -112,7 +105,7 @@ describe('Licence Version Purpose Condition model', () => {
           'licenceVersionPurposeConditionType'
         )
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence version purpose condition type', async () => {
@@ -120,13 +113,11 @@ describe('Licence Version Purpose Condition model', () => {
           .findById(testRecord.id)
           .withGraphFetched('licenceVersionPurposeConditionType')
 
-        expect(result).to.be.instanceOf(LicenceVersionPurposeConditionModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceVersionPurposeConditionModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.licenceVersionPurposeConditionType).to.be.an.instanceOf(LicenceVersionPurposeConditionTypeModel)
-        expect(result.licenceVersionPurposeConditionType).to.equal(testLicenceVersionPurposeConditionType, {
-          skip: ['createdAt', 'updatedAt']
-        })
+        expect(result.licenceVersionPurposeConditionType).toBeInstanceOf(LicenceVersionPurposeConditionTypeModel)
+        expect(result.licenceVersionPurposeConditionType).toMatchObject(testLicenceVersionPurposeConditionType)
       })
     })
   })

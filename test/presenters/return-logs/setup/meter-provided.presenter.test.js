@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const MeterProvidedPresenter = require('../../../../app/presenters/return-logs/setup/meter-provided.presenter.js')
 
@@ -24,7 +17,7 @@ describe('Return Logs Setup - Meter Provided presenter', () => {
     it('correctly presents the data', () => {
       const result = MeterProvidedPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: { href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/units', text: 'Back' },
         meterProvided: null,
         pageTitle: 'Have meter details been provided?',
@@ -43,7 +36,7 @@ describe('Return Logs Setup - Meter Provided presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = MeterProvidedPresenter.go(session)
 
-        expect(result.backLink.href).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink.href).toEqual('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
       })
     })
 
@@ -51,7 +44,7 @@ describe('Return Logs Setup - Meter Provided presenter', () => {
       it('returns a link back to the "units" page on', () => {
         const result = MeterProvidedPresenter.go(session)
 
-        expect(result.backLink.href).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/units')
+        expect(result.backLink.href).toEqual('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/units')
       })
     })
   })
@@ -65,7 +58,7 @@ describe('Return Logs Setup - Meter Provided presenter', () => {
       it('returns the "meterProvided" property populated to re-select the option', () => {
         const result = MeterProvidedPresenter.go(session)
 
-        expect(result.meterProvided).to.equal('yes')
+        expect(result.meterProvided).toEqual('yes')
       })
     })
 
@@ -77,7 +70,7 @@ describe('Return Logs Setup - Meter Provided presenter', () => {
       it('returns the "meterProvided" property populated to re-select the option', () => {
         const result = MeterProvidedPresenter.go(session)
 
-        expect(result.meterProvided).to.equal('no')
+        expect(result.meterProvided).toEqual('no')
       })
     })
   })

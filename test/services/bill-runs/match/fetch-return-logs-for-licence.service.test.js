@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
@@ -65,31 +60,31 @@ describe('Fetch Return Logs for Licence service', () => {
         const { licenceRef } = returnLogRecord
         const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
 
-        expect(result).to.have.length(1)
-        expect(result[0].id).to.equal(returnLogRecord.id)
-        expect(result[0].returnId).to.equal(returnLogRecord.returnId)
-        expect(result[0].description).to.equal('The Description')
-        expect(result[0].startDate).to.equal(new Date('2022-04-01'))
-        expect(result[0].endDate).to.equal(new Date('2023-03-31'))
-        expect(result[0].periodStartDay).to.equal(1)
-        expect(result[0].periodStartMonth).to.equal(4)
-        expect(result[0].periodEndDay).to.equal(31)
-        expect(result[0].periodEndMonth).to.equal(3)
+        expect(result).toHaveLength(1)
+        expect(result[0].id).toEqual(returnLogRecord.id)
+        expect(result[0].returnId).toEqual(returnLogRecord.returnId)
+        expect(result[0].description).toEqual('The Description')
+        expect(result[0].startDate).toEqual(new Date('2022-04-01'))
+        expect(result[0].endDate).toEqual(new Date('2023-03-31'))
+        expect(result[0].periodStartDay).toEqual(1)
+        expect(result[0].periodStartMonth).toEqual(4)
+        expect(result[0].periodEndDay).toEqual(31)
+        expect(result[0].periodEndMonth).toEqual(3)
 
-        expect(result[0].purposes).to.have.length(1)
-        expect(result[0].purposes[0].tertiary.code).to.equal('400')
-        expect(result[0].purposes[0].tertiary.description).to.equal('Spray Irrigation - Direct')
+        expect(result[0].purposes).toHaveLength(1)
+        expect(result[0].purposes[0].tertiary.code).toEqual('400')
+        expect(result[0].purposes[0].tertiary.description).toEqual('Spray Irrigation - Direct')
 
-        expect(result[0].returnSubmissions).to.have.length(1)
-        expect(result[0].returnSubmissions[0].nilReturn).to.equal(false)
+        expect(result[0].returnSubmissions).toHaveLength(1)
+        expect(result[0].returnSubmissions[0].nilReturn).toEqual(false)
 
-        expect(result[0].returnSubmissions[0].returnSubmissionLines).to.have.length(2)
-        expect(result[0].returnSubmissions[0].returnSubmissionLines[0].startDate).to.equal(new Date('2022-05-01'))
-        expect(result[0].returnSubmissions[0].returnSubmissionLines[0].endDate).to.equal(new Date('2022-05-07'))
-        expect(result[0].returnSubmissions[0].returnSubmissionLines[0].quantity).to.equal(1234)
-        expect(result[0].returnSubmissions[0].returnSubmissionLines[1].startDate).to.equal(new Date('2022-05-08'))
-        expect(result[0].returnSubmissions[0].returnSubmissionLines[1].endDate).to.equal(new Date('2022-05-14'))
-        expect(result[0].returnSubmissions[0].returnSubmissionLines[1].quantity).to.equal(5678)
+        expect(result[0].returnSubmissions[0].returnSubmissionLines).toHaveLength(2)
+        expect(result[0].returnSubmissions[0].returnSubmissionLines[0].startDate).toEqual(new Date('2022-05-01'))
+        expect(result[0].returnSubmissions[0].returnSubmissionLines[0].endDate).toEqual(new Date('2022-05-07'))
+        expect(result[0].returnSubmissions[0].returnSubmissionLines[0].quantity).toEqual(1234)
+        expect(result[0].returnSubmissions[0].returnSubmissionLines[1].startDate).toEqual(new Date('2022-05-08'))
+        expect(result[0].returnSubmissions[0].returnSubmissionLines[1].endDate).toEqual(new Date('2022-05-14'))
+        expect(result[0].returnSubmissions[0].returnSubmissionLines[1].quantity).toEqual(5678)
       })
     })
 
@@ -115,9 +110,9 @@ describe('Fetch Return Logs for Licence service', () => {
         const { licenceRef } = returnLogRecord
         const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
 
-        expect(result).to.have.length(1)
+        expect(result).toHaveLength(1)
 
-        expect(result[0].returnSubmissions[0].returnSubmissionLines).to.have.length(0)
+        expect(result[0].returnSubmissions[0].returnSubmissionLines).toHaveLength(0)
       })
     })
 
@@ -130,12 +125,12 @@ describe('Fetch Return Logs for Licence service', () => {
         const { licenceRef } = returnLogRecord
         const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
 
-        expect(result).to.have.length(1)
+        expect(result).toHaveLength(1)
 
-        expect(result[0].returnSubmissions).to.have.length(1)
-        expect(result[0].returnSubmissions[0].nilReturn).to.equal(true)
+        expect(result[0].returnSubmissions).toHaveLength(1)
+        expect(result[0].returnSubmissions[0].nilReturn).toEqual(true)
 
-        expect(result[0].returnSubmissions[0].returnSubmissionLines).to.have.length(0)
+        expect(result[0].returnSubmissions[0].returnSubmissionLines).toHaveLength(0)
       })
     })
 
@@ -152,9 +147,9 @@ describe('Fetch Return Logs for Licence service', () => {
         const { licenceRef } = returnLogRecord
         const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
 
-        expect(result).to.have.length(1)
-        expect(result[0].id).to.equal(returnLogRecord.id)
-        expect(result[0].description).to.equal('The Description')
+        expect(result).toHaveLength(1)
+        expect(result[0].id).toEqual(returnLogRecord.id)
+        expect(result[0].description).toEqual('The Description')
       })
     })
   })
@@ -173,7 +168,7 @@ describe('Fetch Return Logs for Licence service', () => {
         const { licenceRef } = returnLogRecord
         const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
 
-        expect(result).to.have.length(0)
+        expect(result).toHaveLength(0)
       })
     })
 
@@ -190,7 +185,7 @@ describe('Fetch Return Logs for Licence service', () => {
         const { licenceRef } = returnLogRecord
         const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
 
-        expect(result).to.have.length(0)
+        expect(result).toHaveLength(0)
       })
     })
 
@@ -205,7 +200,7 @@ describe('Fetch Return Logs for Licence service', () => {
         const { licenceRef } = returnLogRecord
         const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
 
-        expect(result).to.have.length(0)
+        expect(result).toHaveLength(0)
       })
     })
 
@@ -213,7 +208,7 @@ describe('Fetch Return Logs for Licence service', () => {
       it('returns no records', async () => {
         const result = await FetchReturnLogsForLicenceService.go('LicenceRefWithNoReturnLogs', billingPeriod)
 
-        expect(result).to.have.length(0)
+        expect(result).toHaveLength(0)
       })
     })
 
@@ -228,7 +223,7 @@ describe('Fetch Return Logs for Licence service', () => {
         const { licenceRef } = returnLogRecord
         const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
 
-        expect(result).to.have.length(0)
+        expect(result).toHaveLength(0)
       })
     })
   })
@@ -250,12 +245,12 @@ describe('Fetch Return Logs for Licence service', () => {
     it('logs and records the error then rethrows it', async () => {
       const { licenceRef } = returnLogRecord
 
-      await expect(FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)).to.reject()
+      await expect(FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)).rejects.toThrow()
 
       const logDataArg = notifierStub.omfg.args[0][1]
 
-      expect(notifierStub.omfg.calledWith('Bill run process fetch return logs for licence failed')).to.be.true()
-      expect(logDataArg).to.equal({ licenceRef, billingPeriod })
+      expect(notifierStub.omfg.calledWith('Bill run process fetch return logs for licence failed')).toBe(true)
+      expect(logDataArg).toEqual({ licenceRef, billingPeriod })
     })
   })
 })

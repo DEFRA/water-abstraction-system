@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const NotePresenter = require('../../../../app/presenters/return-logs/setup/note.presenter.js')
 
@@ -24,7 +17,7 @@ describe('Return Logs Setup - Note presenter', () => {
     it('correctly presents the data without a note', () => {
       const result = NotePresenter.go(session)
 
-      expect(result).to.be.equal({
+      expect(result).to.be.toEqual({
         backLink: { href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check', text: 'Back' },
         note: null,
         pageTitle: 'Add a note',
@@ -38,7 +31,7 @@ describe('Return Logs Setup - Note presenter', () => {
     it('returns a link back to the "check" page', () => {
       const result = NotePresenter.go(session)
 
-      expect(result.backLink).to.equal({
+      expect(result.backLink).toEqual({
         href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check',
         text: 'Back'
       })
@@ -57,7 +50,7 @@ describe('Return Logs Setup - Note presenter', () => {
       it('returns the contents of the note', () => {
         const result = NotePresenter.go(session)
 
-        expect(result.note).to.equal('Note attached to return log')
+        expect(result.note).toEqual('Note attached to return log')
       })
     })
 
@@ -65,7 +58,7 @@ describe('Return Logs Setup - Note presenter', () => {
       it('returns an empty note', () => {
         const result = NotePresenter.go(session)
 
-        expect(result.note).to.be.null()
+        expect(result.note).toBeNull()
       })
     })
   })

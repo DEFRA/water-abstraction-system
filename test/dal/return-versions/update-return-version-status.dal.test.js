@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
 const ReturnVersionModel = require('../../../app/models/return-version.model.js')
@@ -35,7 +28,7 @@ describe('DAL - Return Versions - Update Return Version Status dal', () => {
 
       const result = await returnVersion.$query()
 
-      expect(result.status).to.equal(status)
+      expect(result.status).toEqual(status)
     })
   })
 
@@ -56,7 +49,7 @@ describe('DAL - Return Versions - Update Return Version Status dal', () => {
 
       const result = await returnVersion.$query()
 
-      expect(result.status).to.equal(status)
+      expect(result.status).toEqual(status)
     })
   })
 })

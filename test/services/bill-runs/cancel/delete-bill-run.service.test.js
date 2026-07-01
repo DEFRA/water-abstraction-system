@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 const BillHelper = require('../../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
@@ -79,7 +74,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
       it('sends a request to the Charging Module API to delete its copy', async () => {
         await DeleteBillBunService.go(billRun)
 
-        expect(chargingModuleDeleteBillRunRequestStub.called).to.be.true()
+        expect(chargingModuleDeleteBillRunRequestStub.called).toBe(true)
       })
 
       it('deletes any billing data data', async () => {
@@ -92,12 +87,12 @@ describe('Bill Runs - Delete Bill Run service', () => {
         const billCount = await bill.$query().select('id').resultSize()
         const billRunCount = await seededBillRun.$query().select('id').resultSize()
 
-        expect(billRunChargeVersionYearCount).to.equal(0)
-        expect(billRunVolumeCount).to.equal(0)
-        expect(transactionCount).to.equal(0)
-        expect(billLicenceCount).to.equal(0)
-        expect(billCount).to.equal(0)
-        expect(billRunCount).to.equal(0)
+        expect(billRunChargeVersionYearCount).toEqual(0)
+        expect(billRunVolumeCount).toEqual(0)
+        expect(transactionCount).toEqual(0)
+        expect(billLicenceCount).toEqual(0)
+        expect(billCount).toEqual(0)
+        expect(billRunCount).toEqual(0)
       })
 
       it('logs a "complete" message, the bill run passed in, and the time taken in milliseconds and seconds', async () => {
@@ -105,10 +100,10 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
         const logDataArg = notifierStub.omg.args[0][1]
 
-        expect(notifierStub.omg.calledWith('Delete bill run complete')).to.be.true()
-        expect(logDataArg.timeTakenMs).to.exist()
-        expect(logDataArg.timeTakenSs).to.exist()
-        expect(logDataArg.billRun).to.equal(billRun)
+        expect(notifierStub.omg.calledWith('Delete bill run complete')).toBe(true)
+        expect(logDataArg.timeTakenMs).toBeDefined()
+        expect(logDataArg.timeTakenSs).toBeDefined()
+        expect(logDataArg.billRun).toEqual(billRun)
       })
 
       describe('and the bill run has two-part tariff review data', () => {
@@ -146,12 +141,12 @@ describe('Bill Runs - Delete Bill Run service', () => {
           const reviewLicenceCount = await reviewLicence.$query().select('id').resultSize()
           const reviewReturnCount = await reviewReturn.$query().select('id').resultSize()
 
-          expect(reviewChargeElementCount).to.equal(0)
-          expect(reviewChargeElementReturnCount).to.equal(0)
-          expect(reviewChargeReferenceCount).to.equal(0)
-          expect(reviewChargeVersionCount).to.equal(0)
-          expect(reviewLicenceCount).to.equal(0)
-          expect(reviewReturnCount).to.equal(0)
+          expect(reviewChargeElementCount).toEqual(0)
+          expect(reviewChargeElementReturnCount).toEqual(0)
+          expect(reviewChargeReferenceCount).toEqual(0)
+          expect(reviewChargeVersionCount).toEqual(0)
+          expect(reviewLicenceCount).toEqual(0)
+          expect(reviewReturnCount).toEqual(0)
         })
       })
     })
@@ -163,7 +158,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
         })
 
         it('does not throw an error', async () => {
-          await expect(DeleteBillBunService.go(billRun)).not.to.reject()
+          await DeleteBillBunService.go(billRun)
         })
 
         it('logs the error', async () => {
@@ -171,9 +166,9 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Delete bill run failed')).to.be.true()
-          expect(errorLogArgs[1]).to.equal(billRun)
-          expect(errorLogArgs[2]).to.be.instanceOf(Error)
+          expect(notifierStub.omfg.calledWith('Delete bill run failed')).toBe(true)
+          expect(errorLogArgs[1]).toEqual(billRun)
+          expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })
       })
 
@@ -185,7 +180,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
         })
 
         it('does not throw an error', async () => {
-          await expect(DeleteBillBunService.go(billRun)).not.to.reject()
+          await DeleteBillBunService.go(billRun)
         })
 
         it('logs the error', async () => {
@@ -193,9 +188,9 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Delete bill run failed')).to.be.true()
-          expect(errorLogArgs[1]).to.equal(billRun)
-          expect(errorLogArgs[2]).to.be.instanceOf(Error)
+          expect(notifierStub.omfg.calledWith('Delete bill run failed')).toBe(true)
+          expect(errorLogArgs[1]).toEqual(billRun)
+          expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })
       })
 
@@ -211,7 +206,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
         })
 
         it('does not throw an error', async () => {
-          await expect(DeleteBillBunService.go(billRun)).not.to.reject()
+          await DeleteBillBunService.go(billRun)
         })
 
         it('logs the error', async () => {
@@ -219,9 +214,9 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Delete bill run failed')).to.be.true()
-          expect(errorLogArgs[1]).to.equal(billRun)
-          expect(errorLogArgs[2]).to.be.instanceOf(Error)
+          expect(notifierStub.omfg.calledWith('Delete bill run failed')).toBe(true)
+          expect(errorLogArgs[1]).toEqual(billRun)
+          expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })
       })
 
@@ -237,7 +232,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
         })
 
         it('does not throw an error', async () => {
-          await expect(DeleteBillBunService.go(billRun)).not.to.reject()
+          await DeleteBillBunService.go(billRun)
         })
 
         it('logs the error', async () => {
@@ -245,9 +240,9 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Delete bill run failed')).to.be.true()
-          expect(errorLogArgs[1]).to.equal(billRun)
-          expect(errorLogArgs[2]).to.be.instanceOf(Error)
+          expect(notifierStub.omfg.calledWith('Delete bill run failed')).toBe(true)
+          expect(errorLogArgs[1]).toEqual(billRun)
+          expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })
       })
     })
@@ -261,7 +256,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
     it('still sends a request to the Charging Module API', async () => {
       await DeleteBillBunService.go(billRun)
 
-      expect(chargingModuleDeleteBillRunRequestStub.called).to.be.true()
+      expect(chargingModuleDeleteBillRunRequestStub.called).toBe(true)
     })
 
     it('still logs a "complete" message, the bill run passed in, and the time taken in milliseconds and seconds', async () => {
@@ -269,14 +264,14 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
       const logDataArg = notifierStub.omg.args[0][1]
 
-      expect(notifierStub.omg.calledWith('Delete bill run complete')).to.be.true()
-      expect(logDataArg.timeTakenMs).to.exist()
-      expect(logDataArg.timeTakenSs).to.exist()
-      expect(logDataArg.billRun).to.equal(billRun)
+      expect(notifierStub.omg.calledWith('Delete bill run complete')).toBe(true)
+      expect(logDataArg.timeTakenMs).toBeDefined()
+      expect(logDataArg.timeTakenSs).toBeDefined()
+      expect(logDataArg.billRun).toEqual(billRun)
     })
 
     it('does not throw an error', async () => {
-      await expect(DeleteBillBunService.go(billRun)).not.to.reject()
+      await DeleteBillBunService.go(billRun)
     })
   })
 })

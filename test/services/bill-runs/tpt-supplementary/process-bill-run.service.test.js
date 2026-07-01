@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const AssignBillRunToLicencesService = require('../../../../app/services/bill-runs/assign-bill-run-to-licences.service.js')
@@ -63,14 +58,14 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       it('sets the bill run status only to "processing"', async () => {
         await ProcessBillRunService.go(billRun, billingPeriods)
 
-        expect(billRunPatchStub.calledOnce).to.be.true()
-        expect(billRunPatchStub.firstCall.firstArg).to.equal({ status: 'processing' })
+        expect(billRunPatchStub.calledOnce).toBe(true)
+        expect(billRunPatchStub.firstCall.firstArg).toEqual({ status: 'processing' })
       })
 
       it('skips to "generating" the bill run', async () => {
         await ProcessBillRunService.go(billRun, billingPeriods)
 
-        expect(generateBillRunStub.calledOnce).to.be.true()
+        expect(generateBillRunStub.calledOnce).toBe(true)
       })
 
       it('logs the time taken', async () => {
@@ -78,10 +73,10 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
 
         const args = notifierStub.omg.firstCall.args
 
-        expect(args[0]).to.equal('Process bill run complete')
-        expect(args[1].timeTakenMs).to.exist()
-        expect(args[1].billRunId).to.equal(billRun.id)
-        expect(args[1].type).to.equal('two_part_supplementary')
+        expect(args[0]).toEqual('Process bill run complete')
+        expect(args[1].timeTakenMs).toBeDefined()
+        expect(args[1].billRunId).toEqual(billRun.id)
+        expect(args[1].type).toEqual('two_part_supplementary')
       })
     })
 
@@ -97,15 +92,15 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       it('sets the bill run status first to "processing" and then to "review"', async () => {
         await ProcessBillRunService.go(billRun, billingPeriods)
 
-        expect(billRunPatchStub.calledTwice).to.be.true()
-        expect(billRunPatchStub.firstCall.firstArg).to.equal({ status: 'processing' })
-        expect(billRunPatchStub.secondCall.firstArg).to.equal({ status: 'review' })
+        expect(billRunPatchStub.calledTwice).toBe(true)
+        expect(billRunPatchStub.firstCall.firstArg).toEqual({ status: 'processing' })
+        expect(billRunPatchStub.secondCall.firstArg).toEqual({ status: 'review' })
       })
 
       it('does not skip to "generating" the bill run', async () => {
         await ProcessBillRunService.go(billRun, billingPeriods)
 
-        expect(generateBillRunStub.called).to.be.false()
+        expect(generateBillRunStub.called).toBe(false)
       })
 
       it('logs the time taken', async () => {
@@ -113,10 +108,10 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
 
         const args = notifierStub.omg.firstCall.args
 
-        expect(args[0]).to.equal('Process bill run complete')
-        expect(args[1].timeTakenMs).to.exist()
-        expect(args[1].billRunId).to.equal(billRun.id)
-        expect(args[1].type).to.equal('two_part_supplementary')
+        expect(args[0]).toEqual('Process bill run complete')
+        expect(args[1].timeTakenMs).toBeDefined()
+        expect(args[1].billRunId).toEqual(billRun.id)
+        expect(args[1].type).toEqual('two_part_supplementary')
       })
     })
   })
@@ -131,7 +126,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       it('calls HandleErroredBillRunService', async () => {
         await ProcessBillRunService.go(billRun, billingPeriods)
 
-        expect(HandleErroredBillRunService.go.called).to.be.true()
+        expect(HandleErroredBillRunService.go.called).toBe(true)
       })
 
       it('logs the error', async () => {
@@ -139,9 +134,9 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
 
         const args = notifierStub.omfg.firstCall.args
 
-        expect(args[0]).to.equal('Process bill run failed')
-        expect(args[1].billRun.id).to.equal(billRun.id)
-        expect(args[2]).to.be.an.error()
+        expect(args[0]).toEqual('Process bill run failed')
+        expect(args[1].billRun.id).toEqual(billRun.id)
+        expect(args[2]).toBeInstanceOf(Error)
       })
     })
 
@@ -155,7 +150,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       it('calls HandleErroredBillRunService', async () => {
         await ProcessBillRunService.go(billRun, billingPeriods)
 
-        expect(HandleErroredBillRunService.go.called).to.be.true()
+        expect(HandleErroredBillRunService.go.called).toBe(true)
       })
 
       it('logs the error', async () => {
@@ -163,9 +158,9 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
 
         const args = notifierStub.omfg.firstCall.args
 
-        expect(args[0]).to.equal('Process bill run failed')
-        expect(args[1].billRun.id).to.equal(billRun.id)
-        expect(args[2]).to.be.an.error()
+        expect(args[0]).toEqual('Process bill run failed')
+        expect(args[1].billRun.id).toEqual(billRun.id)
+        expect(args[2]).toBeInstanceOf(Error)
       })
     })
   })

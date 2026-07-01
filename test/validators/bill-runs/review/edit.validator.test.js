@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const EditValidator = require('../../../../app/validators/bill-runs/review/edit.validator.js')
 
@@ -22,8 +15,8 @@ describe('Bill Runs Review - Edit validator', () => {
       it('confirms the data is valid', () => {
         const result = EditValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -35,7 +28,7 @@ describe('Bill Runs Review - Edit validator', () => {
       it('confirms the data is valid', () => {
         const result = EditValidator.go(payload)
 
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
   })
@@ -49,8 +42,8 @@ describe('Bill Runs Review - Edit validator', () => {
       it('fails the validation with the message "Select the billable quantity"', () => {
         const result = EditValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select the billable quantity')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select the billable quantity')
       })
     })
 
@@ -63,8 +56,8 @@ describe('Bill Runs Review - Edit validator', () => {
         it('fails validation with the message "Enter the billable quantity"', () => {
           const result = EditValidator.go(payload)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter the billable quantity')
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Enter the billable quantity')
         })
       })
 
@@ -76,8 +69,8 @@ describe('Bill Runs Review - Edit validator', () => {
         it('fails validation with the message "The quantity must be a number"', () => {
           const result = EditValidator.go(payload)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('The quantity must be a number')
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The quantity must be a number')
         })
       })
 
@@ -89,8 +82,8 @@ describe('Bill Runs Review - Edit validator', () => {
         it('fails validation with the message "The quantity must contain no more than 6 decimal places"', () => {
           const result = EditValidator.go(payload)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('The quantity must contain no more than 6 decimal places')
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The quantity must contain no more than 6 decimal places')
         })
       })
 
@@ -102,8 +95,8 @@ describe('Bill Runs Review - Edit validator', () => {
         it('fails validation with the message "The quantity must be zero or higher"', () => {
           const result = EditValidator.go(payload)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('The quantity must be zero or higher')
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The quantity must be zero or higher')
         })
       })
 
@@ -115,8 +108,8 @@ describe('Bill Runs Review - Edit validator', () => {
         it('fails validation with the message "The quantity must be the same as or less than the authorised amount"', () => {
           const result = EditValidator.go(payload)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal(
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual(
             'The quantity must be the same as or less than the authorised amount'
           )
         })
@@ -132,10 +125,8 @@ describe('Bill Runs Review - Edit validator', () => {
         it('fails validation with the message "The quantity must be between zero and the authorised amount"', () => {
           const result = EditValidator.go(payload)
 
-          expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal(
-            'The quantity must be between zero and the authorised amount'
-          )
+          expect(result.error).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The quantity must be between zero and the authorised amount')
         })
       })
     })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const PointHelper = require('../support/helpers/point.helper.js')
 const PointModel = require('../../app/models/point.model.js')
@@ -29,7 +22,7 @@ describe('Return Requirement model', () => {
   let testReturnRequirementPurposes
   let testReturnVersion
 
-  before(async () => {
+  beforeAll(async () => {
     testReturnVersion = await ReturnVersionHelper.add()
 
     testRecord = await ReturnRequirementHelper.add({ returnVersionId: testReturnVersion.id })
@@ -55,7 +48,7 @@ describe('Return Requirement model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testReturnVersion.$query().delete()
     await testPoint.$query().delete()
 
@@ -74,8 +67,8 @@ describe('Return Requirement model', () => {
     it('can successfully run a basic query', async () => {
       const result = await ReturnRequirementModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(ReturnRequirementModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(ReturnRequirementModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -84,19 +77,19 @@ describe('Return Requirement model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReturnRequirementModel.query().innerJoinRelated('points')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the points', async () => {
         const result = await ReturnRequirementModel.query().findById(testRecord.id).withGraphFetched('points')
 
-        expect(result).to.be.instanceOf(ReturnRequirementModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReturnRequirementModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.points).to.be.an.array()
-        expect(result.points).to.have.length(1)
-        expect(result.points[0]).to.be.an.instanceOf(PointModel)
-        expect(result.points[0]).to.equal(testPoint, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.points).toBeInstanceOf(Array)
+        expect(result.points).toHaveLength(1)
+        expect(result.points[0]).toBeInstanceOf(PointModel)
+        expect(result.points[0]).toMatchObject(testPoint)
       })
     })
 
@@ -104,19 +97,19 @@ describe('Return Requirement model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReturnRequirementModel.query().innerJoinRelated('returnLogs')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the return logs', async () => {
         const result = await ReturnRequirementModel.query().findById(testRecord.id).withGraphFetched('returnLogs')
 
-        expect(result).to.be.instanceOf(ReturnRequirementModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReturnRequirementModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.returnLogs).to.be.an.array()
-        expect(result.returnLogs[0]).to.be.an.instanceOf(ReturnLogModel)
-        expect(result.returnLogs).to.include(testReturnLogs[0])
-        expect(result.returnLogs).to.include(testReturnLogs[1])
+        expect(result.returnLogs).toBeInstanceOf(Array)
+        expect(result.returnLogs[0]).toBeInstanceOf(ReturnLogModel)
+        expect(result.returnLogs).toContainEqual(testReturnLogs[0])
+        expect(result.returnLogs).toContainEqual(testReturnLogs[1])
       })
     })
 
@@ -124,7 +117,7 @@ describe('Return Requirement model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReturnRequirementModel.query().innerJoinRelated('returnRequirementPurposes')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the return requirement purposes', async () => {
@@ -132,13 +125,13 @@ describe('Return Requirement model', () => {
           .findById(testRecord.id)
           .withGraphFetched('returnRequirementPurposes')
 
-        expect(result).to.be.instanceOf(ReturnRequirementModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReturnRequirementModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.returnRequirementPurposes).to.be.an.array()
-        expect(result.returnRequirementPurposes[0]).to.be.an.instanceOf(ReturnRequirementPurposeModel)
-        expect(result.returnRequirementPurposes).to.include(testReturnRequirementPurposes[0])
-        expect(result.returnRequirementPurposes).to.include(testReturnRequirementPurposes[1])
+        expect(result.returnRequirementPurposes).toBeInstanceOf(Array)
+        expect(result.returnRequirementPurposes[0]).toBeInstanceOf(ReturnRequirementPurposeModel)
+        expect(result.returnRequirementPurposes).toContainEqual(testReturnRequirementPurposes[0])
+        expect(result.returnRequirementPurposes).toContainEqual(testReturnRequirementPurposes[1])
       })
     })
 
@@ -146,17 +139,17 @@ describe('Return Requirement model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReturnRequirementModel.query().innerJoinRelated('returnVersion')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge version', async () => {
         const result = await ReturnRequirementModel.query().findById(testRecord.id).withGraphFetched('returnVersion')
 
-        expect(result).to.be.instanceOf(ReturnRequirementModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReturnRequirementModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.returnVersion).to.be.an.instanceOf(ReturnVersionModel)
-        expect(result.returnVersion).to.equal(testReturnVersion)
+        expect(result.returnVersion).toBeInstanceOf(ReturnVersionModel)
+        expect(result.returnVersion).toEqual(testReturnVersion)
       })
     })
   })

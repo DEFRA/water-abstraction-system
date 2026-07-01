@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const NoteValidator = require('../../../../app/validators/return-versions/setup/note.validator.js')
 
@@ -15,8 +8,8 @@ describe('Return Versions Setup - Note validator', () => {
     it('confirms the data is valid', () => {
       const result = NoteValidator.go({ note: 'Note added to return requirement' })
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -25,9 +18,9 @@ describe('Return Versions Setup - Note validator', () => {
       it('fails validation', () => {
         const result = NoteValidator.go({ note: '' })
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter details')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Enter details')
       })
     })
 
@@ -48,9 +41,9 @@ describe('Return Versions Setup - Note validator', () => {
             Lorem ipsum dolor sit amet consectetur adipiscing elit`
         })
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter no more than 500 characters')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Enter no more than 500 characters')
       })
     })
   })

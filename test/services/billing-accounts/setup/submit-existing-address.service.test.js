@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
@@ -65,19 +60,16 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
     it('saves the submitted value', async () => {
       await SubmitExistingAddressService.go(session.id, payload)
 
-      expect(session).to.equal(
-        {
-          addressSelected: payload.addressSelected
-        },
-        { skip: ['accountSelected', 'billingAccount', 'id'] }
-      )
-      expect(session.$update.called).to.be.true()
+      expect(session).toMatchObject({
+        addressSelected: payload.addressSelected
+      })
+      expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
       const result = await SubmitExistingAddressService.go(session.id, payload)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
       })
     })
@@ -97,18 +89,15 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       it('saves the submitted value', async () => {
         await SubmitExistingAddressService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            addressSelected: payload.addressSelected
-          },
-          { skip: ['accountSelected', 'billingAccount', 'id'] }
-        )
+        expect(session).toMatchObject({
+          addressSelected: payload.addressSelected
+        })
       })
 
       it('continues the journey', async () => {
         const result = await SubmitExistingAddressService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
         })
       })
@@ -130,19 +119,16 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       it('saves the submitted value', async () => {
         await SubmitExistingAddressService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            addressSelected: payload.addressSelected,
-            checkPageVisited: true
-          },
-          { skip: ['accountSelected', 'billingAccount', 'id'] }
-        )
+        expect(session).toMatchObject({
+          addressSelected: payload.addressSelected,
+          checkPageVisited: true
+        })
       })
 
       it('continues the journey', async () => {
         const result = await SubmitExistingAddressService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
         })
       })
@@ -160,19 +146,16 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       it('saves the submitted value', async () => {
         await SubmitExistingAddressService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            ..._newAddressExpectedValues(session),
-            addressSelected: payload.addressSelected
-          },
-          { skip: ['accountSelected', 'billingAccount', 'id'] }
-        )
+        expect(session).toMatchObject({
+          ..._newAddressExpectedValues(session),
+          addressSelected: payload.addressSelected
+        })
       })
 
       it('continues the journey', async () => {
         const result = await SubmitExistingAddressService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
         })
       })
@@ -199,18 +182,15 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
     it('saves the submitted value', async () => {
       await SubmitExistingAddressService.go(session.id, payload)
 
-      expect(session).to.equal(
-        {
-          addressSelected: 'new'
-        },
-        { skip: ['accountSelected', 'billingAccount', 'existingAccount', 'id'] }
-      )
+      expect(session).toMatchObject({
+        addressSelected: 'new'
+      })
     })
 
     it('continues the journey', async () => {
       const result = await SubmitExistingAddressService.go(session.id, payload)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
       })
     })
@@ -230,18 +210,15 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       it('saves the submitted value', async () => {
         await SubmitExistingAddressService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            addressSelected: 'new'
-          },
-          { skip: ['accountSelected', 'billingAccount', 'existingAccount', 'id'] }
-        )
+        expect(session).toMatchObject({
+          addressSelected: 'new'
+        })
       })
 
       it('continues the journey', async () => {
         const result = await SubmitExistingAddressService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
         })
       })
@@ -263,19 +240,16 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       it('saves the submitted value', async () => {
         await SubmitExistingAddressService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            addressSelected: 'new',
-            checkPageVisited: true
-          },
-          { skip: ['accountSelected', 'billingAccount', 'existingAccount', 'id'] }
-        )
+        expect(session).toMatchObject({
+          addressSelected: 'new',
+          checkPageVisited: true
+        })
       })
 
       it('continues the journey', async () => {
         const result = await SubmitExistingAddressService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
         })
       })
@@ -293,19 +267,16 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       it('saves the submitted value', async () => {
         await SubmitExistingAddressService.go(session.id, payload)
 
-        expect(session).to.equal(
-          {
-            ..._commonSessionData(session.billingAccount),
-            addressSelected: payload.addressSelected
-          },
-          { skip: ['accountSelected', 'billingAccount', 'existingAccount', 'id'] }
-        )
+        expect(session).toMatchObject({
+          ..._commonSessionData(session.billingAccount),
+          addressSelected: payload.addressSelected
+        })
       })
 
       it('continues the journey', async () => {
         const result = await SubmitExistingAddressService.go(session.id, payload)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
         })
       })
@@ -330,7 +301,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
     it('returns page data for the view, with errors', async () => {
       const result = await SubmitExistingAddressService.go(session.id, payload)
 
-      expect(result.error).to.equal({
+      expect(result.error).toEqual({
         errorList: [
           {
             href: '#addressSelected',

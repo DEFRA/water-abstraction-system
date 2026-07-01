@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -56,7 +51,7 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
 
       const licenceEndDateChanges = await LicenceEndDateChangeModel.query().where('licenceId', licence.id)
 
-      expect(licenceEndDateChanges.length).to.equal(0)
+      expect(licenceEndDateChanges.length).toEqual(0)
     })
   })
 
@@ -71,7 +66,7 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
 
       const licenceEndDateChanges = await LicenceEndDateChangeModel.query().where('licenceId', licence.id)
 
-      expect(licenceEndDateChanges.length).to.equal(1)
+      expect(licenceEndDateChanges.length).toEqual(1)
     })
   })
 
@@ -92,8 +87,8 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
 
       const errorLogArgs = notifierStub.omfg.firstCall.args
 
-      expect(notifierStub.omfg.calledWith('Check licence end dates failed')).to.be.true()
-      expect(errorLogArgs[1]).to.equal({
+      expect(notifierStub.omfg.calledWith('Check licence end dates failed')).toBe(true)
+      expect(errorLogArgs[1]).toEqual({
         id: licence.id,
         changedDateDetails: {
           changeDate: new Date('2023-01-01'),
@@ -102,7 +97,7 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
           wrlsDate: null
         }
       })
-      expect(errorLogArgs[2]).to.be.instanceOf(Error)
+      expect(errorLogArgs[2]).toBeInstanceOf(Error)
     })
   })
 })

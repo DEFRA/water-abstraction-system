@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
@@ -41,7 +34,7 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
   let chargeCategory
   let region
 
-  before(async () => {
+  beforeAll(async () => {
     region = RegionHelper.select()
     billRun = await BillRunHelper.add({ batchType: 'two_part_tariff', regionId: region.id })
 
@@ -79,7 +72,7 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
     reviewChargeElement = await ReviewChargeElementHelper.add({ chargeElementId, reviewChargeReferenceId })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await _cleanUp()
   })
 
@@ -87,11 +80,11 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
     it('returns the applicable billing accounts', async () => {
       const results = await FetchBillingAccountsService.go(billRun.id)
 
-      expect(results).to.have.length(1)
+      expect(results).toHaveLength(1)
 
-      expect(results[0]).to.be.instanceOf(BillingAccountModel)
-      expect(results[0].id).to.equal(billingAccount.id)
-      expect(results[0].accountNumber).to.equal(billingAccount.accountNumber)
+      expect(results[0]).toBeInstanceOf(BillingAccountModel)
+      expect(results[0].id).toEqual(billingAccount.id)
+      expect(results[0].accountNumber).toEqual(billingAccount.accountNumber)
     })
 
     describe('and each billing account', () => {
@@ -101,12 +94,12 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
 
           const { chargeVersions } = results[0]
 
-          expect(chargeVersions[0].id).to.equal(chargeVersion.id)
-          expect(chargeVersions[0].scheme).to.equal('sroc')
-          expect(chargeVersions[0].startDate).to.equal(new Date('2023-11-01'))
-          expect(chargeVersions[0].endDate).to.be.null()
-          expect(chargeVersions[0].billingAccountId).to.equal(billingAccount.id)
-          expect(chargeVersions[0].status).to.equal('current')
+          expect(chargeVersions[0].id).toEqual(chargeVersion.id)
+          expect(chargeVersions[0].scheme).toEqual('sroc')
+          expect(chargeVersions[0].startDate).toEqual(new Date('2023-11-01'))
+          expect(chargeVersions[0].endDate).toBeNull()
+          expect(chargeVersions[0].billingAccountId).toEqual(billingAccount.id)
+          expect(chargeVersions[0].status).toEqual('current')
         })
 
         describe('and against each charge version', () => {
@@ -115,12 +108,12 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
 
             const { licence } = results[0].chargeVersions[0]
 
-            expect(licence.id).to.equal(licence.id)
-            expect(licence.licenceRef).to.equal(licence.licenceRef)
-            expect(licence.waterUndertaker).to.equal(false)
-            expect(licence.historicalAreaCode).to.equal('SAAR')
-            expect(licence.regionalChargeArea).to.equal('Southern')
-            expect(licence.region).to.equal({
+            expect(licence.id).toEqual(licence.id)
+            expect(licence.licenceRef).toEqual(licence.licenceRef)
+            expect(licence.waterUndertaker).toEqual(false)
+            expect(licence.historicalAreaCode).toEqual('SAAR')
+            expect(licence.regionalChargeArea).toEqual('Southern')
+            expect(licence.region).toEqual({
               id: region.id,
               chargeRegionId: region.chargeRegionId
             })
@@ -131,11 +124,11 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
 
             const { chargeReferences } = results[0].chargeVersions[0]
 
-            expect(chargeReferences[0].id).to.equal(chargeReference.id)
-            expect(chargeReferences[0].source).to.equal('non-tidal')
-            expect(chargeReferences[0].loss).to.equal('low')
-            expect(chargeReferences[0].volume).to.equal(6.819)
-            expect(chargeReferences[0].adjustments).to.equal({
+            expect(chargeReferences[0].id).toEqual(chargeReference.id)
+            expect(chargeReferences[0].source).toEqual('non-tidal')
+            expect(chargeReferences[0].loss).toEqual('low')
+            expect(chargeReferences[0].volume).toEqual(6.819)
+            expect(chargeReferences[0].adjustments).toEqual({
               s126: null,
               s127: false,
               s130: false,
@@ -143,8 +136,8 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
               winter: false,
               aggregate: '0.562114443'
             })
-            expect(chargeReferences[0].additionalCharges).to.equal({ isSupplyPublicWater: true })
-            expect(chargeReferences[0].description).to.equal('Mineral washing')
+            expect(chargeReferences[0].additionalCharges).toEqual({ isSupplyPublicWater: true })
+            expect(chargeReferences[0].description).toEqual('Mineral washing')
           })
 
           describe('and against each charge reference', () => {
@@ -153,9 +146,9 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
 
               const { chargeCategory: result } = results[0].chargeVersions[0].chargeReferences[0]
 
-              expect(result.id).to.equal(chargeCategory.id)
-              expect(result.reference).to.equal(chargeCategory.reference)
-              expect(result.shortDescription).to.equal(chargeCategory.shortDescription)
+              expect(result.id).toEqual(chargeCategory.id)
+              expect(result.reference).toEqual(chargeCategory.reference)
+              expect(result.shortDescription).toEqual(chargeCategory.shortDescription)
             })
 
             it('includes the review charge references', async () => {
@@ -163,10 +156,10 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
 
               const { reviewChargeReferences: result } = results[0].chargeVersions[0].chargeReferences[0]
 
-              expect(result[0].id).to.equal(reviewChargeReference.id)
-              expect(result[0].amendedAggregate).to.equal(reviewChargeReference.amendedAggregate)
-              expect(result[0].amendedChargeAdjustment).to.equal(reviewChargeReference.amendedChargeAdjustment)
-              expect(result[0].amendedAuthorisedVolume).to.equal(reviewChargeReference.amendedAuthorisedVolume)
+              expect(result[0].id).toEqual(reviewChargeReference.id)
+              expect(result[0].amendedAggregate).toEqual(reviewChargeReference.amendedAggregate)
+              expect(result[0].amendedChargeAdjustment).toEqual(reviewChargeReference.amendedChargeAdjustment)
+              expect(result[0].amendedAuthorisedVolume).toEqual(reviewChargeReference.amendedAuthorisedVolume)
             })
 
             it('includes the charge elements', async () => {
@@ -174,11 +167,11 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
 
               const { chargeElements: result } = results[0].chargeVersions[0].chargeReferences[0]
 
-              expect(result[0].id).to.equal(chargeElement.id)
-              expect(result[0].abstractionPeriodStartDay).to.equal(chargeElement.abstractionPeriodStartDay)
-              expect(result[0].abstractionPeriodStartMonth).to.equal(chargeElement.abstractionPeriodStartMonth)
-              expect(result[0].abstractionPeriodEndDay).to.equal(chargeElement.abstractionPeriodEndDay)
-              expect(result[0].abstractionPeriodEndMonth).to.equal(chargeElement.abstractionPeriodEndMonth)
+              expect(result[0].id).toEqual(chargeElement.id)
+              expect(result[0].abstractionPeriodStartDay).toEqual(chargeElement.abstractionPeriodStartDay)
+              expect(result[0].abstractionPeriodStartMonth).toEqual(chargeElement.abstractionPeriodStartMonth)
+              expect(result[0].abstractionPeriodEndDay).toEqual(chargeElement.abstractionPeriodEndDay)
+              expect(result[0].abstractionPeriodEndMonth).toEqual(chargeElement.abstractionPeriodEndMonth)
             })
 
             describe('and against each charge element', () => {
@@ -188,8 +181,8 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
                 const { reviewChargeElements: result } =
                   results[0].chargeVersions[0].chargeReferences[0].chargeElements[0]
 
-                expect(result[0].id).to.equal(reviewChargeElement.id)
-                expect(result[0].amendedAllocated).to.equal(reviewChargeElement.amendedAllocated)
+                expect(result[0].id).toEqual(reviewChargeElement.id)
+                expect(result[0].amendedAllocated).toEqual(reviewChargeElement.amendedAllocated)
               })
             })
           })
@@ -202,10 +195,10 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
     it('does not include them in the results', async () => {
       const results = await FetchBillingAccountsService.go(billRun.id)
 
-      expect(results).to.have.length(1)
+      expect(results).toHaveLength(1)
 
-      expect(results[0]).to.be.instanceOf(BillingAccountModel)
-      expect(results[0].id).not.to.equal(billingAccountNotInBillRun.id)
+      expect(results[0]).toBeInstanceOf(BillingAccountModel)
+      expect(results[0].id).not.toEqual(billingAccountNotInBillRun.id)
     })
   })
 
@@ -213,7 +206,7 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
     it('returns no results', async () => {
       const results = await FetchBillingAccountsService.go('1c1f7af5-9cba-47a7-8fc4-2c03b0d1124d')
 
-      expect(results).to.be.empty()
+      expect(results).toHaveLength(0)
     })
   })
 })

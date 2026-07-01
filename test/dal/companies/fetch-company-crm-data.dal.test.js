@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, after, afterEach, before, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const CRMSeeder = require('../../support/seeders/crm.seeder.js')
@@ -23,7 +18,7 @@ describe('Companies - Fetch Company CRM Data dal', () => {
   let page
   let roles
 
-  before(async () => {
+  beforeAll(async () => {
     page = undefined
 
     crmData = await CRMSeeder.seed()
@@ -33,7 +28,7 @@ describe('Companies - Fetch Company CRM Data dal', () => {
     company = crmData.company
   })
 
-  after(async () => {
+  afterAll(async () => {
     await crmData.clean()
   })
 
@@ -45,7 +40,7 @@ describe('Companies - Fetch Company CRM Data dal', () => {
     it('returns the matching contacts', async () => {
       const result = await FetchCompanyCRMDataDal.go(company.record.id, roles, page)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         contacts: [
           {
             contactType: 'primary-user',
@@ -110,7 +105,7 @@ describe('Companies - Fetch Company CRM Data dal', () => {
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
           const result = await FetchCompanyCRMDataDal.go(company.record.id, roles, page)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             contacts: [
               {
                 contactType: 'primary-user',
@@ -131,7 +126,7 @@ describe('Companies - Fetch Company CRM Data dal', () => {
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
           const result = await FetchCompanyCRMDataDal.go(company.record.id, roles, page)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             contacts: [
               {
                 contactType: 'primary-user',
@@ -152,7 +147,7 @@ describe('Companies - Fetch Company CRM Data dal', () => {
         it('returns the matching contacts for the page (the second page) with the total number', async () => {
           const result = await FetchCompanyCRMDataDal.go(company.record.id, roles, page)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             contacts: [
               {
                 contactType: 'licence-holder',

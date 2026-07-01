@@ -3,12 +3,7 @@
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const NotifyRequest = require('../../../app/requests/notify.request.js')
@@ -72,13 +67,13 @@ describe('Notify - View Message Data request', () => {
     it('returns a "true" success status', async () => {
       const result = await ViewMessageDataRequest.send(notificationId)
 
-      expect(result.succeeded).to.be.true()
+      expect(result.succeeded).toBe(true)
     })
 
     it('returns the result from Notify in the "response"', async () => {
       const result = await ViewMessageDataRequest.send(notificationId)
 
-      expect(result.response.body).to.equal(response.body)
+      expect(result.response.body).toEqual(response.body)
     })
   })
 
@@ -107,13 +102,13 @@ describe('Notify - View Message Data request', () => {
       it('returns a "false" success status', async () => {
         const result = await ViewMessageDataRequest.send(notificationId)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error in the "response"', async () => {
         const result = await ViewMessageDataRequest.send(notificationId)
 
-        expect(result.response.body).to.equal(response.body)
+        expect(result.response.body).toEqual(response.body)
       })
     })
   })

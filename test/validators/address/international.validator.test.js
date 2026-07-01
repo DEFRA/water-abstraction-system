@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const InternationalValidator = require('../../../app/validators/address/international.validator.js')
 
@@ -28,8 +21,8 @@ describe('Address - International Validator', () => {
     it('returns with no errors', () => {
       const result = InternationalValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -41,9 +34,9 @@ describe('Address - International Validator', () => {
     it('returns with errors', () => {
       const result = InternationalValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error.details[0].message).to.equal('Enter address line 1')
-      expect(result.error.details[1].message).to.equal('Select a country')
+      expect(result.value).toBeDefined()
+      expect(result.error.details[0].message).toEqual('Enter address line 1')
+      expect(result.error.details[1].message).toEqual('Select a country')
     })
   })
 
@@ -55,8 +48,8 @@ describe('Address - International Validator', () => {
     it('returns with errors', () => {
       const result = InternationalValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error.details[0].message).to.equal('Address line 1 cannot start with a special character')
+      expect(result.value).toBeDefined()
+      expect(result.error.details[0].message).toEqual('Address line 1 cannot start with a special character')
     })
   })
 
@@ -68,8 +61,8 @@ describe('Address - International Validator', () => {
     it('returns with errors', () => {
       const result = InternationalValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error.details[0].message).to.equal('Address line 2 cannot start with a special character')
+      expect(result.value).toBeDefined()
+      expect(result.error.details[0].message).toEqual('Address line 2 cannot start with a special character')
     })
   })
 
@@ -81,8 +74,8 @@ describe('Address - International Validator', () => {
     it('returns with errors', () => {
       const result = InternationalValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error.details[0].message).to.equal('Address line 3 cannot start with a special character')
+      expect(result.value).toBeDefined()
+      expect(result.error.details[0].message).toEqual('Address line 3 cannot start with a special character')
     })
   })
 
@@ -94,8 +87,8 @@ describe('Address - International Validator', () => {
     it('returns with errors', () => {
       const result = InternationalValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error.details[0].message).to.equal('Address line 4 cannot start with a special character')
+      expect(result.value).toBeDefined()
+      expect(result.error.details[0].message).toEqual('Address line 4 cannot start with a special character')
     })
   })
 })

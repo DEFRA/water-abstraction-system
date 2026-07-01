@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
@@ -28,7 +23,7 @@ describe('Notices controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -43,6 +38,10 @@ describe('Notices controller', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  afterAll(async () => {
+    await server.stop()
   })
 
   describe('/notices', () => {
@@ -66,9 +65,9 @@ describe('Notices controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Notices')
-          expect(response.payload).to.contain('Showing all 1 notices')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Notices')
+          expect(response.payload).toContain('Showing all 1 notices')
         })
       })
 
@@ -94,9 +93,9 @@ describe('Notices controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Notices (page 2 of 3)')
-          expect(response.payload).to.contain('Showing 25 of 70 notices')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Notices (page 2 of 3)')
+          expect(response.payload).toContain('Showing 25 of 70 notices')
         })
       })
     })
@@ -114,8 +113,8 @@ describe('Notices controller', () => {
         it('redirects back to the index page', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/notices`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/notices`)
         })
       })
 
@@ -130,11 +129,11 @@ describe('Notices controller', () => {
           it('re-renders the index page with no pagination and an error', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
 
-            expect(response.payload).to.contain('There is a problem')
-            expect(response.payload).to.contain('Notices')
-            expect(response.payload).to.contain('Showing all 1 notices')
+            expect(response.payload).toContain('There is a problem')
+            expect(response.payload).toContain('Notices')
+            expect(response.payload).toContain('Showing all 1 notices')
           })
         })
 
@@ -151,11 +150,11 @@ describe('Notices controller', () => {
           it('re-renders the index page with pagination and an error', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
 
-            expect(response.payload).to.contain('There is a problem')
-            expect(response.payload).to.contain('Notices (page 2 of 3)')
-            expect(response.payload).to.contain('Showing 25 of 70 notices')
+            expect(response.payload).toContain('There is a problem')
+            expect(response.payload).toContain('Notices (page 2 of 3)')
+            expect(response.payload).toContain('Showing 25 of 70 notices')
           })
         })
       })
@@ -183,9 +182,9 @@ describe('Notices controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Warning alert')
-          expect(response.payload).to.contain('Showing all 1 notifications')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Warning alert')
+          expect(response.payload).toContain('Showing all 1 notifications')
         })
       })
 
@@ -211,9 +210,9 @@ describe('Notices controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Warning alert (page 2 of 3)')
-          expect(response.payload).to.contain('Showing 25 of 70 notifications')
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(response.payload).toContain('Warning alert (page 2 of 3)')
+          expect(response.payload).toContain('Showing 25 of 70 notifications')
         })
       })
     })
@@ -231,8 +230,8 @@ describe('Notices controller', () => {
         it('redirects back to the view page', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal('/system/notices/ed9e8145-8f2b-4561-b200-d3ee95d30938')
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual('/system/notices/ed9e8145-8f2b-4561-b200-d3ee95d30938')
         })
       })
 
@@ -247,11 +246,11 @@ describe('Notices controller', () => {
           it('re-renders the index page with no pagination and an error', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
 
-            expect(response.payload).to.contain('There is a problem')
-            expect(response.payload).to.contain('Warning alert')
-            expect(response.payload).to.contain('Showing all 1 notifications')
+            expect(response.payload).toContain('There is a problem')
+            expect(response.payload).toContain('Warning alert')
+            expect(response.payload).toContain('Showing all 1 notifications')
           })
         })
 
@@ -268,11 +267,11 @@ describe('Notices controller', () => {
           it('re-renders the index page with pagination and an error', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
 
-            expect(response.payload).to.contain('There is a problem')
-            expect(response.payload).to.contain('Warning alert (page 2 of 3)')
-            expect(response.payload).to.contain('Showing 25 of 70 notifications')
+            expect(response.payload).toContain('There is a problem')
+            expect(response.payload).toContain('Warning alert (page 2 of 3)')
+            expect(response.payload).toContain('Showing 25 of 70 notifications')
           })
         })
       })

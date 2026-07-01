@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const UserSessionsFixture = require('../../../../support/fixtures/user-sessions.fixture.js')
 
@@ -25,7 +18,7 @@ describe('Users - External - Setup - Check Presenter', () => {
     it('returns page data for the view', () => {
       const result = CheckPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'users',
         licences: ['All licences'],
         links: {
@@ -47,7 +40,7 @@ describe('Users - External - Setup - Check Presenter', () => {
       it('returns a message specific for "All licences"', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.warning).to.equal({
+        expect(result.warning).toEqual({
           iconFallbackText: 'Warning',
           text: 'All these licences will no longer be accessible to existing users.'
         })
@@ -63,7 +56,7 @@ describe('Users - External - Setup - Check Presenter', () => {
       it('returns a message specific for one licence', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.warning).to.equal({
+        expect(result.warning).toEqual({
           iconFallbackText: 'Warning',
           text: 'This licence will no longer be accessible to existing users.'
         })
@@ -79,7 +72,7 @@ describe('Users - External - Setup - Check Presenter', () => {
       it('returns a message specific for one licence', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.warning).to.equal({
+        expect(result.warning).toEqual({
           iconFallbackText: 'Warning',
           text: 'These licences will no longer be accessible to existing users.'
         })

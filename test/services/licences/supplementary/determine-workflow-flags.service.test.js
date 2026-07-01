@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
@@ -30,7 +25,7 @@ describe('Determine Workflow Flags Service', () => {
     })
 
     describe('for a licence that is already flagged', () => {
-      before(() => {
+      beforeAll(() => {
         licenceData = {
           id: 'fee406be-d710-4c14-a4a4-9fd43dc9c5bc',
           region_id: '06661d63-a70e-4cc2-bb6f-7b2a7e9607cc',
@@ -48,29 +43,29 @@ describe('Determine Workflow Flags Service', () => {
       it('always returns the licenceId, regionId, startDate and endDate', async () => {
         const result = await DetermineWorkflowFlagsService.go(workflowId)
 
-        expect(result.licenceId).to.equal('fee406be-d710-4c14-a4a4-9fd43dc9c5bc')
-        expect(result.regionId).to.equal('06661d63-a70e-4cc2-bb6f-7b2a7e9607cc')
-        expect(result.startDate).to.equal(new Date('2024-01-01'))
-        expect(result.endDate).to.equal(currentFinancialYear.endDate)
+        expect(result.licenceId).toEqual('fee406be-d710-4c14-a4a4-9fd43dc9c5bc')
+        expect(result.regionId).toEqual('06661d63-a70e-4cc2-bb6f-7b2a7e9607cc')
+        expect(result.startDate).toEqual(new Date('2024-01-01'))
+        expect(result.endDate).toEqual(currentFinancialYear.endDate)
       })
 
       describe('and has no charge versions', () => {
-        before(() => {
+        beforeAll(() => {
           Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
         })
 
         it('returns the correct flags', async () => {
           const result = await DetermineWorkflowFlagsService.go(workflowId)
 
-          expect(result.flagForPreSrocSupplementary).to.equal(true)
-          expect(result.flagForSrocSupplementary).to.equal(false)
-          expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
+          expect(result.flagForPreSrocSupplementary).toEqual(true)
+          expect(result.flagForSrocSupplementary).toEqual(false)
+          expect(result.flagForTwoPartTariffSupplementary).toEqual(false)
         })
       })
 
       describe('and has sroc charge versions', () => {
         describe('and an annual bill run has not been sent while the licence was in workflow', () => {
-          before(() => {
+          beforeAll(() => {
             licenceData.sroc_charge_versions = true
             Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
           })
@@ -78,14 +73,14 @@ describe('Determine Workflow Flags Service', () => {
           it('returns the correct flags', async () => {
             const result = await DetermineWorkflowFlagsService.go(workflowId)
 
-            expect(result.flagForPreSrocSupplementary).to.equal(true)
-            expect(result.flagForSrocSupplementary).to.equal(true)
-            expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
+            expect(result.flagForPreSrocSupplementary).toEqual(true)
+            expect(result.flagForSrocSupplementary).toEqual(true)
+            expect(result.flagForTwoPartTariffSupplementary).toEqual(false)
           })
         })
 
         describe('and an annual bill run has been sent while the licence was in workflow', () => {
-          before(async () => {
+          beforeAll(async () => {
             await BillRunHelper.add({
               regionId: '06661d63-a70e-4cc2-bb6f-7b2a7e9607cc',
               status: 'sent',
@@ -98,15 +93,15 @@ describe('Determine Workflow Flags Service', () => {
           it('returns the correct flags', async () => {
             const result = await DetermineWorkflowFlagsService.go(workflowId)
 
-            expect(result.flagForPreSrocSupplementary).to.equal(true)
-            expect(result.flagForSrocSupplementary).to.equal(true)
-            expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
+            expect(result.flagForPreSrocSupplementary).toEqual(true)
+            expect(result.flagForSrocSupplementary).toEqual(true)
+            expect(result.flagForTwoPartTariffSupplementary).toEqual(false)
           })
         })
       })
 
       describe('and has two-part tariff charge versions', () => {
-        before(() => {
+        beforeAll(() => {
           licenceData.two_part_tariff_charge_versions = true
           Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
         })
@@ -114,15 +109,15 @@ describe('Determine Workflow Flags Service', () => {
         it('returns the correct flags', async () => {
           const result = await DetermineWorkflowFlagsService.go(workflowId)
 
-          expect(result.flagForPreSrocSupplementary).to.equal(true)
-          expect(result.flagForSrocSupplementary).to.equal(true)
-          expect(result.flagForTwoPartTariffSupplementary).to.equal(true)
+          expect(result.flagForPreSrocSupplementary).toEqual(true)
+          expect(result.flagForSrocSupplementary).toEqual(true)
+          expect(result.flagForTwoPartTariffSupplementary).toEqual(true)
         })
       })
     })
 
     describe('for a licence that is not already flagged', () => {
-      before(() => {
+      beforeAll(() => {
         licenceData = {
           id: 'fee406be-d710-4c14-a4a4-9fd43dc9c5bc',
           region_id: '27fc9c25-2031-454b-bdae-0aa4ce566eac',
@@ -140,29 +135,29 @@ describe('Determine Workflow Flags Service', () => {
       it('always returns the licenceId, regionId, startDate and endDate', async () => {
         const result = await DetermineWorkflowFlagsService.go(workflowId)
 
-        expect(result.licenceId).to.equal('fee406be-d710-4c14-a4a4-9fd43dc9c5bc')
-        expect(result.regionId).to.equal('27fc9c25-2031-454b-bdae-0aa4ce566eac')
-        expect(result.startDate).to.equal(new Date('2024-01-01'))
-        expect(result.endDate).to.equal(currentFinancialYear.endDate)
+        expect(result.licenceId).toEqual('fee406be-d710-4c14-a4a4-9fd43dc9c5bc')
+        expect(result.regionId).toEqual('27fc9c25-2031-454b-bdae-0aa4ce566eac')
+        expect(result.startDate).toEqual(new Date('2024-01-01'))
+        expect(result.endDate).toEqual(currentFinancialYear.endDate)
       })
 
       describe('and has no charge versions', () => {
-        before(() => {
+        beforeAll(() => {
           Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
         })
 
         it('returns the correct flags', async () => {
           const result = await DetermineWorkflowFlagsService.go(workflowId)
 
-          expect(result.flagForPreSrocSupplementary).to.equal(false)
-          expect(result.flagForSrocSupplementary).to.equal(false)
-          expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
+          expect(result.flagForPreSrocSupplementary).toEqual(false)
+          expect(result.flagForSrocSupplementary).toEqual(false)
+          expect(result.flagForTwoPartTariffSupplementary).toEqual(false)
         })
       })
 
       describe('and has sroc charge versions', () => {
         describe('and an annual bill run has not been sent while the licence was in workflow', () => {
-          before(() => {
+          beforeAll(() => {
             licenceData.sroc_charge_versions = true
             Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
           })
@@ -170,14 +165,14 @@ describe('Determine Workflow Flags Service', () => {
           it('returns the correct flags', async () => {
             const result = await DetermineWorkflowFlagsService.go(workflowId)
 
-            expect(result.flagForPreSrocSupplementary).to.equal(false)
-            expect(result.flagForSrocSupplementary).to.equal(false)
-            expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
+            expect(result.flagForPreSrocSupplementary).toEqual(false)
+            expect(result.flagForSrocSupplementary).toEqual(false)
+            expect(result.flagForTwoPartTariffSupplementary).toEqual(false)
           })
         })
 
         describe('and an annual bill run has been sent while the licence was in workflow', () => {
-          before(async () => {
+          beforeAll(async () => {
             await BillRunHelper.add({
               regionId: '27fc9c25-2031-454b-bdae-0aa4ce566eac',
               status: 'sent',
@@ -190,15 +185,15 @@ describe('Determine Workflow Flags Service', () => {
           it('returns the correct flags', async () => {
             const result = await DetermineWorkflowFlagsService.go(workflowId)
 
-            expect(result.flagForPreSrocSupplementary).to.equal(false)
-            expect(result.flagForSrocSupplementary).to.equal(true)
-            expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
+            expect(result.flagForPreSrocSupplementary).toEqual(false)
+            expect(result.flagForSrocSupplementary).toEqual(true)
+            expect(result.flagForTwoPartTariffSupplementary).toEqual(false)
           })
         })
       })
 
       describe('and has two-part tariff charge versions', () => {
-        before(() => {
+        beforeAll(() => {
           licenceData.two_part_tariff_charge_versions = true
           Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
         })
@@ -206,14 +201,14 @@ describe('Determine Workflow Flags Service', () => {
         it('returns the correct flags', async () => {
           const result = await DetermineWorkflowFlagsService.go(workflowId)
 
-          expect(result.flagForPreSrocSupplementary).to.equal(false)
-          expect(result.flagForSrocSupplementary).to.equal(true)
-          expect(result.flagForTwoPartTariffSupplementary).to.equal(true)
+          expect(result.flagForPreSrocSupplementary).toEqual(false)
+          expect(result.flagForSrocSupplementary).toEqual(true)
+          expect(result.flagForTwoPartTariffSupplementary).toEqual(true)
         })
       })
 
       describe('for a licence that has ended', () => {
-        before(() => {
+        beforeAll(() => {
           licenceData.ended = true
           Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
         })
@@ -221,9 +216,9 @@ describe('Determine Workflow Flags Service', () => {
         it('returns the unchanged flags', async () => {
           const result = await DetermineWorkflowFlagsService.go(workflowId)
 
-          expect(result.flagForPreSrocSupplementary).to.equal(false)
-          expect(result.flagForSrocSupplementary).to.equal(false)
-          expect(result.flagForTwoPartTariffSupplementary).to.equal(false)
+          expect(result.flagForPreSrocSupplementary).toEqual(false)
+          expect(result.flagForSrocSupplementary).toEqual(false)
+          expect(result.flagForTwoPartTariffSupplementary).toEqual(false)
         })
       })
     })

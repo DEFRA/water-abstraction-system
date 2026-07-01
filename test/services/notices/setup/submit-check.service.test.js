@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const NoticesFixture = require('../../../support/fixtures/notices.fixture.js')
@@ -130,25 +125,25 @@ describe('Notices - Setup - Submit Check service', () => {
     it('creates a notice record', async () => {
       await SubmitCheckService.go(session.id, auth)
 
-      expect(createNoticeStub.called).to.be.true()
+      expect(createNoticeStub.called).toBe(true)
     })
 
     it('creates notification records', async () => {
       await SubmitCheckService.go(session.id, auth)
 
-      expect(createNotificationsStub.called).to.be.true()
+      expect(createNotificationsStub.called).toBe(true)
     })
 
     it('deletes the session record', async () => {
       await SubmitCheckService.go(session.id, auth)
 
-      expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
+      expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
     })
 
     it('sends the notice', async () => {
       await SubmitCheckService.go(session.id, auth)
 
-      expect(sendNoticeStub.called).to.be.true()
+      expect(sendNoticeStub.called).toBe(true)
     })
   })
 })

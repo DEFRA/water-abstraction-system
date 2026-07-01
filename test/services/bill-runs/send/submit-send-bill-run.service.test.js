@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { pause } = require('../../../../app/lib/general.lib.js')
@@ -49,17 +44,17 @@ describe('Bill Runs - Submit Cancel Bill Run service', () => {
       it('updates the bill run invoice numbers in the background and does not throw an error', async () => {
         await SubmitSendBillRunService.go(billRunId)
 
-        expect(sendBillRunStub.called).to.be.true()
-        expect(updateInvoiceNumbersStub.called).to.be.true()
+        expect(sendBillRunStub.called).toBe(true)
+        expect(updateInvoiceNumbersStub.called).toBe(true)
 
         // NOTE: We have faked the UpdateInvoiceNumbersService taking some time to complete so we can test that
         // SubmitSendBillRunService returns control back to us whilst the update is still in progress. We then pause and
         // allow the delete to complete to confirm that it was running in the background.
-        expect(updateDoneFake.called).to.be.false()
+        expect(updateDoneFake.called).toBe(false)
 
         await pause(500)
 
-        expect(updateDoneFake.called).to.be.true()
+        expect(updateDoneFake.called).toBe(true)
       })
     })
 
@@ -72,9 +67,9 @@ describe('Bill Runs - Submit Cancel Bill Run service', () => {
       })
 
       it('does not update the bill run and throws an error', async () => {
-        await expect(SubmitSendBillRunService.go(billRunId)).to.reject()
+        await expect(SubmitSendBillRunService.go(billRunId)).rejects.toThrow()
 
-        expect(updateInvoiceNumbersStub.called).to.equal(false)
+        expect(updateInvoiceNumbersStub.called).toEqual(false)
       })
     })
   })

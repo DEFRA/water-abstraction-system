@@ -4,12 +4,7 @@ const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK, HTTP_STA
   require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, before, beforeEach, after, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const BaseRequest = require('../../app/requests/base.request.js')
@@ -22,7 +17,7 @@ const NotifyRequest = require('../../app/requests/notify.request.js')
 describe('Notify Request', () => {
   const testRoute = 'TEST_ROUTE'
 
-  before(async () => {
+  beforeAll(async () => {
     // NotifyRequest makes use of the getNotifyToken() server method, which we therefore need to stub.
     // Note that we only need to do this once as it is unaffected by the Sinon.restore() in our afterEach()
     globalThis.HapiServerMethods = {
@@ -43,7 +38,7 @@ describe('Notify Request', () => {
     Sinon.restore()
   })
 
-  after(() => {
+  afterAll(() => {
     // Tidy up our global server methods stub once done
     delete globalThis.HapiServerMethods
   })
@@ -65,8 +60,8 @@ describe('Notify Request', () => {
 
         const requestArgs = BaseRequest.get.firstCall.args
 
-        expect(requestArgs[0]).to.endWith('TEST_ROUTE')
-        expect(requestArgs[1].headers).to.include({ authorization: 'Bearer ACCESS_TOKEN' })
+        expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
+        expect(requestArgs[1].headers).toMatchObject({ authorization: 'Bearer ACCESS_TOKEN' })
       })
 
       it('uses the notify timeout', async () => {
@@ -74,25 +69,25 @@ describe('Notify Request', () => {
 
         const requestArgs = BaseRequest.get.firstCall.args
 
-        expect(requestArgs[1].timeout).to.equal({ request: 1234 })
+        expect(requestArgs[1].timeout).toEqual({ request: 1234 })
       })
 
       it('returns a "true" success status', async () => {
         const result = await NotifyRequest.get(testRoute)
 
-        expect(result.succeeded).to.be.true()
+        expect(result.succeeded).toBe(true)
       })
 
       it('returns the response body as an object', async () => {
         const result = await NotifyRequest.get(testRoute)
 
-        expect(result.response.body.testObject.test).to.equal('yes')
+        expect(result.response.body.testObject.test).toEqual('yes')
       })
 
       it('returns the status code', async () => {
         const result = await NotifyRequest.get(testRoute)
 
-        expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(result.response.statusCode).toEqual(HTTP_STATUS_OK)
       })
     })
 
@@ -111,19 +106,19 @@ describe('Notify Request', () => {
       it('returns a "false" success status', async () => {
         const result = await NotifyRequest.get(testRoute)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error response', async () => {
         const result = await NotifyRequest.get(testRoute)
 
-        expect(result.response.body.message).to.equal('Not Found')
+        expect(result.response.body.message).toEqual('Not Found')
       })
 
       it('returns the status code', async () => {
         const result = await NotifyRequest.get(testRoute)
 
-        expect(result.response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
+        expect(result.response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
       })
     })
   })
@@ -145,9 +140,9 @@ describe('Notify Request', () => {
 
         const requestArgs = BaseRequest.post.firstCall.args
 
-        expect(requestArgs[0]).to.endWith('TEST_ROUTE')
-        expect(requestArgs[1].headers).to.include({ authorization: 'Bearer ACCESS_TOKEN' })
-        expect(requestArgs[1].json).to.equal({ test: 'yes' })
+        expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
+        expect(requestArgs[1].headers).toMatchObject({ authorization: 'Bearer ACCESS_TOKEN' })
+        expect(requestArgs[1].json).toEqual({ test: 'yes' })
       })
 
       it('uses the Notify timeout', async () => {
@@ -155,25 +150,25 @@ describe('Notify Request', () => {
 
         const requestArgs = BaseRequest.post.firstCall.args
 
-        expect(requestArgs[1].timeout).to.equal({ request: 1234 })
+        expect(requestArgs[1].timeout).toEqual({ request: 1234 })
       })
 
       it('returns a "true" success status', async () => {
         const result = await NotifyRequest.post(testRoute, { test: 'yes' })
 
-        expect(result.succeeded).to.be.true()
+        expect(result.succeeded).toBe(true)
       })
 
       it('returns the response body as an object', async () => {
         const result = await NotifyRequest.post(testRoute, { test: 'yes' })
 
-        expect(result.response.body.testObject.test).to.equal('yes')
+        expect(result.response.body.testObject.test).toEqual('yes')
       })
 
       it('returns the status code', async () => {
         const result = await NotifyRequest.post(testRoute, { test: 'yes' })
 
-        expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(result.response.statusCode).toEqual(HTTP_STATUS_OK)
       })
     })
 
@@ -196,13 +191,13 @@ describe('Notify Request', () => {
         it('returns a "false" success status', async () => {
           const result = await NotifyRequest.post(testRoute, { test: 'yes' })
 
-          expect(result.succeeded).to.be.false()
+          expect(result.succeeded).toBe(false)
         })
 
         it('returns the error response', async () => {
           const result = await NotifyRequest.post(testRoute, { test: 'yes' })
 
-          expect(result.response.body.errors).to.equal([
+          expect(result.response.body.errors).toEqual([
             { error: 'BadRequestError', message: 'email_address Not a valid email address' }
           ])
         })
@@ -210,7 +205,7 @@ describe('Notify Request', () => {
         it('returns the status code', async () => {
           const result = await NotifyRequest.post(testRoute, { test: 'yes' })
 
-          expect(result.response.statusCode).to.equal(HTTP_STATUS_BAD_REQUEST)
+          expect(result.response.statusCode).toEqual(HTTP_STATUS_BAD_REQUEST)
         })
       })
 
@@ -249,10 +244,10 @@ describe('Notify Request', () => {
         it('retries the request after the configured pause', async () => {
           const result = await NotifyRequest.post(testRoute, { test: 'yes' })
 
-          expect(baseRequestStub.calledTwice).to.be.true()
-          expect(result.succeeded).to.be.true()
-          expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(result.response.body.testObject.test).to.equal('yes')
+          expect(baseRequestStub.calledTwice).toBe(true)
+          expect(result.succeeded).toBe(true)
+          expect(result.response.statusCode).toEqual(HTTP_STATUS_OK)
+          expect(result.response.body.testObject.test).toEqual('yes')
         })
       })
     })

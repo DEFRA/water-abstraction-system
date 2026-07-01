@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const MatchReturnsToChargeElementService = require('../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js')
 
@@ -44,7 +37,7 @@ describe('Match Returns To Charge Element Service', () => {
     it('adds the matching return logs to the charge element', () => {
       MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
-      expect(chargeElement).to.equal({
+      expect(chargeElement).toEqual({
         abstractionPeriods: [
           {
             endDate: new Date('2022-10-31'),
@@ -77,7 +70,7 @@ describe('Match Returns To Charge Element Service', () => {
     it('changes the matched property on the return log to be true', () => {
       MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
-      expect(returnLogs[0].matched).to.be.true()
+      expect(returnLogs[0].matched).toBe(true)
     })
   })
 
@@ -91,7 +84,7 @@ describe('Match Returns To Charge Element Service', () => {
       it('records only the matching return logs against the charge element', () => {
         MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
-        expect(chargeElement.returnLogs).to.equal([
+        expect(chargeElement.returnLogs).toEqual([
           {
             allocatedQuantity: 0,
             returnLogId: '870c6cae-1f31-4e0e-bdd1-4df07b31084e'
@@ -102,8 +95,8 @@ describe('Match Returns To Charge Element Service', () => {
       it('only flags the matching return logs as "matched"', () => {
         MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
-        expect(returnLogs[0].matched).to.be.true()
-        expect(returnLogs[1].matched).to.be.false()
+        expect(returnLogs[0].matched).toBe(true)
+        expect(returnLogs[1].matched).toBe(false)
       })
     })
 
@@ -118,7 +111,7 @@ describe('Match Returns To Charge Element Service', () => {
       it('records only the matching return logs against the charge element', () => {
         MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
-        expect(chargeElement.returnLogs).to.equal([
+        expect(chargeElement.returnLogs).toEqual([
           {
             allocatedQuantity: 0,
             returnLogId: '870c6cae-1f31-4e0e-bdd1-4df07b31084e'
@@ -129,8 +122,8 @@ describe('Match Returns To Charge Element Service', () => {
       it('only flags the matching return logs as "matched"', () => {
         MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
-        expect(returnLogs[0].matched).to.be.true()
-        expect(returnLogs[1].matched).to.be.false()
+        expect(returnLogs[0].matched).toBe(true)
+        expect(returnLogs[1].matched).toBe(false)
       })
     })
   })
@@ -145,14 +138,14 @@ describe('Match Returns To Charge Element Service', () => {
     it('adds no matching return logs to the charge element', () => {
       MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
-      expect(chargeElement.returnLogs).to.be.empty()
+      expect(chargeElement.returnLogs).toHaveLength(0)
     })
 
     it('leaves the matched property on the return logs as false', () => {
       MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
 
-      expect(returnLogs[0].matched).to.be.false()
-      expect(returnLogs[1].matched).to.be.false()
+      expect(returnLogs[0].matched).toBe(false)
+      expect(returnLogs[1].matched).toBe(false)
     })
   })
 })

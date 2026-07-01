@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const NotifyAddressPresenter = require('../../../../app/presenters/notices/setup/notify-address.presenter.js')
 
@@ -41,7 +34,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
     it('condenses the middle address parts', () => {
       const result = NotifyAddressPresenter.go(contact)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         address_line_1: 'Mr J H Watson',
         address_line_2: 'Sherlock Holmes Consulting Detective',
         address_line_3: '221b Baker Street',
@@ -63,7 +56,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
     it('excludes them from the result', () => {
       const result = NotifyAddressPresenter.go(contact)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         address_line_1: 'Mr J H Watson',
         address_line_2: 'Sherlock Holmes Consulting Detective',
         address_line_3: '221b Baker Street',
@@ -82,7 +75,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
     it('excludes it from the result', () => {
       const result = NotifyAddressPresenter.go(contact)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         address_line_1: 'Mr J H Watson',
         address_line_2: '221b Baker Street',
         address_line_3: 'Regents Park',
@@ -102,7 +95,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
     it('removes the duplication from the result', () => {
       const result = NotifyAddressPresenter.go(contact)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         address_line_1: 'Sherlock Holmes Consulting Detective',
         address_line_2: '221b Baker Street',
         address_line_3: 'Regents Park',
@@ -120,7 +113,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
         it('excludes "country" in the result', () => {
           const result = NotifyAddressPresenter.go(contact)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             address_line_1: 'Mr J H Watson',
             address_line_2: 'Sherlock Holmes Consulting Detective',
             address_line_3: '221b Baker Street',
@@ -140,7 +133,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
         it('includes "country" in the result _before_ the postcode', () => {
           const result = NotifyAddressPresenter.go(contact)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             address_line_1: 'Mr J H Watson',
             address_line_2: 'Sherlock Holmes Consulting Detective',
             address_line_3: '221b Baker Street',
@@ -161,7 +154,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
       it('ensures "postcode" is the last address line', () => {
         const result = NotifyAddressPresenter.go(contact)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           address_line_1: 'Mr J H Watson',
           address_line_2: 'Sherlock Holmes Consulting Detective',
           address_line_3: '221b Baker Street',
@@ -195,7 +188,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
       it('includes "country" in the result _after_ the postcode', () => {
         const result = NotifyAddressPresenter.go(contact)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           address_line_1: 'Professor J H Moriarty',
           address_line_2: 'Mathematical Computer Consulting',
           address_line_3: 'Gasthaus Zwirgi',
@@ -215,7 +208,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
       it('ensures "country" is the last address line', () => {
         const result = NotifyAddressPresenter.go(contact)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           address_line_1: 'Professor J H Moriarty',
           address_line_2: 'Mathematical Computer Consulting',
           address_line_3: 'Gasthaus Zwirgi',
@@ -242,7 +235,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
         it('returns all populated address parts plus an "INVALID" message', () => {
           const result = NotifyAddressPresenter.go(contact)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             address_line_1: 'Mr J H Watson',
             address_line_2: 'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
             address_line_3: 'Sherlock Holmes Consulting Detective',
@@ -259,7 +252,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
         it('returns all populated address parts plus an "INVALID" message', () => {
           const result = NotifyAddressPresenter.go(contact)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             address_line_1: 'Mr J H Watson',
             address_line_2: 'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
             address_line_3: 'Sherlock Holmes Consulting Detective',
@@ -281,7 +274,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
         it('returns all populated address parts plus an "INVALID" message', () => {
           const result = NotifyAddressPresenter.go(contact)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             address_line_1: 'Mr J H Watson',
             address_line_2: 'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
             address_line_3: 'Sherlock Holmes Consulting Detective',
@@ -304,7 +297,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
       it('returns all populated address parts plus an "INVALID" message', () => {
         const result = NotifyAddressPresenter.go(contact)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           address_line_1: 'Mr J H Watson',
           address_line_2: 'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
           address_line_3: 'Sherlock Holmes Consulting Detective',
@@ -327,7 +320,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
       it('returns all populated address parts plus an "INVALID" message', () => {
         const result = NotifyAddressPresenter.go(contact)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           address_line_1: 'Mr J H Watson',
           address_line_2: 'INVALID ADDRESS - A line starts with special character',
           address_line_3: 'Sherlock Holmes Consulting Detective',

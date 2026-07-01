@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
 const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
@@ -45,7 +38,7 @@ describe('Notices - Setup - Select Recipients presenter', () => {
   it('returns page data for the view', () => {
     const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       backLink: {
         href: `/system/notices/setup/${session.id}/check`,
         text: 'Back'
@@ -110,7 +103,7 @@ describe('Notices - Setup - Select Recipients presenter', () => {
       it('returns page data for the view with relevant recipients not checked', () => {
         const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
 
-        expect(result.recipients).to.equal([
+        expect(result.recipients).toEqual([
           {
             checked: false,
             contact: [recipients.primaryUser.email],
@@ -132,7 +125,7 @@ describe('Notices - Setup - Select Recipients presenter', () => {
       it('returns page data for the view with relevant recipients checked', () => {
         const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
 
-        expect(result.recipients).to.equal([
+        expect(result.recipients).toEqual([
           {
             checked: true,
             contact: [recipients.primaryUser.email],
@@ -157,7 +150,7 @@ describe('Notices - Setup - Select Recipients presenter', () => {
       it('returns correct text and link', () => {
         const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
 
-        expect(result.setupAddress).to.equal({
+        expect(result.setupAddress).toEqual({
           href: `/system/notices/setup/${session.id}/recipient-name`,
           text: 'Set up a single use address'
         })
@@ -168,7 +161,7 @@ describe('Notices - Setup - Select Recipients presenter', () => {
       it('returns correct text and link', () => {
         const result = SelectRecipientsPresenter.go(session, testRecipients, selectedRecipients)
 
-        expect(result.setupAddress).to.equal({
+        expect(result.setupAddress).toEqual({
           href: `/system/notices/setup/${session.id}/contact-type`,
           text: 'Set up a single use address or email address'
         })

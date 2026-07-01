@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
@@ -41,7 +36,7 @@ describe('Notices - Setup - Abstraction Alerts - View Cancel Alerts service', ()
     it('returns page data for the view', async () => {
       const result = await ViewCancelAlertsService.go(session.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'notices',
         backLink: {
           href: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,

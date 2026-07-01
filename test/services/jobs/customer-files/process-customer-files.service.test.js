@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
@@ -91,21 +86,23 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
       const refreshedAccountPreviouslyProcessed = await accountPreviouslyProcessed.$query()
 
       // Confirm the account was updated with the details from the only 'customer file' it appeared in
-      expect(refreshedAccountExportedOnce.lastTransactionFile).to.equal('nalac50001')
-      expect(refreshedAccountExportedOnce.lastTransactionFileCreatedAt).to.equal(new Date('2025-08-10T12:34:56.789Z'))
-      expect(refreshedAccountExportedOnce.updatedAt).to.be.greaterThan(accountExportedOnce.updatedAt)
+      expect(refreshedAccountExportedOnce.lastTransactionFile).toEqual('nalac50001')
+      expect(refreshedAccountExportedOnce.lastTransactionFileCreatedAt).toEqual(new Date('2025-08-10T12:34:56.789Z'))
+      expect(refreshedAccountExportedOnce.updatedAt.getTime()).toBeGreaterThan(accountExportedOnce.updatedAt.getTime())
 
       // Confirm the account was updated with the details from the last 'customer file' it appeared in
-      expect(refreshedAccountExportedTwice.lastTransactionFile).to.equal('nalac50002')
-      expect(refreshedAccountExportedTwice.lastTransactionFileCreatedAt).to.equal(new Date('2025-08-11T13:57:24.680Z'))
-      expect(refreshedAccountExportedTwice.updatedAt).to.be.greaterThan(accountExportedTwice.updatedAt)
+      expect(refreshedAccountExportedTwice.lastTransactionFile).toEqual('nalac50002')
+      expect(refreshedAccountExportedTwice.lastTransactionFileCreatedAt).toEqual(new Date('2025-08-11T13:57:24.680Z'))
+      expect(refreshedAccountExportedTwice.updatedAt.getTime()).toBeGreaterThan(
+        accountExportedTwice.updatedAt.getTime()
+      )
 
       // Confirm the account was not updated as it has already been processed
-      expect(refreshedAccountPreviouslyProcessed.lastTransactionFile).to.equal('nalac50001')
-      expect(refreshedAccountPreviouslyProcessed.lastTransactionFileCreatedAt).to.equal(
+      expect(refreshedAccountPreviouslyProcessed.lastTransactionFile).toEqual('nalac50001')
+      expect(refreshedAccountPreviouslyProcessed.lastTransactionFileCreatedAt).toEqual(
         new Date('2025-08-10T12:34:56.789Z')
       )
-      expect(refreshedAccountPreviouslyProcessed.updatedAt).to.equal(accountPreviouslyProcessed.updatedAt)
+      expect(refreshedAccountPreviouslyProcessed.updatedAt).toEqual(accountPreviouslyProcessed.updatedAt)
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
@@ -113,10 +110,10 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Customer files job complete')).to.be.true()
-      expect(logDataArg.timeTakenMs).to.exist()
-      expect(logDataArg.timeTakenSs).to.exist()
-      expect(logDataArg.count).to.equal(3)
+      expect(notifierStub.omg.calledWith('Customer files job complete')).toBe(true)
+      expect(logDataArg.timeTakenMs).toBeDefined()
+      expect(logDataArg.timeTakenSs).toBeDefined()
+      expect(logDataArg.count).toEqual(3)
     })
   })
 
@@ -144,7 +141,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
     it('updates no billing account records', async () => {
       await ProcessCustomerFilesService.go(days)
 
-      expect(billRunQueryStub.called).to.be.false()
+      expect(billRunQueryStub.called).toBe(false)
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
@@ -152,10 +149,10 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Customer files job complete')).to.be.true()
-      expect(logDataArg.timeTakenMs).to.exist()
-      expect(logDataArg.timeTakenSs).to.exist()
-      expect(logDataArg.count).to.equal(0)
+      expect(notifierStub.omg.calledWith('Customer files job complete')).toBe(true)
+      expect(logDataArg.timeTakenMs).toBeDefined()
+      expect(logDataArg.timeTakenSs).toBeDefined()
+      expect(logDataArg.count).toEqual(0)
     })
   })
 
@@ -179,9 +176,9 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
 
       const args = notifierStub.omfg.firstCall.args
 
-      expect(args[0]).to.equal('Customer files job failed')
-      expect(args[1]).to.be.null()
-      expect(args[2]).to.be.an.error()
+      expect(args[0]).toEqual('Customer files job failed')
+      expect(args[1]).toBeNull()
+      expect(args[2]).toBeInstanceOf(Error)
     })
 
     it('notifies the team by calling "redAlert()"', async () => {
@@ -189,11 +186,11 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
 
       const args = notifierStub.redAlert.firstCall.args
 
-      expect(args[0]).to.equal('Customer files job failed')
+      expect(args[0]).toEqual('Customer files job failed')
     })
 
     it('does not throw an error', async () => {
-      await expect(ProcessCustomerFilesService.go()).not.to.reject()
+      await ProcessCustomerFilesService.go()
     })
   })
 })

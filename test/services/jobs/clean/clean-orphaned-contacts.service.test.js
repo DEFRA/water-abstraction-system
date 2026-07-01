@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillingAccountAddressHelper = require('../../../support/helpers/billing-account-address.helper.js')
@@ -66,10 +61,10 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
 
         const existsResults = await ContactModel.query().whereIn('id', [contact.id])
 
-        expect(existsResults).to.have.length(0)
+        expect(existsResults).toHaveLength(0)
 
         // We can't check the exact count in case the test deletes void return logs created by other tests
-        expect(result).to.be.greaterThan(0)
+        expect(result).toBeGreaterThan(0)
       })
     })
 
@@ -84,11 +79,11 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
 
           const existsResults = await ContactModel.query().whereIn('id', [contact.id])
 
-          expect(existsResults).to.have.length(1)
+          expect(existsResults).toHaveLength(1)
 
           // Like in the previous tests, we can't check the exact count in case the test deletes other company contacts
           // created by other tests. We just want to check we are always getting a number
-          expect(typeof result).to.equal('number')
+          expect(typeof result).toEqual('number')
         })
       })
 
@@ -102,11 +97,11 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
 
           const existsResults = await ContactModel.query().whereIn('id', [contact.id])
 
-          expect(existsResults).to.have.length(1)
+          expect(existsResults).toHaveLength(1)
 
           // Like in the previous tests, we can't check the exact count in case the test deletes other company contacts
           // created by other tests. We just want to check we are always getting a number
-          expect(typeof result).to.equal('number')
+          expect(typeof result).toEqual('number')
         })
       })
 
@@ -120,11 +115,11 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
 
           const existsResults = await ContactModel.query().whereIn('id', [contact.id])
 
-          expect(existsResults).to.have.length(1)
+          expect(existsResults).toHaveLength(1)
 
           // Like in the previous tests, we can't check the exact count in case the test deletes other company contacts
           // created by other tests. We just want to check we are always getting a number
-          expect(typeof result).to.equal('number')
+          expect(typeof result).toEqual('number')
         })
       })
 
@@ -140,11 +135,11 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
 
           const existsResults = await ContactModel.query().whereIn('id', [contact.id])
 
-          expect(existsResults).to.have.length(1)
+          expect(existsResults).toHaveLength(1)
 
           // Like in the previous tests, we can't check the exact count in case the test deletes other company contacts
           // created by other tests. We just want to check we are always getting a number
-          expect(typeof result).to.equal('number')
+          expect(typeof result).toEqual('number')
         })
       })
     })
@@ -159,7 +154,7 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
     })
 
     it('does not throw an error', async () => {
-      await expect(CleanOrphanedContactsService.go()).not.to.reject()
+      await expect(CleanOrphanedContactsService.go()).resolves.toBeDefined()
     })
 
     it('logs the error', async () => {
@@ -167,9 +162,9 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
 
       const errorLogArgs = notifierStub.omfg.firstCall.args
 
-      expect(notifierStub.omfg.calledWith('Clean job failed')).to.be.true()
-      expect(errorLogArgs[1]).to.equal({ job: 'clean-orphaned-contacts' })
-      expect(errorLogArgs[2]).to.be.instanceOf(Error)
+      expect(notifierStub.omfg.calledWith('Clean job failed')).toBe(true)
+      expect(errorLogArgs[1]).toEqual({ job: 'clean-orphaned-contacts' })
+      expect(errorLogArgs[2]).toBeInstanceOf(Error)
     })
 
     it('still returns a count', async () => {
@@ -177,7 +172,7 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
 
       // Like in the previous tests, we can't check the exact count in case the test deletes void return logs created
       // by other tests. We just want to check we are always getting a number
-      expect(typeof result).to.equal('number')
+      expect(typeof result).toEqual('number')
     })
   })
 })

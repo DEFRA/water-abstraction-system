@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
@@ -49,7 +44,7 @@ describe('Companies - View Company Service', () => {
       it('returns page data for the view', async () => {
         const result = await ViewCompanyService.go(companyDetails.id, role)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           backLink: {
             href: `/system/companies/${companyDetails.id}/contacts`,
             text: 'Go back to licence holder contacts'
@@ -77,7 +72,7 @@ describe('Companies - View Company Service', () => {
       it('calls the fetch service with role converted to camelCase', async () => {
         await ViewCompanyService.go(companyDetails.id, role)
 
-        expect(FetchCompanyDetailsDal.go.calledWith(companyDetails.id, 'licenceHolder')).to.be.true()
+        expect(FetchCompanyDetailsDal.go.calledWith(companyDetails.id, 'licenceHolder')).toBe(true)
       })
     })
 
@@ -89,7 +84,7 @@ describe('Companies - View Company Service', () => {
       it('returns page data for the view', async () => {
         const result = await ViewCompanyService.go(companyDetails.id, role)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           backLink: {
             href: `/system/companies/${companyDetails.id}/contacts`,
             text: 'Go back to licence holder contacts'
@@ -117,7 +112,7 @@ describe('Companies - View Company Service', () => {
       it('calls the fetch service with role converted to camelCase', async () => {
         await ViewCompanyService.go(companyDetails.id, role)
 
-        expect(FetchCompanyDetailsDal.go.calledWith(companyDetails.id, 'returnsTo')).to.be.true()
+        expect(FetchCompanyDetailsDal.go.calledWith(companyDetails.id, 'returnsTo')).toBe(true)
       })
     })
   })

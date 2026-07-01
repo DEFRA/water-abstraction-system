@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const AbstractionPeriodPresenter = require('../../../../app/presenters/licence-monitoring-station/setup/abstraction-period.presenter.js')
 
@@ -29,17 +22,14 @@ describe('Abstraction Period Presenter', () => {
     it('returns page data for the view', () => {
       const result = AbstractionPeriodPresenter.go(session)
 
-      expect(result).to.equal(
-        {
-          abstractionPeriodStartDay: '1',
-          abstractionPeriodEndDay: '2',
-          abstractionPeriodStartMonth: '3',
-          abstractionPeriodEndMonth: '4',
-          monitoringStationLabel: 'LABEL',
-          pageTitle: 'Enter an abstraction period for licence LICENCE_REF'
-        },
-        { skip: ['backLink'] }
-      )
+      expect(result).toMatchObject({
+        abstractionPeriodStartDay: '1',
+        abstractionPeriodEndDay: '2',
+        abstractionPeriodStartMonth: '3',
+        abstractionPeriodEndMonth: '4',
+        monitoringStationLabel: 'LABEL',
+        pageTitle: 'Enter an abstraction period for licence LICENCE_REF'
+      })
     })
 
     describe('and checkPageVisited is true', () => {
@@ -50,7 +40,7 @@ describe('Abstraction Period Presenter', () => {
       it('returns the back link to the check page', () => {
         const result = AbstractionPeriodPresenter.go(session)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: `/system/licence-monitoring-station/setup/356bb545-3e0d-46bd-9df4-d60e1a9eae72/check`,
           text: 'Back'
         })
@@ -65,7 +55,7 @@ describe('Abstraction Period Presenter', () => {
       it('returns the back link to the full condition page', () => {
         const result = AbstractionPeriodPresenter.go(session)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: `/system/licence-monitoring-station/setup/356bb545-3e0d-46bd-9df4-d60e1a9eae72/full-condition`,
           text: 'Back'
         })

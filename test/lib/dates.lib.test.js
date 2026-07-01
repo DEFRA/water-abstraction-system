@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, after, before } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Thing under test
 const DateLib = require('../../app/lib/dates.lib.js')
@@ -17,7 +12,7 @@ describe('Dates lib', () => {
     let secondDate
 
     describe('when the first date is before the second date', () => {
-      before(async () => {
+      beforeAll(async () => {
         firstDate = new Date('2025-10-01')
         secondDate = new Date('2025-10-15')
       })
@@ -25,12 +20,12 @@ describe('Dates lib', () => {
       it('returns -1', () => {
         const result = DateLib.compareDates(firstDate, secondDate)
 
-        expect(result).to.equal(-1)
+        expect(result).toEqual(-1)
       })
     })
 
     describe('when the first date is after the second date', () => {
-      before(async () => {
+      beforeAll(async () => {
         firstDate = new Date('2025-10-15')
         secondDate = new Date('2025-10-01')
       })
@@ -38,12 +33,12 @@ describe('Dates lib', () => {
       it('returns 1', () => {
         const result = DateLib.compareDates(firstDate, secondDate)
 
-        expect(result).to.equal(1)
+        expect(result).toEqual(1)
       })
     })
 
     describe('when the first date is the same as the second date', () => {
-      before(async () => {
+      beforeAll(async () => {
         firstDate = new Date('2025-10-15')
         secondDate = new Date('2025-10-15')
       })
@@ -51,7 +46,7 @@ describe('Dates lib', () => {
       it('returns 0', () => {
         const result = DateLib.compareDates(firstDate, secondDate)
 
-        expect(result).to.equal(0)
+        expect(result).toEqual(0)
       })
     })
   })
@@ -61,7 +56,7 @@ describe('Dates lib', () => {
     let endDate
 
     describe('given a "startDate" and "endDate"', () => {
-      before(async () => {
+      beforeAll(async () => {
         startDate = new Date('2023-04-01')
         endDate = new Date('2023-04-03')
       })
@@ -69,7 +64,7 @@ describe('Dates lib', () => {
       it('returns a "day" object for each day within the period (inclusive)', () => {
         const results = DateLib.daysFromPeriod(startDate, endDate)
 
-        expect(results).to.equal([
+        expect(results).toEqual([
           {
             startDate: new Date('2023-04-01'),
             endDate: new Date('2023-04-01')
@@ -91,26 +86,26 @@ describe('Dates lib', () => {
     let date
 
     describe('given a date starting on or after 1st April', () => {
-      before(async () => {
+      beforeAll(async () => {
         date = new Date('2022-04-01')
       })
 
       it('returns the correct financial year end', () => {
         const result = DateLib.determineFinancialYearEnd(date)
 
-        expect(result).to.equal(2023)
+        expect(result).toEqual(2023)
       })
     })
 
     describe('given a date starting before 1st April', () => {
-      before(async () => {
+      beforeAll(async () => {
         date = new Date('2022-02-21')
       })
 
       it('returns the correct financial year end', () => {
         const result = DateLib.determineFinancialYearEnd(date)
 
-        expect(result).to.equal(2022)
+        expect(result).toEqual(2022)
       })
     })
   })
@@ -119,48 +114,48 @@ describe('Dates lib', () => {
     let dates
 
     describe('given an array of dates', () => {
-      before(async () => {
+      beforeAll(async () => {
         dates = [new Date('2025-04-01'), new Date('2025-03-30'), new Date('2025-03-31')]
       })
 
       it('returns the earliest as a Date value', () => {
         const result = DateLib.determineEarliestDate(dates)
 
-        expect(result).to.equal(new Date('2025-03-30'))
+        expect(result).toEqual(new Date('2025-03-30'))
       })
     })
 
     describe('given an array of that contains date, null and undefined values', () => {
-      before(() => {
+      beforeAll(() => {
         dates = [new Date('2025-04-01'), null, new Date('2025-03-30'), undefined]
       })
 
       it('still returns the earliest as a Date value', () => {
         const result = DateLib.determineEarliestDate(dates)
 
-        expect(result).to.equal(new Date('2025-03-30'))
+        expect(result).toEqual(new Date('2025-03-30'))
       })
     })
 
     describe('given an array that only contains null and undefined values', () => {
-      before(() => {
+      beforeAll(() => {
         dates = [null, undefined]
       })
 
       it('returns null', () => {
         const result = DateLib.determineEarliestDate(dates)
-        expect(result).to.equal(null)
+        expect(result).toEqual(null)
       })
     })
 
     describe('given an empty array', () => {
-      before(() => {
+      beforeAll(() => {
         dates = []
       })
 
       it('returns null', () => {
         const result = DateLib.determineEarliestDate(dates)
-        expect(result).to.equal(null)
+        expect(result).toEqual(null)
       })
     })
   })
@@ -169,50 +164,50 @@ describe('Dates lib', () => {
     let dates
 
     describe('given an array of dates', () => {
-      before(async () => {
+      beforeAll(async () => {
         dates = [new Date('2025-04-01'), new Date('2025-03-30'), new Date('2025-03-31')]
       })
 
       it('returns the latest as a Date value', () => {
         const result = DateLib.determineLatestDate(dates)
 
-        expect(result).to.equal(new Date('2025-04-01'))
+        expect(result).toEqual(new Date('2025-04-01'))
       })
     })
 
     describe('given an array of that contains date, null and undefined values', () => {
-      before(() => {
+      beforeAll(() => {
         dates = [new Date('2025-04-01'), null, new Date('2025-03-30'), undefined]
       })
 
       it('still returns the latest as a Date value', () => {
         const result = DateLib.determineLatestDate(dates)
 
-        expect(result).to.equal(new Date('2025-04-01'))
+        expect(result).toEqual(new Date('2025-04-01'))
       })
     })
 
     describe('given an array that only contains null and undefined values', () => {
-      before(() => {
+      beforeAll(() => {
         dates = [null, undefined]
       })
 
       it('throws an error', () => {
         expect(() => {
           return DateLib.determineLatestDate(dates)
-        }).to.throw('No dates provided to determine earliest')
+        }).toThrow('No dates provided to determine earliest')
       })
     })
 
     describe('given an empty array', () => {
-      before(() => {
+      beforeAll(() => {
         dates = []
       })
 
       it('throws an error', () => {
         expect(() => {
           return DateLib.determineLatestDate(dates)
-        }).to.throw('No dates provided to determine earliest')
+        }).toThrow('No dates provided to determine earliest')
       })
     })
   })
@@ -222,7 +217,7 @@ describe('Dates lib', () => {
       it('correctly formats the given date, for example, 12 September 2021', async () => {
         const result = DateLib.formatDateObjectToISO(new Date('2021-09-12T14:41:10.511Z'))
 
-        expect(result).to.equal('2021-09-12')
+        expect(result).toEqual('2021-09-12')
       })
     })
 
@@ -230,7 +225,7 @@ describe('Dates lib', () => {
       it('correctly formats the given date, for example, 12 September 2021', async () => {
         const result = DateLib.formatDateObjectToISO('2021-09-12')
 
-        expect(result).to.equal('2021-09-12')
+        expect(result).toEqual('2021-09-12')
       })
     })
 
@@ -240,7 +235,7 @@ describe('Dates lib', () => {
 
         expect(() => {
           return DateLib.formatDateObjectToISO(invalidDate)
-        }).to.throw('Invalid time value')
+        }).toThrow('Invalid time value')
       })
     })
 
@@ -250,7 +245,7 @@ describe('Dates lib', () => {
 
         expect(() => {
           return DateLib.formatDateObjectToISO(invalidDate)
-        }).to.throw('Invalid time value')
+        }).toThrow('Invalid time value')
       })
     })
 
@@ -258,7 +253,7 @@ describe('Dates lib', () => {
       it('correctly returns null', async () => {
         const result = DateLib.formatDateObjectToISO(undefined)
 
-        expect(result).to.be.null()
+        expect(result).toBeNull()
       })
     })
   })
@@ -267,25 +262,25 @@ describe('Dates lib', () => {
     it('returns null if the date is null ', () => {
       const result = DateLib.formatStandardDateToISO(null)
 
-      expect(result).to.be.null()
+      expect(result).toBeNull()
     })
 
     it('returns null if the date is "null" (NALD dates are a string with null)', () => {
       const result = DateLib.formatStandardDateToISO('null')
 
-      expect(result).to.be.null()
+      expect(result).toBeNull()
     })
 
     it('returns an iso date string in the format yyyy-mm-dd', () => {
       const result = DateLib.formatStandardDateToISO('20/07/2020')
 
-      expect(result).to.equal('2020-07-20')
+      expect(result).toEqual('2020-07-20')
     })
 
     it('throws an error is the date is not a valid date', () => {
       expect(() => {
         return DateLib.formatStandardDateToISO('20/07/20')
-      }).to.throw('20-07-20 is not a valid date')
+      }).toThrow('20-07-20 is not a valid date')
     })
   })
 
@@ -293,13 +288,13 @@ describe('Dates lib', () => {
     it('should return false if the date is not in the iso format - yyyy-mm-dd', () => {
       const result = DateLib.isISODateFormat('20/07/2020')
 
-      expect(result).to.be.false()
+      expect(result).toBe(false)
     })
 
     it('should return true if the date is in the iso format - yyyy-mm-dd', () => {
       const result = DateLib.isISODateFormat('2020-07-20')
 
-      expect(result).to.be.true()
+      expect(result).toBe(true)
     })
   })
 
@@ -307,13 +302,13 @@ describe('Dates lib', () => {
     it('should return true if the date is >= 2025-04-01', () => {
       const result = DateLib.isQuarterlyReturnSubmissions('2025-04-01')
 
-      expect(result).to.be.true()
+      expect(result).toBe(true)
     })
 
     it('should return false if the date is < 2025-04-01', () => {
       const result = DateLib.isQuarterlyReturnSubmissions('2025-03-31')
 
-      expect(result).to.be.false()
+      expect(result).toBe(false)
     })
   })
 
@@ -321,13 +316,13 @@ describe('Dates lib', () => {
     it('should return false is no date provided', () => {
       const result = DateLib.isValidDate()
 
-      expect(result).to.be.false()
+      expect(result).toBe(false)
     })
 
     it('should return true if the date is valid', () => {
       const result = DateLib.isValidDate('2020-07-20')
 
-      expect(result).to.be.true()
+      expect(result).toBe(true)
     })
 
     describe('if the year is a leap year', () => {
@@ -335,7 +330,7 @@ describe('Dates lib', () => {
         it('returns true', () => {
           const result = DateLib.isValidDate('2020-02-29')
 
-          expect(result).to.be.true()
+          expect(result).toBe(true)
         })
       })
 
@@ -343,7 +338,7 @@ describe('Dates lib', () => {
         it('returns false', () => {
           const result = DateLib.isValidDate('2020-02-30')
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
         })
       })
 
@@ -351,7 +346,7 @@ describe('Dates lib', () => {
         it('returns true', () => {
           const result = DateLib.isValidDate('2000-02-20')
 
-          expect(result).to.be.true()
+          expect(result).toBe(true)
         })
       })
     })
@@ -361,7 +356,7 @@ describe('Dates lib', () => {
         it('returns false', () => {
           const result = DateLib.isValidDate('2021-02-29')
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
         })
       })
 
@@ -369,7 +364,7 @@ describe('Dates lib', () => {
         it('returns false', () => {
           const result = DateLib.isValidDate('1999-02-30')
 
-          expect(result).to.be.false()
+          expect(result).toBe(false)
         })
       })
 
@@ -377,7 +372,7 @@ describe('Dates lib', () => {
         it('returns true', () => {
           const result = DateLib.isValidDate('1999-03-27')
 
-          expect(result).to.be.true()
+          expect(result).toBe(true)
         })
       })
 
@@ -385,7 +380,7 @@ describe('Dates lib', () => {
         it('returns true', () => {
           const result = DateLib.isValidDate('1999-02-27')
 
-          expect(result).to.be.true()
+          expect(result).toBe(true)
         })
       })
     })
@@ -396,7 +391,7 @@ describe('Dates lib', () => {
     let endDate
 
     describe('given a "startDate" that is the first of the month and an "endDate" that is the last of the month', () => {
-      before(async () => {
+      beforeAll(async () => {
         startDate = new Date('2025-02-01')
         endDate = new Date('2025-04-30')
       })
@@ -404,7 +399,7 @@ describe('Dates lib', () => {
       it('returns a "month" object for each month within the period', () => {
         const results = DateLib.monthsFromPeriod(startDate, endDate)
 
-        expect(results).to.equal([
+        expect(results).toEqual([
           {
             startDate: new Date('2025-02-01'),
             endDate: new Date('2025-02-28')
@@ -422,7 +417,7 @@ describe('Dates lib', () => {
     })
 
     describe('given a "startDate" that is in the middle and an "endDate" that is the last of the month', () => {
-      before(async () => {
+      beforeAll(async () => {
         startDate = new Date('2025-02-15')
         endDate = new Date('2025-04-30')
       })
@@ -430,7 +425,7 @@ describe('Dates lib', () => {
       it('sets the start date of the first "month" back to the 1st', () => {
         const results = DateLib.monthsFromPeriod(startDate, endDate)
 
-        expect(results[0]).to.equal({
+        expect(results[0]).toEqual({
           startDate: new Date('2025-02-01'),
           endDate: new Date('2025-02-28')
         })
@@ -438,7 +433,7 @@ describe('Dates lib', () => {
     })
 
     describe('given a "startDate" that is the first of the month and an "endDate" that is in the middle', () => {
-      before(async () => {
+      beforeAll(async () => {
         startDate = new Date('2025-02-01')
         endDate = new Date('2025-04-15')
       })
@@ -446,7 +441,7 @@ describe('Dates lib', () => {
       it('sets the end date of the last "month" forward to the last of the month', () => {
         const results = DateLib.monthsFromPeriod(startDate, endDate)
 
-        expect(results[results.length - 1]).to.equal({
+        expect(results[results.length - 1]).toEqual({
           startDate: new Date('2025-04-01'),
           endDate: new Date('2025-04-30')
         })
@@ -459,7 +454,7 @@ describe('Dates lib', () => {
     let secondDate
 
     describe('when the first date is the same as the second date', () => {
-      before(async () => {
+      beforeAll(async () => {
         firstDate = new Date('2025-10-01')
         secondDate = new Date('2025-10-01')
       })
@@ -467,12 +462,12 @@ describe('Dates lib', () => {
       it('returns true', () => {
         const result = DateLib.sameDate(firstDate, secondDate)
 
-        expect(result).to.be.true()
+        expect(result).toBe(true)
       })
     })
 
     describe('when the first date is not the same as the second date', () => {
-      before(async () => {
+      beforeAll(async () => {
         firstDate = new Date('2025-10-01')
         secondDate = new Date('2025-10-15')
       })
@@ -480,7 +475,7 @@ describe('Dates lib', () => {
       it('returns false', () => {
         const result = DateLib.sameDate(firstDate, secondDate)
 
-        expect(result).to.be.false()
+        expect(result).toBe(false)
       })
     })
   })
@@ -490,7 +485,7 @@ describe('Dates lib', () => {
     let endDate
 
     describe('given a "startDate" that is a Sunday and an "endDate" that is a Saturday', () => {
-      before(async () => {
+      beforeAll(async () => {
         // Sunday
         startDate = new Date('2025-02-02')
         // Saturday
@@ -500,7 +495,7 @@ describe('Dates lib', () => {
       it('returns a "week" object for each week (Sunday to Saturday) within the period', () => {
         const results = DateLib.weeksFromPeriod(startDate, endDate)
 
-        expect(results).to.equal([
+        expect(results).toEqual([
           {
             startDate: new Date('2025-02-02'),
             endDate: new Date('2025-02-08')
@@ -517,7 +512,7 @@ describe('Dates lib', () => {
       })
     })
     describe('given a "startDate" that is Wednesday and an "endDate" that is a Saturday', () => {
-      before(async () => {
+      beforeAll(async () => {
         // Wednesday
         startDate = new Date('2025-02-05')
         // Saturday
@@ -527,7 +522,7 @@ describe('Dates lib', () => {
       it('sets the start date of the first "week" back to the Sunday (start of the week)', () => {
         const results = DateLib.weeksFromPeriod(startDate, endDate)
 
-        expect(results[0]).to.equal({
+        expect(results[0]).toEqual({
           startDate: new Date('2025-02-02'),
           endDate: new Date('2025-02-08')
         })
@@ -535,7 +530,7 @@ describe('Dates lib', () => {
     })
 
     describe('given a "startDate" that is Sunday and an "endDate" that is a Thursday', () => {
-      before(async () => {
+      beforeAll(async () => {
         // Sunday
         startDate = new Date('2025-02-02')
         // Thursday
@@ -545,7 +540,7 @@ describe('Dates lib', () => {
       it('sets the last "week" as the last full week (Sun to Sat) before the "endDate"', () => {
         const results = DateLib.weeksFromPeriod(startDate, endDate)
 
-        expect(results[results.length - 1]).to.equal({
+        expect(results[results.length - 1]).toEqual({
           startDate: new Date('2025-02-16'),
           endDate: new Date('2025-02-22')
         })
@@ -557,13 +552,13 @@ describe('Dates lib', () => {
     let clock
     let expiryDate
 
-    before(() => {
+    beforeAll(() => {
       expiryDate = new Date('2026-04-15')
 
       clock = Sinon.useFakeTimers(expiryDate)
     })
 
-    after(() => {
+    afterAll(() => {
       clock.restore()
     })
 
@@ -571,7 +566,7 @@ describe('Dates lib', () => {
       it('returns today at midnight', () => {
         const result = DateLib.renewalExpiryDate()
 
-        expect(result).to.equal(expiryDate)
+        expect(result).toEqual(expiryDate)
       })
     })
 
@@ -581,7 +576,7 @@ describe('Dates lib', () => {
 
         const expiryDate300DaysInTheFuture = new Date('2027-02-09')
 
-        expect(result).to.equal(expiryDate300DaysInTheFuture)
+        expect(result).toEqual(expiryDate300DaysInTheFuture)
       })
     })
   })
@@ -595,7 +590,7 @@ describe('Dates lib', () => {
 
         const date300DaysInThePast = new Date('2026-01-15')
 
-        expect(result).to.equal(date300DaysInThePast)
+        expect(result).toEqual(date300DaysInThePast)
       })
     })
   })

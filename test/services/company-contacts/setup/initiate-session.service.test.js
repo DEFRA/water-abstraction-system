@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
@@ -43,7 +38,7 @@ describe('Company Contacts - Setup - Initiate Session service', () => {
 
       const matchingSession = await SessionModel.query().findById(result.id)
 
-      expect(matchingSession).to.equal({
+      expect(matchingSession).toEqual({
         company,
         createdAt: matchingSession.createdAt,
         data: {

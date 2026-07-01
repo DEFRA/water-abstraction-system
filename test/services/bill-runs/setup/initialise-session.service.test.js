@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const SessionModel = require('../../../../app/models/session.model.js')
 
@@ -20,7 +13,7 @@ describe('Bill Run - Setup - Initiate Session service', () => {
 
       const matchingSession = await SessionModel.query().findById(result.id)
 
-      expect(matchingSession.data).to.equal({})
+      expect(matchingSession.data).toEqual({})
     })
   })
 })

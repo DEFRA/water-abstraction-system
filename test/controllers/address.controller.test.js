@@ -1,15 +1,10 @@
 'use strict'
 
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
+// Test helpers
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
@@ -31,7 +26,7 @@ describe('Address controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -46,6 +41,10 @@ describe('Address controller', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  afterAll(async () => {
+    await server.stop()
   })
 
   describe('/address/{id}/postcode', () => {
@@ -67,7 +66,7 @@ describe('Address controller', () => {
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.statusCode).toEqual(HTTP_STATUS_OK)
       })
     })
 
@@ -84,8 +83,8 @@ describe('Address controller', () => {
         it('redirects to the select address page', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/select`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/select`)
         })
       })
 
@@ -99,10 +98,10 @@ describe('Address controller', () => {
         it('re-renders the postcode page with an error', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
 
-          expect(response.payload).to.contain('There is a problem')
-          expect(response.payload).to.contain('Enter a UK postcode')
+          expect(response.payload).toContain('There is a problem')
+          expect(response.payload).toContain('Enter a UK postcode')
         })
       })
     })
@@ -129,7 +128,7 @@ describe('Address controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
         })
       })
 
@@ -143,8 +142,8 @@ describe('Address controller', () => {
         it('redirects to the manual page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/manual`)
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(`/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/manual`)
         })
       })
     })
@@ -164,8 +163,8 @@ describe('Address controller', () => {
         it('redirects to the configured route', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(
             `/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/add-recipient`
           )
         })
@@ -182,10 +181,10 @@ describe('Address controller', () => {
           it('re-renders the select page with an error', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.statusCode).toEqual(HTTP_STATUS_OK)
 
-            expect(response.payload).to.contain('There is a problem')
-            expect(response.payload).to.contain('Select an address')
+            expect(response.payload).toContain('There is a problem')
+            expect(response.payload).toContain('Select an address')
           })
         })
 
@@ -199,8 +198,8 @@ describe('Address controller', () => {
           it('redirects to the manual page successfully', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal('/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/manual')
+            expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+            expect(response.headers.location).toEqual('/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/manual')
           })
         })
       })
@@ -228,7 +227,7 @@ describe('Address controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
         })
       })
     })
@@ -248,8 +247,8 @@ describe('Address controller', () => {
         it('redirects to the configured route', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(
             `/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/add-recipient`
           )
         })
@@ -265,10 +264,10 @@ describe('Address controller', () => {
         it('re-renders the page with an error', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
 
-          expect(response.payload).to.contain('There is a problem')
-          expect(response.payload).to.contain('Enter address line 1')
+          expect(response.payload).toContain('There is a problem')
+          expect(response.payload).toContain('Enter address line 1')
         })
       })
     })
@@ -295,7 +294,7 @@ describe('Address controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
         })
       })
     })
@@ -315,8 +314,8 @@ describe('Address controller', () => {
         it('redirects to the redirectUrl page', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(
+          expect(response.statusCode).toEqual(HTTP_STATUS_FOUND)
+          expect(response.headers.location).toEqual(
             `/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/add-recipient`
           )
         })
@@ -332,10 +331,10 @@ describe('Address controller', () => {
         it('re-renders the page with an error', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.statusCode).toEqual(HTTP_STATUS_OK)
 
-          expect(response.payload).to.contain('There is a problem')
-          expect(response.payload).to.contain('Enter address line 1')
+          expect(response.payload).toContain('There is a problem')
+          expect(response.payload).toContain('Enter address line 1')
         })
       })
     })

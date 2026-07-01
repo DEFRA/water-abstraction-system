@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const PointModel = require('../../../../../app/models/point.model.js')
 
@@ -33,7 +26,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
       it('correctly presents the data', () => {
         const result = ReturnRequirementsPresenter.go([requirement], [point], journey)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           returnsRequired: true,
           requirements: [
             {
@@ -57,7 +50,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
 
           const { abstractionPeriod } = result.requirements[0]
 
-          expect(abstractionPeriod).to.equal('From 1 June to 1 March')
+          expect(abstractionPeriod).toEqual('From 1 June to 1 March')
         })
       })
 
@@ -72,7 +65,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
 
             const { agreementsExceptions } = result.requirements[0]
 
-            expect(agreementsExceptions).to.equal('None')
+            expect(agreementsExceptions).toEqual('None')
           })
         })
 
@@ -82,7 +75,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
 
             const { agreementsExceptions } = result.requirements[0]
 
-            expect(agreementsExceptions).to.equal('Gravity fill')
+            expect(agreementsExceptions).toEqual('Gravity fill')
           })
         })
 
@@ -96,7 +89,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
 
             const { agreementsExceptions } = result.requirements[0]
 
-            expect(agreementsExceptions).to.equal('Gravity fill and Transfer re-abstraction scheme')
+            expect(agreementsExceptions).toEqual('Gravity fill and Transfer re-abstraction scheme')
           })
         })
 
@@ -115,7 +108,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
 
             const { agreementsExceptions } = result.requirements[0]
 
-            expect(agreementsExceptions).to.equal(
+            expect(agreementsExceptions).toEqual(
               'Gravity fill, Transfer re-abstraction scheme, Two-part tariff, and 56 returns exception'
             )
           })
@@ -129,7 +122,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
 
           const { points } = result.requirements[0]
 
-          expect(points).to.equal(['At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'])
+          expect(points).toEqual(['At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'])
         })
       })
 
@@ -144,7 +137,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
 
             const { purposes } = result.requirements[0]
 
-            expect(purposes).to.equal(['Spray irrigation (spray indiscreetly)'])
+            expect(purposes).toEqual(['Spray irrigation (spray indiscreetly)'])
           })
         })
 
@@ -154,7 +147,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
 
             const { purposes } = result.requirements[0]
 
-            expect(purposes).to.equal(['Spray irrigation'])
+            expect(purposes).toEqual(['Spray irrigation'])
           })
         })
       })
@@ -166,7 +159,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
 
             const { returnsCycle } = result.requirements[0]
 
-            expect(returnsCycle).to.equal('Summer')
+            expect(returnsCycle).toEqual('Summer')
           })
         })
 
@@ -180,7 +173,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
 
             const { returnsCycle } = result.requirements[0]
 
-            expect(returnsCycle).to.equal('Winter and all year')
+            expect(returnsCycle).toEqual('Winter and all year')
           })
         })
       })
@@ -195,7 +188,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
       it('correctly presents the data (empty requirements)', () => {
         const result = ReturnRequirementsPresenter.go([requirement], [point], journey)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           returnsRequired: true,
           requirements: []
         })

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
@@ -51,13 +46,13 @@ describe('Bill Runs - Send Bill Run service', () => {
         // Check we set the bill run status
         const [patchObject] = billRunPatchStub.args[0]
 
-        expect(patchObject).to.equal({ status: 'sending' }, { skip: ['updatedAt'] })
+        expect(patchObject).toMatchObject({ status: 'sending' })
       })
 
       it('returns an instance of the bill run with its status set to "sending"', async () => {
         const result = await SendBillBunService.go(billRun.id)
 
-        expect(result).to.equal({ ...billRun, status: 'sending' })
+        expect(result).toEqual({ ...billRun, status: 'sending' })
       })
     })
 
@@ -76,20 +71,20 @@ describe('Bill Runs - Send Bill Run service', () => {
         await SendBillBunService.go(billRun.id)
 
         // Check we do not change the bill run status
-        expect(billRunPatchStub.called).to.be.false()
+        expect(billRunPatchStub.called).toBe(false)
       })
 
       it('returns an instance of the bill run with its status unchanged', async () => {
         const result = await SendBillBunService.go(billRun.id)
 
-        expect(result).to.equal(billRun)
+        expect(result).toEqual(billRun)
       })
     })
   })
 
   describe('when the bill run does not exist', () => {
     it('throws as error', async () => {
-      await expect(SendBillBunService.go('47e66de7-f05f-42d2-8fef-640b55150919')).to.reject()
+      await expect(SendBillBunService.go('47e66de7-f05f-42d2-8fef-640b55150919')).rejects.toThrow()
     })
   })
 })

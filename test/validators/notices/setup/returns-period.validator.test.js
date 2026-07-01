@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ReturnsPeriodValidator = require('../../../../app/validators/notices/setup/returns-periods.validator.js')
 
@@ -17,8 +10,8 @@ describe('Notices - Setup - Returns Period validator', () => {
     it('confirms the data is valid', () => {
       const result = ReturnsPeriodValidator.go({ returnsPeriod: 'summer' }, noticeType)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -27,9 +20,9 @@ describe('Notices - Setup - Returns Period validator', () => {
       it('fails validation', () => {
         const result = ReturnsPeriodValidator.go({ returnsPeriod: '' }, noticeType)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select the returns periods for the invitations')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select the returns periods for the invitations')
       })
     })
 
@@ -37,9 +30,9 @@ describe('Notices - Setup - Returns Period validator', () => {
       it('fails validation', () => {
         const result = ReturnsPeriodValidator.go({ returnsPeriod: 'just-because' }, noticeType)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select the returns periods for the invitations')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select the returns periods for the invitations')
       })
     })
   })

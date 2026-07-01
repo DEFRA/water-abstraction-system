@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
@@ -51,7 +46,7 @@ describe('Users - Internal - View Notifications Service', () => {
       it('returns "protected" page data for the view', async () => {
         const result = await ViewNotificationService.go(notification.id, user.id, type, auth)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'users',
           backLink: {
             href: `/system/users/${type}/${user.id}/communications`,
@@ -77,7 +72,7 @@ describe('Users - Internal - View Notifications Service', () => {
       it('returns "full" page data for the view', async () => {
         const result = await ViewNotificationService.go(notification.id, user.id, type, auth)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'users',
           backLink: {
             href: `/system/users/${type}/${user.id}/communications`,

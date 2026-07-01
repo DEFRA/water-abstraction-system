@@ -1,14 +1,10 @@
 'use strict'
 
-const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
-
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
+// Test helpers
+const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
 
 // Things we need to stub
 const CheckAllLicenceEndDatesService = require('../../app/services/licences/end-dates/check-all-licence-end-dates.service.js')
@@ -22,7 +18,7 @@ describe('Licences End Dates controller', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
   })
 
@@ -39,6 +35,10 @@ describe('Licences End Dates controller', () => {
     Sinon.restore()
   })
 
+  afterAll(async () => {
+    await server.stop()
+  })
+
   describe('/licences/end-dates/check', () => {
     describe('POST', () => {
       beforeEach(() => {
@@ -53,7 +53,7 @@ describe('Licences End Dates controller', () => {
         it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
+          expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
         })
       })
     })
@@ -73,7 +73,7 @@ describe('Licences End Dates controller', () => {
         it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
+          expect(response.statusCode).toEqual(HTTP_STATUS_NO_CONTENT)
         })
       })
     })

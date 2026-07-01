@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
@@ -42,7 +37,7 @@ describe('Handle Errored Bill Run service', () => {
 
       const result = await billRun.$query()
 
-      expect(result.status).to.equal('error')
+      expect(result.status).toEqual('error')
     })
 
     describe('when no error code is passed', () => {
@@ -51,7 +46,7 @@ describe('Handle Errored Bill Run service', () => {
 
         const result = await billRun.$query()
 
-        expect(result.errorCode).to.be.null()
+        expect(result.errorCode).toBeNull()
       })
     })
 
@@ -61,7 +56,7 @@ describe('Handle Errored Bill Run service', () => {
 
         const result = await billRun.$query()
 
-        expect(result.errorCode).to.equal(40)
+        expect(result.errorCode).toEqual(40)
       })
     })
   })
@@ -69,7 +64,7 @@ describe('Handle Errored Bill Run service', () => {
   describe('when the service is called unsuccessfully', () => {
     describe('because patching the bill run fails', () => {
       it('handles the error', async () => {
-        await expect(HandleErroredBillRunService.go(billRun.id, 'INVALID_ERROR_CODE')).not.to.reject()
+        await HandleErroredBillRunService.go(billRun.id, 'INVALID_ERROR_CODE')
       })
 
       it('logs an error', async () => {
@@ -79,9 +74,9 @@ describe('Handle Errored Bill Run service', () => {
 
         const logDataArg = notifierStub.omfg.firstCall.args[1]
 
-        expect(notifierStub.omfg.calledWith('Failed to set error status on bill run')).to.be.true()
-        expect(logDataArg.billRunId).to.equal(billRun.id)
-        expect(logDataArg.errorCode).to.equal('INVALID_ERROR_CODE')
+        expect(notifierStub.omfg.calledWith('Failed to set error status on bill run')).toBe(true)
+        expect(logDataArg.billRunId).toEqual(billRun.id)
+        expect(logDataArg.errorCode).toEqual('INVALID_ERROR_CODE')
       })
     })
   })

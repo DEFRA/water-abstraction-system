@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const FetchOtherPurposeIdsDal = require('../../../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js')
@@ -116,8 +111,8 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
       const results = await GenerateReturnVersionRequirementsService.go(licenceId, sessionRequirements)
 
       // We expect two return requirements to be generated from our session data
-      expect(results).to.have.length(2)
-      expect(results).to.equal([
+      expect(results).toHaveLength(2)
+      expect(results).toEqual([
         {
           abstractionPeriodStartDay: '1',
           abstractionPeriodStartMonth: '4',
@@ -176,10 +171,10 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
 
       // Because the two session data requirements share the same purpose, but the second has an additional one, we
       // expect the FetchOtherPurposeIdsService to be called three times - once for each 'valid' purpose
-      expect(fetchOtherPurposeIdsStub.callCount).to.equal(3)
-      expect(fetchOtherPurposeIdsStub.getCall(0).args).to.equal([licenceId, 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'])
-      expect(fetchOtherPurposeIdsStub.getCall(1).args).to.equal([licenceId, 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'])
-      expect(fetchOtherPurposeIdsStub.getCall(2).args).to.equal([licenceId, '58855070-25d1-4f17-92e5-2a67721a4434'])
+      expect(fetchOtherPurposeIdsStub.callCount).toEqual(3)
+      expect(fetchOtherPurposeIdsStub.getCall(0).args).toEqual([licenceId, 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'])
+      expect(fetchOtherPurposeIdsStub.getCall(1).args).toEqual([licenceId, 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'])
+      expect(fetchOtherPurposeIdsStub.getCall(2).args).toEqual([licenceId, '58855070-25d1-4f17-92e5-2a67721a4434'])
     })
   })
 })

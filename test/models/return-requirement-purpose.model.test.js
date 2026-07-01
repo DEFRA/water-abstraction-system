@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
 const PrimaryPurposeModel = require('../../app/models/primary-purpose.model.js')
@@ -28,7 +21,7 @@ describe('Return Requirement Purpose model', () => {
   let testReturnRequirement
   let testSecondaryPurpose
 
-  before(async () => {
+  beforeAll(async () => {
     testPrimaryPurpose = PrimaryPurposeHelper.select()
     testPurpose = PurposeHelper.select()
     testReturnRequirement = await ReturnRequirementHelper.add()
@@ -42,7 +35,7 @@ describe('Return Requirement Purpose model', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testReturnRequirement.$query().delete()
 
     await testRecord.$query().delete()
@@ -52,8 +45,8 @@ describe('Return Requirement Purpose model', () => {
     it('can successfully run a basic query', async () => {
       const result = await ReturnRequirementPurposeModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(ReturnRequirementPurposeModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(ReturnRequirementPurposeModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -62,7 +55,7 @@ describe('Return Requirement Purpose model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReturnRequirementPurposeModel.query().innerJoinRelated('primaryPurpose')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the primary purpose', async () => {
@@ -70,11 +63,11 @@ describe('Return Requirement Purpose model', () => {
           .findById(testRecord.id)
           .withGraphFetched('primaryPurpose')
 
-        expect(result).to.be.instanceOf(ReturnRequirementPurposeModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReturnRequirementPurposeModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.primaryPurpose).to.be.an.instanceOf(PrimaryPurposeModel)
-        expect(result.primaryPurpose).to.equal(testPrimaryPurpose, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.primaryPurpose).toBeInstanceOf(PrimaryPurposeModel)
+        expect(result.primaryPurpose).toMatchObject(testPrimaryPurpose)
       })
     })
 
@@ -82,17 +75,17 @@ describe('Return Requirement Purpose model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReturnRequirementPurposeModel.query().innerJoinRelated('purpose')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the purpose', async () => {
         const result = await ReturnRequirementPurposeModel.query().findById(testRecord.id).withGraphFetched('purpose')
 
-        expect(result).to.be.instanceOf(ReturnRequirementPurposeModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReturnRequirementPurposeModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.purpose).to.be.an.instanceOf(PurposeModel)
-        expect(result.purpose).to.equal(testPurpose, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.purpose).toBeInstanceOf(PurposeModel)
+        expect(result.purpose).toMatchObject(testPurpose)
       })
     })
 
@@ -100,7 +93,7 @@ describe('Return Requirement Purpose model', () => {
       it('can successfully run a related query', async () => {
         const query = await ReturnRequirementPurposeModel.query().innerJoinRelated('returnRequirement')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the charge reference', async () => {
@@ -108,11 +101,11 @@ describe('Return Requirement Purpose model', () => {
           .findById(testRecord.id)
           .withGraphFetched('returnRequirement')
 
-        expect(result).to.be.instanceOf(ReturnRequirementPurposeModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(ReturnRequirementPurposeModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.returnRequirement).to.be.an.instanceOf(ReturnRequirementModel)
-        expect(result.returnRequirement).to.equal(testReturnRequirement)
+        expect(result.returnRequirement).toBeInstanceOf(ReturnRequirementModel)
+        expect(result.returnRequirement).toEqual(testReturnRequirement)
       })
     })
   })
@@ -121,7 +114,7 @@ describe('Return Requirement Purpose model', () => {
     it('can successfully run a related query', async () => {
       const query = await ReturnRequirementPurposeModel.query().innerJoinRelated('secondaryPurpose')
 
-      expect(query).to.exist()
+      expect(query).toBeDefined()
     })
 
     it('can eager load the secondary purpose', async () => {
@@ -129,11 +122,11 @@ describe('Return Requirement Purpose model', () => {
         .findById(testRecord.id)
         .withGraphFetched('secondaryPurpose')
 
-      expect(result).to.be.instanceOf(ReturnRequirementPurposeModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(ReturnRequirementPurposeModel)
+      expect(result.id).toEqual(testRecord.id)
 
-      expect(result.secondaryPurpose).to.be.an.instanceOf(SecondaryPurposeModel)
-      expect(result.secondaryPurpose.id).to.equal(testSecondaryPurpose.id)
+      expect(result.secondaryPurpose).toBeInstanceOf(SecondaryPurposeModel)
+      expect(result.secondaryPurpose.id).toEqual(testSecondaryPurpose.id)
     })
   })
 })

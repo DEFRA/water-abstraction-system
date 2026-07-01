@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
@@ -58,7 +53,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       it('returns page data for the view', async () => {
         const result = await ViewCheckService.go(session.id, yarStub)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           abstractionAlertsLabel: 'Yes, for all licences',
           email: 'eric@test.com',
           emailInUse: null,
@@ -86,8 +81,8 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('updates the session', async () => {
           await ViewCheckService.go(session.id, yarStub)
 
-          expect(session.checkPageVisited).to.be.true()
-          expect(session.$update.called).to.be.true()
+          expect(session.checkPageVisited).toBe(true)
+          expect(session.$update.called).toBe(true)
         })
       })
     })
@@ -110,9 +105,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       it('updates the session', async () => {
         await ViewCheckService.go(session.id, yarStub)
 
-        expect(session.matchingContact).to.equal(matchingContact, {
-          skip: ['createdAt', 'deletedAt', 'updatedAt']
-        })
+        expect(session.matchingContact).toMatchObject(matchingContact)
       })
     })
   })

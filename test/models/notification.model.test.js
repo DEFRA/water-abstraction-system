@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const EventHelper = require('../support/helpers/event.helper.js')
 const EventModel = require('../../app/models/event.model.js')
@@ -22,7 +15,7 @@ describe('Notification model', () => {
   let testLicenceMonitoringStation
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     testEvent = await EventHelper.add()
     testLicenceMonitoringStation = await LicenceMonitoringStationHelper.add()
 
@@ -32,7 +25,7 @@ describe('Notification model', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testEvent.$query().delete()
     await testLicenceMonitoringStation.$query().delete()
 
@@ -43,8 +36,8 @@ describe('Notification model', () => {
     it('can successfully run a basic query', async () => {
       const result = await NotificationModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(NotificationModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(NotificationModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -53,17 +46,17 @@ describe('Notification model', () => {
       it('can successfully run a related query', async () => {
         const query = await NotificationModel.query().innerJoinRelated('event')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the event', async () => {
         const result = await NotificationModel.query().findById(testRecord.id).withGraphFetched('event')
 
-        expect(result).to.be.instanceOf(NotificationModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(NotificationModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.event).to.be.an.instanceOf(EventModel)
-        expect(result.event).to.include(testEvent)
+        expect(result.event).toBeInstanceOf(EventModel)
+        expect(result.event).toMatchObject(testEvent)
       })
     })
 
@@ -71,7 +64,7 @@ describe('Notification model', () => {
       it('can successfully run a related query', async () => {
         const query = await NotificationModel.query().innerJoinRelated('licenceMonitoringStation')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the event', async () => {
@@ -79,11 +72,11 @@ describe('Notification model', () => {
           .findById(testRecord.id)
           .withGraphFetched('licenceMonitoringStation')
 
-        expect(result).to.be.instanceOf(NotificationModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(NotificationModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceMonitoringStation).to.be.an.instanceOf(LicenceMonitoringStationModel)
-        expect(result.licenceMonitoringStation).to.include(testLicenceMonitoringStation)
+        expect(result.licenceMonitoringStation).toBeInstanceOf(LicenceMonitoringStationModel)
+        expect(result.licenceMonitoringStation).toMatchObject(testLicenceMonitoringStation)
       })
     })
   })

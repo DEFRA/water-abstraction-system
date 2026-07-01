@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, after, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AddressHelper = require('../../support/helpers/address.helper.js')
 const CompanyAddressHelper = require('../../support/helpers/company-address.helper.js')
@@ -28,7 +21,7 @@ describe('Companies - Fetch Company details dal', () => {
   let companyAddressEndDateInPast
   let companyAddressNoEndDate
 
-  before(async () => {
+  beforeAll(async () => {
     const licenceRoleId = LicenceRoleHelper.select('licenceHolder').id
 
     company = await CompanyHelper.add()
@@ -68,7 +61,7 @@ describe('Companies - Fetch Company details dal', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await addressDifferentRole.$query().delete()
     await companyAddressDifferentRole.$query().delete()
 
@@ -88,7 +81,7 @@ describe('Companies - Fetch Company details dal', () => {
     it("returns the matching company's details and _all_ addresses for the specified role", async () => {
       const result = await FetchCompanyDetailsDal.go(company.id, 'licenceHolder')
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         id: company.id,
         name: 'Example Trading Ltd',
         companyAddresses: [
@@ -148,7 +141,7 @@ describe('Companies - Fetch Company details dal', () => {
       it("returns the matching company's details and no addresses", async () => {
         const result = await FetchCompanyDetailsDal.go(company.id, 'billing')
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           id: company.id,
           name: 'Example Trading Ltd',
           companyAddresses: []

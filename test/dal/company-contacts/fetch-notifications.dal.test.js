@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const EventHelper = require('../../support/helpers/event.helper.js')
 const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
@@ -63,7 +56,7 @@ describe('Company contact - Fetch Notifications DAL', () => {
     it('returns the matching notifications', async () => {
       const result = await FetchNotificationsDal.go(email)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         notifications: [
           {
             createdAt: notificationTwo.createdAt,
@@ -103,7 +96,7 @@ describe('Company contact - Fetch Notifications DAL', () => {
     it('returns no notifications', async () => {
       const result = await FetchNotificationsDal.go(email)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         notifications: [],
         totalNumber: 0
       })
@@ -118,7 +111,7 @@ describe('Company contact - Fetch Notifications DAL', () => {
     it('returns no notifications', async () => {
       const result = await FetchNotificationsDal.go(email)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         notifications: [],
         totalNumber: 0
       })

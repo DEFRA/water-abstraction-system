@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const TwoPartTariffSupplementarySeeder = require('../../../support/seeders/two-part-tariff-supplementary.seeder.js')
 
@@ -29,9 +22,9 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
       it('returns the applicable billing account, charge information, and review results', async () => {
         const results = await FetchBillingAccountsService.go(seedData.billRun.id, seedData.billingPeriod)
 
-        expect(results).to.have.length(1)
+        expect(results).toHaveLength(1)
 
-        expect(results[0]).to.equal({
+        expect(results[0]).toEqual({
           id: seedData.billingAccount.id,
           accountNumber: seedData.billingAccount.accountNumber,
           chargeVersions: [
@@ -110,9 +103,9 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
       it('returns both billing accounts, charge information, and review results for the applicable charge version', async () => {
         const results = await FetchBillingAccountsService.go(seedData.billRun.id, seedData.billingPeriod)
 
-        expect(results).to.have.length(2)
+        expect(results).toHaveLength(2)
 
-        expect(results).to.equal([
+        expect(results).toEqual([
           {
             id: seedData.billingAccountB.id,
             accountNumber: seedData.billingAccountB.accountNumber,
@@ -223,9 +216,9 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
       it('returns the applicable billing account, just the chargeable charge information, but no review results', async () => {
         const results = await FetchBillingAccountsService.go(seedData.billRun.id, seedData.billingPeriod)
 
-        expect(results).to.have.length(1)
+        expect(results).toHaveLength(1)
 
-        expect(results[0]).to.equal({
+        expect(results[0]).toEqual({
           id: seedData.billingAccount.id,
           accountNumber: seedData.billingAccount.accountNumber,
           chargeVersions: [
@@ -266,9 +259,9 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
       it('returns the applicable billing account, both sets of charge information, but no review results', async () => {
         const results = await FetchBillingAccountsService.go(seedData.billRun.id, seedData.billingPeriod)
 
-        expect(results).to.have.length(1)
+        expect(results).toHaveLength(1)
 
-        expect(results[0]).to.equal({
+        expect(results[0]).toEqual({
           id: seedData.billingAccount.id,
           accountNumber: seedData.billingAccount.accountNumber,
           chargeVersions: [
@@ -334,9 +327,9 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
     it('does not duplicate the results', async () => {
       const results = await FetchBillingAccountsService.go(seedData.billRun.id, seedData.billingPeriod)
 
-      expect(results).to.have.length(1)
+      expect(results).toHaveLength(1)
 
-      expect(results[0]).to.equal({
+      expect(results[0]).toEqual({
         id: seedData.billingAccount.id,
         accountNumber: seedData.billingAccount.accountNumber,
         chargeVersions: [
@@ -411,10 +404,10 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
   //   it('returns the applicable billing accounts', async () => {
   //     const results = await FetchBillingAccountsService.go(billRun.id, billingPeriod)
 
-  //     expect(results).to.have.length(1)
+  //     expect(results).toHaveLength(1)
 
-  //     expect(results[0].id).to.equal(billingAccount1A.id)
-  //     expect(results[0].accountNumber).to.equal(billingAccount1A.accountNumber)
+  //     expect(results[0].id).toEqual(billingAccount1A.id)
+  //     expect(results[0].accountNumber).toEqual(billingAccount1A.accountNumber)
   //   })
 
   //   describe('and each billing account', () => {
@@ -422,23 +415,23 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
   //       it('returns the applicable charge versions', async () => {
   //         const results = await FetchBillingAccountsService.go(billRun.id, billingPeriod)
 
-  //         expect(results[0].chargeVersions).to.have.length(2)
+  //         expect(results[0].chargeVersions).toHaveLength(2)
 
   //         const [tptChargeVersionResult, nonTptChargeVersionResult] = results[0].chargeVersions
 
-  //         expect(tptChargeVersionResult.id).to.equal(chargeVersion1B.id)
-  //         expect(tptChargeVersionResult.scheme).to.equal('sroc')
-  //         expect(tptChargeVersionResult.startDate).to.equal(new Date('2023-04-01'))
-  //         expect(tptChargeVersionResult.endDate).to.equal(new Date('2023-09-30'))
-  //         expect(tptChargeVersionResult.billingAccountId).to.equal(billingAccount1A.id)
-  //         expect(tptChargeVersionResult.status).to.equal('current')
+  //         expect(tptChargeVersionResult.id).toEqual(chargeVersion1B.id)
+  //         expect(tptChargeVersionResult.scheme).toEqual('sroc')
+  //         expect(tptChargeVersionResult.startDate).toEqual(new Date('2023-04-01'))
+  //         expect(tptChargeVersionResult.endDate).toEqual(new Date('2023-09-30'))
+  //         expect(tptChargeVersionResult.billingAccountId).toEqual(billingAccount1A.id)
+  //         expect(tptChargeVersionResult.status).toEqual('current')
 
-  //         expect(nonTptChargeVersionResult.id).to.equal(chargeVersion1C.id)
-  //         expect(nonTptChargeVersionResult.scheme).to.equal('sroc')
-  //         expect(nonTptChargeVersionResult.startDate).to.equal(new Date('2023-10-01'))
-  //         expect(nonTptChargeVersionResult.endDate).to.be.null()
-  //         expect(nonTptChargeVersionResult.billingAccountId).to.equal(billingAccount1A.id)
-  //         expect(nonTptChargeVersionResult.status).to.equal('current')
+  //         expect(nonTptChargeVersionResult.id).toEqual(chargeVersion1C.id)
+  //         expect(nonTptChargeVersionResult.scheme).toEqual('sroc')
+  //         expect(nonTptChargeVersionResult.startDate).toEqual(new Date('2023-10-01'))
+  //         expect(nonTptChargeVersionResult.endDate).toBeNull()
+  //         expect(nonTptChargeVersionResult.billingAccountId).toEqual(billingAccount1A.id)
+  //         expect(nonTptChargeVersionResult.status).toEqual('current')
   //       })
   //     })
 
@@ -448,24 +441,24 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
   //         let licence = results[0].chargeVersions[0].licence
 
-  //         expect(licence.id).to.equal(licence.id)
-  //         expect(licence.licenceRef).to.equal(licence.licenceRef)
-  //         expect(licence.waterUndertaker).to.equal(false)
-  //         expect(licence.historicalAreaCode).to.equal('SAAR')
-  //         expect(licence.regionalChargeArea).to.equal('Southern')
-  //         expect(licence.region).to.equal({
+  //         expect(licence.id).toEqual(licence.id)
+  //         expect(licence.licenceRef).toEqual(licence.licenceRef)
+  //         expect(licence.waterUndertaker).toEqual(false)
+  //         expect(licence.historicalAreaCode).toEqual('SAAR')
+  //         expect(licence.regionalChargeArea).toEqual('Southern')
+  //         expect(licence.region).toEqual({
   //           id: region.id,
   //           chargeRegionId: region.chargeRegionId
   //         })
 
   //         licence = results[0].chargeVersions[1].licence
 
-  //         expect(licence.id).to.equal(licence.id)
-  //         expect(licence.licenceRef).to.equal(licence.licenceRef)
-  //         expect(licence.waterUndertaker).to.equal(false)
-  //         expect(licence.historicalAreaCode).to.equal('SAAR')
-  //         expect(licence.regionalChargeArea).to.equal('Southern')
-  //         expect(licence.region).to.equal({
+  //         expect(licence.id).toEqual(licence.id)
+  //         expect(licence.licenceRef).toEqual(licence.licenceRef)
+  //         expect(licence.waterUndertaker).toEqual(false)
+  //         expect(licence.historicalAreaCode).toEqual('SAAR')
+  //         expect(licence.regionalChargeArea).toEqual('Southern')
+  //         expect(licence.region).toEqual({
   //           id: region.id,
   //           chargeRegionId: region.chargeRegionId
   //         })
@@ -477,11 +470,11 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
   //           const { chargeReferences } = results[0].chargeVersions[0]
 
-  //           expect(chargeReferences[0].id).to.equal(chargeReference1B.id)
-  //           expect(chargeReferences[0].source).to.equal('non-tidal')
-  //           expect(chargeReferences[0].loss).to.equal('low')
-  //           expect(chargeReferences[0].volume).to.equal(6.819)
-  //           expect(chargeReferences[0].adjustments).to.equal({
+  //           expect(chargeReferences[0].id).toEqual(chargeReference1B.id)
+  //           expect(chargeReferences[0].source).toEqual('non-tidal')
+  //           expect(chargeReferences[0].loss).toEqual('low')
+  //           expect(chargeReferences[0].volume).toEqual(6.819)
+  //           expect(chargeReferences[0].adjustments).toEqual({
   //             s126: null,
   //             s127: true,
   //             s130: false,
@@ -489,8 +482,8 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
   //             winter: false,
   //             aggregate: 0.562114443
   //           })
-  //           expect(chargeReferences[0].additionalCharges).to.equal({ isSupplyPublicWater: true })
-  //           expect(chargeReferences[0].description).to.equal('Mineral washing')
+  //           expect(chargeReferences[0].additionalCharges).toEqual({ isSupplyPublicWater: true })
+  //           expect(chargeReferences[0].description).toEqual('Mineral washing')
   //         })
 
   //         describe('and against each charge reference', () => {
@@ -499,9 +492,9 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
   //             const { chargeCategory: result } = results[0].chargeVersions[0].chargeReferences[0]
 
-  //             expect(result.id).to.equal(chargeCategory.id)
-  //             expect(result.reference).to.equal(chargeCategory.reference)
-  //             expect(result.shortDescription).to.equal(chargeCategory.shortDescription)
+  //             expect(result.id).toEqual(chargeCategory.id)
+  //             expect(result.reference).toEqual(chargeCategory.reference)
+  //             expect(result.shortDescription).toEqual(chargeCategory.shortDescription)
   //           })
 
   //           it('includes the review charge references', async () => {
@@ -509,10 +502,10 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
   //             const { reviewChargeReferences: result } = results[0].chargeVersions[0].chargeReferences[0]
 
-  //             expect(result[0].id).to.equal(reviewChargeReference1B.id)
-  //             expect(result[0].amendedAggregate).to.equal(reviewChargeReference1B.amendedAggregate)
-  //             expect(result[0].amendedChargeAdjustment).to.equal(reviewChargeReference1B.amendedChargeAdjustment)
-  //             expect(result[0].amendedAuthorisedVolume).to.equal(reviewChargeReference1B.amendedAuthorisedVolume)
+  //             expect(result[0].id).toEqual(reviewChargeReference1B.id)
+  //             expect(result[0].amendedAggregate).toEqual(reviewChargeReference1B.amendedAggregate)
+  //             expect(result[0].amendedChargeAdjustment).toEqual(reviewChargeReference1B.amendedChargeAdjustment)
+  //             expect(result[0].amendedAuthorisedVolume).toEqual(reviewChargeReference1B.amendedAuthorisedVolume)
   //           })
 
   //           it('includes the charge elements', async () => {
@@ -520,11 +513,11 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
   //             const { chargeElements: result } = results[0].chargeVersions[0].chargeReferences[0]
 
-  //             expect(result[0].id).to.equal(chargeElement1B.id)
-  //             expect(result[0].abstractionPeriodStartDay).to.equal(chargeElement1B.abstractionPeriodStartDay)
-  //             expect(result[0].abstractionPeriodStartMonth).to.equal(chargeElement1B.abstractionPeriodStartMonth)
-  //             expect(result[0].abstractionPeriodEndDay).to.equal(chargeElement1B.abstractionPeriodEndDay)
-  //             expect(result[0].abstractionPeriodEndMonth).to.equal(chargeElement1B.abstractionPeriodEndMonth)
+  //             expect(result[0].id).toEqual(chargeElement1B.id)
+  //             expect(result[0].abstractionPeriodStartDay).toEqual(chargeElement1B.abstractionPeriodStartDay)
+  //             expect(result[0].abstractionPeriodStartMonth).toEqual(chargeElement1B.abstractionPeriodStartMonth)
+  //             expect(result[0].abstractionPeriodEndDay).toEqual(chargeElement1B.abstractionPeriodEndDay)
+  //             expect(result[0].abstractionPeriodEndMonth).toEqual(chargeElement1B.abstractionPeriodEndMonth)
   //           })
 
   //           describe('and against each charge element', () => {
@@ -534,8 +527,8 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
   //               const { reviewChargeElements: result } =
   //                 results[0].chargeVersions[0].chargeReferences[0].chargeElements[0]
 
-  //               expect(result[0].id).to.equal(reviewChargeElement1B.id)
-  //               expect(result[0].amendedAllocated).to.equal(reviewChargeElement1B.amendedAllocated)
+  //               expect(result[0].id).toEqual(reviewChargeElement1B.id)
+  //               expect(result[0].amendedAllocated).toEqual(reviewChargeElement1B.amendedAllocated)
   //             })
   //           })
   //         })
@@ -547,7 +540,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
   //           const { chargeReferences } = results[0].chargeVersions[1]
 
-  //           expect(chargeReferences).to.be.empty()
+  //           expect(chargeReferences).toHaveLength(0)
   //         })
   //       })
   //     })
@@ -559,28 +552,28 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
   //     it('merges the billing account record into one result', async () => {
   //       const results = await FetchBillingAccountsService.go(billRun.id, billingPeriod)
 
-  //       expect(results).to.have.length(1)
+  //       expect(results).toHaveLength(1)
 
-  //       expect(results[0].id).to.equal(billingAccount1A.id)
-  //       expect(results[0].accountNumber).to.equal(billingAccount1A.accountNumber)
+  //       expect(results[0].id).toEqual(billingAccount1A.id)
+  //       expect(results[0].accountNumber).toEqual(billingAccount1A.accountNumber)
 
-  //       expect(results[0].chargeVersions).to.have.length(3)
+  //       expect(results[0].chargeVersions).toHaveLength(3)
 
   //       // The TPT charge version
-  //       expect(results[0].chargeVersions[0].id).to.equal(chargeVersion1B.id)
-  //       expect(results[0].chargeVersions[0].licence.id).to.equal(licence1.id)
-  //       expect(results[0].chargeVersions[0].licence.licenceRef).to.equal(licence1.licenceRef)
+  //       expect(results[0].chargeVersions[0].id).toEqual(chargeVersion1B.id)
+  //       expect(results[0].chargeVersions[0].licence.id).toEqual(licence1.id)
+  //       expect(results[0].chargeVersions[0].licence.licenceRef).toEqual(licence1.licenceRef)
 
   //       // The non-TPT charge version
-  //       expect(results[0].chargeVersions[1].id).to.equal(chargeVersion1C.id)
-  //       expect(results[0].chargeVersions[1].licence.id).to.equal(licence1.id)
-  //       expect(results[0].chargeVersions[1].licence.licenceRef).to.equal(licence1.licenceRef)
+  //       expect(results[0].chargeVersions[1].id).toEqual(chargeVersion1C.id)
+  //       expect(results[0].chargeVersions[1].licence.id).toEqual(licence1.id)
+  //       expect(results[0].chargeVersions[1].licence.licenceRef).toEqual(licence1.licenceRef)
 
   //       // The non-chargeable charge version
-  //       expect(results[0].chargeVersions[2].licence.id).to.equal(
+  //       expect(results[0].chargeVersions[2].licence.id).toEqual(
   //         nonChargeableMergedBillingAccount.chargeVersions[0].licence.id
   //       )
-  //       expect(results[0].chargeVersions[2].licence.licenceRef).to.equal(
+  //       expect(results[0].chargeVersions[2].licence.licenceRef).toEqual(
   //         nonChargeableMergedBillingAccount.chargeVersions[0].licence.licenceRef
   //       )
   //     })
@@ -590,34 +583,34 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
   //     it('adds the billing account record to the results', async () => {
   //       const results = await FetchBillingAccountsService.go(billRun.id, billingPeriod)
 
-  //       expect(results).to.have.length(2)
+  //       expect(results).toHaveLength(2)
 
   //       // Billing account found by this service
-  //       expect(results[0].id).to.equal(billingAccount1A.id)
-  //       expect(results[0].accountNumber).to.equal(billingAccount1A.accountNumber)
+  //       expect(results[0].id).toEqual(billingAccount1A.id)
+  //       expect(results[0].accountNumber).toEqual(billingAccount1A.accountNumber)
 
-  //       expect(results[0].chargeVersions).to.have.length(2)
+  //       expect(results[0].chargeVersions).toHaveLength(2)
 
   //       // The TPT charge version
-  //       expect(results[0].chargeVersions[0].id).to.equal(chargeVersion1B.id)
-  //       expect(results[0].chargeVersions[0].licence.id).to.equal(licence1.id)
-  //       expect(results[0].chargeVersions[0].licence.licenceRef).to.equal(licence1.licenceRef)
+  //       expect(results[0].chargeVersions[0].id).toEqual(chargeVersion1B.id)
+  //       expect(results[0].chargeVersions[0].licence.id).toEqual(licence1.id)
+  //       expect(results[0].chargeVersions[0].licence.licenceRef).toEqual(licence1.licenceRef)
 
   //       // The non-TPT charge version
-  //       expect(results[0].chargeVersions[1].id).to.equal(chargeVersion1C.id)
-  //       expect(results[0].chargeVersions[1].licence.id).to.equal(licence1.id)
-  //       expect(results[0].chargeVersions[1].licence.licenceRef).to.equal(licence1.licenceRef)
+  //       expect(results[0].chargeVersions[1].id).toEqual(chargeVersion1C.id)
+  //       expect(results[0].chargeVersions[1].licence.id).toEqual(licence1.id)
+  //       expect(results[0].chargeVersions[1].licence.licenceRef).toEqual(licence1.licenceRef)
 
   //       // Billing account found by FetchNonChargeableBillingAccounts
-  //       expect(results[1].id).to.equal(nonChargeableNewBillingAccount.id)
-  //       expect(results[1].accountNumber).to.equal(nonChargeableNewBillingAccount.accountNumber)
+  //       expect(results[1].id).toEqual(nonChargeableNewBillingAccount.id)
+  //       expect(results[1].accountNumber).toEqual(nonChargeableNewBillingAccount.accountNumber)
 
-  //       expect(results[1].chargeVersions).to.have.length(1)
+  //       expect(results[1].chargeVersions).toHaveLength(1)
 
-  //       expect(results[1].chargeVersions[0].licence.id).to.equal(
+  //       expect(results[1].chargeVersions[0].licence.id).toEqual(
   //         nonChargeableNewBillingAccount.chargeVersions[0].licence.id
   //       )
-  //       expect(results[1].chargeVersions[0].licence.licenceRef).to.equal(
+  //       expect(results[1].chargeVersions[0].licence.licenceRef).toEqual(
   //         nonChargeableNewBillingAccount.chargeVersions[0].licence.licenceRef
   //       )
   //     })
@@ -628,9 +621,9 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
   //   it('does not include them in the results', async () => {
   //     const results = await FetchBillingAccountsService.go(billRun.id, billingPeriod)
 
-  //     expect(results).to.have.length(1)
+  //     expect(results).toHaveLength(1)
 
-  //     expect(results[0].id).not.to.equal(billingAccountNotInBillRun.id)
+  //     expect(results[0].id).not.toEqual(billingAccountNotInBillRun.id)
   //   })
   // })
 
@@ -641,7 +634,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
         seedData.billingPeriod
       )
 
-      expect(results).to.be.empty()
+      expect(results).toHaveLength(0)
     })
   })
 })

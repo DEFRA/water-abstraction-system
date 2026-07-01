@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
@@ -21,7 +14,7 @@ describe('Licence Monitoring Station - Fetch Licence Monitoring Station service'
   let licence
   let monitoringStation
 
-  before(async () => {
+  beforeAll(async () => {
     licence = await LicenceHelper.add()
     monitoringStation = await MonitoringStationHelper.add({
       catchmentName: 'The Catchment',
@@ -53,7 +46,7 @@ describe('Licence Monitoring Station - Fetch Licence Monitoring Station service'
     it('returns the matching data', async () => {
       const result = await FetchLicenceMonitoringStationService.go(licenceMonitoringStation.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         id: licenceMonitoringStation.id,
         measureType: 'flow',
         restrictionType: 'reduce',
@@ -94,7 +87,7 @@ describe('Licence Monitoring Station - Fetch Licence Monitoring Station service'
     it('returns the matching data', async () => {
       const result = await FetchLicenceMonitoringStationService.go(licenceMonitoringStation.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         id: licenceMonitoringStation.id,
         measureType: 'flow',
         restrictionType: 'reduce',

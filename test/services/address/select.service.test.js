@@ -3,12 +3,7 @@
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../support/stubs/session.stub.js')
@@ -81,7 +76,7 @@ describe('Address - Select service', () => {
       it('returns page data for the view', async () => {
         const result = await SelectService.go(sessionId)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'manage',
           addresses: [
             {
@@ -123,7 +118,7 @@ describe('Address - Select service', () => {
       it('returns page data that causes a redirect to the manual page', async () => {
         const result = await SelectService.go(sessionId)
 
-        expect(result).to.equal({ redirect: true })
+        expect(result).toEqual({ redirect: true })
       })
     })
 
@@ -146,7 +141,7 @@ describe('Address - Select service', () => {
       it('returns page data that causes a redirect to the manual page', async () => {
         const result = await SelectService.go(sessionId)
 
-        expect(result).to.equal({ redirect: true })
+        expect(result).toEqual({ redirect: true })
       })
     })
   })

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const NotificationsFixture = require('../../../../support/fixtures/notifications.fixture.js')
@@ -52,7 +47,7 @@ describe('Notices - Setup - Send - Send Paper Return Notification service', () =
     it('should return the notification notify response', async () => {
       const result = await SendPaperReturnNotificationService.go(notification, referenceCode)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         id: notification.id,
         notifyId: notifyResponse.response.body.id,
         notifyStatus: 'created',
@@ -74,7 +69,7 @@ describe('Notices - Setup - Send - Send Paper Return Notification service', () =
     it('should return the notification notify response', async () => {
       const result = await SendPaperReturnNotificationService.go(notification, referenceCode)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         id: notification.id,
         notifyError:
           '{"status":"ENOTFOUND","message":"Failed to generate the paper return PDF","errors":["getaddrinfo ENOTFOUND gotenberg"]}',

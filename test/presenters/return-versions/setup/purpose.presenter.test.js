@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const PurposePresenter = require('../../../../app/presenters/return-versions/setup/purpose.presenter.js')
 
@@ -70,7 +63,7 @@ describe('Return Versions - Setup - Purpose presenter', () => {
     it('correctly presents the data', () => {
       const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/method',
           text: 'Back'
@@ -105,7 +98,7 @@ describe('Return Versions - Setup - Purpose presenter', () => {
         it('returns a link back to the "check" page', () => {
           const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
 
-          expect(result.backLink).to.equal({
+          expect(result.backLink).toEqual({
             href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
             text: 'Back'
           })
@@ -123,7 +116,7 @@ describe('Return Versions - Setup - Purpose presenter', () => {
         it('returns a link back to the "check" page', () => {
           const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
 
-          expect(result.backLink).to.equal({
+          expect(result.backLink).toEqual({
             href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
             text: 'Back'
           })
@@ -135,7 +128,7 @@ describe('Return Versions - Setup - Purpose presenter', () => {
       it('returns a link back to the "method" page', () => {
         const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/method',
           text: 'Back'
         })
@@ -155,7 +148,7 @@ describe('Return Versions - Setup - Purpose presenter', () => {
       it('returns all the licence purposes with those previously submitted checked and optional aliases populate', () => {
         const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
 
-        expect(result.purposes).to.equal([
+        expect(result.purposes).toEqual([
           {
             alias: '',
             checked: true,
@@ -188,7 +181,7 @@ describe('Return Versions - Setup - Purpose presenter', () => {
       it('returns all the licence purposes with nothing checked and no aliases populated', () => {
         const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
 
-        expect(result.purposes).to.equal([
+        expect(result.purposes).toEqual([
           {
             alias: '',
             checked: false,

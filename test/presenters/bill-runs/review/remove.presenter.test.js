@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
 
@@ -24,7 +17,7 @@ describe('Bill Runs Review - Remove presenter', () => {
     it('correctly presents the data', () => {
       const result = RemovePresenter.go(removeReviewLicence)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         billRunNumber: 10001,
         billRunStatus: 'review',
         dateCreated: '22 October 2024',

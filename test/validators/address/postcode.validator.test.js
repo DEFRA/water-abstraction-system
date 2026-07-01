@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const PostcodeValidator = require('../../../app/validators/address/postcode.validator.js')
 
@@ -21,8 +14,8 @@ describe('Address - Postcode Validator', () => {
     it('returns with no errors', () => {
       const result = PostcodeValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -34,9 +27,9 @@ describe('Address - Postcode Validator', () => {
     it('returns with errors', () => {
       const result = PostcodeValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Enter a UK postcode')
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeDefined()
+      expect(result.error.details[0].message).toEqual('Enter a UK postcode')
     })
   })
 
@@ -48,9 +41,9 @@ describe('Address - Postcode Validator', () => {
     it('returns with errors', () => {
       const result = PostcodeValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Enter a valid UK postcode')
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeDefined()
+      expect(result.error.details[0].message).toEqual('Enter a valid UK postcode')
     })
   })
 })

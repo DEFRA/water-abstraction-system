@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AddressHelper = require('../support/helpers/address.helper.js')
 const AddressModel = require('../../app/models/address.model.js')
@@ -25,7 +18,7 @@ describe('Company Address model', () => {
   let testLicenceRole
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     // Link licence role
     testLicenceRole = await LicenceRoleHelper.select()
 
@@ -43,7 +36,7 @@ describe('Company Address model', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testCompany.$query().delete()
     await testAddress.$query().delete()
 
@@ -54,8 +47,8 @@ describe('Company Address model', () => {
     it('can successfully run a basic query', async () => {
       const result = await CompanyAddressModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(CompanyAddressModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(CompanyAddressModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -64,17 +57,17 @@ describe('Company Address model', () => {
       it('can successfully run a related query', async () => {
         const query = await CompanyAddressModel.query().innerJoinRelated('address')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the address', async () => {
         const result = await CompanyAddressModel.query().findById(testRecord.id).withGraphFetched('address')
 
-        expect(result).to.be.instanceOf(CompanyAddressModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(CompanyAddressModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.address).to.be.an.instanceOf(AddressModel)
-        expect(result.address).to.equal(testAddress)
+        expect(result.address).toBeInstanceOf(AddressModel)
+        expect(result.address).toEqual(testAddress)
       })
     })
 
@@ -82,17 +75,17 @@ describe('Company Address model', () => {
       it('can successfully run a related query', async () => {
         const query = await CompanyAddressModel.query().innerJoinRelated('company')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the company', async () => {
         const result = await CompanyAddressModel.query().findById(testRecord.id).withGraphFetched('company')
 
-        expect(result).to.be.instanceOf(CompanyAddressModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(CompanyAddressModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.company).to.be.an.instanceOf(CompanyModel)
-        expect(result.company).to.equal(testCompany)
+        expect(result.company).toBeInstanceOf(CompanyModel)
+        expect(result.company).toEqual(testCompany)
       })
     })
 
@@ -100,17 +93,17 @@ describe('Company Address model', () => {
       it('can successfully run a related query', async () => {
         const query = await CompanyAddressModel.query().innerJoinRelated('licenceRole')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence role', async () => {
         const result = await CompanyAddressModel.query().findById(testRecord.id).withGraphFetched('licenceRole')
 
-        expect(result).to.be.instanceOf(CompanyAddressModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(CompanyAddressModel)
+        expect(result.id).toMatchObject(testRecord.id)
 
-        expect(result.licenceRole).to.be.an.instanceOf(LicenceRoleModel)
-        expect(result.licenceRole).to.equal(testLicenceRole, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.licenceRole).toBeInstanceOf(LicenceRoleModel)
+        expect(result.licenceRole).toMatchObject(testLicenceRole)
       })
     })
   })

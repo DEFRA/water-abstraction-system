@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const NoticesFixture = require('../../../support/fixtures/notices.fixture.js')
@@ -77,15 +72,15 @@ describe('Job - Notifications - Process Notification Status service', () => {
     it('updates the linked notices overall status and counts', async () => {
       await ProcessNotificationStatusService.go()
 
-      expect(updateEventStub.called).to.be.true()
-      expect(updateEventStub.firstCall.args[0]).to.equal([noticeA.id, noticeB.id])
+      expect(updateEventStub.called).toBe(true)
+      expect(updateEventStub.firstCall.args[0]).toEqual([noticeA.id, noticeB.id])
     })
 
     it('checks whether any alternate notices need to be sent', async () => {
       await ProcessNotificationStatusService.go()
 
-      expect(sendAlternateNoticesStub.called).to.be.true()
-      expect(sendAlternateNoticesStub.firstCall.args[0]).to.equal(notifications)
+      expect(sendAlternateNoticesStub.called).toBe(true)
+      expect(sendAlternateNoticesStub.firstCall.args[0]).toEqual(notifications)
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
@@ -93,10 +88,10 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Notification status job complete')).to.be.true()
-      expect(logDataArg.timeTakenMs).to.exist()
-      expect(logDataArg.timeTakenSs).to.exist()
-      expect(logDataArg.count).to.equal(3)
+      expect(notifierStub.omg.calledWith('Notification status job complete')).toBe(true)
+      expect(logDataArg.timeTakenMs).toBeDefined()
+      expect(logDataArg.timeTakenSs).toBeDefined()
+      expect(logDataArg.count).toEqual(3)
     })
   })
 
@@ -108,7 +103,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
     it('does not update the linked notices', async () => {
       await ProcessNotificationStatusService.go()
 
-      expect(updateEventStub.called).to.be.false()
+      expect(updateEventStub.called).toBe(false)
     })
 
     it('records the error by calling "omfg()"', async () => {
@@ -116,9 +111,9 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
       const args = notifierStub.omfg.firstCall.args
 
-      expect(args[0]).to.equal('Notification status job failed')
-      expect(args[1]).to.be.null()
-      expect(args[2]).to.be.an.error()
+      expect(args[0]).toEqual('Notification status job failed')
+      expect(args[1]).toBeNull()
+      expect(args[2]).toBeInstanceOf(Error)
     })
 
     it('notifies the team by calling "redAlert()"', async () => {
@@ -126,11 +121,11 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
       const args = notifierStub.redAlert.firstCall.args
 
-      expect(args[0]).to.equal('Notification status job failed')
+      expect(args[0]).toEqual('Notification status job failed')
     })
 
     it('does not throw an error', async () => {
-      await expect(ProcessNotificationStatusService.go()).not.to.reject()
+      await ProcessNotificationStatusService.go()
     })
   })
 })

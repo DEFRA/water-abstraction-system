@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
 
@@ -30,7 +23,7 @@ describe('Notices - Setup - Remove Licences presenter', () => {
   it('correctly presents the data', () => {
     const result = RemoveLicencesPresenter.go(licences, session)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       backLink: {
         href: `/system/notices/setup/${session.id}/check`,
         text: 'Back'

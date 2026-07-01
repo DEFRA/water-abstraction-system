@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const StartReadingPresenter = require('../../../../app/presenters/return-logs/setup/start-reading.presenter.js')
 
@@ -24,7 +17,7 @@ describe('Return Logs Setup - Start Reading presenter', () => {
     it('correctly presents the data', () => {
       const result = StartReadingPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: { href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported', text: 'Back' },
         pageTitle: 'Enter the start meter reading',
         pageTitleCaption: 'Return reference 012345',
@@ -43,7 +36,7 @@ describe('Return Logs Setup - Start Reading presenter', () => {
       it('returns the "startReading" property populated to display the input', () => {
         const result = StartReadingPresenter.go(session)
 
-        expect(result.startReading).to.equal(156000)
+        expect(result.startReading).toEqual(156000)
       })
     })
 
@@ -55,7 +48,7 @@ describe('Return Logs Setup - Start Reading presenter', () => {
       it('returns the "startReading" property with a string version of 0 to display the input', () => {
         const result = StartReadingPresenter.go(session)
 
-        expect(result.startReading).to.equal('0')
+        expect(result.startReading).toEqual('0')
       })
     })
   })
@@ -69,7 +62,7 @@ describe('Return Logs Setup - Start Reading presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = StartReadingPresenter.go(session)
 
-        expect(result.backLink.href).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink.href).toEqual('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
       })
     })
 
@@ -77,7 +70,7 @@ describe('Return Logs Setup - Start Reading presenter', () => {
       it('returns a link back to the "Reported" page', () => {
         const result = StartReadingPresenter.go(session)
 
-        expect(result.backLink.href).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported')
+        expect(result.backLink.href).toEqual('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported')
       })
     })
   })

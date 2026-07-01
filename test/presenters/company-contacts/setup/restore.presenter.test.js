@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -28,7 +21,7 @@ describe('Company Contacts - Setup - Restore Presenter', () => {
     it('returns page data for the view', () => {
       const result = RestorePresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         abstractionAlerts: 'Yes',
         backLink: {
           href: `/system/company-contacts/setup/${session.id}/check`,

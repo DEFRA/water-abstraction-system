@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModel = require('../../../../../app/models/session.model.js')
@@ -65,7 +60,7 @@ describe('Users - External - Setup - Initiate Session service', () => {
     it('returns the session Id and an initialised data object', async () => {
       const result = await InitiateSessionService.go(user.id, back)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         data: { activeNavBar: back, licences, selectedLicences: [], user },
         id: result.id,
         activeNavBar: back,
@@ -86,7 +81,7 @@ describe('Users - External - Setup - Initiate Session service', () => {
 
       jsonParsedLicence.licenceVersions[0].startDate = '2022-04-01T00:00:00.000Z'
 
-      expect(matchingSession.data).to.equal({
+      expect(matchingSession.data).toEqual({
         activeNavBar: back,
         licences: [jsonParsedLicence],
         selectedLicences: [],

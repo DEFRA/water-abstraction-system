@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../support/stubs/session.stub.js')
@@ -91,9 +86,9 @@ describe('Address - Submit Select Service', () => {
         it('maps then saves the selected address and returns the specified redirect URL', async () => {
           const result = await SubmitSelectService.go(sessionId, payload)
 
-          expect(result).to.equal({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
+          expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
-          expect(session.addressJourney.address).to.equal({
+          expect(session.addressJourney.address).toEqual({
             uprn: 340116,
             addressLine1: 'ENVIRONMENT AGENCY',
             addressLine2: 'HORIZON HOUSE DEANERY ROAD',
@@ -101,8 +96,8 @@ describe('Address - Submit Select Service', () => {
             addressLine4: 'BRISTOL',
             postcode: 'BS1 5AH'
           })
-          expect(session.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
-          expect(session.$update.called).to.be.true()
+          expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
+          expect(session.$update.called).toBe(true)
         })
       })
 
@@ -132,9 +127,9 @@ describe('Address - Submit Select Service', () => {
         it('maps then saves the selected address and returns the specified redirect URL', async () => {
           const result = await SubmitSelectService.go(sessionId, payload)
 
-          expect(result).to.equal({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
+          expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
-          expect(session.addressJourney.address).to.equal({
+          expect(session.addressJourney.address).toEqual({
             uprn: 340116,
             addressLine1: 'HORIZON HOUSE DEANERY ROAD',
             addressLine2: null,
@@ -142,8 +137,8 @@ describe('Address - Submit Select Service', () => {
             addressLine4: 'BRISTOL',
             postcode: 'BS1 5AH'
           })
-          expect(session.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
-          expect(session.$update.called).to.be.true()
+          expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
+          expect(session.$update.called).toBe(true)
         })
       })
 
@@ -173,9 +168,9 @@ describe('Address - Submit Select Service', () => {
         it('maps then saves the selected address and returns the specified redirect URL', async () => {
           const result = await SubmitSelectService.go(sessionId, payload)
 
-          expect(result).to.equal({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
+          expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
-          expect(session.addressJourney.address).to.equal({
+          expect(session.addressJourney.address).toEqual({
             uprn: 340116,
             addressLine1: 'ENVIRONMENT AGENCY',
             addressLine2: 'DEANERY ROAD',
@@ -183,8 +178,8 @@ describe('Address - Submit Select Service', () => {
             addressLine4: 'BRISTOL',
             postcode: 'BS1 5AH'
           })
-          expect(session.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
-          expect(session.$update.called).to.be.true()
+          expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
+          expect(session.$update.called).toBe(true)
         })
       })
 
@@ -214,9 +209,9 @@ describe('Address - Submit Select Service', () => {
         it('maps then saves the selected address and returns the specified redirect URL', async () => {
           const result = await SubmitSelectService.go(sessionId, payload)
 
-          expect(result).to.equal({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
+          expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
-          expect(session.addressJourney.address).to.equal({
+          expect(session.addressJourney.address).toEqual({
             uprn: 340116,
             addressLine1: 'ENVIRONMENT AGENCY',
             addressLine2: 'HORIZON HOUSE',
@@ -224,8 +219,8 @@ describe('Address - Submit Select Service', () => {
             addressLine4: 'BRISTOL',
             postcode: 'BS1 5AH'
           })
-          expect(session.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
-          expect(session.$update.called).to.be.true()
+          expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
+          expect(session.$update.called).toBe(true)
         })
       })
 
@@ -255,9 +250,9 @@ describe('Address - Submit Select Service', () => {
         it('maps then saves the selected address and returns the specified redirect URL', async () => {
           const result = await SubmitSelectService.go(sessionId, payload)
 
-          expect(result).to.equal({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
+          expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
-          expect(session.addressJourney.address).to.equal({
+          expect(session.addressJourney.address).toEqual({
             uprn: 340116,
             addressLine1: 'ENVIRONMENT AGENCY',
             addressLine2: 'HORIZON HOUSE DEANERY ROAD',
@@ -265,8 +260,8 @@ describe('Address - Submit Select Service', () => {
             addressLine4: 'BRISTOL',
             postcode: 'BS1 5AH'
           })
-          expect(session.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
-          expect(session.$update.called).to.be.true()
+          expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
+          expect(session.$update.called).toBe(true)
         })
       })
 
@@ -294,7 +289,7 @@ describe('Address - Submit Select Service', () => {
         it('returns page data that causes a redirect to the manual page', async () => {
           const result = await SubmitSelectService.go(sessionId, payload)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             redirect: `/system/address/${sessionId}/manual`
           })
         })
@@ -317,7 +312,7 @@ describe('Address - Submit Select Service', () => {
         it('returns page data that causes a redirect to the manual page', async () => {
           const result = await SubmitSelectService.go(sessionId, payload)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             redirect: `/system/address/${sessionId}/manual`
           })
         })
@@ -349,7 +344,7 @@ describe('Address - Submit Select Service', () => {
           it('returns page data needed to re-render the view including the validation error', async () => {
             const result = await SubmitSelectService.go(sessionId, payload)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               error: {
                 addresses: { text: 'Select an address' },
                 errorList: [
@@ -398,7 +393,7 @@ describe('Address - Submit Select Service', () => {
           it('returns page data that causes a redirect to the manual page', async () => {
             const result = await SubmitSelectService.go(sessionId, payload)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               redirect: `/system/address/${sessionId}/manual`
             })
           })
@@ -421,7 +416,7 @@ describe('Address - Submit Select Service', () => {
           it('returns page data that causes a redirect to the manual page', async () => {
             const result = await SubmitSelectService.go(sessionId, payload)
 
-            expect(result).to.equal({
+            expect(result).toEqual({
               redirect: `/system/address/${sessionId}/manual`
             })
           })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillHelper = require('../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
@@ -121,7 +114,7 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
     it('returns the matching bill licence and associated data', async () => {
       const result = await FetchBillLicenceService.go(billLicence.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         id: billLicence.id,
         licenceId: billLicence.licenceId,
         licenceRef: billLicence.licenceRef,
@@ -201,7 +194,7 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
     it('returns the matching bill licence and associated data', async () => {
       const result = await FetchBillLicenceService.go(billLicence.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         id: billLicence.id,
         licenceId: billLicence.licenceId,
         licenceRef: billLicence.licenceRef,
@@ -230,7 +223,7 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
     it('returns a result with no values set', async () => {
       const result = await FetchBillLicenceService.go('93112100-152b-4860-abea-2adee11dcd69')
 
-      expect(result).to.be.undefined()
+      expect(result).toBeUndefined()
     })
   })
 })

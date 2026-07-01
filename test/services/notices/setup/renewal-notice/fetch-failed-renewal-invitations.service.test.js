@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const EventHelper = require('../../../../support/helpers/event.helper.js')
 const NoticesFixture = require('../../../../support/fixtures/notices.fixture.js')
@@ -52,7 +45,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
         it('returns an object with empty properties', async () => {
           const result = await FetchFailedRenewalInvitationsService.go(notice.id)
 
-          expect(result).to.equal({ licenceRefs: [], notificationIds: [] })
+          expect(result).toEqual({ licenceRefs: [], notificationIds: [] })
         })
       })
 
@@ -95,7 +88,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
               }
             )
 
-            expect(result).to.equal({ licenceRefs, notificationIds: expectedNotificationIds })
+            expect(result).toEqual({ licenceRefs, notificationIds: expectedNotificationIds })
           })
         })
 
@@ -125,7 +118,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
           it('returns an object with empty properties', async () => {
             const result = await FetchFailedRenewalInvitationsService.go(notice.id)
 
-            expect(result).to.equal({ licenceRefs: [], notificationIds: [] })
+            expect(result).toEqual({ licenceRefs: [], notificationIds: [] })
           })
         })
       })
@@ -139,7 +132,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
       it('returns an object with empty properties', async () => {
         const result = await FetchFailedRenewalInvitationsService.go(notice.id)
 
-        expect(result).to.equal({ licenceRefs: [], notificationIds: [] })
+        expect(result).toEqual({ licenceRefs: [], notificationIds: [] })
       })
     })
   })
@@ -152,7 +145,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
     it('returns an object with empty properties', async () => {
       const result = await FetchFailedRenewalInvitationsService.go(generateUUID())
 
-      expect(result).to.equal({ licenceRefs: [], notificationIds: [] })
+      expect(result).toEqual({ licenceRefs: [], notificationIds: [] })
     })
   })
 })

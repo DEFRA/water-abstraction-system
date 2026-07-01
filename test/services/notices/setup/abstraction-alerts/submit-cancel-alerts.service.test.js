@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
@@ -41,13 +36,13 @@ describe('Notices - Setup - Abstraction Alerts - Submit Cancel Alerts service', 
     it('returns the monitoring station id', async () => {
       const result = await SubmitCancelAlertsService.go(session.id)
 
-      expect(result).to.equal({ monitoringStationId: sessionData.monitoringStationId })
+      expect(result).toEqual({ monitoringStationId: sessionData.monitoringStationId })
     })
 
     it('clears the session', async () => {
       await SubmitCancelAlertsService.go(session.id)
 
-      expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
+      expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
     })
   })
 })

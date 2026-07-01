@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CRMContactsSeeder = require('../../../../support/seeders/crm-contacts.seeder.js')
 const EmptyLicence = require('../../../../support/seeders/empty-licence.seeder.js')
@@ -23,7 +16,7 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
 
   let scenarios
 
-  before(async () => {
+  beforeAll(async () => {
     scenarios = {}
 
     // 1) Licence holder only
@@ -128,15 +121,17 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     await RecipientScenariosSeeder.clean(scenarios)
   })
 
   // NOTE: Because the query is very large we don't assert the full `query` string here
   describe('when called', () => {
     it('returns the expected query and bindings', () => {
-      expect(query).to.startWith(`
+      expect(
+        query.startsWith(`
   WITH additional_contacts AS (`)
+      ).toBe(true)
     })
   })
 
@@ -149,7 +144,7 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
 
         const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolder)
 
-        expect(rows).to.equal(expectedResults)
+        expect(rows).toEqual(expectedResults)
       })
     })
 
@@ -168,7 +163,7 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
           return compareStrings(a.contact_type, b.contact_type)
         })
 
-        expect(sortedRows).to.equal(expectedResults)
+        expect(sortedRows).toEqual(expectedResults)
       })
     })
 
@@ -182,7 +177,7 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
           licenceHolderRecipient: scenarios.additionalContactNoAlerts.licenceHolderRecipient
         })
 
-        expect(rows).to.equal(expectedResults)
+        expect(rows).toEqual(expectedResults)
       })
     })
 
@@ -196,7 +191,7 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
           primaryUserRecipient: scenarios.primaryUser.primaryUserRecipient
         })
 
-        expect(rows).to.equal(expectedResults)
+        expect(rows).toEqual(expectedResults)
       })
     })
 
@@ -211,7 +206,7 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
           additionalContactRecipient: scenarios.primaryUserWithAdditionalContact.additionalContactRecipient
         })
 
-        expect(rows).to.equal(expectedResults)
+        expect(rows).toEqual(expectedResults)
       })
     })
 
@@ -238,7 +233,7 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
           return compareStrings(a.contact_type, b.contact_type)
         })
 
-        expect(sortedRows).to.equal(expectedResults)
+        expect(sortedRows).toEqual(expectedResults)
       })
     })
 
@@ -261,7 +256,7 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
           return compareStrings(a.licence_refs[0], b.licence_refs[0])
         })
 
-        expect(rows).to.equal(expectedResults)
+        expect(rows).toEqual(expectedResults)
       })
     })
 
@@ -283,7 +278,7 @@ describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Qu
           return compareStrings(a.licence_refs[0], b.licence_refs[0])
         })
 
-        expect(rows).to.equal(expectedResults)
+        expect(rows).toEqual(expectedResults)
       })
     })
   })

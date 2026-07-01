@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { generateUUID } = require('../../../app/lib/general.lib.js')
@@ -101,7 +96,7 @@ describe('Monitoring Stations - View Licence service', () => {
     it('returns the page data for the view', async () => {
       const result = await ViewLicenceService.go(auth, licence.id, monitoringStation.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/monitoring-stations/${monitoringStation.id}`,
           text: 'Go back to monitoring station'

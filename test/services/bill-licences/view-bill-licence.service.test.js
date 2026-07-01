@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const FetchBillLicenceService = require('../../../app/services/bill-licences/fetch-bill-licence.service.js')
@@ -36,18 +31,18 @@ describe('View Bill Licence service', () => {
     it('will fetch the data and format it using the bill licence services', async () => {
       const result = await ViewBillLicenceService.go(testId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'bill-runs',
         billId: '4fc6536e-1970-47f0-a4b3-d4c6360ad389'
       })
 
-      expect(fetchBillLicenceSpy.calledOnceWith(testId)).to.be.true()
+      expect(fetchBillLicenceSpy.calledOnceWith(testId)).toBe(true)
     })
   })
 
   describe('when a bill with a matching ID does not exist', () => {
     it('throws an exception', async () => {
-      await expect(ViewBillLicenceService.go('testId')).to.reject()
+      await expect(ViewBillLicenceService.go('testId')).rejects.toThrow()
     })
   })
 })

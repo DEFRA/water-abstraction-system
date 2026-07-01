@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
 
@@ -24,7 +17,7 @@ describe('Bill Runs Review - Factors presenter', () => {
     it('correctly presents the data', () => {
       const result = FactorsPresenter.go(reviewChargeReference)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         amendedAggregate: 0.333333333,
         amendedChargeAdjustment: 1,
         chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
@@ -54,7 +47,7 @@ describe('Bill Runs Review - Factors presenter', () => {
       it('the otherAdjustments property only contains the adjustment', () => {
         const result = FactorsPresenter.go(reviewChargeReference)
 
-        expect(result.otherAdjustments).to.equal(['Abatement agreement (0.3)'])
+        expect(result.otherAdjustments).toEqual(['Abatement agreement (0.3)'])
       })
     })
 
@@ -66,7 +59,7 @@ describe('Bill Runs Review - Factors presenter', () => {
       it('the otherAdjustments property only contains the additional charge', () => {
         const result = FactorsPresenter.go(reviewChargeReference)
 
-        expect(result.otherAdjustments).to.equal(['Public Water Supply'])
+        expect(result.otherAdjustments).toEqual(['Public Water Supply'])
       })
     })
 
@@ -79,7 +72,7 @@ describe('Bill Runs Review - Factors presenter', () => {
       it('the otherAdjustments property contains both', () => {
         const result = FactorsPresenter.go(reviewChargeReference)
 
-        expect(result.otherAdjustments).to.equal(['Public Water Supply', 'Abatement agreement (0.3)'])
+        expect(result.otherAdjustments).toEqual(['Public Water Supply', 'Abatement agreement (0.3)'])
       })
     })
 
@@ -91,7 +84,7 @@ describe('Bill Runs Review - Factors presenter', () => {
       it('sets the otherAdjustments property as empty', () => {
         const result = FactorsPresenter.go(reviewChargeReference)
 
-        expect(result.otherAdjustments).to.equal([])
+        expect(result.otherAdjustments).toEqual([])
       })
     })
   })

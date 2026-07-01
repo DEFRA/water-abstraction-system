@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ConfirmedPresenter = require('../../../../app/presenters/return-logs/setup/confirmed.presenter.js')
 
@@ -46,7 +39,7 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
     it('correctly presents the data', () => {
       const result = ConfirmedPresenter.go(returnLog)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
         licenceRef: '01/117',
         pageTitle: 'Return 10032788 received',
@@ -67,7 +60,7 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
       it('returns pageTitle as "Return received"', () => {
         const result = ConfirmedPresenter.go(returnLog)
 
-        expect(result.pageTitle).to.equal('Return 10032788 received')
+        expect(result.pageTitle).toEqual('Return 10032788 received')
       })
     })
 
@@ -80,7 +73,7 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
         it('returns pageTitle as "Return submitted"', () => {
           const result = ConfirmedPresenter.go(returnLog)
 
-          expect(result.pageTitle).to.equal('Return 10032788 submitted')
+          expect(result.pageTitle).toEqual('Return 10032788 submitted')
         })
       })
 
@@ -91,7 +84,7 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
         it('returns pageTitle as "Return edited"', () => {
           const result = ConfirmedPresenter.go(returnLog)
 
-          expect(result.pageTitle).to.equal('Return 10032788 edited')
+          expect(result.pageTitle).toEqual('Return 10032788 edited')
         })
       })
     })
@@ -102,7 +95,7 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
       it('returns an object with a label property set to "Purpose" and a value property containing the single purpose', () => {
         const result = ConfirmedPresenter.go(returnLog)
 
-        expect(result.purposeDetails).to.equal({ label: 'Purpose', value: 'Spray Irrigation - Direct' })
+        expect(result.purposeDetails).toEqual({ label: 'Purpose', value: 'Spray Irrigation - Direct' })
       })
     })
 
@@ -114,7 +107,7 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
       it('returns an object with a label property set to "Purposes" and a value property containing the comma separated purposes as a string', () => {
         const result = ConfirmedPresenter.go(returnLog)
 
-        expect(result.purposeDetails).to.equal({
+        expect(result.purposeDetails).toEqual({
           label: 'Purposes',
           value: 'Spray Irrigation - Direct, Spray Irrigation - Storage'
         })

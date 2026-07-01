@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const EventHelper = require('../../support/helpers/event.helper.js')
 const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
@@ -31,7 +24,7 @@ describe('Return Logs - Fetch Notifications DAL', () => {
     notification = await NotificationHelper.add(NotificationsFixture.returnsInvitationEmail(notice))
   })
 
-  after(async () => {
+  afterAll(async () => {
     notice.$query().delete()
     notification.$query().delete()
   })
@@ -40,7 +33,7 @@ describe('Return Logs - Fetch Notifications DAL', () => {
     it('returns the matching notifications and the total', async () => {
       const result = await FetchNotificationsDal.go(notification.returnLogIds[0])
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         notifications: [
           {
             createdAt: notification.createdAt,
@@ -64,7 +57,7 @@ describe('Return Logs - Fetch Notifications DAL', () => {
     it('returns an empty array and zero', async () => {
       const result = await FetchNotificationsDal.go('513f8813-3782-4c1b-a095-a078adf757f4')
 
-      expect(result).to.equal({ notifications: [], totalNumber: 0 })
+      expect(result).toEqual({ notifications: [], totalNumber: 0 })
     })
   })
 })

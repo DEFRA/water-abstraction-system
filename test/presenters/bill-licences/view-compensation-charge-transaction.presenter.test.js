@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ViewCompensationChargeTransactionPresenter = require('../../../app/presenters/bill-licences/view-compensation-charge-transaction.presenter.js')
 
@@ -37,8 +30,8 @@ describe('View Compensation Charge Transaction presenter', () => {
       it('returns the credit property populated and the debit empty', () => {
         const result = ViewCompensationChargeTransactionPresenter.go(transaction)
 
-        expect(result.creditAmount).to.equal('£214.74')
-        expect(result.debitAmount).to.equal('')
+        expect(result.creditAmount).toEqual('£214.74')
+        expect(result.debitAmount).toEqual('')
       })
     })
 
@@ -50,8 +43,8 @@ describe('View Compensation Charge Transaction presenter', () => {
       it('returns the debit property populated and the credit empty', () => {
         const result = ViewCompensationChargeTransactionPresenter.go(transaction)
 
-        expect(result.creditAmount).to.equal('')
-        expect(result.debitAmount).to.equal('£214.74')
+        expect(result.creditAmount).toEqual('')
+        expect(result.debitAmount).toEqual('£214.74')
       })
     })
 
@@ -59,7 +52,7 @@ describe('View Compensation Charge Transaction presenter', () => {
       it('correctly presents the data', () => {
         const result = ViewCompensationChargeTransactionPresenter.go(transaction)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           billableDays: '153/214',
           chargePeriod: '1 April 2023 to 31 March 2024',
           chargeType: 'compensation',
@@ -85,7 +78,7 @@ describe('View Compensation Charge Transaction presenter', () => {
           it('returns "Two-part tariff"', () => {
             const result = ViewCompensationChargeTransactionPresenter.go(transaction)
 
-            expect(result.agreement).to.equal('Two-part tariff')
+            expect(result.agreement).toEqual('Two-part tariff')
           })
         })
 
@@ -93,7 +86,7 @@ describe('View Compensation Charge Transaction presenter', () => {
           it('returns null', () => {
             const result = ViewCompensationChargeTransactionPresenter.go(transaction)
 
-            expect(result.agreement).to.be.null()
+            expect(result.agreement).toBeNull()
           })
         })
       })
@@ -101,7 +94,7 @@ describe('View Compensation Charge Transaction presenter', () => {
       it('correctly presents the data', () => {
         const result = ViewCompensationChargeTransactionPresenter.go(transaction)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           agreement: null,
           billableDays: '153/214',
           chargePeriod: '1 April 2023 to 31 March 2024',

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
@@ -45,7 +40,7 @@ describe('Company contact - Delete company contact service', () => {
 
       const exists = await CompanyContactModel.query().findById(companyContact.id)
 
-      expect(exists).to.equal({
+      expect(exists).toEqual({
         ...companyContact,
         deletedAt: today
       })
@@ -62,7 +57,7 @@ describe('Company contact - Delete company contact service', () => {
 
       const exists = await CompanyContactModel.query().findById(companyContact.id)
 
-      expect(exists).to.be.undefined()
+      expect(exists).toBeUndefined()
     })
   })
 })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
@@ -32,7 +25,7 @@ describe('Users - Notifications Table presenter', () => {
   it('correctly presents the data', () => {
     const result = NotificationsTablePresenter.go(notifications, user.id, type)
 
-    expect(result).to.equal([
+    expect(result).toEqual([
       {
         link: {
           hiddenText: 'sent 18 April 2025 via email',
@@ -62,7 +55,7 @@ describe('Users - Notifications Table presenter', () => {
         it('links to the internal user notification details page', () => {
           const result = NotificationsTablePresenter.go(notifications, user.id, 'internal')
 
-          expect(result[0].link.href).to.equal(`/system/users/internal/${user.id}/notifications/${notifications[0].id}`)
+          expect(result[0].link.href).toEqual(`/system/users/internal/${user.id}/notifications/${notifications[0].id}`)
         })
       })
 
@@ -70,7 +63,7 @@ describe('Users - Notifications Table presenter', () => {
         it('links to the external user notification details page', () => {
           const result = NotificationsTablePresenter.go(notifications, user.id, 'external')
 
-          expect(result[0].link.href).to.equal(`/system/users/external/${user.id}/notifications/${notifications[0].id}`)
+          expect(result[0].link.href).toEqual(`/system/users/external/${user.id}/notifications/${notifications[0].id}`)
         })
       })
     })
@@ -80,7 +73,7 @@ describe('Users - Notifications Table presenter', () => {
     it('returns an empty array', () => {
       const result = NotificationsTablePresenter.go([], user.id, type)
 
-      expect(result).to.equal([])
+      expect(result).toEqual([])
     })
   })
 })

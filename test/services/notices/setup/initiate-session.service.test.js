@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
@@ -36,7 +31,7 @@ describe('Notices - Setup - Initiate Session service', () => {
       it('returns the session Id and redirect path', async () => {
         const result = await InitiateSessionService.go(journey, monitoringStationId)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           sessionId: result.sessionId,
           path: 'notice-type'
         })
@@ -47,7 +42,7 @@ describe('Notices - Setup - Initiate Session service', () => {
 
         const matchingSession = await SessionModel.query().findById(result.sessionId)
 
-        expect(matchingSession.data).to.equal({
+        expect(matchingSession.data).toEqual({
           journey: 'standard'
         })
       })
@@ -62,14 +57,14 @@ describe('Notices - Setup - Initiate Session service', () => {
       it('initiates the session for the ad-hoc notice setup journey and returns the session ID and redirect path', async () => {
         const result = await InitiateSessionService.go(journey, monitoringStationId)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           sessionId: result.sessionId,
           path: 'notice-type'
         })
 
         const matchingSession = await SessionModel.query().findById(result.sessionId)
 
-        expect(matchingSession.data).to.equal({
+        expect(matchingSession.data).toEqual({
           journey: 'adhoc'
         })
       })
@@ -90,84 +85,81 @@ describe('Notices - Setup - Initiate Session service', () => {
       it('initiates the session for the abstraction alerts setup journey and returns the session ID and redirect path', async () => {
         const result = await InitiateSessionService.go(journey, monitoringStationId)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           sessionId: result.sessionId,
           path: 'abstraction-alerts/alert-type'
         })
 
         const matchingSession = await SessionModel.query().findById(result.sessionId)
 
-        expect(matchingSession.referenceCode).to.startWith('WAA-')
+        expect(matchingSession.referenceCode).toMatch(/^WAA-/)
 
-        expect(matchingSession.data).to.equal(
-          {
-            name: 'Water abstraction alert',
-            journey: 'alerts',
-            subType: 'waterAbstractionAlerts',
-            noticeType: 'abstractionAlerts',
-            notificationType: 'Abstraction alert',
-            monitoringStationId,
-            monitoringStationName: 'Death star',
-            licenceMonitoringStations: [
-              {
-                id: monitoringStationData.licenceMonitoringStations[0].id,
-                notes: null,
-                licence: {
-                  id: monitoringStationData.licenceMonitoringStations[0].licence.id,
-                  licenceRef: monitoringStationData.licenceMonitoringStations[0].licence.licenceRef
-                },
-                measureType: 'level',
-                thresholdUnit: 'm',
-                thresholdGroup: 'level-1000-m',
-                thresholdValue: 1000,
-                restrictionType: 'reduce',
-                latestNotification: null,
-                abstractionPeriodEndDay: 1,
-                abstractionPeriodEndMonth: 1,
-                abstractionPeriodStartDay: 1,
-                abstractionPeriodStartMonth: 2
+        expect(matchingSession.data).toMatchObject({
+          name: 'Water abstraction alert',
+          journey: 'alerts',
+          subType: 'waterAbstractionAlerts',
+          noticeType: 'abstractionAlerts',
+          notificationType: 'Abstraction alert',
+          monitoringStationId,
+          monitoringStationName: 'Death star',
+          licenceMonitoringStations: [
+            {
+              id: monitoringStationData.licenceMonitoringStations[0].id,
+              notes: null,
+              licence: {
+                id: monitoringStationData.licenceMonitoringStations[0].licence.id,
+                licenceRef: monitoringStationData.licenceMonitoringStations[0].licence.licenceRef
               },
-              {
-                id: monitoringStationData.licenceMonitoringStations[1].id,
-                notes: 'I have a bad feeling about this',
-                licence: {
-                  id: monitoringStationData.licenceMonitoringStations[1].licence.id,
-                  licenceRef: monitoringStationData.licenceMonitoringStations[1].licence.licenceRef
-                },
-                measureType: 'flow',
-                thresholdUnit: 'm3/s',
-                thresholdGroup: 'flow-100-m3/s',
-                thresholdValue: 100,
-                restrictionType: 'stop',
-                latestNotification: null,
-                abstractionPeriodEndDay: 31,
-                abstractionPeriodEndMonth: 3,
-                abstractionPeriodStartDay: 1,
-                abstractionPeriodStartMonth: 1
+              measureType: 'level',
+              thresholdUnit: 'm',
+              thresholdGroup: 'level-1000-m',
+              thresholdValue: 1000,
+              restrictionType: 'reduce',
+              latestNotification: null,
+              abstractionPeriodEndDay: 1,
+              abstractionPeriodEndMonth: 1,
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 2
+            },
+            {
+              id: monitoringStationData.licenceMonitoringStations[1].id,
+              notes: 'I have a bad feeling about this',
+              licence: {
+                id: monitoringStationData.licenceMonitoringStations[1].licence.id,
+                licenceRef: monitoringStationData.licenceMonitoringStations[1].licence.licenceRef
               },
-              {
-                id: monitoringStationData.licenceMonitoringStations[2].id,
-                notes: null,
-                licence: {
-                  id: monitoringStationData.licenceMonitoringStations[2].licence.id,
-                  licenceRef: monitoringStationData.licenceMonitoringStations[2].licence.licenceRef
-                },
-                measureType: 'level',
-                thresholdUnit: 'm',
-                thresholdGroup: 'level-100-m',
-                thresholdValue: 100,
-                restrictionType: 'stop_or_reduce',
-                latestNotification: null,
-                abstractionPeriodEndDay: 31,
-                abstractionPeriodEndMonth: 3,
-                abstractionPeriodStartDay: 1,
-                abstractionPeriodStartMonth: 1
-              }
-            ],
-            monitoringStationRiverName: 'Meridian Trench'
-          },
-          { skip: ['referenceCode'] }
-        )
+              measureType: 'flow',
+              thresholdUnit: 'm3/s',
+              thresholdGroup: 'flow-100-m3/s',
+              thresholdValue: 100,
+              restrictionType: 'stop',
+              latestNotification: null,
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 3,
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 1
+            },
+            {
+              id: monitoringStationData.licenceMonitoringStations[2].id,
+              notes: null,
+              licence: {
+                id: monitoringStationData.licenceMonitoringStations[2].licence.id,
+                licenceRef: monitoringStationData.licenceMonitoringStations[2].licence.licenceRef
+              },
+              measureType: 'level',
+              thresholdUnit: 'm',
+              thresholdGroup: 'level-100-m',
+              thresholdValue: 100,
+              restrictionType: 'stop_or_reduce',
+              latestNotification: null,
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 3,
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 1
+            }
+          ],
+          monitoringStationRiverName: 'Meridian Trench'
+        })
       })
     })
   })

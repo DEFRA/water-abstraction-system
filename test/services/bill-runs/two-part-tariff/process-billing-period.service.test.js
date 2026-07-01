@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const RegionHelper = require('../../../support/helpers/region.helper.js')
@@ -65,7 +60,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
       it('returns false (bill run is empty)', async () => {
         const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [])
 
-        expect(result).to.be.false()
+        expect(result).toBe(false)
       })
     })
 
@@ -106,47 +101,41 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
         it('returns true (bill run is not empty) and persists the generated bills', async () => {
           const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
 
-          expect(result).to.be.true()
+          expect(result).toBe(true)
 
           // NOTE: We pass a single bill per billing account when persisting
           const billInsertArgs = billInsertStub.args[0]
 
-          expect(billInsertStub.calledOnce).to.be.true()
-          expect(billInsertArgs[0]).to.equal(
-            {
-              accountNumber: billingAccount.accountNumber,
-              address: {}, // Address is set to an empty object for SROC billing invoices
-              billingAccountId: billingAccount.id,
-              billRunId: billRun.id,
-              credit: false,
-              financialYearEnding: billingPeriod.endDate.getFullYear()
-            },
-            { skip: ['id'] }
-          )
+          expect(billInsertStub.calledOnce).toBe(true)
+          expect(billInsertArgs[0]).toMatchObject({
+            accountNumber: billingAccount.accountNumber,
+            address: {}, // Address is set to an empty object for SROC billing invoices
+            billingAccountId: billingAccount.id,
+            billRunId: billRun.id,
+            credit: false,
+            financialYearEnding: billingPeriod.endDate.getFullYear()
+          })
 
           // NOTE: A bill may have multiple bill licences, so we always pass them as an array
           const billLicenceInsertArgs = billLicenceInsertStub.args[0]
 
-          expect(billLicenceInsertStub.calledOnce).to.be.true()
-          expect(billLicenceInsertArgs[0]).to.have.length(1)
-          expect(billLicenceInsertArgs[0][0]).to.equal(
-            {
-              billId: billInsertArgs[0].id,
-              licenceId: licence.id,
-              licenceRef: licence.licenceRef
-            },
-            { skip: ['id'] }
-          )
+          expect(billLicenceInsertStub.calledOnce).toBe(true)
+          expect(billLicenceInsertArgs[0]).toHaveLength(1)
+          expect(billLicenceInsertArgs[0][0]).toMatchObject({
+            billId: billInsertArgs[0].id,
+            licenceId: licence.id,
+            licenceRef: licence.licenceRef
+          })
 
           // NOTE: And for performance reasons, we pass _all_ transactions for all bill licences at once
           const transactionInsertArgs = transactionInsertStub.args[0]
 
-          expect(transactionInsertStub.calledOnce).to.be.true()
-          expect(transactionInsertArgs[0]).to.have.length(2)
+          expect(transactionInsertStub.calledOnce).toBe(true)
+          expect(transactionInsertArgs[0]).toHaveLength(2)
 
           // We just check that on of the transactions being persisted is linked to the records we expect
-          expect(transactionInsertArgs[0][0].billLicenceId).equal(billLicenceInsertArgs[0][0].id)
-          expect(transactionInsertArgs[0][0].externalId).equal('7e752fa6-a19c-4779-b28c-6e536f028795')
+          expect(transactionInsertArgs[0][0].billLicenceId).toEqual(billLicenceInsertArgs[0][0].id)
+          expect(transactionInsertArgs[0][0].externalId).toEqual('7e752fa6-a19c-4779-b28c-6e536f028795')
         })
       })
 
@@ -172,47 +161,41 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
         it('returns true (bill run is not empty) and only persists the bill licences with transactions', async () => {
           const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
 
-          expect(result).to.be.true()
+          expect(result).toBe(true)
 
           // NOTE: We pass a single bill per billing account when persisting
           const billInsertArgs = billInsertStub.args[0]
 
-          expect(billInsertStub.calledOnce).to.be.true()
-          expect(billInsertArgs[0]).to.equal(
-            {
-              accountNumber: billingAccount.accountNumber,
-              address: {}, // Address is set to an empty object for SROC billing invoices
-              billingAccountId: billingAccount.id,
-              billRunId: billRun.id,
-              credit: false,
-              financialYearEnding: billingPeriod.endDate.getFullYear()
-            },
-            { skip: ['id'] }
-          )
+          expect(billInsertStub.calledOnce).toBe(true)
+          expect(billInsertArgs[0]).toMatchObject({
+            accountNumber: billingAccount.accountNumber,
+            address: {}, // Address is set to an empty object for SROC billing invoices
+            billingAccountId: billingAccount.id,
+            billRunId: billRun.id,
+            credit: false,
+            financialYearEnding: billingPeriod.endDate.getFullYear()
+          })
 
           // NOTE: A bill may have multiple bill licences, so we always pass them as an array
           const billLicenceInsertArgs = billLicenceInsertStub.args[0]
 
-          expect(billLicenceInsertStub.calledOnce).to.be.true()
-          expect(billLicenceInsertArgs[0]).to.have.length(1)
-          expect(billLicenceInsertArgs[0][0]).to.equal(
-            {
-              billId: billInsertArgs[0].id,
-              licenceId: licence.id,
-              licenceRef: licence.licenceRef
-            },
-            { skip: ['id'] }
-          )
+          expect(billLicenceInsertStub.calledOnce).toBe(true)
+          expect(billLicenceInsertArgs[0]).toHaveLength(1)
+          expect(billLicenceInsertArgs[0][0]).toMatchObject({
+            billId: billInsertArgs[0].id,
+            licenceId: licence.id,
+            licenceRef: licence.licenceRef
+          })
 
           // NOTE: And for performance reasons, we pass _all_ transactions for all bill licences at once
           const transactionInsertArgs = transactionInsertStub.args[0]
 
-          expect(transactionInsertStub.calledOnce).to.be.true()
-          expect(transactionInsertArgs[0]).to.have.length(2)
+          expect(transactionInsertStub.calledOnce).toBe(true)
+          expect(transactionInsertArgs[0]).toHaveLength(2)
 
           // We just check that on of the transactions being persisted is linked to the records we expect
-          expect(transactionInsertArgs[0][0].billLicenceId).equal(billLicenceInsertArgs[0][0].id)
-          expect(transactionInsertArgs[0][0].externalId).equal('7e752fa6-a19c-4779-b28c-6e536f028795')
+          expect(transactionInsertArgs[0][0].billLicenceId).toEqual(billLicenceInsertArgs[0][0].id)
+          expect(transactionInsertArgs[0][0].externalId).toEqual('7e752fa6-a19c-4779-b28c-6e536f028795')
         })
       })
 
@@ -232,9 +215,9 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
           it('returns false (bill run is empty) and persists nothing', async () => {
             const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
 
-            expect(result).to.be.false()
+            expect(result).toBe(false)
 
-            expect(billInsertStub.called).to.be.false()
+            expect(billInsertStub.called).toBe(false)
           })
         })
 
@@ -248,9 +231,9 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
           it('returns false (bill run is empty) and persists nothing', async () => {
             const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
 
-            expect(result).to.be.false()
+            expect(result).toBe(false)
 
-            expect(billInsertStub.called).to.be.false()
+            expect(billInsertStub.called).toBe(false)
           })
         })
       })
@@ -268,10 +251,12 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])).to.reject()
+        const error = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount]).catch((e) => {
+          return e
+        })
 
-        expect(error).to.be.an.instanceOf(BillRunError)
-        expect(error.code).to.equal(BillRunModel.errorCodes.failedToPrepareTransactions)
+        expect(error).toBeInstanceOf(BillRunError)
+        expect(error.code).toEqual(BillRunModel.errorCodes.failedToPrepareTransactions)
       })
     })
 
@@ -281,9 +266,11 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
       })
 
       it('throws an error', async () => {
-        const error = await expect(ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])).to.reject()
+        const error = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount]).catch((e) => {
+          return e
+        })
 
-        expect(error).to.be.an.instanceOf(Error)
+        expect(error).toBeInstanceOf(Error)
       })
     })
   })

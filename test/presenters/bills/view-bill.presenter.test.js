@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillingAccountModel = require('../../../app/models/billing-account.model.js')
 
@@ -26,7 +19,7 @@ describe('View Bill presenter', () => {
     it('correctly presents the data', () => {
       const result = ViewBillPresenter.go(bill, billingAccount)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         accountName: 'Wessex Water Services Ltd',
         accountNumber: 'E88888888A',
         addressLines: ['86 Oxford Road', 'WOOTTON', 'COURTENAY', 'TA24 8NX'],
@@ -60,7 +53,7 @@ describe('View Bill presenter', () => {
         it('returns just the bill total formatted as money', () => {
           const result = ViewBillPresenter.go(bill, billingAccount)
 
-          expect(result.billTotal).to.equal('£213,178.00')
+          expect(result.billTotal).toEqual('£213,178.00')
         })
       })
 
@@ -72,7 +65,7 @@ describe('View Bill presenter', () => {
         it('returns the bill total formatted as money plus "credit" as a suffix', () => {
           const result = ViewBillPresenter.go(bill, billingAccount)
 
-          expect(result.billTotal).to.equal('£213,178.00 credit')
+          expect(result.billTotal).toEqual('£213,178.00 credit')
         })
       })
     })
@@ -82,7 +75,7 @@ describe('View Bill presenter', () => {
         it('returns the "creditNoteValue" of the bill (£0.00)', () => {
           const result = ViewBillPresenter.go(bill, billingAccount)
 
-          expect(result.creditsTotal).to.equal('£0.00')
+          expect(result.creditsTotal).toEqual('£0.00')
         })
       })
 
@@ -95,7 +88,7 @@ describe('View Bill presenter', () => {
           it('returns £0.00', () => {
             const result = ViewBillPresenter.go(bill, billingAccount)
 
-            expect(result.creditsTotal).to.equal('£0.00')
+            expect(result.creditsTotal).toEqual('£0.00')
           })
         })
 
@@ -107,7 +100,7 @@ describe('View Bill presenter', () => {
           it('returns £213,178.00', () => {
             const result = ViewBillPresenter.go(bill, billingAccount)
 
-            expect(result.creditsTotal).to.equal('£213,178.00')
+            expect(result.creditsTotal).toEqual('£213,178.00')
           })
         })
 
@@ -119,7 +112,7 @@ describe('View Bill presenter', () => {
           it('returns £0.00', () => {
             const result = ViewBillPresenter.go(bill, billingAccount)
 
-            expect(result.creditsTotal).to.equal('£0.00')
+            expect(result.creditsTotal).toEqual('£0.00')
           })
         })
       })
@@ -130,7 +123,7 @@ describe('View Bill presenter', () => {
         it('returns the "invoiceValue" of the bill (£213,178.00)', () => {
           const result = ViewBillPresenter.go(bill, billingAccount)
 
-          expect(result.debitsTotal).to.equal('£213,178.00')
+          expect(result.debitsTotal).toEqual('£213,178.00')
         })
       })
 
@@ -143,7 +136,7 @@ describe('View Bill presenter', () => {
           it('returns £213,178.00', () => {
             const result = ViewBillPresenter.go(bill, billingAccount)
 
-            expect(result.debitsTotal).to.equal('£213,178.00')
+            expect(result.debitsTotal).toEqual('£213,178.00')
           })
         })
 
@@ -155,7 +148,7 @@ describe('View Bill presenter', () => {
           it('returns £0.00', () => {
             const result = ViewBillPresenter.go(bill, billingAccount)
 
-            expect(result.debitsTotal).to.equal('£0.00')
+            expect(result.debitsTotal).toEqual('£0.00')
           })
         })
 
@@ -167,7 +160,7 @@ describe('View Bill presenter', () => {
           it('returns £0.00', () => {
             const result = ViewBillPresenter.go(bill, billingAccount)
 
-            expect(result.debitsTotal).to.equal('£0.00')
+            expect(result.debitsTotal).toEqual('£0.00')
           })
         })
       })

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const BillingAccountModel = require('../../../app/models/billing-account.model.js')
@@ -68,7 +63,7 @@ describe('View Bill service', () => {
       it('will fetch the data and format it using the bill and licence summaries presenters', async () => {
         const result = await ViewBillService.go(testId)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'bill-runs',
           billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737',
           billLicences: [
@@ -111,7 +106,7 @@ describe('View Bill service', () => {
       it('will fetch the data and format it using the bill and view bill licence presenters', async () => {
         const result = await ViewBillService.go(testId)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'bill-runs',
           billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737',
           tableCaption: '2 transactions',
@@ -135,7 +130,7 @@ describe('View Bill service', () => {
     })
 
     it('throws an exception', async () => {
-      await expect(ViewBillService.go('testId')).to.reject()
+      await expect(ViewBillService.go('testId')).rejects.toThrow()
     })
   })
 })

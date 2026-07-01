@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CompanyHelper = require('../../../support/helpers/company.helper.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
@@ -30,7 +23,7 @@ describe('Return Versions - Setup - Fetch Licence service', () => {
   let supersededReturnVersion
   let supersededReturnRequirement
 
-  before(async () => {
+  beforeAll(async () => {
     // Create a licence
     licence = await LicenceHelper.add()
 
@@ -87,7 +80,7 @@ describe('Return Versions - Setup - Fetch Licence service', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await modLog.$query().delete()
 
     await returnRequirement.$query().delete()
@@ -110,7 +103,7 @@ describe('Return Versions - Setup - Fetch Licence service', () => {
     it('returns the matching licence and associated records', async () => {
       const result = await FetchLicenceService.go(licence.id)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         id: licence.id,
         expiredDate: null,
         lapsedDate: null,
@@ -156,7 +149,7 @@ describe('Return Versions - Setup - Fetch Licence service', () => {
           return licenceVersion.id
         })
 
-        expect(resultLicenceVersionIds).to.equal([licenceVersion.id])
+        expect(resultLicenceVersionIds).toEqual([licenceVersion.id])
       })
 
       it('includes only return versions that can be copied from', async () => {
@@ -166,7 +159,7 @@ describe('Return Versions - Setup - Fetch Licence service', () => {
           return returnVersion.id
         })
 
-        expect(resultReturnVersionIds).to.equal([returnVersion.id])
+        expect(resultReturnVersionIds).toEqual([returnVersion.id])
       })
     })
   })
@@ -175,7 +168,7 @@ describe('Return Versions - Setup - Fetch Licence service', () => {
     it('returns undefined', async () => {
       const result = await FetchLicenceService.go('7f665e1b-a2cf-4241-9dc9-9351edc16533')
 
-      expect(result).to.be.undefined()
+      expect(result).toBeUndefined()
     })
   })
 })

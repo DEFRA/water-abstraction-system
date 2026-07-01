@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -59,11 +54,11 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
         it('saves the submitted option', async () => {
           await SubmitMultipleEntriesService.go(session.id, payload, yarStub)
 
-          expect(session.lines[0].quantity).to.equal(100)
-          expect(session.lines[0].quantityCubicMetres).to.equal(100000)
-          expect(session.lines[1].quantity).to.equal(200)
-          expect(session.lines[1].quantityCubicMetres).to.equal(200000)
-          expect(session.$update.called).to.be.true()
+          expect(session.lines[0].quantity).toEqual(100)
+          expect(session.lines[0].quantityCubicMetres).toEqual(100000)
+          expect(session.lines[1].quantity).toEqual(200)
+          expect(session.lines[1].quantityCubicMetres).toEqual(200000)
+          expect(session.$update.called).toBe(true)
         })
 
         it('sets the notification message title to "Updated" and the text to "2 monthly volumes have been updated" ', async () => {
@@ -71,8 +66,8 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
 
           const [flashType, notification] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(notification).to.equal({
+          expect(flashType).toEqual('notification')
+          expect(notification).toEqual({
             title: 'Updated',
             text: '2 monthly volumes have been updated'
           })
@@ -99,9 +94,9 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
         it('saves the submitted option', async () => {
           await SubmitMultipleEntriesService.go(session.id, payload, yarStub)
 
-          expect(session.lines[0].reading).to.equal(100)
-          expect(session.lines[1].reading).to.equal(200)
-          expect(session.$update.called).to.be.true()
+          expect(session.lines[0].reading).toEqual(100)
+          expect(session.lines[1].reading).toEqual(200)
+          expect(session.$update.called).toBe(true)
         })
 
         it('sets the notification message title to "Updated" and the text to "2 monthly meter readings have been updated" ', async () => {
@@ -109,8 +104,8 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
 
           const [flashType, notification] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(notification).to.equal({
+          expect(flashType).toEqual('notification')
+          expect(notification).toEqual({
             title: 'Updated',
             text: '2 monthly meter readings have been updated'
           })
@@ -126,30 +121,27 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
       it('returns the page data for the view', async () => {
         const result = await SubmitMultipleEntriesService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal(
-          {
-            backLink: {
-              href: `/system/return-logs/setup/${session.id}/check`,
-              text: 'Back'
-            },
-            endDate: '1 May 2023',
-            frequency: 'monthly',
-            lineCount: 2,
-            measurementType: 'volumes',
-            multipleEntries: null,
-            pageTitle: 'Enter multiple monthly volumes',
-            pageTitleCaption: 'Return reference 12345',
-            startDate: '1 April 2023'
+        expect(result).toMatchObject({
+          backLink: {
+            href: `/system/return-logs/setup/${session.id}/check`,
+            text: 'Back'
           },
-          { skip: ['sessionId', 'error'] }
-        )
+          endDate: '1 May 2023',
+          frequency: 'monthly',
+          lineCount: 2,
+          measurementType: 'volumes',
+          multipleEntries: null,
+          pageTitle: 'Enter multiple monthly volumes',
+          pageTitleCaption: 'Return reference 12345',
+          startDate: '1 April 2023'
+        })
       })
 
       describe('because the user has not entered anything', () => {
         it('includes an error for the input form element', async () => {
           const result = await SubmitMultipleEntriesService.go(session.id, payload, yarStub)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             errorList: [
               {
                 href: '#multipleEntries',

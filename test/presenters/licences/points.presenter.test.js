@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
 
@@ -33,7 +26,7 @@ describe('Licences - Points presenter', () => {
     it('returns the expected licence points details', () => {
       const result = PointsPresenter.go(points, licence)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/licences/${licence.id}/summary`,
           text: 'Go back to licence summary'

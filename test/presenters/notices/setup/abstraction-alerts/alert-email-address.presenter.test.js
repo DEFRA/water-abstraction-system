@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
 
@@ -35,7 +28,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
     it('returns page data for the view', () => {
       const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         alertEmailAddressOptions: {
           otherUserChecked: false,
           otherUserEmailAddressInput: '',
@@ -61,7 +54,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
           it('returns true', () => {
             const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
 
-            expect(result.alertEmailAddressOptions.otherUserChecked).to.be.true()
+            expect(result.alertEmailAddressOptions.otherUserChecked).toBe(true)
           })
         })
 
@@ -73,7 +66,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
           it('returns false', () => {
             const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
 
-            expect(result.alertEmailAddressOptions.otherUserChecked).to.be.false()
+            expect(result.alertEmailAddressOptions.otherUserChecked).toBe(false)
           })
         })
       })
@@ -88,7 +81,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
           it('returns the session.alertEmailAddress', () => {
             const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
 
-            expect(result.alertEmailAddressOptions.otherUserEmailAddressInput).to.equal('test@defra.gov.uk')
+            expect(result.alertEmailAddressOptions.otherUserEmailAddressInput).toEqual('test@defra.gov.uk')
           })
         })
 
@@ -100,7 +93,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
           it('returns an empty string', () => {
             const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
 
-            expect(result.alertEmailAddressOptions.otherUserEmailAddressInput).to.equal('')
+            expect(result.alertEmailAddressOptions.otherUserEmailAddressInput).toEqual('')
           })
         })
       })
@@ -114,7 +107,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
           it('returns true', () => {
             const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
 
-            expect(result.alertEmailAddressOptions.usernameChecked).to.be.true()
+            expect(result.alertEmailAddressOptions.usernameChecked).toBe(true)
           })
         })
 
@@ -126,7 +119,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Email Address presenter',
           it('returns false', () => {
             const result = AlertEmailAddressPresenter.go(session, auth, validationResult)
 
-            expect(result.alertEmailAddressOptions.usernameChecked).to.be.false()
+            expect(result.alertEmailAddressOptions.usernameChecked).toBe(false)
           })
         })
       })

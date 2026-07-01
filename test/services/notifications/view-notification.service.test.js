@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
@@ -56,7 +51,7 @@ describe('Notifications - View Notification service', () => {
       it('returns the page data for the view', async () => {
         const result = await ViewNotificationService.go(notification.id, licence.id)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'search',
           address: [],
           alertDetails: null,
@@ -85,7 +80,7 @@ describe('Notifications - View Notification service', () => {
       it('returns the page data for the view', async () => {
         const result = await ViewNotificationService.go(notification.id)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'notices',
           address: [],
           alertDetails: null,
@@ -118,7 +113,7 @@ describe('Notifications - View Notification service', () => {
       it('returns the page data for the view', async () => {
         const result = await ViewNotificationService.go(notification.id, licence, returnLogId)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'notices',
           address: [],
           alertDetails: null,
@@ -151,7 +146,7 @@ describe('Notifications - View Notification service', () => {
       it('returns the page data for the view', async () => {
         const result = await ViewNotificationService.go(notification.id, licence, returnLogId, companyContactId)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'notices',
           address: [],
           alertDetails: null,

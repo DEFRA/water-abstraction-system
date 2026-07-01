@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const IndexValidator = require('../../../app/validators/bill-runs/index.validator.js')
 
@@ -24,14 +17,14 @@ describe('Bill Runs - Index validator', () => {
       it('confirms the data is valid', () => {
         const result = IndexValidator.go(payload, regions)
 
-        expect(result.value).to.equal({
+        expect(result.value).toEqual({
           number: 1001,
           regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059'],
           runTypes: ['two_part_tariff'],
           statuses: ['review'],
           yearCreated: 2026
         })
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -43,8 +36,8 @@ describe('Bill Runs - Index validator', () => {
       it('confirms the data is valid', () => {
         const result = IndexValidator.go(payload, regions)
 
-        expect(result.value).to.equal({})
-        expect(result.error).not.to.exist()
+        expect(result.value).toEqual({})
+        expect(result.error).toBeUndefined()
       })
     })
   })
@@ -65,9 +58,9 @@ describe('Bill Runs - Index validator', () => {
         it('fails validation', () => {
           const result = IndexValidator.go(payload, regions)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('The Number must be a number')
-          expect(result.error.details[0].path[0]).to.equal('number')
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The Number must be a number')
+          expect(result.error.details[0].path[0]).toEqual('number')
         })
       })
 
@@ -79,9 +72,9 @@ describe('Bill Runs - Index validator', () => {
         it('fails validation', () => {
           const result = IndexValidator.go(payload, regions)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('The Number must be greater than zero')
-          expect(result.error.details[0].path[0]).to.equal('number')
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The Number must be greater than zero')
+          expect(result.error.details[0].path[0]).toEqual('number')
         })
       })
 
@@ -93,9 +86,9 @@ describe('Bill Runs - Index validator', () => {
         it('fails validation', () => {
           const result = IndexValidator.go(payload, regions)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('The Number must be a whole number')
-          expect(result.error.details[0].path[0]).to.equal('number')
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The Number must be a whole number')
+          expect(result.error.details[0].path[0]).toEqual('number')
         })
       })
 
@@ -107,9 +100,9 @@ describe('Bill Runs - Index validator', () => {
         it('fails validation', () => {
           const result = IndexValidator.go(payload, regions)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('The Number cannot exceed 999999')
-          expect(result.error.details[0].path[0]).to.equal('number')
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The Number cannot exceed 999999')
+          expect(result.error.details[0].path[0]).toEqual('number')
         })
       })
 
@@ -121,9 +114,9 @@ describe('Bill Runs - Index validator', () => {
         it('fails validation', () => {
           const result = IndexValidator.go(payload, regions)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('The Number must be between 1 and 999999')
-          expect(result.error.details[0].path[0]).to.equal('number')
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The Number must be between 1 and 999999')
+          expect(result.error.details[0].path[0]).toEqual('number')
         })
       })
     })
@@ -137,9 +130,9 @@ describe('Bill Runs - Index validator', () => {
         it('fails validation', () => {
           const result = IndexValidator.go(payload, regions)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('Select a valid Run type')
-          expect(result.error.details[0].path[0]).to.equal('runTypes')
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Select a valid Run type')
+          expect(result.error.details[0].path[0]).toEqual('runTypes')
         })
       })
     })
@@ -153,9 +146,9 @@ describe('Bill Runs - Index validator', () => {
         it('fails validation', () => {
           const result = IndexValidator.go(payload, regions)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('The Year created must be a number')
-          expect(result.error.details[0].path[0]).to.equal('yearCreated')
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The Year created must be a number')
+          expect(result.error.details[0].path[0]).toEqual('yearCreated')
         })
       })
 
@@ -169,11 +162,11 @@ describe('Bill Runs - Index validator', () => {
         it('fails validation', () => {
           const result = IndexValidator.go(payload, regions)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal(
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual(
             `The Year created cannot exceed the current year of ${currentYear}`
           )
-          expect(result.error.details[0].path[0]).to.equal('yearCreated')
+          expect(result.error.details[0].path[0]).toEqual('yearCreated')
         })
       })
 
@@ -185,9 +178,9 @@ describe('Bill Runs - Index validator', () => {
         it('fails validation', () => {
           const result = IndexValidator.go(payload, regions)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('The Year created must be greater or equal to 2014')
-          expect(result.error.details[0].path[0]).to.equal('yearCreated')
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The Year created must be greater or equal to 2014')
+          expect(result.error.details[0].path[0]).toEqual('yearCreated')
         })
       })
 
@@ -199,9 +192,9 @@ describe('Bill Runs - Index validator', () => {
         it('fails validation', () => {
           const result = IndexValidator.go(payload, regions)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('The Year created must be a whole number')
-          expect(result.error.details[0].path[0]).to.equal('yearCreated')
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual('The Year created must be a whole number')
+          expect(result.error.details[0].path[0]).toEqual('yearCreated')
         })
       })
 
@@ -215,9 +208,9 @@ describe('Bill Runs - Index validator', () => {
         it('fails validation', () => {
           const result = IndexValidator.go(payload, regions)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal(`The Year created must be between 2014 and ${currentYear}`)
-          expect(result.error.details[0].path[0]).to.equal('yearCreated')
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual(`The Year created must be between 2014 and ${currentYear}`)
+          expect(result.error.details[0].path[0]).toEqual('yearCreated')
         })
       })
     })
@@ -231,9 +224,9 @@ describe('Bill Runs - Index validator', () => {
         it('fails validation', () => {
           const result = IndexValidator.go(payload, regions)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('Select a valid Region')
-          expect(result.error.details[0].path[0]).to.equal('regions')
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Select a valid Region')
+          expect(result.error.details[0].path[0]).toEqual('regions')
         })
       })
     })
@@ -247,9 +240,9 @@ describe('Bill Runs - Index validator', () => {
         it('fails validation', () => {
           const result = IndexValidator.go(payload, regions)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('Select a valid Status')
-          expect(result.error.details[0].path[0]).to.equal('statuses')
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Select a valid Status')
+          expect(result.error.details[0].path[0]).toEqual('statuses')
         })
       })
     })
@@ -264,11 +257,11 @@ describe('Bill Runs - Index validator', () => {
         it('fails validation and displays all errors', () => {
           const result = IndexValidator.go(payload, regions)
 
-          expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('Select a valid Region')
-          expect(result.error.details[0].path[0]).to.equal('regions')
-          expect(result.error.details[1].message).to.equal('Select a valid Run type')
-          expect(result.error.details[1].path[0]).to.equal('runTypes')
+          expect(result.value).toBeDefined()
+          expect(result.error.details[0].message).toEqual('Select a valid Region')
+          expect(result.error.details[0].path[0]).toEqual('regions')
+          expect(result.error.details[1].message).toEqual('Select a valid Run type')
+          expect(result.error.details[1].path[0]).toEqual('runTypes')
         })
       })
     })

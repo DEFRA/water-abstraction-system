@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -40,22 +35,19 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
     it('fetches the current setup session record', async () => {
       const result = await StopOrReduceService.go(session.id)
 
-      expect(result.sessionId).to.equal(session.id)
+      expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
       const result = await StopOrReduceService.go(session.id)
 
-      expect(result).to.equal(
-        {
-          backLink: `/system/licence-monitoring-station/setup/${session.id}/threshold-and-unit`,
-          monitoringStationLabel: 'Monitoring Station Label',
-          pageTitle: 'Does the licence holder need to stop or reduce at this threshold?',
-          stopOrReduce: null,
-          reduceAtThreshold: null
-        },
-        { skip: ['sessionId'] }
-      )
+      expect(result).toMatchObject({
+        backLink: `/system/licence-monitoring-station/setup/${session.id}/threshold-and-unit`,
+        monitoringStationLabel: 'Monitoring Station Label',
+        pageTitle: 'Does the licence holder need to stop or reduce at this threshold?',
+        stopOrReduce: null,
+        reduceAtThreshold: null
+      })
     })
   })
 })

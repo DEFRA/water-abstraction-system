@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -51,17 +46,17 @@ describe('Return Logs Setup - Submit Note service', () => {
         it('saves the submitted value', async () => {
           await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-          expect(session.note).to.equal({
+          expect(session.note).toEqual({
             content: 'A new note related to return logs',
             userEmail: 'carol.shaw@atari.com'
           })
-          expect(session.$update.called).to.be.true()
+          expect(session.$update.called).toBe(true)
         })
 
         it('returns the correct details the controller needs to redirect the journey', async () => {
           const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-          expect(result).to.equal({})
+          expect(result).toEqual({})
         })
 
         it('sets the notification message to "Added"', async () => {
@@ -69,8 +64,8 @@ describe('Return Logs Setup - Submit Note service', () => {
 
           const [flashType, notification] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ title: 'Added', text: 'Note added' })
+          expect(flashType).toEqual('notification')
+          expect(notification).toEqual({ title: 'Added', text: 'Note added' })
         })
       })
 
@@ -93,7 +88,7 @@ describe('Return Logs Setup - Submit Note service', () => {
         it('saves the submitted value', async () => {
           await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-          expect(session.note).to.equal({
+          expect(session.note).toEqual({
             content: 'An updated note related to return requirement',
             userEmail: 'carol.shaw@atari.com'
           })
@@ -102,7 +97,7 @@ describe('Return Logs Setup - Submit Note service', () => {
         it('returns the journey to redirect the page', async () => {
           const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-          expect(result).to.equal({})
+          expect(result).toEqual({})
         })
 
         it('sets the notification message to "Updated"', async () => {
@@ -110,8 +105,8 @@ describe('Return Logs Setup - Submit Note service', () => {
 
           const [flashType, notification] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(notification).to.equal({ title: 'Updated', text: 'Note updated' })
+          expect(flashType).toEqual('notification')
+          expect(notification).toEqual({ title: 'Updated', text: 'Note updated' })
         })
       })
     })
@@ -124,7 +119,7 @@ describe('Return Logs Setup - Submit Note service', () => {
       it('returns page data for the view', async () => {
         const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           backLink: {
             href: `/system/return-logs/setup/${session.id}/check`,
             text: 'Back'
@@ -151,7 +146,7 @@ describe('Return Logs Setup - Submit Note service', () => {
         it('includes an error for the input element', async () => {
           const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             errorList: [
               {
                 href: '#note',
@@ -185,7 +180,7 @@ describe('Return Logs Setup - Submit Note service', () => {
         it('includes an error for the input element', async () => {
           const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-          expect(result.error).to.equal({
+          expect(result.error).toEqual({
             errorList: [
               {
                 href: '#note',

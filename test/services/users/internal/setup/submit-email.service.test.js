@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
@@ -50,17 +45,17 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
     it('saves the submitted value', async () => {
       await SubmitEmailService.go(session.id, payload, yarStub)
 
-      expect(session).to.equal({
+      expect(session).toEqual({
         ...session,
         email: 'bob@environment-agency.gov.uk'
       })
-      expect(session.$update.called).to.be.true()
+      expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
       const result = await SubmitEmailService.go(session.id, payload, yarStub)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         redirectUrl: `/system/users/internal/setup/${session.id}/permissions`
       })
     })
@@ -80,7 +75,7 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
         it('redirects to the Check page', async () => {
           const result = await SubmitEmailService.go(session.id, payload, yarStub)
 
-          expect(result).to.equal({
+          expect(result).toEqual({
             redirectUrl: `/system/users/internal/setup/${session.id}/check`
           })
         })
@@ -90,7 +85,7 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
             it('does not set a notification', async () => {
               await SubmitEmailService.go(session.id, payload, yarStub)
 
-              expect(yarStub.flash.called).to.be.false()
+              expect(yarStub.flash.called).toBe(false)
             })
           })
 
@@ -104,8 +99,8 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
 
               const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-              expect(flashType).to.equal('notification')
-              expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Email address updated' })
+              expect(flashType).toEqual('notification')
+              expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Email address updated' })
             })
           })
         })
@@ -115,7 +110,7 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
         it('does not set a notification', async () => {
           await SubmitEmailService.go(session.id, payload, yarStub)
 
-          expect(yarStub.flash.called).to.be.false()
+          expect(yarStub.flash.called).toBe(false)
         })
       })
     })
@@ -129,7 +124,7 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
     it('returns page data for the view, with errors', async () => {
       const result = await SubmitEmailService.go(session.id, payload, yarStub)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'users',
         backLink: {
           href: '/system/users',

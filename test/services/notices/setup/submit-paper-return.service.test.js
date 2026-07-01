@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
@@ -61,14 +56,14 @@ describe('Notices - Setup - Submit Paper Return service', () => {
     it('saves the selected returns', async () => {
       await SubmitPaperReturnService.go(session.id, payload, yarStub)
 
-      expect(session.selectedReturns).to.equal([dueReturn.returnLogId])
-      expect(session.$update.called).to.be.true()
+      expect(session.selectedReturns).toEqual([dueReturn.returnLogId])
+      expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
       const result = await SubmitPaperReturnService.go(session.id, payload, yarStub)
 
-      expect(result).to.equal({})
+      expect(result).toEqual({})
     })
 
     describe('and the payload has one item (is not an array)', () => {
@@ -84,7 +79,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
       it('saves the selected returns', async () => {
         await SubmitPaperReturnService.go(session.id, payload, yarStub)
 
-        expect(session.selectedReturns).to.equal([dueReturn.returnLogId])
+        expect(session.selectedReturns).toEqual([dueReturn.returnLogId])
       })
     })
 
@@ -104,8 +99,8 @@ describe('Notices - Setup - Submit Paper Return service', () => {
           // Check we add the flash message
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('notification')
-          expect(bannerMessage).to.equal({
+          expect(flashType).toEqual('notification')
+          expect(bannerMessage).toEqual({
             text: 'Returns updated',
             titleText: 'Updated'
           })
@@ -124,7 +119,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
         it('does not set a flash message', async () => {
           await SubmitPaperReturnService.go(session.id, payload, yarStub)
 
-          expect(yarStub.flash.args[0]).to.be.undefined()
+          expect(yarStub.flash.args[0]).toBeUndefined()
         })
       })
     })
@@ -144,7 +139,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
     it('returns page data for the view, with errors', async () => {
       const result = await SubmitPaperReturnService.go(session.id, payload, yarStub)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'notices',
         backLink: {
           href: `/system/notices/setup/${session.id}/licence`,
@@ -187,7 +182,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
       it('returns page data for the view, with errors, and no options selected', async () => {
         const result = await SubmitPaperReturnService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           activeNavBar: 'notices',
           backLink: {
             href: `/system/notices/setup/${session.id}/licence`,

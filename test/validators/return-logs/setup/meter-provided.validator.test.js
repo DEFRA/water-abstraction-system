@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const MeterProvidedValidator = require('../../../../app/validators/return-logs/setup/meter-provided.validator.js')
 
@@ -22,7 +15,7 @@ describe('Return Logs Setup - Meter Provided validator', () => {
       it('confirms the payload is valid', () => {
         const result = MeterProvidedValidator.go(payload)
 
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -34,7 +27,7 @@ describe('Return Logs Setup - Meter Provided validator', () => {
       it('confirms the payload is valid', () => {
         const result = MeterProvidedValidator.go(payload)
 
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
   })
@@ -48,8 +41,8 @@ describe('Return Logs Setup - Meter Provided validator', () => {
       it('fails validation with the message "Select if meter details have been provided"', () => {
         const result = MeterProvidedValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select if meter details have been provided')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select if meter details have been provided')
       })
     })
   })

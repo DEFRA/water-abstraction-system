@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const SiteDescriptionValidator = require('../../../../app/validators/return-versions/setup/site-description.validator.js')
 
@@ -24,7 +17,7 @@ describe('Return Versions Setup - Site Description validator', () => {
       it('confirms the payload is valid', () => {
         const result = SiteDescriptionValidator.go(payload)
 
-        expect(result.error).not.to.exist()
+        expect(result.error).toBeUndefined()
       })
     })
   })
@@ -38,8 +31,8 @@ describe('Return Versions Setup - Site Description validator', () => {
       it('fails validation with the error "Enter a description of the site"', () => {
         const result = SiteDescriptionValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter a description of the site')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Enter a description of the site')
       })
     })
 
@@ -55,8 +48,8 @@ describe('Return Versions Setup - Site Description validator', () => {
       it('fails validation with the error "Site description must be 10 characters or more"', () => {
         const result = SiteDescriptionValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Site description must be 10 characters or more')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Site description must be 10 characters or more')
       })
     })
 
@@ -73,8 +66,8 @@ describe('Return Versions Setup - Site Description validator', () => {
       it('fails validation with the error "Site description must be 100 characters or less"', () => {
         const result = SiteDescriptionValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Site description must be 100 characters or less')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Site description must be 100 characters or less')
       })
     })
   })

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
 
@@ -36,7 +29,7 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
     it('returns page data for the view', () => {
       const result = CheckLicenceMatchesPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`, text: 'Back' },
         cancelLink: `/system/notices/setup/${session.id}/abstraction-alerts/cancel`,
         pageTitle: 'Check the licence matches for the selected thresholds',
@@ -94,7 +87,7 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
         it('returns only the thresholds previously selected', () => {
           const result = CheckLicenceMatchesPresenter.go(session)
 
-          expect(result.restrictions[0]).to.equal({
+          expect(result.restrictions[0]).toEqual({
             abstractionPeriod: '1 February to 1 January',
             action: {
               link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStations.one.id}`,
@@ -114,7 +107,7 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
           it('returns the correct action', () => {
             const result = CheckLicenceMatchesPresenter.go(session)
 
-            expect(result.restrictions[0].action).to.equal({
+            expect(result.restrictions[0].action).toEqual({
               link: `/system/notices/setup/${session.id}/abstraction-alerts/remove-threshold/${licenceMonitoringStations.one.id}`,
               text: 'Remove'
             })
@@ -126,7 +119,7 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
             it('returns the correct action', () => {
               const result = CheckLicenceMatchesPresenter.go(session)
 
-              expect(result.restrictions[0].alertDate).to.equal('')
+              expect(result.restrictions[0].alertDate).toEqual('')
             })
           })
 
@@ -142,7 +135,7 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
             it('returns the correct action', () => {
               const result = CheckLicenceMatchesPresenter.go(session)
 
-              expect(result.restrictions[0].alertDate).to.equal('12 May 2025')
+              expect(result.restrictions[0].alertDate).toEqual('12 May 2025')
             })
           })
         })
@@ -155,9 +148,9 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
           it('returns only the thresholds previously selected and not removed', () => {
             const result = CheckLicenceMatchesPresenter.go(session)
 
-            expect(result.restrictions.length).to.equal(2)
+            expect(result.restrictions.length).toEqual(2)
 
-            expect(result.restrictions).to.equal([
+            expect(result.restrictions).toEqual([
               {
                 abstractionPeriod: '1 January to 31 March',
                 action: {
@@ -197,7 +190,7 @@ describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter
             it('should not show any remove links for the remaining restriction', () => {
               const result = CheckLicenceMatchesPresenter.go(session)
 
-              expect(result.restrictions).to.equal([
+              expect(result.restrictions).toEqual([
                 {
                   abstractionPeriod: '1 January to 31 March',
                   action: null,

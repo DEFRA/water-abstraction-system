@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { generateUUID, timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
@@ -38,23 +31,20 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       it('creates a new return submission and sets the version to 1', async () => {
         const result = await CreateReturnSubmissionService.go(metadata, session, timestamp, user)
 
-        expect(result).to.equal(
-          {
-            createdAt: timestamp,
-            createdBy: user.userId,
-            current: true,
-            metadata,
-            nilReturn: false,
-            notes: 'TEST_NOTE',
-            returnId: session.returnId,
-            returnLogId: session.returnLogId,
-            userId: user.username,
-            userType: 'internal',
-            version: 1
-          },
-          { skip: ['id'] }
-        )
-        expect(result).to.be.instanceOf(ReturnSubmissionModel)
+        expect(result).toMatchObject({
+          createdAt: timestamp,
+          createdBy: user.userId,
+          current: true,
+          metadata,
+          nilReturn: false,
+          notes: 'TEST_NOTE',
+          returnId: session.returnId,
+          returnLogId: session.returnLogId,
+          userId: user.username,
+          userType: 'internal',
+          version: 1
+        })
+        expect(result).toBeInstanceOf(ReturnSubmissionModel)
       })
     })
 
@@ -68,23 +58,20 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       it('creates a new return submission and sets the version to 2', async () => {
         const result = await CreateReturnSubmissionService.go(metadata, session, timestamp, user)
 
-        expect(result).to.equal(
-          {
-            createdAt: timestamp,
-            createdBy: user.userId,
-            current: true,
-            metadata,
-            nilReturn: false,
-            notes: 'TEST_NOTE',
-            returnId: session.returnId,
-            returnLogId: session.returnLogId,
-            userId: user.username,
-            userType: 'internal',
-            version: 2
-          },
-          { skip: ['id'] }
-        )
-        expect(result).to.be.instanceOf(ReturnSubmissionModel)
+        expect(result).toMatchObject({
+          createdAt: timestamp,
+          createdBy: user.userId,
+          current: true,
+          metadata,
+          nilReturn: false,
+          notes: 'TEST_NOTE',
+          returnId: session.returnId,
+          returnLogId: session.returnLogId,
+          userId: user.username,
+          userType: 'internal',
+          version: 2
+        })
+        expect(result).toBeInstanceOf(ReturnSubmissionModel)
       })
 
       it('marks the previous version as superseded', async () => {
@@ -95,7 +82,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
           .where('version', 1)
           .first()
 
-        expect(previousVersion.current).to.be.false()
+        expect(previousVersion.current).toBe(false)
       })
     })
 
@@ -107,7 +94,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       it('sets the nillReturn field to true', async () => {
         const result = await CreateReturnSubmissionService.go(metadata, session, timestamp, user)
 
-        expect(result.nilReturn).to.be.true()
+        expect(result.nilReturn).toBe(true)
       })
     })
 
@@ -119,7 +106,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       it('leaves the notes field blank', async () => {
         const result = await CreateReturnSubmissionService.go(metadata, session, timestamp, user)
 
-        expect(result.notes).to.not.exist()
+        expect(result.notes).toBeUndefined()
       })
     })
 
@@ -150,8 +137,8 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
           .where('version', 1)
           .first()
 
-        expect(currentVersion).to.not.exist()
-        expect(previousVersion.current).to.be.true()
+        expect(currentVersion).toBeUndefined()
+        expect(previousVersion.current).toBe(true)
       })
     })
   })

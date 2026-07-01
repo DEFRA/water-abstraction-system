@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CRMContactsSeeder = require('../../support/seeders/crm-contacts.seeder.js')
 const EmptyLicence = require('../../support/seeders/empty-licence.seeder.js')
@@ -37,7 +30,7 @@ describe('Notices - Recipient Queries DAL', () => {
 
     let scenarios
 
-    before(async () => {
+    beforeAll(async () => {
       scenarios = {}
 
       let licence
@@ -74,14 +67,16 @@ describe('Notices - Recipient Queries DAL', () => {
       }
     })
 
-    after(async () => {
+    afterAll(async () => {
       await RecipientScenariosSeeder.clean(scenarios)
     })
 
     describe('when called', () => {
       it('returns the expected query', () => {
-        expect(query).to.startWith(`
+        expect(
+          query.startsWith(`
   INNER JOIN (`)
+        ).toBe(true)
       })
     })
 
@@ -93,7 +88,7 @@ describe('Notices - Recipient Queries DAL', () => {
 
           const { rows } = await db.raw(wrappedQuery, [licenceRefs])
 
-          expect(rows).to.equal([
+          expect(rows).toEqual([
             {
               licence_ref: licence.licence.licenceRef,
               company_id: licenceHolder.company.id,
@@ -111,7 +106,7 @@ describe('Notices - Recipient Queries DAL', () => {
 
           const { rows } = await db.raw(wrappedQuery, [licenceRefs])
 
-          expect(rows).to.equal([
+          expect(rows).toEqual([
             {
               licence_ref: licence.licence.licenceRef,
               company_id: newLicenceHolder.company.id,
@@ -129,7 +124,7 @@ describe('Notices - Recipient Queries DAL', () => {
 
           const { rows } = await db.raw(wrappedQuery, [licenceRefs])
 
-          expect(rows).to.equal([])
+          expect(rows).toEqual([])
         })
       })
     })
@@ -140,7 +135,7 @@ describe('Notices - Recipient Queries DAL', () => {
 
     let scenarios
 
-    before(async () => {
+    beforeAll(async () => {
       scenarios = {}
 
       // 1) Additional contact present
@@ -169,7 +164,7 @@ describe('Notices - Recipient Queries DAL', () => {
       scenarios.additionalContactWithNoMatchingLicences = await _additionalContactAbstractionAlertsLicences(false)
     })
 
-    after(async () => {
+    afterAll(async () => {
       await RecipientScenariosSeeder.clean(scenarios)
     })
 
@@ -177,8 +172,10 @@ describe('Notices - Recipient Queries DAL', () => {
       it('returns the expected query', () => {
         const query = RecipientQueriesDal.additionalContactRecipientQuery
 
-        expect(query).to.startWith(`
+        expect(
+          query.startsWith(`
   SELECT DISTINCT`)
+        ).toBe(true)
       })
     })
 
@@ -191,7 +188,7 @@ describe('Notices - Recipient Queries DAL', () => {
 
           const expectedResult = _transformToRecipient(scenarios.withAdditionalContact.additionalContactRecipient)
 
-          expect(rows).to.equal([expectedResult])
+          expect(rows).toEqual([expectedResult])
         })
       })
 
@@ -201,7 +198,7 @@ describe('Notices - Recipient Queries DAL', () => {
 
           const { rows } = await db.raw(query, [licenceRefs])
 
-          expect(rows).to.equal([])
+          expect(rows).toEqual([])
         })
       })
 
@@ -211,7 +208,7 @@ describe('Notices - Recipient Queries DAL', () => {
 
           const { rows } = await db.raw(query, [licenceRefs])
 
-          expect(rows).to.equal([])
+          expect(rows).toEqual([])
         })
       })
 
@@ -221,7 +218,7 @@ describe('Notices - Recipient Queries DAL', () => {
 
           const { rows } = await db.raw(query, [licenceRefs])
 
-          expect(rows).to.equal([])
+          expect(rows).toEqual([])
         })
       })
 
@@ -234,7 +231,7 @@ describe('Notices - Recipient Queries DAL', () => {
           scenarios.additionalContactWithMatchingLicences.additionalContactRecipient
         )
 
-        expect(rows).to.equal([expectedResult])
+        expect(rows).toEqual([expectedResult])
       })
 
       it('(Scenario 6) ', async () => {
@@ -242,7 +239,7 @@ describe('Notices - Recipient Queries DAL', () => {
 
         const { rows } = await db.raw(query, [licenceRefs])
 
-        expect(rows).to.equal([])
+        expect(rows).toEqual([])
       })
     })
   })
@@ -250,14 +247,14 @@ describe('Notices - Recipient Queries DAL', () => {
   describe('#licenceHolderRecipientQuery', () => {
     let scenarios
 
-    before(async () => {
+    beforeAll(async () => {
       scenarios = {}
 
       // 1) Licence holder present
       scenarios.withLicenceHolder = await RecipientScenariosSeeder.licenceHolderOnly()
     })
 
-    after(async () => {
+    afterAll(async () => {
       await RecipientScenariosSeeder.clean(scenarios)
     })
 
@@ -265,8 +262,10 @@ describe('Notices - Recipient Queries DAL', () => {
       it('returns the expected query', () => {
         const query = RecipientQueriesDal.licenceHolderRecipientQuery
 
-        expect(query).to.startWith(`
+        expect(
+          query.startsWith(`
   SELECT`)
+        ).toBe(true)
       })
     })
 
@@ -281,7 +280,7 @@ describe('Notices - Recipient Queries DAL', () => {
 
           const expectedResult = _transformToRecipient(scenarios.withLicenceHolder.licenceHolderRecipient, 2)
 
-          expect(rows).to.equal([expectedResult])
+          expect(rows).toEqual([expectedResult])
         })
       })
     })
@@ -290,7 +289,7 @@ describe('Notices - Recipient Queries DAL', () => {
   describe('#primaryUserRecipientQuery', () => {
     let scenarios
 
-    before(async () => {
+    beforeAll(async () => {
       scenarios = {}
 
       // 1) Primary user present
@@ -300,7 +299,7 @@ describe('Notices - Recipient Queries DAL', () => {
       scenarios.noPrimaryUser = await RecipientScenariosSeeder.licenceHolderOnly()
     })
 
-    after(async () => {
+    afterAll(async () => {
       await RecipientScenariosSeeder.clean(scenarios)
     })
 
@@ -308,8 +307,10 @@ describe('Notices - Recipient Queries DAL', () => {
       it('returns the expected query', () => {
         const query = RecipientQueriesDal.primaryUserRecipientQuery
 
-        expect(query).to.startWith(`
+        expect(
+          query.startsWith(`
   SELECT`)
+        ).toBe(true)
       })
     })
 
@@ -324,7 +325,7 @@ describe('Notices - Recipient Queries DAL', () => {
 
           const expectedResult = _transformToRecipient(scenarios.withPrimaryUser.primaryUserRecipient, 1)
 
-          expect(rows).to.equal([expectedResult])
+          expect(rows).toEqual([expectedResult])
         })
       })
 
@@ -336,7 +337,7 @@ describe('Notices - Recipient Queries DAL', () => {
 
           const { rows } = await db.raw(`${query} WHERE ldh.licence_ref = ANY (?)`, [licenceRefs])
 
-          expect(rows).to.equal([])
+          expect(rows).toEqual([])
         })
       })
     })

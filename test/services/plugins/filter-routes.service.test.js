@@ -1,11 +1,6 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
 
 const Hoek = require('@hapi/hoek')
 
@@ -26,7 +21,7 @@ describe('Filter routes service', () => {
     it('returns the routes unchanged', () => {
       const result = FilterRoutesService.go(routes, 'dev')
 
-      expect(result).to.equal(routes)
+      expect(result).toEqual(routes)
     })
   })
 
@@ -38,7 +33,7 @@ describe('Filter routes service', () => {
 
       const result = FilterRoutesService.go(routes, 'prd')
 
-      expect(result).to.equal(filteredRoutes)
+      expect(result).toEqual(filteredRoutes)
     })
   })
 })

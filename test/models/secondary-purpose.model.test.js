@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
@@ -22,7 +15,7 @@ describe('Secondary Purpose model', () => {
   let testLicenceVersionPurposes
   let testReturnRequirementPurposes
 
-  before(async () => {
+  beforeAll(async () => {
     testRecordId = SecondaryPurposeHelper.select().id
 
     testLicenceVersionPurposes = []
@@ -46,7 +39,7 @@ describe('Secondary Purpose model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const licenceVersionPurpose of testLicenceVersionPurposes) {
       await licenceVersionPurpose.$query().delete()
     }
@@ -60,8 +53,8 @@ describe('Secondary Purpose model', () => {
     it('can successfully run a basic query', async () => {
       const result = await SecondaryPurposeModel.query().findById(testRecordId)
 
-      expect(result).to.be.an.instanceOf(SecondaryPurposeModel)
-      expect(result.id).to.equal(testRecordId)
+      expect(result).toBeInstanceOf(SecondaryPurposeModel)
+      expect(result.id).toEqual(testRecordId)
     })
   })
 
@@ -70,7 +63,7 @@ describe('Secondary Purpose model', () => {
       it('can successfully run a related query', async () => {
         const query = await SecondaryPurposeModel.query().innerJoinRelated('licenceVersionPurposes')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the bill licences', async () => {
@@ -78,13 +71,13 @@ describe('Secondary Purpose model', () => {
           .findById(testRecordId)
           .withGraphFetched('licenceVersionPurposes')
 
-        expect(result).to.be.instanceOf(SecondaryPurposeModel)
-        expect(result.id).to.equal(testRecordId)
+        expect(result).toBeInstanceOf(SecondaryPurposeModel)
+        expect(result.id).toEqual(testRecordId)
 
-        expect(result.licenceVersionPurposes).to.be.an.array()
-        expect(result.licenceVersionPurposes[0]).to.be.an.instanceOf(LicenceVersionPurposeModel)
-        expect(result.licenceVersionPurposes).to.include(testLicenceVersionPurposes[0])
-        expect(result.licenceVersionPurposes).to.include(testLicenceVersionPurposes[1])
+        expect(result.licenceVersionPurposes).toBeInstanceOf(Array)
+        expect(result.licenceVersionPurposes[0]).toBeInstanceOf(LicenceVersionPurposeModel)
+        expect(result.licenceVersionPurposes).toContainEqual(testLicenceVersionPurposes[0])
+        expect(result.licenceVersionPurposes).toContainEqual(testLicenceVersionPurposes[1])
       })
     })
 
@@ -92,7 +85,7 @@ describe('Secondary Purpose model', () => {
       it('can successfully run a related query', async () => {
         const query = await SecondaryPurposeModel.query().innerJoinRelated('returnRequirementPurposes')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the bill licences', async () => {
@@ -100,13 +93,13 @@ describe('Secondary Purpose model', () => {
           .findById(testRecordId)
           .withGraphFetched('returnRequirementPurposes')
 
-        expect(result).to.be.instanceOf(SecondaryPurposeModel)
-        expect(result.id).to.equal(testRecordId)
+        expect(result).toBeInstanceOf(SecondaryPurposeModel)
+        expect(result.id).toEqual(testRecordId)
 
-        expect(result.returnRequirementPurposes).to.be.an.array()
-        expect(result.returnRequirementPurposes[0]).to.be.an.instanceOf(ReturnRequirementPurposeModel)
-        expect(result.returnRequirementPurposes).to.include(testReturnRequirementPurposes[0])
-        expect(result.returnRequirementPurposes).to.include(testReturnRequirementPurposes[1])
+        expect(result.returnRequirementPurposes).toBeInstanceOf(Array)
+        expect(result.returnRequirementPurposes[0]).toBeInstanceOf(ReturnRequirementPurposeModel)
+        expect(result.returnRequirementPurposes).toContainEqual(testReturnRequirementPurposes[0])
+        expect(result.returnRequirementPurposes).toContainEqual(testReturnRequirementPurposes[1])
       })
     })
   })

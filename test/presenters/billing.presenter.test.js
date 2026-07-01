@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const BillingPresenter = require('../../app/presenters/billing.presenter.js')
 
@@ -24,7 +17,7 @@ describe('Billing presenter', () => {
       it('returns "Annual"', () => {
         const result = BillingPresenter.formatBillRunType(batchType, scheme, summer)
 
-        expect(result).to.equal('Annual')
+        expect(result).toEqual('Annual')
       })
     })
 
@@ -36,7 +29,7 @@ describe('Billing presenter', () => {
       it('returns "Supplementary"', () => {
         const result = BillingPresenter.formatBillRunType(batchType, scheme, summer)
 
-        expect(result).to.equal('Supplementary')
+        expect(result).toEqual('Supplementary')
       })
     })
 
@@ -48,7 +41,7 @@ describe('Billing presenter', () => {
       it('returns "Two-part tariff supplementary"', () => {
         const result = BillingPresenter.formatBillRunType(batchType, scheme, summer)
 
-        expect(result).to.equal('Two-part tariff supplementary')
+        expect(result).toEqual('Two-part tariff supplementary')
       })
     })
 
@@ -65,7 +58,7 @@ describe('Billing presenter', () => {
         it('returns "Two-part tariff"', () => {
           const result = BillingPresenter.formatBillRunType(batchType, scheme, summer)
 
-          expect(result).to.equal('Two-part tariff')
+          expect(result).toEqual('Two-part tariff')
         })
       })
 
@@ -82,7 +75,7 @@ describe('Billing presenter', () => {
           it('returns "Two-part tariff winter and all year"', () => {
             const result = BillingPresenter.formatBillRunType(batchType, scheme, summer)
 
-            expect(result).to.equal('Two-part tariff winter and all year')
+            expect(result).toEqual('Two-part tariff winter and all year')
           })
         })
 
@@ -94,7 +87,7 @@ describe('Billing presenter', () => {
           it('returns "Two-part tariff summer"', () => {
             const result = BillingPresenter.formatBillRunType(batchType, scheme, summer)
 
-            expect(result).to.equal('Two-part tariff summer')
+            expect(result).toEqual('Two-part tariff summer')
           })
         })
       })
@@ -112,7 +105,7 @@ describe('Billing presenter', () => {
       it('returns "Current"', () => {
         const result = BillingPresenter.formatChargeScheme(scheme)
 
-        expect(result).to.equal('Current')
+        expect(result).toEqual('Current')
       })
     })
 
@@ -124,7 +117,7 @@ describe('Billing presenter', () => {
       it('returns "Old"', () => {
         const result = BillingPresenter.formatChargeScheme(scheme)
 
-        expect(result).to.equal('Old')
+        expect(result).toEqual('Old')
       })
     })
   })
@@ -140,7 +133,7 @@ describe('Billing presenter', () => {
       it('returns "false"', () => {
         const result = BillingPresenter.displayCreditDebitTotals(batchType)
 
-        expect(result).to.be.false()
+        expect(result).toBe(false)
       })
     })
 
@@ -152,7 +145,7 @@ describe('Billing presenter', () => {
       it('returns "true"', () => {
         const result = BillingPresenter.displayCreditDebitTotals(batchType)
 
-        expect(result).to.be.true()
+        expect(result).toBe(true)
       })
     })
 
@@ -164,7 +157,7 @@ describe('Billing presenter', () => {
       it('returns "true"', () => {
         const result = BillingPresenter.displayCreditDebitTotals(batchType)
 
-        expect(result).to.be.true()
+        expect(result).toBe(true)
       })
     })
 
@@ -176,7 +169,7 @@ describe('Billing presenter', () => {
       it('returns "false"', () => {
         const result = BillingPresenter.displayCreditDebitTotals(batchType)
 
-        expect(result).to.be.false()
+        expect(result).toBe(false)
       })
     })
   })
@@ -190,7 +183,7 @@ describe('Billing presenter', () => {
     it('generates the page title for the bill run, for example, "Anglian two-part tariff"', () => {
       const result = BillingPresenter.generateBillRunTitle(regionName, batchType, scheme, summer)
 
-      expect(result).to.equal('Anglian two-part tariff')
+      expect(result).toEqual('Anglian two-part tariff')
     })
   })
 })

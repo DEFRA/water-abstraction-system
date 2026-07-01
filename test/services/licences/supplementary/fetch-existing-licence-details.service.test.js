@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
@@ -21,7 +14,7 @@ describe('Fetch Existing Licence Details Service', () => {
     let licence
 
     describe('and the licence has no charge versions', () => {
-      before(async () => {
+      beforeAll(async () => {
         licence = await LicenceHelper.add({
           revokedDate: new Date('2024-08-01'),
           lapsedDate: new Date('2024-06-01'),
@@ -34,26 +27,26 @@ describe('Fetch Existing Licence Details Service', () => {
       it('fetches the licence data', async () => {
         const result = await FetchExistingLicenceDetailsService.go(licence.id)
 
-        expect(result.id).to.equal(licence.id)
-        expect(result.region_id).to.equal(licence.regionId)
-        expect(result.revoked_date).to.equal(new Date('2024-08-01'))
-        expect(result.lapsed_date).to.equal(new Date('2024-06-01'))
-        expect(result.expired_date).to.equal(new Date('2024-04-01'))
-        expect(result.flagged_for_presroc).to.equal(true)
-        expect(result.flagged_for_sroc).to.equal(true)
+        expect(result.id).toEqual(licence.id)
+        expect(result.region_id).toEqual(licence.regionId)
+        expect(result.revoked_date).toEqual(new Date('2024-08-01'))
+        expect(result.lapsed_date).toEqual(new Date('2024-06-01'))
+        expect(result.expired_date).toEqual(new Date('2024-04-01'))
+        expect(result.flagged_for_presroc).toEqual(true)
+        expect(result.flagged_for_sroc).toEqual(true)
       })
 
       it('outlines which charge versions the licence does not have', async () => {
         const result = await FetchExistingLicenceDetailsService.go(licence.id)
 
-        expect(result.pre_sroc_charge_versions).to.equal(false)
-        expect(result.sroc_charge_versions).to.equal(false)
-        expect(result.two_part_tariff_charge_versions).to.equal(false)
+        expect(result.pre_sroc_charge_versions).toEqual(false)
+        expect(result.sroc_charge_versions).toEqual(false)
+        expect(result.two_part_tariff_charge_versions).toEqual(false)
       })
     })
 
     describe('and the licence has charge versions', () => {
-      before(async () => {
+      beforeAll(async () => {
         licence = await LicenceHelper.add()
         // pre sroc charge versions
         await ChargeVersionHelper.add({ licenceId: licence.id, startDate: new Date('2018-04-01') })
@@ -73,21 +66,21 @@ describe('Fetch Existing Licence Details Service', () => {
       it('fetches the licence data', async () => {
         const result = await FetchExistingLicenceDetailsService.go(licence.id)
 
-        expect(result.id).to.equal(licence.id)
-        expect(result.region_id).to.equal(licence.regionId)
-        expect(result.revoked_date).to.equal(null)
-        expect(result.lapsed_date).to.equal(null)
-        expect(result.expired_date).to.equal(null)
-        expect(result.flagged_for_presroc).to.equal(false)
-        expect(result.flagged_for_sroc).to.equal(false)
+        expect(result.id).toEqual(licence.id)
+        expect(result.region_id).toEqual(licence.regionId)
+        expect(result.revoked_date).toEqual(null)
+        expect(result.lapsed_date).toEqual(null)
+        expect(result.expired_date).toEqual(null)
+        expect(result.flagged_for_presroc).toEqual(false)
+        expect(result.flagged_for_sroc).toEqual(false)
       })
 
       it('outlines which charge versions the licence has', async () => {
         const result = await FetchExistingLicenceDetailsService.go(licence.id)
 
-        expect(result.pre_sroc_charge_versions).to.equal(true)
-        expect(result.sroc_charge_versions).to.equal(true)
-        expect(result.two_part_tariff_charge_versions).to.equal(true)
+        expect(result.pre_sroc_charge_versions).toEqual(true)
+        expect(result.sroc_charge_versions).toEqual(true)
+        expect(result.two_part_tariff_charge_versions).toEqual(true)
       })
     })
   })

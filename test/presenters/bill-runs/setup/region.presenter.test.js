@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const RegionPresenter = require('../../../../app/presenters/bill-runs/setup/region.presenter.js')
 
@@ -31,7 +24,7 @@ describe('Bill Runs - Setup - Region presenter', () => {
       it('correctly presents the data', () => {
         const result = RegionPresenter.go(session, regions)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           backlink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/type',
           pageTitle: 'Select the region',
           regions,
@@ -49,7 +42,7 @@ describe('Bill Runs - Setup - Region presenter', () => {
       it('correctly presents the data', () => {
         const result = RegionPresenter.go(session, regions)
 
-        expect(result).to.equal({
+        expect(result).toEqual({
           backlink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/type',
           pageTitle: 'Select the region',
           regions,

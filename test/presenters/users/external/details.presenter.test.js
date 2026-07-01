@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
@@ -27,7 +20,7 @@ describe('Users - External - Details Presenter', () => {
   it('correctly presents the data', () => {
     const result = DetailsPresenter.go(user, viewingUserScope, back)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       activeNavBar: 'users',
       backLink: {
         href: '/system/users',
@@ -48,7 +41,7 @@ describe('Users - External - Details Presenter', () => {
       it('returns the last signed in date and time', () => {
         const result = DetailsPresenter.go(user, viewingUserScope, back)
 
-        expect(result.lastSignedIn).to.equal('6 October 2022 at 10:00:00')
+        expect(result.lastSignedIn).toEqual('6 October 2022 at 10:00:00')
       })
     })
 
@@ -60,7 +53,7 @@ describe('Users - External - Details Presenter', () => {
       it('returns "Never signed in"', () => {
         const result = DetailsPresenter.go(user, viewingUserScope, back)
 
-        expect(result.lastSignedIn).to.equal('Never signed in')
+        expect(result.lastSignedIn).toEqual('Never signed in')
       })
     })
   })
@@ -74,7 +67,7 @@ describe('Users - External - Details Presenter', () => {
       it('returns an empty array', () => {
         const result = DetailsPresenter.go(user, viewingUserScope, back)
 
-        expect(result.roles).to.be.empty()
+        expect(result.roles).toHaveLength(0)
       })
     })
 
@@ -86,7 +79,7 @@ describe('Users - External - Details Presenter', () => {
       it('returns the correct roles for a "Returns user"', () => {
         const result = DetailsPresenter.go(user, viewingUserScope, back)
 
-        expect(result.roles).to.equal([
+        expect(result.roles).toEqual([
           {
             description: 'Submit returns for the linked licences',
             name: 'Returns user'
@@ -103,7 +96,7 @@ describe('Users - External - Details Presenter', () => {
       it('returns the correct roles for a "Primary user"', () => {
         const result = DetailsPresenter.go(user, viewingUserScope, back)
 
-        expect(result.roles).to.equal([
+        expect(result.roles).toEqual([
           {
             description: 'Create and manage other external user accounts for the linked licences',
             name: 'Primary user'

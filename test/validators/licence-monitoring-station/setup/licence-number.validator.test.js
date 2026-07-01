@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const { licenceEnds } = require('../../../support/fixtures/licence.fixture.js')
 const { yesterday } = require('../../../support/general.js')
@@ -33,8 +26,8 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
     it('returns with no errors', () => {
       const result = LicenceNumberValidator.go(payload, licence)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -47,9 +40,9 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
       it('returns with errors', () => {
         const result = LicenceNumberValidator.go(payload, licence)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter a licence number')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Enter a licence number')
       })
     })
 
@@ -63,9 +56,9 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
       it('returns with errors', () => {
         const result = LicenceNumberValidator.go(payload, licence)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter a licence number')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Enter a licence number')
       })
     })
 
@@ -81,9 +74,9 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
       it('returns with errors', () => {
         const result = LicenceNumberValidator.go(payload, licence)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Licence could not be found')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Licence could not be found')
       })
     })
 
@@ -99,9 +92,9 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
       it('returns with errors', () => {
         const result = LicenceNumberValidator.go(payload, licence)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('The licence has ended')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('The licence has ended')
       })
     })
   })

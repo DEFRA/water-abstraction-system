@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
@@ -49,7 +42,7 @@ describe('Company Contacts - Communications presenter', () => {
     it('returns page data for the view', () => {
       const result = CommunicationsPresenter.go(company, companyContact, notifications)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/companies/${company.id}/contacts`,
           text: 'Go back to licence holder contacts'
@@ -76,7 +69,7 @@ describe('Company Contacts - Communications presenter', () => {
       it('returns the notifications with the company id as query string in the link', () => {
         const result = CommunicationsPresenter.go(company, companyContact, notifications)
 
-        expect(result.notifications[0].link.href).to.equal(
+        expect(result.notifications[0].link.href).toEqual(
           `/system/notifications/${notification.id}?companyContactId=${companyContact.id}`
         )
       })

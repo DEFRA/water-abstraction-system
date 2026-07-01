@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AddressHelper = require('../../support/helpers/address.helper.js')
 const BillHelper = require('../../support/helpers/bill.helper.js')
@@ -80,7 +73,7 @@ describe('Billing Accounts - Fetch View Billing Account service', () => {
     it('returns the matching billingAccount with related address, company, and bills with a bill run status of "sent"', async () => {
       const result = await FetchViewBillingAccountService.go(billingAccountId)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         billingAccount: {
           id: billingAccountId,
           accountNumber: billingAccount.accountNumber,

@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const PointsValidator = require('../../../../app/validators/return-versions/setup/points.validator.js')
 
@@ -17,8 +10,8 @@ describe('Return Versions Setup - Point validator', () => {
     it('confirms the data is valid', () => {
       const result = PointsValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -28,9 +21,9 @@ describe('Return Versions Setup - Point validator', () => {
     it('fails validation', () => {
       const result = PointsValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Select any points for the requirements for returns')
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeDefined()
+      expect(result.error.details[0].message).toEqual('Select any points for the requirements for returns')
     })
   })
 
@@ -40,9 +33,9 @@ describe('Return Versions Setup - Point validator', () => {
     it('fails validation', () => {
       const result = PointsValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Select any points for the requirements for returns')
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeDefined()
+      expect(result.error.details[0].message).toEqual('Select any points for the requirements for returns')
     })
   })
 })

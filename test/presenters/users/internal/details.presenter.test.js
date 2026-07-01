@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
@@ -25,7 +18,7 @@ describe('Users - Internal - Details Presenter', () => {
   it('correctly presents the data', () => {
     const result = DetailsPresenter.go(auth, user)
 
-    expect(result).to.equal({
+    expect(result).toEqual({
       backLink: {
         href: '/system/users',
         text: 'Go back to users'
@@ -46,7 +39,7 @@ describe('Users - Internal - Details Presenter', () => {
       it('returns the date and time of the last login', () => {
         const result = DetailsPresenter.go(auth, user)
 
-        expect(result.lastSignedIn).to.equal('6 October 2022 at 10:00:00')
+        expect(result.lastSignedIn).toEqual('6 October 2022 at 10:00:00')
       })
     })
 
@@ -58,7 +51,7 @@ describe('Users - Internal - Details Presenter', () => {
       it('returns "Never signed in"', () => {
         const result = DetailsPresenter.go(auth, user)
 
-        expect(result.lastSignedIn).to.equal('Never signed in')
+        expect(result.lastSignedIn).toEqual('Never signed in')
       })
     })
   })
@@ -68,7 +61,7 @@ describe('Users - Internal - Details Presenter', () => {
       it('returns an empty array', () => {
         const result = DetailsPresenter.go(auth, user)
 
-        expect(result.roles).to.equal([])
+        expect(result.roles).toEqual([])
       })
     })
 
@@ -82,7 +75,7 @@ describe('Users - Internal - Details Presenter', () => {
       it('returns the "roles" for the group in sentence case, sorted by name', () => {
         const result = DetailsPresenter.go(auth, user)
 
-        expect(result.roles).to.equal([
+        expect(result.roles).toEqual([
           {
             description: 'Send HoF notifications',
             name: 'HOF notifications'
@@ -105,7 +98,7 @@ describe('Users - Internal - Details Presenter', () => {
       it('returns all "roles" in sentence case, sorted by name', () => {
         const result = DetailsPresenter.go(auth, user)
 
-        expect(result.roles).to.equal([
+        expect(result.roles).toEqual([
           {
             description: 'Approve licence data in Digitise! tool',
             name: 'AR approver'
@@ -140,7 +133,7 @@ describe('Users - Internal - Details Presenter', () => {
       it('returns the "roles" for the group in sentence case, sorted by name, with "unlink" mapped to "unregister"', () => {
         const result = DetailsPresenter.go(auth, user)
 
-        expect(result.roles).to.equal([
+        expect(result.roles).toEqual([
           {
             description: 'Manage linkages between gauging stations and licences',
             name: 'Manage gauging station licence links'
@@ -167,7 +160,7 @@ describe('Users - Internal - Details Presenter', () => {
       it('returns "true"', () => {
         const result = DetailsPresenter.go(auth, user)
 
-        expect(result.showEditButton).to.be.true()
+        expect(result.showEditButton).toBe(true)
       })
     })
 
@@ -179,7 +172,7 @@ describe('Users - Internal - Details Presenter', () => {
       it('returns "false"', () => {
         const result = DetailsPresenter.go(auth, user)
 
-        expect(result.showEditButton).to.be.false()
+        expect(result.showEditButton).toBe(false)
       })
     })
   })

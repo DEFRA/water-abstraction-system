@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const EventModel = require('../../../../../app/models/event.model.js')
 const LicenceDocumentHeaderHelper = require('../../../../support/helpers/licence-document-header.helper.js')
@@ -22,7 +15,7 @@ describe('Users - External - Setup - Unregister Licences DAL', () => {
   let session
   let user
 
-  before(async () => {
+  beforeAll(async () => {
     user = UsersFixture.nationalPermittingService()
 
     licenceDocumentHeaders = [
@@ -87,7 +80,7 @@ describe('Users - External - Setup - Unregister Licences DAL', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const licenceDocumentHeader of licenceDocumentHeaders) {
       await licenceDocumentHeader.$query().delete()
     }
@@ -111,8 +104,8 @@ describe('Users - External - Setup - Unregister Licences DAL', () => {
         .whereRaw(`events.metadata->>'documentId' = ?`, [licenceDocumentHeaders[0].id])
         .first()
 
-      expect(updatedLicenceDocumentHeader.companyEntityId).to.be.null()
-      expect(createdEvent).to.exist()
+      expect(updatedLicenceDocumentHeader.companyEntityId).toBeNull()
+      expect(createdEvent).toBeDefined()
 
       // Check second licence unregistered
       updatedLicenceDocumentHeader = await LicenceDocumentHeaderModel.query().findById(licenceDocumentHeaders[1].id)
@@ -121,8 +114,8 @@ describe('Users - External - Setup - Unregister Licences DAL', () => {
         .whereRaw(`events.metadata->>'documentId' = ?`, [licenceDocumentHeaders[1].id])
         .first()
 
-      expect(updatedLicenceDocumentHeader.companyEntityId).to.be.null()
-      expect(createdEvent).to.exist()
+      expect(updatedLicenceDocumentHeader.companyEntityId).toBeNull()
+      expect(createdEvent).toBeDefined()
 
       // Check third licence is still registered
       updatedLicenceDocumentHeader = await LicenceDocumentHeaderModel.query().findById(licenceDocumentHeaders[2].id)
@@ -131,8 +124,8 @@ describe('Users - External - Setup - Unregister Licences DAL', () => {
         .whereRaw(`events.metadata->>'documentId' = ?`, [licenceDocumentHeaders[2].id])
         .first()
 
-      expect(updatedLicenceDocumentHeader.companyEntityId).to.not.be.null()
-      expect(createdEvent).to.not.exist()
+      expect(updatedLicenceDocumentHeader.companyEntityId).not.toBeNull()
+      expect(createdEvent).toBeUndefined()
     })
   })
 })

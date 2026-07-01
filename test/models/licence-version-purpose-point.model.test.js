@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
@@ -22,7 +15,7 @@ describe('Licence Version Purpose Point model', () => {
   let testPoint
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     testLicenceVersionPurpose = await LicenceVersionPurposeHelper.add()
     testPoint = await PointHelper.add()
 
@@ -32,7 +25,7 @@ describe('Licence Version Purpose Point model', () => {
     })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await testLicenceVersionPurpose.$query().delete()
     await testPoint.$query().delete()
 
@@ -43,8 +36,8 @@ describe('Licence Version Purpose Point model', () => {
     it('can successfully run a basic query', async () => {
       const result = await LicenceVersionPurposePointModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(LicenceVersionPurposePointModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(LicenceVersionPurposePointModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -53,7 +46,7 @@ describe('Licence Version Purpose Point model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceVersionPurposePointModel.query().innerJoinRelated('licenceVersionPurpose')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence version purpose', async () => {
@@ -61,11 +54,11 @@ describe('Licence Version Purpose Point model', () => {
           .findById(testRecord.id)
           .withGraphFetched('licenceVersionPurpose')
 
-        expect(result).to.be.instanceOf(LicenceVersionPurposePointModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceVersionPurposePointModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceVersionPurpose).to.be.an.instanceOf(LicenceVersionPurposeModel)
-        expect(result.licenceVersionPurpose).to.equal(testLicenceVersionPurpose)
+        expect(result.licenceVersionPurpose).toBeInstanceOf(LicenceVersionPurposeModel)
+        expect(result.licenceVersionPurpose).toEqual(testLicenceVersionPurpose)
       })
     })
 
@@ -73,17 +66,17 @@ describe('Licence Version Purpose Point model', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceVersionPurposePointModel.query().innerJoinRelated('point')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the point', async () => {
         const result = await LicenceVersionPurposePointModel.query().findById(testRecord.id).withGraphFetched('point')
 
-        expect(result).to.be.instanceOf(LicenceVersionPurposePointModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(LicenceVersionPurposePointModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.point).to.be.an.instanceOf(PointModel)
-        expect(result.point).to.equal(testPoint)
+        expect(result.point).toBeInstanceOf(PointModel)
+        expect(result.point).toEqual(testPoint)
       })
     })
   })

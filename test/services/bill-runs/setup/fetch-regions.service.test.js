@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helper
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 
@@ -33,7 +26,7 @@ describe('Bill Runs Setup - Setup - Fetch Regions service', () => {
           return region.id === expectedRegion.id
         })
 
-        expect(region).to.equal(expectedRegion)
+        expect(region).toEqual(expectedRegion)
       })
     })
   })

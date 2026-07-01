@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const SupplementaryYearValidator = require('../../../../app/validators/licences/supplementary/supplementary-year.validator.js')
 
@@ -22,8 +15,8 @@ describe('Supplementary Year validator', () => {
       it('confirms the data is valid', () => {
         const result = SupplementaryYearValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
       })
     })
 
@@ -35,8 +28,8 @@ describe('Supplementary Year validator', () => {
       it('confirms the data is valid', () => {
         const result = SupplementaryYearValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeUndefined()
       })
     })
   })
@@ -50,9 +43,9 @@ describe('Supplementary Year validator', () => {
       it('fails validation', () => {
         const result = SupplementaryYearValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Select at least one financial year')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Select at least one financial year')
       })
     })
   })

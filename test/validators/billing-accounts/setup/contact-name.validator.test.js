@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const ContactNameValidator = require('../../../../app/validators/billing-accounts/setup/contact-name.validator.js')
 
@@ -21,8 +14,8 @@ describe('Billing Accounts - Setup - Contact Name Validator', () => {
     it('returns with no errors', () => {
       const result = ContactNameValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -35,9 +28,9 @@ describe('Billing Accounts - Setup - Contact Name Validator', () => {
       it('returns with errors', () => {
         const result = ContactNameValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter a name for the contact')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Enter a name for the contact')
       })
     })
 
@@ -49,9 +42,9 @@ describe('Billing Accounts - Setup - Contact Name Validator', () => {
       it('returns with errors', () => {
         const result = ContactNameValidator.go(payload)
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Name must be 100 characters or less')
+        expect(result.value).toBeDefined()
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Name must be 100 characters or less')
       })
     })
   })

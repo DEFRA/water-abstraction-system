@@ -1,13 +1,7 @@
 'use strict'
 
+// Test helpers
 const { HTTP_STATUS_OK } = require('node:http2').constants
-
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -16,8 +10,12 @@ describe('Root controller: GET /', () => {
   let server
 
   // Create server before running the tests
-  before(async () => {
+  beforeAll(async () => {
     server = await init()
+  })
+
+  afterAll(async () => {
+    await server.stop()
   })
 
   it('displays the correct message', async () => {
@@ -29,7 +27,7 @@ describe('Root controller: GET /', () => {
     const response = await server.inject(options)
     const payload = JSON.parse(response.payload)
 
-    expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-    expect(payload.status).to.equal('alive')
+    expect(response.statusCode).toEqual(HTTP_STATUS_OK)
+    expect(payload.status).toEqual('alive')
   })
 })

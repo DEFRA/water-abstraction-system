@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const PointModel = require('../../../../app/models/point.model.js')
@@ -92,32 +87,29 @@ describe('Return Versions - Setup - Points service', () => {
     it('fetches the current setup session record', async () => {
       const result = await SelectPointsService.go(session.id, requirementIndex)
 
-      expect(result.sessionId).to.equal(session.id)
+      expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
       const result = await SelectPointsService.go(session.id, requirementIndex)
 
-      expect(result).to.equal(
-        {
-          pageTitle: 'Select the points for the requirements for returns',
-          pageTitleCaption: 'Licence 01/ABC',
-          backLink: {
-            href: `/system/return-versions/setup/${session.id}/purpose/0`,
-            text: 'Back'
-          },
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          licencePoints: [
-            {
-              id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
-              description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
-            }
-          ],
-          licenceRef: '01/ABC',
-          selectedPointIds: ''
+      expect(result).toMatchObject({
+        pageTitle: 'Select the points for the requirements for returns',
+        pageTitleCaption: 'Licence 01/ABC',
+        backLink: {
+          href: `/system/return-versions/setup/${session.id}/purpose/0`,
+          text: 'Back'
         },
-        { skip: ['sessionId'] }
-      )
+        licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        licencePoints: [
+          {
+            id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+            description: 'At National Grid Reference TQ 69212 50394 (RIVER MEDWAY AT YALDING INTAKE)'
+          }
+        ],
+        licenceRef: '01/ABC',
+        selectedPointIds: ''
+      })
     })
   })
 })

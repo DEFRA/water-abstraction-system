@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const HapiPinoIgnoreRequestService = require('../../../app/services/plugins/hapi-pino-ignore-request.service.js')
 
@@ -15,7 +8,7 @@ describe('Hapi Pino Ignore Request service', () => {
     it('returns true', () => {
       const result = HapiPinoIgnoreRequestService.go({ logAssetRequests: false }, { path: '/' })
 
-      expect(result).to.be.true()
+      expect(result).toBe(true)
     })
   })
 
@@ -23,7 +16,7 @@ describe('Hapi Pino Ignore Request service', () => {
     it('returns true', () => {
       const result = HapiPinoIgnoreRequestService.go({ logAssetRequests: false }, { path: '/status' })
 
-      expect(result).to.be.true()
+      expect(result).toBe(true)
     })
   })
 
@@ -35,7 +28,7 @@ describe('Hapi Pino Ignore Request service', () => {
           { path: '/assets/stylesheets/application.css' }
         )
 
-        expect(result).to.be.true()
+        expect(result).toBe(true)
       })
     })
 
@@ -46,7 +39,7 @@ describe('Hapi Pino Ignore Request service', () => {
           { path: '/assets/stylesheets/application.css' }
         )
 
-        expect(result).to.be.false()
+        expect(result).toBe(false)
       })
     })
   })
@@ -55,7 +48,7 @@ describe('Hapi Pino Ignore Request service', () => {
     it('returns false', () => {
       const result = HapiPinoIgnoreRequestService.go({ logAssetRequests: false }, { path: '/bill-run/stuff' })
 
-      expect(result).to.be.false()
+      expect(result).toBe(false)
     })
   })
 })

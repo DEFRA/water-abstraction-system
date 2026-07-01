@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
@@ -32,7 +25,7 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations dal', () => {
   let notifications
   let user
 
-  before(async () => {
+  beforeAll(async () => {
     licenceVersionPurposeConditionType = await LicenceVersionPurposeConditionTypeHelper.select()
     user = UserHelper.select()
 
@@ -66,7 +59,7 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations dal', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     await licenceVersionPurposeCondition.$query().delete()
     await licenceVersionPurpose.$query().delete()
     await licenceVersion.$query().delete()
@@ -147,20 +140,20 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations dal', () => {
       it('returns the licence, monitoring station and non-deleted licence monitoring station records', async () => {
         const result = await FetchLicenceMonitoringStationsDal.go(licence.id, monitoringStation.id)
 
-        expect(result.licence).to.equal({
+        expect(result.licence).toEqual({
           expiredDate: null,
           id: licence.id,
           lapsedDate: null,
           licenceRef: licence.licenceRef,
           revokedDate: null
         })
-        expect(result.monitoringStation).to.equal({
+        expect(result.monitoringStation).toEqual({
           id: monitoringStation.id,
           label: 'The Monitoring Station',
           riverName: 'The River'
         })
 
-        expect(result.licenceMonitoringStations).to.equal([
+        expect(result.licenceMonitoringStations).toEqual([
           {
             createdAt: licenceMonitoringStations[1].createdAt,
             id: licenceMonitoringStations[1].id,
@@ -212,20 +205,20 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations dal', () => {
       it('returns the licence, monitoring station but no licence monitoring station records', async () => {
         const result = await FetchLicenceMonitoringStationsDal.go(licence.id, monitoringStation.id)
 
-        expect(result.licence).to.equal({
+        expect(result.licence).toEqual({
           expiredDate: null,
           id: licence.id,
           lapsedDate: null,
           licenceRef: licence.licenceRef,
           revokedDate: null
         })
-        expect(result.monitoringStation).to.equal({
+        expect(result.monitoringStation).toEqual({
           id: monitoringStation.id,
           label: 'The Monitoring Station',
           riverName: 'The River'
         })
 
-        expect(result.licenceMonitoringStations).to.be.empty()
+        expect(result.licenceMonitoringStations).toHaveLength(0)
       })
     })
   })
@@ -234,15 +227,15 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations dal', () => {
     it('returns only the licence record populated', async () => {
       const result = await FetchLicenceMonitoringStationsDal.go(licence.id, '1dcbafad-a1c6-43ec-9313-7149b40ffa57')
 
-      expect(result.licence).to.equal({
+      expect(result.licence).toEqual({
         expiredDate: null,
         id: licence.id,
         lapsedDate: null,
         licenceRef: licence.licenceRef,
         revokedDate: null
       })
-      expect(result.monitoringStation).to.be.undefined()
-      expect(result.licenceMonitoringStations).to.be.empty()
+      expect(result.monitoringStation).toBeUndefined()
+      expect(result.licenceMonitoringStations).toHaveLength(0)
     })
   })
 
@@ -253,13 +246,13 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations dal', () => {
         monitoringStation.id
       )
 
-      expect(result.licence).to.be.undefined()
-      expect(result.monitoringStation).to.equal({
+      expect(result.licence).toBeUndefined()
+      expect(result.monitoringStation).toEqual({
         id: monitoringStation.id,
         label: 'The Monitoring Station',
         riverName: 'The River'
       })
-      expect(result.licenceMonitoringStations).to.be.empty()
+      expect(result.licenceMonitoringStations).toHaveLength(0)
     })
   })
 })

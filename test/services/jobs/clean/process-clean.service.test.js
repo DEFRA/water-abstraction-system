@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const CleanEmptyBillRunsService = require('../../../../app/services/jobs/clean/clean-empty-bill-runs.service.js')
@@ -63,11 +58,11 @@ describe('Jobs - Clean - Process Clean service', () => {
     it('cleans expired sessions', async () => {
       await ProcessCleanService.go()
 
-      expect(cleanEmptyBillRunsStub.called).to.be.true()
-      expect(cleanEmptyVoidReturnLogsStub.called).to.be.true()
-      expect(cleanExpiredSessionsStub.called).to.be.true()
-      expect(cleanIncompleteCompanyContactsStub.called).to.be.true()
-      expect(cleanOrphanedContactsStub.called).to.be.true()
+      expect(cleanEmptyBillRunsStub.called).toBe(true)
+      expect(cleanEmptyVoidReturnLogsStub.called).toBe(true)
+      expect(cleanExpiredSessionsStub.called).toBe(true)
+      expect(cleanIncompleteCompanyContactsStub.called).toBe(true)
+      expect(cleanOrphanedContactsStub.called).toBe(true)
     })
 
     it('logs the time taken in milliseconds and seconds, plus the count of rows deleted', async () => {
@@ -75,10 +70,10 @@ describe('Jobs - Clean - Process Clean service', () => {
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Clean job complete')).to.be.true()
-      expect(logDataArg.timeTakenMs).to.exist()
-      expect(logDataArg.timeTakenSs).to.exist()
-      expect(logDataArg.counts).to.equal({
+      expect(notifierStub.omg.calledWith('Clean job complete')).toBe(true)
+      expect(logDataArg.timeTakenMs).toBeDefined()
+      expect(logDataArg.timeTakenSs).toBeDefined()
+      expect(logDataArg.counts).toEqual({
         emptyBillRuns: emptyBillRunsCount,
         emptyVoidReturnLogs: emptyVoidReturnLogsCount,
         expiredSessions: expiredSessionsCount,
@@ -97,7 +92,7 @@ describe('Jobs - Clean - Process Clean service', () => {
     })
 
     it('does not throw an error', async () => {
-      await expect(ProcessCleanService.go()).not.to.reject()
+      await ProcessCleanService.go()
     })
 
     it('logs the error', async () => {
@@ -105,9 +100,9 @@ describe('Jobs - Clean - Process Clean service', () => {
 
       const errorLogArgs = notifierStub.omfg.firstCall.args
 
-      expect(notifierStub.omfg.calledWith('Clean job failed')).to.be.true()
-      expect(errorLogArgs[1]).to.equal({})
-      expect(errorLogArgs[2]).to.be.instanceOf(Error)
+      expect(notifierStub.omfg.calledWith('Clean job failed')).toBe(true)
+      expect(errorLogArgs[1]).toEqual({})
+      expect(errorLogArgs[2]).toBeInstanceOf(Error)
     })
   })
 })

@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
@@ -49,7 +44,7 @@ describe('Notices - Index Notices service', () => {
     it('returns page data for the view', async () => {
       const result = await IndexNoticesService.go(yarStub, auth, page)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         activeNavBar: 'notices',
         filters: {
           fromDate: null,
@@ -105,7 +100,7 @@ describe('Notices - Index Notices service', () => {
       it('returns blank filters and that the controls should be closed', async () => {
         const result = await IndexNoticesService.go(yarStub, auth, page)
 
-        expect(result.filters.openFilter).to.be.false()
+        expect(result.filters.openFilter).toBe(false)
       })
     })
 
@@ -118,7 +113,7 @@ describe('Notices - Index Notices service', () => {
       it('returns blank filters and that the controls should be closed', async () => {
         const result = await IndexNoticesService.go(yarStub, auth, page)
 
-        expect(result.filters.openFilter).to.be.false()
+        expect(result.filters.openFilter).toBe(false)
       })
     })
 
@@ -134,7 +129,7 @@ describe('Notices - Index Notices service', () => {
       it('returns the saved filters and that the controls should be open', async () => {
         const result = await IndexNoticesService.go(yarStub, auth, page)
 
-        expect(result.filters.openFilter).to.be.true()
+        expect(result.filters.openFilter).toBe(true)
       })
     })
   })

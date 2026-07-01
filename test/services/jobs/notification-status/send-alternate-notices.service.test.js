@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -47,9 +42,9 @@ describe('Job - Notifications - Send Alternate Notices service', () => {
     it('sends an alternate notice', async () => {
       await SendAlternateNoticesService.go(notifications)
 
-      expect(sendAlternateNoticeStub.called).to.be.true()
-      expect(sendAlternateNoticeStub.firstCall.args[0]).to.equal(criticalNotices[0])
-      expect(sendAlternateNoticeStub.secondCall.args[0]).to.equal(criticalNotices[1])
+      expect(sendAlternateNoticeStub.called).toBe(true)
+      expect(sendAlternateNoticeStub.firstCall.args[0]).toEqual(criticalNotices[0])
+      expect(sendAlternateNoticeStub.secondCall.args[0]).toEqual(criticalNotices[1])
     })
   })
 
@@ -61,7 +56,7 @@ describe('Job - Notifications - Send Alternate Notices service', () => {
     it('does not send an alternate notice', async () => {
       await SendAlternateNoticesService.go(notifications)
 
-      expect(sendAlternateNoticeStub.called).to.be.false()
+      expect(sendAlternateNoticeStub.called).toBe(false)
     })
   })
 })

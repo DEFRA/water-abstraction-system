@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const CompanyContactHelper = require('../../../support/helpers/company-contact.helper.js')
 const ContactHelper = require('../../../support/helpers/contact.helper.js')
@@ -20,7 +13,7 @@ describe('Company Contacts - Setup - Fetch Company Contacts dal', () => {
   let companyContactToIgnore
   let contact
 
-  before(async () => {
+  beforeAll(async () => {
     contact = await ContactHelper.add()
     contact = await ContactHelper.add()
 
@@ -32,7 +25,7 @@ describe('Company Contacts - Setup - Fetch Company Contacts dal', () => {
     additionalCompanyContact = await CompanyContactHelper.add({ contactId: contact.id })
   })
 
-  after(async () => {
+  afterAll(async () => {
     await additionalCompanyContact.$query().delete()
     await companyContact.$query().delete()
     await contact.$query().delete()
@@ -43,7 +36,7 @@ describe('Company Contacts - Setup - Fetch Company Contacts dal', () => {
     it('returns the matching company contacts', async () => {
       const result = await FetchCompanyContactsDal.go(companyContact.companyId, undefined)
 
-      expect(result).to.equal([
+      expect(result).toEqual([
         {
           id: companyContact.id,
           contact: {
@@ -64,7 +57,7 @@ describe('Company Contacts - Setup - Fetch Company Contacts dal', () => {
     })
 
     describe('and there is a company contact to ignore', () => {
-      before(async () => {
+      beforeAll(async () => {
         companyContactToIgnore = await CompanyContactHelper.add({
           contactId: contact.id,
           companyId: companyContact.companyId
@@ -74,7 +67,7 @@ describe('Company Contacts - Setup - Fetch Company Contacts dal', () => {
       it('returns the matching company contacts', async () => {
         const result = await FetchCompanyContactsDal.go(companyContact.companyId, companyContactToIgnore)
 
-        expect(result).to.equal([
+        expect(result).toEqual([
           {
             id: companyContact.id,
             contact: {

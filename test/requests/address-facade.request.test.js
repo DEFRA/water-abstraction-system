@@ -3,12 +3,7 @@
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Things we need to stub
 const BaseRequest = require('../../app/requests/base.request.js')
@@ -87,27 +82,27 @@ describe('Address Facade request', () => {
 
         const requestArgs = BaseRequest.get.firstCall.args
 
-        expect(requestArgs[0]).to.endWith('TEST_ROUTE')
+        expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
       })
 
       it('returns a "true" success status', async () => {
         const result = await AddressFacadeRequest.get(testRoute)
 
-        expect(result.succeeded).to.be.true()
+        expect(result.succeeded).toBe(true)
       })
 
       it('returns the matches from the Address Facade', async () => {
         const result = await AddressFacadeRequest.get(testRoute)
 
-        expect(result.matches).to.exist()
-        expect(result.matches).to.be.instanceOf(Array)
-        expect(result.matches[0].uprn).to.equal(340116)
+        expect(result.matches).toBeDefined()
+        expect(result.matches).toBeInstanceOf(Array)
+        expect(result.matches[0].uprn).toEqual(340116)
       })
 
       it('returns the status code', async () => {
         const result = await AddressFacadeRequest.get(testRoute)
 
-        expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(result.response.statusCode).toEqual(HTTP_STATUS_OK)
       })
     })
 
@@ -127,27 +122,27 @@ describe('Address Facade request', () => {
       it('returns a "false" success status', async () => {
         const result = await AddressFacadeRequest.get(testRoute)
 
-        expect(result.succeeded).to.be.false()
+        expect(result.succeeded).toBe(false)
       })
 
       it('returns the error response', async () => {
         const result = await AddressFacadeRequest.get(testRoute)
 
-        expect(result.response.body.message).to.equal('Not Found')
+        expect(result.response.body.message).toEqual('Not Found')
       })
 
       it('returns the status code', async () => {
         const result = await AddressFacadeRequest.get(testRoute)
 
-        expect(result.response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
+        expect(result.response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
       })
 
       it('does not returns any matches', async () => {
         const result = await AddressFacadeRequest.get(testRoute)
 
-        expect(result.matches).to.exist()
-        expect(result.matches).to.be.instanceOf(Array)
-        expect(result.matches).to.be.empty()
+        expect(result.matches).toBeDefined()
+        expect(result.matches).toBeInstanceOf(Array)
+        expect(result.matches).toHaveLength(0)
       })
     })
   })

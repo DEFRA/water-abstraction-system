@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -37,7 +30,7 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
     it('returns page data for the view', () => {
       const result = SelectCompanyPresenter.go(session, companies)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/company-search`,
           text: 'Back'
@@ -68,7 +61,7 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
       it('returns the link for the "check" page', () => {
         const result = SelectCompanyPresenter.go(session, companies)
 
-        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
+        expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
     })
 
@@ -81,7 +74,7 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
       it('returns the link for the "account" page', () => {
         const result = SelectCompanyPresenter.go(session, companies)
 
-        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/company-search`)
+        expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/company-search`)
       })
     })
   })
@@ -98,7 +91,7 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
       it('returns the correct value', () => {
         const result = SelectCompanyPresenter.go(session, companies)
 
-        expect(result.companiesHouseNumber).to.equal(session.companiesHouseNumber)
+        expect(result.companiesHouseNumber).toEqual(session.companiesHouseNumber)
       })
     })
 
@@ -112,7 +105,7 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
       it('returns null', () => {
         const result = SelectCompanyPresenter.go(session, companies)
 
-        expect(result.companiesHouseNumber).to.equal(null)
+        expect(result.companiesHouseNumber).toEqual(null)
       })
     })
   })
@@ -128,7 +121,7 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
       it('returns an array of radio options', () => {
         const result = SelectCompanyPresenter.go(session, companies)
 
-        expect(result.companies).to.equal([
+        expect(result.companies).toEqual([
           {
             id: companies[0].number,
             hint: {
@@ -152,7 +145,7 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
       it('returns an empty array', () => {
         const result = SelectCompanyPresenter.go(session, [])
 
-        expect(result.companies).to.equal([])
+        expect(result.companies).toEqual([])
       })
     })
   })

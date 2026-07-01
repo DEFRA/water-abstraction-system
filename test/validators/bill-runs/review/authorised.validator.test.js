@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const AuthorisedValidator = require('../../../../app/validators/bill-runs/review/authorised.validator.js')
 
@@ -21,8 +14,8 @@ describe('Bill Runs Review - Authorised validator', () => {
     it('confirms the data is valid', () => {
       const result = AuthorisedValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      expect(result.value).toBeDefined()
+      expect(result.error).toBeUndefined()
     })
   })
 
@@ -35,8 +28,8 @@ describe('Bill Runs Review - Authorised validator', () => {
       it('fails the validation with the message "Enter an authorised volume"', () => {
         const result = AuthorisedValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter an authorised volume')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('Enter an authorised volume')
       })
     })
 
@@ -48,8 +41,8 @@ describe('Bill Runs Review - Authorised validator', () => {
       it('fails the validation with the message "The authorised volume must be a number"', () => {
         const result = AuthorisedValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('The authorised volume must be a number')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('The authorised volume must be a number')
       })
     })
 
@@ -61,8 +54,8 @@ describe('Bill Runs Review - Authorised validator', () => {
       it('fails the validation with the message "The authorised volume must be greater than 6"', () => {
         const result = AuthorisedValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('The authorised volume must be greater than 6')
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual('The authorised volume must be greater than 6')
       })
     })
 
@@ -74,8 +67,8 @@ describe('Bill Runs Review - Authorised validator', () => {
       it('fails the validation with the message "The authorised volume must not have more than 6 decimal places"', () => {
         const result = AuthorisedValidator.go(payload)
 
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal(
+        expect(result.error).toBeDefined()
+        expect(result.error.details[0].message).toEqual(
           'The authorised volume must not have more than 6 decimal places'
         )
       })

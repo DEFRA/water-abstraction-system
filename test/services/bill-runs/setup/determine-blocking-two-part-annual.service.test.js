@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
@@ -70,13 +65,13 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run servic
       it('returns the match and determines that neither engine can be triggered', async () => {
         const result = await DetermineBlockingTwoPartAnnualService.go(regionId, year)
 
-        expect(result).to.equal({ matches: [match], toFinancialYearEnding: year, trigger: engineTriggers.neither })
+        expect(result).toEqual({ matches: [match], toFinancialYearEnding: year, trigger: engineTriggers.neither })
       })
 
       it('does not bother to check for live bill runs', async () => {
         await DetermineBlockingTwoPartAnnualService.go(regionId, year)
 
-        expect(fetchLiveBillRunStub.called).to.be.false()
+        expect(fetchLiveBillRunStub.called).toBe(false)
       })
     })
 
@@ -96,13 +91,13 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run servic
       it('returns the match and determines that neither engine can be triggered', async () => {
         const result = await DetermineBlockingTwoPartAnnualService.go(regionId, year)
 
-        expect(result).to.equal({ matches: [match], toFinancialYearEnding: year, trigger: engineTriggers.neither })
+        expect(result).toEqual({ matches: [match], toFinancialYearEnding: year, trigger: engineTriggers.neither })
       })
 
       it('does not bother to check for live bill runs', async () => {
         await DetermineBlockingTwoPartAnnualService.go(regionId, year)
 
-        expect(fetchLiveBillRunStub.called).to.be.false()
+        expect(fetchLiveBillRunStub.called).toBe(false)
       })
     })
   })
@@ -121,7 +116,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run servic
         it('returns no matches and determines that the "current" engine can be triggered', async () => {
           const result = await DetermineBlockingTwoPartAnnualService.go(regionId, year)
 
-          expect(result).to.equal({ matches: [], toFinancialYearEnding: year, trigger: engineTriggers.current })
+          expect(result).toEqual({ matches: [], toFinancialYearEnding: year, trigger: engineTriggers.current })
         })
       })
 
@@ -134,7 +129,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run servic
         it('returns no matches and determines that the "old" engine can be triggered', async () => {
           const result = await DetermineBlockingTwoPartAnnualService.go(regionId, year, summer)
 
-          expect(result).to.equal({ matches: [], toFinancialYearEnding: year, trigger: engineTriggers.old })
+          expect(result).toEqual({ matches: [], toFinancialYearEnding: year, trigger: engineTriggers.old })
         })
       })
     })
@@ -150,7 +145,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run servic
       it('returns the match and determines that neither engine can be triggered', async () => {
         const result = await DetermineBlockingTwoPartAnnualService.go(regionId, year)
 
-        expect(result).to.equal({ matches: [match], toFinancialYearEnding: year, trigger: engineTriggers.neither })
+        expect(result).toEqual({ matches: [match], toFinancialYearEnding: year, trigger: engineTriggers.neither })
       })
     })
   })

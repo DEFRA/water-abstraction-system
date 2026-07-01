@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
 
@@ -30,7 +23,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
     it('returns page data for the view', () => {
       const result = AlertThresholdsPresenter.go(session)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`, text: 'Back' },
         pageTitle: 'Which thresholds do you need to send an alert for?',
         pageTitleCaption: 'Death star',
@@ -56,7 +49,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
         it('returns page data for the view, with the thresholds checked', () => {
           const result = AlertThresholdsPresenter.go(session)
 
-          expect(result.thresholdOptions).to.equal([
+          expect(result.thresholdOptions).toEqual([
             {
               checked: true,
               value: licenceMonitoringStations.two.thresholdGroup,
@@ -75,7 +68,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
         it('returns page data for the view, with only the thresholds with stop restrictions', () => {
           const result = AlertThresholdsPresenter.go(session)
 
-          expect(result.thresholdOptions).to.equal([
+          expect(result.thresholdOptions).toEqual([
             {
               checked: false,
               value: licenceMonitoringStations.two.thresholdGroup,
@@ -100,7 +93,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
           it('returns page data for the view, with only the thresholds with stop restrictions', () => {
             const result = AlertThresholdsPresenter.go(session)
 
-            expect(result.thresholdOptions).to.equal([
+            expect(result.thresholdOptions).toEqual([
               {
                 checked: false,
                 hint: { text: 'Flow threshold' },
@@ -120,7 +113,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
         it('returns page data for the view, with only the thresholds with reduce restrictions', () => {
           const result = AlertThresholdsPresenter.go(session)
 
-          expect(result.thresholdOptions).to.equal([
+          expect(result.thresholdOptions).toEqual([
             {
               checked: false,
               value: licenceMonitoringStations.one.thresholdGroup,
@@ -151,7 +144,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
           it('returns page data for the view, with only the thresholds with "reduce" and "stop_or_reduce" restrictions', () => {
             const result = AlertThresholdsPresenter.go(session)
 
-            expect(result.thresholdOptions).to.equal([
+            expect(result.thresholdOptions).toEqual([
               // reduce
               {
                 checked: false,
@@ -180,7 +173,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
         it('returns page data for the view, with all the thresholds', () => {
           const result = AlertThresholdsPresenter.go(session)
 
-          expect(result.thresholdOptions).to.equal([
+          expect(result.thresholdOptions).toEqual([
             {
               checked: false,
               value: licenceMonitoringStations.two.thresholdGroup,
@@ -215,7 +208,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', ()
         it('sorts relevant thresholds first by flow/level alphabetically then by measurement quantity', () => {
           const result = AlertThresholdsPresenter.go(session)
 
-          expect(result.thresholdOptions).to.equal([
+          expect(result.thresholdOptions).toEqual([
             {
               checked: false,
               value: 'flow-100-m3/s',

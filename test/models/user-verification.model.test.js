@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, before, after } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const LicenceDocumentHeaderHelper = require('../support/helpers/licence-document-header.helper.js')
 const LicenceDocumentHeaderModel = require('../../app/models/licence-document-header.model.js')
@@ -25,7 +18,7 @@ describe('User Verification model', () => {
   let testLicenceEntity
   let testRecord
 
-  before(async () => {
+  beforeAll(async () => {
     testCompanyEntity = await LicenceEntityHelper.add({ type: 'company' })
     testLicenceEntity = await LicenceEntityHelper.add()
     testLicenceDocumentHeaders = []
@@ -51,7 +44,7 @@ describe('User Verification model', () => {
     }
   })
 
-  after(async () => {
+  afterAll(async () => {
     for (const testUserVerificationDocument of testUserVerificationDocuments) {
       await testUserVerificationDocument.$query().delete()
     }
@@ -67,8 +60,8 @@ describe('User Verification model', () => {
     it('can successfully run a basic query', async () => {
       const result = await UserVerificationModel.query().findById(testRecord.id)
 
-      expect(result).to.be.an.instanceOf(UserVerificationModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result).toBeInstanceOf(UserVerificationModel)
+      expect(result.id).toEqual(testRecord.id)
     })
   })
 
@@ -77,17 +70,17 @@ describe('User Verification model', () => {
       it('can successfully run a related query', async () => {
         const query = await UserVerificationModel.query().innerJoinRelated('companyEntity')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the company entity', async () => {
         const result = await UserVerificationModel.query().findById(testRecord.id).withGraphFetched('companyEntity')
 
-        expect(result).to.be.instanceOf(UserVerificationModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(UserVerificationModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.companyEntity).to.be.an.instanceOf(LicenceEntityModel)
-        expect(result.companyEntity).to.equal(testCompanyEntity)
+        expect(result.companyEntity).toBeInstanceOf(LicenceEntityModel)
+        expect(result.companyEntity).toEqual(testCompanyEntity)
       })
     })
 
@@ -95,17 +88,17 @@ describe('User Verification model', () => {
       it('can successfully run a related query', async () => {
         const query = await UserVerificationModel.query().innerJoinRelated('licenceEntity')
 
-        expect(query).to.exist()
+        expect(query).toBeDefined()
       })
 
       it('can eager load the licence entity', async () => {
         const result = await UserVerificationModel.query().findById(testRecord.id).withGraphFetched('licenceEntity')
 
-        expect(result).to.be.instanceOf(UserVerificationModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(UserVerificationModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceEntity).to.be.an.instanceOf(LicenceEntityModel)
-        expect(result.licenceEntity).to.equal(testLicenceEntity)
+        expect(result.licenceEntity).toBeInstanceOf(LicenceEntityModel)
+        expect(result.licenceEntity).toEqual(testLicenceEntity)
       })
     })
 
@@ -113,7 +106,7 @@ describe('User Verification model', () => {
       it('can successfully run a related query', async () => {
         const query = await UserVerificationModel.query().innerJoinRelated('licenceDocumentHeaders')
 
-        expect(query).to.be.an.array()
+        expect(query).toBeInstanceOf(Array)
       })
 
       it('can eager load the licence document headers', async () => {
@@ -121,13 +114,13 @@ describe('User Verification model', () => {
           .findById(testRecord.id)
           .withGraphFetched('licenceDocumentHeaders')
 
-        expect(result).to.be.instanceOf(UserVerificationModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result).toBeInstanceOf(UserVerificationModel)
+        expect(result.id).toEqual(testRecord.id)
 
-        expect(result.licenceDocumentHeaders).to.be.an.array()
-        expect(result.licenceDocumentHeaders[0]).to.be.an.instanceOf(LicenceDocumentHeaderModel)
-        expect(result.licenceDocumentHeaders).to.include(testLicenceDocumentHeaders[0])
-        expect(result.licenceDocumentHeaders).to.include(testLicenceDocumentHeaders[1])
+        expect(result.licenceDocumentHeaders).toBeInstanceOf(Array)
+        expect(result.licenceDocumentHeaders[0]).toBeInstanceOf(LicenceDocumentHeaderModel)
+        expect(result.licenceDocumentHeaders).toContainEqual(testLicenceDocumentHeaders[0])
+        expect(result.licenceDocumentHeaders).toContainEqual(testLicenceDocumentHeaders[1])
       })
     })
   })

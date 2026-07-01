@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Thing under test
 const AgreementsExceptionsPresenter = require('../../../../app/presenters/return-versions/setup/agreements-exceptions.presenter.js')
 
@@ -38,7 +31,7 @@ describe('Return Versions Setup - Agreements Exceptions presenter', () => {
     it('correctly presents the data', () => {
       const result = AgreementsExceptionsPresenter.go(session, requirementIndex)
 
-      expect(result).to.equal({
+      expect(result).toEqual({
         agreementsExceptions: null,
         backLink: {
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/frequency-reported/0',
@@ -62,7 +55,7 @@ describe('Return Versions Setup - Agreements Exceptions presenter', () => {
       it('returns a populated agreements-exceptions', () => {
         const result = AgreementsExceptionsPresenter.go(session, requirementIndex)
 
-        expect(result.agreementsExceptions).to.equal('gravity-fill')
+        expect(result.agreementsExceptions).toEqual('gravity-fill')
       })
     })
 
@@ -70,7 +63,7 @@ describe('Return Versions Setup - Agreements Exceptions presenter', () => {
       it('returns an empty agreements-exceptions', () => {
         const result = AgreementsExceptionsPresenter.go(session, requirementIndex)
 
-        expect(result.agreementsExceptions).to.be.null()
+        expect(result.agreementsExceptions).toBeNull()
       })
     })
   })
@@ -84,7 +77,7 @@ describe('Return Versions Setup - Agreements Exceptions presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = AgreementsExceptionsPresenter.go(session, requirementIndex)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
           text: 'Back'
         })
@@ -95,7 +88,7 @@ describe('Return Versions Setup - Agreements Exceptions presenter', () => {
       it('returns a link back to the "frequency-reported" page', () => {
         const result = AgreementsExceptionsPresenter.go(session, requirementIndex)
 
-        expect(result.backLink).to.equal({
+        expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/frequency-reported/0',
           text: 'Back'
         })

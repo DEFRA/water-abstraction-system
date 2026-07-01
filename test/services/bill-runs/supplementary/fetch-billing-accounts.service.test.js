@@ -1,12 +1,5 @@
 'use strict'
 
-// Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
-
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
-const { expect } = Code
-
 // Test helpers
 const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
 
@@ -44,7 +37,14 @@ describe('Fetch Billing Accounts service', () => {
         { billingAccountId: billingAccounts[1].id }
       ])
 
-      expect(result).to.have.length(2).and.contain(expectedResult)
+      expect(result).toHaveLength(2)
+      expect(result).toEqual(
+        expect.arrayContaining(
+          expectedResult.map((item) => {
+            return expect.objectContaining(item)
+          })
+        )
+      )
     })
   })
 })

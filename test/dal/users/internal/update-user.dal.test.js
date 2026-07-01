@@ -1,12 +1,7 @@
 'use strict'
 
 // Test framework dependencies
-const Lab = require('@hapi/lab')
-const Code = require('@hapi/code')
 const Sinon = require('sinon')
-
-const { afterEach, beforeEach, describe, it } = (exports.lab = Lab.script())
-const { expect } = Code
 
 // Test helpers
 const EventModel = require('../../../../app/models/event.model.js')
@@ -79,22 +74,19 @@ describe('Users - Internal - Update User DAL', () => {
 
       const user = await UserModel.query().findById(existingUser.id)
 
-      expect(user).to.equal(
-        {
-          application: 'water_admin',
-          badLogins: 0,
-          enabled: true,
-          lastLogin: null,
-          licenceEntityId: null,
-          resetGuid: null,
-          resetRequired: 0,
-          resetGuidCreatedAt: null,
-          userData: null,
-          username: existingUser.username
-        },
-        { skip: ['createdAt', 'id', 'password', 'updatedAt', 'userId'] }
-      )
-      expect(user.updatedAt).to.not.equal(existingUser.updatedAt)
+      expect(user).toMatchObject({
+        application: 'water_admin',
+        badLogins: 0,
+        enabled: true,
+        lastLogin: null,
+        licenceEntityId: null,
+        resetGuid: null,
+        resetRequired: 0,
+        resetGuidCreatedAt: null,
+        userData: null,
+        username: existingUser.username
+      })
+      expect(user.updatedAt).not.toEqual(existingUser.updatedAt)
     })
 
     it('creates an event', async () => {
@@ -102,28 +94,25 @@ describe('Users - Internal - Update User DAL', () => {
 
       const event = await EventModel.query().where('issuer', 'internal-user-creator@wrls.gov.uk').limit(1).first()
 
-      expect(event).to.equal(
-        {
-          referenceCode: null,
-          type: 'update-user-roles',
-          subtype: 'internal',
-          issuer: 'internal-user-creator@wrls.gov.uk',
-          licences: [],
-          entities: [],
-          metadata: {
-            user: session.email,
-            userId: existingUser.userId
-          },
-          status: null,
-          overallStatus: null,
-          statusCounts: null,
-          triggerNoticeId: null
+      expect(event).toMatchObject({
+        referenceCode: null,
+        type: 'update-user-roles',
+        subtype: 'internal',
+        issuer: 'internal-user-creator@wrls.gov.uk',
+        licences: [],
+        entities: [],
+        metadata: {
+          user: session.email,
+          userId: existingUser.userId
         },
-        { skip: ['createdAt', 'id', 'updatedAt'] }
-      )
+        status: null,
+        overallStatus: null,
+        statusCounts: null,
+        triggerNoticeId: null
+      })
 
-      expect(event.createdAt).to.be.instanceof(Date)
-      expect(event.updatedAt).to.be.instanceof(Date)
+      expect(event.createdAt).toBeInstanceOf(Date)
+      expect(event.updatedAt).toBeInstanceOf(Date)
     })
 
     describe('and the email has changed', () => {
@@ -136,7 +125,7 @@ describe('Users - Internal - Update User DAL', () => {
 
         const user = await UserModel.query().findById(existingUser.id)
 
-        expect(user.username).to.equal(session.email)
+        expect(user.username).toEqual(session.email)
       })
 
       it('replaces the existing resetGuid with a new one and returns the updated users resetGuid', async () => {
@@ -144,9 +133,9 @@ describe('Users - Internal - Update User DAL', () => {
 
         const { resetGuid } = await UserModel.query().findById(existingUser.id)
 
-        expect(resetGuid).to.exist()
-        expect(resetGuid).to.not.equal(existingUser.resetGuid)
-        expect(result).to.equal(resetGuid)
+        expect(resetGuid).toBeDefined()
+        expect(resetGuid).not.toEqual(existingUser.resetGuid)
+        expect(result).toEqual(resetGuid)
       })
     })
 
@@ -156,8 +145,8 @@ describe('Users - Internal - Update User DAL', () => {
 
         const user = await UserModel.query().findById(existingUser.id)
 
-        expect(user.username).to.equal(existingUser.username)
-        expect(result).to.be.undefined()
+        expect(user.username).toEqual(existingUser.username)
+        expect(result).toBeUndefined()
       })
     })
 
@@ -169,8 +158,8 @@ describe('Users - Internal - Update User DAL', () => {
           const userGroup = await UserGroupModel.query().where({ userId: existingUser.userId })
           const userRole = await UserRoleModel.query().where({ userId: existingUser.userId })
 
-          expect(userGroup).to.be.empty()
-          expect(userRole).to.be.empty()
+          expect(userGroup).toHaveLength(0)
+          expect(userRole).toHaveLength(0)
         })
       })
 
@@ -187,10 +176,10 @@ describe('Users - Internal - Update User DAL', () => {
             .withGraphFetched('group')
           const userRole = await UserRoleModel.query().where({ userId: existingUser.userId })
 
-          expect(userGroup).to.have.length(1)
-          expect(userGroup[0].userId).to.equal(existingUser.userId)
-          expect(userGroup[0].group.group).to.equal('nps')
-          expect(userRole).to.be.empty()
+          expect(userGroup).toHaveLength(1)
+          expect(userGroup[0].userId).toEqual(existingUser.userId)
+          expect(userGroup[0].group.group).toEqual('nps')
+          expect(userRole).toHaveLength(0)
         })
       })
 
@@ -207,12 +196,12 @@ describe('Users - Internal - Update User DAL', () => {
             .withGraphFetched('group')
           const userRole = await UserRoleModel.query().where({ userId: existingUser.userId }).withGraphFetched('role')
 
-          expect(userGroup).to.have.length(1)
-          expect(userGroup[0].userId).to.equal(existingUser.userId)
-          expect(userGroup[0].group.group).to.equal('nps')
-          expect(userRole).to.have.length(1)
-          expect(userRole[0].userId).to.equal(existingUser.userId)
-          expect(userRole[0].role.role).to.equal('ar_user')
+          expect(userGroup).toHaveLength(1)
+          expect(userGroup[0].userId).toEqual(existingUser.userId)
+          expect(userGroup[0].group.group).toEqual('nps')
+          expect(userRole).toHaveLength(1)
+          expect(userRole[0].userId).toEqual(existingUser.userId)
+          expect(userRole[0].role.role).toEqual('ar_user')
         })
       })
     })
@@ -228,8 +217,8 @@ describe('Users - Internal - Update User DAL', () => {
         const userGroup = await UserGroupModel.query().where({ id: existingUserGroup.id, userId: existingUser.userId })
         const userRole = await UserRoleModel.query().where({ id: existingUserRole.id, userId: existingUser.userId })
 
-        expect(userGroup).to.have.length(1)
-        expect(userRole).to.have.length(1)
+        expect(userGroup).toHaveLength(1)
+        expect(userRole).toHaveLength(1)
       })
     })
 
@@ -243,7 +232,7 @@ describe('Users - Internal - Update User DAL', () => {
 
         const user = await UserModel.query().findById(existingUser.id)
 
-        expect(user.enabled).to.be.false()
+        expect(user.enabled).toBe(false)
       })
     })
   })
