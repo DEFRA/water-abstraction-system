@@ -1,9 +1,9 @@
 'use strict'
 
 // Test helpers
-const EventModel = require('../../../../../app/models/event.model.js')
 const LicenceDocumentHeaderHelper = require('../../../../support/helpers/licence-document-header.helper.js')
 const LicenceDocumentHeaderModel = require('../../../../../app/models/licence-document-header.model.js')
+const LicenceUnregistrationModel = require('../../../../../app/models/licence-unregistration.model.js')
 const UsersFixture = require('../../../../support/fixtures/users.fixture.js')
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 
@@ -11,12 +11,17 @@ const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 const UnregisterLicencesDal = require('../../../../../app/dal/users/external/setup/unregister-licences.dal.js')
 
 describe('Users - External - Setup - Unregister Licences DAL', () => {
+  let firstLicenceId
   let licenceDocumentHeaders
+  let secondLicenceId
   let session
   let user
 
   beforeAll(async () => {
     user = UsersFixture.nationalPermittingService()
+
+    firstLicenceId = generateUUID()
+    secondLicenceId = generateUUID()
 
     licenceDocumentHeaders = [
       // First licence to be unregistered
@@ -33,7 +38,7 @@ describe('Users - External - Setup - Unregister Licences DAL', () => {
       id: generateUUID(),
       licences: [
         {
-          id: generateUUID(),
+          id: firstLicenceId,
           licenceDocumentHeaderId: licenceDocumentHeaders[0].id,
           licenceRef: licenceDocumentHeaders[0].licenceRef,
           licenceVersions: [
@@ -52,7 +57,7 @@ describe('Users - External - Setup - Unregister Licences DAL', () => {
           ]
         },
         {
-          id: generateUUID(),
+          id: secondLicenceId,
           licenceDocumentHeaderId: licenceDocumentHeaders[1].id,
           licenceRef: licenceDocumentHeaders[1].licenceRef,
           licenceVersions: [
@@ -85,47 +90,33 @@ describe('Users - External - Setup - Unregister Licences DAL', () => {
       await licenceDocumentHeader.$query().delete()
     }
 
-    await EventModel.query()
-      .delete()
-      .where('type', 'unlink-licence')
-      .whereRaw(`events.metadata->>'documentId' = ANY (?)`, [
-        [licenceDocumentHeaders[0].id, licenceDocumentHeaders[1].id, licenceDocumentHeaders[2].id]
-      ])
+    await LicenceUnregistrationModel.query().delete().whereIn('licenceId', [firstLicenceId, secondLicenceId])
   })
 
   describe('when called', () => {
-    it('unregisters the selected licences and records the unregistration as an "event"', async () => {
+    it('unregisters the selected licences and records the unregistration', async () => {
       await UnregisterLicencesDal.go(session, user)
 
       // Check first licence unregistered
       let updatedLicenceDocumentHeader = await LicenceDocumentHeaderModel.query().findById(licenceDocumentHeaders[0].id)
-      let createdEvent = await EventModel.query()
-        .where('type', 'unlink-licence')
-        .whereRaw(`events.metadata->>'documentId' = ?`, [licenceDocumentHeaders[0].id])
+      let createdLicenceUnregistration = await LicenceUnregistrationModel.query()
+        .where('licenceId', firstLicenceId)
         .first()
 
       expect(updatedLicenceDocumentHeader.companyEntityId).toBeNull()
-      expect(createdEvent).toBeDefined()
+      expect(createdLicenceUnregistration).toBeDefined()
 
       // Check second licence unregistered
       updatedLicenceDocumentHeader = await LicenceDocumentHeaderModel.query().findById(licenceDocumentHeaders[1].id)
-      createdEvent = await EventModel.query()
-        .where('type', 'unlink-licence')
-        .whereRaw(`events.metadata->>'documentId' = ?`, [licenceDocumentHeaders[1].id])
-        .first()
+      createdLicenceUnregistration = await LicenceUnregistrationModel.query().where('licenceId', secondLicenceId).first()
 
       expect(updatedLicenceDocumentHeader.companyEntityId).toBeNull()
-      expect(createdEvent).toBeDefined()
+      expect(createdLicenceUnregistration).toBeDefined()
 
       // Check third licence is still registered
       updatedLicenceDocumentHeader = await LicenceDocumentHeaderModel.query().findById(licenceDocumentHeaders[2].id)
-      createdEvent = await EventModel.query()
-        .where('type', 'unlink-licence')
-        .whereRaw(`events.metadata->>'documentId' = ?`, [licenceDocumentHeaders[2].id])
-        .first()
 
       expect(updatedLicenceDocumentHeader.companyEntityId).not.toBeNull()
-      expect(createdEvent).toBeUndefined()
     })
   })
 })
