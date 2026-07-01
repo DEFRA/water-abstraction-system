@@ -33,7 +33,7 @@ const { timestampForPostgres } = require('../../../../lib/general.lib.js')
  * to be re-registered, rather than deleting the link between the user and the licence.
  *
  * It also created an `Event` record to record who unregistered the licence, and when. The recording of this event has
- * now been superseded by the creation of a record in the new `licenceUnregistration` table.
+ * now been superseded by the creation of a record in the new `licence_unregistrations` table.
  *
  * For now, this service replicates what the legacy service was doing with the exception of the recording of the Event.
  *
