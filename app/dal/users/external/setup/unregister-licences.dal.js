@@ -41,7 +41,7 @@ const { timestampForPostgres } = require('../../../../lib/general.lib.js')
  * @param {module:UserModel} user - The user that is deregistering the licences
  */
 async function go(session, user) {
-  const { username } = user
+  const { id: userId } = user
 
   const timestamp = timestampForPostgres()
   const licences = _licencesToUnlink(session)
@@ -51,15 +51,15 @@ async function go(session, user) {
       const { id: licenceId, licenceDocumentHeaderId } = licence
 
       await _unregisterLicence(licenceDocumentHeaderId, timestamp, trx)
-      await _createLicenceUnregistrationRecord(licenceId, username, timestamp, trx)
+      await _createLicenceUnregistrationRecord(licenceId, userId, timestamp, trx)
     }
   })
 }
 
-async function _createLicenceUnregistrationRecord(licenceId, username, timestamp, trx) {
+async function _createLicenceUnregistrationRecord(licenceId, userId, timestamp, trx) {
   await LicenceUnregistrationModel.query(trx).insert({
     createdAt: timestamp,
-    createdBy: username,
+    createdBy: userId,
     licenceId
   })
 }
