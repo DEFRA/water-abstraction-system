@@ -2,16 +2,16 @@
 
 // Test helpers
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
 const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.js')
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
+const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const ReturnsNoticeNotificationsPresenter = require('../../../../app/presenters/notices/setup/returns-notice-notifications.presenter.js')
 
 describe('Notices - Setup - Returns Notice Notifications presenter', () => {
-  const noticeId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
-
+  let noticeId
   let determinedReturnsPeriod
   let dynamicEmailDueDate
   let dynamicLetterDueDate
@@ -19,6 +19,8 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
   let session
 
   beforeEach(() => {
+    noticeId = generateUUID()
+
     dynamicEmailDueDate = futureDueDate()
     dynamicLetterDueDate = futureDueDate('letter')
 
@@ -58,6 +60,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
         messageRef: 'returns invitation',
         messageType: 'email',
         personalisation: {
+          licenceNumber: recipients[0].licence_refs[0],
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
           returnDueDate: formatLongDate(dynamicEmailDueDate)
@@ -75,6 +78,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
         messageRef: 'returns invitation',
         messageType: 'email',
         personalisation: {
+          licenceNumber: recipients[1].licence_refs[0],
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
           returnDueDate: formatLongDate(dynamicEmailDueDate)
@@ -98,6 +102,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR',
+          licenceNumber: recipients[2].licence_refs[0],
           name: 'Returnsholder',
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
@@ -121,6 +126,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR',
+          licenceNumber: recipients[3].licence_refs[0],
           name: 'Returnsto',
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
@@ -138,6 +144,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
         messageRef: 'returns invitation',
         messageType: 'email',
         personalisation: {
+          licenceNumber: recipients[4].licence_refs[0],
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
           returnDueDate: formatLongDate(dynamicEmailDueDate)
@@ -161,6 +168,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR',
+          licenceNumber: recipients[5].licence_refs[0],
           name: 'Additional',
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
@@ -293,6 +301,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
         const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 
         expect(result[0].personalisation).toEqual({
+          licenceNumber: recipients[0].licence_refs[0],
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
           returnDueDate: formatLongDate(recipients[0].notificationDueDate)
@@ -311,6 +320,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR',
+          licenceNumber: recipients[2].licence_refs[0],
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
           returnDueDate: formatLongDate(recipients[2].notificationDueDate),
