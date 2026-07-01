@@ -118,8 +118,6 @@ const vitestConfig = {
             'test/services/return-versions/**/*.test.js',
             'test/services/search/**/*.test.js'
           ],
-          // Share a single worker context across test files rather than isolating each file in its own module scope
-          isolate: false,
           // Human-readable label for this project shown in the Vitest output
           name: 'series',
           // Force a single worker so tests run one at a time and cannot interfere with each other via the database
