@@ -105,6 +105,7 @@ describe('Users - External - Setup - Unregister Licences DAL', () => {
 
       expect(updatedLicenceDocumentHeader.companyEntityId).toBeNull()
       expect(createdLicenceUnregistration).toBeDefined()
+      expect(createdLicenceUnregistration.createdBy).toEqual(user.id)
 
       // Check second licence unregistered
       updatedLicenceDocumentHeader = await LicenceDocumentHeaderModel.query().findById(licenceDocumentHeaders[1].id)
@@ -114,6 +115,7 @@ describe('Users - External - Setup - Unregister Licences DAL', () => {
 
       expect(updatedLicenceDocumentHeader.companyEntityId).toBeNull()
       expect(createdLicenceUnregistration).toBeDefined()
+      expect(createdLicenceUnregistration.createdBy).toEqual(user.id)
 
       // Check third licence is still registered
       updatedLicenceDocumentHeader = await LicenceDocumentHeaderModel.query().findById(licenceDocumentHeaders[2].id)
