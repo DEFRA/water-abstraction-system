@@ -82,14 +82,14 @@ const NOTIFY_TEMPLATES = Object.freeze({
   reminders: {
     adhoc: {
       email: {
-        'primary user': '87dceeb3-aa2b-4ff5-aff9-97755a71532b',
-        'returns user': 'c8076bbd-7d93-4743-81b3-755a5c5f1d50',
-        'single use': '87dceeb3-aa2b-4ff5-aff9-97755a71532b'
+        'primary user': '394f456e-da57-4469-8e83-22284312f8ae',
+        'returns user': 'b6f67826-1e22-4a83-a3c4-abb62019432f',
+        'single use': '394f456e-da57-4469-8e83-22284312f8ae'
       },
       letter: {
-        'licence holder': '62224316-35c4-4b02-98c2-81332817f3dc',
-        'returns to': 'eca3e1d0-a8a6-4eb1-b166-23891fe3a9e5',
-        'single use': '62224316-35c4-4b02-98c2-81332817f3dc'
+        'licence holder': 'd3f7f7d9-d72b-45b4-b0c3-484128542f5e',
+        'returns to': '5d465f69-1c21-4cf0-8bbb-d91c2ba2ec98',
+        'single use': 'd3f7f7d9-d72b-45b4-b0c3-484128542f5e'
       }
     },
     standard: {
