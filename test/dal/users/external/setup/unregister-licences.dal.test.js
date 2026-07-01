@@ -108,7 +108,9 @@ describe('Users - External - Setup - Unregister Licences DAL', () => {
 
       // Check second licence unregistered
       updatedLicenceDocumentHeader = await LicenceDocumentHeaderModel.query().findById(licenceDocumentHeaders[1].id)
-      createdLicenceUnregistration = await LicenceUnregistrationModel.query().where('licenceId', secondLicenceId).first()
+      createdLicenceUnregistration = await LicenceUnregistrationModel.query()
+        .where('licenceId', secondLicenceId)
+        .first()
 
       expect(updatedLicenceDocumentHeader.companyEntityId).toBeNull()
       expect(createdLicenceUnregistration).toBeDefined()
