@@ -24,12 +24,23 @@ const airbrakeConfig = require('../../config/airbrake.config.js')
 const { gotWrapper } = require('../lib/got-wrapper.lib.js')
 const serverConfig = require('../../config/server.config.js')
 
+// The `Notifier` constructor unconditionally hooks `process.on('uncaughtException' | 'unhandledRejection' |
+// 'beforeExit', ...)` and never removes these listeners. In production this plugin is only ever registered once, so
+// it's a non-issue there, but our tests spin up many real Hapi servers (one per test file), and each would otherwise
+// create its own `Notifier`, permanently leaking 3 process-level listeners per server. We keep a single instance
+// here and reuse it across every registration to avoid that leak.
+let _notifier
+
 const AirbrakePlugin = {
   name: 'airbrake',
   register: async (server, _options) => {
     // We add an instance of the Airbrake Notifier so we can send notifications via Airbrake to Errbit manually if
     // needed. It's main use is when passed in as a param to RequestNotifierLib in the RequestNotifierPlugin
-    server.app.airbrake = new Notifier(await _notifierArgs())
+    if (!_notifier) {
+      _notifier = new Notifier(await _notifierArgs())
+    }
+
+    server.app.airbrake = _notifier
 
     // When Hapi emits a request event with an error we capture the details and use Airbrake to send a request to our
     // Errbit instance
