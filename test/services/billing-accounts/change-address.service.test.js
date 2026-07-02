@@ -318,7 +318,7 @@ describe('Change address service', () => {
 
         const testDate = new Date(2023, 8, 4, 10, 31, 57, 2)
 
-        clock = Sinon.useFakeTimers(testDate)
+        clock = Sinon.useFakeTimers({ now: testDate, toFake: ['Date'] })
       })
 
       afterEach(() => {
