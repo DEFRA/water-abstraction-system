@@ -32,6 +32,8 @@ const vitestConfig = {
     dir: 'test',
     // Module(s) to run once before all test suites. We use it to clean and seed the database
     globalSetup: ['test/global-setup.js'],
+    // Module(s) to run once after all test suites. We use it to ensure the database connection is closed
+    globalTeardown: ['test/global-teardown.js'],
     // Each entry is a separate Vitest project, allowing different runner settings per group of tests
     projects: [
       {
