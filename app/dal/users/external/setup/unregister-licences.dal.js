@@ -5,8 +5,8 @@
  * @module UnregisterLicencesDal
  */
 
-const EventModel = require('../../../../models/event.model.js')
-const LicenceDocumentHeader = require('../../../../models/licence-document-header.model.js')
+const LicenceDocumentHeaderModel = require('../../../../models/licence-document-header.model.js')
+const LicenceUnregistrationModel = require('../../../../models/licence-unregistration.model.js')
 const { timestampForPostgres } = require('../../../../lib/general.lib.js')
 
 /**
@@ -32,38 +32,35 @@ const { timestampForPostgres } = require('../../../../lib/general.lib.js')
  * When you understand this, what the legacy service was doing was _unregistering_ the licence, i.e. making it available
  * to be re-registered, rather than deleting the link between the user and the licence.
  *
- * It also created an `Event` record to record who unregistered the licence, and when.
+ * It also created an `Event` record to record who unregistered the licence, and when. The recording of this event has
+ * now been superseded by the creation of a record in the new `licence_unregistrations` table.
  *
- * For now, this service replicates what the legacy service was doing.
+ * For now, this service replicates what the legacy service was doing with the exception of the recording of the Event.
  *
  * @param {module:SessionModel} session - The session instance
  * @param {module:UserModel} user - The user that is deregistering the licences
  */
 async function go(session, user) {
-  const { username } = user
+  const { id: userId } = user
 
   const timestamp = timestampForPostgres()
   const licences = _licencesToUnlink(session)
 
-  await EventModel.transaction(async (trx) => {
+  await LicenceDocumentHeaderModel.transaction(async (trx) => {
     for (const licence of licences) {
-      const { licenceDocumentHeaderId } = licence
+      const { id: licenceId, licenceDocumentHeaderId } = licence
 
       await _unregisterLicence(licenceDocumentHeaderId, timestamp, trx)
-      await _createEventRecord(licenceDocumentHeaderId, username, timestamp, trx)
+      await _createLicenceUnregistrationRecord(licenceId, userId, timestamp, trx)
     }
   })
 }
 
-async function _createEventRecord(licenceDocumentHeaderId, username, timestamp, trx) {
-  await EventModel.query(trx).insert({
+async function _createLicenceUnregistrationRecord(licenceId, userId, timestamp, trx) {
+  await LicenceUnregistrationModel.query(trx).insert({
     createdAt: timestamp,
-    issuer: username,
-    metadata: {
-      documentId: licenceDocumentHeaderId
-    },
-    type: 'unlink-licence',
-    updatedAt: timestamp
+    createdBy: userId,
+    licenceId
   })
 }
 
@@ -80,7 +77,7 @@ function _licencesToUnlink(session) {
 }
 
 async function _unregisterLicence(licenceDocumentHeaderId, timestamp, trx) {
-  await LicenceDocumentHeader.query(trx)
+  await LicenceDocumentHeaderModel.query(trx)
     .findById(licenceDocumentHeaderId)
     .patch({ companyEntityId: null, updatedAt: timestamp })
 }
