@@ -11,7 +11,9 @@ let CompressSchemaFolderService
 // package's live bindings. Once test files are ESM, vi.mock('tar') with a static import will work correctly.
 describe.skip('Jobs - Export - Compress Schema Folder service', () => {
   beforeEach(() => {
-    vi.doMock('tar', () => ({ create: vi.fn().mockResolvedValue(undefined) }))
+    vi.doMock('tar', () => {
+      return { create: vi.fn().mockResolvedValue(undefined) }
+    })
     vi.resetModules()
 
     tar = require('tar')
