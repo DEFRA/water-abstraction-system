@@ -4,7 +4,6 @@ const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http
 
 // Test framework dependencies
 const Sinon = require('sinon')
-const Proxyquire = require('proxyquire')
 
 // Things we need to stub
 const AddressFacadeViewHealthRequest = require('../../../app/requests/address-facade/view-health.request.js')
@@ -14,11 +13,10 @@ const GotenbergViewHealthRequest = require('../../../app/requests/gotenberg/view
 const LegacyViewHealthRequest = require('../../../app/requests/legacy/view-health.request.js')
 const NotifyViewHealthRequest = require('../../../app/requests/notify/view-health.request.js')
 const RespViewHealthRequest = require('../../../app/requests/resp/view-health.request.js')
+const util = require('node:util')
 
 // Thing under test
-// Normally we'd set this to `= require('../../app/services/health/info.service')`. But to control how
-// `child_process.exec()` behaves in the service, after it's been promisified we have to use proxyquire.
-let InfoService // = require('../../app/services/health/info.service')
+const InfoService = require('../../../app/services/health/info.service.js')
 
 describe('Health - Info service', () => {
   const goodRequestResults = {
@@ -112,23 +110,12 @@ describe('Health - Info service', () => {
 
       legacyViewHealthRequestStub.withArgs('water').resolves(goodRequestResults.app)
 
-      // Unfortunately, this convoluted test setup is the only way we've managed to stub how the promisified version of
-      // `child-process.exec()` behaves in the module under test.
-      // We create an anonymous stub, which responds differently depending on which service is being checked. We then
-      // stub the util library's `promisify()` method and tell it to call our anonymous stub when invoked. The bit that
-      // makes all this work is the fact we use Proxyquire to load our stubbed util instead of the real one when we load
-      // our module under test
       const execStub = Sinon.stub().withArgs('clamdscan --version').resolves({
         stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
         stderror: null
       })
-      const utilStub = {
-        promisify: Sinon.stub().callsFake(() => {
-          return execStub
-        })
-      }
 
-      InfoService = Proxyquire('../../../app/services/health/info.service', { 'node:util': utilStub })
+      Sinon.stub(util, 'promisify').returns(execStub)
     })
 
     it('returns details on each', async () => {
@@ -174,13 +161,8 @@ describe('Health - Info service', () => {
         stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
         stderror: null
       })
-      const utilStub = {
-        promisify: Sinon.stub().callsFake(() => {
-          return execStub
-        })
-      }
 
-      InfoService = Proxyquire('../../../app/services/health/info.service', { 'node:util': utilStub })
+      Sinon.stub(util, 'promisify').returns(execStub)
     })
 
     describe('is not running', () => {
@@ -232,19 +214,14 @@ describe('Health - Info service', () => {
 
     describe('is not running', () => {
       beforeEach(async () => {
-        // We tweak our anonymous stub so that it returns stderr populated, which is what happens if the shell call
+        // We tweak the execStub so that it returns stderr populated, which is what happens if the shell call
         // returns a non-zero exit code.
         const execStub = Sinon.stub().withArgs('clamdscan --version').resolves({
           stdout: null,
           stderr: 'Could not connect to clamd'
         })
-        const utilStub = {
-          promisify: Sinon.stub().callsFake(() => {
-            return execStub
-          })
-        }
 
-        InfoService = Proxyquire('../../../app/services/health/info.service', { 'node:util': utilStub })
+        Sinon.stub(util, 'promisify').returns(execStub)
       })
 
       it('handles the error and still returns a result for the other services', async () => {
@@ -277,18 +254,13 @@ describe('Health - Info service', () => {
 
     describe('throws an exception', () => {
       beforeEach(async () => {
-        // In this tweak we tell our anonymous stub to throw an exception when invoked. Not sure when this would happen
+        // In this tweak we tell the execStub to throw an exception when invoked. Not sure when this would happen
         // but we've coded for the eventuality so we need to test it
         const execStub = Sinon.stub()
           .withArgs('clamdscan --version')
           .throwsException(new Error('ClamAV check went boom'))
-        const utilStub = {
-          promisify: Sinon.stub().callsFake(() => {
-            return execStub
-          })
-        }
 
-        InfoService = Proxyquire('../../../app/services/health/info.service', { 'node:util': utilStub })
+        Sinon.stub(util, 'promisify').returns(execStub)
       })
 
       it('handles the error and still returns a result for the other services', async () => {
@@ -327,13 +299,8 @@ describe('Health - Info service', () => {
         stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
         stderror: null
       })
-      const utilStub = {
-        promisify: Sinon.stub().callsFake(() => {
-          return execStub
-        })
-      }
 
-      InfoService = Proxyquire('../../../app/services/health/info.service', { 'node:util': utilStub })
+      Sinon.stub(util, 'promisify').returns(execStub)
 
       redisStub.returns({ ping: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
     })
