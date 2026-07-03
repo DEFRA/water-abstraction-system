@@ -5,10 +5,8 @@
  * @module InfoService
  */
 
-// We use promisify to wrap exec in a promise. This allows us to await it without resorting to using callbacks.
 const ChildProcess = require('node:child_process')
 const util = require('node:util')
-const exec = util.promisify(ChildProcess.exec)
 
 const AddressFacadeViewHealthRequest = require('../../requests/address-facade/view-health.request.js')
 const ChargingModuleViewHealthRequest = require('../../requests/charging-module/view-health.request.js')
@@ -170,6 +168,10 @@ async function _respData() {
 }
 
 async function _virusScannerData() {
+  // We use promisify to wrap exec in a promise. This allows us to await it without resorting to using callbacks.
+  // Creating exec here (rather than at module scope) allows util.promisify to be stubbed in tests.
+  const exec = util.promisify(ChildProcess.exec)
+
   try {
     const { stdout, stderr } = await exec('clamdscan --version')
 
