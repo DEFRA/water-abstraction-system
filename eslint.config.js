@@ -76,7 +76,7 @@ export default [
   // Vitest injects test globals (describe, it, expect, etc.) via globals: true in vitest.config.js. This tells ESLint
   // about those globals so it does not flag them as undefined in test files.
   {
-    files: ['templates/*.test.js', 'test/**/*.test.js'],
+    files: ['templates/*.test.js', 'test/**/*.test.js', 'test/support/stubs/*.js'],
     languageOptions: {
       globals: {
         afterAll: 'readonly',

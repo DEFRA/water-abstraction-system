@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module CompanyHelper
  */
 
-const CompanyModel = require('../../../app/models/company.model.js')
-const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
+import CompanyModel from '../../../app/models/company.model.js'
+import { generateRandomInteger } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new company
@@ -72,7 +70,7 @@ function generateExternalId() {
   return `${regionCode}:${partyId}`
 }
 
-module.exports = {
+export default {
   add,
   defaults,
   generateCompanyNumber,

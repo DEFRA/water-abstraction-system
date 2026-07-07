@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Vitest global teardown — runs once in the main process after the full test suite
  * @module GlobalTeardown
  */
 
-const Database = require('./support/database.js')
+import Database from './support/database.js'
 
 /**
  * Vitest global teardown — runs once in the main process after the full test suite
@@ -19,4 +17,4 @@ async function teardown() {
   await Database.closeConnection()
 }
 
-module.exports = teardown
+export default teardown

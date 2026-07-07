@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module LicenceDocumentRoleHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const LicenceDocumentRoleModel = require('../../../app/models/licence-document-role.model.js')
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import LicenceDocumentRoleModel from '../../../app/models/licence-document-role.model.js'
 
 /**
  * Add a new licence document role
@@ -55,7 +53,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

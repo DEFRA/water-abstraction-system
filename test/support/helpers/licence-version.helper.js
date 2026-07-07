@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module LicenceVersionHelper
  */
 
-const { generateRandomInteger, generateUUID, timestampForPostgres } = require('../../../app/lib/general.lib.js')
-const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
+import { generateRandomInteger, generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
+import LicenceVersionModel from '../../../app/models/licence-version.model.js'
 
 /**
  * Add a new licence version
@@ -72,7 +70,7 @@ function generateLicenceVersionExternalId() {
   return `${generateRandomInteger(0, 9)}:${generateRandomInteger(10000, 99999)}:${generateRandomInteger(1, 100)}:0`
 }
 
-module.exports = {
+export default {
   add,
   defaults,
   generateLicenceVersionExternalId

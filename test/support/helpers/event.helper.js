@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module EventHelper
  */
 
-const EventModel = require('../../../app/models/event.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import EventModel from '../../../app/models/event.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new event
@@ -72,7 +70,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

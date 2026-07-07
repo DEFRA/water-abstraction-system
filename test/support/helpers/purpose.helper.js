@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * @module PurposeHelper
  */
 
-const PurposeModel = require('../../../app/models/purpose.model.js')
-const { selectRandomEntry } = require('../general.js')
-const { data: purposes } = require('../../../db/seeds/data/purposes.js')
+import PurposeModel from '../../../app/models/purpose.model.js'
+import { selectRandomEntry } from '../general.js'
+import { data as purposes } from '../../../db/seeds/data/purposes.js'
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -30,7 +28,7 @@ function select(index = -1) {
   return PurposeModel.fromJson(selectRandomEntry(purposes))
 }
 
-module.exports = {
+export default {
   data: purposes,
   select
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * @module ReturnRequirementPointHelper
  */
 
-const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
-const PointHelper = require('./point.helper.js')
-const ReturnRequirementPointModel = require('../../../app/models/return-requirement-point.model.js')
+import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
+import PointHelper from './point.helper.js'
+import ReturnRequirementPointModel from '../../../app/models/return-requirement-point.model.js'
 
 /**
  * Add a new return requirement point
@@ -67,7 +65,7 @@ function generateReturnRequirementPointExternalId() {
   return `9:${generateRandomInteger(100, 99999)}:${naldPointId}`
 }
 
-module.exports = {
+export default {
   add,
   defaults,
   generateReturnRequirementPointExternalId

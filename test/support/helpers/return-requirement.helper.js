@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module ReturnRequirementHelper
  */
 
-const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
-const ReturnRequirementModel = require('../../../app/models/return-requirement.model.js')
+import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
+import ReturnRequirementModel from '../../../app/models/return-requirement.model.js'
 
 /**
  * Add a new return requirement
@@ -72,7 +70,7 @@ function generateReference() {
   return generateRandomInteger(10000000, 99999999)
 }
 
-module.exports = {
+export default {
   add,
   defaults,
   generateReference

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module LicenceEntityHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const LicenceEntityModel = require('../../../app/models/licence-entity.model.js')
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import LicenceEntityModel from '../../../app/models/licence-entity.model.js'
 
 /**
  * Add a new licence entity
@@ -60,7 +58,7 @@ function generateName() {
   return `${generateUUID()}@example.co.uk`
 }
 
-module.exports = {
+export default {
   add,
   defaults,
   generateName

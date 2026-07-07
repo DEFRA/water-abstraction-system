@@ -1,10 +1,8 @@
-'use strict'
-
 /**
  * @module ContactHelper
  */
 
-const ContactModel = require('../../../app/models/contact.model.js')
+import ContactModel from '../../../app/models/contact.model.js'
 
 /**
  * Add a new contact
@@ -53,7 +51,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * @module AddressHelper
  */
 
-const crypto = require('crypto')
+import crypto from 'crypto'
 
-const AddressModel = require('../../../app/models/address.model.js')
-const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
+import AddressModel from '../../../app/models/address.model.js'
+import { generateRandomInteger } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new address
@@ -107,7 +105,7 @@ function generateExternalId() {
   return `${regionCode}:${addressId}`
 }
 
-module.exports = {
+export default {
   add,
   defaults,
   generateContactHashId,

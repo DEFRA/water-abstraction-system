@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * @module RecipientScenariosSeeder
  */
 
-const CRMContactsSeeder = require('./crm-contacts.seeder.js')
-const EmptyLicence = require('./empty-licence.seeder.js')
-const RecipientsFormatter = require('./recipients.formatter.js')
-const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
-const { compareStrings } = require('../../../app/lib/general.lib.js')
+import CRMContactsSeeder from './crm-contacts.seeder.js'
+import EmptyLicence from './empty-licence.seeder.js'
+import RecipientsFormatter from './recipients.formatter.js'
+import LicenceVersionHelper from '../helpers/licence-version.helper.js'
+import { compareStrings } from '../../../app/lib/general.lib.js'
 
 /**
  * Seeds an additional contact recipient for an existing licence
@@ -505,7 +503,7 @@ function _aggregatedData(returnLogs) {
   }
 }
 
-module.exports = {
+export default {
   additionalContactRecipient,
   clean,
   licenceHolderOnly,

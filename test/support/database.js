@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Use to help with cleaning the database between tests
  *
@@ -8,25 +6,25 @@
  * @module DatabaseSupport
  */
 
-const { db, dbConfig } = require('../../db/db.js')
+import { db, dbConfig } from '../../db/db.js'
 
-const ChangeReasonsSeeder = require('../../db/seeds/12-change-reasons.seed.js')
-const ChargeCategoriesSeeder = require('../../db/seeds/13-charge-categories.seed.js')
-const FinancialAgreementsSeeder = require('../../db/seeds/11-financial-agreements.seed.js')
-const GroupRolesSeeder = require('../../db/seeds/08-group-roles.seed.js')
-const GroupsSeeder = require('../../db/seeds/06-groups.seed.js')
-const LicenceRoleSeeder = require('../../db/seeds/14-licence-roles.seed.js')
-const LicenceVersionPurposeConditionTypeSeeder = require('../../db/seeds/05-licence-version-purpose-condition-types.seed.js')
-const PrimaryPurposesSeeder = require('../../db/seeds/03-primary-purposes.seed.js')
-const PurposesSeeder = require('../../db/seeds/02-purposes.seed.js')
-const RegionsSeeder = require('../../db/seeds/01-regions.seed.js')
-const ReturnCycleSeeder = require('../../db/seeds/16-return-cycles.seed.js')
-const RolesSeeder = require('../../db/seeds/07-roles.seed.js')
-const SecondaryPurposesSeeder = require('../../db/seeds/04-secondary-purposes.seed.js')
-const SourcesSeeder = require('../../db/seeds/15-sources.seed.js')
-const UserGroupsSeeder = require('../../db/seeds/10-user-groups.seed.js')
-const UserRolesSeeder = require('../../db/seeds/17-user-roles.seed.js')
-const UsersSeeder = require('../../db/seeds/09-users.seed.js')
+import ChangeReasonsSeeder from '../../db/seeds/12-change-reasons.seed.js'
+import ChargeCategoriesSeeder from '../../db/seeds/13-charge-categories.seed.js'
+import FinancialAgreementsSeeder from '../../db/seeds/11-financial-agreements.seed.js'
+import GroupRolesSeeder from '../../db/seeds/08-group-roles.seed.js'
+import GroupsSeeder from '../../db/seeds/06-groups.seed.js'
+import LicenceRoleSeeder from '../../db/seeds/14-licence-roles.seed.js'
+import LicenceVersionPurposeConditionTypeSeeder from '../../db/seeds/05-licence-version-purpose-condition-types.seed.js'
+import PrimaryPurposesSeeder from '../../db/seeds/03-primary-purposes.seed.js'
+import PurposesSeeder from '../../db/seeds/02-purposes.seed.js'
+import RegionsSeeder from '../../db/seeds/01-regions.seed.js'
+import ReturnCycleSeeder from '../../db/seeds/16-return-cycles.seed.js'
+import RolesSeeder from '../../db/seeds/07-roles.seed.js'
+import SecondaryPurposesSeeder from '../../db/seeds/04-secondary-purposes.seed.js'
+import SourcesSeeder from '../../db/seeds/15-sources.seed.js'
+import UserGroupsSeeder from '../../db/seeds/10-user-groups.seed.js'
+import UserRolesSeeder from '../../db/seeds/17-user-roles.seed.js'
+import UsersSeeder from '../../db/seeds/09-users.seed.js'
 
 const LEGACY_SCHEMAS = ['crm', 'crm_v2', 'idm', 'permit', 'returns', 'water']
 
@@ -136,7 +134,7 @@ async function closeConnection() {
   await db.destroy()
 }
 
-module.exports = {
+export default {
   clean,
   closeConnection,
   wipe

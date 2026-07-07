@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module PermitLicenceHelper
  */
 
-const PermitLicenceModel = require('../../../app/models/permit-licence.model.js')
-const { generateLicenceRef } = require('./licence.helper.js')
+import PermitLicenceModel from '../../../app/models/permit-licence.model.js'
+import { generateLicenceRef } from './licence.helper.js'
 
 /**
  * Add a new licence into the licence table in the permit schema
@@ -440,7 +438,7 @@ function _licenceDataValue(licenceRef) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

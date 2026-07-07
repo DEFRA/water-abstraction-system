@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module UserVerificationHelper
  */
 
-const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
-const UserVerificationModel = require('../../../app/models/user-verification.model.js')
+import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
+import UserVerificationModel from '../../../app/models/user-verification.model.js'
 
 const VERIFICATION_CODE_CHARACTERS = '23456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXY'
 const VERIFICATION_CODE_LENGTH = 5
@@ -72,7 +70,7 @@ function generateVerificationCode() {
   }).join('')
 }
 
-module.exports = {
+export default {
   add,
   defaults,
   generateVerificationCode

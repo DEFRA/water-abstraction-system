@@ -1,8 +1,6 @@
-'use strict'
-
-const { generateAccountNumber } = require('../helpers/billing-account.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../helpers/licence.helper.js')
+import { generateAccountNumber } from '../helpers/billing-account.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef } from '../helpers/licence.helper.js'
 
 /**
  * Represents a bill run object with generated UUIDs for the ID and external ID
@@ -153,7 +151,7 @@ function licence(region) {
   }
 }
 
-module.exports = {
+export default {
   billRun,
   billingAccount,
   chargingModuleResponse,

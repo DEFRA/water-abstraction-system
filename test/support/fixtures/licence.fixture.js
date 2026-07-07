@@ -1,8 +1,6 @@
-'use strict'
-
-const LicenceModel = require('../../../app/models/licence.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../helpers/licence.helper.js')
+import LicenceModel from '../../../app/models/licence.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef } from '../helpers/licence.helper.js'
 
 /**
  * Generates an instance of `LicenceModel` with an ID and a licence reference
@@ -40,4 +38,4 @@ function licenceEnds(endDate = null) {
   })
 }
 
-module.exports = { licence, licenceEnds }
+export default { licence, licenceEnds }

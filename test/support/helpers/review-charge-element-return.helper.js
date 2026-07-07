@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module ReviewChargeElementReturnHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const ReviewChargeElementReturnModel = require('../../../app/models/review-charge-element-return.model.js')
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import ReviewChargeElementReturnModel from '../../../app/models/review-charge-element-return.model.js'
 
 /**
  * Add a new review charge elements returns record for 2pt matching
@@ -49,7 +47,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

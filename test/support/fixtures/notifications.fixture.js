@@ -1,12 +1,10 @@
-'use strict'
+import EventModel from '../../../app/models/event.model.js'
+import LicenceModel from '../../../app/models/licence.model.js'
+import NotificationModel from '../../../app/models/notification.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import { NOTIFY_TEMPLATES } from '../../../app/lib/notify-templates.lib.js'
 
-const EventModel = require('../../../app/models/event.model.js')
-const LicenceModel = require('../../../app/models/licence.model.js')
-const NotificationModel = require('../../../app/models/notification.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { NOTIFY_TEMPLATES } = require('../../../app/lib/notify-templates.lib.js')
-
-const { domains } = require('../../../config/server.config.js')
+import { domains } from '../../../config/server.config.js'
 
 const ADDRESS = {
   address_line_1: 'ACME Services Ltd',
@@ -835,7 +833,7 @@ function _userPasswordResetEmail(recipient, internal, overrides) {
   return { ...notification, ...overrides }
 }
 
-module.exports = {
+export default {
   abstractionAlertEmail,
   abstractionAlertLetter,
   legacyHandsOfFlow,

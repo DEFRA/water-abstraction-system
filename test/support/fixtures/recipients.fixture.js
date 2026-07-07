@@ -1,11 +1,9 @@
-'use strict'
+import crypto from 'node:crypto'
 
-const crypto = require('node:crypto')
-
-const { futureDueDate } = require('../../../app/presenters/notices/base.presenter.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../helpers/licence.helper.js')
-const { generateReference } = require('../helpers/return-requirement.helper.js')
+import { futureDueDate } from '../../../app/presenters/notices/base.presenter.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef } from '../helpers/licence.helper.js'
+import { generateReference } from '../helpers/return-requirement.helper.js'
 
 /**
  * Creates a fixture for an ad-hoc additional email recipient
@@ -499,7 +497,7 @@ function _nonDownloadRecipient(recipient) {
   }
 }
 
-module.exports = {
+export default {
   additionalEmailRecipient,
   additionalPostalRecipient,
   alertNoticeAdditionalContact,

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * @module LicenceSeeder
  */
 
-const CompanyHelper = require('../helpers/company.helper.js')
-const LicenceHelper = require('../helpers/licence.helper.js')
-const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import CompanyHelper from '../helpers/company.helper.js'
+import LicenceHelper from '../helpers/licence.helper.js'
+import LicenceVersionHelper from '../helpers/licence-version.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Seeds a licence holder that is the current licence version holder for two licences
@@ -92,7 +90,7 @@ async function licenceHolderWithSingleLicence(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   exLicenceHolderWithSingleLicences,
   licenceHolderWithMultipleLicences,
   licenceHolderWithSingleLicence

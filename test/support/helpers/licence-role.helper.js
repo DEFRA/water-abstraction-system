@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module LicenceRoleHelper
  */
 
-const LicenceRoleModel = require('../../../app/models/licence-role.model.js')
-const { data: licenceRoles } = require('../../../db/seeds/data/licence-roles.js')
+import LicenceRoleModel from '../../../app/models/licence-role.model.js'
+import { data as licenceRoles } from '../../../db/seeds/data/licence-roles.js'
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -28,7 +26,7 @@ function select(name = 'licenceHolder') {
   return LicenceRoleModel.fromJson(licenceRole)
 }
 
-module.exports = {
+export default {
   data: licenceRoles,
   select
 }

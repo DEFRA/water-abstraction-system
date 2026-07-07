@@ -1,12 +1,10 @@
-'use strict'
-
-const BillingAccountModel = require('../../../app/models/billing-account.model.js')
-const CompanyContactModel = require('../../../app/models/company-contact.model.js')
-const ContactModel = require('../../../app/models/contact.model.js')
-const LicenceModel = require('../../../app/models/licence.model.js')
-const { generateAccountNumber } = require('../helpers/billing-account.helper.js')
-const { generateLicenceRef } = require('../helpers/licence.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import BillingAccountModel from '../../../app/models/billing-account.model.js'
+import CompanyContactModel from '../../../app/models/company-contact.model.js'
+import ContactModel from '../../../app/models/contact.model.js'
+import LicenceModel from '../../../app/models/licence.model.js'
+import { generateAccountNumber } from '../helpers/billing-account.helper.js'
+import { generateLicenceRef } from '../helpers/licence.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * A representation from the billing accounts 'FetchBillingAccountsService'
@@ -185,7 +183,7 @@ function licences() {
   ]
 }
 
-module.exports = {
+export default {
   billingAccounts,
   company,
   companies,

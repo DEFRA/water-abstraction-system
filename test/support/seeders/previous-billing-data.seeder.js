@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * @module PreviousBillingDataSeeder
  */
 
-const BillLicenceHelper = require('../helpers/bill-licence.helper.js')
-const BillRunHelper = require('../helpers/bill-run.helper.js')
-const BillHelper = require('../helpers/bill.helper.js')
-const BillingAccountHelper = require('../helpers/billing-account.helper.js')
-const ChargeCategoryHelper = require('../helpers/charge-category.helper.js')
-const LicenceHelper = require('../helpers/licence.helper.js')
-const RegionHelper = require('../helpers/region.helper.js')
-const TransactionHelper = require('../helpers/transaction.helper.js')
+import BillLicenceHelper from '../helpers/bill-licence.helper.js'
+import BillRunHelper from '../helpers/bill-run.helper.js'
+import BillHelper from '../helpers/bill.helper.js'
+import BillingAccountHelper from '../helpers/billing-account.helper.js'
+import ChargeCategoryHelper from '../helpers/charge-category.helper.js'
+import LicenceHelper from '../helpers/licence.helper.js'
+import RegionHelper from '../helpers/region.helper.js'
+import TransactionHelper from '../helpers/transaction.helper.js'
 
 /**
  * Seeds previous billing data need to support testing of supplementary billing
@@ -251,7 +249,7 @@ async function _twoPartTariffBillingData(seedData) {
   return { annualBillRun, supplementaryBillRun }
 }
 
-module.exports = {
+export default {
   seed,
   zap
 }

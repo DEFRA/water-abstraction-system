@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * @module CRMContactsSeeder
  */
 
-const AddressHelper = require('../helpers/address.helper.js')
-const CompanyContactHelper = require('../helpers/company-contact.helper.js')
-const CompanyHelper = require('../helpers/company.helper.js')
-const ContactHelper = require('../helpers/contact.helper.js')
-const LicenceDocumentRoleHelper = require('../helpers/licence-document-role.helper.js')
-const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
-const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
-const LicenceRoleHelper = require('../helpers/licence-role.helper.js')
-const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
+import AddressHelper from '../helpers/address.helper.js'
+import CompanyContactHelper from '../helpers/company-contact.helper.js'
+import CompanyHelper from '../helpers/company.helper.js'
+import ContactHelper from '../helpers/contact.helper.js'
+import LicenceDocumentRoleHelper from '../helpers/licence-document-role.helper.js'
+import LicenceEntityHelper from '../helpers/licence-entity.helper.js'
+import LicenceEntityRoleHelper from '../helpers/licence-entity-role.helper.js'
+import LicenceRoleHelper from '../helpers/licence-role.helper.js'
+import LicenceVersionHelper from '../helpers/licence-version.helper.js'
 
 /**
  * Add an additional contact
@@ -237,7 +235,7 @@ async function returnsUser(licenceSeedData, email) {
   }
 }
 
-module.exports = {
+export default {
   additionalContact,
   licenceHolder,
   primaryUser,

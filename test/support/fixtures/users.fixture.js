@@ -1,17 +1,15 @@
-'use strict'
-
-const GroupHelper = require('../helpers/group.helper.js')
-const GroupModel = require('../../../app/models/group.model.js')
-const GroupRoleHelper = require('../helpers/group-role.helper.js')
-const LicenceEntityModel = require('../../../app/models/licence-entity.model.js')
-const LicenceEntityRoleModel = require('../../../app/models/licence-entity-role.model.js')
-const RoleHelper = require('../helpers/role.helper.js')
-const RoleModel = require('../../../app/models/role.model.js')
-const UserHelper = require('../helpers/user.helper.js')
-const UserModel = require('../../../app/models/user.model.js')
-const UserGroupHelper = require('../helpers/user-group.helper.js')
-const UserRoleHelper = require('../helpers/user-role.helper.js')
-const { compareStrings, generateUUID } = require('../../../app/lib/general.lib.js')
+import GroupHelper from '../helpers/group.helper.js'
+import GroupModel from '../../../app/models/group.model.js'
+import GroupRoleHelper from '../helpers/group-role.helper.js'
+import LicenceEntityModel from '../../../app/models/licence-entity.model.js'
+import LicenceEntityRoleModel from '../../../app/models/licence-entity-role.model.js'
+import RoleHelper from '../helpers/role.helper.js'
+import RoleModel from '../../../app/models/role.model.js'
+import UserHelper from '../helpers/user.helper.js'
+import UserModel from '../../../app/models/user.model.js'
+import UserGroupHelper from '../helpers/user-group.helper.js'
+import UserRoleHelper from '../helpers/user-role.helper.js'
+import { compareStrings, generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Populates a `UserModel` instance as the 'admin-internal@wrls.gov.uk' user for testing purposes
@@ -372,7 +370,7 @@ function _transformLicenceEntity(licenceEntity) {
   })
 }
 
-module.exports = {
+export default {
   adminInternal,
   basicAccess,
   billingAndData,

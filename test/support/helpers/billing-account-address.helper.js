@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module BillingAccountAddressHelper
  */
 
-const BillingAccountAddressModel = require('../../../app/models/billing-account-address.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import BillingAccountAddressModel from '../../../app/models/billing-account-address.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new billing account address
@@ -51,7 +49,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }
