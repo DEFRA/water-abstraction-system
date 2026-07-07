@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * @module ModLogHelper
  */
 
-const { randomRegionCode } = require('../general.js')
-const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('./licence.helper.js')
-const ModLogModel = require('../../../app/models/mod-log.model.js')
+import { randomRegionCode } from '../general.js'
+import { generateRandomInteger } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef } from './licence.helper.js'
+import ModLogModel from '../../../app/models/mod-log.model.js'
 
 /**
  * Add a new mod log
@@ -79,7 +77,7 @@ function generateRegionNaldPatternExternalId(regionCode = null) {
   return `${regionCodeToUse}:${generateRandomInteger(100, 99999)}`
 }
 
-module.exports = {
+export default {
   add,
   defaults,
   generateRegionNaldPatternExternalId

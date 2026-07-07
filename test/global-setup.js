@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Vitest global setup — runs once in the main process before the full test suite
  * @module GlobalSetup
  */
 
-const Database = require('./support/database.js')
+import Database from './support/database.js'
 
 /**
  * Clean and seed the test database before any tests run
@@ -20,4 +18,4 @@ async function setup() {
   await Database.closeConnection()
 }
 
-module.exports = setup
+export default setup

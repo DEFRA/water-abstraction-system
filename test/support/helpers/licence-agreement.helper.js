@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * @module LicenceAgreementHelper
  */
 
-const FinancialAgreementHelper = require('./financial-agreement.helper.js')
-const LicenceAgreementModel = require('../../../app/models/licence-agreement.model.js')
-const LicenceHelper = require('./licence.helper.js')
+import FinancialAgreementHelper from './financial-agreement.helper.js'
+import LicenceAgreementModel from '../../../app/models/licence-agreement.model.js'
+import LicenceHelper from './licence.helper.js'
 
 /**
  * Add a new licence agreement
@@ -54,7 +52,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

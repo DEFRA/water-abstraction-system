@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * @module PointHelper
  */
 
-const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
-const PointModel = require('../../../app/models/point.model.js')
-const SourceHelper = require('./source.helper.js')
+import { generateRandomInteger } from '../../../app/lib/general.lib.js'
+import PointModel from '../../../app/models/point.model.js'
+import SourceHelper from './source.helper.js'
 
 /**
  * Add a new licence version purpose point
@@ -80,7 +78,7 @@ function generateNaldPointId() {
   return generateRandomInteger(1, 99999)
 }
 
-module.exports = {
+export default {
   add,
   defaults,
   generateNationalGridReference,

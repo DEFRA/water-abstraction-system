@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * @module RecipientsFormatter
  */
 
-const crypto = require('node:crypto')
+import crypto from 'node:crypto'
 
-const LicenceEntityModel = require('../../../app/models/licence-entity.model.js')
-const LicenceEntityRoleModel = require('../../../app/models/licence-entity-role.model.js')
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const { compareStrings } = require('../../../app/lib/general.lib.js')
+import LicenceEntityModel from '../../../app/models/licence-entity.model.js'
+import LicenceEntityRoleModel from '../../../app/models/licence-entity-role.model.js'
+import ReturnLogModel from '../../../app/models/return-log.model.js'
+import { compareStrings } from '../../../app/lib/general.lib.js'
 
 /**
  * Returns an "Additional contact" recipient
@@ -288,7 +286,7 @@ function _emailHashId(email) {
   return crypto.createHash('md5').update(email.toLowerCase()).digest('hex')
 }
 
-module.exports = {
+export default {
   clean,
   additionalContact,
   licenceHolder,

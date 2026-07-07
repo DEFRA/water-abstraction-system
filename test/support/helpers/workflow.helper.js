@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module WorkflowHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const WorkflowModel = require('../../../app/models/workflow.model.js')
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import WorkflowModel from '../../../app/models/workflow.model.js'
 
 /**
  * Add a new workflow
@@ -58,7 +56,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

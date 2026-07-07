@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * @module ChargeCategoryHelper
  */
 
-const ChargeCategoryModel = require('../../../app/models/charge-category.model.js')
-const { data: chargeCategories } = require('../../../db/seeds/data/charge-categories.js')
-const { selectRandomEntry } = require('../general.js')
+import ChargeCategoryModel from '../../../app/models/charge-category.model.js'
+import { data as chargeCategories } from '../../../db/seeds/data/charge-categories.js'
+import { selectRandomEntry } from '../general.js'
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -30,7 +28,7 @@ function select(index = -1) {
   return ChargeCategoryModel.fromJson(selectRandomEntry(chargeCategories))
 }
 
-module.exports = {
+export default {
   data: chargeCategories,
   select
 }

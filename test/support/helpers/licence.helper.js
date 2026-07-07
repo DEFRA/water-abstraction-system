@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * @module LicenceHelper
  */
 
-const LicenceModel = require('../../../app/models/licence.model.js')
-const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
-const RegionHelper = require('./region.helper.js')
+import LicenceModel from '../../../app/models/licence.model.js'
+import { generateRandomInteger } from '../../../app/lib/general.lib.js'
+import RegionHelper from './region.helper.js'
 
 /**
  * Add a new licence
@@ -71,7 +69,7 @@ function generateLicenceRef() {
   return `01/${secondPart}/${thirdPart}/${fourthPart}`
 }
 
-module.exports = {
+export default {
   add,
   defaults,
   generateLicenceRef

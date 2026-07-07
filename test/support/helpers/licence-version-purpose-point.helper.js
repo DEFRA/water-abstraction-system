@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * @module LicenceVersionPurposePointHelper
  */
 
-const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
-const LicenceVersionPurposePointModel = require('../../../app/models/licence-version-purpose-point.model.js')
-const PointHelper = require('./point.helper.js')
+import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
+import LicenceVersionPurposePointModel from '../../../app/models/licence-version-purpose-point.model.js'
+import PointHelper from './point.helper.js'
 
 /**
  * Add a new licence version purpose point
@@ -67,7 +65,7 @@ function generateLicenceVersionPurposePointExternalId() {
   return `9:${generateRandomInteger(100, 99999)}:${naldPointId}`
 }
 
-module.exports = {
+export default {
   add,
   defaults,
   generateLicenceVersionPurposePointExternalId

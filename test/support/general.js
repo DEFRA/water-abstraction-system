@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * General helper functions available to all helpers
  * @module GeneralHelper
  */
 
-const { generateRandomInteger, today } = require('../../app/lib/general.lib.js')
+import { generateRandomInteger, today } from '../../app/lib/general.lib.js'
 
 /**
  * Generate the POST request options needed for `server.inject()`
@@ -155,7 +153,7 @@ function yesterday() {
   return yesterday
 }
 
-module.exports = {
+export default {
   postRequestOptions,
   randomRegionCode,
   relativeToToday,

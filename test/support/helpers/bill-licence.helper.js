@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * @module BillLicenceHelper
  */
 
-const BillLicenceModel = require('../../../app/models/bill-licence.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const LicenceHelper = require('./licence.helper.js')
+import BillLicenceModel from '../../../app/models/bill-licence.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import LicenceHelper from './licence.helper.js'
 
 /**
  * Add a new bill licence
@@ -52,7 +50,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

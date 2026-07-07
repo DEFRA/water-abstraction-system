@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * @module ReturnLogHelper
  */
 
-const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
-const { generateUUID, timestampForPostgres } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('./licence.helper.js')
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const { generateReference } = require('./return-requirement.helper.js')
+import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
+import { generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef } from './licence.helper.js'
+import ReturnLogModel from '../../../app/models/return-log.model.js'
+import { generateReference } from './return-requirement.helper.js'
 
 /**
  * Add a new return log
@@ -179,7 +177,7 @@ function _areDatesSequential(endDate, startDate) {
   return differenceInDays <= 1
 }
 
-module.exports = {
+export default {
   add,
   defaults,
   generateReturnId,

@@ -1,14 +1,10 @@
-'use strict'
-
 /**
  * @module LicenceVersionPurposeConditionTypeHelper
  */
 
-const LicenceVersionConditionTypeModel = require('../../../app/models/licence-version-purpose-condition-type.model.js')
-const { selectRandomEntry } = require('../general.js')
-const {
-  data: licenceVersionPurposeConditionTypes
-} = require('../../../db/seeds/data/licence-version-purpose-condition-types.js')
+import LicenceVersionConditionTypeModel from '../../../app/models/licence-version-purpose-condition-type.model.js'
+import { selectRandomEntry } from '../general.js'
+import { data as licenceVersionPurposeConditionTypes } from '../../../db/seeds/data/licence-version-purpose-condition-types.js'
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -32,7 +28,7 @@ function select(index = -1) {
   return LicenceVersionConditionTypeModel.fromJson(selectRandomEntry(licenceVersionPurposeConditionTypes))
 }
 
-module.exports = {
+export default {
   data: licenceVersionPurposeConditionTypes,
   select
 }

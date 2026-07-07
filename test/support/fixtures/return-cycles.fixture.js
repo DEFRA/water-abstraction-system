@@ -1,6 +1,4 @@
-'use strict'
-
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Returns a summer return cycle fixture with predefined dates and properties
@@ -81,7 +79,7 @@ function returnCycles(numberOfCycles = 2) {
   return cycles.slice(0, numberOfCycles)
 }
 
-module.exports = {
+export default {
   returnCycles,
   summerCycle,
   winterCycle

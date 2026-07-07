@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module LicenceUnregistrationHelper
  */
 
-const LicenceUnregistrationModel = require('../../../app/models/licence-unregistration.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import LicenceUnregistrationModel from '../../../app/models/licence-unregistration.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new licence unregistration
@@ -49,7 +47,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

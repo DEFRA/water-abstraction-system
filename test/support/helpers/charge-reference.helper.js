@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * @module ChargeReferenceHelper
  */
 
-const ChargeReferenceModel = require('../../../app/models/charge-reference.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const ChargeCategoryHelper = require('./charge-category.helper.js')
+import ChargeReferenceModel from '../../../app/models/charge-reference.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import ChargeCategoryHelper from './charge-category.helper.js'
 
 /**
  * Add a new charge reference
@@ -82,7 +80,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

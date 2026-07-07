@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * @module ViewLicencesFixture
  */
 
-const LicenceModel = require('../../../app/models/licence.model.js')
-const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
-const PointModel = require('../../../app/models/point.model.js')
-const { generateLicenceRef } = require('../helpers/licence.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import LicenceModel from '../../../app/models/licence.model.js'
+import LicenceVersionModel from '../../../app/models/licence-version.model.js'
+import PointModel from '../../../app/models/point.model.js'
+import { generateLicenceRef } from '../helpers/licence.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Represents a licence condition
@@ -233,7 +231,7 @@ function purpose() {
   }
 }
 
-module.exports = {
+export default {
   condition,
   licence,
   licenceVersion,

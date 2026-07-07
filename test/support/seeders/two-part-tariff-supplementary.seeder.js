@@ -1,23 +1,21 @@
-'use strict'
-
 /**
  * @module TwoPartTariffSupplementarySeeder
  */
 
-const BillRunHelper = require('../helpers/bill-run.helper.js')
-const BillingAccountHelper = require('../helpers/billing-account.helper.js')
-const ChangeReasonHelper = require('../helpers/change-reason.helper.js')
-const ChargeCategoryHelper = require('../helpers/charge-category.helper.js')
-const ChargeElementHelper = require('../helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../helpers/charge-version.helper.js')
-const LicenceHelper = require('../helpers/licence.helper.js')
-const LicenceSupplementaryYearHelper = require('../helpers/licence-supplementary-year.helper.js')
-const RegionHelper = require('../helpers/region.helper.js')
-const ReviewChargeElementHelper = require('../helpers/review-charge-element.helper.js')
-const ReviewChargeReferenceHelper = require('../helpers/review-charge-reference.helper.js')
-const ReviewChargeVersionHelper = require('../helpers/review-charge-version.helper.js')
-const ReviewLicenceHelper = require('../helpers/review-licence.helper.js')
+import BillRunHelper from '../helpers/bill-run.helper.js'
+import BillingAccountHelper from '../helpers/billing-account.helper.js'
+import ChangeReasonHelper from '../helpers/change-reason.helper.js'
+import ChargeCategoryHelper from '../helpers/charge-category.helper.js'
+import ChargeElementHelper from '../helpers/charge-element.helper.js'
+import ChargeReferenceHelper from '../helpers/charge-reference.helper.js'
+import ChargeVersionHelper from '../helpers/charge-version.helper.js'
+import LicenceHelper from '../helpers/licence.helper.js'
+import LicenceSupplementaryYearHelper from '../helpers/licence-supplementary-year.helper.js'
+import RegionHelper from '../helpers/region.helper.js'
+import ReviewChargeElementHelper from '../helpers/review-charge-element.helper.js'
+import ReviewChargeReferenceHelper from '../helpers/review-charge-reference.helper.js'
+import ReviewChargeVersionHelper from '../helpers/review-charge-version.helper.js'
+import ReviewLicenceHelper from '../helpers/review-licence.helper.js'
 
 const ABATEMENT_S126 = 16
 const MAJOR_CHANGE = 0
@@ -529,7 +527,7 @@ async function _zapSimple(seedData) {
   await seedData.reviewLicence.$query().delete()
 }
 
-module.exports = {
+export default {
   seed,
   zap
 }

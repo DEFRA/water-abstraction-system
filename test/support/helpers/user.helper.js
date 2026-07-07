@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * @module UserHelper
  */
 
-const { selectRandomEntry } = require('../general.js')
-const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
-const UserModel = require('../../../app/models/user.model.js')
-const { data: users } = require('../../../db/seeds/data/users.js')
+import { selectRandomEntry } from '../general.js'
+import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
+import UserModel from '../../../app/models/user.model.js'
+import { data as users } from '../../../db/seeds/data/users.js'
 
 /**
  * List of attributes to skip when comparing user records in tests
@@ -111,7 +109,7 @@ function select(index = -1) {
   return UserModel.fromJson(selectRandomEntry(users))
 }
 
-module.exports = {
+export default {
   add,
   data: users,
   DEFAULT_INDEX,

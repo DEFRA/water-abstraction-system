@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module BillingAccountHelper
  */
 
-const BillingAccountModel = require('../../../app/models/billing-account.model.js')
-const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
+import BillingAccountModel from '../../../app/models/billing-account.model.js'
+import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 
 /**
  * Add a new billing account
@@ -62,7 +60,7 @@ function generateAccountNumber() {
   return `T${numbering}A`
 }
 
-module.exports = {
+export default {
   add,
   defaults,
   generateAccountNumber

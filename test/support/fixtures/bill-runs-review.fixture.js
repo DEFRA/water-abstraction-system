@@ -1,6 +1,4 @@
-'use strict'
-
-const BillingAccountModel = require('../../../app/models/billing-account.model.js')
+import BillingAccountModel from '../../../app/models/billing-account.model.js'
 
 /**
  * Represents a complete response from `FetchRemoveReviewLicenceService`
@@ -339,7 +337,7 @@ function reviewLicence() {
   }
 }
 
-module.exports = {
+export default {
   removeReviewLicence,
   reviewChargeElement,
   reviewChargeReference,

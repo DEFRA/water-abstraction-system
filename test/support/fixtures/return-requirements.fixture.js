@@ -1,13 +1,11 @@
-'use strict'
-
-const PointHelper = require('../helpers/point.helper.js')
-const PrimaryPurposeHelper = require('../helpers/primary-purpose.helper.js')
-const PurposeHelper = require('../helpers/purpose.helper.js')
-const RegionHelper = require('../helpers/region.helper.js')
-const SecondaryPurposeHelper = require('../helpers/secondary-purpose.helper.js')
-const { generateReference } = require('../helpers/return-requirement.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../helpers/licence.helper.js')
+import PointHelper from '../helpers/point.helper.js'
+import PrimaryPurposeHelper from '../helpers/primary-purpose.helper.js'
+import PurposeHelper from '../helpers/purpose.helper.js'
+import RegionHelper from '../helpers/region.helper.js'
+import SecondaryPurposeHelper from '../helpers/secondary-purpose.helper.js'
+import { generateReference } from '../helpers/return-requirement.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef } from '../helpers/licence.helper.js'
 
 /**
  * Generates the return log prefix in the format v1:regionCode:licenceRef:reference from a return requirement
@@ -144,7 +142,7 @@ function _returnVersion(quarterlyReturns) {
   }
 }
 
-module.exports = {
+export default {
   returnLogPrefix,
   summerReturnRequirement,
   winterReturnRequirement

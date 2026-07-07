@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * @module GroupHelper
  */
 
-const GroupModel = require('../../../app/models/group.model.js')
-const { selectRandomEntry } = require('../general.js')
-const { data: groups } = require('../../../db/seeds/data/groups.js')
+import GroupModel from '../../../app/models/group.model.js'
+import { selectRandomEntry } from '../general.js'
+import { data as groups } from '../../../db/seeds/data/groups.js'
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -30,7 +28,7 @@ function select(index = -1) {
   return GroupModel.fromJson(selectRandomEntry(groups))
 }
 
-module.exports = {
+export default {
   data: groups,
   select
 }

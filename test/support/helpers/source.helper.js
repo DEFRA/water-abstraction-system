@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * @module SourceHelper
  */
 
-const SourceModel = require('../../../app/models/source.model.js')
-const { selectRandomEntry } = require('../general.js')
-const { data: sources } = require('../../../db/seeds/data/sources.js')
+import SourceModel from '../../../app/models/source.model.js'
+import { selectRandomEntry } from '../general.js'
+import { data as sources } from '../../../db/seeds/data/sources.js'
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -30,7 +28,7 @@ function select(index = -1) {
   return SourceModel.fromJson(selectRandomEntry(sources))
 }
 
-module.exports = {
+export default {
   data: sources,
   select
 }

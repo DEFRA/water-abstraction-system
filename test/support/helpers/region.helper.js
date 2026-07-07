@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * @module RegionHelper
  */
 
-const RegionModel = require('../../../app/models/region.model.js')
-const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
-const { data: regions } = require('../../../db/seeds/data/regions.js')
+import RegionModel from '../../../app/models/region.model.js'
+import { generateRandomInteger } from '../../../app/lib/general.lib.js'
+import { data as regions } from '../../../db/seeds/data/regions.js'
 
 // The `BILL_RUN_REGION_INDEX` is only to be used for testing bill run services that need to know details of bill runs
 // per region. This region is not selected randomly to prevent unit tests from using this region unless necessary.
@@ -38,7 +36,7 @@ function select(index = -1) {
   return RegionModel.fromJson(regions[randomIndex])
 }
 
-module.exports = {
+export default {
   data: regions,
   select,
   BILL_RUN_REGION_INDEX,

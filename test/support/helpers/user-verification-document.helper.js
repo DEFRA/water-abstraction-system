@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * @module UserVerificationDocumentHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const UserVerificationDocumentModel = require('../../../app/models/user-verification-document.model.js')
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import UserVerificationDocumentModel from '../../../app/models/user-verification-document.model.js'
 
 /**
  * Add a new user verification document
@@ -49,7 +47,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

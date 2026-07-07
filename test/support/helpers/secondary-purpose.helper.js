@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * @module SecondaryPurposeHelper
  */
 
-const SecondaryPurposeModel = require('../../../app/models/secondary-purpose.model.js')
-const { selectRandomEntry } = require('../general.js')
-const { data: secondaryPurposes } = require('../../../db/seeds/data/secondary-purposes.js')
+import SecondaryPurposeModel from '../../../app/models/secondary-purpose.model.js'
+import { selectRandomEntry } from '../general.js'
+import { data as secondaryPurposes } from '../../../db/seeds/data/secondary-purposes.js'
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -30,7 +28,7 @@ function select(index = -1) {
   return SecondaryPurposeModel.fromJson(selectRandomEntry(secondaryPurposes))
 }
 
-module.exports = {
+export default {
   data: secondaryPurposes,
   select
 }

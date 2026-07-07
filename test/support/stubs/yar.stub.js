@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Creates a stubbed instance of the Yar session plugin for testing purposes.
  *
@@ -7,20 +5,18 @@
  * Tests that exercise code which calls `request.yar` need to set it up manually as no Hapi server is created in unit
  * tests.
  *
- * @param {object} sinon - The sinon sandbox or instance
- *
  * @returns {object} A stubbed Yar instance with flash, get, set, clear and touch methods
  */
-function build(sinon) {
+function build() {
   return {
-    flash: sinon.stub(),
-    get: sinon.stub(),
-    set: sinon.stub(),
-    clear: sinon.stub(),
-    touch: sinon.stub()
+    flash: vi.fn(),
+    get: vi.fn(),
+    set: vi.fn(),
+    clear: vi.fn(),
+    touch: vi.fn()
   }
 }
 
-module.exports = {
+export default {
   build
 }

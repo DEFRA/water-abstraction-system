@@ -1,10 +1,8 @@
-'use strict'
-
 /**
  * @module NotificationHelper
  */
 
-const NotificationModel = require('../../../app/models/notification.model.js')
+import NotificationModel from '../../../app/models/notification.model.js'
 
 /**
  * Add a new notification
@@ -42,7 +40,7 @@ function defaults(data = {}) {
   }
 }
 
-module.exports = {
+export default {
   add,
   defaults
 }

@@ -1,21 +1,20 @@
-'use strict'
-
 /**
  * @module LicenceAbstractionDataSeeder
  */
 
-const LicenceHelper = require('../helpers/licence.helper.js')
-const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
-const LicenceVersionPurposeHelper = require('../helpers/licence-version-purpose.helper.js')
-const LicenceVersionPurposePointHelper = require('../helpers/licence-version-purpose-point.helper.js')
-const PointHelper = require('../helpers/point.helper.js')
-const PrimaryPurposeHelper = require('../helpers/primary-purpose.helper.js')
-const PurposeHelper = require('../helpers/purpose.helper.js')
-const RegionHelper = require('../helpers/region.helper.js')
-const SecondaryPurposeHelper = require('../helpers/secondary-purpose.helper.js')
-const { generateLicenceRef } = require('../helpers/licence.helper.js')
-const { generateLicenceVersionExternalId } = require('../helpers/licence-version.helper.js')
-const { generateLicenceVersionPurposeExternalId } = require('../helpers/licence-version-purpose.helper.js')
+import LicenceHelper from '../helpers/licence.helper.js'
+import LicenceVersionHelper from '../helpers/licence-version.helper.js'
+import LicenceVersionPurposeHelper from '../helpers/licence-version-purpose.helper.js'
+import LicenceVersionPurposePointHelper from '../helpers/licence-version-purpose-point.helper.js'
+import PointHelper from '../helpers/point.helper.js'
+import PrimaryPurposeHelper from '../helpers/primary-purpose.helper.js'
+import PurposeHelper from '../helpers/purpose.helper.js'
+import RegionHelper from '../helpers/region.helper.js'
+import SecondaryPurposeHelper from '../helpers/secondary-purpose.helper.js'
+
+const { generateLicenceRef } = LicenceHelper
+const { generateLicenceVersionExternalId } = LicenceVersionHelper
+const { generateLicenceVersionPurposeExternalId } = LicenceVersionPurposeHelper
 
 /**
  * Seeds a licence with all the related records to get a 'real' set of abstraction data
@@ -179,6 +178,6 @@ async function _purposes() {
   }
 }
 
-module.exports = {
+export default {
   seed
 }
