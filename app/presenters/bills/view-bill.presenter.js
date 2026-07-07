@@ -89,6 +89,9 @@ function _billTotal(valueInPence, credit) {
   return valueAsMoney
 }
 
+export {
+  go
+}
 export default {
   go
 }

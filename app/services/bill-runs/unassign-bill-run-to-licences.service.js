@@ -20,6 +20,9 @@ async function go(billRunId) {
     .where('billRunId', billRunId)
 }
 
+export {
+  go
+}
 export default {
   go
 }

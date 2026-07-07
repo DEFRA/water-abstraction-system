@@ -235,6 +235,13 @@ async function returnsUser(licenceSeedData, email) {
   }
 }
 
+export {
+  additionalContact,
+  licenceHolder,
+  primaryUser,
+  returnsTo,
+  returnsUser
+}
 export default {
   additionalContact,
   licenceHolder,

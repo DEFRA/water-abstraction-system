@@ -39,6 +39,9 @@ async function go(id) {
     })
 }
 
+export {
+  go
+}
 export default {
   go
 }

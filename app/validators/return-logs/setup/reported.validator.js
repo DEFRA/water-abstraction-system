@@ -34,6 +34,9 @@ function go(payload) {
   return schema.validate({ reported }, { abortEarly: false })
 }
 
+export {
+  go
+}
 export default {
   go
 }

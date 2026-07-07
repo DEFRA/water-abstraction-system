@@ -36,6 +36,9 @@ async function go() {
   return rows
 }
 
+export {
+  go
+}
 export default {
   go
 }

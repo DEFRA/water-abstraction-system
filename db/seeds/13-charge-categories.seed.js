@@ -26,6 +26,9 @@ async function _upsert(chargeCategory) {
     ])
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

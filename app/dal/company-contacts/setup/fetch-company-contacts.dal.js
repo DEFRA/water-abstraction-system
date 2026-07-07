@@ -44,6 +44,9 @@ async function _fetch(companyId, companyContact) {
     })
 }
 
+export {
+  go
+}
 export default {
   go
 }

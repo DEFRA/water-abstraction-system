@@ -58,6 +58,11 @@ function generateName() {
   return `${generateUUID()}@example.co.uk`
 }
 
+export {
+  add,
+  defaults,
+  generateName
+}
 export default {
   add,
   defaults,

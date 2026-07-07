@@ -82,6 +82,9 @@ async function _fetchPagination(returnVersionId) {
     ])
 }
 
+export {
+  go
+}
 export default {
   go
 }

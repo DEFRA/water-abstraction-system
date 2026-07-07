@@ -258,6 +258,29 @@ async function viewSelectCompany(request, h) {
   return h.view(`billing-accounts/setup/select-company.njk`, pageData)
 }
 
+export {
+  setup,
+  submitAccount,
+  submitAccountType,
+  submitCheck,
+  submitCompanySearch,
+  submitContact,
+  submitContactName,
+  submitExistingAccount,
+  submitExistingAddress,
+  submitFAO,
+  submitSelectCompany,
+  viewCheck,
+  viewCompanySearch,
+  viewContact,
+  viewContactName,
+  viewAccount,
+  viewAccountType,
+  viewExistingAccount,
+  viewExistingAddress,
+  viewFAO,
+  viewSelectCompany
+}
 export default {
   setup,
   submitAccount,

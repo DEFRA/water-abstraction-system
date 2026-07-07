@@ -26,6 +26,9 @@ async function send(notificationId) {
   return NotifyRequest.get(path)
 }
 
+export {
+  send
+}
 export default {
   send
 }

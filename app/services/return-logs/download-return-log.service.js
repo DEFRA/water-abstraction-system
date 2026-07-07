@@ -26,6 +26,9 @@ async function go(returnLogId, version) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

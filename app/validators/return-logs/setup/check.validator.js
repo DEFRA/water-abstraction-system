@@ -35,6 +35,9 @@ function _lineValuesExist(session) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

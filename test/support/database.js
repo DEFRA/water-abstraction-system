@@ -134,6 +134,11 @@ async function closeConnection() {
   await db.destroy()
 }
 
+export {
+  clean,
+  closeConnection,
+  wipe
+}
 export default {
   clean,
   closeConnection,

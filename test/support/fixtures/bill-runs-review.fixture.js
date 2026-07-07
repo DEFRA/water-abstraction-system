@@ -337,6 +337,12 @@ function reviewLicence() {
   }
 }
 
+export {
+  removeReviewLicence,
+  reviewChargeElement,
+  reviewChargeReference,
+  reviewLicence
+}
 export default {
   removeReviewLicence,
   reviewChargeElement,

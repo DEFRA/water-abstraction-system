@@ -62,6 +62,9 @@ function go() {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -64,6 +64,9 @@ function _getUserPermissionKey(group, role) {
   return matchingPermission.key
 }
 
+export {
+  go
+}
 export default {
   go
 }

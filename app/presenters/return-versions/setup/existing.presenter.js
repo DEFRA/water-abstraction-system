@@ -63,6 +63,9 @@ function _reason(returnVersion) {
   return modLogs[0].reasonDescription
 }
 
+export {
+  go
+}
 export default {
   go
 }

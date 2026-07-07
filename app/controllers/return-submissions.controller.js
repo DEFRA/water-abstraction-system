@@ -13,6 +13,9 @@ async function view(request, h) {
   return h.view('return-submissions/view.njk', pageData)
 }
 
+export {
+  view
+}
 export default {
   view
 }

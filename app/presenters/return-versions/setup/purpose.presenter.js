@@ -61,6 +61,9 @@ function _purposes(licencePurposes, requirementPurposes) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

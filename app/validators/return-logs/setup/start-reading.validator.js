@@ -68,6 +68,9 @@ function _maxMeterReading(lines) {
   return Number(firstLine?.reading)
 }
 
+export {
+  go
+}
 export default {
   go
 }

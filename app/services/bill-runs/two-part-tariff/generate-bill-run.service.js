@@ -110,6 +110,9 @@ async function _processBillingPeriod(billingPeriod, billRun) {
   await _finaliseBillRun(billRun, billRunPopulated)
 }
 
+export {
+  go
+}
 export default {
   go
 }

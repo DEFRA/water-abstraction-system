@@ -27,4 +27,5 @@ function go(recipient) {
   return Object.values(notifyAddress)
 }
 
+export { go }
 export default { go }

@@ -72,6 +72,9 @@ async function _returnLogs(licenceEndDateChange) {
   await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
 }
 
+export {
+  go
+}
 export default {
   go
 }

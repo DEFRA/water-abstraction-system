@@ -25,6 +25,9 @@ async function go(billLicenceId) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -52,6 +52,9 @@ function go(purposes, purposeIds) {
   return schema.validate({ purposes }, { abortEarly: true })
 }
 
+export {
+  go
+}
 export default {
   go
 }

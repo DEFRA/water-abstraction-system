@@ -56,6 +56,9 @@ function go(payload) {
   return schema.validate(dataToValidate, { abortEarly: false })
 }
 
+export {
+  go
+}
 export default {
   go
 }

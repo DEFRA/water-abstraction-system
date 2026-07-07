@@ -72,6 +72,9 @@ function _supplementaryMessage(licencesText) {
   return `The ${licencesText.toLowerCase()} will go into the next supplementary bill run.`
 }
 
+export {
+  go
+}
 export default {
   go
 }

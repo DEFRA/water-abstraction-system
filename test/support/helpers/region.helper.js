@@ -36,6 +36,12 @@ function select(index = -1) {
   return RegionModel.fromJson(regions[randomIndex])
 }
 
+export {
+  regions as data,
+  select,
+  BILL_RUN_REGION_INDEX,
+  TEST_REGION_INDEX
+}
 export default {
   data: regions,
   select,

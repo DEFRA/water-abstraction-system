@@ -66,6 +66,9 @@ function _prepReturnsForMatching(returnLogs, billingPeriod) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

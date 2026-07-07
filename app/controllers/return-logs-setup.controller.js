@@ -441,6 +441,43 @@ async function volumes(request, h) {
   return h.view('return-logs/setup/volumes.njk', pageData)
 }
 
+export {
+  cancel,
+  check,
+  confirmed,
+  deleteNote,
+  guidance,
+  meterDetails,
+  meterProvided,
+  multipleEntries,
+  note,
+  periodUsed,
+  readings,
+  received,
+  reported,
+  singleVolume,
+  startReading,
+  submission,
+  submitConfirmed,
+  submitCancel,
+  submitCheck,
+  submitMeterDetails,
+  submitMeterProvided,
+  submitMultipleEntries,
+  submitNote,
+  submitPeriodUsed,
+  submitReadings,
+  submitReceived,
+  submitReported,
+  submitSetup,
+  submitSingleVolume,
+  submitStartReading,
+  submitSubmission,
+  submitUnits,
+  submitVolumes,
+  units,
+  volumes
+}
 export default {
   cancel,
   check,

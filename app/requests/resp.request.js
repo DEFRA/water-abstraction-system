@@ -77,6 +77,9 @@ function _parseResult(result) {
   return result
 }
 
+export {
+  get
+}
 export default {
   get
 }

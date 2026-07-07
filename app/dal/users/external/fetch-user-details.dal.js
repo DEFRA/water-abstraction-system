@@ -22,6 +22,9 @@ async function go(id) {
   return user
 }
 
+export {
+  go
+}
 export default {
   go
 }

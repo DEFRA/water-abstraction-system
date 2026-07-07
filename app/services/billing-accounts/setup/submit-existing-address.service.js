@@ -84,6 +84,9 @@ function _validate(payload, name) {
   return formatValidationResult(validationResult)
 }
 
+export {
+  go
+}
 export default {
   go
 }

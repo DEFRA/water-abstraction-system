@@ -128,6 +128,9 @@ function _validate(payload) {
   return schema.validate(payload, { abortEarly: false, allowUnknown: true })
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -30,6 +30,9 @@ async function go(auth, monitoringStationId, yar) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

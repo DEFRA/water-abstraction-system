@@ -121,6 +121,9 @@ async function _updateBillingAccount(billingAccount) {
     })
 }
 
+export {
+  go
+}
 export default {
   go
 }

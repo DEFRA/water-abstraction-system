@@ -22,6 +22,9 @@ async function go() {
   return stats
 }
 
+export {
+  go
+}
 export default {
   go
 }

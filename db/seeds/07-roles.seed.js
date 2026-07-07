@@ -30,6 +30,9 @@ async function _upsert(role) {
     .merge(['description', 'dateUpdated'])
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

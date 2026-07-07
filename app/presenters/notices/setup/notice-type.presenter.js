@@ -89,6 +89,9 @@ function _options(noticeType, journey, auth) {
   return options
 }
 
+export {
+  go
+}
 export default {
   go
 }

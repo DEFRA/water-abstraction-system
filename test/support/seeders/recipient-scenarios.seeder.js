@@ -503,6 +503,20 @@ function _aggregatedData(returnLogs) {
   }
 }
 
+export {
+  additionalContactRecipient,
+  clean,
+  licenceHolderOnly,
+  licenceHolderWithDifferentReturnsTo,
+  licenceHolderWithMultipleLicences,
+  licenceHolderWithSameReturnsTo,
+  primaryUserOnly,
+  primaryUserWithDifferentReturnsAgent,
+  primaryUserWithMultipleLicences,
+  primaryUserWithSameReturnsAgent,
+  transformToDownloadingResults,
+  transformToSendingResults
+}
 export default {
   additionalContactRecipient,
   clean,

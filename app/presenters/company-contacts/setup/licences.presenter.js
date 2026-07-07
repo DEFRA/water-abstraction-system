@@ -34,6 +34,9 @@ function _licences(licences, abstractionAlertLicences) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

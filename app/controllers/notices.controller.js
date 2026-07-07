@@ -63,6 +63,12 @@ async function view(request, h) {
   return h.view('notices/view.njk', pageData)
 }
 
+export {
+  index,
+  submitIndex,
+  submitView,
+  view
+}
 export default {
   index,
   submitIndex,

@@ -24,6 +24,9 @@ async function go(returnSubmissionId, yearMonth) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -183,6 +183,16 @@ function licences() {
   ]
 }
 
+export {
+  billingAccounts,
+  company,
+  companies,
+  companyAddress,
+  companyContact,
+  companyContacts,
+  contact,
+  licences
+}
 export default {
   billingAccounts,
   company,

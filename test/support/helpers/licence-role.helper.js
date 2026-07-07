@@ -26,6 +26,10 @@ function select(name = 'licenceHolder') {
   return LicenceRoleModel.fromJson(licenceRole)
 }
 
+export {
+  licenceRoles as data,
+  select
+}
 export default {
   data: licenceRoles,
   select

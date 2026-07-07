@@ -42,6 +42,9 @@ async function _fetch(companyContactId) {
     .first()
 }
 
+export {
+  go
+}
 export default {
   go
 }

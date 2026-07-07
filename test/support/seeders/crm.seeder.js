@@ -475,6 +475,9 @@ async function _returnsUser(companyEntityId, name) {
   }
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

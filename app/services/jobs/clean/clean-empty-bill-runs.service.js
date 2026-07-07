@@ -60,6 +60,9 @@ async function _fetch() {
   return BillRunModel.query().select(['id']).where('status', 'empty')
 }
 
+export {
+  go
+}
 export default {
   go
 }

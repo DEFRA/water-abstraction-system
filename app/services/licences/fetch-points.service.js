@@ -56,6 +56,9 @@ async function _fetchPoints(licenceId) {
     .orderBy('p.description')
 }
 
+export {
+  go
+}
 export default {
   go
 }

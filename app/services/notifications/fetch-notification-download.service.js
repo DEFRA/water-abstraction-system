@@ -16,6 +16,9 @@ async function go(notificationId) {
   return NotificationModel.query().findById(notificationId).select(['pdf'])
 }
 
+export {
+  go
+}
 export default {
   go
 }

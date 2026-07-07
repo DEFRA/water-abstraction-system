@@ -29,6 +29,9 @@ function go(logInTest) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

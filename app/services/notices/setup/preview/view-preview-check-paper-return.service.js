@@ -26,6 +26,9 @@ async function go(sessionId, contactHashId) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

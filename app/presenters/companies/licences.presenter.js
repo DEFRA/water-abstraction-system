@@ -68,6 +68,9 @@ function _status(licenceEndDetails) {
   return null
 }
 
+export {
+  go
+}
 export default {
   go
 }

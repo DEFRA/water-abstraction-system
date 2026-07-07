@@ -25,6 +25,9 @@ async function _upsert(purpose) {
     .merge(['description', 'lossFactor', 'twoPartTariff', 'updatedAt'])
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

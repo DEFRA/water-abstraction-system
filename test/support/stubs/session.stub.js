@@ -20,6 +20,9 @@ function build(_sinon, sessionData) {
   return session
 }
 
+export {
+  build
+}
 export default {
   build
 }

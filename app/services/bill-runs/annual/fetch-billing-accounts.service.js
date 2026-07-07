@@ -158,6 +158,9 @@ function _whereExistsClause(regionId, billingPeriod) {
   return query
 }
 
+export {
+  go
+}
 export default {
   go
 }

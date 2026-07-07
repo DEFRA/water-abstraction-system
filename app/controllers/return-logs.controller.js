@@ -59,6 +59,12 @@ async function submitDetails(request, h) {
   return h.redirect(`/system/return-logs/${id}/details`)
 }
 
+export {
+  download,
+  submitDetails,
+  viewCommunications,
+  viewDetails
+}
 export default {
   download,
   submitDetails,

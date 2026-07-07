@@ -83,6 +83,11 @@ function generateLicenceVersionPurposeExternalId() {
   return `${generateRandomInteger(0, 9)}:${generateRandomInteger(10000, 99999)}`
 }
 
+export {
+  add,
+  defaults,
+  generateLicenceVersionPurposeExternalId
+}
 export default {
   add,
   defaults,

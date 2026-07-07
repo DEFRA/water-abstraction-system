@@ -90,6 +90,11 @@ async function licenceHolderWithSingleLicence(data = {}) {
   }
 }
 
+export {
+  exLicenceHolderWithSingleLicences,
+  licenceHolderWithMultipleLicences,
+  licenceHolderWithSingleLicence
+}
 export default {
   exLicenceHolderWithSingleLicences,
   licenceHolderWithMultipleLicences,

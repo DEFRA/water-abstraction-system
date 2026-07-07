@@ -44,6 +44,9 @@ function _validate(amendedAuthorisedVolume, totalBillableReturns) {
   return schema.validate(amendedAuthorisedVolume, { abortEarly: false })
 }
 
+export {
+  go
+}
 export default {
   go
 }

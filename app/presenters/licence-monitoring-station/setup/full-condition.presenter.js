@@ -71,6 +71,9 @@ function _generateRadioButtons(conditions, conditionId) {
   ]
 }
 
+export {
+  go
+}
 export default {
   go
 }

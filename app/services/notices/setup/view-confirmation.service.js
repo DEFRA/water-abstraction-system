@@ -24,6 +24,9 @@ async function go(eventId) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

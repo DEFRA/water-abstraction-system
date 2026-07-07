@@ -25,6 +25,9 @@ async function _upsert(licenceVersionPurposeConditionType) {
     .merge(['description', 'displayTitle', 'subcodeDescription', 'updatedAt'])
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

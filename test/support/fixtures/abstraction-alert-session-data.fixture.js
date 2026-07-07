@@ -287,6 +287,12 @@ function relevantLicenceMonitoringStations(licenceRefs, _licenceMonitoringStatio
   return lmsArray
 }
 
+export {
+  get,
+  licenceMonitoringStations,
+  relevantLicenceMonitoringStations,
+  unsortedLicenceMonitoringStations
+}
 export default {
   get,
   licenceMonitoringStations,

@@ -35,6 +35,9 @@ function _href(checkPageVisited, sessionId) {
   return '/system/users'
 }
 
+export {
+  go
+}
 export default {
   go
 }

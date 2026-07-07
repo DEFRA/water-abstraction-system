@@ -60,6 +60,11 @@ function generateAccountNumber() {
   return `T${numbering}A`
 }
 
+export {
+  add,
+  defaults,
+  generateAccountNumber
+}
 export default {
   add,
   defaults,

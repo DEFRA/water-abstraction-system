@@ -21,6 +21,9 @@ async function go() {
   await db.seed.run()
 }
 
+export {
+  go
+}
 export default {
   go
 }

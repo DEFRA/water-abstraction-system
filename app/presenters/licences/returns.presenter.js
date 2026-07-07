@@ -61,6 +61,9 @@ function _returns(returns) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

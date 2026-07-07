@@ -39,6 +39,9 @@ async function go(licenceRef, startDate) {
   return !!result
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -36,4 +36,5 @@ const config = {
   requestTimeout: Number.parseInt(process.env.REQUEST_TIMEOUT) || 5000
 }
 
+export const { domains, environment, hapi, httpProxy, requestTimeout } = config
 export default config

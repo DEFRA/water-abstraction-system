@@ -45,6 +45,9 @@ async function _update(changeReason) {
     .where('type', type)
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

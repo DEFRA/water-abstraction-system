@@ -99,6 +99,9 @@ async function _resetSession(session) {
   await session.$update()
 }
 
+export {
+  go
+}
 export default {
   go
 }

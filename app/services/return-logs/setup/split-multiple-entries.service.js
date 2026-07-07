@@ -42,6 +42,9 @@ function go(multipleEntries) {
   return entries
 }
 
+export {
+  go
+}
 export default {
   go
 }

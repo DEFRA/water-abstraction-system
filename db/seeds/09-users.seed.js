@@ -171,6 +171,9 @@ async function _update(user, password) {
     .andWhere('username', username)
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

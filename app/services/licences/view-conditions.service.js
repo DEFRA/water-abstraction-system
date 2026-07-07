@@ -33,6 +33,9 @@ async function go(licenceId, auth) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

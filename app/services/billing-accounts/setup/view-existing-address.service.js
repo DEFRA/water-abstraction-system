@@ -35,6 +35,9 @@ async function _fetchCompanyAddresses(session) {
   return companyAddresses
 }
 
+export {
+  go
+}
 export default {
   go
 }

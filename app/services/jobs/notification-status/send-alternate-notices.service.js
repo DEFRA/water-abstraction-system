@@ -46,6 +46,9 @@ function _noticeIds(notifications) {
   return [...new Set(allNoticeIds)]
 }
 
+export {
+  go
+}
 export default {
   go
 }

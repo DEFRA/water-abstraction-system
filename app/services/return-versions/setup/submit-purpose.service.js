@@ -104,6 +104,9 @@ async function _validate(payload, purposesData) {
   return formatValidationResult(validation)
 }
 
+export {
+  go
+}
 export default {
   go
 }

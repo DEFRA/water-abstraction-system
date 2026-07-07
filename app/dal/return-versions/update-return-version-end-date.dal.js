@@ -16,6 +16,9 @@ async function go(returnVersionId, endDate, trx) {
   await ReturnVersionModel.query(trx).findById(returnVersionId).patch({ endDate })
 }
 
+export {
+  go
+}
 export default {
   go
 }

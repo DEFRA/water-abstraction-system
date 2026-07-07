@@ -399,6 +399,9 @@ async function _selector(schema, table, select, where, value) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

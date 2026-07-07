@@ -19,6 +19,9 @@ async function go(data = {}) {
   return SessionModel.query().insert({ data }).returning('id')
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -76,4 +76,5 @@ process.on('unhandledRejection', (err) => {
   process.exit(1)
 })
 
+export { init, start }
 export default { init, start }

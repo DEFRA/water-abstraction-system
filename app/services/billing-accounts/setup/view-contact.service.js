@@ -35,6 +35,9 @@ async function _fetchCompanyContacts(session) {
   return companyContacts
 }
 
+export {
+  go
+}
 export default {
   go
 }

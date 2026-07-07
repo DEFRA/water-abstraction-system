@@ -62,6 +62,9 @@ function _validate(payload, session) {
   return formatValidationResult(validationResult)
 }
 
+export {
+  go
+}
 export default {
   go
 }

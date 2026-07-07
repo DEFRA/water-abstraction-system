@@ -160,6 +160,9 @@ function _monitoringStationName(monitoringStation) {
   return label
 }
 
+export {
+  go
+}
 export default {
   go
 }

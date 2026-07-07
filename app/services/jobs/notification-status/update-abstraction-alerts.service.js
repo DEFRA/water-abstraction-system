@@ -41,6 +41,9 @@ function _stations(notifications) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

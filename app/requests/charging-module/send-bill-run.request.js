@@ -82,6 +82,9 @@ async function _waitForSent(billRunId) {
   return result
 }
 
+export {
+  send
+}
 export default {
   send
 }

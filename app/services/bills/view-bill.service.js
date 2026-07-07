@@ -59,6 +59,9 @@ async function _fetchBillingAccount(billingAccountId) {
   return BillingAccountModel.query().findById(billingAccountId).modify('contactDetails')
 }
 
+export {
+  go
+}
 export default {
   go
 }

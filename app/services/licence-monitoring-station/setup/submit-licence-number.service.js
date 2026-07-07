@@ -73,6 +73,9 @@ async function _validate(payload, licence) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

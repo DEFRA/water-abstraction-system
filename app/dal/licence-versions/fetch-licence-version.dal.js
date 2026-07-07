@@ -120,6 +120,9 @@ async function _fetch(licenceVersionId) {
     })
 }
 
+export {
+  go
+}
 export default {
   go
 }

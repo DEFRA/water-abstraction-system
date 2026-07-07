@@ -16,6 +16,9 @@ async function send() {
   return ChargingModuleRequest.get(path)
 }
 
+export {
+  send
+}
 export default {
   send
 }

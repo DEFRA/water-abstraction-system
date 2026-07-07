@@ -30,6 +30,9 @@ async function _fetch(email) {
     .first()
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -153,6 +153,14 @@ function yesterday() {
   return yesterday
 }
 
+export {
+  postRequestOptions,
+  randomRegionCode,
+  relativeToToday,
+  selectRandomEntry,
+  tomorrow,
+  yesterday
+}
 export default {
   postRequestOptions,
   randomRegionCode,

@@ -59,6 +59,9 @@ function _determineRestrictionType(stopOrReduce, reduceAtThreshold) {
   return stopOrReduce === 'reduce' && reduceAtThreshold === 'yes' ? 'stop_or_reduce' : stopOrReduce
 }
 
+export {
+  go
+}
 export default {
   go
 }

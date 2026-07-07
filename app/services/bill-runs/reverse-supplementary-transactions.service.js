@@ -44,6 +44,9 @@ function go(transactions, billLicenceId) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

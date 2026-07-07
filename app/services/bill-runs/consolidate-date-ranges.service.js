@@ -117,6 +117,9 @@ function _consolidateDates(dateRanges) {
   )
 }
 
+export {
+  go
+}
 export default {
   go
 }

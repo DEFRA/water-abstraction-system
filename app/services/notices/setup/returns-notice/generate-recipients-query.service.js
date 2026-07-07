@@ -475,6 +475,9 @@ function _returnsToQuery(noticeType) {
   return _noRecipientsQuery()
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -65,6 +65,9 @@ function _pageTitle(companyContacts) {
   return `Set up a contact for ${name}`
 }
 
+export {
+  go
+}
 export default {
   go
 }

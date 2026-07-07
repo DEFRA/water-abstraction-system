@@ -34,6 +34,10 @@ async function viewSearch(request, h) {
   return h.view(VIEW_PAGE, pageData)
 }
 
+export {
+  submitSearch,
+  viewSearch
+}
 export default {
   submitSearch,
   viewSearch

@@ -22,6 +22,9 @@ async function go(regionId, twoPartTariff) {
     .orderBy('financialYearEnd', 'desc')
 }
 
+export {
+  go
+}
 export default {
   go
 }

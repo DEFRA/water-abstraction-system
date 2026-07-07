@@ -129,6 +129,11 @@ function processSavedFilters(yar, filterKey) {
   }
 }
 
+export {
+  clearFilters,
+  handleOneOptionSelected,
+  processSavedFilters
+}
 export default {
   clearFilters,
   handleOneOptionSelected,

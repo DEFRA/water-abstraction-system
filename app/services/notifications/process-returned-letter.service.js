@@ -43,6 +43,9 @@ async function go(payload) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

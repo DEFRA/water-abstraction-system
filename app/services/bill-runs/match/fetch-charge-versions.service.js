@@ -166,6 +166,9 @@ async function go(billRun, billingPeriod) {
   return chargeVersions
 }
 
+export {
+  go
+}
 export default {
   go
 }

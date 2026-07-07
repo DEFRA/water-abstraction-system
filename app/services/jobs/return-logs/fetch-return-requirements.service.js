@@ -109,6 +109,9 @@ async function _fetch(returnCycle) {
     })
 }
 
+export {
+  go
+}
 export default {
   go
 }

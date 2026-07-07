@@ -108,6 +108,9 @@ async function _setFlagForLicence(result) {
   )
 }
 
+export {
+  go
+}
 export default {
   go
 }

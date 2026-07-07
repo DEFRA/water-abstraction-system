@@ -178,6 +178,9 @@ async function _purposes() {
   }
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

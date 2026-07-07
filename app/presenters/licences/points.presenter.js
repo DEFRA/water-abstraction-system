@@ -31,6 +31,9 @@ function go(points, licence) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

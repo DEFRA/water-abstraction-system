@@ -105,6 +105,12 @@ async function selectByDate(date, summer = false) {
   return ReturnCycleModel.query().where('summer', summer).where('startDate', '<=', date).first()
 }
 
+export {
+  add,
+  defaults,
+  select,
+  selectByDate
+}
 export default {
   add,
   defaults,

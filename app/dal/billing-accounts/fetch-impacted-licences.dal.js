@@ -30,6 +30,9 @@ async function go(billingAccountId) {
   return impactedLicences
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -497,6 +497,21 @@ function _nonDownloadRecipient(recipient) {
   }
 }
 
+export {
+  additionalEmailRecipient,
+  additionalPostalRecipient,
+  alertNoticeAdditionalContact,
+  alertNoticeLicenceHolder,
+  alertNoticePrimaryUser,
+  alertsRecipients,
+  recipients,
+  renewalInvitationLicenceHolder,
+  renewalInvitationPrimaryUser,
+  returnsNoticeLicenceHolder,
+  returnsNoticePrimaryUser,
+  returnsNoticeReturnsAgent,
+  returnsNoticeReturnsTo
+}
 export default {
   additionalEmailRecipient,
   additionalPostalRecipient,

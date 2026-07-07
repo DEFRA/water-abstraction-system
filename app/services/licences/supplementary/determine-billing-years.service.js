@@ -39,6 +39,9 @@ function go(startDate, endDate) {
   return years
 }
 
+export {
+  go
+}
 export default {
   go
 }

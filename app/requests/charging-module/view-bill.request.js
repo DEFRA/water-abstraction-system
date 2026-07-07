@@ -22,6 +22,9 @@ async function send(billRunId, billId) {
   return ChargingModuleRequest.get(path)
 }
 
+export {
+  send
+}
 export default {
   send
 }

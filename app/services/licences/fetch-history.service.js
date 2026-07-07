@@ -29,6 +29,9 @@ async function _fetch(licenceId) {
     .modify('history')
 }
 
+export {
+  go
+}
 export default {
   go
 }

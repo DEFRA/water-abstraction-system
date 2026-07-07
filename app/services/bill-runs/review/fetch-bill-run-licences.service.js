@@ -115,6 +115,9 @@ function _filterIssues(issues, reviewLicenceQuery) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

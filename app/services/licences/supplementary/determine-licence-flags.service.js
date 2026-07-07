@@ -55,6 +55,9 @@ async function _fetchLicence(licenceId) {
     .select(['regionId', 'includeInSrocBilling', 'includeInPresrocBilling'])
 }
 
+export {
+  go
+}
 export default {
   go
 }

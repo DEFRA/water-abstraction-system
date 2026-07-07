@@ -29,6 +29,9 @@ async function go() {
   return deletedCount
 }
 
+export {
+  go
+}
 export default {
   go
 }

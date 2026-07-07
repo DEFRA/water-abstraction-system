@@ -54,6 +54,9 @@ function _names(groupRole) {
   return { group, role }
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

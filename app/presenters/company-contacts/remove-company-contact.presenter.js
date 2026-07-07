@@ -60,6 +60,9 @@ function _warning(companyContact) {
   return {}
 }
 
+export {
+  go
+}
 export default {
   go
 }

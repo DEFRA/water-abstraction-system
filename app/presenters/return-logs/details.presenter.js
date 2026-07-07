@@ -285,6 +285,9 @@ function _warning(status, latest) {
   return null
 }
 
+export {
+  go
+}
 export default {
   go
 }

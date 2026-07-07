@@ -93,6 +93,9 @@ function _cleanseTransactions(calculatedTransactions, reverseTransactions) {
   return cleansedTransactionLines
 }
 
+export {
+  go
+}
 export default {
   go
 }

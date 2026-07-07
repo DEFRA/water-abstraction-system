@@ -32,6 +32,9 @@ function _backLink(session) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

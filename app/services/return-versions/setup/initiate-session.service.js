@@ -65,6 +65,9 @@ function _currentVersionStartDate(licenceVersions) {
   return startDate
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -23,6 +23,9 @@ async function go(returnVersionId) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

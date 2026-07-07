@@ -18,6 +18,9 @@ async function go(licenceRef) {
   return !!licence
 }
 
+export {
+  go
+}
 export default {
   go
 }

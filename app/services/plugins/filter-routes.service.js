@@ -45,6 +45,9 @@ function _filteredRoutes(routes) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

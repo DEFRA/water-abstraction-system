@@ -55,6 +55,9 @@ async function _sendEmail(notification) {
   return sendResult.status
 }
 
+export {
+  go
+}
 export default {
   go
 }

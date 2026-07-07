@@ -35,6 +35,9 @@ async function go(licenceEntityId) {
     .modify('licenceHolder')
 }
 
+export {
+  go
+}
 export default {
   go
 }

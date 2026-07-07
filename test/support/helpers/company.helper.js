@@ -70,6 +70,12 @@ function generateExternalId() {
   return `${regionCode}:${partyId}`
 }
 
+export {
+  add,
+  defaults,
+  generateCompanyNumber,
+  generateExternalId
+}
 export default {
   add,
   defaults,

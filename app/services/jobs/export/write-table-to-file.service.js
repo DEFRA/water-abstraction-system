@@ -75,6 +75,9 @@ async function _filenameWithPath(tableName, schemaFolderPath) {
   )
 }
 
+export {
+  go
+}
 export default {
   go
 }

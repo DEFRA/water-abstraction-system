@@ -80,6 +80,9 @@ async function _sendNotifications(notifications, referenceCode) {
   return sentNotifications
 }
 
+export {
+  go
+}
 export default {
   go
 }

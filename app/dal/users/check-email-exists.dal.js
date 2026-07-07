@@ -18,6 +18,9 @@ async function go(email) {
   return !!emailExists
 }
 
+export {
+  go
+}
 export default {
   go
 }

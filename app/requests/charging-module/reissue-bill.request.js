@@ -24,6 +24,9 @@ async function send(billRunId, billId) {
   return ChargingModuleRequest.patch(path)
 }
 
+export {
+  send
+}
 export default {
   send
 }

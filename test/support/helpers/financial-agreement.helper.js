@@ -28,6 +28,10 @@ function select(index = -1) {
   return FinancialAgreementModel.fromJson(selectRandomEntry(financialAgreements))
 }
 
+export {
+  financialAgreements as data,
+  select
+}
 export default {
   data: financialAgreements,
   select

@@ -67,6 +67,9 @@ function _toFinancialYearEnding() {
   return currentFinancialYear.endDate.getFullYear()
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -33,6 +33,9 @@ function go(user, notifications, viewingUserScope, back) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

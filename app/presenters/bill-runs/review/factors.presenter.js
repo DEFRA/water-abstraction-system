@@ -38,6 +38,9 @@ function go(reviewChargeReference) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

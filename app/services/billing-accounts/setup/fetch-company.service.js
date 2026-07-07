@@ -31,6 +31,9 @@ async function go(companiesHouseNumber) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

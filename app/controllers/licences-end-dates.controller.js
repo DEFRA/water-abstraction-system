@@ -21,6 +21,10 @@ async function process(_request, h) {
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
+export {
+  check,
+  process
+}
 export default {
   check,
   process

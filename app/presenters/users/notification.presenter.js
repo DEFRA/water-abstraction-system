@@ -60,6 +60,9 @@ function _contents(notification, superUser) {
   return plaintext
 }
 
+export {
+  go
+}
 export default {
   go
 }

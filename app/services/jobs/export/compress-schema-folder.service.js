@@ -3,7 +3,7 @@
  * @module CompressSchemaFolderService
  */
 
-import tar from 'tar'
+import * as tar from 'tar'
 
 /**
  * Create a compressed tarball (.tgz) from a given schema folder
@@ -26,6 +26,9 @@ async function go(schemaFolderPath) {
   return file
 }
 
+export {
+  go
+}
 export default {
   go
 }

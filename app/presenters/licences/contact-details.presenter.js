@@ -58,6 +58,9 @@ function _licenceHolderContactsLink(contacts) {
   return `/system/companies/${companyId}/contacts`
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -88,6 +88,9 @@ async function _fetch() {
   `)
 }
 
+export {
+  go
+}
 export default {
   go
 }

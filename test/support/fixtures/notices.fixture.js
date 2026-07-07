@@ -293,6 +293,20 @@ function _defaults() {
   }
 }
 
+export {
+  alertReduce,
+  alertResume,
+  alertStop,
+  alertWarning,
+  legacyHandsOffFlow,
+  legacyRenewal,
+  mapToFetchNoticesResult,
+  notices,
+  renewalInvitation,
+  returnsInvitation,
+  returnsPaperForm,
+  returnsReminder
+}
 export default {
   alertReduce,
   alertResume,

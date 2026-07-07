@@ -69,6 +69,9 @@ function successfulResponse(referenceCode) {
   }
 }
 
+export {
+  successfulResponse
+}
 export default {
   successfulResponse
 }

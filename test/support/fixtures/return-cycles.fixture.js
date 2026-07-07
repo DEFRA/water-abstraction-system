@@ -79,6 +79,11 @@ function returnCycles(numberOfCycles = 2) {
   return cycles.slice(0, numberOfCycles)
 }
 
+export {
+  returnCycles,
+  summerCycle,
+  winterCycle
+}
 export default {
   returnCycles,
   summerCycle,

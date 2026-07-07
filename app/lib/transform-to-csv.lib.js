@@ -78,6 +78,9 @@ function _transformValueToCSV(value) {
   return `"${stringValue}"`
 }
 
+export {
+  transformArrayToCSVRow
+}
 export default {
   transformArrayToCSVRow
 }

@@ -128,6 +128,9 @@ const abstractionAlertRecipientsQuery = `
     licence_refs::text;
 `
 
+export {
+  abstractionAlertRecipientsQuery
+}
 export default {
   abstractionAlertRecipientsQuery
 }

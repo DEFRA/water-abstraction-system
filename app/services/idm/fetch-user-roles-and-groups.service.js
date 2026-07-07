@@ -100,6 +100,9 @@ function _combineAndDedupeRoles(rolesArrayToDedupe) {
   return dedupedArray
 }
 
+export {
+  go
+}
 export default {
   go
 }

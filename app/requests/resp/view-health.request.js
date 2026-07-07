@@ -19,6 +19,9 @@ async function send() {
   return RespRequest.get(path)
 }
 
+export {
+  send
+}
 export default {
   send
 }

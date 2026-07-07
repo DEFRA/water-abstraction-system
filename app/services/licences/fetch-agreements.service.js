@@ -28,6 +28,9 @@ async function _fetch(licenceRef) {
     .orderBy([{ column: 'createdAt', order: 'asc' }])
 }
 
+export {
+  go
+}
 export default {
   go
 }

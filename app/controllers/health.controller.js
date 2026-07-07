@@ -37,6 +37,11 @@ async function info(_request, h) {
   return h.view('health/info.njk', pageData)
 }
 
+export {
+  airbrake,
+  database,
+  info
+}
 export default {
   airbrake,
   database,

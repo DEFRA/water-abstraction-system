@@ -51,6 +51,11 @@ function _determineView(pageData) {
   return 'bills/view-single-licence-presroc.njk'
 }
 
+export {
+  remove,
+  submitRemove,
+  view
+}
 export default {
   remove,
   submitRemove,

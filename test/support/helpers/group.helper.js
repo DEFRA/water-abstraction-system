@@ -28,6 +28,10 @@ function select(index = -1) {
   return GroupModel.fromJson(selectRandomEntry(groups))
 }
 
+export {
+  groups as data,
+  select
+}
 export default {
   data: groups,
   select

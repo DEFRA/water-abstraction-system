@@ -103,6 +103,9 @@ function _returnSubmission(allReturnSubmissions, version) {
   return selectedReturnSubmission
 }
 
+export {
+  go
+}
 export default {
   go
 }

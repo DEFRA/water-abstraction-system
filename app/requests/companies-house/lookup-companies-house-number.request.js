@@ -18,6 +18,9 @@ async function send(companiesHouseNumber) {
   return CompaniesHouseRequest.get(path)
 }
 
+export {
+  send
+}
 export default {
   send
 }

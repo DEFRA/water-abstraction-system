@@ -16,6 +16,9 @@ async function go(returnVersionId, status, trx) {
   await ReturnVersionModel.query(trx).findById(returnVersionId).patch({ status })
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -286,6 +286,16 @@ function _emailHashId(email) {
   return crypto.createHash('md5').update(email.toLowerCase()).digest('hex')
 }
 
+export {
+  clean,
+  additionalContact,
+  licenceHolder,
+  primaryUser,
+  returnsUser,
+  returnsTo,
+  transformToDownloadingResult,
+  transformToSendingResult
+}
 export default {
   clean,
   additionalContact,

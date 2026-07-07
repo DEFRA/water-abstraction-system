@@ -39,6 +39,10 @@ function _formattedValidationError(error) {
   return Boom.badRequest(error.details[0].message)
 }
 
+export {
+  changeAddress,
+  view
+}
 export default {
   changeAddress,
   view

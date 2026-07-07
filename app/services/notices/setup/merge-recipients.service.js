@@ -67,6 +67,9 @@ function _selectedRecipients(selectedRecipients, allRecipients) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

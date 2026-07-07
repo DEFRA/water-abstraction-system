@@ -115,6 +115,9 @@ function _permission(scope = []) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

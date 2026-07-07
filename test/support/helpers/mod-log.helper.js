@@ -77,6 +77,11 @@ function generateRegionNaldPatternExternalId(regionCode = null) {
   return `${regionCodeToUse}:${generateRandomInteger(100, 99999)}`
 }
 
+export {
+  add,
+  defaults,
+  generateRegionNaldPatternExternalId
+}
 export default {
   add,
   defaults,

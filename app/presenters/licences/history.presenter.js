@@ -40,6 +40,9 @@ function _licenceVersionEntries(licenceVersions) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -31,6 +31,9 @@ async function _deleteAllTestData() {
   `)
 }
 
+export {
+  go
+}
 export default {
   go
 }

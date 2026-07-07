@@ -25,6 +25,9 @@ async function placeholder(request, h) {
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
+export {
+  placeholder
+}
 export default {
   placeholder
 }

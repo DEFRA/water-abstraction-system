@@ -23,6 +23,10 @@ async function submitRemove(request, h) {
   return h.redirect(`/system/monitoring-stations/${monitoringStationId}`)
 }
 
+export {
+  remove,
+  submitRemove
+}
 export default {
   remove,
   submitRemove

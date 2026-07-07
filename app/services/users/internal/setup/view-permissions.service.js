@@ -36,6 +36,9 @@ async function _showSuperPermission(auth) {
   return currentUser.$permissions().key === 'super'
 }
 
+export {
+  go
+}
 export default {
   go
 }

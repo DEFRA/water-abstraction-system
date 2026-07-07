@@ -90,6 +90,9 @@ async function _insertUserRoles(roleIds, id, trx) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

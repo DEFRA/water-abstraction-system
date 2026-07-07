@@ -18,6 +18,9 @@ async function go(notificationId) {
   return notificationData.pdf
 }
 
+export {
+  go
+}
 export default {
   go
 }

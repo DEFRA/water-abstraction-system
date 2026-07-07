@@ -27,6 +27,9 @@ async function _fetchLicenceData(licenceId) {
   return LicenceModel.query().findById(licenceId).select(['id', 'licenceRef'])
 }
 
+export {
+  go
+}
 export default {
   go
 }

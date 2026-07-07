@@ -54,6 +54,9 @@ async function _validate(payload, dueReturns) {
   return formatValidationResult(validationResult)
 }
 
+export {
+  go
+}
 export default {
   go
 }

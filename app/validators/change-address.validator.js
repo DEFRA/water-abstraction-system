@@ -76,6 +76,9 @@ function _contactSchema() {
   }).optional()
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -27,6 +27,9 @@ async function go(licenceRef, startDate, endDate, trx) {
   await query
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -103,6 +103,9 @@ function _useAuthorisedVolume(chargeReference) {
   chargeReference.allocatedQuantity = totalAllocatedQuantity
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -26,6 +26,9 @@ function go(company, companyContact, notifications) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

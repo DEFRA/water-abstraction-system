@@ -22,6 +22,9 @@ async function _fetch(licenceId) {
   return ReturnVersionModel.query().select(['id']).where('licenceId', licenceId).limit(1).first()
 }
 
+export {
+  go
+}
 export default {
   go
 }

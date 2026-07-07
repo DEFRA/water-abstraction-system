@@ -54,6 +54,9 @@ function _noQuarterlyReturnsForSummerCycle(value, helpers, session) {
   return value
 }
 
+export {
+  go
+}
 export default {
   go
 }

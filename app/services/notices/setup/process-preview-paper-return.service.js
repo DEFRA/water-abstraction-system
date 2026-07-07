@@ -48,6 +48,9 @@ async function _selectedRecipient(session, contactHashId) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

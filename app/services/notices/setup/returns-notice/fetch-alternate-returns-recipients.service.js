@@ -35,6 +35,9 @@ function _applyNotificationDueDate(rows, notificationDueDate) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

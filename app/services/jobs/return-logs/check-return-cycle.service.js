@@ -64,6 +64,9 @@ async function _matchingReturnCycle(startDate, endDate, summer) {
     .first()
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -48,6 +48,9 @@ async function _fetchProfileDetails(userId) {
     ])
 }
 
+export {
+  go
+}
 export default {
   go
 }

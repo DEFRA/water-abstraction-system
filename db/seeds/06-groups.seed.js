@@ -30,6 +30,9 @@ async function _upsert(group) {
     .merge(['description', 'dateUpdated'])
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

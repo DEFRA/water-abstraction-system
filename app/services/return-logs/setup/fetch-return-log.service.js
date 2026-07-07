@@ -30,6 +30,9 @@ async function go(returnLogId) {
     .innerJoinRelated('licence')
 }
 
+export {
+  go
+}
 export default {
   go
 }

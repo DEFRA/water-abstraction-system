@@ -36,6 +36,9 @@ async function _getChargeRegionId(regionId) {
   return result.chargeRegionId
 }
 
+export {
+  send
+}
 export default {
   send
 }

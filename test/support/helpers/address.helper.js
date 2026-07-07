@@ -105,6 +105,13 @@ function generateExternalId() {
   return `${regionCode}:${addressId}`
 }
 
+export {
+  add,
+  defaults,
+  generateContactHashId,
+  generateUprn,
+  generateExternalId
+}
 export default {
   add,
   defaults,

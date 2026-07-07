@@ -34,6 +34,9 @@ async function _fetchMonitoringStation(monitoringStationId) {
   return MonitoringStationModel.query().select('label').findById(monitoringStationId)
 }
 
+export {
+  go
+}
 export default {
   go
 }

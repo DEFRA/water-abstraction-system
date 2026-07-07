@@ -32,6 +32,9 @@ function go(payload) {
   return schema.validate(payload)
 }
 
+export {
+  go
+}
 export default {
   go
 }

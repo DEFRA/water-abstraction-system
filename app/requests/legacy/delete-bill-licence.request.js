@@ -29,6 +29,9 @@ async function send(billLicenceId, user) {
   return LegacyRequest.delete('water', path, userId)
 }
 
+export {
+  send
+}
 export default {
   send
 }

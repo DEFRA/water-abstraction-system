@@ -81,6 +81,9 @@ function _requestFailed(billRunId, result) {
   throw error
 }
 
+export {
+  send
+}
 export default {
   send
 }

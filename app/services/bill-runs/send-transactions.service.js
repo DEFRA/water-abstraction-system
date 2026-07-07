@@ -55,6 +55,9 @@ async function _sendTransactionToChargingModule(transaction, billRunExternalId, 
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

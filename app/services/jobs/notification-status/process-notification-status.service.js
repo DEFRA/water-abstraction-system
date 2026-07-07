@@ -72,6 +72,9 @@ async function _updateEventErrorCount(notifications) {
   await UpdateNoticeService.go(dedupeEventIds)
 }
 
+export {
+  go
+}
 export default {
   go
 }

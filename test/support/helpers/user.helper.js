@@ -109,6 +109,16 @@ function select(index = -1) {
   return UserModel.fromJson(selectRandomEntry(users))
 }
 
+export {
+  add,
+  users as data,
+  DEFAULT_INDEX,
+  defaults,
+  generateUserId,
+  generateUserName,
+  select,
+  SKIP_COMPARE_LIST
+}
 export default {
   add,
   data: users,

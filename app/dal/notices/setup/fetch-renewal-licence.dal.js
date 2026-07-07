@@ -20,6 +20,9 @@ async function go(licenceRef) {
     .first()
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -44,6 +44,9 @@ function _returnLines(returnSubmissionId, session, timestamp) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

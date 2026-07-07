@@ -23,6 +23,9 @@ async function go(licenceVersionId) {
     .orderBy([{ column: 'purposes.description', order: 'asc' }])
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -174,6 +174,20 @@ async function _redirectToLegacy(id, h) {
   return h.redirect(`/user/${userId}/status`)
 }
 
+export {
+  index,
+  submitIndex,
+  submitProfileDetails,
+  submitInternalDetails,
+  viewExternalCommunications,
+  viewExternalDetails,
+  viewExternalLicences,
+  viewExternalVerifications,
+  viewNotification,
+  viewProfileDetails,
+  viewInternalCommunications,
+  viewInternalDetails
+}
 export default {
   index,
   submitIndex,

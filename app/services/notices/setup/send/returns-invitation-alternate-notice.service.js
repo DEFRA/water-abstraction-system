@@ -32,6 +32,9 @@ async function go(mainNotice) {
   return { notice, notificationIds, notifications }
 }
 
+export {
+  go
+}
 export default {
   go
 }

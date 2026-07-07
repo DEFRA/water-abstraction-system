@@ -33,6 +33,9 @@ async function send(batchType, regionId, financialYearEnding, user, summer = fal
   return LegacyRequest.post('water', path, userId, true, body)
 }
 
+export {
+  send
+}
 export default {
   send
 }

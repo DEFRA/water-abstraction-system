@@ -35,6 +35,9 @@ function _backLink(session) {
   return `/system/billing-accounts/${session.billingAccount.id}`
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -65,6 +65,9 @@ async function _pageOfResults(userScopes, searchQuery, resultType, pageNumber) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -67,6 +67,9 @@ async function _generateReturnVersion(nextVersionNumber, session, userId) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

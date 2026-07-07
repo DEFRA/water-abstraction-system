@@ -62,6 +62,9 @@ function _endDate(returnVersion) {
   return determineEarliestDate([licence.expiredDate, licence.lapsedDate, licence.revokedDate])
 }
 
+export {
+  go
+}
 export default {
   go
 }

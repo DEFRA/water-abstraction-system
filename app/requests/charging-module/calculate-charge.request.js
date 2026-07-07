@@ -21,6 +21,9 @@ async function send(transactionData) {
   return ChargingModuleRequest.post(path, transactionData)
 }
 
+export {
+  send
+}
 export default {
   send
 }

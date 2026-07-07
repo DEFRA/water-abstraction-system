@@ -61,6 +61,9 @@ function _queryParam(licenceId, returnLogId, companyContactId) {
   return ''
 }
 
+export {
+  go
+}
 export default {
   go
 }

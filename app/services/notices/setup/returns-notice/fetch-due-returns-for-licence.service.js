@@ -50,6 +50,9 @@ async function _fetch(licenceRef) {
   return db.raw(query, [licenceRef, timestampForPostgres()])
 }
 
+export {
+  go
+}
 export default {
   go
 }

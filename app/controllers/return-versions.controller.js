@@ -12,6 +12,9 @@ async function view(request, h) {
   return h.view('return-versions/view.njk', pageData)
 }
 
+export {
+  view
+}
 export default {
   view
 }

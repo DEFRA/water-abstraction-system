@@ -54,6 +54,9 @@ function _yesterdaysDate() {
   return formatLongDate(yesterdaysDate)
 }
 
+export {
+  go
+}
 export default {
   go
 }

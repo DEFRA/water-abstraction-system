@@ -218,6 +218,9 @@ function _startDate(licence, startDate) {
   return formatLongDate(startDate)
 }
 
+export {
+  go
+}
 export default {
   go
 }

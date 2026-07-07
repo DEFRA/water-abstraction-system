@@ -39,6 +39,11 @@ async function view(request, h) {
   return h.view(`bill-licences/${template}`, pageData)
 }
 
+export {
+  remove,
+  submitRemove,
+  view
+}
 export default {
   remove,
   submitRemove,

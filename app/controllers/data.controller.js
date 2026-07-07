@@ -41,6 +41,13 @@ async function tearDown(_request, h) {
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
+export {
+  dates,
+  deduplicate,
+  load,
+  seed,
+  tearDown
+}
 export default {
   dates,
   deduplicate,

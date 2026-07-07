@@ -116,6 +116,9 @@ function _thresholdOptions(licenceMonitoringStations, alertType, alertThresholds
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

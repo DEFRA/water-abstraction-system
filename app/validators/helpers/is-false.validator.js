@@ -19,6 +19,9 @@ function isFalse(booleanToCheck, errorKey = 'custom.isFalse') {
     return helpers.error(errorKey)
   }
 }
+export {
+  isFalse
+}
 export default {
   isFalse
 }

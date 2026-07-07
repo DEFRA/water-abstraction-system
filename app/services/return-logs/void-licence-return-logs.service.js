@@ -85,6 +85,9 @@ async function go(reissuedReturnIds, licenceRef, returnCycleId, changeDate, trx 
     .whereNotIn('returnId', reissuedReturnIds)
 }
 
+export {
+  go
+}
 export default {
   go
 }

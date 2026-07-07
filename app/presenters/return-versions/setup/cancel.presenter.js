@@ -59,6 +59,9 @@ function _startDate(session) {
   return formatLongDate(date)
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -51,6 +51,9 @@ function _summer(returnsPeriod) {
   return returnsPeriod === 'summer' ? 'true' : 'false'
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -44,6 +44,9 @@ async function send(templateId, emailAddress, options) {
   return NotifyRequest.post(path, body)
 }
 
+export {
+  send
+}
 export default {
   send
 }

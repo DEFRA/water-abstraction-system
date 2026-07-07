@@ -142,6 +142,11 @@ function _returnVersion(quarterlyReturns) {
   }
 }
 
+export {
+  returnLogPrefix,
+  summerReturnRequirement,
+  winterReturnRequirement
+}
 export default {
   returnLogPrefix,
   summerReturnRequirement,

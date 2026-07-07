@@ -51,6 +51,9 @@ function _billRunOptions(chargingModuleResult, batchType) {
   return options
 }
 
+export {
+  go
+}
 export default {
   go
 }

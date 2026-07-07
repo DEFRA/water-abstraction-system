@@ -31,6 +31,9 @@ async function go(notificationId, licenceId = null, returnLogId = null, companyC
   return ViewNotificationPresenter.go(notification, licence, returnLogId, companyContactId)
 }
 
+export {
+  go
+}
 export default {
   go
 }

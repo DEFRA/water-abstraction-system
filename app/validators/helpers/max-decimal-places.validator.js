@@ -26,6 +26,9 @@ function maxDecimalPlaces(maxDecimals) {
     return helpers.error('custom.maxDecimals')
   }
 }
+export {
+  maxDecimalPlaces
+}
 export default {
   maxDecimalPlaces
 }

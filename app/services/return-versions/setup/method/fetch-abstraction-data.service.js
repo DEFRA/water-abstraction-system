@@ -48,6 +48,9 @@ async function go(licenceId, licenceVersionId) {
     })
 }
 
+export {
+  go
+}
 export default {
   go
 }

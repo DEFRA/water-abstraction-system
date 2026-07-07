@@ -355,6 +355,9 @@ function _ukAddressParts(contact, defaultAddressParts) {
   return addressParts
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -23,6 +23,9 @@ async function go() {
   calculateAndLogTimeTaken(startTime, 'Tear down complete')
 }
 
+export {
+  go
+}
 export default {
   go
 }

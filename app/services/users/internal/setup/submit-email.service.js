@@ -66,6 +66,9 @@ function _validate(payload, emailExists) {
   return formatValidationResult(validationResult)
 }
 
+export {
+  go
+}
 export default {
   go
 }

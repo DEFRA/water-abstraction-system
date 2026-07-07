@@ -28,6 +28,10 @@ async function view(request, h) {
   return h.view('monitoring-stations/view.njk', pageData)
 }
 
+export {
+  licence,
+  view
+}
 export default {
   licence,
   view

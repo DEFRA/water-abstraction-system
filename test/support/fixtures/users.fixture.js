@@ -370,6 +370,25 @@ function _transformLicenceEntity(licenceEntity) {
   })
 }
 
+export {
+  adminInternal,
+  basicAccess,
+  billingAndData,
+  digitiseApprover,
+  digitiseEditor,
+  environmentOfficer,
+  external,
+  jonLee,
+  nationalPermittingService,
+  permittingSupportCentre,
+  rachelStevens,
+  superUser,
+  tinaBarrett,
+  transformToFetchUserInternalResult,
+  transformToFetchUsersResult,
+  user,
+  wasteIndustryRegulatoryServices
+}
 export default {
   adminInternal,
   basicAccess,

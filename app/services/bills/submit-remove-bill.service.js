@@ -57,6 +57,9 @@ async function _unassignLicencesToBillRun(billRunId, billLicences) {
   await UnassignLicencesToBillRunService.go(licenceIds, billRunId)
 }
 
+export {
+  go
+}
 export default {
   go
 }

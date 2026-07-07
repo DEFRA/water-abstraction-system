@@ -48,6 +48,9 @@ function _units(sessionUnit) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

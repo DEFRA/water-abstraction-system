@@ -28,6 +28,10 @@ function select(index = -1) {
   return SecondaryPurposeModel.fromJson(selectRandomEntry(secondaryPurposes))
 }
 
+export {
+  secondaryPurposes as data,
+  select
+}
 export default {
   data: secondaryPurposes,
   select

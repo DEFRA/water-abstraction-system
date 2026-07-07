@@ -54,6 +54,9 @@ async function _fetch(billId) {
     })
 }
 
+export {
+  go
+}
 export default {
   go
 }

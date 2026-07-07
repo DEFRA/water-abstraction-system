@@ -48,6 +48,9 @@ function _applyNotificationDueDate(rows, download) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

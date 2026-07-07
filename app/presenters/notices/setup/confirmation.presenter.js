@@ -58,6 +58,9 @@ function _pageTitle(subType) {
   return `Returns ${subTypes[subType]} sent`
 }
 
+export {
+  go
+}
 export default {
   go
 }

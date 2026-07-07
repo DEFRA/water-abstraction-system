@@ -80,6 +80,9 @@ async function _unregisterLicence(licenceDocumentHeaderId, timestamp, trx) {
     .patch({ companyEntityId: null, updatedAt: timestamp })
 }
 
+export {
+  go
+}
 export default {
   go
 }

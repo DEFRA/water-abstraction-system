@@ -27,6 +27,9 @@ async function go(licenceMonitoringStationId) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

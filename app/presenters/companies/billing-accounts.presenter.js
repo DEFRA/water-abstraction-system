@@ -33,6 +33,9 @@ function _billingAccounts(billingAccounts) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

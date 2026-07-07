@@ -110,6 +110,10 @@ function _requestOptions(accessToken, body) {
   }
 }
 
+export {
+  get,
+  post
+}
 export default {
   get,
   post

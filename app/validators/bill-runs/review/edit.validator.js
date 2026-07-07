@@ -58,6 +58,9 @@ function _validateAuthorisedQuantity(quantityOptions) {
   return schema.validate(quantityOptions, { abortEarly: true })
 }
 
+export {
+  go
+}
 export default {
   go
 }

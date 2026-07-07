@@ -42,6 +42,9 @@ async function go(id, auth, page, back = 'users') {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

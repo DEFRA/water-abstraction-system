@@ -15,6 +15,9 @@ async function _upsert(source) {
     .merge(['description', 'sourceType', 'ngr', 'updatedAt'])
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

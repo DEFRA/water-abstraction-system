@@ -30,6 +30,9 @@ async function go(companySearch) {
   return companies
 }
 
+export {
+  go
+}
 export default {
   go
 }

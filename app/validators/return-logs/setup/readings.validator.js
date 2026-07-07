@@ -150,6 +150,9 @@ function _subsequentLowestReading(lines, requestedYear, requestedMonth) {
   return minReading
 }
 
+export {
+  go
+}
 export default {
   go
 }

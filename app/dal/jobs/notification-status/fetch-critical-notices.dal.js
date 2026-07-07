@@ -34,6 +34,9 @@ async function go(noticeIds) {
     )
 }
 
+export {
+  go
+}
 export default {
   go
 }

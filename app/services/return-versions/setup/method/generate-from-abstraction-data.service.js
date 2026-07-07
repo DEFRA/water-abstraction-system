@@ -249,6 +249,9 @@ function _transformForSetup(licence) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

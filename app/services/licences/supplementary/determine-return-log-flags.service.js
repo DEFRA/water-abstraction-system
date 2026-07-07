@@ -76,6 +76,9 @@ async function _fetchReturnLog(returnLogId) {
     })
 }
 
+export {
+  go
+}
 export default {
   go
 }

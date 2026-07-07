@@ -216,6 +216,9 @@ function _submissionLines(returnSubmissionLines) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

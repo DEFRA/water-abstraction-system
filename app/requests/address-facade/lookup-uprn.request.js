@@ -18,6 +18,9 @@ async function send(uprn) {
   return AddressFacadeRequest.get(path)
 }
 
+export {
+  send
+}
 export default {
   send
 }

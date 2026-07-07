@@ -75,6 +75,9 @@ function _notifications(session, recipients, noticeId) {
   return ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -48,6 +48,9 @@ async function _formattedData(recipients, session) {
   return DownloadReturnsNoticePresenter.go(recipients, session)
 }
 
+export {
+  go
+}
 export default {
   go
 }

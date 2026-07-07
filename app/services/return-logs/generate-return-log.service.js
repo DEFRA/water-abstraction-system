@@ -189,6 +189,9 @@ function _startDate(returnVersion, returnCycleStartDate) {
   return determineLatestDate([licence.startDate, returnVersionStartDate, returnCycleStartDate])
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -131,6 +131,9 @@ function _users(resultTypes, _query, selectedResultType) {
   resultTypes.push('user')
 }
 
+export {
+  go
+}
 export default {
   go
 }

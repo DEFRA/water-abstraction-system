@@ -55,6 +55,9 @@ function _failedValidationResponse(auth, payload, validationResult) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

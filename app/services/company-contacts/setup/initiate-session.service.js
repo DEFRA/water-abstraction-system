@@ -27,6 +27,9 @@ async function go(companyId) {
   return CreateSessionDal.go(data)
 }
 
+export {
+  go
+}
 export default {
   go
 }

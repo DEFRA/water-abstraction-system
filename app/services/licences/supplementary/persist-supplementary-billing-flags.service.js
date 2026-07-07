@@ -55,6 +55,9 @@ async function _updateLicenceFlags(includeInPresrocBilling, flagForSrocSupplemen
     .where('id', licenceId)
 }
 
+export {
+  go
+}
 export default {
   go
 }

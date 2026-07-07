@@ -78,6 +78,9 @@ async function _fetchConditions(licenceVersionId) {
     })
 }
 
+export {
+  go
+}
 export default {
   go
 }

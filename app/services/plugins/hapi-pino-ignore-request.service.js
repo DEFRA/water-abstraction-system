@@ -56,6 +56,9 @@ function go(options, request) {
   return false
 }
 
+export {
+  go
+}
 export default {
   go
 }

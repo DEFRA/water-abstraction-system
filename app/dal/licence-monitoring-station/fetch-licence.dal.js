@@ -18,6 +18,9 @@ async function go(licenceRef) {
   return LicenceModel.query().where('licenceRef', licenceRef).select('id', 'licenceRef').modify('ended').first()
 }
 
+export {
+  go
+}
 export default {
   go
 }

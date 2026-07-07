@@ -187,6 +187,11 @@ function _linkDetails(id, method, frequency, endDate, rootPath) {
   }
 }
 
+export {
+  formatMeterDetails,
+  generateSummaryTableHeaders,
+  generateSummaryTableRows
+}
 export default {
   formatMeterDetails,
   generateSummaryTableHeaders,

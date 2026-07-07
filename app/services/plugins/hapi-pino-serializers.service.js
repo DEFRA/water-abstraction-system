@@ -126,6 +126,9 @@ function _res(res) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

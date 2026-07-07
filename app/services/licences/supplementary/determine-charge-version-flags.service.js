@@ -114,6 +114,9 @@ function _twoPartTariffSrocIndicators(chargeReferences) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -44,6 +44,9 @@ async function _getTagReference() {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -40,6 +40,9 @@ async function go(id, page) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

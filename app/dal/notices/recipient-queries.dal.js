@@ -121,6 +121,12 @@ const primaryUserRecipientQuery = `
     ON le.id = ler.licence_entity_id
 `
 
+export {
+  additionalContactRecipientQuery,
+  currentLicenceVersionsJoin,
+  licenceHolderRecipientQuery,
+  primaryUserRecipientQuery
+}
 export default {
   additionalContactRecipientQuery,
   currentLicenceVersionsJoin,

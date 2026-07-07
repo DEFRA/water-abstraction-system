@@ -75,6 +75,9 @@ function _refreshPageLink(contactHashId, noticeType, licenceMonitoringStationId,
   return baseRefreshPageLink
 }
 
+export {
+  go
+}
 export default {
   go
 }
