@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page
  *
  * @module SubmitAlertEmailAddressService
  */
 
-const AlertEmailAddressPresenter = require('../../../../presenters/notices/setup/abstraction-alerts/alert-email-address.presenter.js')
-const AlertEmailAddressValidator = require('../../../../validators/notices/setup/alert-email-address.validator.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+import AlertEmailAddressPresenter from '../../../../presenters/notices/setup/abstraction-alerts/alert-email-address.presenter.js'
+import AlertEmailAddressValidator from '../../../../validators/notices/setup/alert-email-address.validator.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page
@@ -100,6 +98,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

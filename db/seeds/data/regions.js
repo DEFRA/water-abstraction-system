@@ -1,5 +1,3 @@
-'use strict'
-
 const data = [
   {
     id: 'a5f868ec-f51c-478d-924c-37852626b7c1',
@@ -73,6 +71,6 @@ const data = [
   }
 ]
 
-module.exports = {
+export default {
   data
 }

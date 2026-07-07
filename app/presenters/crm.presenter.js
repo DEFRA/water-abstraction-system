@@ -1,6 +1,4 @@
-'use strict'
-
-const { roles } = require('../lib/static-lookups.lib.js')
+import { roles } from '../lib/static-lookups.lib.js'
 
 /**
  * Returns the display label for an abstraction alerts value
@@ -100,7 +98,7 @@ function _contactLink(contact, billingQueryArgs) {
   return `/system/companies/${contact.id}/${contact.contactType}`
 }
 
-module.exports = {
+export default {
   abstractionAlertsLabel,
   formatContact,
   selectedLiveLicences

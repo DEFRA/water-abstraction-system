@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for bill_licences (water.billing_invoice_licences)
  * @module BillLicenceModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class BillLicenceModel extends BaseModel {
   static get tableName() {
@@ -44,4 +42,4 @@ class BillLicenceModel extends BaseModel {
   }
 }
 
-module.exports = BillLicenceModel
+export default BillLicenceModel

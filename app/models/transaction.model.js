@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for transactions (water.billing_transactions)
  * @module TransactionModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class TransactionModel extends BaseModel {
   static get tableName() {
@@ -41,4 +39,4 @@ class TransactionModel extends BaseModel {
   }
 }
 
-module.exports = TransactionModel
+export default TransactionModel

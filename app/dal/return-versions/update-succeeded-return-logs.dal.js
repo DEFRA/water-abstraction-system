@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Update existing return logs to isCurrent=false when a new succeeded or transferred return version is added
  * @module UpdateSucceededReturnLogsDal
  */
 
-const { db } = require('../../../db/db.js')
+import { db } from '../../../db/db.js'
 
 /**
  * Update existing return logs to isCurrent=false when a new succeeded or transferred return version is added
@@ -67,6 +65,6 @@ async function go(licenceRef, trx) {
   await rawQuery.transacting(trx)
 }
 
-module.exports = {
+export default {
   go
 }

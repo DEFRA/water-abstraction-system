@@ -1,6 +1,4 @@
-'use strict'
-
-const ReturnVersionsSetupController = require('../controllers/return-versions-setup.controller.js')
+import ReturnVersionsSetupController from '../controllers/return-versions-setup.controller.js'
 
 const routes = [
   {
@@ -473,4 +471,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

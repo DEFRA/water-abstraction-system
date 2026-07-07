@@ -1,6 +1,4 @@
-'use strict'
-
-exports.up = function (knex) {
+export function up(knex) {
   return knex.raw(`
     CREATE SCHEMA IF NOT EXISTS "crm";
     CREATE SCHEMA IF NOT EXISTS "crm_v2";
@@ -11,7 +9,7 @@ exports.up = function (knex) {
   `)
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.raw(`
     DROP SCHEMA IF EXISTS "water";
     DROP SCHEMA IF EXISTS "returns";

@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Controller for /companies endpoints
  * @module CompaniesController
  */
 
-const ViewBillingAccountsService = require('../services/companies/view-billing-accounts.service.js')
-const ViewCompanyService = require('../services/companies/view-company.service.js')
-const ViewCompanyWithAddressService = require('../services/companies/view-company-with-address.service.js')
-const ViewContactsService = require('../services/companies/view-contacts.service.js')
-const ViewHistoryService = require('../services/companies/view-history.service.js')
-const ViewLicencesService = require('../services/companies/view-licences.service.js')
+import ViewBillingAccountsService from '../services/companies/view-billing-accounts.service.js'
+import ViewCompanyService from '../services/companies/view-company.service.js'
+import ViewCompanyWithAddressService from '../services/companies/view-company-with-address.service.js'
+import ViewContactsService from '../services/companies/view-contacts.service.js'
+import ViewHistoryService from '../services/companies/view-history.service.js'
+import ViewLicencesService from '../services/companies/view-licences.service.js'
 
 async function viewBillingAccounts(request, h) {
   const {
@@ -80,7 +78,7 @@ async function viewLicences(request, h) {
   return h.view(`companies/licences.njk`, pageData)
 }
 
-module.exports = {
+export default {
   viewBillingAccounts,
   viewCompany,
   viewCompanyWithAddress,

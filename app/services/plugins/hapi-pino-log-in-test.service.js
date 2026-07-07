@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Used by HapiPinoPlugin to determine which requests to log
  * @module HapiPinoLogInTestService
@@ -31,6 +29,6 @@ function go(logInTest) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

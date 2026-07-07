@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return` page
  * @module PreviewCheckPaperReturnPresenter
  */
 
-const { formatLongDate } = require('../../../base.presenter.js')
+import { formatLongDate } from '../../../base.presenter.js'
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return` page
@@ -44,6 +42,6 @@ function _returnLogs(dueReturns, selectedReturns, sessionId, contactHashId) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

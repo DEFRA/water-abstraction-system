@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Connects with the Charging Module to generate a bill run
  * @module GenerateBillRunRequest
  */
 
-const ChargingModuleRequest = require('../charging-module.request.js')
+import ChargingModuleRequest from '../charging-module.request.js'
 
 /**
  * Generate a bill run in the Charging Module API
@@ -23,6 +21,6 @@ async function send(billRunId) {
   return ChargingModuleRequest.patch(path)
 }
 
-module.exports = {
+export default {
   send
 }

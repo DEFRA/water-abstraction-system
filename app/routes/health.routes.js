@@ -1,6 +1,4 @@
-'use strict'
-
-const HealthController = require('../controllers/health.controller.js')
+import HealthController from '../controllers/health.controller.js'
 
 const routes = [
   {
@@ -42,4 +40,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

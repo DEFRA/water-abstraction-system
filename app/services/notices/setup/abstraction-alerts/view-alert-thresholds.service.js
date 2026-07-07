@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates presenting the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
  *
  * @module ViewAlertThresholdsService
  */
 
-const AlertThresholdsPresenter = require('../../../../presenters/notices/setup/abstraction-alerts/alert-thresholds.presenter.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+import AlertThresholdsPresenter from '../../../../presenters/notices/setup/abstraction-alerts/alert-thresholds.presenter.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates presenting the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
@@ -27,6 +25,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

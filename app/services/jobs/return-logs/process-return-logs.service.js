@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Determines what return logs need to be generated for a given cycle and creates them
  * @module ProcessReturnLogsService
  */
 
-const { determineEarliestDate } = require('../../../lib/dates.lib.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
-const CreateReturnLogsService = require('../../return-logs/create-return-logs.service.js')
-const CheckReturnCycleService = require('./check-return-cycle.service.js')
-const FetchReturnRequirementsService = require('./fetch-return-requirements.service.js')
+import { determineEarliestDate } from '../../../lib/dates.lib.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
+import CreateReturnLogsService from '../../return-logs/create-return-logs.service.js'
+import CheckReturnCycleService from './check-return-cycle.service.js'
+import FetchReturnRequirementsService from './fetch-return-requirements.service.js'
 
 /**
  * Determines what return logs need to be generated for a given cycle and creates them
@@ -64,6 +62,6 @@ function _endDate(returnVersion) {
   return determineEarliestDate([licence.expiredDate, licence.lapsedDate, licence.revokedDate])
 }
 
-module.exports = {
+export default {
   go
 }

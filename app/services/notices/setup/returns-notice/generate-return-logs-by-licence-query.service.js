@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Generates the query and bindings for selecting the return logs by licence that determine which recipients to fetch
  * @module GenerateReturnLogsByLicenceQueryService
  */
 
-const { timestampForPostgres } = require('../../../../lib/general.lib.js')
-const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
+import { timestampForPostgres } from '../../../../lib/general.lib.js'
+import { NoticeType } from '../../../../lib/static-lookups.lib.js'
 
 /**
  * Generates the query and bindings for selecting the return logs by licence that determine which recipients to fetch
@@ -43,6 +41,6 @@ function _query(noticeType) {
 ${noticeType === NoticeType.REMINDERS ? '    AND rl.due_date IS NOT NULL' : ''}`
 }
 
-module.exports = {
+export default {
   go
 }

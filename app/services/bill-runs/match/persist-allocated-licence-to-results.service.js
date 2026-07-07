@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Persists the results from the `allocateReturnsToChargeElementService` into the DB
  * @module PersistAllocatedLicenceToResultsService
  */
 
-const ReviewChargeElementModel = require('../../../models/review-charge-element.model.js')
-const ReviewChargeElementReturnModel = require('../../../models/review-charge-element-return.model.js')
-const ReviewChargeReferenceModel = require('../../../models/review-charge-reference.model.js')
-const ReviewChargeVersionModel = require('../../../models/review-charge-version.model.js')
-const ReviewLicenceModel = require('../../../models/review-licence.model.js')
-const ReviewReturnModel = require('../../../models/review-return.model.js')
+import ReviewChargeElementModel from '../../../models/review-charge-element.model.js'
+import ReviewChargeElementReturnModel from '../../../models/review-charge-element-return.model.js'
+import ReviewChargeReferenceModel from '../../../models/review-charge-reference.model.js'
+import ReviewChargeVersionModel from '../../../models/review-charge-version.model.js'
+import ReviewLicenceModel from '../../../models/review-licence.model.js'
+import ReviewReturnModel from '../../../models/review-return.model.js'
 
 /**
  * Persists results of matching and allocating return logs to licence charge elements for a two-part tariff bill run
@@ -180,6 +178,6 @@ async function _persistReviewReturn(returnLog, reviewLicenceId) {
   return reviewReturnId
 }
 
-module.exports = {
+export default {
   go
 }

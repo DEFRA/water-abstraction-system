@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/search` page
  * @module SearchValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const ERROR_MESSAGE =
   'Enter a licence number, customer name, returns ID, registered email address or monitoring station'
@@ -41,6 +39,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: true })
 }
 
-module.exports = {
+export default {
   go
 }

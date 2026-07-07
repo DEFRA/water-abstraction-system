@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for licence_agreements (water.licence_agreements)
  * @module LicenceAgreementModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class LicenceAgreementModel extends BaseModel {
   static get tableName() {
@@ -36,4 +34,4 @@ class LicenceAgreementModel extends BaseModel {
   }
 }
 
-module.exports = LicenceAgreementModel
+export default LicenceAgreementModel

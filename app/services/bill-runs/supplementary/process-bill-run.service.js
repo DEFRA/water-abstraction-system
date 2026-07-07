@@ -1,19 +1,17 @@
-'use strict'
-
 /**
  * Process a given supplementary bill run for the given billing periods
  * @module ProcessBillRunService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const BillRunError = require('../../../errors/bill-run.error.js')
-const ChargingModuleGenerateBillRunRequest = require('../../../requests/charging-module/generate-bill-run.request.js')
-const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
-const HandleErroredBillRunService = require('../handle-errored-bill-run.service.js')
-const LegacyRefreshBillRunRequest = require('../../../requests/legacy/refresh-bill-run.request.js')
-const ProcessBillingPeriodService = require('./process-billing-period.service.js')
-const UnflagUnbilledSupplementaryLicencesService = require('../unflag-unbilled-supplementary-licences.service.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import BillRunError from '../../../errors/bill-run.error.js'
+import ChargingModuleGenerateBillRunRequest from '../../../requests/charging-module/generate-bill-run.request.js'
+import FetchChargeVersionsService from './fetch-charge-versions.service.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
+import HandleErroredBillRunService from '../handle-errored-bill-run.service.js'
+import LegacyRefreshBillRunRequest from '../../../requests/legacy/refresh-bill-run.request.js'
+import ProcessBillingPeriodService from './process-billing-period.service.js'
+import UnflagUnbilledSupplementaryLicencesService from '../unflag-unbilled-supplementary-licences.service.js'
 
 /**
  * Process a given bill run for the given billing periods. In this case, "process" means that we create the
@@ -109,6 +107,6 @@ async function _updateStatus(billRunId, status) {
   await BillRunModel.query().findById(billRunId).patch({ status })
 }
 
-module.exports = {
+export default {
   go
 }

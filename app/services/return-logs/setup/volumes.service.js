@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
  * @module VolumesService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const VolumesPresenter = require('../../../presenters/return-logs/setup/volumes.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import VolumesPresenter from '../../../presenters/return-logs/setup/volumes.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
@@ -26,6 +24,6 @@ async function go(sessionId, yearMonth) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

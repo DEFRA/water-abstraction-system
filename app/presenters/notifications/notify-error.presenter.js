@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats a notification which has errored
  * @module NotifyErrorPresenter
@@ -27,6 +25,6 @@ function go(statusCode, message, errors) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

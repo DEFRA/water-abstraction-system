@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `address/{sessionId}/international` page
  *
  * @module InternationalService
  */
 
-const FetchSessionDal = require('../../dal/fetch-session.dal.js')
-const InternationalPresenter = require('../../presenters/address/international.presenter.js')
+import FetchSessionDal from '../../dal/fetch-session.dal.js'
+import InternationalPresenter from '../../presenters/address/international.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `address/{sessionId}/international` page
@@ -26,6 +24,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

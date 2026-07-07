@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `address/{sessionId}/manual` page
  * @module ManualAddressPresenter
@@ -36,6 +34,6 @@ function _backLink(address, sessionId) {
   return { href: `/system/address/${sessionId}/postcode`, text: 'Back' }
 }
 
-module.exports = {
+export default {
   go
 }

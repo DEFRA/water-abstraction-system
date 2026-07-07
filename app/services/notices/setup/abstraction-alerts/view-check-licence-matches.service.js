@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page
  *
  * @module ViewCheckLicenceMatchesService
  */
 
-const CheckLicenceMatchesPresenter = require('../../../../presenters/notices/setup/abstraction-alerts/check-licence-matches.presenter.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const { readFlashNotification } = require('../../../../lib/general.lib.js')
+import CheckLicenceMatchesPresenter from '../../../../presenters/notices/setup/abstraction-alerts/check-licence-matches.presenter.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import { readFlashNotification } from '../../../../lib/general.lib.js'
 
 /**
  * Orchestrates presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page
@@ -32,6 +30,6 @@ async function go(sessionId, yar) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Model for return_submissions (returns.versions)
  * @module ReturnSubmissionModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
-const { formatDateObjectToISO } = require('../lib/dates.lib.js')
-const { unitNames } = require('../lib/static-lookups.lib.js')
+import BaseModel from './base.model.js'
+import { formatDateObjectToISO } from '../lib/dates.lib.js'
+import { unitNames } from '../lib/static-lookups.lib.js'
 
 class ReturnSubmissionModel extends BaseModel {
   static get tableName() {
@@ -103,4 +101,4 @@ class ReturnSubmissionModel extends BaseModel {
   }
 }
 
-module.exports = ReturnSubmissionModel
+export default ReturnSubmissionModel

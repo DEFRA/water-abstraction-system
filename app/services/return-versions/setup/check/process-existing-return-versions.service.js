@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Processes existing return versions to update the their `status` and `endDate` when a new return version is created
  * @module ProcessExistingReturnVersionsService
  */
 
-const FetchCurrentReturnVersionsDal = require('../../../../dal/return-versions/fetch-current-return-versions.dal.js')
-const UpdateReturnVersionEndDateDal = require('../../../../dal/return-versions/update-return-version-end-date.dal.js')
-const UpdateReturnVersionStatusDal = require('../../../../dal/return-versions/update-return-version-status.dal.js')
-const { sameDate } = require('../../../../lib/dates.lib.js')
+import FetchCurrentReturnVersionsDal from '../../../../dal/return-versions/fetch-current-return-versions.dal.js'
+import UpdateReturnVersionEndDateDal from '../../../../dal/return-versions/update-return-version-end-date.dal.js'
+import UpdateReturnVersionStatusDal from '../../../../dal/return-versions/update-return-version-status.dal.js'
+import { sameDate } from '../../../../lib/dates.lib.js'
 
 /**
  * Processes existing return versions to update the their `status` and `endDate` when a new return version is created
@@ -263,6 +261,6 @@ async function _replacePreviousVersion(previousVersions, newVersionStartDate, tr
   return newVersionEndDate
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/check' page
  *
  * @module SubmitCheckService
  */
 
-const CreateUserDal = require('../../../../dal/users/internal/create-user.dal.js')
-const CreateVerificationNotificationDal = require('../../../../dal/users/internal/create-verification-notification.dal.js')
-const DeleteSessionDal = require('../../../../dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const SendVerificationEmailService = require('./send-verification-email.service.js')
-const UpdateUserDal = require('../../../../dal/users/internal/update-user.dal.js')
-const { flashNotification } = require('../../../../lib/general.lib.js')
+import CreateUserDal from '../../../../dal/users/internal/create-user.dal.js'
+import CreateVerificationNotificationDal from '../../../../dal/users/internal/create-verification-notification.dal.js'
+import DeleteSessionDal from '../../../../dal/delete-session.dal.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import SendVerificationEmailService from './send-verification-email.service.js'
+import UpdateUserDal from '../../../../dal/users/internal/update-user.dal.js'
+import { flashNotification } from '../../../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/check' page
@@ -71,6 +69,6 @@ async function _createUser(auth, session, yar) {
   SendVerificationEmailService.go(notification)
 }
 
-module.exports = {
+export default {
   go
 }

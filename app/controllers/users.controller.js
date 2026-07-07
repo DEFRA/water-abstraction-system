@@ -1,24 +1,22 @@
-'use strict'
-
 /**
  * Controller for /users endpoints
  * @module UsersController
  */
 
-const FetchLegacyIdDal = require('../dal/users/fetch-legacy-id.dal.js')
-const IndexUsersService = require('../services/users/index-users.service.js')
-const SubmitIndexUsersService = require('../services/users/submit-index-users.service.js')
-const SubmitProfileDetailsService = require('../services/users/submit-profile-details.service.js')
-const ViewExternalCommunicationsService = require('../services/users/external/view-communications.service.js')
-const ViewExternalDetailsService = require('../services/users/external/view-details.service.js')
-const ViewExternalLicencesService = require('../services/users/external/view-licences.service.js')
-const ViewExternalVerificationsService = require('../services/users/external/view-verifications.service.js')
-const ViewInternalCommunicationsService = require('../services/users/internal/view-communications.service.js')
-const ViewInternalDetailsService = require('../services/users/internal/view-details.service.js')
-const ViewNotificationService = require('../services/users/view-notification.service.js')
-const ViewProfileDetailsService = require('../services/users/view-profile-details.service.js')
+import FetchLegacyIdDal from '../dal/users/fetch-legacy-id.dal.js'
+import IndexUsersService from '../services/users/index-users.service.js'
+import SubmitIndexUsersService from '../services/users/submit-index-users.service.js'
+import SubmitProfileDetailsService from '../services/users/submit-profile-details.service.js'
+import ViewExternalCommunicationsService from '../services/users/external/view-communications.service.js'
+import ViewExternalDetailsService from '../services/users/external/view-details.service.js'
+import ViewExternalLicencesService from '../services/users/external/view-licences.service.js'
+import ViewExternalVerificationsService from '../services/users/external/view-verifications.service.js'
+import ViewInternalCommunicationsService from '../services/users/internal/view-communications.service.js'
+import ViewInternalDetailsService from '../services/users/internal/view-details.service.js'
+import ViewNotificationService from '../services/users/view-notification.service.js'
+import ViewProfileDetailsService from '../services/users/view-profile-details.service.js'
 
-const FeatureFlagsConfig = require('../../config/feature-flags.config.js')
+import FeatureFlagsConfig from '../../config/feature-flags.config.js'
 
 async function index(request, h) {
   const {
@@ -176,7 +174,7 @@ async function _redirectToLegacy(id, h) {
   return h.redirect(`/user/${userId}/status`)
 }
 
-module.exports = {
+export default {
   index,
   submitIndex,
   submitProfileDetails,

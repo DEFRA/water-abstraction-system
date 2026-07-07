@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * View the health of the Address Facade
  * @module ViewHealthRequest
  */
 
-const BaseRequest = require('../base.request.js')
+import BaseRequest from '../base.request.js'
 
-const addressFacadeConfig = require('../../../config/address-facade.config.js')
+import addressFacadeConfig from '../../../config/address-facade.config.js'
 
 /**
  * View the health of the Address Facade
@@ -26,6 +24,6 @@ async function send() {
   return BaseRequest.get(statusUrl.href, { responseType: 'text' })
 }
 
-module.exports = {
+export default {
   send
 }

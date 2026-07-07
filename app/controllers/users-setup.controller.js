@@ -1,29 +1,27 @@
-'use strict'
-
 /**
  * Controller for /users/internal/setup endpoints
  * @module UsersSetupController
  */
 
-const InitiateExternalSessionService = require('../services/users/external/setup/initiate-session.service.js')
-const InitiateInternalEditSessionService = require('../services/users/internal/setup/initiate-edit-session.service.js')
-const InitiateInternalSessionService = require('../services/users/internal/setup/initiate-session.service.js')
-const SubmitExternalCancelService = require('../services/users/external/setup/submit-cancel.service.js')
-const SubmitExternalCheckService = require('../services/users/external/setup/submit-check.service.js')
-const SubmitExternalLicencesService = require('../services/users/external/setup/submit-licences.service.js')
-const SubmitInternalAccessService = require('../services/users/internal/setup/submit-access.service.js')
-const SubmitInternalCancelService = require('../services/users/internal/setup/submit-cancel.service.js')
-const SubmitInternalCheckService = require('../services/users/internal/setup/submit-check.service.js')
-const SubmitInternalEmailService = require('../services/users/internal/setup/submit-email.service.js')
-const SubmitInternalPermissionsService = require('../services/users/internal/setup/submit-permissions.service.js')
-const ViewExternalCancelService = require('../services/users/external/setup/view-cancel.service.js')
-const ViewExternalCheckService = require('../services/users/external/setup/view-check.service.js')
-const ViewExternalLicencesService = require('../services/users/external/setup/view-licences.service.js')
-const ViewInternalAccessService = require('../services/users/internal/setup/view-access.service.js')
-const ViewInternalCancelService = require('../services/users/internal/setup/view-cancel.service.js')
-const ViewInternalCheckService = require('../services/users/internal/setup/view-check.service.js')
-const ViewInternalEmailService = require('../services/users/internal/setup/view-email.service.js')
-const ViewInternalPermissionsService = require('../services/users/internal/setup/view-permissions.service.js')
+import InitiateExternalSessionService from '../services/users/external/setup/initiate-session.service.js'
+import InitiateInternalEditSessionService from '../services/users/internal/setup/initiate-edit-session.service.js'
+import InitiateInternalSessionService from '../services/users/internal/setup/initiate-session.service.js'
+import SubmitExternalCancelService from '../services/users/external/setup/submit-cancel.service.js'
+import SubmitExternalCheckService from '../services/users/external/setup/submit-check.service.js'
+import SubmitExternalLicencesService from '../services/users/external/setup/submit-licences.service.js'
+import SubmitInternalAccessService from '../services/users/internal/setup/submit-access.service.js'
+import SubmitInternalCancelService from '../services/users/internal/setup/submit-cancel.service.js'
+import SubmitInternalCheckService from '../services/users/internal/setup/submit-check.service.js'
+import SubmitInternalEmailService from '../services/users/internal/setup/submit-email.service.js'
+import SubmitInternalPermissionsService from '../services/users/internal/setup/submit-permissions.service.js'
+import ViewExternalCancelService from '../services/users/external/setup/view-cancel.service.js'
+import ViewExternalCheckService from '../services/users/external/setup/view-check.service.js'
+import ViewExternalLicencesService from '../services/users/external/setup/view-licences.service.js'
+import ViewInternalAccessService from '../services/users/internal/setup/view-access.service.js'
+import ViewInternalCancelService from '../services/users/internal/setup/view-cancel.service.js'
+import ViewInternalCheckService from '../services/users/internal/setup/view-check.service.js'
+import ViewInternalEmailService from '../services/users/internal/setup/view-email.service.js'
+import ViewInternalPermissionsService from '../services/users/internal/setup/view-permissions.service.js'
 
 async function setupExternal(request, h) {
   const {
@@ -238,7 +236,7 @@ async function viewInternalPermissions(request, h) {
   return h.view('users/internal/setup/permissions.njk', pageData)
 }
 
-module.exports = {
+export default {
   setupExternal,
   setupInternal,
   setupInternalEdit,

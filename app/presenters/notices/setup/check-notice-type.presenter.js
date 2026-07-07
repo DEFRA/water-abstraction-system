@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/check-notice-type` page
  * @module CheckNoticeTypePresenter
  */
 
-const { NoticeType, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
-const { formatLongDate } = require('../../base.presenter.js')
-const { returnsPeriodText } = require('../base.presenter.js')
+import { NoticeType, NoticeTypes } from '../../../lib/static-lookups.lib.js'
+import { formatLongDate } from '../../base.presenter.js'
+import { returnsPeriodText } from '../base.presenter.js'
 
 const NOTICE_TYPE_TEXT = {
   [NoticeType.INVITATIONS]: NoticeTypes[NoticeType.INVITATIONS].notificationType,
@@ -75,6 +73,6 @@ function _selectedDueReturns(selectedReturns, dueReturns) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

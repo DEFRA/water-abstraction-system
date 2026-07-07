@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Determines which supplementary billing flag should be added to a licence removed from a bill run
  * @module DetermineBillLicenceFlagsService
  */
 
-const BillLicenceModel = require('../../../models/bill-licence.model.js')
+import BillLicenceModel from '../../../models/bill-licence.model.js'
 
 /**
  * Determines which supplementary billing flag should be added to a licence that is removed from a bill run.
@@ -95,6 +93,6 @@ function _updateFlags(billRun, licence) {
   return { flagForPreSrocSupplementary, flagForSrocSupplementary, flagForTwoPartTariffSupplementary }
 }
 
-module.exports = {
+export default {
   go
 }

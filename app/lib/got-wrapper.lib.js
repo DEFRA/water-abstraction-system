@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Wraps the `got` HTTP client so that it mimics the interface of the deprecated `request` library.
  * @module GotWrapperLib
  */
 
-const { HttpProxyAgent, HttpsProxyAgent } = require('hpagent')
+import { HttpProxyAgent, HttpsProxyAgent } from 'hpagent'
 
 /**
  * Wraps the `got` HTTP client so that it mimics the interface of the deprecated `request` library, allowing it to be
@@ -68,4 +66,4 @@ async function requestLike(options, callback, got, defaults) {
   }
 }
 
-module.exports = { gotWrapper }
+export default { gotWrapper }

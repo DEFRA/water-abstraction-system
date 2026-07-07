@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Our router plugin which pulls in the various routes we have defined ready to be registered with the Hapi server
  * (server.js).
@@ -11,45 +9,45 @@
  * @module RouterPlugin
  */
 
-const AddressRoutes = require('../routes/address.routes.js')
-const AssetRoutes = require('../routes/assets.routes.js')
-const BillLicences = require('../routes/bill-licences.routes.js')
-const BillRoutes = require('../routes/bills.routes.js')
-const BillRunRoutes = require('../routes/bill-runs.routes.js')
-const BillRunReviewRoutes = require('../routes/bill-runs-review.routes.js')
-const BillRunSetupRoutes = require('../routes/bill-runs-setup.routes.js')
-const BillingAccountRoutes = require('../routes/billing-accounts.routes.js')
-const BillingAccountSetupRoutes = require('../routes/billing-accounts-setup.routes.js')
-const CheckRoutes = require('../routes/check.routes.js')
-const CompaniesRoutes = require('../routes/companies.routes.js')
-const CompanyContactsRoutes = require('../routes/company-contacts.routes.js')
-const CompanyContactsSetupRoutes = require('../routes/company-contacts-setup.routes.js')
-const DataRoutes = require('../routes/data.routes.js')
-const FilterRoutesService = require('../services/plugins/filter-routes.service.js')
-const HealthRoutes = require('../routes/health.routes.js')
-const NoticesRoutes = require('../routes/notices.routes.js')
-const NoticesSetupRoutes = require('../routes/notices-setup.routes.js')
-const NotificationRoutes = require('../routes/notifications.routes.js')
-const JobRoutes = require('../routes/jobs.routes.js')
-const LicenceEndDatesRoutes = require('../routes/licences-end-dates.routes.js')
-const LicenceMonitoringStationRoutes = require('../routes/licence-monitoring-station.routes.js')
-const LicenceMonitoringStationSetupRoutes = require('../routes/licence-monitoring-station-setup.routes.js')
-const LicenceRoutes = require('../routes/licence.routes.js')
-const LicenceVersionsRoutes = require('../routes/licence-versions.routes.js')
-const ManageRoutes = require('../routes/manage.routes.js')
-const MonitoringStationRoutes = require('../routes/monitoring-station.routes.js')
-const ReportRoutes = require('../routes/reports.routes.js')
-const ReturnLogRoutes = require('../routes/return-logs.routes.js')
-const ReturnLogSetupRoutes = require('../routes/return-logs-setup.routes.js')
-const ReturnSubmissionsRoutes = require('../routes/return-submissions.routes.js')
-const ReturnVersionsRoutes = require('../routes/return-versions.routes.js')
-const ReturnVersionsSetupRoutes = require('../routes/return-versions-setup.routes.js')
-const RootRoutes = require('../routes/root.routes.js')
-const SearchRoutes = require('../routes/search.routes.js')
-const UsersRoutes = require('../routes/users.routes.js')
-const UsersSetupRoutes = require('../routes/users-setup.routes.js')
+import AddressRoutes from '../routes/address.routes.js'
+import AssetRoutes from '../routes/assets.routes.js'
+import BillLicences from '../routes/bill-licences.routes.js'
+import BillRoutes from '../routes/bills.routes.js'
+import BillRunRoutes from '../routes/bill-runs.routes.js'
+import BillRunReviewRoutes from '../routes/bill-runs-review.routes.js'
+import BillRunSetupRoutes from '../routes/bill-runs-setup.routes.js'
+import BillingAccountRoutes from '../routes/billing-accounts.routes.js'
+import BillingAccountSetupRoutes from '../routes/billing-accounts-setup.routes.js'
+import CheckRoutes from '../routes/check.routes.js'
+import CompaniesRoutes from '../routes/companies.routes.js'
+import CompanyContactsRoutes from '../routes/company-contacts.routes.js'
+import CompanyContactsSetupRoutes from '../routes/company-contacts-setup.routes.js'
+import DataRoutes from '../routes/data.routes.js'
+import FilterRoutesService from '../services/plugins/filter-routes.service.js'
+import HealthRoutes from '../routes/health.routes.js'
+import NoticesRoutes from '../routes/notices.routes.js'
+import NoticesSetupRoutes from '../routes/notices-setup.routes.js'
+import NotificationRoutes from '../routes/notifications.routes.js'
+import JobRoutes from '../routes/jobs.routes.js'
+import LicenceEndDatesRoutes from '../routes/licences-end-dates.routes.js'
+import LicenceMonitoringStationRoutes from '../routes/licence-monitoring-station.routes.js'
+import LicenceMonitoringStationSetupRoutes from '../routes/licence-monitoring-station-setup.routes.js'
+import LicenceRoutes from '../routes/licence.routes.js'
+import LicenceVersionsRoutes from '../routes/licence-versions.routes.js'
+import ManageRoutes from '../routes/manage.routes.js'
+import MonitoringStationRoutes from '../routes/monitoring-station.routes.js'
+import ReportRoutes from '../routes/reports.routes.js'
+import ReturnLogRoutes from '../routes/return-logs.routes.js'
+import ReturnLogSetupRoutes from '../routes/return-logs-setup.routes.js'
+import ReturnSubmissionsRoutes from '../routes/return-submissions.routes.js'
+import ReturnVersionsRoutes from '../routes/return-versions.routes.js'
+import ReturnVersionsSetupRoutes from '../routes/return-versions-setup.routes.js'
+import RootRoutes from '../routes/root.routes.js'
+import SearchRoutes from '../routes/search.routes.js'
+import UsersRoutes from '../routes/users.routes.js'
+import UsersSetupRoutes from '../routes/users-setup.routes.js'
 
-const AirbrakeConfig = require('../../config/airbrake.config.js')
+import AirbrakeConfig from '../../config/airbrake.config.js'
 
 const routes = [
   ...RootRoutes,
@@ -101,4 +99,4 @@ const RouterPlugin = {
   }
 }
 
-module.exports = RouterPlugin
+export default RouterPlugin

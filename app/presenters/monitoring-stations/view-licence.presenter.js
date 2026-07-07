@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Format data for the `/monitoring-stations/{monitoringStationId}/licence/{licenceId}` page
  * @module ViewLicencePresenter
  */
 
-const { formatLongDate, formatRestrictionType, formatValueUnit, sentenceCase } = require('../base.presenter.js')
-const { licenceEndsWarning } = require('../licence.presenter.js')
+import { formatLongDate, formatRestrictionType, formatValueUnit, sentenceCase } from '../base.presenter.js'
+import { licenceEndsWarning } from '../licence.presenter.js'
 
 /**
  * Format data for the `/monitoring-stations/{monitoringStationId}/licence/{licenceId}` page
@@ -162,6 +160,6 @@ function _monitoringStationName(monitoringStation) {
   return label
 }
 
-module.exports = {
+export default {
   go
 }

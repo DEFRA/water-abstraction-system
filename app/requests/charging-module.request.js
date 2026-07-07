@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Use for making http requests to the Charging Module
  * @module ChargingModuleRequest
  */
 
-const BaseRequest = require('./base.request.js')
+import BaseRequest from './base.request.js'
 
-const chargingModuleConfig = require('../../config/charging-module.config.js')
+import chargingModuleConfig from '../../config/charging-module.config.js'
 
 /**
  * Sends a DELETE request to the Charging Module for the provided path
@@ -130,7 +128,7 @@ function _parseResult(result) {
   return result
 }
 
-module.exports = {
+export default {
   delete: deleteRequest,
   get,
   patch,

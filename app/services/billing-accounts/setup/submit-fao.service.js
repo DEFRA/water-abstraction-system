@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/fao` page
  *
  * @module SubmitFAOService
  */
 
-const FAOPresenter = require('../../../presenters/billing-accounts/setup/fao.presenter.js')
-const FAOValidator = require('../../../validators/billing-accounts/setup/fao.validator.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FAOPresenter from '../../../presenters/billing-accounts/setup/fao.presenter.js'
+import FAOValidator from '../../../validators/billing-accounts/setup/fao.validator.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/fao` page
@@ -80,6 +78,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

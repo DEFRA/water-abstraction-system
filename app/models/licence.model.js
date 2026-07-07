@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Model for licences (water.licences)
  * @module LicenceModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
-const { compareDates } = require('../lib/dates.lib.js')
-const { timestampForPostgres, today } = require('../lib/general.lib.js')
+import BaseModel from './base.model.js'
+import { compareDates } from '../lib/dates.lib.js'
+import { timestampForPostgres, today } from '../lib/general.lib.js'
 
 class LicenceModel extends BaseModel {
   static get tableName() {
@@ -424,4 +422,4 @@ class LicenceModel extends BaseModel {
   }
 }
 
-module.exports = LicenceModel
+export default LicenceModel

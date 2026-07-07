@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats the bill run data ready for presenting in the errored bill run page
  * @module ErroredBillRunPresenter
  */
 
-const { formatFinancialYear, formatLongDate, titleCase } = require('../base.presenter.js')
-const { formatBillRunType, formatChargeScheme, generateBillRunTitle } = require('../billing.presenter.js')
+import { formatFinancialYear, formatLongDate, titleCase } from '../base.presenter.js'
+import { formatBillRunType, formatChargeScheme, generateBillRunTitle } from '../billing.presenter.js'
 
 /**
  * Prepares and processes bill run data for presentation
@@ -58,6 +56,6 @@ function _errorMessage(errorCode) {
   return 'No error code was assigned. We have no further information at this time.'
 }
 
-module.exports = {
+export default {
   go
 }

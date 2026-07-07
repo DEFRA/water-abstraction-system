@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for licence_documents (crm_v2.documents)
  * @module LicenceDocumentModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 /**
  * Represents an instance of a licence document record
@@ -52,4 +50,4 @@ class LicenceDocumentModel extends BaseModel {
   }
 }
 
-module.exports = LicenceDocumentModel
+export default LicenceDocumentModel

@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats error details from a notification ready for presenting in the view notification page
  * @module NotificationErrorPresenter
@@ -107,6 +105,6 @@ function _extractFromNotifyError(notifyError) {
   return 'Internal system error'
 }
 
-module.exports = {
+export default {
   go
 }

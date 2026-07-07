@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Handles user submission for the review charge reference authorised page
  * @module SubmitAuthorisedService
  */
 
-const AuthorisedPresenter = require('../../../presenters/bill-runs/review/authorised.presenter.js')
-const AuthorisedValidator = require('../../../validators/bill-runs/review/authorised.validator.js')
-const FetchReviewChargeReferenceService = require('./fetch-review-charge-reference.service.js')
-const ReviewChargeReferenceModel = require('../../../models/review-charge-reference.model.js')
+import AuthorisedPresenter from '../../../presenters/bill-runs/review/authorised.presenter.js'
+import AuthorisedValidator from '../../../validators/bill-runs/review/authorised.validator.js'
+import FetchReviewChargeReferenceService from './fetch-review-charge-reference.service.js'
+import ReviewChargeReferenceModel from '../../../models/review-charge-reference.model.js'
 
 /**
  * Orchestrates validating the data for the amend authorised volume page and patching the db value
@@ -61,6 +59,6 @@ function _validate(payload) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

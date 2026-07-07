@@ -1,13 +1,12 @@
-'use strict'
-
 /**
  * Add an `onPreResponse` listener handle Boom errors and return the appropriate error page
  * @module RequestNotifierPlugin
  */
 
-const { HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+import ErrorPagesService from '../services/plugins/error-pages.service.js'
 
-const ErrorPagesService = require('../services/plugins/error-pages.service.js')
+const { HTTP_STATUS_OK } = http2.constants
 
 const ErrorPagesPlugin = {
   plugin: {
@@ -34,4 +33,4 @@ const ErrorPagesPlugin = {
   }
 }
 
-module.exports = ErrorPagesPlugin
+export default ErrorPagesPlugin

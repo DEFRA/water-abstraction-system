@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Updates the status counts and determines the overall status for the provided notices
  * @module UpdateNoticeService
  */
 
-const { db } = require('../../../db/db.js')
-const { timestampForPostgres } = require('../../lib/general.lib.js')
+import { db } from '../../../db/db.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Updates the status counts and determines the overall status for the provided notices
@@ -94,6 +92,6 @@ function _query() {
   `
 }
 
-module.exports = {
+export default {
   go
 }

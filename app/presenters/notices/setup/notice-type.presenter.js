@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/notice-type` page
  * @module NoticeTypePresenter
  */
 
-const { NoticeType, NoticeJourney, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
+import { NoticeType, NoticeJourney, NoticeTypes } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/notice-type` page
@@ -91,6 +89,6 @@ function _options(noticeType, journey, auth) {
   return options
 }
 
-module.exports = {
+export default {
   go
 }

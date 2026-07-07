@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Creates a verification notification record for the new user
  * @module CreateVerificationNotificationDal
  */
 
-const NotificationModel = require('../../../models/notification.model.js')
+import NotificationModel from '../../../models/notification.model.js'
 
-const { domains } = require('../../../../config/server.config.js')
+import { domains } from '../../../../config/server.config.js'
 
 /**
  * Creates a verification notification record for the new user
@@ -32,6 +30,6 @@ async function go(email, resetGuid) {
   return NotificationModel.query().insert(notificationData)
 }
 
-module.exports = {
+export default {
   go
 }

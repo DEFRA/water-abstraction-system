@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for charge_elements (water.charge_purposes)
  * @module ChargeElementModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class ChargeElementModel extends BaseModel {
   static get tableName() {
@@ -44,4 +42,4 @@ class ChargeElementModel extends BaseModel {
   }
 }
 
-module.exports = ChargeElementModel
+export default ChargeElementModel

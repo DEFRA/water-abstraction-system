@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates allocating a single volume to return submission lines using the abstraction period dates given.
  * @module AllocateSingleVolumeToLinesService
  */
 
-const Big = require('big.js')
+import Big from 'big.js'
 
-const { convertFromCubicMetres, convertToCubicMetres } = require('../../../lib/general.lib.js')
+import { convertFromCubicMetres, convertToCubicMetres } from '../../../lib/general.lib.js'
 
 const MAX_DECIMAL = 6
 
@@ -110,6 +108,6 @@ function _lineWithinAbstractionPeriod(lineStartDate, lineEndDate, fromFullDate, 
   return lineStartDate >= fromFullDate && lineEndDate <= toFullDate
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates sending the first main notice to Notify, then checking if an alternate needs creating and sending
  * @module SendNoticeService
  */
 
-const SendAlternateNoticeService = require('./send-alternate-notice.service.js')
-const SendMainNoticeService = require('./send-main-notice.service.js')
-const UpdateNoticeService = require('../../update-notice.service.js')
+import SendAlternateNoticeService from './send-alternate-notice.service.js'
+import SendMainNoticeService from './send-main-notice.service.js'
+import UpdateNoticeService from '../../update-notice.service.js'
 
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../../lib/general.lib.js')
-const { NoticeType, NoticeTypes } = require('../../../../lib/static-lookups.lib.js')
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../../lib/general.lib.js'
+import { NoticeType, NoticeTypes } from '../../../../lib/static-lookups.lib.js'
 
 /**
  * Orchestrates sending the first main notice to Notify, then checking if an alternate needs creating and sending
@@ -48,6 +46,6 @@ async function go(notice, notifications) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

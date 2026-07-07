@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches failed renewal invitation notifications and creates an alternate notice for them
  * @module RenewalInvitationAlternateNoticeService
  */
 
-const CreateAlternateRenewalNoticeService = require('../create-alternate-renewal-notice.service.js')
-const FetchFailedRenewalInvitationsService = require('../renewal-notice/fetch-failed-renewal-invitations.service.js')
+import CreateAlternateRenewalNoticeService from '../create-alternate-renewal-notice.service.js'
+import FetchFailedRenewalInvitationsService from '../renewal-notice/fetch-failed-renewal-invitations.service.js'
 
 /**
  * Fetches failed renewal invitation notifications and creates an alternate notice for them
@@ -36,6 +34,6 @@ async function go(mainNotice) {
   return { notice, notificationIds, notifications }
 }
 
-module.exports = {
+export default {
   go
 }

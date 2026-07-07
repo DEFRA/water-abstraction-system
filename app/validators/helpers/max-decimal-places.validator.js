@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Custom JOI validator to check a value does not have more than the specified number of decimal places
  *
@@ -28,6 +26,6 @@ function maxDecimalPlaces(maxDecimals) {
     return helpers.error('custom.maxDecimals')
   }
 }
-module.exports = {
+export default {
   maxDecimalPlaces
 }

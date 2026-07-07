@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Helper methods to deal with return periods
  * @module ReturnPeriodLib
  */
 
-const { compareDates, sameDate } = require('./dates.lib.js')
-const { returnPeriodDates } = require('./static-lookups.lib.js')
+import { compareDates, sameDate } from './dates.lib.js'
+import { returnPeriodDates } from './static-lookups.lib.js'
 
 /**
  * Determine return periods for a given return cycle.
@@ -399,7 +397,7 @@ function _cycleStartDate(determinationDate, period) {
   return new Date(`${startYear}-${startMonth}-${startDay}`)
 }
 
-module.exports = {
+export default {
   determineReturnsPeriods,
   determineUpcomingReturnsPeriods,
   determineUpcomingReturnPeriods

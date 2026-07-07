@@ -1,8 +1,6 @@
-'use strict'
-
 const tableName = 'review_return_results'
 
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema
     .createTable(tableName, (table) => {
       // Primary Key
@@ -39,6 +37,6 @@ exports.up = function (knex) {
     })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.dropTableIfExists(tableName)
 }

@@ -1,6 +1,4 @@
-'use strict'
-
-const RootController = require('../controllers/root.controller.js')
+import RootController from '../controllers/root.controller.js'
 
 const routes = [
   {
@@ -37,4 +35,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

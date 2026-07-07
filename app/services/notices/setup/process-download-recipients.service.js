@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates fetching and formatting the data needed for the notices setup download link
  * @module ProcessDownloadRecipientsService
  */
 
-const DownloadAbstractionAlertPresenter = require('../../../presenters/notices/setup/download-abstraction-alert.presenter.js')
-const DownloadRenewalInvitationPresenter = require('../../../presenters/notices/setup/download-renewal-invitation.presenter.js')
-const DownloadReturnsNoticePresenter = require('../../../presenters/notices/setup/download-returns-notice.presenter.js')
-const FetchRecipientsService = require('./fetch-recipients.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
+import DownloadAbstractionAlertPresenter from '../../../presenters/notices/setup/download-abstraction-alert.presenter.js'
+import DownloadRenewalInvitationPresenter from '../../../presenters/notices/setup/download-renewal-invitation.presenter.js'
+import DownloadReturnsNoticePresenter from '../../../presenters/notices/setup/download-returns-notice.presenter.js'
+import FetchRecipientsService from './fetch-recipients.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { NoticeJourney, NoticeType } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Orchestrates fetching and formatting the data needed for the notices setup download link
@@ -50,6 +48,6 @@ async function _formattedData(recipients, session) {
   return DownloadReturnsNoticePresenter.go(recipients, session)
 }
 
-module.exports = {
+export default {
   go
 }

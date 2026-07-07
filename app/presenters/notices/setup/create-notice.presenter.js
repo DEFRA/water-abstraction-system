@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats a notice `SessionModel` instance into the data needed for a 'notice' record
  * @module CreateNoticePresenter
  */
 
-const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
-const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
-const { futureDueDate } = require('../base.presenter.js')
+import { NoticeJourney, NoticeType } from '../../../lib/static-lookups.lib.js'
+import { formatDateObjectToISO } from '../../../lib/dates.lib.js'
+import { futureDueDate } from '../base.presenter.js'
 
 /**
  * Formats a notice `SessionModel` instance into the data needed for a 'notice' record
@@ -115,6 +113,6 @@ function _summer(returnsPeriod) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

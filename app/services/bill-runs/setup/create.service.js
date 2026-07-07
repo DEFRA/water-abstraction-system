@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Used to create the new bill run at the end of the setup bill run journey
  * @module CreateService
  */
 
-const LegacyCreateBillRunRequest = require('../../../requests/legacy/create-bill-run.request.js')
-const StartBillRunProcessService = require('../start-bill-run-process.service.js')
-const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
+import LegacyCreateBillRunRequest from '../../../requests/legacy/create-bill-run.request.js'
+import StartBillRunProcessService from '../start-bill-run-process.service.js'
+import { engineTriggers } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Used to create the new bill run at the end of the setup bill run journey
@@ -36,6 +34,6 @@ async function go(session, blockingResults, user) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

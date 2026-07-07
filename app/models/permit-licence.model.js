@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for permit_licences (permit.licence)
  * @module PermitLicenceModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class PermitLicenceModel extends BaseModel {
   static get tableName() {
@@ -33,4 +31,4 @@ class PermitLicenceModel extends BaseModel {
   }
 }
 
-module.exports = PermitLicenceModel
+export default PermitLicenceModel

@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates presenting the data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-alert` page
  *
  * @module ViewPreviewCheckAlertService
  */
 
-const CheckAlertPresenter = require('../../../../presenters/notices/setup/preview/preview-check-alert.presenter.js')
-const FetchAbstractionAlertRecipientsDal = require('../../../../dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+import CheckAlertPresenter from '../../../../presenters/notices/setup/preview/preview-check-alert.presenter.js'
+import FetchAbstractionAlertRecipientsDal from '../../../../dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates presenting the data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-alert` page
@@ -41,6 +39,6 @@ async function _recipientLicenceRefs(contactHashId, session) {
   return matchedRecipient.licence_refs
 }
 
-module.exports = {
+export default {
   go
 }

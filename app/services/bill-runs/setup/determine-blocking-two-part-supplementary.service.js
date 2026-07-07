@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Determines if an existing bill run will block a user from creating a new two-part supplementary bill run
  * @module DetermineBlockingTwoPartSupplementaryService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import { engineTriggers } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Determines if an existing bill run will block a user from creating a new two-part supplementary bill run
@@ -90,6 +88,6 @@ async function _toFinancialYearEnding(regionId, year) {
   return billRun ? year : 0
 }
 
-module.exports = {
+export default {
   go
 }

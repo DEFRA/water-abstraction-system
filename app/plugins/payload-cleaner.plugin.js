@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Plugin that handles 'cleaning' payloads of empty or null properties, extraneous whitespace and any malicious content
  * @module RequestNotifierPlugin
  */
 
-const PayloadCleaningService = require('../services/plugins/payload-cleaning.service.js')
+import PayloadCleaningService from '../services/plugins/payload-cleaning.service.js'
 
 const PayloadCleanerPlugin = {
   name: 'payload-cleaner',
@@ -22,4 +20,4 @@ const PayloadCleanerPlugin = {
   }
 }
 
-module.exports = PayloadCleanerPlugin
+export default PayloadCleanerPlugin

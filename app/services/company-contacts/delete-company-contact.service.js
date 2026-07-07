@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Deletes the company contact
  * @module DeleteCompanyContactService
  */
 
-const CompanyContactModel = require('../../models/company-contact.model.js')
-const { timestampForPostgres } = require('../../lib/general.lib.js')
+import CompanyContactModel from '../../models/company-contact.model.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Deletes the company contact
@@ -27,6 +25,6 @@ async function go(id, notified) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Uses the session data to generate the data sets required to create the return version requirements for a licence
  * @module GenerateReturnVersionRequirementsService
  */
 
-const FetchOtherPurposeIdsDal = require('../../../../dal/return-versions/fetch-other-purpose-ids.dal.js')
+import FetchOtherPurposeIdsDal from '../../../../dal/return-versions/fetch-other-purpose-ids.dal.js'
 
 /**
  * Uses the session data to generate the data sets required to create the return version requirements for a licence
@@ -73,6 +71,6 @@ async function _generateReturnRequirementPurposes(licenceId, purposes) {
   return returnRequirementPurposes
 }
 
-module.exports = {
+export default {
   go
 }

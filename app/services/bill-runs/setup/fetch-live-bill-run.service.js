@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the latest 'live' bill run for the supplied region and financial year
  * @module FetchLiveBillRunService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
+import BillRunModel from '../../../models/bill-run.model.js'
 
 /**
  * Fetches the latest 'live' bill run for the supplied region and financial year
@@ -33,6 +31,6 @@ async function go(regionId, toFinancialYearEnding) {
     .first()
 }
 
-module.exports = {
+export default {
   go
 }

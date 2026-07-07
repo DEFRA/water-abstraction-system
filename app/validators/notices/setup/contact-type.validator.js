@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/notices/setup/{sessionId}/contact-type` page
  *
  * @module ContactTypeValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/notices/setup/{sessionId}/contact-type` page
@@ -41,6 +39,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

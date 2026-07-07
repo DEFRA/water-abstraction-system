@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the '/companies/{id}/billing-accounts' page
  * @module BillingAccountsPresenter
@@ -35,6 +33,6 @@ function _billingAccounts(billingAccounts) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

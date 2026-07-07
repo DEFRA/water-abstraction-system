@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/cancel` page
  *
  * @module ViewCancelAlertsService
  */
 
-const CancelAlertsPresenter = require('../../../../presenters/notices/setup/abstraction-alerts/cancel-alerts.presenter.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+import CancelAlertsPresenter from '../../../../presenters/notices/setup/abstraction-alerts/cancel-alerts.presenter.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/cancel` page
@@ -27,6 +25,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

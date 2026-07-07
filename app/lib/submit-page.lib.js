@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Submit page helper methods
  * @module SubmitPageLib
@@ -131,7 +129,7 @@ function processSavedFilters(yar, filterKey) {
   }
 }
 
-module.exports = {
+export default {
   clearFilters,
   handleOneOptionSelected,
   processSavedFilters

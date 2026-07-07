@@ -1,14 +1,13 @@
-'use strict'
-
 /**
  * Controller for /health endpoints
  * @module HealthController
  */
 
-const { HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+import DatabaseHealthCheckService from '../services/health/database-health-check.service.js'
+import InfoService from '../services/health/info.service.js'
 
-const DatabaseHealthCheckService = require('../services/health/database-health-check.service.js')
-const InfoService = require('../services/health/info.service.js')
+const { HTTP_STATUS_OK } = http2.constants
 
 async function airbrake(request, _h) {
   // First section tests connecting to Airbrake through a manual notification
@@ -38,7 +37,7 @@ async function info(_request, h) {
   return h.view('health/info.njk', pageData)
 }
 
-module.exports = {
+export default {
   airbrake,
   database,
   info

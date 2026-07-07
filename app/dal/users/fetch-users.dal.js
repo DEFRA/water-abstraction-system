@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Fetches the selected page of users for /users
  * @module FetchUsersDal
  */
 
-const UserModel = require('../../models/user.model.js')
-const { userPermissions } = require('../../lib/static-lookups.lib.js')
+import UserModel from '../../models/user.model.js'
+import { userPermissions } from '../../lib/static-lookups.lib.js'
 
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
 
 /**
  * Fetches the selected page of users for /users
@@ -350,6 +348,6 @@ function _fetchQuery() {
     .modify('permissions')
 }
 
-module.exports = {
+export default {
   go
 }

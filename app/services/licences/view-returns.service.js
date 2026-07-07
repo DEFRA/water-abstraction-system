@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the licence returns page
  * @module ViewReturnsService
  */
 
-const DetermineLicenceHasReturnVersionsService = require('./determine-licence-has-return-versions.service.js')
-const FetchReturnsService = require('./fetch-returns.service.js')
-const FetchLicenceService = require('../../services/licences/fetch-licence.service.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const ReturnsPresenter = require('../../presenters/licences/returns.presenter.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import DetermineLicenceHasReturnVersionsService from './determine-licence-has-return-versions.service.js'
+import FetchReturnsService from './fetch-returns.service.js'
+import FetchLicenceService from '../../services/licences/fetch-licence.service.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import ReturnsPresenter from '../../presenters/licences/returns.presenter.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence summary page
@@ -46,6 +44,6 @@ async function go(licenceId, auth, page) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the 'current' return versions for a licence
  * @module FetchCurrentReturnVersionsDal
  */
 
-const ReturnVersionModel = require('../../models/return-version.model.js')
+import ReturnVersionModel from '../../models/return-version.model.js'
 
 /**
  * Fetches the 'current' return versions for a licence
@@ -24,6 +22,6 @@ async function go(licenceId, trx) {
     .orderBy('startDate', 'desc')
 }
 
-module.exports = {
+export default {
   go
 }

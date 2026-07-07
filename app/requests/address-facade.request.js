@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Use for making http requests to the EA Address facade https://github.com/DEFRA/ea-address-facade
  * @module AddressFacadeRequest
  */
 
-const BaseRequest = require('./base.request.js')
+import BaseRequest from './base.request.js'
 
-const addressFacadeConfig = require('../../config/address-facade.config.js')
+import addressFacadeConfig from '../../config/address-facade.config.js'
 
 /**
  * Sends a GET request to the Address Facade
@@ -75,6 +73,6 @@ function _requestOptions() {
   }
 }
 
-module.exports = {
+export default {
   get
 }

@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the `/billing-accounts/setup/{billingAccountId}/contact` page
  *
  * @module SubmitContactService
  */
 
-const ContactPresenter = require('../../../presenters/billing-accounts/setup/contact.presenter.js')
-const ContactValidator = require('../../../validators/billing-accounts/setup/contact.validator.js')
-const FetchCompanyContactsService = require('./fetch-company-contacts.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import ContactPresenter from '../../../presenters/billing-accounts/setup/contact.presenter.js'
+import ContactValidator from '../../../validators/billing-accounts/setup/contact.validator.js'
+import FetchCompanyContactsService from './fetch-company-contacts.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the `/billing-accounts/setup/{billingAccountId}/contact` page
@@ -89,6 +87,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

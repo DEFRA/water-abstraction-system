@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Determines if an existing bill run will block a user from creating a new two-part annual bill run
  * @module DetermineBlockingTwoPartAnnualService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const FetchLiveBillRunService = require('./fetch-live-bill-run.service.js')
-const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import FetchLiveBillRunService from './fetch-live-bill-run.service.js'
+import { engineTriggers } from '../../../lib/static-lookups.lib.js'
 
 const LAST_PRESROC_YEAR = 2022
 
@@ -84,6 +82,6 @@ function _trigger(match, toFinancialYearEnding) {
   return engineTriggers.old
 }
 
-module.exports = {
+export default {
   go
 }

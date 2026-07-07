@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting external user data for `/users/external/{id}/communications` page
  *
  * @module ViewCommunicationsService
  */
 
-const CommunicationsPresenter = require('../../../presenters/users/external/communications.presenter.js')
-const FetchNotificationsDal = require('../../../dal/users/external/fetch-notifications.dal.js')
-const FetchUserDal = require('../../../dal/users/fetch-user.dal.js')
-const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
+import CommunicationsPresenter from '../../../presenters/users/external/communications.presenter.js'
+import FetchNotificationsDal from '../../../dal/users/external/fetch-notifications.dal.js'
+import FetchUserDal from '../../../dal/users/fetch-user.dal.js'
+import PaginatorPresenter from '../../../presenters/paginator.presenter.js'
 
 /**
  * Orchestrates fetching and presenting external user data for `/users/external/{id}/communications` page
@@ -44,6 +42,6 @@ async function go(id, auth, page, back = 'users') {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,71 +1,69 @@
-'use strict'
-
 /**
  * Loads the entities requested by our acceptance tests when `/data/load` is called into the DB using the helpers
  * @module LoadService
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
-const ExpandedError = require('../../../errors/expanded.error.js')
+import ExpandedError from '../../../errors/expanded.error.js'
 
-const AddressHelper = require('../../../../test/support/helpers/address.helper.js')
-const BillLicenceHelper = require('../../../../test/support/helpers/bill-licence.helper.js')
-const BillRunChargeVersionYearHelper = require('../../../../test/support/helpers/bill-run-charge-version-year.helper.js')
-const BillRunVolumeHelper = require('../../../../test/support/helpers/bill-run-volume.helper.js')
-const BillRunHelper = require('../../../../test/support/helpers/bill-run.helper.js')
-const BillHelper = require('../../../../test/support/helpers/bill.helper.js')
-const BillingAccountAddressHelper = require('../../../../test/support/helpers/billing-account-address.helper.js')
-const BillingAccountHelper = require('../../../../test/support/helpers/billing-account.helper.js')
-const ChangeReasonHelper = require('../../../../test/support/helpers/change-reason.helper.js')
-const ChargeElementHelper = require('../../../../test/support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../../../test/support/helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../../../../test/support/helpers/charge-version.helper.js')
-const CompanyAddressHelper = require('../../../../test/support/helpers/company-address.helper.js')
-const CompanyContactHelper = require('../../../../test/support/helpers/company-contact.helper.js')
-const CompanyHelper = require('../../../../test/support/helpers/company.helper.js')
-const ContactHelper = require('../../../../test/support/helpers/contact.helper.js')
-const EventHelper = require('../../../../test/support/helpers/event.helper.js')
-const LicenceAgreementHelper = require('../../../../test/support/helpers/licence-agreement.helper.js')
-const LicenceDocumentHeaderHelper = require('../../../../test/support/helpers/licence-document-header.helper.js')
-const LicenceDocumentRoleHelper = require('../../../../test/support/helpers/licence-document-role.helper.js')
-const LicenceDocumentHelper = require('../../../../test/support/helpers/licence-document.helper.js')
-const LicenceEndDateChangeHelper = require('../../../../test/support/helpers/licence-end-date-change.helper.js')
-const LicenceEntityRoleHelper = require('../../../../test/support/helpers/licence-entity-role.helper.js')
-const LicenceEntityHelper = require('../../../../test/support/helpers/licence-entity.helper.js')
-const LicenceMonitoringStationHelper = require('../../../../test/support/helpers/licence-monitoring-station.helper.js')
-const LicenceRoleHelper = require('../../../../test/support/helpers/licence-role.helper.js')
-const LicenceSupplementaryYearHelper = require('../../../../test/support/helpers/licence-supplementary-year.helper.js')
-const LicenceVersionPurposeConditionHelper = require('../../../../test/support/helpers/licence-version-purpose-condition.helper.js')
-const LicenceVersionPurposeHelper = require('../../../../test/support/helpers/licence-version-purpose.helper.js')
-const LicenceVersionPurposePointHelper = require('../../../../test/support/helpers/licence-version-purpose-point.helper.js')
-const LicenceVersionHelper = require('../../../../test/support/helpers/licence-version.helper.js')
-const LicenceHelper = require('../../../../test/support/helpers/licence.helper.js')
-const ModLogHelper = require('../../../../test/support/helpers/mod-log.helper.js')
-const MonitoringStationHelper = require('../../../../test/support/helpers/monitoring-station.helper.js')
-const NotificationHelper = require('../../../../test/support/helpers/notification.helper.js')
-const PointHelper = require('../../../../test/support/helpers/point.helper.js')
-const PermitLicenceHelper = require('../../../../test/support/helpers/permit-licence.helper.js')
-const ReturnCycleHelper = require('../../../../test/support/helpers/return-cycle.helper.js')
-const ReturnLogHelper = require('../../../../test/support/helpers/return-log.helper.js')
-const ReturnRequirementPointHelper = require('../../../../test/support/helpers/return-requirement-point.helper.js')
-const ReturnRequirementPurposeHelper = require('../../../../test/support/helpers/return-requirement-purpose.helper.js')
-const ReturnRequirementHelper = require('../../../../test/support/helpers/return-requirement.helper.js')
-const ReturnSubmissionLineHelper = require('../../../../test/support/helpers/return-submission-line.helper.js')
-const ReturnSubmissionHelper = require('../../../../test/support/helpers/return-submission.helper.js')
-const ReturnVersionHelper = require('../../../../test/support/helpers/return-version.helper.js')
-const ReviewChargeElementReturnHelper = require('../../../../test/support/helpers/review-charge-element-return.helper.js')
-const ReviewChargeElementHelper = require('../../../../test/support/helpers/review-charge-element.helper.js')
-const ReviewChargeReferenceHelper = require('../../../../test/support/helpers/review-charge-reference.helper.js')
-const ReviewChargeVersionHelper = require('../../../../test/support/helpers/review-charge-version.helper.js')
-const ReviewLicenceHelper = require('../../../../test/support/helpers/review-licence.helper.js')
-const ReviewReturnHelper = require('../../../../test/support/helpers/review-return.helper.js')
-const SessionHelper = require('../../../../test/support/helpers/session.helper.js')
-const TransactionHelper = require('../../../../test/support/helpers/transaction.helper.js')
-const UserGroupHelper = require('../../../../test/support/helpers/user-group.helper.js')
-const UserRoleHelper = require('../../../../test/support/helpers/user-role.helper.js')
-const UserHelper = require('../../../../test/support/helpers/user.helper.js')
-const WorkflowHelper = require('../../../../test/support/helpers/workflow.helper.js')
+import AddressHelper from '../../../../test/support/helpers/address.helper.js'
+import BillLicenceHelper from '../../../../test/support/helpers/bill-licence.helper.js'
+import BillRunChargeVersionYearHelper from '../../../../test/support/helpers/bill-run-charge-version-year.helper.js'
+import BillRunVolumeHelper from '../../../../test/support/helpers/bill-run-volume.helper.js'
+import BillRunHelper from '../../../../test/support/helpers/bill-run.helper.js'
+import BillHelper from '../../../../test/support/helpers/bill.helper.js'
+import BillingAccountAddressHelper from '../../../../test/support/helpers/billing-account-address.helper.js'
+import BillingAccountHelper from '../../../../test/support/helpers/billing-account.helper.js'
+import ChangeReasonHelper from '../../../../test/support/helpers/change-reason.helper.js'
+import ChargeElementHelper from '../../../../test/support/helpers/charge-element.helper.js'
+import ChargeReferenceHelper from '../../../../test/support/helpers/charge-reference.helper.js'
+import ChargeVersionHelper from '../../../../test/support/helpers/charge-version.helper.js'
+import CompanyAddressHelper from '../../../../test/support/helpers/company-address.helper.js'
+import CompanyContactHelper from '../../../../test/support/helpers/company-contact.helper.js'
+import CompanyHelper from '../../../../test/support/helpers/company.helper.js'
+import ContactHelper from '../../../../test/support/helpers/contact.helper.js'
+import EventHelper from '../../../../test/support/helpers/event.helper.js'
+import LicenceAgreementHelper from '../../../../test/support/helpers/licence-agreement.helper.js'
+import LicenceDocumentHeaderHelper from '../../../../test/support/helpers/licence-document-header.helper.js'
+import LicenceDocumentRoleHelper from '../../../../test/support/helpers/licence-document-role.helper.js'
+import LicenceDocumentHelper from '../../../../test/support/helpers/licence-document.helper.js'
+import LicenceEndDateChangeHelper from '../../../../test/support/helpers/licence-end-date-change.helper.js'
+import LicenceEntityRoleHelper from '../../../../test/support/helpers/licence-entity-role.helper.js'
+import LicenceEntityHelper from '../../../../test/support/helpers/licence-entity.helper.js'
+import LicenceMonitoringStationHelper from '../../../../test/support/helpers/licence-monitoring-station.helper.js'
+import LicenceRoleHelper from '../../../../test/support/helpers/licence-role.helper.js'
+import LicenceSupplementaryYearHelper from '../../../../test/support/helpers/licence-supplementary-year.helper.js'
+import LicenceVersionPurposeConditionHelper from '../../../../test/support/helpers/licence-version-purpose-condition.helper.js'
+import LicenceVersionPurposeHelper from '../../../../test/support/helpers/licence-version-purpose.helper.js'
+import LicenceVersionPurposePointHelper from '../../../../test/support/helpers/licence-version-purpose-point.helper.js'
+import LicenceVersionHelper from '../../../../test/support/helpers/licence-version.helper.js'
+import LicenceHelper from '../../../../test/support/helpers/licence.helper.js'
+import ModLogHelper from '../../../../test/support/helpers/mod-log.helper.js'
+import MonitoringStationHelper from '../../../../test/support/helpers/monitoring-station.helper.js'
+import NotificationHelper from '../../../../test/support/helpers/notification.helper.js'
+import PointHelper from '../../../../test/support/helpers/point.helper.js'
+import PermitLicenceHelper from '../../../../test/support/helpers/permit-licence.helper.js'
+import ReturnCycleHelper from '../../../../test/support/helpers/return-cycle.helper.js'
+import ReturnLogHelper from '../../../../test/support/helpers/return-log.helper.js'
+import ReturnRequirementPointHelper from '../../../../test/support/helpers/return-requirement-point.helper.js'
+import ReturnRequirementPurposeHelper from '../../../../test/support/helpers/return-requirement-purpose.helper.js'
+import ReturnRequirementHelper from '../../../../test/support/helpers/return-requirement.helper.js'
+import ReturnSubmissionLineHelper from '../../../../test/support/helpers/return-submission-line.helper.js'
+import ReturnSubmissionHelper from '../../../../test/support/helpers/return-submission.helper.js'
+import ReturnVersionHelper from '../../../../test/support/helpers/return-version.helper.js'
+import ReviewChargeElementReturnHelper from '../../../../test/support/helpers/review-charge-element-return.helper.js'
+import ReviewChargeElementHelper from '../../../../test/support/helpers/review-charge-element.helper.js'
+import ReviewChargeReferenceHelper from '../../../../test/support/helpers/review-charge-reference.helper.js'
+import ReviewChargeVersionHelper from '../../../../test/support/helpers/review-charge-version.helper.js'
+import ReviewLicenceHelper from '../../../../test/support/helpers/review-licence.helper.js'
+import ReviewReturnHelper from '../../../../test/support/helpers/review-return.helper.js'
+import SessionHelper from '../../../../test/support/helpers/session.helper.js'
+import TransactionHelper from '../../../../test/support/helpers/transaction.helper.js'
+import UserGroupHelper from '../../../../test/support/helpers/user-group.helper.js'
+import UserRoleHelper from '../../../../test/support/helpers/user-role.helper.js'
+import UserHelper from '../../../../test/support/helpers/user.helper.js'
+import WorkflowHelper from '../../../../test/support/helpers/workflow.helper.js'
 
 // The entities defined in the payload need to match the properties of this object else you'll get an error. The loader
 // uses the matched value to determine which helper to use to 'load' the entity instance, and whether we can flag it
@@ -401,6 +399,6 @@ async function _selector(schema, table, select, where, value) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

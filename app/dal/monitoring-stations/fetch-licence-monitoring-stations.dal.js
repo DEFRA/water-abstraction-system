@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches the licence monitoring stations, plus the parent licence and monitoring station for view licence page
  * @module FetchLicenceMonitoringStationsDal
  */
 
-const LicenceModel = require('../../models/licence.model.js')
-const LicenceMonitoringStationModel = require('../../models/licence-monitoring-station.model.js')
-const MonitoringStationModel = require('../../models/monitoring-station.model.js')
+import LicenceModel from '../../models/licence.model.js'
+import LicenceMonitoringStationModel from '../../models/licence-monitoring-station.model.js'
+import MonitoringStationModel from '../../models/monitoring-station.model.js'
 
 /**
  * Fetches the licence monitoring stations, plus the parent licence and monitoring station for view licence page
@@ -84,6 +82,6 @@ async function _fetchMonitoringStation(monitoringStationId) {
   return MonitoringStationModel.query().findById(monitoringStationId).select(['id', 'label', 'riverName'])
 }
 
-module.exports = {
+export default {
   go
 }

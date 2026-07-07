@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Determines if an existing bill run will block a user from creating a new annual bill run
  * @module DetermineBlockingAnnualService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const FetchLiveBillRunService = require('./fetch-live-bill-run.service.js')
-const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')
-const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import FetchLiveBillRunService from './fetch-live-bill-run.service.js'
+import { determineCurrentFinancialYear } from '../../../lib/general.lib.js'
+import { engineTriggers } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Determines if an existing bill run will block a user from creating a new annual bill run
@@ -69,6 +67,6 @@ function _toFinancialYearEnding() {
   return currentFinancialYear.endDate.getFullYear()
 }
 
-module.exports = {
+export default {
   go
 }

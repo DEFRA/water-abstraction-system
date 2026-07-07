@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Get the message data for a notification from GOV.UK Notify
  * @module NotifyStatusRequest
  */
 
-const NotifyRequest = require('../notify.request.js')
+import NotifyRequest from '../notify.request.js'
 
 /**
  * Get the message data for a notification from GOV.UK Notify
@@ -28,6 +26,6 @@ async function send(notificationId) {
   return NotifyRequest.get(path)
 }
 
-module.exports = {
+export default {
   send
 }

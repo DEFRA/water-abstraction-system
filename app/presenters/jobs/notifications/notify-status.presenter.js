@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Determines the `status` and `notifyStatus` to apply to a notification after fetching the current status from Notify
  * @module NotifyStatusPresenter
@@ -112,6 +110,6 @@ function _letterStatus(notifyStatus) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

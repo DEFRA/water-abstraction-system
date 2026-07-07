@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Handles updating a review licence record when the progress or status buttons are clicked
  * @module SubmitReviewLicenceService
  */
 
-const ReviewLicenceModel = require('../../../models/review-licence.model.js')
+import ReviewLicenceModel from '../../../models/review-licence.model.js'
 
 /**
  * Handles updating a review licence record when the progress or status buttons are clicked
@@ -72,6 +70,6 @@ async function _update(reviewLicenceId, parsedPayload) {
   await ReviewLicenceModel.query().findById(reviewLicenceId).patch(patch)
 }
 
-module.exports = {
+export default {
   go
 }

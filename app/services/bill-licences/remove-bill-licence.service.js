@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the remove bill licence page
  * @module RemoveBillLicenceService
  */
 
-const FetchBillLicenceSummaryService = require('./fetch-bill-licence-summary.service.js')
-const RemoveBillLicencePresenter = require('../../presenters/bill-licences/remove-bill-licence.presenter.js')
+import FetchBillLicenceSummaryService from './fetch-bill-licence-summary.service.js'
+import RemoveBillLicencePresenter from '../../presenters/bill-licences/remove-bill-licence.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the remove bill licence page
@@ -27,6 +25,6 @@ async function go(billLicenceId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

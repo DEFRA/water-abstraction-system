@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/users` page
  * @module IndexUsersPresenter
  */
 
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
 
 /**
  * Formats data for the `/users` page
@@ -64,6 +62,6 @@ function _userRowData(users) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

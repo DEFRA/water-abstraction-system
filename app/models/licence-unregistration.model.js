@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for licence_unregistrations (water.licence_unregistrations)
  * @module LicenceUnregistrationModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class LicenceUnregistrationModel extends BaseModel {
   static get tableName() {
@@ -36,4 +34,4 @@ class LicenceUnregistrationModel extends BaseModel {
   }
 }
 
-module.exports = LicenceUnregistrationModel
+export default LicenceUnregistrationModel

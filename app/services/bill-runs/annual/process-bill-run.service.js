@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Process a given annual bill run for the given billing periods
  * @module ProcessBillRunService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const BillRunError = require('../../../errors/bill-run.error.js')
-const ChargingModuleGenerateBillRunRequest = require('../../../requests/charging-module/generate-bill-run.request.js')
-const FetchBillingAccountsService = require('./fetch-billing-accounts.service.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
-const LegacyRefreshBillRunRequest = require('../../../requests/legacy/refresh-bill-run.request.js')
-const ProcessBillingPeriodService = require('./process-billing-period.service.js')
-const HandleErroredBillRunService = require('../handle-errored-bill-run.service.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import BillRunError from '../../../errors/bill-run.error.js'
+import ChargingModuleGenerateBillRunRequest from '../../../requests/charging-module/generate-bill-run.request.js'
+import FetchBillingAccountsService from './fetch-billing-accounts.service.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
+import LegacyRefreshBillRunRequest from '../../../requests/legacy/refresh-bill-run.request.js'
+import ProcessBillingPeriodService from './process-billing-period.service.js'
+import HandleErroredBillRunService from '../handle-errored-bill-run.service.js'
 
 /**
  * Process a given bill run for the given billing periods
@@ -92,6 +90,6 @@ async function _updateStatus(billRunId, status) {
   await BillRunModel.query().findById(billRunId).patch({ status })
 }
 
-module.exports = {
+export default {
   go
 }

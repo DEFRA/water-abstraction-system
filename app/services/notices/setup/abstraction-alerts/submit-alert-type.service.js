@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-type` page
  *
  * @module SubmitAlertTypeService
  */
 
-const AlertTypePresenter = require('../../../../presenters/notices/setup/abstraction-alerts/alert-type.presenter.js')
-const AlertTypeValidator = require('../../../../validators/notices/setup/alert-type.validator.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+import AlertTypePresenter from '../../../../presenters/notices/setup/abstraction-alerts/alert-type.presenter.js'
+import AlertTypeValidator from '../../../../validators/notices/setup/alert-type.validator.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-type` page
@@ -58,6 +56,6 @@ function _validate(payload, licenceMonitoringStations) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

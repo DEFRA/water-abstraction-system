@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Fetches the return log details needed for the view '/system/return-logs/{id}/return-details' page
  * @module FetchReturnLogDetailsService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const ReturnSubmissionModel = require('../../models/return-submission.model.js')
+import ReturnLogModel from '../../../app/models/return-log.model.js'
+import ReturnSubmissionModel from '../../models/return-submission.model.js'
 
 /**
  * Fetches the return log details needed for the view '/system/return-logs/{id}/return-details' page
@@ -105,6 +103,6 @@ function _returnSubmission(allReturnSubmissions, version) {
   return selectedReturnSubmission
 }
 
-module.exports = {
+export default {
   go
 }

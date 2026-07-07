@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Determines relevant licence monitoring stations for the `abstraction-alerts` journey
  *
  * @module DetermineRelevantLicenceMonitoringStationsService
  */
 
-const DetermineRelevantLicenceMonitoringStationsByAlertTypeService = require('./determine-relevant-licence-monitoring-stations-by-alert-type.service.js')
+import DetermineRelevantLicenceMonitoringStationsByAlertTypeService from './determine-relevant-licence-monitoring-stations-by-alert-type.service.js'
 
 /**
  * Determines relevant licence monitoring stations for the `abstraction-alerts` journey
@@ -48,6 +46,6 @@ function go(licenceMonitoringStations, selectedLicenceMonitoringStations, remove
   return relevantLicenceMonitoringStations
 }
 
-module.exports = {
+export default {
   go
 }

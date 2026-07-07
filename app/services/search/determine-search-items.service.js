@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Determines which items to search for a given query on the /search page
  * @module DetermineSearchItemsService
@@ -133,6 +131,6 @@ function _users(resultTypes, _query, selectedResultType) {
   resultTypes.push('user')
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/region` page
  * @module RegionService
  */
 
-const FetchRegionsService = require('./fetch-regions.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const RegionPresenter = require('../../../presenters/bill-runs/setup/region.presenter.js')
+import FetchRegionsService from './fetch-regions.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import RegionPresenter from '../../../presenters/bill-runs/setup/region.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/region` page
@@ -31,6 +29,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Model for users (idm.users)
  * @module UserModel
  */
 
-const { hashSync } = require('bcryptjs')
-const { Model } = require('objection')
+import { hashSync } from 'bcryptjs'
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
-const { db } = require('../../db/db.js')
-const { userPermissions } = require('../lib/static-lookups.lib.js')
+import BaseModel from './base.model.js'
+import { db } from '../../db/db.js'
+import { userPermissions } from '../lib/static-lookups.lib.js'
 
 class UserModel extends BaseModel {
   static get tableName() {
@@ -378,4 +376,4 @@ class UserModel extends BaseModel {
   }
 }
 
-module.exports = UserModel
+export default UserModel

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/frequency-collected` page
  * @module FrequencyCollectedValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/frequency-collected` page
@@ -38,6 +36,6 @@ function go(payload) {
   return schema.validate(payload)
 }
 
-module.exports = {
+export default {
   go
 }

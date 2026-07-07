@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Format data for the `/return-log/setup/{sessionId}/multiple-entries` page
  * @module MultipleEntriesPresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
-const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
+import { formatLongDate } from '../../base.presenter.js'
+import { returnRequirementFrequencies } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Format data for the `/return-log/setup/{sessionId}/multiple-entries` page
@@ -35,6 +33,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

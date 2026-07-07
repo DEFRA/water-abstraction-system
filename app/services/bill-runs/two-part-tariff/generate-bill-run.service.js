@@ -1,22 +1,16 @@
-'use strict'
-
 /**
  * Generates an annual two-part tariff bill run after the users have completed reviewing its match & allocate results
  * @module GenerateBillRunService
  */
 
-const BillRunError = require('../../../errors/bill-run.error.js')
-const BillRunModel = require('../../../models/bill-run.model.js')
-const ChargingModuleGenerateBillRunRequest = require('../../../requests/charging-module/generate-bill-run.request.js')
-const {
-  calculateAndLogTimeTaken,
-  currentTimeInNanoseconds,
-  timestampForPostgres
-} = require('../../../lib/general.lib.js')
-const FetchBillingAccountsService = require('./fetch-billing-accounts.service.js')
-const HandleErroredBillRunService = require('../handle-errored-bill-run.service.js')
-const LegacyRefreshBillRunRequest = require('../../../requests/legacy/refresh-bill-run.request.js')
-const ProcessBillingPeriodService = require('./process-billing-period.service.js')
+import BillRunError from '../../../errors/bill-run.error.js'
+import BillRunModel from '../../../models/bill-run.model.js'
+import ChargingModuleGenerateBillRunRequest from '../../../requests/charging-module/generate-bill-run.request.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } from '../../../lib/general.lib.js'
+import FetchBillingAccountsService from './fetch-billing-accounts.service.js'
+import HandleErroredBillRunService from '../handle-errored-bill-run.service.js'
+import LegacyRefreshBillRunRequest from '../../../requests/legacy/refresh-bill-run.request.js'
+import ProcessBillingPeriodService from './process-billing-period.service.js'
 
 /**
  * Generates an annual two-part tariff bill run after the users have completed reviewing its match & allocate results
@@ -116,6 +110,6 @@ async function _processBillingPeriod(billingPeriod, billRun) {
   await _finaliseBillRun(billRun, billRunPopulated)
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * General helper methods
  * @module LegacyDbSnakeCaseMappersLib
  */
 
-const { camelCase, knexIdentifierMappers, snakeCase } = require('objection/lib/utils/identifierMapping.js')
+import { camelCase, knexIdentifierMappers, snakeCase } from 'objection/lib/utils/identifierMapping.js'
 
 /**
  * Return an object containing Knex postProcessResponse() and wrapIdentifier() hooks used in Db query and result parsing
@@ -64,6 +62,6 @@ function _legacySnakeCase(
   return snakeCase(str, { upperCase, underscoreBeforeDigits, underscoreBetweenUppercaseLetters })
 }
 
-module.exports = {
+export default {
   legacyDbSnakeCaseMappers
 }

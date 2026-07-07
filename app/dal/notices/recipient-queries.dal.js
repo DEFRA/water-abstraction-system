@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * SQL join fragment for fetching the current licence version
  *
@@ -123,7 +121,7 @@ const primaryUserRecipientQuery = `
     ON le.id = ler.licence_entity_id
 `
 
-module.exports = {
+export default {
   additionalContactRecipientQuery,
   currentLicenceVersionsJoin,
   licenceHolderRecipientQuery,

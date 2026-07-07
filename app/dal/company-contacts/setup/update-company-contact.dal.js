@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Update the company contact data for the '/company-contacts/{id}/check' page
  * @module UpdateCompanyContactDal
  */
 
-const CompanyContactModel = require('../../../models/company-contact.model.js')
-const { today } = require('../../../lib/general.lib.js')
+import CompanyContactModel from '../../../models/company-contact.model.js'
+import { today } from '../../../lib/general.lib.js'
 
 /**
  * Update the company contact data for the '/company-contacts/{id}/check' page
@@ -49,6 +47,6 @@ async function _update(companyContact) {
   )
 }
 
-module.exports = {
+export default {
   go
 }

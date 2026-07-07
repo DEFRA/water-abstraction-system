@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
  * @module SubmitIndexUsersService
  */
 
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
-const FetchUsersDal = require('../../dal/users/fetch-users.dal.js')
-const IndexUsersPresenter = require('../../presenters/users/index-users.presenter.js')
-const IndexValidator = require('../../validators/users/index.validator.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { clearFilters } = require('../../lib/submit-page.lib.js')
+import { formatValidationResult } from '../../presenters/base.presenter.js'
+import FetchUsersDal from '../../dal/users/fetch-users.dal.js'
+import IndexUsersPresenter from '../../presenters/users/index-users.presenter.js'
+import IndexValidator from '../../validators/users/index.validator.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { clearFilters } from '../../lib/submit-page.lib.js'
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
@@ -86,6 +84,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/licence` page
  * @module LicencePresenter
@@ -36,6 +34,6 @@ function _backLink(sessionId, checkPageVisited) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

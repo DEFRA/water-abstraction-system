@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Generates the SQL query for expiring licences
  * @module GenerateExpiringLicencesQueryService
@@ -41,6 +39,6 @@ function _query() {
   `
 }
 
-module.exports = {
+export default {
   go
 }

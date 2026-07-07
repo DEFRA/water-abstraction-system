@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/frequency-collected` page
  * @module FrequencyCollectedService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const FrequencyCollectedPresenter = require('../../../presenters/return-versions/setup/frequency-collected.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import FrequencyCollectedPresenter from '../../../presenters/return-versions/setup/frequency-collected.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/frequency-collected` page
@@ -29,6 +27,6 @@ async function go(sessionId, requirementIndex) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Validates data submitted for the '/users/internal/setup/{sessionId}/email' page
  *
  * @module EmailValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
-const { isFalse } = require('../../../helpers/is-false.validator.js')
+import { isFalse } from '../../../helpers/is-false.validator.js'
 
 /**
  * Validates data submitted for the '/users/internal/setup/{sessionId}/email' page
@@ -40,6 +38,6 @@ function go(payload, emailExists) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

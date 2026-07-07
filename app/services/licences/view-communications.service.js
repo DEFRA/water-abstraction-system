@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the view licence communications tab
  * @module ViewCommunicationsService
  */
 
-const CommunicationsPresenter = require('../../presenters/licences/communications.presenter.js')
-const FetchLicenceService = require('./fetch-licence.service.js')
-const FetchNotificationsDal = require('../../dal/licences/fetch-notifications.dal.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import CommunicationsPresenter from '../../presenters/licences/communications.presenter.js'
+import FetchLicenceService from './fetch-licence.service.js'
+import FetchNotificationsDal from '../../dal/licences/fetch-notifications.dal.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence communications page
@@ -43,6 +41,6 @@ async function go(licenceId, auth, page) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

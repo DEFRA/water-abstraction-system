@@ -1,22 +1,20 @@
-'use strict'
-
 /**
  * Processes the charge versions for a given billing period
  * @module ProcessBillingPeriodService
  */
 
-const BillRunError = require('../../../errors/bill-run.error.js')
-const BillRunModel = require('../../../models/bill-run.model.js')
-const BillModel = require('../../../models/bill.model.js')
-const BillLicenceModel = require('../../../models/bill-licence.model.js')
-const DetermineChargePeriodService = require('../determine-charge-period.service.js')
-const DetermineMinimumChargeService = require('../determine-minimum-charge.service.js')
-const GenerateTransactionsService = require('../generate-transactions.service.js')
-const FetchPreviousTransactionsService = require('../fetch-previous-transactions.service.js')
-const PreGenerateBillingDataService = require('./pre-generate-billing-data.service.js')
-const ProcessSupplementaryTransactionsService = require('../process-supplementary-transactions.service.js')
-const SendTransactionsService = require('../send-transactions.service.js')
-const TransactionModel = require('../../../models/transaction.model.js')
+import BillRunError from '../../../errors/bill-run.error.js'
+import BillRunModel from '../../../models/bill-run.model.js'
+import BillModel from '../../../models/bill.model.js'
+import BillLicenceModel from '../../../models/bill-licence.model.js'
+import DetermineChargePeriodService from '../determine-charge-period.service.js'
+import DetermineMinimumChargeService from '../determine-minimum-charge.service.js'
+import GenerateTransactionsService from '../generate-transactions.service.js'
+import FetchPreviousTransactionsService from '../fetch-previous-transactions.service.js'
+import PreGenerateBillingDataService from './pre-generate-billing-data.service.js'
+import ProcessSupplementaryTransactionsService from '../process-supplementary-transactions.service.js'
+import SendTransactionsService from '../send-transactions.service.js'
+import TransactionModel from '../../../models/transaction.model.js'
 
 /**
  * Creates the bills and transactions in both WRLS and the Charging Module API
@@ -224,6 +222,6 @@ function _generateCalculatedTransactions(billLicenceId, billingPeriod, chargeVer
   }
 }
 
-module.exports = {
+export default {
   go
 }

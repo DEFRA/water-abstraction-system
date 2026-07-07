@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the '/users/internal/setup/{sessionId}/access' page
  * @module AccessPresenter
@@ -27,6 +25,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

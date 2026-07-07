@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Check if any bill runs are being processed or cancelled
  * @module CheckBusyBillRunsService
  */
 
-const { db } = require('../../../db/db.js')
+import { db } from '../../../db/db.js'
 
 /**
  * Check if any bill runs are busy building or cancelling
@@ -44,6 +42,6 @@ async function _fetch() {
   return results[0]
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Process a given two-part tariff bill run for the given billing periods
  * @module ProcessBillRunService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
-const HandleErroredBillRunService = require('../handle-errored-bill-run.service.js')
-const MatchAndAllocateService = require('../match/match-and-allocate.service.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
+import HandleErroredBillRunService from '../handle-errored-bill-run.service.js'
+import MatchAndAllocateService from '../match/match-and-allocate.service.js'
 
 /**
  * Matches and allocates licences to returns for a two-part tariff bill run
@@ -63,6 +61,6 @@ async function _updateStatus(billRunId, status) {
   return BillRunModel.query().findById(billRunId).patch({ status })
 }
 
-module.exports = {
+export default {
   go
 }

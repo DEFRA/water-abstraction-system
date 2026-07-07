@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Creates new return lines by formatting the provided lines and inserting them into the database
  * @module CreateReturnLinesService
  */
 
-const ReturnSubmissionLineModel = require('../../../models/return-submission-line.model.js')
-const { generateUUID } = require('../../../lib/general.lib.js')
+import ReturnSubmissionLineModel from '../../../models/return-submission-line.model.js'
+import { generateUUID } from '../../../lib/general.lib.js'
 
 /**
  * Creates return lines by formatting the provided lines and inserting them into the database
@@ -46,6 +44,6 @@ function _returnLines(returnSubmissionId, session, timestamp) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

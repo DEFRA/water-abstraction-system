@@ -1,22 +1,20 @@
-'use strict'
-
 /**
  * Controller for /bill-runs/setup endpoints
  * @module BillRunsSetupController
  */
 
-const CheckService = require('../services/bill-runs/setup/check.service.js')
-const InitiateSessionService = require('../services/bill-runs/setup/initiate-session.service.js')
-const NoLicencesService = require('../services/bill-runs/setup/no-licences.service.js')
-const RegionService = require('../services/bill-runs/setup/region.service.js')
-const SeasonService = require('../services/bill-runs/setup/season.service.js')
-const SubmitCheckService = require('../services/bill-runs/setup/submit-check.service.js')
-const SubmitRegionService = require('../services/bill-runs/setup/submit-region.service.js')
-const SubmitSeasonService = require('../services/bill-runs/setup/submit-season.service.js')
-const SubmitTypeService = require('../services/bill-runs/setup/submit-type.service.js')
-const SubmitYearService = require('../services/bill-runs/setup/submit-year.service.js')
-const TypeService = require('../services/bill-runs/setup/type.service.js')
-const YearService = require('../services/bill-runs/setup/year.service.js')
+import CheckService from '../services/bill-runs/setup/check.service.js'
+import InitiateSessionService from '../services/bill-runs/setup/initiate-session.service.js'
+import NoLicencesService from '../services/bill-runs/setup/no-licences.service.js'
+import RegionService from '../services/bill-runs/setup/region.service.js'
+import SeasonService from '../services/bill-runs/setup/season.service.js'
+import SubmitCheckService from '../services/bill-runs/setup/submit-check.service.js'
+import SubmitRegionService from '../services/bill-runs/setup/submit-region.service.js'
+import SubmitSeasonService from '../services/bill-runs/setup/submit-season.service.js'
+import SubmitTypeService from '../services/bill-runs/setup/submit-type.service.js'
+import SubmitYearService from '../services/bill-runs/setup/submit-year.service.js'
+import TypeService from '../services/bill-runs/setup/type.service.js'
+import YearService from '../services/bill-runs/setup/year.service.js'
 
 async function check(request, h) {
   const { sessionId } = request.params
@@ -144,7 +142,7 @@ async function year(request, h) {
   return h.view('bill-runs/setup/year.njk', pageData)
 }
 
-module.exports = {
+export default {
   check,
   noLicences,
   region,

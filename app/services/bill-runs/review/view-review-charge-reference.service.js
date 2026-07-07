@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates page data for the '/bill-runs/review/charge-reference/{reviewChargeReferenceId}' page
  * @module ViewReviewChargeReferenceService
  */
 
-const FetchReviewChargeReferenceService = require('./fetch-review-charge-reference.service.js')
-const ReviewChargeReferencePresenter = require('../../../presenters/bill-runs/review/review-charge-reference.presenter.js')
+import FetchReviewChargeReferenceService from './fetch-review-charge-reference.service.js'
+import ReviewChargeReferencePresenter from '../../../presenters/bill-runs/review/review-charge-reference.presenter.js'
 
 /**
  * Orchestrates page data for the '/bill-runs/review/charge-reference/{reviewChargeReferenceId}' page
@@ -33,6 +31,6 @@ async function go(reviewChargeReferenceId, yar) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

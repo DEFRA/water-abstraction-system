@@ -1,8 +1,6 @@
-'use strict'
-
 const viewName = 'gauging_stations'
 
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema.createView(viewName, (view) => {
     view.as(
       knex('gauging_stations').withSchema('water').select([
@@ -28,6 +26,6 @@ exports.up = function (knex) {
   })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.dropViewIfExists(viewName)
 }

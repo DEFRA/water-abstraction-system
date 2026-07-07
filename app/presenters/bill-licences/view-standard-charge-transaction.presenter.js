@@ -1,17 +1,9 @@
-'use strict'
-
 /**
  * Formats data for a standard charge transaction for the bill-licence page
  * @module ViewStandardChargeTransactionPresenter
  */
 
-const {
-  formatAbstractionPeriod,
-  formatLongDate,
-  formatMoney,
-  formatPounds,
-  titleCase
-} = require('../base.presenter.js')
+import { formatAbstractionPeriod, formatLongDate, formatMoney, formatPounds, titleCase } from '../base.presenter.js'
 
 /**
  * Formats data for standard charge transaction for the bill-licence page
@@ -240,6 +232,6 @@ function _srocContent(transaction) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

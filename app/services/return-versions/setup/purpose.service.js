@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/purpose` page
  * @module PurposeService
  */
 
-const FetchPurposesService = require('./fetch-purposes.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SelectPurposePresenter = require('../../../presenters/return-versions/setup/purpose.presenter.js')
+import FetchPurposesService from './fetch-purposes.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SelectPurposePresenter from '../../../presenters/return-versions/setup/purpose.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/purpose` page
@@ -31,6 +29,6 @@ async function go(sessionId, requirementIndex) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

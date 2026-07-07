@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the '/notices/setup/{sessionId}/recipient-name' page
  * @module RecipientNamePresenter
@@ -23,6 +21,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

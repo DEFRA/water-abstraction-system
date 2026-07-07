@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/points` page
  * @module PointsPresenter
  */
 
-const { compareStrings } = require('../../../lib/general.lib.js')
+import { compareStrings } from '../../../lib/general.lib.js'
 
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/points` page
@@ -58,6 +56,6 @@ function _licencePoints(points) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

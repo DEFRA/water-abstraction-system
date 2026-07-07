@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches the company billing accounts data needed for the view '/companies/{id}/billing-accounts'
  * @module FetchBillingAccountsDal
  */
 
-const BillingAccountModel = require('../../models/billing-account.model.js')
-const DatabaseConfig = require('../../../config/database.config.js')
+import BillingAccountModel from '../../models/billing-account.model.js'
+import DatabaseConfig from '../../../config/database.config.js'
 
 /**
  * Fetches the company billing accounts data needed for the view '/companies/{id}/billing-accounts'
@@ -29,6 +27,6 @@ async function _fetch(companyId, page) {
     .modify('contactDetails')
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
-module.exports = {
+export default {
   go
 }

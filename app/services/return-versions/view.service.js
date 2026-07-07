@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/{sessionId}/view` page
  * @module ViewService
  */
 
-const FetchReturnVersionService = require('./fetch-return-version.service.js')
-const ViewPresenter = require('../../presenters/return-versions/view.presenter.js')
+import FetchReturnVersionService from './fetch-return-version.service.js'
+import ViewPresenter from '../../presenters/return-versions/view.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/{sessionId}/view` page
@@ -25,6 +23,6 @@ async function go(returnVersionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

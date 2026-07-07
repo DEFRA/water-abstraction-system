@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches the contacts for a licence for the view '/licences/{id}/contact-details' page
  * @module FetchLicenceCRMDataService
  */
 
-const DatabaseConfig = require('../../../config/database.config.js')
-const { db } = require('../../../db/db.js')
+import DatabaseConfig from '../../../config/database.config.js'
+import { db } from '../../../db/db.js'
 
 /**
  * Fetches the contacts for a licence for the view '/licences/{id}/contact-details' page
@@ -279,6 +277,6 @@ function _query(paginationAndOrderBy = '') {
   `
 }
 
-module.exports = {
+export default {
   go
 }

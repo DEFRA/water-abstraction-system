@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/contact-name' page
  *
  * @module SubmitContactNameService
  */
 
-const ContactNamePresenter = require('../../../presenters/company-contacts/setup/contact-name.presenter.js')
-const ContactNameValidator = require('../../../validators/company-contacts/setup/contact-name.validator.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { checkUrl } = require('../../../lib/check-page.lib.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { flashNotification } = require('../../../lib/general.lib.js')
+import ContactNamePresenter from '../../../presenters/company-contacts/setup/contact-name.presenter.js'
+import ContactNameValidator from '../../../validators/company-contacts/setup/contact-name.validator.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { checkUrl } from '../../../lib/check-page.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/contact-name' page
@@ -65,6 +63,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

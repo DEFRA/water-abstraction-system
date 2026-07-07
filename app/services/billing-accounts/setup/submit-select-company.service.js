@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/billing-accounts/setup/{sessionId}/select-company' page
  *
  * @module SubmitSelectCompanyService
  */
 
-const FetchCompaniesService = require('./fetch-companies.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SelectCompanyPresenter = require('../../../presenters/billing-accounts/setup/select-company.presenter.js')
-const SelectCompanyValidator = require('../../../validators/billing-accounts/setup/select-company.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchCompaniesService from './fetch-companies.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SelectCompanyPresenter from '../../../presenters/billing-accounts/setup/select-company.presenter.js'
+import SelectCompanyValidator from '../../../validators/billing-accounts/setup/select-company.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the '/billing-accounts/setup/{sessionId}/select-company' page
@@ -77,6 +75,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

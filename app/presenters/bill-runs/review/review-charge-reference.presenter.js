@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Formats the review charge reference data ready for presenting in the review charge reference page
  * @module ReviewChargeReferencePresenter
  */
 
-const { formatFinancialYear } = require('../../base.presenter.js')
-const {
+import { formatFinancialYear } from '../../base.presenter.js'
+import {
   calculateTotalBillableReturns,
   formatAdditionalCharges,
   formatAdjustments,
   formatChargePeriod
-} = require('./base-review.presenter.js')
+} from './base-review.presenter.js'
 
 /**
  * Formats the review charge reference data ready for presenting in the review charge reference page
@@ -71,6 +69,6 @@ function _canAmend(reviewChargeReference) {
   return aggregate !== 1 || chargeAdjustment !== 1
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-logs/setup/{sessionId}/note` page
  * @module NoteService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const NotePresenter = require('../../../presenters/return-logs/setup/note.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import NotePresenter from '../../../presenters/return-logs/setup/note.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-logs/setup/{sessionId}/note` page
@@ -28,6 +26,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

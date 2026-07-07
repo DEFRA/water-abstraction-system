@@ -1,8 +1,6 @@
-'use strict'
-
-const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const { data: purposes } = require('./data/purposes.js')
-const PurposeModel = require('../../app/models/purpose.model.js')
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
+import { data as purposes } from './data/purposes.js'
+import PurposeModel from '../../app/models/purpose.model.js'
 
 /**
  * Seeds the purposes reference data using an upsert
@@ -27,6 +25,6 @@ async function _upsert(purpose) {
     .merge(['description', 'lossFactor', 'twoPartTariff', 'updatedAt'])
 }
 
-module.exports = {
+export default {
   seed
 }

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Validates data submitted for the review charge element edit page
  * @module EditValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
-const { maxDecimalPlaces } = require('../../helpers/max-decimal-places.validator.js')
+import { maxDecimalPlaces } from '../../helpers/max-decimal-places.validator.js'
 
 const MAX_DECIMALS = 6
 
@@ -60,6 +58,6 @@ function _validateAuthorisedQuantity(quantityOptions) {
   return schema.validate(quantityOptions, { abortEarly: true })
 }
 
-module.exports = {
+export default {
   go
 }

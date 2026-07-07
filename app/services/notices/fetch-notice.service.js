@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Fetch the selected notice and its associated notifications for the 'notices/{id}' page
  * @module FetchNoticeService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const EventModel = require('../../models/event.model.js')
-const NotificationModel = require('../../models/notification.model.js')
+import EventModel from '../../models/event.model.js'
+import NotificationModel from '../../models/notification.model.js'
 
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
 
 /**
  * Fetch the selected notice and its associated notifications for the 'notices/{id}' page
@@ -107,6 +105,6 @@ function _fetchNotificationsQuery(noticeId) {
     .where('event_id', noticeId)
 }
 
-module.exports = {
+export default {
   go
 }

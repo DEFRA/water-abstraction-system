@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/return-logs/setup/{sessionId}/note` page
  * @module NotePresenter
@@ -24,6 +22,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

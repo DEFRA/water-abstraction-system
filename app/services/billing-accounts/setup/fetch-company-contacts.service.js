@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches all contacts for a specified company
  * @module FetchCompanyContactsService
  */
 
-const CompanyModel = require('../../../models/company.model.js')
-const ContactModel = require('../../../models/contact.model.js')
+import CompanyModel from '../../../models/company.model.js'
+import ContactModel from '../../../models/contact.model.js'
 
 /**
  * Fetches all contacts for a specified company
@@ -39,6 +37,6 @@ async function go(companyId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

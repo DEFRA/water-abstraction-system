@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-alert` page
  * @module PreviewCheckAlertPresenter
  */
 
-const DetermineRelevantLicenceMonitoringStationsService = require('../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js')
-const { determineRestrictionHeading, formatRestrictions } = require('../../../monitoring-stations/base.presenter.js')
+import DetermineRelevantLicenceMonitoringStationsService from '../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js'
+import { determineRestrictionHeading, formatRestrictions } from '../../../monitoring-stations/base.presenter.js'
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-alert` page
@@ -73,6 +71,6 @@ function _recipientLicenceMonitoringStations(recipientLicenceRefs, session) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

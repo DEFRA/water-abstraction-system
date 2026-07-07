@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Looks up a user in the `idm` schema and returns the roles and groups assigned to them
  * @module FetchUserRolesAndGroupsService
  */
 
-const UserModel = require('../../models/user.model.js')
+import UserModel from '../../models/user.model.js'
 
 /**
  * A user can have roles assigned to them in two ways:
@@ -102,6 +100,6 @@ function _combineAndDedupeRoles(rolesArrayToDedupe) {
   return dedupedArray
 }
 
-module.exports = {
+export default {
   go
 }

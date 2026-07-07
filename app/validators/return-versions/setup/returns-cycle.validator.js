@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/returns-cycle` page
  * @module ReturnsCycleValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/returns-cycle` page
@@ -52,6 +50,6 @@ function _noSummerCycleWithQuarterlyReturns(value, helpers, session) {
   return value
 }
 
-module.exports = {
+export default {
   go
 }

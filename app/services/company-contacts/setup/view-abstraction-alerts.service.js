@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/setup/{sessionId}/abstraction-alerts' page
  *
  * @module ViewAbstractionAlertsService
  */
 
-const AbstractionAlertsPresenter = require('../../../presenters/company-contacts/setup/abstraction-alerts.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import AbstractionAlertsPresenter from '../../../presenters/company-contacts/setup/abstraction-alerts.presenter.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/setup/{sessionId}/abstraction-alerts' page
@@ -26,6 +24,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

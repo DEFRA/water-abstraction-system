@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return` page
  *
  * @module ViewPreviewCheckPaperReturnService
  */
 
-const CheckPaperReturnPresenter = require('../../../../presenters/notices/setup/preview/preview-check-paper-return.presenter.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+import CheckPaperReturnPresenter from '../../../../presenters/notices/setup/preview/preview-check-paper-return.presenter.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return` page
@@ -28,6 +26,6 @@ async function go(sessionId, contactHashId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * View the health of Gotenberg service
  * @module ViewHealthRequest
  */
 
-const BaseRequest = require('../base.request.js')
+import BaseRequest from '../base.request.js'
 
-const gotenbergConfig = require('../../../config/gotenberg.config.js')
+import gotenbergConfig from '../../../config/gotenberg.config.js'
 
 /**
  * View the health of Gotenberg service
@@ -20,6 +18,6 @@ async function send() {
   return BaseRequest.get(statusUrl.href, { responseType: 'json' })
 }
 
-module.exports = {
+export default {
   send
 }

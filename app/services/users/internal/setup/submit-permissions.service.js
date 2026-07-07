@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/permissions' page
  *
  * @module SubmitPermissionsService
  */
 
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const FetchUserDetailsDal = require('../../../../dal/users/internal/fetch-user-details.dal.js')
-const PermissionsPresenter = require('../../../../presenters/users/internal/setup/permissions.presenter.js')
-const PermissionsValidator = require('../../../../validators/users/internal/setup/permissions.validator.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
-const { flashNotification } = require('../../../../lib/general.lib.js')
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import FetchUserDetailsDal from '../../../../dal/users/internal/fetch-user-details.dal.js'
+import PermissionsPresenter from '../../../../presenters/users/internal/setup/permissions.presenter.js'
+import PermissionsValidator from '../../../../validators/users/internal/setup/permissions.validator.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
+import { flashNotification } from '../../../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/permissions' page
@@ -74,6 +72,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

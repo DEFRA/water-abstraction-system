@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/return-logs/{id}/communications' page
  *
  * @module ViewCommunicationsService
  */
 
-const CommunicationsPresenter = require('../../presenters/return-logs/communications.presenter.js')
-const FetchNotificationsDal = require('../../dal/return-logs/fetch-notifications.dal.js')
-const FetchReturnLogService = require('./fetch-return-log.service.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
+import CommunicationsPresenter from '../../presenters/return-logs/communications.presenter.js'
+import FetchNotificationsDal from '../../dal/return-logs/fetch-notifications.dal.js'
+import FetchReturnLogService from './fetch-return-log.service.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/return-logs/{id}/communications' page
@@ -41,6 +39,6 @@ async function go(id, page) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

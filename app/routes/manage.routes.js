@@ -1,6 +1,4 @@
-'use strict'
-
-const ManageController = require('../controllers/manage.controller.js')
+import ManageController from '../controllers/manage.controller.js'
 
 const routes = [
   {
@@ -27,4 +25,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

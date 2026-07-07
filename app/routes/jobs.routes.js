@@ -1,6 +1,4 @@
-'use strict'
-
-const JobsController = require('../controllers/jobs.controller.js')
+import JobsController from '../controllers/jobs.controller.js'
 
 const routes = [
   {
@@ -131,4 +129,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

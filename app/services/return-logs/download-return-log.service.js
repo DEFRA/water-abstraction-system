@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and formatting the data needed for the return log download link
  * @module DownloadReturnLogService
  */
 
-const DownloadReturnLogPresenter = require('../../presenters/return-logs/download-return-log.presenter.js')
-const FetchDownloadReturnLogService = require('./fetch-download-return-log.service.js')
+import DownloadReturnLogPresenter from '../../presenters/return-logs/download-return-log.presenter.js'
+import FetchDownloadReturnLogService from './fetch-download-return-log.service.js'
 
 /**
  * Orchestrates fetching and formatting the data needed for the return log download link
@@ -28,6 +26,6 @@ async function go(returnLogId, version) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

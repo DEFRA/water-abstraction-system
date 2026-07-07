@@ -1,9 +1,7 @@
-'use strict'
+import Big from 'big.js'
 
-const Big = require('big.js')
-
-const { determineAbstractionPeriods } = require('../../../lib/abstraction-period.lib.js')
-const { formatLongDate } = require('../../base.presenter.js')
+import { determineAbstractionPeriods } from '../../../lib/abstraction-period.lib.js'
+import { formatLongDate } from '../../base.presenter.js'
 
 /**
  * Calculates the total allocated volume across all review change elements
@@ -230,7 +228,7 @@ function _chargePeriod(reviewChargeVersion) {
   return { startDate: chargePeriodStartDate, endDate: chargePeriodEndDate }
 }
 
-module.exports = {
+export default {
   calculateTotalBillableReturns,
   formatAdditionalCharges,
   formatAdjustments,

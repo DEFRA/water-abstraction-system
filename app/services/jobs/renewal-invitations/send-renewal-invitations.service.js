@@ -1,19 +1,17 @@
-'use strict'
-
 /**
  * Orchestrates fetching, sending, and updating renewal invitations notifications
  * @module SendRenewalInvitations
  */
 
-const CreateNoticeService = require('../../notices/setup/create-notice.service.js')
-const CreateNotificationsService = require('../../notices/setup/create-notifications.service.js')
-const FetchRenewalRecipients = require('./fetch-renewal-recipients.service.js')
-const SendNoticeService = require('../../notices/setup/send/send-notice.service.js')
-const { renewalExpiryDate, renewalNoticeDate } = require('../../../lib/dates.lib.js')
-const { generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
-const { NoticeTypes, NoticeType } = require('../../../lib/static-lookups.lib.js')
+import CreateNoticeService from '../../notices/setup/create-notice.service.js'
+import CreateNotificationsService from '../../notices/setup/create-notifications.service.js'
+import FetchRenewalRecipients from './fetch-renewal-recipients.service.js'
+import SendNoticeService from '../../notices/setup/send/send-notice.service.js'
+import { renewalExpiryDate, renewalNoticeDate } from '../../../lib/dates.lib.js'
+import { generateNoticeReferenceCode } from '../../../lib/general.lib.js'
+import { NoticeTypes, NoticeType } from '../../../lib/static-lookups.lib.js'
 
-const NotifyConfig = require('../../../../config/notify.config.js')
+import NotifyConfig from '../../../../config/notify.config.js'
 
 /**
  * Orchestrates fetching, sending, and updating renewal invitations notifications
@@ -63,6 +61,6 @@ async function _notifications(noticeData, recipients, noticeId) {
   return CreateNotificationsService.go(noticeData, recipients, noticeId)
 }
 
-module.exports = {
+export default {
   go
 }

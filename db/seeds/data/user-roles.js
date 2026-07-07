@@ -1,7 +1,5 @@
-'use strict'
-
-const { data: roles } = require('./roles.js')
-const { data: users } = require('./users.js')
+import { data as roles } from './roles.js'
+import { data as users } from './users.js'
 
 const data = [
   {
@@ -24,6 +22,6 @@ const data = [
   }
 ]
 
-module.exports = {
+export default {
   data
 }

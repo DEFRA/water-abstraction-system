@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Sends a request to Companies House to return the matching company for the provided number
  * @module LookupCompaniesHouseNumberRequest
  */
 
-const CompaniesHouseRequest = require('../companies-house.request.js')
+import CompaniesHouseRequest from '../companies-house.request.js'
 
 /**
  * Sends a request to Companies House to return the matching company for the provided number
@@ -20,6 +18,6 @@ async function send(companiesHouseNumber) {
   return CompaniesHouseRequest.get(path)
 }
 
-module.exports = {
+export default {
   send
 }

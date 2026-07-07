@@ -1,20 +1,18 @@
-'use strict'
-
 /**
  * Orchestrates flagging a licence for supplementary billing
  * @module ProcessBillingFlagService
  */
 
-const DetermineBillingYearsService = require('./determine-billing-years.service.js')
-const DetermineBillLicenceFlagsService = require('./determine-bill-licence-flags.service.js')
-const DetermineChargeVersionFlagsService = require('./determine-charge-version-flags.service.js')
-const DetermineExistingBillRunYearsService = require('./determine-existing-bill-run-years.service.js')
-const DetermineImportedLicenceFlagsService = require('./determine-imported-licence-flags.service.js')
-const DetermineLicenceFlagsService = require('./determine-licence-flags.service.js')
-const DetermineReturnLogFlagsService = require('./determine-return-log-flags.service.js')
-const DetermineWorkflowFlagsService = require('./determine-workflow-flags.service.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
-const PersistSupplementaryBillingFlagsService = require('./persist-supplementary-billing-flags.service.js')
+import DetermineBillingYearsService from './determine-billing-years.service.js'
+import DetermineBillLicenceFlagsService from './determine-bill-licence-flags.service.js'
+import DetermineChargeVersionFlagsService from './determine-charge-version-flags.service.js'
+import DetermineExistingBillRunYearsService from './determine-existing-bill-run-years.service.js'
+import DetermineImportedLicenceFlagsService from './determine-imported-licence-flags.service.js'
+import DetermineLicenceFlagsService from './determine-licence-flags.service.js'
+import DetermineReturnLogFlagsService from './determine-return-log-flags.service.js'
+import DetermineWorkflowFlagsService from './determine-workflow-flags.service.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
+import PersistSupplementaryBillingFlagsService from './persist-supplementary-billing-flags.service.js'
 
 /**
  * Orchestrates flagging a licence for supplementary billing
@@ -110,6 +108,6 @@ async function _setFlagForLicence(result) {
   )
 }
 
-module.exports = {
+export default {
   go
 }

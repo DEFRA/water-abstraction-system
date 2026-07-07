@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/contact-name' page
  * @module ContactNamePresenter
@@ -39,6 +37,6 @@ function _backLink(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

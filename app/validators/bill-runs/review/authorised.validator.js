@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Validates data submitted for the review charge reference authorised page
  * @module AuthorisedValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
-const { maxDecimalPlaces } = require('../../helpers/max-decimal-places.validator.js')
+import { maxDecimalPlaces } from '../../helpers/max-decimal-places.validator.js'
 
 const MAX_DECIMALS = 6
 
@@ -46,6 +44,6 @@ function _validate(amendedAuthorisedVolume, totalBillableReturns) {
   return schema.validate(amendedAuthorisedVolume, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

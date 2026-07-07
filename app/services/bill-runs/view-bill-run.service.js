@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the bill run page
  * @module ViewBillService
  */
 
-const EmptyBillRunPresenter = require('../../presenters/bill-runs/empty-bill-run.presenter.js')
-const ErroredBillRunPresenter = require('../../presenters/bill-runs/errored-bill-run.presenter.js')
-const ViewBillRunPresenter = require('../../presenters/bill-runs/view-bill-run.presenter.js')
-const ViewBillSummariesPresenter = require('../../presenters/bill-runs/view-bill-summaries.presenter.js')
-const FetchBillRunService = require('./fetch-bill-run.service.js')
+import EmptyBillRunPresenter from '../../presenters/bill-runs/empty-bill-run.presenter.js'
+import ErroredBillRunPresenter from '../../presenters/bill-runs/errored-bill-run.presenter.js'
+import ViewBillRunPresenter from '../../presenters/bill-runs/view-bill-run.presenter.js'
+import ViewBillSummariesPresenter from '../../presenters/bill-runs/view-bill-summaries.presenter.js'
+import FetchBillRunService from './fetch-bill-run.service.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the bill run page
@@ -57,6 +55,6 @@ function _pageData(fetchResult) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

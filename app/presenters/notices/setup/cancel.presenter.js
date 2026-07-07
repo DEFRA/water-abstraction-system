@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/cancel` page
  * @module CancelPresenter
  */
 
-const { formatLongDate, sentenceCase } = require('../../base.presenter.js')
-const { NoticeJourney } = require('../../../lib/static-lookups.lib.js')
+import { formatLongDate, sentenceCase } from '../../base.presenter.js'
+import { NoticeJourney } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/cancel` page
@@ -63,6 +61,6 @@ function _textPrefix(name) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

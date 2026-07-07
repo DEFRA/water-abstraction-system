@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetch the table headers and returns them alongside a db knex query to retrieve a full table
  * @module FetchTableService
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 /**
  * Retrieves headers, a knex query for the table rows and the table name from the table in the db, and returns them as
@@ -37,6 +35,6 @@ async function _headers(tableName, schemaName) {
   return Object.keys(columns)
 }
 
-module.exports = {
+export default {
   go
 }

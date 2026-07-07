@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/start-reading` page
  * @module SubmitStartReadingService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const StartReadingPresenter = require('../../../presenters/return-logs/setup/start-reading.presenter.js')
-const StartReadingValidator = require('../../../validators/return-logs/setup/start-reading.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import GeneralLib from '../../../lib/general.lib.js'
+import StartReadingPresenter from '../../../presenters/return-logs/setup/start-reading.presenter.js'
+import StartReadingValidator from '../../../validators/return-logs/setup/start-reading.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/start-reading` page
@@ -64,6 +62,6 @@ function _validate(payload, session) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

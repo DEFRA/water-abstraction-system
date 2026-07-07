@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Handles fetching and displaying data for display on the /search page
  * @module ViewSearchService
  */
 
-const FindAllSearchMatchesService = require('./find-all-search-matches.service.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const SearchPresenter = require('../../presenters/search/search.presenter.js')
+import FindAllSearchMatchesService from './find-all-search-matches.service.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import SearchPresenter from '../../presenters/search/search.presenter.js'
 
 /**
  * Handles fetching and displaying data for display on the /search page
@@ -67,6 +65,6 @@ async function _pageOfResults(userScopes, searchQuery, resultType, pageNumber) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

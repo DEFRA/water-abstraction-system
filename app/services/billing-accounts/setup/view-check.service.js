@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/check` page
  *
  * @module ViewCheckService
  */
 
-const CheckPresenter = require('../../../presenters/billing-accounts/setup/check.presenter.js')
-const FetchCompanyContactsService = require('./fetch-company-contacts.service.js')
-const FetchCompanyService = require('./fetch-company.service.js')
-const FetchExistingAddress = require('../../../dal/billing-accounts/fetch-existing-address.dal.js')
-const FetchImpactedLicences = require('../../../dal/billing-accounts/fetch-impacted-licences.dal.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { markCheckPageVisited } = require('../../../lib/check-page.lib.js')
+import CheckPresenter from '../../../presenters/billing-accounts/setup/check.presenter.js'
+import FetchCompanyContactsService from './fetch-company-contacts.service.js'
+import FetchCompanyService from './fetch-company.service.js'
+import FetchExistingAddress from '../../../dal/billing-accounts/fetch-existing-address.dal.js'
+import FetchImpactedLicences from '../../../dal/billing-accounts/fetch-impacted-licences.dal.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { markCheckPageVisited } from '../../../lib/check-page.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/check` page
@@ -65,6 +63,6 @@ async function _updateAddressJourneyBackLink(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

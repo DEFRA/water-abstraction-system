@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the '/companies/{id}/{role}' page
  * @module CompanyPresenter
  */
 
-const { formatLongDate } = require('../../presenters/base.presenter.js')
-const { roles } = require('../../lib/static-lookups.lib.js')
+import { formatLongDate } from '../../presenters/base.presenter.js'
+import { roles } from '../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the '/companies/{id}/{role}' page
@@ -55,6 +53,6 @@ function _companyAddresses(companyAddresses) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches a licence for the given licence reference with the data needed to determine if it has ended.
  *
  * @module FetchLicenceDal
  */
 
-const LicenceModel = require('../../models/licence.model.js')
+import LicenceModel from '../../models/licence.model.js'
 
 /**
  * Fetches a licence for the given licence reference with the data needed to determine if it has ended.
@@ -20,6 +18,6 @@ async function go(licenceRef) {
   return LicenceModel.query().where('licenceRef', licenceRef).select('id', 'licenceRef').modify('ended').first()
 }
 
-module.exports = {
+export default {
   go
 }

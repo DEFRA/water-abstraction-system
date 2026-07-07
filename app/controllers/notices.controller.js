@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Controller for /notices endpoints
  * @module NoticesController
  */
 
-const IndexNoticesService = require('../services/notices/index-notices.service.js')
-const SubmitIndexNoticesService = require('../services/notices/submit-index-notices.service.js')
-const SubmitViewNoticeService = require('../services/notices/submit-view-notice.service.js')
-const ViewNoticeService = require('../services/notices/view-notice.service.js')
+import IndexNoticesService from '../services/notices/index-notices.service.js'
+import SubmitIndexNoticesService from '../services/notices/submit-index-notices.service.js'
+import SubmitViewNoticeService from '../services/notices/submit-view-notice.service.js'
+import ViewNoticeService from '../services/notices/view-notice.service.js'
 
 async function index(request, h) {
   const {
@@ -65,7 +63,7 @@ async function view(request, h) {
   return h.view('notices/view.njk', pageData)
 }
 
-module.exports = {
+export default {
   index,
   submitIndex,
   submitView,

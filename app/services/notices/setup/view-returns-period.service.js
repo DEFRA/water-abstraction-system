@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup returns period page
  * @module ViewReturnsPeriodService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const ReturnsPeriodPresenter = require('../../../presenters/notices/setup/returns-period.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import ReturnsPeriodPresenter from '../../../presenters/notices/setup/returns-period.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup returns period page
@@ -26,6 +24,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

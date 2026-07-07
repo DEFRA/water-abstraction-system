@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats data for the `/licences/{id}/summary` page
  * @module SummaryPresenter
  */
 
-const { compareStrings } = require('../../lib/general.lib.js')
-const { formatLongDate, formatAbstractionDate } = require('../base.presenter.js')
-const { formatAbstractionAmounts } = require('./base-licences.presenter.js')
+import { compareStrings } from '../../lib/general.lib.js'
+import { formatLongDate, formatAbstractionDate } from '../base.presenter.js'
+import { formatAbstractionAmounts } from './base-licences.presenter.js'
 
 /**
  * Formats data for the `/licences/{id}/summary` page
@@ -220,6 +218,6 @@ function _startDate(licence, startDate) {
   return formatLongDate(startDate)
 }
 
-module.exports = {
+export default {
   go
 }

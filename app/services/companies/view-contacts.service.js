@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/companies/{id}/contacts' page
  *
  * @module ViewContactsService
  */
 
-const ContactsPresenter = require('../../presenters/companies/contacts.presenter.js')
-const FetchCompanyCRMDataDal = require('../../dal/companies/fetch-company-crm-data.dal.js')
-const FetchCompanyDal = require('../../dal/companies/fetch-company.dal.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { readFlashNotification } = require('../../lib/general.lib.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import ContactsPresenter from '../../presenters/companies/contacts.presenter.js'
+import FetchCompanyCRMDataDal from '../../dal/companies/fetch-company-crm-data.dal.js'
+import FetchCompanyDal from '../../dal/companies/fetch-company.dal.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { readFlashNotification } from '../../lib/general.lib.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/companies/{id}/contacts' page
@@ -51,6 +49,6 @@ async function go(companyId, auth, page, yar) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

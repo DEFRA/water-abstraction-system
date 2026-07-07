@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * General helper methods
  * @module GeneralLib
  */
 
-const Big = require('big.js')
-const { randomInt, randomUUID } = require('node:crypto')
-const { setTimeout } = require('node:timers/promises')
+import Big from 'big.js'
+import { randomInt, randomUUID } from 'node:crypto'
+import { setTimeout } from 'node:timers/promises'
 
-const { returnUnits } = require('./static-lookups.lib.js')
+import { returnUnits } from './static-lookups.lib.js'
 
 const MAX_DECIMAL = 6
 
@@ -525,7 +523,7 @@ function transformStringOfLicencesToArray(licences) {
     }) // Remove empty strings if any
 }
 
-module.exports = {
+export default {
   calculateAndLogTimeTaken,
   compareStrings,
   convertFromCubicMetres,

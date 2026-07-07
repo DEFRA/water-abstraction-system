@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
  * @module SubmitIndexBillRunsService
  */
 
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
-const CheckBusyBillRunsService = require('./check-busy-bill-runs.service.js')
-const FetchBillRunsService = require('./fetch-bill-runs.service.js')
-const FetchRegionsService = require('./setup/fetch-regions.service.js')
-const IndexBillRunsPresenter = require('../../presenters/bill-runs/index-bill-runs.presenter.js')
-const IndexValidator = require('../../validators/bill-runs/index.validator.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { clearFilters, handleOneOptionSelected } = require('../../lib/submit-page.lib.js')
+import { formatValidationResult } from '../../presenters/base.presenter.js'
+import CheckBusyBillRunsService from './check-busy-bill-runs.service.js'
+import FetchBillRunsService from './fetch-bill-runs.service.js'
+import FetchRegionsService from './setup/fetch-regions.service.js'
+import IndexBillRunsPresenter from '../../presenters/bill-runs/index-bill-runs.presenter.js'
+import IndexValidator from '../../validators/bill-runs/index.validator.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { clearFilters, handleOneOptionSelected } from '../../lib/submit-page.lib.js'
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
@@ -105,6 +103,6 @@ function _validate(payload, regions) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/remove-licences` page
  * @module RemoveLicencesPresenter
@@ -25,6 +23,6 @@ function go(removeLicences, session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

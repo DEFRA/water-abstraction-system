@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Determines if an existing bill run blocks the one a user is trying to setup
  * @module DetermineBlockingBillRunService
  */
 
-const DetermineBlockingAnnualService = require('./determine-blocking-annual.service.js')
-const DetermineBlockingSupplementaryService = require('./determine-blocking-supplementary.service.js')
-const DetermineBlockingTwoPartAnnualService = require('./determine-blocking-two-part-annual.service.js')
-const DetermineBlockingTwoPartSupplementaryService = require('./determine-blocking-two-part-supplementary.service.js')
+import DetermineBlockingAnnualService from './determine-blocking-annual.service.js'
+import DetermineBlockingSupplementaryService from './determine-blocking-supplementary.service.js'
+import DetermineBlockingTwoPartAnnualService from './determine-blocking-two-part-annual.service.js'
+import DetermineBlockingTwoPartSupplementaryService from './determine-blocking-two-part-supplementary.service.js'
 
 /**
  * Determines if an existing bill run blocks the one a user is trying to setup
@@ -59,6 +57,6 @@ async function go(session) {
   return DetermineBlockingAnnualService.go(region)
 }
 
-module.exports = {
+export default {
   go
 }

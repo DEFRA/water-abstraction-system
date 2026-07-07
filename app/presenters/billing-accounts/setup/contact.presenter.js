@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/billing-accounts/setup/{billingAccountId}/contact` page
  * @module ContactPresenter
  */
 
-const { checkUrl } = require('../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
 
 /**
  * Formats data for the `/billing-accounts/setup/{billingAccountId}/contact` page
@@ -67,6 +65,6 @@ function _pageTitle(companyContacts) {
   return `Set up a contact for ${name}`
 }
 
-module.exports = {
+export default {
   go
 }

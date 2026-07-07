@@ -1,6 +1,4 @@
-'use strict'
-
-const { checkUrl } = require('../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
 
 /**
  * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/submission` page
@@ -33,6 +31,6 @@ function _backLink(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

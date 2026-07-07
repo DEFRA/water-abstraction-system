@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches return log data needed for the confirmed view
  * @module FetchReturnLogService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const ReturnLogModel = require('../../../models/return-log.model.js')
+import ReturnLogModel from '../../../models/return-log.model.js'
 
 /**
  * Fetches return log data needed for the confirmed view
@@ -32,6 +30,6 @@ async function go(returnLogId) {
     .innerJoinRelated('licence')
 }
 
-module.exports = {
+export default {
   go
 }

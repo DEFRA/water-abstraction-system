@@ -1,6 +1,4 @@
-'use strict'
-
-const BillingAccountsSetupController = require('../controllers/billing-accounts-setup.controller.js')
+import BillingAccountsSetupController from '../controllers/billing-accounts-setup.controller.js'
 
 const routes = [
   {
@@ -257,4 +255,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

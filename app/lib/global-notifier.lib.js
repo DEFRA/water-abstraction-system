@@ -1,10 +1,8 @@
-'use strict'
-
 /**
  * @module GlobalNotifierLib
  */
 
-const BaseNotifierLib = require('./base-notifier.lib.js')
+import BaseNotifierLib from './base-notifier.lib.js'
 
 /**
  * A combined logging and Airbrake (Errbit) notification manager for actions that take place outside of a
@@ -25,4 +23,4 @@ class GlobalNotifierLib extends BaseNotifierLib {
   }
 }
 
-module.exports = GlobalNotifierLib
+export default GlobalNotifierLib

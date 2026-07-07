@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Manages marking a submitted return for supplementary billing
  * @module SubmitConfirmedService
  */
 
-const ProcessBillingFlagService = require('../../licences/supplementary/process-billing-flag.service.js')
-const ReturnLogModel = require('../../../models/return-log.model.js')
+import ProcessBillingFlagService from '../../licences/supplementary/process-billing-flag.service.js'
+import ReturnLogModel from '../../../models/return-log.model.js'
 
 /**
  * Manages marking a submitted return for supplementary billing
@@ -26,6 +24,6 @@ async function go(returnLogId) {
   return licenceId
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/licences' page
  * @module LicencesPresenter
@@ -36,6 +34,6 @@ function _licences(licences, abstractionAlertLicences) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

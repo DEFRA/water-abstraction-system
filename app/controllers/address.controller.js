@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Controller for /address endpoints
  * @module AddressController
  */
 
-const InternationalAddressService = require('../services/address/international.service.js')
-const ManualAddressService = require('../services/address/manual.service.js')
-const PostcodeService = require('../services/address/postcode.service.js')
-const SelectAddressService = require('../services/address/select.service.js')
-const SubmitInternationalAddressService = require('../services/address/submit-international.service.js')
-const SubmitManualAddressService = require('../services/address/submit-manual.service.js')
-const SubmitPostcodeService = require('../services/address/submit-postcode.service.js')
-const SubmitSelectAddressService = require('../services/address/submit-select.service.js')
+import InternationalAddressService from '../services/address/international.service.js'
+import ManualAddressService from '../services/address/manual.service.js'
+import PostcodeService from '../services/address/postcode.service.js'
+import SelectAddressService from '../services/address/select.service.js'
+import SubmitInternationalAddressService from '../services/address/submit-international.service.js'
+import SubmitManualAddressService from '../services/address/submit-manual.service.js'
+import SubmitPostcodeService from '../services/address/submit-postcode.service.js'
+import SubmitSelectAddressService from '../services/address/submit-select.service.js'
 
 async function submitInternational(request, h) {
   const {
@@ -107,7 +105,7 @@ async function viewSelect(request, h) {
   return h.view('address/select.njk', pageData)
 }
 
-module.exports = {
+export default {
   submitInternational,
   submitManual,
   submitPostcode,

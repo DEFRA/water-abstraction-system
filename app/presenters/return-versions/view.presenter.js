@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Formats return version data ready for presenting in the view return version page
  * @module ViewPresenter
  */
 
-const { formatAbstractionPeriod, formatLongDate, formatVersionReason } = require('../base.presenter.js')
-const { isQuarterlyReturnSubmissions } = require('../../lib/dates.lib.js')
-const PreviousAndNextPresenter = require('../previous-and-next.presenter.js')
-const { returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
+import { formatAbstractionPeriod, formatLongDate, formatVersionReason } from '../base.presenter.js'
+import { isQuarterlyReturnSubmissions } from '../../lib/dates.lib.js'
+import PreviousAndNextPresenter from '../previous-and-next.presenter.js'
+import { returnRequirementFrequencies } from '../../lib/static-lookups.lib.js'
 
 /**
  * Formats return version data ready for presenting in the view return version page
@@ -181,6 +179,6 @@ function _requirements(requirements) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,6 +1,4 @@
-'use strict'
-
-const { formatLongDate } = require('./base.presenter.js')
+import { formatLongDate } from './base.presenter.js'
 
 /**
  * Generates a link object for a licence version with hidden text and href
@@ -24,6 +22,6 @@ function linkToLicenceVersion(licenceVersion) {
   }
 }
 
-module.exports = {
+export default {
   linkToLicenceVersion
 }

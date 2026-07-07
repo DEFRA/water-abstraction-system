@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats the licence and related conditions data for the licence conditions page
  * @module ConditionsPresenter
  */
 
-const { formatConditionTypes } = require('../licence.presenter.js')
-const { pluralise } = require('./base-licences.presenter.js')
+import { formatConditionTypes } from '../licence.presenter.js'
+import { pluralise } from './base-licences.presenter.js'
 
 /**
  * Formats the licence and related conditions data for the licence conditions page
@@ -36,6 +34,6 @@ function go(conditions, licence) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

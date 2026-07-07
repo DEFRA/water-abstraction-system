@@ -1,6 +1,4 @@
-'use strict'
-
-const BillRunsReviewController = require('../controllers/bill-runs-review.controller.js')
+import BillRunsReviewController from '../controllers/bill-runs-review.controller.js'
 
 const routes = [
   {
@@ -185,4 +183,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

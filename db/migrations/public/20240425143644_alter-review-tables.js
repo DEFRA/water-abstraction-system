@@ -1,6 +1,4 @@
-'use strict'
-
-exports.up = async function (knex) {
+export async function up(knex) {
   await knex.schema.alterTable('review_charge_references', (table) => {
     table.decimal('amended_aggregate', null, null).defaultTo(1)
     table.decimal('charge_adjustment', null, null).defaultTo(1)
@@ -16,7 +14,7 @@ exports.up = async function (knex) {
   })
 }
 
-exports.down = async function (knex) {
+export async function down(knex) {
   await knex.schema.alterTable('review_charge_references', (table) => {
     table.dropColumn('amended_aggregate')
     table.dropColumn('charge_adjustment')

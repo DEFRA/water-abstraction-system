@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/multiple-entries` page
  * @module SubmitMultipleEntriesService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const MultipleEntriesPresenter = require('../../../presenters/return-logs/setup/multiple-entries.presenter.js')
-const MultipleEntriesValidator = require('../../../validators/return-logs/setup/multiple-entries.validator.js')
-const SplitMultipleEntriesService = require('../../../services/return-logs/setup/split-multiple-entries.service.js')
-const { convertFromCubicMetres, convertToCubicMetres } = require('../../../lib/general.lib.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import MultipleEntriesPresenter from '../../../presenters/return-logs/setup/multiple-entries.presenter.js'
+import MultipleEntriesValidator from '../../../validators/return-logs/setup/multiple-entries.validator.js'
+import SplitMultipleEntriesService from '../../../services/return-logs/setup/split-multiple-entries.service.js'
+import { convertFromCubicMetres, convertToCubicMetres } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { returnRequirementFrequencies } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/multiple-entries` page
@@ -84,6 +82,6 @@ function _validate(frequency, measurementType, payload, session) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

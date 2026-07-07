@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates validating renewal notice types for the `/notices/setup/{sessionId}/licence` page
  * @module ProcessRenewalsNoticeLicenceSubmission
  */
 
-const FetchRenewalLicenceDal = require('../../../../dal/notices/setup/fetch-renewal-licence.dal.js')
-const LicenceRenewalValidator = require('../../../../validators/notices/setup/renewal-notice/licence-renewal.validator.js')
-const { renewalNoticeDate } = require('../../../../lib/dates.lib.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+import FetchRenewalLicenceDal from '../../../../dal/notices/setup/fetch-renewal-licence.dal.js'
+import LicenceRenewalValidator from '../../../../validators/notices/setup/renewal-notice/licence-renewal.validator.js'
+import { renewalNoticeDate } from '../../../../lib/dates.lib.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the renewal notice types for the `/notices/setup/{sessionId}/licence` page
@@ -56,6 +54,6 @@ function _validate(payload, licenceRenewal) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

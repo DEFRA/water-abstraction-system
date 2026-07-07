@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Removes all data created for acceptance tests from the crm and crm_v2 schemas
  * @module CrmV2SchemaService
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 /**
  * Removes all data created for acceptance tests from the crm schema
@@ -172,6 +170,6 @@ async function _deleteAllTestData() {
   `)
 }
 
-module.exports = {
+export default {
   go
 }

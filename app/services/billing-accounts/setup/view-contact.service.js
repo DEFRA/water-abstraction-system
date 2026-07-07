@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{billingAccountId}/contact` page
  *
  * @module ViewContactService
  */
 
-const ContactPresenter = require('../../../presenters/billing-accounts/setup/contact.presenter.js')
-const FetchCompanyContactsService = require('./fetch-company-contacts.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import ContactPresenter from '../../../presenters/billing-accounts/setup/contact.presenter.js'
+import FetchCompanyContactsService from './fetch-company-contacts.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{billingAccountId}/contact` page
@@ -37,6 +35,6 @@ async function _fetchCompanyContacts(session) {
   return companyContacts
 }
 
-module.exports = {
+export default {
   go
 }

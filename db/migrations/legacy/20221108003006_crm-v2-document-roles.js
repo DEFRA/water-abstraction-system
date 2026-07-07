@@ -1,8 +1,6 @@
-'use strict'
-
 const tableName = 'document_roles'
 
-exports.up = function (knex) {
+export function up(knex) {
   return (
     // If it was a simple check constraint we could have used https://knexjs.org/guide/schema-builder.html#checks
     // But because of the complexity of the constraint we have had to drop to using raw() to add the constraint after
@@ -38,6 +36,6 @@ exports.up = function (knex) {
   )
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.withSchema('crm_v2').dropTableIfExists(tableName)
 }

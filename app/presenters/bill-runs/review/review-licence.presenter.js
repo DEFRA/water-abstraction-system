@@ -1,25 +1,18 @@
-'use strict'
-
 /**
  * Formats the review licence data ready for presenting in the review licence page
  * @module ReviewLicencePresenter
  */
 
-const {
-  formatAbstractionPeriod,
-  formatFinancialYear,
-  formatLongDate,
-  formatPurposes
-} = require('../../base.presenter.js')
-const { generateBillRunTitle } = require('../../billing.presenter.js')
-const {
+import { formatAbstractionPeriod, formatFinancialYear, formatLongDate, formatPurposes } from '../../base.presenter.js'
+import { generateBillRunTitle } from '../../billing.presenter.js'
+import {
   calculateTotalBillableReturns,
   formatChargePeriod,
   formatChargePeriods,
   formatIssues,
   formatReturnStatus,
   formatReturnTotals
-} = require('./base-review.presenter.js')
+} from './base-review.presenter.js'
 
 /**
  * Formats the review licence data ready for presenting in the review licence page
@@ -203,6 +196,6 @@ function _formatReviewReturns(reviewReturns) {
   return { matchedReturns, unmatchedReturns }
 }
 
-module.exports = {
+export default {
   go
 }

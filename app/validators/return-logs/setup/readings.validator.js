@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/readings/{yearMonth}` page
  * @module ReadingsValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const MAX_ALLOWED_READING = 99999999999
 
@@ -152,6 +150,6 @@ function _subsequentLowestReading(lines, requestedYear, requestedMonth) {
   return minReading
 }
 
-module.exports = {
+export default {
   go
 }

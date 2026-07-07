@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/meter-provided` page
  * @module MeterProvidedValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const VALID_VALUES = ['yes', 'no']
 
@@ -34,6 +32,6 @@ function go(payload) {
   return schema.validate(payload)
 }
 
-module.exports = {
+export default {
   go
 }

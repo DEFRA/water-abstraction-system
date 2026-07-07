@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Initiates the session record used for setting up a new company contact
  * @module InitiateSessionService
  */
 
-const CreateSessionDal = require('../../../dal/create-session.dal.js')
-const FetchCompanyLicencesDal = require('../../../dal/company-contacts/fetch-company-licences.dal.js')
-const FetchCompanyService = require('../../../dal/companies/fetch-company.dal.js')
+import CreateSessionDal from '../../../dal/create-session.dal.js'
+import FetchCompanyLicencesDal from '../../../dal/company-contacts/fetch-company-licences.dal.js'
+import FetchCompanyService from '../../../dal/companies/fetch-company.dal.js'
 
 /**
  * Initiates the session record used for setting up a new company contact
@@ -29,6 +27,6 @@ async function go(companyId) {
   return CreateSessionDal.go(data)
 }
 
-module.exports = {
+export default {
   go
 }

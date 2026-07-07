@@ -1,6 +1,5 @@
-'use strict'
-
-const SessionNotFoundError = require('../../errors/session-not-found.error.js')
+import http2 from 'node:http2'
+import SessionNotFoundError from '../../errors/session-not-found.error.js'
 
 /**
  * Used by the `ErrorPagesPlugin` to process unhandled exceptions in the service
@@ -8,7 +7,7 @@ const SessionNotFoundError = require('../../errors/session-not-found.error.js')
  */
 
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_GONE, HTTP_STATUS_OK } =
-  require('node:http2').constants
+  http2.constants
 
 /**
  * Determines if a response is an error and and whether an error page should be returned
@@ -151,6 +150,6 @@ function _determineSafeStatusCode(statusCode) {
   return HTTP_STATUS_OK
 }
 
-module.exports = {
+export default {
   go
 }

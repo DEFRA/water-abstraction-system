@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches data needed for the view '/licences/{id}/history` page
  * @module FetchHistoryService
  */
 
-const LicenceVersionModel = require('../../models/licence-version.model.js')
+import LicenceVersionModel from '../../models/licence-version.model.js'
 
 /**
  * Fetches data needed for the view '/licences/{id}/history` page
@@ -31,6 +29,6 @@ async function _fetch(licenceId) {
     .modify('history')
 }
 
-module.exports = {
+export default {
   go
 }

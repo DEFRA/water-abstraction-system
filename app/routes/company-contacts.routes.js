@@ -1,6 +1,4 @@
-'use strict'
-
-const CompanyContactsController = require('../controllers/company-contacts.controller.js')
+import CompanyContactsController from '../controllers/company-contacts.controller.js'
 
 const routes = [
   {
@@ -43,4 +41,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

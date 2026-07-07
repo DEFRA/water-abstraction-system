@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Handles the user submission for the `/bill-runs/setup/{sessionId}/type` page
  * @module SubmitTypeService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const TypePresenter = require('../../../presenters/bill-runs/setup/type.presenter.js')
-const TypeValidator = require('../../../validators/bill-runs/setup/type.validator.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import TypePresenter from '../../../presenters/bill-runs/setup/type.presenter.js'
+import TypeValidator from '../../../validators/bill-runs/setup/type.validator.js'
 
 /**
  * Handles the user submission for the `/bill-runs/setup/{sessionId}/type` page
@@ -68,6 +66,6 @@ function _validate(payload) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

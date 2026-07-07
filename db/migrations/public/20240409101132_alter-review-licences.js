@@ -1,14 +1,12 @@
-'use strict'
-
 const tableName = 'review_licences'
 
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema.alterTable(tableName, (table) => {
     table.boolean('progress').notNullable().defaultTo(false)
   })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.alterTable(tableName, (table) => {
     table.dropColumn('progress')
   })

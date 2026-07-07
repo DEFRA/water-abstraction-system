@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats summary data of licences connected to a bill for the multi-licence bill page
  * @module ViewLicenceSummariesPresenter
  */
 
-const { formatMoney } = require('../base.presenter.js')
+import { formatMoney } from '../base.presenter.js'
 
 /**
  * Formats summary data of licences connected to a bill for the multi-licence bill page
@@ -47,6 +45,6 @@ function _tableCaption(billLicences) {
   return `${numberOfRows} licences`
 }
 
-module.exports = {
+export default {
   go
 }

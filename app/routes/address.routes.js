@@ -1,6 +1,4 @@
-'use strict'
-
-const AddressController = require('../controllers/address.controller.js')
+import AddressController from '../controllers/address.controller.js'
 
 const routes = [
   {
@@ -61,4 +59,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

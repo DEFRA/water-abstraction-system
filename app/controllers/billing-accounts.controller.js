@@ -1,16 +1,15 @@
-'use strict'
-
 /**
  * Controller for /billing-accounts endpoints
  * @module BillingAccountsController
  */
 
-const Boom = require('@hapi/boom')
-const { HTTP_STATUS_CREATED } = require('node:http2').constants
+import http2 from 'node:http2'
+import Boom from '@hapi/boom'
+import ChangeAddressService from '../services/billing-accounts/change-address.service.js'
+import ChangeAddressValidator from '../validators/change-address.validator.js'
+import ViewBillingAccountService from '../services/billing-accounts/view-billing-account.service.js'
 
-const ChangeAddressService = require('../services/billing-accounts/change-address.service.js')
-const ChangeAddressValidator = require('../validators/change-address.validator.js')
-const ViewBillingAccountService = require('../services/billing-accounts/view-billing-account.service.js')
+const { HTTP_STATUS_CREATED } = http2.constants
 
 async function changeAddress(request, h) {
   const validatedData = ChangeAddressValidator.go(request.payload)
@@ -40,7 +39,7 @@ function _formattedValidationError(error) {
   return Boom.badRequest(error.details[0].message)
 }
 
-module.exports = {
+export default {
   changeAddress,
   view
 }

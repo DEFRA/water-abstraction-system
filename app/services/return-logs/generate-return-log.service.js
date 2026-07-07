@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Generate return log data from a return requirement and return cycle
  * @module GenerateReturnLogService
  */
 
-const { determineEarliestDate, determineLatestDate, formatDateObjectToISO } = require('../../lib/dates.lib.js')
+import { determineEarliestDate, determineLatestDate, formatDateObjectToISO } from '../../lib/dates.lib.js'
 
 /**
  * Generate return log data from a return requirement and return cycle
@@ -191,6 +189,6 @@ function _startDate(returnVersion, returnCycleStartDate) {
   return determineLatestDate([licence.startDate, returnVersionStartDate, returnCycleStartDate])
 }
 
-module.exports = {
+export default {
   go
 }

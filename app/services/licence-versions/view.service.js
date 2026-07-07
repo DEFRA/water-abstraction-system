@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/licence-versions/{id}` page
  *
  * @module ViewService
  */
 
-const FetchConditionsService = require('../licences/fetch-conditions.service.js')
-const FetchLicenceVersionDal = require('../../dal/licence-versions/fetch-licence-version.dal.js')
-const ViewPresenter = require('../../presenters/licence-versions/view.presenter.js')
+import FetchConditionsService from '../licences/fetch-conditions.service.js'
+import FetchLicenceVersionDal from '../../dal/licence-versions/fetch-licence-version.dal.js'
+import ViewPresenter from '../../presenters/licence-versions/view.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/licence-versions/{id}` page
@@ -29,6 +27,6 @@ async function go(licenceVersionId, auth) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

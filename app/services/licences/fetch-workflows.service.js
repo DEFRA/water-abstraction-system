@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches workflow data needed for the view '/licences/{id}/set-up` page
  * @module FetchWorkflowsService
  */
 
-const WorkflowModel = require('../../models/workflow.model.js')
+import WorkflowModel from '../../models/workflow.model.js'
 
 /**
  * Fetches workflow data needed for the view '/licences/{id}/set-up` page
@@ -26,6 +24,6 @@ async function _fetch(licenceId) {
     .orderBy([{ column: 'createdAt', order: 'desc' }])
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates creating the notice and sending the notifications when `/notices/setup/{sessionId}/check` page submitted
  * @module SubmitCheckService
  */
 
-const CreateNoticeService = require('./create-notice.service.js')
-const CreateNotificationsService = require('./create-notifications.service.js')
-const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
-const FetchRecipientsService = require('./fetch-recipients.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SendNoticeService = require('./send/send-notice.service.js')
+import CreateNoticeService from './create-notice.service.js'
+import CreateNotificationsService from './create-notifications.service.js'
+import DeleteSessionDal from '../../../dal/delete-session.dal.js'
+import FetchRecipientsService from './fetch-recipients.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SendNoticeService from './send/send-notice.service.js'
 
 /**
  * Orchestrates creating the notice and sending the notifications when `/notices/setup/{sessionId}/check` page submitted
@@ -52,6 +50,6 @@ async function _notice(session, recipients, auth) {
   return CreateNoticeService.go(session, recipients, auth.credentials.user.username)
 }
 
-module.exports = {
+export default {
   go
 }

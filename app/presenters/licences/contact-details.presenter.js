@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/licences/{id}/contact-details` view contact details page
  * @module ContactDetailsPresenter
  */
 
-const { formatContact } = require('../crm.presenter.js')
+import { formatContact } from '../crm.presenter.js'
 
 /**
  * Formats data for the `/licences/{id}/contact-details` view contact details page
@@ -60,6 +58,6 @@ function _licenceHolderContactsLink(contacts) {
   return `/system/companies/${companyId}/contacts`
 }
 
-module.exports = {
+export default {
   go
 }

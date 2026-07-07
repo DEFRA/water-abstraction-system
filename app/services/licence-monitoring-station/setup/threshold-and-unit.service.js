@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/licence-monitoring-station/setup/{sessionId}/threshold-and-unit`
  * page
  * @module ThresholdAndUnitService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const ThresholdAndUnitPresenter = require('../../../presenters/licence-monitoring-station/setup/threshold-and-unit.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import ThresholdAndUnitPresenter from '../../../presenters/licence-monitoring-station/setup/threshold-and-unit.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/licence-monitoring-station/setup/{sessionId}/threshold-and-unit`
@@ -30,6 +28,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

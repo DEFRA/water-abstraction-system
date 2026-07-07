@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/check` page
  * @module CheckValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/check` page
@@ -37,6 +35,6 @@ function _lineValuesExist(session) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

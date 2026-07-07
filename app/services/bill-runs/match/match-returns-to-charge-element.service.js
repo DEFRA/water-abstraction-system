@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Matches return logs to a charge element
  * @module MatchReturnsToChargeElementService
  */
 
-const { periodsOverlap } = require('../../../lib/general.lib.js')
+import { periodsOverlap } from '../../../lib/general.lib.js'
 
 /**
  * Matches return logs to a charge element
@@ -64,6 +62,6 @@ function _matchReturns(chargeElement, returnLogs) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Formats bill run data ready for presenting in the view bill run page
  * @module ViewBillRunPresenter
  */
 
-const { formatFinancialYear, formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
-const {
+import { formatFinancialYear, formatLongDate, formatMoney, titleCase } from '../base.presenter.js'
+import {
   formatBillRunType,
   formatChargeScheme,
   displayCreditDebitTotals,
   generateBillRunTitle
-} = require('../billing.presenter.js')
+} from '../billing.presenter.js'
 
 /**
  * Formats bill run data ready for presenting in the view bill run page
@@ -122,6 +120,6 @@ function _debitsCount(count) {
   return `${count} invoices`
 }
 
-module.exports = {
+export default {
   go
 }

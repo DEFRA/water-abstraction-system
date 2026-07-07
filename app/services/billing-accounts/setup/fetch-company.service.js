@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the data from Companies House for the provided Companies House Number
  * @module FetchCompanyService
  */
 
-const LookupCompanysHouseNumberRequest = require('../../../requests/companies-house/lookup-companies-house-number.request.js')
+import LookupCompanysHouseNumberRequest from '../../../requests/companies-house/lookup-companies-house-number.request.js'
 
 /**
  * Fetches the data from Companies House for the provided Companies House Number
@@ -33,6 +31,6 @@ async function go(companiesHouseNumber) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

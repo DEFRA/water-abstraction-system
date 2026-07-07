@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats summary data of bills connected to a bill run for the bill run summary page
  * @module ViewBillSummariesPresenter
  */
 
-const { formatMoney } = require('../base.presenter.js')
+import { formatMoney } from '../base.presenter.js'
 
 /**
  * Formats summary data of bills connected to a bill run for the bill run summary page
@@ -93,6 +91,6 @@ function _waterCompanies(summaries) {
   return _bills(filteredSummaries)
 }
 
-module.exports = {
+export default {
   go
 }

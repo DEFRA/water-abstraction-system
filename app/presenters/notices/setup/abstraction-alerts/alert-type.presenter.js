@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-type` page
  *
@@ -59,6 +57,6 @@ function _alertTypeOptions(alertType) {
   ]
 }
 
-module.exports = {
+export default {
   go
 }

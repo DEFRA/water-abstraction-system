@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Plugin to log errors using Airbrake API
  * @module AirbrakePlugin
@@ -18,11 +16,11 @@
  * {@link https://github.com/DEFRA/charging-module-api/blob/master/app/plugins/airbrake.js}
  */
 
-const { Notifier } = require('@airbrake/node')
+import { Notifier } from '@airbrake/node'
 
-const airbrakeConfig = require('../../config/airbrake.config.js')
-const { gotWrapper } = require('../lib/got-wrapper.lib.js')
-const serverConfig = require('../../config/server.config.js')
+import airbrakeConfig from '../../config/airbrake.config.js'
+import { gotWrapper } from '../lib/got-wrapper.lib.js'
+import serverConfig from '../../config/server.config.js'
 
 // The `Notifier` constructor unconditionally hooks `process.on('uncaughtException' | 'unhandledRejection' |
 // 'beforeExit', ...)` and never removes these listeners. In production this plugin is only ever registered once, so
@@ -84,4 +82,4 @@ async function _notifierArgs() {
   return args
 }
 
-module.exports = AirbrakePlugin
+export default AirbrakePlugin

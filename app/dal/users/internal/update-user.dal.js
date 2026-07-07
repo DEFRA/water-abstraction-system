@@ -1,19 +1,17 @@
-'use strict'
-
 /**
  * Updates an existing user
  * @module UpdateUserDal
  */
 
-const EventModel = require('../../../models/event.model.js')
-const FetchUserDal = require('../fetch-user.dal.js')
-const GroupModel = require('../../../models/group.model.js')
-const RoleModel = require('../../../models/role.model.js')
-const UserGroupModel = require('../../../models/user-group.model.js')
-const UserModel = require('../../../models/user.model.js')
-const UserRoleModel = require('../../../models/user-role.model.js')
-const { generateUUID, timestampForPostgres } = require('../../../lib/general.lib.js')
-const { userPermissions } = require('../../../lib/static-lookups.lib.js')
+import EventModel from '../../../models/event.model.js'
+import FetchUserDal from '../fetch-user.dal.js'
+import GroupModel from '../../../models/group.model.js'
+import RoleModel from '../../../models/role.model.js'
+import UserGroupModel from '../../../models/user-group.model.js'
+import UserModel from '../../../models/user.model.js'
+import UserRoleModel from '../../../models/user-role.model.js'
+import { generateUUID, timestampForPostgres } from '../../../lib/general.lib.js'
+import { userPermissions } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Updates an existing user
@@ -125,6 +123,6 @@ async function _updateUser(access, currentUsername, email, id, trx) {
   return userData.resetGuid
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/monitoring-stations/{monitoringStationId}/licence/{licenceId}`
  * @module ViewLicenceService
  */
 
-const FetchLicenceMonitoringStationsDal = require('../../dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js')
-const ViewLicencePresenter = require('../../presenters/monitoring-stations/view-licence.presenter.js')
+import FetchLicenceMonitoringStationsDal from '../../dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js'
+import ViewLicencePresenter from '../../presenters/monitoring-stations/view-licence.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/monitoring-stations/{monitoringStationId}/licence/{licenceId}`
@@ -30,6 +28,6 @@ async function go(auth, licenceId, monitoringStationId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

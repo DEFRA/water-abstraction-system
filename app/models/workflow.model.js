@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for workflows (water.charge_version_workflows)
  * @module WorkflowModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class WorkflowModel extends BaseModel {
   static get tableName() {
@@ -28,4 +26,4 @@ class WorkflowModel extends BaseModel {
   }
 }
 
-module.exports = WorkflowModel
+export default WorkflowModel

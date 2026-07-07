@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/reported` page
  * @module SubmitReportedService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const ReportedPresenter = require('../../../presenters/return-logs/setup/reported.presenter.js')
-const ReportedValidator = require('../../../validators/return-logs/setup/reported.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import GeneralLib from '../../../lib/general.lib.js'
+import ReportedPresenter from '../../../presenters/return-logs/setup/reported.presenter.js'
+import ReportedValidator from '../../../validators/return-logs/setup/reported.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/reported` page
@@ -64,6 +62,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

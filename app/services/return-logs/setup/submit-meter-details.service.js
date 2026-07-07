@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/meter-details` page
  * @module SubmitMeterDetailsService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const MeterDetailsPresenter = require('../../../presenters/return-logs/setup/meter-details.presenter.js')
-const MeterDetailsValidator = require('../../../validators/return-logs/setup/meter-details.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import GeneralLib from '../../../lib/general.lib.js'
+import MeterDetailsPresenter from '../../../presenters/return-logs/setup/meter-details.presenter.js'
+import MeterDetailsValidator from '../../../validators/return-logs/setup/meter-details.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/meter-details` page
@@ -80,6 +78,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

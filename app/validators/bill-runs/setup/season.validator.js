@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/bill-runs/setup/{sessionId}/season` page
  * @module SeasonValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const VALID_VALUES = ['summer', 'winter_all_year']
 
@@ -32,6 +30,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

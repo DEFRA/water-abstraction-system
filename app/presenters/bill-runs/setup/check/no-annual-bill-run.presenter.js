@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the `/bill-runs/setup/{sessionId}/check` page when the financial year could not be determined
  * @module NoAnnualBillRunPresenter
  */
 
-const { formatBillRunType, formatChargeScheme } = require('../../../billing.presenter.js')
-const { checkPageBackLink } = require('./base-check.presenter.js')
+import { formatBillRunType, formatChargeScheme } from '../../../billing.presenter.js'
+import { checkPageBackLink } from './base-check.presenter.js'
 
 /**
  * Formats data for the `/bill-runs/setup/{sessionId}/check` page when the financial year could not be determined
@@ -55,6 +53,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

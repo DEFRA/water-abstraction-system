@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/no-returns-required` page
  * @module StartDateService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const NoReturnsRequiredPresenter = require('../../../presenters/return-versions/setup/no-returns-required.presenter.js')
-const NoReturnsRequiredValidator = require('../../../validators/return-versions/setup/no-returns-required.validator.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import GeneralLib from '../../../lib/general.lib.js'
+import NoReturnsRequiredPresenter from '../../../presenters/return-versions/setup/no-returns-required.presenter.js'
+import NoReturnsRequiredValidator from '../../../validators/return-versions/setup/no-returns-required.validator.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/no-returns-required` page
@@ -64,6 +62,6 @@ function _validate(payload) {
   return formatValidationResult(validation)
 }
 
-module.exports = {
+export default {
   go
 }

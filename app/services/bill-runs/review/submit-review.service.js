@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Updates the session cookie with the filter data needed for the '/bill-runs/review/{id}' page
  * @module SubmitReviewService
  */
 
-const { clearFilters, handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
+import { clearFilters, handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
 
 /**
  * Updates the session cookie with the filter data needed for the '/bill-runs/review/{id}' page
@@ -38,6 +36,6 @@ function _save(payload, yar, filterKey) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

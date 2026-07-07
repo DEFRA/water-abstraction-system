@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Determine the billing periods needed when generating a bill run
  * @module DetermineBillingPeriodsService
@@ -79,6 +77,6 @@ function _financialYear(financialYearEnding) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/type` page
  * @module TypeService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const TypePresenter = require('../../../presenters/bill-runs/setup/type.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import TypePresenter from '../../../presenters/bill-runs/setup/type.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/type` page
@@ -29,6 +27,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

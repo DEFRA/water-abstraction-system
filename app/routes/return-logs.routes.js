@@ -1,6 +1,4 @@
-'use strict'
-
-const ReturnLogsController = require('../controllers/return-logs.controller.js')
+import ReturnLogsController from '../controllers/return-logs.controller.js'
 
 const routes = [
   {
@@ -33,4 +31,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

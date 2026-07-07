@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats bill and billing account data ready for presenting in the single licence bill and multi licence bill pages
  * @module ViewBillPresenter
  */
 
-const { formatFinancialYear, formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
-const { formatBillRunType, formatChargeScheme, displayCreditDebitTotals } = require('../billing.presenter.js')
+import { formatFinancialYear, formatLongDate, formatMoney, titleCase } from '../base.presenter.js'
+import { formatBillRunType, formatChargeScheme, displayCreditDebitTotals } from '../billing.presenter.js'
 
 /**
  * Formats bill and billing account data ready for presenting in the single licence bill and multi licence bill pages
@@ -91,6 +89,6 @@ function _billTotal(valueInPence, credit) {
   return valueAsMoney
 }
 
-module.exports = {
+export default {
   go
 }

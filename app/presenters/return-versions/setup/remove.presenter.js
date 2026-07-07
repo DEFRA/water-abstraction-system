@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/remove/{requirementIndex}` page
  * @module RemovePresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
-const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
+import { formatLongDate } from '../../base.presenter.js'
+import { returnRequirementFrequencies } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/remove/{requirementIndex}` page
@@ -57,6 +55,6 @@ function _startDate(session) {
   return formatLongDate(date)
 }
 
-module.exports = {
+export default {
   go
 }

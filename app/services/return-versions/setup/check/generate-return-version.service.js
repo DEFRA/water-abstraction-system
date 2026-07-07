@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Uses the session data to generate the data sets required to create a new return version for a licence
  * @module GenerateReturnVersionService
  */
 
-const DetermineNextVersionNumberDal = require('../../../../dal/return-versions/determine-next-version-number.dal.js')
-const GenerateReturnVersionRequirementsService = require('./generate-return-version-requirements.service.js')
-const { isQuarterlyReturnSubmissions } = require('../../../../lib/dates.lib.js')
+import DetermineNextVersionNumberDal from '../../../../dal/return-versions/determine-next-version-number.dal.js'
+import GenerateReturnVersionRequirementsService from './generate-return-version-requirements.service.js'
+import { isQuarterlyReturnSubmissions } from '../../../../lib/dates.lib.js'
 
 /**
  * Uses the session data to generate the data sets required to create a new return version for a licence
@@ -69,6 +67,6 @@ async function _generateReturnVersion(nextVersionNumber, session, userId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

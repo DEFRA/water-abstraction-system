@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/licence-monitoring-station/setup/{sessionId}/licence-number`
  * page
@@ -7,8 +5,8 @@
  * @module LicenceNumberService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const LicenceNumberPresenter = require('../../../presenters/licence-monitoring-station/setup/licence-number.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import LicenceNumberPresenter from '../../../presenters/licence-monitoring-station/setup/licence-number.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/licence-monitoring-station/setup/{sessionId}/licence-number` page
@@ -27,6 +25,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

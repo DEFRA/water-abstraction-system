@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches data needed to determine if an email address has been used to send notifications.
  * @module FetchNotificationService
  */
 
-const NotificationModel = require('../../models/notification.model.js')
-const { ignoreMessageRef } = require('../../lib/static-lookups.lib.js')
+import NotificationModel from '../../models/notification.model.js'
+import { ignoreMessageRef } from '../../lib/static-lookups.lib.js'
 
 /**
  * Fetches data needed to determine if an email address has been used to send notifications.
@@ -32,6 +30,6 @@ async function _fetch(email) {
     .first()
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
  *
  * @module FullConditionService
  */
 
-const FetchFullConditionService = require('./fetch-full-condition.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const FullConditionPresenter = require('../../../presenters/licence-monitoring-station/setup/full-condition.presenter.js')
+import FetchFullConditionService from './fetch-full-condition.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import FullConditionPresenter from '../../../presenters/licence-monitoring-station/setup/full-condition.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
@@ -29,6 +27,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

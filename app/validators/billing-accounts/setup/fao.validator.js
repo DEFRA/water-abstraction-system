@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/billing-accounts/setup/{sessionId}/fao` page
  *
  * @module FAOValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const VALID_VALUES = ['yes', 'no']
 
@@ -35,6 +33,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

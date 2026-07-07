@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Handles voiding the return logs for a licence after reissuing new ones
  * @module VoidLicenceReturnLogsService
  */
 
-const ReturnLogModel = require('../../models/return-log.model.js')
-const { timestampForPostgres } = require('../../lib/general.lib.js')
+import ReturnLogModel from '../../models/return-log.model.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Handles voiding the return logs for a licence after reissuing new ones
@@ -87,6 +85,6 @@ async function go(reissuedReturnIds, licenceRef, returnCycleId, changeDate, trx 
     .whereNotIn('returnId', reissuedReturnIds)
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Generates the SQL query for selecting recipients to fetch for a returns notice
  * @module GenerateRecipientsQueryService
  */
 
-const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
+import { NoticeType } from '../../../../lib/static-lookups.lib.js'
 
 /**
  * Generates the SQL query for selecting recipients to fetch for a returns notice
@@ -477,6 +475,6 @@ function _returnsToQuery(noticeType) {
   return _noRecipientsQuery()
 }
 
-module.exports = {
+export default {
   go
 }

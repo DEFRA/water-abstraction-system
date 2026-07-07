@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Validates data submitted for the `address/{sessionId}/international` page
  *
  * @module InternationalValidator
  */
 
-const Joi = require('joi')
-const { countries } = require('../../lib/static-lookups.lib.js')
-const { addressLineValidator } = require('./addressLine.validator.js')
+import Joi from 'joi'
+import { countries } from '../../lib/static-lookups.lib.js'
+import { addressLineValidator } from './addressLine.validator.js'
 
 /**
  * Validates data submitted for the `address/{sessionId}/international` page
@@ -34,6 +32,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

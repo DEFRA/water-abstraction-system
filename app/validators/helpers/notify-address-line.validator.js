@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Checks if the given string starts with any of the special characters
  * given in the startCharacters array.
@@ -16,6 +14,6 @@ function invalidStartCharacters(value) {
   })
 }
 
-module.exports = {
+export default {
   invalidStartCharacters
 }

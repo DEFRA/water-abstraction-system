@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the confirm remove a bill page
  * @module RemoveBillPresenter
  */
 
-const { formatFinancialYear, formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
-const { formatBillRunType, formatChargeScheme } = require('../billing.presenter.js')
+import { formatFinancialYear, formatLongDate, formatMoney, titleCase } from '../base.presenter.js'
+import { formatBillRunType, formatChargeScheme } from '../billing.presenter.js'
 
 /**
  * Formats data for the confirm remove a bill page
@@ -74,6 +72,6 @@ function _supplementaryMessage(licencesText) {
   return `The ${licencesText.toLowerCase()} will go into the next supplementary bill run.`
 }
 
-module.exports = {
+export default {
   go
 }

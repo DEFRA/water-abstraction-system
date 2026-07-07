@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/{sessionId}/submission` page
  * @module SubmissionService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SubmissionPresenter = require('../../../presenters/return-logs/setup/submission.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SubmissionPresenter from '../../../presenters/return-logs/setup/submission.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/{sessionId}/submission` page
@@ -25,6 +23,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

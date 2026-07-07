@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/download` link
  * @module DownloadReturnsNoticePresenter
  */
 
-const { addressToCSV } = require('../base.presenter.js')
-const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js')
+import { addressToCSV } from '../base.presenter.js'
+import { transformArrayToCSVRow } from '../../../lib/transform-to-csv.lib.js'
 
 const HEADERS = [
   'Licence',
@@ -81,6 +79,6 @@ function _transformToCsv(recipients, notificationType) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,6 +1,4 @@
-'use strict'
-
-const { formatDateObjectToISO } = require('../lib/dates.lib.js')
+import { formatDateObjectToISO } from '../lib/dates.lib.js'
 
 /**
  * Transforms an array into a CSV formatted string.
@@ -80,6 +78,6 @@ function _transformValueToCSV(value) {
   return `"${stringValue}"`
 }
 
-module.exports = {
+export default {
   transformArrayToCSVRow
 }

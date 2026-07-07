@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/submission` page
  * @module SubmissionValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const VALID_VALUES = ['enterReturn', 'nilReturn', 'recordReceipt']
 
@@ -34,6 +32,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

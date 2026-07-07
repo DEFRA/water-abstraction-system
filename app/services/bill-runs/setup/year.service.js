@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/year` page
  * @module YearService
  */
 
-const FetchLicenceSupplementaryYearsService = require('./fetch-licence-supplementary-years.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const YearPresenter = require('../../../presenters/bill-runs/setup/year.presenter.js')
+import FetchLicenceSupplementaryYearsService from './fetch-licence-supplementary-years.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import YearPresenter from '../../../presenters/bill-runs/setup/year.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/year` page
@@ -34,6 +32,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

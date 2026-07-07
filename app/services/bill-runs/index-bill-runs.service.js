@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the /bill-runs page
  * @module IndexBillRunsService
  */
 
-const CheckBusyBillRunsService = require('./check-busy-bill-runs.service.js')
-const FetchBillRunsService = require('./fetch-bill-runs.service.js')
-const FetchRegionsService = require('./setup/fetch-regions.service.js')
-const IndexBillRunsPresenter = require('../../presenters/bill-runs/index-bill-runs.presenter.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { processSavedFilters } = require('../../lib/submit-page.lib.js')
+import CheckBusyBillRunsService from './check-busy-bill-runs.service.js'
+import FetchBillRunsService from './fetch-bill-runs.service.js'
+import FetchRegionsService from './setup/fetch-regions.service.js'
+import IndexBillRunsPresenter from '../../presenters/bill-runs/index-bill-runs.presenter.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { processSavedFilters } from '../../lib/submit-page.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the /bill-runs page
@@ -56,6 +54,6 @@ function _filters(yar) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Controller for /return-logs endpoints
  * @module ReturnLogsController
  */
 
-const DownloadReturnLogService = require('../services/return-logs/download-return-log.service.js')
-const SubmitDetailsService = require('../services/return-logs/submit-details.service.js')
-const ViewCommunicationsService = require('../services/return-logs/view-communications.service.js')
-const ViewDetailsService = require('../services/return-logs/view-details.service.js')
+import DownloadReturnLogService from '../services/return-logs/download-return-log.service.js'
+import SubmitDetailsService from '../services/return-logs/submit-details.service.js'
+import ViewCommunicationsService from '../services/return-logs/view-communications.service.js'
+import ViewDetailsService from '../services/return-logs/view-details.service.js'
 
 async function download(request, h) {
   const {
@@ -61,7 +59,7 @@ async function submitDetails(request, h) {
   return h.redirect(`/system/return-logs/${id}/details`)
 }
 
-module.exports = {
+export default {
   download,
   submitDetails,
   viewCommunications,

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/cancel` page
  * @module CancelAlertsPresenter
  */
 
-const { sentenceCase } = require('../../../base.presenter.js')
+import { sentenceCase } from '../../../base.presenter.js'
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/cancel` page
@@ -30,6 +28,6 @@ function _summaryList(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

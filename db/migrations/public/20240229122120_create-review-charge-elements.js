@@ -1,9 +1,7 @@
-'use strict'
-
 const tableName = 'review_charge_elements'
 const replacedTableName = 'review_charge_element_results'
 
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema
     .dropTableIfExists(replacedTableName)
     .createTable(tableName, (table) => {
@@ -33,7 +31,7 @@ exports.up = function (knex) {
     })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema
     .dropTableIfExists(tableName)
     .createTable(replacedTableName, (table) => {

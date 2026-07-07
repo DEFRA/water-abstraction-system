@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `address/{sessionId}/international` page
  *
  * @module SubmitInternationalService
  */
 
-const InternationalPresenter = require('../../presenters/address/international.presenter.js')
-const InternationalValidator = require('../../validators/address/international.validator.js')
-const FetchSessionDal = require('../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
+import InternationalPresenter from '../../presenters/address/international.presenter.js'
+import InternationalValidator from '../../validators/address/international.validator.js'
+import FetchSessionDal from '../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `address/{sessionId}/international` page
@@ -72,6 +70,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

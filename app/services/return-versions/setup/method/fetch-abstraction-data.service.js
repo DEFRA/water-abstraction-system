@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches a licence's abstraction data in order to generate new return requirements
  * @module FetchAbstractionDataService
  */
 
-const LicenceModel = require('../../../../models/licence.model.js')
+import LicenceModel from '../../../../models/licence.model.js'
 
 /**
  * Fetches a licence's abstraction data in order to generate new return requirements
@@ -50,6 +48,6 @@ async function go(licenceId, licenceVersionId) {
     })
 }
 
-module.exports = {
+export default {
   go
 }

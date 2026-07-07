@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Fetches the item details for a set of search results on the /search page
  * @module FetchSearchResultsDetailsService
  */
 
-const BillingAccountModel = require('../../models/billing-account.model.js')
-const CompanyModel = require('../../models/company.model.js')
-const LicenceModel = require('../../models/licence.model.js')
-const MonitoringStationModel = require('../../models/monitoring-station.model.js')
-const ReturnLogModel = require('../../models/return-log.model.js')
-const UserModel = require('../../models/user.model.js')
-const { db } = require('../../../db/db.js')
+import BillingAccountModel from '../../models/billing-account.model.js'
+import CompanyModel from '../../models/company.model.js'
+import LicenceModel from '../../models/licence.model.js'
+import MonitoringStationModel from '../../models/monitoring-station.model.js'
+import ReturnLogModel from '../../models/return-log.model.js'
+import UserModel from '../../models/user.model.js'
+import { db } from '../../../db/db.js'
 
 /**
  * Fetches the item details for a set of search results on the /search page
@@ -125,6 +123,6 @@ async function _user(ids) {
   return UserModel.query().select(['id', 'lastLogin', 'username']).modify('permissions').modify('status').findByIds(ids)
 }
 
-module.exports = {
+export default {
   go
 }

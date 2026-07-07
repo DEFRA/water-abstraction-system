@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the `/notices/setup/{sessionId}/paper-return` page
  *
  * @module SubmitPaperReturnService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const PaperReturnPresenter = require('../../../presenters/notices/setup/paper-return.presenter.js')
-const PaperReturnValidator = require('../../../validators/notices/setup/paper-return.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import GeneralLib from '../../../lib/general.lib.js'
+import PaperReturnPresenter from '../../../presenters/notices/setup/paper-return.presenter.js'
+import PaperReturnValidator from '../../../validators/notices/setup/paper-return.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
 
 /**
  * Orchestrates validating the data for the `/notices/setup/{sessionId}/paper-return` page
@@ -95,6 +93,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

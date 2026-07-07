@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/setup/{sessionId}/check' page
  *
  * @module ViewCheckService
  */
 
-const CheckPresenter = require('../../../presenters/company-contacts/setup/check.presenter.js')
-const FetchCompanyContactsDal = require('../../../dal/company-contacts/setup/fetch-company-contacts.dal.js')
-const FetchNotificationService = require('../fetch-notification.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { markCheckPageVisited } = require('../../../lib/check-page.lib.js')
-const { readFlashNotification } = require('../../../lib/general.lib.js')
+import CheckPresenter from '../../../presenters/company-contacts/setup/check.presenter.js'
+import FetchCompanyContactsDal from '../../../dal/company-contacts/setup/fetch-company-contacts.dal.js'
+import FetchNotificationService from '../fetch-notification.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { markCheckPageVisited } from '../../../lib/check-page.lib.js'
+import { readFlashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/setup/{sessionId}/check' page
@@ -49,6 +47,6 @@ async function _save(session, matchingContact) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Controller for /company-contacts endpoints
  * @module CompanyContactsController
  */
 
-const ViewCommunicationsService = require('../services/company-contacts/view-communications.service.js')
-const ViewContactDetailsService = require('../services/company-contacts/view-contact-details.service.js')
-const ViewRemoveCompanyContactService = require('../services/company-contacts/view-remove-company-contact.service.js')
-const SubmitRemoveCompanyContactService = require('../services/company-contacts/submit-remove-company-contact.service.js')
+import ViewCommunicationsService from '../services/company-contacts/view-communications.service.js'
+import ViewContactDetailsService from '../services/company-contacts/view-contact-details.service.js'
+import ViewRemoveCompanyContactService from '../services/company-contacts/view-remove-company-contact.service.js'
+import SubmitRemoveCompanyContactService from '../services/company-contacts/submit-remove-company-contact.service.js'
 
 async function viewCommunications(request, h) {
   const {
@@ -52,7 +50,7 @@ async function submitRemoveCompanyContact(request, h) {
   return h.redirect(`/system/companies/${companyId}/contacts`)
 }
 
-module.exports = {
+export default {
   viewCommunications,
   viewContactDetails,
   viewRemoveCompanyContact,

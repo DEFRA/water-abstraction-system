@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/returns-cycle` page
  * @module ReturnsCyclePresenter
@@ -38,6 +36,6 @@ function _backLinkHref(session, requirementIndex) {
   return `/system/return-versions/setup/${id}/abstraction-period/${requirementIndex}`
 }
 
-module.exports = {
+export default {
   go
 }

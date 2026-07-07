@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the licences to remove for the notices setup remove licences page
  * @module ViewRemoveLicencesService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const RemoveLicencesPresenter = require('../../../presenters/notices/setup/remove-licences.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import RemoveLicencesPresenter from '../../../presenters/notices/setup/remove-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the licences to remove for the notices setup remove licences page
@@ -28,6 +26,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

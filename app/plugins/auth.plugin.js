@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Plugin to authenticate and authorise users
  * @module AuthPlugin
  */
 
-const Boom = require('@hapi/boom')
+import Boom from '@hapi/boom'
 
-const AuthService = require('../services/plugins/auth.service.js')
+import AuthService from '../services/plugins/auth.service.js'
 
-const AuthenticationConfig = require('../../config/authentication.config.js')
-const NotifyConfig = require('../../config/notify.config.js')
+import AuthenticationConfig from '../../config/authentication.config.js'
+import NotifyConfig from '../../config/notify.config.js'
 
 const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000
 
@@ -81,4 +79,4 @@ const AuthPlugin = {
   }
 }
 
-module.exports = AuthPlugin
+export default AuthPlugin

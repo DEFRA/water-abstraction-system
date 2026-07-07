@@ -1,8 +1,6 @@
-'use strict'
-
 const tableName = 'users'
 
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema.withSchema('idm').createTable(tableName, (table) => {
     table.uuid('id').defaultTo(knex.raw('gen_random_uuid()')).notNullable()
     // Primary Key -- note `.increments()` is implicitly the primary key but we add `primary()` to make it explicit
@@ -33,6 +31,6 @@ exports.up = function (knex) {
   })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.withSchema('idm').dropTableIfExists(tableName)
 }

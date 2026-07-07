@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Deletes voided return logs which have not been received and have no return submissions
  * @module CleanEmptyVoidReturnLogsService
  */
 
-const ReturnLogModel = require('../../../models/return-log.model.js')
-const ReturnSubmissionModel = require('../../../models/return-submission.model.js')
+import ReturnLogModel from '../../../models/return-log.model.js'
+import ReturnSubmissionModel from '../../../models/return-submission.model.js'
 
 /**
  * Deletes voided return logs which have not been received and have no return submissions
@@ -31,6 +29,6 @@ async function go() {
   return deletedCount
 }
 
-module.exports = {
+export default {
   go
 }

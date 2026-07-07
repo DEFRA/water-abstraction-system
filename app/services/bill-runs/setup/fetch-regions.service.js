@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches just the ID and display name for all regions
  * @module FetchRegionsService
  */
 
-const RegionModel = require('../../../models/region.model.js')
+import RegionModel from '../../../models/region.model.js'
 
 /**
  * Fetches just the ID and display name for all regions
@@ -18,6 +16,6 @@ async function go() {
     .orderBy([{ column: 'displayName', order: 'asc' }])
 }
 
-module.exports = {
+export default {
   go
 }

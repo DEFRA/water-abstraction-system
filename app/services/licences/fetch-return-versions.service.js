@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches return requirements data needed for the view '/licences/{id}/set-up` page
  * @module FetchReturnVersionsService
  */
 
-const ReturnVersionModel = require('../../models/return-version.model.js')
+import ReturnVersionModel from '../../models/return-version.model.js'
 
 /**
  * Fetches return requirements data needed for the view '/licences/{id}/set-up` page
@@ -33,6 +31,6 @@ async function _fetch(licenceId) {
     })
 }
 
-module.exports = {
+export default {
   go
 }

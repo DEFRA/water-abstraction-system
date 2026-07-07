@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Generate transaction data from the the charge reference and other information passed in
  * @module GenerateTransactionsService
  */
 
-const { generateUUID } = require('../../lib/general.lib.js')
+import { generateUUID } from '../../lib/general.lib.js'
 
-const CalculateAuthorisedAndBillableDaysServiceService = require('./calculate-authorised-and-billable-days.service.js')
+import CalculateAuthorisedAndBillableDaysServiceService from './calculate-authorised-and-billable-days.service.js'
 
 /**
  * Generates an array of transactions ready to be persisted as `billing_transactions`
@@ -158,6 +156,6 @@ function _standardTransaction(
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates presenting the data for `/users` page
  * @module IndexUsersService
  */
 
-const FetchUsersDal = require('../../dal/users/fetch-users.dal.js')
-const IndexUsersPresenter = require('../../presenters/users/index-users.presenter.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { readFlashNotification } = require('../../lib/general.lib.js')
-const { processSavedFilters } = require('../../lib/submit-page.lib.js')
+import FetchUsersDal from '../../dal/users/fetch-users.dal.js'
+import IndexUsersPresenter from '../../presenters/users/index-users.presenter.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { readFlashNotification } from '../../lib/general.lib.js'
+import { processSavedFilters } from '../../lib/submit-page.lib.js'
 
-const featureFlagsConfig = require('../../../config/feature-flags.config.js')
+import featureFlagsConfig from '../../../config/feature-flags.config.js'
 
 /**
  * Orchestrates presenting the data for `/users` page
@@ -54,6 +52,6 @@ function _filters(yar) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

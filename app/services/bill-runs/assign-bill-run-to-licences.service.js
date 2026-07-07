@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Assigns a bill run to licences with matching `LicenceSupplementaryYear` records
  * @module AssignBillRunToLicencesService
  */
 
-const { db } = require('../../../db/db.js')
-const { timestampForPostgres } = require('../../lib/general.lib.js')
+import { db } from '../../../db/db.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Assigns a bill run to licences with matching `LicenceSupplementaryYear` records
@@ -79,6 +77,6 @@ async function go(billRunId) {
   await db.raw(query, params)
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/fao` page
  *
  * @module FAOService
  */
 
-const FAOPresenter = require('../../../presenters/billing-accounts/setup/fao.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import FAOPresenter from '../../../presenters/billing-accounts/setup/fao.presenter.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/fao` page
@@ -26,6 +24,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

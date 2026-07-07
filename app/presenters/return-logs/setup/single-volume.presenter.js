@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Format data for the `/return-log/setup/{sessionId}/single-volume` page
  * @module SingleVolumePresenter
@@ -36,6 +34,6 @@ function _backLinkHref(session) {
   return `/system/return-logs/setup/${id}/meter-provided`
 }
 
-module.exports = {
+export default {
   go
 }

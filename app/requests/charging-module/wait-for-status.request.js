@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Use to wait for a Charging Module bill run to be in a certain state
  * @module ChargingModuleWaitForStatusRequest
  */
 
-const ExpandedError = require('../../errors/expanded.error.js')
-const ViewBillRunStatusRequest = require('./view-bill-run-status.request.js')
-const { pause } = require('../../lib/general.lib.js')
+import ExpandedError from '../../errors/expanded.error.js'
+import ViewBillRunStatusRequest from './view-bill-run-status.request.js'
+import { pause } from '../../lib/general.lib.js'
 
-const billingConfig = require('../../../config/billing.config.js')
+import billingConfig from '../../../config/billing.config.js'
 
 /**
  * Wait for a Charging Module bill run to have a specified state
@@ -83,6 +81,6 @@ function _requestFailed(billRunId, result) {
   throw error
 }
 
-module.exports = {
+export default {
   send
 }

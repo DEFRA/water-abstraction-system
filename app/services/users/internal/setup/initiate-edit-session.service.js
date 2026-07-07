@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Initiates the session record used for editing an internal user account
  * @module InitiateEditSessionService
  */
 
-const CreateSessionDal = require('../../../../dal/create-session.dal.js')
-const FetchUserDetailsDal = require('../../../../dal/users/internal/fetch-user-details.dal.js')
-const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
+import CreateSessionDal from '../../../../dal/create-session.dal.js'
+import FetchUserDetailsDal from '../../../../dal/users/internal/fetch-user-details.dal.js'
+import { userPermissions } from '../../../../lib/static-lookups.lib.js'
 
 /**
  * Initiates the session record used for editing an internal user account
@@ -66,6 +64,6 @@ function _getUserPermissionKey(group, role) {
   return matchingPermission.key
 }
 
-module.exports = {
+export default {
   go
 }

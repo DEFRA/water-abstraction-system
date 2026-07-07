@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the matching licence monitoring station record needed for the remove licence tag page
  * @module FetchLicenceMonitoringStationService
  */
 
-const LicenceMonitoringStationModel = require('../../models/licence-monitoring-station.model.js')
+import LicenceMonitoringStationModel from '../../models/licence-monitoring-station.model.js'
 
 /**
  * Fetches the matching licence monitoring station record needed for the remove licence tag page
@@ -44,6 +42,6 @@ async function _fetchMonitoringStationLicenceTags(licenceMonitoringStationId) {
     })
 }
 
-module.exports = {
+export default {
   go
 }

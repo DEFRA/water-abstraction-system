@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetch all licences linked to the given company via their licence version holders
  * @module FetchCompanyLicencesDal
  */
 
-const { currentLicenceVersionsJoin } = require('../notices/recipient-queries.dal.js')
-const { db } = require('../../../db/db.js')
-const { timestampForPostgres } = require('../../lib/general.lib.js')
+import { currentLicenceVersionsJoin } from '../notices/recipient-queries.dal.js'
+import { db } from '../../../db/db.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Fetch all licences linked to the given company via their licence version holders
@@ -38,6 +36,6 @@ async function go(companyId) {
   return rows
 }
 
-module.exports = {
+export default {
   go
 }

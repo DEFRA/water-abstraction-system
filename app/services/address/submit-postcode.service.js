@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `address/{sessionId}/postcode` page
  *
  * @module SubmitPostcodeService
  */
 
-const FetchSessionDal = require('../../dal/fetch-session.dal.js')
-const PostcodePresenter = require('../../presenters/address/postcode.presenter.js')
-const PostcodeValidator = require('../../validators/address/postcode.validator.js')
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
+import FetchSessionDal from '../../dal/fetch-session.dal.js'
+import PostcodePresenter from '../../presenters/address/postcode.presenter.js'
+import PostcodeValidator from '../../validators/address/postcode.validator.js'
+import { formatValidationResult } from '../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `address/{sessionId}/postcode` page
@@ -64,6 +62,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

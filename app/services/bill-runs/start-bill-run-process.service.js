@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Top level service for creating and processing a new bill run
  * @module StartBillRunProcessService
  */
 
-const AnnualProcessBillRunService = require('./annual/process-bill-run.service.js')
-const DetermineBillingPeriodsService = require('./determine-billing-periods.service.js')
-const InitiateBillRunService = require('./initiate-bill-run.service.js')
-const NoBillingPeriodsError = require('../../errors/no-billing-periods.error.js')
-const SupplementaryProcessBillRunService = require('./supplementary/process-bill-run.service.js')
-const TwoPartTariffProcessBillRunService = require('./two-part-tariff/process-bill-run.service.js')
-const TwoPartTariffSupplementaryProcessBillRunService = require('./tpt-supplementary/process-bill-run.service.js')
+import AnnualProcessBillRunService from './annual/process-bill-run.service.js'
+import DetermineBillingPeriodsService from './determine-billing-periods.service.js'
+import InitiateBillRunService from './initiate-bill-run.service.js'
+import NoBillingPeriodsError from '../../errors/no-billing-periods.error.js'
+import SupplementaryProcessBillRunService from './supplementary/process-bill-run.service.js'
+import TwoPartTariffProcessBillRunService from './two-part-tariff/process-bill-run.service.js'
+import TwoPartTariffSupplementaryProcessBillRunService from './tpt-supplementary/process-bill-run.service.js'
 
 /**
  * Manages the creation of a new bill run
@@ -62,6 +60,6 @@ function _processBillRun(billRun, billingPeriods) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

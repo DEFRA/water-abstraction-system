@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Determine if minimum charge applies to a charge version due to be billed
  * @module DetermineMinimumChargeService
  */
 
-const { sameDate } = require('../../lib/dates.lib.js')
+import { sameDate } from '../../lib/dates.lib.js'
 
 /**
  * Checks if minimum charge applies to a charge version for the given billing period
@@ -29,6 +27,6 @@ function go(chargeVersion, chargePeriod) {
   return isFirstChargeOnNewLicence
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches data needed for the bill page which includes a summary for each licence linked to the bill
  * @module FetchBillService
  */
 
-const BillModel = require('../../models/bill.model.js')
-const { db } = require('../../../db/db.js')
+import BillModel from '../../models/bill.model.js'
+import { db } from '../../../db/db.js'
 
 /**
  * Fetch the matching Bill plus a summary for each licence linked to it
@@ -92,6 +90,6 @@ async function _fetchLicenceSummaries(id) {
     .orderBy('bil.licenceRef')
 }
 
-module.exports = {
+export default {
   go
 }

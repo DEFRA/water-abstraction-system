@@ -1,14 +1,9 @@
-'use strict'
-
 /**
  * Generates the SQL query for renewal invitations
  * @module GenerateRenewalRecipientsQueryService
  */
 
-const {
-  licenceHolderRecipientQuery,
-  primaryUserRecipientQuery
-} = require('../../../dal/notices/recipient-queries.dal.js')
+import { licenceHolderRecipientQuery, primaryUserRecipientQuery } from '../../../dal/notices/recipient-queries.dal.js'
 
 /**
  * Generates the SQL query for renewal invitations
@@ -109,6 +104,6 @@ function _processForSending() {
   `
 }
 
-module.exports = {
+export default {
   go
 }

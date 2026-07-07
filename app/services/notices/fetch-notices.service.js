@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Fetches the notices for the `/notices` page
  * @module FetchNoticesService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const EventModel = require('../../models/event.model.js')
+import EventModel from '../../models/event.model.js'
 
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
 
 /**
  * Fetches the notices for the `/notices` page
@@ -146,6 +144,6 @@ function _standardNoticeTypes(noticeTypes) {
   return standardTypes
 }
 
-module.exports = {
+export default {
   go
 }

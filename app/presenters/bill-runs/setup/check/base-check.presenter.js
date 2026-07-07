@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Given a bill run setup session, returns the URL for the 'Back' link on the /check page.
  *
@@ -22,6 +20,6 @@ function checkPageBackLink(session) {
   return `/system/bill-runs/setup/${id}/season`
 }
 
-module.exports = {
+export default {
   checkPageBackLink
 }

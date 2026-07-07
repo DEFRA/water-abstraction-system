@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Plugin that handles logging for the application
  *
@@ -10,13 +8,13 @@
  * @module HapiPinoPlugin
  */
 
-const HapiPino = require('hapi-pino')
+import HapiPino from 'hapi-pino'
 
-const HapiPinoIgnoreRequestService = require('../services/plugins/hapi-pino-ignore-request.service.js')
-const HapiPinoLogInTestService = require('../services/plugins/hapi-pino-log-in-test.service.js')
-const HapiPinoSerializersService = require('../services/plugins/hapi-pino-serializers.service.js')
+import HapiPinoIgnoreRequestService from '../services/plugins/hapi-pino-ignore-request.service.js'
+import HapiPinoLogInTestService from '../services/plugins/hapi-pino-log-in-test.service.js'
+import HapiPinoSerializersService from '../services/plugins/hapi-pino-serializers.service.js'
 
-const LogConfig = require('../../config/log.config.js')
+import LogConfig from '../../config/log.config.js'
 
 const HapiPinoPlugin = {
   plugin: HapiPino,
@@ -49,4 +47,4 @@ const HapiPinoPlugin = {
   }
 }
 
-module.exports = HapiPinoPlugin
+export default HapiPinoPlugin

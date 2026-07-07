@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/bill-runs/setup/{sessionId}/year` page
  * @module YearValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const VALID_VALUES = ['2026', '2025', '2024', '2023', '2022', '2021']
 
@@ -32,6 +30,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

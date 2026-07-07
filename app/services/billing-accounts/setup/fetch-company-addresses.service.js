@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches the company and it's matching addresses if any
  * @module FetchCompanyAddressesService
  */
 
-const AddressModel = require('../../../models/address.model.js')
-const CompanyModel = require('../../../models/company.model.js')
+import AddressModel from '../../../models/address.model.js'
+import CompanyModel from '../../../models/company.model.js'
 
 /**
  * Fetches the company and it's matching addresses if any
@@ -29,6 +27,6 @@ async function go(companyId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

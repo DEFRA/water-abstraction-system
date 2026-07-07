@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats the result of the send email or letter request to GOV.UK Notify into data for 'water.notifications'
  * @module NotifyUpdatePresenter
  */
 
-const NotifyErrorPresenter = require('./notify-error.presenter.js')
+import NotifyErrorPresenter from './notify-error.presenter.js'
 
 /**
  * Formats the result of the send email or letter request to GOV.UK Notify into data for 'water.notifications'
@@ -43,6 +41,6 @@ function go(notifyResult) {
   )
 }
 
-module.exports = {
+export default {
   go
 }

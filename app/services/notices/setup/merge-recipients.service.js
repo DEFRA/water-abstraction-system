@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Orchestrates merging the fetched recipients with additional ones added, then filtering the results by those selected
  * @module MergeRecipientsService
@@ -69,6 +67,6 @@ function _selectedRecipients(selectedRecipients, allRecipients) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

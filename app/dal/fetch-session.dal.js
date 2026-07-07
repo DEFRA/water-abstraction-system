@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches a session by its unique identifier.
  * @module FetchSessionDal
  */
 
-const SessionModel = require('../models/session.model.js')
-const SessionNotFoundError = require('../errors/session-not-found.error.js')
+import SessionModel from '../models/session.model.js'
+import SessionNotFoundError from '../errors/session-not-found.error.js'
 
 /**
  * Fetches a session by its unique identifier.
@@ -28,6 +26,6 @@ async function go(sessionId) {
   return session
 }
 
-module.exports = {
+export default {
   go
 }

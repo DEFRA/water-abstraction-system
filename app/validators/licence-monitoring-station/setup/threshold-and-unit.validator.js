@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/licence-monitoring-station/setup/{sessionId}/threshold-and-unit` page
  * @module ThresholdAndUnitValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
-const { thresholdUnits } = require('../../../lib/static-lookups.lib.js')
+import { thresholdUnits } from '../../../lib/static-lookups.lib.js'
 
 const MAX_VALUE = 10000000
 
@@ -58,6 +56,6 @@ function go(payload) {
   return schema.validate(dataToValidate, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

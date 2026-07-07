@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Format data for the `/licence-monitoring-station/setup/{sessionId}/threshold-and-unit` page
  * @module ThresholdAndUnitPresenter
  */
 
-const { thresholdUnits } = require('../../../lib/static-lookups.lib.js')
+import { thresholdUnits } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Format data for the `/licence-monitoring-station/setup/{sessionId}/threshold-and-unit` page
@@ -50,6 +48,6 @@ function _units(sessionUnit) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,5 +1,3 @@
-'use strict'
-
 const NOTIFY_TEMPLATES = Object.freeze({
   alerts: {
     email: {
@@ -113,6 +111,6 @@ const NOTIFY_TEMPLATES = Object.freeze({
   }
 })
 
-module.exports = {
+export default {
   NOTIFY_TEMPLATES
 }

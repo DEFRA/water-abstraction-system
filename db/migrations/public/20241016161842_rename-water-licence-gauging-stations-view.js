@@ -1,6 +1,4 @@
-'use strict'
-
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema.dropViewIfExists('licence_gauging_stations').createView('licence_monitoring_stations', (view) => {
     // NOTE: We have commented out unused columns from the source table
     view.as(
@@ -29,7 +27,7 @@ exports.up = function (knex) {
   })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.dropViewIfExists('licence_monitoring_stations').createView('licence_gauging_stations', (view) => {
     // NOTE: We have commented out unused columns from the source table
     view.as(

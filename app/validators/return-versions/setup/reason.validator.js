@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/reason` page
  * @module ReasonValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
-const { returnRequirementReasons } = require('../../../lib/static-lookups.lib.js')
+import { returnRequirementReasons } from '../../../lib/static-lookups.lib.js'
 
 const errorMessage = 'Select the reason for the requirements for returns'
 
@@ -36,6 +34,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

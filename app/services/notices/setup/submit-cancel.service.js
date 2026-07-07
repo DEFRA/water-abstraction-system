@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates handling the data for `/notices/setup/{sessionId}/cancel` page
  * @module SubmitCancelService
  */
 
-const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { NoticeJourney } = require('../../../lib/static-lookups.lib.js')
+import DeleteSessionDal from '../../../dal/delete-session.dal.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { NoticeJourney } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Orchestrates handling the data for `/notices/setup/{sessionId}/cancel` page
@@ -30,6 +28,6 @@ async function go(sessionId) {
   return '/system/notices'
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/purpose` page
  * @module SubmitPurposeService
  */
 
-const FetchPurposesService = require('./fetch-purposes.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const PurposePresenter = require('../../../presenters/return-versions/setup/purpose.presenter.js')
-const PurposeValidation = require('../../../validators/return-versions/setup/purpose.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
+import FetchPurposesService from './fetch-purposes.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import GeneralLib from '../../../lib/general.lib.js'
+import PurposePresenter from '../../../presenters/return-versions/setup/purpose.presenter.js'
+import PurposeValidation from '../../../validators/return-versions/setup/purpose.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/purpose` page
@@ -106,6 +104,6 @@ async function _validate(payload, purposesData) {
   return formatValidationResult(validation)
 }
 
-module.exports = {
+export default {
   go
 }

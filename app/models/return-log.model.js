@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for return_logs (returns.returns)
  * @module ReturnLogModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class ReturnLogModel extends BaseModel {
   static get tableName() {
@@ -65,4 +63,4 @@ class ReturnLogModel extends BaseModel {
   }
 }
 
-module.exports = ReturnLogModel
+export default ReturnLogModel

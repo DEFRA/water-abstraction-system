@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Deletes a folder and its content or an individual file
  * @module DeleteFilesService
  */
 
-const fsPromises = require('node:fs').promises
+import { promises as fsPromises } from 'node:fs'
 
 /**
  * Deletes a folder and its content or an individual file
@@ -20,6 +18,6 @@ async function go(path) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

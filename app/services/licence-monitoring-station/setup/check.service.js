@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/licence-monitoring-station/setup/{sessionId}/check`
  *
  * @module CheckService
  */
 
-const CheckPresenter = require('../../../presenters/licence-monitoring-station/setup/check.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import CheckPresenter from '../../../presenters/licence-monitoring-station/setup/check.presenter.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/licence-monitoring-station/setup/{sessionId}/check`
@@ -34,6 +32,6 @@ async function _markCheckPageVisited(session) {
   return session.$update()
 }
 
-module.exports = {
+export default {
   go
 }

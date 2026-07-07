@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Fetches recipient data for a returns reminder notice
  * @module FetchReturnsReminderRecipientsService
  */
 
-const GenerateReturnLogsByLicenceQueryService = require('./generate-return-logs-by-licence-query.service.js')
-const GenerateReturnLogsByPeriodQueryService = require('./generate-return-logs-by-period-query.service.js')
-const GenerateRecipientsQueryService = require('./generate-recipients-query.service.js')
-const { db } = require('../../../../../db/db.js')
-const { transformStringOfLicencesToArray } = require('../../../../lib/general.lib.js')
-const { NoticeJourney } = require('../../../../lib/static-lookups.lib.js')
+import GenerateReturnLogsByLicenceQueryService from './generate-return-logs-by-licence-query.service.js'
+import GenerateReturnLogsByPeriodQueryService from './generate-return-logs-by-period-query.service.js'
+import GenerateRecipientsQueryService from './generate-recipients-query.service.js'
+import { db } from '../../../../../db/db.js'
+import { transformStringOfLicencesToArray } from '../../../../lib/general.lib.js'
+import { NoticeJourney } from '../../../../lib/static-lookups.lib.js'
 
 /**
  * Fetches recipient data for a returns reminder notice
@@ -51,6 +49,6 @@ function _returnLogsQuery(session) {
   return GenerateReturnLogsByPeriodQueryService.go(noticeType, licencesToExclude, returnsPeriod)
 }
 
-module.exports = {
+export default {
   go
 }

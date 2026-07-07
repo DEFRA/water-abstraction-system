@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats data for the `/search` page
  * @module SearchPresenter
  */
 
-const ContactModel = require('../../models/contact.model.js')
-const { formatLongDate, formatReturnLogStatus } = require('../base.presenter.js')
-const { today } = require('../../lib/general.lib.js')
+import ContactModel from '../../models/contact.model.js'
+import { formatLongDate, formatReturnLogStatus } from '../base.presenter.js'
+import { today } from '../../lib/general.lib.js'
 
 /**
  * Formats data for the `/search` page
@@ -245,6 +243,6 @@ function _user(user) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

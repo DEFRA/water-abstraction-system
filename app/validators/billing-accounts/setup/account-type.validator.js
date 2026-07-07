@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/billing-accounts/setup/{billingAccountId}/account-type` page
  *
  * @module AccountTypeValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const VALID_VALUES = ['company', 'individual']
 const MAX_LENGTH = 100
@@ -51,6 +49,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

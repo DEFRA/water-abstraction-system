@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/billing-accounts/setup/{sessionId}/company-search' page
  *
  * @module SubmitCompanySearchService
  */
 
-const CompanySearchPresenter = require('../../../presenters/billing-accounts/setup/company-search.presenter.js')
-const CompanySearchValidator = require('../../../validators/billing-accounts/setup/company-search.validator.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import CompanySearchPresenter from '../../../presenters/billing-accounts/setup/company-search.presenter.js'
+import CompanySearchValidator from '../../../validators/billing-accounts/setup/company-search.validator.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the '/billing-accounts/setup/{sessionId}/company-search' page
@@ -76,6 +74,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

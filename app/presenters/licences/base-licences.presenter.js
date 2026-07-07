@@ -1,6 +1,4 @@
-'use strict'
-
-const { formatNumber } = require('../base.presenter.js')
+import { formatNumber } from '../base.presenter.js'
 
 /**
  * Formats the abstraction quantities from a `licenceVersionPurpose` as strings of two decimal places and their measure
@@ -122,7 +120,7 @@ function _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBil
   return baseMessage + 'two-part tariff supplementary bill run.'
 }
 
-module.exports = {
+export default {
   formatAbstractionAmounts,
   supplementaryBillingNotification,
   pluralise,

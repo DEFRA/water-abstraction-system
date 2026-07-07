@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/stop-or-reduce` page
  * @module SubmitStopOrReduceService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const StopOrReducePresenter = require('../../../presenters/licence-monitoring-station/setup/stop-or-reduce.presenter.js')
-const StopOrReduceValidator = require('../../../validators/licence-monitoring-station/setup/stop-or-reduce.validator.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import StopOrReducePresenter from '../../../presenters/licence-monitoring-station/setup/stop-or-reduce.presenter.js'
+import StopOrReduceValidator from '../../../validators/licence-monitoring-station/setup/stop-or-reduce.validator.js'
 
 /**
  * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/stop-or-reduce` page
@@ -70,6 +68,6 @@ function _validate(payload) {
   return result
 }
 
-module.exports = {
+export default {
   go
 }

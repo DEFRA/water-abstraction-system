@@ -1,11 +1,11 @@
-'use strict'
-
 /**
  * Controller for /check endpoints
  * @module CheckController
  */
 
-const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
+import http2 from 'node:http2'
+
+const { HTTP_STATUS_NO_CONTENT } = http2.constants
 
 /**
  * A test end point for checking functionality
@@ -25,6 +25,6 @@ async function placeholder(request, h) {
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-module.exports = {
+export default {
   placeholder
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Removes all data created for acceptance tests from the water schema
  * @module WaterSchemaService
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 /**
  * Removes all data created for acceptance tests from the water schema
@@ -534,6 +532,6 @@ async function _deleteAllTestData() {
   `)
 }
 
-module.exports = {
+export default {
   go
 }

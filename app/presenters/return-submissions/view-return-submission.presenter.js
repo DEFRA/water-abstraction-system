@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Formats return submission data ready for presenting in the view return submission page
  * @module ViewReturnSubmissionPresenter
  */
 
-const Big = require('big.js')
+import Big from 'big.js'
 
-const { formatLongDate, formatNumber, formatQuantityToUnit, sentenceCase } = require('../base.presenter.js')
-const { convertFromCubicMetres } = require('../../lib/general.lib.js')
+import { formatLongDate, formatNumber, formatQuantityToUnit, sentenceCase } from '../base.presenter.js'
+import { convertFromCubicMetres } from '../../lib/general.lib.js'
 
-const { returnUnits, unitNames } = require('../../lib/static-lookups.lib.js')
+import { returnUnits, unitNames } from '../../lib/static-lookups.lib.js'
 
 /**
  * Formats return submission data ready for presenting in the view return submission page
@@ -139,6 +137,6 @@ function _total(lines, units) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

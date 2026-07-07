@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for monitoring_stations (water.gauging_stations)
  * @module MonitoringStationModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class MonitoringStationModel extends BaseModel {
   static get tableName() {
@@ -33,4 +31,4 @@ class MonitoringStationModel extends BaseModel {
   }
 }
 
-module.exports = MonitoringStationModel
+export default MonitoringStationModel

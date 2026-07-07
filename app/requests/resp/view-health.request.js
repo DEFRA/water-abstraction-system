@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * View the health of the ReSP API service
  * @module ViewHealthRequest
  */
 
-const RespRequest = require('../resp.request.js')
+import RespRequest from '../resp.request.js'
 
 /**
  * View the health of the ReSP API service
@@ -21,6 +19,6 @@ async function send() {
   return RespRequest.get(path)
 }
 
-module.exports = {
+export default {
   send
 }

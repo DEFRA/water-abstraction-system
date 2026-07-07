@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/email' page
  *
  * @module SubmitEmailService
  */
 
-const CheckEmailExistsDal = require('../../../../dal/users/check-email-exists.dal.js')
-const EmailPresenter = require('../../../../presenters/users/internal/setup/email.presenter.js')
-const EmailValidator = require('../../../../validators/users/internal/setup/email.validator.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const { formatEmail, formatValidationResult } = require('../../../../presenters/base.presenter.js')
-const { checkUrl } = require('../../../../lib/check-page.lib.js')
-const { flashNotification } = require('../../../../lib/general.lib.js')
+import CheckEmailExistsDal from '../../../../dal/users/check-email-exists.dal.js'
+import EmailPresenter from '../../../../presenters/users/internal/setup/email.presenter.js'
+import EmailValidator from '../../../../validators/users/internal/setup/email.validator.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import { formatEmail, formatValidationResult } from '../../../../presenters/base.presenter.js'
+import { checkUrl } from '../../../../lib/check-page.lib.js'
+import { flashNotification } from '../../../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/email' page
@@ -68,6 +66,6 @@ function _validate(payload, emailExists) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

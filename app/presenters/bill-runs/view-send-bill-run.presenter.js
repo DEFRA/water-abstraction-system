@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats the bill run data ready for presenting in the send bill run confirmation page
  * @module ViewSendBillRunPresenter
  */
 
-const { formatFinancialYear, formatLongDate, titleCase } = require('../base.presenter.js')
-const { formatBillRunType, formatChargeScheme } = require('../billing.presenter.js')
+import { formatFinancialYear, formatLongDate, titleCase } from '../base.presenter.js'
+import { formatBillRunType, formatChargeScheme } from '../billing.presenter.js'
 
 /**
  * Prepares and processes bill run data for presentation
@@ -31,6 +29,6 @@ function go(billRun) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

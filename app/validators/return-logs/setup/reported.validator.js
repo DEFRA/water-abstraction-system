@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/reported` page
  * @module ReportedValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const VALID_VALUES = ['meterReadings', 'abstractionVolumes']
 
@@ -36,6 +34,6 @@ function go(payload) {
   return schema.validate({ reported }, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

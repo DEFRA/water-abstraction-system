@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for licence_entities (crm.entity)
  * @module LicenceEntityModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 /**
  * Represents an instance of a licence entity record
@@ -73,4 +71,4 @@ class LicenceEntityModel extends BaseModel {
   }
 }
 
-module.exports = LicenceEntityModel
+export default LicenceEntityModel

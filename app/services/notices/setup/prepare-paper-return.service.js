@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the paper return
  *
  * @module PreparePaperReturnService
  */
 
-const GeneratePaperReturnRequest = require('../../../requests/gotenberg/generate-paper-return.request.js')
-const PreparePaperReturnPresenter = require('../../../presenters/notices/setup/prepare-paper-return.presenter.js')
+import GeneratePaperReturnRequest from '../../../requests/gotenberg/generate-paper-return.request.js'
+import PreparePaperReturnPresenter from '../../../presenters/notices/setup/prepare-paper-return.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the paper return
@@ -25,6 +23,6 @@ async function go(notification) {
   return GeneratePaperReturnRequest.send(pageData)
 }
 
-module.exports = {
+export default {
   go
 }

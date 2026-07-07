@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/returns-cycle` page
  * @module ReturnsCycleService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const ReturnsCyclePresenter = require('../../../presenters/return-versions/setup/returns-cycle.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import ReturnsCyclePresenter from '../../../presenters/return-versions/setup/returns-cycle.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/returns-cycle` page
@@ -29,6 +27,6 @@ async function go(sessionId, requirementIndex) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

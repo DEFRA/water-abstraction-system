@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches two-part tariff licences for the bill run and billing period to be matched & allocated against
  * @module FetchLicencesService
  */
 
-const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
+import FetchChargeVersionsService from './fetch-charge-versions.service.js'
 
 /**
  * Fetches two-part tariff licences for the bill run and billing period to be matched & allocated against
@@ -64,6 +62,6 @@ function _groupByLicence(chargeVersions, uniqueLicenceIds) {
   return licences
 }
 
-module.exports = {
+export default {
   go
 }

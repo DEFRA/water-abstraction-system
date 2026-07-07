@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches bills to be reissued
  * @module FetchBillsToBeReissuedService
  */
 
-const BillModel = require('../../../models/bill.model.js')
+import BillModel from '../../../models/bill.model.js'
 
 /**
  * Takes a region and fetches sroc bills in that region marked for reissuing, along with their transactions
@@ -45,6 +43,6 @@ async function go(regionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

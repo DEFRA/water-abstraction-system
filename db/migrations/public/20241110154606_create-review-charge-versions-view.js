@@ -1,8 +1,6 @@
-'use strict'
-
 const viewName = 'review_charge_versions'
 
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema.dropViewIfExists(viewName).createView(viewName, (view) => {
     view.as(
       knex('review_charge_versions')
@@ -21,6 +19,6 @@ exports.up = function (knex) {
   })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.dropViewIfExists(viewName)
 }

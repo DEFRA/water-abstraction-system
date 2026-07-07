@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the '/companies/{id}/contacts' page
  * @module ContactsPresenter
  */
 
-const { formatContact } = require('../crm.presenter.js')
+import { formatContact } from '../crm.presenter.js'
 
 /**
  * Formats data for the '/companies/{id}/contacts' page
@@ -42,6 +40,6 @@ function _links(company) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

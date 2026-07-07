@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches an external user for display on the `/users/external/{id}/details` page
  * @module FetchUserDetailsDal
  */
 
-const UserModel = require('../../../models/user.model.js')
+import UserModel from '../../../models/user.model.js'
 
 /**
  * Fetches an external user for display on the `/users/external/{id}/details` page
@@ -24,6 +22,6 @@ async function go(id) {
   return user
 }
 
-module.exports = {
+export default {
   go
 }

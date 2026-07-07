@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches the licence refs from failed renewal invitation notifications to primary users
  * @module FetchFailedRenewalInvitationsService
  */
 
-const NotificationModel = require('../../../../models/notification.model.js')
-const { compareStrings } = require('../../../../lib/general.lib.js')
+import NotificationModel from '../../../../models/notification.model.js'
+import { compareStrings } from '../../../../lib/general.lib.js'
 
 /**
  * Fetches the licence refs from failed renewal invitation notifications to primary users
@@ -60,6 +58,6 @@ async function _fetch(eventId) {
     .whereNull('alternateNoticeId')
 }
 
-module.exports = {
+export default {
   go
 }

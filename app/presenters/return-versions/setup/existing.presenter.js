@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/existing` page
  * @module ExistingPresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
-const { returnRequirementReasons } = require('../../../lib/static-lookups.lib.js')
+import { formatLongDate } from '../../base.presenter.js'
+import { returnRequirementReasons } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/existing` page
@@ -65,6 +63,6 @@ function _reason(returnVersion) {
   return modLogs[0].reasonDescription
 }
 
-module.exports = {
+export default {
   go
 }

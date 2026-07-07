@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Deletes the note from the return version currently being setup
  * @module DeleteNoteService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Deletes the note from the return version currently being setup
@@ -34,6 +32,6 @@ async function _save(session) {
   return session.$update()
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/restore' page
  * @module RestorePresenter
  */
 
-const { titleCase } = require('../../base.presenter.js')
+import { titleCase } from '../../base.presenter.js'
 
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/restore' page
@@ -30,6 +28,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

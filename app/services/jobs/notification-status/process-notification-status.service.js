@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates the process of fetching and updating the status of 'notification' from the Notify service.
  * @module ProcessNotificationStatusService
  */
 
-const CheckNotificationStatusService = require('../../notifications/check-notification-status.service.js')
-const FetchNotificationsService = require('./fetch-notifications.service.js')
-const SendAlternateNoticesService = require('./send-alternate-notices.service.js')
-const UpdateNoticeService = require('../../notices/update-notice.service.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
+import CheckNotificationStatusService from '../../notifications/check-notification-status.service.js'
+import FetchNotificationsService from './fetch-notifications.service.js'
+import SendAlternateNoticesService from './send-alternate-notices.service.js'
+import UpdateNoticeService from '../../notices/update-notice.service.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates the process of fetching and updating the status of 'notification' from the Notify service.
@@ -74,6 +72,6 @@ async function _updateEventErrorCount(notifications) {
   await UpdateNoticeService.go(dedupeEventIds)
 }
 
-module.exports = {
+export default {
   go
 }

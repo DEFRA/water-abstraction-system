@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Model for sessions
  * @module SessionModel
  */
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 /**
  * Used for managing temporary session data, for example, during set up journeys
@@ -97,4 +95,4 @@ class SessionModel extends BaseModel {
   }
 }
 
-module.exports = SessionModel
+export default SessionModel

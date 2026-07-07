@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/check` page
  * @module CheckPresenter
  */
 
-const { formatLongDate } = require('../../../base.presenter.js')
-const { isQuarterlyReturnSubmissions } = require('../../../../lib/dates.lib.js')
-const { returnRequirementReasons } = require('../../../../lib/static-lookups.lib.js')
+import { formatLongDate } from '../../../base.presenter.js'
+import { isQuarterlyReturnSubmissions } from '../../../../lib/dates.lib.js'
+import { returnRequirementReasons } from '../../../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/check` page
@@ -74,6 +72,6 @@ function _startDate(session) {
   return formatLongDate(new Date(session.returnVersionStartDate))
 }
 
-module.exports = {
+export default {
   go
 }

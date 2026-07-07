@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for
  * `/return-versions/setup/{sessionId}/additional-submission-options` page
  * @module AdditionalSubmissionOptionsService
  */
 
-const AdditionalSubmissionOptionsPresenter = require('../../../presenters/return-versions/setup/additional-submission-options.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import AdditionalSubmissionOptionsPresenter from '../../../presenters/return-versions/setup/additional-submission-options.presenter.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for
@@ -30,6 +28,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Provides the display information for the `/manage` page
  *
  * @module ViewManageService
  */
 
-const ManagePresenter = require('../../presenters/manage/manage.presenter.js')
+import ManagePresenter from '../../presenters/manage/manage.presenter.js'
 
 /**
  * Provides the display information for the `/manage` page
@@ -27,6 +25,6 @@ async function go(auth) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * View the health of a Legacy service
  * @module ViewHealthRequest
  */
 
-const LegacyRequest = require('../legacy.request.js')
+import LegacyRequest from '../legacy.request.js'
 
 /**
  * View the health of a Legacy service
@@ -19,6 +17,6 @@ async function send(serviceName) {
   return LegacyRequest.get(serviceName, 'health/info', null, false)
 }
 
-module.exports = {
+export default {
   send
 }

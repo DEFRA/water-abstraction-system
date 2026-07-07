@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/company-contacts/{id}/remove' page
  *
  * @module SubmitRemoveCompanyContactService
  */
 
-const DeleteCompanyContactService = require('./delete-company-contact.service.js')
-const FetchCompanyContactDal = require('../../dal/company-contacts/fetch-company-contact.dal.js')
-const FetchNotificationService = require('./fetch-notification.service.js')
-const { flashNotification } = require('../../lib/general.lib.js')
+import DeleteCompanyContactService from './delete-company-contact.service.js'
+import FetchCompanyContactDal from '../../dal/company-contacts/fetch-company-contact.dal.js'
+import FetchNotificationService from './fetch-notification.service.js'
+import { flashNotification } from '../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for the '/company-contacts/{id}/remove' page
@@ -35,6 +33,6 @@ async function go(id, yar) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

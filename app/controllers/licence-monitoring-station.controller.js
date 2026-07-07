@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Controller for /licence-monitoring-station endpoints
  * @module LicenceMonitoringStationController
  */
 
-const RemoveService = require('../services/licence-monitoring-station/remove.service.js')
-const SubmitRemoveService = require('../services/licence-monitoring-station/submit-remove.service.js')
+import RemoveService from '../services/licence-monitoring-station/remove.service.js'
+import SubmitRemoveService from '../services/licence-monitoring-station/submit-remove.service.js'
 
 async function remove(request, h) {
   const { licenceMonitoringStationId } = request.params
@@ -25,7 +23,7 @@ async function submitRemove(request, h) {
   return h.redirect(`/system/monitoring-stations/${monitoringStationId}`)
 }
 
-module.exports = {
+export default {
   remove,
   submitRemove
 }

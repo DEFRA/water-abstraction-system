@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Calculates authorised and billable days for a given charge reference
  * @module CalculateAuthorisedAndBillableDaysService
  */
 
-const { determineAbstractionPeriods } = require('../../lib/abstraction-period.lib.js')
-const ConsolidateDateRangesService = require('./consolidate-date-ranges.service.js')
+import { determineAbstractionPeriods } from '../../lib/abstraction-period.lib.js'
+import ConsolidateDateRangesService from './consolidate-date-ranges.service.js'
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 
@@ -157,6 +155,6 @@ function _consolidateAndCalculate(referencePeriod, abstractionsPeriods) {
   return totalDays
 }
 
-module.exports = {
+export default {
   go
 }

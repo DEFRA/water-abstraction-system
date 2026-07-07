@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates saving the data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page
  *
  * @module SubmitCheckLicenceMatchesService
  */
 
-const DetermineRelevantLicenceMonitoringStationsService = require('./determine-relevant-licence-monitoring-stations.service.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+import DetermineRelevantLicenceMonitoringStationsService from './determine-relevant-licence-monitoring-stations.service.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates saving the data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page
@@ -41,6 +39,6 @@ async function _save(session) {
   return session.$update()
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/abstraction-alerts' page
  * @module AbstractionAlertsPresenter
  */
 
-const { checkUrl } = require('../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
 
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/abstraction-alerts' page
@@ -29,6 +27,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

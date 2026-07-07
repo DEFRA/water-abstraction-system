@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for regions (water.regions)
  * @module RegionModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class RegionModel extends BaseModel {
   static get tableName() {
@@ -44,4 +42,4 @@ class RegionModel extends BaseModel {
   }
 }
 
-module.exports = RegionModel
+export default RegionModel

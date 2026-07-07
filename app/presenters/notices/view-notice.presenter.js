@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the 'notices/{id}' page
  * @module ViewNoticePresenter
  */
 
-const { formatLongDate, formatNoticeType } = require('../base.presenter.js')
+import { formatLongDate, formatNoticeType } from '../base.presenter.js'
 
 /**
  * Formats data for the 'notices/{id}' page
@@ -67,6 +65,6 @@ function _recipient(notification) {
   ].filter(Boolean)
 }
 
-module.exports = {
+export default {
   go
 }

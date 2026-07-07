@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Splits and formats entries from the `/return-logs/{sessionId}/multiple-entries` page
  * @module SplitMultipleEntriesService
@@ -44,6 +42,6 @@ function go(multipleEntries) {
   return entries
 }
 
-module.exports = {
+export default {
   go
 }

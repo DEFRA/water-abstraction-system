@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `address/{sessionId}/postcode` page
  *
  * @module PostcodeService
  */
 
-const FetchSessionDal = require('../../dal/fetch-session.dal.js')
-const PostcodePresenter = require('../../presenters/address/postcode.presenter.js')
+import FetchSessionDal from '../../dal/fetch-session.dal.js'
+import PostcodePresenter from '../../presenters/address/postcode.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `address/{sessionId}/postcode` page
@@ -27,6 +25,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

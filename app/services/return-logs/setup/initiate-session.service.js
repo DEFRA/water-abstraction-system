@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Initiates the session record used for setting up a new return log edit journey
  * @module InitiateSessionService
  */
 
-const CreateSessionDal = require('../../../dal/create-session.dal.js')
-const ReturnLogModel = require('../../../models/return-log.model.js')
-const { daysFromPeriod, weeksFromPeriod, monthsFromPeriod } = require('../../../lib/dates.lib.js')
-const { convertFromCubicMetres } = require('../../../lib/general.lib.js')
-const { returnUnits, unitNames } = require('../../../lib/static-lookups.lib.js')
+import CreateSessionDal from '../../../dal/create-session.dal.js'
+import ReturnLogModel from '../../../models/return-log.model.js'
+import { daysFromPeriod, weeksFromPeriod, monthsFromPeriod } from '../../../lib/dates.lib.js'
+import { convertFromCubicMetres } from '../../../lib/general.lib.js'
+import { returnUnits, unitNames } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Initiates the session record used for setting up a new return log edit journey
@@ -218,6 +216,6 @@ function _submissionLines(returnSubmissionLines) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

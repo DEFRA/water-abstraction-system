@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Connects with the Charging Module to view a bill
  * @module ViewBillService
  */
 
-const ChargingModuleRequest = require('../charging-module.request.js')
+import ChargingModuleRequest from '../charging-module.request.js'
 
 /**
  * Sends a request to the Charging Module to view an invoice and returns the result
@@ -24,6 +22,6 @@ async function send(billRunId, billId) {
   return ChargingModuleRequest.get(path)
 }
 
-module.exports = {
+export default {
   send
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for internal users on the `/users/internal/{id}/details` page
  * @module DetailsPresenter
  */
 
-const { compareStrings } = require('../../../lib/general.lib.js')
-const { formatLongDateTime, sentenceCase } = require('../../base.presenter.js')
+import { compareStrings } from '../../../lib/general.lib.js'
+import { formatLongDateTime, sentenceCase } from '../../base.presenter.js'
 
 /**
  * Formats data for internal users on the `/users/internal/{id}/details` page
@@ -104,6 +102,6 @@ function _mapRole(role) {
   return { description, name: _convertToSentenceCase(name) }
 }
 
-module.exports = {
+export default {
   go
 }

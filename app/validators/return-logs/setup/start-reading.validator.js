@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-logs/{sessionId}/start-reading` page
  * @module StartReadingValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const MAX_ALLOWED_READING = 99999999999
 
@@ -70,6 +68,6 @@ function _maxMeterReading(lines) {
   return Number(firstLine?.reading)
 }
 
-module.exports = {
+export default {
   go
 }

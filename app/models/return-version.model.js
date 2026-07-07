@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Model for return_versions (water.return_versions)
  * @module ReturnVersionModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
-const { returnRequirementReasons } = require('../lib/static-lookups.lib.js')
+import BaseModel from './base.model.js'
+import { returnRequirementReasons } from '../lib/static-lookups.lib.js'
 
 class ReturnVersionModel extends BaseModel {
   static get tableName() {
@@ -240,4 +238,4 @@ class ReturnVersionModel extends BaseModel {
   }
 }
 
-module.exports = ReturnVersionModel
+export default ReturnVersionModel

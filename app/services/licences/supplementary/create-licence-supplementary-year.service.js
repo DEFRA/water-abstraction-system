@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Creates a licenceSupplementaryYears record based on the provided licence data
  * @module CreateLicenceSupplementaryYearService
  */
 
-const LicenceSupplementaryYearModel = require('../../../models/licence-supplementary-year.model.js')
+import LicenceSupplementaryYearModel from '../../../models/licence-supplementary-year.model.js'
 
 /**
  * Creates a licenceSupplementaryYears record based on the provided licence data
@@ -46,6 +44,6 @@ async function _persistSupplementaryBillingYearsData(licenceId, financialYearEnd
   })
 }
 
-module.exports = {
+export default {
   go
 }

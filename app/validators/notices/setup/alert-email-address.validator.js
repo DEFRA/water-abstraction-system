@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page
  *
  * @module AlertEmailAddressValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const ERROR_MESSAGES = {
   invalidEmail: 'Enter an email address in the correct format, like name@example.com',
@@ -45,6 +43,6 @@ function go(payload) {
   return schema.validate(payload)
 }
 
-module.exports = {
+export default {
   go
 }

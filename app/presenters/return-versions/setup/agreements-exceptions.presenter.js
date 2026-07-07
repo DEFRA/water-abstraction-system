@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/agreements-exceptions` page
  * @module AgreementsExceptionsPresenter
@@ -38,6 +36,6 @@ function _backLinkHref(session, requirementIndex) {
   return `/system/return-versions/setup/${id}/frequency-reported/${requirementIndex}`
 }
 
-module.exports = {
+export default {
   go
 }

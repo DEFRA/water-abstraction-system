@@ -1,21 +1,19 @@
-'use strict'
-
-const InitiateEditSessionService = require('../services/company-contacts/setup/initiate-edit-session.service.js')
-const InitiateSessionService = require('../services/company-contacts/setup/initiate-session.service.js')
-const SubmitAbstractionAlertsService = require('../services/company-contacts/setup/submit-abstraction-alerts.service.js')
-const SubmitCancelService = require('../services/company-contacts/setup/submit-cancel.service.js')
-const SubmitCheckService = require('../services/company-contacts/setup/submit-check.service.js')
-const SubmitContactEmailService = require('../services/company-contacts/setup/submit-contact-email.service.js')
-const SubmitContactNameService = require('../services/company-contacts/setup/submit-contact-name.service.js')
-const SubmitLicencesService = require('../services/company-contacts/setup/submit-licences.service.js')
-const SubmitRestoreService = require('../services/company-contacts/setup/submit-restore.service.js')
-const ViewAbstractionAlertsService = require('../services/company-contacts/setup/view-abstraction-alerts.service.js')
-const ViewCancelService = require('../services/company-contacts/setup/view-cancel.service.js')
-const ViewCheckService = require('../services/company-contacts/setup/view-check.service.js')
-const ViewContactEmailService = require('../services/company-contacts/setup/view-contact-email.service.js')
-const ViewContactNameService = require('../services/company-contacts/setup/view-contact-name.service.js')
-const ViewLicencesService = require('../services/company-contacts/setup/view-licences.service.js')
-const ViewRestoreService = require('../services/company-contacts/setup/view-restore.service.js')
+import InitiateEditSessionService from '../services/company-contacts/setup/initiate-edit-session.service.js'
+import InitiateSessionService from '../services/company-contacts/setup/initiate-session.service.js'
+import SubmitAbstractionAlertsService from '../services/company-contacts/setup/submit-abstraction-alerts.service.js'
+import SubmitCancelService from '../services/company-contacts/setup/submit-cancel.service.js'
+import SubmitCheckService from '../services/company-contacts/setup/submit-check.service.js'
+import SubmitContactEmailService from '../services/company-contacts/setup/submit-contact-email.service.js'
+import SubmitContactNameService from '../services/company-contacts/setup/submit-contact-name.service.js'
+import SubmitLicencesService from '../services/company-contacts/setup/submit-licences.service.js'
+import SubmitRestoreService from '../services/company-contacts/setup/submit-restore.service.js'
+import ViewAbstractionAlertsService from '../services/company-contacts/setup/view-abstraction-alerts.service.js'
+import ViewCancelService from '../services/company-contacts/setup/view-cancel.service.js'
+import ViewCheckService from '../services/company-contacts/setup/view-check.service.js'
+import ViewContactEmailService from '../services/company-contacts/setup/view-contact-email.service.js'
+import ViewContactNameService from '../services/company-contacts/setup/view-contact-name.service.js'
+import ViewLicencesService from '../services/company-contacts/setup/view-licences.service.js'
+import ViewRestoreService from '../services/company-contacts/setup/view-restore.service.js'
 
 /**
  * Controller for /company-contacts/setup endpoints
@@ -194,7 +192,7 @@ async function submitRestore(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
-module.exports = {
+export default {
   setup,
   setupEdit,
   viewAbstractionAlerts,

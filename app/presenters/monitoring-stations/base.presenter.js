@@ -1,12 +1,10 @@
-'use strict'
-
-const {
+import {
   formatAbstractionPeriod,
   formatLongDate,
   formatRestrictionType,
   formatValueUnit,
   sentenceCase
-} = require('../base.presenter.js')
+} from '../base.presenter.js'
 
 /**
  * Returns the heading for the "restrictions" column of the monitoring station page
@@ -123,7 +121,7 @@ function _restrictionCount(licenceId, licenceMonitoringStations) {
   return count.length
 }
 
-module.exports = {
+export default {
   determineRestrictionHeading,
   formatRestrictions
 }

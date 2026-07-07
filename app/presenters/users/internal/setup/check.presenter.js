@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the '/users/internal/setup/{sessionId}/check' page
  * @module CheckPresenter
  */
 
-const { sentenceCase } = require('../../../base.presenter.js')
-const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
+import { sentenceCase } from '../../../base.presenter.js'
+import { userPermissions } from '../../../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the '/users/internal/setup/{sessionId}/check' page
@@ -36,6 +34,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Creates a bill run based on the regionId & billing period provided
  * @module CreateBillRunService
  */
 
-const BillRunModel = require('../../models/bill-run.model.js')
+import BillRunModel from '../../models/bill-run.model.js'
 
 /**
  * Create a new bill run
@@ -56,6 +54,6 @@ function _defaultOptions(option) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

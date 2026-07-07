@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for review_licences
  * @module ReviewLicenceModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class ReviewLicenceModel extends BaseModel {
   static get tableName() {
@@ -52,4 +50,4 @@ class ReviewLicenceModel extends BaseModel {
   }
 }
 
-module.exports = ReviewLicenceModel
+export default ReviewLicenceModel

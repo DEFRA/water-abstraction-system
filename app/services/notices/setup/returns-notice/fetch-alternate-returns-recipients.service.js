@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Fetches recipient data for an alternate returns notice
  * @module FetchAlternateReturnsRecipientsService
  */
 
-const GenerateReturnLogsByIdQueryService = require('./generate-return-logs-by-id-query.service.js')
-const GenerateRecipientsQueryService = require('./generate-recipients-query.service.js')
-const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
+import GenerateReturnLogsByIdQueryService from './generate-return-logs-by-id-query.service.js'
+import GenerateRecipientsQueryService from './generate-recipients-query.service.js'
+import { NoticeType } from '../../../../lib/static-lookups.lib.js'
 
-const { db } = require('../../../../../db/db.js')
+import { db } from '../../../../../db/db.js'
 
 /**
  * Fetches recipient data for an alternate returns notice
@@ -37,6 +35,6 @@ function _applyNotificationDueDate(rows, notificationDueDate) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

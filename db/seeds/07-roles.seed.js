@@ -1,8 +1,6 @@
-'use strict'
-
-const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const { db } = require('../db.js')
-const { data: roles } = require('./data/roles.js')
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
+import { db } from '../db.js'
+import { data as roles } from './data/roles.js'
 
 async function seed() {
   for (const role of roles) {
@@ -32,6 +30,6 @@ async function _upsert(role) {
     .merge(['description', 'dateUpdated'])
 }
 
-module.exports = {
+export default {
   seed
 }

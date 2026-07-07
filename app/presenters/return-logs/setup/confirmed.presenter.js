@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats return log data for the `/return-log/setup/confirmed` page
  * @module ConfirmedPresenter
@@ -69,6 +67,6 @@ function _purposeDetails(purposes) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates the removing of a bill licence from a bill run
  * @module SubmitRemoveBillLicenceService
  */
 
-const BillLicenceModel = require('../../models/bill-licence.model.js')
-const LegacyDeleteBillLicenceRequest = require('../../requests/legacy/delete-bill-licence.request.js')
-const ProcessBillingFlagService = require('../licences/supplementary/process-billing-flag.service.js')
-const UnassignLicencesToBillRunService = require('../bill-runs/unassign-licences-to-bill-run.service.js')
+import BillLicenceModel from '../../models/bill-licence.model.js'
+import LegacyDeleteBillLicenceRequest from '../../requests/legacy/delete-bill-licence.request.js'
+import ProcessBillingFlagService from '../licences/supplementary/process-billing-flag.service.js'
+import UnassignLicencesToBillRunService from '../bill-runs/unassign-licences-to-bill-run.service.js'
 
 /**
  * Orchestrates the removing of a bill licence from a bill run
@@ -48,6 +46,6 @@ async function _fetchBillLicence(billLicenceId) {
     })
 }
 
-module.exports = {
+export default {
   go
 }

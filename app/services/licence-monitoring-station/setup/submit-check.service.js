@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates submitting the data for `/licence-monitoring-station/setup/{sessionId}/check`
  *
  * @module SubmitCheckService
  */
 
-const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const LicenceMonitoringStationModel = require('../../../models/licence-monitoring-station.model.js')
-const { flashNotification, timestampForPostgres } = require('../../../lib/general.lib.js')
-const { flowUnits } = require('../../../lib/static-lookups.lib.js')
+import DeleteSessionDal from '../../../dal/delete-session.dal.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import LicenceMonitoringStationModel from '../../../models/licence-monitoring-station.model.js'
+import { flashNotification, timestampForPostgres } from '../../../lib/general.lib.js'
+import { flowUnits } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Orchestrates submitting the data for `/licence-monitoring-station/setup/{sessionId}/check`
@@ -61,6 +59,6 @@ function _determineRestrictionType(stopOrReduce, reduceAtThreshold) {
   return stopOrReduce === 'reduce' && reduceAtThreshold === 'yes' ? 'stop_or_reduce' : stopOrReduce
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Connects with the Charging Module API's Cognito service to get a JWT for authentication
  * @module TokenRequest
  */
 
-const BaseRequest = require('../base.request.js')
+import BaseRequest from '../base.request.js'
 
-const config = require('../../../config/charging-module.config.js')
+import config from '../../../config/charging-module.config.js'
 
 /**
  * Connects with the Charging Module API's Cognito service to get a JWT for authentication
@@ -56,6 +54,6 @@ function _parseResult(result) {
   return authentication
 }
 
-module.exports = {
+export default {
   send
 }

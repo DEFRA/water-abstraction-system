@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Format data for the `/return-log/setup/{sessionId}/meter-details` page
  * @module MeterDetailsPresenter
@@ -26,6 +24,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

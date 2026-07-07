@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the `address/{sessionId}/select` page
  *
  * @module SelectValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `address/{sessionId}/select` page
@@ -27,6 +25,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

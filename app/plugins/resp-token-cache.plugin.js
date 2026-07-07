@@ -1,6 +1,4 @@
-'use strict'
-
-const RespTokenRequest = require('../requests/resp/token.request.js')
+import RespTokenRequest from '../requests/resp/token.request.js'
 
 /**
  * Adds a server method which returns a Azure AD token for the ReSP API.
@@ -49,4 +47,4 @@ function _setExpiryTime(expiresIn) {
   return (expiresIn - 60) * 1000
 }
 
-module.exports = RespTokenCachePlugin
+export default RespTokenCachePlugin

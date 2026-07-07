@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats return requirements data for the `/return-versions/setup/{sessionId}/check` page
  * @module ReturnRequirementsPresenter
  */
 
-const { formatAbstractionDate } = require('../../../base.presenter.js')
-const { returnRequirementFrequencies } = require('../../../../lib/static-lookups.lib.js')
+import { formatAbstractionDate } from '../../../base.presenter.js'
+import { returnRequirementFrequencies } from '../../../../lib/static-lookups.lib.js'
 
 const AGREEMENTS_EXCEPTIONS = {
   none: 'None',
@@ -108,6 +106,6 @@ function _mapPoints(selectedPoints, points) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

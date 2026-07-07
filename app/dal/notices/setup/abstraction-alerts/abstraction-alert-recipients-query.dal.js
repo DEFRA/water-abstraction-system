@@ -1,10 +1,8 @@
-'use strict'
-
-const {
+import {
   additionalContactRecipientQuery,
   licenceHolderRecipientQuery,
   primaryUserRecipientQuery
-} = require('../../recipient-queries.dal.js')
+} from '../../recipient-queries.dal.js'
 
 /**
  * Generates the SQL query for abstraction alert recipients
@@ -130,6 +128,6 @@ const abstractionAlertRecipientsQuery = `
     licence_refs::text;
 `
 
-module.exports = {
+export default {
   abstractionAlertRecipientsQuery
 }

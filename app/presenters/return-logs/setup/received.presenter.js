@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Format data for the `/return-log/setup/{sessionId}/received` page
  * @module ReceivedPresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
-const { today } = require('../../../lib/general.lib.js')
+import { formatLongDate } from '../../base.presenter.js'
+import { today } from '../../../lib/general.lib.js'
 
 /**
  * Format data for the `/return-log/setup/{sessionId}/received` page
@@ -56,6 +54,6 @@ function _yesterdaysDate() {
   return formatLongDate(yesterdaysDate)
 }
 
-module.exports = {
+export default {
   go
 }

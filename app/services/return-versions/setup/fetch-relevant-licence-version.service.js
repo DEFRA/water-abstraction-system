@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches the relevant licence version to extract data from for the start date selected by the user
  * @module FetchRelevantLicenceVersionService
  */
 
-const { sameDate } = require('../../../lib/dates.lib.js')
+import { sameDate } from '../../../lib/dates.lib.js'
 
-const LicenceVersionModel = require('../../../models/licence-version.model.js')
+import LicenceVersionModel from '../../../models/licence-version.model.js'
 
 /**
  * Fetches the relevant licence version to extract data from for the start date selected by the user
@@ -133,6 +131,6 @@ function _manageSameStartDate(licenceVersions) {
   return withSameStartDate[withSameStartDate.length - 1]
 }
 
-module.exports = {
+export default {
   go
 }

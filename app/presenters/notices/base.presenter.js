@@ -1,8 +1,6 @@
-'use strict'
-
-const NotifyAddressPresenter = require('./setup/notify-address.presenter.js')
-const { today } = require('../../lib/general.lib.js')
-const { formatLongDate } = require('../base.presenter.js')
+import NotifyAddressPresenter from './setup/notify-address.presenter.js'
+import { today } from '../../lib/general.lib.js'
+import { formatLongDate } from '../base.presenter.js'
 
 /**
  * Formats an address object into a fixed array of 7 strings to be used as a CSV.
@@ -92,7 +90,7 @@ function _returnsPeriodTextPrefix(returnPeriod) {
   return 'Quarterly'
 }
 
-module.exports = {
+export default {
   addressToCSV,
   futureDueDate,
   returnsPeriodText

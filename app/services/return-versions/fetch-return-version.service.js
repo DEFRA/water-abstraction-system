@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the matching return version and associated licence, return requirements, points and purposes data
  * @module FetchReturnVersionService
  */
 
-const ReturnVersionModel = require('../../models/return-version.model.js')
+import ReturnVersionModel from '../../models/return-version.model.js'
 
 /**
  * Fetches the matching return version and associated licence, return requirements, points and purposes data
@@ -84,6 +82,6 @@ async function _fetchPagination(returnVersionId) {
     ])
 }
 
-module.exports = {
+export default {
   go
 }

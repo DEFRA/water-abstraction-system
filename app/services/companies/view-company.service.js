@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/companies/{id}/{role}' page
  *
  * @module ViewCompanyService
  */
 
-const CompanyPresenter = require('../../presenters/companies/company.presenter.js')
-const FetchCompanyDetailsDal = require('../../dal/companies/fetch-company-details.dal.js')
-const { roles } = require('../../lib/static-lookups.lib.js')
+import CompanyPresenter from '../../presenters/companies/company.presenter.js'
+import FetchCompanyDetailsDal from '../../dal/companies/fetch-company-details.dal.js'
+import { roles } from '../../lib/static-lookups.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/companies/{id}/{role}' page
@@ -28,6 +26,6 @@ async function go(companyId, role) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

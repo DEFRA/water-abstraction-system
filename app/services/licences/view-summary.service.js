@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the licence summary page
  * @module ViewSummaryService
  */
 
-const FetchLicenceService = require('./fetch-licence.service.js')
-const FetchSummaryService = require('./fetch-summary.service.js')
-const SummaryHeadingPresenter = require('../../presenters/licences/summary-heading.presenter.js')
-const SummaryPresenter = require('../../presenters/licences/summary.presenter.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import FetchLicenceService from './fetch-licence.service.js'
+import FetchSummaryService from './fetch-summary.service.js'
+import SummaryHeadingPresenter from '../../presenters/licences/summary-heading.presenter.js'
+import SummaryPresenter from '../../presenters/licences/summary.presenter.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence summary page
@@ -34,6 +32,6 @@ async function go(licenceId, auth) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,6 +1,4 @@
-'use strict'
-
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema.dropViewIfExists('notifications').createView('notifications', (view) => {
     view.as(
       knex('scheduled_notification').withSchema('water').select([
@@ -34,7 +32,7 @@ exports.up = function (knex) {
   })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.dropViewIfExists('notifications').createView('notifications', (view) => {
     // NOTE: We have commented out unused columns from the source table
     view.as(

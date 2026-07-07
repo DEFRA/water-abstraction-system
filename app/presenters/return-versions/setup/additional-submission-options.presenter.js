@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/additional-submission-options` page
  * @module AdditionalSubmissionOptionsPresenter
  */
 
-const { isQuarterlyReturnSubmissions } = require('../../../lib/dates.lib.js')
+import { isQuarterlyReturnSubmissions } from '../../../lib/dates.lib.js'
 
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/additional-submission-options` page
@@ -41,6 +39,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

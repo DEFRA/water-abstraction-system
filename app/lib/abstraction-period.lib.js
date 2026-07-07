@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Helper methods to deal with abstraction periods
  * @module AbstractionPeriodLib
@@ -112,6 +110,6 @@ function _subtractOneYear(date) {
   return new Date(date.getFullYear() - 1, date.getMonth(), date.getDate())
 }
 
-module.exports = {
+export default {
   determineAbstractionPeriods
 }

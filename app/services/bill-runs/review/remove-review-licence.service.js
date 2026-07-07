@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Deletes all data relating to a review licence from the review tables
  * @module RemoveReviewLicenceService
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 /**
  * Deletes all data relating to a review licence from the review tables
@@ -76,6 +74,6 @@ async function _removeReturns(reviewLicenceId) {
     .where('rl.id', reviewLicenceId)
 }
 
-module.exports = {
+export default {
   go
 }

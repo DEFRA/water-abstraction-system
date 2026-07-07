@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Checks if an email address already exists in the system.
  * @module CheckEmailExistsDal
  */
 
-const UserModel = require('../../models/user.model.js')
+import UserModel from '../../models/user.model.js'
 
 /**
  * Checks if an email address already exists in the system.
@@ -20,6 +18,6 @@ async function go(email) {
   return !!emailExists
 }
 
-module.exports = {
+export default {
   go
 }

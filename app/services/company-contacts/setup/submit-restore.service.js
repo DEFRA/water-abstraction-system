@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/check' page
  *
  * @module SubmitRestoreService
  */
 
-const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const UpdateCompanyContactDal = require('../../../dal/company-contacts/setup/update-company-contact.dal.js')
-const { flashNotification } = require('../../../lib/general.lib.js')
+import DeleteSessionDal from '../../../dal/delete-session.dal.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import UpdateCompanyContactDal from '../../../dal/company-contacts/setup/update-company-contact.dal.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/check' page
@@ -49,6 +47,6 @@ async function _updateCompanyContact(session, auth) {
   await UpdateCompanyContactDal.go(companyContact)
 }
 
-module.exports = {
+export default {
   go
 }

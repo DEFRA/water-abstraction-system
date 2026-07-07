@@ -1,6 +1,4 @@
-'use strict'
-
-const { titleCase } = require('./base.presenter.js')
+import { titleCase } from './base.presenter.js'
 
 /**
  * Formats how the bill run type for display in views
@@ -84,7 +82,7 @@ function generateBillRunTitle(regionName, batchType, scheme, summer) {
   return `${titleCase(regionName)} ${billRunType.toLowerCase()}`
 }
 
-module.exports = {
+export default {
   formatBillRunType,
   formatChargeScheme,
   displayCreditDebitTotals,

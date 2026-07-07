@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Manages updating the licence monitoring station record as deleted when remove tag is confirmed
  * @module SubmitRemoveService
  */
 
-const { flashNotification, timestampForPostgres } = require('../../lib/general.lib.js')
-const LicenceMonitoringStationModel = require('../../models/licence-monitoring-station.model.js')
+import { flashNotification, timestampForPostgres } from '../../lib/general.lib.js'
+import LicenceMonitoringStationModel from '../../models/licence-monitoring-station.model.js'
 
 /**
  * Manages updating the licence monitoring station record as deleted when remove tag is confirmed
@@ -26,6 +24,6 @@ async function go(licenceMonitoringStationId, licenceRef, yar) {
   flashNotification(yar, 'Updated', `Tag removed for ${licenceRef}`)
 }
 
-module.exports = {
+export default {
   go
 }

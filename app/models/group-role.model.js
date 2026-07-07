@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for group_roles (idm.group_roles)
  * @module GroupRoleModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class GroupRoleModel extends BaseModel {
   static get tableName() {
@@ -36,4 +34,4 @@ class GroupRoleModel extends BaseModel {
   }
 }
 
-module.exports = GroupRoleModel
+export default GroupRoleModel

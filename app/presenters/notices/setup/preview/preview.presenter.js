@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Formats notification data ready for presenting in the preview notification page
  * @module PreviewPresenter
  */
 
-const GeneratePreviewRequest = require('../../../../requests/notify/generate-preview.request.js')
+import GeneratePreviewRequest from '../../../../requests/notify/generate-preview.request.js'
 
-const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
-const { sentenceCase } = require('../../../base.presenter.js')
+import { NoticeType } from '../../../../lib/static-lookups.lib.js'
+import { sentenceCase } from '../../../base.presenter.js'
 
 /**
  * Formats notification data ready for presenting in the preview notification page
@@ -77,6 +75,6 @@ function _refreshPageLink(contactHashId, noticeType, licenceMonitoringStationId,
   return baseRefreshPageLink
 }
 
-module.exports = {
+export default {
   go
 }

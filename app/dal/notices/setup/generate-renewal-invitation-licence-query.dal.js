@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Generates the query and bindings to select a single licence ref for use in renewal invitation recipient queries
  * @module GenerateRenewalInvitationLicenceQueryDal
@@ -22,6 +20,6 @@ function go(licenceRef) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

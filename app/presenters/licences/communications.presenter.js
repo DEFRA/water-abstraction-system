@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/licences/{id}/communications` view licence communications page
  * @module CommunicationsPresenter
  */
 
-const NotificationsTablePresenter = require('../notifications/notifications-table.presenter.js')
+import NotificationsTablePresenter from '../notifications/notifications-table.presenter.js'
 
 /**
  * Formats data for the `/licences/{id}/communications` view licence communications page
@@ -31,6 +29,6 @@ function go(notifications, licence) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

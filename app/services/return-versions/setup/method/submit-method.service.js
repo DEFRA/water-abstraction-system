@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/method` page
  * @module SubmitSetupService
  */
 
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
 
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const GenerateFromAbstractionDataService = require('./generate-from-abstraction-data.service.js')
-const MethodPresenter = require('../../../../presenters/return-versions/setup/method.presenter.js')
-const MethodValidator = require('../../../../validators/return-versions/setup/method.validator.js')
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import GenerateFromAbstractionDataService from './generate-from-abstraction-data.service.js'
+import MethodPresenter from '../../../../presenters/return-versions/setup/method.presenter.js'
+import MethodValidator from '../../../../validators/return-versions/setup/method.validator.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/method` page
@@ -83,6 +81,6 @@ function _validate(payload) {
   return formatValidationResult(validation)
 }
 
-module.exports = {
+export default {
   go
 }

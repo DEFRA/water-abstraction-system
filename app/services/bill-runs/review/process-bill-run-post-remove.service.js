@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Determines if a two-part tariff bill run is now empty (all licences removed) and if so what to do next
  * @module ProcessBillRunPostRemove
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
-const GenerateTwoPartTariffBillRunService = require('../generate-two-part-tariff-bill-run.service.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import { timestampForPostgres } from '../../../lib/general.lib.js'
+import GenerateTwoPartTariffBillRunService from '../generate-two-part-tariff-bill-run.service.js'
 
 /**
  * Determines if a two-part tariff bill run is now empty (all licences removed) and if so what to do next
@@ -65,6 +63,6 @@ async function _processEmptyBillRun(billRun) {
   GenerateTwoPartTariffBillRunService.go(billRun.id)
 }
 
-module.exports = {
+export default {
   go
 }

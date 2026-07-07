@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/billing-accounts/setup/{billingAccountId}/account` page
  *
  * @module SubmitAccountService
  */
 
-const AccountPresenter = require('../../../presenters/billing-accounts/setup/account.presenter.js')
-const AccountValidator = require('../../../validators/billing-accounts/setup/account.validator.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import AccountPresenter from '../../../presenters/billing-accounts/setup/account.presenter.js'
+import AccountValidator from '../../../validators/billing-accounts/setup/account.validator.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/billing-accounts/setup/{billingAccountId}/account` page
@@ -106,6 +104,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

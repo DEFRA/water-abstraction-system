@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for company_contacts (crm_v2.company_contacts)
  * @module CompanyContactModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class CompanyContactModel extends BaseModel {
   static get tableName() {
@@ -73,4 +71,4 @@ class CompanyContactModel extends BaseModel {
   }
 }
 
-module.exports = CompanyContactModel
+export default CompanyContactModel

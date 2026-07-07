@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches data for the remove bill licence page which summarises the bill run and billing details for the licence
  * @module FetchBillLicenceService
  */
 
-const BillLicenceModel = require('../../models/bill-licence.model.js')
+import BillLicenceModel from '../../models/bill-licence.model.js'
 
 /**
  * Fetches data for the remove bill licence page which summarises the bill run and billing details for the licence
@@ -90,6 +88,6 @@ async function _fetchBillLicence(billLicenceId) {
   return results
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the company details for the view '/companies/{id}/{role}' page
  * @module FetchCompanyDetailsDal
  */
 
-const CompanyModel = require('../../models/company.model.js')
+import CompanyModel from '../../models/company.model.js'
 
 /**
  * Fetches the company details for the view '/companies/{id}/{role}' page
@@ -46,6 +44,6 @@ async function go(companyId, role) {
     })
 }
 
-module.exports = {
+export default {
   go
 }

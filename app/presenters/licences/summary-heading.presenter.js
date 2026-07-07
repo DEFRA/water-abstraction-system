@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats data for the `/licences/{id}/summary` page
  * @module SummaryHeadingPresenter
  */
 
-const { formatLongDate } = require('../base.presenter.js')
-const { licenceEndsWarning } = require('../licence.presenter.js')
-const { supplementaryBillingNotification } = require('./base-licences.presenter.js')
+import { formatLongDate } from '../base.presenter.js'
+import { licenceEndsWarning } from '../licence.presenter.js'
+import { supplementaryBillingNotification } from './base-licences.presenter.js'
 
 /**
  * Formats data for the `/licences/{id}/summary` page
@@ -66,6 +64,6 @@ function _workflowWarning(workflows) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

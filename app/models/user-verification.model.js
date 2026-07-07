@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for user_verifications (crm.verification)
  * @module UserVerificationModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 /**
  * Represents an instance of a user verification record
@@ -65,4 +63,4 @@ class UserVerificationModel extends BaseModel {
   }
 }
 
-module.exports = UserVerificationModel
+export default UserVerificationModel

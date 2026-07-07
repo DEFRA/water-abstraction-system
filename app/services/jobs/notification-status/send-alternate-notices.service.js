@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates sending alternate notices when a critical notice has failed notifications to primary users
  * @module SendAlternateNoticesService
  */
 
-const FetchCriticalNoticesDal = require('../../../dal/jobs/notification-status/fetch-critical-notices.dal.js')
-const SendAlternateNoticeService = require('../../notices/setup/send/send-alternate-notice.service.js')
+import FetchCriticalNoticesDal from '../../../dal/jobs/notification-status/fetch-critical-notices.dal.js'
+import SendAlternateNoticeService from '../../notices/setup/send/send-alternate-notice.service.js'
 
 /**
  * Orchestrates sending alternate notices when a critical notice has failed notifications to primary users
@@ -48,6 +46,6 @@ function _noticeIds(notifications) {
   return [...new Set(allNoticeIds)]
 }
 
-module.exports = {
+export default {
   go
 }

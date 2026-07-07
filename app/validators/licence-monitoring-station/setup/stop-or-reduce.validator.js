@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/licence-monitoring-station/setup/{sessionId}/stop-or-reduce` page
  * @module StopOrReduceValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/licence-monitoring-station/setup/{sessionId}/stop-or-reduce` page
@@ -39,6 +37,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

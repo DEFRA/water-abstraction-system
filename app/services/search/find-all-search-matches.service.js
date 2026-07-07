@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Coordinates finding all matching search results for a search query from the /search page
  * @module FindAllSearchMatchesService
  */
 
-const DetermineSearchItemsService = require('./determine-search-items.service.js')
-const FetchSearchResultsDetailsService = require('./fetch-search-results-details.service.js')
-const FetchSearchResultsService = require('./fetch-search-results.service.js')
+import DetermineSearchItemsService from './determine-search-items.service.js'
+import FetchSearchResultsDetailsService from './fetch-search-results-details.service.js'
+import FetchSearchResultsService from './fetch-search-results.service.js'
 
 /**
  * Coordinates finding all matching search results for a search query from the /search page
@@ -123,6 +121,6 @@ function _results(orderedSearchResults, modelsByType) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

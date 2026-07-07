@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates validating returns notice types for the `/notices/setup/{sessionId}/licence` page
  * @module ProcessReturnsNoticeLicenceSubmission
  */
 
-const CheckLicenceExistsDal = require('../../../../dal/notices/setup/check-licence-exists.dal.js')
-const FetchDueReturnsForLicenceService = require('../returns-notice/fetch-due-returns-for-licence.service.js')
-const LicenceDueReturnsValidator = require('../../../../validators/notices/setup/returns-notice/licence-due-returns.validator.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+import CheckLicenceExistsDal from '../../../../dal/notices/setup/check-licence-exists.dal.js'
+import FetchDueReturnsForLicenceService from '../returns-notice/fetch-due-returns-for-licence.service.js'
+import LicenceDueReturnsValidator from '../../../../validators/notices/setup/returns-notice/licence-due-returns.validator.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the returns notice types for the `/notices/setup/{sessionId}/licence` page
@@ -56,6 +54,6 @@ async function _validate(payload, dueReturns) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

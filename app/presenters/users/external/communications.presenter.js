@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the '/users/external/{id}/communications' page
  * @module CommunicationsPresenter
  */
 
-const NotificationsTablePresenter = require('../notifications-table.presenter.js')
-const { sourceNavigation } = require('../base-users.presenter.js')
+import NotificationsTablePresenter from '../notifications-table.presenter.js'
+import { sourceNavigation } from '../base-users.presenter.js'
 
 /**
  * Formats data for the '/users/external/{id}/communications' page
@@ -35,6 +33,6 @@ function go(user, notifications, viewingUserScope, back) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

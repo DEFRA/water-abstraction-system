@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Process all licence end date changes previously recorded
  * @module ProcessLicenceEndDateChangesService
  */
 
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
-const LicenceEndDateChangeModel = require('../../../models/licence-end-date-change.model.js')
-const ProcessBillingFlagService = require('../../licences/supplementary/process-billing-flag.service.js')
-const ProcessLicenceReturnLogsService = require('../../return-logs/process-licence-return-logs.service.js')
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
+import LicenceEndDateChangeModel from '../../../models/licence-end-date-change.model.js'
+import ProcessBillingFlagService from '../../licences/supplementary/process-billing-flag.service.js'
+import ProcessLicenceReturnLogsService from '../../return-logs/process-licence-return-logs.service.js'
 
 /**
  * Process all licence end date changes previously recorded
@@ -74,6 +72,6 @@ async function _returnLogs(licenceEndDateChange) {
   await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Determines which financial year ends are between the date ranges
  * @module DetermineBillingYearsService
  */
 
-const { determineFinancialYearEnd } = require('../../../lib/dates.lib.js')
+import { determineFinancialYearEnd } from '../../../lib/dates.lib.js'
 
 const LAST_PRE_SROC_FINANCIAL_YEAR_END = 2022
 
@@ -41,6 +39,6 @@ function go(startDate, endDate) {
   return years
 }
 
-module.exports = {
+export default {
   go
 }

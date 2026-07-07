@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/account` page
  *
  * @module ViewAccountService
  */
 
-const AccountPresenter = require('../../../presenters/billing-accounts/setup/account.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import AccountPresenter from '../../../presenters/billing-accounts/setup/account.presenter.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/account` page
@@ -26,6 +24,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

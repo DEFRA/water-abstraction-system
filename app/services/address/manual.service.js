@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `address/{sessionId}/manual` page
  *
  * @module ManualService
  */
 
-const FetchSessionDal = require('../../dal/fetch-session.dal.js')
-const ManualAddressPresenter = require('../../presenters/address/manual.presenter.js')
+import FetchSessionDal from '../../dal/fetch-session.dal.js'
+import ManualAddressPresenter from '../../presenters/address/manual.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `address/{sessionId}/manual` page
@@ -26,6 +24,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

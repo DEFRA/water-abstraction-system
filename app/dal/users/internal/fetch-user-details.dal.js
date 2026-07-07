@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the user details needed for user pages
  * @module FetchUserDetailsDal
  */
 
-const UserModel = require('../../../models/user.model.js')
+import UserModel from '../../../models/user.model.js'
 
 /**
  * Fetches the user details needed for user pages
@@ -41,6 +39,6 @@ async function go(id) {
     })
 }
 
-module.exports = {
+export default {
   go
 }

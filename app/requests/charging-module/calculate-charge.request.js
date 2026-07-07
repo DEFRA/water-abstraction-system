@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Connects with the Charging Module to calculate a standalone charge
  * @module CalculateChargeRequest
  */
 
-const ChargingModuleRequest = require('../charging-module.request.js')
+import ChargingModuleRequest from '../charging-module.request.js'
 
 /**
  * Sends a request to the Charging Module to calculate a standalone charge and returns the result.
@@ -23,6 +21,6 @@ async function send(transactionData) {
   return ChargingModuleRequest.post(path, transactionData)
 }
 
-module.exports = {
+export default {
   send
 }

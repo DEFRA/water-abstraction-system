@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/notices/setup/{sessionId}/recipient-name' page
  *
  * @module SubmitRecipientNameService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const RecipientNamePresenter = require('../../../presenters/notices/setup/recipient-name.presenter.js')
-const RecipientNameValidator = require('../../../validators/notices/setup/recipient-name.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import RecipientNamePresenter from '../../../presenters/notices/setup/recipient-name.presenter.js'
+import RecipientNameValidator from '../../../validators/notices/setup/recipient-name.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the '/notices/setup/{sessionId}/recipient-name' page
@@ -53,6 +51,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches existing supplementary details about a licence being updated during import
  * @module FetchExistingLicenceDetailsService
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 /**
  * Fetches existing supplementary details about a licence being updated during import
@@ -87,6 +85,6 @@ function _query() {
   `
 }
 
-module.exports = {
+export default {
   go
 }

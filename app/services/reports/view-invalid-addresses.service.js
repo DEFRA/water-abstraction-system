@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the view invalid addresses page
  * @module ViewInvalidAddressesService
  */
 
-const FetchInvalidAddressesService = require('./fetch-invalid-addresses.service.js')
-const ViewInvalidAddressesPresenter = require('../../presenters/reports/view-invalid-addresses.presenter.js')
+import FetchInvalidAddressesService from './fetch-invalid-addresses.service.js'
+import ViewInvalidAddressesPresenter from '../../presenters/reports/view-invalid-addresses.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the view invalid addresses page
@@ -24,6 +22,6 @@ async function go() {
   }
 }
 
-module.exports = {
+export default {
   go
 }

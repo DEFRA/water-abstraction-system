@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Generates return submission metatadata
  * @module GenerateReturnSubmissionMetadataService
  */
 
-const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
+import { formatDateObjectToISO } from '../../../lib/dates.lib.js'
 
 const REPORTED = {
   VOLUMES: 'abstractionVolumes',
@@ -96,6 +94,6 @@ function _totalProperties(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

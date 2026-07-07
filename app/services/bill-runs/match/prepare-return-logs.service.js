@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Prepares the return logs to be matched to a charge element
  * @module PrepareReturnLogsService
  */
 
-const Big = require('big.js')
+import Big from 'big.js'
 
-const { determineAbstractionPeriods } = require('../../../lib/abstraction-period.lib.js')
-const FetchReturnLogsForLicenceService = require('./fetch-return-logs-for-licence.service.js')
-const { periodsOverlap } = require('../../../lib/general.lib.js')
+import { determineAbstractionPeriods } from '../../../lib/abstraction-period.lib.js'
+import FetchReturnLogsForLicenceService from './fetch-return-logs-for-licence.service.js'
+import { periodsOverlap } from '../../../lib/general.lib.js'
 
 /**
  * Prepares return logs for matching with abstraction periods and performs checks for potential issues
@@ -68,6 +66,6 @@ function _prepReturnsForMatching(returnLogs, billingPeriod) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

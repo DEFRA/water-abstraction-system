@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for user_roles (idm.user_roles)
  * @module UserRoleModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class UserRoleModel extends BaseModel {
   static get tableName() {
@@ -36,4 +34,4 @@ class UserRoleModel extends BaseModel {
   }
 }
 
-module.exports = UserRoleModel
+export default UserRoleModel

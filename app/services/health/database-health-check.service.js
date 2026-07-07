@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Used by the `DatabaseController` to determine if connection to the database is healthy
  * @module DatabaseHealthCheckService
  */
 
-const { db } = require('../../../db/db.js')
+import { db } from '../../../db/db.js'
 
 /**
  * Generates an array of stats for each table in the database
@@ -24,6 +22,6 @@ async function go() {
   return stats
 }
 
-module.exports = {
+export default {
   go
 }

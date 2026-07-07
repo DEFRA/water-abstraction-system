@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the confirm remove a bill licence page
  * @module RemoveBillLicencePresenter
  */
 
-const { formatFinancialYear, formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
-const { formatBillRunType, formatChargeScheme } = require('../billing.presenter.js')
+import { formatFinancialYear, formatLongDate, formatMoney, titleCase } from '../base.presenter.js'
+import { formatBillRunType, formatChargeScheme } from '../billing.presenter.js'
 
 /**
  * Formats data for the confirm remove a bill licence page
@@ -76,6 +74,6 @@ function _total(transactions) {
   return formatMoney(transactionTotal, true)
 }
 
-module.exports = {
+export default {
   go
 }

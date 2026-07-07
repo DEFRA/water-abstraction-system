@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/setup/{sessionId}/restore' page
  *
  * @module ViewRestoreService
  */
 
-const RestorePresenter = require('../../../presenters/company-contacts/setup/restore.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import RestorePresenter from '../../../presenters/company-contacts/setup/restore.presenter.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/setup/{sessionId}/restore' page
@@ -26,6 +24,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

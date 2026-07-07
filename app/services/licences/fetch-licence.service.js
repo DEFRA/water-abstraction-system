@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches the matching licence for the view '/licences/{id}/*' pages
  * @module FetchLicenceService
  */
 
-const LicenceModel = require('../../models/licence.model.js')
-const { db } = require('../../../db/db.js')
+import LicenceModel from '../../models/licence.model.js'
+import { db } from '../../../db/db.js'
 
 /**
  * Fetches the matching licence for the view '/licences/{id}/*' pages
@@ -43,6 +41,6 @@ async function go(licenceId) {
     .modify('currentVersion')
 }
 
-module.exports = {
+export default {
   go
 }

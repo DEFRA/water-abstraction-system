@@ -1,36 +1,38 @@
-'use strict'
+import Hapi from '@hapi/hapi'
 
-const Hapi = require('@hapi/hapi')
+import AirbrakePlugin from './plugins/airbrake.plugin.js'
+import AuthPlugin from './plugins/auth.plugin.js'
+import BearerPlugin from './plugins/bearer.plugin.js'
+import ChargingModuleTokenCachePlugin from './plugins/charging-module-token-cache.plugin.js'
+import ContentSecurityPolicyPlugin from './plugins/content-security-policy.plugin.js'
+import CrumbPlugin from './plugins/crumb.plugin.js'
+import ErrorPagesPlugin from './plugins/error-pages.plugin.js'
+import GlobalHapiServerMethodsPlugin from './plugins/global-hapi-server-methods.plugin.js'
+import GlobalNotifierPlugin from './plugins/global-notifier.plugin.js'
+import HapiPinoPlugin from './plugins/hapi-pino.plugin.js'
+import KeepYarAlivePlugin from './plugins/keep-yar-alive.plugin.js'
+import NotifyTokenCachePlugin from './plugins/notify-token-cache.plugin.js'
+import PayloadCleanerPlugin from './plugins/payload-cleaner.plugin.js'
+import RequestNotifierPlugin from './plugins/request-notifier.plugin.js'
+import RespTokenCachePlugin from './plugins/resp-token-cache.plugin.js'
+import RouterPlugin from './plugins/router.plugin.js'
+import StopPlugin from './plugins/stop.plugin.js'
+import ViewsPlugin from './plugins/views.plugin.js'
+import YarPlugin from './plugins/yar.plugin.js'
 
-const AirbrakePlugin = require('./plugins/airbrake.plugin.js')
-const AuthPlugin = require('./plugins/auth.plugin.js')
-const BearerPlugin = require('./plugins/bearer.plugin.js')
-const ChargingModuleTokenCachePlugin = require('./plugins/charging-module-token-cache.plugin.js')
-const ContentSecurityPolicyPlugin = require('./plugins/content-security-policy.plugin.js')
-const CrumbPlugin = require('./plugins/crumb.plugin.js')
-const ErrorPagesPlugin = require('./plugins/error-pages.plugin.js')
-const GlobalHapiServerMethodsPlugin = require('./plugins/global-hapi-server-methods.plugin.js')
-const GlobalNotifierPlugin = require('./plugins/global-notifier.plugin.js')
-const HapiPinoPlugin = require('./plugins/hapi-pino.plugin.js')
-const KeepYarAlivePlugin = require('./plugins/keep-yar-alive.plugin.js')
-const NotifyTokenCachePlugin = require('./plugins/notify-token-cache.plugin.js')
-const PayloadCleanerPlugin = require('./plugins/payload-cleaner.plugin.js')
-const RequestNotifierPlugin = require('./plugins/request-notifier.plugin.js')
-const RespTokenCachePlugin = require('./plugins/resp-token-cache.plugin.js')
-const RouterPlugin = require('./plugins/router.plugin.js')
-const StopPlugin = require('./plugins/stop.plugin.js')
-const ViewsPlugin = require('./plugins/views.plugin.js')
-const YarPlugin = require('./plugins/yar.plugin.js')
+import Cookie from '@hapi/cookie'
+import Inert from '@hapi/inert'
+import Scooter from '@hapi/scooter'
 
-const ServerConfig = require('../config/server.config.js')
+import ServerConfig from '../config/server.config.js'
 
 const registerPlugins = async (server) => {
   // NOTE: This order matters to some plugins we register. Inserting into the order should be fine. But if you reorder
   // any existing plugin registration double-check you haven't broken anything!
   await server.register(StopPlugin)
-  await server.register(require('@hapi/inert'))
-  await server.register(require('@hapi/cookie'))
-  await server.register(require('@hapi/scooter'))
+  await server.register(Inert)
+  await server.register(Cookie)
+  await server.register(Scooter)
   await server.register(YarPlugin)
   await server.register(BearerPlugin)
   await server.register(AuthPlugin)
@@ -74,4 +76,4 @@ process.on('unhandledRejection', (err) => {
   process.exit(1)
 })
 
-module.exports = { init, start }
+export default { init, start }

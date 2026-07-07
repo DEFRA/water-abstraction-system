@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/notices/setup/{sessionId}/recipient-name' page
  *
  * @module ViewRecipientNameService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const RecipientNamePresenter = require('../../../presenters/notices/setup/recipient-name.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import RecipientNamePresenter from '../../../presenters/notices/setup/recipient-name.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/notices/setup/{sessionId}/recipient-name' page
@@ -27,6 +25,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

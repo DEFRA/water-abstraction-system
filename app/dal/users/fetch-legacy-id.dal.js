@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the legacy `userId` value for a user, needed to link to the legacy user management pages
  * @module FetchLegacyIdDal
  */
 
-const UserModel = require('../../models/user.model.js')
+import UserModel from '../../models/user.model.js'
 
 /**
  * Fetches the legacy `userId` value for a user, needed to link to the legacy user management pages
@@ -32,6 +30,6 @@ async function go(id) {
   return userId
 }
 
-module.exports = {
+export default {
   go
 }

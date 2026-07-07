@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates fetching and determining recipients when checking, downloading or sending notices
  * @module FetchRecipientsService
  */
 
-const FetchAbstractionAlertRecipientsDal = require('../../../dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
-const FetchPaperReturnsRecipientsService = require('./returns-notice/fetch-paper-returns-recipients.service.js')
-const FetchRenewalInvitationRecipientsService = require('./renewal-notice/fetch-renewal-invitation-recipients.service.js')
-const FetchReturnsInvitationRecipientsService = require('./returns-notice/fetch-returns-invitation-recipients.service.js')
-const FetchReturnsReminderRecipientsService = require('./returns-notice/fetch-returns-reminder-recipients.service.js')
-const MergeRecipientsService = require('./merge-recipients.service.js')
-const { NoticeType } = require('../../../lib/static-lookups.lib.js')
+import FetchAbstractionAlertRecipientsDal from '../../../dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'
+import FetchPaperReturnsRecipientsService from './returns-notice/fetch-paper-returns-recipients.service.js'
+import FetchRenewalInvitationRecipientsService from './renewal-notice/fetch-renewal-invitation-recipients.service.js'
+import FetchReturnsInvitationRecipientsService from './returns-notice/fetch-returns-invitation-recipients.service.js'
+import FetchReturnsReminderRecipientsService from './returns-notice/fetch-returns-reminder-recipients.service.js'
+import MergeRecipientsService from './merge-recipients.service.js'
+import { NoticeType } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Orchestrates fetching and determining recipients when checking, downloading or sending notices
@@ -50,6 +48,6 @@ async function _recipientsData(session, download) {
   return FetchReturnsReminderRecipientsService.go(session, download)
 }
 
-module.exports = {
+export default {
   go
 }

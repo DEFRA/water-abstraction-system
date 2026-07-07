@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for points (water.points)
  * @module PointModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class PointModel extends BaseModel {
   static get tableName() {
@@ -86,4 +84,4 @@ class PointModel extends BaseModel {
   }
 }
 
-module.exports = PointModel
+export default PointModel

@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Handles user submission for the review charge reference factors page
  * @module SubmitFactorsService
  */
 
-const FactorsPresenter = require('../../../presenters/bill-runs/review/factors.presenter.js')
-const FactorsValidator = require('../../../validators/bill-runs/review/factors.validator.js')
-const FetchReviewChargeReferenceService = require('./fetch-review-charge-reference.service.js')
-const ReviewChargeReferenceModel = require('../../../models/review-charge-reference.model.js')
+import FactorsPresenter from '../../../presenters/bill-runs/review/factors.presenter.js'
+import FactorsValidator from '../../../validators/bill-runs/review/factors.validator.js'
+import FetchReviewChargeReferenceService from './fetch-review-charge-reference.service.js'
+import ReviewChargeReferenceModel from '../../../models/review-charge-reference.model.js'
 
 /**
  * Handles user submission for the review charge reference factors page
@@ -78,6 +76,6 @@ function _validate(payload) {
   return result
 }
 
-module.exports = {
+export default {
   go
 }

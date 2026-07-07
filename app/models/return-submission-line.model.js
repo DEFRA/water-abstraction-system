@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for return_submission_lines (returns.lines)
  * @module ReturnSubmissionLineModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class ReturnSubmissionLineModel extends BaseModel {
   static get tableName() {
@@ -28,4 +26,4 @@ class ReturnSubmissionLineModel extends BaseModel {
   }
 }
 
-module.exports = ReturnSubmissionLineModel
+export default ReturnSubmissionLineModel

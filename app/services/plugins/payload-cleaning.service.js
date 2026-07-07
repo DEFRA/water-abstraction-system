@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Clean request payloads of null and empty properties. Remove extraneous whitespace and any malicious content
  * @module PayloadCleaningService
  */
 
-const Sanitizer = require('sanitizer')
+import Sanitizer from 'sanitizer'
 
 /**
  * Loop through an payload's properties and 'clean' it.
@@ -223,6 +221,6 @@ function _cleanValue(value) {
   return value
 }
 
-module.exports = {
+export default {
   go
 }

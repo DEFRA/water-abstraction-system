@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates sending a paper return notification to Notify
  * @module SendPaperReturnNotificationService
  */
 
-const CreatePrecompiledFileRequest = require('../../../../requests/notify/create-precompiled-file.request.js')
-const NotifyErrorPresenter = require('../../../../presenters/notifications/notify-error.presenter.js')
-const NotifyUpdatePresenter = require('../../../../presenters/notifications/notify-update.presenter.js')
-const PreparePaperReturnService = require('../prepare-paper-return.service.js')
+import CreatePrecompiledFileRequest from '../../../../requests/notify/create-precompiled-file.request.js'
+import NotifyErrorPresenter from '../../../../presenters/notifications/notify-error.presenter.js'
+import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'
+import PreparePaperReturnService from '../prepare-paper-return.service.js'
 
 /**
  * Orchestrates sending a paper return notification to Notify
@@ -45,6 +43,6 @@ function _returnFromError(notification, returnFormRequest) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

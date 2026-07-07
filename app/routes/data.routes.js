@@ -1,6 +1,4 @@
-'use strict'
-
-const DataController = require('../controllers/data.controller.js')
+import DataController from '../controllers/data.controller.js'
 
 const routes = [
   {
@@ -62,4 +60,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

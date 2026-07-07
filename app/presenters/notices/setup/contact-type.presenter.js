@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/contact-type` page
  * @module ContactTypePresenter
@@ -30,6 +28,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

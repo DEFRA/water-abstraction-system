@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats the review charge element data ready for presenting in the review charge element edit page
  * @module EditPresenter
  */
 
-const { formatFinancialYear } = require('../../base.presenter.js')
-const { formatChargePeriod, formatChargePeriods } = require('./base-review.presenter.js')
+import { formatFinancialYear } from '../../base.presenter.js'
+import { formatChargePeriod, formatChargePeriods } from './base-review.presenter.js'
 
 /**
  * Prepares and processes bill run and review charge element data for presenting
@@ -54,6 +52,6 @@ function _authorisedQuantity(reviewChargeElement) {
   return Math.min(chargeElement.authorisedAnnualQuantity, reviewChargeReference.amendedAuthorisedVolume)
 }
 
-module.exports = {
+export default {
   go
 }

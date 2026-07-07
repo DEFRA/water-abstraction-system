@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Use for making http requests to other services
  * @module BaseRequest
  */
 
-const { HttpsProxyAgent } = require('hpagent')
+import { HttpsProxyAgent } from 'hpagent'
 
-const serverConfig = require('../../config/server.config.js')
+import serverConfig from '../../config/server.config.js'
 
 /**
  * Returns an object containing the default options.
@@ -254,7 +252,7 @@ async function _sendRequest(method, url, additionalOptions) {
   return result
 }
 
-module.exports = {
+export default {
   delete: deleteRequest,
   get,
   patch,

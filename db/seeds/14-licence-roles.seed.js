@@ -1,8 +1,6 @@
-'use strict'
-
-const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const { data: licenceRoles } = require('./data/licence-roles.js')
-const LicenceRoleModel = require('../../app/models/licence-role.model.js')
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
+import { data as licenceRoles } from './data/licence-roles.js'
+import LicenceRoleModel from '../../app/models/licence-role.model.js'
 
 async function seed() {
   for (const licenceRole of licenceRoles) {
@@ -42,6 +40,6 @@ async function _update(licenceRole) {
     .andWhere('label', label)
 }
 
-module.exports = {
+export default {
   seed
 }

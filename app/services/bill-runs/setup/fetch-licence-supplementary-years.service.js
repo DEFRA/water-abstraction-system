@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the years that have licences flagged for supplementary billing for the given region
  * @module FetchLicenceSupplementaryYearsService
  */
 
-const LicenceSupplementaryYearModel = require('../../../models/licence-supplementary-year.model.js')
+import LicenceSupplementaryYearModel from '../../../models/licence-supplementary-year.model.js'
 
 /**
  * Fetches the years that have licences flagged for supplementary billing for the given region
@@ -24,6 +22,6 @@ async function go(regionId, twoPartTariff) {
     .orderBy('financialYearEnd', 'desc')
 }
 
-module.exports = {
+export default {
   go
 }

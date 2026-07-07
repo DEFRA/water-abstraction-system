@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/paper-return` page
  *
  * @module ViewPaperReturnService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const PaperReturnPresenter = require('../../../presenters/notices/setup/paper-return.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import PaperReturnPresenter from '../../../presenters/notices/setup/paper-return.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/paper-return` page
@@ -27,6 +25,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

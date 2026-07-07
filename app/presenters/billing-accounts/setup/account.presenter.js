@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/billing-accounts/setup/{billingAccountId}/account` page
  * @module AccountPresenter
@@ -37,6 +35,6 @@ function _backLink(session) {
   return `/system/billing-accounts/${session.billingAccount.id}`
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Fetches recipient data for a paper returns notice
  * @module FetchPaperReturnsRecipientsService
  */
 
-const GenerateReturnLogsByIdQueryService = require('./generate-return-logs-by-id-query.service.js')
-const GenerateRecipientsQueryService = require('./generate-recipients-query.service.js')
-const { futureDueDate } = require('../../../../presenters/notices/base.presenter.js')
+import GenerateReturnLogsByIdQueryService from './generate-return-logs-by-id-query.service.js'
+import GenerateRecipientsQueryService from './generate-recipients-query.service.js'
+import { futureDueDate } from '../../../../presenters/notices/base.presenter.js'
 
-const { db } = require('../../../../../db/db.js')
+import { db } from '../../../../../db/db.js'
 
 /**
  * Fetches recipient data for a paper returns notice
@@ -50,6 +48,6 @@ function _applyNotificationDueDate(rows, download) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

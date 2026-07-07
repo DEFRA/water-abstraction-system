@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches licences that have a related charge element that is due to expire in less than 50 days
  * @module FetchTimeLimitedLicencesService
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 /**
  * Fetches licences that have a related charge element that is due to expire in less than 50 days
@@ -55,6 +53,6 @@ function _offSetCurrentDateByDays(days) {
   return date
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the '/notices/setup/{sessionId}/recipient-name' page
  *
  * @module RecipientNameValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const errorMessage = `Enter the recipient's name`
 
@@ -28,6 +26,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

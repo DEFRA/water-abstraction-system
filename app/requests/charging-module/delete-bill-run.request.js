@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Connects with the Charging Module to delete a new bill run
  * @module ChargingModuleDeleteBillRunService
  */
 
-const ChargingModuleRequest = require('../charging-module.request.js')
+import ChargingModuleRequest from '../charging-module.request.js'
 
 /**
  * Delete a bill run in the Charging Module API
@@ -23,6 +21,6 @@ async function send(billRunId) {
   return ChargingModuleRequest.delete(path)
 }
 
-module.exports = {
+export default {
   send
 }

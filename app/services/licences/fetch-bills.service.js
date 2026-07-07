@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches all return logs for a licence which is needed for the view '/licences/{id}/bills` page
  * @module FetchBillsService
  */
 
-const BillModel = require('../../models/bill.model.js')
+import BillModel from '../../models/bill.model.js'
 
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
 
 /**
  * Fetches all bills for a licence which is needed for the view '/licences/{id}/bills` page
@@ -49,6 +47,6 @@ async function _fetch(licenceId, page) {
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
 
-module.exports = {
+export default {
   go
 }

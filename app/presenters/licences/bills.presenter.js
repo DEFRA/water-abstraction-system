@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the `/licences/{id}/bills` view licence bill page
  * @module BillsPresenter
  */
 
-const { formatLongDate, formatMoney } = require('../base.presenter.js')
-const { formatBillRunType } = require('../billing.presenter.js')
+import { formatLongDate, formatMoney } from '../base.presenter.js'
+import { formatBillRunType } from '../billing.presenter.js'
 
 /**
  * Formats data for the `/licences/{id}/bills` view licence bill page
@@ -77,6 +75,6 @@ function _formatBillNumber(bill) {
 
   return ''
 }
-module.exports = {
+export default {
   go
 }

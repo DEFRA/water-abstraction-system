@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-logs/{sessionId}/multiple-entries` page
  * @module MultipleEntriesValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/return-logs/{sessionId}/multiple-entries` page
@@ -72,6 +70,6 @@ function _meterReadingsInIncreasingOrder(value, helpers, startReading) {
   return value
 }
 
-module.exports = {
+export default {
   go
 }

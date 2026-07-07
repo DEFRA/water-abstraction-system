@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Creates a Redis client
  * @module CreateRedisClient
  */
 
-const Redis = require('ioredis')
+import Redis from 'ioredis'
 
-const redisConfig = require('../../../config/redis.config.js')
+import redisConfig from '../../../config/redis.config.js'
 
 /**
  * Connect to Redis and return a client
@@ -28,6 +26,6 @@ async function go() {
   })
 }
 
-module.exports = {
+export default {
   go
 }

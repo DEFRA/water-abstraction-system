@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats the bill run data ready for presenting in the cancel bill run confirmation page
  * @module ViewCancelBillRunPresenter
  */
 
-const { formatFinancialYear, formatLongDate, titleCase } = require('../base.presenter.js')
-const { formatBillRunType, formatChargeScheme } = require('../billing.presenter.js')
+import { formatFinancialYear, formatLongDate, titleCase } from '../base.presenter.js'
+import { formatBillRunType, formatChargeScheme } from '../billing.presenter.js'
 
 /**
  * Prepares and processes bill run data for presentation
@@ -44,6 +42,6 @@ function _backLink(id, scheme, status) {
   return `/system/bill-runs/${id}`
 }
 
-module.exports = {
+export default {
   go
 }

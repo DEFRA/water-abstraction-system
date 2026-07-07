@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates page data for the '/bill-runs/review/licence/{reviewLicenceId}' page
  * @module ViewReviewLicenceService
  */
 
-const FetchReviewLicenceService = require('./fetch-review-licence.service.js')
-const ReviewLicencePresenter = require('../../../presenters/bill-runs/review/review-licence.presenter.js')
+import FetchReviewLicenceService from './fetch-review-licence.service.js'
+import ReviewLicencePresenter from '../../../presenters/bill-runs/review/review-licence.presenter.js'
 
 /**
  * Orchestrates page data for the '/bill-runs/review/licence/{reviewLicenceId}' page
@@ -29,6 +27,6 @@ async function go(reviewLicenceId, yar) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

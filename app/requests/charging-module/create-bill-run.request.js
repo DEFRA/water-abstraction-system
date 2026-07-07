@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Connects with the Charging Module to create a new bill run
  * @module CreateBillRunRequest
  */
 
-const RegionModel = require('../../models/region.model.js')
-const ChargingModuleRequest = require('../charging-module.request.js')
+import RegionModel from '../../models/region.model.js'
+import ChargingModuleRequest from '../charging-module.request.js'
 
 /**
  * Sends a request to the Charging Module to create a new bill run and returns the result.
@@ -38,6 +36,6 @@ async function _getChargeRegionId(regionId) {
   return result.chargeRegionId
 }
 
-module.exports = {
+export default {
   send
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/check' page
  * @module CheckPresenter
  */
 
-const { abstractionAlertsLabel, selectedLiveLicences } = require('../../crm.presenter.js')
+import { abstractionAlertsLabel, selectedLiveLicences } from '../../crm.presenter.js'
 
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/check' page
@@ -111,6 +109,6 @@ function _warning(matchingContact, abstractionAlertLicences, abstractionAlerts) 
   }
 }
 
-module.exports = {
+export default {
   go
 }

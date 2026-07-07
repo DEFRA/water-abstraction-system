@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the '/billing-accounts/setup/{sessionId}/select-company' page
  * @module SelectCompanyPresenter
  */
 
-const { checkUrl } = require('../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
 
 /**
  * Formats data for the '/billing-accounts/setup/{sessionId}/select-company' page
@@ -48,6 +46,6 @@ function _radioOptions(companies, companiesHouseNumber) {
   return items
 }
 
-module.exports = {
+export default {
   go
 }

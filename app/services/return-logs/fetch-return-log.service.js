@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the return log needed for the view '/system/return-logs/{id}/communications' page
  * @module FetchReturnLogService
  */
 
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
+import ReturnLogModel from '../../../app/models/return-log.model.js'
 
 /**
  * Fetches the return log needed for the view '/system/return-logs/{id}/communications' page
@@ -24,6 +22,6 @@ async function go(returnLogId) {
     })
 }
 
-module.exports = {
+export default {
   go
 }

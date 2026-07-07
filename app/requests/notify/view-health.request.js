@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * View the health of Notify service
  * @module ViewHealthRequest
  */
 
-const NotifyRequest = require('../notify.request.js')
+import NotifyRequest from '../notify.request.js'
 
 /**
  * View the health of Notify service
@@ -16,6 +14,6 @@ async function send() {
   return NotifyRequest.get('')
 }
 
-module.exports = {
+export default {
   send
 }

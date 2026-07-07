@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/purpose` page
  * @module PurposePresenter
@@ -63,6 +61,6 @@ function _purposes(licencePurposes, requirementPurposes) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

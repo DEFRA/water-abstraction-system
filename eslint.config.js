@@ -68,7 +68,7 @@ export default [
   // in the `app/controllers` and `db/seeds` directories. The controllers purposefully do very little and the purpose of
   // the seed files is obvious
   {
-    files: ['app/controllers/**/*', 'db/seeds/**/*'],
+    files: ['app/controllers/**/*', 'db/seeds/**/*', 'db/migrations/**/*'],
     rules: {
       'jsdoc/require-jsdoc': 'off'
     }

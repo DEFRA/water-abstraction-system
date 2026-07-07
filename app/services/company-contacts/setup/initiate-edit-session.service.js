@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Initiates the session record used for setting up an existing company contact
  * @module InitiateEditSessionService
  */
 
-const CreateSessionDal = require('../../../dal/create-session.dal.js')
-const FetchCompanyContactDal = require('../../../dal/company-contacts/setup/fetch-company-contact.dal.js')
-const FetchCompanyLicencesDal = require('../../../dal/company-contacts/fetch-company-licences.dal.js')
-const { formatEmail } = require('../../../presenters/base.presenter.js')
+import CreateSessionDal from '../../../dal/create-session.dal.js'
+import FetchCompanyContactDal from '../../../dal/company-contacts/setup/fetch-company-contact.dal.js'
+import FetchCompanyLicencesDal from '../../../dal/company-contacts/fetch-company-licences.dal.js'
+import { formatEmail } from '../../../presenters/base.presenter.js'
 
 /**
  * Initiates the session record used for setting up an existing company contact
@@ -70,6 +68,6 @@ function _abstractionAlerts(companyContact, licences) {
   return abstractionAlertType
 }
 
-module.exports = {
+export default {
   go
 }
