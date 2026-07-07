@@ -4,7 +4,7 @@
 
 import Joi from 'joi'
 
-import StaticLookupsLib from '../lib/static-lookups.lib.js'
+import { companyTypes, contactTypes, organisationTypes, sources } from '../lib/static-lookups.lib.js'
 
 /**
  * Checks that the payload of a `/billing-accounts/{billingAccountId}/address` request is valid
@@ -46,10 +46,10 @@ function _agentCompanySchema() {
   return Joi.object({
     id: Joi.string().guid().optional(),
     type: Joi.string()
-      .valid(...StaticLookupsLib.companyTypes)
+      .valid(...companyTypes)
       .optional(),
     organisationType: Joi.string()
-      .valid(...StaticLookupsLib.organisationTypes)
+      .valid(...organisationTypes)
       .optional(),
     name: Joi.string().optional(),
     companyNumber: Joi.string().optional()
@@ -60,7 +60,7 @@ function _contactSchema() {
   return Joi.object({
     id: Joi.string().guid().optional(),
     type: Joi.string()
-      .valid(...StaticLookupsLib.contactTypes)
+      .valid(...contactTypes)
       .optional(),
     salutation: Joi.string().optional(),
     firstName: Joi.string().optional(),
@@ -70,15 +70,13 @@ function _contactSchema() {
     suffix: Joi.string().optional(),
     department: Joi.string().optional(),
     source: Joi.string()
-      .valid(...StaticLookupsLib.sources)
+      .valid(...sources)
       .optional(),
     isTest: Joi.boolean().default(false).optional()
   }).optional()
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

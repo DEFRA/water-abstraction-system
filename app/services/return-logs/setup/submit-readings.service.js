@@ -4,7 +4,7 @@
  */
 
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import GeneralLib from '../../../lib/general.lib.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 import ReadingsPresenter from '../../../presenters/return-logs/setup/readings.presenter.js'
 import ReadingsValidator from '../../../validators/return-logs/setup/readings.validator.js'
 import { formatValidationResult } from '../../../presenters/base.presenter.js'
@@ -30,7 +30,7 @@ async function go(sessionId, payload, yar, yearMonth) {
   if (!error) {
     await _save(payload, session, requestedYear, requestedMonth)
 
-    GeneralLib.flashNotification(yar, 'Updated', 'Readings have been updated')
+    flashNotification(yar, 'Updated', 'Readings have been updated')
 
     return {}
   }
@@ -108,9 +108,7 @@ function _validate(payload, requestedYear, requestedMonth, session) {
   return formatValidationResult(validation)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

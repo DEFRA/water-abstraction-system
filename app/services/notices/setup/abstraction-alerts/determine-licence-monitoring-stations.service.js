@@ -88,9 +88,7 @@ function _thresholdGroup(measureType, thresholdValue, thresholdUnit) {
   return `${measureType}-${thresholdValue}-${thresholdUnit}`
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

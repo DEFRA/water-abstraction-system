@@ -52,9 +52,7 @@ function _query() {
   `
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

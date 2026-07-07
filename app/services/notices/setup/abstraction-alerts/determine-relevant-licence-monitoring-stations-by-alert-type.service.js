@@ -53,9 +53,7 @@ function _stop(licenceMonitoringStations, alertType) {
   })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

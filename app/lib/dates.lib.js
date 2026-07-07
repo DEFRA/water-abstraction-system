@@ -404,21 +404,3 @@ function _cloneDate(dateToClone) {
 
   return new Date(`${year}-${month}-${day}`)
 }
-
-export default {
-  compareDates,
-  daysFromPeriod,
-  determineFinancialYearEnd,
-  determineEarliestDate,
-  determineLatestDate,
-  formatDateObjectToISO,
-  formatStandardDateToISO,
-  isISODateFormat,
-  isQuarterlyReturnSubmissions,
-  isValidDate,
-  monthsFromPeriod,
-  renewalExpiryDate,
-  renewalNoticeDate,
-  sameDate,
-  weeksFromPeriod
-}

@@ -50,9 +50,7 @@ async function _notice(session, recipients, auth) {
   return CreateNoticeService.go(session, recipients, auth.credentials.user.username)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

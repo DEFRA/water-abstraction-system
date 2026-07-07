@@ -6,7 +6,7 @@
 import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import GeneralLib from '../../../lib/general.lib.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 import NoReturnsRequiredPresenter from '../../../presenters/return-versions/setup/no-returns-required.presenter.js'
 import NoReturnsRequiredValidator from '../../../validators/return-versions/setup/no-returns-required.validator.js'
 
@@ -33,7 +33,7 @@ async function go(sessionId, payload, yar) {
     await _save(session, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Return version updated')
+      flashNotification(yar, 'Updated', 'Return version updated')
     }
 
     return {
@@ -62,9 +62,7 @@ function _validate(payload) {
   return formatValidationResult(validation)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

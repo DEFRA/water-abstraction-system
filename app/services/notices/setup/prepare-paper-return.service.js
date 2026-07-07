@@ -23,9 +23,7 @@ async function go(notification) {
   return GeneratePaperReturnRequest.send(pageData)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

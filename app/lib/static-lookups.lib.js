@@ -738,35 +738,3 @@ export const userNotificationTypes = Object.freeze({
     type: 'external'
   }
 })
-
-export default {
-  billRunStatuses,
-  billRunTypes,
-  companyTypes,
-  contactTypes,
-  countries,
-  engineTriggers,
-  flowUnits,
-  ignoreMessageRef,
-  naldAreaCodes,
-  naldRegions,
-  NoticeJourney,
-  noticeMappings,
-  NoticeType,
-  NoticeTypes,
-  organisationTypes,
-  returnCycleDates,
-  returnPeriodDates,
-  returnRequirementFrequencies,
-  returnRequirementReasons,
-  returnUnits,
-  roles,
-  sources,
-  thresholdUnits,
-  twoPartTariffReviewIssues,
-  quarterlyReturnPeriods,
-  unitConversion,
-  unitNames,
-  userPermissions,
-  userNotificationTypes
-}

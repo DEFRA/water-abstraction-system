@@ -85,9 +85,7 @@ function _redirect(journey) {
   return 'notice-type'
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

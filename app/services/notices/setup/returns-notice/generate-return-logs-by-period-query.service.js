@@ -57,9 +57,7 @@ function _query(dueDateCondition) {
   `
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

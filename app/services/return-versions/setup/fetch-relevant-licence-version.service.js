@@ -131,9 +131,7 @@ function _manageSameStartDate(licenceVersions) {
   return withSameStartDate[withSameStartDate.length - 1]
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

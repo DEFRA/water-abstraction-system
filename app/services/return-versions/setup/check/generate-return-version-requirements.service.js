@@ -71,9 +71,7 @@ async function _generateReturnRequirementPurposes(licenceId, purposes) {
   return returnRequirementPurposes
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

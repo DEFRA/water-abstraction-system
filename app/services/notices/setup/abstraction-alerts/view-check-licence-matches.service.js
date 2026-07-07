@@ -30,9 +30,7 @@ async function go(sessionId, yar) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

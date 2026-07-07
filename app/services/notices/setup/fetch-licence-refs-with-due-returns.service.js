@@ -54,9 +54,7 @@ async function _fetch(returnsPeriod, noticeType) {
   return query
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

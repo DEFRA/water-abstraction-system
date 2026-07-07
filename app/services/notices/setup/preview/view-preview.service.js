@@ -68,9 +68,7 @@ async function _recipient(contactHashId, session) {
   })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

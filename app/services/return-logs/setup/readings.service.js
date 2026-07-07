@@ -26,9 +26,7 @@ async function go(sessionId, yearMonth) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

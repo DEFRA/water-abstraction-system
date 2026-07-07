@@ -97,9 +97,7 @@ function _redirect(noticeType, journey, checkPageVisited, licenceChanged) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

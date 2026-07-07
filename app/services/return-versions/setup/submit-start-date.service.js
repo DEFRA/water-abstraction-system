@@ -8,7 +8,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 import DetermineRelevantLicenceVersionService from './determine-relevant-licence-version.service.js'
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import GeneralLib from '../../../lib/general.lib.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 import StartDatePresenter from '../../../presenters/return-versions/setup/start-date.presenter.js'
 import StartDateValidator from '../../../validators/return-versions/setup/start-date.validator.js'
 
@@ -47,7 +47,7 @@ async function go(sessionId, payload, yar) {
     await _save(session, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Return version updated')
+      flashNotification(yar, 'Updated', 'Return version updated')
     }
 
     return {
@@ -162,9 +162,7 @@ function _validate(payload, licenceStartDate, licenceEndDate) {
   return formatValidationResult(validation)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

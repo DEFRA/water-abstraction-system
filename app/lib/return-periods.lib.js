@@ -396,9 +396,3 @@ function _cycleStartDate(determinationDate, period) {
 
   return new Date(`${startYear}-${startMonth}-${startDay}`)
 }
-
-export default {
-  determineReturnsPeriods,
-  determineUpcomingReturnsPeriods,
-  determineUpcomingReturnPeriods
-}

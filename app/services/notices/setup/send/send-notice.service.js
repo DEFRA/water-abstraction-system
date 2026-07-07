@@ -46,9 +46,7 @@ async function go(notice, notifications) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

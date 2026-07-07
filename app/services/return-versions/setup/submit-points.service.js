@@ -7,7 +7,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 import FetchPointsService from './fetch-points.service.js'
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import GeneralLib from '../../../lib/general.lib.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 import PointsPresenter from '../../../presenters/return-versions/setup/points.presenter.js'
 import PointsValidator from '../../../validators/return-versions/setup/points.validator.js'
 import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
@@ -40,7 +40,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Requirements for returns updated')
+      flashNotification(yar, 'Updated', 'Requirements for returns updated')
     }
 
     return {
@@ -69,9 +69,7 @@ function _validate(payload) {
   return formatValidationResult(validation)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

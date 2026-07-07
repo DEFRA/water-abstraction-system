@@ -8,7 +8,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 import FrequencyCollectedPresenter from '../../../presenters/return-versions/setup/frequency-collected.presenter.js'
 import FrequencyCollectedValidator from '../../../validators/return-versions/setup/frequency-collected.validator.js'
-import GeneralLib from '../../../lib/general.lib.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/frequency-collected` page
@@ -36,7 +36,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Requirements for returns updated')
+      flashNotification(yar, 'Updated', 'Requirements for returns updated')
     }
 
     return {
@@ -64,9 +64,7 @@ function _validate(payload) {
   return formatValidationResult(validation)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

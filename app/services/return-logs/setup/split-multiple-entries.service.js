@@ -42,9 +42,7 @@ function go(multipleEntries) {
   return entries
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

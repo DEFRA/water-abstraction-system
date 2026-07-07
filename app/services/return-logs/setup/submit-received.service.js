@@ -93,9 +93,7 @@ function _validate(payload, startDate) {
   return formatValidationResult(validation)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

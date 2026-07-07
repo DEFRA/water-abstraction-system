@@ -4,12 +4,10 @@
  */
 
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import GeneralLib from '../../../lib/general.lib.js'
+import { convertFromCubicMetres, convertToCubicMetres, flashNotification } from '../../../lib/general.lib.js'
 import VolumesPresenter from '../../../presenters/return-logs/setup/volumes.presenter.js'
 import VolumesValidator from '../../../validators/return-logs/setup/volumes.validator.js'
 import { formatValidationResult } from '../../../presenters/base.presenter.js'
-
-const { convertFromCubicMetres, convertToCubicMetres } = GeneralLib
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
@@ -32,7 +30,7 @@ async function go(sessionId, payload, yar, yearMonth) {
   if (!error) {
     await _save(payload, session, requestedYear, requestedMonth)
 
-    GeneralLib.flashNotification(yar, 'Updated', 'Volumes have been updated')
+    flashNotification(yar, 'Updated', 'Volumes have been updated')
 
     return {}
   }
@@ -113,9 +111,7 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

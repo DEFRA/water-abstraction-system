@@ -26,9 +26,7 @@ async function go(sessionId, auth) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -77,7 +77,3 @@ function _transformValueToCSV(value) {
 
   return `"${stringValue}"`
 }
-
-export default {
-  transformArrayToCSVRow
-}

@@ -5,7 +5,7 @@
 
 import FetchPurposesService from './fetch-purposes.service.js'
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import GeneralLib from '../../../lib/general.lib.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 import PurposePresenter from '../../../presenters/return-versions/setup/purpose.presenter.js'
 import PurposeValidation from '../../../validators/return-versions/setup/purpose.validator.js'
 import { formatValidationResult } from '../../../presenters/base.presenter.js'
@@ -42,7 +42,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
     await _save(session, requirementIndex, purposes)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Requirements for returns updated')
+      flashNotification(yar, 'Updated', 'Requirements for returns updated')
     }
 
     return {
@@ -104,9 +104,7 @@ async function _validate(payload, purposesData) {
   return formatValidationResult(validation)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -61,7 +61,3 @@ function _legacySnakeCase(
 
   return snakeCase(str, { upperCase, underscoreBeforeDigits, underscoreBetweenUppercaseLetters })
 }
-
-export default {
-  legacyDbSnakeCaseMappers
-}

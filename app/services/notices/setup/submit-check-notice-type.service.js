@@ -57,9 +57,7 @@ function _backLink(session) {
   return { href: `/system/notices/setup/${session.id}/contact-type`, text: 'Back' }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -109,7 +109,3 @@ function _isPeriodValid(referencePeriod, abstractionPeriod) {
 function _subtractOneYear(date) {
   return new Date(date.getFullYear() - 1, date.getMonth(), date.getDate())
 }
-
-export default {
-  determineAbstractionPeriods
-}

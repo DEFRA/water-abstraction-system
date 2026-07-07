@@ -6,7 +6,7 @@
 import AgreementsExceptionsPresenter from '../../../presenters/return-versions/setup/agreements-exceptions.presenter.js'
 import AgreementsExceptionsValidator from '../../../validators/return-versions/setup/agreements-exceptions.validator.js'
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import GeneralLib from '../../../lib/general.lib.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 import { formatValidationResult } from '../../../presenters/base.presenter.js'
 import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
 
@@ -38,9 +38,9 @@ async function go(sessionId, requirementIndex, payload, yar) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Requirements for returns updated')
+      flashNotification(yar, 'Updated', 'Requirements for returns updated')
     } else {
-      GeneralLib.flashNotification(yar, 'Added', 'New requirement added')
+      flashNotification(yar, 'Added', 'New requirement added')
     }
 
     return {
@@ -68,9 +68,7 @@ function _validate(payload) {
   return formatValidationResult(validation)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

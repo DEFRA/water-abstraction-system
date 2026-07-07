@@ -48,9 +48,7 @@ async function _recipientsData(session, download) {
   return FetchReturnsReminderRecipientsService.go(session, download)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -82,9 +82,7 @@ function _validate(frequency, measurementType, payload, session) {
   return formatValidationResult(validationResult)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

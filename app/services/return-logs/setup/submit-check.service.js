@@ -81,9 +81,7 @@ function _validate(session) {
   return formatValidationResult(validationResult)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

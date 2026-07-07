@@ -34,9 +34,7 @@ async function _removeRequirementFromSession(session, requirementIndex) {
   await session.$update()
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

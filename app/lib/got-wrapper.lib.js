@@ -65,5 +65,3 @@ async function requestLike(options, callback, got, defaults) {
     callback(error, null, null)
   }
 }
-
-export default { gotWrapper }

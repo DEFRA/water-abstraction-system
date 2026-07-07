@@ -24,9 +24,7 @@ async function go(returnLogId) {
   return licenceId
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

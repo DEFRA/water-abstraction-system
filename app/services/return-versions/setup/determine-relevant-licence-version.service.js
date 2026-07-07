@@ -66,9 +66,7 @@ function _copyableExistingReturnVersions(licenceVersion, returnVersions) {
   return copyableReturnVersions
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -110,7 +110,3 @@ export const NOTIFY_TEMPLATES = Object.freeze({
     verificationEmail: '45b79d3a-39f2-44cf-b8f9-012c952dbd92'
   }
 })
-
-export default {
-  NOTIFY_TEMPLATES
-}

@@ -71,9 +71,7 @@ async function _persistReturnRequirementsPurposes(returnRequirementPurposes, ret
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }
