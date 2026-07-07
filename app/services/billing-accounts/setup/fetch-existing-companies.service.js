@@ -30,6 +30,9 @@ async function go(searchInput) {
     .limit(NUMBER_OF_RESULTS)
 }
 
+export {
+  go
+}
 export default {
   go
 }

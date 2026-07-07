@@ -63,6 +63,9 @@ async function _updateAddressJourneyBackLink(session) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

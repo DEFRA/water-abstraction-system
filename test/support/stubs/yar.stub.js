@@ -17,6 +17,9 @@ function build() {
   }
 }
 
+export {
+  build
+}
 export default {
   build
 }

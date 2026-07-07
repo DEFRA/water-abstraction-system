@@ -67,6 +67,9 @@ function _validate(payload, noticeType) {
   return formatValidationResult(validationResult)
 }
 
+export {
+  go
+}
 export default {
   go
 }

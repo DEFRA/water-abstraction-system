@@ -22,6 +22,9 @@ async function send(billRunId) {
   return result
 }
 
+export {
+  send
+}
 export default {
   send
 }

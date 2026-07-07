@@ -75,6 +75,10 @@ function defaults(data = {}) {
   }
 }
 
+export {
+  add,
+  defaults
+}
 export default {
   add,
   defaults

@@ -73,6 +73,9 @@ function _requestOptions() {
   }
 }
 
+export {
+  get
+}
 export default {
   get
 }

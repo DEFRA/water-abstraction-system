@@ -306,6 +306,9 @@ async function _persistGeneratedData(bill, processedBillLicences, billRunExterna
   return true
 }
 
+export {
+  go
+}
 export default {
   go
 }

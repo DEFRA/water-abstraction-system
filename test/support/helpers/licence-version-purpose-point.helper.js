@@ -65,6 +65,11 @@ function generateLicenceVersionPurposePointExternalId() {
   return `9:${generateRandomInteger(100, 99999)}:${naldPointId}`
 }
 
+export {
+  add,
+  defaults,
+  generateLicenceVersionPurposePointExternalId
+}
 export default {
   add,
   defaults,

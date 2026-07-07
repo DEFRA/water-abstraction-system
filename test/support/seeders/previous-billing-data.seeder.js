@@ -249,6 +249,10 @@ async function _twoPartTariffBillingData(seedData) {
   return { annualBillRun, supplementaryBillRun }
 }
 
+export {
+  seed,
+  zap
+}
 export default {
   seed,
   zap

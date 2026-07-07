@@ -157,6 +157,23 @@ async function viewReviewLicence(request, h) {
   return h.view('bill-runs/review/review-licence.njk', pageData)
 }
 
+export {
+  preview,
+  submitAuthorised,
+  submitEdit,
+  submitFactors,
+  submitRemove,
+  submitReview,
+  submitReviewLicence,
+  viewAuthorised,
+  viewEdit,
+  viewFactors,
+  viewRemove,
+  viewReview,
+  viewReviewChargeElement,
+  viewReviewChargeReference,
+  viewReviewLicence
+}
 export default {
   preview,
   submitAuthorised,

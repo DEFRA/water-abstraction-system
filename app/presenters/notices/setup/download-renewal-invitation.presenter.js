@@ -69,6 +69,9 @@ function _transformToCsv(recipients, session) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -162,6 +162,9 @@ function _validate(payload, licenceStartDate, licenceEndDate) {
   return formatValidationResult(validation)
 }
 
+export {
+  go
+}
 export default {
   go
 }

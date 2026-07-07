@@ -111,6 +111,9 @@ const NOTIFY_TEMPLATES = Object.freeze({
   }
 })
 
+export {
+  NOTIFY_TEMPLATES
+}
 export default {
   NOTIFY_TEMPLATES
 }

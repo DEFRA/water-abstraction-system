@@ -88,6 +88,9 @@ function _validate(billRun) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

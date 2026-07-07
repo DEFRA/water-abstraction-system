@@ -71,6 +71,9 @@ function _recipientLicenceMonitoringStations(recipientLicenceRefs, session) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

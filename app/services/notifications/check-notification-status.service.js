@@ -187,6 +187,9 @@ function _status(notification, notifyStatus) {
   return LETTER_STATUS[notifyStatus] || NOTIFICATIONS_STATUS.pending
 }
 
+export {
+  go
+}
 export default {
   go
 }

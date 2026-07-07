@@ -73,6 +73,9 @@ function _selectedDueReturns(selectedReturns, dueReturns) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

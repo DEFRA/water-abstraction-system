@@ -69,6 +69,9 @@ async function _createUser(auth, session, yar) {
   SendVerificationEmailService.go(notification)
 }
 
+export {
+  go
+}
 export default {
   go
 }

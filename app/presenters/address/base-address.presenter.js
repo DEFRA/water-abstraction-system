@@ -30,6 +30,9 @@ function countryLookup(selectedCountry = 'select') {
   return displayCountries
 }
 
+export {
+  countryLookup
+}
 export default {
   countryLookup
 }

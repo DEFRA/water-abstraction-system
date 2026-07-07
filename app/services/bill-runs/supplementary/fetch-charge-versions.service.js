@@ -131,6 +131,9 @@ function _extractLicenceIdsThenRemoveNonChargeableChargeVersions(allChargeVersio
   return { chargeVersions, licenceIdsForPeriod }
 }
 
+export {
+  go
+}
 export default {
   go
 }

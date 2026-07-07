@@ -53,6 +53,9 @@ function _returnLogsQuery(session) {
   return GenerateReturnLogsByPeriodQueryService.go(noticeType, licencesToExclude, returnsPeriod)
 }
 
+export {
+  go
+}
 export default {
   go
 }

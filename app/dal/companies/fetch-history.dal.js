@@ -41,6 +41,9 @@ async function _fetch(companyId, page) {
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
 
+export {
+  go
+}
 export default {
   go
 }

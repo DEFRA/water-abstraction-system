@@ -35,6 +35,11 @@ async function view(request, h) {
   return h.view('notifications/view.njk', pageData)
 }
 
+export {
+  download,
+  returnedLetter,
+  view
+}
 export default {
   download,
   returnedLetter,

@@ -94,6 +94,9 @@ function _totalProperties(session) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

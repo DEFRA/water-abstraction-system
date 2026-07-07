@@ -236,6 +236,27 @@ async function viewInternalPermissions(request, h) {
   return h.view('users/internal/setup/permissions.njk', pageData)
 }
 
+export {
+  setupExternal,
+  setupInternal,
+  setupInternalEdit,
+  submitExternalCancel,
+  submitExternalCheck,
+  submitExternalLicences,
+  submitInternalAccess,
+  submitInternalCancel,
+  submitInternalCheck,
+  submitInternalEmail,
+  submitInternalPermissions,
+  viewInternalAccess,
+  viewExternalCancel,
+  viewExternalCheck,
+  viewExternalLicences,
+  viewInternalCancel,
+  viewInternalCheck,
+  viewInternalEmail,
+  viewInternalPermissions
+}
 export default {
   setupExternal,
   setupInternal,

@@ -179,6 +179,9 @@ async function _virusScannerData() {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

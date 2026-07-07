@@ -79,6 +79,9 @@ function _pageTitle(date) {
   return `Water abstracted ${titleDate}`
 }
 
+export {
+  go
+}
 export default {
   go
 }

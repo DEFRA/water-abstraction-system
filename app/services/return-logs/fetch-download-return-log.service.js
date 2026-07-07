@@ -38,6 +38,9 @@ async function _fetch(returnLogId, version) {
     })
 }
 
+export {
+  go
+}
 export default {
   go
 }

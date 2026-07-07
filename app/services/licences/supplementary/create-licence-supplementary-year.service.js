@@ -44,6 +44,9 @@ async function _persistSupplementaryBillingYearsData(licenceId, financialYearEnd
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

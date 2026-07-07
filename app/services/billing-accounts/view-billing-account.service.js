@@ -57,6 +57,9 @@ function _queryArgs(chargeVersionId, licenceId) {
   return queryArgs
 }
 
+export {
+  go
+}
 export default {
   go
 }

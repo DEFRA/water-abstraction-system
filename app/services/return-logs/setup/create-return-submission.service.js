@@ -64,6 +64,9 @@ async function _markPreviousVersionAsSuperseded(returnLogId, version, trx) {
     .where('version', version)
 }
 
+export {
+  go
+}
 export default {
   go
 }

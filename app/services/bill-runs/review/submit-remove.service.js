@@ -71,6 +71,9 @@ async function _flagForSupplementaryBilling(reviewLicence) {
   await CreateLicenceSupplementaryYearService.go(licenceId, [billRun.toFinancialYearEnding], true)
 }
 
+export {
+  go
+}
 export default {
   go
 }

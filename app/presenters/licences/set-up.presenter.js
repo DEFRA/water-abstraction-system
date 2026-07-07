@@ -274,6 +274,9 @@ function _workflowStartDate(workflow) {
   return formatLongDate(startDate)
 }
 
+export {
+  go
+}
 export default {
   go
 }

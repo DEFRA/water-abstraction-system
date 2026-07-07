@@ -82,6 +82,9 @@ async function _fetchMonitoringStation(monitoringStationId) {
   return MonitoringStationModel.query().findById(monitoringStationId).select(['id', 'label', 'riverName'])
 }
 
+export {
+  go
+}
 export default {
   go
 }

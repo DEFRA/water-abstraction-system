@@ -211,6 +211,9 @@ function _sortPointsByDescription(first, second) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

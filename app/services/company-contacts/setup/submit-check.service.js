@@ -81,6 +81,9 @@ async function _updateCompanyContact(session, auth, yar) {
   flashNotification(yar, 'Updated', 'Contact details updated.')
 }
 
+export {
+  go
+}
 export default {
   go
 }

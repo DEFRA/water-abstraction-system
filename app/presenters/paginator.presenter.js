@@ -267,6 +267,9 @@ function _showingXofY(paginationTotal, currentAmount, message) {
   return `Showing all ${paginationTotal} ${message}`
 }
 
+export {
+  go
+}
 export default {
   go
 }

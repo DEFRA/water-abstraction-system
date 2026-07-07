@@ -49,6 +49,9 @@ async function go(companyId, auth, page, yar) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

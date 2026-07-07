@@ -28,6 +28,10 @@ function select(index = -1) {
   return ChargeReasonModel.fromJson(selectRandomEntry(changeReasons))
 }
 
+export {
+  changeReasons as data,
+  select
+}
 export default {
   data: changeReasons,
   select

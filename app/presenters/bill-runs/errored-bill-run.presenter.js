@@ -56,6 +56,9 @@ function _errorMessage(errorCode) {
   return 'No error code was assigned. We have no further information at this time.'
 }
 
+export {
+  go
+}
 export default {
   go
 }

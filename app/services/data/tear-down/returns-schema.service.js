@@ -115,6 +115,9 @@ function _determineCurrentReturnCycleEndDates() {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -76,6 +76,9 @@ function _lastSignedIn(user) {
   return formatLongDateTime(lastLogin)
 }
 
+export {
+  go
+}
 export default {
   go
 }

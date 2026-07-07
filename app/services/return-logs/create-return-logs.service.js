@@ -76,6 +76,9 @@ async function _persistReturnLogs(returnLogs, trx) {
   return createdIds
 }
 
+export {
+  go
+}
 export default {
   go
 }

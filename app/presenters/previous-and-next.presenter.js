@@ -49,6 +49,9 @@ function _indexOfAnchorId(arrayOfElements, anchorElement) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

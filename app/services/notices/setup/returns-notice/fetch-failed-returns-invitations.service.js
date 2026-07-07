@@ -102,6 +102,9 @@ async function _fetch(eventId) {
     .whereNull('alternateNoticeId')
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -19,6 +19,9 @@ async function go(notifications) {
   await NotificationModel.query().insert(notifications).onConflict('id').merge(['status', 'notifyStatus'])
 }
 
+export {
+  go
+}
 export default {
   go
 }

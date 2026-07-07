@@ -74,6 +74,9 @@ async function _checkLicences(licences) {
   await pMap(licences, CheckLicenceEndDatesService.go, { concurrency: LicencesConfig.endDates.batchSize })
 }
 
+export {
+  go
+}
 export default {
   go
 }

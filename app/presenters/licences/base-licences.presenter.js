@@ -120,6 +120,12 @@ function _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBil
   return baseMessage + 'two-part tariff supplementary bill run.'
 }
 
+export {
+  formatAbstractionAmounts,
+  supplementaryBillingNotification,
+  pluralise,
+  userRoles
+}
 export default {
   formatAbstractionAmounts,
   supplementaryBillingNotification,

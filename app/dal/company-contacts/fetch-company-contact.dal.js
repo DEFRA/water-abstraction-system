@@ -33,6 +33,9 @@ async function go(companyContactId) {
     })
 }
 
+export {
+  go
+}
 export default {
   go
 }

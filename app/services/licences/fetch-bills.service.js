@@ -47,6 +47,9 @@ async function _fetch(licenceId, page) {
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
 
+export {
+  go
+}
 export default {
   go
 }

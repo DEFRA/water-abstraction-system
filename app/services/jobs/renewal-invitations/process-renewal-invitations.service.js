@@ -23,6 +23,9 @@ async function go(days) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

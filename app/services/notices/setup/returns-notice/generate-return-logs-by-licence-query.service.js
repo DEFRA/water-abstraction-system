@@ -41,6 +41,9 @@ function _query(noticeType) {
 ${noticeType === NoticeType.REMINDERS ? '    AND rl.due_date IS NOT NULL' : ''}`
 }
 
+export {
+  go
+}
 export default {
   go
 }

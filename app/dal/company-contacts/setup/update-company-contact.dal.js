@@ -47,6 +47,9 @@ async function _update(companyContact) {
   )
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -38,6 +38,9 @@ function _licenceExists(value, helpers, licenceExists) {
   return helpers.error('invalidLicence')
 }
 
+export {
+  licenceRefSchema
+}
 export default {
   licenceRefSchema
 }

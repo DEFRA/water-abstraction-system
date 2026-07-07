@@ -101,6 +101,9 @@ function _validateAnotherStartDate(payload, licenceStartDate, licenceEndDate) {
   return schema.validate(payload, { abortEarly: false })
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -102,6 +102,9 @@ function _mapRole(role) {
   return { description, name: _convertToSentenceCase(name) }
 }
 
+export {
+  go
+}
 export default {
   go
 }

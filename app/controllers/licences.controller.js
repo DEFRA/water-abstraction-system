@@ -185,6 +185,24 @@ async function viewSummary(request, h) {
   return h.view('licences/summary.njk', pageData)
 }
 
+export {
+  markedForSupplementaryBilling,
+  markForSupplementaryBilling,
+  noReturnsRequired,
+  returnsRequired,
+  submitMarkForSupplementaryBilling,
+  supplementary,
+  viewBills,
+  viewCommunications,
+  viewContactDetails,
+  viewHistory,
+  viewLicenceConditions,
+  viewLicencePoints,
+  viewLicencePurposes,
+  viewReturns,
+  viewSetUp,
+  viewSummary
+}
 export default {
   markedForSupplementaryBilling,
   markForSupplementaryBilling,

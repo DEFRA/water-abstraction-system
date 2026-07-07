@@ -4,7 +4,7 @@
  */
 
 import FetchLicenceUpdatesService from './fetch-licence-updates.service.js'
-import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } from '../lib/general.lib.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } from '../../../lib/general.lib.js'
 import Workflow from '../../../models/workflow.model.js'
 
 /**
@@ -62,6 +62,9 @@ async function _addWorkflowRecords(licenceVersions) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

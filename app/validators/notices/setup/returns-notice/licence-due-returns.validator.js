@@ -39,6 +39,9 @@ function _dueReturns(value, helpers, dueReturnsExist) {
   return helpers.error('dueReturns', { licenceRef: value })
 }
 
+export {
+  go
+}
 export default {
   go
 }

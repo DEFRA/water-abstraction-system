@@ -47,6 +47,9 @@ async function _updateCompanyContact(session, auth) {
   await UpdateCompanyContactDal.go(companyContact)
 }
 
+export {
+  go
+}
 export default {
   go
 }

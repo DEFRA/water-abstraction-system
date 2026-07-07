@@ -51,6 +51,9 @@ async function seed(existingLicenceRef = null, existingRegionId = null, expiredD
   }
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

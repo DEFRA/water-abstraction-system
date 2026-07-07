@@ -28,6 +28,10 @@ function select(index = -1) {
   return ChargeCategoryModel.fromJson(selectRandomEntry(chargeCategories))
 }
 
+export {
+  chargeCategories as data,
+  select
+}
 export default {
   data: chargeCategories,
   select

@@ -32,6 +32,9 @@ async function send(content, reference) {
   return NotifyRequest.post(path, body)
 }
 
+export {
+  send
+}
 export default {
   send
 }

@@ -78,6 +78,9 @@ function _validate(payload, startDate) {
   return schema.validate(payload)
 }
 
+export {
+  go
+}
 export default {
   go
 }

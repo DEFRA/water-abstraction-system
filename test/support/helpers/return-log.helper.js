@@ -177,6 +177,12 @@ function _areDatesSequential(endDate, startDate) {
   return differenceInDays <= 1
 }
 
+export {
+  add,
+  defaults,
+  generateReturnId,
+  hasContinuousReturnLogs
+}
 export default {
   add,
   defaults,

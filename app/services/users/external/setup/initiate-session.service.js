@@ -35,6 +35,9 @@ async function go(id, back) {
   return CreateSessionDal.go(data)
 }
 
+export {
+  go
+}
 export default {
   go
 }

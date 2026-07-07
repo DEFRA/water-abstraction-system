@@ -24,6 +24,9 @@ async function go(expiredDate) {
   return rows
 }
 
+export {
+  go
+}
 export default {
   go
 }

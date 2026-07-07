@@ -98,6 +98,9 @@ function _periodIsIncompatible(chargePeriod, billingPeriod) {
   return startsAfterBillingPeriod || endsBeforeBillingPeriod || startsAfterItEnds
 }
 
+export {
+  go
+}
 export default {
   go
 }

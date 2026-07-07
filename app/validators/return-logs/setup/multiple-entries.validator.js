@@ -70,6 +70,9 @@ function _meterReadingsInIncreasingOrder(value, helpers, startReading) {
   return value
 }
 
+export {
+  go
+}
 export default {
   go
 }

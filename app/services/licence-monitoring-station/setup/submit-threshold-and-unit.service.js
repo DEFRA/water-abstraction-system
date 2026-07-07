@@ -93,6 +93,9 @@ function _validate(payload) {
   return { formattedError, value: null }
 }
 
+export {
+  go
+}
 export default {
   go
 }

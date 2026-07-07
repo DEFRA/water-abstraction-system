@@ -123,6 +123,9 @@ async function _updateUser(access, currentUsername, email, id, trx) {
   return userData.resetGuid
 }
 
+export {
+  go
+}
 export default {
   go
 }

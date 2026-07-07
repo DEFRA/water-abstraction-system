@@ -45,6 +45,9 @@ function _warning(licences) {
   return warning
 }
 
+export {
+  go
+}
 export default {
   go
 }

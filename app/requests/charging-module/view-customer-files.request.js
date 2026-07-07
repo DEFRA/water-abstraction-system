@@ -24,6 +24,9 @@ async function send(days) {
   return result
 }
 
+export {
+  send
+}
 export default {
   send
 }

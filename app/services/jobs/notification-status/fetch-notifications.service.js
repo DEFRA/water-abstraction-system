@@ -48,6 +48,9 @@ async function go() {
   return query
 }
 
+export {
+  go
+}
 export default {
   go
 }

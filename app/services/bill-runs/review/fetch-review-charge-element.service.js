@@ -93,6 +93,9 @@ async function _fetch(reviewChargeElementId) {
     })
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -66,6 +66,9 @@ function _recipients(recipients, selectedRecipients) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

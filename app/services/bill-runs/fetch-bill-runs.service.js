@@ -77,6 +77,9 @@ function _fetchQuery() {
     .innerJoinRelated('region')
 }
 
+export {
+  go
+}
 export default {
   go
 }

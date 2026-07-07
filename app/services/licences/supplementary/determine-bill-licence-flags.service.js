@@ -93,6 +93,9 @@ function _updateFlags(billRun, licence) {
   return { flagForPreSrocSupplementary, flagForSrocSupplementary, flagForTwoPartTariffSupplementary }
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -29,6 +29,9 @@ async function _save(session) {
   return session.$update()
 }
 
+export {
+  go
+}
 export default {
   go
 }

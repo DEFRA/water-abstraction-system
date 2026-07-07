@@ -41,6 +41,9 @@ function _addresses(addresses) {
   return displayAddresses
 }
 
+export {
+  go
+}
 export default {
   go
 }

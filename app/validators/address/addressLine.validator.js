@@ -36,6 +36,9 @@ function _addressLineCustom(value, helper) {
   return value
 }
 
+export {
+  addressLineValidator
+}
 export default {
   addressLineValidator
 }

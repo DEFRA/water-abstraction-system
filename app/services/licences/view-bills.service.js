@@ -40,6 +40,9 @@ async function go(licenceId, auth, page) {
     roles: userRoles(auth)
   }
 }
+export {
+  go
+}
 export default {
   go
 }

@@ -83,6 +83,9 @@ function _licenceExpiryDateInRange(value, helpers, licenceRenewal) {
   return helpers.error('expiry-date-too-soon', { licenceRef: value })
 }
 
+export {
+  go
+}
 export default {
   go
 }

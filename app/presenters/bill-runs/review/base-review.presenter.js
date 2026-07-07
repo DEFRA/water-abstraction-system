@@ -228,6 +228,16 @@ function _chargePeriod(reviewChargeVersion) {
   return { startDate: chargePeriodStartDate, endDate: chargePeriodEndDate }
 }
 
+export {
+  calculateTotalBillableReturns,
+  formatAdditionalCharges,
+  formatAdjustments,
+  formatChargePeriod,
+  formatChargePeriods,
+  formatIssues,
+  formatReturnStatus,
+  formatReturnTotals
+}
 export default {
   calculateTotalBillableReturns,
   formatAdditionalCharges,

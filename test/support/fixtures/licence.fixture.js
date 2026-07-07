@@ -38,4 +38,5 @@ function licenceEnds(endDate = null) {
   })
 }
 
+export { licence, licenceEnds }
 export default { licence, licenceEnds }

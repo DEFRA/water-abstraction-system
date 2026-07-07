@@ -250,6 +250,9 @@ async function _licence(licenceId, trx) {
     .findById(licenceId)
 }
 
+export {
+  go
+}
 export default {
   go
 }

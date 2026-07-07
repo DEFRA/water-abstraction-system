@@ -66,6 +66,9 @@ function _twoMonthsAgo() {
   return todaysDate
 }
 
+export {
+  go
+}
 export default {
   go
 }

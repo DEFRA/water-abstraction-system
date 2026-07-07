@@ -50,6 +50,9 @@ async function _upsert(cycle) {
     .merge(['dueDate', 'submittedInWrls', 'updatedAt'])
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

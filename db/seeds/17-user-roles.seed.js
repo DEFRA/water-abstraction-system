@@ -61,6 +61,9 @@ function _names(userRole) {
   return { role, username }
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

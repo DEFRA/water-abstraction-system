@@ -23,6 +23,9 @@ async function go(abstractionAlertLicences) {
     .orderBy('licenceRef')
 }
 
+export {
+  go
+}
 export default {
   go
 }

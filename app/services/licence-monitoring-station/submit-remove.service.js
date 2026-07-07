@@ -24,6 +24,9 @@ async function go(licenceMonitoringStationId, licenceRef, yar) {
   flashNotification(yar, 'Updated', `Tag removed for ${licenceRef}`)
 }
 
+export {
+  go
+}
 export default {
   go
 }

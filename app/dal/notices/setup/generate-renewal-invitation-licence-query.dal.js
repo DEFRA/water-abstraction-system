@@ -20,6 +20,9 @@ function go(licenceRef) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

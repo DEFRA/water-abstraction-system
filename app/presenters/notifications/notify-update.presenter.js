@@ -41,6 +41,9 @@ function go(notifyResult) {
   )
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -222,6 +222,9 @@ function _generateCalculatedTransactions(billLicenceId, billingPeriod, chargeVer
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -527,6 +527,10 @@ async function _zapSimple(seedData) {
   await seedData.reviewLicence.$query().delete()
 }
 
+export {
+  seed,
+  zap
+}
 export default {
   seed,
   zap

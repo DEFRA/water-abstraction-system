@@ -64,6 +64,9 @@ function _workflowWarning(workflows) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

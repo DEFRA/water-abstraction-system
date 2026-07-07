@@ -393,6 +393,15 @@ function _transformReturnLog(returnLog) {
   }
 }
 
+export {
+  abstractionAlertStop,
+  adHocInvitation,
+  adHocReminder,
+  adHocRenewalInvitation,
+  paperReturn,
+  standardInvitation,
+  standardReminder
+}
 export default {
   abstractionAlertStop,
   adHocInvitation,

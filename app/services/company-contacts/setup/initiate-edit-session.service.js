@@ -68,6 +68,9 @@ function _abstractionAlerts(companyContact, licences) {
   return abstractionAlertType
 }
 
+export {
+  go
+}
 export default {
   go
 }

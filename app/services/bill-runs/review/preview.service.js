@@ -99,6 +99,9 @@ function _transaction(reviewChargeReference) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

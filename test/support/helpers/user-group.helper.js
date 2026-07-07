@@ -79,6 +79,13 @@ function select(index = -1) {
   return UserGroupModel.fromJson(selectRandomEntry(userGroups))
 }
 
+export {
+  add,
+  userGroups as data,
+  DEFAULT_INDEX,
+  defaults,
+  select
+}
 export default {
   add,
   data: userGroups,

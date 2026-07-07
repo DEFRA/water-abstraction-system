@@ -62,6 +62,9 @@ async function _fetchSrocBillRuns(changeDateFinancialYearEnd, licenceId) {
     .orderBy('billRuns.toFinancialYearEnding', 'asc')
 }
 
+export {
+  go
+}
 export default {
   go
 }

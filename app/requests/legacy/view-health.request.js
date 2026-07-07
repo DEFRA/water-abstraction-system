@@ -17,6 +17,9 @@ async function send(serviceName) {
   return LegacyRequest.get(serviceName, 'health/info', null, false)
 }
 
+export {
+  send
+}
 export default {
   send
 }

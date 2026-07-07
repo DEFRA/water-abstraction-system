@@ -14,6 +14,9 @@ async function send() {
   return NotifyRequest.get('')
 }
 
+export {
+  send
+}
 export default {
   send
 }

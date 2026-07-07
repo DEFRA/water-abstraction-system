@@ -23,6 +23,9 @@ function go(removeLicences, session) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

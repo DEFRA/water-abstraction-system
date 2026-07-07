@@ -37,6 +37,9 @@ async function _fetch(returnSubmissionId) {
     })
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -38,6 +38,9 @@ function go(payload, emailExists) {
   return schema.validate(payload, { abortEarly: false })
 }
 
+export {
+  go
+}
 export default {
   go
 }

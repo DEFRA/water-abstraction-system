@@ -140,6 +140,9 @@ function _sentTo(notification) {
   return personalisation['address_line_1']
 }
 
+export {
+  go
+}
 export default {
   go
 }

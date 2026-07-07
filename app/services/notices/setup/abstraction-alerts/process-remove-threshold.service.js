@@ -42,6 +42,9 @@ async function _save(session, licenceMonitoringStationId) {
   return session.$update()
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -36,6 +36,9 @@ function _superUser(auth) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

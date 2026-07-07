@@ -35,6 +35,9 @@ function markdown(input = '') {
   return globalThis.GlobalMarked.parse(replacedCaret)
 }
 
+export {
+  markdown
+}
 export default {
   markdown
 }

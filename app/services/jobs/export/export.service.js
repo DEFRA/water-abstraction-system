@@ -23,6 +23,9 @@ async function go() {
   calculateAndLogTimeTaken(startTime, 'DB export complete')
 }
 
+export {
+  go
+}
 export default {
   go
 }

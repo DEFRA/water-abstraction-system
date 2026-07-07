@@ -35,6 +35,9 @@ async function _headers(tableName, schemaName) {
   return Object.keys(columns)
 }
 
+export {
+  go
+}
 export default {
   go
 }

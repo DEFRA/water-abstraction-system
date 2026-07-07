@@ -34,6 +34,9 @@ async function go(session, blockingResults, user) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

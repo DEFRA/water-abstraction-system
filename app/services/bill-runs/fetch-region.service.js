@@ -28,6 +28,9 @@ async function _fetch(naldRegionId) {
   return result
 }
 
+export {
+  go
+}
 export default {
   go
 }

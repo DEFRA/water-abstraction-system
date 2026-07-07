@@ -22,6 +22,9 @@ async function go(sessionId) {
   return pageData
 }
 
+export {
+  go
+}
 export default {
   go
 }

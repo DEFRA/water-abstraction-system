@@ -49,6 +49,9 @@ function _returns(returns, selectedReturns = []) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

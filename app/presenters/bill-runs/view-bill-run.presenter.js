@@ -120,6 +120,9 @@ function _debitsCount(count) {
   return `${count} invoices`
 }
 
+export {
+  go
+}
 export default {
   go
 }

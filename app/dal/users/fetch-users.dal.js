@@ -348,6 +348,9 @@ function _fetchQuery() {
     .modify('permissions')
 }
 
+export {
+  go
+}
 export default {
   go
 }

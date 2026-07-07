@@ -18,6 +18,9 @@ async function send() {
   return BaseRequest.get(statusUrl.href, { responseType: 'json' })
 }
 
+export {
+  send
+}
 export default {
   send
 }

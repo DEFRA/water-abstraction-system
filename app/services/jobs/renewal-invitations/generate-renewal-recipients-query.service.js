@@ -104,6 +104,9 @@ function _processForSending() {
   `
 }
 
+export {
+  go
+}
 export default {
   go
 }

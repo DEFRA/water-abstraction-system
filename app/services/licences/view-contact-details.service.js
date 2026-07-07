@@ -42,6 +42,9 @@ async function go(licenceId, auth, page) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

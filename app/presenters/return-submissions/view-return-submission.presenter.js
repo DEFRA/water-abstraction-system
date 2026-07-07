@@ -137,6 +137,9 @@ function _total(lines, units) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

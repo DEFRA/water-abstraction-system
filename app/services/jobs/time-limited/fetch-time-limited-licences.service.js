@@ -53,6 +53,9 @@ function _offSetCurrentDateByDays(days) {
   return date
 }
 
+export {
+  go
+}
 export default {
   go
 }

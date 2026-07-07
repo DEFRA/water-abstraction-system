@@ -14,6 +14,9 @@ function invalidStartCharacters(value) {
   })
 }
 
+export {
+  invalidStartCharacters
+}
 export default {
   invalidStartCharacters
 }

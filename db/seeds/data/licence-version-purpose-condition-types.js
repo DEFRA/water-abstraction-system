@@ -541,6 +541,9 @@ const data = [
   }
 ]
 
+export {
+  data
+}
 export default {
   data
 }

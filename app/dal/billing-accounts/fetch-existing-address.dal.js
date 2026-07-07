@@ -21,6 +21,9 @@ async function go(addressId) {
     .findById(addressId)
 }
 
+export {
+  go
+}
 export default {
   go
 }

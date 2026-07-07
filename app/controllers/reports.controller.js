@@ -11,6 +11,9 @@ async function invalidAddresses(_request, h) {
   return h.view('reports/view-invalid-addresses.njk', pageData)
 }
 
+export {
+  invalidAddresses
+}
 export default {
   invalidAddresses
 }

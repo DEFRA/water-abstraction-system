@@ -16,6 +16,9 @@ async function view(request, h) {
   return h.view(`licence-versions/view.njk`, pageData)
 }
 
+export {
+  view
+}
 export default {
   view
 }

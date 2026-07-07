@@ -121,6 +121,10 @@ function _restrictionCount(licenceId, licenceMonitoringStations) {
   return count.length
 }
 
+export {
+  determineRestrictionHeading,
+  formatRestrictions
+}
 export default {
   determineRestrictionHeading,
   formatRestrictions

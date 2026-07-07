@@ -93,6 +93,9 @@ async function _unflagTwoPartTariff(billRun) {
     )
 }
 
+export {
+  go
+}
 export default {
   go
 }

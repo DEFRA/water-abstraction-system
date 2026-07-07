@@ -18,6 +18,9 @@ async function go(addressId) {
     .select(['id', 'address1', 'address2', 'address3', 'address4', 'address5', 'address6', 'country', 'postcode'])
 }
 
+export {
+  go
+}
 export default {
   go
 }

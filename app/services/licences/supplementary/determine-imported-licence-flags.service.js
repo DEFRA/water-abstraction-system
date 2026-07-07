@@ -112,6 +112,9 @@ function _updateFlags(existingLicenceDetails, flagForPreSrocSupplementary, resul
   result.flagForTwoPartTariffSupplementary = existingLicenceDetails.two_part_tariff_charge_versions
 }
 
+export {
+  go
+}
 export default {
   go
 }

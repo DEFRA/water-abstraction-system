@@ -119,6 +119,9 @@ function _links(session) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

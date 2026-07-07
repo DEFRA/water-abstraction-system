@@ -30,6 +30,9 @@ function go(billRun) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

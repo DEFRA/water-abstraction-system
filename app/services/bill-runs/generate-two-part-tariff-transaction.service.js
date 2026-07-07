@@ -129,6 +129,9 @@ function _standardTransaction(
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

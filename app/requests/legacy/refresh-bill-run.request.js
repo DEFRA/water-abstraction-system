@@ -25,6 +25,9 @@ async function send(billRunId) {
   return LegacyRequest.post('water', path)
 }
 
+export {
+  send
+}
 export default {
   send
 }

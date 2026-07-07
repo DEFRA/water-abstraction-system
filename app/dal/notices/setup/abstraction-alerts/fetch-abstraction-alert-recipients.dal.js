@@ -21,6 +21,9 @@ async function go(session) {
   return rows
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -90,6 +90,9 @@ async function _fetchLicenceSummaries(id) {
     .orderBy('bil.licenceRef')
 }
 
+export {
+  go
+}
 export default {
   go
 }

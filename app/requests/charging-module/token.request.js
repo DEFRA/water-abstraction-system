@@ -54,6 +54,9 @@ function _parseResult(result) {
   return authentication
 }
 
+export {
+  send
+}
 export default {
   send
 }

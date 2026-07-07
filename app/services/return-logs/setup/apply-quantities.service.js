@@ -79,6 +79,9 @@ function _volumesUpdate(session) {
   return session
 }
 
+export {
+  go
+}
 export default {
   go
 }

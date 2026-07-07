@@ -94,6 +94,9 @@ function _availableRestrictionType(licenceMonitoringStations, alertType) {
   return Array.from(types)
 }
 
+export {
+  go
+}
 export default {
   go
 }

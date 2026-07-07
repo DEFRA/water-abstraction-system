@@ -101,6 +101,16 @@ async function view(request, h) {
   return h.view(pageData.view, pageData)
 }
 
+export {
+  cancel,
+  index,
+  send,
+  submitCancel,
+  submitIndex,
+  submitSend,
+  twoPartTariff,
+  view
+}
 export default {
   cancel,
   index,

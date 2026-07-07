@@ -42,6 +42,9 @@ function _returnLogs(dueReturns, selectedReturns, sessionId, contactHashId) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

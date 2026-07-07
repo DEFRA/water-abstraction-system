@@ -44,6 +44,9 @@ async function _addWorkflowRecords(timeLimitedResults) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

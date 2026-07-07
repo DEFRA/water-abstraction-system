@@ -324,6 +324,9 @@ async function _sendViewBillRequest(billRun, reissueBillId) {
   return result.response.body.invoice
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -77,6 +77,9 @@ function _sortChargeReferencesBySubsistenceCharge(chargeReferences) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

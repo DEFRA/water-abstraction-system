@@ -142,6 +142,20 @@ async function year(request, h) {
   return h.view('bill-runs/setup/year.njk', pageData)
 }
 
+export {
+  check,
+  noLicences,
+  region,
+  season,
+  setup,
+  submitCheck,
+  submitRegion,
+  submitSeason,
+  submitType,
+  submitYear,
+  type,
+  year
+}
 export default {
   check,
   noLicences,

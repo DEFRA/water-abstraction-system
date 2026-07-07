@@ -80,6 +80,9 @@ function _requestOptions(accessToken, searchParams) {
   }
 }
 
+export {
+  get
+}
 export default {
   get
 }

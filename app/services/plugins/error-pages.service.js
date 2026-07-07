@@ -150,6 +150,9 @@ function _determineSafeStatusCode(statusCode) {
   return HTTP_STATUS_OK
 }
 
+export {
+  go
+}
 export default {
   go
 }

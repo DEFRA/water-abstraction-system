@@ -25,6 +25,9 @@ async function go(reviewChargeReferenceId) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -22,6 +22,9 @@ async function go(tableName, schemaFolderPath, schemaName) {
   await WriteTableToFileService.go(data.headers, data.rows, schemaFolderPath, tableName)
 }
 
+export {
+  go
+}
 export default {
   go
 }

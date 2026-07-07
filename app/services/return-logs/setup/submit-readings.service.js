@@ -108,6 +108,9 @@ function _validate(payload, requestedYear, requestedMonth, session) {
   return formatValidationResult(validation)
 }
 
+export {
+  go
+}
 export default {
   go
 }

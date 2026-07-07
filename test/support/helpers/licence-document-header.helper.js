@@ -91,6 +91,10 @@ function _metadata() {
   }
 }
 
+export {
+  add,
+  defaults
+}
 export default {
   add,
   defaults

@@ -77,6 +77,9 @@ function _validateDate(payload, startDate, endDate) {
   return schema.validate(payload, { abortEarly: false, allowUnknown: true })
 }
 
+export {
+  go
+}
 export default {
   go
 }

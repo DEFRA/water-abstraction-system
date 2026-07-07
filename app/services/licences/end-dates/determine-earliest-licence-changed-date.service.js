@@ -99,6 +99,9 @@ function _earliestChangedDate(changedDates) {
   return changedDates[0]
 }
 
+export {
+  go
+}
 export default {
   go
 }

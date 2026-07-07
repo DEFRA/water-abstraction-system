@@ -69,6 +69,11 @@ function generateLicenceRef() {
   return `01/${secondPart}/${thirdPart}/${fourthPart}`
 }
 
+export {
+  add,
+  defaults,
+  generateLicenceRef
+}
 export default {
   add,
   defaults,

@@ -161,6 +161,9 @@ function _trigger(matches, toFinancialYearEnding) {
   return engineTriggers.old
 }
 
+export {
+  go
+}
 export default {
   go
 }

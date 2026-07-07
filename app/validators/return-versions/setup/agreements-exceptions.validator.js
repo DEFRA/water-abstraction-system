@@ -46,6 +46,9 @@ const VALID_VALUES = [
   'none'
 ]
 
+export {
+  go
+}
 export default {
   go
 }

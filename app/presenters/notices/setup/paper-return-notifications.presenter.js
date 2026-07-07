@@ -97,6 +97,9 @@ function _selectedReturnLogs(session) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

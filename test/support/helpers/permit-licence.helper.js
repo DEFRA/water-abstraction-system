@@ -438,6 +438,10 @@ function _licenceDataValue(licenceRef) {
   }
 }
 
+export {
+  add,
+  defaults
+}
 export default {
   add,
   defaults

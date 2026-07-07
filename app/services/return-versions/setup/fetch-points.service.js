@@ -25,6 +25,9 @@ async function go(licenceVersionId) {
     .where('licenceVersions.id', licenceVersionId)
 }
 
+export {
+  go
+}
 export default {
   go
 }

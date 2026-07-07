@@ -30,6 +30,9 @@ async function go(sessionId, yar, auth) {
   return { redirectUrl: `/system/users/external/${sessionData.user.id}/licences?back=${sessionData.activeNavBar}` }
 }
 
+export {
+  go
+}
 export default {
   go
 }

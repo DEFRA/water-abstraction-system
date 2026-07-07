@@ -38,6 +38,9 @@ async function _create(companyId, companyContact) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

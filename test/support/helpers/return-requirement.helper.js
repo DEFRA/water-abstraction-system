@@ -70,6 +70,11 @@ function generateReference() {
   return generateRandomInteger(10000000, 99999999)
 }
 
+export {
+  add,
+  defaults,
+  generateReference
+}
 export default {
   add,
   defaults,

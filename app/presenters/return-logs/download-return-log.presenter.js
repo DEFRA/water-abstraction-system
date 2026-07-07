@@ -50,6 +50,9 @@ function _csvData(selectedReturnSubmission) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -117,6 +117,9 @@ function _contact(session, companyContacts) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

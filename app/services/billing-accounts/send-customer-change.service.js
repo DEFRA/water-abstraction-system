@@ -38,6 +38,9 @@ async function go(billingAccount, address, company, contact) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

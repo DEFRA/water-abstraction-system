@@ -57,6 +57,9 @@ function _verifications(verifications) {
   return formattedVerifications
 }
 
+export {
+  go
+}
 export default {
   go
 }

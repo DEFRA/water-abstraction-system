@@ -28,6 +28,10 @@ function select(index = -1) {
   return SourceModel.fromJson(selectRandomEntry(sources))
 }
 
+export {
+  sources as data,
+  select
+}
 export default {
   data: sources,
   select

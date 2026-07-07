@@ -121,6 +121,9 @@ function _validate(payload) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

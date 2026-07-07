@@ -79,6 +79,9 @@ function _transformToCsv(recipients, notificationType) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

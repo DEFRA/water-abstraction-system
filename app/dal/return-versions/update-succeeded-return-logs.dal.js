@@ -65,6 +65,9 @@ async function go(licenceRef, trx) {
   await rawQuery.transacting(trx)
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -28,6 +28,10 @@ function select(index = -1) {
   return LicenceVersionConditionTypeModel.fromJson(selectRandomEntry(licenceVersionPurposeConditionTypes))
 }
 
+export {
+  licenceVersionPurposeConditionTypes as data,
+  select
+}
 export default {
   data: licenceVersionPurposeConditionTypes,
   select

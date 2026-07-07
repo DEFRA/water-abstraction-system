@@ -523,6 +523,26 @@ function transformStringOfLicencesToArray(licences) {
     }) // Remove empty strings if any
 }
 
+export {
+  calculateAndLogTimeTaken,
+  compareStrings,
+  convertFromCubicMetres,
+  convertToCubicMetres,
+  currentTimeInNanoseconds,
+  determineCurrentFinancialYear,
+  flashNotification,
+  readFlashNotification,
+  generateNoticeReferenceCode,
+  generateRandomInteger,
+  generateUUID,
+  pause,
+  periodsOverlap,
+  splitArrayIntoGroups,
+  timestampForPostgres,
+  today,
+  transactionsMatch,
+  transformStringOfLicencesToArray
+}
 export default {
   calculateAndLogTimeTaken,
   compareStrings,

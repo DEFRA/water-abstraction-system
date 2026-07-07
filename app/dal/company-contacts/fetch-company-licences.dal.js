@@ -36,6 +36,9 @@ async function go(companyId) {
   return rows
 }
 
+export {
+  go
+}
 export default {
   go
 }

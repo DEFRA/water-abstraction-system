@@ -14,6 +14,9 @@ async function go(sessionId) {
   await SessionModel.query().delete().where('id', sessionId)
 }
 
+export {
+  go
+}
 export default {
   go
 }

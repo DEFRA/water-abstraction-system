@@ -36,6 +36,9 @@ function _backLinkHref(session, requirementIndex) {
   return `/system/return-versions/setup/${id}/returns-cycle/${requirementIndex}`
 }
 
+export {
+  go
+}
 export default {
   go
 }

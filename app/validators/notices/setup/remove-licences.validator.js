@@ -57,6 +57,9 @@ function _removedLicencesWithDueReturnsValidator(value, helpers, licenceRefsWith
   return result
 }
 
+export {
+  go
+}
 export default {
   go
 }

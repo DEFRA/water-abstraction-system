@@ -41,6 +41,9 @@ function _formattedData(session, blockingResults) {
   return AllowedBillRunPresenter.go(session, blockingResults)
 }
 
+export {
+  go
+}
 export default {
   go
 }

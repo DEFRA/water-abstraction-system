@@ -56,6 +56,9 @@ function _messageRefs() {
   return messageRefs
 }
 
+export {
+  go
+}
 export default {
   go
 }

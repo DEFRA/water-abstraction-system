@@ -107,6 +107,9 @@ async function _fetch(billingAccountId, licenceId, financialYearEnding, twoPartT
     .whereIn('billRuns.batchType', batchTypes)
 }
 
+export {
+  go
+}
 export default {
   go
 }

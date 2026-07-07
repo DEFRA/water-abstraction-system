@@ -49,6 +49,9 @@ async function _supplementaryBillingYears(regionId, years, twoPartTariff) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

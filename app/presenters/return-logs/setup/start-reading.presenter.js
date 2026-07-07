@@ -39,6 +39,9 @@ function _savedValue(startReading) {
   return startReading ?? null
 }
 
+export {
+  go
+}
 export default {
   go
 }

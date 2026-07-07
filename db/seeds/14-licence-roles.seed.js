@@ -40,6 +40,9 @@ async function _update(licenceRole) {
     .andWhere('label', label)
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

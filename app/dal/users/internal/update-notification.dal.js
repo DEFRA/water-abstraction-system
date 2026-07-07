@@ -21,6 +21,9 @@ async function go(notification, sendResult) {
   return notification.$query().patch({ notifyError, notifyId, notifyStatus, plaintext, status, updatedAt })
 }
 
+export {
+  go
+}
 export default {
   go
 }

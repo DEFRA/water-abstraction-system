@@ -118,6 +118,9 @@ async function _fetchDetail(licenceIds) {
     .orderBy('licenceRef', 'asc')
 }
 
+export {
+  go
+}
 export default {
   go
 }

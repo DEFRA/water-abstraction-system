@@ -250,6 +250,9 @@ function _userSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery) 
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

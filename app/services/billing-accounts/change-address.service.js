@@ -366,6 +366,9 @@ function _transformContact(timestamp, contact) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

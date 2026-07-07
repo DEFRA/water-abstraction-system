@@ -28,6 +28,9 @@ async function go(sessionId) {
   return '/system/notices'
 }
 
+export {
+  go
+}
 export default {
   go
 }

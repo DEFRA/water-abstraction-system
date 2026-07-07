@@ -78,6 +78,12 @@ function generateNaldPointId() {
   return generateRandomInteger(1, 99999)
 }
 
+export {
+  add,
+  defaults,
+  generateNationalGridReference,
+  generateNaldPointId
+}
 export default {
   add,
   defaults,

@@ -151,6 +151,13 @@ function licence(region) {
   }
 }
 
+export {
+  billRun,
+  billingAccount,
+  chargingModuleResponse,
+  chargeVersion,
+  licence
+}
 export default {
   billRun,
   billingAccount,

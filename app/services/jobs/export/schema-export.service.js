@@ -55,6 +55,9 @@ function _folderToUpload(schemaName) {
   return path.join(temporaryFilePath, schemaName)
 }
 
+export {
+  go
+}
 export default {
   go
 }

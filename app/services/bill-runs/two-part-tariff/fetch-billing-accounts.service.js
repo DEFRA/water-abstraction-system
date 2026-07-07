@@ -152,6 +152,9 @@ function _whereBillingAccountExistsClause(billRunId) {
   return query
 }
 
+export {
+  go
+}
 export default {
   go
 }

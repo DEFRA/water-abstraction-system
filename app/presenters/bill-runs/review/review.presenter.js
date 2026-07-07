@@ -82,6 +82,9 @@ function _reviewMessage(numberOfLicencesToReview) {
   return `You need to review ${numberOfLicences} with returns data issues. You can then continue and send the bill run.`
 }
 
+export {
+  go
+}
 export default {
   go
 }

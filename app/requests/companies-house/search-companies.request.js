@@ -23,6 +23,9 @@ async function send(queryString) {
   return CompaniesHouseRequest.get(path, searchParams)
 }
 
+export {
+  send
+}
 export default {
   send
 }

@@ -39,6 +39,9 @@ async function _recipientLicenceRefs(contactHashId, session) {
   return matchedRecipient.licence_refs
 }
 
+export {
+  go
+}
 export default {
   go
 }

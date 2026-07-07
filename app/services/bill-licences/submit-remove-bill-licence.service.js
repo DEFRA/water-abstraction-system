@@ -46,6 +46,9 @@ async function _fetchBillLicence(billLicenceId) {
     })
 }
 
+export {
+  go
+}
 export default {
   go
 }

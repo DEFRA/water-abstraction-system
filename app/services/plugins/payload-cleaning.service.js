@@ -221,6 +221,9 @@ function _cleanValue(value) {
   return value
 }
 
+export {
+  go
+}
 export default {
   go
 }

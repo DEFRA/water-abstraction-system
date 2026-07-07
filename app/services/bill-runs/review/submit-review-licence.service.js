@@ -70,6 +70,9 @@ async function _update(reviewLicenceId, parsedPayload) {
   await ReviewLicenceModel.query().findById(reviewLicenceId).patch(patch)
 }
 
+export {
+  go
+}
 export default {
   go
 }

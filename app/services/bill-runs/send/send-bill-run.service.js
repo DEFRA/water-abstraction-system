@@ -56,6 +56,9 @@ async function _updateStatus(billRunId) {
   return BillRunModel.query().findById(billRunId).patch({ status: 'sending', updatedAt: timestampForPostgres() })
 }
 
+export {
+  go
+}
 export default {
   go
 }

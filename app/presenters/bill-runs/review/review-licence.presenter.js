@@ -196,6 +196,9 @@ function _formatReviewReturns(reviewReturns) {
   return { matchedReturns, unmatchedReturns }
 }
 
+export {
+  go
+}
 export default {
   go
 }

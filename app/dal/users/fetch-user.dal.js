@@ -16,6 +16,9 @@ async function go(id) {
   return UserModel.query().findById(id).select(['id', 'licenceEntityId', 'username'])
 }
 
+export {
+  go
+}
 export default {
   go
 }

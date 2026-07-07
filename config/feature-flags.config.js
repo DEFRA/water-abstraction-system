@@ -15,4 +15,5 @@ const config = {
   enableUsersView: String(process.env.ENABLE_USERS_VIEW) === 'true' || false
 }
 
+export const { enableBillingAccountChangeAddress, enableUsersManagement, enableUsersView } = config
 export default config

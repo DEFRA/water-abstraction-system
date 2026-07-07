@@ -98,6 +98,9 @@ async function _flagForSrocSupplementary(createdAt, regionId) {
   return recordCount > 0
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -56,6 +56,9 @@ function _validate(payload, licenceMonitoringStations) {
   return formatValidationResult(validationResult)
 }
 
+export {
+  go
+}
 export default {
   go
 }

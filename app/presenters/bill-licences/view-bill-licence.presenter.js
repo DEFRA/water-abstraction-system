@@ -99,6 +99,9 @@ function _transactions(transactions) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

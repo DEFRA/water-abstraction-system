@@ -82,6 +82,16 @@ async function timeLimited(_request, h) {
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
+export {
+  clean,
+  customerFiles,
+  exportDb,
+  licenceUpdates,
+  notificationStatus,
+  renewalInvitations,
+  returnLogs,
+  timeLimited
+}
 export default {
   clean,
   customerFiles,

@@ -31,6 +31,9 @@ function go(purposes, licence) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

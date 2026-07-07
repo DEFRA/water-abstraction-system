@@ -47,6 +47,9 @@ async function _save(session, matchingContact) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

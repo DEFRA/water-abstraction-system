@@ -144,6 +144,9 @@ function _standardNoticeTypes(noticeTypes) {
   return standardTypes
 }
 
+export {
+  go
+}
 export default {
   go
 }

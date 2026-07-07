@@ -39,6 +39,9 @@ async function send(templateId, personalisation) {
   return NotifyRequest.post(path, body)
 }
 
+export {
+  send
+}
 export default {
   send
 }

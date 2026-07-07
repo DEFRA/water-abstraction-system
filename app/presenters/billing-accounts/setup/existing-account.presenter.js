@@ -66,6 +66,9 @@ function _radioOptions(existingAccount, companies) {
   return items
 }
 
+export {
+  go
+}
 export default {
   go
 }

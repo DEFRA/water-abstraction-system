@@ -231,6 +231,15 @@ function purpose() {
   }
 }
 
+export {
+  condition,
+  licence,
+  licenceVersion,
+  licenceVersionPurpose,
+  point,
+  pointWithSource,
+  purpose
+}
 export default {
   condition,
   licence,

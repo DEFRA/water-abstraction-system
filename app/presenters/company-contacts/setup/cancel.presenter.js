@@ -37,6 +37,9 @@ function _pageTitle(session) {
   return 'You are about to cancel this contact'
 }
 
+export {
+  go
+}
 export default {
   go
 }

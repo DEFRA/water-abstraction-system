@@ -76,6 +76,9 @@ async function _updateBillRun(billRunId, externalBillRun) {
     .patch({ status: 'sent', transactionFileReference, updatedAt: timestampForPostgres() })
 }
 
+export {
+  go
+}
 export default {
   go
 }

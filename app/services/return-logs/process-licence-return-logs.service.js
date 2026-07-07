@@ -107,6 +107,9 @@ async function _processReturnCycle(returnCycle, returnRequirements, changeDate, 
   await VoidLicenceReturnLogsService.go(generatedReturnIds, licenceRef, returnCycle.id, changeDate, trx)
 }
 
+export {
+  go
+}
 export default {
   go
 }

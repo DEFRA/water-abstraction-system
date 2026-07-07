@@ -87,6 +87,11 @@ function _startDate(determinationDate, cycle) {
   return new Date(`${cycleStartYear}-${cycleStartMonth}-${cycleStartDay}`)
 }
 
+export {
+  determineCycleDueDate,
+  determineCycleEndDate,
+  determineCycleStartDate
+}
 export default {
   determineCycleDueDate,
   determineCycleEndDate,

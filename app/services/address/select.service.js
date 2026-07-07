@@ -29,6 +29,9 @@ async function go(sessionId) {
   return SelectPresenter.go(session, result.matches)
 }
 
+export {
+  go
+}
 export default {
   go
 }

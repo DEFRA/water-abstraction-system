@@ -25,6 +25,9 @@ async function _upsert(secondaryPurpose) {
     .merge(['description', 'updatedAt'])
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

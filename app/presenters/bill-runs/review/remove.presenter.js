@@ -28,6 +28,9 @@ function go(reviewLicence) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

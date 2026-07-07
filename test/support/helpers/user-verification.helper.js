@@ -70,6 +70,11 @@ function generateVerificationCode() {
   }).join('')
 }
 
+export {
+  add,
+  defaults,
+  generateVerificationCode
+}
 export default {
   add,
   defaults,

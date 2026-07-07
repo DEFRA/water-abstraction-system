@@ -192,6 +192,24 @@ async function submitRestore(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
+export {
+  setup,
+  setupEdit,
+  viewAbstractionAlerts,
+  viewCancel,
+  viewCheck,
+  viewContactEmail,
+  viewContactName,
+  viewLicences,
+  viewRestore,
+  submitAbstractionAlerts,
+  submitCancel,
+  submitCheck,
+  submitContactEmail,
+  submitContactName,
+  submitLicences,
+  submitRestore
+}
 export default {
   setup,
   setupEdit,

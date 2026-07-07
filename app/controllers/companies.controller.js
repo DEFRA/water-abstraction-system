@@ -78,6 +78,14 @@ async function viewLicences(request, h) {
   return h.view(`companies/licences.njk`, pageData)
 }
 
+export {
+  viewBillingAccounts,
+  viewCompany,
+  viewCompanyWithAddress,
+  viewContacts,
+  viewHistory,
+  viewLicences
+}
 export default {
   viewBillingAccounts,
   viewCompany,

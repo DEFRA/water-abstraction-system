@@ -40,6 +40,9 @@ function _metadata(billRun) {
   return CreateBillRunEventPresenter.go(billRun)
 }
 
+export {
+  go
+}
 export default {
   go
 }

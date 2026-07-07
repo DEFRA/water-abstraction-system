@@ -46,6 +46,9 @@ function go(licenceMonitoringStations, selectedLicenceMonitoringStations, remove
   return relevantLicenceMonitoringStations
 }
 
+export {
+  go
+}
 export default {
   go
 }

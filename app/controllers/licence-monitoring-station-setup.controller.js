@@ -188,6 +188,21 @@ async function thresholdAndUnit(request, h) {
   return h.view('licence-monitoring-station/setup/threshold-and-unit.njk', pageData)
 }
 
+export {
+  abstractionPeriod,
+  check,
+  fullCondition,
+  licenceNumber,
+  stopOrReduce,
+  submitAbstractionPeriod,
+  submitCheck,
+  submitFullCondition,
+  submitLicenceNumber,
+  submitSetup,
+  submitStopOrReduce,
+  submitThresholdAndUnit,
+  thresholdAndUnit
+}
 export default {
   abstractionPeriod,
   check,

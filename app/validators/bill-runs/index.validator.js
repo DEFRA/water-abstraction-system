@@ -79,6 +79,9 @@ function _validRegionIds(regions) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -121,6 +121,9 @@ function _results(orderedSearchResults, modelsByType) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -31,6 +31,9 @@ async function go(billingAccountId) {
   return CreateSessionDal.go(data)
 }
 
+export {
+  go
+}
 export default {
   go
 }

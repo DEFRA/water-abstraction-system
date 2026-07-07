@@ -226,6 +226,9 @@ function _logResult(startTime, billRun, results) {
   globalThis.GlobalNotifier.omfg('Delete bill run failed', billRun, firstError.reason)
 }
 
+export {
+  go
+}
 export default {
   go
 }

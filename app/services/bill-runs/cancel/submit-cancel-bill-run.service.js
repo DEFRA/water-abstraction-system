@@ -35,6 +35,9 @@ async function go(billRunId) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

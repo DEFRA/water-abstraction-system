@@ -61,6 +61,9 @@ async function _initialiseSelectedRecipients(recipients, session) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

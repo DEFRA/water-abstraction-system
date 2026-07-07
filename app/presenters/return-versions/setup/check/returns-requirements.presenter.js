@@ -106,6 +106,9 @@ function _mapPoints(selectedPoints, points) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

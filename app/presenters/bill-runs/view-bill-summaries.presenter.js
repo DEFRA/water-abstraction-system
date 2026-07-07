@@ -91,6 +91,9 @@ function _waterCompanies(summaries) {
   return _bills(filteredSummaries)
 }
 
+export {
+  go
+}
 export default {
   go
 }

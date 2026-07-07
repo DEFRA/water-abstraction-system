@@ -63,6 +63,9 @@ function unregistrationSession() {
   }
 }
 
+export {
+  unregistrationSession
+}
 export default {
   unregistrationSession
 }

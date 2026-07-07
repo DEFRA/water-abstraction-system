@@ -28,6 +28,10 @@ function select(index = -1) {
   return GroupRoleModel.fromJson(selectRandomEntry(groupRoles))
 }
 
+export {
+  groupRoles as data,
+  select
+}
 export default {
   data: groupRoles,
   select

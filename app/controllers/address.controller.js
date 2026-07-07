@@ -105,6 +105,16 @@ async function viewSelect(request, h) {
   return h.view('address/select.njk', pageData)
 }
 
+export {
+  submitInternational,
+  submitManual,
+  submitPostcode,
+  submitSelect,
+  viewInternational,
+  viewManual,
+  viewPostcode,
+  viewSelect
+}
 export default {
   submitInternational,
   submitManual,

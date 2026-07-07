@@ -20,6 +20,9 @@ async function _fetch(companyId) {
   return CompanyModel.query().findById(companyId).select(['id', 'name'])
 }
 
+export {
+  go
+}
 export default {
   go
 }

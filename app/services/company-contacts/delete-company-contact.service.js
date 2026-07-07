@@ -25,6 +25,9 @@ async function go(id, notified) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

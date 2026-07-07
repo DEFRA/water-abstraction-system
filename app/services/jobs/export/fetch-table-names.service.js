@@ -42,6 +42,9 @@ function _pluckTableNames(tableData) {
   })
 }
 
+export {
+  go
+}
 export default {
   go
 }

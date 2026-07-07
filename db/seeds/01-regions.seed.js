@@ -69,6 +69,9 @@ async function _update(region) {
     .andWhere('naldRegionId', naldRegionId)
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

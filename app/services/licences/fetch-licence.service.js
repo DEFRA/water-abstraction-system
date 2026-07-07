@@ -41,6 +41,9 @@ async function go(licenceId) {
     .modify('currentVersion')
 }
 
+export {
+  go
+}
 export default {
   go
 }

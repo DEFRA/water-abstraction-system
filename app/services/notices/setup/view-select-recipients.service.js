@@ -45,6 +45,9 @@ function _selectedRecipients(session) {
   return selectedRecipients
 }
 
+export {
+  go
+}
 export default {
   go
 }

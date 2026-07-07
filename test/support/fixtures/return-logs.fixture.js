@@ -219,6 +219,12 @@ function _returnSubmissionLines(returnLog, returnSubmissionId, type, userUnit) {
   })
 }
 
+export {
+  applyFetchReturnLogFields,
+  dueReturn,
+  returnLog,
+  returnSubmission
+}
 export default {
   applyFetchReturnLogFields,
   dueReturn,

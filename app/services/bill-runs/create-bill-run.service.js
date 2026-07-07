@@ -54,6 +54,9 @@ function _defaultOptions(option) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

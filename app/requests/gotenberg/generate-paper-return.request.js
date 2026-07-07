@@ -49,7 +49,7 @@ function _generateFormData(htmlContent, footerHtml) {
 }
 
 function _generateHtmlContent(view, data) {
-  const nunjucksEnv = nunjucks.configure(path.resolve(__dirname, '../../views/notices/pdfs/'), { autoescape: true })
+  const nunjucksEnv = nunjucks.configure(path.resolve(import.meta.dirname, '../../views/notices/pdfs/'), { autoescape: true })
 
   return new Promise((resolve, reject) => {
     nunjucksEnv.render(view, data, (err, result) => {
@@ -58,6 +58,9 @@ function _generateHtmlContent(view, data) {
   })
 }
 
+export {
+  send
+}
 export default {
   send
 }

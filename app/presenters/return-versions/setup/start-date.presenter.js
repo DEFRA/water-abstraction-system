@@ -50,6 +50,9 @@ function _licenceVersionStartDate(licence) {
   return formatLongDate(dateObj)
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -64,6 +64,9 @@ async function _notifications(notice, recipients, expiryDate, renewalDate) {
   return CreateNotificationsService.go(noticeData, recipients, noticeId)
 }
 
+export {
+  go
+}
 export default {
   go
 }

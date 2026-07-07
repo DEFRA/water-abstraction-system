@@ -50,6 +50,12 @@ async function submitRemoveCompanyContact(request, h) {
   return h.redirect(`/system/companies/${companyId}/contacts`)
 }
 
+export {
+  viewCommunications,
+  viewContactDetails,
+  viewRemoveCompanyContact,
+  submitRemoveCompanyContact
+}
 export default {
   viewCommunications,
   viewContactDetails,

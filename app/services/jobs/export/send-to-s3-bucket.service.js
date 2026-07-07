@@ -62,6 +62,9 @@ async function _uploadFileToS3Bucket(params) {
   await s3Client.send(command)
 }
 
+export {
+  go
+}
 export default {
   go
 }

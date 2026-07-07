@@ -52,6 +52,9 @@ async function _fetch(email, page) {
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
 
+export {
+  go
+}
 export default {
   go
 }

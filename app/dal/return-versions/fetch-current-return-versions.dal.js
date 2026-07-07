@@ -22,6 +22,9 @@ async function go(licenceId, trx) {
     .orderBy('startDate', 'desc')
 }
 
+export {
+  go
+}
 export default {
   go
 }

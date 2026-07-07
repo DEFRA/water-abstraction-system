@@ -25,6 +25,9 @@ async function go(auth) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

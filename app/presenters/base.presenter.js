@@ -659,6 +659,31 @@ function titleCase(value) {
   )
 }
 
+export {
+  convertPenceToPounds,
+  formatAbstractionDate,
+  formatAbstractionPeriod,
+  formatChargingModuleDate,
+  formatDateMonthYear,
+  formatEmail,
+  formatFinancialYear,
+  formatLongDate,
+  formatLongDateTime,
+  formatMoney,
+  formatNoticeType,
+  formatNumber,
+  formatPounds,
+  formatPurposes,
+  formatQuantityToUnit,
+  formatRestrictionType,
+  formatReturnLogStatus,
+  formatValidationResult,
+  formatValueUnit,
+  formatVersionReason,
+  leftPadZeroes,
+  sentenceCase,
+  titleCase
+}
 export default {
   convertPenceToPounds,
   formatAbstractionDate,

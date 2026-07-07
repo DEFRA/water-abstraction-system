@@ -37,6 +37,9 @@ function _alertEmailAddressOptions(alertEmailAddress, alertEmailAddressType) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

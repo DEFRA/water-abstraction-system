@@ -60,6 +60,9 @@ function _restrictions(relevantLicenceMonitoringStations, sessionId) {
   return formatRestrictions(preparedLicenceMonitoringStations)
 }
 
+export {
+  go
+}
 export default {
   go
 }

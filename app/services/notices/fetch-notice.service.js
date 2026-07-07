@@ -105,6 +105,9 @@ function _fetchNotificationsQuery(noticeId) {
     .where('event_id', noticeId)
 }
 
+export {
+  go
+}
 export default {
   go
 }

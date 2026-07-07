@@ -29,4 +29,5 @@ pg.types.setTypeParser(pg.types.builtins.NUMERIC, (value) => {
 
 const db = Knex(dbConfig)
 
+export { db, dbConfig }
 export default { db, dbConfig }

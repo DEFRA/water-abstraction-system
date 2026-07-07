@@ -46,6 +46,9 @@ AND NOT EXISTS (
   return deletedCount
 }
 
+export {
+  go
+}
 export default {
   go
 }

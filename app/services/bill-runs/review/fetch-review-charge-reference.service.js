@@ -76,6 +76,9 @@ async function _fetch(reviewChargeReferenceId) {
     })
 }
 
+export {
+  go
+}
 export default {
   go
 }

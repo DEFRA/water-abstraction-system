@@ -98,6 +98,11 @@ function _contactLink(contact, billingQueryArgs) {
   return `/system/companies/${contact.id}/${contact.contactType}`
 }
 
+export {
+  abstractionAlertsLabel,
+  formatContact,
+  selectedLiveLicences
+}
 export default {
   abstractionAlertsLabel,
   formatContact,

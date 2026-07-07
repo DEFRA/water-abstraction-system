@@ -18,6 +18,9 @@ async function go(path) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

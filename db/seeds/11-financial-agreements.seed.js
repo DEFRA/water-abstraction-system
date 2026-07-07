@@ -15,6 +15,9 @@ async function _upsert(financialAgreement) {
     .merge(['description', 'disabled', 'updatedAt'])
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

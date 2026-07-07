@@ -833,6 +833,27 @@ function _userPasswordResetEmail(recipient, internal, overrides) {
   return { ...notification, ...overrides }
 }
 
+export {
+  abstractionAlertEmail,
+  abstractionAlertLetter,
+  legacyHandsOfFlow,
+  legacyRenewal,
+  notification,
+  paperReturn,
+  renewalInvitationEmail,
+  renewalInvitationLetter,
+  returnsInvitationAdHocEmail,
+  returnsInvitationAdHocLetter,
+  returnsInvitationAlternateLetter,
+  returnsInvitationEmail,
+  returnsInvitationLetter,
+  returnsReminderEmail,
+  returnsReminderLetter,
+  userExternalPasswordResetEmail,
+  userExternalShareExistingEmail,
+  userInternalPasswordResetEmail,
+  userNewInternalEmail
+}
 export default {
   abstractionAlertEmail,
   abstractionAlertLetter,

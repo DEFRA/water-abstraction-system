@@ -70,6 +70,9 @@ function _srocContent(transaction) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

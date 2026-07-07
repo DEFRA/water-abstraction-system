@@ -44,6 +44,9 @@ async function go(companyId, role) {
     })
 }
 
+export {
+  go
+}
 export default {
   go
 }

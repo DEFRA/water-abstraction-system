@@ -120,6 +120,9 @@ async function _returnRequirement(returnVersionId, legacyId, reportingFrequency,
   return returnRequirement
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

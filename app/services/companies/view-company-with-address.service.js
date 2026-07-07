@@ -29,6 +29,9 @@ async function go(companyId, addressId, role, licenceId = null) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

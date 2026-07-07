@@ -52,6 +52,9 @@ function _licenceVersions(licences) {
   return versions
 }
 
+export {
+  go
+}
 export default {
   go
 }

@@ -61,6 +61,9 @@ function _names(userGroup) {
   return { group, username }
 }
 
+export {
+  seed
+}
 export default {
   seed
 }

@@ -77,6 +77,12 @@ function select(index = -1) {
   return UserRoleModel.fromJson(selectRandomEntry(userRoles))
 }
 
+export {
+  add,
+  userRoles as data,
+  defaults,
+  select
+}
 export default {
   add,
   data: userRoles,

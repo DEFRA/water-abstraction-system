@@ -63,6 +63,9 @@ async function _fetchNotification(notificationId) {
     })
 }
 
+export {
+  go
+}
 export default {
   go
 }

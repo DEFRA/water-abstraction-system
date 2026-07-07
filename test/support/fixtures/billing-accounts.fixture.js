@@ -68,6 +68,9 @@ function billingAccount() {
   }
 }
 
+export {
+  billingAccount
+}
 export default {
   billingAccount
 }

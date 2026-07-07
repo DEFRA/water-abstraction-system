@@ -42,6 +42,9 @@ async function _fetchMonitoringStationLicenceTags(licenceMonitoringStationId) {
     })
 }
 
+export {
+  go
+}
 export default {
   go
 }

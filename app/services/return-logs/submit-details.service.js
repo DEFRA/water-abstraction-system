@@ -26,6 +26,9 @@ async function go(payload, returnLogId) {
   await ReturnLogModel.query().patch({ underQuery, updatedAt: timestampForPostgres() }).findById(returnLogId)
 }
 
+export {
+  go
+}
 export default {
   go
 }

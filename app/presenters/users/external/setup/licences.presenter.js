@@ -55,6 +55,9 @@ function _checkBoxItems(licences, selectedLicences, allLicences) {
   return items
 }
 
+export {
+  go
+}
 export default {
   go
 }

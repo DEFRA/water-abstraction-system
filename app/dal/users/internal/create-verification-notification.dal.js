@@ -30,6 +30,9 @@ async function go(email, resetGuid) {
   return NotificationModel.query().insert(notificationData)
 }
 
+export {
+  go
+}
 export default {
   go
 }

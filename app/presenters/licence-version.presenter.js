@@ -22,6 +22,9 @@ function linkToLicenceVersion(licenceVersion) {
   }
 }
 
+export {
+  linkToLicenceVersion
+}
 export default {
   linkToLicenceVersion
 }

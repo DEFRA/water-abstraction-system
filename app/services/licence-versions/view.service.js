@@ -27,6 +27,9 @@ async function go(licenceVersionId, auth) {
   }
 }
 
+export {
+  go
+}
 export default {
   go
 }

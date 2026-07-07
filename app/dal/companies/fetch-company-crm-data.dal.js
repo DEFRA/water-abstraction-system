@@ -261,6 +261,9 @@ function _query(paginationAndOrderBy = '') {
   ;`
 }
 
+export {
+  go
+}
 export default {
   go
 }
