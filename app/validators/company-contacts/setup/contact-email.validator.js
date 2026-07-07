@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the '/company-contacts/setup/{sessionId}/contact-email' page
  *
  * @module ContactEmailValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the '/company-contacts/setup/{sessionId}/contact-email' page
@@ -28,6 +26,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

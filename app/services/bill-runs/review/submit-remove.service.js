@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates removing a review licence from a two-part tariff bill run whilst it is at the review stage
  * @module SubmitRemoveService
  */
 
-const CreateLicenceSupplementaryYearService = require('../../licences/supplementary/create-licence-supplementary-year.service.js')
-const FetchRemoveReviewLicenceModel = require('./fetch-remove-review-licence.service.js')
-const UnassignLicencesToBillRunService = require('../unassign-licences-to-bill-run.service.js')
-const ProcessBillRunPostRemove = require('./process-bill-run-post-remove.service.js')
-const RemoveReviewLicenceService = require('./remove-review-licence.service.js')
-const { flashNotification } = require('../../../lib/general.lib.js')
+import CreateLicenceSupplementaryYearService from '../../licences/supplementary/create-licence-supplementary-year.service.js'
+import FetchRemoveReviewLicenceModel from './fetch-remove-review-licence.service.js'
+import UnassignLicencesToBillRunService from '../unassign-licences-to-bill-run.service.js'
+import ProcessBillRunPostRemove from './process-bill-run-post-remove.service.js'
+import RemoveReviewLicenceService from './remove-review-licence.service.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates removing a review licence from a two-part tariff bill run whilst it is at the review stage
@@ -73,6 +71,6 @@ async function _flagForSupplementaryBilling(reviewLicence) {
   await CreateLicenceSupplementaryYearService.go(licenceId, [billRun.toFinancialYearEnding], true)
 }
 
-module.exports = {
+export default {
   go
 }

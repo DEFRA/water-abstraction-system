@@ -1,6 +1,4 @@
-'use strict'
-
-const LicenceMonitoringStationController = require('../controllers/licence-monitoring-station.controller.js')
+import LicenceMonitoringStationController from '../controllers/licence-monitoring-station.controller.js'
 
 const routes = [
   {
@@ -29,4 +27,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

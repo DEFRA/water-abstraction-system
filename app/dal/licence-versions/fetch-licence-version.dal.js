@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches data needed for the view `/licence-versions/{id}` page
  * @module FetchLicenceVersionDal
  */
 
-const { raw } = require('objection')
+import { raw } from 'objection'
 
-const LicenceVersionModel = require('../../models/licence-version.model.js')
+import LicenceVersionModel from '../../models/licence-version.model.js'
 
 /**
  * Fetches data needed for the view `/licence-versions/{id}` page
@@ -122,6 +120,6 @@ async function _fetch(licenceVersionId) {
     })
 }
 
-module.exports = {
+export default {
   go
 }

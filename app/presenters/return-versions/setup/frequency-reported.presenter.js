@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/frequency-reported` page
  * @module FrequencyReportedPresenter
@@ -38,6 +36,6 @@ function _backLinkHref(session, requirementIndex) {
   return `/system/return-versions/setup/${id}/frequency-collected/${requirementIndex}`
 }
 
-module.exports = {
+export default {
   go
 }

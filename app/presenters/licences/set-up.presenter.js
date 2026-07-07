@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the `/licences/{id}/set-up` view licence set up page
  * @module SetUpPresenter
  */
 
-const { formatLongDate } = require('../base.presenter.js')
-const { supplementaryBillingNotification } = require('./base-licences.presenter.js')
+import { formatLongDate } from '../base.presenter.js'
+import { supplementaryBillingNotification } from './base-licences.presenter.js'
 
 const ROLES = {
   billing: 'billing',
@@ -276,6 +274,6 @@ function _workflowStartDate(workflow) {
   return formatLongDate(startDate)
 }
 
-module.exports = {
+export default {
   go
 }

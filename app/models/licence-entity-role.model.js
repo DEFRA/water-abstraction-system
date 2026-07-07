@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for licence_entity_roles (crm.entity_roles)
  * @module LicenceEntityRoleModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 /**
  * Represents an instance of a licence entity role record
@@ -56,4 +54,4 @@ class LicenceEntityRoleModel extends BaseModel {
   }
 }
 
-module.exports = LicenceEntityRoleModel
+export default LicenceEntityRoleModel

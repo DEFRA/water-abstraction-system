@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/bill-runs/setup/{sessionId}/region` page
  * @module BillRunsCreateRegionValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/bill-runs/setup/{sessionId}/region` page
@@ -35,6 +33,6 @@ function go(payload, regions) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

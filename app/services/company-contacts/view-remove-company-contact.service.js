@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/{id}/remove' page
  *
  * @module ViewRemoveCompanyContactService
  */
 
-const FetchAbstractionAlertLicencesDal = require('../../dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
-const FetchCompanyContactDal = require('../../dal/company-contacts/fetch-company-contact.dal.js')
-const FetchCompanyService = require('../../dal/companies/fetch-company.dal.js')
-const RemoveCompanyContactPresenter = require('../../presenters/company-contacts/remove-company-contact.presenter.js')
+import FetchAbstractionAlertLicencesDal from '../../dal/company-contacts/fetch-abstraction-alert-licences.dal.js'
+import FetchCompanyContactDal from '../../dal/company-contacts/fetch-company-contact.dal.js'
+import FetchCompanyService from '../../dal/companies/fetch-company.dal.js'
+import RemoveCompanyContactPresenter from '../../presenters/company-contacts/remove-company-contact.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/{id}/remove' page
@@ -32,6 +30,6 @@ async function go(id) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

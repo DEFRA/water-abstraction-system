@@ -1,5 +1,3 @@
-'use strict'
-
 class NoBillingPeriodsError extends Error {
   constructor(year = null) {
     super(
@@ -10,4 +8,4 @@ class NoBillingPeriodsError extends Error {
   }
 }
 
-module.exports = NoBillingPeriodsError
+export default NoBillingPeriodsError

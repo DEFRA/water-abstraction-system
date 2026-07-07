@@ -1,20 +1,18 @@
-'use strict'
-
 /**
  * Service to handle the submission of the check page in the return logs setup flow
  * @module SubmitCheckService
  */
 
-const CheckPresenter = require('../../../presenters/return-logs/setup/check.presenter.js')
-const CheckValidator = require('../../../validators/return-logs/setup/check.validator.js')
-const CreateReturnLinesService = require('./create-return-lines.service.js')
-const CreateReturnSubmissionService = require('./create-return-submission.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GenerateReturnSubmissionMetadata = require('./generate-return-submission-metadata.service.js')
-const ReturnLogModel = require('../../../models/return-log.model.js')
-const SessionModel = require('../../../models/session.model.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
+import CheckPresenter from '../../../presenters/return-logs/setup/check.presenter.js'
+import CheckValidator from '../../../validators/return-logs/setup/check.validator.js'
+import CreateReturnLinesService from './create-return-lines.service.js'
+import CreateReturnSubmissionService from './create-return-submission.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import GenerateReturnSubmissionMetadata from './generate-return-submission-metadata.service.js'
+import ReturnLogModel from '../../../models/return-log.model.js'
+import SessionModel from '../../../models/session.model.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Service to handle the submission of the check page in the return logs setup flow.
@@ -83,6 +81,6 @@ function _validate(session) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

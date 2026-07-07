@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/method` page
  * @module MethodPresenter
@@ -29,6 +27,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

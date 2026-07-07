@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/contact-name` page
  *
  * @module ViewContactNameService
  */
 
-const ContactNamePresenter = require('../../../presenters/billing-accounts/setup/contact-name.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import ContactNamePresenter from '../../../presenters/billing-accounts/setup/contact-name.presenter.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/contact-name` page
@@ -26,6 +24,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

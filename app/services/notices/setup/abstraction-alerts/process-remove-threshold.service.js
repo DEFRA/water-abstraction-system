@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates removing the licence monitoring station from the thresholds list for - `/notices/setup/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}` page
  *
  * @module ProcessRemoveThresholdService
  */
 
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../../lib/general.lib.js')
-const { formatRestrictionType, formatValueUnit } = require('../../../../presenters/base.presenter.js')
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import GeneralLib from '../../../../lib/general.lib.js'
+import { formatRestrictionType, formatValueUnit } from '../../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates removing the licence monitoring station from the thresholds list for - `/notices/setup/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}` page
@@ -44,6 +42,6 @@ async function _save(session, licenceMonitoringStationId) {
   return session.$update()
 }
 
-module.exports = {
+export default {
   go
 }

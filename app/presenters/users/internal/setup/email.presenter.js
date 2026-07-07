@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the '/users/internal/setup/{sessionId}/email' page
  * @module EmailPresenter
  */
 
-const { formatEmail } = require('../../../base.presenter.js')
+import { formatEmail } from '../../../base.presenter.js'
 
 /**
  * Formats data for the '/users/internal/setup/{sessionId}/email' page
@@ -37,6 +35,6 @@ function _href(checkPageVisited, sessionId) {
   return '/system/users'
 }
 
-module.exports = {
+export default {
   go
 }

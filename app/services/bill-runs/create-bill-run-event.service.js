@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Creates the event for when a new bill run is initialised
  * @module CreateBillRunEventService
  */
 
-const CreateBillRunEventPresenter = require('../../presenters/bill-runs/create-bill-run-event.presenter.js')
-const EventModel = require('../../models/event.model.js')
-const GeneralLib = require('../../lib/general.lib.js')
+import CreateBillRunEventPresenter from '../../presenters/bill-runs/create-bill-run-event.presenter.js'
+import EventModel from '../../models/event.model.js'
+import GeneralLib from '../../lib/general.lib.js'
 
 /**
  * Create an event for when a new bill run is initialised
@@ -42,6 +40,6 @@ function _metadata(billRun) {
   return CreateBillRunEventPresenter.go(billRun)
 }
 
-module.exports = {
+export default {
   go
 }

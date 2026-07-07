@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-logs/setup/{sessionId}/cancel` page
  * @module CancelService
  */
 
-const CancelPresenter = require('../../../presenters/return-logs/setup/cancel.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import CancelPresenter from '../../../presenters/return-logs/setup/cancel.presenter.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-logs/setup/{sessionId}/cancel` page
@@ -25,6 +23,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

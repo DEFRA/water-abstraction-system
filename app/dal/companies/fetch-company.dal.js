@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the company data needed for the view '/companies/{id}/contacts'
  * @module FetchCompanyDal
  */
 
-const CompanyModel = require('../../models/company.model.js')
+import CompanyModel from '../../models/company.model.js'
 
 /**
  * Fetches the company data needed for the view '/companies/{id}/contacts'
@@ -22,6 +20,6 @@ async function _fetch(companyId) {
   return CompanyModel.query().findById(companyId).select(['id', 'name'])
 }
 
-module.exports = {
+export default {
   go
 }

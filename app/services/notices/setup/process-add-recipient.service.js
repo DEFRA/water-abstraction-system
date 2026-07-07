@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Add an 'additional recipient' to the notice setup session from address data captured by our shared address journey
  * @module ProcessAddRecipientService
  */
 
-const crypto = require('node:crypto')
+import crypto from 'node:crypto'
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { flashNotification } = require('../../../lib/general.lib.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Add an 'additional recipient' to the notice setup session from address data captured by our shared address journey
@@ -101,6 +99,6 @@ async function _resetSession(session) {
   await session.$update()
 }
 
-module.exports = {
+export default {
   go
 }

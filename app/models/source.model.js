@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for sources (water.sources)
  * @module SourceModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class SourceModel extends BaseModel {
   static get tableName() {
@@ -28,4 +26,4 @@ class SourceModel extends BaseModel {
   }
 }
 
-module.exports = SourceModel
+export default SourceModel

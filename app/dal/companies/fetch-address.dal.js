@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the address data needed for the view '/companies/{id}/address/{addressId}/{role}'
  * @module FetchAddressDal
  */
 
-const AddressModel = require('../../models/address.model.js')
+import AddressModel from '../../models/address.model.js'
 
 /**
  * Fetches the address data needed for the view '/companies/{id}/address/{addressId}/{role}'
@@ -20,6 +18,6 @@ async function go(addressId) {
     .select(['id', 'address1', 'address2', 'address3', 'address4', 'address5', 'address6', 'country', 'postcode'])
 }
 
-module.exports = {
+export default {
   go
 }

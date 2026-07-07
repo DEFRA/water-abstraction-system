@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/billing-accounts/setup/{sessionId}/existing-address` page
  * @module ExistingAddressPresenter
  */
 
-const { checkUrl } = require('../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
 
 /**
  * Formats data for the `/billing-accounts/setup/{sessionId}/existing-address` page
@@ -94,6 +92,6 @@ function _radioOptions(addressSelected, companyAddresses) {
   return items
 }
 
-module.exports = {
+export default {
   go
 }

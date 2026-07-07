@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Determines if an existing bill run will block a user from creating a new supplementary bill run
  * @module DetermineBlockingSupplementaryService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')
-const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import { determineCurrentFinancialYear } from '../../../lib/general.lib.js'
+import { engineTriggers } from '../../../lib/static-lookups.lib.js'
 
 const LAST_PRESROC_YEAR = 2022
 
@@ -163,6 +161,6 @@ function _trigger(matches, toFinancialYearEnding) {
   return engineTriggers.old
 }
 
-module.exports = {
+export default {
   go
 }

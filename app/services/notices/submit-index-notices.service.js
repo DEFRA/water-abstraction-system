@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
  * @module SubmitIndexNoticesService
  */
 
-const FetchNoticesService = require('./fetch-notices.service.js')
-const IndexValidator = require('../../validators/notices/index.validator.js')
-const NoticesIndexPresenter = require('../../presenters/notices/index-notices.presenter.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
-const { clearFilters, handleOneOptionSelected } = require('../../lib/submit-page.lib.js')
+import FetchNoticesService from './fetch-notices.service.js'
+import IndexValidator from '../../validators/notices/index.validator.js'
+import NoticesIndexPresenter from '../../presenters/notices/index-notices.presenter.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { formatValidationResult } from '../../presenters/base.presenter.js'
+import { clearFilters, handleOneOptionSelected } from '../../lib/submit-page.lib.js'
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
@@ -104,6 +102,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

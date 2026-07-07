@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Manages changing the address for a billing account
  * @module ChangeAddressService
  */
 
-const AddressModel = require('../../models/address.model.js')
-const BillingAccountAddressModel = require('../../models/billing-account-address.model.js')
-const BillingAccountModel = require('../../models/billing-account.model.js')
-const CompanyModel = require('../../models/company.model.js')
-const ContactModel = require('../../models/contact.model.js')
-const SendCustomerChangeService = require('./send-customer-change.service.js')
+import AddressModel from '../../models/address.model.js'
+import BillingAccountAddressModel from '../../models/billing-account-address.model.js'
+import BillingAccountModel from '../../models/billing-account.model.js'
+import CompanyModel from '../../models/company.model.js'
+import ContactModel from '../../models/contact.model.js'
+import SendCustomerChangeService from './send-customer-change.service.js'
 
 /**
  * Manages the changing of an address for a billing (invoice) account
@@ -368,6 +366,6 @@ function _transformContact(timestamp, contact) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

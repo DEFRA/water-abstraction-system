@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/licence-number` page
  *
  * @module SubmitLicenceNumberService
  */
 
-const FetchLicenceDal = require('../../../dal/licence-monitoring-station/fetch-licence.dal.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const LicenceNumberPresenter = require('../../../presenters/licence-monitoring-station/setup/licence-number.presenter.js')
-const LicenceNumberValidator = require('../../../validators/licence-monitoring-station/setup/licence-number.validator.js')
+import FetchLicenceDal from '../../../dal/licence-monitoring-station/fetch-licence.dal.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import LicenceNumberPresenter from '../../../presenters/licence-monitoring-station/setup/licence-number.presenter.js'
+import LicenceNumberValidator from '../../../validators/licence-monitoring-station/setup/licence-number.validator.js'
 
 /**
  * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/licence-number` page
@@ -75,6 +73,6 @@ async function _validate(payload, licence) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

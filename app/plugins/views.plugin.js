@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Our views plugin which serves views using nunjucks and govuk-frontend.
  *
@@ -10,13 +8,14 @@
  * @module ViewsPlugin
  */
 
-const path = require('node:path')
-const Nunjucks = require('nunjucks')
-const Vision = require('@hapi/vision')
+import path from 'node:path'
+import Nunjucks from 'nunjucks'
+import Vision from '@hapi/vision'
 
-const { markdown } = require('../views/filters/markdown.filter.js')
+import { enableBillingAccountChangeAddress } from '../../config/feature-flags.config.js'
+import { markdown } from '../views/filters/markdown.filter.js'
 
-const ServerConfig = require('../../config/server.config.js')
+import ServerConfig from '../../config/server.config.js'
 
 // This relates to our custom Nunjucks filter `app/views/filters/markdown.filter.js`. It uses the package **marked** to
 // convert the markdown returned by Notify and saved in our notifications to HTML, which we then display in some pages.
@@ -35,8 +34,6 @@ const ServerConfig = require('../../config/server.config.js')
 import('marked').then((mod) => {
   globalThis.GlobalMarked = mod.marked
 })
-
-const { enableBillingAccountChangeAddress } = require('../../config/feature-flags.config.js')
 
 const ViewsPlugin = {
   plugin: Vision,
@@ -199,4 +196,4 @@ function _navigationLinks(auth) {
   return links
 }
 
-module.exports = ViewsPlugin
+export default ViewsPlugin

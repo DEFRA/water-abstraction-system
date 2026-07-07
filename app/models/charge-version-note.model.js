@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for charge_version_notes (water.notes)
  * @module ChargeVersionNote
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class ChargeVersionNote extends BaseModel {
   static get tableName() {
@@ -36,4 +34,4 @@ class ChargeVersionNote extends BaseModel {
   }
 }
 
-module.exports = ChargeVersionNote
+export default ChargeVersionNote

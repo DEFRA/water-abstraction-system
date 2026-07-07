@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/confirmed` page
  * @module ConfirmedService
  */
 
-const ConfirmedPresenter = require('../../../presenters/return-logs/setup/confirmed.presenter.js')
-const FetchReturnLogService = require('../../../services/return-logs/setup/fetch-return-log.service.js')
+import ConfirmedPresenter from '../../../presenters/return-logs/setup/confirmed.presenter.js'
+import FetchReturnLogService from '../../../services/return-logs/setup/fetch-return-log.service.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/confirmed` page
@@ -25,6 +23,6 @@ async function go(returnLogId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

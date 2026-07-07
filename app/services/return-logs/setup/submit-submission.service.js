@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Handles the user submission for the `/return-logs/setup/{sessionId}/submission` page
  * @module SubmitSubmissionService
  */
 
-const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const ReturnLogModel = require('../../../models/return-log.model.js')
-const SubmissionPresenter = require('../../../presenters/return-logs/setup/submission.presenter.js')
-const SubmissionValidator = require('../../../validators/return-logs/setup/submission.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
+import DeleteSessionDal from '../../../dal/delete-session.dal.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import ReturnLogModel from '../../../models/return-log.model.js'
+import SubmissionPresenter from '../../../presenters/return-logs/setup/submission.presenter.js'
+import SubmissionValidator from '../../../validators/return-logs/setup/submission.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Handles the user submission for the `/return-logs/setup/{sessionId}/submission` page
@@ -85,6 +83,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

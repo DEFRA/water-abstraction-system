@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating and storing the data for `/users/me/profile-details` page
  * @module SubmitProfileDetailsService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const ProfileDetailsPresenter = require('../../presenters/users/profile-details.presenter.js')
-const ProfileDetailsValidator = require('../../validators/users/profile-details.validator.js')
-const UserModel = require('../../models/user.model.js')
+import ProfileDetailsPresenter from '../../presenters/users/profile-details.presenter.js'
+import ProfileDetailsValidator from '../../validators/users/profile-details.validator.js'
+import UserModel from '../../models/user.model.js'
 
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
+import { formatValidationResult } from '../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating and storing the data for `/users/me/profile-details` page
@@ -71,6 +69,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

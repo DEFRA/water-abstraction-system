@@ -1,5 +1,3 @@
-'use strict'
-
 class BillRunError extends Error {
   constructor(error, code = null) {
     super(error)
@@ -8,4 +6,4 @@ class BillRunError extends Error {
   }
 }
 
-module.exports = BillRunError
+export default BillRunError

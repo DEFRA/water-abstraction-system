@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/billing-accounts/setup/{sessionId}/select-company' page
  *
  * @module ViewSelectCompanyService
  */
 
-const FetchCompaniesService = require('./fetch-companies.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SelectCompanyPresenter = require('../../../presenters/billing-accounts/setup/select-company.presenter.js')
+import FetchCompaniesService from './fetch-companies.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SelectCompanyPresenter from '../../../presenters/billing-accounts/setup/select-company.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/billing-accounts/setup/{sessionId}/select-company' page
@@ -28,6 +26,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

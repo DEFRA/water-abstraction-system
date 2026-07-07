@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Checks a two-part tariff bill run can be generated, then determines which generate engine to use
  * @module GenerateTwoPartTariffBillRunService
  */
 
-const BillRunModel = require('../../models/bill-run.model.js')
-const ExpandedError = require('../../errors/expanded.error.js')
-const { timestampForPostgres } = require('../../lib/general.lib.js')
-const GenerateAnnualBillRun = require('./two-part-tariff/generate-bill-run.service.js')
-const GenerateSupplementaryBillRun = require('./tpt-supplementary/generate-bill-run.service.js')
+import BillRunModel from '../../models/bill-run.model.js'
+import ExpandedError from '../../errors/expanded.error.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
+import GenerateAnnualBillRun from './two-part-tariff/generate-bill-run.service.js'
+import GenerateSupplementaryBillRun from './tpt-supplementary/generate-bill-run.service.js'
 
 /**
  * Checks a two-part tariff bill run can be generated, then determines which generate engine to use
@@ -90,6 +88,6 @@ function _validate(billRun) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

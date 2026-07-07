@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/agreements-exceptions` page
  * @module AgreementsExceptionsValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/agreements-exceptions` page
@@ -48,6 +46,6 @@ const VALID_VALUES = [
   'none'
 ]
 
-module.exports = {
+export default {
   go
 }

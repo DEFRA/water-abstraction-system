@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/contact-type` page
  *
  * @module SubmitContactTypeService
  */
 
-const crypto = require('node:crypto')
+import crypto from 'node:crypto'
 
-const ContactTypePresenter = require('../../../presenters/notices/setup/contact-type.presenter.js')
-const ContactTypeValidator = require('../../../validators/notices/setup/contact-type.validator.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { flashNotification } = require('../../../lib/general.lib.js')
+import ContactTypePresenter from '../../../presenters/notices/setup/contact-type.presenter.js'
+import ContactTypeValidator from '../../../validators/notices/setup/contact-type.validator.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/contact-type` page
@@ -93,6 +91,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

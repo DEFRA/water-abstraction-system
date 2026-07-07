@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Determines if a licence has a two-part tariff (Section 127 )licence agreement in place for the start date selected
  * @module DetermineTwoPartTariffAgreementService
  */
 
-const LicenceAgreementModel = require('../../../../models/licence-agreement.model.js')
+import LicenceAgreementModel from '../../../../models/licence-agreement.model.js'
 
 /**
  * Determines if a licence has a two-part tariff (Section 127 )licence agreement in place for the start date selected
@@ -41,6 +39,6 @@ async function go(licenceRef, startDate) {
   return !!result
 }
 
-module.exports = {
+export default {
   go
 }

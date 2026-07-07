@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Determines the next version number for a new return version
  * @module DetermineNextVersionNumberDal
  */
 
-const ReturnVersionModel = require('../../models/return-version.model.js')
+import ReturnVersionModel from '../../models/return-version.model.js'
 
 /**
  * Determines the next version number for a new return version
@@ -27,6 +25,6 @@ async function go(licenceId) {
   return 1
 }
 
-module.exports = {
+export default {
   go
 }

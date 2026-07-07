@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for `/licence-monitoring-station/setup/{sessionId}/check`
  * @module CheckPresenter
  */
 
-const { formatAbstractionPeriod, formatValueUnit } = require('../../base.presenter.js')
+import { formatAbstractionPeriod, formatValueUnit } from '../../base.presenter.js'
 
 /**
  * Formats data for `/licence-monitoring-station/setup/{sessionId}/check`
@@ -72,6 +70,6 @@ function _type(stopOrReduce, reduceAtThreshold) {
   return 'Reduce with a maximum volume limit'
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/licence-monitoring-station/setup/{sessionId}/abstraction-period`
  *
  * @module AbstractionPeriodService
  */
 
-const AbstractionPeriodPresenter = require('../../../presenters/licence-monitoring-station/setup/abstraction-period.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import AbstractionPeriodPresenter from '../../../presenters/licence-monitoring-station/setup/abstraction-period.presenter.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/licence-monitoring-station/setup/{sessionId}/abstraction-period`
@@ -26,6 +24,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

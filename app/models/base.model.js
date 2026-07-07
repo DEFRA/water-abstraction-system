@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Base class for all Objection-based models
  * @module BaseModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const { db } = require('../../db/db.js')
+import { db } from '../../db/db.js'
 
 // We only have to do this once in the app and then it will be set globally for Objection. As we are not using multiple
 // databases we have no need to pass it into each query we build. And setting it here means all subclasses will inherit
@@ -41,4 +39,4 @@ class BaseModel extends Model {
   }
 }
 
-module.exports = BaseModel
+export default BaseModel

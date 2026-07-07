@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Fetches SROC charge versions linked to licences flagged for inclusion in next SROC supplementary billing
  * @module FetchChargeVersionsService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const ChargeVersionModel = require('../../../models/charge-version.model.js')
-const Workflow = require('../../../models/workflow.model.js')
+import ChargeVersionModel from '../../../models/charge-version.model.js'
+import Workflow from '../../../models/workflow.model.js'
 
 /**
  * Fetch all SROC charge versions to be processed as part of supplementary billing
@@ -133,6 +131,6 @@ function _extractLicenceIdsThenRemoveNonChargeableChargeVersions(allChargeVersio
   return { chargeVersions, licenceIdsForPeriod }
 }
 
-module.exports = {
+export default {
   go
 }

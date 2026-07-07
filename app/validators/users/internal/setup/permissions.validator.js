@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Validates data submitted for the '/users/internal/setup/{sessionId}/permissions' page
  *
  * @module PermissionsValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
-const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
+import { userPermissions } from '../../../../lib/static-lookups.lib.js'
 
 /**
  * Validates data submitted for the '/users/internal/setup/{sessionId}/permissions' page
@@ -32,6 +30,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

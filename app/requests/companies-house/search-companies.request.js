@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Sends a request to Companies House to search for matching companies for the provided string
  * @module SearchCompaniesRequest
  */
 
-const CompaniesHouseRequest = require('../companies-house.request.js')
+import CompaniesHouseRequest from '../companies-house.request.js'
 
 /**
  * Sends a request to Companies House to search for matching companies for the provided string
@@ -25,6 +23,6 @@ async function send(queryString) {
   return CompaniesHouseRequest.get(path, searchParams)
 }
 
-module.exports = {
+export default {
   send
 }

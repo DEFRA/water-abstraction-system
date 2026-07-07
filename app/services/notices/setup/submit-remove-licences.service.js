@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the notice setup remove licences page
  * @module SubmitRemoveLicencesService
  */
 
-const FetchLicenceRefsWithDueReturnsService = require('./fetch-licence-refs-with-due-returns.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const RemoveLicencesPresenter = require('../../../presenters/notices/setup/remove-licences.presenter.js')
-const RemoveLicencesValidator = require('../../../validators/notices/setup/remove-licences.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchLicenceRefsWithDueReturnsService from './fetch-licence-refs-with-due-returns.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import RemoveLicencesPresenter from '../../../presenters/notices/setup/remove-licences.presenter.js'
+import RemoveLicencesValidator from '../../../validators/notices/setup/remove-licences.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the notice setup remove licences page
@@ -62,6 +60,6 @@ function _validate(payload, validLicences) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

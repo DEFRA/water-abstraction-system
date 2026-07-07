@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Create a notice from the notice setup data
  * @module CreateNoticeService
  */
 
-const CreateNoticePresenter = require('../../../presenters/notices/setup/create-notice.presenter.js')
-const EventModel = require('../../../../app/models/event.model.js')
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
+import CreateNoticePresenter from '../../../presenters/notices/setup/create-notice.presenter.js'
+import EventModel from '../../../../app/models/event.model.js'
+import { timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Create a notice from the notice setup data
@@ -28,6 +26,6 @@ async function go(noticeData, recipients, issuer) {
   return EventModel.query().insert({ ...notice, createdAt: timestamp, updatedAt: timestamp })
 }
 
-module.exports = {
+export default {
   go
 }

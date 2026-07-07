@@ -1,8 +1,6 @@
-'use strict'
-
 const tableName = 'entity'
 
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema.withSchema('crm').createTable(tableName, (table) => {
     // Data
     table.string('entity_id').notNullable()
@@ -22,6 +20,6 @@ exports.up = function (knex) {
   })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.withSchema('crm').dropTableIfExists(tableName)
 }

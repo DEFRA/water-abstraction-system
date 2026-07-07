@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/single-volume` page
  * @module SubmitSingleVolumeService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SingleVolumePresenter = require('../../../presenters/return-logs/setup/single-volume.presenter.js')
-const SingleVolumeValidator = require('../../../validators/return-logs/setup/single-volume.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SingleVolumePresenter from '../../../presenters/return-logs/setup/single-volume.presenter.js'
+import SingleVolumeValidator from '../../../validators/return-logs/setup/single-volume.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/single-volume` page
@@ -66,6 +64,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

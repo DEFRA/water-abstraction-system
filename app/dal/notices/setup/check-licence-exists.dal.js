@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Checks whether a licence exists for the given licence reference.
  * @module CheckLicenceExistsDal
  */
 
-const LicenceModel = require('../../../models/licence.model.js')
+import LicenceModel from '../../../models/licence.model.js'
 
 /**
  * Checks whether a licence exists for the given licence reference.
@@ -20,6 +18,6 @@ async function go(licenceRef) {
   return !!licence
 }
 
-module.exports = {
+export default {
   go
 }

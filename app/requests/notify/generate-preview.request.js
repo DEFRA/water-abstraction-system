@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Generate a preview of a notification using GOV.UK Notify
  * @module GeneratePreviewRequest
  */
 
-const NotifyRequest = require('../notify.request.js')
+import NotifyRequest from '../notify.request.js'
 
 /**
  * Generate a preview of a notification using GOV.UK Notify
@@ -41,6 +39,6 @@ async function send(templateId, personalisation) {
   return NotifyRequest.post(path, body)
 }
 
-module.exports = {
+export default {
   send
 }

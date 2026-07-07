@@ -1,27 +1,26 @@
-'use strict'
-
 /**
  * Controller for /licences endpoints
  * @module LicencesController
  */
 
-const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
+import http2 from 'node:http2'
+import InitiateSessionService from '../services/return-versions/setup/initiate-session.service.js'
+import LicenceSupplementaryProcessBillingFlagService from '../services/licences/supplementary/process-billing-flag.service.js'
+import SubmitMarkForSupplementaryBillingService from '../services/licences/supplementary/submit-mark-for-supplementary-billing.service.js'
+import ViewBillsService from '../services/licences/view-bills.service.js'
+import ViewCommunicationsService from '../services/licences/view-communications.service.js'
+import ViewConditionsService from '../services/licences/view-conditions.service.js'
+import ViewContactDetailsService from '../services/licences/view-contact-details.service.js'
+import ViewHistoryService from '../services/licences/view-history.service.js'
+import ViewMarkForSupplementaryBillingService from '../services/licences/supplementary/view-mark-for-supplementary-billing.service.js'
+import ViewMarkedForSupplementaryBillingService from '../services/licences/supplementary/view-marked-for-supplementary-billing.service.js'
+import ViewPointsService from '../services/licences/view-points.service.js'
+import ViewPurposesService from '../services/licences/view-purposes.service.js'
+import ViewReturnsService from '../services/licences/view-returns.service.js'
+import ViewSetUpService from '../services/licences/view-set-up.service.js'
+import ViewSummaryService from '../services/licences/view-summary.service.js'
 
-const InitiateSessionService = require('../services/return-versions/setup/initiate-session.service.js')
-const LicenceSupplementaryProcessBillingFlagService = require('../services/licences/supplementary/process-billing-flag.service.js')
-const SubmitMarkForSupplementaryBillingService = require('../services/licences/supplementary/submit-mark-for-supplementary-billing.service.js')
-const ViewBillsService = require('../services/licences/view-bills.service.js')
-const ViewCommunicationsService = require('../services/licences/view-communications.service.js')
-const ViewConditionsService = require('../services/licences/view-conditions.service.js')
-const ViewContactDetailsService = require('../services/licences/view-contact-details.service.js')
-const ViewHistoryService = require('../services/licences/view-history.service.js')
-const ViewMarkForSupplementaryBillingService = require('../services/licences/supplementary/view-mark-for-supplementary-billing.service.js')
-const ViewMarkedForSupplementaryBillingService = require('../services/licences/supplementary/view-marked-for-supplementary-billing.service.js')
-const ViewPointsService = require('../services/licences/view-points.service.js')
-const ViewPurposesService = require('../services/licences/view-purposes.service.js')
-const ViewReturnsService = require('../services/licences/view-returns.service.js')
-const ViewSetUpService = require('../services/licences/view-set-up.service.js')
-const ViewSummaryService = require('../services/licences/view-summary.service.js')
+const { HTTP_STATUS_NO_CONTENT } = http2.constants
 
 async function markedForSupplementaryBilling(request, h) {
   const { id: licenceId } = request.params
@@ -186,7 +185,7 @@ async function viewSummary(request, h) {
   return h.view('licences/summary.njk', pageData)
 }
 
-module.exports = {
+export default {
   markedForSupplementaryBilling,
   markForSupplementaryBilling,
   noReturnsRequired,

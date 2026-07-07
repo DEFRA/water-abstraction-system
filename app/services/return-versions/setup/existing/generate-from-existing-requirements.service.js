@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Generates returns setup requirements from an existing return version
  * @module GenerateFromExistingRequirementsService
  */
 
-const FetchExistingRequirementsService = require('./fetch-existing-requirements.service.js')
+import FetchExistingRequirementsService from './fetch-existing-requirements.service.js'
 
 /**
  * Generates returns setup requirements from an existing return version
@@ -123,6 +121,6 @@ function _transformForSetup(returnVersion) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

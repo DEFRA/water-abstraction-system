@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the '/users/internal/setup/{sessionId}/access' page
  *
  * @module AccessValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the '/users/internal/setup/{sessionId}/access' page
@@ -27,6 +25,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

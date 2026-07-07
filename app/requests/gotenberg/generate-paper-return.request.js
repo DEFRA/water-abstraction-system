@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Sends multipart/form-data to Gotenberg for generating a PDF document
  * @module GeneratePaperReturnRequest
  */
 
-const nunjucks = require('nunjucks')
-const path = require('node:path')
+import nunjucks from 'nunjucks'
+import path from 'node:path'
 
-const GotenbergRequest = require('../gotenberg.request.js')
+import GotenbergRequest from '../gotenberg.request.js'
 
 /**
  * Sends multipart/form-data to Gotenberg for generating a PDF document
@@ -60,6 +58,6 @@ function _generateHtmlContent(view, data) {
   })
 }
 
-module.exports = {
+export default {
   send
 }

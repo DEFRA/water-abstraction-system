@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Connects with the Charging Module to create a new transaction
  * @module CreateTransactionRequest
  */
 
-const ChargingModuleRequest = require('../charging-module.request.js')
+import ChargingModuleRequest from '../charging-module.request.js'
 
 /**
  * Sends a request to the Charging Module to create a transaction and returns the result.
@@ -24,6 +22,6 @@ async function send(billRunId, transactionData) {
   return ChargingModuleRequest.post(path, transactionData)
 }
 
-module.exports = {
+export default {
   send
 }

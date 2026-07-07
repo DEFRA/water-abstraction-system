@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Determines if an existing bill run matches the one a user is trying to setup
  * @module SubmitCheckService
  */
 
-const AllowedBillRunPresenter = require('../../../presenters/bill-runs/setup/check/allowed-bill-run.presenter.js')
-const BlockedBillRunPresenter = require('../../../../app/presenters/bill-runs/setup/check/blocked-bill-run.presenter.js')
-const CreateService = require('./create.service.js')
-const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
-const DetermineBlockingBillRunService = require('./determine-blocking-bill-run.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const NoAnnualBillRunPresenter = require('../../../presenters/bill-runs/setup/check/no-annual-bill-run.presenter.js')
-const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
+import AllowedBillRunPresenter from '../../../presenters/bill-runs/setup/check/allowed-bill-run.presenter.js'
+import BlockedBillRunPresenter from '../../../../app/presenters/bill-runs/setup/check/blocked-bill-run.presenter.js'
+import CreateService from './create.service.js'
+import DeleteSessionDal from '../../../dal/delete-session.dal.js'
+import DetermineBlockingBillRunService from './determine-blocking-bill-run.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import NoAnnualBillRunPresenter from '../../../presenters/bill-runs/setup/check/no-annual-bill-run.presenter.js'
+import { engineTriggers } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Determines if an existing bill run matches the one a user is trying to setup
@@ -77,6 +75,6 @@ function _formattedData(session, blockingResults) {
   return AllowedBillRunPresenter.go(session, blockingResults)
 }
 
-module.exports = {
+export default {
   go
 }

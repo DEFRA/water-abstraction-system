@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/abstraction-alerts' page
  *
  * @module SubmitAbstractionAlertsService
  */
 
-const AbstractionAlertsPresenter = require('../../../presenters/company-contacts/setup/abstraction-alerts.presenter.js')
-const AbstractionAlertsValidator = require('../../../validators/company-contacts/setup/abstraction-alerts.validator.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { flashNotification } = require('../../../lib/general.lib.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import AbstractionAlertsPresenter from '../../../presenters/company-contacts/setup/abstraction-alerts.presenter.js'
+import AbstractionAlertsValidator from '../../../validators/company-contacts/setup/abstraction-alerts.validator.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/abstraction-alerts' page
@@ -72,6 +70,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

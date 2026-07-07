@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches a licence for the given licence reference with the data for a renewal.
  * @module FetchRenewalLicenceDal
  */
 
-const LicenceModel = require('../../../models/licence.model.js')
+import LicenceModel from '../../../models/licence.model.js'
 
 /**
  * Fetches a licence for the given licence reference with the data for a renewal.
@@ -22,6 +20,6 @@ async function go(licenceRef) {
     .first()
 }
 
-module.exports = {
+export default {
   go
 }

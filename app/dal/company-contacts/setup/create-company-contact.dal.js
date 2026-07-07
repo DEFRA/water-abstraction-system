@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Creates the company contact data for the '/company-contacts/{id}' pages
  * @module CreateCompanyContactDal
  */
 
-const CompanyContactModel = require('../../../models/company-contact.model.js')
-const LicenceRoleModel = require('../../../models/licence-role.model.js')
-const { today } = require('../../../lib/general.lib.js')
+import CompanyContactModel from '../../../models/company-contact.model.js'
+import LicenceRoleModel from '../../../models/licence-role.model.js'
+import { today } from '../../../lib/general.lib.js'
 
 /**
  * Creates the company contact data for the '/company-contacts/{id}' pages
@@ -40,6 +38,6 @@ async function _create(companyId, companyContact) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

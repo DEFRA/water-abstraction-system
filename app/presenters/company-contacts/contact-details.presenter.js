@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the '/company-contacts/{id}/contact-details' page
  * @module ContactDetailsPresenter
  */
 
-const { abstractionAlertsLabel } = require('../crm.presenter.js')
-const { formatEmail, formatLongDate } = require('../base.presenter.js')
+import { abstractionAlertsLabel } from '../crm.presenter.js'
+import { formatEmail, formatLongDate } from '../base.presenter.js'
 
 /**
  * Formats data for the '/company-contacts/{id}/contact-details' page
@@ -91,6 +89,6 @@ function _warning(licences) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

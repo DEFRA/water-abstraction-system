@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats notification data ready for presenting in the view notification page
  * @module ViewNotificationPresenter
  */
 
-const NotificationErrorPresenter = require('./notification-error.presenter.js')
-const { formatLongDate, formatNoticeType, formatRestrictionType, formatValueUnit } = require('../base.presenter.js')
+import NotificationErrorPresenter from './notification-error.presenter.js'
+import { formatLongDate, formatNoticeType, formatRestrictionType, formatValueUnit } from '../base.presenter.js'
 
 /**
  * Formats notification data ready for presenting in the view notification page
@@ -142,6 +140,6 @@ function _sentTo(notification) {
   return personalisation['address_line_1']
 }
 
-module.exports = {
+export default {
   go
 }

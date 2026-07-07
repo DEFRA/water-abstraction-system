@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Connects with the water-abstraction-service to create a bill run
  * @module CreateBillRunRequest
  */
 
-const LegacyRequest = require('../legacy.request.js')
+import LegacyRequest from '../legacy.request.js'
 
 /**
  * Send a request to the legacy water-abstraction-service to create a bill run
@@ -35,6 +33,6 @@ async function send(batchType, regionId, financialYearEnding, user, summer = fal
   return LegacyRequest.post('water', path, userId, true, body)
 }
 
-module.exports = {
+export default {
   send
 }

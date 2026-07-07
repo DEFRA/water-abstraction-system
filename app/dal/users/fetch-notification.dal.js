@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the matching notification needed for the view
  * @module FetchNotificationDal
  */
 
-const NotificationModel = require('../../models/notification.model.js')
+import NotificationModel from '../../models/notification.model.js'
 
 /**
  * Fetches the matching notification needed for the view
@@ -31,6 +29,6 @@ async function go(notificationId) {
     ])
 }
 
-module.exports = {
+export default {
   go
 }

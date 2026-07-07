@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches a licence's abstraction data and generates setup return requirements from it
  * @module GenerateFromAbstractionDataService
  */
 
-const DetermineTwoPartTariffAgreementService = require('./determine-two-part-tariff-agreement.service.js')
-const FetchAbstractionDataService = require('./fetch-abstraction-data.service.js')
-const { compareStrings } = require('../../../../lib/general.lib.js')
+import DetermineTwoPartTariffAgreementService from './determine-two-part-tariff-agreement.service.js'
+import FetchAbstractionDataService from './fetch-abstraction-data.service.js'
+import { compareStrings } from '../../../../lib/general.lib.js'
 
 const SUMMER_RETURN_CYCLE = 'summer'
 const WINTER_RETURN_CYCLE = 'winter-and-all-year'
@@ -251,6 +249,6 @@ function _transformForSetup(licence) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

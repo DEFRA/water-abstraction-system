@@ -1,16 +1,15 @@
-'use strict'
-
 /**
  * Use for making http requests to the GOV.UK Notify service https://www.notifications.service.gov.uk/
  * @module NotifyRequest
  */
 
-const { HTTP_STATUS_TOO_MANY_REQUESTS } = require('node:http2').constants
+import http2 from 'node:http2'
+import BaseRequest from './base.request.js'
+import { pause } from '../lib/general.lib.js'
 
-const BaseRequest = require('./base.request.js')
-const { pause } = require('../lib/general.lib.js')
+import notifyConfig from '../../config/notify.config.js'
 
-const notifyConfig = require('../../config/notify.config.js')
+const { HTTP_STATUS_TOO_MANY_REQUESTS } = http2.constants
 
 /**
  * Sends a GET request to Notify
@@ -111,7 +110,7 @@ function _requestOptions(accessToken, body) {
   }
 }
 
-module.exports = {
+export default {
   get,
   post
 }

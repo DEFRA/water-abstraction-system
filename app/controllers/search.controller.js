@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Controller for /search endpoints
  * @module SearchController
  */
 
-const SubmitSearchService = require('../services/search/submit-search.service.js')
-const ViewSearchService = require('../services/search/view-search.service.js')
+import SubmitSearchService from '../services/search/submit-search.service.js'
+import ViewSearchService from '../services/search/view-search.service.js'
 
 const VIEW_PAGE = 'search/search.njk'
 
@@ -36,7 +34,7 @@ async function viewSearch(request, h) {
   return h.view(VIEW_PAGE, pageData)
 }
 
-module.exports = {
+export default {
   submitSearch,
   viewSearch
 }

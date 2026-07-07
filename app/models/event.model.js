@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for events (water.events)
  * @module EventModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class EventModel extends BaseModel {
   static get tableName() {
@@ -33,4 +31,4 @@ class EventModel extends BaseModel {
   }
 }
 
-module.exports = EventModel
+export default EventModel

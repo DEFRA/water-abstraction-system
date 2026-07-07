@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Handles the user submission for the `/bill-runs/setup/{sessionId}/region` page
  * @module SubmitRegionService
  */
 
-const FetchRegionsService = require('./fetch-regions.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const RegionPresenter = require('../../../presenters/bill-runs/setup/region.presenter.js')
-const RegionValidator = require('../../../validators/bill-runs/setup/region.validator.js')
+import FetchRegionsService from './fetch-regions.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import RegionPresenter from '../../../presenters/bill-runs/setup/region.presenter.js'
+import RegionValidator from '../../../validators/bill-runs/setup/region.validator.js'
 
 /**
  * Handles the user submission for the `/bill-runs/setup/{sessionId}/region` page
@@ -78,6 +76,6 @@ function _validate(payload, regions) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

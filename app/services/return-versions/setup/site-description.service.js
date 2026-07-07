@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/site-description` page
  * @module SiteDescriptionService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SiteDescriptionPresenter = require('../../../presenters/return-versions/setup/site-description.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SiteDescriptionPresenter from '../../../presenters/return-versions/setup/site-description.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/site-description` page
@@ -29,6 +27,6 @@ async function go(sessionId, requirementIndex) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

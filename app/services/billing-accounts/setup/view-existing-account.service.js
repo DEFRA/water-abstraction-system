@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/existing-account` page
  *
  * @module ExistingAccountService
  */
 
-const ExistingAccountPresenter = require('../../../presenters/billing-accounts/setup/existing-account.presenter.js')
-const FetchExistingCompaniesService = require('./fetch-existing-companies.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import ExistingAccountPresenter from '../../../presenters/billing-accounts/setup/existing-account.presenter.js'
+import FetchExistingCompaniesService from './fetch-existing-companies.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/existing-account` page
@@ -28,6 +26,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

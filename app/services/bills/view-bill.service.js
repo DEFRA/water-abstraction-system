@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for one of the view bill templates
  * @module ViewBillService
  */
 
-const BillingAccountModel = require('../../models/billing-account.model.js')
-const FetchBillLicence = require('../bill-licences/fetch-bill-licence.service.js')
-const FetchBillService = require('./fetch-bill-service.js')
-const ViewBillPresenter = require('../../presenters/bills/view-bill.presenter.js')
-const ViewBillLicencePresenter = require('../../presenters/bill-licences/view-bill-licence.presenter.js')
-const ViewLicenceSummariesPresenter = require('../../presenters/bills/view-licence-summaries.presenter.js')
+import BillingAccountModel from '../../models/billing-account.model.js'
+import FetchBillLicence from '../bill-licences/fetch-bill-licence.service.js'
+import FetchBillService from './fetch-bill-service.js'
+import ViewBillPresenter from '../../presenters/bills/view-bill.presenter.js'
+import ViewBillLicencePresenter from '../../presenters/bill-licences/view-bill-licence.presenter.js'
+import ViewLicenceSummariesPresenter from '../../presenters/bills/view-licence-summaries.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for one of the view bill templates
@@ -61,6 +59,6 @@ async function _fetchBillingAccount(billingAccountId) {
   return BillingAccountModel.query().findById(billingAccountId).modify('contactDetails')
 }
 
-module.exports = {
+export default {
   go
 }

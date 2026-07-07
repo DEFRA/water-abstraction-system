@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `address/{sessionId}/select` page
  * @module SelectPresenter
@@ -43,6 +41,6 @@ function _addresses(addresses) {
   return displayAddresses
 }
 
-module.exports = {
+export default {
   go
 }

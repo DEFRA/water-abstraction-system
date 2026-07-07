@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-logs/setup/{sessionId}/meter-provided` page
  * @module MeterProvidedService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const MeterProvidedPresenter = require('../../../presenters/return-logs/setup/meter-provided.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import MeterProvidedPresenter from '../../../presenters/return-logs/setup/meter-provided.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-logs/setup/{sessionId}/meter-provided` page
@@ -28,6 +26,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

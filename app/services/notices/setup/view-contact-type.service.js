@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/contact-type` page
  *
  * @module ViewContactTypeService
  */
 
-const ContactTypePresenter = require('../../../presenters/notices/setup/contact-type.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import ContactTypePresenter from '../../../presenters/notices/setup/contact-type.presenter.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/contact-type` page
@@ -27,6 +25,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

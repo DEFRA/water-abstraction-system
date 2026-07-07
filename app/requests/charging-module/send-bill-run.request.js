@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Connects with the Charging Module to send a bill run
  * @module ChargingModuleSendBillRunRequest
  */
 
-const ChargingModuleRequest = require('../charging-module.request.js')
-const ExpandedError = require('../../errors/expanded.error.js')
-const WaitForStatusRequest = require('./wait-for-status.request.js')
+import ChargingModuleRequest from '../charging-module.request.js'
+import ExpandedError from '../../errors/expanded.error.js'
+import WaitForStatusRequest from './wait-for-status.request.js'
 
 /**
  * Approve then send a bill run in the Charging Module API
@@ -84,6 +82,6 @@ async function _waitForSent(billRunId) {
   return result
 }
 
-module.exports = {
+export default {
   send
 }

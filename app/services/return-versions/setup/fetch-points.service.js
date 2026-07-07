@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches a licence version's points needed for `/return-versions/setup/{sessionId}/points` page
  * @module FetchPointsService
  */
 
-const PointModel = require('../../../models/point.model.js')
+import PointModel from '../../../models/point.model.js'
 
 /**
  * Fetches a licence version's points needed for `/return-versions/setup/{sessionId}/points` page
@@ -27,6 +25,6 @@ async function go(licenceVersionId) {
     .where('licenceVersions.id', licenceVersionId)
 }
 
-module.exports = {
+export default {
   go
 }

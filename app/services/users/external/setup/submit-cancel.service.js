@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates cancelling the data for the '/users/external/setup/{sessionId}/cancel' page
  *
  * @module SubmitCancelService
  */
 
-const DeleteSessionDal = require('../../../../dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+import DeleteSessionDal from '../../../../dal/delete-session.dal.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates cancelling the data for the '/users/external/setup/{sessionId}/cancel' page
@@ -28,6 +26,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

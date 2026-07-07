@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/licence` page
  * @module SubmitLicenceService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const LicencePresenter = require('../../../presenters/notices/setup/licence.presenter.js')
-const ProcessRenewalsNoticeLicenceSubmission = require('./renewal-notice/process-licence-submission.service.js')
-const ProcessReturnsNoticeLicenceSubmission = require('./returns-notice/process-licence-submission.service.js')
-const { flashNotification } = require('../../../lib/general.lib.js')
-const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import LicencePresenter from '../../../presenters/notices/setup/licence.presenter.js'
+import ProcessRenewalsNoticeLicenceSubmission from './renewal-notice/process-licence-submission.service.js'
+import ProcessReturnsNoticeLicenceSubmission from './returns-notice/process-licence-submission.service.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { NoticeJourney, NoticeType } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/licence` page
@@ -99,6 +97,6 @@ function _redirect(noticeType, journey, checkPageVisited, licenceChanged) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

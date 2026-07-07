@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Sends customer changes to the Charging Module
  * @module SendCustomerChangeService
  */
 
-const ChargingModuleCreateCustomerChangeRequest = require('../../requests/charging-module/create-customer-change.request.js')
-const CreateCustomerChangePresenter = require('../../presenters/charging-module/create-customer-change.presenter.js')
-const ExpandedError = require('../../errors/expanded.error.js')
+import ChargingModuleCreateCustomerChangeRequest from '../../requests/charging-module/create-customer-change.request.js'
+import CreateCustomerChangePresenter from '../../presenters/charging-module/create-customer-change.presenter.js'
+import ExpandedError from '../../errors/expanded.error.js'
 
 /**
  * Generates the customer change request data from the model instances provided and sends it to the Charging Module
@@ -40,6 +38,6 @@ async function go(billingAccount, address, company, contact) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

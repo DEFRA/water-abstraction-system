@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Fetches the charge version billing data needed to determine the supplementary billing flags
  * @module FetchChargeVersionBillingDataService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const ChargeVersionModel = require('../../../models/charge-version.model.js')
-const { determineFinancialYearEnd } = require('../../../lib/dates.lib.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import ChargeVersionModel from '../../../models/charge-version.model.js'
+import { determineFinancialYearEnd } from '../../../lib/dates.lib.js'
 
 /**
  * Fetches the charge version billing data needed to determine the supplementary billing flags
@@ -64,6 +62,6 @@ async function _fetchSrocBillRuns(changeDateFinancialYearEnd, licenceId) {
     .orderBy('billRuns.toFinancialYearEnding', 'asc')
 }
 
-module.exports = {
+export default {
   go
 }

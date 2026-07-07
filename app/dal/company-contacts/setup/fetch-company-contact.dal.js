@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the company contact data needed for the '/company-contacts/setup/{id}/edit'
  * @module FetchCompanyContactDal
  */
 
-const CompanyContactModel = require('../../../models/company-contact.model.js')
+import CompanyContactModel from '../../../models/company-contact.model.js'
 
 /**
  * Fetches the company contact data needed for the '/company-contacts/setup/{id}/edit'
@@ -44,6 +42,6 @@ async function _fetch(companyContactId) {
     .first()
 }
 
-module.exports = {
+export default {
   go
 }

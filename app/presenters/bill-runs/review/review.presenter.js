@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the `/bill-runs/review/{id}` page
  * @module ReviewBillRunPresenter
  */
 
-const { formatFinancialYear, formatLongDate, titleCase } = require('../../base.presenter.js')
-const { formatBillRunType, formatChargeScheme, generateBillRunTitle } = require('../../billing.presenter.js')
+import { formatFinancialYear, formatLongDate, titleCase } from '../../base.presenter.js'
+import { formatBillRunType, formatChargeScheme, generateBillRunTitle } from '../../billing.presenter.js'
 
 /**
  * Formats data for the `/bill-runs/review/{id}` page
@@ -84,6 +82,6 @@ function _reviewMessage(numberOfLicencesToReview) {
   return `You need to review ${numberOfLicences} with returns data issues. You can then continue and send the bill run.`
 }
 
-module.exports = {
+export default {
   go
 }

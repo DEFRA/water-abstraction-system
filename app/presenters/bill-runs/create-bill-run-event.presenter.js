@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats a `BillRunModel` into the metadata content needed for a bill run's 'event' record
  * @module CreateBillRunEventPresenter
@@ -60,6 +58,6 @@ function go(billRun) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

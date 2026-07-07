@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/notices/setup/remove-licences` page
  * @module RemoveLicencesValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
-const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
+import { transformStringOfLicencesToArray } from '../../../lib/general.lib.js'
 
 /**
  * Validates data submitted for the `/notices/setup/remove-licences` page
@@ -59,6 +57,6 @@ function _removedLicencesWithDueReturnsValidator(value, helpers, licenceRefsWith
   return result
 }
 
-module.exports = {
+export default {
   go
 }

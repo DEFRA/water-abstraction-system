@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Connects with the water-abstraction-service to delete a bill licence
  * @module DeleteBillLicenceRequest
  */
 
-const LegacyRequest = require('../legacy.request.js')
+import LegacyRequest from '../legacy.request.js'
 
 /**
  * Send a request to the legacy water-abstraction-service to delete a bill licence
@@ -31,6 +29,6 @@ async function send(billLicenceId, user) {
   return LegacyRequest.delete('water', path, userId)
 }
 
-module.exports = {
+export default {
   send
 }

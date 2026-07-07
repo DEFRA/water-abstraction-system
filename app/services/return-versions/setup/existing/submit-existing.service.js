@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/existing` page
  * @module SubmitExistingService
  */
 
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
 
-const ExistingPresenter = require('../../../../presenters/return-versions/setup/existing.presenter.js')
-const ExistingValidator = require('../../../../validators/return-versions/setup/existing.validator.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const GenerateFromExistingRequirementsService = require('./generate-from-existing-requirements.service.js')
+import ExistingPresenter from '../../../../presenters/return-versions/setup/existing.presenter.js'
+import ExistingValidator from '../../../../validators/return-versions/setup/existing.validator.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import GenerateFromExistingRequirementsService from './generate-from-existing-requirements.service.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/existing` page
@@ -69,6 +67,6 @@ function _validate(payload, session) {
   return formatValidationResult(validation)
 }
 
-module.exports = {
+export default {
   go
 }

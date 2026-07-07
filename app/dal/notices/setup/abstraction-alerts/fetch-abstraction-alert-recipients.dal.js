@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches the abstraction alert recipients data for the `/notices/setup/check` page
  * @module FetchAbstractionAlertRecipientsDal
  */
 
-const { abstractionAlertRecipientsQuery } = require('./abstraction-alert-recipients-query.dal.js')
-const { db } = require('../../../../../db/db.js')
+import { abstractionAlertRecipientsQuery } from './abstraction-alert-recipients-query.dal.js'
+import { db } from '../../../../../db/db.js'
 
 /**
  * Fetches the abstraction alert recipients data for the `/notices/setup/check` page
@@ -23,6 +21,6 @@ async function go(session) {
   return rows
 }
 
-module.exports = {
+export default {
   go
 }

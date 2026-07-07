@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the licence conditions page
  * @module ViewConditionsService
  */
 
-const ConditionsPresenter = require('../../presenters/licences/conditions.presenter.js')
-const FetchConditionsService = require('./fetch-conditions.service.js')
-const FetchLicenceService = require('./fetch-licence.service.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import ConditionsPresenter from '../../presenters/licences/conditions.presenter.js'
+import FetchConditionsService from './fetch-conditions.service.js'
+import FetchLicenceService from './fetch-licence.service.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence conditions page
@@ -35,6 +33,6 @@ async function go(licenceId, auth) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

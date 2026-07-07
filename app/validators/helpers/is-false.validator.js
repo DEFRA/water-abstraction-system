@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Custom Joi validator that fails when the provided flag is true
  *
@@ -21,6 +19,6 @@ function isFalse(booleanToCheck, errorKey = 'custom.isFalse') {
     return helpers.error(errorKey)
   }
 }
-module.exports = {
+export default {
   isFalse
 }

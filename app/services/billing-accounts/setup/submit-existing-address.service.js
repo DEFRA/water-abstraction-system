@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/existing-address` page
  *
  * @module SubmitExistingAddressService
  */
 
-const ExistingAddressPresenter = require('../../../presenters/billing-accounts/setup/existing-address.presenter.js')
-const ExistingAddressValidator = require('../../../validators/billing-accounts/setup/existing-address.validator.js')
-const FetchCompanyAddressesService = require('./fetch-company-addresses.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import ExistingAddressPresenter from '../../../presenters/billing-accounts/setup/existing-address.presenter.js'
+import ExistingAddressValidator from '../../../validators/billing-accounts/setup/existing-address.validator.js'
+import FetchCompanyAddressesService from './fetch-company-addresses.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/existing-address` page
@@ -86,6 +84,6 @@ function _validate(payload, name) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

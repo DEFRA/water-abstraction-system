@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for return_cycles (returns.return_cycle)
  * @module ReturnCycleModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class ReturnCycleModel extends BaseModel {
   static get tableName() {
@@ -28,4 +26,4 @@ class ReturnCycleModel extends BaseModel {
   }
 }
 
-module.exports = ReturnCycleModel
+export default ReturnCycleModel

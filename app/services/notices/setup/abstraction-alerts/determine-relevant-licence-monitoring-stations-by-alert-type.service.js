@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Determines the relevant licence monitoring stations for a given alert type in the `abstraction-alerts` journey.
  *
@@ -55,6 +53,6 @@ function _stop(licenceMonitoringStations, alertType) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

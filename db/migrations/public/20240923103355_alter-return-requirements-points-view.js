@@ -1,8 +1,6 @@
-'use strict'
-
 const viewName = 'return_requirement_points'
 
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema.dropViewIfExists(viewName).createView(viewName, (view) => {
     view.as(
       knex('return_requirement_points')
@@ -19,7 +17,7 @@ exports.up = function (knex) {
   })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.dropViewIfExists(viewName).createView(viewName, (view) => {
     view.as(
       knex('return_requirement_points')

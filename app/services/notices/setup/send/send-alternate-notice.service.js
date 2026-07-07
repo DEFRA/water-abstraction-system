@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates sending a 'failed' notice to Notify, recording the results, and checking the status when finished
  * @module SendAlternateNoticeService
  */
 
-const NotificationModel = require('../../../../models/notification.model.js')
-const RenewalInvitationAlternateNoticeService = require('./renewal-invitation-alternate-notice.service.js')
-const ReturnsInvitationAlternateNoticeService = require('./returns-invitation-alternate-notice.service.js')
-const SendLetterNotificationService = require('./send-letter-notification.service.js')
+import NotificationModel from '../../../../models/notification.model.js'
+import RenewalInvitationAlternateNoticeService from './renewal-invitation-alternate-notice.service.js'
+import ReturnsInvitationAlternateNoticeService from './returns-invitation-alternate-notice.service.js'
+import SendLetterNotificationService from './send-letter-notification.service.js'
 
-const { timestampForPostgres } = require('../../../../lib/general.lib.js')
-const { NoticeType, NoticeTypes } = require('../../../../lib/static-lookups.lib.js')
+import { timestampForPostgres } from '../../../../lib/general.lib.js'
+import { NoticeType, NoticeTypes } from '../../../../lib/static-lookups.lib.js'
 
 /**
  * Orchestrates sending a 'failed' notice to Notify, recording the results, and checking the status when finished
@@ -64,6 +62,6 @@ async function _updateFailedEmailInvitations(alternateNoticeId, notificationIds)
     .whereNull('alternateNoticeId')
 }
 
-module.exports = {
+export default {
   go
 }

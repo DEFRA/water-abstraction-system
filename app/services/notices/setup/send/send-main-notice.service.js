@@ -1,19 +1,17 @@
-'use strict'
-
 /**
  * Orchestrates sending the first main notice to Notify, recording the results, and checking the status when finished
  * @module SendMainNoticeService
  */
 
-const CheckNotificationStatusService = require('../../../notifications/check-notification-status.service.js')
-const NotificationModel = require('../../../../../app/models/notification.model.js')
-const SendEmailNotificationService = require('./send-email-notification.service.js')
-const SendLetterNotificationService = require('./send-letter-notification.service.js')
-const SendPaperReturnNotificationService = require('./send-paper-return-notification.service.js')
+import CheckNotificationStatusService from '../../../notifications/check-notification-status.service.js'
+import NotificationModel from '../../../../../app/models/notification.model.js'
+import SendEmailNotificationService from './send-email-notification.service.js'
+import SendLetterNotificationService from './send-letter-notification.service.js'
+import SendPaperReturnNotificationService from './send-paper-return-notification.service.js'
 
-const { pause } = require('../../../../lib/general.lib.js')
+import { pause } from '../../../../lib/general.lib.js'
 
-const notifyConfig = require('../../../../../config/notify.config.js')
+import notifyConfig from '../../../../../config/notify.config.js'
 
 /**
  * Orchestrates sending the first main notice to Notify, recording the results, and checking the status when finished
@@ -82,6 +80,6 @@ async function _sendNotifications(notifications, referenceCode) {
   return sentNotifications
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches charge version data needed for the view '/licences/{id}/set-up` page
  * @module FetchChargeVersionsService
  */
 
-const ChargeVersionModel = require('../../models/charge-version.model.js')
+import ChargeVersionModel from '../../models/charge-version.model.js'
 
 /**
  * Fetches charge version data needed for the view '/licences/{id}/set-up` page
@@ -32,6 +30,6 @@ async function _fetch(licenceId) {
     ])
 }
 
-module.exports = {
+export default {
   go
 }

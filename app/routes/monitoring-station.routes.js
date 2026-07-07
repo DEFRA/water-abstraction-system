@@ -1,6 +1,4 @@
-'use strict'
-
-const MonitoringStationsController = require('../controllers/monitoring-stations.controller.js')
+import MonitoringStationsController from '../controllers/monitoring-stations.controller.js'
 
 const routes = [
   {
@@ -19,4 +17,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

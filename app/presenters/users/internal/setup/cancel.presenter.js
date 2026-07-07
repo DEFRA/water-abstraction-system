@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the '/users/internal/setup/{sessionId}/cancel' page
  * @module CancelPresenter
  */
 
-const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
+import { userPermissions } from '../../../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the '/users/internal/setup/{sessionId}/cancel' page
@@ -30,6 +28,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

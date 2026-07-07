@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches licences linked to a user for for the external unlink licence journey
  * @module FetchLicencesDal
  */
 
-const LicenceModel = require('../../../../models/licence.model.js')
+import LicenceModel from '../../../../models/licence.model.js'
 
 /**
  * Fetches licences linked to a user for for the external unlink licence journey
@@ -37,6 +35,6 @@ async function go(licenceEntityId) {
     .modify('licenceHolder')
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Determines if a licence should be flagged for supplementary billing based on a change in charge version
  * @module DetermineChargeVersionFlagsService
  */
 
-const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')
+import { determineCurrentFinancialYear } from '../../../lib/general.lib.js'
 
-const FetchChargeVersionBillingDataService = require('./fetch-charge-version-billing-data.service.js')
+import FetchChargeVersionBillingDataService from './fetch-charge-version-billing-data.service.js'
 
 /**
  * Determines if a licence should be flagged for supplementary billing based on a change in charge version
@@ -116,6 +114,6 @@ function _twoPartTariffSrocIndicators(chargeReferences) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

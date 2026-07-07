@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Formats data for a bill licence including its transactions into what is needed for the bill-licence page
  * @module ViewBillLicencePresenter
  */
 
-const { formatMoney } = require('../base.presenter.js')
-const { displayCreditDebitTotals } = require('../billing.presenter.js')
-const ViewCompensationChargeTransactionPresenter = require('./view-compensation-charge-transaction.presenter.js')
-const ViewMinimumChargeTransactionPresenter = require('./view-minimum-charge-transaction.presenter.js')
-const ViewStandardChargeTransactionPresenter = require('./view-standard-charge-transaction.presenter.js')
+import { formatMoney } from '../base.presenter.js'
+import { displayCreditDebitTotals } from '../billing.presenter.js'
+import ViewCompensationChargeTransactionPresenter from './view-compensation-charge-transaction.presenter.js'
+import ViewMinimumChargeTransactionPresenter from './view-minimum-charge-transaction.presenter.js'
+import ViewStandardChargeTransactionPresenter from './view-standard-charge-transaction.presenter.js'
 
 /**
  * Formats data for a bill licence including its transactions into what is needed for the bill-licence page
@@ -101,6 +99,6 @@ function _transactions(transactions) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

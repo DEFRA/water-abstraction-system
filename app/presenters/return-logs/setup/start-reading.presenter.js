@@ -1,6 +1,4 @@
-'use strict'
-
-const { checkUrl } = require('../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
 
 /**
  * Formats the data ready for presenting in the `/return-logs/setup/{sessionId}/start-reading` page
@@ -41,6 +39,6 @@ function _savedValue(startReading) {
   return startReading ?? null
 }
 
-module.exports = {
+export default {
   go
 }

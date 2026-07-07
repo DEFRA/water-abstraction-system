@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches the contacts data needed for the view '/companies/{id}/contacts'
  * @module FetchCompanyCRMDataDal
  */
 
-const { db } = require('../../../db/db.js')
+import { db } from '../../../db/db.js'
 
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
 
 /**
  * Fetches the contacts data needed for the view '/companies/{id}/contacts'
@@ -263,6 +261,6 @@ function _query(paginationAndOrderBy = '') {
   ;`
 }
 
-module.exports = {
+export default {
   go
 }

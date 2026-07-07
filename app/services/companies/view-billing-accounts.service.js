@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/companies/{id}/billing-accounts' page
  *
  * @module ViewBillingAccountsService
  */
 
-const BillingAccountsPresenter = require('../../presenters/companies/billing-accounts.presenter.js')
-const FetchBillingAccountsDal = require('../../dal/companies/fetch-billing-accounts.dal.js')
-const FetchCompanyDal = require('../../dal/companies/fetch-company.dal.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import BillingAccountsPresenter from '../../presenters/companies/billing-accounts.presenter.js'
+import FetchBillingAccountsDal from '../../dal/companies/fetch-billing-accounts.dal.js'
+import FetchCompanyDal from '../../dal/companies/fetch-company.dal.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/companies/{id}/billing-accounts' page
@@ -44,6 +42,6 @@ async function go(companyId, auth, page) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

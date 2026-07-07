@@ -1,19 +1,17 @@
-'use strict'
-
 /**
  * Creates a new user
  * @module CreateUserDal
  */
 
-const { hashSync } = require('bcryptjs')
+import { hashSync } from 'bcryptjs'
 
-const EventModel = require('../../../models/event.model.js')
-const FetchUserDal = require('../fetch-user.dal.js')
-const GroupModel = require('../../../models/group.model.js')
-const RoleModel = require('../../../models/role.model.js')
-const UserModel = require('../../../models/user.model.js')
-const { generateUUID, timestampForPostgres } = require('../../../lib/general.lib.js')
-const { userPermissions } = require('../../../lib/static-lookups.lib.js')
+import EventModel from '../../../models/event.model.js'
+import FetchUserDal from '../fetch-user.dal.js'
+import GroupModel from '../../../models/group.model.js'
+import RoleModel from '../../../models/role.model.js'
+import UserModel from '../../../models/user.model.js'
+import { generateUUID, timestampForPostgres } from '../../../lib/general.lib.js'
+import { userPermissions } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Creates a new user
@@ -92,6 +90,6 @@ async function _insertUserRoles(roleIds, id, trx) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

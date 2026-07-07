@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates the cancelling of a bill run
  * @module SubmitCancelBillRunService
  */
 
-const CancelBillBunService = require('./cancel-bill-run.service.js')
-const DeleteBillRunService = require('./delete-bill-run.service.js')
-const UnassignBillRunToLicencesService = require('../unassign-bill-run-to-licences.service.js')
+import CancelBillBunService from './cancel-bill-run.service.js'
+import DeleteBillRunService from './delete-bill-run.service.js'
+import UnassignBillRunToLicencesService from '../unassign-bill-run-to-licences.service.js'
 
 /**
  * Orchestrates the cancelling of a bill run
@@ -37,6 +35,6 @@ async function go(billRunId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,17 +1,11 @@
-'use strict'
-
 /**
  * Puts licences into workflow that have a licence version created in last 2 months and no existing workflow record
  * @module ProcessLicenceUpdatesService
  */
 
-const FetchLicenceUpdatesService = require('./fetch-licence-updates.service.js')
-const {
-  calculateAndLogTimeTaken,
-  currentTimeInNanoseconds,
-  timestampForPostgres
-} = require('../../../lib/general.lib.js')
-const Workflow = require('../../../models/workflow.model.js')
+import FetchLicenceUpdatesService from './fetch-licence-updates.service.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } from '../lib/general.lib.js'
+import Workflow from '../../../models/workflow.model.js'
 
 /**
  * Puts licences into workflow that have a licence version created in last 2 months and no existing workflow record
@@ -68,6 +62,6 @@ async function _addWorkflowRecords(licenceVersions) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

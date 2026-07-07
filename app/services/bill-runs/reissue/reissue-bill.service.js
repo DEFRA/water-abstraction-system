@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Handles the reissuing of a single bill
  * @module ReissueBillService
  */
 
-const ChargingModuleReissueBillRequest = require('../../../requests/charging-module/reissue-bill.request.js')
-const ChargingModuleViewBillRequest = require('../../../requests/charging-module/view-bill.request.js')
-const ChargingModuleViewBillRunStatusRequest = require('../../../requests/charging-module/view-bill-run-status.request.js')
-const ExpandedError = require('../../../errors/expanded.error.js')
-const { generateUUID, pause } = require('../../../lib/general.lib.js')
+import ChargingModuleReissueBillRequest from '../../../requests/charging-module/reissue-bill.request.js'
+import ChargingModuleViewBillRequest from '../../../requests/charging-module/view-bill.request.js'
+import ChargingModuleViewBillRunStatusRequest from '../../../requests/charging-module/view-bill-run-status.request.js'
+import ExpandedError from '../../../errors/expanded.error.js'
+import { generateUUID, pause } from '../../../lib/general.lib.js'
 
 /**
  * Handles the reissuing of a single bill
@@ -326,6 +324,6 @@ async function _sendViewBillRequest(billRun, reissueBillId) {
   return result.response.body.invoice
 }
 
-module.exports = {
+export default {
   go
 }

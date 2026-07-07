@@ -1,14 +1,14 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/bill-runs` page
  * @module IndexValidator
  */
 
-const Joi = require('joi').extend(require('@joi/date'))
+import base from 'joi'
+import joiDate from '@joi/date'
 
-const { billRunStatuses, billRunTypes } = require('../../lib/static-lookups.lib.js')
+import { billRunStatuses, billRunTypes } from '../../lib/static-lookups.lib.js'
 
+const Joi = base.extend(joiDate)
 const MAX_BILL_RUN_NUMBER = 999999
 const MIN_YEAR_CREATED = 2014 // Based on the minimum year a bill run has been created in the system
 
@@ -79,6 +79,6 @@ function _validRegionIds(regions) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

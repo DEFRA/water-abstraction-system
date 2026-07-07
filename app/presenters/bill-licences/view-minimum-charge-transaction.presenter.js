@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for minimum charge transaction for the bill-licence page
  * @module ViewMinimumChargeTransactionPresenter
  */
 
-const { formatMoney } = require('../base.presenter.js')
+import { formatMoney } from '../base.presenter.js'
 
 /**
  * Formats data for minimum charge transaction for the bill-licence page
@@ -28,6 +26,6 @@ function go(transaction) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Determines what the charge period is for a charge version in a given billing period
  * @module DetermineChargePeriodService
@@ -100,6 +98,6 @@ function _periodIsIncompatible(chargePeriod, billingPeriod) {
   return startsAfterBillingPeriod || endsBeforeBillingPeriod || startsAfterItEnds
 }
 
-module.exports = {
+export default {
   go
 }

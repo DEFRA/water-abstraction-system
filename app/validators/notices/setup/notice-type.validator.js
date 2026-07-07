@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/notices/setup/{sessionId}/notice-type` page
  *
  * @module NoticeTypeValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const errorMessage = 'Select the notice type'
 
@@ -26,6 +24,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/notices/setup/returns-period` page
  * @module ReturnsPeriodValidator
  */
 
-const Joi = require('joi')
-const { returnPeriodDates } = require('../../../lib/static-lookups.lib.js')
+import Joi from 'joi'
+import { returnPeriodDates } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Validates data submitted for the `/notices/setup/returns-period` page
@@ -36,6 +34,6 @@ function go(payload, noticeType) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

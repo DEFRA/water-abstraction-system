@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches all the table names from a given schema
  * @module FetchTableNamesService
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 /**
  * Retrieves the table names for a specific schema
@@ -44,6 +42,6 @@ function _pluckTableNames(tableData) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Sends transactions to the Charging Module
  * @module SendTransactionsService
  */
 
-const BillRunError = require('../../errors/bill-run.error.js')
-const BillRunModel = require('../../models/bill-run.model.js')
-const ChargingModuleCreateTransactionRequest = require('../../requests/charging-module/create-transaction.request.js')
-const ChargingModuleCreateTransactionPresenter = require('../../presenters/charging-module/create-transaction.presenter.js')
+import BillRunError from '../../errors/bill-run.error.js'
+import BillRunModel from '../../models/bill-run.model.js'
+import ChargingModuleCreateTransactionRequest from '../../requests/charging-module/create-transaction.request.js'
+import ChargingModuleCreateTransactionPresenter from '../../presenters/charging-module/create-transaction.presenter.js'
 
 /**
  * Sends the provided transactions to the Charging Module and returns an array of the sent transactions
@@ -57,6 +55,6 @@ async function _sendTransactionToChargingModule(transaction, billRunExternalId, 
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Process a two-part tariff supplementary bill run for the given billing period
  * @module ProcessBillRunService
  */
 
-const AssignBillRunToLicencesService = require('../assign-bill-run-to-licences.service.js')
-const BillRunModel = require('../../../models/bill-run.model.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
-const GenerateBillRunService = require('../tpt-supplementary/generate-bill-run.service.js')
-const HandleErroredBillRunService = require('../handle-errored-bill-run.service.js')
-const MatchAndAllocateService = require('../match/match-and-allocate.service.js')
+import AssignBillRunToLicencesService from '../assign-bill-run-to-licences.service.js'
+import BillRunModel from '../../../models/bill-run.model.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
+import GenerateBillRunService from '../tpt-supplementary/generate-bill-run.service.js'
+import HandleErroredBillRunService from '../handle-errored-bill-run.service.js'
+import MatchAndAllocateService from '../match/match-and-allocate.service.js'
 
 /**
  * Process a two-part tariff supplementary bill run for the given billing period
@@ -71,6 +69,6 @@ async function _updateStatus(billRunId, status) {
   await BillRunModel.query().findById(billRunId).patch({ status })
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/notices/setup/{sessionId}/abstraction-alerts/alert-type` page
  *
  * @module AlertTypeValidator
  */
 
-const Joi = require('joi')
-const DetermineRelevantLicenceMonitoringStationsByAlertTypeService = require('../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js')
+import Joi from 'joi'
+import DetermineRelevantLicenceMonitoringStationsByAlertTypeService from '../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js'
 
 const errorMessage = 'Select the type of alert you need to send'
 
@@ -96,6 +94,6 @@ function _availableRestrictionType(licenceMonitoringStations, alertType) {
   return Array.from(types)
 }
 
-module.exports = {
+export default {
   go
 }

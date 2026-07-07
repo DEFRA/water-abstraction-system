@@ -1,6 +1,4 @@
-'use strict'
-
-const CheckController = require('../controllers/check.controller.js')
+import CheckController from '../controllers/check.controller.js'
 
 const routes = [
   {
@@ -20,4 +18,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

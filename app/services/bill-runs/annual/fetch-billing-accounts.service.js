@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Fetches all billing accounts to be processed as part of annual billing for a region and billing period
  * @module FetchBillingAccountsService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const BillingAccountModel = require('../../../models/billing-account.model.js')
-const ChargeVersionModel = require('../../../models/charge-version.model.js')
-const Workflow = require('../../../models/workflow.model.js')
+import BillingAccountModel from '../../../models/billing-account.model.js'
+import ChargeVersionModel from '../../../models/charge-version.model.js'
+import Workflow from '../../../models/workflow.model.js'
 
 /**
  * Fetch all billing accounts to be processed as part of annual billing for a region and billing period
@@ -160,6 +158,6 @@ function _whereExistsClause(regionId, billingPeriod) {
   return query
 }
 
-module.exports = {
+export default {
   go
 }

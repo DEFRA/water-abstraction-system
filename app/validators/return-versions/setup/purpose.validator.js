@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/purpose` page
  * @module PurposeValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/purpose` page
@@ -54,6 +52,6 @@ function go(purposes, purposeIds) {
   return schema.validate({ purposes }, { abortEarly: true })
 }
 
-module.exports = {
+export default {
   go
 }

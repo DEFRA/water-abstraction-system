@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for bill_run_charge_version_years (water.billing_batch_charge_version_years)
  * @module BillRunChargeVersionYearModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 /**
  * Represents an instance of a bill run charge version year record
@@ -49,4 +47,4 @@ class BillRunChargeVersionYearModel extends BaseModel {
   }
 }
 
-module.exports = BillRunChargeVersionYearModel
+export default BillRunChargeVersionYearModel

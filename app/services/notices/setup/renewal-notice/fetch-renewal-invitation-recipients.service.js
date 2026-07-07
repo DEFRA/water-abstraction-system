@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches recipient data for an adhoc renewal invitation notice
  * @module FetchRenewalInvitationRecipientsService
  */
 
-const GenerateRenewalInvitationLicenceQueryDal = require('../../../../dal/notices/setup/generate-renewal-invitation-licence-query.dal.js')
-const GenerateRenewalRecipientsQueryService = require('../../../jobs/renewal-invitations/generate-renewal-recipients-query.service.js')
-const { db } = require('../../../../../db/db.js')
+import GenerateRenewalInvitationLicenceQueryDal from '../../../../dal/notices/setup/generate-renewal-invitation-licence-query.dal.js'
+import GenerateRenewalRecipientsQueryService from '../../../jobs/renewal-invitations/generate-renewal-recipients-query.service.js'
+import { db } from '../../../../../db/db.js'
 
 /**
  * Fetches recipient data for an adhoc renewal invitation notice
@@ -32,6 +30,6 @@ async function go(session) {
   return rows
 }
 
-module.exports = {
+export default {
   go
 }

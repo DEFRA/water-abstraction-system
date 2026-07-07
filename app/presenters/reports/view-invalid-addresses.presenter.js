@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats return invalid addresses data ready for presenting in the view invalid addresses page
  * @module ViewInvalidAddressesPresenter
  */
 
-const { formatDateObjectToISO } = require('../../lib/dates.lib.js')
+import { formatDateObjectToISO } from '../../lib/dates.lib.js'
 
 /**
  * Formats return invalid addresses data ready for presenting in the view invalid addresses page
@@ -55,6 +53,6 @@ function _line(addressLine) {
   return addressLine ?? ''
 }
 
-module.exports = {
+export default {
   go
 }

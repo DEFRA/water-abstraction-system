@@ -1,16 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
  * @module SubmitVolumesService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const VolumesPresenter = require('../../../presenters/return-logs/setup/volumes.presenter.js')
-const VolumesValidator = require('../../../validators/return-logs/setup/volumes.validator.js')
-const { convertFromCubicMetres, convertToCubicMetres } = require('../../../lib/general.lib.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import GeneralLib from '../../../lib/general.lib.js'
+import VolumesPresenter from '../../../presenters/return-logs/setup/volumes.presenter.js'
+import VolumesValidator from '../../../validators/return-logs/setup/volumes.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+
+const { convertFromCubicMetres, convertToCubicMetres } = GeneralLib
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
@@ -114,6 +113,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

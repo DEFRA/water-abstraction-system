@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches licence versions that were created in last 2 months that have no matching workflow record
  * @module FetchLicenceUpdatesService
  */
 
-const { db } = require('../../../../db/db.js')
-const { today } = require('../../../lib/general.lib.js')
+import { db } from '../../../../db/db.js'
+import { today } from '../../../lib/general.lib.js'
 
 /**
  * Fetches licence versions that were created in last two months that have no matching workflow record
@@ -68,6 +66,6 @@ function _twoMonthsAgo() {
   return todaysDate
 }
 
-module.exports = {
+export default {
   go
 }

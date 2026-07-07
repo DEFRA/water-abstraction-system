@@ -1,5 +1,3 @@
-'use strict'
-
 const billRunStatuses = Object.freeze({
   processing: 'Building',
   cancel: 'Cancelling',
@@ -741,7 +739,7 @@ const userNotificationTypes = Object.freeze({
   }
 })
 
-module.exports = {
+export default {
   billRunStatuses,
   billRunTypes,
   companyTypes,

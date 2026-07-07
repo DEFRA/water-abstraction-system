@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for previewing a paper return
  *
  * @module ProcessPreviewPaperReturnService
  */
 
-const FetchRecipientsService = require('./fetch-recipients.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const PaperReturnNotificationsPresenter = require('../../../presenters/notices/setup/paper-return-notifications.presenter.js')
-const PreparePaperReturnService = require('./prepare-paper-return.service.js')
+import FetchRecipientsService from './fetch-recipients.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import PaperReturnNotificationsPresenter from '../../../presenters/notices/setup/paper-return-notifications.presenter.js'
+import PreparePaperReturnService from './prepare-paper-return.service.js'
 
 /**
  * Orchestrates fetching and presenting the data for previewing a paper return
@@ -50,6 +48,6 @@ async function _selectedRecipient(session, contactHashId) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

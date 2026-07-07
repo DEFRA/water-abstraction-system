@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates creating a new notice and notifications for renewal invitation emails that failed
  *
  * @module CreateAlternateRenewalNoticeService
  */
 
-const CreateNotificationsService = require('./create-notifications.service.js')
-const EventModel = require('../../../models/event.model.js')
-const FetchAlternateRenewalRecipientsService = require('./renewal-notice/fetch-alternate-renewal-recipients.service.js')
-const { generateNoticeReferenceCode, timestampForPostgres } = require('../../../lib/general.lib.js')
-const { NoticeType, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
+import CreateNotificationsService from './create-notifications.service.js'
+import EventModel from '../../../models/event.model.js'
+import FetchAlternateRenewalRecipientsService from './renewal-notice/fetch-alternate-renewal-recipients.service.js'
+import { generateNoticeReferenceCode, timestampForPostgres } from '../../../lib/general.lib.js'
+import { NoticeType, NoticeTypes } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Orchestrates creating a new notice and notifications for renewal invitation emails that failed
@@ -66,6 +64,6 @@ async function _notifications(notice, recipients, expiryDate, renewalDate) {
   return CreateNotificationsService.go(noticeData, recipients, noticeId)
 }
 
-module.exports = {
+export default {
   go
 }

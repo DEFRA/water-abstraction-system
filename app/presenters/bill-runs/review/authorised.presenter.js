@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats the review charge reference data ready for presenting in the review charge reference authorised page
  * @module AuthorisedPresenter
  */
 
-const { formatFinancialYear } = require('../../base.presenter.js')
-const { calculateTotalBillableReturns, formatChargePeriod } = require('./base-review.presenter.js')
+import { formatFinancialYear } from '../../base.presenter.js'
+import { calculateTotalBillableReturns, formatChargePeriod } from './base-review.presenter.js'
 
 /**
  * Formats the review charge reference data ready for presenting in the review charge reference authorised page
@@ -36,6 +34,6 @@ function go(reviewChargeReference) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

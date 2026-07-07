@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/abstraction-period` page
  * @module AbstractionPeriodService
  */
 
-const AbstractionPeriodPresenter = require('../../../presenters/return-versions/setup/abstraction-period.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import AbstractionPeriodPresenter from '../../../presenters/return-versions/setup/abstraction-period.presenter.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/abstraction-period` page
@@ -29,6 +27,6 @@ async function go(sessionId, requirementIndex) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

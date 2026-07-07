@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Sends a request to the address facade for the provided uprn
  * @module LookupUPRNRequest
  */
 
-const AddressFacadeRequest = require('../address-facade.request.js')
+import AddressFacadeRequest from '../address-facade.request.js'
 
 /**
  * Sends a request to the address facade for the provided uprn
@@ -20,6 +18,6 @@ async function send(uprn) {
   return AddressFacadeRequest.get(path)
 }
 
-module.exports = {
+export default {
   send
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/contact-email' page
  * @module ContactEmailPresenter
  */
 
-const { checkUrl } = require('../../../lib/check-page.lib.js')
-const { formatEmail } = require('../../base.presenter.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
+import { formatEmail } from '../../base.presenter.js'
 
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/contact-email' page
@@ -29,6 +27,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

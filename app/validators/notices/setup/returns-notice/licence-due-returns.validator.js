@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Validates the licence and that it has due returns, for the returns notice types, submitted for the `/notices/setup/{sessionId}/licence` page
  * @module LicenceDueReturnsValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
-const { licenceRefSchema } = require('../../../schemas/licence-ref.schema.js')
+import { licenceRefSchema } from '../../../schemas/licence-ref.schema.js'
 
 /**
  * Validates the licence and that it has due returns, for the returns notice types, submitted for the `/notices/setup/{sessionId}/licence` page
@@ -41,6 +39,6 @@ function _dueReturns(value, helpers, dueReturnsExist) {
   return helpers.error('dueReturns', { licenceRef: value })
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the view return submission page
  * @module ViewReturnSubmissionService
  */
 
-const FetchReturnSubmissionService = require('./fetch-return-submission.service.js')
-const ViewReturnSubmissionPresenter = require('../../presenters/return-submissions/view-return-submission.presenter.js')
+import FetchReturnSubmissionService from './fetch-return-submission.service.js'
+import ViewReturnSubmissionPresenter from '../../presenters/return-submissions/view-return-submission.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the view return submission page
@@ -26,6 +24,6 @@ async function go(returnSubmissionId, yearMonth) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

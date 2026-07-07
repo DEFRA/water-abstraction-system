@@ -1,6 +1,4 @@
-'use strict'
-
-const LicencesEndDatesController = require('../controllers/licences-end-dates.controller.js')
+import LicencesEndDatesController from '../controllers/licences-end-dates.controller.js'
 
 const routes = [
   {
@@ -33,4 +31,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

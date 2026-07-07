@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/paper-return` page
  * @module PaperReturnPresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
+import { formatLongDate } from '../../base.presenter.js'
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/paper-return` page
@@ -51,6 +49,6 @@ function _returns(returns, selectedReturns = []) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

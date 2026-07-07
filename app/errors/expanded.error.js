@@ -1,5 +1,3 @@
-'use strict'
-
 class ExpandedError extends Error {
   // eslint-disable-next-line jsdoc/lines-before-block
   /**
@@ -17,4 +15,4 @@ class ExpandedError extends Error {
   }
 }
 
-module.exports = ExpandedError
+export default ExpandedError

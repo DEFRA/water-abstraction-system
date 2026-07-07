@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Create a new return version
  * @module CreateReturnVersionService
  */
 
-const ReturnRequirementModel = require('../../../../models/return-requirement.model.js')
-const ReturnRequirementPointModel = require('../../../../models/return-requirement-point.model.js')
-const ReturnRequirementPurposeModel = require('../../../../models/return-requirement-purpose.model.js')
-const ReturnVersionModel = require('../../../../models/return-version.model.js')
+import ReturnRequirementModel from '../../../../models/return-requirement.model.js'
+import ReturnRequirementPointModel from '../../../../models/return-requirement-point.model.js'
+import ReturnRequirementPurposeModel from '../../../../models/return-requirement-purpose.model.js'
+import ReturnVersionModel from '../../../../models/return-version.model.js'
 
 /**
  * Create a new return version
@@ -73,6 +71,6 @@ async function _persistReturnRequirementsPurposes(returnRequirementPurposes, ret
   }
 }
 
-module.exports = {
+export default {
   go
 }

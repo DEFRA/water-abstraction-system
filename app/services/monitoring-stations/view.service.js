@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the `/monitoring-stations/{id}` page
  * @module ViewService
  */
 
-const FetchMonitoringStationDetailsDal = require('../../dal/monitoring-stations/fetch-monitoring-station-details.dal.js')
-const ViewPresenter = require('../../presenters/monitoring-stations/view.presenter.js')
-const { readFlashNotification } = require('../../lib/general.lib.js')
+import FetchMonitoringStationDetailsDal from '../../dal/monitoring-stations/fetch-monitoring-station-details.dal.js'
+import ViewPresenter from '../../presenters/monitoring-stations/view.presenter.js'
+import { readFlashNotification } from '../../lib/general.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the `/monitoring-stations/{id}` page
@@ -32,6 +30,6 @@ async function go(auth, monitoringStationId, yar) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

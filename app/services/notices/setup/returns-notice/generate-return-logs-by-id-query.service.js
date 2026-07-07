@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Generates the query and bindings for selecting the return logs by Id that determine which recipients to fetch
  * @module GenerateReturnLogsByIdQueryService
@@ -38,6 +36,6 @@ function _query() {
   `
 }
 
-module.exports = {
+export default {
   go
 }

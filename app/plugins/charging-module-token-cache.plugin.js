@@ -1,6 +1,4 @@
-'use strict'
-
-const ChargingModuleTokenRequest = require('../requests/charging-module/token.request.js')
+import ChargingModuleTokenRequest from '../requests/charging-module/token.request.js'
 
 /**
  * Adds a server method which returns a Cognito token for the Charging Module.
@@ -49,4 +47,4 @@ function _setExpiryTime(expiresIn) {
   return (expiresIn - 60) * 1000
 }
 
-module.exports = ChargingModuleTokenCachePlugin
+export default ChargingModuleTokenCachePlugin

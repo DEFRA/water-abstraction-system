@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Formats data for the `/licence-versions/{id}` page
  * @module ViewPresenter
  */
 
-const NotifyAddressPresenter = require('../notices/setup/notify-address.presenter.js')
-const NotifyConfig = require('../../../config/notify.config.js')
-const PreviousAndNextPresenter = require('../previous-and-next.presenter.js')
-const { formatLongDate, formatVersionReason } = require('../base.presenter.js')
-const { compareStrings } = require('../../lib/general.lib.js')
-const { formatLicencePoints, formatLicencePurposes, formatConditionTypes } = require('../licence.presenter.js')
+import NotifyAddressPresenter from '../notices/setup/notify-address.presenter.js'
+import NotifyConfig from '../../../config/notify.config.js'
+import PreviousAndNextPresenter from '../previous-and-next.presenter.js'
+import { formatLongDate, formatVersionReason } from '../base.presenter.js'
+import { compareStrings } from '../../lib/general.lib.js'
+import { formatLicencePoints, formatLicencePurposes, formatConditionTypes } from '../licence.presenter.js'
 
 /**
  * Formats data for the `/licence-versions/{id}` page
@@ -213,6 +211,6 @@ function _sortPointsByDescription(first, second) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

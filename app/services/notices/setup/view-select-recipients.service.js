@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/notices/setup/{sessionId}/select-recipients' page
  *
  * @module ViewSelectRecipientsService
  */
 
-const FetchRecipientsService = require('./fetch-recipients.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SelectRecipientsPresenter = require('../../../presenters/notices/setup/select-recipients.presenter.js')
+import FetchRecipientsService from './fetch-recipients.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SelectRecipientsPresenter from '../../../presenters/notices/setup/select-recipients.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/notices/setup/{sessionId}/select-recipients' page
@@ -47,6 +45,6 @@ function _selectedRecipients(session) {
   return selectedRecipients
 }
 
-module.exports = {
+export default {
   go
 }

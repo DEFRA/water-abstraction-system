@@ -1,31 +1,29 @@
-'use strict'
-
 /**
  * Controller for /billing-accounts/setup endpoints
  * @module BillingAccountsSetupController
  */
 
-const InitiateSessionService = require('../services/billing-accounts/setup/initiate-session.service.js')
-const SubmitAccountService = require('../services/billing-accounts/setup/submit-account.service.js')
-const SubmitAccountTypeService = require('../services/billing-accounts/setup/submit-account-type.service.js')
-const SubmitCheckService = require('../services/billing-accounts/setup/submit-check.service.js')
-const SubmitCompanySearchService = require('../services/billing-accounts/setup/submit-company-search.service.js')
-const SubmitContactService = require('../services/billing-accounts/setup/submit-contact.service.js')
-const SubmitContactNameService = require('../services/billing-accounts/setup/submit-contact-name.service.js')
-const SubmitExistingAccountService = require('../services/billing-accounts/setup/submit-existing-account.service.js')
-const SubmitExistingAddressService = require('../services/billing-accounts/setup/submit-existing-address.service.js')
-const SubmitFAOService = require('../services/billing-accounts/setup/submit-fao.service.js')
-const SubmitSelectCompanyService = require('../services/billing-accounts/setup/submit-select-company.service.js')
-const ViewAccountService = require('../services/billing-accounts/setup/view-account.service.js')
-const ViewAccountTypeService = require('../services/billing-accounts/setup/view-account-type.service.js')
-const ViewCheckService = require('../services/billing-accounts/setup/view-check.service.js')
-const ViewCompanySearchService = require('../services/billing-accounts/setup/view-company-search.service.js')
-const ViewContactService = require('../services/billing-accounts/setup/view-contact.service.js')
-const ViewContactNameService = require('../services/billing-accounts/setup/view-contact-name.service.js')
-const ViewExistingAddressService = require('../services/billing-accounts/setup/view-existing-address.service.js')
-const ViewExistingAccountService = require('../services/billing-accounts/setup/view-existing-account.service.js')
-const ViewFAOService = require('../services/billing-accounts/setup/view-fao.service.js')
-const ViewSelectCompanyService = require('../services/billing-accounts/setup/view-select-company.service.js')
+import InitiateSessionService from '../services/billing-accounts/setup/initiate-session.service.js'
+import SubmitAccountService from '../services/billing-accounts/setup/submit-account.service.js'
+import SubmitAccountTypeService from '../services/billing-accounts/setup/submit-account-type.service.js'
+import SubmitCheckService from '../services/billing-accounts/setup/submit-check.service.js'
+import SubmitCompanySearchService from '../services/billing-accounts/setup/submit-company-search.service.js'
+import SubmitContactService from '../services/billing-accounts/setup/submit-contact.service.js'
+import SubmitContactNameService from '../services/billing-accounts/setup/submit-contact-name.service.js'
+import SubmitExistingAccountService from '../services/billing-accounts/setup/submit-existing-account.service.js'
+import SubmitExistingAddressService from '../services/billing-accounts/setup/submit-existing-address.service.js'
+import SubmitFAOService from '../services/billing-accounts/setup/submit-fao.service.js'
+import SubmitSelectCompanyService from '../services/billing-accounts/setup/submit-select-company.service.js'
+import ViewAccountService from '../services/billing-accounts/setup/view-account.service.js'
+import ViewAccountTypeService from '../services/billing-accounts/setup/view-account-type.service.js'
+import ViewCheckService from '../services/billing-accounts/setup/view-check.service.js'
+import ViewCompanySearchService from '../services/billing-accounts/setup/view-company-search.service.js'
+import ViewContactService from '../services/billing-accounts/setup/view-contact.service.js'
+import ViewContactNameService from '../services/billing-accounts/setup/view-contact-name.service.js'
+import ViewExistingAddressService from '../services/billing-accounts/setup/view-existing-address.service.js'
+import ViewExistingAccountService from '../services/billing-accounts/setup/view-existing-account.service.js'
+import ViewFAOService from '../services/billing-accounts/setup/view-fao.service.js'
+import ViewSelectCompanyService from '../services/billing-accounts/setup/view-select-company.service.js'
 
 async function setup(request, h) {
   const { billingAccountId } = request.params
@@ -260,7 +258,7 @@ async function viewSelectCompany(request, h) {
   return h.view(`billing-accounts/setup/select-company.njk`, pageData)
 }
 
-module.exports = {
+export default {
   setup,
   submitAccount,
   submitAccountType,

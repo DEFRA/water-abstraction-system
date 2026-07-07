@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Returns dynamic dates used by the service, for example, current financial year and returns periods
  * @module DatesService
  */
 
-const DetermineBillingPeriodsService = require('../../bill-runs/determine-billing-periods.service.js')
-const { determineCurrentFinancialYear, today } = require('../../../lib/general.lib.js')
-const {
+import DetermineBillingPeriodsService from '../../bill-runs/determine-billing-periods.service.js'
+import { determineCurrentFinancialYear, today } from '../../../lib/general.lib.js'
+import {
   determineCycleDueDate,
   determineCycleEndDate,
   determineCycleStartDate
-} = require('../../../lib/return-cycle-dates.lib.js')
-const { determineReturnsPeriods, determineUpcomingReturnPeriods } = require('../../../lib/return-periods.lib.js')
+} from '../../../lib/return-cycle-dates.lib.js'
+import { determineReturnsPeriods, determineUpcomingReturnPeriods } from '../../../lib/return-periods.lib.js'
 
 /**
  * Returns dynamic dates used by the service, for example, current financial year and returns periods
@@ -66,6 +64,6 @@ function go() {
   }
 }
 
-module.exports = {
+export default {
   go
 }

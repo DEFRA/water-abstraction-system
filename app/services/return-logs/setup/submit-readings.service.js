@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/readings/{yearMonth}` page
  * @module SubmitReadingsService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const ReadingsPresenter = require('../../../presenters/return-logs/setup/readings.presenter.js')
-const ReadingsValidator = require('../../../validators/return-logs/setup/readings.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import GeneralLib from '../../../lib/general.lib.js'
+import ReadingsPresenter from '../../../presenters/return-logs/setup/readings.presenter.js'
+import ReadingsValidator from '../../../validators/return-logs/setup/readings.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/readings/{yearMonth}` page
@@ -110,6 +108,6 @@ function _validate(payload, requestedYear, requestedMonth, session) {
   return formatValidationResult(validation)
 }
 
-module.exports = {
+export default {
   go
 }

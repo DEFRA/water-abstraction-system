@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Creates a compressed tarball (.tgz) from a given schema folder
  * @module CompressSchemaFolderService
  */
 
-const tar = require('tar')
+import tar from 'tar'
 
 /**
  * Create a compressed tarball (.tgz) from a given schema folder
@@ -28,6 +26,6 @@ async function go(schemaFolderPath) {
   return file
 }
 
-module.exports = {
+export default {
   go
 }

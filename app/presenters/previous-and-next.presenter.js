@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Returns the previous and next neighbours in an already-sorted array of objects, based on the `id` of the provided
  * anchor object.
@@ -51,6 +49,6 @@ function _indexOfAnchorId(arrayOfElements, anchorElement) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

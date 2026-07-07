@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/reason` page
  * @module SubmitReasonService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const ReasonPresenter = require('../../../presenters/return-versions/setup/reason.presenter.js')
-const ReasonValidator = require('../../../validators/return-versions/setup/reason.validator.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import GeneralLib from '../../../lib/general.lib.js'
+import ReasonPresenter from '../../../presenters/return-versions/setup/reason.presenter.js'
+import ReasonValidator from '../../../validators/return-versions/setup/reason.validator.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/reason` page
@@ -65,6 +63,6 @@ function _validate(payload) {
   return formatValidationResult(validation)
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/check` page
  * @module CheckService
  */
 
-const CheckPresenter = require('../../../../presenters/return-versions/setup/check/check.presenter.js')
-const FetchPointsService = require('../fetch-points.service.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const ReturnRequirementsPresenter = require('../../../../presenters/return-versions/setup/check/returns-requirements.presenter.js')
-const { readFlashNotification } = require('../../../../lib/general.lib.js')
+import CheckPresenter from '../../../../presenters/return-versions/setup/check/check.presenter.js'
+import FetchPointsService from '../fetch-points.service.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import ReturnRequirementsPresenter from '../../../../presenters/return-versions/setup/check/returns-requirements.presenter.js'
+import { readFlashNotification } from '../../../../lib/general.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/check` page
@@ -51,6 +49,6 @@ async function _returnRequirements(session) {
   return ReturnRequirementsPresenter.go(requirements, points, journey)
 }
 
-module.exports = {
+export default {
   go
 }

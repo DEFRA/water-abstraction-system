@@ -1,14 +1,14 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/notices` page
  * @module IndexValidator
  */
 
-const Joi = require('joi').extend(require('@joi/date'))
+import base from 'joi'
+import joiDate from '@joi/date'
 
-const { leftPadZeroes } = require('../../presenters/base.presenter.js')
+import { leftPadZeroes } from '../../presenters/base.presenter.js'
 
+const Joi = base.extend(joiDate)
 const NOTICE_TYPES = [
   'legacyNotifications',
   'paperReturnForms',
@@ -128,6 +128,6 @@ function _validate(payload) {
   return schema.validate(payload, { abortEarly: false, allowUnknown: true })
 }
 
-module.exports = {
+export default {
   go
 }

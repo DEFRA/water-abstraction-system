@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `licences/{licenceId}/mark-for-supplementary-billing` page
  * @module SupplementaryYearValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const ERROR_MESSAGE = 'Select at least one financial year'
 
@@ -35,6 +33,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: true })
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `address/{sessionId}/manual` page
  *
  * @module SubmitManualService
  */
 
-const FetchSessionDal = require('../../dal/fetch-session.dal.js')
-const ManualAddressPresenter = require('../../presenters/address/manual.presenter.js')
-const ManualAddressValidator = require('../../validators/address/manual.validator.js')
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
+import FetchSessionDal from '../../dal/fetch-session.dal.js'
+import ManualAddressPresenter from '../../presenters/address/manual.presenter.js'
+import ManualAddressValidator from '../../validators/address/manual.validator.js'
+import { formatValidationResult } from '../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `address/{sessionId}/manual` page
@@ -71,6 +69,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

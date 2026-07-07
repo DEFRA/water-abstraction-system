@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Calculates the charge for a charge reference for preview by a user on the review charge reference page
  * @module PreviewService
  */
 
-const { formatChargingModuleDate, formatMoney } = require('../../../presenters/base.presenter.js')
-const CalculateChargeRequest = require('../../../requests/charging-module/calculate-charge.request.js')
-const FetchReviewChargeReferenceService = require('./fetch-review-charge-reference.service.js')
+import { formatChargingModuleDate, formatMoney } from '../../../presenters/base.presenter.js'
+import CalculateChargeRequest from '../../../requests/charging-module/calculate-charge.request.js'
+import FetchReviewChargeReferenceService from './fetch-review-charge-reference.service.js'
 
 /**
  * Calculates the charge for a charge reference for preview by a user on the review charge reference page
@@ -101,6 +99,6 @@ function _transaction(reviewChargeReference) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

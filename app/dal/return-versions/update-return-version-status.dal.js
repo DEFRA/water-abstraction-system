@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Updates the status of a return version
  * @module UpdateReturnVersionStatusDal
  */
 
-const ReturnVersionModel = require('../../models/return-version.model.js')
+import ReturnVersionModel from '../../models/return-version.model.js'
 
 /**
  * Updates the status of a return version
@@ -18,6 +16,6 @@ async function go(returnVersionId, status, trx) {
   await ReturnVersionModel.query(trx).findById(returnVersionId).patch({ status })
 }
 
-module.exports = {
+export default {
   go
 }

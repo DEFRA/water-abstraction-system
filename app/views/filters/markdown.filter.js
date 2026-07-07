@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Converts Notify's custom flavour of markdown into valid HTML. Notify's flavour of markdown uses a caret (`^`)
  * character to represent blockquotes. This function replaces any carets (`^`) with the standard blockquote marker (`>`)
@@ -37,6 +35,6 @@ function markdown(input = '') {
   return globalThis.GlobalMarked.parse(replacedCaret)
 }
 
-module.exports = {
+export default {
   markdown
 }

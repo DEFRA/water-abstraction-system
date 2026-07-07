@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the view billing account page
  * @module ViewBillingAccountService
  */
 
-const FetchViewBillingAccountService = require('../billing-accounts/fetch-view-billing-account.service.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const ViewBillingAccountPresenter = require('../../presenters/billing-accounts/view-billing-account.presenter.js')
+import FetchViewBillingAccountService from '../billing-accounts/fetch-view-billing-account.service.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import ViewBillingAccountPresenter from '../../presenters/billing-accounts/view-billing-account.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the view billing account page
@@ -59,6 +57,6 @@ function _queryArgs(chargeVersionId, licenceId) {
   return queryArgs
 }
 
-module.exports = {
+export default {
   go
 }

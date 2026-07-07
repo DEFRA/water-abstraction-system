@@ -1,6 +1,4 @@
-'use strict'
-
-const NoticesController = require('../controllers/notices.controller.js')
+import NoticesController from '../controllers/notices.controller.js'
 
 const routes = [
   {
@@ -53,4 +51,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

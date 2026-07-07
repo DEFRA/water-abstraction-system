@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the licenceVersionPurposes data needed for the purposes page
  * @module FetchPurposesService
  */
 
-const LicenceModel = require('../../models/licence.model.js')
+import LicenceModel from '../../models/licence.model.js'
 
 /**
  * Fetches the licenceVersionPurposes data needed for the purposes page
@@ -59,6 +57,6 @@ async function _fetch(licenceId) {
     })
 }
 
-module.exports = {
+export default {
   go
 }

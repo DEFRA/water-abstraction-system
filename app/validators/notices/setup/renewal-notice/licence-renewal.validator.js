@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Validates the licence ref submitted for the `/notices/setup/{sessionId}/licence` page for renewal notice types
  * @module LicenceRenewalValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
-const { renewalNoticeDate } = require('../../../../lib/dates.lib.js')
-const { licenceRefSchema } = require('../../../schemas/licence-ref.schema.js')
-const { today } = require('../../../../lib/general.lib.js')
+import { renewalNoticeDate } from '../../../../lib/dates.lib.js'
+import { licenceRefSchema } from '../../../schemas/licence-ref.schema.js'
+import { today } from '../../../../lib/general.lib.js'
 
 /**
  * Validates the licence ref submitted for the `/notices/setup/{sessionId}/licence` page for renewal notice types
@@ -85,6 +83,6 @@ function _licenceExpiryDateInRange(value, helpers, licenceRenewal) {
   return helpers.error('expiry-date-too-soon', { licenceRef: value })
 }
 
-module.exports = {
+export default {
   go
 }

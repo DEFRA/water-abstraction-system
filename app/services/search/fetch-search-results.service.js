@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Handles fetching a list of matching search results for the /search page
  * @module FetchSearchResultsService
  */
 
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
 
-const { db } = require('../../../db/db.js')
+import { db } from '../../../db/db.js'
 
 const BILLING_ACCOUNT_SQL = `
   SELECT
@@ -252,6 +250,6 @@ function _userSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery) 
   }
 }
 
-module.exports = {
+export default {
   go
 }

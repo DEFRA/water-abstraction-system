@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Controller for /bill-licences endpoints
  * @module BillLicencesController
  */
 
-const Boom = require('@hapi/boom')
+import Boom from '@hapi/boom'
 
-const RemoveBillLicenceService = require('../services/bill-licences/remove-bill-licence.service.js')
-const SubmitRemoveBillLicenceService = require('../services/bill-licences/submit-remove-bill-licence.service.js')
-const ViewBillLicenceService = require('../services/bill-licences/view-bill-licence.service.js')
+import RemoveBillLicenceService from '../services/bill-licences/remove-bill-licence.service.js'
+import SubmitRemoveBillLicenceService from '../services/bill-licences/submit-remove-bill-licence.service.js'
+import ViewBillLicenceService from '../services/bill-licences/view-bill-licence.service.js'
 
 async function remove(request, h) {
   const { id } = request.params
@@ -41,7 +39,7 @@ async function view(request, h) {
   return h.view(`bill-licences/${template}`, pageData)
 }
 
-module.exports = {
+export default {
   remove,
   submitRemove,
   view

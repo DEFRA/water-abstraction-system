@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches verifications for an external user on the `/users/external/{id}/verifications` page
  * @module FetchVerificationsDal
  */
 
-const UserVerificationModel = require('../../../models/user-verification.model.js')
+import UserVerificationModel from '../../../models/user-verification.model.js'
 
-const DatabaseConfig = require('../../../../config/database.config.js')
+import DatabaseConfig from '../../../../config/database.config.js'
 
 /**
  * Fetches verifications for an external user on the `/users/external/{id}/verifications` page
@@ -46,6 +44,6 @@ async function _fetch(licenceEntityId, page) {
     })
 }
 
-module.exports = {
+export default {
   go
 }

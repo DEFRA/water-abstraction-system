@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/check-notice-type` page
  *
  * @module ViewCheckNoticeTypeService
  */
 
-const CheckNoticeTypePresenter = require('../../../presenters/notices/setup/check-notice-type.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { readFlashNotification } = require('../../../lib/general.lib.js')
+import CheckNoticeTypePresenter from '../../../presenters/notices/setup/check-notice-type.presenter.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import { readFlashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/check-notice-type` page
@@ -40,6 +38,6 @@ async function _markCheckPageVisited(session) {
   return session.$update()
 }
 
-module.exports = {
+export default {
   go
 }

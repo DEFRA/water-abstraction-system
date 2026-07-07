@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches any companies that meet the search criteria from Companies House
  * @module FetchCompaniesService
  */
 
-const SearchCompaniesRequest = require('../../../requests/companies-house/search-companies.request.js')
+import SearchCompaniesRequest from '../../../requests/companies-house/search-companies.request.js'
 
 /**
  * Fetches any companies that meet the search criteria from Companies House
@@ -32,6 +30,6 @@ async function go(companySearch) {
   return companies
 }
 
-module.exports = {
+export default {
   go
 }

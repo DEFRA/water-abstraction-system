@@ -1,22 +1,20 @@
-'use strict'
-
 /**
  * Checks status and gathers info for each of the services which make up WRLS
  * @module InfoService
  */
 
-const ChildProcess = require('node:child_process')
-const util = require('node:util')
+import ChildProcess from 'node:child_process'
+import util from 'node:util'
 
-const AddressFacadeViewHealthRequest = require('../../requests/address-facade/view-health.request.js')
-const ChargingModuleViewHealthRequest = require('../../requests/charging-module/view-health.request.js')
-const CreateRedisClientService = require('./create-redis-client.service.js')
-const FetchSystemInfoService = require('./fetch-system-info.service.js')
-const GotenbergViewHealthRequest = require('../../requests/gotenberg/view-health.request.js')
-const LegacyViewHealthRequest = require('../../requests/legacy/view-health.request.js')
-const NotifyViewHealthRequest = require('../../requests/notify/view-health.request.js')
-const RespViewHealthRequest = require('../../requests/resp/view-health.request.js')
-const { sentenceCase } = require('../../presenters/base.presenter.js')
+import AddressFacadeViewHealthRequest from '../../requests/address-facade/view-health.request.js'
+import ChargingModuleViewHealthRequest from '../../requests/charging-module/view-health.request.js'
+import CreateRedisClientService from './create-redis-client.service.js'
+import FetchSystemInfoService from './fetch-system-info.service.js'
+import GotenbergViewHealthRequest from '../../requests/gotenberg/view-health.request.js'
+import LegacyViewHealthRequest from '../../requests/legacy/view-health.request.js'
+import NotifyViewHealthRequest from '../../requests/notify/view-health.request.js'
+import RespViewHealthRequest from '../../requests/resp/view-health.request.js'
+import { sentenceCase } from '../../presenters/base.presenter.js'
 
 const SERVICE_RUNNING_MESSAGE = 'Up and running'
 
@@ -181,6 +179,6 @@ async function _virusScannerData() {
   }
 }
 
-module.exports = {
+export default {
   go
 }

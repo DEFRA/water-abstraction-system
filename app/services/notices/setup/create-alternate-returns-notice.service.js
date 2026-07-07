@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates creating a new notice and notifications for returns invitation emails that failed
  *
  * @module CreateAlternateReturnsNoticeService
  */
 
-const CreateNotificationsService = require('./create-notifications.service.js')
-const EventModel = require('../../../models/event.model.js')
-const FetchAlternateReturnsRecipientsService = require('./returns-notice/fetch-alternate-returns-recipients.service.js')
-const { generateNoticeReferenceCode, timestampForPostgres } = require('../../../lib/general.lib.js')
-const { NoticeJourney, NoticeType, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
+import CreateNotificationsService from './create-notifications.service.js'
+import EventModel from '../../../models/event.model.js'
+import FetchAlternateReturnsRecipientsService from './returns-notice/fetch-alternate-returns-recipients.service.js'
+import { generateNoticeReferenceCode, timestampForPostgres } from '../../../lib/general.lib.js'
+import { NoticeJourney, NoticeType, NoticeTypes } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Orchestrates creating a new notice and notifications for returns invitation emails that failed
@@ -68,6 +66,6 @@ async function _notifications(notice, recipients) {
   return CreateNotificationsService.go(session, recipients, noticeId)
 }
 
-module.exports = {
+export default {
   go
 }

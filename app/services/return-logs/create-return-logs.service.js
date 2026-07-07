@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Generates and persists return logs for the given return requirement and cycle
  * @module CreateReturnLogsService
  */
 
-const GenerateReturnLogService = require('./generate-return-log.service.js')
-const { db } = require('../../../db/db.js')
-const { timestampForPostgres } = require('../../lib/general.lib.js')
-const { determineReturnsPeriods } = require('../../lib/return-periods.lib.js')
+import GenerateReturnLogService from './generate-return-log.service.js'
+import { db } from '../../../db/db.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
+import { determineReturnsPeriods } from '../../lib/return-periods.lib.js'
 
 /**
  * Generates and persists return logs for the given return requirement and cycle
@@ -78,6 +76,6 @@ async function _persistReturnLogs(returnLogs, trx) {
   return createdIds
 }
 
-module.exports = {
+export default {
   go
 }

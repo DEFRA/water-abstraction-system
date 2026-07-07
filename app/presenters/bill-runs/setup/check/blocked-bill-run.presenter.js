@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats data for the `/bill-runs/setup/{sessionId}/check` page when the bill run is blocked from creation
  * @module BlockedBillRunPresenter
  */
 
-const { formatLongDate } = require('../../../base.presenter.js')
-const { checkPageBackLink } = require('./base-check.presenter.js')
-const { formatBillRunType, formatChargeScheme } = require('../../../billing.presenter.js')
+import { formatLongDate } from '../../../base.presenter.js'
+import { checkPageBackLink } from './base-check.presenter.js'
+import { formatBillRunType, formatChargeScheme } from '../../../billing.presenter.js'
 
 const LAST_PRESROC_YEAR = 2022
 
@@ -82,6 +80,6 @@ function _messages(firstMatch, billRunType) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

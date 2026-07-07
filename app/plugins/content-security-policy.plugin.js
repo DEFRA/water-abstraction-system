@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Plugin to set Content Security Policy headers on responses. This is a security measure to help prevent cross-site
  * scripting (XSS) and other code injection attacks.
@@ -26,7 +24,7 @@
  * @module ContentSecurityPolicyPlugin
  */
 
-const Blankie = require('blankie')
+import Blankie from 'blankie'
 
 const ContentSecurityPolicyPlugin = {
   plugin: Blankie,
@@ -43,4 +41,4 @@ const ContentSecurityPolicyPlugin = {
   }
 }
 
-module.exports = ContentSecurityPolicyPlugin
+export default ContentSecurityPolicyPlugin

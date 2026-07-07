@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/manage` page
  * @module ManagePresenter
  */
 
-const featureFlags = require('../../../config/feature-flags.config.js')
+import featureFlags from '../../../config/feature-flags.config.js'
 
 /**
  * Formats data for the `/manage` page
@@ -79,6 +77,6 @@ function _viewWorkflow(userScopes) {
   return { show: links.checkLicences, links }
 }
 
-module.exports = {
+export default {
   go
 }

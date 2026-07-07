@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Orchestrates fetching and formatting the data needed for the Monitoring station journey
  * @module DetermineLicenceMonitoringStationsService
  */
 
-const FetchMonitoringStationDetailsDal = require('../../../../dal/monitoring-stations/fetch-monitoring-station-details.dal.js')
+import FetchMonitoringStationDetailsDal from '../../../../dal/monitoring-stations/fetch-monitoring-station-details.dal.js'
 
 /**
  * Orchestrates fetching and formatting the data needed for the Monitoring station journey
@@ -90,6 +88,6 @@ function _thresholdGroup(measureType, thresholdValue, thresholdUnit) {
   return `${measureType}-${thresholdValue}-${thresholdUnit}`
 }
 
-module.exports = {
+export default {
   go
 }

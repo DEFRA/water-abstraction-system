@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for external users on the `/users/external/{id}/verifications` page
  * @module VerificationsPresenter
  */
 
-const { formatLongDate } = require('../../base.presenter.js')
-const { sourceNavigation } = require('../base-users.presenter.js')
+import { formatLongDate } from '../../base.presenter.js'
+import { sourceNavigation } from '../base-users.presenter.js'
 
 /**
  * Formats data for external users on the `/users/external/{id}/verifications` page
@@ -59,6 +57,6 @@ function _verifications(verifications) {
   return formattedVerifications
 }
 
-module.exports = {
+export default {
   go
 }

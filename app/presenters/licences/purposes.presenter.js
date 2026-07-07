@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats the licence and related licenceVersionPurposes data for the view licence purposes page
  * @module PurposesPresenter
  */
 
-const { formatLicencePurposes } = require('../licence.presenter.js')
-const { pluralise } = require('./base-licences.presenter.js')
+import { formatLicencePurposes } from '../licence.presenter.js'
+import { pluralise } from './base-licences.presenter.js'
 
 /**
  * Formats the licence and related licenceVersionPurposes data for the view licence purposes page
@@ -33,6 +31,6 @@ function go(purposes, licence) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

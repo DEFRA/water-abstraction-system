@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/note` page
  * @module SubmitNoteService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const NotePresenter = require('../../../presenters/return-versions/setup/note.presenter.js')
-const NoteValidator = require('../../../validators/return-versions/setup/note.validator.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import NotePresenter from '../../../presenters/return-versions/setup/note.presenter.js'
+import NoteValidator from '../../../validators/return-versions/setup/note.validator.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/note` page
@@ -93,6 +91,6 @@ function _validate(payload) {
   return formatValidationResult(validation)
 }
 
-module.exports = {
+export default {
   go
 }

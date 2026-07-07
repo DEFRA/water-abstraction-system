@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/returns-cycle` page
  * @module SubmitReturnsCycleService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const ReturnsCyclePresenter = require('../../../presenters/return-versions/setup/returns-cycle.presenter.js')
-const ReturnsCycleValidator = require('../../../validators/return-versions/setup/returns-cycle.validator.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import GeneralLib from '../../../lib/general.lib.js'
+import ReturnsCyclePresenter from '../../../presenters/return-versions/setup/returns-cycle.presenter.js'
+import ReturnsCycleValidator from '../../../validators/return-versions/setup/returns-cycle.validator.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/returns-cycle` page
@@ -66,6 +64,6 @@ function _validate(payload, session) {
   return formatValidationResult(validation)
 }
 
-module.exports = {
+export default {
   go
 }

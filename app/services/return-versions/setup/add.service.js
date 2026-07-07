@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Orchestrates adding an empty object to the requirements array in the session
  * @module AddService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates adding an empty object to the requirements array in the session
@@ -34,6 +32,6 @@ async function _save(session) {
   return session.$update()
 }
 
-module.exports = {
+export default {
   go
 }

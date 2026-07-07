@@ -1,20 +1,18 @@
-'use strict'
-
 /**
  * Controller for /bill-runs endpoints
  * @module BillRunsController
  */
 
-const Boom = require('@hapi/boom')
+import Boom from '@hapi/boom'
 
-const GenerateTwoPartTariffBillRunService = require('../services/bill-runs/generate-two-part-tariff-bill-run.service.js')
-const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
-const SubmitCancelBillRunService = require('../services/bill-runs/cancel/submit-cancel-bill-run.service.js')
-const SubmitIndexBillRunsService = require('../services/bill-runs/submit-index-bill-runs.service.js')
-const SubmitSendBillRunService = require('../services/bill-runs/send/submit-send-bill-run.service.js')
-const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
-const ViewCancelBillRunService = require('../services/bill-runs/cancel/view-cancel-bill-run.service.js')
-const ViewSendBillRunService = require('../services/bill-runs/send/view-send-bill-run.service.js')
+import GenerateTwoPartTariffBillRunService from '../services/bill-runs/generate-two-part-tariff-bill-run.service.js'
+import IndexBillRunsService from '../services/bill-runs/index-bill-runs.service.js'
+import SubmitCancelBillRunService from '../services/bill-runs/cancel/submit-cancel-bill-run.service.js'
+import SubmitIndexBillRunsService from '../services/bill-runs/submit-index-bill-runs.service.js'
+import SubmitSendBillRunService from '../services/bill-runs/send/submit-send-bill-run.service.js'
+import ViewBillRunService from '../services/bill-runs/view-bill-run.service.js'
+import ViewCancelBillRunService from '../services/bill-runs/cancel/view-cancel-bill-run.service.js'
+import ViewSendBillRunService from '../services/bill-runs/send/view-send-bill-run.service.js'
 
 async function cancel(request, h) {
   const { id } = request.params
@@ -103,7 +101,7 @@ async function view(request, h) {
   return h.view(pageData.view, pageData)
 }
 
-module.exports = {
+export default {
   cancel,
   index,
   send,

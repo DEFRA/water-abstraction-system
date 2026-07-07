@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/check` page
  *
  * @module SubmitCheckService
  */
 
-const AddressModel = require('../../../models/address.model.js')
-const ChangeAddressService = require('../change-address.service.js')
-const FetchCompanyService = require('./fetch-company.service.js')
-const FetchCompanyContactsService = require('./fetch-company-contacts.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import AddressModel from '../../../models/address.model.js'
+import ChangeAddressService from '../change-address.service.js'
+import FetchCompanyService from './fetch-company.service.js'
+import FetchCompanyContactsService from './fetch-company-contacts.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/check` page
@@ -119,6 +117,6 @@ function _contact(session, companyContacts) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-logs/setup/{sessionId}/reported` page
  * @module ReportedService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const ReportedPresenter = require('../../../presenters/return-logs/setup/reported.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import ReportedPresenter from '../../../presenters/return-logs/setup/reported.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-logs/setup/{sessionId}/reported` page
@@ -28,6 +26,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

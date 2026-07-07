@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for notifications (water.notification)
  * @module NotificationModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class NotificationModel extends BaseModel {
   static get tableName() {
@@ -41,4 +39,4 @@ class NotificationModel extends BaseModel {
   }
 }
 
-module.exports = NotificationModel
+export default NotificationModel

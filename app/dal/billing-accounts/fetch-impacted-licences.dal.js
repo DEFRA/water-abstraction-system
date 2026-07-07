@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches licence references for the provided billing account id.
  * @module FetchImpactedLicences
  */
 
-const ChargeVersionModel = require('../../models/charge-version.model.js')
+import ChargeVersionModel from '../../models/charge-version.model.js'
 
 /**
  * Fetches licence references for the provided billing account id.
@@ -32,6 +30,6 @@ async function go(billingAccountId) {
   return impactedLicences
 }
 
-module.exports = {
+export default {
   go
 }

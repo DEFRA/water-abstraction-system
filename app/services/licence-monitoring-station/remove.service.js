@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for
  * `/licence-monitoring-station/{licenceMonitoringStationId}/remove` page
  * @module RemoveService
  */
 
-const FetchLicenceMonitoringStationService = require('./fetch-licence-monitoring-station.service.js')
-const RemovePresenter = require('../../presenters/licence-monitoring-station/remove.presenter.js')
+import FetchLicenceMonitoringStationService from './fetch-licence-monitoring-station.service.js'
+import RemovePresenter from '../../presenters/licence-monitoring-station/remove.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for
@@ -29,6 +27,6 @@ async function go(licenceMonitoringStationId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

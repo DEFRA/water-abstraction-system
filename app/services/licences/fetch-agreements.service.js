@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches licence agreements data needed for the view '/licences/{id}/set-up` page
  * @module FetchAgreementsService
  */
 
-const LicenceAgreementModel = require('../../models/licence-agreement.model.js')
+import LicenceAgreementModel from '../../models/licence-agreement.model.js'
 
 /**
  * Fetches licence agreements data needed for the view '/licences/{id}/set-up` page
@@ -30,6 +28,6 @@ async function _fetch(licenceRef) {
     .orderBy([{ column: 'createdAt', order: 'asc' }])
 }
 
-module.exports = {
+export default {
   go
 }

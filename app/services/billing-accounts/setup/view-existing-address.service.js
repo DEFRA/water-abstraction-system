@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/existing-address` page
  *
  * @module ExistingAddressService
  */
 
-const ExistingAddressPresenter = require('../../../presenters/billing-accounts/setup/existing-address.presenter.js')
-const FetchCompanyAddressesService = require('./fetch-company-addresses.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import ExistingAddressPresenter from '../../../presenters/billing-accounts/setup/existing-address.presenter.js'
+import FetchCompanyAddressesService from './fetch-company-addresses.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/existing-address` page
@@ -37,6 +35,6 @@ async function _fetchCompanyAddresses(session) {
   return companyAddresses
 }
 
-module.exports = {
+export default {
   go
 }

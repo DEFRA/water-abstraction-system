@@ -1,8 +1,6 @@
-'use strict'
-
 const tableName = 'document_header'
 
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema.withSchema('crm').createTable(tableName, (table) => {
     // Primary Key
     table.string('document_id').primary().defaultTo(knex.raw('gen_random_uuid()'))
@@ -45,6 +43,6 @@ exports.up = function (knex) {
   })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.withSchema('crm').dropTableIfExists(tableName)
 }

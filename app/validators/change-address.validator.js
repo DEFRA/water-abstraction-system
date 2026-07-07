@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * @module ChangeAddressValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
-const StaticLookupsLib = require('../lib/static-lookups.lib.js')
+import StaticLookupsLib from '../lib/static-lookups.lib.js'
 
 /**
  * Checks that the payload of a `/billing-accounts/{billingAccountId}/address` request is valid
@@ -78,6 +76,6 @@ function _contactSchema() {
   }).optional()
 }
 
-module.exports = {
+export default {
   go
 }

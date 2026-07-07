@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/points` page
  * @module PointsService
  */
 
-const FetchPointsService = require('./fetch-points.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const PointsPresenter = require('../../../presenters/return-versions/setup/points.presenter.js')
+import FetchPointsService from './fetch-points.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import PointsPresenter from '../../../presenters/return-versions/setup/points.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/points` page
@@ -31,6 +29,6 @@ async function go(sessionId, requirementIndex) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

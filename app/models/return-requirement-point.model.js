@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for return_requirement_points (water.return_requirement_points)
  * @module ReturnRequirementPointModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class ReturnRequirementPointModel extends BaseModel {
   static get tableName() {
@@ -36,4 +34,4 @@ class ReturnRequirementPointModel extends BaseModel {
   }
 }
 
-module.exports = ReturnRequirementPointModel
+export default ReturnRequirementPointModel

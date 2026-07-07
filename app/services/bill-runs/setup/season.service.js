@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/season` page
  * @module BillRunsCreateSeasonService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SeasonPresenter = require('../../../presenters/bill-runs/setup/season.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SeasonPresenter from '../../../presenters/bill-runs/setup/season.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/season` page
@@ -29,6 +27,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

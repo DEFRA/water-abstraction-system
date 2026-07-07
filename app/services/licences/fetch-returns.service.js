@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches all return logs for a licence which is needed for the view '/licences/{id}/returns` page
  * @module FetchReturnsService
  */
 
-const ReturnLogModel = require('../../models/return-log.model.js')
+import ReturnLogModel from '../../models/return-log.model.js'
 
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
 
 /**
  * Fetches all return logs for a licence which is needed for the view '/licences/{id}/returns` page
@@ -43,6 +41,6 @@ async function _fetch(licenceId, page) {
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
 
-module.exports = {
+export default {
   go
 }

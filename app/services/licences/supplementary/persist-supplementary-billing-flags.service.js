@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Persists the supplementary billing flags for a licence
  * @module PersistSupplementaryBillingFlagsService
  */
 
-const CreateLicenceSupplementaryYearService = require('./create-licence-supplementary-year.service.js')
-const LicenceModel = require('../../../models/licence.model.js')
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
+import CreateLicenceSupplementaryYearService from './create-licence-supplementary-year.service.js'
+import LicenceModel from '../../../models/licence.model.js'
+import { timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Persists the supplementary billing flags for a licence
@@ -57,6 +55,6 @@ async function _updateLicenceFlags(includeInPresrocBilling, flagForSrocSupplemen
     .where('id', licenceId)
 }
 
-module.exports = {
+export default {
   go
 }

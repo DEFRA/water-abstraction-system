@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the '/billing-accounts/setup/{sessionId}/select-company' page
  *
  * @module SelectCompanyValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the '/billing-accounts/setup/{sessionId}/select-company' page
@@ -26,6 +24,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

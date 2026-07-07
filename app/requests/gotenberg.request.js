@@ -1,16 +1,15 @@
-'use strict'
-
 /**
  * Make a http requests to Gotenberg to convert HTML into a PDF
  * @module GotenbergRequest
  */
 
-const { HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+import BaseRequest from './base.request.js'
+import { pause } from '../lib/general.lib.js'
 
-const BaseRequest = require('./base.request.js')
-const { pause } = require('../lib/general.lib.js')
+import gotenbergConfig from '../../config/gotenberg.config.js'
 
-const gotenbergConfig = require('../../config/gotenberg.config.js')
+const { HTTP_STATUS_OK } = http2.constants
 
 /**
  * Make a http requests to Gotenberg to convert HTML into a PDF
@@ -83,6 +82,6 @@ function _parseResult(result) {
   return result
 }
 
-module.exports = {
+export default {
   post
 }

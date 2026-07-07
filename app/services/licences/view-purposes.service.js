@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the licence purposes page
  * @module ViewPurposesService
  */
 
-const FetchPurposesService = require('../licences/fetch-purposes.service.js')
-const FetchLicenceService = require('./fetch-licence.service.js')
-const PurposesPresenter = require('../../presenters/licences/purposes.presenter.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import FetchPurposesService from '../licences/fetch-purposes.service.js'
+import FetchLicenceService from './fetch-licence.service.js'
+import PurposesPresenter from '../../presenters/licences/purposes.presenter.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence purposes page
@@ -32,6 +30,6 @@ async function go(licenceId, auth) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

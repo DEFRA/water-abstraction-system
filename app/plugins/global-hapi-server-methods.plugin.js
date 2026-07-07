@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Plugin to add Hapi server methods to the global object
  *
@@ -17,4 +15,4 @@ const GlobalHapiServerMethods = {
   }
 }
 
-module.exports = GlobalHapiServerMethods
+export default GlobalHapiServerMethods

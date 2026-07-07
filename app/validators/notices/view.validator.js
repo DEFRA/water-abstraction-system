@@ -1,11 +1,12 @@
-'use strict'
-
 /**
  * Validates filter data submitted for the `/notice/{id}` page
  * @module ViewValidator
  */
 
-const Joi = require('joi').extend(require('@joi/date'))
+import base from 'joi'
+import joiDate from '@joi/date'
+
+const Joi = base.extend(joiDate)
 
 const STATUSES = ['cancelled', 'error', 'pending', 'returned', 'sent']
 
@@ -49,6 +50,6 @@ function _validate(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

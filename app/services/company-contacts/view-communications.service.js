@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/{id}/communications' page
  *
  * @module ViewCommunicationsService
  */
 
-const CommunicationsPresenter = require('../../presenters/company-contacts/communications.presenter.js')
-const FetchCompanyContactDal = require('../../dal/company-contacts/fetch-company-contact.dal.js')
-const FetchCompanyService = require('../../dal/companies/fetch-company.dal.js')
-const FetchNotificationsDal = require('../../dal/company-contacts/fetch-notifications.dal.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
+import CommunicationsPresenter from '../../presenters/company-contacts/communications.presenter.js'
+import FetchCompanyContactDal from '../../dal/company-contacts/fetch-company-contact.dal.js'
+import FetchCompanyService from '../../dal/companies/fetch-company.dal.js'
+import FetchNotificationsDal from '../../dal/company-contacts/fetch-notifications.dal.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/{id}/communications' page
@@ -44,6 +42,6 @@ async function go(id, page) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

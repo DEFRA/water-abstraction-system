@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/billing-accounts/setup/{sessionId}/account` page
  *
  * @module AccountValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const MAX_LENGTH = 100
 
@@ -47,6 +45,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

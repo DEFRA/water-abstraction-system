@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for licence_end_date_changes (water.licence_end_date_changes)
  * @module LicenceEndDateChangeModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class LicenceEndDateChangeModel extends BaseModel {
   static get tableName() {
@@ -28,4 +26,4 @@ class LicenceEndDateChangeModel extends BaseModel {
   }
 }
 
-module.exports = LicenceEndDateChangeModel
+export default LicenceEndDateChangeModel

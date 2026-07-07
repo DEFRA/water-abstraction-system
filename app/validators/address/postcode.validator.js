@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Validates data submitted for the `address/{sessionId}/postcode` page
  *
  * @module PostcodeValidator
  */
 
-const { postcodeValidator } = require('postcode-validator')
+import { postcodeValidator } from 'postcode-validator'
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `address/{sessionId}/postcode` page
@@ -37,6 +35,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

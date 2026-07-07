@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Create and send an email using GOV.UK Notify
  * @module CreateEmailRequest
  */
 
-const NotifyRequest = require('../notify.request.js')
+import NotifyRequest from '../notify.request.js'
 
 /**
  * Create and send an email using GOV.UK Notify
@@ -46,6 +44,6 @@ async function send(templateId, emailAddress, options) {
   return NotifyRequest.post(path, body)
 }
 
-module.exports = {
+export default {
   send
 }

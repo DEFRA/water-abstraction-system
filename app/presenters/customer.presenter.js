@@ -1,6 +1,4 @@
-'use strict'
-
-const { formatEmail } = require('./base.presenter.js')
+import { formatEmail } from './base.presenter.js'
 
 /**
  * We have a couple of places where we need to show the company contact (in some places this is referred to as the customer contact)
@@ -27,6 +25,6 @@ function _communicationType(companyContact) {
   return companyContact.licenceRole.label
 }
 
-module.exports = {
+export default {
   formatCompanyContact
 }

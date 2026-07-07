@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches recipients for renewal invitations
  * @module FetchRenewalRecipients
  */
 
-const GenerateExpiringLicencesQueryService = require('./generate-expiring-licences-query.service.js')
-const GenerateRenewalRecipientsQueryService = require('./generate-renewal-recipients-query.service.js')
-const { db } = require('../../../../db/db.js')
+import GenerateExpiringLicencesQueryService from './generate-expiring-licences-query.service.js'
+import GenerateRenewalRecipientsQueryService from './generate-renewal-recipients-query.service.js'
+import { db } from '../../../../db/db.js'
 
 /**
  * Fetches recipients for renewal invitations
@@ -26,6 +24,6 @@ async function go(expiredDate) {
   return rows
 }
 
-module.exports = {
+export default {
   go
 }

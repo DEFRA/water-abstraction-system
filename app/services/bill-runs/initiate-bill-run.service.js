@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Handles initiating a new bill run
  * @module InitiateBillRunService
  */
 
-const BillRunModel = require('../../models/bill-run.model.js')
-const ChargingModuleCreateBillRunRequest = require('../../requests/charging-module/create-bill-run.request.js')
-const CreateBillRunService = require('./create-bill-run.service.js')
-const CreateBillRunEventService = require('./create-bill-run-event.service.js')
+import BillRunModel from '../../models/bill-run.model.js'
+import ChargingModuleCreateBillRunRequest from '../../requests/charging-module/create-bill-run.request.js'
+import CreateBillRunService from './create-bill-run.service.js'
+import CreateBillRunEventService from './create-bill-run-event.service.js'
 
 /**
  * Initiate a new bill run
@@ -53,6 +51,6 @@ function _billRunOptions(chargingModuleResult, batchType) {
   return options
 }
 
-module.exports = {
+export default {
   go
 }

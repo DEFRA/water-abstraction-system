@@ -1,12 +1,10 @@
-'use strict'
+import { db } from '../db.js'
 
-const { db } = require('../db.js')
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
+import { data as regions } from './data/regions.js'
+import RegionModel from '../../app/models/region.model.js'
 
-const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const { data: regions } = require('./data/regions.js')
-const RegionModel = require('../../app/models/region.model.js')
-
-const ServerConfig = require('../../config/server.config.js')
+import ServerConfig from '../../config/server.config.js'
 
 /**
  * Seed the regions reference data
@@ -71,6 +69,6 @@ async function _update(region) {
     .andWhere('naldRegionId', naldRegionId)
 }
 
-module.exports = {
+export default {
   seed
 }

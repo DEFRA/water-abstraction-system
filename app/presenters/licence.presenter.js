@@ -1,9 +1,7 @@
-'use strict'
-
-const PointModel = require('../models/point.model.js')
-const { today } = require('../lib/general.lib.js')
-const { formatAbstractionPeriod, formatLongDate } = require('./base.presenter.js')
-const { formatAbstractionAmounts } = require('./licences/base-licences.presenter.js')
+import PointModel from '../models/point.model.js'
+import { today } from '../lib/general.lib.js'
+import { formatAbstractionPeriod, formatLongDate } from './base.presenter.js'
+import { formatAbstractionAmounts } from './licences/base-licences.presenter.js'
 
 /**
  * Formats Licence condition types for the view
@@ -215,7 +213,7 @@ function licenceEndsWarning(licence) {
   }
 }
 
-module.exports = {
+export default {
   formatConditionTypes,
   formatLicencePoints,
   formatLicencePurposes,

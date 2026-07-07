@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches a region based on the NALD region ID provided
  * @module FetchRegionService
  */
 
-const RegionModel = require('../../models/region.model.js')
+import RegionModel from '../../models/region.model.js'
 
 /**
  * Fetches the region with the matching NALD Region ID
@@ -30,6 +28,6 @@ async function _fetch(naldRegionId) {
   return result
 }
 
-module.exports = {
+export default {
   go
 }

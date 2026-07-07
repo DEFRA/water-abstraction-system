@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/notice-type` page
  *
  * @module ViewNoticeTypeService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const NoticeTypePresenter = require('../../../presenters/notices/setup/notice-type.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import NoticeTypePresenter from '../../../presenters/notices/setup/notice-type.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/notice-type` page
@@ -28,6 +26,6 @@ async function go(sessionId, auth) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

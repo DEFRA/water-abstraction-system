@@ -1,5 +1,3 @@
-'use strict'
-
 const KeepYarAlivePlugin = {
   name: 'keepYarAlive',
   register: (server, _options) => {
@@ -23,4 +21,4 @@ const KeepYarAlivePlugin = {
   }
 }
 
-module.exports = KeepYarAlivePlugin
+export default KeepYarAlivePlugin

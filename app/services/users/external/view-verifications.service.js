@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting external user data for `/users/external/{id}/verifications` page
  * @module ViewVerificationsService
  */
 
-const FetchVerificationsDal = require('../../../dal/users/external/fetch-verifications.dal.js')
-const FetchUserDal = require('../../../dal/users/fetch-user.dal.js')
-const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
-const VerificationsPresenter = require('../../../presenters/users/external/verifications.presenter.js')
+import FetchVerificationsDal from '../../../dal/users/external/fetch-verifications.dal.js'
+import FetchUserDal from '../../../dal/users/fetch-user.dal.js'
+import PaginatorPresenter from '../../../presenters/paginator.presenter.js'
+import VerificationsPresenter from '../../../presenters/users/external/verifications.presenter.js'
 
 /**
  * Orchestrates fetching and presenting external user data for `/users/external/{id}/verifications` page
@@ -43,6 +41,6 @@ async function go(id, auth, page, back = 'users') {
   }
 }
 
-module.exports = {
+export default {
   go
 }

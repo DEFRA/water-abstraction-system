@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/return-logs/{id}/details' page
  *
  * @module ViewDetailsService
  */
 
-const FetchReturnLogDetailsService = require('./fetch-return-log-details.service.js')
-const DetailsPresenter = require('../../presenters/return-logs/details.presenter.js')
+import FetchReturnLogDetailsService from './fetch-return-log-details.service.js'
+import DetailsPresenter from '../../presenters/return-logs/details.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/return-logs/{id}/details' page
@@ -29,6 +27,6 @@ async function go(returnLogId, auth, version) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

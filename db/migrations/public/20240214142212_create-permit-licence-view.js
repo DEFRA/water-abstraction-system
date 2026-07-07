@@ -1,8 +1,6 @@
-'use strict'
-
 const viewName = 'permit_licences'
 
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema.createView(viewName, (view) => {
     view.as(
       knex('licence')
@@ -27,6 +25,6 @@ exports.up = function (knex) {
   })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.dropViewIfExists(viewName)
 }

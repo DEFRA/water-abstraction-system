@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for '/notices/setup/{sessionId}/select-recipients' page
  *
  * @module SubmitSelectRecipientsService
  */
 
-const FetchRecipientsService = require('./fetch-recipients.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const SelectRecipientsPresenter = require('../../../presenters/notices/setup/select-recipients.presenter.js')
-const SelectRecipientsValidator = require('../../../validators/notices/setup/select-recipients.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
+import FetchRecipientsService from './fetch-recipients.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import GeneralLib from '../../../lib/general.lib.js'
+import SelectRecipientsPresenter from '../../../presenters/notices/setup/select-recipients.presenter.js'
+import SelectRecipientsValidator from '../../../validators/notices/setup/select-recipients.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
 
 /**
  * Orchestrates validating the data for '/notices/setup/{sessionId}/select-recipients' page
@@ -77,6 +75,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

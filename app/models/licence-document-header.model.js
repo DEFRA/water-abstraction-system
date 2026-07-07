@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for licence_document_headers (crm.document_header)
  * @module LicenceDocumentHeaderModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 /**
  * Represents an instance of a licence document header record
@@ -63,4 +61,4 @@ class LicenceDocumentHeaderModel extends BaseModel {
   }
 }
 
-module.exports = LicenceDocumentHeaderModel
+export default LicenceDocumentHeaderModel

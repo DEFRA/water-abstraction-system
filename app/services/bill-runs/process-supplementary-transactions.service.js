@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches matching debit transactions from previous bill runs, then compares them as credits to those just generated
  * @module ProcessSupplementaryTransactionsService
  */
 
-const { transactionsMatch } = require('../../lib/general.lib.js')
-const ReverseTransactionsService = require('./reverse-supplementary-transactions.service.js')
+import { transactionsMatch } from '../../lib/general.lib.js'
+import ReverseTransactionsService from './reverse-supplementary-transactions.service.js'
 
 /**
  * Fetches matching debit transactions from previous bill runs, then compares them as credits to those just generated
@@ -95,6 +93,6 @@ function _cleanseTransactions(calculatedTransactions, reverseTransactions) {
   return cleansedTransactionLines
 }
 
-module.exports = {
+export default {
   go
 }

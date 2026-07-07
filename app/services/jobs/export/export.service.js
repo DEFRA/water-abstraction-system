@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Exports the entire db
  * @module DbExportService
  */
 
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
-const SchemaExportService = require('./schema-export.service.js')
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
+import SchemaExportService from './schema-export.service.js'
 
 /**
  * Calls SchemaExportService giving it a schemaName
@@ -25,6 +23,6 @@ async function go() {
   calculateAndLogTimeTaken(startTime, 'DB export complete')
 }
 
-module.exports = {
+export default {
   go
 }

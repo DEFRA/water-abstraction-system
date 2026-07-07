@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Transforms pagination information into the appropriate pagination component elements
  * @module PaginatorPresenter
  */
 
-const DatabaseConfig = require('../../config/database.config.js')
+import DatabaseConfig from '../../config/database.config.js'
 
 const SIMPLE_PAGINATOR = 'simple'
 const COMPLEX_START_PAGINATOR = 'start'
@@ -269,6 +267,6 @@ function _showingXofY(paginationTotal, currentAmount, message) {
   return `Showing all ${paginationTotal} ${message}`
 }
 
-module.exports = {
+export default {
   go
 }

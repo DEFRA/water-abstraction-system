@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{eventId}/confirmation` page
  * @module ConfirmationPresenter
  */
 
-const { NoticeType, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
+import { NoticeType, NoticeTypes } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the `/notices/setup/{eventId}/confirmation` page
@@ -60,6 +58,6 @@ function _pageTitle(subType) {
   return `Returns ${subTypes[subType]} sent`
 }
 
-module.exports = {
+export default {
   go
 }

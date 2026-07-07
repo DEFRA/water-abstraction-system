@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for companies (crm_v2.companies)
  * @module CompanyModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 /**
  * Objection model that represents a `company` in the `crm_v2.companies` table
@@ -108,4 +106,4 @@ class CompanyModel extends BaseModel {
   }
 }
 
-module.exports = CompanyModel
+export default CompanyModel

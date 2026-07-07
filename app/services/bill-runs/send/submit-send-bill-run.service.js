@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates the sending of a bill run
  * @module SubmitSendBillRunService
  */
 
-const SendBillBunService = require('./send-bill-run.service.js')
-const UpdateInvoiceNumbersService = require('./update-invoice-numbers.service.js')
+import SendBillBunService from './send-bill-run.service.js'
+import UpdateInvoiceNumbersService from './update-invoice-numbers.service.js'
 
 /**
  * Orchestrates the sending of a bill run
@@ -32,6 +30,6 @@ async function go(billRunId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

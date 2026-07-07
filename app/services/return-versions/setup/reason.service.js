@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/reason` page
  * @module SelectReasonService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SelectReasonPresenter = require('../../../presenters/return-versions/setup/reason.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SelectReasonPresenter from '../../../presenters/return-versions/setup/reason.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/reason` page
@@ -28,6 +26,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Generates the query and bindings for selecting the return logs by period that determine which recipients to fetch
  * @module GenerateReturnLogsByPeriodQueryService
  */
 
-const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
+import { NoticeType } from '../../../../lib/static-lookups.lib.js'
 
 /**
  * Generates the query and bindings for selecting the return logs by period that determine which recipients to fetch
@@ -59,6 +57,6 @@ function _query(dueDateCondition) {
   `
 }
 
-module.exports = {
+export default {
   go
 }

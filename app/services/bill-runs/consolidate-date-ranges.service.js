@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Consolidates an array of date ranges by merging overlapping ranges, returning an array of the resulting date ranges
  * @module ConsolidateDateRangesService
@@ -119,6 +117,6 @@ function _consolidateDates(dateRanges) {
   )
 }
 
-module.exports = {
+export default {
   go
 }

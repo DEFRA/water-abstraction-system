@@ -1,16 +1,15 @@
-'use strict'
-
 /**
  * Controller for /data endpoints
  * @module DataController
  */
 
-const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+import DatesService from '../services/data/dates/dates.service.js'
+import LoadService from '../services/data/load/load.service.js'
+import SeedService from '../services/data/seed/seed.service.js'
+import TearDownService from '../services/data/tear-down/tear-down.service.js'
 
-const DatesService = require('../services/data/dates/dates.service.js')
-const LoadService = require('../services/data/load/load.service.js')
-const SeedService = require('../services/data/seed/seed.service.js')
-const TearDownService = require('../services/data/tear-down/tear-down.service.js')
+const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 
 async function dates(_request, h) {
   const pageData = DatesService.go()
@@ -42,7 +41,7 @@ async function tearDown(_request, h) {
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-module.exports = {
+export default {
   dates,
   deduplicate,
   load,

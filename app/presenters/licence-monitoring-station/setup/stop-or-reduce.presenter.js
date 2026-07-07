@@ -1,6 +1,4 @@
-'use strict'
-
-const { checkUrl } = require('../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
 
 /**
  * Formats data for the `/licence-monitoring-station/setup/{sessionId}/stop-or-reduce` page
@@ -27,6 +25,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

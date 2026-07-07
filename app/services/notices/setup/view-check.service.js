@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup check page
  * @module ViewCheckService
  */
 
-const CheckPresenter = require('../../../presenters/notices/setup/check.presenter.js')
-const FetchRecipientsService = require('./fetch-recipients.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
-const { readFlashNotification } = require('../../../lib/general.lib.js')
+import CheckPresenter from '../../../presenters/notices/setup/check.presenter.js'
+import FetchRecipientsService from './fetch-recipients.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import PaginatorPresenter from '../../../presenters/paginator.presenter.js'
+import { readFlashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup check page
@@ -63,6 +61,6 @@ async function _initialiseSelectedRecipients(recipients, session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

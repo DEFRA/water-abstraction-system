@@ -1,6 +1,4 @@
-'use strict'
-
-const LicencesController = require('../controllers/licences.controller.js')
+import LicencesController from '../controllers/licences.controller.js'
 
 const routes = [
   {
@@ -151,4 +149,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

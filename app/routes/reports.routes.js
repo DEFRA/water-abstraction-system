@@ -1,6 +1,4 @@
-'use strict'
-
-const ReportsController = require('../controllers/reports.controller.js')
+import ReportsController from '../controllers/reports.controller.js'
 
 const routes = [
   {
@@ -25,4 +23,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

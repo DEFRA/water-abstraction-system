@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the address for the provided address id.
  * @module FetchExistingAddress
  */
 
-const AddressModel = require('../../models/address.model.js')
+import AddressModel from '../../models/address.model.js'
 
 /**
  * Fetches the address for the provided address id.
@@ -23,6 +21,6 @@ async function go(addressId) {
     .findById(addressId)
 }
 
-module.exports = {
+export default {
   go
 }

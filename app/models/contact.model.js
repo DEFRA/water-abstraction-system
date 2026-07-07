@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for contacts (crm_v2.contacts)
  * @module ContactModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 /**
  * Objection model that represents a `contact` in the `crm_v2.contacts` table
@@ -115,4 +113,4 @@ class ContactModel extends BaseModel {
   }
 }
 
-module.exports = ContactModel
+export default ContactModel

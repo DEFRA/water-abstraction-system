@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Manages removing the return requirement from the session when remove is confirmed
  * @module SubmitRemoveService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Manages deleting the selected requirement in the session when remove is confirmed
@@ -36,6 +34,6 @@ async function _removeRequirementFromSession(session, requirementIndex) {
   await session.$update()
 }
 
-module.exports = {
+export default {
   go
 }

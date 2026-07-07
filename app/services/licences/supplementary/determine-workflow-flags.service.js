@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Determines if a licence being removed from workflow should be flagged for supplementary billing
  * @module DetermineWorkflowFlagsService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const FetchLicenceService = require('./fetch-licence.service.js')
-const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import FetchLicenceService from './fetch-licence.service.js'
+import { determineCurrentFinancialYear } from '../../../lib/general.lib.js'
 
 /**
  * Determines if a licence should be flagged for supplementary billing when removed from workflow
@@ -100,6 +98,6 @@ async function _flagForSrocSupplementary(createdAt, regionId) {
   return recordCount > 0
 }
 
-module.exports = {
+export default {
   go
 }

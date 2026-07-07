@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats recipients into notifications for an abstraction alert
  * @module AbstractionAlertNotificationsPresenter
  */
 
-const NotifyAddressPresenter = require('./notify-address.presenter.js')
-const { NOTIFY_TEMPLATES } = require('../../../lib/notify-templates.lib.js')
+import NotifyAddressPresenter from './notify-address.presenter.js'
+import { NOTIFY_TEMPLATES } from '../../../lib/notify-templates.lib.js'
 
 /**
  * Formats recipients into notifications for an abstraction alert
@@ -315,6 +313,6 @@ function _source(monitoringStationRiverName) {
   return monitoringStationRiverName ? `* Source of supply: ${monitoringStationRiverName}` : ''
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup preview page
  * @module ViewPreviewService
  */
 
-const AbstractionAlertNotificationsPresenter = require('../../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js')
-const FetchRecipientsService = require('../fetch-recipients.service.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const PreviewPresenter = require('../../../../presenters/notices/setup/preview/preview.presenter.js')
-const RenewalInvitationNotificationsPresenter = require('../../../../presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js')
-const ReturnsNoticeNotificationsPresenter = require('../../../../presenters/notices/setup/returns-notice-notifications.presenter.js')
-const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
+import AbstractionAlertNotificationsPresenter from '../../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js'
+import FetchRecipientsService from '../fetch-recipients.service.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import PreviewPresenter from '../../../../presenters/notices/setup/preview/preview.presenter.js'
+import RenewalInvitationNotificationsPresenter from '../../../../presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js'
+import ReturnsNoticeNotificationsPresenter from '../../../../presenters/notices/setup/returns-notice-notifications.presenter.js'
+import { NoticeType } from '../../../../lib/static-lookups.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup preview page
@@ -70,6 +68,6 @@ async function _recipient(contactHashId, session) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

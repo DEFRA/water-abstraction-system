@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetch the primary and secondary purpose ids from the latest matching licence version with the same purpose
  * @module FetchOtherPurposeIdsDal
  */
 
-const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
+import LicenceVersionPurposeModel from '../../models/licence-version-purpose.model.js'
 
 /**
  * Fetch the primary and secondary purpose ids from the latest matching licence version with the same purpose
@@ -54,6 +52,6 @@ async function go(licenceId, purposeId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

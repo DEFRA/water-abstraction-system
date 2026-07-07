@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for review_charge_versions
  * @module ReviewChargeVersionModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class ReviewChargeVersionModel extends BaseModel {
   static get tableName() {
@@ -44,4 +42,4 @@ class ReviewChargeVersionModel extends BaseModel {
   }
 }
 
-module.exports = ReviewChargeVersionModel
+export default ReviewChargeVersionModel

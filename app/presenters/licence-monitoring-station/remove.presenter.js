@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Format data for the `/licence-monitoring-station/{licenceMonitoringStationId}/remove` page
  * @module RemovePresenter
  */
 
-const { formatRestrictionType, formatValueUnit } = require('../base.presenter.js')
+import { formatRestrictionType, formatValueUnit } from '../base.presenter.js'
 
 /**
  * Format data for the `/licence-monitoring-station/{licenceMonitoringStationId}/remove` page
@@ -63,6 +61,6 @@ function _monitoringStationName(monitoringStation) {
   return label
 }
 
-module.exports = {
+export default {
   go
 }

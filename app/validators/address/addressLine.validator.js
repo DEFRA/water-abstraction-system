@@ -1,8 +1,6 @@
-'use strict'
+import Joi from 'joi'
 
-const Joi = require('joi')
-
-const { invalidStartCharacters } = require('../helpers/notify-address-line.validator.js')
+import { invalidStartCharacters } from '../helpers/notify-address-line.validator.js'
 
 /**
  * A Joi schema for validating address lines.
@@ -38,6 +36,6 @@ function _addressLineCustom(value, helper) {
   return value
 }
 
-module.exports = {
+export default {
   addressLineValidator
 }

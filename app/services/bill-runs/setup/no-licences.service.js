@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Handles fetching the region name for `/bill-runs/setup/{sessionId}/no-licences` page
  * @module NoLicencesService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const RegionModel = require('../../../models/region.model.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import RegionModel from '../../../models/region.model.js'
 
 /**
  * Handles fetching the region name for `/bill-runs/setup/{sessionId}/no-licences` page
@@ -30,6 +28,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

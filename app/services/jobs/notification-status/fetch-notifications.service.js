@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Fetches pending notifications awaiting a status update from Notify
  * @module FetchNotificationsService
  */
 
-const NotificationModel = require('../../../models/notification.model.js')
-const { today } = require('../../../lib/general.lib.js')
+import NotificationModel from '../../../models/notification.model.js'
+import { today } from '../../../lib/general.lib.js'
 
-const notifyConfig = require('../../../../config/notify.config.js')
+import notifyConfig from '../../../../config/notify.config.js'
 
 /**
  * Fetches pending notifications awaiting a status update from Notify
@@ -50,6 +48,6 @@ async function go() {
   return query
 }
 
-module.exports = {
+export default {
   go
 }

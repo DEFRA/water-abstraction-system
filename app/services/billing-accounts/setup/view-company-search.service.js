@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/billing-accounts/setup/{sessionId}/company-search' page
  *
  * @module ViewCompanySearchService
  */
 
-const CompanySearchPresenter = require('../../../presenters/billing-accounts/setup/company-search.presenter.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+import CompanySearchPresenter from '../../../presenters/billing-accounts/setup/company-search.presenter.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/billing-accounts/setup/{sessionId}/company-search' page
@@ -26,6 +24,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

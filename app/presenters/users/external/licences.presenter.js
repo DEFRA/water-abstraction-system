@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for external users on the `/users/external/{id}/licences` page
  * @module LicencesPresenter
  */
 
-const { sourceNavigation } = require('../base-users.presenter.js')
-const { today } = require('../../../lib/general.lib.js')
+import { sourceNavigation } from '../base-users.presenter.js'
+import { today } from '../../../lib/general.lib.js'
 
 /**
  * Formats data for external users on the `/users/external/{id}/licences` page
@@ -112,6 +110,6 @@ function _userLicences(licences) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

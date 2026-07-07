@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Connects with the ReSP API's Azure AD authentication service to get a JWT for authentication
  * @module TokenRequest
  */
 
-const querystring = require('node:querystring')
+import querystring from 'node:querystring'
 
-const BaseRequest = require('../base.request.js')
+import BaseRequest from '../base.request.js'
 
-const config = require('../../../config/resp.config.js')
+import config from '../../../config/resp.config.js'
 
 /**
  * Connects with the ReSP API's Azure AD authentication service to get a JWT for authentication
@@ -62,6 +60,6 @@ function _parseResult(result) {
   return authentication
 }
 
-module.exports = {
+export default {
   send
 }

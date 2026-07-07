@@ -1,51 +1,49 @@
-'use strict'
-
 /**
  * Controller for /notices/setup endpoints
  * @module NoticesSetupController
  */
 
-const InitiateSessionService = require('../services/notices/setup/initiate-session.service.js')
-const ProcessAddRecipientService = require('../services/notices/setup/process-add-recipient.service.js')
-const ProcessDownloadRecipientsService = require('../services/notices/setup/process-download-recipients.service.js')
-const ProcessPreviewPaperReturnService = require('../services/notices/setup/process-preview-paper-return.service.js')
-const ProcessRemoveThresholdService = require('../services/notices/setup/abstraction-alerts/process-remove-threshold.service.js')
-const SubmitAlertEmailAddressService = require('../services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
-const SubmitAlertThresholdsService = require('../services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
-const SubmitAlertTypeService = require('../services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
-const SubmitCancelAlertsService = require('../services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js')
-const SubmitCancelService = require('../services/notices/setup/submit-cancel.service.js')
-const SubmitCheckLicenceMatchesService = require('../services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js')
-const SubmitCheckNoticeTypeService = require('../services/notices/setup/submit-check-notice-type.service.js')
-const SubmitCheckService = require('../services/notices/setup/submit-check.service.js')
-const SubmitContactTypeService = require('../services/notices/setup/submit-contact-type.service.js')
-const SubmitLicenceService = require('../services/notices/setup/submit-licence.service.js')
-const SubmitNoticeTypeService = require('../services/notices/setup/submit-notice-type.service.js')
-const SubmitPaperReturnService = require('../services/notices/setup/submit-paper-return.service.js')
-const SubmitRecipientNameService = require('../services/notices/setup/submit-recipient-name.service.js')
-const SubmitRemoveLicencesService = require('../services/notices/setup/submit-remove-licences.service.js')
-const SubmitReturnsPeriodService = require('../services/notices/setup/submit-returns-period.service.js')
-const SubmitSelectRecipientsService = require('../services/notices/setup/submit-select-recipients.service.js')
-const ViewAlertEmailAddressService = require('../services/notices/setup/abstraction-alerts/view-alert-email-address.service.js')
-const ViewAlertThresholdsService = require('../services/notices/setup/abstraction-alerts/view-alert-thresholds.service.js')
-const ViewAlertTypeService = require('../services/notices/setup/abstraction-alerts/view-alert-type.service.js')
-const ViewCancelService = require('../services/notices/setup/view-cancel.service.js')
-const ViewCancelAlertsService = require('../services/notices/setup/abstraction-alerts/view-cancel-alerts.service.js')
-const ViewCheckService = require('../services/notices/setup/view-check.service.js')
-const ViewCheckLicenceMatchesService = require('../services/notices/setup/abstraction-alerts/view-check-licence-matches.service.js')
-const ViewCheckNoticeTypeService = require('../services/notices/setup/view-check-notice-type.service.js')
-const ViewConfirmationService = require('../services/notices/setup/view-confirmation.service.js')
-const ViewContactTypeService = require('../services/notices/setup/view-contact-type.service.js')
-const ViewLicenceService = require('../services/notices/setup/view-licence.service.js')
-const ViewNoticeTypeService = require('../services/notices/setup/view-notice-type.service.js')
-const ViewPaperReturnService = require('../services/notices/setup/view-paper-return.service.js')
-const ViewPreviewService = require('../services/notices/setup/preview/view-preview.service.js')
-const ViewPreviewCheckAlertService = require('../services/notices/setup/preview/view-preview-check-alert.service.js')
-const ViewPreviewCheckPaperReturnService = require('../services/notices/setup/preview/view-preview-check-paper-return.service.js')
-const ViewRecipientNameService = require('../services/notices/setup/view-recipient-name.service.js')
-const ViewRemoveLicencesService = require('../services/notices/setup/view-remove-licences.service.js')
-const ViewReturnsPeriodService = require('../services/notices/setup/view-returns-period.service.js')
-const ViewSelectRecipientsService = require('../services/notices/setup/view-select-recipients.service.js')
+import InitiateSessionService from '../services/notices/setup/initiate-session.service.js'
+import ProcessAddRecipientService from '../services/notices/setup/process-add-recipient.service.js'
+import ProcessDownloadRecipientsService from '../services/notices/setup/process-download-recipients.service.js'
+import ProcessPreviewPaperReturnService from '../services/notices/setup/process-preview-paper-return.service.js'
+import ProcessRemoveThresholdService from '../services/notices/setup/abstraction-alerts/process-remove-threshold.service.js'
+import SubmitAlertEmailAddressService from '../services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js'
+import SubmitAlertThresholdsService from '../services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js'
+import SubmitAlertTypeService from '../services/notices/setup/abstraction-alerts/submit-alert-type.service.js'
+import SubmitCancelAlertsService from '../services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js'
+import SubmitCancelService from '../services/notices/setup/submit-cancel.service.js'
+import SubmitCheckLicenceMatchesService from '../services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js'
+import SubmitCheckNoticeTypeService from '../services/notices/setup/submit-check-notice-type.service.js'
+import SubmitCheckService from '../services/notices/setup/submit-check.service.js'
+import SubmitContactTypeService from '../services/notices/setup/submit-contact-type.service.js'
+import SubmitLicenceService from '../services/notices/setup/submit-licence.service.js'
+import SubmitNoticeTypeService from '../services/notices/setup/submit-notice-type.service.js'
+import SubmitPaperReturnService from '../services/notices/setup/submit-paper-return.service.js'
+import SubmitRecipientNameService from '../services/notices/setup/submit-recipient-name.service.js'
+import SubmitRemoveLicencesService from '../services/notices/setup/submit-remove-licences.service.js'
+import SubmitReturnsPeriodService from '../services/notices/setup/submit-returns-period.service.js'
+import SubmitSelectRecipientsService from '../services/notices/setup/submit-select-recipients.service.js'
+import ViewAlertEmailAddressService from '../services/notices/setup/abstraction-alerts/view-alert-email-address.service.js'
+import ViewAlertThresholdsService from '../services/notices/setup/abstraction-alerts/view-alert-thresholds.service.js'
+import ViewAlertTypeService from '../services/notices/setup/abstraction-alerts/view-alert-type.service.js'
+import ViewCancelService from '../services/notices/setup/view-cancel.service.js'
+import ViewCancelAlertsService from '../services/notices/setup/abstraction-alerts/view-cancel-alerts.service.js'
+import ViewCheckService from '../services/notices/setup/view-check.service.js'
+import ViewCheckLicenceMatchesService from '../services/notices/setup/abstraction-alerts/view-check-licence-matches.service.js'
+import ViewCheckNoticeTypeService from '../services/notices/setup/view-check-notice-type.service.js'
+import ViewConfirmationService from '../services/notices/setup/view-confirmation.service.js'
+import ViewContactTypeService from '../services/notices/setup/view-contact-type.service.js'
+import ViewLicenceService from '../services/notices/setup/view-licence.service.js'
+import ViewNoticeTypeService from '../services/notices/setup/view-notice-type.service.js'
+import ViewPaperReturnService from '../services/notices/setup/view-paper-return.service.js'
+import ViewPreviewService from '../services/notices/setup/preview/view-preview.service.js'
+import ViewPreviewCheckAlertService from '../services/notices/setup/preview/view-preview-check-alert.service.js'
+import ViewPreviewCheckPaperReturnService from '../services/notices/setup/preview/view-preview-check-paper-return.service.js'
+import ViewRecipientNameService from '../services/notices/setup/view-recipient-name.service.js'
+import ViewRemoveLicencesService from '../services/notices/setup/view-remove-licences.service.js'
+import ViewReturnsPeriodService from '../services/notices/setup/view-returns-period.service.js'
+import ViewSelectRecipientsService from '../services/notices/setup/view-select-recipients.service.js'
 
 async function processAddRecipient(request, h) {
   const {
@@ -510,7 +508,7 @@ async function viewSelectRecipients(request, h) {
   return h.view(`notices/setup/select-recipients.njk`, pageData)
 }
 
-module.exports = {
+export default {
   processAddRecipient,
   processDownloadRecipients,
   processPreviewPaperReturn,

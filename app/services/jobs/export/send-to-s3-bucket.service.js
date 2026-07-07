@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Sends a file to our AWS S3 bucket
  * @module SendToS3BucketService
  */
 
-const { PutObjectCommand, S3Client } = require('@aws-sdk/client-s3')
-const fsPromises = require('node:fs').promises
-const { HttpsProxyAgent, HttpProxyAgent } = require('hpagent')
-const { NodeHttpHandler } = require('@smithy/node-http-handler')
-const path = require('node:path')
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { promises as fsPromises } from 'node:fs'
+import { HttpsProxyAgent, HttpProxyAgent } from 'hpagent'
+import { NodeHttpHandler } from '@smithy/node-http-handler'
+import path from 'node:path'
 
-const serverConfig = require('../../../../config/server.config.js')
-const S3Config = require('../../../../config/s3.config.js')
+import serverConfig from '../../../../config/server.config.js'
+import S3Config from '../../../../config/s3.config.js'
 
 /**
  * Sends a file to our AWS S3 Bucket using the filePath that it receives
@@ -64,6 +62,6 @@ async function _uploadFileToS3Bucket(params) {
   await s3Client.send(command)
 }
 
-module.exports = {
+export default {
   go
 }

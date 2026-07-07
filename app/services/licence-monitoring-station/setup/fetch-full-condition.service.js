@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
  *
  * @module FetchFullConditionService
  */
 
-const LicenceVersionPurposeConditionModel = require('../../../models/licence-version-purpose-condition.model.js')
+import LicenceVersionPurposeConditionModel from '../../../models/licence-version-purpose-condition.model.js'
 
 /**
  * Fetches the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
@@ -52,6 +50,6 @@ async function go(licenceId) {
   )
 }
 
-module.exports = {
+export default {
   go
 }

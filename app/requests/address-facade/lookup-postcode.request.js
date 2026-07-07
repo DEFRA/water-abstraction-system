@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Sends a request to the address facade for the provided postcode
  * @module LookupPostcodeRequest
  */
 
-const AddressFacadeRequest = require('../address-facade.request.js')
+import AddressFacadeRequest from '../address-facade.request.js'
 
 /**
  * Sends a request to the address facade for the provided postcode
@@ -20,6 +18,6 @@ async function send(postcode) {
   return AddressFacadeRequest.get(path)
 }
 
-module.exports = {
+export default {
   send
 }

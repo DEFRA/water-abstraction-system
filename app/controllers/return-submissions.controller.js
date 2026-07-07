@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Controller for /return-submissions endpoints
  * @module ReturnSubmissionsController
  */
 
-const ViewReturnSubmissionService = require('../services/return-submissions/view-return-submission.service.js')
+import ViewReturnSubmissionService from '../services/return-submissions/view-return-submission.service.js'
 
 async function view(request, h) {
   const { yearMonth, returnSubmissionId } = request.params
@@ -15,6 +13,6 @@ async function view(request, h) {
   return h.view('return-submissions/view.njk', pageData)
 }
 
-module.exports = {
+export default {
   view
 }

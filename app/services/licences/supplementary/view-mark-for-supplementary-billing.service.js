@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates flagging a licence for supplementary billing
  * @module ViewMarkForSupplementaryBillingService
  */
 
-const LicenceModel = require('../../../../app/models/licence.model.js')
-const MarkForSupplementaryBillingPresenter = require('../../../presenters/licences/supplementary/mark-for-supplementary-billing.presenter.js')
+import LicenceModel from '../../../../app/models/licence.model.js'
+import MarkForSupplementaryBillingPresenter from '../../../presenters/licences/supplementary/mark-for-supplementary-billing.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence mark for supplementary billing page
@@ -30,6 +28,6 @@ async function _fetchLicenceData(licenceId) {
   return LicenceModel.query().findById(licenceId).select(['id', 'licenceRef'])
 }
 
-module.exports = {
+export default {
   go
 }

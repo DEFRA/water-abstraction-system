@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches recipient data for an alternate renewal notice
  * @module FetchAlternateRenewalRecipientsService
  */
 
-const { licenceHolderRecipientQuery } = require('../../../../dal/notices/recipient-queries.dal.js')
-const { db } = require('../../../../../db/db.js')
+import { licenceHolderRecipientQuery } from '../../../../dal/notices/recipient-queries.dal.js'
+import { db } from '../../../../../db/db.js'
 
 /**
  * Fetches recipient data for an alternate renewal notice
@@ -54,6 +52,6 @@ function _query() {
   `
 }
 
-module.exports = {
+export default {
   go
 }

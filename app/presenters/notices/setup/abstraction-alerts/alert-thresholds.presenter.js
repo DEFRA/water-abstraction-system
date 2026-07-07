@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
  * @module AlertThresholdsPresenter
  */
 
-const DetermineRelevantLicenceMonitoringStationsByAlertTypeService = require('../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js')
-const { formatValueUnit, titleCase } = require('../../../base.presenter.js')
-const { unitConversion } = require('../../../../lib/static-lookups.lib.js')
+import DetermineRelevantLicenceMonitoringStationsByAlertTypeService from '../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js'
+import { formatValueUnit, titleCase } from '../../../base.presenter.js'
+import { unitConversion } from '../../../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
@@ -118,6 +116,6 @@ function _thresholdOptions(licenceMonitoringStations, alertType, alertThresholds
   })
 }
 
-module.exports = {
+export default {
   go
 }

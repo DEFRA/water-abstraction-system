@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches a summary of each bill run for the selected page for /bill-runs
  * @module FetchBillRunsService
  */
 
-const BillRunModel = require('../../models/bill-run.model.js')
+import BillRunModel from '../../models/bill-run.model.js'
 
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
 
 /**
  * Fetches a summary of each bill run for the selected page for /bill-runs
@@ -79,6 +77,6 @@ function _fetchQuery() {
     .innerJoinRelated('region')
 }
 
-module.exports = {
+export default {
   go
 }

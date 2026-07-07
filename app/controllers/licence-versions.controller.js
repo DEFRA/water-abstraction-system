@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Controller for /licences-versions endpoints
  * @module LicenceVersionsController
  */
 
-const ViewService = require('../services/licence-versions/view.service.js')
+import ViewService from '../services/licence-versions/view.service.js'
 
 async function view(request, h) {
   const {
@@ -18,6 +16,6 @@ async function view(request, h) {
   return h.view(`licence-versions/view.njk`, pageData)
 }
 
-module.exports = {
+export default {
   view
 }

@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the licence points page
  * @module ViewPointsService
  */
 
-const FetchPointsService = require('../licences/fetch-points.service.js')
-const FetchLicenceService = require('./fetch-licence.service.js')
-const PointsPresenter = require('../../presenters/licences/points.presenter.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import FetchPointsService from '../licences/fetch-points.service.js'
+import FetchLicenceService from './fetch-licence.service.js'
+import PointsPresenter from '../../presenters/licences/points.presenter.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence points page
@@ -32,6 +30,6 @@ async function go(licenceId, auth) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

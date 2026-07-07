@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Determines if a licence with a change in return log should be flagged for supplementary billing
  * @module DetermineReturnLogFlagsService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const ReturnLogModel = require('../../../models/return-log.model.js')
+import ReturnLogModel from '../../../models/return-log.model.js'
 
 const SROC_START_DATE = new Date('2022-04-01')
 
@@ -78,6 +76,6 @@ async function _fetchReturnLog(returnLogId) {
     })
 }
 
-module.exports = {
+export default {
   go
 }

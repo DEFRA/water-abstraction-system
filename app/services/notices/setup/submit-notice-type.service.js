@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the `/notices/setup/{sessionId}/notice-type` page
  *
  * @module SubmitNoticeTypeService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const NoticeTypePresenter = require('../../../presenters/notices/setup/notice-type.presenter.js')
-const NoticeTypeValidator = require('../../../validators/notices/setup/notice-type.validator.js')
-const { NoticeJourney, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
-const { flashNotification, generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import NoticeTypePresenter from '../../../presenters/notices/setup/notice-type.presenter.js'
+import NoticeTypeValidator from '../../../validators/notices/setup/notice-type.validator.js'
+import { NoticeJourney, NoticeTypes } from '../../../lib/static-lookups.lib.js'
+import { flashNotification, generateNoticeReferenceCode } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for the `/notices/setup/{sessionId}/notice-type` page
@@ -96,6 +94,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

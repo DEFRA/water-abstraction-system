@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for charge_categories (water.billing_charge_categories)
  * @module ChargeCategoryModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class ChargeCategoryModel extends BaseModel {
   static get tableName() {
@@ -28,4 +26,4 @@ class ChargeCategoryModel extends BaseModel {
   }
 }
 
-module.exports = ChargeCategoryModel
+export default ChargeCategoryModel

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Used to wipe the test database of all tables, views and legacy schemas
  * @module WipeDatabase
  */
 
-const { dbConfig } = require('./db.js')
+import { dbConfig } from './db.js'
 
-const { wipe } = require('../test/support/database.js')
+import { wipe } from '../test/support/database.js'
 
 /**
  * Wipe the test database of all tables, views and legacy schemas

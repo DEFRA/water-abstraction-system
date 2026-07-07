@@ -1,6 +1,4 @@
-'use strict'
-
-const BillRunsController = require('../controllers/bill-runs.controller.js')
+import BillRunsController from '../controllers/bill-runs.controller.js'
 
 const routes = [
   {
@@ -101,4 +99,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Connects with the Charging Module to get customer files exported in the last `x` days
  * @module ChargingModuleViewBillRunRequest
  */
 
-const ChargingModuleRequest = require('../../requests/charging-module.request.js')
+import ChargingModuleRequest from '../../requests/charging-module.request.js'
 
 /**
  * Connects with the Charging Module to get customer files exported in the last `x` days
@@ -26,6 +24,6 @@ async function send(days) {
   return result
 }
 
-module.exports = {
+export default {
   send
 }

@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/access' page
  *
  * @module SubmitAccessService
  */
 
-const AccessPresenter = require('../../../../presenters/users/internal/setup/access.presenter.js')
-const AccessValidator = require('../../../../validators/users/internal/setup/access.validator.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
-const { flashNotification } = require('../../../../lib/general.lib.js')
+import AccessPresenter from '../../../../presenters/users/internal/setup/access.presenter.js'
+import AccessValidator from '../../../../validators/users/internal/setup/access.validator.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
+import { flashNotification } from '../../../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/access' page
@@ -62,6 +60,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

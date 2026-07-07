@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Generate a two-part tariff transaction data from the the charge reference and other information passed in
  * @module GenerateTwoPartTariffTransactionService
  */
 
-const { generateUUID } = require('../../lib/general.lib.js')
+import { generateUUID } from '../../lib/general.lib.js'
 
 /**
  * Generate a two-part tariff transaction data from the the charge reference and other information passed in
@@ -131,6 +129,6 @@ function _standardTransaction(
   }
 }
 
-module.exports = {
+export default {
   go
 }

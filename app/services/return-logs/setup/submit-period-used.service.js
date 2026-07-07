@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/period-used` page
  * @module SubmitPeriodUsedService
  */
 
-const AllocateSingleVolumeToLinesService = require('./allocate-single-volume-to-lines.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const PeriodUsedPresenter = require('../../../presenters/return-logs/setup/period-used.presenter.js')
-const PeriodUsedValidator = require('../../../validators/return-logs/setup/period-used.validator.js')
-const { determineAbstractionPeriods } = require('../../../lib/abstraction-period.lib.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import AllocateSingleVolumeToLinesService from './allocate-single-volume-to-lines.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import PeriodUsedPresenter from '../../../presenters/return-logs/setup/period-used.presenter.js'
+import PeriodUsedValidator from '../../../validators/return-logs/setup/period-used.validator.js'
+import { determineAbstractionPeriods } from '../../../lib/abstraction-period.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/period-used` page
@@ -118,6 +116,6 @@ function _validate(payload, session) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for licence_document_roles (crm_v2.document_roles)
  * @module LicenceDocumentRoleModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class LicenceDocumentRoleModel extends BaseModel {
   static get tableName() {
@@ -60,4 +58,4 @@ class LicenceDocumentRoleModel extends BaseModel {
   }
 }
 
-module.exports = LicenceDocumentRoleModel
+export default LicenceDocumentRoleModel

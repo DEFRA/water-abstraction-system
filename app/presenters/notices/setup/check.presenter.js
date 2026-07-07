@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Formats data for the `/notices/setup/check` page
  * @module CheckPresenter
  */
 
-const ContactPresenter = require('./contact.presenter.js')
-const DatabaseConfig = require('../../../../config/database.config.js')
-const { compareStrings } = require('../../../lib/general.lib.js')
-const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.js')
+import ContactPresenter from './contact.presenter.js'
+import DatabaseConfig from '../../../../config/database.config.js'
+import { compareStrings } from '../../../lib/general.lib.js'
+import { NoticeType, NoticeJourney } from '../../../lib/static-lookups.lib.js'
 
 const NOTIFICATION_TYPES = {
   [NoticeType.ABSTRACTION_ALERTS]: 'Abstraction alerts',
@@ -207,6 +205,6 @@ function _warning(formattedRecipients) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

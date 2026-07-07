@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Generates the Charging Module create customer request from an WRLS billing account
  * @module ChargingModuleCreateCustomerChangePresenter
@@ -162,6 +160,6 @@ function _truncate(stringToTruncate, maximumLength) {
   return `${truncatedString}...`
 }
 
-module.exports = {
+export default {
   go
 }

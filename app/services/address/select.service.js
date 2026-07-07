@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the `address/{sessionId}/select` page
  *
  * @module SelectAddressService
  */
 
-const FetchSessionDal = require('../../dal/fetch-session.dal.js')
-const LookupPostcodeRequest = require('../../requests/address-facade/lookup-postcode.request.js')
-const SelectPresenter = require('../../presenters/address/select.presenter.js')
+import FetchSessionDal from '../../dal/fetch-session.dal.js'
+import LookupPostcodeRequest from '../../requests/address-facade/lookup-postcode.request.js'
+import SelectPresenter from '../../presenters/address/select.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the `address/{sessionId}/select` page
@@ -31,6 +29,6 @@ async function go(sessionId) {
   return SelectPresenter.go(session, result.matches)
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetch all licences for abstraction alert licences ids
  * @module FetchAbstractionAlertLicencesDal
  */
 
-const LicenceModel = require('../../models/licence.model.js')
+import LicenceModel from '../../models/licence.model.js'
 
 /**
  * Fetch all licences for abstraction alert licences ids
@@ -25,6 +23,6 @@ async function go(abstractionAlertLicences) {
     .orderBy('licenceRef')
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/companies/{id}/address/{addressId}/{role}' page
  *
  * @module ViewCompanyWithAddressService
  */
 
-const CompanyWithAddressPresenter = require('../../presenters/companies/company-with-address.presenter.js')
-const FetchAddressDal = require('../../dal/companies/fetch-address.dal.js')
-const FetchCompanyDal = require('../../dal/companies/fetch-company.dal.js')
+import CompanyWithAddressPresenter from '../../presenters/companies/company-with-address.presenter.js'
+import FetchAddressDal from '../../dal/companies/fetch-address.dal.js'
+import FetchCompanyDal from '../../dal/companies/fetch-company.dal.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/companies/{id}/address/{addressId}/{role}' page
@@ -31,6 +29,6 @@ async function go(companyId, addressId, role, licenceId = null) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

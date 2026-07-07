@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Date helper methods
  * @module DatesLib
@@ -407,7 +405,7 @@ function _cloneDate(dateToClone) {
   return new Date(`${year}-${month}-${day}`)
 }
 
-module.exports = {
+export default {
   compareDates,
   daysFromPeriod,
   determineFinancialYearEnd,

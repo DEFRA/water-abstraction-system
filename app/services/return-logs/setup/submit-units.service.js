@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/units` page
  * @module SubmitUnitsService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const UnitsPresenter = require('../../../presenters/return-logs/setup/units.presenter.js')
-const UnitsValidator = require('../../../validators/return-logs/setup/units.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { returnUnits } = require('../../../lib/static-lookups.lib.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import GeneralLib from '../../../lib/general.lib.js'
+import UnitsPresenter from '../../../presenters/return-logs/setup/units.presenter.js'
+import UnitsValidator from '../../../validators/return-logs/setup/units.validator.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
+import { returnUnits } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/units` page
@@ -71,6 +69,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

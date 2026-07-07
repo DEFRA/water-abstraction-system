@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/users/me/profile-details` page
  * @module ProfileDetailsValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const EMAIL_DOMAIN_PATTERN = /^.+@environment-agency.gov.uk$/
 const MAX_ADDRESS_LENGTH = 300
@@ -50,6 +48,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/licence-monitoring-station/setup/{sessionId}/stop-or-reduce` page
  * @module StopOrReduceService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const StopOrReducePresenter = require('../../../presenters/licence-monitoring-station/setup/stop-or-reduce.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import StopOrReducePresenter from '../../../presenters/licence-monitoring-station/setup/stop-or-reduce.presenter.js'
 
 /**
  * Orchestrates presenting the data for `/licence-monitoring-station/setup/{sessionId}/stop-or-reduce` page
@@ -25,6 +23,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

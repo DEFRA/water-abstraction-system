@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Orchestrates sending the verification email to the new user, recording the results, and checking the status
  * @module SendVerificationEmailService
  */
 
-const CheckNotificationStatusService = require('../../../notifications/check-notification-status.service.js')
-const CreateEmailRequest = require('../../../../requests/notify/create-email.request.js')
-const NotifyUpdatePresenter = require('../../../../presenters/notifications/notify-update.presenter.js')
-const UpdateNotificationDal = require('../../../../dal/users/internal/update-notification.dal.js')
-const { pause } = require('../../../../lib/general.lib.js')
-const { NOTIFY_TEMPLATES } = require('../../../../lib/notify-templates.lib.js')
+import CheckNotificationStatusService from '../../../notifications/check-notification-status.service.js'
+import CreateEmailRequest from '../../../../requests/notify/create-email.request.js'
+import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'
+import UpdateNotificationDal from '../../../../dal/users/internal/update-notification.dal.js'
+import { pause } from '../../../../lib/general.lib.js'
+import { NOTIFY_TEMPLATES } from '../../../../lib/notify-templates.lib.js'
 
-const notifyConfig = require('../../../../../config/notify.config.js')
+import notifyConfig from '../../../../../config/notify.config.js'
 
 /**
  * Orchestrates sending the verification email to the new user, recording the results, and checking the status
@@ -57,6 +55,6 @@ async function _sendEmail(notification) {
   return sendResult.status
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for external users on the `/users/external/setup/{id}/check` page
  * @module CheckPresenter
  */
 
-const { formatLicencesToUnlink } = require('../../base-users.presenter.js')
+import { formatLicencesToUnlink } from '../../base-users.presenter.js'
 
 /**
  * Formats data for external users on the `/users/external/setup/{id}/check` page
@@ -47,6 +45,6 @@ function _warning(licences) {
   return warning
 }
 
-module.exports = {
+export default {
   go
 }

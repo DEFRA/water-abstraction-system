@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/notices/setup/returns-period` page
  * @module SubmitReturnsPeriodService
  */
 
-const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const ReturnsPeriodPresenter = require('../../../presenters/notices/setup/returns-period.presenter.js')
-const ReturnsPeriodValidator = require('../../../validators/notices/setup/returns-periods.validator.js')
-const { flashNotification } = require('../../../lib/general.lib.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import DetermineReturnsPeriodService from './determine-returns-period.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import ReturnsPeriodPresenter from '../../../presenters/notices/setup/returns-period.presenter.js'
+import ReturnsPeriodValidator from '../../../validators/notices/setup/returns-periods.validator.js'
+import { flashNotification } from '../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
 /**
  * Formats data for the `/notices/setup/returns-period` page
@@ -69,6 +67,6 @@ function _validate(payload, noticeType) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

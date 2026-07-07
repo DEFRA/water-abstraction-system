@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for licence_supplementary_years
  * @module LicenceSupplementaryYearModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class LicenceSupplementaryYearModel extends BaseModel {
   static get tableName() {
@@ -36,4 +34,4 @@ class LicenceSupplementaryYearModel extends BaseModel {
   }
 }
 
-module.exports = LicenceSupplementaryYearModel
+export default LicenceSupplementaryYearModel

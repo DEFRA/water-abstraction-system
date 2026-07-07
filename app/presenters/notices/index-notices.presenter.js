@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/notices` page
  * @module IndexNoticesPresenter
  */
 
-const { formatLongDate, formatNoticeType } = require('../base.presenter.js')
+import { formatLongDate, formatNoticeType } from '../base.presenter.js'
 
 /**
  * Formats data for the `/notices` page
@@ -81,6 +79,6 @@ function _noticeRowData(notices) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

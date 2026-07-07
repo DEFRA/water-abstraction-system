@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates page data for the '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}' page
  * @module ViewReviewChargeElementService
  */
 
-const FetchReviewChargeElementService = require('./fetch-review-charge-element.service.js')
-const ReviewChargeElementPresenter = require('../../../presenters/bill-runs/review/review-charge-element.presenter.js')
+import FetchReviewChargeElementService from './fetch-review-charge-element.service.js'
+import ReviewChargeElementPresenter from '../../../presenters/bill-runs/review/review-charge-element.presenter.js'
 
 /**
  * Orchestrates page data for the '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}' page
@@ -32,6 +30,6 @@ async function go(reviewChargeElementId, elementIndex, yar) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

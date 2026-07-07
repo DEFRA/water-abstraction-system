@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for billing_account_addresses (crm_v2.invoice_account_addresses)
  * @module BillingAccountAddressModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class BillingAccountAddressModel extends BaseModel {
   static get tableName() {
@@ -52,4 +50,4 @@ class BillingAccountAddressModel extends BaseModel {
   }
 }
 
-module.exports = BillingAccountAddressModel
+export default BillingAccountAddressModel

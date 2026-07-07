@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Check if the current summer or all year return cycle exists, and if not create it, then return the result
  * @module CheckReturnCycleService
  */
 
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
-const { determineCycleEndDate, determineCycleStartDate } = require('../../../lib/return-cycle-dates.lib.js')
-const ReturnCycleModel = require('../../../models/return-cycle.model.js')
+import { timestampForPostgres } from '../../../lib/general.lib.js'
+import { determineCycleEndDate, determineCycleStartDate } from '../../../lib/return-cycle-dates.lib.js'
+import ReturnCycleModel from '../../../models/return-cycle.model.js'
 
 /**
  * Check if the current summer or all year return cycle exists, and if not create it, then return the result
@@ -66,6 +64,6 @@ async function _matchingReturnCycle(startDate, endDate, summer) {
     .first()
 }
 
-module.exports = {
+export default {
   go
 }

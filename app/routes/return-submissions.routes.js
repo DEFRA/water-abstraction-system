@@ -1,6 +1,4 @@
-'use strict'
-
-const ReturnSubmissionsController = require('../controllers/return-submissions.controller.js')
+import ReturnSubmissionsController from '../controllers/return-submissions.controller.js'
 
 const routes = [
   {
@@ -12,4 +10,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

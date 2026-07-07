@@ -1,18 +1,16 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '/users/external/setup/{sessionId}/licences' page
  *
  * @module SubmitLicencesService
  */
 
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const LicencesPresenter = require('../../../../presenters/users/external/setup/licences.presenter.js')
-const LicencesValidator = require('../../../../validators/users/external/setup/licences.validator.js')
-const { checkUrl } = require('../../../../lib/check-page.lib.js')
-const { flashNotification } = require('../../../../lib/general.lib.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
-const { handleOneOptionSelected } = require('../../../../lib/submit-page.lib.js')
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import LicencesPresenter from '../../../../presenters/users/external/setup/licences.presenter.js'
+import LicencesValidator from '../../../../validators/users/external/setup/licences.validator.js'
+import { checkUrl } from '../../../../lib/check-page.lib.js'
+import { flashNotification } from '../../../../lib/general.lib.js'
+import { formatValidationResult } from '../../../../presenters/base.presenter.js'
+import { handleOneOptionSelected } from '../../../../lib/submit-page.lib.js'
 
 /**
  * Orchestrates validating the data for the '/users/external/setup/{sessionId}/licences' page
@@ -108,6 +106,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

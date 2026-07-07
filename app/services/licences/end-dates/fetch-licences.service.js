@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches all licences that are in NALD, joins them to those in WRLS, and returns the end dates for both
  * @module FetchLicences
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 /**
  * Fetches all licences that are in NALD, joins them to those in WRLS, and returns the end dates for both
@@ -38,6 +36,6 @@ async function go() {
   return rows
 }
 
-module.exports = {
+export default {
   go
 }

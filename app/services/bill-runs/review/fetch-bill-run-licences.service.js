@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Fetches bill run and licences data for two-part-tariff billing review
  * @module FetchBillRunLicencesService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const ReviewLicenceModel = require('../../../models/review-licence.model.js')
-const { twoPartTariffReviewIssues } = require('../../../lib/static-lookups.lib.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import ReviewLicenceModel from '../../../models/review-licence.model.js'
+import { twoPartTariffReviewIssues } from '../../../lib/static-lookups.lib.js'
 
-const DatabaseConfig = require('../../../../config/database.config.js')
+import DatabaseConfig from '../../../../config/database.config.js'
 
 /**
  * Fetches bill run and licences data for two-part-tariff billing review
@@ -117,6 +115,6 @@ function _filterIssues(issues, reviewLicenceQuery) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

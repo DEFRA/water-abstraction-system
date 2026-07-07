@@ -1,13 +1,13 @@
-'use strict'
-
 /**
  * Returns information about the `system` repo in the format required by the info service
  * @module FetchSystemInfoService
  */
 
 // We use promisify to wrap exec in a promise. This allows us to await it without resorting to using callbacks.
-const util = require('node:util')
-const exec = util.promisify(require('node:child_process').exec)
+import { exec as childProcessExec } from 'node:child_process'
+import { promisify } from 'node:util'
+
+const exec = promisify(childProcessExec)
 
 /**
  * Returns information about the `system` repo in the format required by the info service
@@ -44,6 +44,6 @@ async function _getTagReference() {
   }
 }
 
-module.exports = {
+export default {
   go
 }

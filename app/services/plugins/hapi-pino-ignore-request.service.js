@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Used by HapiPinoPlugin to determine which requests to log
  * @module HapiPinoIgnoreRequestService
@@ -58,6 +56,6 @@ function go(options, request) {
   return false
 }
 
-module.exports = {
+export default {
   go
 }

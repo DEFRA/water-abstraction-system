@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
  *
  * @module AlertThresholdsValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const ERROR_MESSAGE = 'Select applicable threshold(s)'
 
@@ -32,6 +30,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Updates the end date for a return version
  * @module UpdateReturnVersionEndDateDal
  */
 
-const ReturnVersionModel = require('../../models/return-version.model.js')
+import ReturnVersionModel from '../../models/return-version.model.js'
 
 /**
  * Updates the end date for a return version
@@ -18,6 +16,6 @@ async function go(returnVersionId, endDate, trx) {
   await ReturnVersionModel.query(trx).findById(returnVersionId).patch({ endDate })
 }
 
-module.exports = {
+export default {
   go
 }

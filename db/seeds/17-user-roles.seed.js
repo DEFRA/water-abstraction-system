@@ -1,12 +1,10 @@
-'use strict'
+import { db } from '../db.js'
+import { data as roles } from './data/roles.js'
+import UserRoleModel from '../../app/models/user-role.model.js'
+import { data as userRoles } from './data/user-roles.js'
+import { data as users } from './data/users.js'
 
-const { db } = require('../db.js')
-const { data: roles } = require('./data/roles.js')
-const UserRoleModel = require('../../app/models/user-role.model.js')
-const { data: userRoles } = require('./data/user-roles.js')
-const { data: users } = require('./data/users.js')
-
-const ServerConfig = require('../../config/server.config.js')
+import ServerConfig from '../../config/server.config.js'
 
 async function seed() {
   // These user groups relate to users that are only for use in our non-production environments
@@ -63,6 +61,6 @@ function _names(userRole) {
   return { role, username }
 }
 
-module.exports = {
+export default {
   seed
 }

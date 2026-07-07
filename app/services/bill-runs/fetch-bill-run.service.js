@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches data needed for the bill run page which includes a summary for each bill linked to the bill run
  * @module FetchBillRunService
  */
 
-const BillRunModel = require('../../models/bill-run.model.js')
-const { db } = require('../../../db/db.js')
+import BillRunModel from '../../models/bill-run.model.js'
+import { db } from '../../../db/db.js'
 
 /**
  * Fetch the matching Bill Run plus a summary for each bill linked to it
@@ -118,6 +116,6 @@ async function _fetchBillSummaries(id) {
   return results
 }
 
-module.exports = {
+export default {
   go
 }

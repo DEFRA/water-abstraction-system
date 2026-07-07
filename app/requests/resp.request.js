@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Use for making http requests to the ReSP API
  * @module RespRequest
  */
 
-const BaseRequest = require('./base.request.js')
+import BaseRequest from './base.request.js'
 
-const respConfig = require('../../config/resp.config.js')
+import respConfig from '../../config/resp.config.js'
 
 /**
  * Sends a GET request to the ReSP API for the provided route
@@ -79,6 +77,6 @@ function _parseResult(result) {
   return result
 }
 
-module.exports = {
+export default {
   get
 }

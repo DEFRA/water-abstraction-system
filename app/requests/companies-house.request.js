@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Use for making http requests to the GOV.UK Companies House service https://api.companieshouse.gov.uk/
  * @module CompaniesHouseRequest
  */
 
-const BaseRequest = require('./base.request.js')
+import BaseRequest from './base.request.js'
 
-const companiesHouseConfig = require('../../config/companies-house.config.js')
+import companiesHouseConfig from '../../config/companies-house.config.js'
 
 /**
  * Sends a GET request to Companies House
@@ -82,6 +80,6 @@ function _requestOptions(accessToken, searchParams) {
   }
 }
 
-module.exports = {
+export default {
   get
 }

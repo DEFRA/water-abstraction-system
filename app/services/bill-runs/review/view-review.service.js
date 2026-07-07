@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/bill-runs/review/{id}' page
  * @module ViewReviewService
  */
 
-const FetchBillRunLicencesService = require('./fetch-bill-run-licences.service.js')
-const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
-const ReviewPresenter = require('../../../presenters/bill-runs/review/review.presenter.js')
-const { readFlashNotification } = require('../../../lib/general.lib.js')
-const { processSavedFilters } = require('../../../lib/submit-page.lib.js')
+import FetchBillRunLicencesService from './fetch-bill-run-licences.service.js'
+import PaginatorPresenter from '../../../presenters/paginator.presenter.js'
+import ReviewPresenter from '../../../presenters/bill-runs/review/review.presenter.js'
+import { readFlashNotification } from '../../../lib/general.lib.js'
+import { processSavedFilters } from '../../../lib/submit-page.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/bill-runs/review/{id}' page
@@ -59,6 +57,6 @@ function _filters(yar, filterKey) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

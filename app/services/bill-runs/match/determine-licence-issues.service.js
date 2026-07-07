@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Determines the issues on a licence for a two-part tariff bill run
  * @module DetermineLicenceIssuesService
  */
 
-const { compareStrings } = require('../../../lib/general.lib.js')
-const { twoPartTariffReviewIssues } = require('../../../lib/static-lookups.lib.js')
+import { compareStrings } from '../../../lib/general.lib.js'
+import { twoPartTariffReviewIssues } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Determines the issues on a licence for a two-part tariff bill run
@@ -276,6 +274,6 @@ function _returnsReceivedStatus(returnLogs, licenceReturnLogs) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

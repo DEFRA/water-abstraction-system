@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `address/{sessionId}/select` page
  *
  * @module SubmitSelectService
  */
 
-const FetchSessionDal = require('../../dal/fetch-session.dal.js')
-const LookupPostcodeRequest = require('../../requests/address-facade/lookup-postcode.request.js')
-const LookupUPRNRequest = require('../../requests/address-facade/lookup-uprn.request.js')
-const SelectPresenter = require('../../presenters/address/select.presenter.js')
-const SelectValidator = require('../../validators/address/select.validator.js')
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
+import FetchSessionDal from '../../dal/fetch-session.dal.js'
+import LookupPostcodeRequest from '../../requests/address-facade/lookup-postcode.request.js'
+import LookupUPRNRequest from '../../requests/address-facade/lookup-uprn.request.js'
+import SelectPresenter from '../../presenters/address/select.presenter.js'
+import SelectValidator from '../../validators/address/select.validator.js'
+import { formatValidationResult } from '../../presenters/base.presenter.js'
 
 /**
  * Orchestrates validating the data for `address/{sessionId}/select` page
@@ -94,6 +92,6 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
+export default {
   go
 }

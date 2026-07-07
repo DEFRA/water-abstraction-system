@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches an existing return version and its return requirements in order for a new one to be copied from it
  * @module FetchExistingRequirementsService
  */
 
-const ReturnVersionModel = require('../../../../models/return-version.model.js')
+import ReturnVersionModel from '../../../../models/return-version.model.js'
 
 /**
  * Fetches an existing return version and its return requirements in order for a new one to be copied from it
@@ -61,6 +59,6 @@ async function _fetch(returnVersionId) {
     })
 }
 
-module.exports = {
+export default {
   go
 }

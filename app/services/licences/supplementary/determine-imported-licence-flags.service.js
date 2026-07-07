@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Determines if a licence should be flagged for supplementary billing based on changes to its 'end dates'
  * @module DetermineImportedLicenceFlagsService
  */
 
-const FetchExistingLicenceDetailsService = require('./fetch-existing-licence-details.service.js')
-const { determineCurrentFinancialYear } = require('../../../lib/general.lib.js')
+import FetchExistingLicenceDetailsService from './fetch-existing-licence-details.service.js'
+import { determineCurrentFinancialYear } from '../../../lib/general.lib.js'
 
 const SROC_START_DATE = new Date('2022-04-01')
 
@@ -114,6 +112,6 @@ function _updateFlags(existingLicenceDetails, flagForPreSrocSupplementary, resul
   result.flagForTwoPartTariffSupplementary = existingLicenceDetails.two_part_tariff_charge_versions
 }
 
-module.exports = {
+export default {
   go
 }

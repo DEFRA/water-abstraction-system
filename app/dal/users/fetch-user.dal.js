@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches basic user details for user view pages
  * @module FetchUserDal
  */
 
-const UserModel = require('../../models/user.model.js')
+import UserModel from '../../models/user.model.js'
 
 /**
  * Fetches basic user details for user view pages
@@ -18,6 +16,6 @@ async function go(id) {
   return UserModel.query().findById(id).select(['id', 'licenceEntityId', 'username'])
 }
 
-module.exports = {
+export default {
   go
 }

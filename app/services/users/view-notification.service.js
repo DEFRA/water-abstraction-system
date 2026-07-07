@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the view notification page
  * @module ViewNotificationService
  */
 
-const FetchNotificationDal = require('../../dal/users/fetch-notification.dal.js')
-const FetchUserDal = require('../../dal/users/fetch-user.dal.js')
-const NotificationPresenter = require('../../presenters/users/notification.presenter.js')
+import FetchNotificationDal from '../../dal/users/fetch-notification.dal.js'
+import FetchUserDal from '../../dal/users/fetch-user.dal.js'
+import NotificationPresenter from '../../presenters/users/notification.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the view notification page
@@ -38,6 +36,6 @@ function _superUser(auth) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

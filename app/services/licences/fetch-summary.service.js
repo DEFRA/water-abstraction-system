@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches data needed for the view '/licences/{id}/summary` page
  * @module FetchSummaryService
  */
 
-const LicenceModel = require('../../models/licence.model.js')
+import LicenceModel from '../../models/licence.model.js'
 
 /**
  * Fetch the matching licence and return data needed for the view licence page summary tab
@@ -90,6 +88,6 @@ async function _fetch(licenceId) {
     })
 }
 
-module.exports = {
+export default {
   go
 }

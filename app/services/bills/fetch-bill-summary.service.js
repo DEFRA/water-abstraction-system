@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches data for the remove bill page which summarises the bill run and billing details for the bill
  * @module FetchBillSummaryService
  */
 
-const BillModel = require('../../models/bill.model.js')
+import BillModel from '../../models/bill.model.js'
 
 /**
  * Fetches data for the remove bill page which summarises the bill run and billing details for the bill
@@ -56,6 +54,6 @@ async function _fetch(billId) {
     })
 }
 
-module.exports = {
+export default {
   go
 }

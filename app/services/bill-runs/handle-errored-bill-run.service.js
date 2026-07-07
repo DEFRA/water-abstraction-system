@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Handles an errored bill run (setting status etc.)
  * @module HandleErroredBillRunService
  */
 
-const BillRunModel = require('../../models/bill-run.model.js')
+import BillRunModel from '../../models/bill-run.model.js'
 
 /**
  * Sets the status of the specified bill run to `error`, and logs an error if this can't be done.
@@ -34,6 +32,6 @@ async function _updateBillRun(billRunId, errorCode) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

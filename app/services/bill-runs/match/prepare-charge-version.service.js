@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Prepares the charge version for matching
  * @module PrepareChargeVersionService
  */
 
-const { determineAbstractionPeriods } = require('../../../lib/abstraction-period.lib.js')
-const DetermineChargePeriodService = require('../determine-charge-period.service.js')
+import { determineAbstractionPeriods } from '../../../lib/abstraction-period.lib.js'
+import DetermineChargePeriodService from '../determine-charge-period.service.js'
 
 /**
  * Prepares the charge version for matching with its returns
@@ -79,6 +77,6 @@ function _sortChargeReferencesBySubsistenceCharge(chargeReferences) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

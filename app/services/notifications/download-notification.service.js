@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Orchestrates fetching and returning the PDF data for a notification
  * @module DownloadNotificationService
  */
 
-const FetchDownloadNotificationService = require('./fetch-notification-download.service.js')
+import FetchDownloadNotificationService from './fetch-notification-download.service.js'
 
 /**
  * Orchestrates fetching and returning the PDF data for a notification
@@ -20,6 +18,6 @@ async function go(notificationId) {
   return notificationData.pdf
 }
 
-module.exports = {
+export default {
   go
 }

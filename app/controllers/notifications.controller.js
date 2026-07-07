@@ -1,15 +1,14 @@
-'use strict'
-
 /**
  * Controller for /notifications endpoints
  * @module NotificationsController
  */
 
-const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
+import http2 from 'node:http2'
+import DownloadNotificationService from '../services/notifications/download-notification.service.js'
+import ProcessReturnedLetterService from '../services/notifications/process-returned-letter.service.js'
+import ViewNotificationService from '../services/notifications/view-notification.service.js'
 
-const DownloadNotificationService = require('../services/notifications/download-notification.service.js')
-const ProcessReturnedLetterService = require('../services/notifications/process-returned-letter.service.js')
-const ViewNotificationService = require('../services/notifications/view-notification.service.js')
+const { HTTP_STATUS_NO_CONTENT } = http2.constants
 
 async function download(request, h) {
   const { id: notificationId } = request.params
@@ -36,7 +35,7 @@ async function view(request, h) {
   return h.view('notifications/view.njk', pageData)
 }
 
-module.exports = {
+export default {
   download,
   returnedLetter,
   view

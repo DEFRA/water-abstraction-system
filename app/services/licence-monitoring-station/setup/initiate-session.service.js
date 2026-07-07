@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Initiates the session record used for setting up a new licence monitoring station
  * @module InitiateSessionService
  */
 
-const CreateSessionDal = require('../../../dal/create-session.dal.js')
-const MonitoringStationModel = require('../../../models/monitoring-station.model.js')
+import CreateSessionDal from '../../../dal/create-session.dal.js'
+import MonitoringStationModel from '../../../models/monitoring-station.model.js'
 
 /**
  * Initiates the session record used for setting up a new licence monitoring station journey
@@ -36,6 +34,6 @@ async function _fetchMonitoringStation(monitoringStationId) {
   return MonitoringStationModel.query().select('label').findById(monitoringStationId)
 }
 
-module.exports = {
+export default {
   go
 }

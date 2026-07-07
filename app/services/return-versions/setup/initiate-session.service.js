@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Initiates the session record used for setting up a new return requirement
  * @module InitiateSessionService
  */
 
-const Boom = require('@hapi/boom')
+import Boom from '@hapi/boom'
 
-const CreateSessionDal = require('../../../dal/create-session.dal.js')
-const FetchLicenceService = require('./fetch-licence.service.js')
+import CreateSessionDal from '../../../dal/create-session.dal.js'
+import FetchLicenceService from './fetch-licence.service.js'
 
 /**
  * Initiates the session record using for setting up a new return requirement
@@ -67,6 +65,6 @@ function _currentVersionStartDate(licenceVersions) {
   return startDate
 }
 
-module.exports = {
+export default {
   go
 }

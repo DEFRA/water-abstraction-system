@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats notifications data for display in communications tables on view licence communications and return log pages
  * @module NotificationsTablePresenter
  */
 
-const { formatLongDate, formatNoticeType, sentenceCase } = require('../base.presenter.js')
+import { formatLongDate, formatNoticeType, sentenceCase } from '../base.presenter.js'
 
 /**
  * Formats data for display in communications tables on view licence communications and return log pages
@@ -63,6 +61,6 @@ function _queryParam(licenceId, returnLogId, companyContactId) {
   return ''
 }
 
-module.exports = {
+export default {
   go
 }

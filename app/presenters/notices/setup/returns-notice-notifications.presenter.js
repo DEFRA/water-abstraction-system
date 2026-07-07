@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats recipients into notifications for a standard or ad-hoc returns invitation or reminder
  * @module ReturnsNoticeNotificationsPresenter
  */
 
-const NotifyAddressPresenter = require('./notify-address.presenter.js')
-const { formatLongDate } = require('../../base.presenter.js')
-const { NOTIFY_TEMPLATES } = require('../../../lib/notify-templates.lib.js')
+import NotifyAddressPresenter from './notify-address.presenter.js'
+import { formatLongDate } from '../../base.presenter.js'
+import { NOTIFY_TEMPLATES } from '../../../lib/notify-templates.lib.js'
 
 const MESSAGE_REFS = {
   alternateInvitations: {
@@ -108,6 +106,6 @@ function _letter(recipient, noticeId, session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

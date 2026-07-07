@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Takes previously billed transactions and returns reversed and cleansed versions of them for supplementary billing
  * @module ReverseSupplementaryTransactionsService
  */
 
-const { generateUUID } = require('../../lib/general.lib.js')
+import { generateUUID } from '../../lib/general.lib.js'
 
 /**
  * Takes previously billed transactions and returns reversed and cleansed versions of them for supplementary billing
@@ -46,6 +44,6 @@ function go(transactions, billLicenceId) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

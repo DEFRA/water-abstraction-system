@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the cancel bill run confirmation page
  * @module ViewCancelBillRunService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const ViewCancelBillRunPresenter = require('../../../presenters/bill-runs/view-cancel-bill-run.presenter.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import ViewCancelBillRunPresenter from '../../../presenters/bill-runs/view-cancel-bill-run.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the cancel bill run confirmation page
@@ -37,6 +35,6 @@ async function _fetchBillRun(id) {
     })
 }
 
-module.exports = {
+export default {
   go
 }

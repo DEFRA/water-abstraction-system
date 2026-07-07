@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/site-description` page
  * @module SubmitSiteDescriptionService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
-const SiteDescriptionPresenter = require('../../../presenters/return-versions/setup/site-description.presenter.js')
-const SiteDescriptionValidator = require('../../../validators/return-versions/setup/site-description.validator.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import GeneralLib from '../../../lib/general.lib.js'
+import SiteDescriptionPresenter from '../../../presenters/return-versions/setup/site-description.presenter.js'
+import SiteDescriptionValidator from '../../../validators/return-versions/setup/site-description.validator.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/site-description` page
@@ -78,6 +76,6 @@ function _validate(payload) {
   return formatValidationResult(validation)
 }
 
-module.exports = {
+export default {
   go
 }

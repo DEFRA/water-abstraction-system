@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Used by `AuthPlugin` to authenticate and authorise users
  * @module AuthService
  */
 
-const FetchUserRolesAndGroupsService = require('../idm/fetch-user-roles-and-groups.service.js')
+import FetchUserRolesAndGroupsService from '../idm/fetch-user-roles-and-groups.service.js'
 
-const featureFlagsConfig = require('../../../config/feature-flags.config.js')
+import featureFlagsConfig from '../../../config/feature-flags.config.js'
 
 /**
  * Used by `AuthPlugin` to authenticate and authorise users
@@ -117,6 +115,6 @@ function _permission(scope = []) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

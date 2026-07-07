@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for financial_agreements (water.financial_agreement_types)
  * @module FinancialAgreementModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class FinancialAgreementModel extends BaseModel {
   static get tableName() {
@@ -28,4 +26,4 @@ class FinancialAgreementModel extends BaseModel {
   }
 }
 
-module.exports = FinancialAgreementModel
+export default FinancialAgreementModel

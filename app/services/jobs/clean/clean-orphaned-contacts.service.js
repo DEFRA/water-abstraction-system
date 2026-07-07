@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Deletes contacts which have become orphaned
  * @module CleanOrphanedContactsService
  */
 
-const ContactModel = require('../../../models/contact.model.js')
+import ContactModel from '../../../models/contact.model.js'
 
 /**
  * Deletes contacts which have become orphaned
@@ -48,6 +46,6 @@ AND NOT EXISTS (
   return deletedCount
 }
 
-module.exports = {
+export default {
   go
 }

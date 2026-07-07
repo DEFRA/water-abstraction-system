@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats notification data ready for presenting in the view user notification page
  * @module ViewNotificationPresenter
  */
 
-const NotificationErrorPresenter = require('../notifications/notification-error.presenter.js')
-const { formatLongDate } = require('../base.presenter.js')
-const { userNotificationTypes } = require('../../lib/static-lookups.lib.js')
+import NotificationErrorPresenter from '../notifications/notification-error.presenter.js'
+import { formatLongDate } from '../base.presenter.js'
+import { userNotificationTypes } from '../../lib/static-lookups.lib.js'
 
 /**
  * Formats notification data ready for presenting in the view user notification page
@@ -62,6 +60,6 @@ function _contents(notification, superUser) {
   return plaintext
 }
 
-module.exports = {
+export default {
   go
 }

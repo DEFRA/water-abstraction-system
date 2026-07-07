@@ -1,17 +1,15 @@
-'use strict'
-
 /**
  * Export converted data to a temporary file
  * @module WriteTableToFileService
  */
 
-const fs = require('node:fs')
-const fsPromises = fs.promises
-const { pipeline, Transform } = require('node:stream')
-const path = require('node:path')
-const util = require('node:util')
+import fs from 'node:fs'
+import { pipeline, Transform } from 'node:stream'
+import path from 'node:path'
+import util from 'node:util'
 
-const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js')
+import { transformArrayToCSVRow } from '../../../lib/transform-to-csv.lib.js'
+const fsPromises = fs.promises
 
 /**
  * Converts data into CSV format and writes it to a file
@@ -77,6 +75,6 @@ async function _filenameWithPath(tableName, schemaFolderPath) {
   )
 }
 
-module.exports = {
+export default {
   go
 }

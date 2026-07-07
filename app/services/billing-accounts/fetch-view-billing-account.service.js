@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Fetches the matching billing account and additional records needed for the view billing account page
  * @module FetchViewBillingAccountService
  */
 
-const BillingAccountModel = require('../../models/billing-account.model.js')
-const BillModel = require('../../models/bill.model.js')
-const BillRunModel = require('../../models/bill-run.model.js')
+import BillingAccountModel from '../../models/billing-account.model.js'
+import BillModel from '../../models/bill.model.js'
+import BillRunModel from '../../models/bill-run.model.js'
 
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
 
 /**
  * Fetches the matching billing account and additional records needed for the view billing account page
@@ -59,6 +57,6 @@ async function _fetchBills(billingAccountId, page) {
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
 
-module.exports = {
+export default {
   go
 }

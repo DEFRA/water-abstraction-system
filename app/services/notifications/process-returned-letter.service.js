@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Processes a returned letter callback from GOV.UK Notify
  *
  * @module ProcessReturnedLetterService
  */
 
-const NotificationModel = require('../../models/notification.model.js')
-const UpdateNoticeService = require('../notices/update-notice.service.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } = require('../../lib/general.lib.js')
+import NotificationModel from '../../models/notification.model.js'
+import UpdateNoticeService from '../notices/update-notice.service.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Processes a returned letter callback from GOV.UK Notify
@@ -45,6 +43,6 @@ async function go(payload) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

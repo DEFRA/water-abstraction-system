@@ -1,10 +1,8 @@
-'use strict'
+import Big from 'big.js'
 
-const Big = require('big.js')
-
-const { formatNumber, sentenceCase } = require('../base.presenter.js')
-const { convertFromCubicMetres } = require('../../lib/general.lib.js')
-const { returnRequirementFrequencies, returnUnits, unitNames } = require('../../lib/static-lookups.lib.js')
+import { formatNumber, sentenceCase } from '../base.presenter.js'
+import { convertFromCubicMetres } from '../../lib/general.lib.js'
+import { returnRequirementFrequencies, returnUnits, unitNames } from '../../lib/static-lookups.lib.js'
 
 /**
  * Formats the details of a return submission meter
@@ -189,7 +187,7 @@ function _linkDetails(id, method, frequency, endDate, rootPath) {
   }
 }
 
-module.exports = {
+export default {
   formatMeterDetails,
   generateSummaryTableHeaders,
   generateSummaryTableRows

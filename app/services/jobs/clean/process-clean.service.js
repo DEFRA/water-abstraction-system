@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Processes deletion from the service of redundant records, for example, old sessions
  * @module ProcessCleanService
  */
 
-const CleanEmptyBillRunsService = require('./clean-empty-bill-runs.service.js')
-const CleanEmptyVoidReturnLogsService = require('./clean-empty-void-return-logs.service.js')
-const CleanExpiredSessionsService = require('./clean-expired-sessions.service.js')
-const CleanIncompleteCompanyContactsService = require('./clean-incomplete-company-contacts.service.js')
-const CleanOrphanedContactsService = require('./clean-orphaned-contacts.service.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
+import CleanEmptyBillRunsService from './clean-empty-bill-runs.service.js'
+import CleanEmptyVoidReturnLogsService from './clean-empty-void-return-logs.service.js'
+import CleanExpiredSessionsService from './clean-expired-sessions.service.js'
+import CleanIncompleteCompanyContactsService from './clean-incomplete-company-contacts.service.js'
+import CleanOrphanedContactsService from './clean-orphaned-contacts.service.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 
 /**
  * Processes deletion from the service of redundant records, for example, old sessions
@@ -43,6 +41,6 @@ async function go() {
   }
 }
 
-module.exports = {
+export default {
   go
 }

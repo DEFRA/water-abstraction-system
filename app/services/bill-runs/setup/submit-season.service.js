@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Handles the user submission for the `/bill-runs/setup/{sessionId}/type` page
  * @module SubmitSeasonService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const SeasonPresenter = require('../../../presenters/bill-runs/setup/season.presenter.js')
-const SeasonValidator = require('../../../validators/bill-runs/setup/season.validator.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import SeasonPresenter from '../../../presenters/bill-runs/setup/season.presenter.js'
+import SeasonValidator from '../../../validators/bill-runs/setup/season.validator.js'
 
 /**
  * Handles the user submission for the `/bill-runs/setup/{sessionId}/type` page
@@ -68,6 +66,6 @@ function _validate(payload) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

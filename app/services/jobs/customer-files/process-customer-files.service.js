@@ -1,18 +1,12 @@
-'use strict'
-
 /**
  * Updates the last customer file reference and created_at fields for billing accounts whose addresses have been updated
  * @module ProcessCustomerFilesService
  */
 
-const BillingAccount = require('../../../models/billing-account.model.js')
-const ExpandedError = require('../../../errors/expanded.error.js')
-const ViewCustomerFilesRequest = require('../../../requests/charging-module/view-customer-files.request.js')
-const {
-  calculateAndLogTimeTaken,
-  currentTimeInNanoseconds,
-  timestampForPostgres
-} = require('../../../lib/general.lib.js')
+import BillingAccount from '../../../models/billing-account.model.js'
+import ExpandedError from '../../../errors/expanded.error.js'
+import ViewCustomerFilesRequest from '../../../requests/charging-module/view-customer-files.request.js'
+import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Updates the last customer file reference and created_at fields for billing accounts whose addresses have been updated
@@ -127,6 +121,6 @@ async function _updateBillingAccount(billingAccount) {
     })
 }
 
-module.exports = {
+export default {
   go
 }

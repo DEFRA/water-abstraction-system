@@ -1,7 +1,5 @@
-'use strict'
-
-const SendRenewalInvitations = require('./send-renewal-invitations.service.js')
-const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
+import SendRenewalInvitations from './send-renewal-invitations.service.js'
+import { currentTimeInNanoseconds, calculateAndLogTimeTaken } from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates the process of fetching, sending, and updating renewal invitations notifications
@@ -25,6 +23,6 @@ async function go(days) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

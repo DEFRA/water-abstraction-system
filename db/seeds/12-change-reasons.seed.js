@@ -1,8 +1,6 @@
-'use strict'
-
-const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const { data: changeReasons } = require('./data/change-reasons.js')
-const ChangeReasonModel = require('../../app/models/change-reason.model.js')
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
+import { data as changeReasons } from './data/change-reasons.js'
+import ChangeReasonModel from '../../app/models/change-reason.model.js'
 
 async function seed() {
   for (const changeReason of changeReasons) {
@@ -47,6 +45,6 @@ async function _update(changeReason) {
     .where('type', type)
 }
 
-module.exports = {
+export default {
   seed
 }

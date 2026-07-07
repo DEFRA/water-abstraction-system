@@ -1,13 +1,14 @@
-'use strict'
-
 /**
  * Validates data submitted for abstraction periods
  * @module AbstractionPeriodValidator
  */
 
-const Joi = require('joi').extend(require('@joi/date'))
+import base from 'joi'
+import joiDate from '@joi/date'
 
-const { leftPadZeroes } = require('../presenters/base.presenter.js')
+import { leftPadZeroes } from '../presenters/base.presenter.js'
+
+const Joi = base.extend(joiDate)
 
 /**
  * Validates data submitted for abstraction periods
@@ -63,6 +64,6 @@ function _validateAbstractionDate(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

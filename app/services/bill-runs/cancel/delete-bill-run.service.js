@@ -1,21 +1,19 @@
-'use strict'
-
 /**
  * Deletes a bill run, all its associated records and the its match in the Charging Module API
  * @module DeleteBillRunService
  */
 
-const BillModel = require('../../../models/bill.model.js')
-const BillLicenceModel = require('../../../models/bill-licence.model.js')
-const BillRunModel = require('../../../models/bill-run.model.js')
-const BillRunChargeVersionYearModel = require('../../../models/bill-run-charge-version-year.model.js')
-const BillRunVolumeModel = require('../../../models/bill-run-volume.model.js')
-const { db } = require('../../../../db/db.js')
-const ChargingModuleDeleteBillRunRequest = require('../../../requests/charging-module/delete-bill-run.request.js')
-const { calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
-const ReviewChargeVersionModel = require('../../../models/review-charge-version.model.js')
-const ReviewLicenceModel = require('../../../models/review-licence.model.js')
-const ReviewReturnModel = require('../../../models/review-return.model.js')
+import BillModel from '../../../models/bill.model.js'
+import BillLicenceModel from '../../../models/bill-licence.model.js'
+import BillRunModel from '../../../models/bill-run.model.js'
+import BillRunChargeVersionYearModel from '../../../models/bill-run-charge-version-year.model.js'
+import BillRunVolumeModel from '../../../models/bill-run-volume.model.js'
+import { db } from '../../../../db/db.js'
+import ChargingModuleDeleteBillRunRequest from '../../../requests/charging-module/delete-bill-run.request.js'
+import { calculateAndLogTimeTaken } from '../../../lib/general.lib.js'
+import ReviewChargeVersionModel from '../../../models/review-charge-version.model.js'
+import ReviewLicenceModel from '../../../models/review-licence.model.js'
+import ReviewReturnModel from '../../../models/review-return.model.js'
 
 /**
  * Deletes a bill run, all its associated records and its match in the Charging Module API
@@ -228,6 +226,6 @@ function _logResult(startTime, billRun, results) {
   globalThis.GlobalNotifier.omfg('Delete bill run failed', billRun, firstError.reason)
 }
 
-module.exports = {
+export default {
   go
 }

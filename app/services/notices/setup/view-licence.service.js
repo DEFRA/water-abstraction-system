@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/notices/setup/{sessionId}/licence` page
  * @module ViewLicenceService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const LicencePresenter = require('../../../presenters/notices/setup/licence.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import LicencePresenter from '../../../presenters/notices/setup/licence.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/notices/setup/{sessionId}/licence` page
@@ -29,6 +27,6 @@ async function go(sessionId) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

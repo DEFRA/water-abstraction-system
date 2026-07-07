@@ -1,6 +1,4 @@
-'use strict'
-
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema.dropViewIfExists('gauging_stations').createView('monitoring_stations', (view) => {
     view.as(
       knex('gauging_stations').withSchema('water').select([
@@ -26,7 +24,7 @@ exports.up = function (knex) {
   })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.dropViewIfExists('monitoring_stations').createView('gauging_stations', (view) => {
     view.as(
       knex('gauging_stations').withSchema('water').select([

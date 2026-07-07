@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Orchestrates the process of updating the licence monitoring stations last abstraction alert.
  * @module UpdateAbstractionAlertsService
  */
 
-const LicenceMonitoringStationModel = require('../../../models/licence-monitoring-station.model.js')
+import LicenceMonitoringStationModel from '../../../models/licence-monitoring-station.model.js'
 
 /**
  * Orchestrates the process of updating the licence monitoring stations last abstraction alert.
@@ -43,6 +41,6 @@ function _stations(notifications) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Unflag all licences in a bill run that did not result in a billing invoice (they are unbilled)
  * @module UnflagUnbilledSupplementaryLicencesService
  */
 
-const BillLicenceModel = require('../../models/bill-licence.model.js')
-const LicenceModel = require('../../models/licence.model.js')
-const LicenceSupplementaryYearModel = require('../../models/licence-supplementary-year.model.js')
-const WorkflowModel = require('../../models/workflow.model.js')
+import BillLicenceModel from '../../models/bill-licence.model.js'
+import LicenceModel from '../../models/licence.model.js'
+import LicenceSupplementaryYearModel from '../../models/licence-supplementary-year.model.js'
+import WorkflowModel from '../../models/workflow.model.js'
 
 /**
  * Unflag all licences in a bill run that did not result in a billing invoice (they are unbilled)
@@ -95,6 +93,6 @@ async function _unflagTwoPartTariff(billRun) {
     )
 }
 
-module.exports = {
+export default {
   go
 }

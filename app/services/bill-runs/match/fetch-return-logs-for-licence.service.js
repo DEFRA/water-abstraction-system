@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches SROC return logs linked to licences flagged for inclusion in next SROC 2PT billing
  * @module FetchReturnLogsForLicenceService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const ReturnLogModel = require('../../../models/return-log.model.js')
+import ReturnLogModel from '../../../models/return-log.model.js'
 
 /**
  * Fetch all SROC return logs to be processed as part of two-part-tariff billing
@@ -85,6 +83,6 @@ async function _fetch(licenceRef, billingPeriod) {
   return returnLogs
 }
 
-module.exports = {
+export default {
   go
 }

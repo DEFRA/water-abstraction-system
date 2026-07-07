@@ -1,7 +1,5 @@
-'use strict'
-
-const { data: groups } = require('./groups.js')
-const { data: users } = require('./users.js')
+import { data as groups } from './groups.js'
+import { data as users } from './users.js'
 
 const data = [
   {
@@ -87,6 +85,6 @@ const data = [
   }
 ]
 
-module.exports = {
+export default {
   data
 }

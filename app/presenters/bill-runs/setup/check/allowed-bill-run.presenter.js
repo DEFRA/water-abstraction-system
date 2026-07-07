@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats data for the `/bill-runs/setup/{sessionId}/check` page when the bill run is allowed to be created
  * @module AllowBillRunPresenter
  */
 
-const { checkPageBackLink } = require('./base-check.presenter.js')
-const { formatBillRunType, formatChargeScheme } = require('../../../billing.presenter.js')
-const { engineTriggers } = require('../../../../lib/static-lookups.lib.js')
+import { checkPageBackLink } from './base-check.presenter.js'
+import { formatBillRunType, formatChargeScheme } from '../../../billing.presenter.js'
+import { engineTriggers } from '../../../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the `/bill-runs/setup/{sessionId}/check` page when the bill run is allowed to be created
@@ -52,6 +50,6 @@ function _chargeScheme(trigger) {
   return formatChargeScheme(scheme)
 }
 
-module.exports = {
+export default {
   go
 }

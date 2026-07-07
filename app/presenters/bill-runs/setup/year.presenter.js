@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/bill-runs/setup/{sessionId}/year` page
  * @module YearPresenter
@@ -64,6 +62,6 @@ function _tptAnnualFinancialYearsData(selectedYear) {
   ]
 }
 
-module.exports = {
+export default {
   go
 }

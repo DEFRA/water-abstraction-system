@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates presenting the data for `/notices` page
  * @module IndexNoticesService
  */
 
-const FetchNoticesService = require('./fetch-notices.service.js')
-const NoticesIndexPresenter = require('../../presenters/notices/index-notices.presenter.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { processSavedFilters } = require('../../lib/submit-page.lib.js')
+import FetchNoticesService from './fetch-notices.service.js'
+import NoticesIndexPresenter from '../../presenters/notices/index-notices.presenter.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { processSavedFilters } from '../../lib/submit-page.lib.js'
 
 /**
  * Orchestrates presenting the data for `/notices` page
@@ -50,6 +48,6 @@ function _filters(yar) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

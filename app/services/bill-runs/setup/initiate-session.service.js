@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Initiates the session record used for setting up a new bill run
  * @module InitiateSessionService
  */
 
-const CreateSessionDal = require('../../../dal/create-session.dal.js')
+import CreateSessionDal from '../../../dal/create-session.dal.js'
 
 /**
  * Initiates the session record using for setting up a new bill run
@@ -23,6 +21,6 @@ async function go() {
   return CreateSessionDal.go()
 }
 
-module.exports = {
+export default {
   go
 }

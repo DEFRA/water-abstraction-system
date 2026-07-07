@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats notifications data for display in communications tables on view external and internal user pages
  * @module NotificationsTablePresenter
  */
 
-const { formatLongDate, sentenceCase } = require('../base.presenter.js')
-const { userNotificationTypes } = require('../../lib/static-lookups.lib.js')
+import { formatLongDate, sentenceCase } from '../base.presenter.js'
+import { userNotificationTypes } from '../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for display in communications tables on view external and internal user pages
@@ -43,6 +41,6 @@ function _link(notification, sentDate, userId, type) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

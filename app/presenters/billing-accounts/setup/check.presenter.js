@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/billing-accounts/setup/{sessionId}/check` page
  * @module CheckPresenter
@@ -121,6 +119,6 @@ function _links(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `address/{sessionId}/postcode` page
  * @module PostcodeAddressPresenter
@@ -25,6 +23,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

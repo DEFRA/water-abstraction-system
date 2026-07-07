@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/bill-runs/setup/{sessionId}/season` page
  * @module SeasonPresenter
@@ -21,6 +19,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

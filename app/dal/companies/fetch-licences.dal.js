@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches the licences, related to a company, data needed for the view '/companies/{id}/licences'
  * @module FetchLicencesDal
  */
 
-const LicenceModel = require('../../models/licence.model.js')
+import LicenceModel from '../../models/licence.model.js'
 
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
 
 /**
  * Fetches the licences, related to a company, data needed for the view '/companies/{id}/licences'
@@ -120,6 +118,6 @@ async function _fetchDetail(licenceIds) {
     .orderBy('licenceRef', 'asc')
 }
 
-module.exports = {
+export default {
   go
 }

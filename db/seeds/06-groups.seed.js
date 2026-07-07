@@ -1,8 +1,6 @@
-'use strict'
-
-const { timestampForPostgres } = require('../../app/lib/general.lib.js')
-const { db } = require('../db.js')
-const { data: groups } = require('./data/groups.js')
+import { timestampForPostgres } from '../../app/lib/general.lib.js'
+import { db } from '../db.js'
+import { data as groups } from './data/groups.js'
 
 async function seed() {
   for (const group of groups) {
@@ -32,6 +30,6 @@ async function _upsert(group) {
     .merge(['description', 'dateUpdated'])
 }
 
-module.exports = {
+export default {
   seed
 }

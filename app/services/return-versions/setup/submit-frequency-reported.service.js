@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/frequency-reported` page
  * @module SubmitFrequencyReportedService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+import { formatValidationResult } from '../../../presenters/base.presenter.js'
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const FrequencyReportedPresenter = require('../../../presenters/return-versions/setup/frequency-reported.presenter.js')
-const FrequencyReportedValidator = require('../../../validators/return-versions/setup/frequency-reported.validator.js')
-const GeneralLib = require('../../../lib/general.lib.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import FrequencyReportedPresenter from '../../../presenters/return-versions/setup/frequency-reported.presenter.js'
+import FrequencyReportedValidator from '../../../validators/return-versions/setup/frequency-reported.validator.js'
+import GeneralLib from '../../../lib/general.lib.js'
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/frequency-reported` page
@@ -66,6 +64,6 @@ function _validate(payload) {
   return formatValidationResult(validation)
 }
 
-module.exports = {
+export default {
   go
 }

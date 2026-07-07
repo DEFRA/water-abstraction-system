@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches all billing accounts for the supplied charge versions
  * @module FetchBillingAccountsService
  */
 
-const BillingAccountModel = require('../../../models/billing-account.model.js')
+import BillingAccountModel from '../../../models/billing-account.model.js'
 
 /**
  * Fetch all billing accounts for the supplied charge versions
@@ -47,6 +45,6 @@ function _makeObjects(models) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

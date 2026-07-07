@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats recipients and return logs into notifications for a paper return
  * @module PaperReturnNotificationsPresenter
  */
 
-const NotifyAddressPresenter = require('./notify-address.presenter.js')
-const { formatLongDate } = require('../../base.presenter.js')
-const { futureDueDate } = require('../base.presenter.js')
+import NotifyAddressPresenter from './notify-address.presenter.js'
+import { formatLongDate } from '../../base.presenter.js'
+import { futureDueDate } from '../base.presenter.js'
 
 /**
  * Formats recipients and return logs into notifications for a paper return
@@ -99,6 +97,6 @@ function _selectedReturnLogs(session) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

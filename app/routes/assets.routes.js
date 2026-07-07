@@ -1,5 +1,3 @@
-'use strict'
-
 const routes = [
   {
     method: 'GET',
@@ -36,4 +34,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

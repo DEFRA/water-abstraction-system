@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Creates a new session
  * @module CreateSessionDal
  */
 
-const SessionModel = require('../models/session.model.js')
+import SessionModel from '../models/session.model.js'
 
 /**
  * Creates a new session
@@ -21,6 +19,6 @@ async function go(data = {}) {
   return SessionModel.query().insert({ data }).returning('id')
 }
 
-module.exports = {
+export default {
   go
 }

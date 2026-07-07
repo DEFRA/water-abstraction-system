@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the matching return log data and associated submission needed for the csv download
  * @module FetchDownloadReturnLogService
  */
 
-const ReturnLogModel = require('../../models/return-log.model.js')
+import ReturnLogModel from '../../models/return-log.model.js'
 
 /**
  * Fetches the matching return log data and associated submission needed for the csv download
@@ -40,6 +38,6 @@ async function _fetch(returnLogId, version) {
     })
 }
 
-module.exports = {
+export default {
   go
 }

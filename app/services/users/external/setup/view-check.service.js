@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/users/external/setup/{sessionId}/check' page
  *
  * @module ViewCheckService
  */
 
-const CheckPresenter = require('../../../../presenters/users/external/setup/check.presenter.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const { markCheckPageVisited } = require('../../../../lib/check-page.lib.js')
-const { readFlashNotification } = require('../../../../lib/general.lib.js')
+import CheckPresenter from '../../../../presenters/users/external/setup/check.presenter.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import { markCheckPageVisited } from '../../../../lib/check-page.lib.js'
+import { readFlashNotification } from '../../../../lib/general.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/users/external/setup/{sessionId}/check' page
@@ -34,6 +32,6 @@ async function go(sessionId, yar) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

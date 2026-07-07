@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches a licence version's purposes needed for `/return-versions/setup/{sessionId}/purpose` page
  * @module FetchPurposesService
  */
 
-const PurposeModel = require('../../../models/purpose.model.js')
+import PurposeModel from '../../../models/purpose.model.js'
 
 /**
  * Fetches a licence version's purposes needed for `/return-versions/setup/{sessionId}/purpose` page
@@ -25,6 +23,6 @@ async function go(licenceVersionId) {
     .orderBy([{ column: 'purposes.description', order: 'asc' }])
 }
 
-module.exports = {
+export default {
   go
 }

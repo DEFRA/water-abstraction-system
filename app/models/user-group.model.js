@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for user_groups (idm.user_groups)
  * @module UserGroupModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class UserGroupModel extends BaseModel {
   static get tableName() {
@@ -36,4 +34,4 @@ class UserGroupModel extends BaseModel {
   }
 }
 
-module.exports = UserGroupModel
+export default UserGroupModel

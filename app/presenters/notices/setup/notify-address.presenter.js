@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Formats a licence document header metadata contact record into a valid Notify address
  * @module NotifyAddressPresenter
  */
 
-const { postcodeValidator } = require('postcode-validator')
+import { postcodeValidator } from 'postcode-validator'
 
-const { invalidStartCharacters } = require('../../../validators/helpers/notify-address-line.validator.js')
+import { invalidStartCharacters } from '../../../validators/helpers/notify-address-line.validator.js'
 
 const MAX_ADDRESS_LINES = 6 // The Notify max is actually 7 but we reserve address line 1 for the contact name
 const UK_COUNTRIES = new Set(['england', 'northern ireland', 'scotland', 'wales', 'united kingdom'])
@@ -357,6 +355,6 @@ function _ukAddressParts(contact, defaultAddressParts) {
   return addressParts
 }
 
-module.exports = {
+export default {
   go
 }

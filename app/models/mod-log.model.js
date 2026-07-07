@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for mod log (water.mod_logs)
  * @module ModLogModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class ModLogModel extends BaseModel {
   static get tableName() {
@@ -52,4 +50,4 @@ class ModLogModel extends BaseModel {
   }
 }
 
-module.exports = ModLogModel
+export default ModLogModel

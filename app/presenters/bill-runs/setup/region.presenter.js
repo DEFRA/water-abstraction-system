@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the `/bill-runs/setup/{sessionId}/region` page
  * @module RegionPresenter
@@ -23,6 +21,6 @@ function go(session, regions) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

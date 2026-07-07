@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats a recipient into a contact
  * @module ContactPresenter
  */
 
-const NotifyAddressPresenter = require('./notify-address.presenter.js')
+import NotifyAddressPresenter from './notify-address.presenter.js'
 
 /**
  * Formats a recipient into a contact
@@ -29,4 +27,4 @@ function go(recipient) {
   return Object.values(notifyAddress)
 }
 
-module.exports = { go }
+export default { go }

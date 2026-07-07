@@ -1,44 +1,42 @@
-'use strict'
-
 /**
  * Controller for /return-logs/setup endpoints
  * @module ReturnLogsSetupController
  */
 
-const CancelService = require('../services/return-logs/setup/cancel.service.js')
-const CheckService = require('../services/return-logs/setup/check.service.js')
-const ConfirmedService = require('../services/return-logs/setup/confirmed.service.js')
-const DeleteNoteService = require('../services/return-logs/setup/delete-note.service.js')
-const InitiateSessionService = require('../services/return-logs/setup/initiate-session.service.js')
-const MeterDetailsService = require('../services/return-logs/setup/meter-details.service.js')
-const MeterProvidedService = require('../services/return-logs/setup/meter-provided.service.js')
-const MultipleEntriesService = require('../services/return-logs/setup/multiple-entries.service.js')
-const NoteService = require('../services/return-logs/setup/note.service.js')
-const PeriodUsedService = require('../services/return-logs/setup/period-used.service.js')
-const ReadingsService = require('../services/return-logs/setup/readings.service.js')
-const ReceivedService = require('../services/return-logs/setup/received.service.js')
-const ReportedService = require('../services/return-logs/setup/reported.service.js')
-const SingleVolumeService = require('../services/return-logs/setup/single-volume.service.js')
-const StartReadingService = require('../services/return-logs/setup/start-reading.service.js')
-const SubmissionService = require('../services/return-logs/setup/submission.service.js')
-const SubmitConfirmedService = require('../services/return-logs/setup/submit-confirmed.service.js')
-const SubmitCancelService = require('../services/return-logs/setup/submit-cancel.service.js')
-const SubmitCheckService = require('../services/return-logs/setup/submit-check.service.js')
-const SubmitMeterDetailsService = require('../services/return-logs/setup/submit-meter-details.service.js')
-const SubmitMeterProvidedService = require('../services/return-logs/setup/submit-meter-provided.service.js')
-const SubmitMultipleEntriesService = require('../services/return-logs/setup/submit-multiple-entries.service.js')
-const SubmitNoteService = require('../services/return-logs/setup/submit-note.service.js')
-const SubmitPeriodUsedService = require('../services/return-logs/setup/submit-period-used.service.js')
-const SubmitReadingsService = require('../services/return-logs/setup/submit-readings.service.js')
-const SubmitReceivedService = require('../services/return-logs/setup/submit-received.service.js')
-const SubmitReportedService = require('../services/return-logs/setup/submit-reported.service.js')
-const SubmitSingleVolumeService = require('../services/return-logs/setup/submit-single-volume.service.js')
-const SubmitStartReadingService = require('../services/return-logs/setup/submit-start-reading.service.js')
-const SubmitSubmissionService = require('../services/return-logs/setup/submit-submission.service.js')
-const SubmitUnitsService = require('../services/return-logs/setup/submit-units.service.js')
-const SubmitVolumesService = require('../services/return-logs/setup/submit-volumes.service.js')
-const UnitsService = require('../services/return-logs/setup/units.service.js')
-const VolumesService = require('../services/return-logs/setup/volumes.service.js')
+import CancelService from '../services/return-logs/setup/cancel.service.js'
+import CheckService from '../services/return-logs/setup/check.service.js'
+import ConfirmedService from '../services/return-logs/setup/confirmed.service.js'
+import DeleteNoteService from '../services/return-logs/setup/delete-note.service.js'
+import InitiateSessionService from '../services/return-logs/setup/initiate-session.service.js'
+import MeterDetailsService from '../services/return-logs/setup/meter-details.service.js'
+import MeterProvidedService from '../services/return-logs/setup/meter-provided.service.js'
+import MultipleEntriesService from '../services/return-logs/setup/multiple-entries.service.js'
+import NoteService from '../services/return-logs/setup/note.service.js'
+import PeriodUsedService from '../services/return-logs/setup/period-used.service.js'
+import ReadingsService from '../services/return-logs/setup/readings.service.js'
+import ReceivedService from '../services/return-logs/setup/received.service.js'
+import ReportedService from '../services/return-logs/setup/reported.service.js'
+import SingleVolumeService from '../services/return-logs/setup/single-volume.service.js'
+import StartReadingService from '../services/return-logs/setup/start-reading.service.js'
+import SubmissionService from '../services/return-logs/setup/submission.service.js'
+import SubmitConfirmedService from '../services/return-logs/setup/submit-confirmed.service.js'
+import SubmitCancelService from '../services/return-logs/setup/submit-cancel.service.js'
+import SubmitCheckService from '../services/return-logs/setup/submit-check.service.js'
+import SubmitMeterDetailsService from '../services/return-logs/setup/submit-meter-details.service.js'
+import SubmitMeterProvidedService from '../services/return-logs/setup/submit-meter-provided.service.js'
+import SubmitMultipleEntriesService from '../services/return-logs/setup/submit-multiple-entries.service.js'
+import SubmitNoteService from '../services/return-logs/setup/submit-note.service.js'
+import SubmitPeriodUsedService from '../services/return-logs/setup/submit-period-used.service.js'
+import SubmitReadingsService from '../services/return-logs/setup/submit-readings.service.js'
+import SubmitReceivedService from '../services/return-logs/setup/submit-received.service.js'
+import SubmitReportedService from '../services/return-logs/setup/submit-reported.service.js'
+import SubmitSingleVolumeService from '../services/return-logs/setup/submit-single-volume.service.js'
+import SubmitStartReadingService from '../services/return-logs/setup/submit-start-reading.service.js'
+import SubmitSubmissionService from '../services/return-logs/setup/submit-submission.service.js'
+import SubmitUnitsService from '../services/return-logs/setup/submit-units.service.js'
+import SubmitVolumesService from '../services/return-logs/setup/submit-volumes.service.js'
+import UnitsService from '../services/return-logs/setup/units.service.js'
+import VolumesService from '../services/return-logs/setup/volumes.service.js'
 
 async function cancel(request, h) {
   const { sessionId } = request.params
@@ -443,7 +441,7 @@ async function volumes(request, h) {
   return h.view('return-logs/setup/volumes.njk', pageData)
 }
 
-module.exports = {
+export default {
   cancel,
   check,
   confirmed,

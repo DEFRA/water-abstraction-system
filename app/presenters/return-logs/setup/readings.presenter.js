@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Format data for the `/return-logs/setup/{sessionId}/readings/{yearMonth}` page
  * @module ReadingsPresenter
  */
 
-const { formatDateMonthYear, formatLongDate } = require('../../base.presenter.js')
+import { formatDateMonthYear, formatLongDate } from '../../base.presenter.js'
 
 /**
  * Format data for the `/return-logs/setup/{sessionId}/readings/{yearMonth}` page
@@ -80,6 +78,6 @@ function _pageTitle(date) {
   return `Water abstracted ${titleDate}`
 }
 
-module.exports = {
+export default {
   go
 }

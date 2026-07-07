@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Deletes empty bill runs
  * @module CleanEmptyBillRunsService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const CancelBillBunService = require('../../bill-runs/cancel/cancel-bill-run.service.js')
-const DeleteBillRunService = require('../../bill-runs/cancel/delete-bill-run.service.js')
-const UnassignBillRunToLicencesService = require('../../bill-runs/unassign-bill-run-to-licences.service.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import CancelBillBunService from '../../bill-runs/cancel/cancel-bill-run.service.js'
+import DeleteBillRunService from '../../bill-runs/cancel/delete-bill-run.service.js'
+import UnassignBillRunToLicencesService from '../../bill-runs/unassign-bill-run-to-licences.service.js'
 
 /**
  * Deletes empty bill runs
@@ -62,6 +60,6 @@ async function _fetch() {
   return BillRunModel.query().select(['id']).where('status', 'empty')
 }
 
-module.exports = {
+export default {
   go
 }

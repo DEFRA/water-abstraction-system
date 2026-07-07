@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the view licence bills tab
  * @module ViewBillsService
  */
 
-const BillsPresenter = require('../../presenters/licences/bills.presenter.js')
-const FetchBillsService = require('./fetch-bills.service.js')
-const FetchLicenceService = require('./fetch-licence.service.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import BillsPresenter from '../../presenters/licences/bills.presenter.js'
+import FetchBillsService from './fetch-bills.service.js'
+import FetchLicenceService from './fetch-licence.service.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the view licence bills tab
@@ -42,6 +40,6 @@ async function go(licenceId, auth, page) {
     roles: userRoles(auth)
   }
 }
-module.exports = {
+export default {
   go
 }

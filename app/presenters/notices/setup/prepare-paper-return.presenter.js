@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Formats data for the return form
  * @module PreparePaperReturnPresenter
  */
 
-const { daysFromPeriod, monthsFromPeriod, weeksFromPeriod } = require('../../../lib/dates.lib.js')
-const { formatLongDate } = require('../../base.presenter.js')
-const { naldAreaCodes, returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
-const { splitArrayIntoGroups } = require('../../../lib/general.lib.js')
+import { daysFromPeriod, monthsFromPeriod, weeksFromPeriod } from '../../../lib/dates.lib.js'
+import { formatLongDate } from '../../base.presenter.js'
+import { naldAreaCodes, returnRequirementFrequencies } from '../../../lib/static-lookups.lib.js'
+import { splitArrayIntoGroups } from '../../../lib/general.lib.js'
 
 const RETURN_TYPE = {
   week: {
@@ -271,6 +269,6 @@ function _generateDates(startDate, endDate, returnsFrequency) {
   return _formatPeriodsToLongDate(dates)
 }
 
-module.exports = {
+export default {
   go
 }

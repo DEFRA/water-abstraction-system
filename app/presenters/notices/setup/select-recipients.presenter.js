@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Formats data for the '/notices/setup/{sessionId}/select-recipients' page
  * @module SelectRecipientsPresenter
  */
 
-const ContactPresenter = require('./contact.presenter.js')
-const { NoticeType } = require('../../../lib/static-lookups.lib.js')
+import ContactPresenter from './contact.presenter.js'
+import { NoticeType } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Formats data for the '/notices/setup/{sessionId}/select-recipients' page
@@ -68,6 +66,6 @@ function _recipients(recipients, selectedRecipients) {
   })
 }
 
-module.exports = {
+export default {
   go
 }

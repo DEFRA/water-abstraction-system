@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Validates data submitted for the `address/{sessionId}/manual` page
  *
  * @module ManualAddressValidator
  */
 
-const { postcodeValidator } = require('postcode-validator')
-const { addressLineValidator } = require('./addressLine.validator.js')
+import { postcodeValidator } from 'postcode-validator'
+import { addressLineValidator } from './addressLine.validator.js'
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for the `address/{sessionId}/manual` page
@@ -39,6 +37,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

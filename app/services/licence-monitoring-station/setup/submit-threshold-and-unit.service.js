@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/threshold-and-unit` page
  * @module SubmitThresholdAndUnitService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const ThresholdAndUnitPresenter = require('../../../presenters/licence-monitoring-station/setup/threshold-and-unit.presenter.js')
-const ThresholdAndUnitValidator = require('../../../validators/licence-monitoring-station/setup/threshold-and-unit.validator.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import ThresholdAndUnitPresenter from '../../../presenters/licence-monitoring-station/setup/threshold-and-unit.presenter.js'
+import ThresholdAndUnitValidator from '../../../validators/licence-monitoring-station/setup/threshold-and-unit.validator.js'
 
 /**
  * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/threshold-and-unit` page
@@ -95,6 +93,6 @@ function _validate(payload) {
   return { formattedError, value: null }
 }
 
-module.exports = {
+export default {
   go
 }

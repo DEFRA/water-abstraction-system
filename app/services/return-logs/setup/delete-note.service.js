@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Deletes the note from the return log currently being setup
  * @module DeleteNoteService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const GeneralLib = require('../../../lib/general.lib.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import GeneralLib from '../../../lib/general.lib.js'
 
 /**
  * Deletes the note from the return log currently being setup
@@ -31,6 +29,6 @@ async function _save(session) {
   return session.$update()
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for `/profiles/me/details` page
  * @module ViewProfileDetailsService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const ProfileDetailsPresenter = require('../../presenters/users/profile-details.presenter.js')
-const UserModel = require('../../models/user.model.js')
-const { readFlashNotification } = require('../../lib/general.lib.js')
+import ProfileDetailsPresenter from '../../presenters/users/profile-details.presenter.js'
+import UserModel from '../../models/user.model.js'
+import { readFlashNotification } from '../../lib/general.lib.js'
 
 /**
  * Orchestrates fetching and presenting the data for `/users/me/profile-details` page
@@ -50,6 +48,6 @@ async function _fetchProfileDetails(userId) {
     ])
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,25 +1,23 @@
-'use strict'
-
 /**
  * Controller for /bill-runs/review endpoints
  * @module BillRunsReviewController
  */
 
-const PreviewService = require('../services/bill-runs/review/preview.service.js')
-const SubmitAuthorisedService = require('../services/bill-runs/review/submit-authorised.service.js')
-const SubmitEditService = require('..//services/bill-runs/review/submit-edit.service.js')
-const SubmitFactorsService = require('../services/bill-runs/review/submit-factors.service.js')
-const SubmitRemoveService = require('../services/bill-runs/review/submit-remove.service.js')
-const SubmitReviewService = require('../services/bill-runs/review/submit-review.service.js')
-const SubmitReviewLicenceService = require('../services/bill-runs/review/submit-review-licence.service.js')
-const ViewAuthorisedService = require('../services/bill-runs/review/view-authorised.service.js')
-const ViewEditService = require('../services/bill-runs/review/view-edit.service.js')
-const ViewFactorsService = require('../services/bill-runs/review/view-factors.service.js')
-const ViewRemoveService = require('../services/bill-runs/review/view-remove.service.js')
-const ViewReviewChargeElementService = require('../services/bill-runs/review/view-review-charge-element.service.js')
-const ViewReviewChargeReferenceService = require('../services/bill-runs/review/view-review-charge-reference.service.js')
-const ViewReviewLicenceService = require('../services/bill-runs/review/view-review-licence.service.js')
-const ViewReviewService = require('../services/bill-runs/review/view-review.service.js')
+import PreviewService from '../services/bill-runs/review/preview.service.js'
+import SubmitAuthorisedService from '../services/bill-runs/review/submit-authorised.service.js'
+import SubmitEditService from '..//services/bill-runs/review/submit-edit.service.js'
+import SubmitFactorsService from '../services/bill-runs/review/submit-factors.service.js'
+import SubmitRemoveService from '../services/bill-runs/review/submit-remove.service.js'
+import SubmitReviewService from '../services/bill-runs/review/submit-review.service.js'
+import SubmitReviewLicenceService from '../services/bill-runs/review/submit-review-licence.service.js'
+import ViewAuthorisedService from '../services/bill-runs/review/view-authorised.service.js'
+import ViewEditService from '../services/bill-runs/review/view-edit.service.js'
+import ViewFactorsService from '../services/bill-runs/review/view-factors.service.js'
+import ViewRemoveService from '../services/bill-runs/review/view-remove.service.js'
+import ViewReviewChargeElementService from '../services/bill-runs/review/view-review-charge-element.service.js'
+import ViewReviewChargeReferenceService from '../services/bill-runs/review/view-review-charge-reference.service.js'
+import ViewReviewLicenceService from '../services/bill-runs/review/view-review-licence.service.js'
+import ViewReviewService from '../services/bill-runs/review/view-review.service.js'
 
 async function preview(request, h) {
   const { reviewChargeReferenceId } = request.params
@@ -159,7 +157,7 @@ async function viewReviewLicence(request, h) {
   return h.view('bill-runs/review/review-licence.njk', pageData)
 }
 
-module.exports = {
+export default {
   preview,
   submitAuthorised,
   submitEdit,

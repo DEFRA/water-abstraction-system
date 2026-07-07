@@ -1,6 +1,4 @@
-'use strict'
-
-const UsersController = require('../controllers/users.controller.js')
+import UsersController from '../controllers/users.controller.js'
 
 const routes = [
   {
@@ -124,4 +122,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

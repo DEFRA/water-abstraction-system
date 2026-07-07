@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats for display selected licences to unlink in the external check and cancel pages
  *
@@ -73,7 +71,7 @@ function sourceNavigation(requestedQueryValue, canManageAccounts) {
   }
 }
 
-module.exports = {
+export default {
   formatLicencesToUnlink,
   sourceNavigation
 }

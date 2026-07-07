@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Handles the user submission for the `/bill-runs/setup/{sessionId}/year` page
  * @module SubmitYearService
  */
 
-const FetchLicenceSupplementaryYearsService = require('./fetch-licence-supplementary-years.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const YearPresenter = require('../../../presenters/bill-runs/setup/year.presenter.js')
-const YearValidator = require('../../../validators/bill-runs/setup/year.validator.js')
+import FetchLicenceSupplementaryYearsService from './fetch-licence-supplementary-years.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import YearPresenter from '../../../presenters/bill-runs/setup/year.presenter.js'
+import YearValidator from '../../../validators/bill-runs/setup/year.validator.js'
 
 /**
  * Handles the user submission for the `/bill-runs/setup/{sessionId}/year` page
@@ -74,6 +72,6 @@ function _validate(payload, regions) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

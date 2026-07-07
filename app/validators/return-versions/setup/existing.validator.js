@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-requirements/{sessionId}/existing` page
  * @module ExistingValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const errorMessage = 'Select a return version'
 
@@ -37,6 +35,6 @@ function go(payload, returnVersions) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

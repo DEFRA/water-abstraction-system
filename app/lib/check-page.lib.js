@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Check page helper methods
  * @module CheckPageLib
@@ -68,7 +66,7 @@ async function markCheckPageVisited(session) {
   await session.$update()
 }
 
-module.exports = {
+export default {
   checkUrl,
   markCheckPageNotVisited,
   markCheckPageVisited

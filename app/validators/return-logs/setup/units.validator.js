@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/units` page
  * @module UnitsValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const VALID_VALUES = ['cubicMetres', 'litres', 'megalitres', 'gallons']
 
@@ -36,6 +34,6 @@ function go(payload) {
   return schema.validate({ units }, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

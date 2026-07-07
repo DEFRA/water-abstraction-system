@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Controller for /monitoring-stations endpoints
  * @module MonitoringStationsController
  */
 
-const ViewLicenceService = require('../services/monitoring-stations/view-licence.service.js')
-const ViewService = require('../services/monitoring-stations/view.service.js')
+import ViewLicenceService from '../services/monitoring-stations/view-licence.service.js'
+import ViewService from '../services/monitoring-stations/view.service.js'
 
 async function licence(request, h) {
   const {
@@ -30,7 +28,7 @@ async function view(request, h) {
   return h.view('monitoring-stations/view.njk', pageData)
 }
 
-module.exports = {
+export default {
   licence,
   view
 }

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for review_charge_elements_returns
  * @module ReviewChargeElementReturnModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class ReviewChargeElementReturnModel extends BaseModel {
   static get tableName() {
@@ -36,4 +34,4 @@ class ReviewChargeElementReturnModel extends BaseModel {
   }
 }
 
-module.exports = ReviewChargeElementReturnModel
+export default ReviewChargeElementReturnModel

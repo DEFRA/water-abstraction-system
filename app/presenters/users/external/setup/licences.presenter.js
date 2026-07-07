@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for external users on the `/users/external/setup/{id}/licences` page
  * @module LicencesPresenter
@@ -57,6 +55,6 @@ function _checkBoxItems(licences, selectedLicences, allLicences) {
   return items
 }
 
-module.exports = {
+export default {
   go
 }

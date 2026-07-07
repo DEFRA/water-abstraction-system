@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * View the health of Charging Module service
  * @module ViewHealthRequest
  */
 
-const ChargingModuleRequest = require('../charging-module.request.js')
+import ChargingModuleRequest from '../charging-module.request.js'
 
 /**
  * View the health of Charging Module service
@@ -18,6 +16,6 @@ async function send() {
   return ChargingModuleRequest.get(path)
 }
 
-module.exports = {
+export default {
   send
 }

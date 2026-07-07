@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `address/{sessionId}/international` page
  * @module InternationalPresenter
  */
 
-const { countryLookup } = require('./base-address.presenter.js')
+import { countryLookup } from './base-address.presenter.js'
 
 /**
  * Formats data for the `address/{sessionId}/international` page
@@ -31,6 +29,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

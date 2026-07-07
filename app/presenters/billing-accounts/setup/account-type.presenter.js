@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/billing-accounts/setup/{billingAccountId}/account-type` page
  * @module AccountTypePresenter
  */
 
-const { checkUrl } = require('../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
 
 /**
  * Formats data for the `/billing-accounts/setup/{billingAccountId}/account-type` page
@@ -29,6 +27,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

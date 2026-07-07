@@ -1,7 +1,3 @@
-'use strict'
-
-const FIFTEEN_MINUTES_IN_MILLISECONDS = 15 * 60 * 1000
-
 /**
  * Plugin to add {@link https://hapi.dev/module/yar/ | yar}, a hapi session manager to the app
  *
@@ -69,9 +65,11 @@ const FIFTEEN_MINUTES_IN_MILLISECONDS = 15 * 60 * 1000
  * @module YarPlugin
  */
 
-const Yar = require('@hapi/yar')
+import Yar from '@hapi/yar'
 
-const AuthenticationConfig = require('../../config/authentication.config.js')
+import AuthenticationConfig from '../../config/authentication.config.js'
+
+const FIFTEEN_MINUTES_IN_MILLISECONDS = 15 * 60 * 1000
 
 const YarPlugin = {
   plugin: Yar,
@@ -87,4 +85,4 @@ const YarPlugin = {
   }
 }
 
-module.exports = YarPlugin
+export default YarPlugin

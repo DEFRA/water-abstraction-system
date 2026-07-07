@@ -1,19 +1,17 @@
-'use strict'
-
 /**
  * Manages converting the session data to return requirement records when check return requirements is confirmed
  * @module SubmitCheckService
  */
 
-const CreateReturnVersionService = require('./create-return-version.service.js')
-const DeleteSessionDal = require('../../../../dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const GenerateReturnVersionService = require('./generate-return-version.service.js')
-const ProcessExistingReturnVersionsService = require('./process-existing-return-versions.service.js')
-const ProcessLicenceReturnLogsService = require('../../../return-logs/process-licence-return-logs.service.js')
-const ReturnVersionModel = require('../../../../models/return-version.model.js')
-const UpdateSucceededReturnLogsDal = require('../../../../dal/return-versions/update-succeeded-return-logs.dal.js')
-const VoidReturnLogsService = require('../../../return-logs/void-return-logs.service.js')
+import CreateReturnVersionService from './create-return-version.service.js'
+import DeleteSessionDal from '../../../../dal/delete-session.dal.js'
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import GenerateReturnVersionService from './generate-return-version.service.js'
+import ProcessExistingReturnVersionsService from './process-existing-return-versions.service.js'
+import ProcessLicenceReturnLogsService from '../../../return-logs/process-licence-return-logs.service.js'
+import ReturnVersionModel from '../../../../models/return-version.model.js'
+import UpdateSucceededReturnLogsDal from '../../../../dal/return-versions/update-succeeded-return-logs.dal.js'
+import VoidReturnLogsService from '../../../return-logs/void-return-logs.service.js'
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 
@@ -128,6 +126,6 @@ async function _processEndDate(returnVersion, licenceId, trx) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

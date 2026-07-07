@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches invalid addresses linked to 'Licence holder' and 'Returns to' contacts for non-ended licences
  * @module FetchInvalidAddressesService
  */
 
-const { db } = require('../../../db/db.js')
+import { db } from '../../../db/db.js'
 
 /**
  * Fetches invalid addresses linked to 'Licence holder' and 'Returns to' contacts for non-ended licences
@@ -90,6 +88,6 @@ async function _fetch() {
   `)
 }
 
-module.exports = {
+export default {
   go
 }

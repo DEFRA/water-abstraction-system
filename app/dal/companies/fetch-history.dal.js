@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches the licences and their versions, related to a company, data needed for the view '/companies/{id}/history'
  * @module FetchHistoryDal
  */
 
-const LicenceModel = require('../../models/licence.model.js')
+import LicenceModel from '../../models/licence.model.js'
 
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
 
 /**
  * Fetches the licences and their versions, related to a company, data needed for the view '/companies/{id}/history'
@@ -43,6 +41,6 @@ async function _fetch(companyId, page) {
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,6 +1,4 @@
-'use strict'
-
-const { formatEmail } = require('../base.presenter.js')
+import { formatEmail } from '../base.presenter.js'
 
 /**
  * Formats data for the `/users/me/profile-details` page
@@ -36,6 +34,6 @@ function go(profileDetails) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

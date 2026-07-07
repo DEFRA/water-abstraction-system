@@ -1,6 +1,4 @@
-'use strict'
-
-const SearchController = require('../controllers/search.controller.js')
+import SearchController from '../controllers/search.controller.js'
 
 const routes = [
   {
@@ -19,4 +17,4 @@ const routes = [
   }
 ]
 
-module.exports = routes
+export default routes

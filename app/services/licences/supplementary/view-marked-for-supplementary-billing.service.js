@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data needed for the marked for supplementary billing confirmation page
  * @module ViewMarkedForSupplementaryBillingService
  */
 
-const LicenceModel = require('../../../../app/models/licence.model.js')
+import LicenceModel from '../../../../app/models/licence.model.js'
 
 /**
  * Orchestrates fetching and presenting the data needed for the marked for supplementary billing confirmation page
@@ -29,6 +27,6 @@ async function _fetchLicenceData(licenceId) {
   return LicenceModel.query().findById(licenceId).select(['id', 'licenceRef'])
 }
 
-module.exports = {
+export default {
   go
 }

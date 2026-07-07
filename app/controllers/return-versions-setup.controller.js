@@ -1,48 +1,46 @@
-'use strict'
-
 /**
  * Controller for /return-versions/setup endpoints
  * @module ReturnVersionsSetupController
  */
 
-const AbstractionPeriodService = require('../services/return-versions/setup/abstraction-period.service.js')
-const AddService = require('../services/return-versions/setup/add.service.js')
-const AdditionalSubmissionOptionsService = require('../services/return-versions/setup/additional-submission-options.service.js')
-const AgreementsExceptionsService = require('../services/return-versions/setup/agreements-exceptions.service.js')
-const CancelService = require('../services/return-versions/setup/cancel.service.js')
-const CheckService = require('../services/return-versions/setup/check/check.service.js')
-const DeleteNoteService = require('../services/return-versions/setup/delete-note.service.js')
-const ExistingService = require('../services/return-versions/setup/existing/existing.service.js')
-const FrequencyCollectedService = require('../services/return-versions/setup/frequency-collected.service.js')
-const FrequencyReportedService = require('../services/return-versions/setup/frequency-reported.service.js')
-const MethodService = require('../services/return-versions/setup/method/method.service.js')
-const NoReturnsRequiredService = require('../services/return-versions/setup/no-returns-required.service.js')
-const NoteService = require('../services/return-versions/setup/note.service.js')
-const PointsService = require('../services/return-versions/setup/points.service.js')
-const RemoveService = require('../services/return-versions/setup/remove.service.js')
-const ReturnsCycleService = require('../services/return-versions/setup/returns-cycle.service.js')
-const SelectPurposeService = require('../services/return-versions/setup/purpose.service.js')
-const SelectReasonService = require('../services/return-versions/setup/reason.service.js')
-const SiteDescriptionService = require('../services/return-versions/setup/site-description.service.js')
-const StartDateService = require('../services/return-versions/setup/start-date.service.js')
-const SubmitAbstractionPeriod = require('../services/return-versions/setup/submit-abstraction-period.service.js')
-const SubmitAdditionalSubmissionOptionsService = require('../services/return-versions/setup/submit-additional-submission-options.service.js')
-const SubmitAgreementsExceptions = require('../services/return-versions/setup/submit-agreements-exceptions.service.js')
-const SubmitCancel = require('../services/return-versions/setup/submit-cancel.service.js')
-const SubmitCheckService = require('../services/return-versions/setup/check/submit-check.service.js')
-const SubmitExistingService = require('../services/return-versions/setup/existing/submit-existing.service.js')
-const SubmitFrequencyCollectedService = require('../services/return-versions/setup/submit-frequency-collected.service.js')
-const SubmitFrequencyReportedService = require('../services/return-versions/setup/submit-frequency-reported.service.js')
-const SubmitMethodService = require('../services/return-versions/setup/method/submit-method.service.js')
-const SubmitNoReturnsRequiredService = require('../services/return-versions/setup/submit-no-returns-required.service.js')
-const SubmitNoteService = require('../services/return-versions/setup/submit-note.service.js')
-const SubmitPointsService = require('../services/return-versions/setup/submit-points.service.js')
-const SubmitPurposeService = require('../services/return-versions/setup/submit-purpose.service.js')
-const SubmitReasonService = require('../services/return-versions/setup/submit-reason.service.js')
-const SubmitRemoveService = require('../services/return-versions/setup/submit-remove.service.js')
-const SubmitReturnsCycleService = require('../services/return-versions/setup/submit-returns-cycle.service.js')
-const SubmitSiteDescriptionService = require('../services/return-versions/setup/submit-site-description.service.js')
-const SubmitStartDateService = require('../services/return-versions/setup/submit-start-date.service.js')
+import AbstractionPeriodService from '../services/return-versions/setup/abstraction-period.service.js'
+import AddService from '../services/return-versions/setup/add.service.js'
+import AdditionalSubmissionOptionsService from '../services/return-versions/setup/additional-submission-options.service.js'
+import AgreementsExceptionsService from '../services/return-versions/setup/agreements-exceptions.service.js'
+import CancelService from '../services/return-versions/setup/cancel.service.js'
+import CheckService from '../services/return-versions/setup/check/check.service.js'
+import DeleteNoteService from '../services/return-versions/setup/delete-note.service.js'
+import ExistingService from '../services/return-versions/setup/existing/existing.service.js'
+import FrequencyCollectedService from '../services/return-versions/setup/frequency-collected.service.js'
+import FrequencyReportedService from '../services/return-versions/setup/frequency-reported.service.js'
+import MethodService from '../services/return-versions/setup/method/method.service.js'
+import NoReturnsRequiredService from '../services/return-versions/setup/no-returns-required.service.js'
+import NoteService from '../services/return-versions/setup/note.service.js'
+import PointsService from '../services/return-versions/setup/points.service.js'
+import RemoveService from '../services/return-versions/setup/remove.service.js'
+import ReturnsCycleService from '../services/return-versions/setup/returns-cycle.service.js'
+import SelectPurposeService from '../services/return-versions/setup/purpose.service.js'
+import SelectReasonService from '../services/return-versions/setup/reason.service.js'
+import SiteDescriptionService from '../services/return-versions/setup/site-description.service.js'
+import StartDateService from '../services/return-versions/setup/start-date.service.js'
+import SubmitAbstractionPeriod from '../services/return-versions/setup/submit-abstraction-period.service.js'
+import SubmitAdditionalSubmissionOptionsService from '../services/return-versions/setup/submit-additional-submission-options.service.js'
+import SubmitAgreementsExceptions from '../services/return-versions/setup/submit-agreements-exceptions.service.js'
+import SubmitCancel from '../services/return-versions/setup/submit-cancel.service.js'
+import SubmitCheckService from '../services/return-versions/setup/check/submit-check.service.js'
+import SubmitExistingService from '../services/return-versions/setup/existing/submit-existing.service.js'
+import SubmitFrequencyCollectedService from '../services/return-versions/setup/submit-frequency-collected.service.js'
+import SubmitFrequencyReportedService from '../services/return-versions/setup/submit-frequency-reported.service.js'
+import SubmitMethodService from '../services/return-versions/setup/method/submit-method.service.js'
+import SubmitNoReturnsRequiredService from '../services/return-versions/setup/submit-no-returns-required.service.js'
+import SubmitNoteService from '../services/return-versions/setup/submit-note.service.js'
+import SubmitPointsService from '../services/return-versions/setup/submit-points.service.js'
+import SubmitPurposeService from '../services/return-versions/setup/submit-purpose.service.js'
+import SubmitReasonService from '../services/return-versions/setup/submit-reason.service.js'
+import SubmitRemoveService from '../services/return-versions/setup/submit-remove.service.js'
+import SubmitReturnsCycleService from '../services/return-versions/setup/submit-returns-cycle.service.js'
+import SubmitSiteDescriptionService from '../services/return-versions/setup/submit-site-description.service.js'
+import SubmitStartDateService from '../services/return-versions/setup/submit-start-date.service.js'
 
 async function abstractionPeriod(request, h) {
   const { requirementIndex, sessionId } = request.params
@@ -509,7 +507,7 @@ async function submitStartDate(request, h) {
   return h.redirect(`/system/return-versions/setup/${sessionId}/no-returns-required`)
 }
 
-module.exports = {
+export default {
   abstractionPeriod,
   add,
   additionalSubmissionOptions,

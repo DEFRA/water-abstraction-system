@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Adds a server method which returns a signed JWT access token for GOV.UK Notify.
  *
@@ -8,9 +6,9 @@
  * @module NotifyTokenCachePlugin
  */
 
-const jwt = require('jsonwebtoken')
+import jwt from 'jsonwebtoken'
 
-const notifyConfig = require('../../config/notify.config.js')
+import notifyConfig from '../../config/notify.config.js'
 
 const FIVE_SECS_IN_MS = 5000
 const TWENTY_FIVE_SECS_IN_MS = 25000
@@ -94,4 +92,4 @@ function _credentials() {
   }
 }
 
-module.exports = NotifyTokenCachePlugin
+export default NotifyTokenCachePlugin

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches the licence and associated records required for the start of the return version setup process
  * @module FetchLicenceService
  */
 
-const LicenceModel = require('../../../models/licence.model.js')
-const ReturnRequirementModel = require('../../../models/return-requirement.model.js')
+import LicenceModel from '../../../models/licence.model.js'
+import ReturnRequirementModel from '../../../models/return-requirement.model.js'
 
 /**
  * Fetches the licence and associated records required for the start of the return version setup process
@@ -42,6 +40,6 @@ async function go(licenceId) {
   )
 }
 
-module.exports = {
+export default {
   go
 }

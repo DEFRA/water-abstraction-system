@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for `/licence-monitoring-station/setup/{sessionId}/full-condition`
  *
  * @module FullConditionValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 /**
  * Validates data submitted for `/licence-monitoring-station/setup/{sessionId}/full-condition`
@@ -30,6 +28,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

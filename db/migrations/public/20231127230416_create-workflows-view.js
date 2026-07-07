@@ -1,8 +1,6 @@
-'use strict'
-
 const viewName = 'workflows'
 
-exports.up = function (knex) {
+export function up(knex) {
   return knex.schema.createView(viewName, (view) => {
     view.as(
       knex('charge_version_workflows')
@@ -23,6 +21,6 @@ exports.up = function (knex) {
   })
 }
 
-exports.down = function (knex) {
+export function down(knex) {
   return knex.schema.dropViewIfExists(viewName)
 }

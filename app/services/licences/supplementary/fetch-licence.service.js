@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches existing supplementary details about a licence being removed from workflow
  * @module FetchLicenceService
  */
 
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 /**
  * Fetches existing supplementary details about a licence being removed from workflow
@@ -75,6 +73,6 @@ function _query() {
 `
 }
 
-module.exports = {
+export default {
   go
 }

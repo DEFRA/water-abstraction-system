@@ -1,16 +1,14 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/companies/{id}/licences' page
  *
  * @module ViewLicencesService
  */
 
-const FetchCompanyDal = require('../../dal/companies/fetch-company.dal.js')
-const FetchLicencesDal = require('../../dal/companies/fetch-licences.dal.js')
-const LicencesPresenter = require('../../presenters/companies/licences.presenter.js')
-const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+import FetchCompanyDal from '../../dal/companies/fetch-company.dal.js'
+import FetchLicencesDal from '../../dal/companies/fetch-licences.dal.js'
+import LicencesPresenter from '../../presenters/companies/licences.presenter.js'
+import PaginatorPresenter from '../../presenters/paginator.presenter.js'
+import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/companies/{id}/licences' page
@@ -44,6 +42,6 @@ async function go(companyId, auth, page) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

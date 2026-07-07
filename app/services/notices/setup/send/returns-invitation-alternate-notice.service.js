@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches failed returns invitation notifications and creates an alternate notice for them
  * @module ReturnsInvitationAlternateNoticeService
  */
 
-const CreateAlternateReturnsNoticeService = require('../create-alternate-returns-notice.service.js')
-const FetchFailedReturnsInvitationsService = require('../returns-notice/fetch-failed-returns-invitations.service.js')
+import CreateAlternateReturnsNoticeService from '../create-alternate-returns-notice.service.js'
+import FetchFailedReturnsInvitationsService from '../returns-notice/fetch-failed-returns-invitations.service.js'
 
 /**
  * Fetches failed returns invitation notifications and creates an alternate notice for them
@@ -34,6 +32,6 @@ async function go(mainNotice) {
   return { notice, notificationIds, notifications }
 }
 
-module.exports = {
+export default {
   go
 }

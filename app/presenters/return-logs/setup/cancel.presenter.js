@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats data for the `/return-logs/setup/{sessionId}/cancel` page
  * @module CancelPresenter
  */
 
-const { formatAbstractionPeriod, formatLongDate } = require('../../base.presenter.js')
+import { formatAbstractionPeriod, formatLongDate } from '../../base.presenter.js'
 
 /**
  * Formats data for the `/return-logs/setup/{sessionId}/cancel` page
@@ -45,6 +43,6 @@ function go(session) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

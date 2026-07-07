@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Connects with the Charging Module to reissue a bill
  * @module ReissueBillRequest
  */
 
-const ChargingModuleRequest = require('../charging-module.request.js')
+import ChargingModuleRequest from '../charging-module.request.js'
 
 /**
  * Sends a request to the Charging Module rebill endpoint to reissue an bill (known as invoice in the CHA)
@@ -26,6 +24,6 @@ async function send(billRunId, billId) {
   return ChargingModuleRequest.patch(path)
 }
 
-module.exports = {
+export default {
   send
 }

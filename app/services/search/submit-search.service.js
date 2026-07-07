@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Handles queries submitted to the /search page
  * @module SubmitSearchService
  */
 
-const SearchPresenter = require('../../presenters/search/search.presenter.js')
-const SearchValidator = require('../../validators/search/search.validator.js')
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
+import SearchPresenter from '../../presenters/search/search.presenter.js'
+import SearchValidator from '../../validators/search/search.validator.js'
+import { formatValidationResult } from '../../presenters/base.presenter.js'
 
 /**
  * Handles queries submitted to the /search page
@@ -57,6 +55,6 @@ function _failedValidationResponse(auth, payload, validationResult) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

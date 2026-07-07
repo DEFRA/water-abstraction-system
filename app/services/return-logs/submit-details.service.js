@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Handles updating a return log record when the mark/resolve query button is clicked
  * @module SubmitDetailsService
  */
 
-const ReturnLogModel = require('../../models/return-log.model.js')
-const { timestampForPostgres } = require('../../lib/general.lib.js')
+import ReturnLogModel from '../../models/return-log.model.js'
+import { timestampForPostgres } from '../../lib/general.lib.js'
 
 /**
  * Handles updating a return log record when the mark/resolve query button is clicked
@@ -28,6 +26,6 @@ async function go(payload, returnLogId) {
   await ReturnLogModel.query().patch({ underQuery, updatedAt: timestampForPostgres() }).findById(returnLogId)
 }
 
-module.exports = {
+export default {
   go
 }

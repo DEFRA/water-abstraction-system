@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the `/notices/setup/{sessionId}/paper-return` page
  *
  * @module PaperReturnValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const errorMessage = 'Select the returns for the paper return'
 
@@ -30,6 +28,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

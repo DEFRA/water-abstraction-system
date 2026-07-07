@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches the previously billed transactions that match, removing any debits which cancelled out by previous credits
  * @module FetchPreviousTransactionsService
  */
 
-const { db } = require('../../../db/db.js')
-const { transactionsMatch } = require('../../lib/general.lib.js')
-const TransactionModel = require('../../models/transaction.model.js')
+import { db } from '../../../db/db.js'
+import { transactionsMatch } from '../../lib/general.lib.js'
+import TransactionModel from '../../models/transaction.model.js'
 
 /**
  * Fetches the previously billed transactions that match, removing any debits which cancelled out by previous credits
@@ -109,6 +107,6 @@ async function _fetch(billingAccountId, licenceId, financialYearEnding, twoPartT
     .whereIn('billRuns.batchType', batchTypes)
 }
 
-module.exports = {
+export default {
   go
 }

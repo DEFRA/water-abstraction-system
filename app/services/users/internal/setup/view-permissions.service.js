@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for the '/users/internal/setup/{sessionId}/permissions' page
  *
  * @module ViewPermissionsService
  */
 
-const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const FetchUserDetailsDal = require('../../../../dal/users/internal/fetch-user-details.dal.js')
-const PermissionsPresenter = require('../../../../presenters/users/internal/setup/permissions.presenter.js')
+import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
+import FetchUserDetailsDal from '../../../../dal/users/internal/fetch-user-details.dal.js'
+import PermissionsPresenter from '../../../../presenters/users/internal/setup/permissions.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for the '/users/internal/setup/{sessionId}/permissions' page
@@ -38,6 +36,6 @@ async function _showSuperPermission(auth) {
   return currentUser.$permissions().key === 'super'
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Fetches details for each notice whose notifications have had their status checked by the notification-status job
  * @module FetchCriticalNoticesDal
  */
 
-const EventModel = require('../../../models/event.model.js')
-const { NoticeTypes } = require('../../../lib/static-lookups.lib.js')
+import EventModel from '../../../models/event.model.js'
+import { NoticeTypes } from '../../../lib/static-lookups.lib.js'
 
 /**
  * Fetches details for each notice whose notifications have had their status checked by the notification-status job
@@ -36,6 +34,6 @@ async function go(noticeIds) {
     )
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Fetches data needed for the bill licence page which lists all transactions in a bill licence
  * @module FetchBillLicenceService
  */
 
-const { ref } = require('objection')
+import { ref } from 'objection'
 
-const BillLicenceModel = require('../../models/bill-licence.model.js')
+import BillLicenceModel from '../../models/bill-licence.model.js'
 
 /**
  * Fetch the matching Bill Licence plus its transactions
@@ -104,6 +102,6 @@ async function _fetchBillLicence(id) {
   return results
 }
 
-module.exports = {
+export default {
   go
 }

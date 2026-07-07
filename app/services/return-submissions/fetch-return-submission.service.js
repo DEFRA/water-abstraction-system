@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Fetches the matching return submission needed for the view
  * @module FetchReturnSubmissionService
  */
 
-const ReturnSubmissionModel = require('../../models/return-submission.model.js')
+import ReturnSubmissionModel from '../../models/return-submission.model.js'
 
 /**
  * Fetches the matching return submission
@@ -39,6 +37,6 @@ async function _fetch(returnSubmissionId) {
     })
 }
 
-module.exports = {
+export default {
   go
 }

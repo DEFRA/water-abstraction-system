@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
  *
  * @module SubmitFullConditionService
  */
 
-const FetchFullConditionService = require('../../../services/licence-monitoring-station/setup/fetch-full-condition.service.js')
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const FullConditionService = require('../../../services/licence-monitoring-station/setup/full-condition.service.js')
-const FullConditionValidator = require('../../../validators/licence-monitoring-station/setup/full-condition.validator.js')
+import FetchFullConditionService from '../../../services/licence-monitoring-station/setup/fetch-full-condition.service.js'
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import FullConditionService from '../../../services/licence-monitoring-station/setup/full-condition.service.js'
+import FullConditionValidator from '../../../validators/licence-monitoring-station/setup/full-condition.validator.js'
 
 /**
  * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
@@ -123,6 +121,6 @@ function _validate(payload) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

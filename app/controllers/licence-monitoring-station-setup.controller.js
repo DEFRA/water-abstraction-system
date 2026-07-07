@@ -1,23 +1,21 @@
-'use strict'
-
 /**
  * Controller for /licence-monitoring-station/setup endpoints
  * @module LicenceMonitoringStationSetupController
  */
 
-const AbstractionPeriodService = require('../services/licence-monitoring-station/setup/abstraction-period.service.js')
-const CheckService = require('../services/licence-monitoring-station/setup/check.service.js')
-const FullConditionService = require('../services/licence-monitoring-station/setup/full-condition.service.js')
-const InitiateSessionService = require('../services/licence-monitoring-station/setup/initiate-session.service.js')
-const LicenceNumberService = require('../services/licence-monitoring-station/setup/licence-number.service.js')
-const StopOrReduceService = require('../services/licence-monitoring-station/setup/stop-or-reduce.service.js')
-const SubmitCheckService = require('../services/licence-monitoring-station/setup/submit-check.service.js')
-const SubmitAbstractionPeriodService = require('../services/licence-monitoring-station/setup/submit-abstraction-period.service.js')
-const SubmitFullConditionService = require('../services/licence-monitoring-station/setup/submit-full-condition.service.js')
-const SubmitLicenceNumberService = require('../services/licence-monitoring-station/setup/submit-licence-number.service.js')
-const SubmitStopOrReduceService = require('../services//licence-monitoring-station/setup/submit-stop-or-reduce.service.js')
-const SubmitThresholdAndUnitService = require('../services/licence-monitoring-station/setup/submit-threshold-and-unit.service.js')
-const ThresholdAndUnitService = require('../services/licence-monitoring-station/setup/threshold-and-unit.service.js')
+import AbstractionPeriodService from '../services/licence-monitoring-station/setup/abstraction-period.service.js'
+import CheckService from '../services/licence-monitoring-station/setup/check.service.js'
+import FullConditionService from '../services/licence-monitoring-station/setup/full-condition.service.js'
+import InitiateSessionService from '../services/licence-monitoring-station/setup/initiate-session.service.js'
+import LicenceNumberService from '../services/licence-monitoring-station/setup/licence-number.service.js'
+import StopOrReduceService from '../services/licence-monitoring-station/setup/stop-or-reduce.service.js'
+import SubmitCheckService from '../services/licence-monitoring-station/setup/submit-check.service.js'
+import SubmitAbstractionPeriodService from '../services/licence-monitoring-station/setup/submit-abstraction-period.service.js'
+import SubmitFullConditionService from '../services/licence-monitoring-station/setup/submit-full-condition.service.js'
+import SubmitLicenceNumberService from '../services/licence-monitoring-station/setup/submit-licence-number.service.js'
+import SubmitStopOrReduceService from '../services//licence-monitoring-station/setup/submit-stop-or-reduce.service.js'
+import SubmitThresholdAndUnitService from '../services/licence-monitoring-station/setup/submit-threshold-and-unit.service.js'
+import ThresholdAndUnitService from '../services/licence-monitoring-station/setup/threshold-and-unit.service.js'
 
 async function abstractionPeriod(request, h) {
   const {
@@ -190,7 +188,7 @@ async function thresholdAndUnit(request, h) {
   return h.view('licence-monitoring-station/setup/threshold-and-unit.njk', pageData)
 }
 
-module.exports = {
+export default {
   abstractionPeriod,
   check,
   fullCondition,

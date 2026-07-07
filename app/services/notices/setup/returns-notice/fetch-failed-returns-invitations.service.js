@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Fetches the licence refs and return logs IDs from failed returns invitation notifications to primary users
  * @module FetchFailedReturnsInvitationsService
  */
 
-const NotificationModel = require('../../../../models/notification.model.js')
-const { futureDueDate } = require('../../../../presenters/notices/base.presenter.js')
-const { compareDates } = require('../../../../lib/dates.lib.js')
-const { compareStrings } = require('../../../../lib/general.lib.js')
+import NotificationModel from '../../../../models/notification.model.js'
+import { futureDueDate } from '../../../../presenters/notices/base.presenter.js'
+import { compareDates } from '../../../../lib/dates.lib.js'
+import { compareStrings } from '../../../../lib/general.lib.js'
 
 /**
  * Fetches the licence refs and return logs IDs from failed returns invitation notifications to primary users
@@ -104,6 +102,6 @@ async function _fetch(eventId) {
     .whereNull('alternateNoticeId')
 }
 
-module.exports = {
+export default {
   go
 }

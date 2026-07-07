@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Checks if a bill run can be cancelled, and if so, updates the status of the bill run to 'cancel'
  * @module CancelBillRunService
  */
 
-const BillRunModel = require('../../../models/bill-run.model.js')
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
+import BillRunModel from '../../../models/bill-run.model.js'
+import { timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
  * Checks if a bill run can be cancelled, and if so, updates the status of the bill run to 'cancel'
@@ -73,6 +71,6 @@ async function _updateStatus(billRunId) {
   return BillRunModel.query().findById(billRunId).patch({ status: 'cancel', updatedAt: timestampForPostgres() })
 }
 
-module.exports = {
+export default {
   go
 }

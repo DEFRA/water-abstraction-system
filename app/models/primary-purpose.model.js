@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Model for primary_purposes (water.purposes_primary)
  * @module PrimaryPurposeModel
  */
 
-const { Model } = require('objection')
+import { Model } from 'objection'
 
-const BaseModel = require('./base.model.js')
+import BaseModel from './base.model.js'
 
 class PrimaryPurposeModel extends BaseModel {
   static get tableName() {
@@ -36,4 +34,4 @@ class PrimaryPurposeModel extends BaseModel {
   }
 }
 
-module.exports = PrimaryPurposeModel
+export default PrimaryPurposeModel

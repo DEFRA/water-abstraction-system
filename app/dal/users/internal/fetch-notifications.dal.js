@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Fetches data needed for the view '/system/users/internal/{id}/communications' page
  * @module FetchNotificationsDal
  */
 
-const NotificationModel = require('../../../models/notification.model.js')
-const { userNotificationTypes } = require('../../../lib/static-lookups.lib.js')
+import NotificationModel from '../../../models/notification.model.js'
+import { userNotificationTypes } from '../../../lib/static-lookups.lib.js'
 
-const DatabaseConfig = require('../../../../config/database.config.js')
-const ServerConfig = require('../../../../config/server.config.js')
+import DatabaseConfig from '../../../../config/database.config.js'
+import ServerConfig from '../../../../config/server.config.js'
 
 /**
  * Fetches data needed for the view '/system/users/internal/{id}/communications' page
@@ -58,6 +56,6 @@ function _messageRefs() {
   return messageRefs
 }
 
-module.exports = {
+export default {
   go
 }

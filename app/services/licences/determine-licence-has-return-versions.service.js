@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Determines if a licence has requirements
  * @module DetermineLicenceHasReturnVersionsService
  */
 
-const ReturnVersionModel = require('../../models/return-version.model.js')
+import ReturnVersionModel from '../../models/return-version.model.js'
 
 /**
  * Determines if a licence has requirements
@@ -24,6 +22,6 @@ async function _fetch(licenceId) {
   return ReturnVersionModel.query().select(['id']).where('licenceId', licenceId).limit(1).first()
 }
 
-module.exports = {
+export default {
   go
 }

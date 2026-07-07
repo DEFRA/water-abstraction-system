@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Handles the reissuing of bills
  * @module ReissueBillsService
  */
 
-const BillModel = require('../../../models/bill.model.js')
-const BillLicenceModel = require('../../../models/bill-licence.model.js')
-const FetchBillsToBeReissuedService = require('./fetch-bills-to-be-reissued.service.js')
-const ReissueBillService = require('./reissue-bill.service.js')
-const TransactionModel = require('../../../models/transaction.model.js')
+import BillModel from '../../../models/bill.model.js'
+import BillLicenceModel from '../../../models/bill-licence.model.js'
+import FetchBillsToBeReissuedService from './fetch-bills-to-be-reissued.service.js'
+import ReissueBillService from './reissue-bill.service.js'
+import TransactionModel from '../../../models/transaction.model.js'
 
 /**
  * Handles the reissuing of bills
@@ -61,6 +59,6 @@ async function _persistData(dataToPersist) {
   await TransactionModel.query().insert(dataToPersist.transactions)
 }
 
-module.exports = {
+export default {
   go
 }

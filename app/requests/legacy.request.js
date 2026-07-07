@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Use for making http requests to the legacy web services
  * @module LegacyRequest
  */
 
-const BaseRequest = require('./base.request.js')
+import BaseRequest from './base.request.js'
 
-const legacyConfig = require('../../config/legacy.config.js')
+import legacyConfig from '../../config/legacy.config.js'
 
 const services = {
   // REPO-NAME - PM2 NAME
@@ -199,7 +197,7 @@ function _parseResult(result) {
   return result
 }
 
-module.exports = {
+export default {
   delete: deleteRequest,
   get,
   post

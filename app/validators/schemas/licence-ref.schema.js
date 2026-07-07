@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Returns a Joi schema for the `licenceRef` field
  * @module LicenceRefSchemaValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const errorMessage = 'Enter a licence number'
 
@@ -40,6 +38,6 @@ function _licenceExists(value, helpers, licenceExists) {
   return helpers.error('invalidLicence')
 }
 
-module.exports = {
+export default {
   licenceRefSchema
 }

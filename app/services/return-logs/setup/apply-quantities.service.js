@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Recalculates the quantities and applies them to the session object
  * @module ApplyQuantitiesService
  */
 
-const { convertFromCubicMetres, convertToCubicMetres } = require('../../../lib/general.lib.js')
+import { convertFromCubicMetres, convertToCubicMetres } from '../../../lib/general.lib.js'
 
 const METER_READINGS_METHOD = 'meterReadings'
 
@@ -81,6 +79,6 @@ function _volumesUpdate(session) {
   return session
 }
 
-module.exports = {
+export default {
   go
 }

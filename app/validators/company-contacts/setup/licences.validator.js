@@ -1,12 +1,10 @@
-'use strict'
-
 /**
  * Validates data submitted for the '/company-contacts/setup/{sessionId}/licences' page
  *
  * @module LicencesValidator
  */
 
-const Joi = require('joi')
+import Joi from 'joi'
 
 const errorMessage = 'Select the licences they should get water abstraction alerts emails for'
 
@@ -30,6 +28,6 @@ function go(payload) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-module.exports = {
+export default {
   go
 }

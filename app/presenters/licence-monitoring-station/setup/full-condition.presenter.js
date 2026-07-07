@@ -1,6 +1,4 @@
-'use strict'
-
-const { checkUrl } = require('../../../lib/check-page.lib.js')
+import { checkUrl } from '../../../lib/check-page.lib.js'
 
 /**
  * Formats data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
@@ -73,6 +71,6 @@ function _generateRadioButtons(conditions, conditionId) {
   ]
 }
 
-module.exports = {
+export default {
   go
 }

@@ -1,14 +1,12 @@
-'use strict'
-
 /**
  * Orchestrates validating and patching the data for the amend billable returns page
  * @module SubmitEditService
  */
 
-const EditPresenter = require('../../../presenters/bill-runs/review/edit.presenter.js')
-const EditValidator = require('../../../validators/bill-runs/review/edit.validator.js')
-const FetchReviewChargeElementService = require('./fetch-review-charge-element.service.js')
-const ReviewChargeElementModel = require('../../../models/review-charge-element.model.js')
+import EditPresenter from '../../../presenters/bill-runs/review/edit.presenter.js'
+import EditValidator from '../../../validators/bill-runs/review/edit.validator.js'
+import FetchReviewChargeElementService from './fetch-review-charge-element.service.js'
+import ReviewChargeElementModel from '../../../models/review-charge-element.model.js'
 
 /**
  * Orchestrates validating the data for the amend billable returns page and patching the db value
@@ -71,6 +69,6 @@ function _validate(payload) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

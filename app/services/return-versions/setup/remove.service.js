@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Orchestrates fetching and presenting the data for
  * `/return-versions/setup/{sessionId}/remove/{requirementIndex}` page
  * @module RemoveService
  */
 
-const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const RemovePresenter = require('../../../presenters/return-versions/setup/remove.presenter.js')
+import FetchSessionDal from '../../../dal/fetch-session.dal.js'
+import RemovePresenter from '../../../presenters/return-versions/setup/remove.presenter.js'
 
 /**
  * Orchestrates fetching and presenting the data for
@@ -30,6 +28,6 @@ async function go(sessionId, requirementIndex) {
   }
 }
 
-module.exports = {
+export default {
   go
 }

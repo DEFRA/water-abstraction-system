@@ -1,11 +1,9 @@
-'use strict'
-
 /**
  * Formats a transaction as a Charging Module API transaction request
  * @module CreateTransactionPresenter
  */
 
-const { formatChargingModuleDate } = require('../base.presenter.js')
+import { formatChargingModuleDate } from '../base.presenter.js'
 
 /**
  * Formats a transaction as a Charging Module API transaction request
@@ -56,6 +54,6 @@ function go(transaction, accountNumber, licence) {
   }
 }
 
-module.exports = {
+export default {
   go
 }
