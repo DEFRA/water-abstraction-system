@@ -32,7 +32,7 @@ import { camelCase, knexIdentifierMappers, snakeCase } from 'objection/lib/utils
  *
  * @returns object containing Knex postProcessResponse() and wrapIdentifier() hooks
  */
-function legacyDbSnakeCaseMappers(opt = {}) {
+export function legacyDbSnakeCaseMappers(opt = {}) {
   return knexIdentifierMappers({
     parse: (str) => {
       return _legacyCamelCase(str, opt)
@@ -62,9 +62,6 @@ function _legacySnakeCase(
   return snakeCase(str, { upperCase, underscoreBeforeDigits, underscoreBetweenUppercaseLetters })
 }
 
-export {
-  legacyDbSnakeCaseMappers
-}
 export default {
   legacyDbSnakeCaseMappers
 }
