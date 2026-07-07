@@ -1,5 +1,3 @@
-'use strict'
-
-const { start } = require('./app/server.js')
+import { start } from './app/server.js'
 
 start()

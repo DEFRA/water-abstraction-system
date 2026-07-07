@@ -1,5 +1,3 @@
-'use strict'
-
 const ci = String(process.env.CI) === 'true' || false
 
 const vitestConfig = {
@@ -146,6 +144,4 @@ const vitestConfig = {
   }
 }
 
-module.exports = {
-  ...vitestConfig
-}
+export default vitestConfig

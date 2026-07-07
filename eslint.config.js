@@ -1,11 +1,9 @@
-'use strict'
+import jsdocPlugin from 'eslint-plugin-jsdoc'
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
+import globals from 'globals'
+import neostandard from 'neostandard'
 
-const jsdocPlugin = require('eslint-plugin-jsdoc')
-const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended')
-const globals = require('globals')
-const neostandard = require('neostandard')
-
-module.exports = [
+export default [
   // Ignore the folder created when JSDocs are generated
   // NOTE: In an ESLint Flat Config, an object is only treated as a Global Ignore if it contains the ignores key and
   // nothing else.
@@ -36,7 +34,7 @@ module.exports = [
       globals: {
         ...globals.node
       },
-      sourceType: 'commonjs'
+      sourceType: 'module'
     },
     plugins: {
       // https://github.com/gajus/eslint-plugin-jsdoc
@@ -45,10 +43,8 @@ module.exports = [
     },
     // NOTE: Special case for arrow-body-style below
     rules: {
-      // Enforce .js extension when requiring files
-      'import/extensions': ['error', 'always'],
-      // Enforce 'use strict' declarations in all modules
-      strict: ['error', 'global'],
+      // Enforce .js extension when importing local files; ignore bare package specifiers (e.g. 'dotenv/config')
+      'import/extensions': ['error', 'always', { ignorePackages: true }],
       'jsdoc/check-alignment': 'error',
       'jsdoc/check-indentation': 'error',
       'jsdoc/check-types': 'error',

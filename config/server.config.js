@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Config values used by this service, for example, the port to use
  * @module ServerConfig
  */
 
-// We require dotenv directly in each config file to support unit tests that depend on this this subset of config.
-// Requiring dotenv in multiple places has no effect on the app when running for real.
-require('dotenv').config()
+// We import dotenv directly in each config file to support unit tests that depend on this subset of config.
+// Importing dotenv in multiple places has no effect on the app when running for real.
+import 'dotenv/config'
 
 const config = {
   domains: {
@@ -38,4 +36,4 @@ const config = {
   requestTimeout: Number.parseInt(process.env.REQUEST_TIMEOUT) || 5000
 }
 
-module.exports = config
+export default config
