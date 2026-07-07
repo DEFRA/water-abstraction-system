@@ -16,9 +16,7 @@ async function go(sessionId) {
   await DeleteSessionDal.go(sessionId)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

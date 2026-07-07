@@ -522,24 +522,3 @@ export function transformStringOfLicencesToArray(licences) {
       return item !== ''
     }) // Remove empty strings if any
 }
-
-export default {
-  calculateAndLogTimeTaken,
-  compareStrings,
-  convertFromCubicMetres,
-  convertToCubicMetres,
-  currentTimeInNanoseconds,
-  determineCurrentFinancialYear,
-  flashNotification,
-  readFlashNotification,
-  generateNoticeReferenceCode,
-  generateRandomInteger,
-  generateUUID,
-  pause,
-  periodsOverlap,
-  splitArrayIntoGroups,
-  timestampForPostgres,
-  today,
-  transactionsMatch,
-  transformStringOfLicencesToArray
-}

@@ -43,9 +43,7 @@ function _returnFromError(notification, returnFormRequest) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

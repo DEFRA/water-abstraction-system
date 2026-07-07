@@ -121,9 +121,7 @@ function _transformForSetup(returnVersion) {
   })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

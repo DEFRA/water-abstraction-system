@@ -30,9 +30,7 @@ async function go(session) {
   return rows
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

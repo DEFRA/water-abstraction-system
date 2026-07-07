@@ -65,9 +65,3 @@ export async function markCheckPageVisited(session) {
 
   await session.$update()
 }
-
-export default {
-  checkUrl,
-  markCheckPageNotVisited,
-  markCheckPageVisited
-}

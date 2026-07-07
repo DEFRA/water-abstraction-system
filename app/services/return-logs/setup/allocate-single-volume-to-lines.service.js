@@ -108,9 +108,7 @@ function _lineWithinAbstractionPeriod(lineStartDate, lineEndDate, fromFullDate, 
   return lineStartDate >= fromFullDate && lineEndDate <= toFullDate
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

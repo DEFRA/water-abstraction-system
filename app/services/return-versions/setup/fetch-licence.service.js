@@ -40,9 +40,7 @@ async function go(licenceId) {
   )
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

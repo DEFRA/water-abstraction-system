@@ -26,9 +26,7 @@ async function go(notification, referenceCode) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -28,9 +28,7 @@ async function go(sessionId, requirementIndex) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

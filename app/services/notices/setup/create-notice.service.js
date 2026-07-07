@@ -26,9 +26,7 @@ async function go(noticeData, recipients, issuer) {
   return EventModel.query().insert({ ...notice, createdAt: timestamp, updatedAt: timestamp })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

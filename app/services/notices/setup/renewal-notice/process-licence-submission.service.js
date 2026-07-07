@@ -54,9 +54,7 @@ function _validate(payload, licenceRenewal) {
   return formatValidationResult(validationResult)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

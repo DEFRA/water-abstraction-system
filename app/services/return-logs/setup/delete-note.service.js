@@ -4,7 +4,7 @@
  */
 
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import GeneralLib from '../../../lib/general.lib.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 
 /**
  * Deletes the note from the return log currently being setup
@@ -18,7 +18,7 @@ import GeneralLib from '../../../lib/general.lib.js'
 async function go(sessionId, yar) {
   const session = await FetchSessionDal.go(sessionId)
 
-  GeneralLib.flashNotification(yar, 'Deleted', 'Note deleted')
+  flashNotification(yar, 'Deleted', 'Note deleted')
 
   await _save(session)
 }
@@ -29,9 +29,7 @@ async function _save(session) {
   return session.$update()
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

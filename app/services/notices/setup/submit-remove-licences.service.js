@@ -60,9 +60,7 @@ function _validate(payload, validLicences) {
   return formatValidationResult(validationResult)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

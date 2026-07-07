@@ -23,9 +23,7 @@ async function go(returnLogId) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

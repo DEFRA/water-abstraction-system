@@ -59,9 +59,7 @@ async function _fetch(returnVersionId) {
     })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -6,7 +6,7 @@
 
 import FetchRecipientsService from './fetch-recipients.service.js'
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import GeneralLib from '../../../lib/general.lib.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 import SelectRecipientsPresenter from '../../../presenters/notices/setup/select-recipients.presenter.js'
 import SelectRecipientsValidator from '../../../validators/notices/setup/select-recipients.validator.js'
 import { formatValidationResult } from '../../../presenters/base.presenter.js'
@@ -31,11 +31,7 @@ async function go(sessionId, payload, yar) {
   if (!error) {
     await _save(session, payload)
 
-    GeneralLib.flashNotification(
-      yar,
-      'Updated',
-      'The recipients have been changed. Check details before sending invitations.'
-    )
+    flashNotification(yar, 'Updated', 'The recipients have been changed. Check details before sending invitations.')
 
     return {}
   }
@@ -75,9 +71,7 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -49,9 +49,7 @@ async function _returnRequirements(session) {
   return ReturnRequirementsPresenter.go(requirements, points, journey)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

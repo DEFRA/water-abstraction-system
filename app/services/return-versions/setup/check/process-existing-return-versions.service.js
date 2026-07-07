@@ -261,9 +261,7 @@ async function _replacePreviousVersion(previousVersions, newVersionStartDate, tr
   return newVersionEndDate
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

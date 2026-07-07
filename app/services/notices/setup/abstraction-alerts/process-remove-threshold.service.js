@@ -5,7 +5,7 @@
  */
 
 import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
-import GeneralLib from '../../../../lib/general.lib.js'
+import { flashNotification } from '../../../../lib/general.lib.js'
 import { formatRestrictionType, formatValueUnit } from '../../../../presenters/base.presenter.js'
 
 /**
@@ -21,7 +21,7 @@ async function go(sessionId, licenceMonitoringStationId, yar) {
 
   await _save(session, licenceMonitoringStationId)
 
-  GeneralLib.flashNotification(yar, 'Updated', _notificationMessage(session, licenceMonitoringStationId))
+  flashNotification(yar, 'Updated', _notificationMessage(session, licenceMonitoringStationId))
 }
 
 function _notificationMessage(session, licenceMonitoringStationId) {
@@ -42,9 +42,7 @@ async function _save(session, licenceMonitoringStationId) {
   return session.$update()
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -62,9 +62,7 @@ async function _updateFailedEmailInvitations(alternateNoticeId, notificationIds)
     .whereNull('alternateNoticeId')
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

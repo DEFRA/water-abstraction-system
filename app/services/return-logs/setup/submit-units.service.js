@@ -4,7 +4,7 @@
  */
 
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import GeneralLib from '../../../lib/general.lib.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 import UnitsPresenter from '../../../presenters/return-logs/setup/units.presenter.js'
 import UnitsValidator from '../../../validators/return-logs/setup/units.validator.js'
 import { formatValidationResult } from '../../../presenters/base.presenter.js'
@@ -34,7 +34,7 @@ async function go(sessionId, payload, yar) {
     await _save(session, payload)
 
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Reporting details changed')
+      flashNotification(yar, 'Updated', 'Reporting details changed')
     }
 
     return {
@@ -69,9 +69,7 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

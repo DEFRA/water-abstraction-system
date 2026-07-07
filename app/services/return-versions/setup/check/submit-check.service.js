@@ -126,9 +126,7 @@ async function _processEndDate(returnVersion, licenceId, trx) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -128,9 +128,3 @@ export function processSavedFilters(yar, filterKey) {
     openFilter
   }
 }
-
-export default {
-  clearFilters,
-  handleOneOptionSelected,
-  processSavedFilters
-}

@@ -5,7 +5,7 @@
  */
 
 import FetchSessionDal from '../../../dal/fetch-session.dal.js'
-import GeneralLib from '../../../lib/general.lib.js'
+import { flashNotification } from '../../../lib/general.lib.js'
 import PaperReturnPresenter from '../../../presenters/notices/setup/paper-return.presenter.js'
 import PaperReturnValidator from '../../../validators/notices/setup/paper-return.validator.js'
 import { formatValidationResult } from '../../../presenters/base.presenter.js'
@@ -29,7 +29,7 @@ async function go(sessionId, payload, yar) {
 
   if (!error) {
     if (session.checkPageVisited && _arraysDiffer(payload.returns, session.selectedReturns)) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Returns updated')
+      flashNotification(yar, 'Updated', 'Returns updated')
     }
 
     await _save(session, payload)
@@ -93,9 +93,7 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }
