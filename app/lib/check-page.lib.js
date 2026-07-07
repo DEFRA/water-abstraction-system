@@ -22,7 +22,7 @@
  *
  * @returns {string} The url to use, modified to point to the '/check' page if it has been visited
  */
-function checkUrl(session, url) {
+export function checkUrl(session, url) {
   const { checkPageVisited } = session
 
   if (checkPageVisited) {
@@ -44,7 +44,7 @@ function checkUrl(session, url) {
  *
  * @param {object} session - The session instance
  */
-async function markCheckPageNotVisited(session) {
+export async function markCheckPageNotVisited(session) {
   session.checkPageVisited = false
 
   await session.$update()
@@ -60,17 +60,12 @@ async function markCheckPageNotVisited(session) {
  *
  * @param {object} session - The session instance
  */
-async function markCheckPageVisited(session) {
+export async function markCheckPageVisited(session) {
   session.checkPageVisited = true
 
   await session.$update()
 }
 
-export {
-  checkUrl,
-  markCheckPageNotVisited,
-  markCheckPageVisited
-}
 export default {
   checkUrl,
   markCheckPageNotVisited,

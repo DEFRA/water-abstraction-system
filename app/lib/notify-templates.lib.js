@@ -1,4 +1,4 @@
-const NOTIFY_TEMPLATES = Object.freeze({
+export const NOTIFY_TEMPLATES = Object.freeze({
   alerts: {
     email: {
       reduce: 'd94bf110-b173-4f77-8e9a-cf7b4f95dc00',
@@ -111,9 +111,6 @@ const NOTIFY_TEMPLATES = Object.freeze({
   }
 })
 
-export {
-  NOTIFY_TEMPLATES
-}
 export default {
   NOTIFY_TEMPLATES
 }

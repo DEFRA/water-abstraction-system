@@ -22,7 +22,7 @@ import { formatDateObjectToISO } from '../lib/dates.lib.js'
  *
  * @private
  */
-function transformArrayToCSVRow(arrayToTransform) {
+export function transformArrayToCSVRow(arrayToTransform) {
   if (!arrayToTransform) {
     return undefined
   }
@@ -78,9 +78,6 @@ function _transformValueToCSV(value) {
   return `"${stringValue}"`
 }
 
-export {
-  transformArrayToCSVRow
-}
 export default {
   transformArrayToCSVRow
 }
