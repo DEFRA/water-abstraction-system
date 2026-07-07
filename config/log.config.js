@@ -1,13 +1,11 @@
-'use strict'
-
 /**
  * Config values used by our logger
  * @module LogConfig
  */
 
-// We require dotenv directly in each config file to support unit tests that depend on this this subset of config.
-// Requiring dotenv in multiple places has no effect on the app when running for real.
-require('dotenv').config()
+// We import dotenv directly in each config file to support unit tests that depend on this subset of config.
+// Importing dotenv in multiple places has no effect on the app when running for real.
+import 'dotenv/config'
 
 const config = {
   // Credit to https://stackoverflow.com/a/323546/6117745 for how to handle
@@ -16,4 +14,4 @@ const config = {
   logInTest: String(process.env.LOG_IN_TEST) === 'true' || false
 }
 
-module.exports = config
+export default config

@@ -1,6 +1,4 @@
-'use strict'
-
-const { legacyDbSnakeCaseMappers } = require('./app/lib/legacy-db-snake-case-mappers.lib.js')
+import { legacyDbSnakeCaseMappers } from './app/lib/legacy-db-snake-case-mappers.lib.js'
 
 /**
  * Passing in our variant of `knexSnakeCaseMappers` allows us to use camelCase everywhere and knex will convert it to
@@ -21,10 +19,10 @@ const { legacyDbSnakeCaseMappers } = require('./app/lib/legacy-db-snake-case-map
  * to migrations.
  */
 
-const knexfile = require('./knexfile.js')
+import knexfile from './knexfile.js'
 
 for (const environment in knexfile) {
   Object.assign(knexfile[environment], legacyDbSnakeCaseMappers({ underscoreBeforeDigits: true }))
 }
 
-module.exports = { ...knexfile }
+export default { ...knexfile }
