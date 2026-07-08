@@ -6,6 +6,8 @@ import ChargeReasonModel from '../../../app/models/change-reason.model.js'
 import { data as changeReasons } from '../../../db/seeds/data/change-reasons.js'
 import { selectRandomEntry } from '../general.js'
 
+export const data = changeReasons
+
 /**
  * Select an entry from the reference data entries seeded at the start of testing
  *

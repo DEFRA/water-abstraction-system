@@ -6,6 +6,8 @@ import RoleModel from '../../../app/models/role.model.js'
 import { selectRandomEntry } from '../general.js'
 import { data as roles } from '../../../db/seeds/data/roles.js'
 
+export const data = roles
+
 /**
  * Select an entry from the reference data entries seeded at the start of testing
  *

@@ -8,6 +8,8 @@ import { data as regions } from '../../../db/seeds/data/regions.js'
 
 // The `BILL_RUN_REGION_INDEX` is only to be used for testing bill run services that need to know details of bill runs
 // per region. This region is not selected randomly to prevent unit tests from using this region unless necessary.
+export const data = regions
+
 export const BILL_RUN_REGION_INDEX = 9
 export const TEST_REGION_INDEX = 8
 

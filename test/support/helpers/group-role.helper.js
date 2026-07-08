@@ -6,6 +6,8 @@ import GroupRoleModel from '../../../app/models/group-role.model.js'
 import { selectRandomEntry } from '../general.js'
 import { data as groupRoles } from '../../../db/seeds/data/group-roles.js'
 
+export const data = groupRoles
+
 /**
  * Select an entry from the reference data entries seeded at the start of testing
  *

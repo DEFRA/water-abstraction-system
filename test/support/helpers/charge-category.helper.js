@@ -6,6 +6,8 @@ import ChargeCategoryModel from '../../../app/models/charge-category.model.js'
 import { data as chargeCategories } from '../../../db/seeds/data/charge-categories.js'
 import { selectRandomEntry } from '../general.js'
 
+export const data = chargeCategories
+
 /**
  * Select an entry from the reference data entries seeded at the start of testing
  *

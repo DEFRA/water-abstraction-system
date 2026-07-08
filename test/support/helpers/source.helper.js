@@ -6,6 +6,8 @@ import SourceModel from '../../../app/models/source.model.js'
 import { selectRandomEntry } from '../general.js'
 import { data as sources } from '../../../db/seeds/data/sources.js'
 
+export const data = sources
+
 /**
  * Select an entry from the reference data entries seeded at the start of testing
  *

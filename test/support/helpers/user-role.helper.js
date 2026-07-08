@@ -9,6 +9,8 @@ import * as RoleHelper from './role.helper.js'
 import UserRoleModel from '../../../app/models/user-role.model.js'
 import { data as userRoles } from '../../../db/seeds/data/user-roles.js'
 
+export const data = userRoles
+
 /**
  * Add a new user role
  *

@@ -9,6 +9,8 @@ import * as GroupHelper from './group.helper.js'
 import UserGroupModel from '../../../app/models/user-group.model.js'
 import { data as userGroups } from '../../../db/seeds/data/user-groups.js'
 
+export const data = userGroups
+
 export const DEFAULT_INDEX = 4
 
 /**

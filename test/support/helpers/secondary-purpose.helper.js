@@ -6,6 +6,8 @@ import SecondaryPurposeModel from '../../../app/models/secondary-purpose.model.j
 import { selectRandomEntry } from '../general.js'
 import { data as secondaryPurposes } from '../../../db/seeds/data/secondary-purposes.js'
 
+export const data = secondaryPurposes
+
 /**
  * Select an entry from the reference data entries seeded at the start of testing
  *
