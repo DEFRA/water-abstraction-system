@@ -1,13 +1,13 @@
-/* eslint-disable no-unused-vars, strict, no-undef */
+/* eslint-disable no-unused-vars, no-undef */
 
 // Controller code
-const __SERVICE_NAME__ = require('__SERVICE_PATH__')
-const __SUBMIT_NAME__ = require('__SUBMIT_PATH__')
+import __SERVICE_NAME__ from '__SERVICE_PATH__'
+import __SUBMIT_NAME__ from '__SUBMIT_PATH__'
 
 async function __VIEW_SERVICE_NAME__(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await __SERVICE_NAME__.go(sessionId)
+  const pageData = await __SERVICE_NAME__(sessionId)
 
   return h.view(`__VIEW_PATH__`, pageData)
 }
@@ -18,7 +18,7 @@ async function __SUBMIT_SERVICE_NAME__(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await __SUBMIT_NAME__.go(sessionId, payload)
+  const pageData = await __SUBMIT_NAME__(sessionId, payload)
 
   if (pageData.error) {
     return h.view(`__VIEW_PATH__`, pageData)
@@ -34,7 +34,7 @@ const routes = [
     method: 'GET',
     path: '',
     options: {
-      handler: __CONTROLLER_NAME__.__VIEW_SERVICE_NAME__,
+      handler: __VIEW_SERVICE_NAME__,
       auth: {
         access: {
           scope: ['']
@@ -46,7 +46,7 @@ const routes = [
     method: 'POST',
     path: '',
     options: {
-      handler: __CONTROLLER_NAME__.__SUBMIT_SERVICE_NAME__,
+      handler: __SUBMIT_SERVICE_NAME__,
       auth: {
         access: {
           scope: ['']

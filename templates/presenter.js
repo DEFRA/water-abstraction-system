@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Formats data for the '' page
  * @module __MODULE_NAME__
@@ -12,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   return {
     backLink: {
       href: '',
@@ -20,8 +18,4 @@ function go(session) {
     },
     pageTitle: ''
   }
-}
-
-module.exports = {
-  go
 }

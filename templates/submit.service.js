@@ -1,15 +1,13 @@
-'use strict'
-
 /**
  * Orchestrates validating the data for the '' page
  *
  * @module __MODULE_NAME__
  */
 
-const __PRESENTER_NAME__ = require('__PRESENTER_PATH__')
-const __VALIDATOR_NAME__ = require('__VALIDATOR_PATH__')
-const FetchSessionDal = require('__FETCH_SESSION_DAL_PATH__')
-const { formatValidationResult } = require('__BASE_PRESENTER_PATH__')
+import __PRESENTER_NAME__ from '__PRESENTER_PATH__'
+import __VALIDATOR_NAME__ from '__VALIDATOR_PATH__'
+import FetchSessionDal from '__FETCH_SESSION_DAL_PATH__'
+import { formatValidationResult } from '__BASE_PRESENTER_PATH__'
 
 /**
  * Orchestrates validating the data for the '' page
@@ -19,8 +17,8 @@ const { formatValidationResult } = require('__BASE_PRESENTER_PATH__')
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+export default async function go(sessionId, payload) {
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -30,7 +28,7 @@ async function go(sessionId, payload) {
     return {}
   }
 
-  const pageData = __PRESENTER_NAME__.go(session)
+  const pageData = __PRESENTER_NAME__(session)
 
   return {
     error: validationResult,
@@ -43,11 +41,8 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = __VALIDATOR_NAME__.go(payload)
+  const validationResult = __VALIDATOR_NAME__(payload)
 
   return formatValidationResult(validationResult)
 }
 
-module.exports = {
-  go
-}
