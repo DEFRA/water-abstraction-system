@@ -3,7 +3,7 @@
  * @module SendLetterNotificationService
  */
 
-import CreateLetterRequest from '../../../../requests/notify/create-letter.request.js'
+import { send } from '../../../../requests/notify/create-letter.request.js'
 import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'
 
 /**
@@ -15,7 +15,7 @@ import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-u
  * @returns {Promise<object>} a notification with the Notify response
  */
 async function go(notification, referenceCode) {
-  const notifyResult = await CreateLetterRequest.send(notification.templateId, {
+  const notifyResult = await send(notification.templateId, {
     personalisation: notification.personalisation,
     reference: referenceCode
   })

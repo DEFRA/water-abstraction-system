@@ -57,9 +57,7 @@ async function go(session) {
   return DetermineBlockingAnnualService.go(region)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

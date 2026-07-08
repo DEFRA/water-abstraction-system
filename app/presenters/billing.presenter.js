@@ -82,12 +82,7 @@ function generateBillRunTitle(regionName, batchType, scheme, summer) {
   return `${titleCase(regionName)} ${billRunType.toLowerCase()}`
 }
 
-export {
-  formatBillRunType,
-  formatChargeScheme,
-  displayCreditDebitTotals,
-  generateBillRunTitle
-}
+export { formatBillRunType, formatChargeScheme, displayCreditDebitTotals, generateBillRunTitle }
 export default {
   formatBillRunType,
   formatChargeScheme,

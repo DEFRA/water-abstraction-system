@@ -80,9 +80,7 @@ function _messages(firstMatch, billRunType) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

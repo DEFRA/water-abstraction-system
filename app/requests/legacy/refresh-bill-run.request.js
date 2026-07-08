@@ -3,7 +3,7 @@
  * @module RefreshBillRunRequest
  */
 
-import LegacyRequest from '../legacy.request.js'
+import { postRequest } from '../legacy.request.js'
 
 /**
  * Send a request to the legacy water-abstraction-service to refresh a bill run
@@ -19,15 +19,8 @@ import LegacyRequest from '../legacy.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(billRunId) {
+export async function send(billRunId) {
   const path = `billing/batches/${billRunId}/refresh`
 
-  return LegacyRequest.post('water', path)
-}
-
-export {
-  send
-}
-export default {
-  send
+  return postRequest('water', path)
 }

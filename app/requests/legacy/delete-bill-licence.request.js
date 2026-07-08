@@ -3,7 +3,7 @@
  * @module DeleteBillLicenceRequest
  */
 
-import LegacyRequest from '../legacy.request.js'
+import { deleteRequest } from '../legacy.request.js'
 
 /**
  * Send a request to the legacy water-abstraction-service to delete a bill licence
@@ -22,16 +22,9 @@ import LegacyRequest from '../legacy.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(billLicenceId, user) {
+export async function send(billLicenceId, user) {
   const { userId } = user
   const path = `billing/invoice-licences/${billLicenceId}`
 
-  return LegacyRequest.delete('water', path, userId)
-}
-
-export {
-  send
-}
-export default {
-  send
+  return deleteRequest('water', path, userId)
 }

@@ -109,9 +109,7 @@ function _warning(matchingContact, abstractionAlertLicences, abstractionAlerts) 
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

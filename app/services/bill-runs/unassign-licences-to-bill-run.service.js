@@ -22,9 +22,7 @@ async function go(licenceIds, billRunId) {
     .where('billRunId', billRunId)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

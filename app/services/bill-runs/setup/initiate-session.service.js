@@ -21,9 +21,7 @@ async function go() {
   return CreateSessionDal.go()
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

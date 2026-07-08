@@ -53,9 +53,7 @@ function _line(addressLine) {
   return addressLine ?? ''
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

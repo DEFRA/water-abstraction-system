@@ -5,7 +5,7 @@
  */
 
 import FetchSessionDal from '../../dal/fetch-session.dal.js'
-import LookupPostcodeRequest from '../../requests/address-facade/lookup-postcode.request.js'
+import { send } from '../../requests/address-facade/lookup-postcode.request.js'
 import SelectPresenter from '../../presenters/address/select.presenter.js'
 
 /**
@@ -18,7 +18,7 @@ import SelectPresenter from '../../presenters/address/select.presenter.js'
 async function go(sessionId) {
   const session = await FetchSessionDal.go(sessionId)
 
-  const result = await LookupPostcodeRequest.send(session.addressJourney.address.postcode)
+  const result = await send(session.addressJourney.address.postcode)
 
   if (result.succeeded === false || result.matches.length === 0) {
     return {

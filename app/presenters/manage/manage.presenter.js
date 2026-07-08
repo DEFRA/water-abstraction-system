@@ -77,9 +77,7 @@ function _viewWorkflow(userScopes) {
   return { show: links.checkLicences, links }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

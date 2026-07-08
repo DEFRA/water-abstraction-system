@@ -26,9 +26,7 @@ function go(transaction) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

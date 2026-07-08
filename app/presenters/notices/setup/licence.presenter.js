@@ -34,9 +34,7 @@ function _backLink(sessionId, checkPageVisited) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

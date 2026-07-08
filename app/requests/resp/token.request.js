@@ -1,23 +1,23 @@
 /**
- * Connects with the ReSP API's Azure AD authentication service to get a JWT for authentication
+ * Connects with the ReSP API's Azure AD authentication service to getRequest a JWT for authentication
  * @module TokenRequest
  */
 
 import querystring from 'node:querystring'
 
-import BaseRequest from '../base.request.js'
+import { postRequest } from '../base.request.js'
 
 import config from '../../../config/resp.config.js'
 
 /**
- * Connects with the ReSP API's Azure AD authentication service to get a JWT for authentication
+ * Connects with the ReSP API's Azure AD authentication service to getRequest a JWT for authentication
  *
  * @returns {Promise<object>} An object containing the `accessToken:` to use in future ReSP requests
  */
-async function send() {
+export async function send() {
   const url = new URL(`/${config.tenantId}/oauth2/v2.0/token`, config.tokenUrl)
 
-  const result = await BaseRequest.post(url.href, _options())
+  const result = await postRequest(url.href, _options())
 
   return _parseResult(result)
 }
@@ -58,11 +58,4 @@ function _parseResult(result) {
   }
 
   return authentication
-}
-
-export {
-  send
-}
-export default {
-  send
 }

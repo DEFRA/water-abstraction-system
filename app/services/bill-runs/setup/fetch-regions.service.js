@@ -16,9 +16,7 @@ async function go() {
     .orderBy([{ column: 'displayName', order: 'asc' }])
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

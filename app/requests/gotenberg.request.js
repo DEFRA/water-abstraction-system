@@ -4,7 +4,7 @@
  */
 
 import http2 from 'node:http2'
-import BaseRequest from './base.request.js'
+import { postRequest as basePostRequest } from './base.request.js'
 import { pause } from '../lib/general.lib.js'
 
 import gotenbergConfig from '../../config/gotenberg.config.js'
@@ -19,8 +19,8 @@ const { HTTP_STATUS_OK } = http2.constants
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function post(path, formData) {
-  const result = await _sendRequest(path, BaseRequest.post, formData)
+export async function postRequest(path, formData) {
+  const result = await _sendRequest(path, basePostRequest, formData)
 
   // Requests for PDFs are sporadic at best. We are talking weeks between users creating them. So, we haven't wasted
   // money or energy keeping Gotenberg running in an ECS instance with lots of resource.
@@ -80,11 +80,4 @@ function _parseResult(result) {
   }
 
   return result
-}
-
-export {
-  post
-}
-export default {
-  post
 }

@@ -213,12 +213,7 @@ function licenceEndsWarning(licence) {
   }
 }
 
-export {
-  formatConditionTypes,
-  formatLicencePoints,
-  formatLicencePurposes,
-  licenceEndsWarning
-}
+export { formatConditionTypes, formatLicencePoints, formatLicencePurposes, licenceEndsWarning }
 export default {
   formatConditionTypes,
   formatLicencePoints,

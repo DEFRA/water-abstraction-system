@@ -3,7 +3,7 @@
  * @module FetchCompaniesService
  */
 
-import SearchCompaniesRequest from '../../../requests/companies-house/search-companies.request.js'
+import { send } from '../../../requests/companies-house/search-companies.request.js'
 
 /**
  * Fetches any companies that meet the search criteria from Companies House
@@ -13,7 +13,7 @@ import SearchCompaniesRequest from '../../../requests/companies-house/search-com
  * @returns {Promise<object[]>} an object containing the matching companies needed to populate the view
  */
 async function go(companySearch) {
-  const result = await SearchCompaniesRequest.send(companySearch)
+  const result = await send(companySearch)
 
   if (!result.succeeded) {
     return []

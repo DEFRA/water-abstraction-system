@@ -105,9 +105,7 @@ function _extractFromNotifyError(notifyError) {
   return 'Internal system error'
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

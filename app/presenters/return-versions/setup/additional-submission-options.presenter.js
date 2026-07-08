@@ -39,9 +39,7 @@ function go(session) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

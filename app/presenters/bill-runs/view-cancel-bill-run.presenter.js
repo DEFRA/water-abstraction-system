@@ -42,9 +42,7 @@ function _backLink(id, scheme, status) {
   return `/system/bill-runs/${id}`
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

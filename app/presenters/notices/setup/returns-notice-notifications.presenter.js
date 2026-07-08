@@ -106,9 +106,7 @@ function _letter(recipient, noticeId, session) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

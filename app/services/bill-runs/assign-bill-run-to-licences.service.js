@@ -77,9 +77,7 @@ async function go(billRunId) {
   await db.raw(query, params)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

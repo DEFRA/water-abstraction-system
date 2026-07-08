@@ -3,7 +3,7 @@
  * @module ViewBillRunStatusRequest
  */
 
-import ChargingModuleRequest from '../charging-module.request.js'
+import { getRequest } from '../charging-module.request.js'
 
 /**
  * Sends a request to the Charging Module to view a bill run's status and returns the result
@@ -15,15 +15,8 @@ import ChargingModuleRequest from '../charging-module.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(billRunId) {
+export async function send(billRunId) {
   const path = `v3/wrls/bill-runs/${billRunId}/status`
 
-  return ChargingModuleRequest.get(path)
-}
-
-export {
-  send
-}
-export default {
-  send
+  return getRequest(path)
 }

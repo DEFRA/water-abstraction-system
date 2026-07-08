@@ -56,9 +56,7 @@ function _formatCompanyAddress(address) {
   ].filter(Boolean)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

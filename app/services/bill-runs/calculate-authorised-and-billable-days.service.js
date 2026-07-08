@@ -155,9 +155,7 @@ function _consolidateAndCalculate(referencePeriod, abstractionsPeriods) {
   return totalDays
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

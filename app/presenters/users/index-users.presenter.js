@@ -62,9 +62,7 @@ function _userRowData(users) {
   })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

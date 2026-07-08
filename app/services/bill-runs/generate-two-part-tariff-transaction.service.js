@@ -129,9 +129,7 @@ function _standardTransaction(
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

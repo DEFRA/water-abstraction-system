@@ -60,9 +60,7 @@ function _processBillRun(billRun, billingPeriods) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

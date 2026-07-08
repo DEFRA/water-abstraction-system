@@ -5,11 +5,11 @@
 
 import BillRunModel from '../../../models/bill-run.model.js'
 import BillRunError from '../../../errors/bill-run.error.js'
-import ChargingModuleGenerateBillRunRequest from '../../../requests/charging-module/generate-bill-run.request.js'
+import { send as generateBillRun } from '../../../requests/charging-module/generate-bill-run.request.js'
 import FetchChargeVersionsService from './fetch-charge-versions.service.js'
 import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib/general.lib.js'
 import HandleErroredBillRunService from '../handle-errored-bill-run.service.js'
-import LegacyRefreshBillRunRequest from '../../../requests/legacy/refresh-bill-run.request.js'
+import { send as refreshBillRun } from '../../../requests/legacy/refresh-bill-run.request.js'
 import ProcessBillingPeriodService from './process-billing-period.service.js'
 import UnflagUnbilledSupplementaryLicencesService from '../unflag-unbilled-supplementary-licences.service.js'
 
@@ -94,9 +94,9 @@ async function _finaliseBillRun(billRun, accumulatedLicenceIds, resultsOfProcess
 
   // We now need to tell the Charging Module to run its generate process. This is where the Charging module finalises
   // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
-  await ChargingModuleGenerateBillRunRequest.send(billRun.externalId)
+  await generateBillRun(billRun.externalId)
 
-  await LegacyRefreshBillRunRequest.send(billRun.id)
+  await refreshBillRun(billRun.id)
 }
 
 function _logError(billRun, error) {
@@ -107,9 +107,7 @@ async function _updateStatus(billRunId, status) {
   await BillRunModel.query().findById(billRunId).patch({ status })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

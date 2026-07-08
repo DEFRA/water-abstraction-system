@@ -214,9 +214,7 @@ function _processDueReturns(chargeElement, matchingReturns, chargeReference) {
   })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

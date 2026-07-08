@@ -116,9 +116,7 @@ async function _fetchBillSummaries(id) {
   return results
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

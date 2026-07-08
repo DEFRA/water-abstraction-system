@@ -29,9 +29,7 @@ function go(notifications, licence) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

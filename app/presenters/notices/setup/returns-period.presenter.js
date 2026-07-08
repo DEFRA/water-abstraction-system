@@ -62,9 +62,7 @@ function _formatReturnPeriod(returnsPeriod, savedReturnsPeriod) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

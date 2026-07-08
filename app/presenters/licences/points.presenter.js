@@ -31,9 +31,7 @@ function go(points, licence) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

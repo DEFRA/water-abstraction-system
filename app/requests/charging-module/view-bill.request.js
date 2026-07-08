@@ -3,7 +3,7 @@
  * @module ViewBillService
  */
 
-import ChargingModuleRequest from '../charging-module.request.js'
+import { getRequest } from '../charging-module.request.js'
 
 /**
  * Sends a request to the Charging Module to view an invoice and returns the result
@@ -16,15 +16,8 @@ import ChargingModuleRequest from '../charging-module.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(billRunId, billId) {
+export async function send(billRunId, billId) {
   const path = `v3/wrls/bill-runs/${billRunId}/invoices/${billId}`
 
-  return ChargingModuleRequest.get(path)
-}
-
-export {
-  send
-}
-export default {
-  send
+  return getRequest(path)
 }

@@ -40,9 +40,7 @@ function _links(company) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

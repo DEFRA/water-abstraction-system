@@ -72,9 +72,7 @@ function _matchedReturns(reviewReturns) {
   })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

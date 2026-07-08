@@ -131,9 +131,7 @@ function _statusItems(filters) {
   })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

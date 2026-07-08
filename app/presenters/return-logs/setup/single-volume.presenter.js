@@ -34,9 +34,7 @@ function _backLinkHref(session) {
   return `/system/return-logs/setup/${id}/meter-provided`
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

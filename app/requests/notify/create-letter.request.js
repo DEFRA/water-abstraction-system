@@ -3,7 +3,7 @@
  * @module CreateLetterRequest
  */
 
-import NotifyRequest from '../notify.request.js'
+import { postRequest } from '../notify.request.js'
 
 /**
  * Create and send a letter using GOV.UK Notify
@@ -41,7 +41,7 @@ import NotifyRequest from '../notify.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(templateId, options) {
+export async function send(templateId, options) {
   const path = 'v2/notifications/letter'
 
   const body = {
@@ -49,12 +49,5 @@ async function send(templateId, options) {
     ...options
   }
 
-  return NotifyRequest.post(path, body)
-}
-
-export {
-  send
-}
-export default {
-  send
+  return postRequest(path, body)
 }

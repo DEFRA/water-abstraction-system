@@ -42,9 +42,7 @@ async function _fetch() {
   return results[0]
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

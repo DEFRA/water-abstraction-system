@@ -92,9 +92,7 @@ function _radioOptions(addressSelected, companyAddresses) {
   return items
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

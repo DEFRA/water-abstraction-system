@@ -4,7 +4,7 @@
  */
 
 import { formatChargingModuleDate, formatMoney } from '../../../presenters/base.presenter.js'
-import CalculateChargeRequest from '../../../requests/charging-module/calculate-charge.request.js'
+import { send } from '../../../requests/charging-module/calculate-charge.request.js'
 import FetchReviewChargeReferenceService from './fetch-review-charge-reference.service.js'
 
 /**
@@ -48,7 +48,7 @@ async function _calculateCharge(transaction) {
     return { charge: 0 }
   }
 
-  const result = await CalculateChargeRequest.send(transaction)
+  const result = await send(transaction)
 
   if (result.succeeded) {
     return { charge: result.response.body.calculation.chargeValue }
@@ -99,9 +99,7 @@ function _transaction(reviewChargeReference) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

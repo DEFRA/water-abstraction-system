@@ -41,9 +41,7 @@ function go(notifyResult) {
   )
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

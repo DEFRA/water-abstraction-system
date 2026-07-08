@@ -74,9 +74,7 @@ async function _removeReturns(reviewLicenceId) {
     .where('rl.id', reviewLicenceId)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

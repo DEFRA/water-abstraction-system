@@ -34,9 +34,7 @@ function _backLink(address, sessionId) {
   return { href: `/system/address/${sessionId}/postcode`, text: 'Back' }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

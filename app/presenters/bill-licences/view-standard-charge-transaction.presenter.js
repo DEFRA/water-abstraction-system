@@ -232,9 +232,7 @@ function _srocContent(transaction) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -24,9 +24,7 @@ async function go(reviewLicenceId) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

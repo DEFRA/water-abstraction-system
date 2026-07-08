@@ -36,9 +36,7 @@ function _backLinkHref(session, requirementIndex) {
   return `/system/return-versions/setup/${id}/frequency-collected/${requirementIndex}`
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

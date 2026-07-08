@@ -32,9 +32,7 @@ async function _updateBillRun(billRunId, errorCode) {
   })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

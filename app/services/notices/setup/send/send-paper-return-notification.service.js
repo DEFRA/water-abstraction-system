@@ -3,7 +3,7 @@
  * @module SendPaperReturnNotificationService
  */
 
-import CreatePrecompiledFileRequest from '../../../../requests/notify/create-precompiled-file.request.js'
+import { send } from '../../../../requests/notify/create-precompiled-file.request.js'
 import NotifyErrorPresenter from '../../../../presenters/notifications/notify-error.presenter.js'
 import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'
 import PreparePaperReturnService from '../prepare-paper-return.service.js'
@@ -22,7 +22,7 @@ async function go(notification, referenceCode) {
   if (returnFormRequest.succeeded) {
     const pdf = returnFormRequest.response.body
 
-    const notifyResult = await CreatePrecompiledFileRequest.send(pdf, referenceCode)
+    const notifyResult = await send(pdf, referenceCode)
 
     return {
       ...NotifyUpdatePresenter.go(notifyResult),

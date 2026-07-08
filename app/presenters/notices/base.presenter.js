@@ -90,11 +90,7 @@ function _returnsPeriodTextPrefix(returnPeriod) {
   return 'Quarterly'
 }
 
-export {
-  addressToCSV,
-  futureDueDate,
-  returnsPeriodText
-}
+export { addressToCSV, futureDueDate, returnsPeriodText }
 export default {
   addressToCSV,
   futureDueDate,

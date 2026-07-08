@@ -5,7 +5,7 @@
 
 import BillingAccount from '../../../models/billing-account.model.js'
 import ExpandedError from '../../../errors/expanded.error.js'
-import ViewCustomerFilesRequest from '../../../requests/charging-module/view-customer-files.request.js'
+import { send } from '../../../requests/charging-module/view-customer-files.request.js'
 import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } from '../../../lib/general.lib.js'
 
 /**
@@ -98,7 +98,7 @@ function _billingAccounts(customerFiles) {
 }
 
 async function _fetchCustomerFiles(days) {
-  const result = await ViewCustomerFilesRequest.send(days)
+  const result = await send(days)
 
   if (!result.succeeded) {
     throw new ExpandedError('Charging Module view customer files request failed', { days })

@@ -99,9 +99,7 @@ function _transactions(transactions) {
   })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -27,9 +27,7 @@ function go(chargeVersion, chargePeriod) {
   return isFirstChargeOnNewLicence
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

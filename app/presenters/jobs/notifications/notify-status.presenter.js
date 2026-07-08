@@ -110,9 +110,7 @@ function _letterStatus(notifyStatus) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -3,9 +3,9 @@
  * @module ReissueBillService
  */
 
-import ChargingModuleReissueBillRequest from '../../../requests/charging-module/reissue-bill.request.js'
-import ChargingModuleViewBillRequest from '../../../requests/charging-module/view-bill.request.js'
-import ChargingModuleViewBillRunStatusRequest from '../../../requests/charging-module/view-bill-run-status.request.js'
+import { send as reissueBillRequest } from '../../../requests/charging-module/reissue-bill.request.js'
+import { send as viewBillRequest } from '../../../requests/charging-module/view-bill.request.js'
+import { send as viewBillRunStatus } from '../../../requests/charging-module/view-bill-run-status.request.js'
 import ExpandedError from '../../../errors/expanded.error.js'
 import { generateUUID, pause } from '../../../lib/general.lib.js'
 
@@ -135,7 +135,7 @@ async function _pauseUntilNotPending(billRunExternalId) {
       await pause(1000)
     }
 
-    const result = await ChargingModuleViewBillRunStatusRequest.send(billRunExternalId)
+    const result = await viewBillRunStatus(billRunExternalId)
 
     if (!result.succeeded) {
       const error = new ExpandedError('Charging Module reissue request failed', {
@@ -290,7 +290,7 @@ function _retrieveOrGenerateBillLicence(dataToReturn, sourceBill, billingId, sou
 }
 
 async function _sendReissueRequest(billRunExternalId, billExternalId) {
-  const result = await ChargingModuleReissueBillRequest.send(billRunExternalId, billExternalId)
+  const result = await reissueBillRequest(billRunExternalId, billExternalId)
 
   if (!result.succeeded) {
     const error = new ExpandedError('Charging Module reissue request failed', {
@@ -309,7 +309,7 @@ async function _sendReissueRequest(billRunExternalId, billExternalId) {
 }
 
 async function _sendViewBillRequest(billRun, reissueBillId) {
-  const result = await ChargingModuleViewBillRequest.send(billRun.externalId, reissueBillId)
+  const result = await viewBillRequest(billRun.externalId, reissueBillId)
 
   if (!result.succeeded) {
     const error = new ExpandedError('Charging Module view bill request failed', {
@@ -324,9 +324,7 @@ async function _sendViewBillRequest(billRun, reissueBillId) {
   return result.response.body.invoice
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

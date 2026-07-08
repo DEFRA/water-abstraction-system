@@ -66,9 +66,7 @@ function _yearsToDisplay() {
   return lastSixFinancialYears
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -5,7 +5,7 @@
 
 import BillRunError from '../../errors/bill-run.error.js'
 import BillRunModel from '../../models/bill-run.model.js'
-import ChargingModuleCreateTransactionRequest from '../../requests/charging-module/create-transaction.request.js'
+import { send } from '../../requests/charging-module/create-transaction.request.js'
 import ChargingModuleCreateTransactionPresenter from '../../presenters/charging-module/create-transaction.presenter.js'
 
 /**
@@ -41,10 +41,7 @@ async function _sendTransactionToChargingModule(transaction, billRunExternalId, 
   try {
     const chargingModuleRequest = ChargingModuleCreateTransactionPresenter.go(transaction, accountNumber, licence)
 
-    const chargingModuleResponse = await ChargingModuleCreateTransactionRequest.send(
-      billRunExternalId,
-      chargingModuleRequest
-    )
+    const chargingModuleResponse = await send(billRunExternalId, chargingModuleRequest)
 
     transaction.status = 'charge_created'
     transaction.externalId = chargingModuleResponse.response.body.transaction.id
@@ -55,9 +52,7 @@ async function _sendTransactionToChargingModule(transaction, billRunExternalId, 
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

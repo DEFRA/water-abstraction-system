@@ -32,9 +32,7 @@ async function go(sessionId) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

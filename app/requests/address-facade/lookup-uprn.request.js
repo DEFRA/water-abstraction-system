@@ -3,7 +3,7 @@
  * @module LookupUPRNRequest
  */
 
-import AddressFacadeRequest from '../address-facade.request.js'
+import { getRequest } from '../address-facade.request.js'
 
 /**
  * Sends a request to the address facade for the provided uprn
@@ -12,15 +12,8 @@ import AddressFacadeRequest from '../address-facade.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(uprn) {
+export async function send(uprn) {
   const path = `address-service/v1/addresses/${uprn}?key=client1`
 
-  return AddressFacadeRequest.get(path)
-}
-
-export {
-  send
-}
-export default {
-  send
+  return getRequest(path)
 }

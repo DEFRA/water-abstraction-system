@@ -45,9 +45,7 @@ function _makeObjects(models) {
   })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

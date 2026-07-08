@@ -72,9 +72,7 @@ function _startDate(session) {
   return formatLongDate(new Date(session.returnVersionStartDate))
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

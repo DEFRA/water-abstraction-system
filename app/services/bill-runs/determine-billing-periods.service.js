@@ -77,9 +77,7 @@ function _financialYear(financialYearEnding) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

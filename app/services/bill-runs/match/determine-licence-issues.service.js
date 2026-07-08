@@ -274,9 +274,7 @@ function _returnsReceivedStatus(returnLogs, licenceReturnLogs) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -5,8 +5,8 @@
  */
 
 import FetchSessionDal from '../../dal/fetch-session.dal.js'
-import LookupPostcodeRequest from '../../requests/address-facade/lookup-postcode.request.js'
-import LookupUPRNRequest from '../../requests/address-facade/lookup-uprn.request.js'
+import { send as lookupPostcode } from '../../requests/address-facade/lookup-postcode.request.js'
+import { send as lookupUprn } from '../../requests/address-facade/lookup-uprn.request.js'
 import SelectPresenter from '../../presenters/address/select.presenter.js'
 import SelectValidator from '../../validators/address/select.validator.js'
 import { formatValidationResult } from '../../presenters/base.presenter.js'
@@ -25,7 +25,7 @@ async function go(sessionId, payload) {
   const error = _validate(payload)
 
   if (!error) {
-    const uprnResult = await LookupUPRNRequest.send(payload.addresses)
+    const uprnResult = await lookupUprn(payload.addresses)
 
     // NOTE: Handle the edge case that having selected a valid address, our call to the address facade fails. When this
     // happens we fall back to asking the user to enter the address manually
@@ -42,7 +42,7 @@ async function go(sessionId, payload) {
     }
   }
 
-  const postcodeResult = await LookupPostcodeRequest.send(session.addressJourney.address.postcode)
+  const postcodeResult = await lookupPostcode(session.addressJourney.address.postcode)
 
   // NOTE: Another edge case. The user forgot to select an address and hit submit. So, we need to lookup the matching
   // addresses by postcode again, only this time the request fails. Again, we simply fallback to entering it manually
@@ -92,9 +92,7 @@ function _validate(payload) {
   return formatValidationResult(validationResult)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

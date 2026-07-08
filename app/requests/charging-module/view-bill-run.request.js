@@ -1,9 +1,9 @@
 /**
- * Connects with the Charging Module to get a bill run summary
+ * Connects with the Charging Module to getRequest a bill run summary
  * @module ChargingModuleViewBillRunRequest
  */
 
-import ChargingModuleRequest from '../../requests/charging-module.request.js'
+import { getRequest } from '../../requests/charging-module.request.js'
 
 /**
  * View a bill run in the Charging Module API
@@ -15,16 +15,9 @@ import ChargingModuleRequest from '../../requests/charging-module.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(billRunId) {
+export async function send(billRunId) {
   const path = `v3/wrls/bill-runs/${billRunId}`
-  const result = await ChargingModuleRequest.get(path)
+  const result = await getRequest(path)
 
   return result
-}
-
-export {
-  send
-}
-export default {
-  send
 }

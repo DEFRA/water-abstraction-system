@@ -179,9 +179,7 @@ function _requirements(requirements) {
   })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

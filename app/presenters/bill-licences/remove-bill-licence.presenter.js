@@ -74,9 +74,7 @@ function _total(transactions) {
   return formatMoney(transactionTotal, true)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

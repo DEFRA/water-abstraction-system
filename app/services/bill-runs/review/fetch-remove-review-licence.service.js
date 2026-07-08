@@ -32,9 +32,7 @@ async function _fetch(reviewLicenceId) {
     })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

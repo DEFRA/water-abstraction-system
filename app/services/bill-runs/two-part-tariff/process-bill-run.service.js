@@ -61,9 +61,7 @@ async function _updateStatus(billRunId, status) {
   return BillRunModel.query().findById(billRunId).patch({ status })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

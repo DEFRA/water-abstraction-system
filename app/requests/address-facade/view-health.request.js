@@ -3,7 +3,7 @@
  * @module ViewHealthRequest
  */
 
-import BaseRequest from '../base.request.js'
+import { getRequest } from '../base.request.js'
 
 import addressFacadeConfig from '../../../config/address-facade.config.js'
 
@@ -18,15 +18,8 @@ import addressFacadeConfig from '../../../config/address-facade.config.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send() {
+export async function send() {
   const statusUrl = new URL('/address-service/hola', addressFacadeConfig.url)
 
-  return BaseRequest.get(statusUrl.href, { responseType: 'text' })
-}
-
-export {
-  send
-}
-export default {
-  send
+  return getRequest(statusUrl.href, { responseType: 'text' })
 }

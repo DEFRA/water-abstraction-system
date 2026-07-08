@@ -34,9 +34,7 @@ function go(reviewChargeReference) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

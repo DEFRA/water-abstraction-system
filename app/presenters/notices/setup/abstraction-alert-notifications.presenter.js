@@ -313,9 +313,7 @@ function _source(monitoringStationRiverName) {
   return monitoringStationRiverName ? `* Source of supply: ${monitoringStationRiverName}` : ''
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

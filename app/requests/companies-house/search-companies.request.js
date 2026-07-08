@@ -3,7 +3,7 @@
  * @module SearchCompaniesRequest
  */
 
-import CompaniesHouseRequest from '../companies-house.request.js'
+import { getRequest } from '../companies-house.request.js'
 
 /**
  * Sends a request to Companies House to search for matching companies for the provided string
@@ -12,7 +12,7 @@ import CompaniesHouseRequest from '../companies-house.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(queryString) {
+export async function send(queryString) {
   const path = `search/companies`
   const searchParams = {
     q: queryString,
@@ -20,12 +20,5 @@ async function send(queryString) {
     items_per_page: 15
   }
 
-  return CompaniesHouseRequest.get(path, searchParams)
-}
-
-export {
-  send
-}
-export default {
-  send
+  return getRequest(path, searchParams)
 }

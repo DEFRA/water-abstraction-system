@@ -34,9 +34,7 @@ function go(profileDetails) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

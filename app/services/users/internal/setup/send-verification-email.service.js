@@ -4,7 +4,7 @@
  */
 
 import CheckNotificationStatusService from '../../../notifications/check-notification-status.service.js'
-import CreateEmailRequest from '../../../../requests/notify/create-email.request.js'
+import { send } from '../../../../requests/notify/create-email.request.js'
 import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-update.presenter.js'
 import UpdateNotificationDal from '../../../../dal/users/internal/update-notification.dal.js'
 import { pause } from '../../../../lib/general.lib.js'
@@ -42,7 +42,7 @@ async function _createEmailRequest(notification) {
 
   const templateId = NOTIFY_TEMPLATES.users.verificationEmail
 
-  const notifyResult = await CreateEmailRequest.send(templateId, recipient, { personalisation })
+  const notifyResult = await send(templateId, recipient, { personalisation })
 
   return NotifyUpdatePresenter.go(notifyResult)
 }

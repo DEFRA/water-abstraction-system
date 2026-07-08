@@ -34,9 +34,7 @@ function go(conditions, licence) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

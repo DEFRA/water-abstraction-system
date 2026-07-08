@@ -160,9 +160,7 @@ function _truncate(stringToTruncate, maximumLength) {
   return `${truncatedString}...`
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

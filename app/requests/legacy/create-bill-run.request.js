@@ -3,7 +3,7 @@
  * @module CreateBillRunRequest
  */
 
-import LegacyRequest from '../legacy.request.js'
+import { postRequest } from '../legacy.request.js'
 
 /**
  * Send a request to the legacy water-abstraction-service to create a bill run
@@ -18,7 +18,7 @@ import LegacyRequest from '../legacy.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(batchType, regionId, financialYearEnding, user, summer = false) {
+export async function send(batchType, regionId, financialYearEnding, user, summer = false) {
   const { userId, username: userEmail } = user
 
   const path = 'billing/batches'
@@ -30,12 +30,5 @@ async function send(batchType, regionId, financialYearEnding, user, summer = fal
     userEmail
   }
 
-  return LegacyRequest.post('water', path, userId, true, body)
-}
-
-export {
-  send
-}
-export default {
-  send
+  return postRequest('water', path, userId, true, body)
 }

@@ -72,9 +72,7 @@ function _validate(payload, regions) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }
