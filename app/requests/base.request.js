@@ -4,6 +4,7 @@
  */
 
 import { HttpsProxyAgent } from 'hpagent'
+import got from 'got'
 
 import serverConfig from '../../config/server.config.js'
 
@@ -12,7 +13,7 @@ import serverConfig from '../../config/server.config.js'
  *
  * We want to be able to export these options so we can set specific settings that may be multiple objects deep. For
  * example, if we want to set `retry.backoffLimit` then we can't simply pass `{ retry: { backoffLimit: 5 } }` to the lib
- * as `additionalOptions` as this would replace the entire `retry` section. We would therefore want to getRequest the exported
+ * as `additionalOptions` as this would replace the entire `retry` section. We would therefore want to get the exported
  * `retry` section and add our setting to it before passing it back as `additionalOptions`.
  *
  * Note that we have a function here rather than defining a const as this did not allow us to override settings using
@@ -33,7 +34,7 @@ export function defaultOptions() {
         }
       : {}),
     // If we don't have this setting Got will throw its own HTTPError unless the result is 2xx or 3xx. That makes it
-    // impossible to see what the status code was because it doesn't getRequest set on the response object Got provides when
+    // impossible to see what the status code was because it doesn't get set on the response object Got provides when
     // an error is thrown. With this set Got will treat a 404 in the same way it treats a 204.
     throwHttpErrors: false,
     // Got has a built in retry mechanism. We have found though you have to be careful with what gets retried. Our
@@ -103,7 +104,7 @@ export async function deleteRequest(url, additionalOptions = {}) {
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
 export async function getRequest(url, additionalOptions = {}) {
-  return _sendRequest('getRequest', url, additionalOptions)
+  return _sendRequest('get', url, additionalOptions)
 }
 
 /**
@@ -128,7 +129,7 @@ export async function getRequest(url, additionalOptions = {}) {
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
 export async function patchRequest(url, additionalOptions = {}) {
-  return _sendRequest('patchRequest', url, additionalOptions)
+  return _sendRequest('patch', url, additionalOptions)
 }
 
 /**
@@ -153,21 +154,11 @@ export async function patchRequest(url, additionalOptions = {}) {
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
 export async function postRequest(url, additionalOptions = {}) {
-  return _sendRequest('postRequest', url, additionalOptions)
+  return _sendRequest('post', url, additionalOptions)
 }
 
 function _beforeRetryHook(error, retryCount) {
   globalThis.GlobalNotifier.omg('Retrying HTTP request', { error, retryCount })
-}
-
-async function _importGot() {
-  // As of v12, the got dependency no longer supports CJS modules. This causes us a problem as we are locked into
-  // using these for the time being. Some workarounds are provided here:
-  // https://github.com/sindresorhus/got/issues/1789 We have gone the route of using await import('got'). We cannot do
-  // this at the top level as Node doesn't support top level in CJS so we do it here instead.
-  const { default: got } = await import('got')
-
-  return got
 }
 
 /**
@@ -226,7 +217,6 @@ function _requestOptions(additionalOptions) {
 }
 
 async function _sendRequest(method, url, additionalOptions) {
-  const got = await _importGot()
   const result = {
     succeeded: false,
     response: null
