@@ -18,7 +18,7 @@ describe('Company contact - Delete company contact service', () => {
 
     today = new Date('2020-06-06')
 
-    clock = vi.useFakeTimers({ now: { now: today, toFake: ['Date'] } })
+    clock = vi.useFakeTimers({ now: today, toFake: ['Date'] })
   })
 
   afterEach(async () => {

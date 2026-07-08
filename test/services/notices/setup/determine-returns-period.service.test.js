@@ -11,7 +11,7 @@ describe('Notices - Setup - Determine Returns Period service', () => {
   let returnsPeriod
 
   beforeEach(async () => {
-    clock = vi.useFakeTimers({ now: new Date(`${year}-01-01` }))
+    clock = vi.useFakeTimers({ now: new Date(`${year}-01-01`) })
 
     returnsPeriod = 'quarterFour'
   })

@@ -18,7 +18,7 @@ describe('Return Period lib', () => {
   let dueDateNextYear
 
   beforeEach(() => {
-    clock = vi.useFakeTimers({ now: new Date(`${year}-01-01` }))
+    clock = vi.useFakeTimers({ now: new Date(`${year}-01-01`) })
   })
 
   afterEach(() => {
