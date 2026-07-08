@@ -13,7 +13,7 @@ import Nunjucks from 'nunjucks'
 import Vision from '@hapi/vision'
 
 import { enableBillingAccountChangeAddress } from '../../config/feature-flags.config.js'
-import markdown from '../views/filters/markdown.filter.js'
+import MarkdownFilter from '../views/filters/markdown.filter.js'
 
 import ServerConfig from '../../config/server.config.js'
 
@@ -137,7 +137,7 @@ function prepare(config, next) {
   const environment = Nunjucks.configure(paths)
 
   // Add custom filter to support rendering Notify notifications as HTML
-  environment.addFilter('markdown', markdown)
+  environment.addFilter('markdown', MarkdownFilter)
 
   config.compileOptions.environment = environment
 
