@@ -1,3 +1,5 @@
+import { marked } from 'marked'
+
 /**
  * Converts Notify's custom flavour of markdown into valid HTML. Notify's flavour of markdown uses a caret (`^`)
  * character to represent blockquotes. This function replaces any carets (`^`) with the standard blockquote marker (`>`)
@@ -27,12 +29,7 @@
 function markdown(input = '') {
   const replacedCaret = input.replace(/\^/gm, '>')
 
-  // NOTE: See app/plugins/views.plugin.js for details why marked is in the global scope rather than just required().
-  if (!globalThis.GlobalMarked) {
-    return input
-  }
-
-  return globalThis.GlobalMarked.parse(replacedCaret)
+  return marked.parse(replacedCaret)
 }
 
 export {
