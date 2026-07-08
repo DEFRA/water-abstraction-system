@@ -1,7 +1,7 @@
 import { data as roles } from './roles.js'
 import { data as users } from './users.js'
 
-const data = [
+export const data = [
   {
     id: '90c9a1e2-90b2-43ab-8997-102a535b2f99',
     roleId: roles.find((role) => {
@@ -21,10 +21,3 @@ const data = [
     }).userId
   }
 ]
-
-export {
-  data
-}
-export default {
-  data
-}

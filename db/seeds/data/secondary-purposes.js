@@ -1,4 +1,4 @@
-const data = [
+export const data = [
   {
     id: '2457bfeb-a120-4b57-802a-46494bd22f82',
     legacyId: 'AGR',
@@ -315,10 +315,3 @@ const data = [
     description: 'Onshore Oil and Gas Extraction'
   }
 ]
-
-export {
-  data
-}
-export default {
-  data
-}

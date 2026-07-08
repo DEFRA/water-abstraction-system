@@ -1,4 +1,4 @@
-const data = [
+export const data = [
   {
     id: 'a83fbaca-e964-4bfc-9ac6-f5f675d757af',
     group: 'environment_officer',
@@ -30,10 +30,3 @@ const data = [
     description: 'Super user'
   }
 ]
-
-export {
-  data
-}
-export default {
-  data
-}

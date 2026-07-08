@@ -1,4 +1,4 @@
-const data = [
+export const data = [
   {
     id: 'b6bb3b77-cfe8-4f22-8dc9-e92713ca3156',
     legacyId: 'A',
@@ -40,10 +40,3 @@ const data = [
     description: 'Crown And Government'
   }
 ]
-
-export {
-  data
-}
-export default {
-  data
-}

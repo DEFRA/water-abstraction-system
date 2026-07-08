@@ -1,4 +1,4 @@
-const data = [
+export const data = [
   {
     id: '03923150-3253-44ed-9efe-70d15ddcf583',
     name: 'returnsTo',
@@ -20,10 +20,3 @@ const data = [
     label: 'Additional Contact'
   }
 ]
-
-export {
-  data
-}
-export default {
-  data
-}

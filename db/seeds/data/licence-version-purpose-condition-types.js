@@ -1,4 +1,4 @@
-const data = [
+export const data = [
   {
     id: 'a71c352b-04a8-4f32-b349-929ec1607704',
     code: 'NSQ',
@@ -540,10 +540,3 @@ const data = [
     param2Label: 'Where measured'
   }
 ]
-
-export {
-  data
-}
-export default {
-  data
-}
