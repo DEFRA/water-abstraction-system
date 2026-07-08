@@ -46,7 +46,7 @@ describe('Licence Versions - View service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewService.go(licenceVersion.id, auth)
+      const result = await ViewService(licenceVersion.id, auth)
 
       expect(result).toEqual({
         backLink: {

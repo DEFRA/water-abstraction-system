@@ -14,7 +14,7 @@ import VolumesPresenter from '../../../presenters/return-logs/setup/volumes.pres
  *
  * @returns {Promise<object>} The view data for the volumes page
  */
-async function go(sessionId, yearMonth) {
+export default async function go(sessionId, yearMonth) {
   const session = await FetchSessionDal(sessionId)
 
   const formattedData = VolumesPresenter.go(session, yearMonth)
@@ -22,9 +22,4 @@ async function go(sessionId, yearMonth) {
   return {
     ...formattedData
   }
-}
-
-export { go }
-export default {
-  go
 }

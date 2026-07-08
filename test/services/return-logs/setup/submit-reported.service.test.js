@@ -44,7 +44,7 @@ describe('Return Logs Setup - Submit Reported service', () => {
       })
 
       it('saves the submitted option', async () => {
-        await SubmitReportedService.go(session.id, payload, yarStub)
+        await SubmitReportedService(session.id, payload, yarStub)
 
         expect(session.reported).toEqual('meterReadings')
         expect(session.$update.called).toBe(true)
@@ -52,7 +52,7 @@ describe('Return Logs Setup - Submit Reported service', () => {
 
       describe('and the page has been not been visited', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitReportedService.go(session.id, payload, yarStub)
+          const result = await SubmitReportedService(session.id, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: undefined,
@@ -69,7 +69,7 @@ describe('Return Logs Setup - Submit Reported service', () => {
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
-          const result = await SubmitReportedService.go(session.id, payload, yarStub)
+          const result = await SubmitReportedService(session.id, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: true,
@@ -78,7 +78,7 @@ describe('Return Logs Setup - Submit Reported service', () => {
         })
 
         it('sets the notification message title to "Updated" and the text to "Reporting details changed" ', async () => {
-          await SubmitReportedService.go(session.id, payload, yarStub)
+          await SubmitReportedService(session.id, payload, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
 
@@ -94,7 +94,7 @@ describe('Return Logs Setup - Submit Reported service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitReportedService.go(session.id, payload, yarStub)
+        const result = await SubmitReportedService(session.id, payload, yarStub)
 
         expect(result).toMatchObject({
           backLink: { href: `/system/return-logs/setup/${session.id}/submission`, text: 'Back' },
@@ -106,7 +106,7 @@ describe('Return Logs Setup - Submit Reported service', () => {
 
       describe('because the user has not selected anything', () => {
         it('includes an error for the radio form element', async () => {
-          const result = await SubmitReportedService.go(session.id, payload, yarStub)
+          const result = await SubmitReportedService(session.id, payload, yarStub)
 
           expect(result.error.errorList).toEqual([{ href: '#reported', text: 'Select how this return was reported' }])
         })

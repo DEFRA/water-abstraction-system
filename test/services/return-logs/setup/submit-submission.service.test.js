@@ -53,7 +53,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
         })
 
         it('saves the submitted option to the session and returns the redirect as "reported"', async () => {
-          const result = await SubmitSubmissionService.go(session.id, payload)
+          const result = await SubmitSubmissionService(session.id, payload)
 
           expect(session.journey).toEqual('enterReturn')
           expect(result.redirect).toEqual('reported')
@@ -67,7 +67,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
         })
 
         it('saves the submitted option to the session and returns the redirect as "check"', async () => {
-          const result = await SubmitSubmissionService.go(session.id, payload)
+          const result = await SubmitSubmissionService(session.id, payload)
 
           expect(session.journey).toEqual('nilReturn')
           expect(result.redirect).toEqual('check')
@@ -83,7 +83,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
         })
 
         it('returns the redirect as "confirm-received", updates the return log as "received", deletes the session, and returns the redirect as "confirm-received"', async () => {
-          const result = await SubmitSubmissionService.go(session.id, payload)
+          const result = await SubmitSubmissionService(session.id, payload)
 
           const refreshedReturnLog = await returnLog.$query()
 
@@ -116,7 +116,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
         })
 
         it('updates "checkPageVisited" to false in the session data', async () => {
-          await SubmitSubmissionService.go(session.id, payload)
+          await SubmitSubmissionService(session.id, payload)
 
           expect(session.checkPageVisited).toBe(false)
           expect(session.$update.called).toBe(true)
@@ -130,7 +130,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
       })
 
       it('includes an error for the radio form element', async () => {
-        const result = await SubmitSubmissionService.go(session.id, payload)
+        const result = await SubmitSubmissionService(session.id, payload)
 
         expect(result.error.errorList).toEqual([
           { href: '#journey', text: 'Select what you want to do with this return' }
@@ -138,7 +138,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitSubmissionService.go(session.id, payload)
+        const result = await SubmitSubmissionService(session.id, payload)
 
         expect(result).toEqual({
           backLink: { href: `/system/return-logs/setup/${session.id}/received`, text: 'Back' },

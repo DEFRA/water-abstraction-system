@@ -35,7 +35,7 @@ describe('Bill Runs - Review - Submit Review Service', () => {
       })
 
       it('clears the filter object from the session', async () => {
-        await SubmitReviewService.go(billRunId, payload, yarStub)
+        await SubmitReviewService(billRunId, payload, yarStub)
 
         expect(yarStub.clear.called).toBe(true)
       })
@@ -47,7 +47,7 @@ describe('Bill Runs - Review - Submit Review Service', () => {
       })
 
       it('saves a default filter object in the session', async () => {
-        await SubmitReviewService.go(billRunId, payload, yarStub)
+        await SubmitReviewService(billRunId, payload, yarStub)
 
         const setArgs = yarStub.set.args[0]
 
@@ -72,7 +72,7 @@ describe('Bill Runs - Review - Submit Review Service', () => {
       })
 
       it('saves the submitted filters as the "usersFilter" object in the session', async () => {
-        await SubmitReviewService.go(billRunId, payload, yarStub)
+        await SubmitReviewService(billRunId, payload, yarStub)
 
         const setArgs = yarStub.set.args[0]
 

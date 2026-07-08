@@ -45,7 +45,7 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
 
       describe('that do NOT include emails to primary users', () => {
         it('returns an object with empty properties', async () => {
-          const result = await FetchFailedReturnsInvitationsService.go(notice.id)
+          const result = await FetchFailedReturnsInvitationsService(notice.id)
 
           expect(result).toEqual({ dueDate: null, licenceRefs: [], notificationIds: [], returnLogIds: [] })
         })
@@ -92,7 +92,7 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
             })
 
             it('returns the failed notification IDs plus the unique licence refs and return logs IDs from them, and a calculated due date', async () => {
-              const result = await FetchFailedReturnsInvitationsService.go(notice.id)
+              const result = await FetchFailedReturnsInvitationsService(notice.id)
 
               expect(result).toEqual({
                 dueDate: futureDueDate('letter'),
@@ -131,7 +131,7 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
             })
 
             it('returns the failed notification IDs plus the unique licence refs and return logs IDs from them, and a calculated due date', async () => {
-              const result = await FetchFailedReturnsInvitationsService.go(notice.id)
+              const result = await FetchFailedReturnsInvitationsService(notice.id)
 
               expect(result).toEqual({
                 dueDate: new Date('2025-04-28'),
@@ -169,7 +169,7 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
           })
 
           it('returns an object with empty properties', async () => {
-            const result = await FetchFailedReturnsInvitationsService.go(notice.id)
+            const result = await FetchFailedReturnsInvitationsService(notice.id)
 
             expect(result).toEqual({ dueDate: null, licenceRefs: [], notificationIds: [], returnLogIds: [] })
           })
@@ -179,7 +179,7 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
 
     describe('with no failed notifications', () => {
       it('returns an object with empty properties', async () => {
-        const result = await FetchFailedReturnsInvitationsService.go('1f0e0086-7bc4-4ef2-a696-35ea1e79d224')
+        const result = await FetchFailedReturnsInvitationsService('1f0e0086-7bc4-4ef2-a696-35ea1e79d224')
 
         expect(result).toEqual({ dueDate: null, licenceRefs: [], notificationIds: [], returnLogIds: [] })
       })
@@ -188,7 +188,7 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
 
   describe('when there is NOT a matching notice', () => {
     it('returns an object with empty properties', async () => {
-      const result = await FetchFailedReturnsInvitationsService.go('1f0e0086-7bc4-4ef2-a696-35ea1e79d224')
+      const result = await FetchFailedReturnsInvitationsService('1f0e0086-7bc4-4ef2-a696-35ea1e79d224')
 
       expect(result).toEqual({ dueDate: null, licenceRefs: [], notificationIds: [], returnLogIds: [] })
     })

@@ -18,7 +18,7 @@ import VerificationsPresenter from '../../../presenters/users/external/verificat
  *
  * @returns {Promise<object>} The view data for the external user page
  */
-async function go(id, auth, page, back = 'users') {
+export default async function go(id, auth, page, back = 'users') {
   const user = await FetchUserDal(id)
 
   const { verifications, totalNumber } = await FetchVerificationsDal(user.licenceEntityId, page)
@@ -39,11 +39,4 @@ async function go(id, auth, page, back = 'users') {
     pagination,
     ...pageData
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

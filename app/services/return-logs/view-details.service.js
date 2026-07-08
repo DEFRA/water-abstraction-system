@@ -16,8 +16,8 @@ import DetailsPresenter from '../../presenters/return-logs/details.presenter.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(returnLogId, auth, version) {
-  const returnLog = await FetchReturnLogDetailsService.go(returnLogId, version)
+export default async function go(returnLogId, auth, version) {
+  const returnLog = await FetchReturnLogDetailsService(returnLogId, version)
 
   const pageData = DetailsPresenter.go(returnLog, auth)
 
@@ -25,11 +25,4 @@ async function go(returnLogId, auth, version) {
     activeSecondaryNav: 'details',
     ...pageData
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

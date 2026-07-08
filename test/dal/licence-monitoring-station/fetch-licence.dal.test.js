@@ -20,7 +20,7 @@ describe('Licence Monitoring Station - Fetch Licence DAL', () => {
 
   describe('when the licence exists', () => {
     it('returns the licence with the data needed to determine if it has ended', async () => {
-      const result = await FetchLicenceDal.go(licence.licenceRef)
+      const result = await FetchLicenceDal(licence.licenceRef)
 
       expect(result).toEqual({
         expiredDate: null,
@@ -34,7 +34,7 @@ describe('Licence Monitoring Station - Fetch Licence DAL', () => {
 
   describe('when the licence does not exist', () => {
     it('returns undefined', async () => {
-      const result = await FetchLicenceDal.go(generateUUID())
+      const result = await FetchLicenceDal(generateUUID())
 
       expect(result).toBeUndefined()
     })

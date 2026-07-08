@@ -28,8 +28,8 @@ import FetchChargeVersionBillingDataService from './fetch-charge-version-billing
  * @returns {object} - An object containing the related licenceId, regionId, charge version start and end date and
  * licence supplementary billing flags
  */
-async function go(chargeVersionId) {
-  const { chargeVersion, srocBillRuns } = await FetchChargeVersionBillingDataService.go(chargeVersionId)
+export default async function go(chargeVersionId) {
+  const { chargeVersion, srocBillRuns } = await FetchChargeVersionBillingDataService(chargeVersionId)
   const { chargeReferences, licence, endDate, startDate, scheme } = chargeVersion
 
   const result = {
@@ -112,11 +112,4 @@ function _twoPartTariffSrocIndicators(chargeReferences) {
   return chargeReferences.some((chargeReference) => {
     return chargeReference.twoPartTariff
   })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -40,7 +40,7 @@ describe('Notifications - Fetch Notification service', () => {
         })
 
         it('returns the matching notification with its related event and licence data', async () => {
-          const result = await FetchNotificationService.go(notification.id, licence.id)
+          const result = await FetchNotificationService(notification.id, licence.id)
 
           expect(result).toEqual({
             licence: {
@@ -91,7 +91,7 @@ describe('Notifications - Fetch Notification service', () => {
         })
 
         it('returns the matching notification with its related event and licence data', async () => {
-          const result = await FetchNotificationService.go(notification.id, licence.id)
+          const result = await FetchNotificationService(notification.id, licence.id)
 
           expect(result).toEqual({
             licence: {
@@ -134,7 +134,7 @@ describe('Notifications - Fetch Notification service', () => {
         })
 
         it('returns the matching notification with its related event and licence data', async () => {
-          const result = await FetchNotificationService.go(notification.id, licence.id)
+          const result = await FetchNotificationService(notification.id, licence.id)
 
           expect(result).toEqual({
             licence: {
@@ -175,7 +175,7 @@ describe('Notifications - Fetch Notification service', () => {
         })
 
         it('returns the matching notification with its related event and licence data', async () => {
-          const result = await FetchNotificationService.go(notification.id, licence.id)
+          const result = await FetchNotificationService(notification.id, licence.id)
 
           expect(result).toEqual({
             licence: {
@@ -214,7 +214,7 @@ describe('Notifications - Fetch Notification service', () => {
       })
 
       it('returns null licence data (it makes no difference to the notification data returned)', async () => {
-        const result = await FetchNotificationService.go(notification.id)
+        const result = await FetchNotificationService(notification.id)
 
         expect(result).toEqual({
           licence: null,

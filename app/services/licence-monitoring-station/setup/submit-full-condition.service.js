@@ -17,7 +17,7 @@ import FullConditionValidator from '../../../validators/licence-monitoring-stati
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload) {
+export default async function go(sessionId, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
@@ -43,7 +43,7 @@ async function go(sessionId, payload) {
     }
   }
 
-  const pageData = await FullConditionService.go(sessionId)
+  const pageData = await FullConditionService(sessionId)
 
   return {
     error: validationResult,
@@ -84,7 +84,7 @@ async function _fetchCondition(licenceId, conditionId) {
     return { condition: null, conditionIndex: null }
   }
 
-  const conditions = await FetchFullConditionService.go(licenceId)
+  const conditions = await FetchFullConditionService(licenceId)
 
   const conditionIndex = conditions.findIndex((condition) => {
     return condition.id === conditionId
@@ -119,11 +119,4 @@ function _validate(payload) {
   return {
     text: message
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

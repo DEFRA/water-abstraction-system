@@ -61,7 +61,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
       })
 
       it('creates and then returns the new summer return cycle', async () => {
-        const result = await CheckReturnCycleService.go(summer)
+        const result = await CheckReturnCycleService(summer)
 
         const [insertObject] = insertStub.args[0]
 
@@ -83,7 +83,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
       })
 
       it('returns the matching summer cycle', async () => {
-        const result = await CheckReturnCycleService.go(summer)
+        const result = await CheckReturnCycleService(summer)
 
         expect(result).toEqual(cycleData)
       })
@@ -109,7 +109,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
       })
 
       it('creates and then returns the new summer return cycle', async () => {
-        const result = await CheckReturnCycleService.go(summer)
+        const result = await CheckReturnCycleService(summer)
 
         const [insertObject] = insertStub.args[0]
 
@@ -131,7 +131,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
       })
 
       it('returns the matching all year return cycle', async () => {
-        const result = await CheckReturnCycleService.go(summer)
+        const result = await CheckReturnCycleService(summer)
 
         expect(result).toEqual(cycleData)
       })

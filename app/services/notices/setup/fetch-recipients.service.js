@@ -22,10 +22,10 @@ import { NoticeType } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<object[]>} The recipient data for the notice or download
  */
-async function go(session, download) {
+export default async function go(session, download) {
   const recipientsData = await _recipientsData(session, download)
 
-  return MergeRecipientsService.go(session, recipientsData)
+  return MergeRecipientsService(session, recipientsData)
 }
 
 async function _recipientsData(session, download) {
@@ -34,21 +34,16 @@ async function _recipientsData(session, download) {
   }
 
   if (session.noticeType === NoticeType.PAPER_RETURN) {
-    return FetchPaperReturnsRecipientsService.go(session, download)
+    return FetchPaperReturnsRecipientsService(session, download)
   }
 
   if (session.noticeType === NoticeType.INVITATIONS) {
-    return FetchReturnsInvitationRecipientsService.go(session, download)
+    return FetchReturnsInvitationRecipientsService(session, download)
   }
 
   if (session.noticeType === NoticeType.RENEWAL_INVITATIONS) {
-    return FetchRenewalInvitationRecipientsService.go(session)
+    return FetchRenewalInvitationRecipientsService(session)
   }
 
-  return FetchReturnsReminderRecipientsService.go(session, download)
-}
-
-export { go }
-export default {
-  go
+  return FetchReturnsReminderRecipientsService(session, download)
 }

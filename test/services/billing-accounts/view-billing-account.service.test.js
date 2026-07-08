@@ -35,7 +35,7 @@ describe('Billing Accounts - View Billing Account service', () => {
 
   describe('when a billing account with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewBillingAccountService.go(
+      const result = await ViewBillingAccountService(
         billingAccountData.billingAccount.id,
         1,
         licenceId,

@@ -22,7 +22,7 @@ export async function abstractionPeriod(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await AbstractionPeriodService.go(sessionId)
+  const pageData = await AbstractionPeriodService(sessionId)
 
   return h.view('licence-monitoring-station/setup/abstraction-period.njk', pageData)
 }
@@ -32,7 +32,7 @@ export async function check(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await CheckService.go(sessionId)
+  const pageData = await CheckService(sessionId)
 
   return h.view(`licence-monitoring-station/setup/check.njk`, pageData)
 }
@@ -42,7 +42,7 @@ export async function fullCondition(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await FullConditionService.go(sessionId)
+  const pageData = await FullConditionService(sessionId)
 
   return h.view(`licence-monitoring-station/setup/full-condition.njk`, pageData)
 }
@@ -52,7 +52,7 @@ export async function licenceNumber(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await LicenceNumberService.go(sessionId)
+  const pageData = await LicenceNumberService(sessionId)
 
   return h.view(`licence-monitoring-station/setup/licence-number.njk`, pageData)
 }
@@ -63,7 +63,7 @@ export async function submitAbstractionPeriod(request, h) {
     payload
   } = request
 
-  const pageData = await SubmitAbstractionPeriodService.go(sessionId, payload)
+  const pageData = await SubmitAbstractionPeriodService(sessionId, payload)
 
   if (pageData.error) {
     return h.view(`licence-monitoring-station/setup/abstraction-period.njk`, pageData)
@@ -81,7 +81,7 @@ export async function submitCheck(request, h) {
 
   const { userId } = request.auth.credentials.user
 
-  const monitoringStationId = await SubmitCheckService.go(sessionId, userId, yar)
+  const monitoringStationId = await SubmitCheckService(sessionId, userId, yar)
 
   return h.redirect(`/system/monitoring-stations/${monitoringStationId}`)
 }
@@ -92,7 +92,7 @@ export async function submitFullCondition(request, h) {
     payload
   } = request
 
-  const pageData = await SubmitFullConditionService.go(sessionId, payload)
+  const pageData = await SubmitFullConditionService(sessionId, payload)
 
   if (pageData.error) {
     return h.view(`licence-monitoring-station/setup/full-condition.njk`, pageData)
@@ -113,7 +113,7 @@ export async function submitLicenceNumber(request, h) {
     payload
   } = request
 
-  const pageData = await SubmitLicenceNumberService.go(sessionId, payload)
+  const pageData = await SubmitLicenceNumberService(sessionId, payload)
 
   if (pageData.error) {
     return h.view(`licence-monitoring-station/setup/licence-number.njk`, pageData)
@@ -129,7 +129,7 @@ export async function submitLicenceNumber(request, h) {
 export async function submitSetup(request, h) {
   const { monitoringStationId } = request.payload
 
-  const sessionId = await InitiateSessionService.go(monitoringStationId)
+  const sessionId = await InitiateSessionService(monitoringStationId)
 
   return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/threshold-and-unit`)
 }
@@ -137,7 +137,7 @@ export async function submitSetup(request, h) {
 export async function stopOrReduce(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await StopOrReduceService.go(sessionId)
+  const pageData = await StopOrReduceService(sessionId)
 
   return h.view(`licence-monitoring-station/setup/stop-or-reduce.njk`, pageData)
 }
@@ -148,7 +148,7 @@ export async function submitStopOrReduce(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await SubmitStopOrReduceService.go(sessionId, payload)
+  const pageData = await SubmitStopOrReduceService(sessionId, payload)
 
   if (pageData.error) {
     return h.view(`licence-monitoring-station/setup/stop-or-reduce.njk`, pageData)
@@ -167,7 +167,7 @@ export async function submitThresholdAndUnit(request, h) {
     payload
   } = request
 
-  const pageData = await SubmitThresholdAndUnitService.go(sessionId, payload)
+  const pageData = await SubmitThresholdAndUnitService(sessionId, payload)
 
   if (pageData.error) {
     return h.view('licence-monitoring-station/setup/threshold-and-unit.njk', pageData)
@@ -183,7 +183,7 @@ export async function submitThresholdAndUnit(request, h) {
 export async function thresholdAndUnit(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ThresholdAndUnitService.go(sessionId)
+  const pageData = await ThresholdAndUnitService(sessionId)
 
   return h.view('licence-monitoring-station/setup/threshold-and-unit.njk', pageData)
 }

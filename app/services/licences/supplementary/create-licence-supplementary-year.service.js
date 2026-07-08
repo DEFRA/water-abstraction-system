@@ -12,7 +12,7 @@ import LicenceSupplementaryYearModel from '../../../models/licence-supplementary
  * @param {object[]} financialYearEnds - An array of the financial year ends to be persisted as individual records
  * @param {boolean} twoPartTariff - If there are any two-part tariff indicators on the licence
  */
-async function go(licenceId, financialYearEnds, twoPartTariff) {
+export default async function go(licenceId, financialYearEnds, twoPartTariff) {
   for (const financialYearEnd of financialYearEnds) {
     const match = await _fetchExistingLicenceSupplementaryYears(licenceId, financialYearEnd, twoPartTariff)
 
@@ -42,11 +42,4 @@ async function _persistSupplementaryBillingYearsData(licenceId, financialYearEnd
     financialYearEnd,
     twoPartTariff
   })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

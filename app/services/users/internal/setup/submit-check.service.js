@@ -21,7 +21,7 @@ import { flashNotification } from '../../../../lib/general.lib.js'
  *
  * @returns {Promise<object>} An object containing the URL to redirect the user to after confirming
  */
-async function go(auth, sessionId, yar) {
+export default async function go(auth, sessionId, yar) {
   const session = await FetchSessionDal(sessionId)
 
   await DeleteSessionDal(sessionId)
@@ -50,7 +50,7 @@ async function _updateUser(auth, session, yar) {
     flashNotification(yar, 'User updated', `We have emailed ${email} instructions to complete their account set up.`)
 
     // Intentionally not awaited — fire-and-forget with internal error handling
-    SendVerificationEmailService.go(notification)
+    SendVerificationEmailService(notification)
   } else {
     flashNotification(yar, 'User updated', `User ${email} has been updated.`)
   }
@@ -66,12 +66,5 @@ async function _createUser(auth, session, yar) {
   flashNotification(yar, 'User added', `We have emailed ${email} instructions to complete their account set up.`)
 
   // Intentionally not awaited — fire-and-forget with internal error handling
-  SendVerificationEmailService.go(notification)
-}
-
-export {
-  go
-}
-export default {
-  go
+  SendVerificationEmailService(notification)
 }

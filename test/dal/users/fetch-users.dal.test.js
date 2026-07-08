@@ -173,7 +173,7 @@ describe('Users - Fetch Users DAL', () => {
     })
 
     it('returns all users ordered by their username (email) ascending', async () => {
-      const { results, total } = await FetchUsersDal.go(filters, pageNumber)
+      const { results, total } = await FetchUsersDal(filters, pageNumber)
 
       // Assert the total is equal to or greater than our seeded count plus created users. Other tests may create
       // records, so we don't assert exactly
@@ -206,7 +206,7 @@ describe('Users - Fetch Users DAL', () => {
       })
 
       it('returns the matching users', async () => {
-        const { results } = await FetchUsersDal.go(filters, pageNumber)
+        const { results } = await FetchUsersDal(filters, pageNumber)
 
         // Assert the results contain only users with 'lee' in their username
         for (let i = 0; i < seededUsersLength; i++) {
@@ -219,7 +219,7 @@ describe('Users - Fetch Users DAL', () => {
       })
 
       it('excludes those that do not match', async () => {
-        const { results } = await FetchUsersDal.go(filters, pageNumber)
+        const { results } = await FetchUsersDal(filters, pageNumber)
 
         // Assert the results do not contain any users with 'lee' on their username
         const skipAssertions = ['jon.lee@example.co.uk']
@@ -252,7 +252,7 @@ describe('Users - Fetch Users DAL', () => {
         })
 
         it('returns the matching users', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results contain our seeded internal basic user and created external user
           expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess()))
@@ -260,7 +260,7 @@ describe('Users - Fetch Users DAL', () => {
         })
 
         it('excludes those that do not match', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results do not contain our other seeded users
           const skipAssertions = ['basic.access@wrls.gov.uk', externalBasicAccessUser.username]
@@ -286,14 +286,14 @@ describe('Users - Fetch Users DAL', () => {
             })
 
             it('returns the matching users', async () => {
-              const { results } = await FetchUsersDal.go(filters, pageNumber)
+              const { results } = await FetchUsersDal(filters, pageNumber)
 
               // Assert the results _only _contain our created external user
               expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
             })
 
             it('excludes those that do not match', async () => {
-              const { results } = await FetchUsersDal.go(filters, pageNumber)
+              const { results } = await FetchUsersDal(filters, pageNumber)
 
               // Assert the results do not contain our seeded users
               const skipAssertions = [externalBasicAccessUser.username]
@@ -319,14 +319,14 @@ describe('Users - Fetch Users DAL', () => {
             })
 
             it('returns the matching users', async () => {
-              const { results } = await FetchUsersDal.go(filters, pageNumber)
+              const { results } = await FetchUsersDal(filters, pageNumber)
 
               // Assert the results _only _contain our seeded external user
               expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess()))
             })
 
             it('excludes those that do not match', async () => {
-              const { results } = await FetchUsersDal.go(filters, pageNumber)
+              const { results } = await FetchUsersDal(filters, pageNumber)
 
               // Assert the results do not contain our other seeded users
               const skipAssertions = ['basic.access@wrls.gov.uk']
@@ -357,14 +357,14 @@ describe('Users - Fetch Users DAL', () => {
         })
 
         it('returns the matching users', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results contain our seeded billing and data user
           expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(UsersFixture.billingAndData()))
         })
 
         it('excludes those that do not match', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results do not contain our other seeded users
           const skipAssertions = ['billing.data@wrls.gov.uk']
@@ -393,7 +393,7 @@ describe('Users - Fetch Users DAL', () => {
         })
 
         it('returns the matching users', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results contain our seeded national permitting service user
           expect(results).toContainEqual(
@@ -402,7 +402,7 @@ describe('Users - Fetch Users DAL', () => {
         })
 
         it('excludes those that do not match', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results do not contain our other seeded users
           const skipAssertions = ['national.permitting.service@wrls.gov.uk']
@@ -431,14 +431,14 @@ describe('Users - Fetch Users DAL', () => {
         })
 
         it('returns the matching users', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results contain our seeded national permitting service user
           expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(UsersFixture.digitiseApprover()))
         })
 
         it('excludes those that do not match', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results do not contain our other seeded users
           const skipAssertions = ['digitise.approver@wrls.gov.uk']
@@ -467,14 +467,14 @@ describe('Users - Fetch Users DAL', () => {
         })
 
         it('returns the matching users', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results contain our seeded national permitting service user
           expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(UsersFixture.digitiseEditor()))
         })
 
         it('excludes those that do not match', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results do not contain our other seeded users
           const skipAssertions = ['digitise.editor@wrls.gov.uk']
@@ -503,7 +503,7 @@ describe('Users - Fetch Users DAL', () => {
         })
 
         it('returns the matching users', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results contain our external users from the seed data. The ones we added as part of the test
           // setup have `LicenceEntityRoles` so have at least a 'basic' permission level.
@@ -514,7 +514,7 @@ describe('Users - Fetch Users DAL', () => {
         })
 
         it('excludes those that do not match', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results do not contain our other seeded users
           const skipAssertions = [
@@ -547,14 +547,14 @@ describe('Users - Fetch Users DAL', () => {
         })
 
         it('returns the matching users', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results contain our created external primary user
           expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
         })
 
         it('excludes those that do not match', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results do not contain our seeded users
           const skipAssertions = [externalPrimaryUser.username]
@@ -582,14 +582,14 @@ describe('Users - Fetch Users DAL', () => {
         })
 
         it('returns the matching users', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results contain our created external returns user
           expect(results).toContainEqual(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
         })
 
         it('excludes those that do not match', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results do not contain our seeded users
           const skipAssertions = [externalReturnsUser.username]
@@ -619,7 +619,7 @@ describe('Users - Fetch Users DAL', () => {
         })
 
         it('returns the matching users', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results contain our seeded users where enabled is true and lastLogin is null
           for (let i = 0; i < seededUsersLength.length; i++) {
@@ -636,7 +636,7 @@ describe('Users - Fetch Users DAL', () => {
         })
 
         it('excludes those that do not match', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results do not contain our seeded users where enabled is false, or enabled is true but lastLogin
           // is NOT null
@@ -660,7 +660,7 @@ describe('Users - Fetch Users DAL', () => {
         })
 
         it('returns the matching users', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results contain our seeded users where enabled is false
           for (let i = 0; i < seededUsersLength; i++) {
@@ -676,7 +676,7 @@ describe('Users - Fetch Users DAL', () => {
         })
 
         it('excludes those that do not match', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results do not contain our seeded users where enabled is true
           for (let i = 0; i < seededUsersLength; i++) {
@@ -700,7 +700,7 @@ describe('Users - Fetch Users DAL', () => {
         })
 
         it('returns the matching users', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results contain our seeded users where enabled is true and lastLogin is NOT null
           for (let i = 0; i < seededUsersLength; i++) {
@@ -713,7 +713,7 @@ describe('Users - Fetch Users DAL', () => {
         })
 
         it('excludes those that do not match', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results do not contain our seeded users where enabled is false, or enabled is true but lastLogin
           // is null
@@ -739,7 +739,7 @@ describe('Users - Fetch Users DAL', () => {
         })
 
         it('returns the matching users', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results contain our seeded users where enabled is true and password is 'VOID'
           for (let i = 0; i < seededUsersLength; i++) {
@@ -752,7 +752,7 @@ describe('Users - Fetch Users DAL', () => {
         })
 
         it('excludes those that do not match', async () => {
-          const { results } = await FetchUsersDal.go(filters, pageNumber)
+          const { results } = await FetchUsersDal(filters, pageNumber)
 
           // Assert the results do not contain our seeded users where enabled is false, or enabled is true but password
           // is not 'VOID'
@@ -778,7 +778,7 @@ describe('Users - Fetch Users DAL', () => {
       })
 
       it('returns the matching users', async () => {
-        const { results } = await FetchUsersDal.go(filters, pageNumber)
+        const { results } = await FetchUsersDal(filters, pageNumber)
 
         // Assert the results contain our seeded external users
         for (let i = 0; i < seededUsersLength; i++) {
@@ -797,7 +797,7 @@ describe('Users - Fetch Users DAL', () => {
       })
 
       it('excludes those that do not match', async () => {
-        const { results } = await FetchUsersDal.go(filters, pageNumber)
+        const { results } = await FetchUsersDal(filters, pageNumber)
 
         // Assert the results do not contain our seeded internal users
         for (let i = 0; i < seededUsersLength; i++) {
@@ -820,7 +820,7 @@ describe('Users - Fetch Users DAL', () => {
     })
 
     it('can return the selected page', async () => {
-      const result = await FetchUsersDal.go(filters, pageNumber)
+      const result = await FetchUsersDal(filters, pageNumber)
 
       expect(result.results).not.toHaveLength(0)
     })

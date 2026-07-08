@@ -24,11 +24,11 @@ import DetermineChargePeriodService from '../determine-charge-period.service.js'
  * @param {module:ChargeVersionModel} chargeVersion - The charge version to prepare
  * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  */
-function go(chargeVersion, billingPeriod) {
+export default function go(chargeVersion, billingPeriod) {
   const { chargeReferences } = chargeVersion
 
   _sortChargeReferencesBySubsistenceCharge(chargeReferences)
-  chargeVersion.chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
+  chargeVersion.chargePeriod = DetermineChargePeriodService(chargeVersion, billingPeriod)
 
   chargeReferences.forEach((chargeReference) => {
     const { chargeElements } = chargeReference
@@ -75,9 +75,4 @@ function _sortChargeReferencesBySubsistenceCharge(chargeReferences) {
 
     return 0
   })
-}
-
-export { go }
-export default {
-  go
 }

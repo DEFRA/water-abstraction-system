@@ -51,7 +51,7 @@ describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
         })
 
         it('removes the company contact and returns the count', async () => {
-          const result = await CleanIncompleteCompanyContactsService.go()
+          const result = await CleanIncompleteCompanyContactsService()
 
           const existsResults = await CompanyContactModel.query().whereIn('id', [companyContact.id])
 
@@ -70,7 +70,7 @@ describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
         })
 
         it('does not remove the company contact and returns the count', async () => {
-          const result = await CleanIncompleteCompanyContactsService.go()
+          const result = await CleanIncompleteCompanyContactsService()
 
           const existsResults = await CompanyContactModel.query().whereIn('id', [companyContact.id])
 
@@ -96,7 +96,7 @@ describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
         })
 
         it('does not remove the company contact and returns the count', async () => {
-          const result = await CleanIncompleteCompanyContactsService.go()
+          const result = await CleanIncompleteCompanyContactsService()
 
           const existsResults = await CompanyContactModel.query().whereIn('id', [companyContact.id])
 
@@ -121,11 +121,11 @@ describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
     })
 
     it('does not throw an error', async () => {
-      await expect(CleanIncompleteCompanyContactsService.go()).resolves.toBeDefined()
+      await expect(CleanIncompleteCompanyContactsService()).resolves.toBeDefined()
     })
 
     it('logs the error', async () => {
-      await CleanIncompleteCompanyContactsService.go()
+      await CleanIncompleteCompanyContactsService()
 
       const errorLogArgs = notifierStub.omfg.firstCall.args
 
@@ -135,7 +135,7 @@ describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
     })
 
     it('still returns a count', async () => {
-      const result = await CleanIncompleteCompanyContactsService.go()
+      const result = await CleanIncompleteCompanyContactsService()
 
       // Like in the previous tests, we can't check the exact count in case the test deletes void return logs created
       // by other tests. We just want to check we are always getting a number

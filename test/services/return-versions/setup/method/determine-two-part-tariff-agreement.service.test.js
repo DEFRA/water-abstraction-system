@@ -44,7 +44,7 @@ describe('Return Versions - Setup - Determine Two-Part Tariff Agreement service'
     })
 
     it('returns false', async () => {
-      const result = await DetermineTwoPartTariffAgreementService.go(licenceRef, startDate)
+      const result = await DetermineTwoPartTariffAgreementService(licenceRef, startDate)
 
       expect(result).toBe(false)
     })
@@ -56,7 +56,7 @@ describe('Return Versions - Setup - Determine Two-Part Tariff Agreement service'
     })
 
     it('returns true', async () => {
-      const result = await DetermineTwoPartTariffAgreementService.go(licenceRef, startDate)
+      const result = await DetermineTwoPartTariffAgreementService(licenceRef, startDate)
 
       expect(result).toBe(true)
     })
@@ -68,7 +68,7 @@ describe('Return Versions - Setup - Determine Two-Part Tariff Agreement service'
     })
 
     it('returns false', async () => {
-      const result = await DetermineTwoPartTariffAgreementService.go(licenceRef, startDate)
+      const result = await DetermineTwoPartTariffAgreementService(licenceRef, startDate)
 
       expect(result).toBe(false)
     })
@@ -80,7 +80,7 @@ describe('Return Versions - Setup - Determine Two-Part Tariff Agreement service'
     })
 
     it('returns false', async () => {
-      const result = await DetermineTwoPartTariffAgreementService.go(generateLicenceRef(), startDate)
+      const result = await DetermineTwoPartTariffAgreementService(generateLicenceRef(), startDate)
 
       expect(result).toBe(false)
     })

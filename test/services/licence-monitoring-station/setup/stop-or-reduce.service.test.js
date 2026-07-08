@@ -33,13 +33,13 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await StopOrReduceService.go(session.id)
+      const result = await StopOrReduceService(session.id)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await StopOrReduceService.go(session.id)
+      const result = await StopOrReduceService(session.id)
 
       expect(result).toMatchObject({
         backLink: `/system/licence-monitoring-station/setup/${session.id}/threshold-and-unit`,

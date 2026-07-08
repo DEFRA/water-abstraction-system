@@ -15,7 +15,7 @@ import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, contactHashId) {
+export default async function go(sessionId, contactHashId) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = CheckPaperReturnPresenter.go(session, contactHashId)
@@ -24,9 +24,4 @@ async function go(sessionId, contactHashId) {
     activeNavBar: 'notices',
     ...pageData
   }
-}
-
-export { go }
-export default {
-  go
 }

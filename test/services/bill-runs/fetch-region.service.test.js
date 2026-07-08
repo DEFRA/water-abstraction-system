@@ -11,7 +11,7 @@ describe('Fetch Region service', () => {
 
   describe('when there is a region with a matching NALD region id', () => {
     it('returns results', async () => {
-      const result = await FetchRegionService.go(region.naldRegionId)
+      const result = await FetchRegionService(region.naldRegionId)
 
       expect(result.id).toEqual(region.id)
     })
@@ -19,7 +19,7 @@ describe('Fetch Region service', () => {
 
   describe('when there is no region with a matching NALD region id', () => {
     it('returns no results', async () => {
-      const result = await FetchRegionService.go(21)
+      const result = await FetchRegionService(21)
 
       expect(result).toBeUndefined()
     })

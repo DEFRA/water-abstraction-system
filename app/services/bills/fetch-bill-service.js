@@ -16,7 +16,7 @@ import { db } from '../../../db/db.js'
  * @returns {Promise<object>} the matching instance of BillModel plus a summary (ID, reference, and total net amount)
  * for each licence linked to the bill
  */
-async function go(id) {
+export default async function go(id) {
   const bill = await _fetchBill(id)
   const licenceSummaries = await _fetchLicenceSummaries(id)
 
@@ -88,11 +88,4 @@ async function _fetchLicenceSummaries(id) {
     .where('bt.chargeType', 'standard')
     .groupBy('bil.id', 'bil.licenceRef')
     .orderBy('bil.licenceRef')
-}
-
-export {
-  go
-}
-export default {
-  go
 }

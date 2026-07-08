@@ -52,14 +52,14 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
       })
 
       it('saves the submitted value', async () => {
-        await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
+        await SubmitAdditionalSubmissionOptionsService(session.id, payload, yarStub)
 
         expect(session.noAdditionalOptions).toBe(true)
         expect(session.$update.called).toBe(true)
       })
 
       it('sets the notification message to "Updated"', async () => {
-        await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
+        await SubmitAdditionalSubmissionOptionsService(session.id, payload, yarStub)
 
         const [flashType, notification] = yarStub.flash.args[0]
 
@@ -79,13 +79,13 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
       })
 
       it('saves the submitted value', async () => {
-        await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
+        await SubmitAdditionalSubmissionOptionsService(session.id, payload, yarStub)
 
         expect(session.multipleUpload).toBe(true)
       })
 
       it('sets the notification message to "Updated"', async () => {
-        await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
+        await SubmitAdditionalSubmissionOptionsService(session.id, payload, yarStub)
 
         const [flashType, notification] = yarStub.flash.args[0]
 
@@ -105,13 +105,13 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
       })
 
       it('saves the submitted value', async () => {
-        await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
+        await SubmitAdditionalSubmissionOptionsService(session.id, payload, yarStub)
 
         expect(session.quarterlyReturns).toBe(true)
       })
 
       it('sets the notification message to "Updated"', async () => {
-        await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
+        await SubmitAdditionalSubmissionOptionsService(session.id, payload, yarStub)
 
         const [flashType, notification] = yarStub.flash.args[0]
 
@@ -129,7 +129,7 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
       })
 
       it('returns page data for the view', async () => {
-        const result = await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
+        const result = await SubmitAdditionalSubmissionOptionsService(session.id, payload, yarStub)
 
         expect(result).toMatchObject({
           backLink: {
@@ -148,7 +148,7 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
 
       describe('because the user has not checked anything', () => {
         it('includes an error for the checkbox element', async () => {
-          const result = await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
+          const result = await SubmitAdditionalSubmissionOptionsService(session.id, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [

@@ -15,7 +15,7 @@ export async function index(request, h) {
     yar
   } = request
 
-  const pageData = await IndexNoticesService.go(yar, auth, page)
+  const pageData = await IndexNoticesService(yar, auth, page)
 
   return h.view('notices/index.njk', pageData)
 }
@@ -28,7 +28,7 @@ export async function submitIndex(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitIndexNoticesService.go(payload, yar, auth, page)
+  const pageData = await SubmitIndexNoticesService(payload, yar, auth, page)
 
   if (pageData.error) {
     return h.view('notices/index.njk', pageData)
@@ -42,7 +42,7 @@ export async function submitView(request, h) {
   const { page } = request.query
   const { id } = request.params
 
-  const pageData = await SubmitViewNoticeService.go(id, payload, yar, page)
+  const pageData = await SubmitViewNoticeService(id, payload, yar, page)
 
   if (pageData.error) {
     return h.view('notices/view.njk', pageData)
@@ -58,7 +58,7 @@ export async function view(request, h) {
     yar
   } = request
 
-  const pageData = await ViewNoticeService.go(id, yar, page)
+  const pageData = await ViewNoticeService(id, yar, page)
 
   return h.view('notices/view.njk', pageData)
 }

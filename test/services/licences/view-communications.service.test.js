@@ -71,7 +71,7 @@ describe('Licences - View Communications service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCommunicationsService.go(licenceId, auth, page)
+      const result = await ViewCommunicationsService(licenceId, auth, page)
 
       expect(result).toEqual({
         activeSecondaryNav: 'communications',

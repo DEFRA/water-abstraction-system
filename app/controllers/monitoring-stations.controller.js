@@ -12,7 +12,7 @@ export async function licence(request, h) {
     params: { licenceId, monitoringStationId }
   } = request
 
-  const pageData = await ViewLicenceService.go(auth, licenceId, monitoringStationId)
+  const pageData = await ViewLicenceService(auth, licenceId, monitoringStationId)
 
   return h.view('monitoring-stations/licence.njk', pageData)
 }
@@ -23,7 +23,7 @@ export async function view(request, h) {
     params: { monitoringStationId }
   } = request
 
-  const pageData = await ViewService.go(auth, monitoringStationId, request.yar)
+  const pageData = await ViewService(auth, monitoringStationId, request.yar)
 
   return h.view('monitoring-stations/view.njk', pageData)
 }

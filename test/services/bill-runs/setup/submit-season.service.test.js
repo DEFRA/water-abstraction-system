@@ -38,14 +38,14 @@ describe('Bill Runs - Setup - Submit Season service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitSeasonService.go(session.id, payload)
+        await SubmitSeasonService(session.id, payload)
 
         expect(session.season).toEqual('summer')
         expect(session.$update.called).toBe(true)
       })
 
       it('returns an empty object (no page data is needed for a redirect)', async () => {
-        const result = await SubmitSeasonService.go(session.id, payload)
+        const result = await SubmitSeasonService(session.id, payload)
 
         expect(result).toEqual({})
       })
@@ -58,7 +58,7 @@ describe('Bill Runs - Setup - Submit Season service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitSeasonService.go(session.id, payload)
+          const result = await SubmitSeasonService(session.id, payload)
 
           expect(result).toEqual({
             activeNavBar: 'bill-runs',

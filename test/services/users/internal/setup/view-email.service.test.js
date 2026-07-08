@@ -30,7 +30,7 @@ describe('Users - Internal - Setup - View Email Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewEmailService.go(session.id)
+      const result = await ViewEmailService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'users',

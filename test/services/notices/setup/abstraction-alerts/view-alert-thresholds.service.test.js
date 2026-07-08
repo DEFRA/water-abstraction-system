@@ -37,7 +37,7 @@ describe('Notices - Setup - Abstraction Alerts - View Alert Thresholds service',
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewAlertThresholdsService.go(session.id)
+      const result = await ViewAlertThresholdsService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

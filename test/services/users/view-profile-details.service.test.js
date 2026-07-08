@@ -48,7 +48,7 @@ describe('Users - View profile details service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewProfileDetailsService.go(userId, yarStub)
+      const result = await ViewProfileDetailsService(userId, yarStub)
 
       expect(result).toEqual({
         backLink: {
@@ -73,7 +73,7 @@ describe('Users - View profile details service', () => {
       })
 
       it('returns the notification', async () => {
-        const result = await ViewProfileDetailsService.go(userId, yarStub)
+        const result = await ViewProfileDetailsService(userId, yarStub)
 
         expect(yarStub.flash.calledWith('notification')).toBe(true)
         expect(result.notification).toEqual(testNotification)
@@ -88,7 +88,7 @@ describe('Users - View profile details service', () => {
     })
 
     it('throws the error', async () => {
-      const error = await ViewProfileDetailsService.go(userId, yarStub).catch((e) => {
+      const error = await ViewProfileDetailsService(userId, yarStub).catch((e) => {
         return e
       })
 

@@ -23,7 +23,7 @@ import { clearFilters } from '../../lib/submit-page.lib.js'
  * @returns {Promise<object>} If no errors an empty object signifying the request can be redirected to the view page
  * else the data needed to re-render the page
  */
-async function go(noticeId, payload, yar, page) {
+export default async function go(noticeId, payload, yar, page) {
   const filterKey = `noticeFilter-${noticeId}`
 
   const filterCleared = clearFilters(payload, yar, filterKey)
@@ -49,7 +49,7 @@ async function go(noticeId, payload, yar, page) {
 }
 
 async function _replayView(noticeId, payload, error, page, savedFilters) {
-  const { notice, notifications, totalNumber } = await FetchNoticeService.go(noticeId, page, savedFilters)
+  const { notice, notifications, totalNumber } = await FetchNoticeService(noticeId, page, savedFilters)
 
   const pagination = PaginatorPresenter.go(
     totalNumber,
@@ -92,11 +92,4 @@ function _validate(payload) {
   const validationResult = ViewValidator.go(payload)
 
   return formatValidationResult(validationResult)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

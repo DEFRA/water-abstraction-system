@@ -55,7 +55,7 @@ describe('Licences - View History service', () => {
 
   describe('when a licence with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewHistoryService.go(licence.id, auth)
+      const result = await ViewHistoryService(licence.id, auth)
 
       expect(result).toEqual({
         activeSecondaryNav: 'history',

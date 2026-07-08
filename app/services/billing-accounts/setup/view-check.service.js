@@ -19,10 +19,10 @@ import { markCheckPageVisited } from '../../../lib/check-page.lib.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
   const companyContacts = await _fetchCompanyContacts(session)
-  const companysHouseResult = await FetchCompanyService.go(session.companiesHouseNumber)
+  const companysHouseResult = await FetchCompanyService(session.companiesHouseNumber)
   const existingAddress = await _fetchExistingAddress(session)
   const impactedLicences = await FetchImpactedLicences.go(session.billingAccount.id)
 
@@ -40,7 +40,7 @@ async function _fetchCompanyContacts(session) {
   const newAccount = !!session.existingAccount && session.existingAccount !== 'new'
   const companyId = newAccount ? session.existingAccount : session.billingAccount.company.id
 
-  const companyContacts = await FetchCompanyContactsService.go(companyId)
+  const companyContacts = await FetchCompanyContactsService(companyId)
 
   return companyContacts
 }
@@ -61,11 +61,4 @@ async function _updateAddressJourneyBackLink(session) {
 
     await session.$update()
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

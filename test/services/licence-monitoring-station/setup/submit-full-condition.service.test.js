@@ -63,14 +63,14 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
 
   describe('when called', () => {
     it('saves the submitted value', async () => {
-      await SubmitFullConditionService.go(session.id, payload)
+      await SubmitFullConditionService(session.id, payload)
 
       expect(session.conditionId).toEqual(payload.condition)
       expect(session.$update.called).toBe(true)
     })
 
     it('saves the abstraction period', async () => {
-      await SubmitFullConditionService.go(session.id, payload)
+      await SubmitFullConditionService(session.id, payload)
 
       expect(session.abstractionPeriodEndDay).toEqual(31)
       expect(session.abstractionPeriodEndMonth).toEqual(3)
@@ -79,7 +79,7 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
     })
 
     it('saves the condition display text', async () => {
-      await SubmitFullConditionService.go(session.id, payload)
+      await SubmitFullConditionService(session.id, payload)
 
       expect(session.conditionDisplayText).toEqual(
         'LICENCE_VERSION_CONDITION_TYPE_DISPLAY_TITLE 1: NOTES (Additional information 1: PARAM_1) (Additional information 2: PARAM_2)'
@@ -92,7 +92,7 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
       })
 
       it('returns true for abstractionPeriod', async () => {
-        const result = await SubmitFullConditionService.go(session.id, payload)
+        const result = await SubmitFullConditionService(session.id, payload)
 
         expect(result).toEqual({ abstractionPeriod: true })
       })
@@ -100,7 +100,7 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
 
     describe('and a UUID was passed in the payload', () => {
       it('returns false for abstractionPeriod', async () => {
-        const result = await SubmitFullConditionService.go(session.id, payload)
+        const result = await SubmitFullConditionService(session.id, payload)
 
         expect(result).toEqual({ abstractionPeriod: false })
       })
@@ -113,7 +113,7 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitFullConditionService.go(session.id, payload)
+      const result = await SubmitFullConditionService(session.id, payload)
 
       expect(result).toEqual({
         error: { text: 'Select a condition' },

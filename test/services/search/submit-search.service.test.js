@@ -45,7 +45,7 @@ describe('Search - Submit Search service', () => {
     })
 
     it('sets the session value and returns a redirect to the search results page', async () => {
-      const result = await SubmitSearchService.go(auth, payload, yar)
+      const result = await SubmitSearchService(auth, payload, yar)
 
       expect(yarSpy.calledWithExactly('searchQuery', 'searchthis')).toBe(true)
       expect(yarSpy.calledWithExactly('searchResultType', 'monitoringStation')).toBe(true)
@@ -59,7 +59,7 @@ describe('Search - Submit Search service', () => {
     })
 
     it('returns an error message', async () => {
-      const result = await SubmitSearchService.go(auth, payload, yar)
+      const result = await SubmitSearchService(auth, payload, yar)
 
       expect(result).toEqual({
         filterItems: [
@@ -111,7 +111,7 @@ describe('Search - Submit Search service', () => {
     })
 
     it('sets the session value and returns a redirect to the search results page', async () => {
-      const result = await SubmitSearchService.go(auth, payload, yar)
+      const result = await SubmitSearchService(auth, payload, yar)
 
       expect(yarSpy.calledWithExactly('searchQuery', 'searchthis')).toBe(true)
       expect(yarSpy.calledWithExactly('searchResultType', 'all')).toBe(true)
@@ -125,7 +125,7 @@ describe('Search - Submit Search service', () => {
     })
 
     it('redirects to the blank search page without setting session values', async () => {
-      const result = await SubmitSearchService.go(auth, payload, yar)
+      const result = await SubmitSearchService(auth, payload, yar)
 
       expect(yarSpy.called).toBe(false)
       expect(result).toEqual({ redirect: '/system/search' })
@@ -138,7 +138,7 @@ describe('Search - Submit Search service', () => {
     })
 
     it('redirects to the blank search page without setting session values', async () => {
-      const result = await SubmitSearchService.go(auth, payload, yar)
+      const result = await SubmitSearchService(auth, payload, yar)
 
       expect(yarSpy.called).toBe(false)
       expect(result).toEqual({ redirect: '/system/search' })

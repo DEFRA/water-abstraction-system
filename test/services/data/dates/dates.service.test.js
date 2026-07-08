@@ -8,7 +8,7 @@ const DatesService = require('../../../../app/services/data/dates/dates.service.
 // trying to avoid asserting the values (else it will just keep breaking!)
 describe('Data - Dates service', () => {
   it('returns the current billing periods', () => {
-    const result = DatesService.go()
+    const result = DatesService()
 
     expect(result.billingPeriods).toBeDefined()
 
@@ -35,7 +35,7 @@ describe('Data - Dates service', () => {
   })
 
   it('returns the current financial year', () => {
-    const result = DatesService.go()
+    const result = DatesService()
 
     expect(result.currentFinancialYear).toBeDefined()
     expect(result.currentFinancialYear.startDate).toBeInstanceOf(Date)
@@ -43,7 +43,7 @@ describe('Data - Dates service', () => {
   })
 
   it('returns the current summer return cycle', () => {
-    const result = DatesService.go()
+    const result = DatesService()
 
     expect(result.currentSummerReturnCycle).toBeDefined()
     expect(result.currentSummerReturnCycle.startDate).toBeInstanceOf(Date)
@@ -51,7 +51,7 @@ describe('Data - Dates service', () => {
   })
 
   it('returns the current winter return cycle', () => {
-    const result = DatesService.go()
+    const result = DatesService()
 
     expect(result.currentWinterReturnCycle).toBeDefined()
     expect(result.currentWinterReturnCycle.startDate).toBeInstanceOf(Date)
@@ -59,7 +59,7 @@ describe('Data - Dates service', () => {
   })
 
   it('returns the current returns periods', () => {
-    const result = DatesService.go()
+    const result = DatesService()
 
     expect(result.firstReturnPeriod).toBeDefined()
     expect(result.firstReturnPeriod.name).toBeDefined()

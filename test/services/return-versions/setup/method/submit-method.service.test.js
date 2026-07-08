@@ -79,7 +79,7 @@ describe('Return Versions - Setup - Submit Method service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitMethodService.go(session.id, payload)
+        await SubmitMethodService(session.id, payload)
 
         expect(session.method).toEqual('useAbstractionData')
         expect(session.$update.called).toBe(true)
@@ -87,13 +87,13 @@ describe('Return Versions - Setup - Submit Method service', () => {
 
       describe('and the user has selected to use abstraction data', () => {
         it('returns the route to the check page', async () => {
-          const result = await SubmitMethodService.go(session.id, payload)
+          const result = await SubmitMethodService(session.id, payload)
 
           expect(result.redirect).toEqual('check')
         })
 
         it('updates the updates the requirements in the session', async () => {
-          await SubmitMethodService.go(session.id, payload)
+          await SubmitMethodService(session.id, payload)
 
           expect(session.requirements).toEqual(_generatedReturnRequirements())
           expect(session.$update.called).toBe(true)
@@ -108,7 +108,7 @@ describe('Return Versions - Setup - Submit Method service', () => {
         })
 
         it('returns the route for the select an existing requirement page', async () => {
-          const result = await SubmitMethodService.go(session.id, payload)
+          const result = await SubmitMethodService(session.id, payload)
 
           expect(result.redirect).toEqual('existing')
         })
@@ -122,7 +122,7 @@ describe('Return Versions - Setup - Submit Method service', () => {
         })
 
         it('returns the route for the select purpose page', async () => {
-          const result = await SubmitMethodService.go(session.id, payload)
+          const result = await SubmitMethodService(session.id, payload)
 
           expect(result.redirect).toEqual('purpose/0')
         })
@@ -135,7 +135,7 @@ describe('Return Versions - Setup - Submit Method service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await SubmitMethodService.go(session.id, payload)
+        const result = await SubmitMethodService(session.id, payload)
 
         expect(result).toMatchObject({
           pageTitle: 'How do you want to set up the requirements for returns?',
@@ -152,7 +152,7 @@ describe('Return Versions - Setup - Submit Method service', () => {
 
       describe('because the user has not submitted anything', () => {
         it('includes an error for the input element', async () => {
-          const result = await SubmitMethodService.go(session.id, payload)
+          const result = await SubmitMethodService(session.id, payload)
 
           expect(result.error).toEqual({
             errorList: [

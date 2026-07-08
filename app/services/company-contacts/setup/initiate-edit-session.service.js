@@ -15,7 +15,7 @@ import { formatEmail } from '../../../presenters/base.presenter.js'
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(companyContactId) {
+export default async function go(companyContactId) {
   const companyContact = await FetchCompanyContactDal(companyContactId)
 
   const licences = await FetchCompanyLicencesDal(companyContact.company.id)
@@ -66,11 +66,4 @@ function _abstractionAlerts(companyContact, licences) {
   }
 
   return abstractionAlertType
-}
-
-export {
-  go
-}
-export default {
-  go
 }

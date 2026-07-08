@@ -18,7 +18,7 @@ import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgre
  *
  * @param {string} payload - Payload from the Notify callback
  */
-async function go(payload) {
+export default async function go(payload) {
   try {
     const startTime = currentTimeInNanoseconds()
 
@@ -31,7 +31,7 @@ async function go(payload) {
 
     if (updatedNotifications.length) {
       // Recalculate the overall status and status counts on the linked notice.
-      await UpdateNoticeService.go([updatedNotifications[0].eventId])
+      await UpdateNoticeService([updatedNotifications[0].eventId])
     }
 
     calculateAndLogTimeTaken(startTime, 'Returned letter complete', {
@@ -41,11 +41,4 @@ async function go(payload) {
   } catch (error) {
     globalThis.GlobalNotifier.omfg('Returned letter failed', payload, error)
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

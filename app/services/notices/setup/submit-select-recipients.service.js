@@ -21,7 +21,7 @@ import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload, yar) {
+export default async function go(sessionId, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   handleOneOptionSelected(payload, 'recipients')
@@ -40,7 +40,7 @@ async function go(sessionId, payload, yar) {
 
   _clearSelectedRecipients(session)
 
-  const recipients = await FetchRecipientsService.go(session)
+  const recipients = await FetchRecipientsService(session)
 
   const pageData = SelectRecipientsPresenter.go(session, recipients, selectedRecipients)
 
@@ -69,9 +69,4 @@ function _validate(payload) {
   const validationResult = SelectRecipientsValidator.go(payload)
 
   return formatValidationResult(validationResult)
-}
-
-export { go }
-export default {
-  go
 }

@@ -13,8 +13,8 @@ import FetchFailedRenewalInvitationsService from '../renewal-notice/fetch-failed
  *
  * @returns {Promise<object|null>} The notice, notifications, and failed notification IDs, or null if none failed
  */
-async function go(mainNotice) {
-  const { licenceRefs, notificationIds } = await FetchFailedRenewalInvitationsService.go(mainNotice.id)
+export default async function go(mainNotice) {
+  const { licenceRefs, notificationIds } = await FetchFailedRenewalInvitationsService(mainNotice.id)
 
   if (notificationIds.length === 0) {
     return null
@@ -24,7 +24,7 @@ async function go(mainNotice) {
   const expiryDate = new Date(expiryDateIso)
   const renewalDate = new Date(renewalDateIso)
 
-  const { notice, notifications } = await CreateAlternateRenewalNoticeService.go(
+  const { notice, notifications } = await CreateAlternateRenewalNoticeService(
     mainNotice,
     licenceRefs,
     expiryDate,
@@ -32,9 +32,4 @@ async function go(mainNotice) {
   )
 
   return { notice, notificationIds, notifications }
-}
-
-export { go }
-export default {
-  go
 }

@@ -17,7 +17,7 @@ export async function viewBillingAccounts(request, h) {
     query: { page }
   } = request
 
-  const pageData = await ViewBillingAccountsService.go(id, auth, page)
+  const pageData = await ViewBillingAccountsService(id, auth, page)
 
   return h.view(`companies/billing-accounts.njk`, pageData)
 }
@@ -26,7 +26,7 @@ export async function viewCompany(request, h) {
   const {
     params: { id, role }
   } = request
-  const pageData = await ViewCompanyService.go(id, role)
+  const pageData = await ViewCompanyService(id, role)
 
   return h.view(`companies/company.njk`, pageData)
 }
@@ -36,7 +36,7 @@ export async function viewCompanyWithAddress(request, h) {
     params: { addressId, id, role },
     query: { 'licence-id': licenceId }
   } = request
-  const pageData = await ViewCompanyWithAddressService.go(id, addressId, role, licenceId)
+  const pageData = await ViewCompanyWithAddressService(id, addressId, role, licenceId)
 
   return h.view(`companies/company-with-address.njk`, pageData)
 }
@@ -49,7 +49,7 @@ export async function viewContacts(request, h) {
     yar
   } = request
 
-  const pageData = await ViewContactsService.go(id, auth, page, yar)
+  const pageData = await ViewContactsService(id, auth, page, yar)
 
   return h.view(`companies/contacts.njk`, pageData)
 }
@@ -61,7 +61,7 @@ export async function viewHistory(request, h) {
     query: { page }
   } = request
 
-  const pageData = await ViewHistoryService.go(id, auth, page)
+  const pageData = await ViewHistoryService(id, auth, page)
 
   return h.view(`companies/history.njk`, pageData)
 }
@@ -73,7 +73,7 @@ export async function viewLicences(request, h) {
     query: { page }
   } = request
 
-  const pageData = await ViewLicencesService.go(id, auth, page)
+  const pageData = await ViewLicencesService(id, auth, page)
 
   return h.view(`companies/licences.njk`, pageData)
 }

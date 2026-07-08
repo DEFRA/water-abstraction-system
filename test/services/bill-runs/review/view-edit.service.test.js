@@ -29,7 +29,7 @@ describe('Bill Runs - Review - View Edit Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewEditService.go(reviewChargeElement.id, elementIndex)
+      const result = await ViewEditService(reviewChargeElement.id, elementIndex)
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',

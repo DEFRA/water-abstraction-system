@@ -34,7 +34,7 @@ describe('Company Contacts - Setup - Fetch Company Contacts dal', () => {
 
   describe('when there are company contacts', () => {
     it('returns the matching company contacts', async () => {
-      const result = await FetchCompanyContactsDal.go(companyContact.companyId, undefined)
+      const result = await FetchCompanyContactsDal(companyContact.companyId, undefined)
 
       expect(result).toEqual([
         {
@@ -65,7 +65,7 @@ describe('Company Contacts - Setup - Fetch Company Contacts dal', () => {
       })
 
       it('returns the matching company contacts', async () => {
-        const result = await FetchCompanyContactsDal.go(companyContact.companyId, companyContactToIgnore)
+        const result = await FetchCompanyContactsDal(companyContact.companyId, companyContactToIgnore)
 
         expect(result).toEqual([
           {

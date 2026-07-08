@@ -45,7 +45,7 @@ import { timestampForPostgres } from '../../lib/general.lib.js'
  *
  * @param {string[]} noticeIds - the UUIDs of the notices to update
  */
-async function go(noticeIds) {
+export default async function go(noticeIds) {
   const query = _query()
   const updatedAt = timestampForPostgres()
 
@@ -90,11 +90,4 @@ function _query() {
   AND e.id = os.event_id
   AND e.id = ANY(?);
   `
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -45,7 +45,7 @@ import SubmitStartDateService from '../services/return-versions/setup/submit-sta
 export async function abstractionPeriod(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  const pageData = await AbstractionPeriodService.go(sessionId, requirementIndex)
+  const pageData = await AbstractionPeriodService(sessionId, requirementIndex)
 
   return h.view('return-versions/setup/abstraction-period.njk', pageData)
 }
@@ -53,7 +53,7 @@ export async function abstractionPeriod(request, h) {
 export async function add(request, h) {
   const { sessionId } = request.params
 
-  const requirementIndex = await AddService.go(sessionId)
+  const requirementIndex = await AddService(sessionId)
 
   return h.redirect(`/system/return-versions/setup/${sessionId}/purpose/${requirementIndex}`)
 }
@@ -61,7 +61,7 @@ export async function add(request, h) {
 export async function additionalSubmissionOptions(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await AdditionalSubmissionOptionsService.go(sessionId)
+  const pageData = await AdditionalSubmissionOptionsService(sessionId)
 
   return h.view('return-versions/setup/additional-submission-options.njk', pageData)
 }
@@ -69,7 +69,7 @@ export async function additionalSubmissionOptions(request, h) {
 export async function agreementsExceptions(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  const pageData = await AgreementsExceptionsService.go(sessionId, requirementIndex)
+  const pageData = await AgreementsExceptionsService(sessionId, requirementIndex)
 
   return h.view('return-versions/setup/agreements-exceptions.njk', pageData)
 }
@@ -85,14 +85,14 @@ export async function approved(request, h) {
 
 export async function cancel(request, h) {
   const { sessionId } = request.params
-  const pageData = await CancelService.go(sessionId)
+  const pageData = await CancelService(sessionId)
 
   return h.view('return-versions/setup/cancel.njk', pageData)
 }
 
 export async function check(request, h) {
   const { sessionId } = request.params
-  const pageData = await CheckService.go(sessionId, request.yar)
+  const pageData = await CheckService(sessionId, request.yar)
 
   return h.view('return-versions/setup/check.njk', pageData)
 }
@@ -100,7 +100,7 @@ export async function check(request, h) {
 export async function deleteNote(request, h) {
   const { sessionId } = request.params
 
-  await DeleteNoteService.go(sessionId, request.yar)
+  await DeleteNoteService(sessionId, request.yar)
 
   return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
 }
@@ -108,7 +108,7 @@ export async function deleteNote(request, h) {
 export async function existing(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ExistingService.go(sessionId)
+  const pageData = await ExistingService(sessionId)
 
   return h.view('return-versions/setup/existing.njk', pageData)
 }
@@ -116,7 +116,7 @@ export async function existing(request, h) {
 export async function frequencyCollected(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  const pageData = await FrequencyCollectedService.go(sessionId, requirementIndex)
+  const pageData = await FrequencyCollectedService(sessionId, requirementIndex)
 
   return h.view('return-versions/setup/frequency-collected.njk', pageData)
 }
@@ -124,7 +124,7 @@ export async function frequencyCollected(request, h) {
 export async function frequencyReported(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  const pageData = await FrequencyReportedService.go(sessionId, requirementIndex)
+  const pageData = await FrequencyReportedService(sessionId, requirementIndex)
 
   return h.view('return-versions/setup/frequency-reported.njk', pageData)
 }
@@ -132,7 +132,7 @@ export async function frequencyReported(request, h) {
 export async function method(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await MethodService.go(sessionId)
+  const pageData = await MethodService(sessionId)
 
   return h.view('return-versions/setup/method.njk', pageData)
 }
@@ -140,7 +140,7 @@ export async function method(request, h) {
 export async function noReturnsRequired(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await NoReturnsRequiredService.go(sessionId)
+  const pageData = await NoReturnsRequiredService(sessionId)
 
   return h.view('return-versions/setup/no-returns-required.njk', pageData)
 }
@@ -148,7 +148,7 @@ export async function noReturnsRequired(request, h) {
 export async function note(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await NoteService.go(sessionId)
+  const pageData = await NoteService(sessionId)
 
   return h.view('return-versions/setup/note.njk', pageData)
 }
@@ -156,7 +156,7 @@ export async function note(request, h) {
 export async function points(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  const pageData = await PointsService.go(sessionId, requirementIndex)
+  const pageData = await PointsService(sessionId, requirementIndex)
 
   return h.view('return-versions/setup/points.njk', pageData)
 }
@@ -164,7 +164,7 @@ export async function points(request, h) {
 export async function purpose(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  const pageData = await SelectPurposeService.go(sessionId, requirementIndex)
+  const pageData = await SelectPurposeService(sessionId, requirementIndex)
 
   return h.view('return-versions/setup/purpose.njk', pageData)
 }
@@ -172,7 +172,7 @@ export async function purpose(request, h) {
 export async function reason(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SelectReasonService.go(sessionId)
+  const pageData = await SelectReasonService(sessionId)
 
   return h.view('return-versions/setup/reason.njk', pageData)
 }
@@ -180,7 +180,7 @@ export async function reason(request, h) {
 export async function remove(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  const pageData = await RemoveService.go(sessionId, requirementIndex)
+  const pageData = await RemoveService(sessionId, requirementIndex)
 
   return h.view('return-versions/setup/remove.njk', pageData)
 }
@@ -188,7 +188,7 @@ export async function remove(request, h) {
 export async function returnsCycle(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  const pageData = await ReturnsCycleService.go(sessionId, requirementIndex)
+  const pageData = await ReturnsCycleService(sessionId, requirementIndex)
 
   return h.view('return-versions/setup/returns-cycle.njk', pageData)
 }
@@ -196,7 +196,7 @@ export async function returnsCycle(request, h) {
 export async function siteDescription(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  const pageData = await SiteDescriptionService.go(sessionId, requirementIndex)
+  const pageData = await SiteDescriptionService(sessionId, requirementIndex)
 
   return h.view('return-versions/setup/site-description.njk', pageData)
 }
@@ -204,7 +204,7 @@ export async function siteDescription(request, h) {
 export async function startDate(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await StartDateService.go(sessionId)
+  const pageData = await StartDateService(sessionId)
 
   return h.view('return-versions/setup/start-date.njk', pageData)
 }
@@ -252,7 +252,7 @@ export async function submitAdditionalSubmissionOptions(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitAdditionalSubmissionOptionsService.go(sessionId, payload, yar)
+  const pageData = await SubmitAdditionalSubmissionOptionsService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/additional-submission-options.njk', pageData)
@@ -274,7 +274,7 @@ export async function submitCheck(request, h) {
   const { sessionId } = request.params
   const { userId } = request.auth.credentials.user
 
-  const licenceId = await SubmitCheckService.go(sessionId, userId)
+  const licenceId = await SubmitCheckService(sessionId, userId)
 
   return h.redirect(`/system/return-versions/setup/${licenceId}/approved`)
 }
@@ -285,7 +285,7 @@ export async function submitExisting(request, h) {
     payload
   } = request
 
-  const pageData = await SubmitExistingService.go(sessionId, payload)
+  const pageData = await SubmitExistingService(sessionId, payload)
 
   if (pageData.error) {
     return h.view('return-versions/setup/existing.njk', pageData)
@@ -301,7 +301,7 @@ export async function submitFrequencyCollected(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitFrequencyCollectedService.go(sessionId, requirementIndex, payload, yar)
+  const pageData = await SubmitFrequencyCollectedService(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/frequency-collected.njk', pageData)
@@ -321,7 +321,7 @@ export async function submitFrequencyReported(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitFrequencyReportedService.go(sessionId, requirementIndex, payload, yar)
+  const pageData = await SubmitFrequencyReportedService(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/frequency-reported.njk', pageData)
@@ -337,7 +337,7 @@ export async function submitFrequencyReported(request, h) {
 export async function submitMethod(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitMethodService.go(sessionId, request.payload)
+  const pageData = await SubmitMethodService(sessionId, request.payload)
 
   if (pageData.error) {
     return h.view('return-versions/setup/method.njk', pageData)
@@ -353,7 +353,7 @@ export async function submitNoReturnsRequired(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitNoReturnsRequiredService.go(sessionId, payload, yar)
+  const pageData = await SubmitNoReturnsRequiredService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/no-returns-required.njk', pageData)
@@ -366,7 +366,7 @@ export async function submitNote(request, h) {
   const { sessionId } = request.params
   const { user } = request.auth.credentials
 
-  const pageData = await SubmitNoteService.go(sessionId, request.payload, user, request.yar)
+  const pageData = await SubmitNoteService(sessionId, request.payload, user, request.yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/note.njk', pageData)
@@ -382,7 +382,7 @@ export async function submitPoints(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitPointsService.go(sessionId, requirementIndex, payload, yar)
+  const pageData = await SubmitPointsService(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/points.njk', pageData)
@@ -402,7 +402,7 @@ export async function submitPurpose(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitPurposeService.go(sessionId, requirementIndex, payload, yar)
+  const pageData = await SubmitPurposeService(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/purpose.njk', pageData)
@@ -422,7 +422,7 @@ export async function submitReason(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitReasonService.go(sessionId, payload, yar)
+  const pageData = await SubmitReasonService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/reason.njk', pageData)
@@ -438,7 +438,7 @@ export async function submitReason(request, h) {
 export async function submitRemove(request, h) {
   const { requirementIndex, sessionId } = request.params
 
-  await SubmitRemoveService.go(sessionId, requirementIndex, request.yar)
+  await SubmitRemoveService(sessionId, requirementIndex, request.yar)
 
   return h.redirect(`/system/return-versions/setup/${sessionId}/check`)
 }
@@ -450,7 +450,7 @@ export async function submitReturnsCycle(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitReturnsCycleService.go(sessionId, requirementIndex, payload, yar)
+  const pageData = await SubmitReturnsCycleService(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/returns-cycle.njk', pageData)
@@ -470,7 +470,7 @@ export async function submitSiteDescription(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitSiteDescriptionService.go(sessionId, requirementIndex, payload, yar)
+  const pageData = await SubmitSiteDescriptionService(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/site-description.njk', pageData)
@@ -490,7 +490,7 @@ export async function submitStartDate(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitStartDateService.go(sessionId, payload, yar)
+  const pageData = await SubmitStartDateService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/start-date.njk', pageData)

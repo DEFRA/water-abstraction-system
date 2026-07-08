@@ -36,7 +36,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
 
   describe('when the licence has contact details', () => {
     it('returns the matching licence contacts', async () => {
-      const result = await FetchLicenceCRMDataService.go(licence.id, roles)
+      const result = await FetchLicenceCRMDataService(licence.id, roles)
 
       expect(result).toEqual({
         contacts: [
@@ -95,7 +95,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
 
     describe('and the licence has a "NALD GAP" charge version in its history', () => {
       it('returns the matching licence contacts including the billing contact (even with a NALD GAP charge version)', async () => {
-        const result = await FetchLicenceCRMDataService.go(crmData.otherLicence.record.id, roles)
+        const result = await FetchLicenceCRMDataService(crmData.otherLicence.record.id, roles)
 
         expect(result).toEqual({
           contacts: [
@@ -134,7 +134,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
         })
 
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
-          const result = await FetchLicenceCRMDataService.go(licence.id, roles, page)
+          const result = await FetchLicenceCRMDataService(licence.id, roles, page)
 
           expect(result).toEqual({
             contacts: [
@@ -156,7 +156,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
         })
 
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
-          const result = await FetchLicenceCRMDataService.go(licence.id, roles, page)
+          const result = await FetchLicenceCRMDataService(licence.id, roles, page)
 
           expect(result).toEqual({
             contacts: [
@@ -178,7 +178,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
         })
 
         it('returns the matching contacts for the page (the second page) with the total number', async () => {
-          const result = await FetchLicenceCRMDataService.go(licence.id, roles, page)
+          const result = await FetchLicenceCRMDataService(licence.id, roles, page)
 
           expect(result).toEqual({
             contacts: [

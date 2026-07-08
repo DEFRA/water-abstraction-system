@@ -75,7 +75,7 @@ describe('Notices - Setup - Fetch Licence Refs With Due Returns service', () => 
     })
 
     it('correctly returns the expected licence refs', async () => {
-      const results = await FetchLicenceRefsWithDueReturnsService.go(returnsPeriod, noticeType)
+      const results = await FetchLicenceRefsWithDueReturnsService(returnsPeriod, noticeType)
 
       expect(results).toContainEqual(distinctInvitationLicenceRef)
       expect(results).toContainEqual(returnLogs[2].licenceRef)
@@ -90,7 +90,7 @@ describe('Notices - Setup - Fetch Licence Refs With Due Returns service', () => 
     })
 
     it('returns a distinct list of licence refs', async () => {
-      const results = await FetchLicenceRefsWithDueReturnsService.go(returnsPeriod, noticeType)
+      const results = await FetchLicenceRefsWithDueReturnsService(returnsPeriod, noticeType)
 
       const knownDuplicateLicenceRef = results.filter((licenceRef) => {
         return licenceRef === distinctInvitationLicenceRef
@@ -106,7 +106,7 @@ describe('Notices - Setup - Fetch Licence Refs With Due Returns service', () => 
     })
 
     it('correctly returns the expected licence refs', async () => {
-      const results = await FetchLicenceRefsWithDueReturnsService.go(returnsPeriod, noticeType)
+      const results = await FetchLicenceRefsWithDueReturnsService(returnsPeriod, noticeType)
 
       expect(results).toContainEqual(distinctReminderLicenceRef)
       expect(results).toContainEqual(returnLogs[8].licenceRef)
@@ -120,7 +120,7 @@ describe('Notices - Setup - Fetch Licence Refs With Due Returns service', () => 
     })
 
     it('returns a distinct list of licence refs', async () => {
-      const results = await FetchLicenceRefsWithDueReturnsService.go(returnsPeriod, noticeType)
+      const results = await FetchLicenceRefsWithDueReturnsService(returnsPeriod, noticeType)
 
       const knownDuplicateLicenceRef = results.filter((licenceRef) => {
         return licenceRef === distinctReminderLicenceRef

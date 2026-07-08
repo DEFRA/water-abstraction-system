@@ -71,7 +71,7 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload, yarStub)
+        await SubmitAbstractionPeriodService(session.id, requirementIndex, payload, yarStub)
 
         expect(session.requirements[0].abstractionPeriod).toEqual({
           abstractionPeriodStartDay: '01',
@@ -85,7 +85,7 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
 
       describe('and the page has been not been visited', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitAbstractionPeriodService(session.id, requirementIndex, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: false
@@ -101,7 +101,7 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitAbstractionPeriodService(session.id, requirementIndex, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: true
@@ -109,7 +109,7 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
         })
 
         it('sets the notification message title to "Updated" and the text to "Requirements for returns updated" ', async () => {
-          await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload, yarStub)
+          await SubmitAbstractionPeriodService(session.id, requirementIndex, payload, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
 
@@ -128,7 +128,7 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload, yarStub)
+        const result = await SubmitAbstractionPeriodService(session.id, requirementIndex, payload, yarStub)
 
         expect(result).toMatchObject({
           pageTitle: 'Enter the abstraction period for the requirements for returns',
@@ -145,7 +145,7 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
 
       describe('because the user has not submitted anything', () => {
         it('includes an error for both input elements', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitAbstractionPeriodService(session.id, requirementIndex, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [
@@ -179,7 +179,7 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
         })
 
         it('includes an error for the start date input element', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitAbstractionPeriodService(session.id, requirementIndex, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [
@@ -195,7 +195,7 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
         })
 
         it('includes what was submitted', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitAbstractionPeriodService(session.id, requirementIndex, payload, yarStub)
 
           expect(result.abstractionPeriod).toEqual({
             abstractionPeriodStartDay: null,
@@ -217,7 +217,7 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
         })
 
         it('includes an error for the end date input element', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitAbstractionPeriodService(session.id, requirementIndex, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [
@@ -233,7 +233,7 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
         })
 
         it('includes what was submitted', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitAbstractionPeriodService(session.id, requirementIndex, payload, yarStub)
 
           expect(result.abstractionPeriod).toEqual({
             abstractionPeriodStartDay: '08',
@@ -255,7 +255,7 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
         })
 
         it('includes an error for both input elements', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitAbstractionPeriodService(session.id, requirementIndex, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [
@@ -278,7 +278,7 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
         })
 
         it('includes what was submitted', async () => {
-          const result = await SubmitAbstractionPeriodService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitAbstractionPeriodService(session.id, requirementIndex, payload, yarStub)
 
           expect(result.abstractionPeriod).toEqual({
             abstractionPeriodStartDay: 'abc',

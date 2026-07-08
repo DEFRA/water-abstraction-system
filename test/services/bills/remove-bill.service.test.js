@@ -25,7 +25,7 @@ describe('Remove Bill service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await RemoveBillService.go(testId)
+      const result = await RemoveBillService(testId)
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',

@@ -14,7 +14,7 @@ import LicenceModel from '../../models/licence.model.js'
  *
  * @returns {Promise<module:LicenceModel>} the data needed to populate the view licence page summary tab
  */
-async function go(licenceId) {
+export default async function go(licenceId) {
   return _fetch(licenceId)
 }
 
@@ -86,11 +86,4 @@ async function _fetch(licenceId) {
     .modifyGraph('workflows', (workflowsBuilder) => {
       workflowsBuilder.select(['id', 'status']).whereNull('deletedAt')
     })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

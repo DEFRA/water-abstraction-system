@@ -99,7 +99,7 @@ describe('Generate Transactions service', () => {
       })
 
       it('returns an array of one transaction containing the expected data', () => {
-        const results = GenerateTransactionsService.go(
+        const results = GenerateTransactionsService(
           billLicenceId,
           chargeReference,
           billingPeriod,
@@ -118,7 +118,7 @@ describe('Generate Transactions service', () => {
       })
 
       it('returns the charge element as JSON in the transaction line "purposes" property', () => {
-        const results = GenerateTransactionsService.go(
+        const results = GenerateTransactionsService(
           billLicenceId,
           chargeReference,
           billingPeriod,
@@ -135,7 +135,7 @@ describe('Generate Transactions service', () => {
 
     describe('and is not a water undertaker', () => {
       it('returns an array of two transactions containing the expected data', () => {
-        const results = GenerateTransactionsService.go(
+        const results = GenerateTransactionsService(
           billLicenceId,
           chargeReference,
           billingPeriod,
@@ -154,7 +154,7 @@ describe('Generate Transactions service', () => {
       })
 
       it('returns a second compensation charge transaction', () => {
-        const results = GenerateTransactionsService.go(
+        const results = GenerateTransactionsService(
           billLicenceId,
           chargeReference,
           billingPeriod,
@@ -173,7 +173,7 @@ describe('Generate Transactions service', () => {
       })
 
       it('returns the charge element as JSON in both transaction lines "purposes" property', () => {
-        const results = GenerateTransactionsService.go(
+        const results = GenerateTransactionsService(
           billLicenceId,
           chargeReference,
           billingPeriod,
@@ -199,7 +199,7 @@ describe('Generate Transactions service', () => {
       })
 
       it('returns "newLicence" as true in the results', () => {
-        const results = GenerateTransactionsService.go(
+        const results = GenerateTransactionsService(
           billLicenceId,
           chargeReference,
           billingPeriod,
@@ -214,7 +214,7 @@ describe('Generate Transactions service', () => {
 
     describe('and is not a new licence', () => {
       it('returns "newLicence" as false in the results', () => {
-        const results = GenerateTransactionsService.go(
+        const results = GenerateTransactionsService(
           billLicenceId,
           chargeReference,
           billingPeriod,
@@ -230,7 +230,7 @@ describe('Generate Transactions service', () => {
     describe('and a two-part tariff agreement (section 127)', () => {
       describe('has not applied', () => {
         it('returns the standard description', () => {
-          const results = GenerateTransactionsService.go(
+          const results = GenerateTransactionsService(
             billLicenceId,
             chargeReference,
             billingPeriod,
@@ -249,7 +249,7 @@ describe('Generate Transactions service', () => {
         })
 
         it('returns the two-part tariff prefixed description', () => {
-          const results = GenerateTransactionsService.go(
+          const results = GenerateTransactionsService(
             billLicenceId,
             chargeReference,
             billingPeriod,
@@ -277,7 +277,7 @@ describe('Generate Transactions service', () => {
     })
 
     it('returns an empty array', () => {
-      const results = GenerateTransactionsService.go(
+      const results = GenerateTransactionsService(
         billLicenceId,
         chargeReference,
         billingPeriod,

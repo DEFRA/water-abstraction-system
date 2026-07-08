@@ -21,7 +21,7 @@ import MonitoringStationModel from '../../../models/monitoring-station.model.js'
  *
  * @returns {Promise<string>} the sessionId used for the redirect
  */
-async function go(monitoringStationId) {
+export default async function go(monitoringStationId) {
   const monitoringStation = await _fetchMonitoringStation(monitoringStationId)
   const data = { monitoringStationId, ...monitoringStation }
 
@@ -32,11 +32,4 @@ async function go(monitoringStationId) {
 
 async function _fetchMonitoringStation(monitoringStationId) {
   return MonitoringStationModel.query().select('label').findById(monitoringStationId)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

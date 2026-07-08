@@ -94,7 +94,7 @@ describe('Monitoring Stations - View Licence service', () => {
 
   describe('when called', () => {
     it('returns the page data for the view', async () => {
-      const result = await ViewLicenceService.go(auth, licence.id, monitoringStation.id)
+      const result = await ViewLicenceService(auth, licence.id, monitoringStation.id)
 
       expect(result).toEqual({
         backLink: {

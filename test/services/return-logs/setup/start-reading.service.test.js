@@ -32,13 +32,13 @@ describe('Return Logs Setup - Start Reading service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await StartReadingService.go(session.id)
+      const result = await StartReadingService(session.id)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await StartReadingService.go(session.id)
+      const result = await StartReadingService(session.id)
 
       expect(result).toMatchObject({
         backLink: { href: `/system/return-logs/setup/${session.id}/reported`, text: 'Back' },

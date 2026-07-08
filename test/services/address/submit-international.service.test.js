@@ -59,7 +59,7 @@ describe('Address - Submit International Service', () => {
       })
 
       it('saves the submitted address and returns the specified redirect URL', async () => {
-        const result = await SubmitInternationalService.go(sessionId, payload)
+        const result = await SubmitInternationalService(sessionId, payload)
 
         expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
@@ -83,7 +83,7 @@ describe('Address - Submit International Service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitInternationalService.go(sessionId, payload)
+          const result = await SubmitInternationalService(sessionId, payload)
 
           expect(result).toEqual({
             error: {
@@ -123,7 +123,7 @@ describe('Address - Submit International Service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitInternationalService.go(sessionId, payload)
+          const result = await SubmitInternationalService(sessionId, payload)
 
           expect(result).toEqual({
             error: {

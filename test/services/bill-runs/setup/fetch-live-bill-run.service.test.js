@@ -60,7 +60,7 @@ describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
     describe('for the requested region', () => {
       describe('with a matching financial year ending', () => {
         it('returns the match', async () => {
-          const result = await FetchLiveBillRunsService.go(matchingRegion.id, toFinancialYearEnding)
+          const result = await FetchLiveBillRunsService(matchingRegion.id, toFinancialYearEnding)
 
           expect(result).toEqual({
             id: matchingBillRun.id,
@@ -81,7 +81,7 @@ describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
 
       describe('but with a different matching financial year ending', () => {
         it('is not returned as the match', async () => {
-          const result = await FetchLiveBillRunsService.go(matchingRegion.id, toFinancialYearEnding)
+          const result = await FetchLiveBillRunsService(matchingRegion.id, toFinancialYearEnding)
 
           expect(nonMatchingBillRunIds).not.toContainEqual(result.id)
         })
@@ -90,7 +90,7 @@ describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
 
     describe('for a different region', () => {
       it('is not returned as the match', async () => {
-        const result = await FetchLiveBillRunsService.go(matchingRegion.id, toFinancialYearEnding)
+        const result = await FetchLiveBillRunsService(matchingRegion.id, toFinancialYearEnding)
 
         expect(nonMatchingBillRunIds).not.toContainEqual(result.id)
       })
@@ -99,7 +99,7 @@ describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
 
   describe('when there is a "non-live" bill run', () => {
     it('is not returned as the match', async () => {
-      const result = await FetchLiveBillRunsService.go(matchingRegion.id, toFinancialYearEnding)
+      const result = await FetchLiveBillRunsService(matchingRegion.id, toFinancialYearEnding)
 
       expect(nonMatchingBillRunIds).not.toContainEqual(result.id)
     })

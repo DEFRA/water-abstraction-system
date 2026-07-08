@@ -42,7 +42,7 @@ describe('Tear down service', () => {
   })
 
   it('tears down the schemas', async () => {
-    await TearDownService.go()
+    await TearDownService()
 
     const args = notifierStub.omg.firstCall.args
 

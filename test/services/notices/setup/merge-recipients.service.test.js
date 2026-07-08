@@ -22,7 +22,7 @@ describe('Notices - Setup - Merge Recipients service', () => {
 
     describe('and no selected recipients', () => {
       it('returns just the fetched recipients', () => {
-        const results = MergeRecipientsService.go(session, fetchedRecipients)
+        const results = MergeRecipientsService(session, fetchedRecipients)
 
         expect(results).toEqual([
           {
@@ -59,7 +59,7 @@ describe('Notices - Setup - Merge Recipients service', () => {
       })
 
       it('returns just the selected fetched recipients', () => {
-        const results = MergeRecipientsService.go(session, fetchedRecipients)
+        const results = MergeRecipientsService(session, fetchedRecipients)
 
         expect(results).toEqual([
           {
@@ -91,7 +91,7 @@ describe('Notices - Setup - Merge Recipients service', () => {
         })
 
         it('returns all fetched and additional recipients', () => {
-          const results = MergeRecipientsService.go(session, fetchedRecipients)
+          const results = MergeRecipientsService(session, fetchedRecipients)
 
           expect(results).toEqual([
             {
@@ -147,7 +147,7 @@ describe('Notices - Setup - Merge Recipients service', () => {
         })
 
         it('returns only the fetched recipients', () => {
-          const results = MergeRecipientsService.go(session, fetchedRecipients)
+          const results = MergeRecipientsService(session, fetchedRecipients)
 
           expect(results).toEqual([
             {
@@ -191,7 +191,7 @@ describe('Notices - Setup - Merge Recipients service', () => {
         })
 
         it('returns all fetched recipients and additional recipients without duplicates', () => {
-          const results = MergeRecipientsService.go(session, fetchedRecipients)
+          const results = MergeRecipientsService(session, fetchedRecipients)
 
           expect(results).toEqual([
             {
@@ -248,7 +248,7 @@ describe('Notices - Setup - Merge Recipients service', () => {
         })
 
         it('returns just the selected fetched recipients', () => {
-          const results = MergeRecipientsService.go(session, fetchedRecipients)
+          const results = MergeRecipientsService(session, fetchedRecipients)
 
           expect(results).toEqual([
             {
@@ -278,7 +278,7 @@ describe('Notices - Setup - Merge Recipients service', () => {
         })
 
         it('returns just the selected additional recipients', () => {
-          const results = MergeRecipientsService.go(session, fetchedRecipients)
+          const results = MergeRecipientsService(session, fetchedRecipients)
 
           expect(results).toEqual([
             {
@@ -311,7 +311,7 @@ describe('Notices - Setup - Merge Recipients service', () => {
         })
 
         it('returns only the selected fetched and additional recipients', () => {
-          const results = MergeRecipientsService.go(session, fetchedRecipients)
+          const results = MergeRecipientsService(session, fetchedRecipients)
 
           expect(results).toEqual([
             {

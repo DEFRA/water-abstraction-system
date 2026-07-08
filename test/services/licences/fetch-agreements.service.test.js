@@ -37,7 +37,7 @@ describe('Licences - Fetch Agreements service', () => {
       })
 
       it('returns the matching agreements data', async () => {
-        const results = await FetchAgreementsService.go(licenceAgreement.licenceRef)
+        const results = await FetchAgreementsService(licenceAgreement.licenceRef)
 
         expect(results[0]).toMatchObject({
           endDate,
@@ -63,7 +63,7 @@ describe('Licences - Fetch Agreements service', () => {
       })
 
       it('does not return the agreements data', async () => {
-        const results = await FetchAgreementsService.go(licenceAgreement.licenceRef)
+        const results = await FetchAgreementsService(licenceAgreement.licenceRef)
 
         expect(results).toHaveLength(0)
       })

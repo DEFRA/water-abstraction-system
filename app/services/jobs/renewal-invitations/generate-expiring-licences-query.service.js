@@ -13,7 +13,7 @@
  * @returns {object} The query to use as the 'expiring_licences` CTE in the recipients query, and the associated
  * bindings
  */
-function go(expiredDate) {
+export default function go(expiredDate) {
   const bindings = [expiredDate]
 
   return {
@@ -37,11 +37,4 @@ function _query() {
       l.revoked_date IS NULL OR l.revoked_date > l.expired_date
     )
   `
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -12,7 +12,7 @@ import redisConfig from '../../../config/redis.config.js'
  *
  * @returns {Promise<Redis>} - a new redis instance
  */
-async function go() {
+export default async function go() {
   return new Redis({
     host: redisConfig.host,
     port: redisConfig.port,
@@ -24,11 +24,4 @@ async function go() {
     // Don't attempt to retry a request to Redis if a command fails
     maxRetriesPerRequest: 0
   })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

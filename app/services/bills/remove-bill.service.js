@@ -14,8 +14,8 @@ import RemoveBillPresenter from '../../presenters/bills/remove-bill.presenter.js
  * @returns {Promise<object>} a formatted representation of the bill, its billing account and the bill run it is linked
  * to for the remove bill page
  */
-async function go(billId) {
-  const bill = await FetchBillSummaryService.go(billId)
+export default async function go(billId) {
+  const bill = await FetchBillSummaryService(billId)
 
   const formattedData = RemoveBillPresenter.go(bill)
 
@@ -23,11 +23,4 @@ async function go(billId) {
     activeNavBar: 'bill-runs',
     ...formattedData
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

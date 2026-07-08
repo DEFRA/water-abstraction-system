@@ -46,7 +46,7 @@ describe('Notices - Setup - Preview - View Preview Check Paper Return service', 
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewPreviewCheckPaperReturnService.go(session.id, contactHashId)
+      const result = await ViewPreviewCheckPaperReturnService(session.id, contactHashId)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

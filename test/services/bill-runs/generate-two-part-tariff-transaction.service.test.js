@@ -25,7 +25,7 @@ describe('Bill Runs - Generate Two Part Tariff Transaction service', () => {
   describe('when called', () => {
     describe('with a charge reference that has volume to be billed', () => {
       it('returns a two-part tariff transaction ready to be persisted', () => {
-        const result = GenerateTwoPartTariffTransactionService.go(
+        const result = GenerateTwoPartTariffTransactionService(
           billLicenceId,
           chargeReference,
           chargePeriod,
@@ -75,7 +75,7 @@ describe('Bill Runs - Generate Two Part Tariff Transaction service', () => {
         })
 
         it('returns the two-part tariff prefixed description', () => {
-          const result = GenerateTwoPartTariffTransactionService.go(
+          const result = GenerateTwoPartTariffTransactionService(
             billLicenceId,
             chargeReference,
             chargePeriod,
@@ -97,7 +97,7 @@ describe('Bill Runs - Generate Two Part Tariff Transaction service', () => {
       })
 
       it('returns null', () => {
-        const result = GenerateTwoPartTariffTransactionService.go(
+        const result = GenerateTwoPartTariffTransactionService(
           billLicenceId,
           chargeReference,
           chargePeriod,

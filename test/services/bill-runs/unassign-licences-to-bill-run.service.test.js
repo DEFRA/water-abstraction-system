@@ -35,7 +35,7 @@ describe('Bill Runs - Unassign Licences To Bill Run service', () => {
 
   describe('when called', () => {
     it('updates the matching "LicenceSupplementaryYear" records with a null bill run ID', async () => {
-      await UnassignLicencesToBillRunService.go(licenceIds, billRunId)
+      await UnassignLicencesToBillRunService(licenceIds, billRunId)
 
       const patchArgs = licenceSupplementaryYearPatch.args[0][0]
 

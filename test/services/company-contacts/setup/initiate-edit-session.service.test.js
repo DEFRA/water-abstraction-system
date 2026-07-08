@@ -48,7 +48,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
   describe('when called', () => {
     it('creates a new session record with the "company contact" saved', async () => {
-      const result = await InitiateEditSessionService.go(companyContact.id)
+      const result = await InitiateEditSessionService(companyContact.id)
 
       const matchingSession = await SessionModel.query().findById(result.id)
 
@@ -72,7 +72,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
         })
 
         it('returns "yes"', async () => {
-          const result = await InitiateEditSessionService.go(companyContact.id)
+          const result = await InitiateEditSessionService(companyContact.id)
 
           const matchingSession = await SessionModel.query().findById(result.id)
 
@@ -85,7 +85,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
           })
 
           it('returns "some"', async () => {
-            const result = await InitiateEditSessionService.go(companyContact.id)
+            const result = await InitiateEditSessionService(companyContact.id)
 
             const matchingSession = await SessionModel.query().findById(result.id)
 
@@ -96,7 +96,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
       describe('when the "abstractionAlerts" property is false', () => {
         it('returns "no"', async () => {
-          const result = await InitiateEditSessionService.go(companyContact.id)
+          const result = await InitiateEditSessionService(companyContact.id)
 
           const matchingSession = await SessionModel.query().findById(result.id)
 
@@ -116,7 +116,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
         })
 
         it('returns "yes"', async () => {
-          const result = await InitiateEditSessionService.go(companyContact.id)
+          const result = await InitiateEditSessionService(companyContact.id)
 
           const matchingSession = await SessionModel.query().findById(result.id)
 
@@ -129,7 +129,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
           })
 
           it('returns "no"', async () => {
-            const result = await InitiateEditSessionService.go(companyContact.id)
+            const result = await InitiateEditSessionService(companyContact.id)
 
             const matchingSession = await SessionModel.query().findById(result.id)
 
@@ -140,7 +140,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
       describe('when the "abstractionAlerts" property is false', () => {
         it('returns "no"', async () => {
-          const result = await InitiateEditSessionService.go(companyContact.id)
+          const result = await InitiateEditSessionService(companyContact.id)
 
           const matchingSession = await SessionModel.query().findById(result.id)
 
@@ -152,7 +152,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
   describe('the "name" property', () => {
     it('formats the name', async () => {
-      const result = await InitiateEditSessionService.go(companyContact.id)
+      const result = await InitiateEditSessionService(companyContact.id)
 
       const matchingSession = await SessionModel.query().findById(result.id)
 

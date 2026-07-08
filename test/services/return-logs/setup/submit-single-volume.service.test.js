@@ -39,7 +39,7 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
       })
 
       it('saves the submitted option', async () => {
-        await SubmitSingleVolumeService.go(session.id, payload)
+        await SubmitSingleVolumeService(session.id, payload)
 
         expect(session.singleVolume).toEqual('yes')
         expect(session.singleVolumeQuantity).toEqual(1000)
@@ -49,7 +49,7 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
 
       describe('and the user has previously selected "yes" to a single volume being provided', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitSingleVolumeService.go(session.id, payload)
+          const result = await SubmitSingleVolumeService(session.id, payload)
 
           expect(result).toEqual({ singleVolume: 'yes' })
         })
@@ -61,7 +61,7 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
         })
 
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitSingleVolumeService.go(session.id, payload)
+          const result = await SubmitSingleVolumeService(session.id, payload)
 
           expect(result).toEqual({ singleVolume: 'no' })
         })
@@ -74,7 +74,7 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitSingleVolumeService.go(session.id, payload)
+        const result = await SubmitSingleVolumeService(session.id, payload)
 
         expect(result).toMatchObject({
           backLink: { href: `/system/return-logs/setup/${session.id}/meter-provided`, text: 'Back' },
@@ -88,7 +88,7 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
 
       describe('because the user has not selected anything', () => {
         it('includes an error for the radio form element', async () => {
-          const result = await SubmitSingleVolumeService.go(session.id, payload)
+          const result = await SubmitSingleVolumeService(session.id, payload)
 
           expect(result.error).toEqual({
             errorList: [{ href: '#singleVolume', text: "Select if it's a single volume" }],
@@ -104,7 +104,7 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
         })
 
         it('includes an error for the input form element', async () => {
-          const result = await SubmitSingleVolumeService.go(session.id, payload)
+          const result = await SubmitSingleVolumeService(session.id, payload)
 
           expect(result.error).toEqual({
             errorList: [{ href: '#singleVolumeQuantity', text: 'Enter a total amount greater than zero' }],

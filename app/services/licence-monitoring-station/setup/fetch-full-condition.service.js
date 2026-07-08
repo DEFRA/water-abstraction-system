@@ -14,7 +14,7 @@ import LicenceVersionPurposeConditionModel from '../../../models/licence-version
  * @returns {Promise<object>} The matching instance of the `LicenceVersionPurposeConditionModel` populated with the
  * data needed for the "Select full condition" page
  */
-async function go(licenceId) {
+export default async function go(licenceId) {
   return (
     LicenceVersionPurposeConditionModel.query()
       .distinctOn(
@@ -48,11 +48,4 @@ async function go(licenceId) {
         { column: `licenceVersionPurposeConditions.createdAt`, order: 'desc' }
       ])
   )
-}
-
-export {
-  go
-}
-export default {
-  go
 }

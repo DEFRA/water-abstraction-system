@@ -41,13 +41,13 @@ describe('Notices - Submit Index Notices service', () => {
       })
 
       it('returns a result that tells the controller to redirect to the index page', async () => {
-        const result = await SubmitIndexNoticesService.go(payload, yarStub, auth)
+        const result = await SubmitIndexNoticesService(payload, yarStub, auth)
 
         expect(result).toEqual({})
       })
 
       it('clears the "noticesFilter" object from the session', async () => {
-        await SubmitIndexNoticesService.go(payload, yarStub, auth)
+        await SubmitIndexNoticesService(payload, yarStub, auth)
 
         expect(yarStub.clear.called).toBe(true)
       })
@@ -59,13 +59,13 @@ describe('Notices - Submit Index Notices service', () => {
       })
 
       it('returns a result that tells the controller to redirect to the index page', async () => {
-        const result = await SubmitIndexNoticesService.go(payload, yarStub, auth)
+        const result = await SubmitIndexNoticesService(payload, yarStub, auth)
 
         expect(result).toEqual({})
       })
 
       it('saves a default "noticesFilter" object in the session', async () => {
-        await SubmitIndexNoticesService.go(payload, yarStub, auth)
+        await SubmitIndexNoticesService(payload, yarStub, auth)
 
         const setArgs = yarStub.set.args[0]
 
@@ -103,13 +103,13 @@ describe('Notices - Submit Index Notices service', () => {
 
       describe('but no notice types included', () => {
         it('returns a result that tells the controller to redirect to the index page', async () => {
-          const result = await SubmitIndexNoticesService.go(payload, yarStub, auth)
+          const result = await SubmitIndexNoticesService(payload, yarStub, auth)
 
           expect(result).toEqual({})
         })
 
         it('saves the submitted filters as the "noticesFilter" object in the session', async () => {
-          await SubmitIndexNoticesService.go(payload, yarStub, auth)
+          await SubmitIndexNoticesService(payload, yarStub, auth)
 
           const setArgs = yarStub.set.args[0]
 
@@ -137,13 +137,13 @@ describe('Notices - Submit Index Notices service', () => {
         })
 
         it('returns a result that tells the controller to redirect to the index page', async () => {
-          const result = await SubmitIndexNoticesService.go(payload, yarStub, auth)
+          const result = await SubmitIndexNoticesService(payload, yarStub, auth)
 
           expect(result).toEqual({})
         })
 
         it('saves the submitted filters as the "noticesFilter" object in the session', async () => {
-          await SubmitIndexNoticesService.go(payload, yarStub, auth)
+          await SubmitIndexNoticesService(payload, yarStub, auth)
 
           const setArgs = yarStub.set.args[0]
 
@@ -171,13 +171,13 @@ describe('Notices - Submit Index Notices service', () => {
         })
 
         it('returns a result that tells the controller to redirect to the index page', async () => {
-          const result = await SubmitIndexNoticesService.go(payload, yarStub, auth)
+          const result = await SubmitIndexNoticesService(payload, yarStub, auth)
 
           expect(result).toEqual({})
         })
 
         it('saves the submitted filters as the "noticesFilter" object in the session', async () => {
-          await SubmitIndexNoticesService.go(payload, yarStub, auth)
+          await SubmitIndexNoticesService(payload, yarStub, auth)
 
           const setArgs = yarStub.set.args[0]
 
@@ -218,7 +218,7 @@ describe('Notices - Submit Index Notices service', () => {
         })
 
         it('returns the page data for the view, including any errors', async () => {
-          const result = await SubmitIndexNoticesService.go(payload, yarStub, auth, '2')
+          const result = await SubmitIndexNoticesService(payload, yarStub, auth, '2')
 
           expect(result).toEqual({
             activeNavBar: 'notices',
@@ -308,7 +308,7 @@ describe('Notices - Submit Index Notices service', () => {
         })
 
         it('returns the page data for the view, including any errors', async () => {
-          const result = await SubmitIndexNoticesService.go(payload, yarStub, auth)
+          const result = await SubmitIndexNoticesService(payload, yarStub, auth)
 
           expect(result).toEqual({
             activeNavBar: 'notices',

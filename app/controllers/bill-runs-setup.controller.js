@@ -19,7 +19,7 @@ import YearService from '../services/bill-runs/setup/year.service.js'
 export async function check(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await CheckService.go(sessionId)
+  const pageData = await CheckService(sessionId)
 
   return h.view('bill-runs/setup/check.njk', pageData)
 }
@@ -27,7 +27,7 @@ export async function check(request, h) {
 export async function noLicences(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await NoLicencesService.go(sessionId)
+  const pageData = await NoLicencesService(sessionId)
 
   return h.view('bill-runs/setup/no-licences.njk', pageData)
 }
@@ -35,7 +35,7 @@ export async function noLicences(request, h) {
 export async function region(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await RegionService.go(sessionId)
+  const pageData = await RegionService(sessionId)
 
   return h.view('bill-runs/setup/region.njk', pageData)
 }
@@ -43,13 +43,13 @@ export async function region(request, h) {
 export async function season(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SeasonService.go(sessionId)
+  const pageData = await SeasonService(sessionId)
 
   return h.view('bill-runs/setup/season.njk', pageData)
 }
 
 export async function setup(_request, h) {
-  const session = await InitiateSessionService.go()
+  const session = await InitiateSessionService()
 
   return h.redirect(`/system/bill-runs/setup/${session.id}/type`)
 }
@@ -57,7 +57,7 @@ export async function setup(_request, h) {
 export async function submitCheck(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitCheckService.go(sessionId, request.auth)
+  const pageData = await SubmitCheckService(sessionId, request.auth)
 
   if (pageData.error) {
     return h.view('bill-runs/setup/check.njk', pageData)
@@ -69,7 +69,7 @@ export async function submitCheck(request, h) {
 export async function submitRegion(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitRegionService.go(sessionId, request.payload)
+  const pageData = await SubmitRegionService(sessionId, request.payload)
 
   if (pageData.error) {
     return h.view('bill-runs/setup/region.njk', pageData)
@@ -85,7 +85,7 @@ export async function submitRegion(request, h) {
 export async function submitSeason(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitSeasonService.go(sessionId, request.payload)
+  const pageData = await SubmitSeasonService(sessionId, request.payload)
 
   if (pageData.error) {
     return h.view('bill-runs/setup/season.njk', pageData)
@@ -97,7 +97,7 @@ export async function submitSeason(request, h) {
 export async function submitType(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitTypeService.go(sessionId, request.payload)
+  const pageData = await SubmitTypeService(sessionId, request.payload)
 
   if (pageData.error) {
     return h.view('bill-runs/setup/type.njk', pageData)
@@ -109,7 +109,7 @@ export async function submitType(request, h) {
 export async function submitYear(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitYearService.go(sessionId, request.payload)
+  const pageData = await SubmitYearService(sessionId, request.payload)
 
   if (pageData.error) {
     return h.view('bill-runs/setup/year.njk', pageData)
@@ -125,7 +125,7 @@ export async function submitYear(request, h) {
 export async function type(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await TypeService.go(sessionId)
+  const pageData = await TypeService(sessionId)
 
   return h.view('bill-runs/setup/type.njk', pageData)
 }
@@ -133,7 +133,7 @@ export async function type(request, h) {
 export async function year(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await YearService.go(sessionId)
+  const pageData = await YearService(sessionId)
 
   if (pageData.financialYearsData.length === 0) {
     return h.redirect(`/system/bill-runs/setup/${sessionId}/no-licences`)

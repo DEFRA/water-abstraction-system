@@ -16,10 +16,10 @@ import RemoveCompanyContactPresenter from '../../presenters/company-contacts/rem
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(id) {
+export default async function go(id) {
   const companyContact = await FetchCompanyContactDal(id)
 
-  const company = await FetchCompanyService.go(companyContact.companyId)
+  const company = await FetchCompanyService(companyContact.companyId)
 
   const licences = await FetchAbstractionAlertLicencesDal(companyContact.abstractionAlertLicences)
 
@@ -28,11 +28,4 @@ async function go(id) {
   return {
     ...pageData
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

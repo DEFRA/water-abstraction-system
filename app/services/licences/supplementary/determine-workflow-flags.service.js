@@ -37,8 +37,8 @@ import { determineCurrentFinancialYear } from '../../../lib/general.lib.js'
  * @returns {object} - An object containing the related licenceId, regionId, workflow start and end date and
  * licence supplementary billing flags
  */
-async function go(workflowId) {
-  const licence = await FetchLicenceService.go(workflowId)
+export default async function go(workflowId) {
+  const licence = await FetchLicenceService(workflowId)
   const { endDate } = determineCurrentFinancialYear()
 
   // Since the database returns the licence data in snake_case, we need to convert these references to camelCase
@@ -96,11 +96,4 @@ async function _flagForSrocSupplementary(createdAt, regionId) {
     .resultSize()
 
   return recordCount > 0
-}
-
-export {
-  go
-}
-export default {
-  go
 }

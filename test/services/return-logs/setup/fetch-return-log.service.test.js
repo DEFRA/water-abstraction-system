@@ -43,7 +43,7 @@ describe('Return Logs - Setup - Fetch Return Log service', () => {
     })
 
     it('returns the return log instance', async () => {
-      const result = await FetchReturnLogService.go(returnLog.id)
+      const result = await FetchReturnLogService(returnLog.id)
 
       expect(result).toEqual({
         id: returnLog.id,
@@ -64,7 +64,7 @@ describe('Return Logs - Setup - Fetch Return Log service', () => {
       })
 
       it('returns a count of the associated return submissions', async () => {
-        const result = await FetchReturnLogService.go(returnLog.id)
+        const result = await FetchReturnLogService(returnLog.id)
 
         expect(result.submissionCount).toEqual(2)
       })
@@ -73,7 +73,7 @@ describe('Return Logs - Setup - Fetch Return Log service', () => {
 
   describe('when a matching return log does not exist', () => {
     it('returns undefined', async () => {
-      const result = await FetchReturnLogService.go(generateUUID())
+      const result = await FetchReturnLogService(generateUUID())
 
       expect(result).toBeUndefined()
     })

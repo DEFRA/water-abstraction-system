@@ -14,8 +14,8 @@ import FetchReviewChargeReferenceService from './fetch-review-charge-reference.s
  *
  * @returns {Promise<object>} the 'pageData' needed to view the amend authorised volume page
  */
-async function go(reviewChargeReferenceId) {
-  const reviewChargeReference = await FetchReviewChargeReferenceService.go(reviewChargeReferenceId)
+export default async function go(reviewChargeReferenceId) {
+  const reviewChargeReference = await FetchReviewChargeReferenceService(reviewChargeReferenceId)
 
   const pageData = AuthorisedPresenter.go(reviewChargeReference)
 
@@ -23,9 +23,4 @@ async function go(reviewChargeReferenceId) {
     activeNavBar: 'bill-runs',
     ...pageData
   }
-}
-
-export { go }
-export default {
-  go
 }

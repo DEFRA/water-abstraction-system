@@ -17,8 +17,8 @@ import FetchBillRunService from './fetch-bill-run.service.js'
  * @returns {Promise<object>} an object representing the `pageData` needed by the view bill run template. It contains
  * details of the bill run and the bills linked to it plus the page title.
  */
-async function go(id) {
-  const result = await FetchBillRunService.go(id)
+export default async function go(id) {
+  const result = await FetchBillRunService(id)
 
   const formattedData = _pageData(result)
 
@@ -53,9 +53,4 @@ function _pageData(fetchResult) {
     billGroupsCount: billGroups.length,
     billGroups
   }
-}
-
-export { go }
-export default {
-  go
 }

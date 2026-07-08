@@ -16,7 +16,7 @@ import FetchOtherPurposeIdsDal from '../../../../dal/return-versions/fetch-other
  *
  * @returns {Promise<object>} The new return version requirements data for a licence
  */
-async function go(licenceId, requirements) {
+export default async function go(licenceId, requirements) {
   const returnRequirements = []
 
   for (const requirement of requirements) {
@@ -69,9 +69,4 @@ async function _generateReturnRequirementPurposes(licenceId, purposes) {
   }
 
   return returnRequirementPurposes
-}
-
-export { go }
-export default {
-  go
 }

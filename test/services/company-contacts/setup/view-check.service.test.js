@@ -51,7 +51,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewCheckService.go(session.id, yarStub)
+        const result = await ViewCheckService(session.id, yarStub)
 
         expect(result).toEqual({
           abstractionAlertsLabel: 'Yes, for all licences',
@@ -79,7 +79,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       describe('marks the check page as visited', () => {
         it('updates the session', async () => {
-          await ViewCheckService.go(session.id, yarStub)
+          await ViewCheckService(session.id, yarStub)
 
           expect(session.checkPageVisited).toBe(true)
           expect(session.$update.called).toBe(true)
@@ -103,7 +103,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       })
 
       it('updates the session', async () => {
-        await ViewCheckService.go(session.id, yarStub)
+        await ViewCheckService(session.id, yarStub)
 
         expect(session.matchingContact).toMatchObject(matchingContact)
       })

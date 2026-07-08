@@ -25,7 +25,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
  * @returns {Promise<object>} If no errors it returns an empty object else the page data for the note page including the
  * validation error details
  */
-async function go(sessionId, payload, user, yar) {
+export default async function go(sessionId, payload, user, yar) {
   const session = await FetchSessionDal(sessionId)
   const error = _validate(payload)
 
@@ -88,9 +88,4 @@ function _validate(payload) {
   const validationResult = NoteValidator.go(payload)
 
   return formatValidationResult(validationResult)
-}
-
-export { go }
-export default {
-  go
 }

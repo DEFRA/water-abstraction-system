@@ -51,25 +51,25 @@ describe('Bill Runs - Review - Submit Remove service', () => {
         })
 
         it('removes the review licence', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(removeReviewLicenceStub.called).toBe(true)
         })
 
         it('does not attempt to unassign the licence from the bill run', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(unassignLicencesToBillRunStub.called).toBe(false)
         })
 
         it('flags the licence for supplementary billing', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(createLicenceSupplementaryYearStub.called).toBe(true)
         })
 
         it('sets a notification', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(yarStub.flash.called).toBe(true)
 
@@ -83,7 +83,7 @@ describe('Bill Runs - Review - Submit Remove service', () => {
         })
 
         it('returns the bill run ID and a flag to indicate the bill run is not empty', async () => {
-          const result = await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          const result = await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(result).toEqual({
             billRunId: '287aeb25-cf11-429d-8c6f-f98f06db021d',
@@ -99,31 +99,31 @@ describe('Bill Runs - Review - Submit Remove service', () => {
         })
 
         it('removes the review licence', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(removeReviewLicenceStub.called).toBe(true)
         })
 
         it('does not attempt to unassign the licence from the bill run', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(unassignLicencesToBillRunStub.called).toBe(false)
         })
 
         it('flags the licence for supplementary billing', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(createLicenceSupplementaryYearStub.called).toBe(true)
         })
 
         it('does not add a flash message', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(yarStub.flash.called).toBe(false)
         })
 
         it('returns the bill run ID and a flag to indicate the bill run is empty', async () => {
-          const result = await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          const result = await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(result).toEqual({
             billRunId: '287aeb25-cf11-429d-8c6f-f98f06db021d',
@@ -142,25 +142,25 @@ describe('Bill Runs - Review - Submit Remove service', () => {
         })
 
         it('removes the review licence', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(removeReviewLicenceStub.called).toBe(true)
         })
 
         it('does attempt to unassign the licence from the bill run', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(unassignLicencesToBillRunStub.called).toBe(true)
         })
 
         it('does not flag the licence for supplementary billing', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(createLicenceSupplementaryYearStub.called).toBe(false)
         })
 
         it('sets a notification', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(yarStub.flash.called).toBe(true)
 
@@ -174,7 +174,7 @@ describe('Bill Runs - Review - Submit Remove service', () => {
         })
 
         it('returns the bill run ID and a flag to indicate the bill run is not empty', async () => {
-          const result = await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          const result = await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(result).toEqual({
             billRunId: '287aeb25-cf11-429d-8c6f-f98f06db021d',
@@ -191,31 +191,31 @@ describe('Bill Runs - Review - Submit Remove service', () => {
         })
 
         it('removes the review licence', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(removeReviewLicenceStub.called).toBe(true)
         })
 
         it('does attempt to unassign the licence from the bill run', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(unassignLicencesToBillRunStub.called).toBe(true)
         })
 
         it('does not flag the licence for supplementary billing', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(createLicenceSupplementaryYearStub.called).toBe(false)
         })
 
         it('does not add a flash message', async () => {
-          await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(yarStub.flash.called).toBe(false)
         })
 
         it('returns the bill run ID and a flag to indicate the bill run is empty', async () => {
-          const result = await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
+          const result = await SubmitRemoveService(removeReviewLicence.id, yarStub)
 
           expect(result).toEqual({
             billRunId: '287aeb25-cf11-429d-8c6f-f98f06db021d',

@@ -33,7 +33,7 @@ describe('Bill Runs - Setup - No Licences service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await NoLicencesService.go(session.id)
+      const result = await NoLicencesService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',

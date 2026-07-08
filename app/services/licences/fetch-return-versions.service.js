@@ -12,7 +12,7 @@ import ReturnVersionModel from '../../models/return-version.model.js'
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's set up tab
  */
-async function go(licenceId) {
+export default async function go(licenceId) {
   return _fetch(licenceId)
 }
 
@@ -29,11 +29,4 @@ async function _fetch(licenceId) {
     .modifyGraph('modLogs', (builder) => {
       builder.select(['id', 'reasonDescription']).orderBy('externalId', 'asc')
     })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

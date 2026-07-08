@@ -129,7 +129,7 @@ describe('Notices - Update Notice service', () => {
 
   describe('when called with', () => {
     it('correctly updates the ""overallStatus" and "statusCount" of each notice that is a notification', async () => {
-      await UpdateEventService.go(noticeIds)
+      await UpdateEventService(noticeIds)
 
       // Check notice with only sent notifications - SENT
       let refreshedNotice = await sentNotice.$query()

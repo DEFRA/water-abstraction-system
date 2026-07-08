@@ -12,7 +12,7 @@ import * as tar from 'tar'
  *
  * @returns {Promise<string>} The path to the created tarball file
  */
-async function go(schemaFolderPath) {
+export default async function go(schemaFolderPath) {
   const file = `${schemaFolderPath}.tgz`
 
   await tar.create(
@@ -24,11 +24,4 @@ async function go(schemaFolderPath) {
   )
 
   return file
-}
-
-export {
-  go
-}
-export default {
-  go
 }

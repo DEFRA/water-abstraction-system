@@ -20,8 +20,8 @@ import { NoticeJourney, NoticeType, NoticeTypes } from '../../../lib/static-look
  *
  * @returns {Promise<object>} The created alternate notice and notifications
  */
-async function go(notice, licenceRefs, dueDate, returnLogIds) {
-  const recipients = await FetchAlternateReturnsRecipientsService.go(returnLogIds, dueDate)
+export default async function go(notice, licenceRefs, dueDate, returnLogIds) {
+  const recipients = await FetchAlternateReturnsRecipientsService(returnLogIds, dueDate)
   const alternateNotice = await _notice(notice, recipients, licenceRefs)
   const notifications = await _notifications(alternateNotice, recipients)
 
@@ -63,10 +63,5 @@ async function _notifications(notice, recipients) {
     noticeType: NoticeType.ALTERNATE_INVITATION
   }
 
-  return CreateNotificationsService.go(session, recipients, noticeId)
-}
-
-export { go }
-export default {
-  go
+  return CreateNotificationsService(session, recipients, noticeId)
 }

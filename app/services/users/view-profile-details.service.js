@@ -21,7 +21,7 @@ import { readFlashNotification } from '../../lib/general.lib.js'
  *
  * @returns {Promise<object>} The view data for the profile details page
  */
-async function go(userId, yar) {
+export default async function go(userId, yar) {
   const profileDetails = await _fetchProfileDetails(userId)
 
   const notification = readFlashNotification(yar)
@@ -46,11 +46,4 @@ async function _fetchProfileDetails(userId) {
       ref('userData:contactDetails.name').castText().as('name'),
       ref('userData:contactDetails.tel').castText().as('tel')
     ])
-}
-
-export {
-  go
-}
-export default {
-  go
 }

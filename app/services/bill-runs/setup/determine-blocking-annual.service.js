@@ -30,13 +30,13 @@ import { engineTriggers } from '../../../lib/static-lookups.lib.js'
  * @returns {Promise<object>} Any blocking matches for the bill run being created, the `toFinancialYearEnding` to use
  * when creating it, and which bill run engine to trigger the creation with (if any)
  */
-async function go(regionId) {
+export default async function go(regionId) {
   const toFinancialYearEnding = _toFinancialYearEnding()
 
   let match = await _fetchMatches(regionId, toFinancialYearEnding)
 
   if (!match) {
-    match = await FetchLiveBillRunService.go(regionId, toFinancialYearEnding)
+    match = await FetchLiveBillRunService(regionId, toFinancialYearEnding)
   }
 
   const matches = match ? [match] : []
@@ -65,9 +65,4 @@ function _toFinancialYearEnding() {
   const currentFinancialYear = determineCurrentFinancialYear()
 
   return currentFinancialYear.endDate.getFullYear()
-}
-
-export { go }
-export default {
-  go
 }

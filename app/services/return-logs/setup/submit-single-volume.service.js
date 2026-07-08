@@ -23,7 +23,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
  *
  * @returns {Promise<object>} If no errors the page data for the single-volume page else the validation error details
  */
-async function go(sessionId, payload) {
+export default async function go(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   const error = _validate(payload)
@@ -62,9 +62,4 @@ function _validate(payload) {
   const validationResult = SingleVolumeValidator.go(payload)
 
   return formatValidationResult(validationResult)
-}
-
-export { go }
-export default {
-  go
 }

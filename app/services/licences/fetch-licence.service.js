@@ -13,7 +13,7 @@ import { db } from '../../../db/db.js'
  *
  * @returns {Promise<module:LicenceModel>} the matching `LicenceModel`
  */
-async function go(licenceId) {
+export default async function go(licenceId) {
   return LicenceModel.query()
     .findById(licenceId)
     .select([
@@ -39,11 +39,4 @@ async function go(licenceId) {
     `)
     ])
     .modify('currentVersion')
-}
-
-export {
-  go
-}
-export default {
-  go
 }

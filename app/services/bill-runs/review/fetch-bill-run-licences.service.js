@@ -29,7 +29,7 @@ import DatabaseConfig from '../../../../config/database.config.js'
  * @returns {Promise<object>} An object containing the billRun data and an array of licences for the bill run that match
  * the selected page in the data. Also included is any data that has been used to filter the results
  */
-async function go(id, filters, page = '1') {
+export default async function go(id, filters, page = '1') {
   const billRun = await _fetchBillRun(id)
   const licences = await _fetchBillRunLicences(id, filters, page)
 
@@ -113,9 +113,4 @@ function _filterIssues(issues, reviewLicenceQuery) {
       builder.orWhereLike('issues', `%${lookupIssues[i]}%`)
     }
   })
-}
-
-export { go }
-export default {
-  go
 }

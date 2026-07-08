@@ -30,7 +30,7 @@ import ReviewReturnModel from '../../../models/review-return.model.js'
  *
  * @param {module:BillRunModule} billRun - The bill run to be deleted
  */
-async function go(billRun) {
+export default async function go(billRun) {
   try {
     const startTime = process.hrtime.bigint()
 
@@ -224,9 +224,4 @@ function _logResult(startTime, billRun, results) {
   }
 
   globalThis.GlobalNotifier.omfg('Delete bill run failed', billRun, firstError.reason)
-}
-
-export { go }
-export default {
-  go
 }

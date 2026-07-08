@@ -27,7 +27,7 @@ describe('Return Versions Setup - Submit Cancel service', () => {
 
   describe('when a user submits the return requirements to be cancelled', () => {
     it('deletes the session data', async () => {
-      await SubmitCancelService.go(session.id)
+      await SubmitCancelService(session.id)
 
       expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
     })

@@ -46,7 +46,7 @@ describe('Bill Runs Review - Remove Review Licence service', () => {
     })
 
     it('will remove the records relating to the review licence from the review tables', async () => {
-      await RemoveReviewLicenceService.go(reviewLicence.id)
+      await RemoveReviewLicenceService(reviewLicence.id)
 
       expect(await ReviewLicenceModel.query().findById(reviewLicence.id)).toBeUndefined()
       expect(await ReviewReturnModel.query().findById(reviewReturnId)).toBeUndefined()

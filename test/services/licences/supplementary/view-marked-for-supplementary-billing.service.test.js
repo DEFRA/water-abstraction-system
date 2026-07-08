@@ -15,7 +15,7 @@ describe('Licences -  View Marked For Supplementary Billing Service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewMarkedForSupplementaryBillingService.go(licence.id)
+      const result = await ViewMarkedForSupplementaryBillingService(licence.id)
 
       expect(result).toEqual({
         licenceRef: licence.licenceRef,

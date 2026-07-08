@@ -59,7 +59,7 @@ describe('Companies - Fetch History dal', () => {
 
   describe('when called', () => {
     it('returns licences linked to the company where it is the licence holder', async () => {
-      const result = await FetchHistoryDal.go(licenceHolder.company.id, pageNumber)
+      const result = await FetchHistoryDal(licenceHolder.company.id, pageNumber)
 
       expect(result).toEqual({
         licences: [

@@ -15,7 +15,7 @@ describe('Companies - Fetch Address dal', () => {
     })
 
     it('returns the matching address', async () => {
-      const result = await FetchAddressDal.go(address.id)
+      const result = await FetchAddressDal(address.id)
 
       expect(result).toEqual({
         id: address.id,

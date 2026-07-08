@@ -48,7 +48,7 @@ describe('Users - External - Fetch Notifications DAL', () => {
 
   describe('when the user has notifications', () => {
     it('returns the matching notifications and the total', async () => {
-      const result = await FetchNotificationsDal.go(user.username)
+      const result = await FetchNotificationsDal(user.username)
 
       expect(result).toEqual({
         notifications: [
@@ -74,7 +74,7 @@ describe('Users - External - Fetch Notifications DAL', () => {
 
   describe('when the user has no notifications', () => {
     it('returns an empty array and zero', async () => {
-      const result = await FetchNotificationsDal.go('mystery.user@example.co.uk')
+      const result = await FetchNotificationsDal('mystery.user@example.co.uk')
 
       expect(result).toEqual({ notifications: [], totalNumber: 0 })
     })

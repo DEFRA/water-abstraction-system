@@ -16,18 +16,11 @@ import ManagePresenter from '../../presenters/manage/manage.presenter.js'
  *
  * @returns {Promise<object>} The view data for the Manage page
  */
-async function go(auth) {
+export default async function go(auth) {
   const pageData = ManagePresenter.go(auth.credentials.scope)
 
   return {
     activeNavBar: 'manage',
     ...pageData
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -33,7 +33,7 @@ describe('Notices - Setup - View Recipient Name service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewRecipientNameService.go(session.id)
+      const result = await ViewRecipientNameService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

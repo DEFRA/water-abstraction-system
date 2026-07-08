@@ -12,7 +12,7 @@ import { clearFilters, handleOneOptionSelected } from '../../../lib/submit-page.
  * @param {object} payload - The `request.payload` containing the filter data.
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-async function go(billRunId, payload, yar) {
+export default async function go(billRunId, payload, yar) {
   const filterKey = `review-${billRunId}`
 
   const filterCleared = clearFilters(payload, yar, filterKey)
@@ -34,9 +34,4 @@ function _save(payload, yar, filterKey) {
     licenceStatus: payload.licenceStatus ?? null,
     progress: payload.progress
   })
-}
-
-export { go }
-export default {
-  go
 }

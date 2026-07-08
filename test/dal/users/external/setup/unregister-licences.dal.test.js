@@ -95,7 +95,7 @@ describe('Users - External - Setup - Unregister Licences DAL', () => {
 
   describe('when called', () => {
     it('unregisters the selected licences and records the unregistration', async () => {
-      await UnregisterLicencesDal.go(session, user)
+      await UnregisterLicencesDal(session, user)
 
       // Check first licence unregistered
       let updatedLicenceDocumentHeader = await LicenceDocumentHeaderModel.query().findById(licenceDocumentHeaders[0].id)

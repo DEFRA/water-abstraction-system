@@ -18,18 +18,13 @@ import SelectPurposePresenter from '../../../presenters/return-versions/setup/pu
  *
  * @returns {Promise<object>} The view data for the purpose page
  */
-async function go(sessionId, requirementIndex) {
+export default async function go(sessionId, requirementIndex) {
   const session = await FetchSessionDal(sessionId)
-  const purposesData = await FetchPurposesService.go(session.licenceVersion.id)
+  const purposesData = await FetchPurposesService(session.licenceVersion.id)
 
   const formattedData = SelectPurposePresenter.go(session, requirementIndex, purposesData)
 
   return {
     ...formattedData
   }
-}
-
-export { go }
-export default {
-  go
 }

@@ -44,8 +44,8 @@ import featureFlagsConfig from '../../../config/feature-flags.config.js'
  *
  * @returns {Promise<object>} the permission object
  */
-async function go(userId) {
-  const { user, roles, groups } = await FetchUserRolesAndGroupsService.go(userId)
+export default async function go(userId) {
+  const { user, roles, groups } = await FetchUserRolesAndGroupsService(userId)
 
   // We put each role's name into the scope array for hapi to use for its scope authorisation
   const scope = roles.map((role) => {
@@ -113,11 +113,4 @@ function _permission(scope = []) {
     notices,
     users
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

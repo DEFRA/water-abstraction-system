@@ -25,7 +25,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
         })
 
         it('removes the old allocated quantity', () => {
-          AllocateSingleVolumeToLinesService.go(session)
+          AllocateSingleVolumeToLinesService(session)
 
           expect(lines[0].quantity).toBeUndefined()
           expect(lines[0].quantityCubicMetres).toBeUndefined()
@@ -42,7 +42,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
         })
 
         it('allocates the new quantity to the applicable lines', () => {
-          AllocateSingleVolumeToLinesService.go(session)
+          AllocateSingleVolumeToLinesService(session)
 
           expect(lines[6].quantity).toEqual(350)
           expect(lines[6].quantityCubicMetres).toEqual(350)
@@ -72,7 +72,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
         })
 
         it('allocates the volume evenly across lines covered by the abstraction period', () => {
-          AllocateSingleVolumeToLinesService.go(session)
+          AllocateSingleVolumeToLinesService(session)
 
           expect(lines[0].quantity).toEqual(200)
           expect(lines[0].quantityCubicMetres).toEqual(200)
@@ -89,7 +89,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
         })
 
         it('ignores lines outside the abstraction period', () => {
-          AllocateSingleVolumeToLinesService.go(session)
+          AllocateSingleVolumeToLinesService(session)
 
           expect(lines[6].quantity).toBeUndefined()
           expect(lines[6].quantityCubicMetres).toBeUndefined()
@@ -120,7 +120,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
       })
 
       it('handles rounding errors by adjusting the last line', () => {
-        AllocateSingleVolumeToLinesService.go(session)
+        AllocateSingleVolumeToLinesService(session)
 
         expect(lines[0].quantity).toEqual(166.851854)
         expect(lines[0].quantityCubicMetres).toEqual(166.851854)
@@ -137,7 +137,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
       })
 
       it('allocates the single volume across lines so their total matches the single volume', () => {
-        AllocateSingleVolumeToLinesService.go(session)
+        AllocateSingleVolumeToLinesService(session)
 
         const linesQuantityTotal = lines.reduce((sum, line) => {
           const quantity = line.quantity ?? 0
@@ -149,7 +149,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
       })
 
       it('ignores lines outside the abstraction period', () => {
-        AllocateSingleVolumeToLinesService.go(session)
+        AllocateSingleVolumeToLinesService(session)
 
         expect(lines[6].quantity).toBeUndefined()
         expect(lines[6].quantityCubicMetres).toBeUndefined()
@@ -182,7 +182,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
           // cubic metres before allocation to the lines `quantityCubicMetres`. The allocated line `quantityCubicMetres`
           // is then converted back to the original UOM and allocated to the `quantity`. This affects the individual
           // line quantities and totals due to rounding.
-          AllocateSingleVolumeToLinesService.go(session)
+          AllocateSingleVolumeToLinesService(session)
 
           expect(lines[0].quantity).toEqual(36702.276902)
           expect(lines[0].quantityCubicMetres).toEqual(166.851854)
@@ -199,7 +199,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
         })
 
         it('allocates the single volume across lines so their total matches the single volume', () => {
-          AllocateSingleVolumeToLinesService.go(session)
+          AllocateSingleVolumeToLinesService(session)
 
           const linesQuantityTotal = lines.reduce((sum, line) => {
             const quantity = line.quantity ?? 0

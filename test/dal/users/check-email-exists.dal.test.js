@@ -21,7 +21,7 @@ describe('DAL - Check email exists dal', () => {
     })
 
     it('returns "true"', async () => {
-      const result = await CheckEmailExistsDal.go(email)
+      const result = await CheckEmailExistsDal(email)
 
       expect(result).toBe(true)
     })
@@ -33,7 +33,7 @@ describe('DAL - Check email exists dal', () => {
     })
 
     it('returns "false"', async () => {
-      const result = await CheckEmailExistsDal.go(email)
+      const result = await CheckEmailExistsDal(email)
 
       expect(result).toBe(false)
     })

@@ -18,10 +18,10 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence bills template.
  */
-async function go(licenceId, auth, page) {
-  const licence = await FetchLicenceService.go(licenceId)
+export default async function go(licenceId, auth, page) {
+  const licence = await FetchLicenceService(licenceId)
 
-  const { bills, totalNumber } = await FetchBillsService.go(licenceId, page)
+  const { bills, totalNumber } = await FetchBillsService(licenceId, page)
 
   const pageData = BillsPresenter.go(bills, licence)
 
@@ -39,10 +39,4 @@ async function go(licenceId, auth, page) {
     pagination,
     roles: userRoles(auth)
   }
-}
-export {
-  go
-}
-export default {
-  go
 }

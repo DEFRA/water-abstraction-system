@@ -15,7 +15,7 @@ import FetchSessionDal from '../../../dal/fetch-session.dal.js'
  * @param {number} requirementIndex - The index of the requirement being removed
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-async function go(sessionId, requirementIndex, yar) {
+export default async function go(sessionId, requirementIndex, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const notification = {
@@ -32,9 +32,4 @@ async function _removeRequirementFromSession(session, requirementIndex) {
   session.requirements.splice(requirementIndex, 1)
 
   await session.$update()
-}
-
-export { go }
-export default {
-  go
 }

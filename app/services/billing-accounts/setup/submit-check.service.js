@@ -17,19 +17,19 @@ import FetchSessionDal from '../../../dal/fetch-session.dal.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
   const { billingAccount } = session
 
   const existingAccount = !!session.existingAccount && session.existingAccount !== 'new'
   const id = existingAccount ? session.existingAccount : session.billingAccount.company.id
-  const companyContacts = await FetchCompanyContactsService.go(id)
+  const companyContacts = await FetchCompanyContactsService(id)
 
   const address = await _address(session)
   const agentCompany = await _agentCompany(session, companyContacts, existingAccount)
   const contact = _contact(session, companyContacts)
 
-  const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+  const result = await ChangeAddressService(billingAccount.id, address, agentCompany, contact)
 
   return {
     redirectUrl: `/system/billing-accounts/${billingAccount.id}`,
@@ -67,7 +67,7 @@ async function _agentCompany(session, companyContacts, existingAccount) {
   const anotherAccountSelected = session.accountSelected === 'another'
 
   if (session.companiesHouseNumber) {
-    const companysHouseResult = await FetchCompanyService.go(session.companiesHouseNumber)
+    const companysHouseResult = await FetchCompanyService(session.companiesHouseNumber)
 
     companyName = companysHouseResult.title
   } else if (session.individualName) {
@@ -115,11 +115,4 @@ function _contact(session, companyContacts) {
     type: 'department',
     department: name
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -61,7 +61,7 @@ describe('View Bill service', () => {
       })
 
       it('will fetch the data and format it using the bill and licence summaries presenters', async () => {
-        const result = await ViewBillService.go(testId)
+        const result = await ViewBillService(testId)
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',
@@ -104,7 +104,7 @@ describe('View Bill service', () => {
       })
 
       it('will fetch the data and format it using the bill and view bill licence presenters', async () => {
-        const result = await ViewBillService.go(testId)
+        const result = await ViewBillService(testId)
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',
@@ -130,7 +130,7 @@ describe('View Bill service', () => {
     })
 
     it('throws an exception', async () => {
-      await expect(ViewBillService.go('testId')).rejects.toThrow()
+      await expect(ViewBillService('testId')).rejects.toThrow()
     })
   })
 })

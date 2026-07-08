@@ -52,7 +52,7 @@ describe('Bill Runs - Setup - Check service', () => {
         })
 
         it('returns the data needed to review and create the bill run', async () => {
-          const result = await CheckService.go(session.id)
+          const result = await CheckService(session.id)
 
           expect(result).toEqual({
             activeNavBar: 'bill-runs',
@@ -95,7 +95,7 @@ describe('Bill Runs - Setup - Check service', () => {
         })
 
         it('returns the data needed to confirm why the bill run cannot be created', async () => {
-          const result = await CheckService.go(session.id)
+          const result = await CheckService(session.id)
 
           expect(result).toEqual({
             activeNavBar: 'bill-runs',
@@ -141,7 +141,7 @@ describe('Bill Runs - Setup - Check service', () => {
           })
 
           it('returns the data needed to review and create the bill run', async () => {
-            const result = await CheckService.go(session.id)
+            const result = await CheckService(session.id)
 
             expect(result).toEqual({
               activeNavBar: 'bill-runs',
@@ -184,7 +184,7 @@ describe('Bill Runs - Setup - Check service', () => {
           })
 
           it('returns the data needed to confirm why the bill run cannot be created', async () => {
-            const result = await CheckService.go(session.id)
+            const result = await CheckService(session.id)
 
             expect(result).toEqual({
               activeNavBar: 'bill-runs',
@@ -226,7 +226,7 @@ describe('Bill Runs - Setup - Check service', () => {
           })
 
           it('returns the data needed to review and create the bill run', async () => {
-            const result = await CheckService.go(session.id)
+            const result = await CheckService(session.id)
 
             expect(result).toEqual({
               activeNavBar: 'bill-runs',
@@ -269,7 +269,7 @@ describe('Bill Runs - Setup - Check service', () => {
           })
 
           it('returns the data needed to confirm why the bill run cannot be created', async () => {
-            const result = await CheckService.go(session.id)
+            const result = await CheckService(session.id)
 
             expect(result).toEqual({
               activeNavBar: 'bill-runs',
@@ -312,7 +312,7 @@ describe('Bill Runs - Setup - Check service', () => {
         })
 
         it('returns the data needed to review and create the bill run', async () => {
-          const result = await CheckService.go(session.id)
+          const result = await CheckService(session.id)
 
           expect(result).toEqual({
             activeNavBar: 'bill-runs',
@@ -364,7 +364,7 @@ describe('Bill Runs - Setup - Check service', () => {
         })
 
         it('returns the data needed to confirm why the bill runs cannot be created', async () => {
-          const result = await CheckService.go(session.id)
+          const result = await CheckService(session.id)
 
           expect(result).toEqual({
             activeNavBar: 'bill-runs',
@@ -406,7 +406,7 @@ describe('Bill Runs - Setup - Check service', () => {
         })
 
         it('returns the data needed to review and create the "current" SROC bill run', async () => {
-          const result = await CheckService.go(session.id)
+          const result = await CheckService(session.id)
 
           expect(result).toEqual({
             activeNavBar: 'bill-runs',
@@ -448,7 +448,7 @@ describe('Bill Runs - Setup - Check service', () => {
         })
 
         it('returns the data needed to review and create the "old" PRESROC bill run', async () => {
-          const result = await CheckService.go(session.id)
+          const result = await CheckService(session.id)
 
           expect(result).toEqual({
             activeNavBar: 'bill-runs',
@@ -484,7 +484,7 @@ describe('Bill Runs - Setup - Check service', () => {
             })
 
             it('returns the data needed to confirm why the bill run cannot be created', async () => {
-              const result = await CheckService.go(session.id)
+              const result = await CheckService(session.id)
 
               expect(result).toEqual({
                 activeNavBar: 'bill-runs',
@@ -518,7 +518,7 @@ describe('Bill Runs - Setup - Check service', () => {
             })
 
             it('returns the data needed to review and create the "old" PRESROC bill run', async () => {
-              const result = await CheckService.go(session.id)
+              const result = await CheckService(session.id)
 
               expect(result).toEqual({
                 activeNavBar: 'bill-runs',

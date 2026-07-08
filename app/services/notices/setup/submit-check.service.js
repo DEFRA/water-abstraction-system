@@ -20,10 +20,10 @@ import SendNoticeService from './send/send-notice.service.js'
  *
  * @returns {Promise<string>} - the created notice Id
  */
-async function go(sessionId, auth) {
+export default async function go(sessionId, auth) {
   const session = await FetchSessionDal(sessionId)
 
-  const recipients = await FetchRecipientsService.go(session)
+  const recipients = await FetchRecipientsService(session)
 
   await DeleteSessionDal(sessionId)
 
@@ -37,20 +37,15 @@ async function go(sessionId, auth) {
   // confirmation page, and from there the view notice page.
   //
   // But if we were to await the result they would see a timeout. So, we kick it off and then return to the controller.
-  SendNoticeService.go(notice, notifications)
+  SendNoticeService(notice, notifications)
 
   return notice.id
 }
 
 async function _notifications(session, recipients, noticeId) {
-  return CreateNotificationsService.go(session, recipients, noticeId)
+  return CreateNotificationsService(session, recipients, noticeId)
 }
 
 async function _notice(session, recipients, auth) {
-  return CreateNoticeService.go(session, recipients, auth.credentials.user.username)
-}
-
-export { go }
-export default {
-  go
+  return CreateNoticeService(session, recipients, auth.credentials.user.username)
 }

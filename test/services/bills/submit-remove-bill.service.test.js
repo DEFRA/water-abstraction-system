@@ -50,25 +50,25 @@ describe('Bills - Submit Remove Bill service', () => {
 
   describe('when called', () => {
     it('unassigns any two-part tariff supplementary licences in the bill from the bill run', async () => {
-      await SubmitRemoveBillService.go(bill.id, user)
+      await SubmitRemoveBillService(bill.id, user)
 
       expect(unassignLicencesToBillRunStub.called).toBe(true)
     })
 
     it('flags the two licences in the bill for supplementary billing', async () => {
-      await SubmitRemoveBillService.go(bill.id, user)
+      await SubmitRemoveBillService(bill.id, user)
 
       expect(processBillingFlagsStub.calledTwice).toBe(true)
     })
 
     it('sends a request to the legacy service to delete the bill', async () => {
-      await SubmitRemoveBillService.go(bill.id, user)
+      await SubmitRemoveBillService(bill.id, user)
 
       expect(legacyDeleteBillRequestStub.called).toBe(true)
     })
 
     it('returns the path to the legacy bill run processing page', async () => {
-      const result = await SubmitRemoveBillService.go(bill.id, user)
+      const result = await SubmitRemoveBillService(bill.id, user)
 
       expect(result).toEqual(`/billing/batch/${bill.billRunId}/processing`)
     })

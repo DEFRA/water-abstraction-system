@@ -68,7 +68,7 @@ describe('Return Versions Setup - Submit Site Description service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
+        await SubmitSiteDescriptionService(session.id, requirementIndex, payload, yarStub)
 
         expect(session.requirements[0].siteDescription).toEqual('This is a valid return requirement description')
         expect(session.$update.called).toBe(true)
@@ -76,7 +76,7 @@ describe('Return Versions Setup - Submit Site Description service', () => {
 
       describe('and the page has been not been visited', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitSiteDescriptionService(session.id, requirementIndex, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: false
@@ -92,7 +92,7 @@ describe('Return Versions Setup - Submit Site Description service', () => {
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitSiteDescriptionService(session.id, requirementIndex, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: true
@@ -100,7 +100,7 @@ describe('Return Versions Setup - Submit Site Description service', () => {
         })
 
         it('sets the notification message title to "Updated" and the text to "Requirements for returns updated" ', async () => {
-          await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
+          await SubmitSiteDescriptionService(session.id, requirementIndex, payload, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
 
@@ -119,7 +119,7 @@ describe('Return Versions Setup - Submit Site Description service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
+        const result = await SubmitSiteDescriptionService(session.id, requirementIndex, payload, yarStub)
 
         expect(result).toMatchObject({
           pageTitle: 'Enter a site description for the requirements for returns',
@@ -136,7 +136,7 @@ describe('Return Versions Setup - Submit Site Description service', () => {
 
       describe('because the user has not entered anything', () => {
         it('includes an error for the input element', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitSiteDescriptionService(session.id, requirementIndex, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [
@@ -158,7 +158,7 @@ describe('Return Versions Setup - Submit Site Description service', () => {
         })
 
         it('includes an error for the input element', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitSiteDescriptionService(session.id, requirementIndex, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [
@@ -172,7 +172,7 @@ describe('Return Versions Setup - Submit Site Description service', () => {
         })
 
         it('includes what was submitted', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitSiteDescriptionService(session.id, requirementIndex, payload, yarStub)
 
           expect(result.siteDescription).toEqual('Too short')
         })
@@ -190,7 +190,7 @@ describe('Return Versions Setup - Submit Site Description service', () => {
         })
 
         it('includes an error for the input element', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitSiteDescriptionService(session.id, requirementIndex, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [
@@ -204,7 +204,7 @@ describe('Return Versions Setup - Submit Site Description service', () => {
         })
 
         it('includes what was submitted', async () => {
-          const result = await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitSiteDescriptionService(session.id, requirementIndex, payload, yarStub)
 
           expect(result.siteDescription).toEqual(invalidSiteDescription)
         })

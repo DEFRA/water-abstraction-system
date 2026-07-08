@@ -37,7 +37,7 @@ describe('Billing Accounts - Setup - View Company Search Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCompanySearchService.go(session.id)
+      const result = await ViewCompanySearchService(session.id)
 
       expect(result).toEqual({
         backLink: {

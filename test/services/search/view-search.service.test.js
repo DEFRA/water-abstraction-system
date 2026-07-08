@@ -71,7 +71,7 @@ describe('Search - View Search service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewSearchService.go(auth, yar, page)
+      const result = await ViewSearchService(auth, yar, page)
 
       expect(result).toEqual({
         filterItems: [
@@ -150,7 +150,7 @@ describe('Search - View Search service', () => {
     })
 
     it('returns page data for the blank search page', async () => {
-      const result = await ViewSearchService.go(auth, yar, page)
+      const result = await ViewSearchService(auth, yar, page)
 
       expect(result).toEqual({
         filterItems: [
@@ -199,7 +199,7 @@ describe('Search - View Search service', () => {
     })
 
     it('returns page data for the blank search page', async () => {
-      const result = await ViewSearchService.go(auth, yar, page)
+      const result = await ViewSearchService(auth, yar, page)
 
       expect(result).toEqual({
         filterItems: [
@@ -249,7 +249,7 @@ describe('Search - View Search service', () => {
     })
 
     it('still returns page data for the view', async () => {
-      const result = await ViewSearchService.go(auth, yar, page)
+      const result = await ViewSearchService(auth, yar, page)
 
       expect(result).toEqual({
         filterItems: [

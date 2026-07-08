@@ -27,7 +27,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
       })
 
       it('returns the saved value', async () => {
-        const result = await GenerateFromExistingRequirementsService.go(returnVersionId)
+        const result = await GenerateFromExistingRequirementsService(returnVersionId)
 
         expect(result.multipleUpload).toBe(false)
       })
@@ -41,7 +41,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
       })
 
       it('returns the saved value', async () => {
-        const result = await GenerateFromExistingRequirementsService.go(returnVersionId)
+        const result = await GenerateFromExistingRequirementsService(returnVersionId)
 
         expect(result.quarterlyReturns).toBe(false)
       })
@@ -55,7 +55,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
       })
 
       it('returns the details of its return requirements transformed for use in the journey', async () => {
-        const result = await GenerateFromExistingRequirementsService.go(returnVersionId)
+        const result = await GenerateFromExistingRequirementsService(returnVersionId)
 
         expect(result.requirements).toEqual([
           {
@@ -118,7 +118,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
       })
 
       it('returns the details of its return requirements transformed, falling back to point description for the missing site description', async () => {
-        const result = await GenerateFromExistingRequirementsService.go(returnVersionId)
+        const result = await GenerateFromExistingRequirementsService(returnVersionId)
 
         expect(result.requirements).toEqual([
           {
@@ -175,7 +175,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
 
   describe('when a matching return version does not exist', () => {
     it('throws an error', async () => {
-      await expect(GenerateFromExistingRequirementsService.go('6d436e7b-c3c9-493c-97f3-b397c899c926')).rejects.toThrow()
+      await expect(GenerateFromExistingRequirementsService('6d436e7b-c3c9-493c-97f3-b397c899c926')).rejects.toThrow()
     })
   })
 })

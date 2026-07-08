@@ -58,7 +58,7 @@ describe('Bill Runs Review - Fetch Review Charge Reference service', () => {
 
   describe('when a matching review charge reference exists', () => {
     it('returns the match', async () => {
-      const result = await FetchReviewChargeReferenceService.go(reviewChargeReference.id)
+      const result = await FetchReviewChargeReferenceService(reviewChargeReference.id)
 
       expect(result).toEqual({
         id: reviewChargeReference.id,
@@ -111,7 +111,7 @@ describe('Bill Runs Review - Fetch Review Charge Reference service', () => {
 
   describe('when no matching review charge reference exists', () => {
     it('returns nothing', async () => {
-      const result = await FetchReviewChargeReferenceService.go('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
+      const result = await FetchReviewChargeReferenceService('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
 
       expect(result).toBeUndefined()
     })

@@ -21,7 +21,7 @@ import { flashNotification } from '../../../../lib/general.lib.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload, yar) {
+export default async function go(sessionId, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const emailExists = await CheckEmailExistsDal(formatEmail(payload.email))
@@ -64,11 +64,4 @@ function _validate(payload, emailExists) {
   const validationResult = EmailValidator.go(payload, emailExists)
 
   return formatValidationResult(validationResult)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

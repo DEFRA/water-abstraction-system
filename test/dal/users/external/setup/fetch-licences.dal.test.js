@@ -44,7 +44,7 @@ describe('Users - External - Setup - Fetch Licences DAL', () => {
 
   describe('when called', () => {
     it('returns the matching licences', async () => {
-      const result = await FetchLicencesDal.go(userEntity.id)
+      const result = await FetchLicencesDal(userEntity.id)
 
       expect(result).toEqual([
         {

@@ -18,7 +18,7 @@ import { db } from '../../../db/db.js'
  *
  * @returns {Promise<object>} An object containing the set of matching models for each result type
  */
-async function go(idsByType) {
+export default async function go(idsByType) {
   const finders = {}
 
   for (const [key, ids] of Object.entries(idsByType)) {
@@ -121,11 +121,4 @@ async function _returnLog(ids) {
 
 async function _user(ids) {
   return UserModel.query().select(['id', 'lastLogin', 'username']).modify('permissions').modify('status').findByIds(ids)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

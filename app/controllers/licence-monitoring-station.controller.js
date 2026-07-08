@@ -9,7 +9,7 @@ import SubmitRemoveService from '../services/licence-monitoring-station/submit-r
 export async function remove(request, h) {
   const { licenceMonitoringStationId } = request.params
 
-  const pageData = await RemoveService.go(licenceMonitoringStationId)
+  const pageData = await RemoveService(licenceMonitoringStationId)
 
   return h.view('licence-monitoring-station/remove.njk', pageData)
 }
@@ -18,7 +18,7 @@ export async function submitRemove(request, h) {
   const { licenceMonitoringStationId } = request.params
   const { licenceRef, monitoringStationId } = request.payload
 
-  await SubmitRemoveService.go(licenceMonitoringStationId, licenceRef, request.yar)
+  await SubmitRemoveService(licenceMonitoringStationId, licenceRef, request.yar)
 
   return h.redirect(`/system/monitoring-stations/${monitoringStationId}`)
 }

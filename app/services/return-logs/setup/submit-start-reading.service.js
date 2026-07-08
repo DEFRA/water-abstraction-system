@@ -24,7 +24,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
  *
  * @returns {Promise<object>} If no errors the page data for the start reading page else the validation error details
  */
-async function go(sessionId, payload, yar) {
+export default async function go(sessionId, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const error = _validate(payload, session)
@@ -60,9 +60,4 @@ function _validate(payload, session) {
   const validationResult = StartReadingValidator.go(payload, session.lines)
 
   return formatValidationResult(validationResult)
-}
-
-export { go }
-export default {
-  go
 }

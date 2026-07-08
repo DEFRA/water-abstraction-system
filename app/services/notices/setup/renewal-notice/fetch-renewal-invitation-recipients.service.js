@@ -18,19 +18,14 @@ import { db } from '../../../../../db/db.js'
  *
  * @returns {Promise<object[]>} The recipient data for the renewal invitation notice
  */
-async function go(session) {
+export default async function go(session) {
   const { licenceRef } = session
 
   const { bindings, query: licenceQuery } = GenerateRenewalInvitationLicenceQueryDal(licenceRef)
 
-  const query = GenerateRenewalRecipientsQueryService.go(licenceQuery)
+  const query = GenerateRenewalRecipientsQueryService(licenceQuery)
 
   const { rows } = await db.raw(query, bindings)
 
   return rows
-}
-
-export { go }
-export default {
-  go
 }

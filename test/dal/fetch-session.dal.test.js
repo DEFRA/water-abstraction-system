@@ -23,7 +23,7 @@ describe('DAL - Fetch session dal', () => {
 
   describe('when the session exists', () => {
     it('returns the session', async () => {
-      const result = await FetchSessionDal.go(sessionId)
+      const result = await FetchSessionDal(sessionId)
 
       expect(result).toEqual(session)
     })
@@ -31,7 +31,7 @@ describe('DAL - Fetch session dal', () => {
 
   describe('when the session does not exists', () => {
     it('throws a "SessionNotFoundError"', async () => {
-      const promise = FetchSessionDal.go(generateUUID())
+      const promise = FetchSessionDal(generateUUID())
 
       await expect(promise).rejects.toBeInstanceOf(SessionNotFoundError)
     })

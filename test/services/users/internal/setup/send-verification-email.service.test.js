@@ -91,7 +91,7 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     })
 
     it('sends the email via Notify with the correct recipient and personalisation', async () => {
-      await SendVerificationEmailService.go(notification)
+      await SendVerificationEmailService(notification)
 
       const args = createEmailRequestStub.firstCall.args
 
@@ -101,7 +101,7 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     })
 
     it('records the Notify response to the notification', async () => {
-      await SendVerificationEmailService.go(notification)
+      await SendVerificationEmailService(notification)
 
       expect(updateNotificationDalStub.calledOnce).toBe(true)
       expect(updateNotificationDalStub.firstCall.args[0]).toEqual(notification)
@@ -114,7 +114,7 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     })
 
     it('checks the status of the updated notification', async () => {
-      await SendVerificationEmailService.go(notification)
+      await SendVerificationEmailService(notification)
 
       expect(checkNotificationStatusStub.calledOnce).toBe(true)
       const notificationPassedToCheck = checkNotificationStatusStub.firstCall.args[0]
@@ -143,7 +143,7 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     })
 
     it('records the error against the notification', async () => {
-      await SendVerificationEmailService.go(notification)
+      await SendVerificationEmailService(notification)
 
       expect(updateNotificationDalStub.calledOnce).toBe(true)
       const patchData = updateNotificationDalStub.firstCall.args[1]
@@ -153,7 +153,7 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     })
 
     it('does not wait or check the notification status', async () => {
-      await SendVerificationEmailService.go(notification)
+      await SendVerificationEmailService(notification)
 
       expect(pauseStub.called).toBe(false)
       expect(checkNotificationStatusStub.called).toBe(false)
@@ -166,7 +166,7 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     })
 
     it('handles the error', async () => {
-      await SendVerificationEmailService.go(notification)
+      await SendVerificationEmailService(notification)
 
       const args = notifierStub.omfg.firstCall.args
 

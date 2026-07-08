@@ -26,16 +26,11 @@ import UnassignBillRunToLicencesService from '../unassign-bill-run-to-licences.s
  *
  * @param {string} billRunId  - UUID of the bill run to be cancelled
  */
-async function go(billRunId) {
-  const billRun = await CancelBillBunService.go(billRunId)
+export default async function go(billRunId) {
+  const billRun = await CancelBillBunService(billRunId)
 
   if (billRun.status === 'cancel') {
-    await UnassignBillRunToLicencesService.go(billRun.id)
-    DeleteBillRunService.go(billRun)
+    await UnassignBillRunToLicencesService(billRun.id)
+    DeleteBillRunService(billRun)
   }
-}
-
-export { go }
-export default {
-  go
 }

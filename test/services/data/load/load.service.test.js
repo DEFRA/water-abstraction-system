@@ -50,7 +50,7 @@ describe('Load service', () => {
       })
 
       it('loads the entities into the DB', async () => {
-        const { billRuns, licences } = await LoadService.go(payload)
+        const { billRuns, licences } = await LoadService(payload)
 
         const licence = await LicenceModel.query().findById(licences[0])
 
@@ -63,7 +63,7 @@ describe('Load service', () => {
       })
 
       it('returns the generated and used IDs for the entities', async () => {
-        const result = await LoadService.go(payload)
+        const result = await LoadService(payload)
 
         expect(result.licences).toBeDefined()
         expect(result.licences).not.toHaveLength(0)
@@ -97,7 +97,7 @@ describe('Load service', () => {
         })
 
         it('transforms the lookup into the queried value', async () => {
-          await LoadService.go(payload)
+          await LoadService(payload)
 
           const chargeReference = await ChargeReferenceModel.query().findById('fa3c73d0-0459-41f0-b6cf-0e0758775ca4')
 
@@ -107,7 +107,7 @@ describe('Load service', () => {
 
       describe('that includes an entity with an "is_test" field', () => {
         it('sets the "is_test" flag on the entity instance as part of loading it', async () => {
-          const result = await LoadService.go(payload)
+          const result = await LoadService(payload)
 
           const licence = await db('licences')
             .withSchema('water')
@@ -125,7 +125,7 @@ describe('Load service', () => {
       })
 
       it('throws an exception', async () => {
-        const result = await LoadService.go(payload).catch((e) => {
+        const result = await LoadService(payload).catch((e) => {
           return e
         })
 
@@ -136,7 +136,7 @@ describe('Load service', () => {
 
     describe('with an empty payload', () => {
       it('returns an empty result', async () => {
-        const result = await LoadService.go(null)
+        const result = await LoadService(null)
 
         expect(result).toEqual({})
       })

@@ -50,7 +50,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Check Licence Matches se
   describe('when called', () => {
     describe('and there are no licence monitoring stations removed', () => {
       it('saves the "licenceRefs" to the session', async () => {
-        await SubmitCheckLicenceMatchesService.go(session.id)
+        await SubmitCheckLicenceMatchesService(session.id)
 
         expect(session.licenceRefs).toEqual([
           licenceMonitoringStations.one.licence.licenceRef,
@@ -62,7 +62,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Check Licence Matches se
       })
 
       it('saves the "relevantLicenceMonitoringStations" to the session', async () => {
-        await SubmitCheckLicenceMatchesService.go(session.id)
+        await SubmitCheckLicenceMatchesService(session.id)
 
         expect(session.relevantLicenceMonitoringStations).toEqual([
           licenceMonitoringStations.one,
@@ -82,13 +82,13 @@ describe('Notices - Setup - Abstraction Alerts - Submit Check Licence Matches se
       })
 
       it('saves the "licenceRefs" to the session with duplicates removed', async () => {
-        await SubmitCheckLicenceMatchesService.go(session.id)
+        await SubmitCheckLicenceMatchesService(session.id)
 
         expect(session.licenceRefs).toEqual([licenceMonitoringStations.one.licence.licenceRef])
       })
 
       it('saves the "relevantLicenceMonitoringStations" to the session', async () => {
-        await SubmitCheckLicenceMatchesService.go(session.id)
+        await SubmitCheckLicenceMatchesService(session.id)
 
         expect(session.relevantLicenceMonitoringStations).toEqual([
           licenceMonitoringStations.one,
@@ -107,13 +107,13 @@ describe('Notices - Setup - Abstraction Alerts - Submit Check Licence Matches se
       })
 
       it('saves the "licenceRefs" to the session without the removed thresholds', async () => {
-        await SubmitCheckLicenceMatchesService.go(session.id)
+        await SubmitCheckLicenceMatchesService(session.id)
 
         expect(session.licenceRefs).toEqual([licenceMonitoringStations.three.licence.licenceRef])
       })
 
       it('saves the "relevantLicenceMonitoringStations" to the session', async () => {
-        await SubmitCheckLicenceMatchesService.go(session.id)
+        await SubmitCheckLicenceMatchesService(session.id)
 
         expect(session.relevantLicenceMonitoringStations).toEqual([licenceMonitoringStations.three])
       })

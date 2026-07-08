@@ -34,7 +34,7 @@ describe('Company Contacts - Setup - Restore Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewRestoreService.go(session.id)
+      const result = await ViewRestoreService(session.id)
 
       expect(result).toEqual({
         abstractionAlerts: 'Yes',

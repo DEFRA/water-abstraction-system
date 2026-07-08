@@ -25,7 +25,7 @@ import BillingConfig from '../../../../config/billing.config.js'
  *
  * @returns {Promise<boolean>} true if the bill run is not empty (there are transactions to bill) else false
  */
-async function go(billRun, billingPeriod, billingAccounts) {
+export default async function go(billRun, billingPeriod, billingAccounts) {
   let billRunIsPopulated = false
 
   if (billingAccounts.length === 0) {
@@ -119,7 +119,7 @@ async function _createBillLicencesAndTransactions(billId, billingAccount, billRu
  * @private
  */
 async function _createTransactions(billLicenceId, billingPeriod, chargeVersion, billRunExternalId, accountNumber) {
-  const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
+  const chargePeriod = DetermineChargePeriodService(chargeVersion, billingPeriod)
 
   if (!chargePeriod.startDate) {
     return []
@@ -131,7 +131,7 @@ async function _createTransactions(billLicenceId, billingPeriod, chargeVersion, 
     return []
   }
 
-  return SendTransactionsService.go(generatedTransactions, billRunExternalId, accountNumber, chargeVersion.licence)
+  return SendTransactionsService(generatedTransactions, billRunExternalId, accountNumber, chargeVersion.licence)
 }
 
 /**
@@ -218,12 +218,12 @@ function _findOrCreateBillLicence(billLicences, licence, billId) {
  */
 function _generateTransactionData(billLicenceId, chargePeriod, chargeVersion) {
   try {
-    const firstChargeOnNewLicence = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
+    const firstChargeOnNewLicence = DetermineMinimumChargeService(chargeVersion, chargePeriod)
 
     const transactions = []
 
     chargeVersion.chargeReferences.forEach((chargeReference) => {
-      const transaction = GenerateTwoPartTariffTransactionService.go(
+      const transaction = GenerateTwoPartTariffTransactionService(
         billLicenceId,
         chargeReference,
         chargePeriod,
@@ -285,9 +285,4 @@ async function _persistBillData(bill, billLicences, transactions) {
   await TransactionModel.query().insert(transactions)
 
   return true
-}
-
-export { go }
-export default {
-  go
 }

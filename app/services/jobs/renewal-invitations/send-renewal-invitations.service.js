@@ -20,7 +20,7 @@ import NotifyConfig from '../../../../config/notify.config.js'
  *
  * @returns {Promise<object[]>} An array of renewal invitation recipients
  */
-async function go(days) {
+export default async function go(days) {
   const expiryDate = renewalExpiryDate(days)
   const renewalDate = renewalNoticeDate(expiryDate)
 
@@ -33,7 +33,7 @@ async function go(days) {
 
     const notifications = await _notifications(noticeData, recipients, notice.id)
 
-    SendNoticeService.go(notice, notifications)
+    SendNoticeService(notice, notifications)
   }
 
   return recipients
@@ -54,16 +54,9 @@ function _noticeData(expiryDate, renewalDate) {
 }
 
 async function _notice(noticeData, recipients) {
-  return CreateNoticeService.go(noticeData, recipients, NotifyConfig.replyTo)
+  return CreateNoticeService(noticeData, recipients, NotifyConfig.replyTo)
 }
 
 async function _notifications(noticeData, recipients, noticeId) {
-  return CreateNotificationsService.go(noticeData, recipients, noticeId)
-}
-
-export {
-  go
-}
-export default {
-  go
+  return CreateNotificationsService(noticeData, recipients, noticeId)
 }

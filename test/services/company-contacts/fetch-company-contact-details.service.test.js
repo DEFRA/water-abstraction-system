@@ -50,7 +50,7 @@ describe('Company Contacts - Fetch Company Contact Details service', () => {
         })
 
         it('returns the matching company contact with "abstractionAlertsCount" as 0', async () => {
-          const result = await FetchCompanyContactDetailsService.go(companyContact.id)
+          const result = await FetchCompanyContactDetailsService(companyContact.id)
 
           expect(result).toEqual(_transformToFetchResult(companyContact, contact, user, licenceRole, 0))
         })
@@ -68,7 +68,7 @@ describe('Company Contacts - Fetch Company Contact Details service', () => {
         })
 
         it('returns the matching company contact with "abstractionAlertsCount" as 1', async () => {
-          const result = await FetchCompanyContactDetailsService.go(companyContact.id)
+          const result = await FetchCompanyContactDetailsService(companyContact.id)
 
           expect(result).toEqual(_transformToFetchResult(companyContact, contact, user, licenceRole, 1))
         })
@@ -96,7 +96,7 @@ describe('Company Contacts - Fetch Company Contact Details service', () => {
           })
 
           it('returns the matching company contact with "abstractionAlertsCount" as 0', async () => {
-            const result = await FetchCompanyContactDetailsService.go(companyContact.id)
+            const result = await FetchCompanyContactDetailsService(companyContact.id)
 
             expect(result).toEqual(_transformToFetchResult(companyContact, contact, user, licenceRole, 0))
           })
@@ -112,7 +112,7 @@ describe('Company Contacts - Fetch Company Contact Details service', () => {
           })
 
           it('returns the matching company contact with "abstractionAlertsCount" as 1', async () => {
-            const result = await FetchCompanyContactDetailsService.go(companyContact.id)
+            const result = await FetchCompanyContactDetailsService(companyContact.id)
 
             expect(result).toEqual(_transformToFetchResult(companyContact, contact, user, licenceRole, 1))
           })

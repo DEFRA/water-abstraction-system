@@ -36,7 +36,7 @@ describe('Bill Runs - Review - View Review Licence Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewReviewLicenceService.go(reviewLicence.id, yarStub)
+        const result = await ViewReviewLicenceService(reviewLicence.id, yarStub)
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',
@@ -134,7 +134,7 @@ describe('Bill Runs - Review - View Review Licence Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewReviewLicenceService.go(reviewLicence.id, yarStub)
+        const result = await ViewReviewLicenceService(reviewLicence.id, yarStub)
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',

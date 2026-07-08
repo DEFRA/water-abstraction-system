@@ -12,7 +12,7 @@ import BillingAccountModel from '../../../models/billing-account.model.js'
  *
  * @returns {Promise<object[]>} Array of objects in the format { billingAccountId: '...', accountNumber: '...' }
  */
-async function go(chargeVersions) {
+export default async function go(chargeVersions) {
   const uniqueBillingAccountIds = _extractUniqueBillingAccountIds(chargeVersions)
   const billingAccountModels = await _fetch(uniqueBillingAccountIds)
 
@@ -43,9 +43,4 @@ function _makeObjects(models) {
   return models.map((model) => {
     return model.toJSON()
   })
-}
-
-export { go }
-export default {
-  go
 }

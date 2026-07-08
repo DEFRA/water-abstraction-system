@@ -59,7 +59,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     })
 
     it('creates a new session record containing details of the return log', async () => {
-      const result = await InitiateSessionService.go(returnLog.id)
+      const result = await InitiateSessionService(returnLog.id)
 
       const sessionId = _getSessionId(result)
 
@@ -129,7 +129,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       })
 
       it('returns the quantity as expected', async () => {
-        const result = await InitiateSessionService.go(returnLog.id)
+        const result = await InitiateSessionService(returnLog.id)
 
         const sessionId = _getSessionId(result)
 
@@ -155,7 +155,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       })
 
       it('formats the unit as expected', async () => {
-        const result = await InitiateSessionService.go(returnLog.id)
+        const result = await InitiateSessionService(returnLog.id)
 
         const sessionId = _getSessionId(result)
 
@@ -178,7 +178,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       })
 
       it('defaults the unit to cubicMetres', async () => {
-        const result = await InitiateSessionService.go(returnLog.id)
+        const result = await InitiateSessionService(returnLog.id)
 
         const sessionId = _getSessionId(result)
 
@@ -216,7 +216,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       })
 
       it('includes the meter details', async () => {
-        const result = await InitiateSessionService.go(returnLog.id)
+        const result = await InitiateSessionService(returnLog.id)
 
         const sessionId = _getSessionId(result)
 
@@ -246,7 +246,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       })
 
       it('sets the journey as expected', async () => {
-        const result = await InitiateSessionService.go(returnLog.id)
+        const result = await InitiateSessionService(returnLog.id)
 
         const sessionId = _getSessionId(result)
 
@@ -256,7 +256,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       })
 
       it('populates the lines array with placeholder data', async () => {
-        const result = await InitiateSessionService.go(returnLog.id)
+        const result = await InitiateSessionService(returnLog.id)
 
         const sessionId = _getSessionId(result)
 
@@ -289,7 +289,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     })
 
     it('sets beenReceived to true', async () => {
-      const result = await InitiateSessionService.go(returnLog.id)
+      const result = await InitiateSessionService(returnLog.id)
 
       const sessionId = _getSessionId(result)
 
@@ -299,7 +299,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     })
 
     it('populates the lines array with placeholder data', async () => {
-      const result = await InitiateSessionService.go(returnLog.id)
+      const result = await InitiateSessionService(returnLog.id)
 
       const sessionId = _getSessionId(result)
 
@@ -331,7 +331,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     })
 
     it('sets beenReceived to false', async () => {
-      const result = await InitiateSessionService.go(returnLog.id)
+      const result = await InitiateSessionService(returnLog.id)
 
       const sessionId = _getSessionId(result)
 
@@ -341,7 +341,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
     })
 
     it('does not include submission-specific fields', async () => {
-      const result = await InitiateSessionService.go(returnLog.id)
+      const result = await InitiateSessionService(returnLog.id)
 
       const sessionId = _getSessionId(result)
 

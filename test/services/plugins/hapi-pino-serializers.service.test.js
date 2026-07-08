@@ -8,7 +8,7 @@ const HapiPinoSerializersService = require('../../../app/services/plugins/hapi-p
 describe('Hapi Pino Serializers service', () => {
   describe('when called', () => {
     it('returns an object containing two functions called "req" and "res"', () => {
-      const result = HapiPinoSerializersService.go()
+      const result = HapiPinoSerializersService()
 
       expect(result.req).toBeDefined()
       expect(result.res).toBeDefined()
@@ -54,7 +54,7 @@ describe('Hapi Pino Serializers service', () => {
       })
 
       it('returns version containing only the key properties we care about', () => {
-        const { req } = HapiPinoSerializersService.go()
+        const { req } = HapiPinoSerializersService()
 
         expect(req(requestObject)).toEqual({
           id: '1737736750350:9bc56d13c48b:618:m6azkwqb:10004',
@@ -89,7 +89,7 @@ describe('Hapi Pino Serializers service', () => {
       })
 
       it('returns version containing only the key properties we care about', () => {
-        const { res } = HapiPinoSerializersService.go()
+        const { res } = HapiPinoSerializersService()
 
         expect(res(responseObject)).toEqual({
           statusCode: HTTP_STATUS_OK

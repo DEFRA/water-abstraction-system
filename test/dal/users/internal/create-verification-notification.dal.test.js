@@ -20,7 +20,7 @@ describe('Users - Internal - Create Verification Notification DAL', () => {
     })
 
     it('creates a notification', async () => {
-      await CreateVerificationNotificationDal.go(email, resetGuid)
+      await CreateVerificationNotificationDal(email, resetGuid)
 
       const notification = await NotificationModel.query().where('recipient', email).limit(1).first()
 

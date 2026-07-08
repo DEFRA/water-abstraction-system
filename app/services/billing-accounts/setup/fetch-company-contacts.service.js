@@ -13,7 +13,7 @@ import ContactModel from '../../../models/contact.model.js'
  *
  * @returns {Promise<object[]>} an object containing the matching contacts needed to populate the view
  */
-async function go(companyId) {
+export default async function go(companyId) {
   const company = await CompanyModel.query().select(['id', 'name']).findById(companyId)
   const contacts = await ContactModel.query()
     .select([
@@ -35,11 +35,4 @@ async function go(companyId) {
     company,
     contacts
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

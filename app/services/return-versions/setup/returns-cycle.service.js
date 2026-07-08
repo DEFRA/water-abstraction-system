@@ -17,7 +17,7 @@ import ReturnsCyclePresenter from '../../../presenters/return-versions/setup/ret
  *
  * @returns {Promise<object>} The view data for the returns cycle page
  */
-async function go(sessionId, requirementIndex) {
+export default async function go(sessionId, requirementIndex) {
   const session = await FetchSessionDal(sessionId)
 
   const formattedData = ReturnsCyclePresenter.go(session, requirementIndex)
@@ -25,9 +25,4 @@ async function go(sessionId, requirementIndex) {
   return {
     ...formattedData
   }
-}
-
-export { go }
-export default {
-  go
 }

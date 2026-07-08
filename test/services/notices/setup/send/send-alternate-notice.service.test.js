@@ -73,7 +73,7 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
     })
 
     it('sends the alternate notifications to Notify and records the results', async () => {
-      await SendAlternateNoticeService.go(mainNotice)
+      await SendAlternateNoticeService(mainNotice)
 
       expect(sendLetterNotificationStub.calledOnce).toBe(true)
       expect(sendLetterNotificationStub.firstCall.args).toEqual([alternateNotification, alternateNotice.referenceCode])
@@ -91,14 +91,14 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
     })
 
     it('updates the failed notifications with the alternate notice ID', async () => {
-      await SendAlternateNoticeService.go(mainNotice)
+      await SendAlternateNoticeService(mainNotice)
 
       expect(notificationPatchStub.calledTwice).toBe(true)
       expect(notificationPatchStub.secondCall.args[0]).toMatchObject({ alternateNoticeId: alternateNotice.id })
     })
 
     it('returns the sent alternate notice', async () => {
-      const result = await SendAlternateNoticeService.go(mainNotice)
+      const result = await SendAlternateNoticeService(mainNotice)
 
       expect(result).toEqual(alternateNotice)
     })
@@ -110,13 +110,13 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
     })
 
     it('does not proceed with sending', async () => {
-      await SendAlternateNoticeService.go(mainNotice)
+      await SendAlternateNoticeService(mainNotice)
 
       expect(sendLetterNotificationStub.called).toBe(false)
     })
 
     it('returns null', async () => {
-      const result = await SendAlternateNoticeService.go(mainNotice)
+      const result = await SendAlternateNoticeService(mainNotice)
 
       expect(result).toBeNull()
     })
@@ -140,13 +140,13 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
     })
 
     it('delegates to RenewalInvitationAlternateNoticeService', async () => {
-      await SendAlternateNoticeService.go(mainNotice)
+      await SendAlternateNoticeService(mainNotice)
 
       expect(RenewalInvitationAlternateNoticeService.go.calledOnce).toBe(true)
     })
 
     it('returns the sent alternate notice', async () => {
-      const result = await SendAlternateNoticeService.go(mainNotice)
+      const result = await SendAlternateNoticeService(mainNotice)
 
       expect(result).toEqual(alternateNotice)
     })

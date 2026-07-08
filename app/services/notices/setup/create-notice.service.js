@@ -19,14 +19,9 @@ import { timestampForPostgres } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<module:EventModel>} the new `EventModel` (Notice) instance
  */
-async function go(noticeData, recipients, issuer) {
+export default async function go(noticeData, recipients, issuer) {
   const notice = CreateNoticePresenter.go(noticeData, recipients, issuer)
   const timestamp = timestampForPostgres()
 
   return EventModel.query().insert({ ...notice, createdAt: timestamp, updatedAt: timestamp })
-}
-
-export { go }
-export default {
-  go
 }

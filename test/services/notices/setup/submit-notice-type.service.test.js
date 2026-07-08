@@ -44,20 +44,20 @@ describe('Notices - Setup - Submit Notice Type service', () => {
 
   describe('when called', () => {
     it('saves the notice type session data', async () => {
-      await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+      await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
       expect(session).toEqual(session)
       expect(session.$update.called).toBe(true)
     })
 
     it('saves the submitted "noticeType"', async () => {
-      await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+      await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
       expect(session.noticeType).toEqual('invitations')
     })
 
     it('returns a redirect to the "licence" page', async () => {
-      const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+      const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
       expect(result).toEqual({ redirectUrl: 'licence' })
     })
@@ -74,20 +74,20 @@ describe('Notices - Setup - Submit Notice Type service', () => {
         })
 
         it('redirects to the licence page', async () => {
-          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+          const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
           expect(result).toEqual({ redirectUrl: 'licence' })
         })
 
         it('updates the sessions "checkPageVisited" flag', async () => {
-          await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+          await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
           expect(session.checkPageVisited).toBe(false)
           expect(session.$update.called).toBe(true)
         })
 
         it('sets a flash message', async () => {
-          await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+          await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
           // Check we add the flash message
           const [flashType, bannerMessage] = yarStub.flash.args[0]
@@ -111,14 +111,14 @@ describe('Notices - Setup - Submit Notice Type service', () => {
         })
 
         it('does not update the session "checkPageVisited" flag', async () => {
-          await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+          await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
           expect(session.checkPageVisited).toBe(true)
           expect(session.$update.called).toBe(true)
         })
 
         it('does not set a flash message', async () => {
-          await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+          await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
           expect(yarStub.flash.args[0]).toBeUndefined()
         })
@@ -138,7 +138,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
         })
 
         it('returns a redirect to the "/check-notice-type" page', async () => {
-          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+          const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
           expect(result).toEqual({ redirectUrl: 'check-notice-type' })
         })
@@ -155,7 +155,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
         })
 
         it('returns a redirect to the "/returns-period" page', async () => {
-          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+          const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
           expect(result).toEqual({ redirectUrl: 'returns-period' })
         })
@@ -175,7 +175,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
         })
 
         it('returns a redirect to the "/check-notice-type" page', async () => {
-          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+          const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
           expect(result).toEqual({ redirectUrl: 'check-notice-type' })
         })
@@ -192,7 +192,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
         })
 
         it('returns a redirect to the "licence" page', async () => {
-          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+          const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
           expect(result).toEqual({ redirectUrl: 'licence' })
         })
@@ -206,7 +206,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+      const result = await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

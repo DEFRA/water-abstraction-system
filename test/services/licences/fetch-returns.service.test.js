@@ -60,7 +60,7 @@ describe('Licences - Fetch Returns service', () => {
 
   describe('when the licence has return logs', () => {
     it('returns results', async () => {
-      const result = await FetchReturnsService.go(licence.id)
+      const result = await FetchReturnsService(licence.id)
 
       expect(result).toEqual({
         //  This should be ordered first by start date, then by return reference

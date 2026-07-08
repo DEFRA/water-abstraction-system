@@ -36,13 +36,13 @@ describe('Fetch User Roles And Groups service', () => {
 
   describe('when the user exists', () => {
     it('returns the user', async () => {
-      const result = await FetchUserRolesAndGroupsService.go(user.userId)
+      const result = await FetchUserRolesAndGroupsService(user.userId)
 
       expect(result.user).toMatchObject(user)
     })
 
     it("returns the user's roles", async () => {
-      const result = await FetchUserRolesAndGroupsService.go(user.userId)
+      const result = await FetchUserRolesAndGroupsService(user.userId)
 
       const roles = result.roles.map((role) => {
         return role.role
@@ -59,7 +59,7 @@ describe('Fetch User Roles And Groups service', () => {
     })
 
     it("returns the user's groups", async () => {
-      const result = await FetchUserRolesAndGroupsService.go(user.userId)
+      const result = await FetchUserRolesAndGroupsService(user.userId)
 
       const groups = result.groups.map((group) => {
         return group.group
@@ -77,7 +77,7 @@ describe('Fetch User Roles And Groups service', () => {
       })
 
       it('returns only one instance of the role', async () => {
-        const result = await FetchUserRolesAndGroupsService.go(user.userId)
+        const result = await FetchUserRolesAndGroupsService(user.userId)
 
         const roles = result.roles.map((role) => {
           return role.role
@@ -97,19 +97,19 @@ describe('Fetch User Roles And Groups service', () => {
     const unknownUserId = 0
 
     it('returns "null" for "user"', async () => {
-      const result = await FetchUserRolesAndGroupsService.go(unknownUserId)
+      const result = await FetchUserRolesAndGroupsService(unknownUserId)
 
       expect(result.user).toBeNull()
     })
 
     it('returns an empty roles array', async () => {
-      const result = await FetchUserRolesAndGroupsService.go(unknownUserId)
+      const result = await FetchUserRolesAndGroupsService(unknownUserId)
 
       expect(result.roles).toHaveLength(0)
     })
 
     it('returns an empty groups array', async () => {
-      const result = await FetchUserRolesAndGroupsService.go(unknownUserId)
+      const result = await FetchUserRolesAndGroupsService(unknownUserId)
 
       expect(result.groups).toHaveLength(0)
     })

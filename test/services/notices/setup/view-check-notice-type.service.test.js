@@ -40,7 +40,7 @@ describe('Notices - Setup - View Check Notice Type service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCheckNoticeTypeService.go(session.id, yarStub)
+      const result = await ViewCheckNoticeTypeService(session.id, yarStub)
 
       expect(result).toEqual({
         activeNavBar: 'notices',
@@ -59,7 +59,7 @@ describe('Notices - Setup - View Check Notice Type service', () => {
     })
 
     it('should set the "checkPageVisited" flag', async () => {
-      await ViewCheckNoticeTypeService.go(session.id, yarStub)
+      await ViewCheckNoticeTypeService(session.id, yarStub)
 
       expect(session.checkPageVisited).toBe(true)
       expect(session.$update.called).toBe(true)
@@ -72,7 +72,7 @@ describe('Notices - Setup - View Check Notice Type service', () => {
       })
 
       it('should set the notification', async () => {
-        const result = await ViewCheckNoticeTypeService.go(session.id, yarStub)
+        const result = await ViewCheckNoticeTypeService(session.id, yarStub)
 
         expect(result.notification).toEqual('Test notification')
       })

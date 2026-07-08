@@ -22,7 +22,7 @@ import { formatValidationResult } from '../../presenters/base.presenter.js'
  *
  * @returns {Promise<object>} The page data for the profile details page including any validation error details
  */
-async function go(userId, payload, yar) {
+export default async function go(userId, payload, yar) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
@@ -67,11 +67,4 @@ function _validate(payload) {
   const validationResult = ProfileDetailsValidator.go(payload)
 
   return formatValidationResult(validationResult)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

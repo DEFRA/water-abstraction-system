@@ -40,7 +40,7 @@ describe('Billing Accounts - Setup - Fetch Company Contacts service', () => {
 
   describe('when a matching company exists and has an contact', () => {
     it('returns the company name and matching contact', async () => {
-      const result = await FetchCompanyContactsService.go(company.id)
+      const result = await FetchCompanyContactsService(company.id)
 
       expect(result).toEqual({
         company: {
@@ -66,7 +66,7 @@ describe('Billing Accounts - Setup - Fetch Company Contacts service', () => {
 
   describe('when a matching company exists and has no contact', () => {
     it('returns the company name and an empty contacts array', async () => {
-      const result = await FetchCompanyContactsService.go(companyWithNoContact.id)
+      const result = await FetchCompanyContactsService(companyWithNoContact.id)
 
       expect(result).toEqual({
         company: {

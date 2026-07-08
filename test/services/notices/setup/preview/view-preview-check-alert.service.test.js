@@ -57,7 +57,7 @@ describe('Notices - Setup - Preview - View Preview Check Alert service', () => {
 
   describe('when called', () => {
     it('returns the page data for the view', async () => {
-      const result = await ViewPreviewCheckAlertService.go(testRecipient.contact_hash_id, session.id)
+      const result = await ViewPreviewCheckAlertService(testRecipient.contact_hash_id, session.id)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

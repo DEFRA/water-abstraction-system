@@ -19,7 +19,7 @@ import { flashNotification } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, yar, auth) {
+export default async function go(sessionId, yar, auth) {
   const sessionData = await FetchSessionDal(sessionId)
 
   await DeleteSessionDal(sessionId)
@@ -79,11 +79,4 @@ async function _updateCompanyContact(session, auth, yar) {
   await UpdateCompanyContactDal(companyContact)
 
   flashNotification(yar, 'Updated', 'Contact details updated.')
-}
-
-export {
-  go
-}
-export default {
-  go
 }

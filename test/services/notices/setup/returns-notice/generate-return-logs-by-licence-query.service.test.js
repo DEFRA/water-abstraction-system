@@ -59,7 +59,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
       })
 
       it('returns the expected query and bindings', () => {
-        const result = GenerateReturnLogsByLicenceQueryService.go(licenceRef, noticeType)
+        const result = GenerateReturnLogsByLicenceQueryService(licenceRef, noticeType)
 
         const todayAsString = new Date().toISOString().split('T')[0]
 
@@ -91,7 +91,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
       })
 
       it('returns the expected query and bindings', () => {
-        const result = GenerateReturnLogsByLicenceQueryService.go(licenceRef, noticeType)
+        const result = GenerateReturnLogsByLicenceQueryService(licenceRef, noticeType)
 
         const todayAsString = new Date().toISOString().split('T')[0]
 
@@ -125,7 +125,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
       })
 
       it('returns the expected return logs', async () => {
-        const { bindings, query } = GenerateReturnLogsByLicenceQueryService.go(licenceRef, noticeType)
+        const { bindings, query } = GenerateReturnLogsByLicenceQueryService(licenceRef, noticeType)
         const { rows } = await db.raw(query, bindings)
 
         expect(rows).toEqual([
@@ -147,7 +147,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Que
       })
 
       it('returns the expected return logs', async () => {
-        const { bindings, query } = GenerateReturnLogsByLicenceQueryService.go(licenceRef, noticeType)
+        const { bindings, query } = GenerateReturnLogsByLicenceQueryService(licenceRef, noticeType)
         const { rows } = await db.raw(query, bindings)
 
         expect(rows).toEqual([

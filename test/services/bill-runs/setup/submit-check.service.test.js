@@ -55,14 +55,14 @@ describe('Bill Runs - Setup - Submit Check service', () => {
       })
 
       it('triggers creation of the bill run and returns empty page data', async () => {
-        const result = await SubmitCheckService.go(session.id, auth)
+        const result = await SubmitCheckService(session.id, auth)
 
         expect(createStub.called).toBe(true)
         expect(result).toEqual({})
       })
 
       it('deletes the session data', async () => {
-        await SubmitCheckService.go(session.id, auth)
+        await SubmitCheckService(session.id, auth)
 
         expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
       })
@@ -94,7 +94,7 @@ describe('Bill Runs - Setup - Submit Check service', () => {
       })
 
       it('returns page data needed to re-render the view', async () => {
-        const result = await SubmitCheckService.go(session.id, auth)
+        const result = await SubmitCheckService(session.id, auth)
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',

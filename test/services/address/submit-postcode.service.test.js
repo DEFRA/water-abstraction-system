@@ -51,7 +51,7 @@ describe('Address - Submit Postcode Service', () => {
       })
 
       it('saves the submitted postcode and returns an empty object (tells controller to redirect to next page)', async () => {
-        const result = await SubmitPostcodeService.go(sessionId, payload)
+        const result = await SubmitPostcodeService(sessionId, payload)
 
         expect(result).toEqual({})
 
@@ -67,7 +67,7 @@ describe('Address - Submit Postcode Service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitPostcodeService.go(sessionId, payload)
+          const result = await SubmitPostcodeService(sessionId, payload)
 
           expect(result).toEqual({
             error: {
@@ -98,7 +98,7 @@ describe('Address - Submit Postcode Service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitPostcodeService.go(sessionId, payload)
+          const result = await SubmitPostcodeService(sessionId, payload)
 
           expect(result).toEqual({
             error: {

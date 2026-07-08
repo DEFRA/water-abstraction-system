@@ -18,11 +18,11 @@ import ViewNoticePresenter from '../../presenters/notices/view-notice.presenter.
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(noticeId, yar, page) {
+export default async function go(noticeId, yar, page) {
   const filterKey = `noticeFilter-${noticeId}`
   const filters = _filters(yar, filterKey)
 
-  const { notice, notifications, totalNumber } = await FetchNoticeService.go(noticeId, filters, page)
+  const { notice, notifications, totalNumber } = await FetchNoticeService(noticeId, filters, page)
 
   const pagination = PaginatorPresenter.go(
     totalNumber,
@@ -52,11 +52,4 @@ function _filters(yar, filterKey) {
     status: null,
     ...savedFilters
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

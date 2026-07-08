@@ -21,7 +21,7 @@ import PreparePaperReturnService from './prepare-paper-return.service.js'
  *
  * @returns {Promise<ArrayBuffer>} - Resolves with the generated form file as an ArrayBuffer.
  */
-async function go(sessionId, contactHashId, returnLogId) {
+export default async function go(sessionId, contactHashId, returnLogId) {
   const session = await FetchSessionDal(sessionId)
 
   // NOTE: The notifications the presenter generates are based on the combination of recipients and selected return logs
@@ -35,20 +35,15 @@ async function go(sessionId, contactHashId, returnLogId) {
   // to look at a single recipient and return log so we know we'll just get one notification back in the array.
   const notifications = PaperReturnNotificationsPresenter.go(session, [selectedRecipient], null)
 
-  const returnFormRequest = await PreparePaperReturnService.go(notifications[0])
+  const returnFormRequest = await PreparePaperReturnService(notifications[0])
 
   return returnFormRequest.response.body
 }
 
 async function _selectedRecipient(session, contactHashId) {
-  const recipients = await FetchRecipientsService.go(session)
+  const recipients = await FetchRecipientsService(session)
 
   return recipients.find((recipient) => {
     return recipient.contact_hash_id === contactHashId
   })
-}
-
-export { go }
-export default {
-  go
 }

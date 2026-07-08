@@ -40,7 +40,7 @@ describe('Billing Accounts - Setup - View Existing Account service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewExistingAccountService.go(session.id)
+      const result = await ViewExistingAccountService(session.id)
 
       expect(result).toEqual({
         backLink: {

@@ -15,7 +15,7 @@ import ViewLicencePresenter from '../../presenters/monitoring-stations/view-lice
  *
  * @returns {Promise<object>} The view data for the licence tag details page
  */
-async function go(auth, licenceId, monitoringStationId) {
+export default async function go(auth, licenceId, monitoringStationId) {
   const { licence, licenceMonitoringStations, monitoringStation } = await FetchLicenceMonitoringStationsDal(
     licenceId,
     monitoringStationId
@@ -26,11 +26,4 @@ async function go(auth, licenceId, monitoringStationId) {
   return {
     ...formattedData
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

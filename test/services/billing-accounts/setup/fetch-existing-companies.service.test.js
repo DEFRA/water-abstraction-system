@@ -32,7 +32,7 @@ describe('Billing Accounts - Setup - Fetch Existing Companies service', () => {
 
   describe('when called with a searchInput', () => {
     it('returns the matching companies', async () => {
-      const result = await FetchExistingCompaniesService.go('Fake')
+      const result = await FetchExistingCompaniesService('Fake')
 
       expect(result).toEqual([
         CompanyModel.fromJson({

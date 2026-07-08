@@ -24,7 +24,7 @@ import GenerateTwoPartTariffBillRunService from '../generate-two-part-tariff-bil
  *
  * @returns {Promise<boolean>} true if it was the last review licence in the bill run, else false
  */
-async function go(billRunId) {
+export default async function go(billRunId) {
   const billRun = await _fetchBillRun(billRunId)
 
   const empty = billRun.reviewLicences.length === 0
@@ -60,10 +60,5 @@ async function _processEmptyBillRun(billRun) {
   // However, if it is two-part tariff supplementary then we still have to check for previous transactions that might
   // need to be credited. This means we need to trigger the generate process to handle this. It will do its work in
   // the background, meantime we'll return control to the user and the they'll be redirected to the bill runs page.
-  GenerateTwoPartTariffBillRunService.go(billRun.id)
-}
-
-export { go }
-export default {
-  go
+  GenerateTwoPartTariffBillRunService(billRun.id)
 }

@@ -16,8 +16,8 @@ import ReviewChargeElementPresenter from '../../../presenters/bill-runs/review/r
  *
  * @returns {Promise<object>} the 'pageData' needed for the review charge element page
  */
-async function go(reviewChargeElementId, elementIndex, yar) {
-  const reviewChargeElement = await FetchReviewChargeElementService.go(reviewChargeElementId)
+export default async function go(reviewChargeElementId, elementIndex, yar) {
+  const reviewChargeElement = await FetchReviewChargeElementService(reviewChargeElementId)
 
   const [bannerMessage] = yar.flash('banner')
 
@@ -28,9 +28,4 @@ async function go(reviewChargeElementId, elementIndex, yar) {
     bannerMessage,
     ...pageData
   }
-}
-
-export { go }
-export default {
-  go
 }

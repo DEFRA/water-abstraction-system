@@ -50,25 +50,25 @@ describe('Bill Licences - Submit Remove Bill Licence service', () => {
 
   describe('when called', () => {
     it('calls the "UnassignLicencesToBillRunService" to unassign any licence supplementary year records from the bill run', async () => {
-      await SubmitRemoveBillLicenceService.go(billLicence.id, user)
+      await SubmitRemoveBillLicenceService(billLicence.id, user)
 
       expect(unassignLicencesToBillRunStub.called).toBe(true)
     })
 
     it('calls the "ProcessBillingFlagService" to check if the licence needs a supplementary billing flag', async () => {
-      await SubmitRemoveBillLicenceService.go(billLicence.id, user)
+      await SubmitRemoveBillLicenceService(billLicence.id, user)
 
       expect(processBillingFlagStub.called).toBe(true)
     })
 
     it('sends a request to the legacy service to delete the bill licence', async () => {
-      await SubmitRemoveBillLicenceService.go(billLicence.id, user)
+      await SubmitRemoveBillLicenceService(billLicence.id, user)
 
       expect(legacyDeleteBillLicenceRequestStub.called).toBe(true)
     })
 
     it('returns the path to the legacy bill run processing page with invoice ID option', async () => {
-      const result = await SubmitRemoveBillLicenceService.go(billLicence.id, user)
+      const result = await SubmitRemoveBillLicenceService(billLicence.id, user)
 
       expect(result).toEqual(`/billing/batch/${billLicence.bill.billRunId}/processing?invoiceId=${billLicence.bill.id}`)
     })

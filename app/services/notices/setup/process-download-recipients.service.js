@@ -20,12 +20,12 @@ import { NoticeJourney, NoticeType } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<object>} The data for the download link (csv string, filename and type)
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const { notificationType, referenceCode } = session
 
-  const recipients = await FetchRecipientsService.go(session, true)
+  const recipients = await FetchRecipientsService(session, true)
 
   const formattedData = await _formattedData(recipients, session)
 
@@ -46,9 +46,4 @@ async function _formattedData(recipients, session) {
   }
 
   return DownloadReturnsNoticePresenter.go(recipients, session)
-}
-
-export { go }
-export default {
-  go
 }

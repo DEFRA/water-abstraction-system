@@ -16,13 +16,13 @@ import { NoticeType, NoticeTypes } from '../../../../lib/static-lookups.lib.js'
  * @param {object} notice - The main notice to be sent
  * @param {object[]} notifications - The main notifications linked to the main notice to be sent
  */
-async function go(notice, notifications) {
+export default async function go(notice, notifications) {
   try {
     const startTime = currentTimeInNanoseconds()
 
     const { id: noticeId, subtype } = notice
 
-    await SendMainNoticeService.go(notice, notifications)
+    await SendMainNoticeService(notice, notifications)
 
     const noticesToUpdate = [noticeId]
 
@@ -31,22 +31,17 @@ async function go(notice, notifications) {
       subtype === NoticeTypes[NoticeType.INVITATIONS].subType ||
       subtype === NoticeTypes[NoticeType.RENEWAL_INVITATIONS].subType
     ) {
-      const alternateNotice = await SendAlternateNoticeService.go(notice)
+      const alternateNotice = await SendAlternateNoticeService(notice)
 
       if (alternateNotice) {
         noticesToUpdate.push(alternateNotice.id)
       }
     }
 
-    await UpdateNoticeService.go(noticesToUpdate)
+    await UpdateNoticeService(noticesToUpdate)
 
     calculateAndLogTimeTaken(startTime, 'Send notice complete', { count: notifications.length, noticeId })
   } catch (error) {
     globalThis.GlobalNotifier.omfg('Send notice failed', { notice }, error)
   }
-}
-
-export { go }
-export default {
-  go
 }

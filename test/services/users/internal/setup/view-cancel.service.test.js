@@ -33,7 +33,7 @@ describe('Users - Internal - Setup - View Cancel Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCancelService.go(session.id)
+      const result = await ViewCancelService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'users',

@@ -12,7 +12,7 @@ import ViewBillService from '../services/bills/view-bill.service.js'
 export async function remove(request, h) {
   const { id } = request.params
 
-  const pageData = await RemoveBillService.go(id)
+  const pageData = await RemoveBillService(id)
 
   return h.view('bills/remove.njk', pageData)
 }
@@ -21,7 +21,7 @@ export async function submitRemove(request, h) {
   const { id } = request.params
 
   try {
-    const redirectPath = await SubmitRemoveBillService.go(id, request.auth.credentials.user)
+    const redirectPath = await SubmitRemoveBillService(id, request.auth.credentials.user)
 
     return h.redirect(redirectPath)
   } catch (error) {
@@ -32,7 +32,7 @@ export async function submitRemove(request, h) {
 export async function view(request, h) {
   const { id } = request.params
 
-  const pageData = await ViewBillService.go(id)
+  const pageData = await ViewBillService(id)
 
   const template = _determineView(pageData)
 

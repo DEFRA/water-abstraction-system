@@ -20,7 +20,7 @@ import { compareStrings } from '../../../../lib/general.lib.js'
  * @returns {Promise<object>} An object containing the IDs of the failed notifications, plus the combined return log IDs
  * and licence references from them
  */
-async function go(noticeId) {
+export default async function go(noticeId) {
   const notifications = await _fetch(noticeId)
 
   const dueDate = _dueDate(notifications)
@@ -100,9 +100,4 @@ async function _fetch(eventId) {
     .where('contactType', 'primary user')
     .where('messageType', 'email')
     .whereNull('alternateNoticeId')
-}
-
-export { go }
-export default {
-  go
 }

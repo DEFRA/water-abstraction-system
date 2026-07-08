@@ -81,7 +81,7 @@ describe('Fetch Bill Summary service', () => {
 
   describe('when a bill with a matching ID exists', () => {
     it('will fetch the data used in the remove bill page', async () => {
-      const result = await FetchBillSummaryService.go(bill.id)
+      const result = await FetchBillSummaryService(bill.id)
 
       expect(result).toEqual({
         id: bill.id,
@@ -142,7 +142,7 @@ describe('Fetch Bill Summary service', () => {
 
   describe('when a bill licence with a matching ID does not exist', () => {
     it('returns no result', async () => {
-      const result = await FetchBillSummaryService.go('93112100-152b-4860-abea-2adee11dcd69')
+      const result = await FetchBillSummaryService('93112100-152b-4860-abea-2adee11dcd69')
 
       expect(result).toBeUndefined()
     })

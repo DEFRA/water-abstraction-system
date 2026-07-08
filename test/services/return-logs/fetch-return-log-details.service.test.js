@@ -50,7 +50,7 @@ describe('Return Logs - Fetch Return Log Details service', () => {
   describe('when called', () => {
     describe('and the return log has no submissions', () => {
       it('fetches the matching return log with the linked licence and no submissions', async () => {
-        const result = await FetchReturnLogDetailsService.go(returnLog.id)
+        const result = await FetchReturnLogDetailsService(returnLog.id)
 
         expect(result).toEqual({
           dueDate: returnLog.dueDate,
@@ -118,7 +118,7 @@ describe('Return Logs - Fetch Return Log Details service', () => {
       })
 
       it('fetches the matching return log with the linked licence and all submission versions', async () => {
-        const result = await FetchReturnLogDetailsService.go(returnLog.id)
+        const result = await FetchReturnLogDetailsService(returnLog.id)
 
         expect(result).toMatchObject({
           dueDate: returnLog.dueDate,
@@ -171,7 +171,7 @@ describe('Return Logs - Fetch Return Log Details service', () => {
 
       describe('and when no version is specified', () => {
         it('selects the latest submission', async () => {
-          const result = await FetchReturnLogDetailsService.go(returnLog.id)
+          const result = await FetchReturnLogDetailsService(returnLog.id)
 
           expect(result.returnSubmissions).toEqual([
             {
@@ -203,7 +203,7 @@ describe('Return Logs - Fetch Return Log Details service', () => {
         })
 
         it('automatically applies readings to the submission', async () => {
-          await FetchReturnLogDetailsService.go(returnLog.id)
+          await FetchReturnLogDetailsService(returnLog.id)
 
           expect(returnSubmissions[2].$applyReadings.calledOnce).toBe(true)
         })
@@ -215,7 +215,7 @@ describe('Return Logs - Fetch Return Log Details service', () => {
         })
 
         it('selects the matching submission', async () => {
-          const result = await FetchReturnLogDetailsService.go(returnLog.id, version)
+          const result = await FetchReturnLogDetailsService(returnLog.id, version)
 
           expect(result.returnSubmissions).toEqual([
             {
@@ -240,7 +240,7 @@ describe('Return Logs - Fetch Return Log Details service', () => {
         })
 
         it('automatically applies readings to the submission', async () => {
-          await FetchReturnLogDetailsService.go(returnLog.id, version)
+          await FetchReturnLogDetailsService(returnLog.id, version)
 
           expect(returnSubmissions[1].$applyReadings.calledOnce).toBe(true)
         })

@@ -10,11 +10,11 @@ import Workflow from '../../../models/workflow.model.js'
 /**
  * Puts SROC licences into workflow that have a related `purpose` that is due to expire in less than 50 days
  */
-async function go() {
+export default async function go() {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    const timeLimitedResults = await FetchTimeLimitedLicencesService.go()
+    const timeLimitedResults = await FetchTimeLimitedLicencesService()
 
     await _addWorkflowRecords(timeLimitedResults)
 
@@ -42,11 +42,4 @@ async function _addWorkflowRecords(timeLimitedResults) {
       updatedAt: timestamp
     })
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

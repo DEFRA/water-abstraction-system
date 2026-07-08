@@ -79,7 +79,7 @@ describe('Licences - Fetch Conditions service', () => {
     })
 
     it('return the matching conditions', async () => {
-      const result = await FetchConditionsService.go(licenceVersion.id)
+      const result = await FetchConditionsService(licenceVersion.id)
 
       expect(result).toEqual([
         {
@@ -131,7 +131,7 @@ describe('Licences - Fetch Conditions service', () => {
     })
 
     it('returns no conditions', async () => {
-      const result = await FetchConditionsService.go(licenceVersion.id)
+      const result = await FetchConditionsService(licenceVersion.id)
 
       expect(result).toEqual([])
     })

@@ -38,18 +38,18 @@ import { engineTriggers } from '../../../lib/static-lookups.lib.js'
  * If the bill run is supplementary and 2 matches are found it returns the most recent match formatted for use in the
  * '/exists' page.
  */
-async function go(sessionId, auth) {
+export default async function go(sessionId, auth) {
   const session = await FetchSessionDal(sessionId)
 
   await DeleteSessionDal(session.id)
 
-  const blockingResults = await DetermineBlockingBillRunService.go(session)
+  const blockingResults = await DetermineBlockingBillRunService(session)
 
   // NOTE: As there is nothing a user can change on the /check page we _should_ never get a POST request from it if a
   // blocking bill run was found. This is just protection against malicious use, or more likely, someone has left the
   // page idle and another user has triggered a bill run that now blocks it.
   if (blockingResults.trigger !== engineTriggers.neither) {
-    await CreateService.go(session, blockingResults, auth.credentials.user)
+    await CreateService(session, blockingResults, auth.credentials.user)
 
     return {}
   }
@@ -73,9 +73,4 @@ function _formattedData(session, blockingResults) {
   }
 
   return AllowedBillRunPresenter.go(session, blockingResults)
-}
-
-export { go }
-export default {
-  go
 }

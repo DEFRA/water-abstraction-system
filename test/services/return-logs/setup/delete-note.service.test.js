@@ -39,14 +39,14 @@ describe('Return Logs Setup - Delete Note service', () => {
   })
 
   it('deletes the note from the session', async () => {
-    await DeleteNoteService.go(session.id, yarStub)
+    await DeleteNoteService(session.id, yarStub)
 
     expect(session.note).toBeUndefined()
     expect(session.$update.called).toBe(true)
   })
 
   it('sets the notification message to "Deleted"', async () => {
-    await DeleteNoteService.go(session.id, yarStub)
+    await DeleteNoteService(session.id, yarStub)
 
     const [flashType, notification] = yarStub.flash.args[0]
 

@@ -17,11 +17,11 @@ import { db } from '../../../../../db/db.js'
  *
  * @returns {Promise<object[]>} The recipient data for the paper returns notice
  */
-async function go(session, download) {
+export default async function go(session, download) {
   const { selectedReturns, noticeType } = session
 
-  const { bindings, query: dueReturnLogsQuery } = GenerateReturnLogsByIdQueryService.go(selectedReturns)
-  const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+  const { bindings, query: dueReturnLogsQuery } = GenerateReturnLogsByIdQueryService(selectedReturns)
+  const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
   const { rows } = await db.raw(query, bindings)
 
@@ -46,9 +46,4 @@ function _applyNotificationDueDate(rows, download) {
       row.notificationDueDate = null
     }
   }
-}
-
-export { go }
-export default {
-  go
 }

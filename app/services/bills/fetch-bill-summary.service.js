@@ -19,7 +19,7 @@ import BillModel from '../../models/bill.model.js'
  * @returns {Promise<object>} the matching instance of BillModel plus the linked billing account and bill
  * run. Also all bill licences linked to the bill so we can display which licences are in the bill
  */
-async function go(billId) {
+export default async function go(billId) {
   return _fetch(billId)
 }
 
@@ -52,11 +52,4 @@ async function _fetch(billId) {
     .modifyGraph('billRun.region', (builder) => {
       builder.select(['id', 'displayName'])
     })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

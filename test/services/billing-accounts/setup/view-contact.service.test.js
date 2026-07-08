@@ -49,7 +49,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewContactService.go(session.id)
+        const result = await ViewContactService(session.id)
 
         expect(result).toEqual({
           backLink: {
@@ -94,7 +94,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewContactService.go(session.id)
+        const result = await ViewContactService(session.id)
 
         expect(result).toEqual({
           backLink: {

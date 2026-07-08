@@ -41,7 +41,7 @@ describe('Bill Runs - Send Bill Run service', () => {
       })
 
       it('sets the status of the bill run to "sending"', async () => {
-        await SendBillBunService.go(billRun.id)
+        await SendBillBunService(billRun.id)
 
         // Check we set the bill run status
         const [patchObject] = billRunPatchStub.args[0]
@@ -50,7 +50,7 @@ describe('Bill Runs - Send Bill Run service', () => {
       })
 
       it('returns an instance of the bill run with its status set to "sending"', async () => {
-        const result = await SendBillBunService.go(billRun.id)
+        const result = await SendBillBunService(billRun.id)
 
         expect(result).toEqual({ ...billRun, status: 'sending' })
       })
@@ -68,14 +68,14 @@ describe('Bill Runs - Send Bill Run service', () => {
       })
 
       it('does not change the bill run status', async () => {
-        await SendBillBunService.go(billRun.id)
+        await SendBillBunService(billRun.id)
 
         // Check we do not change the bill run status
         expect(billRunPatchStub.called).toBe(false)
       })
 
       it('returns an instance of the bill run with its status unchanged', async () => {
-        const result = await SendBillBunService.go(billRun.id)
+        const result = await SendBillBunService(billRun.id)
 
         expect(result).toEqual(billRun)
       })
@@ -84,7 +84,7 @@ describe('Bill Runs - Send Bill Run service', () => {
 
   describe('when the bill run does not exist', () => {
     it('throws as error', async () => {
-      await expect(SendBillBunService.go('47e66de7-f05f-42d2-8fef-640b55150919')).rejects.toThrow()
+      await expect(SendBillBunService('47e66de7-f05f-42d2-8fef-640b55150919')).rejects.toThrow()
     })
   })
 })

@@ -54,7 +54,7 @@ const AuthPlugin = {
       keepAlive: true,
       redirectTo: '/signin',
       validate: async (_request, session) => {
-        return AuthService.go(session.userId)
+        return AuthService(session.userId)
       }
     })
 

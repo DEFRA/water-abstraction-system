@@ -84,7 +84,7 @@ describe('Address - Submit Select Service', () => {
         })
 
         it('maps then saves the selected address and returns the specified redirect URL', async () => {
-          const result = await SubmitSelectService.go(sessionId, payload)
+          const result = await SubmitSelectService(sessionId, payload)
 
           expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
@@ -125,7 +125,7 @@ describe('Address - Submit Select Service', () => {
         })
 
         it('maps then saves the selected address and returns the specified redirect URL', async () => {
-          const result = await SubmitSelectService.go(sessionId, payload)
+          const result = await SubmitSelectService(sessionId, payload)
 
           expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
@@ -166,7 +166,7 @@ describe('Address - Submit Select Service', () => {
         })
 
         it('maps then saves the selected address and returns the specified redirect URL', async () => {
-          const result = await SubmitSelectService.go(sessionId, payload)
+          const result = await SubmitSelectService(sessionId, payload)
 
           expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
@@ -207,7 +207,7 @@ describe('Address - Submit Select Service', () => {
         })
 
         it('maps then saves the selected address and returns the specified redirect URL', async () => {
-          const result = await SubmitSelectService.go(sessionId, payload)
+          const result = await SubmitSelectService(sessionId, payload)
 
           expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
@@ -248,7 +248,7 @@ describe('Address - Submit Select Service', () => {
         })
 
         it('maps then saves the selected address and returns the specified redirect URL', async () => {
-          const result = await SubmitSelectService.go(sessionId, payload)
+          const result = await SubmitSelectService(sessionId, payload)
 
           expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
@@ -287,7 +287,7 @@ describe('Address - Submit Select Service', () => {
         })
 
         it('returns page data that causes a redirect to the manual page', async () => {
-          const result = await SubmitSelectService.go(sessionId, payload)
+          const result = await SubmitSelectService(sessionId, payload)
 
           expect(result).toEqual({
             redirect: `/system/address/${sessionId}/manual`
@@ -310,7 +310,7 @@ describe('Address - Submit Select Service', () => {
         })
 
         it('returns page data that causes a redirect to the manual page', async () => {
-          const result = await SubmitSelectService.go(sessionId, payload)
+          const result = await SubmitSelectService(sessionId, payload)
 
           expect(result).toEqual({
             redirect: `/system/address/${sessionId}/manual`
@@ -342,7 +342,7 @@ describe('Address - Submit Select Service', () => {
           })
 
           it('returns page data needed to re-render the view including the validation error', async () => {
-            const result = await SubmitSelectService.go(sessionId, payload)
+            const result = await SubmitSelectService(sessionId, payload)
 
             expect(result).toEqual({
               error: {
@@ -391,7 +391,7 @@ describe('Address - Submit Select Service', () => {
           })
 
           it('returns page data that causes a redirect to the manual page', async () => {
-            const result = await SubmitSelectService.go(sessionId, payload)
+            const result = await SubmitSelectService(sessionId, payload)
 
             expect(result).toEqual({
               redirect: `/system/address/${sessionId}/manual`
@@ -414,7 +414,7 @@ describe('Address - Submit Select Service', () => {
           })
 
           it('returns page data that causes a redirect to the manual page', async () => {
-            const result = await SubmitSelectService.go(sessionId, payload)
+            const result = await SubmitSelectService(sessionId, payload)
 
             expect(result).toEqual({
               redirect: `/system/address/${sessionId}/manual`

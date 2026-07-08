@@ -19,7 +19,7 @@ describe('Determine Return Log Flags Service', () => {
       })
 
       it('always returns the licenceId, regionId, startDate and endDate', async () => {
-        const result = await DetermineReturnLogFlagsService.go(returnLog.id)
+        const result = await DetermineReturnLogFlagsService(returnLog.id)
 
         expect(result.licenceId).toEqual(licence.id)
         expect(result.regionId).toEqual(licence.regionId)
@@ -29,7 +29,7 @@ describe('Determine Return Log Flags Service', () => {
 
       describe('and the return is not two-part tariff, ending after the 1st of April 2022 (sroc)', () => {
         it('returns the correct flags', async () => {
-          const result = await DetermineReturnLogFlagsService.go(returnLog.id)
+          const result = await DetermineReturnLogFlagsService(returnLog.id)
 
           expect(result.flagForPreSrocSupplementary).toEqual(true)
           expect(result.flagForSrocSupplementary).toEqual(true)
@@ -43,7 +43,7 @@ describe('Determine Return Log Flags Service', () => {
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineReturnLogFlagsService.go(returnLog.id)
+          const result = await DetermineReturnLogFlagsService(returnLog.id)
 
           expect(result.flagForPreSrocSupplementary).toEqual(true)
           expect(result.flagForSrocSupplementary).toEqual(true)
@@ -61,7 +61,7 @@ describe('Determine Return Log Flags Service', () => {
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineReturnLogFlagsService.go(returnLog.id)
+          const result = await DetermineReturnLogFlagsService(returnLog.id)
 
           expect(result.flagForPreSrocSupplementary).toEqual(true)
           expect(result.flagForSrocSupplementary).toEqual(true)
@@ -77,7 +77,7 @@ describe('Determine Return Log Flags Service', () => {
       })
 
       it('always returns the licenceId, regionId, startDate and endDate', async () => {
-        const result = await DetermineReturnLogFlagsService.go(returnLog.id)
+        const result = await DetermineReturnLogFlagsService(returnLog.id)
 
         expect(result.licenceId).toEqual(licence.id)
         expect(result.regionId).toEqual(licence.regionId)
@@ -87,7 +87,7 @@ describe('Determine Return Log Flags Service', () => {
 
       describe('and the return is not two-part tariff, ending after the 1st of April 2022 (sroc)', () => {
         it('returns the correct flags', async () => {
-          const result = await DetermineReturnLogFlagsService.go(returnLog.id)
+          const result = await DetermineReturnLogFlagsService(returnLog.id)
 
           expect(result.flagForPreSrocSupplementary).toEqual(false)
           expect(result.flagForSrocSupplementary).toEqual(true)
@@ -101,7 +101,7 @@ describe('Determine Return Log Flags Service', () => {
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineReturnLogFlagsService.go(returnLog.id)
+          const result = await DetermineReturnLogFlagsService(returnLog.id)
 
           expect(result.flagForPreSrocSupplementary).toEqual(false)
           expect(result.flagForSrocSupplementary).toEqual(false)
@@ -119,7 +119,7 @@ describe('Determine Return Log Flags Service', () => {
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineReturnLogFlagsService.go(returnLog.id)
+          const result = await DetermineReturnLogFlagsService(returnLog.id)
 
           expect(result.flagForPreSrocSupplementary).toEqual(true)
           expect(result.flagForSrocSupplementary).toEqual(false)

@@ -33,7 +33,7 @@ import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgre
  *
  * @param {number} days - The number of days to look back for customer files
  */
-async function go(days) {
+export default async function go(days) {
   try {
     const startTime = currentTimeInNanoseconds()
 
@@ -119,11 +119,4 @@ async function _updateBillingAccount(billingAccount) {
     .where((builder) => {
       builder.where('last_transaction_file', '<>', lastTransactionFile).orWhereNull('last_transaction_file')
     })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -35,7 +35,7 @@ describe('Schema export service', () => {
     })
 
     it('calls the different services that export a schema', async () => {
-      await SchemaExportService.go('water')
+      await SchemaExportService('water')
 
       expect(FetchTableNamesServiceStub.called).toBe(true)
       expect(CompressSchemaFolderServiceStub.called).toBe(true)
@@ -46,7 +46,7 @@ describe('Schema export service', () => {
     it('calls the ExportTableService with the different table names as arguments', async () => {
       const tableNames = []
 
-      await SchemaExportService.go('water')
+      await SchemaExportService('water')
 
       const allArgs = ExportTableServiceStub.getCalls().flatMap((call) => {
         return call.args
@@ -59,7 +59,7 @@ describe('Schema export service', () => {
       const schemaName = 'water'
       const expectedFolderPath = ['/tmp/water']
 
-      await SchemaExportService.go(schemaName)
+      await SchemaExportService(schemaName)
 
       const args = SendToS3BucketServiceStub.getCalls().flatMap((call) => {
         return call.args
@@ -90,7 +90,7 @@ describe('Schema export service', () => {
     it('catches the error', async () => {
       FetchTableNamesServiceStub.rejects(new Error())
 
-      await SchemaExportService.go('water')
+      await SchemaExportService('water')
 
       expect(notifierStub.omfg.calledWith('Error: Failed to export schema water')).toBe(true)
       expect(SendToS3BucketServiceStub.called).toBe(false)
@@ -98,7 +98,7 @@ describe('Schema export service', () => {
     })
 
     it('cleans up the files', async () => {
-      await SchemaExportService.go('water')
+      await SchemaExportService('water')
 
       expect(DeleteFilesServiceStub.called).toBe(true)
     })

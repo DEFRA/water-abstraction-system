@@ -101,7 +101,7 @@ describe('Return Versions - Setup - Fetch Licence service', () => {
 
   describe('when the matching licence exists', () => {
     it('returns the matching licence and associated records', async () => {
-      const result = await FetchLicenceService.go(licence.id)
+      const result = await FetchLicenceService(licence.id)
 
       expect(result).toEqual({
         id: licence.id,
@@ -143,7 +143,7 @@ describe('Return Versions - Setup - Fetch Licence service', () => {
 
     describe('and the associated data records', () => {
       it('includes only the "current" licence version', async () => {
-        const result = await FetchLicenceService.go(licence.id)
+        const result = await FetchLicenceService(licence.id)
 
         const resultLicenceVersionIds = result.licenceVersions.map((licenceVersion) => {
           return licenceVersion.id
@@ -153,7 +153,7 @@ describe('Return Versions - Setup - Fetch Licence service', () => {
       })
 
       it('includes only return versions that can be copied from', async () => {
-        const result = await FetchLicenceService.go(licence.id)
+        const result = await FetchLicenceService(licence.id)
 
         const resultReturnVersionIds = result.returnVersions.map((returnVersion) => {
           return returnVersion.id
@@ -166,7 +166,7 @@ describe('Return Versions - Setup - Fetch Licence service', () => {
 
   describe('when the matching licence does not exist', () => {
     it('returns undefined', async () => {
-      const result = await FetchLicenceService.go('7f665e1b-a2cf-4241-9dc9-9351edc16533')
+      const result = await FetchLicenceService('7f665e1b-a2cf-4241-9dc9-9351edc16533')
 
       expect(result).toBeUndefined()
     })

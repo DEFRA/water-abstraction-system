@@ -54,7 +54,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
       })
 
       it('saves the submitted option', async () => {
-        await SubmitReceivedService.go(session.id, payload, yarStub)
+        await SubmitReceivedService(session.id, payload, yarStub)
 
         expect(session.receivedDateOptions).toEqual('today')
         expect(new Date(session.receivedDate)).toEqual(testDate)
@@ -63,7 +63,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
 
       describe('and the page has been not been visited', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitReceivedService.go(session.id, payload, yarStub)
+          const result = await SubmitReceivedService(session.id, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: undefined
@@ -79,7 +79,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
-          const result = await SubmitReceivedService.go(session.id, payload, yarStub)
+          const result = await SubmitReceivedService(session.id, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: true
@@ -87,7 +87,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
         })
 
         it('sets the notification message title to "Updated" and the text to "Reporting details changed" ', async () => {
-          await SubmitReceivedService.go(session.id, payload, yarStub)
+          await SubmitReceivedService(session.id, payload, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
 
@@ -107,7 +107,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
       })
 
       it('saves the submitted option', async () => {
-        await SubmitReceivedService.go(session.id, payload, yarStub)
+        await SubmitReceivedService(session.id, payload, yarStub)
 
         expect(session.receivedDateOptions).toEqual('yesterday')
         expect(new Date(session.receivedDate)).toEqual(testDate)
@@ -126,7 +126,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
       })
 
       it('saves the submitted values', async () => {
-        await SubmitReceivedService.go(session.id, payload, yarStub)
+        await SubmitReceivedService(session.id, payload, yarStub)
 
         expect(session.receivedDateOptions).toEqual('customDate')
         expect(session.receivedDateDay).toEqual('26')
@@ -137,7 +137,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
       })
 
       it('returns the correct details the controller needs to redirect the journey', async () => {
-        const result = await SubmitReceivedService.go(session.id, payload, yarStub)
+        const result = await SubmitReceivedService(session.id, payload, yarStub)
 
         expect(result).toEqual({ checkPageVisited: undefined })
       })
@@ -149,7 +149,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitReceivedService.go(session.id, payload, yarStub)
+        const result = await SubmitReceivedService(session.id, payload, yarStub)
 
         expect(result).toMatchObject({
           pageTitle: 'When was the return received?',
@@ -167,7 +167,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
 
       describe('because the user has not selected anything', () => {
         it('includes an error for the radio form element', async () => {
-          const result = await SubmitReceivedService.go(session.id, payload, yarStub)
+          const result = await SubmitReceivedService(session.id, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [
@@ -192,7 +192,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
         })
 
         it('includes an error for the date input element', async () => {
-          const result = await SubmitReceivedService.go(session.id, payload, yarStub)
+          const result = await SubmitReceivedService(session.id, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [
@@ -206,7 +206,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
         })
 
         it('includes what was submitted', async () => {
-          const result = await SubmitReceivedService.go(session.id, payload, yarStub)
+          const result = await SubmitReceivedService(session.id, payload, yarStub)
 
           expect(result.receivedDateDay).toEqual('a')
           expect(result.receivedDateMonth).toEqual('b')

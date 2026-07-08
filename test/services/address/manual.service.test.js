@@ -43,7 +43,7 @@ describe('Address - Manual Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ManualService.go(sessionId)
+      const result = await ManualService(sessionId)
 
       expect(result).toEqual({
         activeNavBar: 'manage',

@@ -21,7 +21,7 @@ import { timestampForPostgres } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<module:BillRunModel>} the bill run including its `externalId` and status
  */
-async function go(billRunId) {
+export default async function go(billRunId) {
   const billRun = await _fetchBillRun(billRunId)
 
   if (billRun.status === 'ready') {
@@ -54,9 +54,4 @@ async function _fetchBillRun(id) {
 
 async function _updateStatus(billRunId) {
   return BillRunModel.query().findById(billRunId).patch({ status: 'sending', updatedAt: timestampForPostgres() })
-}
-
-export { go }
-export default {
-  go
 }

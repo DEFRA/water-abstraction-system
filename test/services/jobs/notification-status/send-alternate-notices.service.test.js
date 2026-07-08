@@ -40,7 +40,7 @@ describe('Job - Notifications - Send Alternate Notices service', () => {
     })
 
     it('sends an alternate notice', async () => {
-      await SendAlternateNoticesService.go(notifications)
+      await SendAlternateNoticesService(notifications)
 
       expect(sendAlternateNoticeStub.called).toBe(true)
       expect(sendAlternateNoticeStub.firstCall.args[0]).toEqual(criticalNotices[0])
@@ -54,7 +54,7 @@ describe('Job - Notifications - Send Alternate Notices service', () => {
     })
 
     it('does not send an alternate notice', async () => {
-      await SendAlternateNoticesService.go(notifications)
+      await SendAlternateNoticesService(notifications)
 
       expect(sendAlternateNoticeStub.called).toBe(false)
     })

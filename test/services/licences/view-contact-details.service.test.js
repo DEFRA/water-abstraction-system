@@ -61,7 +61,7 @@ describe('Licences - View Contact Details service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewContactDetailsService.go(licenceId, auth)
+      const result = await ViewContactDetailsService(licenceId, auth)
 
       expect(result).toEqual({
         activeSecondaryNav: 'contact-details',

@@ -37,7 +37,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await AbstractionPeriodService.go(session.id)
+      const result = await AbstractionPeriodService(session.id)
 
       expect(result).toEqual({
         abstractionPeriodStartDay: '1',

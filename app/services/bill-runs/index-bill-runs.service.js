@@ -18,15 +18,15 @@ import { processSavedFilters } from '../../lib/submit-page.lib.js'
  *
  * @returns {Promise<object>} The view data for the bill runs page
  */
-async function go(yar, page) {
+export default async function go(yar, page) {
   const filters = _filters(yar)
 
   // We expect the FetchBillRunsService to take the longest to complete. But running them together means we are only
   // waiting as long as it takes FetchBillRunsService to complete rather than their combined time
   const [busyResult, { results: billRuns, total: totalNumber }, regions] = await Promise.all([
-    CheckBusyBillRunsService.go(),
-    FetchBillRunsService.go(filters, page),
-    FetchRegionsService.go()
+    CheckBusyBillRunsService(),
+    FetchBillRunsService(filters, page),
+    FetchRegionsService()
   ])
 
   const pagination = PaginatorPresenter.go(totalNumber, page, '/system/bill-runs', billRuns.length, 'bill runs')
@@ -52,9 +52,4 @@ function _filters(yar) {
     yearCreated: null,
     ...savedFilters
   }
-}
-
-export { go }
-export default {
-  go
 }

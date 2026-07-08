@@ -33,7 +33,7 @@ describe('Notices - Setup - Send - Send Email Notification service', () => {
   })
 
   it('should return the notification notify response', async () => {
-    const result = await SendEmailNotificationService.go(notification, referenceCode)
+    const result = await SendEmailNotificationService(notification, referenceCode)
 
     expect(result).toEqual({
       id: notification.id,

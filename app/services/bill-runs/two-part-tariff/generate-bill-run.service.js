@@ -36,7 +36,7 @@ import ProcessBillingPeriodService from './process-billing-period.service.js'
  * @param {module:BillRunModel} billRun - The instance of the annual two-part tariff bill run that has been reviewed and
  * is ready for generating
  */
-async function go(billRun) {
+export default async function go(billRun) {
   const { id: billRunId } = billRun
 
   try {
@@ -48,7 +48,7 @@ async function go(billRun) {
 
     calculateAndLogTimeTaken(startTime, 'Generate annual two-part tariff bill run complete', { billRunId })
   } catch (error) {
-    await HandleErroredBillRunService.go(billRunId, error.code)
+    await HandleErroredBillRunService(billRunId, error.code)
     globalThis.GlobalNotifier.omfg('Generate annual two-part tariff bill run failed', { billRun }, error)
   }
 }
@@ -74,7 +74,7 @@ function _billingPeriod(billRun) {
 
 async function _fetchBillingAccounts(billRunId) {
   try {
-    return await FetchBillingAccountsService.go(billRunId)
+    return await FetchBillingAccountsService(billRunId)
   } catch (error) {
     // We know we're saying we failed to process charge versions. But we're stuck with the legacy error codes and this
     // is the closest one related to what stage we're at in the process
@@ -105,12 +105,7 @@ async function _processBillingPeriod(billingPeriod, billRun) {
 
   const billingAccounts = await _fetchBillingAccounts(billRunId)
 
-  const billRunPopulated = await ProcessBillingPeriodService.go(billRun, billingPeriod, billingAccounts)
+  const billRunPopulated = await ProcessBillingPeriodService(billRun, billingPeriod, billingAccounts)
 
   await _finaliseBillRun(billRun, billRunPopulated)
-}
-
-export { go }
-export default {
-  go
 }

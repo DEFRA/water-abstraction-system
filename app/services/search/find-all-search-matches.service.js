@@ -20,14 +20,14 @@ import FetchSearchResultsService from './fetch-search-results.service.js'
  *
  * @returns {Promise<object>} The full set of results for the requested page
  */
-async function go(query, resultType, page, userScopes) {
-  const resultTypes = DetermineSearchItemsService.go(query, resultType, userScopes)
+export default async function go(query, resultType, page, userScopes) {
+  const resultTypes = DetermineSearchItemsService(query, resultType, userScopes)
 
-  const { results: orderedSearchResults, total } = await FetchSearchResultsService.go(query, resultTypes, page)
+  const { results: orderedSearchResults, total } = await FetchSearchResultsService(query, resultTypes, page)
 
   const idsByType = _idsByType(orderedSearchResults)
 
-  const modelsByType = await FetchSearchResultsDetailsService.go(idsByType)
+  const modelsByType = await FetchSearchResultsDetailsService(idsByType)
 
   const results = _results(orderedSearchResults, modelsByType)
 
@@ -119,11 +119,4 @@ function _results(orderedSearchResults, modelsByType) {
 
     return { exact, model, type }
   })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

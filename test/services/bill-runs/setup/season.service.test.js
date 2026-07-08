@@ -30,7 +30,7 @@ describe('Bill Runs - Setup - Type service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await SeasonService.go(session.id)
+      const result = await SeasonService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',

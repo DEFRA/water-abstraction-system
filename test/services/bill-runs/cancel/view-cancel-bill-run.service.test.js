@@ -47,7 +47,7 @@ describe('Bill Runs - View Cancel Bill Run service', () => {
       })
     })
     it('will fetch the data and format it for use in the cancel bill run page', async () => {
-      const result = await ViewCancelBillRunService.go(billRunId)
+      const result = await ViewCancelBillRunService(billRunId)
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',
@@ -67,7 +67,7 @@ describe('Bill Runs - View Cancel Bill Run service', () => {
 
   describe('when a bill run with a matching ID does not exist', () => {
     it('throws an exception', async () => {
-      await expect(ViewCancelBillRunService.go('testId')).rejects.toThrow()
+      await expect(ViewCancelBillRunService('testId')).rejects.toThrow()
     })
   })
 })

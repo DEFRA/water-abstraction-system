@@ -15,7 +15,7 @@ describe('Companies - Fetch Company dal', () => {
     })
 
     it('returns the matching company', async () => {
-      const result = await FetchCompanyDal.go(company.id)
+      const result = await FetchCompanyDal(company.id)
 
       expect(result).toEqual({
         id: company.id,

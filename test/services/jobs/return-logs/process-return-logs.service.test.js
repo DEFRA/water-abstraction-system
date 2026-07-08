@@ -50,7 +50,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
       })
 
       it('logs the time taken in milliseconds and seconds', async () => {
-        await ProcessReturnLogsService.go(cycle)
+        await ProcessReturnLogsService(cycle)
 
         const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -71,7 +71,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
       })
 
       it('logs the time taken in milliseconds and seconds', async () => {
-        await ProcessReturnLogsService.go(cycle)
+        await ProcessReturnLogsService(cycle)
 
         const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -90,7 +90,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
       })
 
       it('still logs the time taken in milliseconds and seconds', async () => {
-        await ProcessReturnLogsService.go(cycle)
+        await ProcessReturnLogsService(cycle)
 
         const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -110,7 +110,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
       })
 
       it('records the error by calling "omfg()"', async () => {
-        await ProcessReturnLogsService.go(cycle)
+        await ProcessReturnLogsService(cycle)
 
         const args = notifierStub.omfg.firstCall.args
 
@@ -120,7 +120,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
       })
 
       it('notifies the team by calling "redAlert()"', async () => {
-        await ProcessReturnLogsService.go(cycle)
+        await ProcessReturnLogsService(cycle)
 
         const args = notifierStub.redAlert.firstCall.args
 
@@ -128,7 +128,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
       })
 
       it('does not throw an error', async () => {
-        await ProcessReturnLogsService.go()
+        await ProcessReturnLogsService()
       })
     })
     describe('because the create return logs service errors', () => {
@@ -140,7 +140,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
       })
 
       it('records the error by calling "omfg()"', async () => {
-        await ProcessReturnLogsService.go(cycle)
+        await ProcessReturnLogsService(cycle)
 
         const args = notifierStub.omfg.firstCall.args
 
@@ -150,7 +150,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
       })
 
       it('does not throw an error', async () => {
-        await ProcessReturnLogsService.go()
+        await ProcessReturnLogsService()
       })
     })
   })

@@ -57,7 +57,7 @@ describe('Licences - View Returns service', () => {
   describe('when a return', () => {
     describe('and it has no optional fields', () => {
       it('will return all the mandatory data and default values for use in the licence returns page', async () => {
-        const result = await ViewReturnsService.go(licence.id, auth, page)
+        const result = await ViewReturnsService(licence.id, auth, page)
 
         expect(result).toEqual({
           activeSecondaryNav: 'returns',

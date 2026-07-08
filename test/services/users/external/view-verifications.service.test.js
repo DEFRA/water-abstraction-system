@@ -40,7 +40,7 @@ describe('Users - External - View Verifications service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewVerificationsService.go(user.id, auth, page, back)
+      const result = await ViewVerificationsService(user.id, auth, page, back)
 
       expect(result).toEqual({
         activeNavBar: 'users',

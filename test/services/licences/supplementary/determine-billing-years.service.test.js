@@ -33,7 +33,7 @@ describe('Determine Billing Years Service', () => {
       })
 
       it('takes todays date for the end date and returns the financial year ends between the two dates', () => {
-        const result = DetermineBillingYearsService.go(startDate, endDate)
+        const result = DetermineBillingYearsService(startDate, endDate)
 
         expect(result).toEqual([2023, 2024])
       })
@@ -45,7 +45,7 @@ describe('Determine Billing Years Service', () => {
       })
 
       it('returns the financial year ends between the two dates', () => {
-        const result = DetermineBillingYearsService.go(startDate, endDate)
+        const result = DetermineBillingYearsService(startDate, endDate)
 
         expect(result).toEqual([2023, 2024])
       })
@@ -57,7 +57,7 @@ describe('Determine Billing Years Service', () => {
       })
 
       it('returns the financial year ends between the two dates', () => {
-        const result = DetermineBillingYearsService.go(startDate, endDate)
+        const result = DetermineBillingYearsService(startDate, endDate)
 
         expect(result).toEqual([2023, 2024, 2025])
       })
@@ -75,7 +75,7 @@ describe('Determine Billing Years Service', () => {
       })
 
       it('takes todays date for the end date and returns the financial year ends between the two dates', () => {
-        const result = DetermineBillingYearsService.go(startDate, endDate)
+        const result = DetermineBillingYearsService(startDate, endDate)
 
         expect(result).toEqual([2023, 2024])
       })
@@ -87,7 +87,7 @@ describe('Determine Billing Years Service', () => {
       })
 
       it('returns  the financial year ends between the two dates', () => {
-        const result = DetermineBillingYearsService.go(startDate, endDate)
+        const result = DetermineBillingYearsService(startDate, endDate)
 
         expect(result).toEqual([2023])
       })
@@ -99,7 +99,7 @@ describe('Determine Billing Years Service', () => {
       })
 
       it('returns  the financial year ends between the two dates', () => {
-        const result = DetermineBillingYearsService.go(startDate, endDate)
+        const result = DetermineBillingYearsService(startDate, endDate)
 
         expect(result).toEqual([2023, 2024])
       })

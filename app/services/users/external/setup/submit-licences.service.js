@@ -21,7 +21,7 @@ import { handleOneOptionSelected } from '../../../../lib/submit-page.lib.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload, yar) {
+export default async function go(sessionId, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   handleOneOptionSelected(payload, 'licences')
@@ -104,11 +104,4 @@ function _validate(payload) {
   const validationResult = LicencesValidator.go(payload)
 
   return formatValidationResult(validationResult)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

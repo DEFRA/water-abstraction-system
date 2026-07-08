@@ -47,7 +47,7 @@ describe('Licences - View Points service', () => {
 
   describe('when a licence with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewPointsService.go(licence.id, auth)
+      const result = await ViewPointsService(licence.id, auth)
 
       expect(result).toEqual({
         activeSecondaryNav: 'summary',

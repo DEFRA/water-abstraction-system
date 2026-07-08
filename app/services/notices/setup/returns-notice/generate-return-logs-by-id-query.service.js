@@ -10,7 +10,7 @@
  *
  * @returns {object} The query to use as the 'due_return_logs` CTE in the recipients query, and the associated bindings
  */
-function go(returnLogIds) {
+export default function go(returnLogIds) {
   const bindings = [returnLogIds]
 
   return {
@@ -34,9 +34,4 @@ function _query() {
     rl.status = 'due'
     AND rl.id = ANY (?)
   `
-}
-
-export { go }
-export default {
-  go
 }

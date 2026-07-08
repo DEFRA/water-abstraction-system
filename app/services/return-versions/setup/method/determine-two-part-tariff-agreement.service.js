@@ -22,7 +22,7 @@ import LicenceAgreementModel from '../../../../models/licence-agreement.model.js
  *
  * @returns {Promise<boolean>} - Whether there is a two-part tariff agreement in place on the start date for the licence
  */
-async function go(licenceRef, startDate) {
+export default async function go(licenceRef, startDate) {
   const result = await LicenceAgreementModel.query()
     .select('licenceAgreements.id')
     .innerJoin('financialAgreements', 'financialAgreements.id', 'licenceAgreements.financialAgreementId')
@@ -37,9 +37,4 @@ async function go(licenceRef, startDate) {
     .first()
 
   return !!result
-}
-
-export { go }
-export default {
-  go
 }

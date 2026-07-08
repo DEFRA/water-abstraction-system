@@ -45,7 +45,7 @@ describe('Notices - Setup - Send - Send Paper Return Notification service', () =
     })
 
     it('should return the notification notify response', async () => {
-      const result = await SendPaperReturnNotificationService.go(notification, referenceCode)
+      const result = await SendPaperReturnNotificationService(notification, referenceCode)
 
       expect(result).toEqual({
         id: notification.id,
@@ -67,7 +67,7 @@ describe('Notices - Setup - Send - Send Paper Return Notification service', () =
     })
 
     it('should return the notification notify response', async () => {
-      const result = await SendPaperReturnNotificationService.go(notification, referenceCode)
+      const result = await SendPaperReturnNotificationService(notification, referenceCode)
 
       expect(result).toEqual({
         id: notification.id,

@@ -19,7 +19,7 @@ describe('Notices - Setup - Fetch Renewal Licence DAL', () => {
 
   describe('when the licence exists', () => {
     it('returns the licence with the renewal date fields', async () => {
-      const result = await FetchRenewalLicenceDal.go(licence.licenceRef)
+      const result = await FetchRenewalLicenceDal(licence.licenceRef)
 
       expect(result).toEqual({
         expiredDate: null,
@@ -33,7 +33,7 @@ describe('Notices - Setup - Fetch Renewal Licence DAL', () => {
 
   describe('when the licence does not exist', () => {
     it('returns undefined', async () => {
-      const result = await FetchRenewalLicenceDal.go('does-not-exist')
+      const result = await FetchRenewalLicenceDal('does-not-exist')
 
       expect(result).toEqual(undefined)
     })

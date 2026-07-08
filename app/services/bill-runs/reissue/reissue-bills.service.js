@@ -22,8 +22,8 @@ import TransactionModel from '../../../models/transaction.model.js'
  *
  * @returns {Promise<boolean>} `true` if any bills were reissued; `false` if not
  */
-async function go(reissueBillRun) {
-  const sourceBills = await FetchBillsToBeReissuedService.go(reissueBillRun.regionId)
+export default async function go(reissueBillRun) {
+  const sourceBills = await FetchBillsToBeReissuedService(reissueBillRun.regionId)
 
   if (sourceBills.length === 0) {
     return false
@@ -36,7 +36,7 @@ async function go(reissueBillRun) {
   }
 
   for (const sourceBill of sourceBills) {
-    const newData = await ReissueBillService.go(sourceBill, reissueBillRun)
+    const newData = await ReissueBillService(sourceBill, reissueBillRun)
 
     _addNewDataToDataToPersist(dataToPersist, newData)
   }
@@ -57,9 +57,4 @@ async function _persistData(dataToPersist) {
   await BillModel.query().insert(dataToPersist.bills)
   await BillLicenceModel.query().insert(dataToPersist.billLicences)
   await TransactionModel.query().insert(dataToPersist.transactions)
-}
-
-export { go }
-export default {
-  go
 }

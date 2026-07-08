@@ -41,7 +41,7 @@ import LicenceVersionModel from '../../../models/licence-version.model.js'
  *
  * @returns {Promise<module:LicenceVersionModel>} the relevant licence version
  */
-async function go(licenceId, startDate) {
+export default async function go(licenceId, startDate) {
   const licenceVersions = await _fetch(licenceId, startDate)
 
   if (licenceVersions.length === 0) {
@@ -129,9 +129,4 @@ function _manageSameStartDate(licenceVersions) {
   }
 
   return withSameStartDate[withSameStartDate.length - 1]
-}
-
-export { go }
-export default {
-  go
 }

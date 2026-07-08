@@ -76,13 +76,13 @@ describe('Return Versions - Setup - Check service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await CheckService.go(session.id, yarStub)
+      const result = await CheckService(session.id, yarStub)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await CheckService.go(session.id, yarStub)
+      const result = await CheckService(session.id, yarStub)
 
       expect(result).toMatchObject({
         licenceRef: '01/ABC',
@@ -110,7 +110,7 @@ describe('Return Versions - Setup - Check service', () => {
     })
 
     it('updates the session record to indicate user has visited the "check" page', async () => {
-      await CheckService.go(session.id, yarStub)
+      await CheckService(session.id, yarStub)
 
       expect(session.checkPageVisited).toBe(true)
       expect(session.$update.called).toBe(true)

@@ -44,7 +44,7 @@ describe('Address - International Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await InternationalService.go(sessionId)
+      const result = await InternationalService(sessionId)
 
       expect(result).toEqual({
         activeNavBar: 'manage',

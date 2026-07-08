@@ -18,7 +18,7 @@
  *
  * @returns {number[] | null} The formatted array of numbers and null values.
  */
-function go(multipleEntries) {
+export default function go(multipleEntries) {
   if (!multipleEntries) {
     return null
   }
@@ -40,9 +40,4 @@ function go(multipleEntries) {
   }
 
   return entries
-}
-
-export { go }
-export default {
-  go
 }

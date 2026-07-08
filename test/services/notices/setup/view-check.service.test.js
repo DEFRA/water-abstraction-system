@@ -43,7 +43,7 @@ describe('Notices - Setup - View Check service', () => {
   })
 
   it('correctly presents the data', async () => {
-    const result = await ViewCheckService.go(session.id, yarStub)
+    const result = await ViewCheckService(session.id, yarStub)
 
     expect(result).toEqual({
       activeNavBar: 'notices',
@@ -81,7 +81,7 @@ describe('Notices - Setup - View Check service', () => {
 
   describe('when this is the first time visiting the check page', () => {
     it('initialises the "selectedRecipients" property in the session', async () => {
-      await ViewCheckService.go(session.id, yarStub)
+      await ViewCheckService(session.id, yarStub)
 
       expect(sessionUpdateStub.called).toBe(true)
     })
@@ -93,7 +93,7 @@ describe('Notices - Setup - View Check service', () => {
     })
 
     it('leaves the "selectedRecipients" property alone', async () => {
-      await ViewCheckService.go(session.id, yarStub)
+      await ViewCheckService(session.id, yarStub)
 
       expect(sessionUpdateStub.called).toBe(false)
     })

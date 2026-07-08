@@ -37,7 +37,7 @@ describe('Determine Minimum Charge service', () => {
       })
 
       it('returns true', async () => {
-        const result = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
+        const result = DetermineMinimumChargeService(chargeVersion, chargePeriod)
 
         expect(result).toBe(true)
       })
@@ -54,7 +54,7 @@ describe('Determine Minimum Charge service', () => {
       })
 
       it('returns false', async () => {
-        const result = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
+        const result = DetermineMinimumChargeService(chargeVersion, chargePeriod)
 
         expect(result).toBe(false)
       })
@@ -72,7 +72,7 @@ describe('Determine Minimum Charge service', () => {
     })
 
     it('returns false', async () => {
-      const result = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
+      const result = DetermineMinimumChargeService(chargeVersion, chargePeriod)
 
       expect(result).toBe(false)
     })

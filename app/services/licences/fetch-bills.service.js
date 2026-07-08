@@ -15,7 +15,7 @@ import DatabaseConfig from '../../../config/database.config.js'
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's bills tab
  */
-async function go(licenceId, page = '1') {
+export default async function go(licenceId, page = '1') {
   const { results: bills, total: totalNumber } = await _fetch(licenceId, page)
 
   return { bills, totalNumber }
@@ -45,11 +45,4 @@ async function _fetch(licenceId, page) {
     })
     .orderBy([{ column: 'createdAt', order: 'desc' }])
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -44,7 +44,7 @@ describe('Users - Internal - View Notifications Service', () => {
       })
 
       it('returns "protected" page data for the view', async () => {
-        const result = await ViewNotificationService.go(notification.id, user.id, type, auth)
+        const result = await ViewNotificationService(notification.id, user.id, type, auth)
 
         expect(result).toEqual({
           activeNavBar: 'users',
@@ -70,7 +70,7 @@ describe('Users - Internal - View Notifications Service', () => {
       })
 
       it('returns "full" page data for the view', async () => {
-        const result = await ViewNotificationService.go(notification.id, user.id, type, auth)
+        const result = await ViewNotificationService(notification.id, user.id, type, auth)
 
         expect(result).toEqual({
           activeNavBar: 'users',

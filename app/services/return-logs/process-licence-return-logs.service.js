@@ -42,8 +42,8 @@ import { determineEarliestDate } from '../../lib/dates.lib.js'
  * reissue
  * @param {object} [trx=null] - Optional transaction object
  */
-async function go(licenceId, changeDate, returnVersionEndDate = null, trx = null) {
-  const returnRequirements = await FetchLicenceReturnRequirementsService.go(licenceId, changeDate, trx)
+export default async function go(licenceId, changeDate, returnVersionEndDate = null, trx = null) {
+  const returnRequirements = await FetchLicenceReturnRequirementsService(licenceId, changeDate, trx)
 
   if (returnRequirements.length === 0) {
     return
@@ -99,17 +99,10 @@ async function _processReturnCycle(returnCycle, returnRequirements, changeDate, 
   // Because we've processed _all_ return requirements for the cycle, we know any return logs whose ID is not in
   // `generatedReturnLogIds` have been made redundant by whatever the 'change' was
   for (const returnRequirement of requirementsToProcess) {
-    const returnIds = await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate, trx)
+    const returnIds = await CreateReturnLogsService(returnRequirement, returnCycle, licenceEndDate, trx)
 
     generatedReturnIds.push(...returnIds)
   }
 
-  await VoidLicenceReturnLogsService.go(generatedReturnIds, licenceRef, returnCycle.id, changeDate, trx)
-}
-
-export {
-  go
-}
-export default {
-  go
+  await VoidLicenceReturnLogsService(generatedReturnIds, licenceRef, returnCycle.id, changeDate, trx)
 }

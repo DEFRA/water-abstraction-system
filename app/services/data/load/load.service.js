@@ -272,7 +272,7 @@ const LOAD_HELPERS = {
  * }
  * ```
  */
-async function go(payload) {
+export default async function go(payload) {
   // Instantiate a result object to which we'll record the ID's generated/used
   const result = {}
 
@@ -397,11 +397,4 @@ async function _selector(schema, table, select, where, value) {
 
     throw error
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

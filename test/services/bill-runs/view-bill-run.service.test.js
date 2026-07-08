@@ -27,7 +27,7 @@ describe('View Bill Run service', () => {
       })
 
       it('will fetch the data and format it for use in the empty bill run page', async () => {
-        const result = await ViewBillRunService.go(testId)
+        const result = await ViewBillRunService(testId)
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',
@@ -55,7 +55,7 @@ describe('View Bill Run service', () => {
       })
 
       it('will fetch the data and format it for use in the errored bill run page', async () => {
-        const result = await ViewBillRunService.go(testId)
+        const result = await ViewBillRunService(testId)
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',
@@ -83,7 +83,7 @@ describe('View Bill Run service', () => {
         })
 
         it('will fetch the data and format it for use in the view bill run page', async () => {
-          const result = await ViewBillRunService.go(testId)
+          const result = await ViewBillRunService(testId)
 
           expect(result).toEqual({
             activeNavBar: 'bill-runs',
@@ -154,7 +154,7 @@ describe('View Bill Run service', () => {
         })
 
         it('will fetch the data and format it for use in the view bill run page', async () => {
-          const result = await ViewBillRunService.go(testId)
+          const result = await ViewBillRunService(testId)
 
           expect(result).toEqual({
             activeNavBar: 'bill-runs',
@@ -214,7 +214,7 @@ describe('View Bill Run service', () => {
     })
 
     it('throws an exception', async () => {
-      await expect(ViewBillRunService.go('testId')).rejects.toThrow()
+      await expect(ViewBillRunService('testId')).rejects.toThrow()
     })
   })
 })

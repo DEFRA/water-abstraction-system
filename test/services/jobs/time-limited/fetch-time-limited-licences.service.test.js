@@ -46,7 +46,7 @@ describe('Fetch Time Limited Licences service', () => {
     })
 
     it('returns the licenceId, licenceVersionId and chargeVersionId for the SROC licence with an expiring element', async () => {
-      const results = await FetchTimeLimitedLicencesService.go()
+      const results = await FetchTimeLimitedLicencesService()
 
       const hasLicenceId = results.some((result) => {
         return result.id === licenceId
@@ -69,7 +69,7 @@ describe('Fetch Time Limited Licences service', () => {
       })
 
       it('returns the licenceId, licenceVersionId and chargeVersionId for the SROC licence with an expiring element', async () => {
-        const results = await FetchTimeLimitedLicencesService.go()
+        const results = await FetchTimeLimitedLicencesService()
 
         const hasLicenceId = results.some((result) => {
           return result.id === licenceId
@@ -114,7 +114,7 @@ describe('Fetch Time Limited Licences service', () => {
       })
 
       it('does not return the licence', async () => {
-        const results = await FetchTimeLimitedLicencesService.go()
+        const results = await FetchTimeLimitedLicencesService()
 
         const hasLicenceId = results.some((result) => {
           return result.id === licenceId
@@ -155,7 +155,7 @@ describe('Fetch Time Limited Licences service', () => {
       })
 
       it('does not return the licence', async () => {
-        const results = await FetchTimeLimitedLicencesService.go()
+        const results = await FetchTimeLimitedLicencesService()
 
         const hasLicenceId = results.some((result) => {
           return result.id === licenceId
@@ -196,7 +196,7 @@ describe('Fetch Time Limited Licences service', () => {
       })
 
       it('does not return the licence', async () => {
-        const results = await FetchTimeLimitedLicencesService.go()
+        const results = await FetchTimeLimitedLicencesService()
 
         const hasLicenceId = results.some((result) => {
           return result.id === licenceId
@@ -237,7 +237,7 @@ describe('Fetch Time Limited Licences service', () => {
       })
 
       it('does not return the licence', async () => {
-        const results = await FetchTimeLimitedLicencesService.go()
+        const results = await FetchTimeLimitedLicencesService()
 
         const hasLicenceId = results.some((result) => {
           return result.id === licenceId
@@ -277,7 +277,7 @@ describe('Fetch Time Limited Licences service', () => {
       })
 
       it('does not return the licence', async () => {
-        const results = await FetchTimeLimitedLicencesService.go()
+        const results = await FetchTimeLimitedLicencesService()
 
         const hasLicenceId = results.some((result) => {
           return result.id === licenceId
@@ -317,7 +317,7 @@ describe('Fetch Time Limited Licences service', () => {
       })
 
       it('does not return the licence', async () => {
-        const results = await FetchTimeLimitedLicencesService.go()
+        const results = await FetchTimeLimitedLicencesService()
 
         const hasLicenceId = results.some((result) => {
           return result.id === licenceId
@@ -357,7 +357,7 @@ describe('Fetch Time Limited Licences service', () => {
       })
 
       it('does not return the licence', async () => {
-        const results = await FetchTimeLimitedLicencesService.go()
+        const results = await FetchTimeLimitedLicencesService()
 
         const hasLicenceId = results.some((result) => {
           return result.id === licenceId
@@ -397,7 +397,7 @@ describe('Fetch Time Limited Licences service', () => {
       })
 
       it('does not return the licence', async () => {
-        const results = await FetchTimeLimitedLicencesService.go()
+        const results = await FetchTimeLimitedLicencesService()
 
         const hasLicenceId = results.some((result) => {
           return result.id === licenceId

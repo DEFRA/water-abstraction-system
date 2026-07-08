@@ -74,14 +74,14 @@ describe('Return Versions Setup - Submit Remove service', () => {
 
   describe('when a user submits the return requirements to be removed', () => {
     it('deletes the selected requirement from the session data', async () => {
-      await SubmitRemoveService.go(session.id, requirementIndex, yarStub)
+      await SubmitRemoveService(session.id, requirementIndex, yarStub)
 
       expect(session.requirements[requirementIndex]).toBeUndefined()
       expect(session.$update.called).toBe(true)
     })
 
     it('sets the notification message to "Requirements removed"', async () => {
-      await SubmitRemoveService.go(session.id, requirementIndex, yarStub)
+      await SubmitRemoveService(session.id, requirementIndex, yarStub)
 
       const [flashType, notification] = yarStub.flash.args[0]
 

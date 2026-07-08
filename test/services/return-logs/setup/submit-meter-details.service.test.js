@@ -49,7 +49,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
       })
 
       it('saves the submitted option', async () => {
-        await SubmitMeterDetailsService.go(session.id, payload, yarStub)
+        await SubmitMeterDetailsService(session.id, payload, yarStub)
 
         expect(session.meterMake).toEqual('WATER')
         expect(session.meterSerialNumber).toEqual('123')
@@ -61,7 +61,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
 
     describe('and the page has been not been visited', () => {
       it('returns the correct details the controller needs to redirect the journey', async () => {
-        const result = await SubmitMeterDetailsService.go(session.id, payload, yarStub)
+        const result = await SubmitMeterDetailsService(session.id, payload, yarStub)
 
         expect(result).toEqual({
           checkPageVisited: undefined,
@@ -81,7 +81,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
       })
 
       it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
-        const result = await SubmitMeterDetailsService.go(session.id, payload, yarStub)
+        const result = await SubmitMeterDetailsService(session.id, payload, yarStub)
 
         expect(result).toEqual({
           checkPageVisited: true,
@@ -90,7 +90,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
       })
 
       it('sets the notification message title to "Updated" and the text to "Reporting details changed" ', async () => {
-        await SubmitMeterDetailsService.go(session.id, payload, yarStub)
+        await SubmitMeterDetailsService(session.id, payload, yarStub)
 
         const [flashType, notification] = yarStub.flash.args[0]
 
@@ -105,7 +105,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitMeterDetailsService.go(session.id, payload, yarStub)
+        const result = await SubmitMeterDetailsService(session.id, payload, yarStub)
 
         expect(result).toMatchObject({
           backLink: { href: `/system/return-logs/setup/${session.id}/meter-provided`, text: 'Back' },
@@ -119,7 +119,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
 
       describe('because the user has not entered or selected anything', () => {
         it('includes an error for both input elements and radio elements', async () => {
-          const result = await SubmitMeterDetailsService.go(session.id, payload, yarStub)
+          const result = await SubmitMeterDetailsService(session.id, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [
@@ -146,7 +146,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
         })
 
         it('includes an error for the make input elements', async () => {
-          const result = await SubmitMeterDetailsService.go(session.id, payload, yarStub)
+          const result = await SubmitMeterDetailsService(session.id, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [{ href: '#meterMake', text: 'Enter the make of the meter' }],
@@ -164,7 +164,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
         })
 
         it('includes an error for the make input elements', async () => {
-          const result = await SubmitMeterDetailsService.go(session.id, payload, yarStub)
+          const result = await SubmitMeterDetailsService(session.id, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [{ href: '#meterSerialNumber', text: 'Enter a serial number' }],
@@ -182,7 +182,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
         })
 
         it('includes an error for the make input elements', async () => {
-          const result = await SubmitMeterDetailsService.go(session.id, payload, yarStub)
+          const result = await SubmitMeterDetailsService(session.id, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [{ href: '#meter10TimesDisplay', text: 'Select if the meter has a ×10 display' }],

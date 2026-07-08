@@ -15,7 +15,7 @@ import LicenceVersionPurposeModel from '../../models/licence-version-purpose.mod
  * @returns {Promise<object[]>} An array oof objects containing the condition types, along with their related purposes
  * and points data, required for the conditions page
  */
-async function go(licenceVersionId) {
+export default async function go(licenceVersionId) {
   return _fetchConditions(licenceVersionId)
 }
 
@@ -76,11 +76,4 @@ async function _fetchConditions(licenceVersionId) {
             })
         })
     })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

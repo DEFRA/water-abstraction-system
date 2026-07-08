@@ -25,15 +25,8 @@ import ViewNotificationPresenter from '../../presenters/notifications/view-notif
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the view notification template.
  */
-async function go(notificationId, licenceId = null, returnLogId = null, companyContactId = null) {
-  const { licence, notification } = await FetchNotificationService.go(notificationId, licenceId)
+export default async function go(notificationId, licenceId = null, returnLogId = null, companyContactId = null) {
+  const { licence, notification } = await FetchNotificationService(notificationId, licenceId)
 
   return ViewNotificationPresenter.go(notification, licence, returnLogId, companyContactId)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -51,7 +51,7 @@ describe('Bill Runs - Send Transactions service', () => {
     })
 
     it('updates the transactions with the responses from the Charging Module API', async () => {
-      const results = await SendTransactionsService.go(transactions, billRunExternalId, accountNumber, licence)
+      const results = await SendTransactionsService(transactions, billRunExternalId, accountNumber, licence)
 
       expect(results).toHaveLength(2)
       expect(results[0].status).toEqual('charge_created')
@@ -71,11 +71,11 @@ describe('Bill Runs - Send Transactions service', () => {
 
     it('throws a BillRunError with the correct code', async () => {
       await expect(
-        SendTransactionsService.go(transactions, billRunExternalId, accountNumber, licence)
+        SendTransactionsService(transactions, billRunExternalId, accountNumber, licence)
       ).rejects.toBeInstanceOf(BillRunError)
 
       await expect(
-        SendTransactionsService.go(transactions, billRunExternalId, accountNumber, licence)
+        SendTransactionsService(transactions, billRunExternalId, accountNumber, licence)
       ).rejects.toMatchObject({ code: BillRunModel.errorCodes.failedToCreateCharge })
     })
   })

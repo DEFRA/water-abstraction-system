@@ -18,10 +18,10 @@ import { readFlashNotification } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<object>} The view data for the review page
  */
-async function go(sessionId, yar, page) {
+export default async function go(sessionId, yar, page) {
   const session = await FetchSessionDal(sessionId)
 
-  const recipients = await FetchRecipientsService.go(session, false)
+  const recipients = await FetchRecipientsService(session, false)
 
   await _initialiseSelectedRecipients(recipients, session)
 
@@ -59,9 +59,4 @@ async function _initialiseSelectedRecipients(recipients, session) {
 
     await session.$update()
   }
-}
-
-export { go }
-export default {
-  go
 }

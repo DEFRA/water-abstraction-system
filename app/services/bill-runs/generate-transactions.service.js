@@ -31,8 +31,8 @@ import CalculateAuthorisedAndBillableDaysServiceService from './calculate-author
  *
  * @returns {object[]} an array of 0, 1 or 2 transaction objects
  */
-function go(billLicenceId, chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker) {
-  const { authorisedDays, billableDays } = CalculateAuthorisedAndBillableDaysServiceService.go(
+export default function go(billLicenceId, chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker) {
+  const { authorisedDays, billableDays } = CalculateAuthorisedAndBillableDaysServiceService(
     chargePeriod,
     billingPeriod,
     chargeReference
@@ -154,9 +154,4 @@ function _standardTransaction(
     winterOnly: !!chargeReference.adjustments.winter,
     purposes: _generateElements(chargeReference)
   }
-}
-
-export { go }
-export default {
-  go
 }

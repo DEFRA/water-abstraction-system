@@ -32,7 +32,7 @@ describe('Company Contacts - Setup - Fetch Company Contact Dal', () => {
 
   describe('when there is a company contact', () => {
     it('returns the matching company contact', async () => {
-      const result = await FetchCompanyContactDal.go(companyContact.id)
+      const result = await FetchCompanyContactDal(companyContact.id)
 
       expect(result).toEqual({
         abstractionAlertLicences: null,

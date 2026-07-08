@@ -14,8 +14,8 @@ import FetchChargeVersionsService from './fetch-charge-versions.service.js'
  * @returns {Promise<object[]>} the licences to be matched, each containing an array of charge versions applicable for
  * two-part tariff
  */
-async function go(billRun, billingPeriod) {
-  const chargeVersions = await FetchChargeVersionsService.go(billRun, billingPeriod)
+export default async function go(billRun, billingPeriod) {
+  const chargeVersions = await FetchChargeVersionsService(billRun, billingPeriod)
 
   const uniqueLicenceIds = _extractUniqueLicenceIds(chargeVersions)
 
@@ -60,9 +60,4 @@ function _groupByLicence(chargeVersions, uniqueLicenceIds) {
   }
 
   return licences
-}
-
-export { go }
-export default {
-  go
 }

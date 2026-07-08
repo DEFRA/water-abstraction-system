@@ -21,13 +21,13 @@ import CreateBillRunEventService from './create-bill-run-event.service.js'
  *
  * @returns {Promise<module:BillRunModel>} The newly created bill run instance
  */
-async function go(financialYearEndings, regionId, batchType, userEmail) {
+export default async function go(financialYearEndings, regionId, batchType, userEmail) {
   const chargingModuleResult = await send(regionId, 'sroc')
 
   const billRunOptions = _billRunOptions(chargingModuleResult, batchType)
-  const billRun = await CreateBillRunService.go(regionId, financialYearEndings, billRunOptions)
+  const billRun = await CreateBillRunService(regionId, financialYearEndings, billRunOptions)
 
-  await CreateBillRunEventService.go(billRun, userEmail)
+  await CreateBillRunEventService(billRun, userEmail)
 
   return billRun
 }
@@ -49,9 +49,4 @@ function _billRunOptions(chargingModuleResult, batchType) {
   options.errorCode = BillRunModel.errorCodes.failedToCreateBillRun
 
   return options
-}
-
-export { go }
-export default {
-  go
 }

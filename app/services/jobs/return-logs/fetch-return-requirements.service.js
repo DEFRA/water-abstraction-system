@@ -15,7 +15,7 @@ import ReturnVersionModel from '../../../models/return-version.model.js'
  *
  * @returns {Promise<module:ReturnRequirementModel[]>} the matching return requirements for the given return cycle
  */
-async function go(returnCycle) {
+export default async function go(returnCycle) {
   return _fetch(returnCycle)
 }
 
@@ -107,11 +107,4 @@ async function _fetch(returnCycle) {
           secondaryPurposeBuilder.select(['description', 'id', 'legacyId'])
         })
     })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

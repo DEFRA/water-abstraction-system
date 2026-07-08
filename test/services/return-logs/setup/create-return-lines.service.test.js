@@ -47,7 +47,7 @@ describe('Return Logs - Setup - Create New Return Lines service', () => {
     })
 
     it('inserts the lines', async () => {
-      await CreateReturnLinesService.go(returnSubmissionId, session, timestamp)
+      await CreateReturnLinesService(returnSubmissionId, session, timestamp)
 
       const result = await ReturnSubmissionLineModel.query().where('returnSubmissionId', returnSubmissionId)
 
@@ -69,7 +69,7 @@ describe('Return Logs - Setup - Create New Return Lines service', () => {
       })
 
       it('returns an empty array', async () => {
-        const result = await CreateReturnLinesService.go(returnSubmissionId, session, timestamp)
+        const result = await CreateReturnLinesService(returnSubmissionId, session, timestamp)
 
         expect(result).toEqual([])
       })
@@ -79,7 +79,7 @@ describe('Return Logs - Setup - Create New Return Lines service', () => {
       it('does not persist anything if an error occurs', async () => {
         try {
           await ReturnSubmissionLineModel.transaction(async (trx) => {
-            await CreateReturnLinesService.go(returnSubmissionId, session, timestamp, trx)
+            await CreateReturnLinesService(returnSubmissionId, session, timestamp, trx)
             throw new Error()
           })
         } catch (_error) {

@@ -44,7 +44,7 @@ describe('Licences - View Purposes service', () => {
 
   describe('when a licence with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewPurposesService.go(licence.id, auth)
+      const result = await ViewPurposesService(licence.id, auth)
 
       expect(result).toEqual({
         activeSecondaryNav: 'summary',

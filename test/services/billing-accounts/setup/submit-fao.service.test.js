@@ -45,7 +45,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitFAOService.go(session.id, payload)
+      await SubmitFAOService(session.id, payload)
 
       expect(session).toMatchObject({
         fao: 'yes'
@@ -53,7 +53,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitFAOService.go(session.id, payload)
+      const result = await SubmitFAOService(session.id, payload)
 
       expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/contact`)
     })
@@ -71,7 +71,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitFAOService.go(session.id, payload)
+        await SubmitFAOService(session.id, payload)
 
         expect(session).toMatchObject({
           fao: 'yes'
@@ -80,7 +80,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitFAOService.go(session.id, payload)
+        const result = await SubmitFAOService(session.id, payload)
 
         expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/contact`)
       })
@@ -100,7 +100,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitFAOService.go(session.id, payload)
+        await SubmitFAOService(session.id, payload)
 
         expect(session).toMatchObject({
           checkPageVisited: true,
@@ -110,7 +110,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitFAOService.go(session.id, payload)
+        const result = await SubmitFAOService(session.id, payload)
 
         expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
@@ -130,7 +130,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitFAOService.go(session.id, payload)
+        await SubmitFAOService(session.id, payload)
 
         expect(session).toMatchObject({
           addressJourney: null,
@@ -143,7 +143,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitFAOService.go(session.id, payload)
+        const result = await SubmitFAOService(session.id, payload)
 
         expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/contact`)
       })
@@ -158,7 +158,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitFAOService.go(session.id, payload)
+      await SubmitFAOService(session.id, payload)
 
       expect(session).toMatchObject({
         fao: 'no'
@@ -167,7 +167,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitFAOService.go(session.id, payload)
+      const result = await SubmitFAOService(session.id, payload)
 
       expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
     })
@@ -185,7 +185,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitFAOService.go(session.id, payload)
+        await SubmitFAOService(session.id, payload)
 
         expect(session).toMatchObject({
           fao: 'no'
@@ -194,7 +194,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitFAOService.go(session.id, payload)
+        const result = await SubmitFAOService(session.id, payload)
 
         expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
@@ -214,7 +214,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitFAOService.go(session.id, payload)
+        await SubmitFAOService(session.id, payload)
 
         expect(session).toMatchObject({
           checkPageVisited: true,
@@ -224,7 +224,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitFAOService.go(session.id, payload)
+        const result = await SubmitFAOService(session.id, payload)
 
         expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
@@ -246,7 +246,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitFAOService.go(session.id, payload)
+        await SubmitFAOService(session.id, payload)
 
         expect(session).toMatchObject({
           addressJourney: null,
@@ -259,7 +259,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitFAOService.go(session.id, payload)
+        const result = await SubmitFAOService(session.id, payload)
 
         expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })
@@ -284,7 +284,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitFAOService.go(session.id, payload)
+        await SubmitFAOService(session.id, payload)
 
         expect(session).toMatchObject({
           addressJourney: _addressJourney(session),
@@ -294,7 +294,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitFAOService.go(session.id, payload)
+        const result = await SubmitFAOService(session.id, payload)
 
         expect(result.redirectUrl).toEqual(`/system/address/${session.id}/postcode`)
       })
@@ -303,7 +303,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
 
   describe('when validation fails', () => {
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitFAOService.go(session.id, {})
+      const result = await SubmitFAOService(session.id, {})
 
       expect(result.error).toEqual({
         errorList: [

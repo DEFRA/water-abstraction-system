@@ -41,7 +41,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitLicencesService.go(session.id, payload, yarStub)
+      await SubmitLicencesService(session.id, payload, yarStub)
 
       expect(session).toEqual({
         ...session,
@@ -51,7 +51,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitLicencesService.go(session.id, payload, yarStub)
+      const result = await SubmitLicencesService(session.id, payload, yarStub)
 
       expect(result).toEqual({
         redirectUrl: `/system/users/external/setup/${session.id}/check`
@@ -75,7 +75,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
             })
 
             it('does not set a notification', async () => {
-              await SubmitLicencesService.go(session.id, payload, yarStub)
+              await SubmitLicencesService(session.id, payload, yarStub)
 
               expect(yarStub.flash.called).toBe(false)
             })
@@ -96,7 +96,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
               })
 
               it('sets a notification', async () => {
-                await SubmitLicencesService.go(session.id, payload, yarStub)
+                await SubmitLicencesService(session.id, payload, yarStub)
 
                 const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -120,7 +120,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
               })
 
               it('sets a notification', async () => {
-                await SubmitLicencesService.go(session.id, payload, yarStub)
+                await SubmitLicencesService(session.id, payload, yarStub)
 
                 const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -144,7 +144,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
               })
 
               it('sets a notification', async () => {
-                await SubmitLicencesService.go(session.id, payload, yarStub)
+                await SubmitLicencesService(session.id, payload, yarStub)
 
                 const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -158,7 +158,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
 
       describe('not been visited', () => {
         it('does not set a notification', async () => {
-          await SubmitLicencesService.go(session.id, payload, yarStub)
+          await SubmitLicencesService(session.id, payload, yarStub)
 
           expect(yarStub.flash.called).toBe(false)
         })
@@ -172,7 +172,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitLicencesService.go(session.id, payload, yarStub)
+      const result = await SubmitLicencesService(session.id, payload, yarStub)
 
       expect(result).toEqual({
         error: {

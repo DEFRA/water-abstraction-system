@@ -33,7 +33,7 @@ describe('Companies - Fetch Billing Accounts dal', () => {
   })
 
   it('returns the billing accounts for the company', async () => {
-    const result = await FetchCompanyDal.go(company.id)
+    const result = await FetchCompanyDal(company.id)
 
     expect(result).toEqual({
       billingAccounts: [

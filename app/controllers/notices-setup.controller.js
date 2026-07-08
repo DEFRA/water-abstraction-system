@@ -51,7 +51,7 @@ export async function processAddRecipient(request, h) {
     yar
   } = request
 
-  await ProcessAddRecipientService.go(sessionId, yar)
+  await ProcessAddRecipientService(sessionId, yar)
 
   return h.redirect(`/system/notices/setup/${sessionId}/check`)
 }
@@ -61,7 +61,7 @@ export async function processDownloadRecipients(request, h) {
     params: { sessionId }
   } = request
 
-  const { data, type, filename } = await ProcessDownloadRecipientsService.go(sessionId)
+  const { data, type, filename } = await ProcessDownloadRecipientsService(sessionId)
 
   return h
     .response(data)
@@ -74,7 +74,7 @@ export async function processDownloadRecipients(request, h) {
 export async function processPreviewPaperReturn(request, h) {
   const { contactHashId, sessionId, returnLogId } = request.params
 
-  const fileBuffer = await ProcessPreviewPaperReturnService.go(sessionId, contactHashId, returnLogId)
+  const fileBuffer = await ProcessPreviewPaperReturnService(sessionId, contactHashId, returnLogId)
 
   return h.response(fileBuffer).type('application/pdf').header('Content-Disposition', 'inline; filename="example.pdf"')
 }
@@ -85,7 +85,7 @@ export async function processRemoveThreshold(request, h) {
     yar
   } = request
 
-  await ProcessRemoveThresholdService.go(sessionId, licenceMonitoringStationId, yar)
+  await ProcessRemoveThresholdService(sessionId, licenceMonitoringStationId, yar)
 
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
 }
@@ -96,7 +96,7 @@ export async function setup(request, h) {
     query: { monitoringStationId }
   } = request
 
-  const { sessionId, path } = await InitiateSessionService.go(journey, monitoringStationId)
+  const { sessionId, path } = await InitiateSessionService(journey, monitoringStationId)
 
   return h.redirect(`/system/notices/setup/${sessionId}/${path}`)
 }
@@ -108,7 +108,7 @@ export async function submitAlertEmailAddress(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await SubmitAlertEmailAddressService.go(sessionId, payload, auth)
+  const pageData = await SubmitAlertEmailAddressService(sessionId, payload, auth)
 
   if (pageData.error) {
     return h.view(`notices/setup/alert-email-address.njk`, pageData)
@@ -123,7 +123,7 @@ export async function submitAlertThresholds(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await SubmitAlertThresholdsService.go(sessionId, payload)
+  const pageData = await SubmitAlertThresholdsService(sessionId, payload)
 
   if (pageData.error) {
     return h.view(`notices/setup/alert-thresholds.njk`, pageData)
@@ -138,7 +138,7 @@ export async function submitAlertType(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await SubmitAlertTypeService.go(sessionId, payload)
+  const pageData = await SubmitAlertTypeService(sessionId, payload)
 
   if (pageData.error) {
     return h.view(`notices/setup/alert-type.njk`, pageData)
@@ -150,7 +150,7 @@ export async function submitAlertType(request, h) {
 export async function submitCancel(request, h) {
   const { sessionId } = request.params
 
-  const redirectURl = await SubmitCancelService.go(sessionId)
+  const redirectURl = await SubmitCancelService(sessionId)
 
   return h.redirect(redirectURl)
 }
@@ -160,7 +160,7 @@ export async function submitCancelAlerts(request, h) {
     params: { sessionId }
   } = request
 
-  const { monitoringStationId } = await SubmitCancelAlertsService.go(sessionId)
+  const { monitoringStationId } = await SubmitCancelAlertsService(sessionId)
 
   return h.redirect(`/system/monitoring-stations/${monitoringStationId}`)
 }
@@ -171,7 +171,7 @@ export async function submitCheck(request, h) {
     params: { sessionId }
   } = request
 
-  const eventId = await SubmitCheckService.go(sessionId, auth)
+  const eventId = await SubmitCheckService(sessionId, auth)
 
   return h.redirect(`/system/notices/setup/${eventId}/confirmation`)
 }
@@ -181,7 +181,7 @@ export async function submitCheckLicenceMatches(request, h) {
     params: { sessionId }
   } = request
 
-  await SubmitCheckLicenceMatchesService.go(sessionId)
+  await SubmitCheckLicenceMatchesService(sessionId)
 
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/alert-email-address`)
 }
@@ -191,7 +191,7 @@ export async function submitCheckNoticeType(request, h) {
     params: { sessionId }
   } = request
 
-  await SubmitCheckNoticeTypeService.go(sessionId)
+  await SubmitCheckNoticeTypeService(sessionId)
 
   return h.redirect(`/system/notices/setup/${sessionId}/check`)
 }
@@ -203,7 +203,7 @@ export async function submitContactType(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitContactTypeService.go(sessionId, payload, yar)
+  const pageData = await SubmitContactTypeService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view(`notices/setup/contact-type.njk`, pageData)
@@ -222,7 +222,7 @@ export async function submitLicence(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitLicenceService.go(sessionId, request.payload, yar)
+  const pageData = await SubmitLicenceService(sessionId, request.payload, yar)
 
   if (pageData.error) {
     return h.view(`notices/setup/licence.njk`, pageData)
@@ -239,7 +239,7 @@ export async function submitNoticeType(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitNoticeTypeService.go(sessionId, payload, yar, auth)
+  const pageData = await SubmitNoticeTypeService(sessionId, payload, yar, auth)
 
   if (pageData.error) {
     return h.view(`notices/setup/notice-type.njk`, pageData)
@@ -254,7 +254,7 @@ export async function submitRecipientName(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await SubmitRecipientNameService.go(sessionId, payload)
+  const pageData = await SubmitRecipientNameService(sessionId, payload)
 
   if (pageData.error) {
     return h.view(`notices/setup/recipient-name.njk`, pageData)
@@ -269,7 +269,7 @@ export async function submitRemoveLicences(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await SubmitRemoveLicencesService.go(sessionId, payload)
+  const pageData = await SubmitRemoveLicencesService(sessionId, payload)
 
   if (pageData.error) {
     return h.view(`notices/setup/remove-licences.njk`, pageData)
@@ -285,7 +285,7 @@ export async function submitReturnsPeriod(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitReturnsPeriodService.go(sessionId, payload, yar)
+  const pageData = await SubmitReturnsPeriodService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view(`notices/setup/returns-period.njk`, pageData)
@@ -301,7 +301,7 @@ export async function submitPaperReturn(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitPaperReturnService.go(sessionId, payload, yar)
+  const pageData = await SubmitPaperReturnService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view(`notices/setup/paper-return.njk`, pageData)
@@ -317,7 +317,7 @@ export async function submitSelectRecipients(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitSelectRecipientsService.go(sessionId, payload, yar)
+  const pageData = await SubmitSelectRecipientsService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view(`notices/setup/select-recipients.njk`, pageData)
@@ -332,7 +332,7 @@ export async function viewAlertEmailAddress(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await ViewAlertEmailAddressService.go(sessionId, auth)
+  const pageData = await ViewAlertEmailAddressService(sessionId, auth)
 
   return h.view(`notices/setup/alert-email-address.njk`, pageData)
 }
@@ -340,7 +340,7 @@ export async function viewAlertEmailAddress(request, h) {
 export async function viewAlertThresholds(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ViewAlertThresholdsService.go(sessionId)
+  const pageData = await ViewAlertThresholdsService(sessionId)
 
   return h.view(`notices/setup/alert-thresholds.njk`, pageData)
 }
@@ -350,7 +350,7 @@ export async function viewAlertType(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await ViewAlertTypeService.go(sessionId)
+  const pageData = await ViewAlertTypeService(sessionId)
 
   return h.view(`notices/setup/alert-type.njk`, pageData)
 }
@@ -358,7 +358,7 @@ export async function viewAlertType(request, h) {
 export async function viewCancel(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ViewCancelService.go(sessionId)
+  const pageData = await ViewCancelService(sessionId)
 
   return h.view(`notices/setup/cancel.njk`, pageData)
 }
@@ -366,7 +366,7 @@ export async function viewCancel(request, h) {
 export async function viewCancelAlerts(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ViewCancelAlertsService.go(sessionId)
+  const pageData = await ViewCancelAlertsService(sessionId)
 
   return h.view(`notices/setup/cancel-alerts.njk`, pageData)
 }
@@ -378,7 +378,7 @@ export async function viewCheck(request, h) {
     yar
   } = request
 
-  const pageData = await ViewCheckService.go(sessionId, yar, page)
+  const pageData = await ViewCheckService(sessionId, yar, page)
 
   return h.view(`notices/setup/check.njk`, pageData)
 }
@@ -389,7 +389,7 @@ export async function viewCheckLicenceMatches(request, h) {
     yar
   } = request
 
-  const pageData = await ViewCheckLicenceMatchesService.go(sessionId, yar)
+  const pageData = await ViewCheckLicenceMatchesService(sessionId, yar)
 
   return h.view(`notices/setup/check-licence-matches.njk`, pageData)
 }
@@ -400,7 +400,7 @@ export async function viewCheckNoticeType(request, h) {
     yar
   } = request
 
-  const pageData = await ViewCheckNoticeTypeService.go(sessionId, yar)
+  const pageData = await ViewCheckNoticeTypeService(sessionId, yar)
 
   return h.view(`notices/setup/check-notice-type.njk`, pageData)
 }
@@ -408,7 +408,7 @@ export async function viewCheckNoticeType(request, h) {
 export async function viewConfirmation(request, h) {
   const { eventId } = request.params
 
-  const pageData = await ViewConfirmationService.go(eventId)
+  const pageData = await ViewConfirmationService(eventId)
 
   return h.view(`notices/setup/confirmation.njk`, pageData)
 }
@@ -416,7 +416,7 @@ export async function viewConfirmation(request, h) {
 export async function viewContactType(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ViewContactTypeService.go(sessionId)
+  const pageData = await ViewContactTypeService(sessionId)
 
   return h.view(`notices/setup/contact-type.njk`, pageData)
 }
@@ -424,7 +424,7 @@ export async function viewContactType(request, h) {
 export async function viewLicence(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ViewLicenceService.go(sessionId)
+  const pageData = await ViewLicenceService(sessionId)
 
   return h.view(`notices/setup/licence.njk`, pageData)
 }
@@ -435,7 +435,7 @@ export async function viewNoticeType(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await ViewNoticeTypeService.go(sessionId, auth)
+  const pageData = await ViewNoticeTypeService(sessionId, auth)
 
   return h.view(`notices/setup/notice-type.njk`, pageData)
 }
@@ -443,7 +443,7 @@ export async function viewNoticeType(request, h) {
 export async function viewPaperReturn(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ViewPaperReturnService.go(sessionId)
+  const pageData = await ViewPaperReturnService(sessionId)
 
   return h.view(`notices/setup/paper-return.njk`, pageData)
 }
@@ -451,7 +451,7 @@ export async function viewPaperReturn(request, h) {
 export async function viewPreview(request, h) {
   const { contactHashId, licenceMonitoringStationId, sessionId } = request.params
 
-  const pageData = await ViewPreviewService.go(sessionId, contactHashId, licenceMonitoringStationId)
+  const pageData = await ViewPreviewService(sessionId, contactHashId, licenceMonitoringStationId)
 
   return h.view('notices/setup/preview.njk', pageData)
 }
@@ -459,7 +459,7 @@ export async function viewPreview(request, h) {
 export async function viewPreviewCheckAlert(request, h) {
   const { contactHashId, sessionId } = request.params
 
-  const pageData = await ViewPreviewCheckAlertService.go(contactHashId, sessionId)
+  const pageData = await ViewPreviewCheckAlertService(contactHashId, sessionId)
 
   return h.view('notices/setup/preview-check-alert.njk', pageData)
 }
@@ -467,7 +467,7 @@ export async function viewPreviewCheckAlert(request, h) {
 export async function viewPreviewCheckPaperReturn(request, h) {
   const { contactHashId, sessionId } = request.params
 
-  const pageData = await ViewPreviewCheckPaperReturnService.go(sessionId, contactHashId)
+  const pageData = await ViewPreviewCheckPaperReturnService(sessionId, contactHashId)
 
   return h.view(`notices/setup/preview-check-paper-return.njk`, pageData)
 }
@@ -475,7 +475,7 @@ export async function viewPreviewCheckPaperReturn(request, h) {
 export async function viewRecipientName(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ViewRecipientNameService.go(sessionId)
+  const pageData = await ViewRecipientNameService(sessionId)
 
   return h.view(`notices/setup/recipient-name.njk`, pageData)
 }
@@ -485,7 +485,7 @@ export async function viewRemoveLicences(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await ViewRemoveLicencesService.go(sessionId)
+  const pageData = await ViewRemoveLicencesService(sessionId)
 
   return h.view(`notices/setup/remove-licences.njk`, pageData)
 }
@@ -495,7 +495,7 @@ export async function viewReturnsPeriod(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await ViewReturnsPeriodService.go(sessionId)
+  const pageData = await ViewReturnsPeriodService(sessionId)
 
   return h.view(`notices/setup/returns-period.njk`, pageData)
 }
@@ -503,7 +503,7 @@ export async function viewReturnsPeriod(request, h) {
 export async function viewSelectRecipients(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ViewSelectRecipientsService.go(sessionId)
+  const pageData = await ViewSelectRecipientsService(sessionId)
 
   return h.view(`notices/setup/select-recipients.njk`, pageData)
 }

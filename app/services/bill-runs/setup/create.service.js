@@ -21,20 +21,15 @@ import { engineTriggers } from '../../../lib/static-lookups.lib.js'
  * @param {object} blockingResults - Results of `DetermineBlockingBillRunService`
  * @param {module:UserModel} user - Instance of `UserModel` that represents the user making the request
  */
-async function go(session, blockingResults, user) {
+export default async function go(session, blockingResults, user) {
   const { region: regionId, type, season } = session
   const { toFinancialYearEnding, trigger } = blockingResults
 
   if (trigger === engineTriggers.current || trigger === engineTriggers.both) {
-    await StartBillRunProcessService.go(regionId, type, user.username, toFinancialYearEnding)
+    await StartBillRunProcessService(regionId, type, user.username, toFinancialYearEnding)
   }
 
   if (trigger === engineTriggers.old || trigger === engineTriggers.both) {
     await send(type, regionId, toFinancialYearEnding, user, season === 'summer')
   }
-}
-
-export { go }
-export default {
-  go
 }

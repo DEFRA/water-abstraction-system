@@ -13,8 +13,8 @@ import RemovePresenter from '../../../presenters/bill-runs/review/remove.present
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(reviewLicenceId) {
-  const reviewLicence = await FetchRemoveReviewLicenceService.go(reviewLicenceId)
+export default async function go(reviewLicenceId) {
+  const reviewLicence = await FetchRemoveReviewLicenceService(reviewLicenceId)
 
   const pageData = RemovePresenter.go(reviewLicence)
 
@@ -22,9 +22,4 @@ async function go(reviewLicenceId) {
     activeNavBar: 'bill-runs',
     ...pageData
   }
-}
-
-export { go }
-export default {
-  go
 }

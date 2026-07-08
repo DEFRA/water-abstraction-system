@@ -60,13 +60,13 @@ describe('Bill Runs - Setup - Determine Blocking Annual Bill Run service', () =>
     })
 
     it('returns the match and determines that neither engine can be triggered', async () => {
-      const result = await DetermineBlockingAnnualService.go(regionId)
+      const result = await DetermineBlockingAnnualService(regionId)
 
       expect(result).toEqual({ matches: [match], toFinancialYearEnding, trigger: engineTriggers.neither })
     })
 
     it('does not bother to check for live bill runs', async () => {
-      await DetermineBlockingAnnualService.go(regionId, toFinancialYearEnding)
+      await DetermineBlockingAnnualService(regionId, toFinancialYearEnding)
 
       expect(fetchLiveBillRunStub.called).toBe(false)
     })
@@ -83,7 +83,7 @@ describe('Bill Runs - Setup - Determine Blocking Annual Bill Run service', () =>
       })
 
       it('returns no matches and determines that the "current" engine can be triggered', async () => {
-        const result = await DetermineBlockingAnnualService.go(regionId)
+        const result = await DetermineBlockingAnnualService(regionId)
 
         expect(result).toEqual({ matches: [], toFinancialYearEnding, trigger: engineTriggers.current })
       })
@@ -98,7 +98,7 @@ describe('Bill Runs - Setup - Determine Blocking Annual Bill Run service', () =>
       })
 
       it('returns the match and determines that neither engine can be triggered', async () => {
-        const result = await DetermineBlockingAnnualService.go(regionId)
+        const result = await DetermineBlockingAnnualService(regionId)
 
         expect(result).toEqual({ matches: [match], toFinancialYearEnding, trigger: engineTriggers.neither })
       })

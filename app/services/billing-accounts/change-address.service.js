@@ -50,7 +50,7 @@ import SendCustomerChangeService from './send-customer-change.service.js'
  * @returns {Promise<object>} contains a copy of the persisted address, agent company and contact if they were also
  * changed
  */
-async function go(billingAccountId, address, agentCompany = {}, contact = {}) {
+export default async function go(billingAccountId, address, agentCompany = {}, contact = {}) {
   const billingAccount = await _fetchBillingAccount(billingAccountId)
 
   // We use the same timestamp for all date created/updated values. We then have something to tie together all the
@@ -73,7 +73,7 @@ async function go(billingAccountId, address, agentCompany = {}, contact = {}) {
   // it doesn't). If the CHA fails the user will know. If the CHA succeeds but our update fails the user will still see
   // an error and try again. It matters not that we send the same information to the CHA; either way it will overwrite
   // what is either in it or SOP. But this way the user is never left believing all is well when something has failed.
-  await SendCustomerChangeService.go(billingAccount, addressInstance, companyInstance, contactInstance)
+  await SendCustomerChangeService(billingAccount, addressInstance, companyInstance, contactInstance)
 
   const persistedData = await _persist(timestamp, billingAccount, addressInstance, companyInstance, contactInstance)
 
@@ -364,11 +364,4 @@ function _transformContact(timestamp, contact) {
     createdAt: timestamp,
     updatedAt: timestamp
   })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

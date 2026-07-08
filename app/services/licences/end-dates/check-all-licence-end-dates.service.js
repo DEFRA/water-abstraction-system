@@ -33,7 +33,7 @@ import LicencesConfig from '../../../../config/licences.config.js'
  * > If a licence in NALD does not have a status of DRAFT, and at least one current licence version then it will be
  * excluded
  */
-async function go() {
+export default async function go() {
   try {
     const startTime = currentTimeInNanoseconds()
 
@@ -72,11 +72,4 @@ async function _checkLicences(licences) {
   const pMap = (await import('p-map')).default
 
   await pMap(licences, CheckLicenceEndDatesService.go, { concurrency: LicencesConfig.endDates.batchSize })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -15,7 +15,7 @@ import { db } from '../../../db/db.js'
  *
  * @returns {Promise<object[]>} the contacts for the licence
  */
-async function go(licenceId, roles, page = '1') {
+export default async function go(licenceId, roles, page = '1') {
   const authorisedForBilling = roles.includes('billing')
 
   const [{ rows: contacts }, { rows: totalNumber }] = await Promise.all([
@@ -275,11 +275,4 @@ function _query(paginationAndOrderBy = '') {
     ${paginationAndOrderBy}
     ;
   `
-}
-
-export {
-  go
-}
-export default {
-  go
 }

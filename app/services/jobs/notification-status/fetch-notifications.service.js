@@ -19,7 +19,7 @@ import notifyConfig from '../../../../config/notify.config.js'
  *
  * @returns {Promise<object[]>} the 'pending' notifications that need their status checking with Notify
  */
-async function go() {
+export default async function go() {
   const todaysDate = today()
   const retentionStartDate = today()
 
@@ -46,11 +46,4 @@ async function go() {
     .andWhere('createdAt', '>=', retentionStartDate)
 
   return query
-}
-
-export {
-  go
-}
-export default {
-  go
 }

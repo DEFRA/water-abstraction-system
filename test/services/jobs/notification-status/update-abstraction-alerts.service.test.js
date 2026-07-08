@@ -36,7 +36,7 @@ describe('Job - Notification Status - Update Abstraction Alerts service', () => 
 
   describe('when a notice has been successful', () => {
     it('updates the "status" and "statusUpdatedAt" of the matching licence monitoring station', async () => {
-      await UpdateAbstractionAlertsService.go([notification])
+      await UpdateAbstractionAlertsService([notification])
 
       const updatedResult = await licenceMonitoringStation.$query()
 
@@ -45,7 +45,7 @@ describe('Job - Notification Status - Update Abstraction Alerts service', () => 
     })
 
     it('does not update other licence monitoring stations', async () => {
-      await UpdateAbstractionAlertsService.go([notification])
+      await UpdateAbstractionAlertsService([notification])
 
       const updatedResult = await licenceMonitoringStationUnTouched.$query()
 
@@ -68,7 +68,7 @@ describe('Job - Notification Status - Update Abstraction Alerts service', () => 
     })
 
     it('does not update the "status" and "statusUpdatedAt"', async () => {
-      await UpdateAbstractionAlertsService.go([notification])
+      await UpdateAbstractionAlertsService([notification])
 
       const updatedResult = await licenceMonitoringStation.$query()
 

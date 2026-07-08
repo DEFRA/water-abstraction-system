@@ -13,7 +13,7 @@ import { db } from '../../../db/db.js'
  *
  * @returns {Promise<string>} the state of busy bill runs; 'cancelling', 'building', 'both', or 'none'
  */
-async function go() {
+export default async function go() {
   const { building, cancelling } = await _fetch()
 
   if (building && cancelling) {
@@ -40,9 +40,4 @@ async function _fetch() {
   )
 
   return results[0]
-}
-
-export { go }
-export default {
-  go
 }

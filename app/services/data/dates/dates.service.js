@@ -29,7 +29,7 @@ import { determineUpcomingReturnPeriods } from '../../../lib/return-periods.lib.
  *
  * @returns {object} an object containing the current billing and return periods, plus the current financial year dates
  */
-function go() {
+export default function go() {
   const [firstReturnPeriod, secondReturnPeriod] = determineUpcomingReturnPeriods(today())
   const currentSummerReturnCycle = {
     startDate: determineCycleStartDate(true),
@@ -43,10 +43,10 @@ function go() {
   }
   const currentFinancialYear = determineCurrentFinancialYear()
   const billingPeriods = {
-    annual: DetermineBillingPeriodsService.go('annual', currentFinancialYear.endDate.getFullYear()),
-    supplementary: DetermineBillingPeriodsService.go('supplementary', currentFinancialYear.endDate.getFullYear()),
-    twoPartTariff: DetermineBillingPeriodsService.go('two_part_tariff', currentFinancialYear.endDate.getFullYear()),
-    twoPartSupplementary: DetermineBillingPeriodsService.go(
+    annual: DetermineBillingPeriodsService('annual', currentFinancialYear.endDate.getFullYear()),
+    supplementary: DetermineBillingPeriodsService('supplementary', currentFinancialYear.endDate.getFullYear()),
+    twoPartTariff: DetermineBillingPeriodsService('two_part_tariff', currentFinancialYear.endDate.getFullYear()),
+    twoPartSupplementary: DetermineBillingPeriodsService(
       'two_part_supplementary',
       currentFinancialYear.endDate.getFullYear()
     )
@@ -60,11 +60,4 @@ function go() {
     firstReturnPeriod,
     secondReturnPeriod
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

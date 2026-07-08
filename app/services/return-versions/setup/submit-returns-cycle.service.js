@@ -27,7 +27,7 @@ import ReturnsCycleValidator from '../../../validators/return-versions/setup/ret
  * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the returns cycle page including the validation error details
  */
-async function go(sessionId, requirementIndex, payload, yar) {
+export default async function go(sessionId, requirementIndex, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload, session)
@@ -62,9 +62,4 @@ function _validate(payload, session) {
   const validation = ReturnsCycleValidator.go(payload, session)
 
   return formatValidationResult(validation)
-}
-
-export { go }
-export default {
-  go
 }

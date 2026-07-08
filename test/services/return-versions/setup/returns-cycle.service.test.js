@@ -54,13 +54,13 @@ describe('Return Versions Setup - Returns Cycle service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await ReturnsCycleService.go(session.id, requirementIndex)
+      const result = await ReturnsCycleService(session.id, requirementIndex)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await ReturnsCycleService.go(session.id, requirementIndex)
+      const result = await ReturnsCycleService(session.id, requirementIndex)
 
       expect(result).toMatchObject({
         pageTitle: 'Select the returns cycle for the requirements for returns',

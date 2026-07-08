@@ -27,7 +27,7 @@ describe('Bill Runs - Review - View Authorised Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewAuthorisedService.go(reviewChargeReference.id)
+      const result = await ViewAuthorisedService(reviewChargeReference.id)
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',

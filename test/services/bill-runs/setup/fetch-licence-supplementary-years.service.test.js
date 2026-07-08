@@ -36,7 +36,7 @@ describe('Bill Runs - Setup - Fetch Licence Supplementary Years service', () => 
     })
 
     it('returns an array of the years selected for supplementary billing', async () => {
-      const result = await FetchLicenceSupplementaryYearsService.go(regionId, twoPartTariff)
+      const result = await FetchLicenceSupplementaryYearsService(regionId, twoPartTariff)
 
       expect(result).toEqual([{ financialYearEnd: 2024 }, { financialYearEnd: 2023 }, { financialYearEnd: 2022 }])
     })
@@ -54,7 +54,7 @@ describe('Bill Runs - Setup - Fetch Licence Supplementary Years service', () => 
     })
 
     it('returns an empty array', async () => {
-      const result = await FetchLicenceSupplementaryYearsService.go(regionId, twoPartTariff)
+      const result = await FetchLicenceSupplementaryYearsService(regionId, twoPartTariff)
 
       expect(result).toEqual([])
     })

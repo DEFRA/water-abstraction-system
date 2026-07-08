@@ -13,8 +13,8 @@ import FetchFailedReturnsInvitationsService from '../returns-notice/fetch-failed
  *
  * @returns {Promise<object|null>} The notice, notifications, and failed notification IDs, or null if none failed
  */
-async function go(mainNotice) {
-  const { dueDate, licenceRefs, notificationIds, returnLogIds } = await FetchFailedReturnsInvitationsService.go(
+export default async function go(mainNotice) {
+  const { dueDate, licenceRefs, notificationIds, returnLogIds } = await FetchFailedReturnsInvitationsService(
     mainNotice.id
   )
 
@@ -22,7 +22,7 @@ async function go(mainNotice) {
     return null
   }
 
-  const { notice, notifications } = await CreateAlternateReturnsNoticeService.go(
+  const { notice, notifications } = await CreateAlternateReturnsNoticeService(
     mainNotice,
     licenceRefs,
     dueDate,
@@ -30,9 +30,4 @@ async function go(mainNotice) {
   )
 
   return { notice, notificationIds, notifications }
-}
-
-export { go }
-export default {
-  go
 }

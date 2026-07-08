@@ -83,7 +83,7 @@ describe('Fetch Bill Licence Summary service', () => {
 
   describe('when a bill licence with a matching ID exists', () => {
     it('will fetch the data use in the remove bill licence page', async () => {
-      const result = await FetchBillLicenceSummaryService.go(billLicence.id)
+      const result = await FetchBillLicenceSummaryService(billLicence.id)
 
       // NOTE: Transactions would not ordinarily be empty. But the format of the transactions will differ depending on
       // scheme so we get into that in later tests.
@@ -153,7 +153,7 @@ describe('Fetch Bill Licence Summary service', () => {
 
   describe('when a bill licence with a matching ID does not exist', () => {
     it('returns no result', async () => {
-      const result = await FetchBillLicenceSummaryService.go('93112100-152b-4860-abea-2adee11dcd69')
+      const result = await FetchBillLicenceSummaryService('93112100-152b-4860-abea-2adee11dcd69')
 
       expect(result).toBeUndefined()
     })

@@ -16,7 +16,7 @@ export async function download(request, h) {
 
   const version = Number(query.version)
 
-  const { data, type, filename } = await DownloadReturnLogService.go(id, version)
+  const { data, type, filename } = await DownloadReturnLogService(id, version)
 
   return h
     .response(data)
@@ -32,7 +32,7 @@ export async function viewCommunications(request, h) {
     query: { page }
   } = request
 
-  const pageData = await ViewCommunicationsService.go(id, page)
+  const pageData = await ViewCommunicationsService(id, page)
 
   return h.view('return-logs/communications.njk', pageData)
 }
@@ -46,7 +46,7 @@ export async function viewDetails(request, h) {
 
   const version = query.version ? Number(query.version) : 0
 
-  const pageData = await ViewDetailsService.go(id, auth, version)
+  const pageData = await ViewDetailsService(id, auth, version)
 
   return h.view('return-logs/details.njk', pageData)
 }
@@ -54,7 +54,7 @@ export async function viewDetails(request, h) {
 export async function submitDetails(request, h) {
   const { id } = request.params
 
-  await SubmitDetailsService.go(request.payload, id)
+  await SubmitDetailsService(request.payload, id)
 
   return h.redirect(`/system/return-logs/${id}/details`)
 }

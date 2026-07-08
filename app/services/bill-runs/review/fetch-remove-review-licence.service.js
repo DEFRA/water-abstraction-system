@@ -13,7 +13,7 @@ import ReviewLicenceModel from '../../../models/review-licence.model.js'
  * @returns {module:ReviewLicenceModel} the matching `ReviewLicenceModel` instance and related data needed for the
  * two-part tariff remove review licence page
  */
-async function go(reviewLicenceId) {
+export default async function go(reviewLicenceId) {
   return _fetch(reviewLicenceId)
 }
 
@@ -30,9 +30,4 @@ async function _fetch(reviewLicenceId) {
           regionBuilder.select(['id', 'displayName'])
         })
     })
-}
-
-export { go }
-export default {
-  go
 }

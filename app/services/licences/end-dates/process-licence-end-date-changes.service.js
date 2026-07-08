@@ -18,7 +18,7 @@ import ProcessLicenceReturnLogsService from '../../return-logs/process-licence-r
  * These downstream services depend on knowing when a licence's end dates have changed so they can determine what
  * billing flags need to be set, or what return logs need reissuing.
  */
-async function go() {
+export default async function go() {
   try {
     const startTime = currentTimeInNanoseconds()
 
@@ -49,7 +49,7 @@ async function _billingFlag(licenceEndDateChange) {
   const { changeDate, dateType, licenceId, naldDate, wrlsDate } = licenceEndDateChange
   const payload = { licenceId, changedDateDetails: { changeDate, dateType, naldDate, wrlsDate } }
 
-  await ProcessBillingFlagService.go(payload)
+  await ProcessBillingFlagService(payload)
 }
 
 async function _processLicenceEndDateChanges(licenceEndDateChange) {
@@ -69,12 +69,5 @@ async function _processLicenceEndDateChanges(licenceEndDateChange) {
 async function _returnLogs(licenceEndDateChange) {
   const { licenceId, changeDate } = licenceEndDateChange
 
-  await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
-}
-
-export {
-  go
-}
-export default {
-  go
+  await ProcessLicenceReturnLogsService(licenceId, changeDate)
 }

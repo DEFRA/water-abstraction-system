@@ -54,13 +54,13 @@ describe('Return Versions Setup - Frequency Collected service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await FrequencyCollectedService.go(session.id, requirementIndex)
+      const result = await FrequencyCollectedService(session.id, requirementIndex)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await FrequencyCollectedService.go(session.id, requirementIndex)
+      const result = await FrequencyCollectedService(session.id, requirementIndex)
 
       expect(result).toMatchObject({
         pageTitle: 'Select how often readings or volumes are collected',

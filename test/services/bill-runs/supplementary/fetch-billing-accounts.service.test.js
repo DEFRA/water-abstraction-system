@@ -32,7 +32,7 @@ describe('Fetch Billing Accounts service', () => {
     })
 
     it('fetches the billing accounts that the charge versions link to', async () => {
-      const result = await FetchBillingAccountsService.go([
+      const result = await FetchBillingAccountsService([
         { billingAccountId: billingAccounts[0].id },
         { billingAccountId: billingAccounts[1].id }
       ])

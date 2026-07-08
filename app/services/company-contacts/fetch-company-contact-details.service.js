@@ -12,7 +12,7 @@ import CompanyContactModel from '../../models/company-contact.model.js'
  *
  * @returns {Promise<CompanyContactModel>} the company contact
  */
-async function go(companyContactId) {
+export default async function go(companyContactId) {
   return _fetch(companyContactId)
 }
 
@@ -61,11 +61,4 @@ async function _fetch(companyContactId) {
       updatedByUserBuilder.select(['id', 'username'])
     })
     .first()
-}
-
-export {
-  go
-}
-export default {
-  go
 }

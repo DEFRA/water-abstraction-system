@@ -16,15 +16,8 @@ import { db } from '../../../db/db.js'
  *
  * @returns an array of stats for each table found in the db
  */
-async function go() {
+export default async function go() {
   const stats = db.select().table('pg_stat_user_tables')
 
   return stats
-}
-
-export {
-  go
-}
-export default {
-  go
 }

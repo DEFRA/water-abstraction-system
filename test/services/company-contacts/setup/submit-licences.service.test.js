@@ -45,14 +45,14 @@ describe('Company Contacts - Setup - Licences Service', () => {
 
   describe('when called', () => {
     it('saves the submitted value', async () => {
-      await SubmitLicencesService.go(session.id, payload)
+      await SubmitLicencesService(session.id, payload)
 
       expect(session.abstractionAlertLicences).toEqual([licence.id])
       expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitLicencesService.go(session.id, payload)
+      const result = await SubmitLicencesService(session.id, payload)
 
       expect(result).toEqual({ redirectUrl: `/system/company-contacts/setup/${session.id}/check` })
     })
@@ -64,7 +64,7 @@ describe('Company Contacts - Setup - Licences Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitLicencesService.go(session.id, payload)
+      const result = await SubmitLicencesService(session.id, payload)
 
       expect(result).toEqual({
         backLink: {

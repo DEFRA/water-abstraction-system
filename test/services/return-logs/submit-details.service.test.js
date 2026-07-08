@@ -36,7 +36,7 @@ describe('Return Logs - Submit Details Service', () => {
       })
 
       it('updates the "underQuery" flag on the return log to true', async () => {
-        await SubmitDetailsService.go(payload, mockReturnLog.id)
+        await SubmitDetailsService(payload, mockReturnLog.id)
 
         // Check we save the status change
         const [patchObject] = patchStub.args[0]
@@ -51,7 +51,7 @@ describe('Return Logs - Submit Details Service', () => {
       })
 
       it('updates the "underQuery" flag on the return log to false', async () => {
-        await SubmitDetailsService.go(payload, mockReturnLog.id)
+        await SubmitDetailsService(payload, mockReturnLog.id)
 
         // Check we save the status change
         const [patchObject] = patchStub.args[0]

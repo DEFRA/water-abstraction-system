@@ -35,7 +35,7 @@ describe('Return Logs Setup - Check service', () => {
 
   describe('when called for the first time', () => {
     it('returns page data for the view', async () => {
-      const result = await CheckService.go(session.id, yarStub)
+      const result = await CheckService(session.id, yarStub)
 
       expect(result).toEqual({
         abstractionPeriod: '1 January to 31 December',
@@ -108,7 +108,7 @@ describe('Return Logs Setup - Check service', () => {
     })
 
     it('updates the session record to indicate user has visited the "check" page', async () => {
-      await CheckService.go(session.id, yarStub)
+      await CheckService(session.id, yarStub)
 
       expect(session.checkPageVisited).toBe(true)
       expect(session.$update.called).toBe(true)

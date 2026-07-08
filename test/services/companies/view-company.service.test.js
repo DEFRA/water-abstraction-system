@@ -42,7 +42,7 @@ describe('Companies - View Company Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewCompanyService.go(companyDetails.id, role)
+        const result = await ViewCompanyService(companyDetails.id, role)
 
         expect(result).toEqual({
           backLink: {
@@ -70,7 +70,7 @@ describe('Companies - View Company Service', () => {
       })
 
       it('calls the fetch service with role converted to camelCase', async () => {
-        await ViewCompanyService.go(companyDetails.id, role)
+        await ViewCompanyService(companyDetails.id, role)
 
         expect(FetchCompanyDetailsDal.go.calledWith(companyDetails.id, 'licenceHolder')).toBe(true)
       })
@@ -82,7 +82,7 @@ describe('Companies - View Company Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewCompanyService.go(companyDetails.id, role)
+        const result = await ViewCompanyService(companyDetails.id, role)
 
         expect(result).toEqual({
           backLink: {
@@ -110,7 +110,7 @@ describe('Companies - View Company Service', () => {
       })
 
       it('calls the fetch service with role converted to camelCase', async () => {
-        await ViewCompanyService.go(companyDetails.id, role)
+        await ViewCompanyService(companyDetails.id, role)
 
         expect(FetchCompanyDetailsDal.go.calledWith(companyDetails.id, 'returnsTo')).toBe(true)
       })

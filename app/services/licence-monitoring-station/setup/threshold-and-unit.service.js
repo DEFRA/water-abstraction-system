@@ -18,7 +18,7 @@ import ThresholdAndUnitPresenter from '../../../presenters/licence-monitoring-st
  *
  * @returns {Promise<object>} The view data for the threshold and unit page
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const formattedData = ThresholdAndUnitPresenter.go(session)
@@ -26,11 +26,4 @@ async function go(sessionId) {
   return {
     ...formattedData
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

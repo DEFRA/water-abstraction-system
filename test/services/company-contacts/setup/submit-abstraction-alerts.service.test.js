@@ -42,7 +42,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
 
   describe('when called', () => {
     it('saves the submitted value', async () => {
-      await SubmitAbstractionAlertsService.go(session.id, payload, yarStub)
+      await SubmitAbstractionAlertsService(session.id, payload, yarStub)
 
       expect(session).toEqual({
         ...session,
@@ -54,7 +54,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
     describe('the redirect URL', () => {
       describe('when "abstractionAlerts" is "yes"', () => {
         it('redirects to the check page', async () => {
-          const result = await SubmitAbstractionAlertsService.go(session.id, payload, yarStub)
+          const result = await SubmitAbstractionAlertsService(session.id, payload, yarStub)
 
           expect(result).toEqual({ redirectUrl: `/system/company-contacts/setup/${session.id}/check` })
         })
@@ -66,7 +66,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
         })
 
         it('redirects to the check page', async () => {
-          const result = await SubmitAbstractionAlertsService.go(session.id, payload, yarStub)
+          const result = await SubmitAbstractionAlertsService(session.id, payload, yarStub)
 
           expect(result).toEqual({ redirectUrl: `/system/company-contacts/setup/${session.id}/check` })
         })
@@ -78,7 +78,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
         })
 
         it('redirects to the licences page', async () => {
-          const result = await SubmitAbstractionAlertsService.go(session.id, payload, yarStub)
+          const result = await SubmitAbstractionAlertsService(session.id, payload, yarStub)
 
           expect(result).toEqual({ redirectUrl: `/system/company-contacts/setup/${session.id}/licences` })
         })
@@ -102,7 +102,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
         describe('and the "session" and "payload" value', () => {
           describe('match', () => {
             it('does not set a notification', async () => {
-              await SubmitAbstractionAlertsService.go(session.id, payload, yarStub)
+              await SubmitAbstractionAlertsService(session.id, payload, yarStub)
 
               expect(yarStub.flash.called).toBe(false)
             })
@@ -114,7 +114,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
             })
 
             it('sets a notification', async () => {
-              await SubmitAbstractionAlertsService.go(session.id, payload, yarStub)
+              await SubmitAbstractionAlertsService(session.id, payload, yarStub)
 
               const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -127,7 +127,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
 
       describe('not been visited', () => {
         it('does not set a notification', async () => {
-          await SubmitAbstractionAlertsService.go(session.id, payload, yarStub)
+          await SubmitAbstractionAlertsService(session.id, payload, yarStub)
 
           expect(yarStub.flash.called).toBe(false)
         })
@@ -141,7 +141,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitAbstractionAlertsService.go(session.id, payload, yarStub)
+      const result = await SubmitAbstractionAlertsService(session.id, payload, yarStub)
 
       expect(result).toEqual({
         abstractionAlerts: null,

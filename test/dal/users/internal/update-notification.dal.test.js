@@ -38,7 +38,7 @@ describe('Users - Internal - Update Notification DAL', () => {
     })
 
     it('updates the notification with the send result details', async () => {
-      await UpdateNotificationDal.go(notification, sendResult)
+      await UpdateNotificationDal(notification, sendResult)
 
       const result = await notification.$query()
 
@@ -80,7 +80,7 @@ describe('Users - Internal - Update Notification DAL', () => {
     })
 
     it('updates the notification with the error details and failed status', async () => {
-      await UpdateNotificationDal.go(notification, sendResult)
+      await UpdateNotificationDal(notification, sendResult)
 
       const result = await notification.$query()
 

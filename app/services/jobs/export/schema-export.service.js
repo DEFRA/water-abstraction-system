@@ -19,24 +19,24 @@ import SendToS3BucketService from './send-to-s3-bucket.service.js'
  *
  * @param {string} schemaName - The name of the database schema to export
  */
-async function go(schemaName) {
+export default async function go(schemaName) {
   const schemaFolderPath = _folderToUpload(schemaName)
   let compressedSchemaPath
 
   try {
-    const tableNames = await FetchTableNamesService.go(schemaName)
+    const tableNames = await FetchTableNamesService(schemaName)
 
     for (const tableName of tableNames) {
-      await ExportTableService.go(tableName, schemaFolderPath, schemaName)
+      await ExportTableService(tableName, schemaFolderPath, schemaName)
     }
 
-    compressedSchemaPath = await CompressSchemaFolderService.go(schemaFolderPath)
-    await SendToS3BucketService.go(compressedSchemaPath)
+    compressedSchemaPath = await CompressSchemaFolderService(schemaFolderPath)
+    await SendToS3BucketService(compressedSchemaPath)
   } catch (error) {
     globalThis.GlobalNotifier.omfg(`Error: Failed to export schema ${schemaName}`, null, error)
   } finally {
-    await DeleteFilesService.go(schemaFolderPath)
-    await DeleteFilesService.go(compressedSchemaPath)
+    await DeleteFilesService(schemaFolderPath)
+    await DeleteFilesService(compressedSchemaPath)
   }
 }
 
@@ -53,11 +53,4 @@ function _folderToUpload(schemaName) {
   const temporaryFilePath = os.tmpdir()
 
   return path.join(temporaryFilePath, schemaName)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

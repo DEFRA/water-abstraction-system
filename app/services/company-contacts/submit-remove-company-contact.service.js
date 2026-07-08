@@ -17,25 +17,18 @@ import { flashNotification } from '../../lib/general.lib.js'
  *
  * @returns {Promise<object>} The data to redirect the user after the company contact has been removed
  */
-async function go(id, yar) {
+export default async function go(id, yar) {
   const companyContact = await FetchCompanyContactDal(id)
 
-  const notification = await FetchNotificationService.go(companyContact.contact.email)
+  const notification = await FetchNotificationService(companyContact.contact.email)
 
   const notified = !!notification
 
-  await DeleteCompanyContactService.go(id, notified)
+  await DeleteCompanyContactService(id, notified)
 
   flashNotification(yar, 'Contact removed', `${companyContact.contact.$name()} was removed from this company.`)
 
   return {
     companyId: companyContact.companyId
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

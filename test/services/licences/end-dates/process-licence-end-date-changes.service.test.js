@@ -43,14 +43,14 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
     })
 
     it('processes the changed licence for supplementary billing flags', async () => {
-      await ProcessLicenceEndDateChangesService.go()
+      await ProcessLicenceEndDateChangesService()
 
       expect(processBillingFlagsStub.called).toBe(true)
     })
 
     describe('and the app is managing "requirements for returns"', () => {
       it('processes the changed licence for reissuing return logs', async () => {
-        await ProcessLicenceEndDateChangesService.go()
+        await ProcessLicenceEndDateChangesService()
 
         expect(processReturnLogsStub.called).toBe(true)
       })
@@ -58,7 +58,7 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
 
     describe('and when the processing is complete', () => {
       it('deletes the licence end date change record', async () => {
-        await ProcessLicenceEndDateChangesService.go()
+        await ProcessLicenceEndDateChangesService()
 
         const result = await LicenceEndDateChangeModel.query().findById(licenceEndDateChange.id)
 
@@ -66,7 +66,7 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
       })
 
       it('logs the completed licence change', async () => {
-        await ProcessLicenceEndDateChangesService.go()
+        await ProcessLicenceEndDateChangesService()
 
         const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -82,7 +82,7 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
       })
 
       it('logs the time taken in milliseconds and seconds', async () => {
-        await ProcessLicenceEndDateChangesService.go()
+        await ProcessLicenceEndDateChangesService()
 
         const logDataArg = notifierStub.omg.secondCall.args[1]
 
@@ -101,7 +101,7 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
       })
 
       it('handles the error', async () => {
-        await ProcessLicenceEndDateChangesService.go()
+        await ProcessLicenceEndDateChangesService()
 
         const errorLogArgs = notifierStub.omfg.firstCall.args
 
@@ -126,7 +126,7 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
       })
 
       it('handles the error', async () => {
-        await ProcessLicenceEndDateChangesService.go()
+        await ProcessLicenceEndDateChangesService()
 
         const errorLogArgs = notifierStub.omfg.firstCall.args
 

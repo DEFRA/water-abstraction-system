@@ -28,7 +28,7 @@ describe('Export Service', () => {
   it('calls the SchemaExportService with the different schema names', async () => {
     const schemaNames = ['water', 'returns', 'crm', 'crm_v2', 'idm', 'permit']
 
-    await ExportService.go()
+    await ExportService()
 
     const allArgs = SchemaExportServiceStub.getCalls().flatMap((call) => {
       return call.args
@@ -38,7 +38,7 @@ describe('Export Service', () => {
   })
 
   it('logs the time taken to export the db', async () => {
-    await ExportService.go()
+    await ExportService()
 
     const args = notifierStub.omg.firstCall.args
 

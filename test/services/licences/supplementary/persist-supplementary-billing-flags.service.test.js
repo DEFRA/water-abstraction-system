@@ -41,7 +41,7 @@ describe('Persist Supplementary Billing Flags Service', () => {
         })
 
         it('persists the flags on the licence', async () => {
-          await PersistSupplementaryBillingFlagsService.go(
+          await PersistSupplementaryBillingFlagsService(
             twoPartTariffFinancialYears,
             preSrocFlag,
             srocFlag,
@@ -56,7 +56,7 @@ describe('Persist Supplementary Billing Flags Service', () => {
         })
 
         it('calls `CreateLicenceSupplementaryYearsService` to handle persisting the financial years', async () => {
-          await PersistSupplementaryBillingFlagsService.go(
+          await PersistSupplementaryBillingFlagsService(
             twoPartTariffFinancialYears,
             preSrocFlag,
             srocFlag,
@@ -75,7 +75,7 @@ describe('Persist Supplementary Billing Flags Service', () => {
         })
 
         it('persists the flags on the licence', async () => {
-          await PersistSupplementaryBillingFlagsService.go(
+          await PersistSupplementaryBillingFlagsService(
             twoPartTariffFinancialYears,
             preSrocFlag,
             srocFlag,
@@ -90,7 +90,7 @@ describe('Persist Supplementary Billing Flags Service', () => {
         })
 
         it('does not call `CreateLicenceSupplementaryYearsService`', async () => {
-          await PersistSupplementaryBillingFlagsService.go(
+          await PersistSupplementaryBillingFlagsService(
             twoPartTariffFinancialYears,
             preSrocFlag,
             srocFlag,

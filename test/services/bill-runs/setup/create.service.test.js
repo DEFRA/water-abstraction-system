@@ -43,7 +43,7 @@ describe('Bill Runs - Setup - Create service', () => {
     })
 
     it('triggers both bill run engines', async () => {
-      await CreateService.go(session, blockingResults, user)
+      await CreateService(session, blockingResults, user)
 
       expect(startBillRunProcessServiceStub.calledWith(regionId, 'supplementary', 'carol.shaw@atari.com', 2025)).toBe(
         true
@@ -62,7 +62,7 @@ describe('Bill Runs - Setup - Create service', () => {
     })
 
     it('triggers only the "current" bill run engine', async () => {
-      await CreateService.go(session, blockingResults, user)
+      await CreateService(session, blockingResults, user)
 
       expect(startBillRunProcessServiceStub.calledWith(regionId, 'annual', 'carol.shaw@atari.com', 2025)).toBe(true)
       expect(legacyCreateBillRunRequestStub.called).toBe(false)
@@ -79,7 +79,7 @@ describe('Bill Runs - Setup - Create service', () => {
     })
 
     it('triggers only the "old" bill run engine', async () => {
-      await CreateService.go(session, blockingResults, user)
+      await CreateService(session, blockingResults, user)
 
       expect(startBillRunProcessServiceStub.called).toBe(false)
       expect(legacyCreateBillRunRequestStub.calledWith('two_part_tariff', regionId, 2022, user, true)).toBe(true)

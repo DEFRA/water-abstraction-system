@@ -24,7 +24,7 @@ describe('DAL - Return Versions - Update Return Version End Date dal', () => {
 
   describe('when called without a transaction', () => {
     it('updates the end date for the specified return version', async () => {
-      await UpdateReturnVersionEndDateDal.go(returnVersion.$id(), endDate)
+      await UpdateReturnVersionEndDateDal(returnVersion.$id(), endDate)
 
       const result = await returnVersion.$query()
 
@@ -44,7 +44,7 @@ describe('DAL - Return Versions - Update Return Version End Date dal', () => {
     })
 
     it('updates the end date for the specified return version', async () => {
-      await UpdateReturnVersionEndDateDal.go(returnVersion.$id(), endDate, trx)
+      await UpdateReturnVersionEndDateDal(returnVersion.$id(), endDate, trx)
       await trx.commit()
 
       const result = await returnVersion.$query()

@@ -17,8 +17,8 @@ import PaginatorPresenter from '../../presenters/paginator.presenter.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(id, page) {
-  const returnLog = await FetchReturnLogService.go(id)
+export default async function go(id, page) {
+  const returnLog = await FetchReturnLogService(id)
 
   const { notifications, totalNumber } = await FetchNotificationsDal(id, page)
 
@@ -37,11 +37,4 @@ async function go(id, page) {
     pagination,
     ...pageData
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

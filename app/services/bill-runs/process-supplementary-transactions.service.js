@@ -30,12 +30,12 @@ import ReverseTransactionsService from './reverse-supplementary-transactions.ser
  * @returns {Promise<object[]>} An array of the remaining generated transactions and reversed debits from previous
  * transactions (ie. those which were not cancelled out when the generated and reversed were compared)
  */
-async function go(previousTransactions, generatedTransactions, billLicenceId) {
+export default async function go(previousTransactions, generatedTransactions, billLicenceId) {
   if (previousTransactions.length === 0) {
     return generatedTransactions
   }
 
-  const reversedTransactions = ReverseTransactionsService.go(previousTransactions, billLicenceId)
+  const reversedTransactions = ReverseTransactionsService(previousTransactions, billLicenceId)
 
   return _cleanseTransactions(generatedTransactions, reversedTransactions)
 }
@@ -91,9 +91,4 @@ function _cleanseTransactions(calculatedTransactions, reverseTransactions) {
   cleansedTransactionLines.push(...reverseTransactions)
 
   return cleansedTransactionLines
-}
-
-export { go }
-export default {
-  go
 }

@@ -13,7 +13,7 @@ const ErrorPagesPlugin = {
     name: 'error-pages',
     register: (server, _options) => {
       server.ext('onPreResponse', (request, h) => {
-        const { stopResponse, statusCode } = ErrorPagesService.go(request)
+        const { stopResponse, statusCode } = ErrorPagesService(request)
 
         if (!stopResponse) {
           return h.continue

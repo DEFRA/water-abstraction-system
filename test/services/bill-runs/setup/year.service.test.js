@@ -36,7 +36,7 @@ describe('Bill Runs - Setup - Year service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await YearService.go(session.id)
+      const result = await YearService(session.id)
 
       expect(yearsStub.calledWith(regionId, true)).toBe(true)
 

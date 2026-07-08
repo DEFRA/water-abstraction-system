@@ -46,20 +46,20 @@ describe('Fetch Return Submission service', () => {
 
   describe('when the service is called', () => {
     it('fetches the return submission', async () => {
-      const result = await FetchReturnSubmissionService.go(testReturnSubmission.id)
+      const result = await FetchReturnSubmissionService(testReturnSubmission.id)
 
       expect(result).toBeInstanceOf(ReturnSubmissionModel)
       expect(result.id).toEqual(testReturnSubmission.id)
     })
 
     it('includes the expected metadata', async () => {
-      const result = await FetchReturnSubmissionService.go(testReturnSubmission.id)
+      const result = await FetchReturnSubmissionService(testReturnSubmission.id)
 
       expect(result.metadata.units).toEqual('Ml')
     })
 
     it('includes the return log id, submission version and current version used for the back link', async () => {
-      const result = await FetchReturnSubmissionService.go(testReturnSubmission.id)
+      const result = await FetchReturnSubmissionService(testReturnSubmission.id)
 
       expect(result.returnLogId).toEqual(testReturnSubmission.returnLogId)
       expect(result.version).toEqual(testReturnSubmission.version)
@@ -67,7 +67,7 @@ describe('Fetch Return Submission service', () => {
     })
 
     it('includes the linked return submission lines, ordered by start date', async () => {
-      const result = await FetchReturnSubmissionService.go(testReturnSubmission.id)
+      const result = await FetchReturnSubmissionService(testReturnSubmission.id)
       const { returnSubmissionLines } = result
 
       expect(returnSubmissionLines).toHaveLength(2)
@@ -78,7 +78,7 @@ describe('Fetch Return Submission service', () => {
     })
 
     it('includes the linked return log with its reference and frequency', async () => {
-      const result = await FetchReturnSubmissionService.go(testReturnSubmission.id)
+      const result = await FetchReturnSubmissionService(testReturnSubmission.id)
       const { returnLog } = result
 
       expect(returnLog).toBeInstanceOf(ReturnLogModel)

@@ -34,7 +34,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await LicenceNumberService.go(session.id)
+      const result = await LicenceNumberService(session.id)
 
       expect(result).toEqual({
         backLink: `/system/licence-monitoring-station/setup/${session.id}/stop-or-reduce`,

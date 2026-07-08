@@ -94,7 +94,7 @@ describe('Reports - Fetch Invalid Addresses service', () => {
 
   describe('when called', () => {
     it('returns a list of licences that are missing postcode and country fields', async () => {
-      const results = await FetchInvalidAddressesService.go()
+      const results = await FetchInvalidAddressesService()
 
       expect(results.length).toBeGreaterThan(4)
       expect(results).toContainEqual({

@@ -33,7 +33,7 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
     })
 
     it('returns an empty object', () => {
-      const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+      const result = GenerateReturnSubmissionMetadataService(sessionData)
 
       expect(result).toEqual({})
     })
@@ -67,7 +67,7 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
       ]
 
       const results = sessionDataToTest.map((session) => {
-        return GenerateReturnSubmissionMetadataService.go(session).units
+        return GenerateReturnSubmissionMetadataService(session).units
       })
 
       expect(results).toEqual(['m³', 'l', 'Ml', 'gal'])
@@ -79,7 +79,7 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
       })
 
       it('sets method as abstractionVolumes', () => {
-        const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+        const result = GenerateReturnSubmissionMetadataService(sessionData)
 
         expect(result.method).toEqual('abstractionVolumes')
       })
@@ -93,7 +93,7 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
         })
 
         it('correctly populates meters array with details', () => {
-          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+          const result = GenerateReturnSubmissionMetadataService(sessionData)
 
           expect(result.meters).toEqual([
             {
@@ -106,7 +106,7 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
         })
 
         it('sets type as measured', () => {
-          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+          const result = GenerateReturnSubmissionMetadataService(sessionData)
 
           expect(result.type).toEqual('measured')
         })
@@ -118,13 +118,13 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
         })
 
         it('correctly sets meters array as empty', () => {
-          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+          const result = GenerateReturnSubmissionMetadataService(sessionData)
 
           expect(result.meters).toEqual([])
         })
 
         it('sets type as estimated', () => {
-          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+          const result = GenerateReturnSubmissionMetadataService(sessionData)
 
           expect(result.type).toEqual('estimated')
         })
@@ -137,13 +137,13 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
         })
 
         it('sets totalFlag to true', () => {
-          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+          const result = GenerateReturnSubmissionMetadataService(sessionData)
 
           expect(result.totalFlag).toEqual(true)
         })
 
         it('sets total as session.singleVolumeQuantity', () => {
-          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+          const result = GenerateReturnSubmissionMetadataService(sessionData)
 
           expect(result.total).toEqual(12345)
         })
@@ -156,19 +156,19 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
           })
 
           it('sets totalCustomDates as true', () => {
-            const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+            const result = GenerateReturnSubmissionMetadataService(sessionData)
 
             expect(result.totalCustomDates).toEqual(true)
           })
 
           it('sets totalCustomDateStart to fromFullDate', () => {
-            const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+            const result = GenerateReturnSubmissionMetadataService(sessionData)
 
             expect(result.totalCustomDateStart).toEqual('2025-01-01')
           })
 
           it('sets totalCustomDateEnd to toFullDate', () => {
-            const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+            const result = GenerateReturnSubmissionMetadataService(sessionData)
 
             expect(result.totalCustomDateEnd).toEqual('2025-12-31')
           })
@@ -180,13 +180,13 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
           })
 
           it('sets totalCustomDates as false', () => {
-            const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+            const result = GenerateReturnSubmissionMetadataService(sessionData)
 
             expect(result.totalCustomDates).toEqual(false)
           })
 
           it('does not include totalCustomDateStart or totalCustomEndDate', () => {
-            const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+            const result = GenerateReturnSubmissionMetadataService(sessionData)
 
             expect(result.totalCustomDateStart).toBeUndefined()
             expect(result.totalCustomDateEnd).toBeUndefined()
@@ -200,13 +200,13 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
         })
 
         it('sets totalFlag to false', () => {
-          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+          const result = GenerateReturnSubmissionMetadataService(sessionData)
 
           expect(result.totalFlag).toEqual(false)
         })
 
         it('does not include total, totalCustomDateStart or totalCustomEndDate', () => {
-          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+          const result = GenerateReturnSubmissionMetadataService(sessionData)
 
           expect(result.total).toBeUndefined()
           expect(result.totalCustomDateStart).toBeUndefined()
@@ -224,7 +224,7 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
       })
 
       it('sets method as oneMeter', () => {
-        const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+        const result = GenerateReturnSubmissionMetadataService(sessionData)
 
         expect(result.method).toEqual('oneMeter')
       })
@@ -238,13 +238,13 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
         })
 
         it('sets type as measured', () => {
-          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+          const result = GenerateReturnSubmissionMetadataService(sessionData)
 
           expect(result.type).toEqual('measured')
         })
 
         it('returns the expected meter array', () => {
-          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+          const result = GenerateReturnSubmissionMetadataService(sessionData)
 
           expect(result.meters).toEqual([
             {
@@ -270,13 +270,13 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
 
         // This is consistent with the legacy code; only returns with volumes and no meter have type set to estimated
         it('sets type as measured', () => {
-          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+          const result = GenerateReturnSubmissionMetadataService(sessionData)
 
           expect(result.type).toEqual('measured')
         })
 
         it('returns the expected meter array', () => {
-          const result = GenerateReturnSubmissionMetadataService.go(sessionData)
+          const result = GenerateReturnSubmissionMetadataService(sessionData)
 
           expect(result.meters).toEqual([
             {

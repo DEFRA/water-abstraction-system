@@ -47,7 +47,7 @@ describe('Return Logs Setup - Volumes service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await VolumesService.go(session.id, yearMonth)
+      const result = await VolumesService(session.id, yearMonth)
 
       expect(result).toEqual({
         backLink: { href: `/system/return-logs/setup/${session.id}/check`, text: 'Back' },

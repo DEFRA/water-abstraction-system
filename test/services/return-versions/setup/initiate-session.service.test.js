@@ -32,7 +32,7 @@ describe('Return Versions - Setup - Initiate Session service', () => {
         })
 
         it('creates a new session record containing details of the licence', async () => {
-          const result = await InitiateSessionService.go(licence.id, journey)
+          const result = await InitiateSessionService(licence.id, journey)
 
           const { data } = result
 
@@ -76,7 +76,7 @@ describe('Return Versions - Setup - Initiate Session service', () => {
         })
 
         it('creates a new session record containing details of the licence', async () => {
-          const result = await InitiateSessionService.go(licence.id, journey)
+          const result = await InitiateSessionService(licence.id, journey)
 
           const { data } = result
 
@@ -119,7 +119,7 @@ describe('Return Versions - Setup - Initiate Session service', () => {
       })
 
       it('throws a Boom not found error', async () => {
-        await expect(InitiateSessionService.go('e456e538-4d55-4552-84f7-6a7636eb1945', journey)).rejects.toMatchObject({
+        await expect(InitiateSessionService('e456e538-4d55-4552-84f7-6a7636eb1945', journey)).rejects.toMatchObject({
           isBoom: true,
           data: { id: 'e456e538-4d55-4552-84f7-6a7636eb1945' },
           output: {

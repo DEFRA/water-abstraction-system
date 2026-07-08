@@ -37,7 +37,7 @@ describe('Users - External - Setup - View Check Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCheckService.go(session.id, yarStub)
+      const result = await ViewCheckService(session.id, yarStub)
 
       expect(result).toEqual({
         activeNavBar: 'users',
@@ -60,7 +60,7 @@ describe('Users - External - Setup - View Check Service', () => {
     })
 
     it('sets the "checkPageVisited" flag to "true"', async () => {
-      await ViewCheckService.go(session.id, yarStub)
+      await ViewCheckService(session.id, yarStub)
 
       expect(session.checkPageVisited).toBe(true)
       expect(session.$update.called).toBe(true)
@@ -72,7 +72,7 @@ describe('Users - External - Setup - View Check Service', () => {
       })
 
       it('displays the notification', async () => {
-        const result = await ViewCheckService.go(session.id, yarStub)
+        const result = await ViewCheckService(session.id, yarStub)
 
         expect(result.notification).toEqual('Test notification')
       })

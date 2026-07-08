@@ -44,7 +44,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
         // For reference, ProcessSupplementaryTransactions, which calls this service, will flip it to a credit, then
         // compare it to the transactions it is generating.
         it('returns the debit from the supplementary (transactions in the annual and supplementary cancel out)', async () => {
-          const results = await FetchPreviousTransactionsService.go(
+          const results = await FetchPreviousTransactionsService(
             seededData.billingAccount.id,
             seededData.licenceBoth.id,
             seededData.toFinancialYearEnding,
@@ -95,7 +95,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
         //
         // So, the service will have no credits to cancel it off and will just return it for further processing.
         it('returns the debit from the debit from it', async () => {
-          const results = await FetchPreviousTransactionsService.go(
+          const results = await FetchPreviousTransactionsService(
             seededData.billingAccount.id,
             seededData.licenceAnnual.id,
             seededData.toFinancialYearEnding,
@@ -143,7 +143,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
 
       describe('but the licence has never been billed', () => {
         it('returns an empty array', async () => {
-          const results = await FetchPreviousTransactionsService.go(
+          const results = await FetchPreviousTransactionsService(
             seededData.billingAccount.id,
             '6d2b7db9-afee-4af2-8916-88c23dd9807d',
             seededData.toFinancialYearEnding,
@@ -157,7 +157,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
 
     describe('and the billing account has no previous bills', () => {
       it('returns an empty array', async () => {
-        const results = await FetchPreviousTransactionsService.go(
+        const results = await FetchPreviousTransactionsService(
           'c772d96a-7e99-4f37-8fbd-414828e42ac4',
           '6d2b7db9-afee-4af2-8916-88c23dd9807d',
           seededData.toFinancialYearEnding,
@@ -190,7 +190,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
         // For reference, ProcessSupplementaryTransactions, which calls this service, will flip it to a credit, then
         // compare it to the transactions it is generating.
         it('returns the debit from the supplementary (transactions in the annual and supplementary cancel out)', async () => {
-          const results = await FetchPreviousTransactionsService.go(
+          const results = await FetchPreviousTransactionsService(
             seededData.billingAccount.id,
             seededData.licenceBoth.id,
             seededData.toFinancialYearEnding,
@@ -241,7 +241,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
         //
         // So, the service will have no credits to cancel it off and will just return it for further processing.
         it('returns the debit from the debit from it', async () => {
-          const results = await FetchPreviousTransactionsService.go(
+          const results = await FetchPreviousTransactionsService(
             seededData.billingAccount.id,
             seededData.licenceAnnual.id,
             seededData.toFinancialYearEnding,
@@ -289,7 +289,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
 
       describe('but the licence has never been billed', () => {
         it('returns an empty array', async () => {
-          const results = await FetchPreviousTransactionsService.go(
+          const results = await FetchPreviousTransactionsService(
             seededData.billingAccount.id,
             '6d2b7db9-afee-4af2-8916-88c23dd9807d',
             seededData.toFinancialYearEnding,
@@ -303,7 +303,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
 
     describe('and the billing account has no previous bills', () => {
       it('returns an empty array', async () => {
-        const results = await FetchPreviousTransactionsService.go(
+        const results = await FetchPreviousTransactionsService(
           'c772d96a-7e99-4f37-8fbd-414828e42ac4',
           '6d2b7db9-afee-4af2-8916-88c23dd9807d',
           seededData.toFinancialYearEnding,
@@ -336,7 +336,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
 
   // describe('when there are no transactions', () => {
   //   it('returns no results', async () => {
-  //     const result = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
+  //     const result = await FetchPreviousTransactionsService(billingAccountId, licenceId, financialYearEnding)
 
   //     expect(result).toHaveLength(0)
   //   })
@@ -351,7 +351,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
   //     })
 
   //     it('returns results', async () => {
-  //       const results = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
+  //       const results = await FetchPreviousTransactionsService(billingAccountId, licenceId, financialYearEnding)
 
   //       expect(results).toHaveLength(1)
   //       expect(results[0].credit).toBe(false)
@@ -375,7 +375,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
   //           })
 
   //           it('returns no results', async () => {
-  //             const results = await FetchPreviousTransactionsService.go(
+  //             const results = await FetchPreviousTransactionsService(
   //               billingAccountId,
   //               licenceId,
   //               financialYearEnding
@@ -396,7 +396,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
   //           })
 
   //           it('returns the debits', async () => {
-  //             const results = await FetchPreviousTransactionsService.go(
+  //             const results = await FetchPreviousTransactionsService(
   //               billingAccountId,
   //               licenceId,
   //               financialYearEnding
@@ -426,7 +426,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
   //           })
 
   //           it('returns only the follow up debit', async () => {
-  //             const results = await FetchPreviousTransactionsService.go(
+  //             const results = await FetchPreviousTransactionsService(
   //               billingAccountId,
   //               licenceId,
   //               financialYearEnding
@@ -449,7 +449,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
   //           })
 
   //           it('returns both debits', async () => {
-  //             const results = await FetchPreviousTransactionsService.go(
+  //             const results = await FetchPreviousTransactionsService(
   //               billingAccountId,
   //               licenceId,
   //               financialYearEnding
@@ -483,7 +483,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
   //     })
 
   //     it('returns no results', async () => {
-  //       const results = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
+  //       const results = await FetchPreviousTransactionsService(billingAccountId, licenceId, financialYearEnding)
 
   //       expect(results).toHaveLength(0)
   //     })
@@ -500,7 +500,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
   //     })
 
   //     it('returns no results', async () => {
-  //       const results = await FetchPreviousTransactionsService.go(billingAccountId, licenceId, financialYearEnding)
+  //       const results = await FetchPreviousTransactionsService(billingAccountId, licenceId, financialYearEnding)
 
   //       expect(results).toHaveLength(0)
   //     })

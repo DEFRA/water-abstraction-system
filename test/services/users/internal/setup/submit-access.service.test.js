@@ -39,7 +39,7 @@ describe('Users - Internal - Setup - Submit Access Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitAccessService.go(session.id, payload, yarStub)
+      await SubmitAccessService(session.id, payload, yarStub)
 
       expect(session).toEqual({
         ...session,
@@ -49,7 +49,7 @@ describe('Users - Internal - Setup - Submit Access Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitAccessService.go(session.id, payload, yarStub)
+      const result = await SubmitAccessService(session.id, payload, yarStub)
 
       expect(result).toEqual({
         redirectUrl: `/system/users/internal/setup/${session.id}/check`
@@ -64,7 +64,7 @@ describe('Users - Internal - Setup - Submit Access Service', () => {
           })
 
           it('does not set a notification', async () => {
-            await SubmitAccessService.go(session.id, payload, yarStub)
+            await SubmitAccessService(session.id, payload, yarStub)
 
             expect(yarStub.flash.called).toBe(false)
           })
@@ -76,7 +76,7 @@ describe('Users - Internal - Setup - Submit Access Service', () => {
           })
 
           it('sets a notification', async () => {
-            await SubmitAccessService.go(session.id, payload, yarStub)
+            await SubmitAccessService(session.id, payload, yarStub)
 
             const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -94,7 +94,7 @@ describe('Users - Internal - Setup - Submit Access Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitAccessService.go(session.id, payload, yarStub)
+      const result = await SubmitAccessService(session.id, payload, yarStub)
 
       expect(result).toEqual({
         access: 'enabled',

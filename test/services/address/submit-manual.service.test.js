@@ -58,7 +58,7 @@ describe('Address - Submit Manual Service', () => {
       })
 
       it('saves the submitted address and returns the specified redirect URL', async () => {
-        const result = await SubmitManualService.go(sessionId, payload)
+        const result = await SubmitManualService(sessionId, payload)
 
         expect(result).toEqual({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
@@ -81,7 +81,7 @@ describe('Address - Submit Manual Service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitManualService.go(sessionId, payload)
+          const result = await SubmitManualService(sessionId, payload)
 
           expect(result).toEqual({
             error: {
@@ -120,7 +120,7 @@ describe('Address - Submit Manual Service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitManualService.go(sessionId, payload)
+          const result = await SubmitManualService(sessionId, payload)
 
           expect(result).toEqual({
             error: {

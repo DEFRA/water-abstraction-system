@@ -18,7 +18,7 @@ import TransactionModel from '../../models/transaction.model.js'
  *
  * @returns {Promise<object[]>} The resulting matched transactions
  */
-async function go(billingAccountId, licenceId, financialYearEnding, twoPartTariff) {
+export default async function go(billingAccountId, licenceId, financialYearEnding, twoPartTariff) {
   const transactions = await _fetch(billingAccountId, licenceId, financialYearEnding, twoPartTariff)
 
   return _cleanse(transactions)
@@ -105,9 +105,4 @@ async function _fetch(billingAccountId, licenceId, financialYearEnding, twoPartT
       'billRuns.scheme': 'sroc'
     })
     .whereIn('billRuns.batchType', batchTypes)
-}
-
-export { go }
-export default {
-  go
 }

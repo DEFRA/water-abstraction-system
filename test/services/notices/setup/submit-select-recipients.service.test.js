@@ -51,14 +51,14 @@ describe('Notices - Setup - Submit Select Recipients service', () => {
 
   describe('when called', () => {
     it('saves the submitted value', async () => {
-      await SubmitSelectRecipientsService.go(session.id, payload, yarStub)
+      await SubmitSelectRecipientsService(session.id, payload, yarStub)
 
       expect(session.selectedRecipients).toEqual(['123'])
       expect(session.$update.called).toBe(true)
     })
 
     it('sets a flash message', async () => {
-      await SubmitSelectRecipientsService.go(session.id, payload, yarStub)
+      await SubmitSelectRecipientsService(session.id, payload, yarStub)
 
       // Check we add the flash message
       const [flashType, bannerMessage] = yarStub.flash.args[0]
@@ -71,7 +71,7 @@ describe('Notices - Setup - Submit Select Recipients service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitSelectRecipientsService.go(session.id, payload, yarStub)
+      const result = await SubmitSelectRecipientsService(session.id, payload, yarStub)
 
       expect(result).toEqual({})
     })
@@ -84,7 +84,7 @@ describe('Notices - Setup - Submit Select Recipients service', () => {
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitSelectRecipientsService.go(session.id, payload, yarStub)
+        const result = await SubmitSelectRecipientsService(session.id, payload, yarStub)
 
         expect(result).toEqual({
           backLink: {

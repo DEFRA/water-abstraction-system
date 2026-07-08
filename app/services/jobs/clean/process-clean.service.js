@@ -17,15 +17,15 @@ import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib
  * > errors. This is a safety net in case me miss something. An error here would be an uncaught exception as it is not
  * > handled by the controller. This would cause the app itself to fall over.
  */
-async function go() {
+export default async function go() {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    const emptyBillRunsCount = await CleanEmptyBillRunsService.go()
-    const emptyVoidReturnLogsCount = await CleanEmptyVoidReturnLogsService.go()
-    const expiredSessionsCount = await CleanExpiredSessionsService.go()
-    const incompleteCompanyContactsCount = await CleanIncompleteCompanyContactsService.go()
-    const orphanedContactsCount = await CleanOrphanedContactsService.go()
+    const emptyBillRunsCount = await CleanEmptyBillRunsService()
+    const emptyVoidReturnLogsCount = await CleanEmptyVoidReturnLogsService()
+    const expiredSessionsCount = await CleanExpiredSessionsService()
+    const incompleteCompanyContactsCount = await CleanIncompleteCompanyContactsService()
+    const orphanedContactsCount = await CleanOrphanedContactsService()
 
     calculateAndLogTimeTaken(startTime, 'Clean job complete', {
       counts: {
@@ -39,11 +39,4 @@ async function go() {
   } catch (error) {
     globalThis.GlobalNotifier.omfg('Clean job failed', {}, error)
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

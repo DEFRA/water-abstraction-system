@@ -41,7 +41,7 @@ describe('Companies - View History service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewHistoryService.go(company.id, auth, page)
+      const result = await ViewHistoryService(company.id, auth, page)
 
       expect(result).toEqual({
         activeSecondaryNav: 'history',

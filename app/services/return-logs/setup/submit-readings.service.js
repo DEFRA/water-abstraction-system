@@ -20,7 +20,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
  * @returns {Promise<object>} If no errors it returns an empty object else the page data for the readings page including
  * the validation error details
  */
-async function go(sessionId, payload, yar, yearMonth) {
+export default async function go(sessionId, payload, yar, yearMonth) {
   const session = await FetchSessionDal(sessionId)
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
@@ -106,9 +106,4 @@ function _validate(payload, requestedYear, requestedMonth, session) {
   const validation = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
   return formatValidationResult(validation)
-}
-
-export { go }
-export default {
-  go
 }

@@ -12,11 +12,11 @@ import LicenceEndDateChangeModel from '../../../models/licence-end-date-change.m
  *
  * @param {object} licence - The licence to check
  */
-async function go(licence) {
+export default async function go(licence) {
   let changedDateDetails
 
   try {
-    changedDateDetails = DetermineEarliestLicenceChangedDateService.go(licence)
+    changedDateDetails = DetermineEarliestLicenceChangedDateService(licence)
 
     if (!changedDateDetails) {
       return
@@ -31,11 +31,4 @@ async function go(licence) {
   } catch (error) {
     globalThis.GlobalNotifier.omfg('Check licence end dates failed', { id: licence.id, changedDateDetails }, error)
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -47,7 +47,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitExistingAccountService.go(session.id, payload)
+      await SubmitExistingAccountService(session.id, payload)
 
       expect(session).toMatchObject({
         existingAccount: payload.existingAccount
@@ -56,7 +56,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitExistingAccountService.go(session.id, payload)
+      const result = await SubmitExistingAccountService(session.id, payload)
 
       expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
@@ -76,7 +76,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitExistingAccountService.go(session.id, payload)
+        await SubmitExistingAccountService(session.id, payload)
 
         expect(session).toMatchObject({
           existingAccount: payload.existingAccount
@@ -85,7 +85,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitExistingAccountService.go(session.id, payload)
+        const result = await SubmitExistingAccountService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
@@ -107,7 +107,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitExistingAccountService.go(session.id, payload)
+        await SubmitExistingAccountService(session.id, payload)
 
         expect(session).toMatchObject({
           checkPageVisited: true,
@@ -117,7 +117,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitExistingAccountService.go(session.id, payload)
+        const result = await SubmitExistingAccountService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
@@ -135,7 +135,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       })
 
       it('saves the submitted value and deletes the previously saved data', async () => {
-        await SubmitExistingAccountService.go(session.id, payload)
+        await SubmitExistingAccountService(session.id, payload)
 
         expect(session).toMatchObject({
           ..._newAccountExpectedValues(),
@@ -145,7 +145,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitExistingAccountService.go(session.id, payload)
+        const result = await SubmitExistingAccountService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
@@ -162,7 +162,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitExistingAccountService.go(session.id, payload)
+      await SubmitExistingAccountService(session.id, payload)
 
       expect(session).toMatchObject({
         existingAccount: 'new'
@@ -171,7 +171,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitExistingAccountService.go(session.id, payload)
+      const result = await SubmitExistingAccountService(session.id, payload)
 
       expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/account-type`
@@ -191,7 +191,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitExistingAccountService.go(session.id, payload)
+        await SubmitExistingAccountService(session.id, payload)
 
         expect(session).toMatchObject({
           existingAccount: payload.existingAccount
@@ -200,7 +200,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitExistingAccountService.go(session.id, payload)
+        const result = await SubmitExistingAccountService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/account-type`
@@ -218,7 +218,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitExistingAccountService.go(session.id, payload)
+        await SubmitExistingAccountService(session.id, payload)
 
         expect(session).toMatchObject({
           ..._commonExpectedValues(),
@@ -228,7 +228,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitExistingAccountService.go(session.id, payload)
+        const result = await SubmitExistingAccountService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/account-type`
@@ -244,7 +244,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitExistingAccountService.go(session.id, payload)
+      const result = await SubmitExistingAccountService(session.id, payload)
 
       expect(result.error).toEqual({
         errorList: [

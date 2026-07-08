@@ -41,7 +41,7 @@ describe('View Return Submission service', () => {
   })
 
   it('correctly fetches return log and transforms it via the presenter', async () => {
-    const result = await ViewReturnSubmissionService.go('RETURN_SUBMISSION_ID', '2025-0')
+    const result = await ViewReturnSubmissionService('RETURN_SUBMISSION_ID', '2025-0')
 
     // We only check a few items here -- the key thing is that the mock return log was fetched and successfully
     // passed to the presenter

@@ -70,7 +70,7 @@ describe('Return Versions - Setup - Determine Relevant Licence Version service',
       })
 
       it('returns the relevant licence with no copyable return versions', async () => {
-        const result = await DetermineRelevantLicenceVersionService.go(session)
+        const result = await DetermineRelevantLicenceVersionService(session)
 
         expect(result).toEqual({ ...licenceVersion, copyableReturnVersions: [] })
       })
@@ -89,7 +89,7 @@ describe('Return Versions - Setup - Determine Relevant Licence Version service',
       })
 
       it('returns the relevant licence with latest existing return version as a copyable candidate', async () => {
-        const result = await DetermineRelevantLicenceVersionService.go(session)
+        const result = await DetermineRelevantLicenceVersionService(session)
 
         expect(result).toEqual({ ...licenceVersion, copyableReturnVersions: [session.licence.returnVersions[0]] })
       })
@@ -106,7 +106,7 @@ describe('Return Versions - Setup - Determine Relevant Licence Version service',
       })
 
       it('returns the relevant licence with existing return versions that start during the period as a copyable candidates', async () => {
-        const result = await DetermineRelevantLicenceVersionService.go(session)
+        const result = await DetermineRelevantLicenceVersionService(session)
 
         expect(result).toEqual({
           ...licenceVersion,
@@ -126,7 +126,7 @@ describe('Return Versions - Setup - Determine Relevant Licence Version service',
       })
 
       it('returns the relevant licence with no copyable return versions', async () => {
-        const result = await DetermineRelevantLicenceVersionService.go(session)
+        const result = await DetermineRelevantLicenceVersionService(session)
 
         expect(result).toEqual({ ...licenceVersion, copyableReturnVersions: [] })
       })

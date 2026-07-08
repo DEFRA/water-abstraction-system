@@ -70,21 +70,21 @@ describe('Job - Notifications - Process Notification Status service', () => {
     })
 
     it('updates the linked notices overall status and counts', async () => {
-      await ProcessNotificationStatusService.go()
+      await ProcessNotificationStatusService()
 
       expect(updateEventStub.called).toBe(true)
       expect(updateEventStub.firstCall.args[0]).toEqual([noticeA.id, noticeB.id])
     })
 
     it('checks whether any alternate notices need to be sent', async () => {
-      await ProcessNotificationStatusService.go()
+      await ProcessNotificationStatusService()
 
       expect(sendAlternateNoticesStub.called).toBe(true)
       expect(sendAlternateNoticesStub.firstCall.args[0]).toEqual(notifications)
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
-      await ProcessNotificationStatusService.go()
+      await ProcessNotificationStatusService()
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -101,13 +101,13 @@ describe('Job - Notifications - Process Notification Status service', () => {
     })
 
     it('does not update the linked notices', async () => {
-      await ProcessNotificationStatusService.go()
+      await ProcessNotificationStatusService()
 
       expect(updateEventStub.called).toBe(false)
     })
 
     it('records the error by calling "omfg()"', async () => {
-      await ProcessNotificationStatusService.go()
+      await ProcessNotificationStatusService()
 
       const args = notifierStub.omfg.firstCall.args
 
@@ -117,7 +117,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
     })
 
     it('notifies the team by calling "redAlert()"', async () => {
-      await ProcessNotificationStatusService.go()
+      await ProcessNotificationStatusService()
 
       const args = notifierStub.redAlert.firstCall.args
 
@@ -125,7 +125,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
     })
 
     it('does not throw an error', async () => {
-      await ProcessNotificationStatusService.go()
+      await ProcessNotificationStatusService()
     })
   })
 })

@@ -21,8 +21,8 @@ import ViewBillingAccountPresenter from '../../presenters/billing-accounts/view-
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the view billing account template.
  */
-async function go(id, page, licenceId, chargeVersionId, companyId) {
-  const { totalNumber, ...billingAccountData } = await FetchViewBillingAccountService.go(id, page)
+export default async function go(id, page, licenceId, chargeVersionId, companyId) {
+  const { totalNumber, ...billingAccountData } = await FetchViewBillingAccountService(id, page)
 
   const pageData = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
 
@@ -55,11 +55,4 @@ function _queryArgs(chargeVersionId, licenceId) {
   }
 
   return queryArgs
-}
-
-export {
-  go
-}
-export default {
-  go
 }

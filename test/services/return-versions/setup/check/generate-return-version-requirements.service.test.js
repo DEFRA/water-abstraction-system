@@ -108,7 +108,7 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
 
   describe('when called', () => {
     it('generates return requirements for persisting from the session requirements data', async () => {
-      const results = await GenerateReturnVersionRequirementsService.go(licenceId, sessionRequirements)
+      const results = await GenerateReturnVersionRequirementsService(licenceId, sessionRequirements)
 
       // We expect two return requirements to be generated from our session data
       expect(results).toHaveLength(2)

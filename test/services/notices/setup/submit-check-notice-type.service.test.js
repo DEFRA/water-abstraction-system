@@ -49,7 +49,7 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
       })
 
       it('adds the "addressJourney" property to the session configured for going back to contact-type', async () => {
-        await SubmitCheckNoticeTypeService.go(sessionId)
+        await SubmitCheckNoticeTypeService(sessionId)
 
         expect(session).toEqual({
           dueReturns: [],
@@ -91,7 +91,7 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
       })
 
       it('adds the "addressJourney" property to the session configured for going back to recipient-name', async () => {
-        await SubmitCheckNoticeTypeService.go(sessionId)
+        await SubmitCheckNoticeTypeService(sessionId)
 
         expect(session).toEqual({
           dueReturns: [],

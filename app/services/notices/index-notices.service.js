@@ -17,10 +17,10 @@ import { processSavedFilters } from '../../lib/submit-page.lib.js'
  *
  * @returns {Promise<object>} The view data for the notices page
  */
-async function go(yar, auth, page) {
+export default async function go(yar, auth, page) {
   const filters = _filters(yar)
 
-  const { results: notices, total: totalNumber } = await FetchNoticesService.go(filters, page)
+  const { results: notices, total: totalNumber } = await FetchNoticesService(filters, page)
 
   const pagination = PaginatorPresenter.go(totalNumber, page, `/system/notices`, notices.length, 'notices')
 
@@ -46,11 +46,4 @@ function _filters(yar) {
     toDate: null,
     ...savedFilters
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

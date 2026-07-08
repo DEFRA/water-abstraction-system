@@ -78,7 +78,7 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
 
   describe('when there are billing accounts that are linked to the bill run', () => {
     it('returns the applicable billing accounts', async () => {
-      const results = await FetchBillingAccountsService.go(billRun.id)
+      const results = await FetchBillingAccountsService(billRun.id)
 
       expect(results).toHaveLength(1)
 
@@ -90,7 +90,7 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
     describe('and each billing account', () => {
       describe('for the charge versions property', () => {
         it('returns the applicable charge versions', async () => {
-          const results = await FetchBillingAccountsService.go(billRun.id)
+          const results = await FetchBillingAccountsService(billRun.id)
 
           const { chargeVersions } = results[0]
 
@@ -104,7 +104,7 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
 
         describe('and against each charge version', () => {
           it('includes the licence', async () => {
-            const results = await FetchBillingAccountsService.go(billRun.id)
+            const results = await FetchBillingAccountsService(billRun.id)
 
             const { licence } = results[0].chargeVersions[0]
 
@@ -120,7 +120,7 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
           })
 
           it('includes the applicable charge references', async () => {
-            const results = await FetchBillingAccountsService.go(billRun.id)
+            const results = await FetchBillingAccountsService(billRun.id)
 
             const { chargeReferences } = results[0].chargeVersions[0]
 
@@ -142,7 +142,7 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
 
           describe('and against each charge reference', () => {
             it('includes the charge category', async () => {
-              const results = await FetchBillingAccountsService.go(billRun.id)
+              const results = await FetchBillingAccountsService(billRun.id)
 
               const { chargeCategory: result } = results[0].chargeVersions[0].chargeReferences[0]
 
@@ -152,7 +152,7 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
             })
 
             it('includes the review charge references', async () => {
-              const results = await FetchBillingAccountsService.go(billRun.id)
+              const results = await FetchBillingAccountsService(billRun.id)
 
               const { reviewChargeReferences: result } = results[0].chargeVersions[0].chargeReferences[0]
 
@@ -163,7 +163,7 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
             })
 
             it('includes the charge elements', async () => {
-              const results = await FetchBillingAccountsService.go(billRun.id)
+              const results = await FetchBillingAccountsService(billRun.id)
 
               const { chargeElements: result } = results[0].chargeVersions[0].chargeReferences[0]
 
@@ -176,7 +176,7 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
 
             describe('and against each charge element', () => {
               it('includes the review charge elements', async () => {
-                const results = await FetchBillingAccountsService.go(billRun.id)
+                const results = await FetchBillingAccountsService(billRun.id)
 
                 const { reviewChargeElements: result } =
                   results[0].chargeVersions[0].chargeReferences[0].chargeElements[0]
@@ -193,7 +193,7 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
 
   describe('when there are billing accounts not linked to the bill run', () => {
     it('does not include them in the results', async () => {
-      const results = await FetchBillingAccountsService.go(billRun.id)
+      const results = await FetchBillingAccountsService(billRun.id)
 
       expect(results).toHaveLength(1)
 
@@ -204,7 +204,7 @@ describe('Bill Runs - Two Part Tariff - Fetch Billing Accounts service', () => {
 
   describe('when there are no billing accounts at all (no results)', () => {
     it('returns no results', async () => {
-      const results = await FetchBillingAccountsService.go('1c1f7af5-9cba-47a7-8fc4-2c03b0d1124d')
+      const results = await FetchBillingAccountsService('1c1f7af5-9cba-47a7-8fc4-2c03b0d1124d')
 
       expect(results).toHaveLength(0)
     })

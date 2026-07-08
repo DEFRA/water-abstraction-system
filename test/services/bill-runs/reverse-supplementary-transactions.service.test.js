@@ -25,7 +25,7 @@ describe('Bill Runs - Reverse Supplementary Transactions service', () => {
 
   describe('when the service is called', () => {
     it('returns reversing transactions', () => {
-      const result = ReverseSupplementaryTransactionsService.go(transactions, billLicenceId)
+      const result = ReverseSupplementaryTransactionsService(transactions, billLicenceId)
 
       expect(result).toHaveLength(transactions.length)
 

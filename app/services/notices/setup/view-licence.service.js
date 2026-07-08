@@ -16,7 +16,7 @@ import LicencePresenter from '../../../presenters/notices/setup/licence.presente
  *
  * @returns {Promise<object>} The view data for the licence page
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const formattedData = LicencePresenter.go(session)
@@ -25,9 +25,4 @@ async function go(sessionId) {
     activeNavBar: 'notices',
     ...formattedData
   }
-}
-
-export { go }
-export default {
-  go
 }

@@ -21,15 +21,15 @@ import TwoPartTariffSupplementaryProcessBillRunService from './tpt-supplementary
  *
  * @returns {Promise<object>} Object that will be the JSON response returned to the client
  */
-async function go(regionId, batchType, userEmail, financialYearEnding) {
-  const billingPeriods = DetermineBillingPeriodsService.go(batchType, financialYearEnding)
+export default async function go(regionId, batchType, userEmail, financialYearEnding) {
+  const billingPeriods = DetermineBillingPeriodsService(batchType, financialYearEnding)
 
   if (billingPeriods.length === 0) {
     throw new NoBillingPeriodsError(financialYearEnding)
   }
 
   const financialYearEndings = _financialYearEndings(billingPeriods)
-  const billRun = await InitiateBillRunService.go(financialYearEndings, regionId, batchType, userEmail)
+  const billRun = await InitiateBillRunService(financialYearEndings, regionId, batchType, userEmail)
 
   _processBillRun(billRun, billingPeriods)
 }
@@ -46,21 +46,16 @@ function _processBillRun(billRun, billingPeriods) {
   // immediate response
   switch (billRun.batchType) {
     case 'annual':
-      AnnualProcessBillRunService.go(billRun, billingPeriods)
+      AnnualProcessBillRunService(billRun, billingPeriods)
       break
     case 'supplementary':
-      SupplementaryProcessBillRunService.go(billRun, billingPeriods)
+      SupplementaryProcessBillRunService(billRun, billingPeriods)
       break
     case 'two_part_tariff':
-      TwoPartTariffProcessBillRunService.go(billRun, billingPeriods)
+      TwoPartTariffProcessBillRunService(billRun, billingPeriods)
       break
     case 'two_part_supplementary':
-      TwoPartTariffSupplementaryProcessBillRunService.go(billRun, billingPeriods)
+      TwoPartTariffSupplementaryProcessBillRunService(billRun, billingPeriods)
       break
   }
-}
-
-export { go }
-export default {
-  go
 }

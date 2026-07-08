@@ -23,7 +23,7 @@ describe('Licence Monitoring Station - Setup - Initiate Session service', () => 
 
   describe('when called', () => {
     it('creates a new session record containing details of the monitoring station', async () => {
-      const sessionId = await InitiateSessionService.go(monitoringStation.id)
+      const sessionId = await InitiateSessionService(monitoringStation.id)
 
       const matchingSession = await SessionModel.query().findById(sessionId)
 

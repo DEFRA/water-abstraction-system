@@ -72,7 +72,7 @@ function _availableRestrictionTypeCustomError(value, helpers, licenceMonitoringS
  * @private
  */
 function _availableRestrictionType(licenceMonitoringStations, alertType) {
-  const relevantLicenceMonitoringStation = DetermineRelevantLicenceMonitoringStationsByAlertTypeService.go(
+  const relevantLicenceMonitoringStation = DetermineRelevantLicenceMonitoringStationsByAlertTypeService(
     licenceMonitoringStations,
     alertType
   )

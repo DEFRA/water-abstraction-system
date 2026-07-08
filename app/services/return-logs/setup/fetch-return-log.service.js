@@ -14,7 +14,7 @@ import ReturnLogModel from '../../../models/return-log.model.js'
  *
  * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and licence data
  */
-async function go(returnLogId) {
+export default async function go(returnLogId) {
   return ReturnLogModel.query()
     .findById(returnLogId)
     .select(
@@ -28,9 +28,4 @@ async function go(returnLogId) {
       ReturnLogModel.relatedQuery('returnSubmissions').count().as('submissionCount')
     )
     .innerJoinRelated('licence')
-}
-
-export { go }
-export default {
-  go
 }

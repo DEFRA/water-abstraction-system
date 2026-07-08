@@ -46,7 +46,7 @@ describe('Return Logs Setup - Readings service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ReadingsService.go(session.id, yearMonth)
+      const result = await ReadingsService(session.id, yearMonth)
 
       expect(result).toEqual({
         backLink: {

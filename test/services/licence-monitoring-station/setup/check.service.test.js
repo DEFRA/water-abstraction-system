@@ -43,7 +43,7 @@ describe('Licence Monitoring Station Setup - Check Service', () => {
 
   describe('when called', () => {
     it('returns the expected output', async () => {
-      const result = await CheckService.go(session.id)
+      const result = await CheckService(session.id)
 
       expect(result).toEqual({
         abstractionPeriod: '1 February to 3 April',
@@ -65,7 +65,7 @@ describe('Licence Monitoring Station Setup - Check Service', () => {
     })
 
     it('sets the "checkPageVisited" flag to "true"', async () => {
-      await CheckService.go(session.id)
+      await CheckService(session.id)
 
       expect(session.checkPageVisited).toBe(true)
       expect(session.$update.called).toBe(true)

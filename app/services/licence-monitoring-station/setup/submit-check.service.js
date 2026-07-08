@@ -19,7 +19,7 @@ import { flowUnits } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<string>} The monitoring station id used to redirect back to the monitoring station page
  */
-async function go(sessionId, userId, yar) {
+export default async function go(sessionId, userId, yar) {
   const session = await FetchSessionDal(sessionId)
 
   await _createTag(session, userId)
@@ -57,11 +57,4 @@ function _determineMeasureType(unit) {
 
 function _determineRestrictionType(stopOrReduce, reduceAtThreshold) {
   return stopOrReduce === 'reduce' && reduceAtThreshold === 'yes' ? 'stop_or_reduce' : stopOrReduce
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -15,7 +15,7 @@ import NoticeTypePresenter from '../../../presenters/notices/setup/notice-type.p
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, auth) {
+export default async function go(sessionId, auth) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = NoticeTypePresenter.go(session, auth)
@@ -24,9 +24,4 @@ async function go(sessionId, auth) {
     activeNavBar: 'notices',
     ...pageData
   }
-}
-
-export { go }
-export default {
-  go
 }

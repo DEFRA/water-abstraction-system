@@ -19,7 +19,7 @@ import { periodsOverlap } from '../../../lib/general.lib.js'
  * @param {module:ChargeVersionModel} chargePeriod - The charge period taken from the charge version
  * @param {module:ChargeReferenceModel} chargeReference - The charge reference the element belongs to
  */
-function go(chargeElement, matchingReturns, chargePeriod, chargeReference) {
+export default function go(chargeElement, matchingReturns, chargePeriod, chargeReference) {
   _processCompletedReturns(chargeElement, matchingReturns, chargePeriod, chargeReference)
 
   const hasDueReturns = matchingReturns.some((matchedReturn) => {
@@ -212,9 +212,4 @@ function _processDueReturns(chargeElement, matchingReturns, chargeReference) {
 
     _allocateDueReturns(chargeElement, matchedReturn, chargeReference, i)
   })
-}
-
-export { go }
-export default {
-  go
 }

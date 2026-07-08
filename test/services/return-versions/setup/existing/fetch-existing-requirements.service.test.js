@@ -21,7 +21,7 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
     })
 
     it('returns the details of the requirements for returns', async () => {
-      const result = await FetchExistingRequirementsService.go(seededReturnVersion.id)
+      const result = await FetchExistingRequirementsService(seededReturnVersion.id)
 
       expect(result).toEqual({
         id: seededReturnVersion.id,
@@ -100,7 +100,7 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
 
   describe('when a matching return version does not exist', () => {
     it('returns nothing', async () => {
-      const result = await FetchExistingRequirementsService.go('7d0c235a-6556-47dc-8d18-3b2965d49703')
+      const result = await FetchExistingRequirementsService('7d0c235a-6556-47dc-8d18-3b2965d49703')
 
       expect(result).toBeUndefined()
     })

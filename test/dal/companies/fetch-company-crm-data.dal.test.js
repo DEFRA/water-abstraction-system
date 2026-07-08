@@ -38,7 +38,7 @@ describe('Companies - Fetch Company CRM Data dal', () => {
 
   describe('when there are contacts', () => {
     it('returns the matching contacts', async () => {
-      const result = await FetchCompanyCRMDataDal.go(company.record.id, roles, page)
+      const result = await FetchCompanyCRMDataDal(company.record.id, roles, page)
 
       expect(result).toEqual({
         contacts: [
@@ -103,7 +103,7 @@ describe('Companies - Fetch Company CRM Data dal', () => {
         })
 
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
-          const result = await FetchCompanyCRMDataDal.go(company.record.id, roles, page)
+          const result = await FetchCompanyCRMDataDal(company.record.id, roles, page)
 
           expect(result).toEqual({
             contacts: [
@@ -124,7 +124,7 @@ describe('Companies - Fetch Company CRM Data dal', () => {
         })
 
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
-          const result = await FetchCompanyCRMDataDal.go(company.record.id, roles, page)
+          const result = await FetchCompanyCRMDataDal(company.record.id, roles, page)
 
           expect(result).toEqual({
             contacts: [
@@ -145,7 +145,7 @@ describe('Companies - Fetch Company CRM Data dal', () => {
         })
 
         it('returns the matching contacts for the page (the second page) with the total number', async () => {
-          const result = await FetchCompanyCRMDataDal.go(company.record.id, roles, page)
+          const result = await FetchCompanyCRMDataDal(company.record.id, roles, page)
 
           expect(result).toEqual({
             contacts: [

@@ -21,7 +21,7 @@ import { NoticeType } from '../../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<object>} The view data for the preview page
  */
-async function go(sessionId, contactHashId, licenceMonitoringStationId = null) {
+export default async function go(sessionId, contactHashId, licenceMonitoringStationId = null) {
   const session = await FetchSessionDal(sessionId)
 
   const recipient = await _recipient(contactHashId, session)
@@ -61,14 +61,9 @@ function _notification(recipient, session, licenceMonitoringStationId) {
 }
 
 async function _recipient(contactHashId, session) {
-  const recipients = await FetchRecipientsService.go(session)
+  const recipients = await FetchRecipientsService(session)
 
   return recipients.find((recipient) => {
     return recipient.contact_hash_id === contactHashId
   })
-}
-
-export { go }
-export default {
-  go
 }

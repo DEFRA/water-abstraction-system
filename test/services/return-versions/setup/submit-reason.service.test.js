@@ -65,14 +65,14 @@ describe('Return Versions Setup - Submit Reason service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitReasonService.go(session.id, payload, yarStub)
+        await SubmitReasonService(session.id, payload, yarStub)
 
         expect(session.reason).toEqual('new-licence')
       })
 
       describe('and the page has been not been visited', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitReasonService.go(session.id, payload, yarStub)
+          const result = await SubmitReasonService(session.id, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: false
@@ -88,7 +88,7 @@ describe('Return Versions Setup - Submit Reason service', () => {
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
-          const result = await SubmitReasonService.go(session.id, payload, yarStub)
+          const result = await SubmitReasonService(session.id, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: true
@@ -96,7 +96,7 @@ describe('Return Versions Setup - Submit Reason service', () => {
         })
 
         it('sets the notification message title to "Updated" and the text to "Return version updated" ', async () => {
-          await SubmitReasonService.go(session.id, payload, yarStub)
+          await SubmitReasonService(session.id, payload, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
 
@@ -112,7 +112,7 @@ describe('Return Versions Setup - Submit Reason service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await SubmitReasonService.go(session.id, payload, yarStub)
+        const result = await SubmitReasonService(session.id, payload, yarStub)
 
         expect(result).toMatchObject({
           pageTitle: 'Select the reason for the requirements for returns',
@@ -128,7 +128,7 @@ describe('Return Versions Setup - Submit Reason service', () => {
 
       describe('because the user has not submitted anything', () => {
         it('includes an error for the input element', async () => {
-          const result = await SubmitReasonService.go(session.id, payload, yarStub)
+          const result = await SubmitReasonService(session.id, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [

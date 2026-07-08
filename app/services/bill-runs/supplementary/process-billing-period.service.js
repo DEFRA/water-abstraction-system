@@ -25,12 +25,12 @@ import TransactionModel from '../../../models/transaction.model.js'
  *
  * @returns {Promise<boolean>} true if the bill run is not empty (there are transactions to bill) else false
  */
-async function go(billRun, billingPeriod, chargeVersions) {
+export default async function go(billRun, billingPeriod, chargeVersions) {
   if (chargeVersions.length === 0) {
     return false
   }
 
-  const preGeneratedData = await PreGenerateBillingDataService.go(chargeVersions, billRun.id, billingPeriod)
+  const preGeneratedData = await PreGenerateBillingDataService(chargeVersions, billRun.id, billingPeriod)
 
   const billingData = _buildBillingDataWithTransactions(chargeVersions, preGeneratedData, billingPeriod)
   const dataToPersist = await _buildDataToPersist(billingData, billingPeriod, billRun.externalId)
@@ -58,7 +58,7 @@ async function _buildDataToPersist(billingData, billingPeriod, billRunExternalId
     const cleansedTransactions = await _cleanseTransactions(currentBillingData, billingPeriod)
 
     if (cleansedTransactions.length !== 0) {
-      const transactions = await SendTransactionsService.go(
+      const transactions = await SendTransactionsService(
         cleansedTransactions,
         billRunExternalId,
         currentBillingData.bill.accountNumber,
@@ -178,13 +178,13 @@ async function _cleanseTransactions(currentBillingData, billingPeriod) {
     return []
   }
 
-  const previousTransactions = await FetchPreviousTransactionsService.go(
+  const previousTransactions = await FetchPreviousTransactionsService(
     currentBillingData.bill.billingAccountId,
     currentBillingData.billLicence.licenceId,
     billingPeriod.endDate.getFullYear(),
     false
   )
-  const cleansedTransactions = await ProcessSupplementaryTransactionsService.go(
+  const cleansedTransactions = await ProcessSupplementaryTransactionsService(
     previousTransactions,
     currentBillingData.calculatedTransactions,
     currentBillingData.billLicence.id
@@ -195,18 +195,18 @@ async function _cleanseTransactions(currentBillingData, billingPeriod) {
 
 function _generateCalculatedTransactions(billLicenceId, billingPeriod, chargeVersion) {
   try {
-    const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
+    const chargePeriod = DetermineChargePeriodService(chargeVersion, billingPeriod)
 
     if (!chargePeriod.startDate) {
       return []
     }
 
-    const newLicence = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
+    const newLicence = DetermineMinimumChargeService(chargeVersion, chargePeriod)
     const waterUndertaker = chargeVersion.licence.waterUndertaker
 
     // We use flatMap as GenerateTransactionsService returns an array of transactions
     const transactions = chargeVersion.chargeReferences.flatMap((chargeReference) => {
-      return GenerateTransactionsService.go(
+      return GenerateTransactionsService(
         billLicenceId,
         chargeReference,
         billingPeriod,
@@ -220,9 +220,4 @@ function _generateCalculatedTransactions(billLicenceId, billingPeriod, chargeVer
   } catch (error) {
     throw new BillRunError(error, BillRunModel.errorCodes.failedToPrepareTransactions)
   }
-}
-
-export { go }
-export default {
-  go
 }

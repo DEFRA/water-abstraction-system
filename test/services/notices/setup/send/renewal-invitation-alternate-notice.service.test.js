@@ -52,7 +52,7 @@ describe('Notices - Setup - Send - Renewal Invitation Alternate Notice service',
     })
 
     it('creates the alternate notice and notifications', async () => {
-      await RenewalInvitationAlternateNoticeService.go(mainNotice)
+      await RenewalInvitationAlternateNoticeService(mainNotice)
 
       const expiryDate = new Date(mainNotice.metadata.expiryDate)
       const renewalDate = new Date(mainNotice.metadata.renewalDate)
@@ -67,7 +67,7 @@ describe('Notices - Setup - Send - Renewal Invitation Alternate Notice service',
     })
 
     it('returns the notice, notification IDs, and notifications', async () => {
-      const result = await RenewalInvitationAlternateNoticeService.go(mainNotice)
+      const result = await RenewalInvitationAlternateNoticeService(mainNotice)
 
       expect(result).toEqual({
         notice: alternateNotice,
@@ -86,13 +86,13 @@ describe('Notices - Setup - Send - Renewal Invitation Alternate Notice service',
     })
 
     it('does not create the alternate notice', async () => {
-      await RenewalInvitationAlternateNoticeService.go(mainNotice)
+      await RenewalInvitationAlternateNoticeService(mainNotice)
 
       expect(createAlternateRenewalNoticeStub.called).toBe(false)
     })
 
     it('returns null', async () => {
-      const result = await RenewalInvitationAlternateNoticeService.go(mainNotice)
+      const result = await RenewalInvitationAlternateNoticeService(mainNotice)
 
       expect(result).toBeNull()
     })

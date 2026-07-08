@@ -14,7 +14,7 @@ import { db } from '../../../../db/db.js'
  *
  * @returns {Promise<object>} The headers, query and table name from the table
  */
-async function go(tableName, schemaName) {
+export default async function go(tableName, schemaName) {
   const data = {
     headers: await _headers(tableName, schemaName),
     rows: _rows(tableName, schemaName)
@@ -33,11 +33,4 @@ async function _headers(tableName, schemaName) {
 
   // We are only interested in the column names
   return Object.keys(columns)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

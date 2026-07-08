@@ -17,14 +17,14 @@ describe('Prepare Charge Version Service', () => {
     })
 
     it('sorts the charge references by their subsistence charge', async () => {
-      await PrepareChargeVersionService.go(chargeVersion, billingPeriod)
+      await PrepareChargeVersionService(chargeVersion, billingPeriod)
 
       expect(chargeVersion.chargeReferences[0].chargeCategory.subsistenceCharge).toEqual(70000)
       expect(chargeVersion.chargeReferences[1].chargeCategory.subsistenceCharge).toEqual(68400)
     })
 
     it('preps the charge elements correctly', async () => {
-      await PrepareChargeVersionService.go(chargeVersion, billingPeriod)
+      await PrepareChargeVersionService(chargeVersion, billingPeriod)
 
       expect(chargeVersion.chargeReferences[0].chargeElements[0]).toEqual({
         id: '8eac5976-d16c-4818-8bc8-384d958ce863',

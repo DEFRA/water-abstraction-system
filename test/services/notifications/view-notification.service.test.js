@@ -49,7 +49,7 @@ describe('Notifications - View Notification service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await ViewNotificationService.go(notification.id, licence.id)
+        const result = await ViewNotificationService(notification.id, licence.id)
 
         expect(result).toEqual({
           activeNavBar: 'search',
@@ -78,7 +78,7 @@ describe('Notifications - View Notification service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await ViewNotificationService.go(notification.id)
+        const result = await ViewNotificationService(notification.id)
 
         expect(result).toEqual({
           activeNavBar: 'notices',
@@ -111,7 +111,7 @@ describe('Notifications - View Notification service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await ViewNotificationService.go(notification.id, licence, returnLogId)
+        const result = await ViewNotificationService(notification.id, licence, returnLogId)
 
         expect(result).toEqual({
           activeNavBar: 'notices',
@@ -144,7 +144,7 @@ describe('Notifications - View Notification service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await ViewNotificationService.go(notification.id, licence, returnLogId, companyContactId)
+        const result = await ViewNotificationService(notification.id, licence, returnLogId, companyContactId)
 
         expect(result).toEqual({
           activeNavBar: 'notices',

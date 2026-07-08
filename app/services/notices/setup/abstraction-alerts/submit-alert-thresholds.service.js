@@ -18,7 +18,7 @@ import { handleOneOptionSelected } from '../../../../lib/submit-page.lib.js'
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId, payload) {
+export default async function go(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   handleOneOptionSelected(payload, 'alertThresholds')
@@ -49,9 +49,4 @@ function _validate(payload) {
   const validationResult = AlertThresholdsValidator.go(payload)
 
   return formatValidationResult(validationResult)
-}
-
-export { go }
-export default {
-  go
 }

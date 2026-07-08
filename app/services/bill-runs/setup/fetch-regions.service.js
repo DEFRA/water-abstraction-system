@@ -10,13 +10,8 @@ import RegionModel from '../../../models/region.model.js'
  *
  * @returns {Promise<object[]>} The display name and ID for all regions in the service ordered by display name
  */
-async function go() {
+export default async function go() {
   return RegionModel.query()
     .select(['id', 'displayName'])
     .orderBy([{ column: 'displayName', order: 'asc' }])
-}
-
-export { go }
-export default {
-  go
 }

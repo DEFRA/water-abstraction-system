@@ -34,7 +34,7 @@ describe('Fetch Licence Service', () => {
     })
 
     it('fetches the licence data related to that workflow record', async () => {
-      const result = await FetchLicenceService.go(workflow.id)
+      const result = await FetchLicenceService(workflow.id)
 
       expect(result.id).toEqual(licence.id)
       expect(result.region_id).toEqual(licence.regionId)
@@ -44,7 +44,7 @@ describe('Fetch Licence Service', () => {
     })
 
     it('outlines which charge versions the licence has', async () => {
-      const result = await FetchLicenceService.go(workflow.id)
+      const result = await FetchLicenceService(workflow.id)
 
       expect(result.sroc_charge_versions).toEqual(true)
       expect(result.two_part_tariff_charge_versions).toEqual(true)

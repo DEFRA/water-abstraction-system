@@ -37,7 +37,7 @@ import StartDateValidator from '../../../validators/return-versions/setup/start-
  * @returns {Promise<object>} If no errors 2 flags that determine whether the user is returned to the check page or the
  * next page in the journey else the page data for the start date page including the validation error details
  */
-async function go(sessionId, payload, yar) {
+export default async function go(sessionId, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const { endDate, startDate } = session.licence
@@ -95,7 +95,7 @@ async function _relevantLicenceVersion(session, previousStartDate) {
   }
 
   // Fetch and assign the relevant licence version to the session.
-  const relevantLicenceVersion = await DetermineRelevantLicenceVersionService.go(session)
+  const relevantLicenceVersion = await DetermineRelevantLicenceVersionService(session)
 
   if (!session.licenceVersion) {
     // In this scenario licenceVersion was not set, which means it must be our first visit to the page. In which case
@@ -160,9 +160,4 @@ function _validate(payload, licenceStartDate, licenceEndDate) {
   const validation = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
 
   return formatValidationResult(validation)
-}
-
-export { go }
-export default {
-  go
 }

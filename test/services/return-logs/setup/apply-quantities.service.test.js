@@ -35,7 +35,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
       })
 
       it('updates the session data with the correct quantities', () => {
-        const result = ApplyQuantitiesService.go(session)
+        const result = ApplyQuantitiesService(session)
 
         expect(result).toEqual({
           lines: [
@@ -96,7 +96,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
         })
 
         it('updates the session data with the correct quantities', () => {
-          const result = ApplyQuantitiesService.go(session)
+          const result = ApplyQuantitiesService(session)
 
           expect(result).toEqual({
             lines: [
@@ -159,7 +159,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
       })
 
       it('updates the session data with the correct quantities', () => {
-        const result = ApplyQuantitiesService.go(session)
+        const result = ApplyQuantitiesService(session)
 
         expect(result).toEqual({
           lines: [
@@ -220,7 +220,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
         })
 
         it('updates the session data with the correct quantities', () => {
-          const result = ApplyQuantitiesService.go(session)
+          const result = ApplyQuantitiesService(session)
 
           expect(result).toEqual({
             lines: [
@@ -286,7 +286,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
       })
 
       it('updates the session data with the correct quantities', () => {
-        const result = ApplyQuantitiesService.go(session)
+        const result = ApplyQuantitiesService(session)
 
         expect(result).toEqual({
           lines: [

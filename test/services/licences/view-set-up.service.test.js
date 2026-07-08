@@ -103,7 +103,7 @@ describe('Licences - View Set Up service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewSetUpService.go(licence.id, auth)
+      const result = await ViewSetUpService(licence.id, auth)
 
       expect(result).toEqual({
         activeSecondaryNav: 'set-up',

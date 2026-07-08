@@ -47,7 +47,7 @@ describe('Users - Submit profile details service', () => {
       })
 
       it('saves the user details', async () => {
-        const result = await SubmitProfileDetailsService.go(userId, payload, yarStub)
+        const result = await SubmitProfileDetailsService(userId, payload, yarStub)
 
         expect(patchStub.called).toBe(true)
         expect(whereStub.calledWith('userId', userId)).toBe(true)
@@ -64,7 +64,7 @@ describe('Users - Submit profile details service', () => {
       })
 
       it('flashes a notification of successful update', async () => {
-        await SubmitProfileDetailsService.go(userId, payload, yarStub)
+        await SubmitProfileDetailsService(userId, payload, yarStub)
 
         expect(yarStub.flash.lastCall.args[0]).toEqual('notification')
         expect(yarStub.flash.lastCall.args[1]).toEqual({
@@ -75,7 +75,7 @@ describe('Users - Submit profile details service', () => {
 
       describe('and the payload has empty or missing values', () => {
         it('saves missing values as empty strings', async () => {
-          await SubmitProfileDetailsService.go(userId, {}, yarStub)
+          await SubmitProfileDetailsService(userId, {}, yarStub)
 
           expect(
             patchStub.calledWith({
@@ -98,13 +98,13 @@ describe('Users - Submit profile details service', () => {
       })
 
       it('does not save', async () => {
-        await SubmitProfileDetailsService.go(userId, payload, yarStub)
+        await SubmitProfileDetailsService(userId, payload, yarStub)
 
         expect(userModelQueryStub.notCalled).toBe(true)
       })
 
       it('returns the details required to redisplay the page including validation errors', async () => {
-        const result = await SubmitProfileDetailsService.go(userId, payload, yarStub)
+        const result = await SubmitProfileDetailsService(userId, payload, yarStub)
 
         expect(result).toEqual({
           address: '',
@@ -147,7 +147,7 @@ describe('Users - Submit profile details service', () => {
       })
 
       it('does not flash a notification', async () => {
-        await SubmitProfileDetailsService.go(userId, payload, yarStub)
+        await SubmitProfileDetailsService(userId, payload, yarStub)
 
         expect(yarStub.flash.notCalled).toBe(true)
       })
@@ -161,7 +161,7 @@ describe('Users - Submit profile details service', () => {
     })
 
     it('throws the error', async () => {
-      const error = await SubmitProfileDetailsService.go(userId, {}, yarStub).catch((e) => {
+      const error = await SubmitProfileDetailsService(userId, {}, yarStub).catch((e) => {
         return e
       })
 

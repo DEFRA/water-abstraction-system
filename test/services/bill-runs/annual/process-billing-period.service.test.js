@@ -40,7 +40,7 @@ describe('Annual Process billing period service', () => {
   describe('when the service is called', () => {
     describe('and there are no billing accounts to process', () => {
       it('returns false (bill run is empty)', async () => {
-        const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [])
+        const result = await ProcessBillingPeriodService(billRun, billingPeriod, [])
 
         expect(result).toBe(false)
       })
@@ -67,7 +67,7 @@ describe('Annual Process billing period service', () => {
         })
 
         it('returns true (bill run is not empty)', async () => {
-          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+          const result = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount])
 
           expect(result).toBe(true)
         })
@@ -93,13 +93,13 @@ describe('Annual Process billing period service', () => {
         })
 
         it('returns true (bill run is not empty)', async () => {
-          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+          const result = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount])
 
           expect(result).toBe(true)
         })
 
         it('only persists the bill licences with transactions', async () => {
-          await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+          await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount])
 
           const result = await BillModel.query().findOne('billRunId', billRun.id).withGraphFetched('billLicences')
 
@@ -121,7 +121,7 @@ describe('Annual Process billing period service', () => {
         })
 
         it('returns false (bill run is empty)', async () => {
-          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+          const result = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount])
 
           expect(result).toBe(false)
         })
@@ -141,7 +141,7 @@ describe('Annual Process billing period service', () => {
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount]).catch((e) => {
+        const error = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount]).catch((e) => {
           return e
         })
 
@@ -156,7 +156,7 @@ describe('Annual Process billing period service', () => {
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount]).catch((e) => {
+        const error = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount]).catch((e) => {
           return e
         })
 

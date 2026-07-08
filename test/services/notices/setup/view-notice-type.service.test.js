@@ -37,7 +37,7 @@ describe('Notices - Setup - View Notice Type service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewNoticeTypeService.go(session.id, auth)
+      const result = await ViewNoticeTypeService(session.id, auth)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

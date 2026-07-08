@@ -48,7 +48,7 @@ describe('Bill Runs Review - Submit Edit Service', () => {
         })
 
         it('saves the submitted value, adds a flash message and returns an empty object', async () => {
-          const result = await SubmitEditService.go(reviewChargeElement.id, elementIndex, yarStub, payload)
+          const result = await SubmitEditService(reviewChargeElement.id, elementIndex, yarStub, payload)
 
           // Check we save the change
           const [patchObject] = patchStub.args[0]
@@ -72,7 +72,7 @@ describe('Bill Runs Review - Submit Edit Service', () => {
         })
 
         it('saves the submitted value, adds a flash message and returns an empty object', async () => {
-          const result = await SubmitEditService.go(reviewChargeElement.id, elementIndex, yarStub, payload)
+          const result = await SubmitEditService(reviewChargeElement.id, elementIndex, yarStub, payload)
 
           // Check we save the change
           const [patchObject] = patchStub.args[0]
@@ -98,7 +98,7 @@ describe('Bill Runs Review - Submit Edit Service', () => {
         })
 
         it('does not save the submitted value or add a flash message, and returns the page data including an error', async () => {
-          const result = await SubmitEditService.go(reviewChargeElement.id, elementIndex, yarStub, payload)
+          const result = await SubmitEditService(reviewChargeElement.id, elementIndex, yarStub, payload)
 
           // Check we didn't save
           expect(patchStub.called).toBe(false)
@@ -139,7 +139,7 @@ describe('Bill Runs Review - Submit Edit Service', () => {
         })
 
         it('does not save the submitted value or add a flash message, and returns the page data including an error', async () => {
-          const result = await SubmitEditService.go(reviewChargeElement.id, elementIndex, yarStub, payload)
+          const result = await SubmitEditService(reviewChargeElement.id, elementIndex, yarStub, payload)
 
           // Check we didn't save
           expect(patchStub.called).toBe(false)

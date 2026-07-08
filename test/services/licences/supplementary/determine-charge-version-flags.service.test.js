@@ -60,7 +60,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
         })
 
         it('returns the result with the PRE-SROC flag set to true and the other flags unchanged', async () => {
-          const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
+          const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
           expect(result).toEqual({
             licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
@@ -88,7 +88,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             })
 
             it('returns the result with the SROC flag set to true and the other flags unchanged', async () => {
-              const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
+              const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
               expect(result).toEqual({
                 licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
@@ -110,7 +110,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             })
 
             it('returns the result with the SROC flag and two-part tariff set to true', async () => {
-              const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
+              const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
               expect(result).toEqual({
                 licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
@@ -132,7 +132,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             })
 
             it('returns the result with the SROC flag set to true and the other flags unchanged', async () => {
-              const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
+              const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
               expect(result).toEqual({
                 licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
@@ -160,7 +160,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             })
 
             it('returns the result with the SROC flag and two-part tariff set to true', async () => {
-              const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
+              const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
               expect(result).toEqual({
                 licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
@@ -182,7 +182,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             })
 
             it('returns the result with the SROC flag and two-part tariff set to true', async () => {
-              const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
+              const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
               expect(result).toEqual({
                 licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
@@ -204,7 +204,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             })
 
             it('returns the result with the SROC flag and two-part tariff set to true', async () => {
-              const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
+              const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
               expect(result).toEqual({
                 licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
@@ -232,7 +232,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             })
 
             it('returns the result with the SROC flag set to true and the other flags unchanged', async () => {
-              const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
+              const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
               expect(result).toEqual({
                 licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
@@ -254,7 +254,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             })
 
             it('returns the result with only the two-part tariff set to true', async () => {
-              const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
+              const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
               expect(result).toEqual({
                 licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
@@ -276,7 +276,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             })
 
             it('returns the result with the PRE-SROC and SROC flags unchanged and the two-part tariff flag as false', async () => {
-              const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
+              const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
               expect(result).toEqual({
                 licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',
@@ -303,7 +303,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
       })
 
       it('returns the result with the PRE-SROC and SROC flags unchanged and the two-part tariff flag as false', async () => {
-        const result = await DetermineChargeVersionFlagsService.go(chargeVersionId)
+        const result = await DetermineChargeVersionFlagsService(chargeVersionId)
 
         expect(result).toEqual({
           licenceId: 'e516d678-4c04-45cf-8bde-4591bcdedce6',

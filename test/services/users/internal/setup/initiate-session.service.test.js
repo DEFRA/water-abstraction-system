@@ -9,7 +9,7 @@ const InitiateSessionService = require('../../../../../app/services/users/intern
 describe('Users - Internal - Setup - Initiate Session service', () => {
   describe('when called', () => {
     it('returns the session Id and an empty data object', async () => {
-      const result = await InitiateSessionService.go()
+      const result = await InitiateSessionService()
 
       expect(result).toEqual({
         data: {},
@@ -18,7 +18,7 @@ describe('Users - Internal - Setup - Initiate Session service', () => {
     })
 
     it('initiates the session for the journey ', async () => {
-      const result = await InitiateSessionService.go()
+      const result = await InitiateSessionService()
 
       const matchingSession = await SessionModel.query().findById(result.id)
 

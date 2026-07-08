@@ -48,7 +48,7 @@ describe('Notices - Setup - Create Alternate Returns Notice service', () => {
   })
 
   it('creates and then returns the alternate notice and associated notifications ready for sending', async () => {
-    const result = await CreateAlternateReturnsNoticeService.go(notice, licenceRefs, dueDate, returnLogIds)
+    const result = await CreateAlternateReturnsNoticeService(notice, licenceRefs, dueDate, returnLogIds)
 
     expect(result.notice).toMatchObject({
       issuer: notice.issuer,

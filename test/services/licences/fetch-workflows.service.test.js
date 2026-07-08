@@ -26,7 +26,7 @@ describe('Licences - Fetch Workflows service', () => {
 
   describe('when the licence has workflow data', () => {
     it('returns the matching workflow data', async () => {
-      const result = await FetchWorkflowsService.go(workflow.licenceId)
+      const result = await FetchWorkflowsService(workflow.licenceId)
 
       expect(result).toEqual([
         {

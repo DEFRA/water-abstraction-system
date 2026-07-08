@@ -62,7 +62,7 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
     })
 
     it('returns no return requirements', async () => {
-      const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+      const results = await FetchLicenceReturnRequirementsService(licence.id, changeDate)
 
       expect(results).toHaveLength(0)
     })
@@ -78,7 +78,7 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
       })
 
       it('only returns requirements linked to "current" return versions that end on or after the change date', async () => {
-        const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+        const results = await FetchLicenceReturnRequirementsService(licence.id, changeDate)
 
         expect(results).toEqual([
           _transformReturnVersionToResult(returnVersions[3]),
@@ -96,7 +96,7 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
       })
 
       it('only returns requirements linked to "current" return versions that end after the change date', async () => {
-        const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+        const results = await FetchLicenceReturnRequirementsService(licence.id, changeDate)
 
         expect(results).toEqual([
           _transformReturnVersionToResult(returnVersions[1]),
@@ -115,7 +115,7 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
       })
 
       it('only returns requirements linked to latest "current" return version that has no end date', async () => {
-        const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+        const results = await FetchLicenceReturnRequirementsService(licence.id, changeDate)
 
         expect(results).toEqual([_transformReturnVersionToResult(returnVersions[4])])
       })
@@ -132,7 +132,7 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
       })
 
       it('only returns requirements linked to "current" return versions that end on or after the change date', async () => {
-        const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+        const results = await FetchLicenceReturnRequirementsService(licence.id, changeDate)
 
         expect(results).toEqual([
           _transformReturnVersionToResult(returnVersions[3]),
@@ -150,7 +150,7 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
       })
 
       it('only returns requirements linked to "current" return versions that end after the change date', async () => {
-        const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+        const results = await FetchLicenceReturnRequirementsService(licence.id, changeDate)
 
         expect(results).toEqual([
           _transformReturnVersionToResult(returnVersions[1]),
@@ -169,7 +169,7 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
       })
 
       it('only returns requirements linked to latest "current" return version that has no end date', async () => {
-        const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+        const results = await FetchLicenceReturnRequirementsService(licence.id, changeDate)
 
         expect(results).toEqual([_transformReturnVersionToResult(returnVersions[4])])
       })

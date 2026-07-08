@@ -46,13 +46,13 @@ describe('Bill Runs - Cancel - Submit Cancel Bill Run service', () => {
       })
 
       it('unassigns the bill run from those licences with supplementary year records', async () => {
-        await SubmitCancelBillBunService.go(billRunId)
+        await SubmitCancelBillBunService(billRunId)
 
         expect(unassignBillRunStub.called).toBe(true)
       })
 
       it('deletes the bill run in the background and does not throw an error', async () => {
-        await SubmitCancelBillBunService.go(billRunId)
+        await SubmitCancelBillBunService(billRunId)
 
         expect(cancelBillRunStub.called).toBe(true)
         expect(deleteBillRunStub.called).toBe(true)
@@ -77,13 +77,13 @@ describe('Bill Runs - Cancel - Submit Cancel Bill Run service', () => {
       })
 
       it('does not unassign the bill run from those licences with supplementary year records', async () => {
-        await expect(SubmitCancelBillBunService.go(billRunId)).rejects.toThrow()
+        await expect(SubmitCancelBillBunService(billRunId)).rejects.toThrow()
 
         expect(unassignBillRunStub.called).toEqual(false)
       })
 
       it('does not delete the bill run and throws an error', async () => {
-        await expect(SubmitCancelBillBunService.go(billRunId)).rejects.toThrow()
+        await expect(SubmitCancelBillBunService(billRunId)).rejects.toThrow()
 
         expect(deleteBillRunStub.called).toEqual(false)
       })

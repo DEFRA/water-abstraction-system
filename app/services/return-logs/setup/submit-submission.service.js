@@ -20,7 +20,7 @@ import { timestampForPostgres } from '../../../lib/general.lib.js'
  * @returns {Promise<object>} An object with a `journey:` property if there are no errors else the page data for
  * the abstraction return page including the validation error details
  */
-async function go(sessionId, payload) {
+export default async function go(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
   const error = _validate(payload)
 
@@ -81,9 +81,4 @@ function _validate(payload) {
   const validationResult = SubmissionValidator.go(payload)
 
   return formatValidationResult(validationResult)
-}
-
-export { go }
-export default {
-  go
 }

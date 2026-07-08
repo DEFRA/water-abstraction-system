@@ -54,7 +54,7 @@ describe('Licences - Fetch Bills service', () => {
       })
 
       it('returns results', async () => {
-        const result = await FetchBillService.go(licence.id)
+        const result = await FetchBillService(licence.id)
 
         expect(result).toEqual({
           bills: [
@@ -101,7 +101,7 @@ describe('Licences - Fetch Bills service', () => {
       })
 
       it('returns no results', async () => {
-        const result = await FetchBillService.go(licence.id)
+        const result = await FetchBillService(licence.id)
 
         expect(result).toEqual({
           bills: [],
@@ -118,7 +118,7 @@ describe('Licences - Fetch Bills service', () => {
     })
 
     it('returns no results', async () => {
-      const result = await FetchBillService.go(licence.id)
+      const result = await FetchBillService(licence.id)
 
       expect(result).toEqual({
         bills: [],

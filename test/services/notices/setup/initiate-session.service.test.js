@@ -29,7 +29,7 @@ describe('Notices - Setup - Initiate Session service', () => {
       })
 
       it('returns the session Id and redirect path', async () => {
-        const result = await InitiateSessionService.go(journey, monitoringStationId)
+        const result = await InitiateSessionService(journey, monitoringStationId)
 
         expect(result).toEqual({
           sessionId: result.sessionId,
@@ -38,7 +38,7 @@ describe('Notices - Setup - Initiate Session service', () => {
       })
 
       it('initiates the session for the standard journey ', async () => {
-        const result = await InitiateSessionService.go(journey, monitoringStationId)
+        const result = await InitiateSessionService(journey, monitoringStationId)
 
         const matchingSession = await SessionModel.query().findById(result.sessionId)
 
@@ -55,7 +55,7 @@ describe('Notices - Setup - Initiate Session service', () => {
       })
 
       it('initiates the session for the ad-hoc notice setup journey and returns the session ID and redirect path', async () => {
-        const result = await InitiateSessionService.go(journey, monitoringStationId)
+        const result = await InitiateSessionService(journey, monitoringStationId)
 
         expect(result).toEqual({
           sessionId: result.sessionId,
@@ -83,7 +83,7 @@ describe('Notices - Setup - Initiate Session service', () => {
       })
 
       it('initiates the session for the abstraction alerts setup journey and returns the session ID and redirect path', async () => {
-        const result = await InitiateSessionService.go(journey, monitoringStationId)
+        const result = await InitiateSessionService(journey, monitoringStationId)
 
         expect(result).toEqual({
           sessionId: result.sessionId,

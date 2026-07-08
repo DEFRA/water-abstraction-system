@@ -18,7 +18,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload) {
+export default async function go(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
@@ -76,7 +76,7 @@ async function _submissionData(session) {
   const newAccount = !!session.existingAccount && session.existingAccount !== 'new'
   const companyId = newAccount ? session.existingAccount : session.billingAccount.company.id
 
-  const companyContacts = await FetchCompanyContactsService.go(companyId)
+  const companyContacts = await FetchCompanyContactsService(companyId)
 
   return ContactPresenter.go(session, companyContacts)
 }
@@ -85,11 +85,4 @@ function _validate(payload) {
   const validationResult = ContactValidator.go(payload)
 
   return formatValidationResult(validationResult)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

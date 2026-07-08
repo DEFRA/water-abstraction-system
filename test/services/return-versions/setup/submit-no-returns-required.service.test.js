@@ -64,14 +64,14 @@ describe('Return Versions Setup - Submit No Returns Required service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitNoReturnsRequiredService.go(session.id, payload)
+        await SubmitNoReturnsRequiredService(session.id, payload)
 
         expect(session.reason).toEqual('abstraction-below-100-cubic-metres-per-day')
         expect(session.$update.called).toBe(true)
       })
 
       it('returns the correct details the controller needs to redirect the journey', async () => {
-        const result = await SubmitNoReturnsRequiredService.go(session.id, payload, yarStub)
+        const result = await SubmitNoReturnsRequiredService(session.id, payload, yarStub)
 
         expect(result).toEqual({ checkPageVisited: false, journey: 'no-returns-required' })
       })
@@ -87,7 +87,7 @@ describe('Return Versions Setup - Submit No Returns Required service', () => {
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
-          const result = await SubmitNoReturnsRequiredService.go(session.id, payload, yarStub)
+          const result = await SubmitNoReturnsRequiredService(session.id, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: true,
@@ -96,7 +96,7 @@ describe('Return Versions Setup - Submit No Returns Required service', () => {
         })
 
         it('sets the notification message title to "Updated" and the text to "Return version updated" ', async () => {
-          await SubmitNoReturnsRequiredService.go(session.id, payload, yarStub)
+          await SubmitNoReturnsRequiredService(session.id, payload, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
 
@@ -112,7 +112,7 @@ describe('Return Versions Setup - Submit No Returns Required service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await SubmitNoReturnsRequiredService.go(session.id, payload)
+        const result = await SubmitNoReturnsRequiredService(session.id, payload)
 
         expect(result).toMatchObject({
           pageTitle: 'Why are no returns required?',
@@ -128,7 +128,7 @@ describe('Return Versions Setup - Submit No Returns Required service', () => {
 
       describe('because the user has not selected anything', () => {
         it('includes an error for the input element', async () => {
-          const result = await SubmitNoReturnsRequiredService.go(session.id, payload)
+          const result = await SubmitNoReturnsRequiredService(session.id, payload)
 
           expect(result.error).toEqual({
             errorList: [

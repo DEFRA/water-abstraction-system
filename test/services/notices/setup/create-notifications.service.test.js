@@ -82,7 +82,7 @@ describe('Notices - Setup - Create Notifications service', () => {
     })
 
     it('returns the created the abstraction alert notifications', async () => {
-      const results = await CreateNotificationsService.go(session, recipients, noticeId)
+      const results = await CreateNotificationsService(session, recipients, noticeId)
 
       expect(results).toHaveLength(2)
 
@@ -219,7 +219,7 @@ describe('Notices - Setup - Create Notifications service', () => {
     })
 
     it('returns the created the paper return notifications', async () => {
-      const results = await CreateNotificationsService.go(session, recipients, noticeId)
+      const results = await CreateNotificationsService(session, recipients, noticeId)
 
       expect(results).toHaveLength(2)
 
@@ -328,7 +328,7 @@ describe('Notices - Setup - Create Notifications service', () => {
     })
 
     it('returns the created the returns notifications', async () => {
-      const results = await CreateNotificationsService.go(session, recipients, noticeId)
+      const results = await CreateNotificationsService(session, recipients, noticeId)
 
       expect(results).toHaveLength(2)
 
@@ -412,7 +412,7 @@ describe('Notices - Setup - Create Notifications service', () => {
     })
 
     it('returns the created returns notifications', async () => {
-      const results = await CreateNotificationsService.go(session, recipients, noticeId)
+      const results = await CreateNotificationsService(session, recipients, noticeId)
 
       expect(results).toHaveLength(2)
 

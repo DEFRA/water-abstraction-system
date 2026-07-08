@@ -93,7 +93,7 @@ function _sortedThresholds(relevantThresholds) {
  * @private
  */
 function _thresholdOptions(licenceMonitoringStations, alertType, alertThresholds = []) {
-  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsByAlertTypeService.go(
+  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsByAlertTypeService(
     licenceMonitoringStations,
     alertType
   )

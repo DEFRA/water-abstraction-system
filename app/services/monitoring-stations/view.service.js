@@ -16,9 +16,8 @@ import { readFlashNotification } from '../../lib/general.lib.js'
  *
  * @returns {Promise<object>} page data needed by the view template
  */
-async function go(auth, monitoringStationId, yar) {
-  const { licenceMonitoringStations, monitoringStation } =
-    await FetchMonitoringStationDetailsDal(monitoringStationId)
+export default async function go(auth, monitoringStationId, yar) {
+  const { licenceMonitoringStations, monitoringStation } = await FetchMonitoringStationDetailsDal(monitoringStationId)
 
   const pageData = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
@@ -28,11 +27,4 @@ async function go(auth, monitoringStationId, yar) {
     notification,
     ...pageData
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

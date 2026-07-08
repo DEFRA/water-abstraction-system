@@ -33,7 +33,7 @@ describe('Handle Errored Bill Run service', () => {
 
   describe('when the service is called successfully', () => {
     it('sets the bill run status to "error"', async () => {
-      await HandleErroredBillRunService.go(billRun.id)
+      await HandleErroredBillRunService(billRun.id)
 
       const result = await billRun.$query()
 
@@ -42,7 +42,7 @@ describe('Handle Errored Bill Run service', () => {
 
     describe('when no error code is passed', () => {
       it('does not set an error code', async () => {
-        await HandleErroredBillRunService.go(billRun.id)
+        await HandleErroredBillRunService(billRun.id)
 
         const result = await billRun.$query()
 
@@ -52,7 +52,7 @@ describe('Handle Errored Bill Run service', () => {
 
     describe('when an error code is passed', () => {
       it('does set an error code', async () => {
-        await HandleErroredBillRunService.go(billRun.id, 40)
+        await HandleErroredBillRunService(billRun.id, 40)
 
         const result = await billRun.$query()
 
@@ -64,13 +64,13 @@ describe('Handle Errored Bill Run service', () => {
   describe('when the service is called unsuccessfully', () => {
     describe('because patching the bill run fails', () => {
       it('handles the error', async () => {
-        await HandleErroredBillRunService.go(billRun.id, 'INVALID_ERROR_CODE')
+        await HandleErroredBillRunService(billRun.id, 'INVALID_ERROR_CODE')
       })
 
       it('logs an error', async () => {
         // Note that we would not normally pass a string as an error code but we do this here to force the patch to fail
         // in lieu of a working method of stubbing Objection
-        await HandleErroredBillRunService.go(billRun.id, 'INVALID_ERROR_CODE')
+        await HandleErroredBillRunService(billRun.id, 'INVALID_ERROR_CODE')
 
         const logDataArg = notifierStub.omfg.firstCall.args[1]
 

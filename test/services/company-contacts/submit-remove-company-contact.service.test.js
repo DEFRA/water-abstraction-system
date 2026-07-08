@@ -42,7 +42,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+        const result = await SubmitRemoveCompanyContactService(companyContact.id, yarStub)
 
         expect(result).toEqual({
           companyId: companyContact.companyId
@@ -50,7 +50,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
       })
 
       it('sets a flash message', async () => {
-        await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+        await SubmitRemoveCompanyContactService(companyContact.id, yarStub)
 
         // Check we add the flash message
         const [flashType, bannerMessage] = yarStub.flash.args[0]
@@ -63,7 +63,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
       })
 
       it('calls the delete company contact service with the id and true', async () => {
-        await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+        await SubmitRemoveCompanyContactService(companyContact.id, yarStub)
 
         expect(DeleteCompanyContactService.go.calledWithExactly(companyContact.id, true)).toBe(true)
       })
@@ -76,7 +76,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+        const result = await SubmitRemoveCompanyContactService(companyContact.id, yarStub)
 
         expect(result).toEqual({
           companyId: companyContact.companyId
@@ -84,7 +84,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
       })
 
       it('sets a flash message', async () => {
-        await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+        await SubmitRemoveCompanyContactService(companyContact.id, yarStub)
 
         // Check we add the flash message
         const [flashType, bannerMessage] = yarStub.flash.args[0]
@@ -97,7 +97,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
       })
 
       it('calls the delete company contact service with the id and false', async () => {
-        await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+        await SubmitRemoveCompanyContactService(companyContact.id, yarStub)
 
         expect(DeleteCompanyContactService.go.calledWithExactly(companyContact.id, false)).toBe(true)
       })

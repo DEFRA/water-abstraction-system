@@ -17,13 +17,6 @@ import { db } from '../../../../db/db.js'
  *
  * Credit to {@link https://stackoverflow.com/a/53169879 | Programmatically run knex seed:run}
  */
-async function go() {
+export default async function go() {
   await db.seed.run()
-}
-
-export {
-  go
-}
-export default {
-  go
 }

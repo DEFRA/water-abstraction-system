@@ -77,7 +77,7 @@ describe('Bill Runs - Review - View Review Service', () => {
     })
 
     it('returns the page data for the view', async () => {
-      const result = await ViewReviewService.go(billRunId, yarStub, page)
+      const result = await ViewReviewService(billRunId, yarStub, page)
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',
@@ -149,7 +149,7 @@ describe('Bill Runs - Review - View Review Service', () => {
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
-        const result = await ViewReviewService.go(billRunId, yarStub, page)
+        const result = await ViewReviewService(billRunId, yarStub, page)
 
         expect(result.filters.openFilter).toBe(false)
       })
@@ -161,7 +161,7 @@ describe('Bill Runs - Review - View Review Service', () => {
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
-        const result = await ViewReviewService.go(billRunId, yarStub, page)
+        const result = await ViewReviewService(billRunId, yarStub, page)
 
         expect(result.filters.openFilter).toBe(false)
       })
@@ -176,7 +176,7 @@ describe('Bill Runs - Review - View Review Service', () => {
       })
 
       it('returns the saved filters and that the controls should be open', async () => {
-        const result = await ViewReviewService.go(billRunId, yarStub, page)
+        const result = await ViewReviewService(billRunId, yarStub, page)
 
         expect(result.filters.openFilter).toBe(true)
       })

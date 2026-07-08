@@ -40,7 +40,7 @@ describe('Company Contacts - Fetch Notification service', () => {
     })
 
     it('returns a notification', async () => {
-      const result = await FetchNotificationService.go(email)
+      const result = await FetchNotificationService(email)
 
       expect(result).toEqual({
         id: notification.id
@@ -58,7 +58,7 @@ describe('Company Contacts - Fetch Notification service', () => {
       })
 
       it('returns undefined', async () => {
-        const result = await FetchNotificationService.go(email)
+        const result = await FetchNotificationService(email)
 
         expect(result).toBeUndefined()
       })
@@ -74,7 +74,7 @@ describe('Company Contacts - Fetch Notification service', () => {
       })
 
       it('returns undefined', async () => {
-        const result = await FetchNotificationService.go(email)
+        const result = await FetchNotificationService(email)
 
         expect(result).toBeUndefined()
       })

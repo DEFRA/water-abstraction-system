@@ -59,13 +59,13 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
 
   describe('when called', () => {
     it('continues the journey', async () => {
-      const result = await SubmitRestoreService.go(session.id, yarStub, auth)
+      const result = await SubmitRestoreService(session.id, yarStub, auth)
 
       expect(result).toEqual({ redirectUrl: `/system/companies/${company.id}/contacts` })
     })
 
     it('persists the company contact details', async () => {
-      await SubmitRestoreService.go(session.id, yarStub, auth)
+      await SubmitRestoreService(session.id, yarStub, auth)
 
       const [actualContact] = UpdateCompanyContactDal.go.args[0]
 
@@ -80,7 +80,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
     })
 
     it('sets a notification', async () => {
-      await SubmitRestoreService.go(session.id, yarStub, auth)
+      await SubmitRestoreService(session.id, yarStub, auth)
 
       const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -89,7 +89,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
     })
 
     it('clears the session', async () => {
-      await SubmitRestoreService.go(session.id, yarStub, auth)
+      await SubmitRestoreService(session.id, yarStub, auth)
 
       expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
     })
@@ -97,7 +97,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
     describe('the "abstractionAlerts" property', () => {
       describe('when set to "yes"', () => {
         it('persists the "abstractionAlerts" as "true"', async () => {
-          await SubmitRestoreService.go(session.id, yarStub, auth)
+          await SubmitRestoreService(session.id, yarStub, auth)
 
           const [actualContact] = UpdateCompanyContactDal.go.args[0]
 
@@ -116,7 +116,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
         })
 
         it('persists the "abstractionAlerts" as "false"', async () => {
-          await SubmitRestoreService.go(session.id, yarStub, auth)
+          await SubmitRestoreService(session.id, yarStub, auth)
 
           const [actualContact] = UpdateCompanyContactDal.go.args[0]
 
@@ -137,7 +137,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
         })
 
         it('persists the "email" in lowercase', async () => {
-          await SubmitRestoreService.go(session.id, yarStub, auth)
+          await SubmitRestoreService(session.id, yarStub, auth)
 
           const [actualContact] = UpdateCompanyContactDal.go.args[0]
 

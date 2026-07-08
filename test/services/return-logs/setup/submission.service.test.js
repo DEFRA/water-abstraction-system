@@ -30,7 +30,7 @@ describe('Return Logs Setup - Submission service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await SubmissionService.go(session.id)
+      const result = await SubmissionService(session.id)
 
       expect(result).toEqual({
         backLink: { href: `/system/return-logs/setup/${session.id}/received`, text: 'Back' },

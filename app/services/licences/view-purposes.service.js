@@ -16,9 +16,9 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence purposes template
  */
-async function go(licenceId, auth) {
-  const licence = await FetchLicenceService.go(licenceId)
-  const purposes = await FetchPurposesService.go(licenceId)
+export default async function go(licenceId, auth) {
+  const licence = await FetchLicenceService(licenceId)
+  const purposes = await FetchPurposesService(licenceId)
 
   const pageData = PurposesPresenter.go(purposes, licence)
 
@@ -28,11 +28,4 @@ async function go(licenceId, auth) {
     activeSummarySubNav: 'purposes',
     roles: userRoles(auth)
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

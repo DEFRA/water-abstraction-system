@@ -15,7 +15,7 @@ describe('Fetch Licence Has Requirements service', () => {
     })
 
     it('returns true', async () => {
-      const result = await FetchLicenceHasRequirementsService.go(licenceId)
+      const result = await FetchLicenceHasRequirementsService(licenceId)
 
       expect(result).toBe(true)
     })
@@ -23,7 +23,7 @@ describe('Fetch Licence Has Requirements service', () => {
 
   describe('when the licence does not have return versions', () => {
     it('returns false', async () => {
-      const result = await FetchLicenceHasRequirementsService.go('ed3b9b1a-94e0-480c-8ad6-60e05f5fa9f4')
+      const result = await FetchLicenceHasRequirementsService('ed3b9b1a-94e0-480c-8ad6-60e05f5fa9f4')
 
       expect(result).toBe(false)
     })

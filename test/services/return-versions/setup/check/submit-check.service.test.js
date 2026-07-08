@@ -169,14 +169,14 @@ describe('Return Versions - Setup - Submit Check service', () => {
     })
 
     it('creates the new return version and associated data', async () => {
-      await SubmitCheckService.go(session.id, userId)
+      await SubmitCheckService(session.id, userId)
 
       expect(createReturnVersionStub.called).toBe(true)
       expect(createReturnVersionStub.firstCall.args[0]).toEqual(generatedReturnVersionData)
     })
 
     it('processes existing return logs for the licence', async () => {
-      await SubmitCheckService.go(session.id, userId)
+      await SubmitCheckService(session.id, userId)
 
       expect(processLicenceReturnLogsStub.called).toBe(true)
       expect(processLicenceReturnLogsStub.firstCall.args[0]).toEqual(generatedReturnVersionData.returnVersion.licenceId)
@@ -192,7 +192,7 @@ describe('Return Versions - Setup - Submit Check service', () => {
     describe('and the setup journey', () => {
       describe('was "standard"', () => {
         it('does NOT attempt to void all return logs in the period it covers', async () => {
-          await SubmitCheckService.go(session.id, userId)
+          await SubmitCheckService(session.id, userId)
 
           expect(voidReturnLogsStub.called).toBe(false)
         })
@@ -208,7 +208,7 @@ describe('Return Versions - Setup - Submit Check service', () => {
         })
 
         it('does attempt to void all return logs in the period it covers', async () => {
-          await SubmitCheckService.go(session.id, userId)
+          await SubmitCheckService(session.id, userId)
 
           expect(voidReturnLogsStub.called).toBe(true)
           expect(voidReturnLogsStub.firstCall.args[0]).toEqual(sessionData.licence.licenceRef)
@@ -220,7 +220,7 @@ describe('Return Versions - Setup - Submit Check service', () => {
 
     describe('and it is the first return version for the licence', () => {
       it('skips processing existing return versions', async () => {
-        await SubmitCheckService.go(session.id, userId)
+        await SubmitCheckService(session.id, userId)
 
         expect(processExistingReturnVersionsStub.called).toBe(false)
       })
@@ -238,7 +238,7 @@ describe('Return Versions - Setup - Submit Check service', () => {
       })
 
       it('processes existing return versions impacted by the new return version', async () => {
-        await SubmitCheckService.go(session.id, userId)
+        await SubmitCheckService(session.id, userId)
 
         expect(processExistingReturnVersionsStub.called).toBe(true)
         expect(processExistingReturnVersionsStub.firstCall.args[0]).toEqual(
@@ -253,7 +253,7 @@ describe('Return Versions - Setup - Submit Check service', () => {
     describe("and the new return version's reason", () => {
       describe('is NOT "succession-or-transfer-of-licence"', () => {
         it('does NOT update the existing return logs as succeeded', async () => {
-          await SubmitCheckService.go(session.id, userId)
+          await SubmitCheckService(session.id, userId)
 
           expect(updateSucceededReturnLogsStub.called).toBe(false)
         })
@@ -275,7 +275,7 @@ describe('Return Versions - Setup - Submit Check service', () => {
         })
 
         it('updates the existing return logs as succeeded', async () => {
-          await SubmitCheckService.go(session.id, userId)
+          await SubmitCheckService(session.id, userId)
 
           expect(updateSucceededReturnLogsStub.called).toBe(true)
           expect(updateSucceededReturnLogsStub.firstCall.args[0]).toEqual(sessionData.licence.licenceRef)
@@ -289,7 +289,7 @@ describe('Return Versions - Setup - Submit Check service', () => {
       })
 
       it('logs the error and rethrows it', async () => {
-        await expect(SubmitCheckService.go(session.id, userId)).rejects.toThrow()
+        await expect(SubmitCheckService(session.id, userId)).rejects.toThrow()
 
         const args = notifierStub.omfg.firstCall.args
 

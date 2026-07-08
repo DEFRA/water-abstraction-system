@@ -34,7 +34,7 @@ describe('Licences - Fetch Notifications DAL', () => {
 
   describe('when the licence has notifications', () => {
     it('returns the matching notifications', async () => {
-      const result = await FetchNotificationsDal.go(licence.licenceRef)
+      const result = await FetchNotificationsDal(licence.licenceRef)
 
       expect(result).toEqual({
         notifications: [
@@ -62,7 +62,7 @@ describe('Licences - Fetch Notifications DAL', () => {
     })
 
     it('returns no notifications', async () => {
-      const result = await FetchNotificationsDal.go(licence.licenceRef)
+      const result = await FetchNotificationsDal(licence.licenceRef)
 
       expect(result).toEqual({
         notifications: [],

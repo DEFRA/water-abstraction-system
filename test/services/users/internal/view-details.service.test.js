@@ -28,7 +28,7 @@ describe('Users - Internal - View Details service', () => {
 
   describe('when called', () => {
     it('returns page data for the internal user view', async () => {
-      const result = await ViewDetailsService.go(auth, user.id)
+      const result = await ViewDetailsService(auth, user.id)
 
       expect(result).toEqual({
         activeNavBar: 'users',

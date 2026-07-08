@@ -95,7 +95,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
   })
 
   it('correctly returns the data', async () => {
-    const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
+    const result = await DetermineLicenceMonitoringStationsService(monitoringStationId)
 
     expect(result).toEqual({
       licenceMonitoringStations: [
@@ -181,7 +181,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
     })
 
     it('does not return ended licences', async () => {
-      const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
+      const result = await DetermineLicenceMonitoringStationsService(monitoringStationId)
 
       expect(result).toEqual({
         licenceMonitoringStations: [
@@ -218,7 +218,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
     describe('the "notes" property', () => {
       describe('when there are "notes"', () => {
         it('returns the "notes"', async () => {
-          const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
+          const result = await DetermineLicenceMonitoringStationsService(monitoringStationId)
 
           expect(result.licenceMonitoringStations[1].notes).toEqual('I have a bad feeling about this')
         })
@@ -226,7 +226,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
 
       describe('when "notes" is null', () => {
         it('returns null', async () => {
-          const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
+          const result = await DetermineLicenceMonitoringStationsService(monitoringStationId)
 
           expect(result.licenceMonitoringStations[0].notes).toEqual(null)
         })
@@ -234,7 +234,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
 
       describe('when the "notes" is weird! `"                   "             "                    "`', () => {
         it('returns the weird notes', async () => {
-          const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
+          const result = await DetermineLicenceMonitoringStationsService(monitoringStationId)
 
           expect(result.licenceMonitoringStations[2].notes).toEqual(
             '"                   "             "                    "'
@@ -245,7 +245,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
 
     describe('the "thresholdGroup" property', () => {
       it('generates a "thresholdGroup" for each licence monitoring station', async () => {
-        const result = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
+        const result = await DetermineLicenceMonitoringStationsService(monitoringStationId)
 
         expect(result.licenceMonitoringStations[0].thresholdGroup).toEqual('flow-100-m3/s')
       })

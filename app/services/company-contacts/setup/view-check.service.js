@@ -19,12 +19,12 @@ import { readFlashNotification } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, yar) {
+export default async function go(sessionId, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const companyContacts = await FetchCompanyContactsDal(session.company.id, session.companyContact)
 
-  const sentNotification = await FetchNotificationService.go(session.email)
+  const sentNotification = await FetchNotificationService(session.email)
 
   await markCheckPageVisited(session)
 
@@ -45,11 +45,4 @@ async function _save(session, matchingContact) {
     session.matchingContact = matchingContact
     await session.$update()
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

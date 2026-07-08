@@ -20,10 +20,10 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(id, auth, yar) {
-  const companyContact = await FetchCompanyContactDetailsService.go(id)
+export default async function go(id, auth, yar) {
+  const companyContact = await FetchCompanyContactDetailsService(id)
 
-  const company = await FetchCompanyService.go(companyContact.companyId)
+  const company = await FetchCompanyService(companyContact.companyId)
 
   const licences = await FetchAbstractionAlertLicencesDal(companyContact.abstractionAlertLicences)
 
@@ -37,11 +37,4 @@ async function go(id, auth, yar) {
     roles: userRoles(auth),
     ...pageData
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

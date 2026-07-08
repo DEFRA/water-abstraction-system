@@ -55,7 +55,7 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewExistingAddressService.go(session.id)
+        const result = await ViewExistingAddressService(session.id)
 
         expect(result).toEqual({
           backLink: {
@@ -97,7 +97,7 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewExistingAddressService.go(session.id)
+        const result = await ViewExistingAddressService(session.id)
 
         expect(result).toEqual({
           backLink: {
@@ -140,7 +140,7 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewExistingAddressService.go(session.id)
+        const result = await ViewExistingAddressService(session.id)
 
         expect(result).toEqual({
           backLink: {

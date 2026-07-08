@@ -17,7 +17,7 @@ import ViewSendBillRunService from '../services/bill-runs/send/view-send-bill-ru
 export async function cancel(request, h) {
   const { id } = request.params
 
-  const pageData = await ViewCancelBillRunService.go(id)
+  const pageData = await ViewCancelBillRunService(id)
 
   return h.view('bill-runs/cancel.njk', pageData)
 }
@@ -28,7 +28,7 @@ export async function index(request, h) {
     yar
   } = request
 
-  const pageData = await IndexBillRunsService.go(yar, page)
+  const pageData = await IndexBillRunsService(yar, page)
 
   return h.view('bill-runs/index.njk', pageData)
 }
@@ -36,7 +36,7 @@ export async function index(request, h) {
 export async function send(request, h) {
   const { id } = request.params
 
-  const pageData = await ViewSendBillRunService.go(id)
+  const pageData = await ViewSendBillRunService(id)
 
   return h.view('bill-runs/send.njk', pageData)
 }
@@ -46,7 +46,7 @@ export async function submitCancel(request, h) {
 
   // NOTE: What we are awaiting here is for the SubmitCancelBillRunService to update the status of the bill run to
   // `cancel'. Deleting the bill run will carry on in the background after that
-  await SubmitCancelBillRunService.go(id)
+  await SubmitCancelBillRunService(id)
 
   return h.redirect('/system/bill-runs')
 }
@@ -58,7 +58,7 @@ export async function submitIndex(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitIndexBillRunsService.go(payload, yar, page)
+  const pageData = await SubmitIndexBillRunsService(payload, yar, page)
 
   if (pageData.error) {
     return h.view('bill-runs/index.njk', pageData)
@@ -72,7 +72,7 @@ export async function submitSend(request, h) {
 
   // NOTE: What we are awaiting here is for the SubmitSendBillRunService to update the status of the bill run to
   // `sending'.
-  await SubmitSendBillRunService.go(id)
+  await SubmitSendBillRunService(id)
 
   // Redirect to the legacy processing page
   return h.redirect(`/billing/batch/${id}/processing`)
@@ -84,7 +84,7 @@ export async function twoPartTariff(request, h) {
   try {
     // NOTE: What we are awaiting here is for the GenerateBillRunService to update the status of the bill run to
     // `processing'.
-    await GenerateTwoPartTariffBillRunService.go(id)
+    await GenerateTwoPartTariffBillRunService(id)
 
     // Redirect to the bill runs page
     return h.redirect('/system/bill-runs')
@@ -96,7 +96,7 @@ export async function twoPartTariff(request, h) {
 export async function view(request, h) {
   const { id } = request.params
 
-  const pageData = await ViewBillRunService.go(id)
+  const pageData = await ViewBillRunService(id)
 
   return h.view(pageData.view, pageData)
 }

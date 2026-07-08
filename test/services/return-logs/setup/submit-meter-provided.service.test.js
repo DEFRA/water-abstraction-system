@@ -45,7 +45,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
       })
 
       it('saves the submitted option', async () => {
-        await SubmitMeterProvidedService.go(session.id, payload, yarStub)
+        await SubmitMeterProvidedService(session.id, payload, yarStub)
 
         expect(session.meterProvided).toEqual('yes')
         expect(session.$update.called).toBe(true)
@@ -53,7 +53,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
 
       describe('and the user has selected "yes" to a meter being provided', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitMeterProvidedService.go(session.id, payload, yarStub)
+          const result = await SubmitMeterProvidedService(session.id, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: undefined,
@@ -70,7 +70,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
 
         describe('and the page has been not been visited', () => {
           it('returns the correct details the controller needs to redirect the journey', async () => {
-            const result = await SubmitMeterProvidedService.go(session.id, payload, yarStub)
+            const result = await SubmitMeterProvidedService(session.id, payload, yarStub)
 
             expect(result).toEqual({
               checkPageVisited: undefined,
@@ -99,7 +99,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
             })
 
             it('removes the previously entered meter details from the session data', async () => {
-              await SubmitMeterProvidedService.go(session.id, payload, yarStub)
+              await SubmitMeterProvidedService(session.id, payload, yarStub)
 
               expect(session.meterProvided).toEqual('no')
               expect(session.meterMake).toBeNull()
@@ -121,13 +121,13 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
           })
 
           it('returns the correct details the controller needs to redirect the journey', async () => {
-            const result = await SubmitMeterProvidedService.go(session.id, payload, yarStub)
+            const result = await SubmitMeterProvidedService(session.id, payload, yarStub)
 
             expect(result).toEqual({ checkPageVisited: true, meterProvided: 'no', reported: 'abstractionVolumes' })
           })
 
           it('sets the notification message title to "Updated" and the text to "Reporting details changed" ', async () => {
-            await SubmitMeterProvidedService.go(session.id, payload, yarStub)
+            await SubmitMeterProvidedService(session.id, payload, yarStub)
 
             const [flashType, notification] = yarStub.flash.args[0]
 
@@ -144,7 +144,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitMeterProvidedService.go(session.id, payload, yarStub)
+        const result = await SubmitMeterProvidedService(session.id, payload, yarStub)
 
         expect(result).toMatchObject({
           backLink: { href: `/system/return-logs/setup/${session.id}/units`, text: 'Back' },
@@ -156,7 +156,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
 
       describe('because the user has not selected anything', () => {
         it('includes an error for the radio form element', async () => {
-          const result = await SubmitMeterProvidedService.go(session.id, payload, yarStub)
+          const result = await SubmitMeterProvidedService(session.id, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [

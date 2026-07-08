@@ -21,7 +21,7 @@ import { formatValidationResult } from '../../../../presenters/base.presenter.js
  *
  * @returns {Promise<object>} The due returns fetched alongside the validation result (null if valid)
  */
-async function go(payload) {
+export default async function go(payload) {
   const dueReturns = await _dueReturns(payload)
 
   const validationResult = await _validate(payload, dueReturns)
@@ -37,7 +37,7 @@ async function _dueReturns(payload) {
     return []
   }
 
-  return FetchDueReturnsForLicenceService.go(payload.licenceRef)
+  return FetchDueReturnsForLicenceService(payload.licenceRef)
 }
 
 async function _validate(payload, dueReturns) {
@@ -52,9 +52,4 @@ async function _validate(payload, dueReturns) {
   const validationResult = LicenceDueReturnsValidator.go(payload, licenceExists, dueReturnsExist)
 
   return formatValidationResult(validationResult)
-}
-
-export { go }
-export default {
-  go
 }

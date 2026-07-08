@@ -17,9 +17,9 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence summary template.
  */
-async function go(licenceId, auth) {
-  const licence = await FetchLicenceService.go(licenceId)
-  const summary = await FetchSummaryService.go(licenceId)
+export default async function go(licenceId, auth) {
+  const licence = await FetchLicenceService(licenceId)
+  const summary = await FetchSummaryService(licenceId)
 
   const summaryHeadingData = SummaryHeadingPresenter.go(licence, summary)
   const pageData = SummaryPresenter.go(licence, summary)
@@ -30,11 +30,4 @@ async function go(licenceId, auth) {
     activeSecondaryNav: 'summary',
     roles: userRoles(auth)
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

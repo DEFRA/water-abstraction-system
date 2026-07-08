@@ -68,7 +68,7 @@ describe('Bill Runs Review - Preview service', () => {
 
         describe('for a charge reference with no additional charges (null)', () => {
           it('makes the correct request to the Charging Module API', async () => {
-            await PreviewService.go(reviewChargeReference.id, yarStub)
+            await PreviewService(reviewChargeReference.id, yarStub)
 
             const generatedTransaction = calculateChargeRequestStub.args[0][0]
 
@@ -99,7 +99,7 @@ describe('Bill Runs Review - Preview service', () => {
           })
 
           it('adds a flash message stating the example charge returned by the Charging Module API', async () => {
-            await PreviewService.go(reviewChargeReference.id, yarStub)
+            await PreviewService(reviewChargeReference.id, yarStub)
 
             const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -116,7 +116,7 @@ describe('Bill Runs Review - Preview service', () => {
           })
 
           it('makes the correct request to the Charging Module API', async () => {
-            await PreviewService.go(reviewChargeReference.id, yarStub)
+            await PreviewService(reviewChargeReference.id, yarStub)
 
             const generatedTransaction = calculateChargeRequestStub.args[0][0]
 
@@ -147,7 +147,7 @@ describe('Bill Runs Review - Preview service', () => {
           })
 
           it('adds a flash message stating the example charge returned by the Charging Module API', async () => {
-            await PreviewService.go(reviewChargeReference.id, yarStub)
+            await PreviewService(reviewChargeReference.id, yarStub)
 
             const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -175,7 +175,7 @@ describe('Bill Runs Review - Preview service', () => {
         })
 
         it('adds a flash message stating the charge could not be calculated', async () => {
-          await PreviewService.go(reviewChargeReference.id, yarStub)
+          await PreviewService(reviewChargeReference.id, yarStub)
 
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -194,7 +194,7 @@ describe('Bill Runs Review - Preview service', () => {
       })
 
       it('adds a flash message stating the example charge is £0.00 and skips calling the Charging Module API', async () => {
-        await PreviewService.go(reviewChargeReference.id, yarStub)
+        await PreviewService(reviewChargeReference.id, yarStub)
 
         expect(calculateChargeRequestStub.called).toBe(false)
 

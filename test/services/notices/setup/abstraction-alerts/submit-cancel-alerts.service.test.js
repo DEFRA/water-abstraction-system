@@ -34,13 +34,13 @@ describe('Notices - Setup - Abstraction Alerts - Submit Cancel Alerts service', 
 
   describe('when called', () => {
     it('returns the monitoring station id', async () => {
-      const result = await SubmitCancelAlertsService.go(session.id)
+      const result = await SubmitCancelAlertsService(session.id)
 
       expect(result).toEqual({ monitoringStationId: sessionData.monitoringStationId })
     })
 
     it('clears the session', async () => {
-      await SubmitCancelAlertsService.go(session.id)
+      await SubmitCancelAlertsService(session.id)
 
       expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
     })

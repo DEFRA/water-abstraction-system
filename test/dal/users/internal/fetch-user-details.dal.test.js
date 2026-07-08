@@ -20,7 +20,7 @@ describe('Users - Internal - Fetch User Details DAL', () => {
     })
 
     it('returns the requested user', async () => {
-      const result = await FetchUserDetailsDal.go(user.id)
+      const result = await FetchUserDetailsDal(user.id)
 
       expect(result).toEqual({
         id: user.id,

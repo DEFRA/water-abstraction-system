@@ -44,7 +44,7 @@ describe('Return Logs Setup - Submit Note service', () => {
         })
 
         it('saves the submitted value', async () => {
-          await SubmitNoteService.go(session.id, payload, user, yarStub)
+          await SubmitNoteService(session.id, payload, user, yarStub)
 
           expect(session.note).toEqual({
             content: 'A new note related to return logs',
@@ -54,13 +54,13 @@ describe('Return Logs Setup - Submit Note service', () => {
         })
 
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
+          const result = await SubmitNoteService(session.id, payload, user, yarStub)
 
           expect(result).toEqual({})
         })
 
         it('sets the notification message to "Added"', async () => {
-          await SubmitNoteService.go(session.id, payload, user, yarStub)
+          await SubmitNoteService(session.id, payload, user, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
 
@@ -86,7 +86,7 @@ describe('Return Logs Setup - Submit Note service', () => {
         })
 
         it('saves the submitted value', async () => {
-          await SubmitNoteService.go(session.id, payload, user, yarStub)
+          await SubmitNoteService(session.id, payload, user, yarStub)
 
           expect(session.note).toEqual({
             content: 'An updated note related to return requirement',
@@ -95,13 +95,13 @@ describe('Return Logs Setup - Submit Note service', () => {
         })
 
         it('returns the journey to redirect the page', async () => {
-          const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
+          const result = await SubmitNoteService(session.id, payload, user, yarStub)
 
           expect(result).toEqual({})
         })
 
         it('sets the notification message to "Updated"', async () => {
-          await SubmitNoteService.go(session.id, payload, user, yarStub)
+          await SubmitNoteService(session.id, payload, user, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
 
@@ -117,7 +117,7 @@ describe('Return Logs Setup - Submit Note service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
+        const result = await SubmitNoteService(session.id, payload, user, yarStub)
 
         expect(result).toEqual({
           backLink: {
@@ -144,7 +144,7 @@ describe('Return Logs Setup - Submit Note service', () => {
 
       describe('because the user has not entered anything', () => {
         it('includes an error for the input element', async () => {
-          const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
+          const result = await SubmitNoteService(session.id, payload, user, yarStub)
 
           expect(result.error).toEqual({
             errorList: [
@@ -178,7 +178,7 @@ describe('Return Logs Setup - Submit Note service', () => {
         })
 
         it('includes an error for the input element', async () => {
-          const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
+          const result = await SubmitNoteService(session.id, payload, user, yarStub)
 
           expect(result.error).toEqual({
             errorList: [

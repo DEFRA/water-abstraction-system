@@ -52,7 +52,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" with the correct flags to persist', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           expect(
             PersistSupplementaryBillingFlagsService.go.calledOnceWith(
@@ -65,7 +65,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -83,7 +83,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           expect(
             PersistSupplementaryBillingFlagsService.go.calledOnceWith(
@@ -96,7 +96,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -122,7 +122,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           expect(
             PersistSupplementaryBillingFlagsService.go.calledOnceWith(
@@ -135,7 +135,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -153,7 +153,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           expect(
             PersistSupplementaryBillingFlagsService.go.calledOnceWith(
@@ -166,7 +166,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -192,7 +192,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           expect(
             PersistSupplementaryBillingFlagsService.go.calledOnceWith(
@@ -205,7 +205,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -223,7 +223,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           expect(
             PersistSupplementaryBillingFlagsService.go.calledOnceWith(
@@ -236,7 +236,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -268,7 +268,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           expect(
             PersistSupplementaryBillingFlagsService.go.calledOnceWith(
@@ -281,7 +281,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -299,7 +299,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           expect(
             PersistSupplementaryBillingFlagsService.go.calledOnceWith(
@@ -312,7 +312,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -338,7 +338,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           expect(
             PersistSupplementaryBillingFlagsService.go.calledOnceWith(
@@ -351,7 +351,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
           const logDataArg = notifierStub.omg.firstCall.args[1]
           expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
           expect(logDataArg.timeTakenMs).toBeDefined()
@@ -367,7 +367,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           expect(
             PersistSupplementaryBillingFlagsService.go.calledOnceWith(
@@ -380,7 +380,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
           const logDataArg = notifierStub.omg.firstCall.args[1]
           expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
           expect(logDataArg.timeTakenMs).toBeDefined()
@@ -404,7 +404,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           expect(
             PersistSupplementaryBillingFlagsService.go.calledOnceWith(
@@ -417,7 +417,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -435,7 +435,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           expect(
             PersistSupplementaryBillingFlagsService.go.calledOnceWith(
@@ -448,7 +448,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
-          await ProcessBillingFlagService.go(payload)
+          await ProcessBillingFlagService(payload)
 
           const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -468,7 +468,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
       })
 
       it('throws an error', async () => {
-        await ProcessBillingFlagService.go(payload)
+        await ProcessBillingFlagService(payload)
 
         const args = notifierStub.omfg.firstCall.args
 

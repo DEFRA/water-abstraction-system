@@ -14,7 +14,7 @@ describe('Hapi Pino Log In Test service', () => {
   describe('when unit tests are running', () => {
     describe('and we tell it to log events', () => {
       it('returns an empty object - hapi-pino is not silenced', () => {
-        const result = HapiPinoLogInTestService.go(true)
+        const result = HapiPinoLogInTestService(true)
 
         expect(result).toEqual({})
       })
@@ -22,7 +22,7 @@ describe('Hapi Pino Log In Test service', () => {
 
     describe('and we tell it not to log events in test', () => {
       it('returns an object containing config to silence hapi-pino', () => {
-        const result = HapiPinoLogInTestService.go(false)
+        const result = HapiPinoLogInTestService(false)
 
         expect(result).toEqual({
           logEvents: false,
@@ -39,7 +39,7 @@ describe('Hapi Pino Log In Test service', () => {
 
     describe('and we tell it not to log events in test', () => {
       it('returns an empty object - hapi-pino is not silenced', () => {
-        const result = HapiPinoLogInTestService.go(false)
+        const result = HapiPinoLogInTestService(false)
 
         expect(result).toEqual({})
       })
@@ -47,7 +47,7 @@ describe('Hapi Pino Log In Test service', () => {
 
     describe('and we tell it to log events in test', () => {
       it('returns an empty object - hapi-pino is not silenced', () => {
-        const result = HapiPinoLogInTestService.go(true)
+        const result = HapiPinoLogInTestService(true)
 
         expect(result).toEqual({})
       })

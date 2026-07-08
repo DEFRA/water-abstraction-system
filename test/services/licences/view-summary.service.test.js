@@ -49,7 +49,7 @@ describe('Licences - View Summary service', () => {
       })
 
       it('will return all the mandatory data and default values for use in the licence summary page', async () => {
-        const result = await ViewSummaryService.go(licence.id, auth)
+        const result = await ViewSummaryService(licence.id, auth)
 
         expect(result).toEqual({
           abstractionAmounts: [],

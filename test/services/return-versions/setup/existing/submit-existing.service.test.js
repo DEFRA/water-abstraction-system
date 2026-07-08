@@ -83,26 +83,26 @@ describe('Return Versions - Setup - Submit Existing service', () => {
       })
 
       it('returns the correct details the controller needs to redirect the journey', async () => {
-        const result = await SubmitExistingService.go(session.id, payload)
+        const result = await SubmitExistingService(session.id, payload)
 
         expect(result).toEqual({})
       })
 
       it('saves the selected existing return requirements', async () => {
-        await SubmitExistingService.go(session.id, payload)
+        await SubmitExistingService(session.id, payload)
 
         expect(session.requirements).toEqual([_transformedReturnRequirement()])
         expect(session.$update.called).toBe(true)
       })
 
       it('saves the return versions "multipleUpload" state', async () => {
-        await SubmitExistingService.go(session.id, payload)
+        await SubmitExistingService(session.id, payload)
 
         expect(session.multipleUpload).toEqual(false)
       })
 
       it('saves the return versions "quarterlyReturns" state', async () => {
-        await SubmitExistingService.go(session.id, payload)
+        await SubmitExistingService(session.id, payload)
 
         expect(session.quarterlyReturns).toEqual(false)
       })
@@ -114,7 +114,7 @@ describe('Return Versions - Setup - Submit Existing service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await SubmitExistingService.go(session.id, payload)
+        const result = await SubmitExistingService(session.id, payload)
 
         expect(result).toMatchObject({
           pageTitle: 'Use previous requirements for returns',
@@ -130,7 +130,7 @@ describe('Return Versions - Setup - Submit Existing service', () => {
 
       describe('because the user has not submitted anything', () => {
         it('includes an error for the input element', async () => {
-          const result = await SubmitExistingService.go(session.id, payload)
+          const result = await SubmitExistingService(session.id, payload)
 
           expect(result.error).toEqual({
             errorList: [

@@ -43,14 +43,14 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitCompanySearchService.go(session.id, payload)
+      await SubmitCompanySearchService(session.id, payload)
 
       expect(session.companySearch).toEqual(payload.companySearch)
       expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitCompanySearchService.go(session.id, payload)
+      const result = await SubmitCompanySearchService(session.id, payload)
 
       expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/select-company`
@@ -71,14 +71,14 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitCompanySearchService.go(session.id, payload)
+      await SubmitCompanySearchService(session.id, payload)
 
       expect(session.companySearch).toEqual(payload.companySearch)
       expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitCompanySearchService.go(session.id, payload)
+      const result = await SubmitCompanySearchService(session.id, payload)
 
       expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/select-company`
@@ -100,7 +100,7 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitCompanySearchService.go(session.id, payload)
+      await SubmitCompanySearchService(session.id, payload)
 
       expect(session.companySearch).toEqual(payload.companySearch)
       expect(session.checkPageVisited).toEqual(true)
@@ -108,7 +108,7 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
     })
 
     it('continues the journey', async () => {
-      await SubmitCompanySearchService.go(session.id, payload)
+      await SubmitCompanySearchService(session.id, payload)
 
       expect(session).toMatchObject({
         checkPageVisited: true,
@@ -132,14 +132,14 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitCompanySearchService.go(session.id, payload)
+      await SubmitCompanySearchService(session.id, payload)
 
       expect(session.companySearch).toEqual(payload.companySearch)
       expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
-      await SubmitCompanySearchService.go(session.id, payload)
+      await SubmitCompanySearchService(session.id, payload)
 
       expect(session).toMatchObject({
         addressJourney: null,
@@ -161,7 +161,7 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitCompanySearchService.go(session.id, payload)
+        const result = await SubmitCompanySearchService(session.id, payload)
 
         expect(result.error).toEqual({
           errorList: [
@@ -185,7 +185,7 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitCompanySearchService.go(session.id, payload)
+        const result = await SubmitCompanySearchService(session.id, payload)
 
         expect(result.error).toEqual({
           errorList: [

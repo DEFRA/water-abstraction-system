@@ -106,42 +106,42 @@ describe('Return Logs Setup - Submit Check service', () => {
 
   describe('when called with valid data', () => {
     it('updates the return log status to completed', async () => {
-      await SubmitCheckService.go(session.id, user)
+      await SubmitCheckService(session.id, user)
 
       const updatedReturnLog = await ReturnLogModel.query().findById(returnLog.id)
       expect(updatedReturnLog.status).toEqual('completed')
     })
 
     it('updates the return log received date', async () => {
-      await SubmitCheckService.go(session.id, user)
+      await SubmitCheckService(session.id, user)
 
       const updatedReturnLog = await ReturnLogModel.query().findById(returnLog.id)
       expect(updatedReturnLog.receivedDate).toEqual(new Date('2024-01-01'))
     })
 
     it('updates the return log updatedAt date', async () => {
-      await SubmitCheckService.go(session.id, user)
+      await SubmitCheckService(session.id, user)
 
       const updatedReturnLog = await ReturnLogModel.query().findById(returnLog.id)
       expect(updatedReturnLog.updatedAt).not.toEqual(returnLog.updatedAt)
     })
 
     it('deletes the session', async () => {
-      await SubmitCheckService.go(session.id, user)
+      await SubmitCheckService(session.id, user)
 
       const deletedSession = await SessionModel.query().findById(session.id)
       expect(deletedSession).toBeUndefined()
     })
 
     it('generates metadata for the return submission', async () => {
-      await SubmitCheckService.go(session.id, user)
+      await SubmitCheckService(session.id, user)
 
       const callArgs = generateReturnSubmissionMetadataStub.firstCall.args
       expect(callArgs[0]).toBeInstanceOf(SessionModel)
     })
 
     it('calls CreateReturnSubmissionService with correct parameters', async () => {
-      await SubmitCheckService.go(session.id, user)
+      await SubmitCheckService(session.id, user)
 
       const callArgs = createReturnSubmissionServiceStub.firstCall.args
       expect(callArgs[0]).toEqual(mockGeneratedMetadata)
@@ -150,7 +150,7 @@ describe('Return Logs Setup - Submit Check service', () => {
     })
 
     it('calls CreateReturnLinesService with correct parameters', async () => {
-      await SubmitCheckService.go(session.id, user)
+      await SubmitCheckService(session.id, user)
 
       const callArgs = createReturnLinesServiceStub.firstCall.args
       expect(callArgs[0]).toEqual(mockNewReturnSubmissionId)
@@ -158,7 +158,7 @@ describe('Return Logs Setup - Submit Check service', () => {
     })
 
     it('returns the original returnLogId', async () => {
-      const result = await SubmitCheckService.go(session.id, user)
+      const result = await SubmitCheckService(session.id, user)
 
       expect(result).toEqual({ returnLogId: returnLog.id })
     })
@@ -185,7 +185,7 @@ describe('Return Logs Setup - Submit Check service', () => {
       })
 
       it('returns the original returnLogId', async () => {
-        const result = await SubmitCheckService.go(session.id, user)
+        const result = await SubmitCheckService(session.id, user)
 
         expect(result).toEqual({ returnLogId: returnLog.id })
       })
@@ -213,7 +213,7 @@ describe('Return Logs Setup - Submit Check service', () => {
     })
 
     it('returns the page data including a validation error', async () => {
-      const result = await SubmitCheckService.go(session.id, user)
+      const result = await SubmitCheckService(session.id, user)
 
       expect(result).toEqual({
         abstractionPeriod: null,

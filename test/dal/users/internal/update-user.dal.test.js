@@ -70,7 +70,7 @@ describe('Users - Internal - Update User DAL', () => {
 
   describe('when called', () => {
     it('updates the user', async () => {
-      await UpdateUserDal.go(auth, session)
+      await UpdateUserDal(auth, session)
 
       const user = await UserModel.query().findById(existingUser.id)
 
@@ -90,7 +90,7 @@ describe('Users - Internal - Update User DAL', () => {
     })
 
     it('creates an event', async () => {
-      await UpdateUserDal.go(auth, session)
+      await UpdateUserDal(auth, session)
 
       const event = await EventModel.query().where('issuer', 'internal-user-creator@wrls.gov.uk').limit(1).first()
 
@@ -121,7 +121,7 @@ describe('Users - Internal - Update User DAL', () => {
       })
 
       it('updates the username', async () => {
-        await UpdateUserDal.go(auth, session)
+        await UpdateUserDal(auth, session)
 
         const user = await UserModel.query().findById(existingUser.id)
 
@@ -129,7 +129,7 @@ describe('Users - Internal - Update User DAL', () => {
       })
 
       it('replaces the existing resetGuid with a new one and returns the updated users resetGuid', async () => {
-        const result = await UpdateUserDal.go(auth, session)
+        const result = await UpdateUserDal(auth, session)
 
         const { resetGuid } = await UserModel.query().findById(existingUser.id)
 
@@ -141,7 +141,7 @@ describe('Users - Internal - Update User DAL', () => {
 
     describe('and the email has not changed', () => {
       it('does not update the username and returns undefined', async () => {
-        const result = await UpdateUserDal.go(auth, session)
+        const result = await UpdateUserDal(auth, session)
 
         const user = await UserModel.query().findById(existingUser.id)
 
@@ -153,7 +153,7 @@ describe('Users - Internal - Update User DAL', () => {
     describe('and the permission has changed', () => {
       describe('and the new permission has no groups or roles', () => {
         it('does not create any user groups or user roles', async () => {
-          await UpdateUserDal.go(auth, session)
+          await UpdateUserDal(auth, session)
 
           const userGroup = await UserGroupModel.query().where({ userId: existingUser.userId })
           const userRole = await UserRoleModel.query().where({ userId: existingUser.userId })
@@ -169,7 +169,7 @@ describe('Users - Internal - Update User DAL', () => {
         })
 
         it('creates the user groups but no user roles', async () => {
-          await UpdateUserDal.go(auth, session)
+          await UpdateUserDal(auth, session)
 
           const userGroup = await UserGroupModel.query()
             .where({ userId: existingUser.userId })
@@ -189,7 +189,7 @@ describe('Users - Internal - Update User DAL', () => {
         })
 
         it('creates the user groups and user roles', async () => {
-          await UpdateUserDal.go(auth, session)
+          await UpdateUserDal(auth, session)
 
           const userGroup = await UserGroupModel.query()
             .where({ userId: existingUser.userId })
@@ -212,7 +212,7 @@ describe('Users - Internal - Update User DAL', () => {
       })
 
       it('does not remove the existing user groups or user roles', async () => {
-        await UpdateUserDal.go(auth, session)
+        await UpdateUserDal(auth, session)
 
         const userGroup = await UserGroupModel.query().where({ id: existingUserGroup.id, userId: existingUser.userId })
         const userRole = await UserRoleModel.query().where({ id: existingUserRole.id, userId: existingUser.userId })
@@ -228,7 +228,7 @@ describe('Users - Internal - Update User DAL', () => {
       })
 
       it('disables the user', async () => {
-        await UpdateUserDal.go(auth, session)
+        await UpdateUserDal(auth, session)
 
         const user = await UserModel.query().findById(existingUser.id)
 

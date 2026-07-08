@@ -40,7 +40,7 @@ describe('Bill Runs - Review - View Review Charge Reference Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewReviewChargeReferenceService.go(reviewChargeReference.id, yarStub)
+        const result = await ViewReviewChargeReferenceService(reviewChargeReference.id, yarStub)
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',
@@ -78,7 +78,7 @@ describe('Bill Runs - Review - View Review Charge Reference Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewReviewChargeReferenceService.go(reviewChargeReference.id, yarStub)
+        const result = await ViewReviewChargeReferenceService(reviewChargeReference.id, yarStub)
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',
@@ -116,7 +116,7 @@ describe('Bill Runs - Review - View Review Charge Reference Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewReviewChargeReferenceService.go(reviewChargeReference.id, yarStub)
+        const result = await ViewReviewChargeReferenceService(reviewChargeReference.id, yarStub)
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',

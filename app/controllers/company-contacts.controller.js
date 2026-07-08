@@ -14,7 +14,7 @@ export async function viewCommunications(request, h) {
     query: { page }
   } = request
 
-  const pageData = await ViewCommunicationsService.go(id, page)
+  const pageData = await ViewCommunicationsService(id, page)
 
   return h.view(`company-contacts/communications.njk`, pageData)
 }
@@ -26,7 +26,7 @@ export async function viewContactDetails(request, h) {
     yar
   } = request
 
-  const pageData = await ViewContactDetailsService.go(id, auth, yar)
+  const pageData = await ViewContactDetailsService(id, auth, yar)
 
   return h.view(`company-contacts/contact-details.njk`, pageData)
 }
@@ -34,7 +34,7 @@ export async function viewContactDetails(request, h) {
 export async function viewRemoveCompanyContact(request, h) {
   const { id } = request.params
 
-  const pageData = await ViewRemoveCompanyContactService.go(id)
+  const pageData = await ViewRemoveCompanyContactService(id)
 
   return h.view(`company-contacts/remove-company-contact.njk`, pageData)
 }
@@ -45,7 +45,7 @@ export async function submitRemoveCompanyContact(request, h) {
     yar
   } = request
 
-  const { companyId } = await SubmitRemoveCompanyContactService.go(id, yar)
+  const { companyId } = await SubmitRemoveCompanyContactService(id, yar)
 
   return h.redirect(`/system/companies/${companyId}/contacts`)
 }

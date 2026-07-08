@@ -55,7 +55,7 @@ describe('Search - Find All Search Matches service', () => {
     })
 
     it('returns all the matching data', async () => {
-      const result = await FindAllSearchMatchesService.go(query, resultType, page, userScopes)
+      const result = await FindAllSearchMatchesService(query, resultType, page, userScopes)
 
       expect(result).toEqual({
         results: [

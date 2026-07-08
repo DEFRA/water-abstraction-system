@@ -117,7 +117,7 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
 
   describe('when a matching review licence exists', () => {
     it('returns the match', async () => {
-      const result = await FetchReviewLicenceService.go(reviewLicence.id)
+      const result = await FetchReviewLicenceService(reviewLicence.id)
 
       expect(result).toEqual({
         id: reviewLicence.id,
@@ -277,7 +277,7 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
 
   describe('when no matching review licence exists', () => {
     it('returns nothing', async () => {
-      const result = await FetchReviewLicenceService.go('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
+      const result = await FetchReviewLicenceService('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
 
       expect(result).toBeUndefined()
     })

@@ -57,7 +57,7 @@ describe('Bill Runs - Setup - Submit Region service', () => {
         })
 
         it('saves the submitted region ID and its name and returns an object confirming setup is complete', async () => {
-          const result = await SubmitRegionService.go(session.id, payload)
+          const result = await SubmitRegionService(session.id, payload)
 
           expect(session.region).toEqual(region.id)
           expect(session.regionName).toEqual(region.displayName)
@@ -75,7 +75,7 @@ describe('Bill Runs - Setup - Submit Region service', () => {
         })
 
         it('saves the submitted region ID and its name and returns an object confirming setup is not complete', async () => {
-          const result = await SubmitRegionService.go(session.id, payload)
+          const result = await SubmitRegionService(session.id, payload)
 
           expect(session.region).toEqual(region.id)
           expect(session.regionName).toEqual(region.displayName)
@@ -93,7 +93,7 @@ describe('Bill Runs - Setup - Submit Region service', () => {
         })
 
         it('saves the submitted region ID and its name and returns an object confirming setup is not complete', async () => {
-          const result = await SubmitRegionService.go(session.id, payload)
+          const result = await SubmitRegionService(session.id, payload)
 
           expect(session.region).toEqual(region.id)
           expect(session.regionName).toEqual(region.displayName)
@@ -115,7 +115,7 @@ describe('Bill Runs - Setup - Submit Region service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitRegionService.go(session.id, payload)
+          const result = await SubmitRegionService(session.id, payload)
 
           expect(result).toEqual({
             activeNavBar: 'bill-runs',

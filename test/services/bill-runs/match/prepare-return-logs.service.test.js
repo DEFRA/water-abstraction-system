@@ -35,7 +35,7 @@ describe('Prepare Return Logs Service', () => {
         })
 
         it('preps the returns correctly', async () => {
-          await PrepareReturnLogService.go(licence, billingPeriod)
+          await PrepareReturnLogService(licence, billingPeriod)
 
           expect(licence.returnLogs[0]).toEqual({
             id: 'v1:1:01/977:14959864:2022-04-01:2023-03-31',
@@ -98,7 +98,7 @@ describe('Prepare Return Logs Service', () => {
         })
 
         it('flags the return as outside the abstraction period', async () => {
-          await PrepareReturnLogService.go(licence, billingPeriod)
+          await PrepareReturnLogService(licence, billingPeriod)
 
           expect(licence.returnLogs[0].abstractionOutsidePeriod).toBe(true)
         })
@@ -114,7 +114,7 @@ describe('Prepare Return Logs Service', () => {
         })
 
         it('flags the return as a nil return', async () => {
-          await PrepareReturnLogService.go(licence, billingPeriod)
+          await PrepareReturnLogService(licence, billingPeriod)
 
           expect(licence.returnLogs[0].nilReturn).toBe(true)
         })
@@ -127,7 +127,7 @@ describe('Prepare Return Logs Service', () => {
       })
 
       it('assigns no return logs to the licence', async () => {
-        await PrepareReturnLogService.go(licence, billingPeriod)
+        await PrepareReturnLogService(licence, billingPeriod)
 
         expect(licence.returnLogs).toHaveLength(0)
       })

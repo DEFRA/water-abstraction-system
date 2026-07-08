@@ -22,14 +22,14 @@ import ViewReviewService from '../services/bill-runs/review/view-review.service.
 export async function preview(request, h) {
   const { reviewChargeReferenceId } = request.params
 
-  await PreviewService.go(reviewChargeReferenceId, request.yar)
+  await PreviewService(reviewChargeReferenceId, request.yar)
 
   return h.redirect(`/system/bill-runs/review/charge-reference/${reviewChargeReferenceId}`)
 }
 
 export async function submitAuthorised(request, h) {
   const { reviewChargeReferenceId } = request.params
-  const pageData = await SubmitAuthorisedService.go(reviewChargeReferenceId, request.yar, request.payload)
+  const pageData = await SubmitAuthorisedService(reviewChargeReferenceId, request.yar, request.payload)
 
   if (pageData.error) {
     return h.view('bill-runs/review/authorised.njk', pageData)
@@ -41,7 +41,7 @@ export async function submitAuthorised(request, h) {
 export async function submitEdit(request, h) {
   const { elementIndex, reviewChargeElementId } = request.params
 
-  const pageData = await SubmitEditService.go(reviewChargeElementId, elementIndex, request.yar, request.payload)
+  const pageData = await SubmitEditService(reviewChargeElementId, elementIndex, request.yar, request.payload)
 
   if (pageData.error) {
     return h.view('bill-runs/review/edit.njk', pageData)
@@ -52,7 +52,7 @@ export async function submitEdit(request, h) {
 
 export async function submitFactors(request, h) {
   const { reviewChargeReferenceId } = request.params
-  const pageData = await SubmitFactorsService.go(reviewChargeReferenceId, request.yar, request.payload)
+  const pageData = await SubmitFactorsService(reviewChargeReferenceId, request.yar, request.payload)
 
   if (pageData.error) {
     return h.view('bill-runs/review/factors.njk', pageData)
@@ -64,7 +64,7 @@ export async function submitFactors(request, h) {
 export async function submitRemove(request, h) {
   const { reviewLicenceId } = request.params
 
-  const result = await SubmitRemoveService.go(reviewLicenceId, request.yar)
+  const result = await SubmitRemoveService(reviewLicenceId, request.yar)
 
   if (result.empty) {
     return h.redirect('/system/bill-runs')
@@ -76,7 +76,7 @@ export async function submitRemove(request, h) {
 export async function submitReview(request, h) {
   const { billRunId } = request.params
 
-  await SubmitReviewService.go(billRunId, request.payload, request.yar)
+  await SubmitReviewService(billRunId, request.payload, request.yar)
 
   return h.redirect(`/system/bill-runs/review/${billRunId}`)
 }
@@ -84,7 +84,7 @@ export async function submitReview(request, h) {
 export async function submitReviewLicence(request, h) {
   const { reviewLicenceId } = request.params
 
-  await SubmitReviewLicenceService.go(reviewLicenceId, request.yar, request.payload)
+  await SubmitReviewLicenceService(reviewLicenceId, request.yar, request.payload)
 
   return h.redirect(`/system/bill-runs/review/licence/${reviewLicenceId}`)
 }
@@ -92,7 +92,7 @@ export async function submitReviewLicence(request, h) {
 export async function viewAuthorised(request, h) {
   const { reviewChargeReferenceId } = request.params
 
-  const pageData = await ViewAuthorisedService.go(reviewChargeReferenceId)
+  const pageData = await ViewAuthorisedService(reviewChargeReferenceId)
 
   return h.view('bill-runs/review/authorised.njk', pageData)
 }
@@ -100,7 +100,7 @@ export async function viewAuthorised(request, h) {
 export async function viewEdit(request, h) {
   const { elementIndex, reviewChargeElementId } = request.params
 
-  const pageData = await ViewEditService.go(reviewChargeElementId, elementIndex)
+  const pageData = await ViewEditService(reviewChargeElementId, elementIndex)
 
   return h.view('bill-runs/review/edit.njk', pageData)
 }
@@ -108,7 +108,7 @@ export async function viewEdit(request, h) {
 export async function viewFactors(request, h) {
   const { reviewChargeReferenceId } = request.params
 
-  const pageData = await ViewFactorsService.go(reviewChargeReferenceId)
+  const pageData = await ViewFactorsService(reviewChargeReferenceId)
 
   return h.view('bill-runs/review/factors.njk', pageData)
 }
@@ -116,7 +116,7 @@ export async function viewFactors(request, h) {
 export async function viewRemove(request, h) {
   const { reviewLicenceId } = request.params
 
-  const pageData = await ViewRemoveService.go(reviewLicenceId)
+  const pageData = await ViewRemoveService(reviewLicenceId)
 
   return h.view('bill-runs/review/remove.njk', pageData)
 }
@@ -128,7 +128,7 @@ export async function viewReview(request, h) {
     yar
   } = request
 
-  const pageData = await ViewReviewService.go(billRunId, yar, page)
+  const pageData = await ViewReviewService(billRunId, yar, page)
 
   return h.view('bill-runs/review/review.njk', pageData)
 }
@@ -136,7 +136,7 @@ export async function viewReview(request, h) {
 export async function viewReviewChargeElement(request, h) {
   const { elementIndex, reviewChargeElementId } = request.params
 
-  const pageData = await ViewReviewChargeElementService.go(reviewChargeElementId, elementIndex, request.yar)
+  const pageData = await ViewReviewChargeElementService(reviewChargeElementId, elementIndex, request.yar)
 
   return h.view('bill-runs/review/review-charge-element.njk', pageData)
 }
@@ -144,7 +144,7 @@ export async function viewReviewChargeElement(request, h) {
 export async function viewReviewChargeReference(request, h) {
   const { reviewChargeReferenceId } = request.params
 
-  const pageData = await ViewReviewChargeReferenceService.go(reviewChargeReferenceId, request.yar)
+  const pageData = await ViewReviewChargeReferenceService(reviewChargeReferenceId, request.yar)
 
   return h.view('bill-runs/review/review-charge-reference.njk', pageData)
 }
@@ -152,7 +152,7 @@ export async function viewReviewChargeReference(request, h) {
 export async function viewReviewLicence(request, h) {
   const { reviewLicenceId } = request.params
 
-  const pageData = await ViewReviewLicenceService.go(reviewLicenceId, request.yar)
+  const pageData = await ViewReviewLicenceService(reviewLicenceId, request.yar)
 
   return h.view('bill-runs/review/review-licence.njk', pageData)
 }

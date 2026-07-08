@@ -114,14 +114,14 @@ describe('Fetch Bill Run service', () => {
 
   describe('when a bill run with a matching ID exists', () => {
     it('returns the matching instance of BillRunModel', async () => {
-      const { billRun: result } = await FetchBillRunService.go(testBillRun.id)
+      const { billRun: result } = await FetchBillRunService(testBillRun.id)
 
       expect(result.id).toEqual(testBillRun.id)
       expect(result).toBeInstanceOf(BillRunModel)
     })
 
     it('returns the matching bill run including the linked region', async () => {
-      const { billRun: result } = await FetchBillRunService.go(testBillRun.id)
+      const { billRun: result } = await FetchBillRunService(testBillRun.id)
       const { region: returnedRegion } = result
 
       expect(result.id).toEqual(testBillRun.id)
@@ -132,7 +132,7 @@ describe('Fetch Bill Run service', () => {
     })
 
     it('returns a bill summary for each bill linked to the bill run', async () => {
-      const { billSummaries: result } = await FetchBillRunService.go(testBillRun.id)
+      const { billSummaries: result } = await FetchBillRunService(testBillRun.id)
 
       // NOTE: When we create the licences the helper will generate random licence references. When the service returns
       // them for the first bill though, they are expected to be in ascending order. So, we need to sort them first to
@@ -171,7 +171,7 @@ describe('Fetch Bill Run service', () => {
 
   describe('when a bill run with a matching ID does not exist', () => {
     it('returns a result with no values set', async () => {
-      const result = await FetchBillRunService.go('93112100-152b-4860-abea-2adee11dcd69')
+      const result = await FetchBillRunService('93112100-152b-4860-abea-2adee11dcd69')
 
       expect(result).toBeDefined()
       expect(result.billRun).toEqual(undefined)

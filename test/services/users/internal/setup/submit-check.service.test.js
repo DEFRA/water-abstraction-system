@@ -62,19 +62,19 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
     })
 
     it('deletes the session', async () => {
-      await SubmitCheckService.go(auth, session.id, yarStub)
+      await SubmitCheckService(auth, session.id, yarStub)
 
       expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
     })
 
     it('returns the redirect URL', async () => {
-      const result = await SubmitCheckService.go(auth, session.id, yarStub)
+      const result = await SubmitCheckService(auth, session.id, yarStub)
 
       expect(result).toEqual({ redirectUrl: '/system/users' })
     })
 
     it('sets a notification', async () => {
-      await SubmitCheckService.go(auth, session.id, yarStub)
+      await SubmitCheckService(auth, session.id, yarStub)
 
       const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -86,7 +86,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
     })
 
     it('sends a verification email', async () => {
-      await SubmitCheckService.go(auth, session.id, yarStub)
+      await SubmitCheckService(auth, session.id, yarStub)
 
       expect(SendVerificationEmailService.go.calledWith(notification)).toBe(true)
     })
@@ -105,7 +105,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
     })
 
     it('returns the redirect URL', async () => {
-      const result = await SubmitCheckService.go(auth, session.id, yarStub)
+      const result = await SubmitCheckService(auth, session.id, yarStub)
 
       expect(result).toEqual({ redirectUrl: '/system/users' })
     })
@@ -130,13 +130,13 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
       })
 
       it('creates a new password reset link', async () => {
-        await SubmitCheckService.go(auth, session.id, yarStub)
+        await SubmitCheckService(auth, session.id, yarStub)
 
         expect(CreateVerificationNotificationDal.go.calledWith(session.email, newResetGuid)).toBe(true)
       })
 
       it('sets a notification', async () => {
-        await SubmitCheckService.go(auth, session.id, yarStub)
+        await SubmitCheckService(auth, session.id, yarStub)
 
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -148,7 +148,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
       })
 
       it('sends a verification email', async () => {
-        await SubmitCheckService.go(auth, session.id, yarStub)
+        await SubmitCheckService(auth, session.id, yarStub)
 
         expect(SendVerificationEmailService.go.calledWith(notification)).toBe(true)
       })
@@ -156,7 +156,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
 
     describe('when the email has not changed', () => {
       it('sets a notification', async () => {
-        await SubmitCheckService.go(auth, session.id, yarStub)
+        await SubmitCheckService(auth, session.id, yarStub)
 
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -168,7 +168,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
       })
 
       it('does not send a verification email', async () => {
-        await SubmitCheckService.go(auth, session.id, yarStub)
+        await SubmitCheckService(auth, session.id, yarStub)
 
         expect(SendVerificationEmailService.go.called).toBe(false)
       })

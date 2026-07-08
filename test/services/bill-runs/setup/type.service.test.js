@@ -29,7 +29,7 @@ describe('Bill Runs - Setup - Type service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await TypeService.go(session.id)
+      const result = await TypeService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',
