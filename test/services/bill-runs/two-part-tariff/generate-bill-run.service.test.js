@@ -40,6 +40,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()
+    vi.spyOn(HandleErroredBillRunService, 'default').mockResolvedValue()
     globalThis.GlobalNotifier = notifierStub
   })
 

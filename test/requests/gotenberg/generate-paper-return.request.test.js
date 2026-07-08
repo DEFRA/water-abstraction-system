@@ -71,11 +71,11 @@ describe('Gotenberg - Generate Paper Return Request', () => {
         expect(content).toContain('<!DOCTYPE html>')
 
         // Check all append calls
-        expect(FormData.prototype.append.calledWith('marginTop', '0')).toBe(true)
-        expect(FormData.prototype.append.calledWith('marginBottom', '0')).toBe(true)
-        expect(FormData.prototype.append.calledWith('marginLeft', '0')).toBe(true)
-        expect(FormData.prototype.append.calledWith('marginRight', '0')).toBe(true)
-        expect(FormData.prototype.append.calledWith('preferCssPageSize', 'true')).toBe(true)
+        expect(FormData.prototype.append).toHaveBeenCalledWith('marginTop', '0')
+        expect(FormData.prototype.append).toHaveBeenCalledWith('marginBottom', '0')
+        expect(FormData.prototype.append).toHaveBeenCalledWith('marginLeft', '0')
+        expect(FormData.prototype.append).toHaveBeenCalledWith('marginRight', '0')
+        expect(FormData.prototype.append).toHaveBeenCalledWith('preferCssPageSize', 'true')
       })
 
       it('containing the html', async () => {
