@@ -200,7 +200,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
           chargingModuleDeleteBillRunRequestStub.mockResolvedValue()
           vi.spyOn(BillLicenceModel, 'query').mockReturnValue({
             delete: vi.fn().mockReturnThis(),
-            whereExists: vi.fn().rejects()
+            whereExists: vi.fn().mockRejectedValue(new Error())
           })
         })
 
@@ -226,7 +226,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
           chargingModuleDeleteBillRunRequestStub.mockResolvedValue()
           vi.spyOn(ReviewLicenceModel, 'query').mockReturnValue({
             delete: vi.fn().mockReturnThis(),
-            where: vi.fn().rejects()
+            where: vi.fn().mockRejectedValue(new Error())
           })
         })
 

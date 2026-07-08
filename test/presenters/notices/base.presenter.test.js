@@ -5,7 +5,7 @@
 import * as RecipientsFixture from '../../support/fixtures/recipients.fixture.js'
 
 // Thing under test
-import BasePresenter from '../../../app/presenters/notices/base.presenter.js'
+import * as BasePresenter from '../../../app/presenters/notices/base.presenter.js'
 
 describe('Notices - Base presenter', () => {
   let clock

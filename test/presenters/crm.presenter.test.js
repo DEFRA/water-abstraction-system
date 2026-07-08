@@ -3,7 +3,7 @@ import { generateUUID } from '../../app/lib/general.lib.js'
 import { licence } from '../support/fixtures/licence.fixture.js'
 
 // Thing under test
-import CRMPresenter from '../../app/presenters/crm.presenter.js'
+import * as CRMPresenter from '../../app/presenters/crm.presenter.js'
 
 describe('CRM presenter', () => {
   describe('#abstractionAlertsLabel()', () => {

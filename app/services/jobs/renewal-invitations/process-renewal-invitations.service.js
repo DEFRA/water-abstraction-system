@@ -15,7 +15,7 @@ export default async function go(days) {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    const recipients = await SendRenewalInvitations.go(days)
+    const recipients = await SendRenewalInvitations(days)
 
     calculateAndLogTimeTaken(startTime, 'Renewals invitation status job complete', { count: recipients.length })
   } catch (error) {

@@ -3,7 +3,7 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 
 // Thing under test
-import BaseUsersPresenter from '../../../app/presenters/users/base-users.presenter.js'
+import * as BaseUsersPresenter from '../../../app/presenters/users/base-users.presenter.js'
 
 describe('Users - Base Users presenter', () => {
   describe('#formatLicencesToUnlink', () => {

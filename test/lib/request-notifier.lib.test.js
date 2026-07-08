@@ -1,7 +1,7 @@
 // Test framework dependencies
 
 // Thing under test
-import * as RequestNotifierLib from '../../app/lib/request-notifier.lib.js'
+import RequestNotifierLib from '../../app/lib/request-notifier.lib.js'
 
 describe('RequestNotifierLib class', () => {
   const id = '1234567890'

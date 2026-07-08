@@ -113,7 +113,7 @@ describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
         delete: vi.fn().mockReturnThis(),
         innerJoinRelated: vi.fn().mockReturnThis(),
         where: vi.fn().mockReturnThis(),
-        whereNull: vi.fn().rejects()
+        whereNull: vi.fn().mockRejectedValue(new Error())
       })
     })
 

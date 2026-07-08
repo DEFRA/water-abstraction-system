@@ -73,7 +73,7 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
           await GenerateTwoPartTariffBillRunService(billRunDetails.id)
 
           expect(billRunPatchStub).toHaveBeenCalledOnce()
-          expect(billRunPatchStub.firstCall.firstArg).toMatchObject({ status: 'processing' })
+          expect(billRunPatchStub.mock.calls[0][0]).toMatchObject({ status: 'processing' })
         })
 
         it('triggers the "generate annual bill run" service', async () => {
@@ -119,7 +119,7 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
           await GenerateTwoPartTariffBillRunService(billRunDetails.id)
 
           expect(billRunPatchStub).toHaveBeenCalledOnce()
-          expect(billRunPatchStub.firstCall.firstArg).toMatchObject({ status: 'processing' })
+          expect(billRunPatchStub.mock.calls[0][0]).toMatchObject({ status: 'processing' })
         })
 
         it('triggers the "generate supplementary bill run" service', async () => {

@@ -67,7 +67,7 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
         await GenerateBillRunService(billRun)
 
         expect(billRunPatchStub).toHaveBeenCalledOnce()
-        expect(billRunPatchStub.firstCall.firstArg).toMatchObject({ status: 'empty' })
+        expect(billRunPatchStub.mock.calls[0][0]).toMatchObject({ status: 'empty' })
       })
 
       it('triggers the "unflag unbilled supplementary licences" service', async () => {

@@ -16,7 +16,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
   beforeAll(async () => {
     page = undefined
 
-    crmData = await CRMSeeder()
+    crmData = await CRMSeeder.seed()
 
     roles = ['billing']
 

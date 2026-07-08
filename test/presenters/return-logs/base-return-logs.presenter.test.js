@@ -2,7 +2,7 @@
 import { unitNames } from '../../../app/lib/static-lookups.lib.js'
 
 // Thing under test
-import BaseReturnLogsPresenter from '../../../app/presenters/return-logs/base-return-logs.presenter.js'
+import * as BaseReturnLogsPresenter from '../../../app/presenters/return-logs/base-return-logs.presenter.js'
 
 describe('Return Logs - Base Return Logs presenter', () => {
   describe('#formatMeterDetails()', () => {

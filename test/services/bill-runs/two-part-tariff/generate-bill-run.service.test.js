@@ -66,7 +66,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
         await GenerateBillRunService(billRun)
 
         expect(billRunPatchStub).toHaveBeenCalledOnce()
-        expect(billRunPatchStub.firstCall.firstArg).toMatchObject({ status: 'empty' })
+        expect(billRunPatchStub.mock.calls[0][0]).toMatchObject({ status: 'empty' })
       })
     })
 

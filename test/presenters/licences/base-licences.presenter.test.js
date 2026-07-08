@@ -1,5 +1,5 @@
 // Thing under test
-import BaseLicencesPresenter from '../../../app/presenters/licences/base-licences.presenter.js'
+import * as BaseLicencesPresenter from '../../../app/presenters/licences/base-licences.presenter.js'
 
 describe('Licences - Base Licences presenter', () => {
   describe('#formatAbstractionAmounts()', () => {

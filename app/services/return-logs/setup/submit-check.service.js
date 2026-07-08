@@ -59,7 +59,7 @@ async function _markReturnLogAsSubmitted(returnLogId, receivedDate, timestamp, t
 async function _save(session, user) {
   const timestamp = timestampForPostgres()
 
-  const metadata = GenerateReturnSubmissionMetadata.go(session)
+  const metadata = GenerateReturnSubmissionMetadata(session)
 
   await ReturnLogModel.transaction(async (trx) => {
     const returnSubmission = await CreateReturnSubmissionService(metadata, session, timestamp, user, trx)

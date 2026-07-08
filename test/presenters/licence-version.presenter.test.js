@@ -1,5 +1,5 @@
 // Thing under test
-import LicenceVersionPresenter from '../../app/presenters/licence-version.presenter.js'
+import * as LicenceVersionPresenter from '../../app/presenters/licence-version.presenter.js'
 
 describe('Licence version presenter', () => {
   describe('#linkToLicenceVersion', () => {

@@ -45,7 +45,7 @@ describe('Charging Module Reissue Bill request', () => {
 
     it('hits the correct endpoint', async () => {
       await ReissueBillRequest.send(billRunId, billId)
-      const endpoint = ChargingModuleRequest.patchRequest.firstCall.firstArg
+      const endpoint = ChargingModuleRequest.patchRequest.mock.calls[0][0]
 
       expect(endpoint).toEqual(`v3/wrls/bill-runs/${billRunId}/invoices/${billId}/rebill`)
     })

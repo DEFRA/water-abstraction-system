@@ -6,7 +6,7 @@ import { generateUUID, today } from '../../app/lib/general.lib.js'
 import { tomorrow, yesterday } from '../support/general.js'
 
 // Thing under test
-import BasePresenter from '../../app/presenters/base.presenter.js'
+import * as BasePresenter from '../../app/presenters/base.presenter.js'
 
 describe('Base presenter', () => {
   describe('#convertPenceToPounds()', () => {

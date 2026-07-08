@@ -26,7 +26,7 @@ import { flashNotification } from '../../../lib/general.lib.js'
  * the last licence in the bill run (bill run is now empty)
  */
 export default async function go(reviewLicenceId, yar) {
-  const reviewLicence = await FetchRemoveReviewLicenceModel.go(reviewLicenceId)
+  const reviewLicence = await FetchRemoveReviewLicenceModel(reviewLicenceId)
 
   await RemoveReviewLicenceService(reviewLicenceId)
 
@@ -50,7 +50,7 @@ export default async function go(reviewLicenceId, yar) {
 async function _empty(reviewLicence) {
   const { billRun } = reviewLicence
 
-  return ProcessBillRunPostRemove.go(billRun.id)
+  return ProcessBillRunPostRemove(billRun.id)
 }
 
 async function _flagForSupplementaryBilling(reviewLicence) {

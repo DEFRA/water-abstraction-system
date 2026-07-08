@@ -93,15 +93,15 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         await UpdateInvoiceNumbersService(billRun)
 
         expect(billPatchStub.calledTwice).toBe(true)
-        expect(billPatchStub.firstCall.firstArg).toEqual({ invoiceNumber: 'WAI1000429' })
-        expect(billPatchStub.secondCall.firstArg).toEqual({ invoiceNumber: 'WAI1000428' })
+        expect(billPatchStub.mock.calls[0][0]).toEqual({ invoiceNumber: 'WAI1000429' })
+        expect(billPatchStub.mock.calls[1][0]).toEqual({ invoiceNumber: 'WAI1000428' })
       })
 
       it('updates the bill run with the Charging Module transaction reference', async () => {
         await UpdateInvoiceNumbersService(billRun)
 
         expect(billRunPatchStub).toHaveBeenCalledOnce()
-        expect(billRunPatchStub.firstCall.firstArg).toMatchObject({
+        expect(billRunPatchStub.mock.calls[0][0]).toMatchObject({
           status: 'sent',
           transactionFileReference: 'nalwi50031'
         })
@@ -226,7 +226,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
 
           vi.spyOn(BillModel, 'query').mockReturnValue({
             patch: vi.fn().mockReturnThis(),
-            where: vi.fn().rejects()
+            where: vi.fn().mockRejectedValue(new Error())
           })
         })
 
@@ -258,7 +258,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
           })
           vi.spyOn(BillRunModel, 'query').mockReturnValue({
             findById: vi.fn().mockReturnThis(),
-            patch: vi.fn().rejects()
+            patch: vi.fn().mockRejectedValue(new Error())
           })
         })
 

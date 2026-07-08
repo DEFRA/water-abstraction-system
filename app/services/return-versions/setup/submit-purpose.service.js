@@ -99,7 +99,7 @@ async function _validate(payload, purposesData) {
     return purpose.id
   })
 
-  const validation = PurposeValidation.go(payload, purposeIds)
+  const validation = PurposeValidation(payload, purposeIds)
 
   return formatValidationResult(validation)
 }

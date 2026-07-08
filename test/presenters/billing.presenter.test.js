@@ -1,5 +1,5 @@
 // Thing under test
-import BillingPresenter from '../../app/presenters/billing.presenter.js'
+import * as BillingPresenter from '../../app/presenters/billing.presenter.js'
 
 describe('Billing presenter', () => {
   describe('#formatBillRunType()', () => {

@@ -4,12 +4,11 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
 /**
  * Creates a stubbed instance of the SessionModel for testing purposes.
  *
- * @param {object} _sinon - Unused. Retained for call-site compatibility until Phase 4 (Sinon removal).
  * @param {object} sessionData - The raw data to populate the model with.
  *
  * @returns {module:SessionModel} A model instance with stubbed methods.
  */
-export default function build(_sinon, sessionData) {
+export default function build(sessionData) {
   const session = SessionModel.fromJson({
     id: generateUUID(),
     ...sessionData

@@ -15,7 +15,7 @@ describe('Return Versions - Fetch Return Version service', () => {
 
   describe('when a matching return version exists', () => {
     beforeEach(async () => {
-      const seedData = await RequirementsForReturnsSeeder()
+      const seedData = await RequirementsForReturnsSeeder.seed()
 
       seededLicence = seedData.licence
       seededReturnVersion = seedData.returnVersion

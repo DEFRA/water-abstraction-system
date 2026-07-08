@@ -50,12 +50,12 @@ async function _fetchBillRun(billRunId) {
 
 async function _generateBillRun(billRun) {
   if (billRun.batchType === 'two_part_supplementary') {
-    GenerateSupplementaryBillRun.go(billRun)
+    GenerateSupplementaryBillRun(billRun)
 
     return
   }
 
-  GenerateAnnualBillRun.go(billRun)
+  GenerateAnnualBillRun(billRun)
 }
 
 async function _markAsProcessing(billRun) {

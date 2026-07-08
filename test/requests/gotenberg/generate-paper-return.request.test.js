@@ -96,7 +96,7 @@ describe('Gotenberg - Generate Paper Return Request', () => {
         expect(content).toContain('<!DOCTYPE html>')
 
         // Verify the complete append call signature
-        expect(FormData.prototype.append.calledWith('index.html', expect.any(Blob), 'index.html')).toBe(true)
+        expect(FormData.prototype.append).toHaveBeenCalledWith('index.html', expect.any(Blob), 'index.html')
       })
 
       it('containing the footer', async () => {
@@ -117,7 +117,7 @@ describe('Gotenberg - Generate Paper Return Request', () => {
         expect(content).toContain('footer')
 
         // Verify the complete append call signature
-        expect(FormData.prototype.append.calledWith('files', expect.any(Blob), 'footer.html')).toBe(true)
+        expect(FormData.prototype.append).toHaveBeenCalledWith('files', expect.any(Blob), 'footer.html')
       })
     })
   })

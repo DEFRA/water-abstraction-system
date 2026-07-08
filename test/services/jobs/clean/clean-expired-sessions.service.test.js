@@ -72,7 +72,7 @@ describe('Jobs - Clean - Clean Expired Sessions service', () => {
     beforeEach(() => {
       vi.spyOn(SessionModel, 'query').mockReturnValue({
         delete: vi.fn().mockReturnThis(),
-        where: vi.fn().rejects()
+        where: vi.fn().mockRejectedValue(new Error())
       })
     })
 

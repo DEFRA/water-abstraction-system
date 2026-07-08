@@ -57,10 +57,10 @@ export default async function go(sessionId, payload, yar) {
 
 async function _processedLicenceSubmission(noticeType, payload) {
   if (noticeType === NoticeType.RENEWAL_INVITATIONS) {
-    return ProcessRenewalsNoticeLicenceSubmission.go(payload)
+    return ProcessRenewalsNoticeLicenceSubmission(payload)
   }
 
-  return ProcessReturnsNoticeLicenceSubmission.go(payload)
+  return ProcessReturnsNoticeLicenceSubmission(payload)
 }
 
 /**
