@@ -1315,4 +1315,4 @@ function _getOptions(path) {
 
 function _postOptions(path, payload) {
   return postRequestOptions(`/return-logs/setup/${sessionId}/${path}`, payload, ['returns'])
-})
+}
