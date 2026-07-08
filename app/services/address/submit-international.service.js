@@ -65,7 +65,7 @@ async function _save(session) {
 }
 
 function _validate(payload) {
-  const validationResult = InternationalValidator.go(payload)
+  const validationResult = InternationalValidator(payload)
 
   return formatValidationResult(validationResult)
 }

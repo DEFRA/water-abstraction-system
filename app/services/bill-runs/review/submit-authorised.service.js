@@ -46,7 +46,7 @@ async function _save(reviewChargeReferenceId, payload) {
 }
 
 function _validate(payload) {
-  const validation = AuthorisedValidator.go(payload)
+  const validation = AuthorisedValidator(payload)
 
   if (!validation.error) {
     return null

@@ -21,7 +21,7 @@ const VALID_TYPES = ['water_admin', 'water_vml']
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function go(payload) {
   const permissions = Object.keys(userPermissions)
 
   const schema = Joi.object({
@@ -58,11 +58,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false, allowUnknown: true })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

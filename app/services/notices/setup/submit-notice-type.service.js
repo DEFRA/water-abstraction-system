@@ -89,7 +89,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = NoticeTypeValidator.go(payload)
+  const validationResult = NoticeTypeValidator(payload)
 
   return formatValidationResult(validationResult)
 }

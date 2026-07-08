@@ -55,7 +55,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = AccessValidator.go(payload)
+  const validationResult = AccessValidator(payload)
 
   return formatValidationResult(validationResult)
 }

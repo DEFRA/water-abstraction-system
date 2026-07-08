@@ -55,7 +55,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload, validLicences) {
-  const validationResult = RemoveLicencesValidator.go(payload, validLicences)
+  const validationResult = RemoveLicencesValidator(payload, validLicences)
 
   return formatValidationResult(validationResult)
 }

@@ -71,7 +71,7 @@ function _submittedSessionData(session, requirementIndex, payload) {
 }
 
 function _validate(payload) {
-  const validation = SiteDescriptionValidator.go(payload)
+  const validation = SiteDescriptionValidator(payload)
 
   return formatValidationResult(validation)
 }

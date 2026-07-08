@@ -34,7 +34,7 @@ const MAX_SENT_BY_LENGTH = 255
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function go(payload) {
   payload.fromDate = _fullDate('sentFromDay', 'sentFromMonth', 'sentFromYear', payload)
   payload.toDate = _fullDate('sentToDay', 'sentToMonth', 'sentToYear', payload)
 
@@ -126,11 +126,4 @@ function _validate(payload) {
     .messages({ 'any.custom': 'The from date must be before the to date' })
 
   return schema.validate(payload, { abortEarly: false, allowUnknown: true })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

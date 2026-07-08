@@ -62,7 +62,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload, noticeType) {
-  const validationResult = ReturnsPeriodValidator.go(payload, noticeType)
+  const validationResult = ReturnsPeriodValidator(payload, noticeType)
 
   return formatValidationResult(validationResult)
 }

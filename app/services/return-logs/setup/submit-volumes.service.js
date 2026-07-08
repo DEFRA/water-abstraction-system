@@ -106,7 +106,7 @@ function _validate(payload) {
     return null
   }
 
-  const validationResult = VolumesValidator.go(payload)
+  const validationResult = VolumesValidator(payload)
 
   return formatValidationResult(validationResult)
 }

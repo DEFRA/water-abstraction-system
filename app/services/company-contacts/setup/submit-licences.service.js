@@ -49,7 +49,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = LicencesValidator.go(payload)
+  const validationResult = LicencesValidator(payload)
 
   return formatValidationResult(validationResult)
 }

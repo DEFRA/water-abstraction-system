@@ -57,7 +57,7 @@ async function _save(session) {
 }
 
 function _validate(payload) {
-  const validationResult = PostcodeValidator.go(payload)
+  const validationResult = PostcodeValidator(payload)
 
   return formatValidationResult(validationResult)
 }

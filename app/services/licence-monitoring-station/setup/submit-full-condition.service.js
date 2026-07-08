@@ -108,7 +108,7 @@ async function _save(session, abstractionPeriod, conditionDisplayText, payload) 
 }
 
 function _validate(payload) {
-  const validation = FullConditionValidator.go(payload)
+  const validation = FullConditionValidator(payload)
 
   if (!validation.error) {
     return null

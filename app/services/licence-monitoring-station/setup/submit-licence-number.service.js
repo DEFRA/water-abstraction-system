@@ -60,7 +60,7 @@ function _submittedSessionData(session, payload) {
 }
 
 async function _validate(payload, licence) {
-  const validation = LicenceNumberValidator.go(payload, licence)
+  const validation = LicenceNumberValidator(payload, licence)
 
   if (!validation.error) {
     return null

@@ -62,7 +62,7 @@ function _validate(payload, session) {
     licence: { returnVersions }
   } = session
 
-  const validation = ExistingValidator.go(payload, returnVersions)
+  const validation = ExistingValidator(payload, returnVersions)
 
   return formatValidationResult(validation)
 }

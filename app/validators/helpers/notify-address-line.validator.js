@@ -6,17 +6,10 @@
  *
  * @returns {boolean} true if the string starts with any of the special characters, false otherwise
  */
-function invalidStartCharacters(value) {
+export function invalidStartCharacters(value) {
   const startCharacters = ['@', '(', ')', '=', '[', ']', '”', '\\', '/', '<', '>']
 
   return startCharacters.some((character) => {
     return value.startsWith(character)
   })
-}
-
-export {
-  invalidStartCharacters
-}
-export default {
-  invalidStartCharacters
 }

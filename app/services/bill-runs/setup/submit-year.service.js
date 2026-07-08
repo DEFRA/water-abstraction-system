@@ -59,7 +59,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload, regions) {
-  const validation = YearValidator.go(payload, regions)
+  const validation = YearValidator(payload, regions)
 
   if (!validation.error) {
     return null

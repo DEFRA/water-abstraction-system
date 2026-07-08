@@ -97,7 +97,7 @@ function _savedFilters(yar) {
 }
 
 function _validate(payload) {
-  const validationResult = IndexValidator.go(payload)
+  const validationResult = IndexValidator(payload)
 
   return formatValidationResult(validationResult)
 }

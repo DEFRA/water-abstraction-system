@@ -86,7 +86,7 @@ async function _save(session, payload, yar) {
 }
 
 function _validate(payload) {
-  const validationResult = ContactTypeValidator.go(payload)
+  const validationResult = ContactTypeValidator(payload)
 
   return formatValidationResult(validationResult)
 }

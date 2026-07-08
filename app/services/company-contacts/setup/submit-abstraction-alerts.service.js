@@ -65,7 +65,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = AbstractionAlertsValidator.go(payload)
+  const validationResult = AbstractionAlertsValidator(payload)
 
   return formatValidationResult(validationResult)
 }

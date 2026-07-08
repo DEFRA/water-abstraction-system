@@ -77,7 +77,7 @@ function _submittedSessionData(session, payload) {
 
 function _validate(frequency, measurementType, payload, session) {
   const { lines, startReading } = session
-  const validationResult = MultipleEntriesValidator.go(frequency, lines.length, measurementType, payload, startReading)
+  const validationResult = MultipleEntriesValidator(frequency, lines.length, measurementType, payload, startReading)
 
   return formatValidationResult(validationResult)
 }

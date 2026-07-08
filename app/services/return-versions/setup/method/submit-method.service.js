@@ -76,7 +76,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = MethodValidator.go(payload)
+  const validation = MethodValidator(payload)
 
   return formatValidationResult(validation)
 }

@@ -79,7 +79,7 @@ function _submissionData(session, payload, companyAddresses) {
 }
 
 function _validate(payload, name) {
-  const validationResult = ExistingAddressValidator.go(payload, name)
+  const validationResult = ExistingAddressValidator(payload, name)
 
   return formatValidationResult(validationResult)
 }

@@ -16,7 +16,7 @@ const errorMessage = 'Enter a licence number'
  *
  * @returns {object} A Joi schema for the `licenceRef` field
  */
-function licenceRefSchema(licenceExists) {
+export function licenceRefSchema(licenceExists) {
   return Joi.string()
     .required()
     .custom((value, helpers) => {
@@ -36,11 +36,4 @@ function _licenceExists(value, helpers, licenceExists) {
   }
 
   return helpers.error('invalidLicence')
-}
-
-export {
-  licenceRefSchema
-}
-export default {
-  licenceRefSchema
 }

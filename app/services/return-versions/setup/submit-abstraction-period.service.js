@@ -71,7 +71,7 @@ function _submittedSessionData(session, requirementIndex, payload) {
 }
 
 function _validate(payload) {
-  const validation = AbstractionPeriodValidator.go(payload)
+  const validation = AbstractionPeriodValidator(payload)
 
   return formatValidationResult(validation)
 }

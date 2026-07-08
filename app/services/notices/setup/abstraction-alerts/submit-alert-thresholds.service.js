@@ -46,7 +46,7 @@ async function _save(session) {
 }
 
 function _validate(payload) {
-  const validationResult = AlertThresholdsValidator.go(payload)
+  const validationResult = AlertThresholdsValidator(payload)
 
   return formatValidationResult(validationResult)
 }

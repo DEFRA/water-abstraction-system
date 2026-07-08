@@ -19,7 +19,7 @@ const ENTER_A_LICENCE_NUMBER_ERROR = 'Enter a licence number'
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload, licence) {
+export default function go(payload, licence) {
   const licenceExists = !!licence
   const licenceHasEnded = licence?.$ended() ?? false
 
@@ -38,11 +38,4 @@ function go(payload, licence) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -17,7 +17,7 @@ const MAX_VALUE = 10000000
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function go(payload) {
   const VALID_VALUES = Object.values(thresholdUnits).map((unit) => {
     return unit.value
   })
@@ -54,11 +54,4 @@ function go(payload) {
   }
 
   return schema.validate(dataToValidate, { abortEarly: false })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

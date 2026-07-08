@@ -73,7 +73,7 @@ function _submissionData(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = ContactNameValidator.go(payload)
+  const validationResult = ContactNameValidator(payload)
 
   return formatValidationResult(validationResult)
 }

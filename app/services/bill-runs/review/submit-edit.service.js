@@ -48,7 +48,7 @@ function _save(reviewChargeElementId, payload) {
 }
 
 function _validate(payload) {
-  const validation = EditValidator.go(payload)
+  const validation = EditValidator(payload)
 
   if (!validation.error) {
     return null

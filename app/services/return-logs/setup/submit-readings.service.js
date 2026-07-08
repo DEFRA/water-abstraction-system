@@ -103,7 +103,7 @@ function _validate(payload, requestedYear, requestedMonth, session) {
     return null
   }
 
-  const validation = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
+  const validation = ReadingsValidator(payload, requestedYear, requestedMonth, session)
 
   return formatValidationResult(validation)
 }

@@ -57,7 +57,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = NoReturnsRequiredValidator.go(payload)
+  const validation = NoReturnsRequiredValidator(payload)
 
   return formatValidationResult(validation)
 }

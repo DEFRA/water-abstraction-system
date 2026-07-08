@@ -26,7 +26,7 @@ const Joi = base.extend(joiDate)
  * dates. Each result object will be the output of Joi's schema.validate(). If any errors are found, the 'error'
  * property will be present, detailing the issue.
  */
-function go(payload) {
+export default function go(payload) {
   const { abstractionPeriodStartDay, abstractionPeriodStartMonth, abstractionPeriodEndDay, abstractionPeriodEndMonth } =
     payload
 
@@ -62,11 +62,4 @@ function _validateAbstractionDate(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

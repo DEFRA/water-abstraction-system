@@ -89,7 +89,7 @@ function _savedFilters(yar, filterKey) {
 }
 
 function _validate(payload) {
-  const validationResult = ViewValidator.go(payload)
+  const validationResult = ViewValidator(payload)
 
   return formatValidationResult(validationResult)
 }

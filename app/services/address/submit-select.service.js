@@ -87,7 +87,7 @@ async function _save(session, address) {
 }
 
 function _validate(payload) {
-  const validationResult = SelectValidator.go(payload)
+  const validationResult = SelectValidator(payload)
 
   return formatValidationResult(validationResult)
 }

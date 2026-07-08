@@ -53,7 +53,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = TypeValidator.go(payload)
+  const validation = TypeValidator(payload)
 
   if (!validation.error) {
     return null

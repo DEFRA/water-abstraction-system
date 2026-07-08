@@ -73,7 +73,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = MeterDetailsValidator.go(payload)
+  const validationResult = MeterDetailsValidator(payload)
 
   return formatValidationResult(validationResult)
 }

@@ -51,7 +51,7 @@ function _submittedSessionData(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = StopOrReduceValidator.go(payload)
+  const validation = StopOrReduceValidator(payload)
 
   if (!validation.error) {
     return null

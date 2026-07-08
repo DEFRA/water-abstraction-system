@@ -17,7 +17,7 @@ import Joi from 'joi'
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(frequency, length, measurementType, payload, startReading) {
+export default function go(frequency, length, measurementType, payload, startReading) {
   const schema = Joi.object({
     multipleEntries: Joi.array()
       .required()
@@ -68,11 +68,4 @@ function _meterReadingsInIncreasingOrder(value, helpers, startReading) {
   }
 
   return value
-}
-
-export {
-  go
-}
-export default {
-  go
 }

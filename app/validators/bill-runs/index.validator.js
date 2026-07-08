@@ -21,7 +21,7 @@ const MIN_YEAR_CREATED = 2014 // Based on the minimum year a bill run has been c
  * @returns {object} The result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload, regions) {
+export default function go(payload, regions) {
   const maxYearCreated = new Date().getFullYear()
   const validRegionIds = _validRegionIds(regions)
 
@@ -77,11 +77,4 @@ function _validRegionIds(regions) {
   return regions.map((region) => {
     return region.id
   })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

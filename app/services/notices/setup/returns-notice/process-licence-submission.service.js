@@ -49,7 +49,7 @@ async function _validate(payload, dueReturns) {
     licenceExists = await CheckLicenceExistsDal(payload.licenceRef)
   }
 
-  const validationResult = LicenceDueReturnsValidator.go(payload, licenceExists, dueReturnsExist)
+  const validationResult = LicenceDueReturnsValidator(payload, licenceExists, dueReturnsExist)
 
   return formatValidationResult(validationResult)
 }

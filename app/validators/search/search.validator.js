@@ -20,7 +20,7 @@ const MAX_LENGTH = 100
  * @returns {object} the result from calling Joi's schema.validate(). If any errors are found the `error` property will
  * also exist detailing what the issue is.
  */
-function go(payload) {
+export default function go(payload) {
   const schema = Joi.object({
     filter: Joi.string(),
     query: Joi.string()
@@ -37,11 +37,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: true })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

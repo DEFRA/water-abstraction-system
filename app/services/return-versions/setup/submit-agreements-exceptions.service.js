@@ -63,7 +63,7 @@ async function _save(session, requirementIndex, payload) {
 }
 
 function _validate(payload) {
-  const validation = AgreementsExceptionsValidator.go(payload)
+  const validation = AgreementsExceptionsValidator(payload)
 
   return formatValidationResult(validation)
 }

@@ -76,7 +76,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = ExistingAccountValidator.go(payload)
+  const validationResult = ExistingAccountValidator(payload)
 
   return formatValidationResult(validationResult)
 }

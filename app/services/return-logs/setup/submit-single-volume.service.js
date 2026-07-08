@@ -59,7 +59,7 @@ function _submittedSessionData(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = SingleVolumeValidator.go(payload)
+  const validationResult = SingleVolumeValidator(payload)
 
   return formatValidationResult(validationResult)
 }

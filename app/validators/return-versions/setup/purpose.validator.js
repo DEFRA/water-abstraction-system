@@ -21,7 +21,7 @@ import Joi from 'joi'
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the
  * `error:` property will also exist detailing what the issue is.
  */
-function go(purposes, purposeIds) {
+export default function go(purposes, purposeIds) {
   const errorMessage = 'Select any purpose for the requirements for returns'
 
   const schema = Joi.object({
@@ -50,11 +50,4 @@ function go(purposes, purposeIds) {
   })
 
   return schema.validate({ purposes }, { abortEarly: true })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

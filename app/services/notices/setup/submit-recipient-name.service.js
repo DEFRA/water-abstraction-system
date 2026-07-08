@@ -46,7 +46,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = RecipientNameValidator.go(payload)
+  const validationResult = RecipientNameValidator(payload)
 
   return formatValidationResult(validationResult)
 }

@@ -58,7 +58,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = ContactEmailValidator.go(payload)
+  const validationResult = ContactEmailValidator(payload)
 
   return formatValidationResult(validationResult)
 }

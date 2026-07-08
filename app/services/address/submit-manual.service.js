@@ -64,7 +64,7 @@ async function _save(session) {
 }
 
 function _validate(payload) {
-  const validationResult = ManualAddressValidator.go(payload)
+  const validationResult = ManualAddressValidator(payload)
 
   return formatValidationResult(validationResult)
 }

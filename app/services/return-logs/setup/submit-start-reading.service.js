@@ -57,7 +57,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload, session) {
-  const validationResult = StartReadingValidator.go(payload, session.lines)
+  const validationResult = StartReadingValidator(payload, session.lines)
 
   return formatValidationResult(validationResult)
 }
