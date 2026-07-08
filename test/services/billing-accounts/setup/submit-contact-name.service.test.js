@@ -41,7 +41,7 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
       await SubmitContactNameService(session.id, payload)
 
       expect(session.contactName).toEqual(payload.contactName)
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
@@ -68,7 +68,7 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
         await SubmitContactNameService(session.id, payload)
 
         expect(session.contactName).toEqual(payload.contactName)
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -98,7 +98,7 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
 
         expect(session.contactName).toEqual(payload.contactName)
         expect(session.checkPageVisited).toEqual(true)
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('returns to the check page', async () => {
@@ -133,7 +133,7 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
         expect(session.contactName).toEqual(payload.contactName)
         expect(session.checkPageVisited).toEqual(false)
 
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('returns to the check page', async () => {

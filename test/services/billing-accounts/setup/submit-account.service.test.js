@@ -45,7 +45,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
         searchInput: null
       })
 
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
@@ -74,7 +74,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
           searchInput: null
         })
 
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -101,7 +101,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
           accountSelected: billingAccount.company.id,
           searchInput: null
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -127,7 +127,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
         accountSelected: 'another',
         searchInput: 'Customer Name'
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
@@ -156,7 +156,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
           accountSelected: 'another',
           searchInput: 'Customer Name'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -183,7 +183,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
           accountSelected: 'another',
           searchInput: 'Customer Name'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {

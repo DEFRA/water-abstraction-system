@@ -43,7 +43,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
         await SubmitAlertEmailAddressService(session.id, payload, auth)
 
         expect(session.alertEmailAddress).toEqual('admin@defra.gov.uk')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -62,7 +62,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
         await SubmitAlertEmailAddressService(session.id, payload, auth)
 
         expect(session.alertEmailAddress).toEqual('test@defra.gov.uk')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -79,7 +79,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
         await SubmitAlertEmailAddressService(session.id, payload, auth)
 
         expect(session.alertEmailAddress).toEqual(auth.credentials.user.username)
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
     })
 
@@ -91,7 +91,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
         await SubmitAlertEmailAddressService(session.id, payload, auth)
 
         expect(session.alertEmailAddress).toEqual('test@defra.go.uk')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
     })
 

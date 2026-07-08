@@ -75,7 +75,7 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
           abstractionPeriodEndMonth: '7'
         })
 
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the page has been not been visited', () => {

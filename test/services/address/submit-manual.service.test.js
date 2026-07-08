@@ -67,7 +67,7 @@ describe('Address - Submit Manual Service', () => {
           postcode: 'SW1A 1AA'
         })
         expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/manual`)
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
     })
 

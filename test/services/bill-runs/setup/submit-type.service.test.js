@@ -44,7 +44,7 @@ describe('Bill Runs - Setup - Submit Type service', () => {
         const result = await SubmitTypeService(session.id, payload)
 
         expect(result).toEqual({})
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
     })
 

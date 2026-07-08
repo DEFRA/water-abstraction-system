@@ -53,7 +53,7 @@ describe('Address - Submit Postcode Service', () => {
         expect(result).toEqual({})
 
         expect(session.addressJourney.address.postcode).toEqual('SW1A 1AA')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
     })
 

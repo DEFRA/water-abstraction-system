@@ -43,7 +43,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
         ...session,
         allLicences: true
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {

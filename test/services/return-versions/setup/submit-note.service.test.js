@@ -69,7 +69,7 @@ describe('Return Versions Setup - Submit Note service', () => {
             content: 'A new note related to return requirement',
             userEmail: 'carol.shaw@atari.com'
           })
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
 
         it('returns the correct details the controller needs to redirect the journey', async () => {
@@ -126,7 +126,7 @@ describe('Return Versions Setup - Submit Note service', () => {
             content: 'An updated note related to return requirement',
             userEmail: 'carol.shaw@atari.com'
           })
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
 
         it('returns the journey to redirect the page', async () => {

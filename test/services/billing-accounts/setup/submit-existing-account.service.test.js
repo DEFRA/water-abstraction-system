@@ -47,7 +47,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       expect(session).toMatchObject({
         existingAccount: payload.existingAccount
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
@@ -76,7 +76,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
         expect(session).toMatchObject({
           existingAccount: payload.existingAccount
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -108,7 +108,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
           checkPageVisited: true,
           existingAccount: payload.existingAccount
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -136,7 +136,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
           ..._newAccountExpectedValues(),
           existingAccount: companies[0].id
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -162,7 +162,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       expect(session).toMatchObject({
         existingAccount: 'new'
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
@@ -191,7 +191,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
         expect(session).toMatchObject({
           existingAccount: payload.existingAccount
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -219,7 +219,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
           ..._commonExpectedValues(),
           existingAccount: 'new'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {

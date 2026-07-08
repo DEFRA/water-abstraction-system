@@ -74,7 +74,7 @@ describe('Return Versions Setup - Submit Remove service', () => {
       await SubmitRemoveService(session.id, requirementIndex, yarStub)
 
       expect(session.requirements[requirementIndex]).toBeUndefined()
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('sets the notification message to "Requirements removed"', async () => {

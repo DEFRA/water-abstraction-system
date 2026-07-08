@@ -53,7 +53,7 @@ describe('Return Logs Setup - Submit Start Reading service', () => {
         await SubmitStartReadingService(session.id, payload, yarStub)
 
         expect(session.startReading).toEqual(15600)
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the page has been not been visited', () => {

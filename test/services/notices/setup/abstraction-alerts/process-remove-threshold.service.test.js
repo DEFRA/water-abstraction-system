@@ -39,7 +39,7 @@ describe('Notices - Setup - Abstraction Alerts -Process Remove Threshold service
         await ProcessRemoveThresholdService(session.id, licenceMonitoringStations.one.id, yarStub)
 
         expect(session.removedThresholds).toEqual([licenceMonitoringStations.one.id])
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
     })
 

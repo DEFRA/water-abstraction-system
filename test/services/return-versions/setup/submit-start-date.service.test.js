@@ -102,7 +102,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
               startDate: new Date('2023-01-01')
             })
 
-            expect(session.$update.called).toBe(true)
+            expect(session.$update).toHaveBeenCalled()
           })
         })
 
@@ -132,7 +132,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
               startDate: new Date('2023-01-01')
             })
 
-            expect(session.$update.called).toBe(true)
+            expect(session.$update).toHaveBeenCalled()
           })
         })
 
@@ -150,7 +150,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
               await SubmitStartDateService(session.id, payload, yarStub)
 
               expect(session.quarterlyReturns).toBeUndefined()
-              expect(session.$update.called).toBe(true)
+              expect(session.$update).toHaveBeenCalled()
             })
           })
 

@@ -45,7 +45,7 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
         ...session,
         email: 'bob@environment-agency.gov.uk'
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {

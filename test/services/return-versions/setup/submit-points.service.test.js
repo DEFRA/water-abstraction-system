@@ -86,7 +86,7 @@ describe('Return Versions - Setup - Submit Points service', () => {
         await SubmitPointsService(session.id, requirementIndex, payload, yarStub)
 
         expect(session.requirements[0].points).toEqual(['d03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6'])
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the page has been not been visited', () => {

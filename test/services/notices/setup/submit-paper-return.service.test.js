@@ -53,7 +53,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
       await SubmitPaperReturnService(session.id, payload, yarStub)
 
       expect(session.selectedReturns).toEqual([dueReturn.returnLogId])
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {

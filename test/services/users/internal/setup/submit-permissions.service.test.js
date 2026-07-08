@@ -54,7 +54,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
         ...session,
         permission: 'basic'
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {

@@ -66,7 +66,7 @@ describe('Return Versions Setup - Submit Returns Cycle service', () => {
         await SubmitReturnsCycleService(session.id, requirementIndex, payload, yarStub)
 
         expect(session.requirements[0].returnsCycle).toEqual('summer')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the page has been not been visited', () => {

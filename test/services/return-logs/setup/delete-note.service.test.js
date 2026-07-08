@@ -39,7 +39,7 @@ describe('Return Logs Setup - Delete Note service', () => {
     await DeleteNoteService(session.id, yarStub)
 
     expect(session.note).toBeUndefined()
-    expect(session.$update.called).toBe(true)
+    expect(session.$update).toHaveBeenCalled()
   })
 
   it('sets the notification message to "Deleted"', async () => {

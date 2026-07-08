@@ -44,7 +44,7 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
         ...session,
         name: 'Eric'
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {

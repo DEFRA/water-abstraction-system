@@ -92,7 +92,7 @@ describe('Return Versions - Setup - Submit Existing service', () => {
         await SubmitExistingService(session.id, payload)
 
         expect(session.requirements).toEqual([_transformedReturnRequirement()])
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('saves the return versions "multipleUpload" state', async () => {

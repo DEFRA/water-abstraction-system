@@ -43,7 +43,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
       await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
       expect(session).toEqual(session)
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('saves the submitted "noticeType"', async () => {
@@ -79,7 +79,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
           await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
           expect(session.checkPageVisited).toBe(false)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
 
         it('sets a flash message', async () => {
@@ -110,7 +110,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
           await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
           expect(session.checkPageVisited).toBe(true)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
 
         it('does not set a flash message', async () => {

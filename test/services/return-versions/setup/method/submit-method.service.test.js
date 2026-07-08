@@ -79,7 +79,7 @@ describe('Return Versions - Setup - Submit Method service', () => {
         await SubmitMethodService(session.id, payload)
 
         expect(session.method).toEqual('useAbstractionData')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the user has selected to use abstraction data', () => {
@@ -93,7 +93,7 @@ describe('Return Versions - Setup - Submit Method service', () => {
           await SubmitMethodService(session.id, payload)
 
           expect(session.requirements).toEqual(_generatedReturnRequirements())
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
 

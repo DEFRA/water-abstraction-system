@@ -108,7 +108,7 @@ describe('Return Logs Setup - Check service', () => {
       await CheckService(session.id, yarStub)
 
       expect(session.checkPageVisited).toBe(true)
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
   })
 })

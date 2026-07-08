@@ -76,7 +76,7 @@ describe('Company Contacts - Setup - Check Service', () => {
           await ViewCheckService(session.id, yarStub)
 
           expect(session.checkPageVisited).toBe(true)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
     })

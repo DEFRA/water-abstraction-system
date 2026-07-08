@@ -53,7 +53,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
 
           expect(session.journey).toEqual('enterReturn')
           expect(result.redirect).toEqual('reported')
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
 
@@ -67,7 +67,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
 
           expect(session.journey).toEqual('nilReturn')
           expect(result.redirect).toEqual('check')
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
 
@@ -115,7 +115,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
           await SubmitSubmissionService(session.id, payload)
 
           expect(session.checkPageVisited).toBe(false)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
     })

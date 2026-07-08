@@ -41,7 +41,7 @@ describe('Bill Runs - Setup - Submit Year service', () => {
 
           expect(session.year).toEqual('2026')
           expect(result.setupComplete).toBe(true)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
 
@@ -58,7 +58,7 @@ describe('Bill Runs - Setup - Submit Year service', () => {
           expect(session.year).toEqual('2022')
           expect(result.setupComplete).toBe(false)
 
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
     })

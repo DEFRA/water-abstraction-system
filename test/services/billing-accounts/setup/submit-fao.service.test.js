@@ -71,7 +71,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
         expect(session).toMatchObject({
           fao: 'yes'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -101,7 +101,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
           checkPageVisited: true,
           fao: 'yes'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -134,7 +134,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
           contactSelected: null,
           fao: 'yes'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -158,7 +158,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
       expect(session).toMatchObject({
         fao: 'no'
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
@@ -185,7 +185,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
         expect(session).toMatchObject({
           fao: 'no'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -215,7 +215,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
           checkPageVisited: true,
           fao: 'no'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -250,7 +250,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
           contactSelected: null,
           fao: 'no'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -285,7 +285,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
           addressJourney: _addressJourney(session),
           fao: 'no'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {

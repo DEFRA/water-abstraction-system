@@ -95,7 +95,7 @@ describe('Address - Submit Select Service', () => {
             postcode: 'BS1 5AH'
           })
           expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
 
@@ -136,7 +136,7 @@ describe('Address - Submit Select Service', () => {
             postcode: 'BS1 5AH'
           })
           expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
 
@@ -177,7 +177,7 @@ describe('Address - Submit Select Service', () => {
             postcode: 'BS1 5AH'
           })
           expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
 
@@ -218,7 +218,7 @@ describe('Address - Submit Select Service', () => {
             postcode: 'BS1 5AH'
           })
           expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
 
@@ -259,7 +259,7 @@ describe('Address - Submit Select Service', () => {
             postcode: 'BS1 5AH'
           })
           expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/select`)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
 

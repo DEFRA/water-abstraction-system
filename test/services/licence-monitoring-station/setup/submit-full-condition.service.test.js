@@ -63,7 +63,7 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
       await SubmitFullConditionService(session.id, payload)
 
       expect(session.conditionId).toEqual(payload.condition)
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('saves the abstraction period', async () => {

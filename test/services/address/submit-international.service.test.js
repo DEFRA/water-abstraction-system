@@ -69,7 +69,7 @@ describe('Address - Submit International Service', () => {
           postcode: '80802'
         })
         expect(session.addressJourney.backUrl).toEqual(`/system/address/${session.id}/international`)
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
     })
 

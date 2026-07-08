@@ -51,7 +51,7 @@ describe('Notices - Setup - Submit Select Recipients service', () => {
       await SubmitSelectRecipientsService(session.id, payload, yarStub)
 
       expect(session.selectedRecipients).toEqual(['123'])
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('sets a flash message', async () => {

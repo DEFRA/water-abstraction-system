@@ -54,7 +54,7 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
           expect(session.lines[0].quantityCubicMetres).toEqual(100000)
           expect(session.lines[1].quantity).toEqual(200)
           expect(session.lines[1].quantityCubicMetres).toEqual(200000)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
 
         it('sets the notification message title to "Updated" and the text to "2 monthly volumes have been updated" ', async () => {
@@ -92,7 +92,7 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
 
           expect(session.lines[0].reading).toEqual(100)
           expect(session.lines[1].reading).toEqual(200)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
 
         it('sets the notification message title to "Updated" and the text to "2 monthly meter readings have been updated" ', async () => {

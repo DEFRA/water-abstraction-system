@@ -43,7 +43,7 @@ describe('Return Logs Setup - Submit Reported service', () => {
         await SubmitReportedService(session.id, payload, yarStub)
 
         expect(session.reported).toEqual('meterReadings')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the page has been not been visited', () => {

@@ -38,7 +38,7 @@ describe('Bill Runs - Setup - Submit Season service', () => {
         await SubmitSeasonService(session.id, payload)
 
         expect(session.season).toEqual('summer')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('returns an empty object (no page data is needed for a redirect)', async () => {

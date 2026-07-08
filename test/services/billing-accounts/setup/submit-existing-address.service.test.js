@@ -58,7 +58,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       expect(session).toMatchObject({
         addressSelected: payload.addressSelected
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {

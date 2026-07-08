@@ -56,7 +56,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
           await SubmitLicenceNumberService(session.id, payload)
 
           expect(session.licenceRef).toEqual(payload.licenceRef)
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
 
         it('saves the licence id', async () => {

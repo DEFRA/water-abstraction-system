@@ -40,7 +40,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
 
         expect(session.stopOrReduce).toEqual('stop')
         expect(session.reduceAtThreshold).toEqual(null)
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the page has been not been visited', () => {
@@ -68,7 +68,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
           expect(result).toEqual({
             checkPageVisited: true
           })
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
     })
