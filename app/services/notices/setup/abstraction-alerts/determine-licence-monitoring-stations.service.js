@@ -12,7 +12,7 @@ import FetchMonitoringStationDetailsDal from '../../../../dal/monitoring-station
  * @returns {Promise<{object}>}
  */
 async function go(id) {
-  const { licenceMonitoringStations, monitoringStation } = await FetchMonitoringStationDetailsDal.go(id)
+  const { licenceMonitoringStations, monitoringStation } = await FetchMonitoringStationDetailsDal(id)
 
   return {
     licenceMonitoringStations: _licenceMonitoringStations(licenceMonitoringStations),

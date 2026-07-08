@@ -14,7 +14,7 @@ import SubmissionPresenter from '../../../presenters/return-logs/setup/submissio
  * @returns {Promise<object>} page data needed by the view template
  */
 async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const formattedData = SubmissionPresenter.go(session)
 

@@ -17,7 +17,7 @@ import DatabaseConfig from '../../../config/database.config.js'
  *
  * @returns {Promise<object[]>} the notifications linked to the return log
  */
-async function go(returnLogId, page = '1') {
+export default async function go(returnLogId, page = '1') {
   const { results: notifications, total: totalNumber } = await _fetch(returnLogId, page)
 
   return { notifications, totalNumber }
@@ -43,11 +43,4 @@ async function _fetch(returnLogId, page) {
       ])
     })
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

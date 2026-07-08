@@ -17,7 +17,7 @@ import { roles } from '../../lib/static-lookups.lib.js'
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(companyId, role) {
-  const companyDetails = await FetchCompanyDetailsDal.go(companyId, roles[role].name)
+  const companyDetails = await FetchCompanyDetailsDal(companyId, roles[role].name)
 
   const pageData = CompanyPresenter.go(companyDetails, role)
 

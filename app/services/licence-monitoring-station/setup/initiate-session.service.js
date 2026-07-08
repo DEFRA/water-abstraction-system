@@ -25,7 +25,7 @@ async function go(monitoringStationId) {
   const monitoringStation = await _fetchMonitoringStation(monitoringStationId)
   const data = { monitoringStationId, ...monitoringStation }
 
-  const { id: sessionId } = await CreateSessionDal.go(data)
+  const { id: sessionId } = await CreateSessionDal(data)
 
   return sessionId
 }

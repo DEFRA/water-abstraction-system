@@ -21,7 +21,7 @@ async function go(sessionId, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
-    const session = await FetchSessionDal.go(sessionId)
+    const session = await FetchSessionDal(sessionId)
 
     // On the check page we want to display the exact text of the chosen condition (including the condition number) plus
     // its abstraction period. To do this we need to re-fetch the condition. We can then save the info in the session.

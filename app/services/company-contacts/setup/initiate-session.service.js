@@ -17,14 +17,14 @@ import FetchCompanyService from '../../../dal/companies/fetch-company.dal.js'
 async function go(companyId) {
   const company = await FetchCompanyService.go(companyId)
 
-  const licences = await FetchCompanyLicencesDal.go(companyId)
+  const licences = await FetchCompanyLicencesDal(companyId)
 
   const data = {
     company,
     licences
   }
 
-  return CreateSessionDal.go(data)
+  return CreateSessionDal(data)
 }
 
 export {

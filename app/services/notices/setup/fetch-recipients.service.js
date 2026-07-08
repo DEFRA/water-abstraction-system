@@ -30,7 +30,7 @@ async function go(session, download) {
 
 async function _recipientsData(session, download) {
   if (session.noticeType === NoticeType.ABSTRACTION_ALERTS) {
-    return FetchAbstractionAlertRecipientsDal.go(session)
+    return FetchAbstractionAlertRecipientsDal(session)
   }
 
   if (session.noticeType === NoticeType.PAPER_RETURN) {

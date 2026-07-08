@@ -12,7 +12,7 @@ import UserModel from '../../../models/user.model.js'
  *
  * @returns {Promise<module:UserModel>} the requested user
  */
-async function go(id) {
+export default async function go(id) {
   const user = await UserModel.query()
     .select(['id', 'licenceEntityId', 'username'])
     .modify('permissions')
@@ -20,11 +20,4 @@ async function go(id) {
     .findById(id)
 
   return user
-}
-
-export {
-  go
-}
-export default {
-  go
 }

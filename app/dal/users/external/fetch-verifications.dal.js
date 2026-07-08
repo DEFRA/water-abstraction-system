@@ -15,7 +15,7 @@ import DatabaseConfig from '../../../../config/database.config.js'
  *
  * @returns {Promise<object[]>} the requested user verifications
  */
-async function go(licenceEntityId, page = '1') {
+export default async function go(licenceEntityId, page = '1') {
   const { results: verifications, total: totalNumber } = await _fetch(licenceEntityId, page)
 
   return { totalNumber, verifications }
@@ -42,11 +42,4 @@ async function _fetch(licenceEntityId, page) {
           licenceBuilder.select(['id', 'licenceRef']).modify('licenceHolder')
         })
     })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -18,9 +18,9 @@ import LicenceNumberValidator from '../../../validators/licence-monitoring-stati
  * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
-  const licence = payload.licenceRef ? await FetchLicenceDal.go(payload.licenceRef) : null
+  const licence = payload.licenceRef ? await FetchLicenceDal(payload.licenceRef) : null
 
   const validationResult = await _validate(payload, licence)
 

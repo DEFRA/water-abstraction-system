@@ -20,7 +20,7 @@ import PaginatorPresenter from '../../presenters/paginator.presenter.js'
 async function go(id, page) {
   const returnLog = await FetchReturnLogService.go(id)
 
-  const { notifications, totalNumber } = await FetchNotificationsDal.go(id, page)
+  const { notifications, totalNumber } = await FetchNotificationsDal(id, page)
 
   const pageData = CommunicationsPresenter.go(returnLog, notifications)
 

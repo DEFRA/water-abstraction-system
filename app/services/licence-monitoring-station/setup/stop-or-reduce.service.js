@@ -14,7 +14,7 @@ import StopOrReducePresenter from '../../../presenters/licence-monitoring-statio
  * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const pageData = StopOrReducePresenter.go(session)
 

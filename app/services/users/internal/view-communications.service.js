@@ -18,9 +18,9 @@ import PaginatorPresenter from '../../../presenters/paginator.presenter.js'
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(id, page) {
-  const user = await FetchUserDal.go(id)
+  const user = await FetchUserDal(id)
 
-  const { notifications, totalNumber } = await FetchNotificationsDal.go(user.username, page)
+  const { notifications, totalNumber } = await FetchNotificationsDal(user.username, page)
 
   const pageData = CommunicationsPresenter.go(user, notifications)
 

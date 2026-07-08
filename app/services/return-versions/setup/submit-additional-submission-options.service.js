@@ -26,7 +26,7 @@ import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
  * validation error details
  */
 async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   handleOneOptionSelected(payload, 'additionalSubmissionOptions')
 

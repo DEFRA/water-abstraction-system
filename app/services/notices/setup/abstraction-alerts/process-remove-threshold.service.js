@@ -17,7 +17,7 @@ import { formatRestrictionType, formatValueUnit } from '../../../../presenters/b
  *
  */
 async function go(sessionId, licenceMonitoringStationId, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   await _save(session, licenceMonitoringStationId)
 

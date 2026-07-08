@@ -13,7 +13,7 @@ import CompanyModel from '../../models/company.model.js'
  *
  * @returns {Promise<module:CompanyModel>} the data needed to populate the view company page
  */
-async function go(companyId, role) {
+export default async function go(companyId, role) {
   return CompanyModel.query()
     .findById(companyId)
     .select(['id', 'name'])
@@ -42,11 +42,4 @@ async function go(companyId, role) {
           ])
         })
     })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

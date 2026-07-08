@@ -12,15 +12,8 @@ import LicenceModel from '../../../models/licence.model.js'
  *
  * @returns {Promise<boolean>} Whether a matching licence exists in the database
  */
-async function go(licenceRef) {
+export default async function go(licenceRef) {
   const licence = await LicenceModel.query().where('licenceRef', licenceRef).select('licenceRef').limit(1).first()
 
   return !!licence
-}
-
-export {
-  go
-}
-export default {
-  go
 }

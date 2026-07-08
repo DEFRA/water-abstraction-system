@@ -18,7 +18,7 @@ import PermissionsPresenter from '../../../../presenters/users/internal/setup/pe
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(auth, sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const pageData = PermissionsPresenter.go(session)
 
@@ -31,7 +31,7 @@ async function go(auth, sessionId) {
 }
 
 async function _showSuperPermission(auth) {
-  const currentUser = await FetchUserDetailsDal.go(auth.credentials.user.id)
+  const currentUser = await FetchUserDetailsDal(auth.credentials.user.id)
 
   return currentUser.$permissions().key === 'super'
 }

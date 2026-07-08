@@ -21,7 +21,7 @@ import { userPermissions } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<string>} The resetGuid for the new user
  */
-async function go(auth, session) {
+export default async function go(auth, session) {
   const { email, permission } = session
   const { groups, roles } = userPermissions[permission]
 
@@ -46,7 +46,7 @@ async function go(auth, session) {
 }
 
 async function _insertEvent(auth, email, userId, trx) {
-  const { username } = await FetchUserDal.go(auth.credentials.user.id)
+  const { username } = await FetchUserDal(auth.credentials.user.id)
 
   const timestamp = timestampForPostgres()
 
@@ -88,11 +88,4 @@ async function _insertUserRoles(roleIds, id, trx) {
   for (const { id: roleId } of roleIds) {
     await UserModel.relatedQuery('userRoles', trx).for(id).insert({ id: generateUUID(), roleId })
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

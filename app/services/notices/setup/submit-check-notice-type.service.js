@@ -18,7 +18,7 @@ import { NoticeType } from '../../../lib/static-lookups.lib.js'
  * @param {string} sessionId - The UUID of the current session
  */
 async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   session.addressJourney = {
     activeNavBar: 'notices',

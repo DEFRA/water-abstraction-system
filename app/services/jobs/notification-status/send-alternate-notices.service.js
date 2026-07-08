@@ -27,7 +27,7 @@ import SendAlternateNoticeService from '../../notices/setup/send/send-alternate-
  */
 async function go(notifications) {
   const noticeIds = _noticeIds(notifications)
-  const criticalNotices = await FetchCriticalNoticesDal.go(noticeIds)
+  const criticalNotices = await FetchCriticalNoticesDal(noticeIds)
 
   if (criticalNotices.length === 0) {
     return

@@ -14,7 +14,7 @@ import RemoveLicencesPresenter from '../../../presenters/notices/setup/remove-li
  * @returns {Promise<object>} The view data for the remove licences page
  */
 async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const { removeLicences = [] } = session
 

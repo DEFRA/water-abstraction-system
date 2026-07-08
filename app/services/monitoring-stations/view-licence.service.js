@@ -16,7 +16,7 @@ import ViewLicencePresenter from '../../presenters/monitoring-stations/view-lice
  * @returns {Promise<object>} The view data for the licence tag details page
  */
 async function go(auth, licenceId, monitoringStationId) {
-  const { licence, licenceMonitoringStations, monitoringStation } = await FetchLicenceMonitoringStationsDal.go(
+  const { licence, licenceMonitoringStations, monitoringStation } = await FetchLicenceMonitoringStationsDal(
     licenceId,
     monitoringStationId
   )

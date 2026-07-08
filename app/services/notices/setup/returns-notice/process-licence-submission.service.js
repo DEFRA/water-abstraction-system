@@ -46,7 +46,7 @@ async function _validate(payload, dueReturns) {
   let licenceExists = false
 
   if (payload.licenceRef) {
-    licenceExists = await CheckLicenceExistsDal.go(payload.licenceRef)
+    licenceExists = await CheckLicenceExistsDal(payload.licenceRef)
   }
 
   const validationResult = LicenceDueReturnsValidator.go(payload, licenceExists, dueReturnsExist)

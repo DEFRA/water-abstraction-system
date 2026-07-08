@@ -21,9 +21,9 @@ import { readFlashNotification } from '../../../lib/general.lib.js'
  * @returns {Promise<object>} The view data for the external user page
  */
 async function go(id, auth, page, yar, back = 'users') {
-  const user = await FetchUserDal.go(id)
+  const user = await FetchUserDal(id)
 
-  const { licences, totalNumber } = await FetchLicencesDal.go(user.licenceEntityId, page)
+  const { licences, totalNumber } = await FetchLicencesDal(user.licenceEntityId, page)
 
   const pageData = LicencesPresenter.go(user, licences, auth.credentials.scope, back)
 

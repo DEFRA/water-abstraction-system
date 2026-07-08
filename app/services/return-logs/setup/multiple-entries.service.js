@@ -17,7 +17,7 @@ import MultipleEntriesPresenter from '../../../presenters/return-logs/setup/mult
  * @returns {Promise<object>} The view data for the multiple entries page
  */
 async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const pageData = MultipleEntriesPresenter.go(session)
 

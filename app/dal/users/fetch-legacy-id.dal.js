@@ -24,15 +24,8 @@ import UserModel from '../../models/user.model.js'
  *
  * @returns {Promise<number>} the requested user's legacy `userId`
  */
-async function go(id) {
+export default async function go(id) {
   const { userId } = await UserModel.query().select(['userId']).findById(id)
 
   return userId
-}
-
-export {
-  go
-}
-export default {
-  go
 }

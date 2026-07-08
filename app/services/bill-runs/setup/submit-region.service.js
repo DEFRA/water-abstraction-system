@@ -29,7 +29,7 @@ import RegionValidator from '../../../validators/bill-runs/setup/region.validato
  * the region page including the validation error details
  */
 async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
   const regions = await FetchRegionsService.go()
 
   const validationResult = _validate(payload, regions)

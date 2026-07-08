@@ -50,7 +50,7 @@ async function _createEmailRequest(notification) {
 async function _sendEmail(notification) {
   const sendResult = await _createEmailRequest(notification)
 
-  await UpdateNotificationDal.go(notification, sendResult)
+  await UpdateNotificationDal(notification, sendResult)
 
   return sendResult.status
 }

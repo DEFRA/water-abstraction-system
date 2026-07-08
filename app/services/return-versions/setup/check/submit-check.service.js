@@ -29,9 +29,9 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
  * @returns {Promise<string>} The licence Id
  */
 async function go(sessionId, userId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
-  await DeleteSessionDal.go(sessionId)
+  await DeleteSessionDal(sessionId)
 
   try {
     const { journey, licence } = session
@@ -66,7 +66,7 @@ async function go(sessionId, userId) {
       //    the return logs. They become hidden to all users because they never built a way to display return logs a
       //    previous licence holder.
       if (returnVersion.reason === 'succession-or-transfer-of-licence') {
-        await UpdateSucceededReturnLogsDal.go(licence.licenceRef, trx)
+        await UpdateSucceededReturnLogsDal(licence.licenceRef, trx)
       }
     })
 

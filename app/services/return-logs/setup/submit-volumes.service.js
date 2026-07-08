@@ -21,7 +21,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
  * the validation error details
  */
 async function go(sessionId, payload, yar, yearMonth) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
 

@@ -30,7 +30,7 @@ import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
  * the page data for the points page including the validation error details
  */
 async function go(sessionId, requirementIndex, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   handleOneOptionSelected(payload, 'points')
 

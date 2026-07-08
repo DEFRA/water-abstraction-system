@@ -17,7 +17,7 @@ import DatabaseConfig from '../../../config/database.config.js'
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's communications tab
  */
-async function go(licenceRef, page = '1') {
+export default async function go(licenceRef, page = '1') {
   const { results: notifications, total: totalNumber } = await _fetch(licenceRef, page)
 
   return { notifications, totalNumber }
@@ -43,11 +43,4 @@ async function _fetch(licenceRef, page) {
       ])
     })
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

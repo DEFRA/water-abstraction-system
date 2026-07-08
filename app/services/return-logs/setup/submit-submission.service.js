@@ -21,7 +21,7 @@ import { timestampForPostgres } from '../../../lib/general.lib.js'
  * the abstraction return page including the validation error details
  */
 async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
   const error = _validate(payload)
 
   const { returnLogId } = session
@@ -50,7 +50,7 @@ async function _confirmReceipt(session) {
     .findById(session.returnLogId)
     .patch({ receivedDate: session.receivedDate, status: 'received', updatedAt: timestampForPostgres() })
 
-  await DeleteSessionDal.go(session.id)
+  await DeleteSessionDal(session.id)
 }
 
 async function _redirect(journey, session) {

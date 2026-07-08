@@ -21,7 +21,7 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
 async function go(licenceId, auth, page) {
   const licence = await FetchLicenceService.go(licenceId)
 
-  const { notifications, totalNumber } = await FetchNotificationsDal.go(licence.licenceRef, page)
+  const { notifications, totalNumber } = await FetchNotificationsDal(licence.licenceRef, page)
 
   const pageData = CommunicationsPresenter.go(notifications, licence)
 

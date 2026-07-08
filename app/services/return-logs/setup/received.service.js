@@ -17,7 +17,7 @@ import ReceivedPresenter from '../../../presenters/return-logs/setup/received.pr
  * @returns {Promise<object>} The view data for the received page
  */
 async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const formattedData = ReceivedPresenter.go(session)
 

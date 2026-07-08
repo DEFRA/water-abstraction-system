@@ -19,7 +19,7 @@ import { flashNotification } from '../../../lib/general.lib.js'
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
 async function go(sessionId, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
   const { address } = session.addressJourney
 
   const additionalRecipient = {

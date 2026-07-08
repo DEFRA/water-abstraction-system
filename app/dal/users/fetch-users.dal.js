@@ -28,7 +28,7 @@ import DatabaseConfig from '../../../config/database.config.js'
  *
  * @returns {Promise<module:UserModel[]>} an array of users that match the selected 'page in the data
  */
-async function go(filters, page = '1') {
+export default async function go(filters, page = '1') {
   const query = _fetchQuery()
 
   _applyFilters(query, filters)
@@ -346,11 +346,4 @@ function _fetchQuery() {
     .select(['id', 'licenceEntityId', 'userId', 'username'])
     .modify('status')
     .modify('permissions')
-}
-
-export {
-  go
-}
-export default {
-  go
 }

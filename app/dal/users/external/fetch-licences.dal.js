@@ -17,7 +17,7 @@ import DatabaseConfig from '../../../../config/database.config.js'
  *
  * @returns {Promise<module:LicenceModel[]>} the requested user licences
  */
-async function go(licenceEntityId, page = '1') {
+export default async function go(licenceEntityId, page = '1') {
   const { results: licences, total: totalNumber } = await _fetch(licenceEntityId, page)
 
   return { licences, totalNumber }
@@ -61,11 +61,4 @@ async function _fetch(licenceEntityId, page) {
             .orderBy('role', 'asc')
         })
     })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

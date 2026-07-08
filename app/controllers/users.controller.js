@@ -169,7 +169,7 @@ export async function viewProfileDetails(request, h) {
 }
 
 async function _redirectToLegacy(id, h) {
-  const userId = await FetchLegacyIdDal.go(id)
+  const userId = await FetchLegacyIdDal(id)
 
   return h.redirect(`/user/${userId}/status`)
 }

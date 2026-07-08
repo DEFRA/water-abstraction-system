@@ -27,7 +27,7 @@ import ReasonValidator from '../../../validators/return-versions/setup/reason.va
  * the page data for the reason page including the validation error details
  */
 async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 

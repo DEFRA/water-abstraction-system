@@ -22,9 +22,9 @@ import { flashNotification } from '../../../../lib/general.lib.js'
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
-  const emailExists = await CheckEmailExistsDal.go(formatEmail(payload.email))
+  const emailExists = await CheckEmailExistsDal(formatEmail(payload.email))
 
   const validationResult = _validate(payload, emailExists)
 

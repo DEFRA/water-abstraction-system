@@ -12,13 +12,6 @@ import ReturnVersionModel from '../../models/return-version.model.js'
  * @param {string} status - The new status for the return version
  * @param {object} trx - Database transaction object to ensure all DB changes are applied, or none at all
  */
-async function go(returnVersionId, status, trx) {
+export default async function go(returnVersionId, status, trx) {
   await ReturnVersionModel.query(trx).findById(returnVersionId).patch({ status })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

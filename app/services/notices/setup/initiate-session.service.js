@@ -43,7 +43,7 @@ async function go(journey, monitoringStationId = null) {
     journey
   }
 
-  const session = await CreateSessionDal.go(data)
+  const session = await CreateSessionDal(data)
 
   return {
     sessionId: session.id,

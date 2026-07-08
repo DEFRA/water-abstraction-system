@@ -26,7 +26,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
  * @returns {Promise<object>} If no errors the page data for the received page else the validation error details
  */
 async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const { startDate } = session
   const error = _validate(payload, startDate)

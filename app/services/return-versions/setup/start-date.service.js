@@ -17,7 +17,7 @@ import StartDatePresenter from '../../../presenters/return-versions/setup/start-
  * @returns {Promise<object>} The view data for the start date page
  */
 async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const formattedData = StartDatePresenter.go(session)
 

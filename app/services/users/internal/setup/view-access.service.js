@@ -15,7 +15,7 @@ import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const pageData = AccessPresenter.go(session)
 

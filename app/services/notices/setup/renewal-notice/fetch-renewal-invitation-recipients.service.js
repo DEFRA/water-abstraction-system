@@ -21,7 +21,7 @@ import { db } from '../../../../../db/db.js'
 async function go(session) {
   const { licenceRef } = session
 
-  const { bindings, query: licenceQuery } = GenerateRenewalInvitationLicenceQueryDal.go(licenceRef)
+  const { bindings, query: licenceQuery } = GenerateRenewalInvitationLicenceQueryDal(licenceRef)
 
   const query = GenerateRenewalRecipientsQueryService.go(licenceQuery)
 

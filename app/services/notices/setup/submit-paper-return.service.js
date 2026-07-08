@@ -21,7 +21,7 @@ import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
  * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   handleOneOptionSelected(payload, 'returns')
 

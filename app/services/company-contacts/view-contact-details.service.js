@@ -25,7 +25,7 @@ async function go(id, auth, yar) {
 
   const company = await FetchCompanyService.go(companyContact.companyId)
 
-  const licences = await FetchAbstractionAlertLicencesDal.go(companyContact.abstractionAlertLicences)
+  const licences = await FetchAbstractionAlertLicencesDal(companyContact.abstractionAlertLicences)
 
   const pageData = ContactDetailsPresenter.go(company, companyContact, licences)
 

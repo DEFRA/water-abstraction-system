@@ -14,7 +14,7 @@ import DeleteSessionDal from '../../../dal/delete-session.dal.js'
  * @param {string} sessionId - The UUID for the return requirement setup session record
  */
 async function go(sessionId) {
-  await DeleteSessionDal.go(sessionId)
+  await DeleteSessionDal(sessionId)
 }
 
 export { go }

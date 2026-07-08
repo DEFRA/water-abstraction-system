@@ -29,7 +29,7 @@ import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
  * the page data for the purpose page including the validation error details
  */
 async function go(sessionId, requirementIndex, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
   const licencePurposes = await FetchPurposesService.go(session.licenceVersion.id)
 
   handleOneOptionSelected(payload, 'purposes')

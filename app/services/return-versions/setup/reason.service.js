@@ -17,7 +17,7 @@ import SelectReasonPresenter from '../../../presenters/return-versions/setup/rea
  * @returns {Promise<object>} page data needed by the view template
  */
 async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const formattedData = SelectReasonPresenter.go(session)
 

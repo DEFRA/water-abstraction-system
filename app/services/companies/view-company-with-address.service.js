@@ -19,8 +19,8 @@ import FetchCompanyDal from '../../dal/companies/fetch-company.dal.js'
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(companyId, addressId, role, licenceId = null) {
-  const company = await FetchCompanyDal.go(companyId)
-  const address = await FetchAddressDal.go(addressId)
+  const company = await FetchCompanyDal(companyId)
+  const address = await FetchAddressDal(addressId)
 
   const pageData = CompanyWithAddressPresenter.go(company, address, role, licenceId)
 

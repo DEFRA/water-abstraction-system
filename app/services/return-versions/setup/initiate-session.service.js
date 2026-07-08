@@ -32,7 +32,7 @@ async function go(licenceId, journey) {
 
   const data = _data(licence, journey)
 
-  return CreateSessionDal.go(data)
+  return CreateSessionDal(data)
 }
 
 function _data(licence, journey) {

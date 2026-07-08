@@ -23,7 +23,7 @@ import { sameDate } from '../../../../lib/dates.lib.js'
  * if there is no `endDate`
  */
 async function go(licenceId, newVersionStartDate, trx) {
-  const previousVersions = await FetchCurrentReturnVersionsDal.go(licenceId, trx)
+  const previousVersions = await FetchCurrentReturnVersionsDal(licenceId, trx)
   const previousVersionEndDate = _calculateEndDate(newVersionStartDate)
 
   let result
@@ -90,7 +90,7 @@ async function _endLatestVersion(previousVersions, newVersionStartDate, endDate,
     return null
   }
 
-  await UpdateReturnVersionEndDateDal.go(matchedReturnVersion.id, endDate, trx)
+  await UpdateReturnVersionEndDateDal(matchedReturnVersion.id, endDate, trx)
 
   return endDate
 }
@@ -166,7 +166,7 @@ async function _insertBetweenVersions(previousVersions, newVersionStartDate, end
 
   const newVersionEndDate = matchedReturnVersion.endDate
 
-  await UpdateReturnVersionEndDateDal.go(matchedReturnVersion.id, endDate, trx)
+  await UpdateReturnVersionEndDateDal(matchedReturnVersion.id, endDate, trx)
 
   return newVersionEndDate
 }
@@ -214,7 +214,7 @@ async function _replaceLatestVersion(previousVersions, newVersionStartDate, trx)
     return null
   }
 
-  await UpdateReturnVersionStatusDal.go(matchedReturnVersion.id, 'superseded', trx)
+  await UpdateReturnVersionStatusDal(matchedReturnVersion.id, 'superseded', trx)
 
   return true
 }
@@ -256,7 +256,7 @@ async function _replacePreviousVersion(previousVersions, newVersionStartDate, tr
 
   const newVersionEndDate = matchedReturnVersion.endDate
 
-  await UpdateReturnVersionStatusDal.go(matchedReturnVersion.id, 'superseded', trx)
+  await UpdateReturnVersionStatusDal(matchedReturnVersion.id, 'superseded', trx)
 
   return newVersionEndDate
 }

@@ -28,7 +28,7 @@ import SiteDescriptionValidator from '../../../validators/return-versions/setup/
  * the page data for the site description page including the validation error details
  */
 async function go(sessionId, requirementIndex, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 

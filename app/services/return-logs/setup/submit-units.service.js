@@ -26,7 +26,7 @@ import { returnUnits } from '../../../lib/static-lookups.lib.js'
  * @returns {Promise<object>} If no errors the page data for the units page else the validation error details
  */
 async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const error = _validate(payload)
 

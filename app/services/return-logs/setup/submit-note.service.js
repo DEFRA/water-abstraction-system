@@ -26,7 +26,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
  * validation error details
  */
 async function go(sessionId, payload, user, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
   const error = _validate(payload)
 
   if (!error) {

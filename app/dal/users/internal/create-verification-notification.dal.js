@@ -15,7 +15,7 @@ import { domains } from '../../../../config/server.config.js'
  *
  * @returns {Promise<object>} The created notification
  */
-async function go(email, resetGuid) {
+export default async function go(email, resetGuid) {
   const personalisation = {
     unique_create_password_link: `${domains.internal}/reset_password_change_password?resetGuid=${resetGuid}`
   }
@@ -28,11 +28,4 @@ async function go(email, resetGuid) {
   }
 
   return NotificationModel.query().insert(notificationData)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

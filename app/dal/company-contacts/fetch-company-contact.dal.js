@@ -12,7 +12,7 @@ import CompanyContactModel from '../../models/company-contact.model.js'
  *
  * @returns {Promise<module:CompanyContactModel>} the company contact and associated contact record
  */
-async function go(companyContactId) {
+export default async function go(companyContactId) {
   return CompanyContactModel.query()
     .select(['abstractionAlertLicences', 'abstractionAlerts', 'companyId', 'id'])
     .findById(companyContactId)
@@ -31,11 +31,4 @@ async function go(companyContactId) {
         'email'
       ])
     })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

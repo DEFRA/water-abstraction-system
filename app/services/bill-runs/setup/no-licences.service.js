@@ -17,7 +17,7 @@ import RegionModel from '../../../models/region.model.js'
  * @returns {Promise<string>} The display name of the region
  */
 async function go(sessionId) {
-  const { region: regionId } = await FetchSessionDal.go(sessionId)
+  const { region: regionId } = await FetchSessionDal(sessionId)
   const { displayName: regionName } = await RegionModel.query().findById(regionId).select('displayName')
 
   return {

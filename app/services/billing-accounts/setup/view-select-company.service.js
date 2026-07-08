@@ -16,7 +16,7 @@ import SelectCompanyPresenter from '../../../presenters/billing-accounts/setup/s
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
   const companies = await FetchCompaniesService.go(session.companySearch)
 
   const pageData = SelectCompanyPresenter.go(session, companies)

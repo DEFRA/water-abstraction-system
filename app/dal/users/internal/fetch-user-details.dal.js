@@ -12,7 +12,7 @@ import UserModel from '../../../models/user.model.js'
  *
  * @returns {Promise<module:UserModel>} the requested user
  */
-async function go(id) {
+export default async function go(id) {
   return UserModel.query()
     .select(['id', 'userId', 'username'])
     .modify('status')
@@ -37,11 +37,4 @@ async function go(id) {
         { column: 'description', order: 'asc' }
       ])
     })
-}
-
-export {
-  go
-}
-export default {
-  go
 }
