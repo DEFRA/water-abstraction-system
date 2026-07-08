@@ -164,7 +164,9 @@ describe('Health - Info service', () => {
     describe('is not running', () => {
       beforeEach(async () => {
         vi.spyOn(CreateRedisClientService, 'default').mockReturnValue({
-          ping: vi.fn().mockImplementation(() => { throw new Error('Redis check went boom' })),
+          ping: vi.fn().mockImplementation(() => {
+            throw new Error('Redis check went boom')
+          }),
           disconnect: vi.fn().mockResolvedValue()
         })
       })

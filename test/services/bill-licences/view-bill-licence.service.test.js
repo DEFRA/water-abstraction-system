@@ -15,11 +15,11 @@ describe('View Bill Licence service', () => {
 
   describe('when a bill licence with a matching ID exists', () => {
     beforeEach(() => {
+      vi.spyOn(FetchBillLicenceService, 'default').mockResolvedValue()
 
       vi.spyOn(ViewBillLicencePresenter, 'default').mockReturnValue({
         billId: '4fc6536e-1970-47f0-a4b3-d4c6360ad389'
-         vi.spyOn(FetchBillLicenceService, 'default').mockResolvedValue()
-   })
+      })
     })
 
     it('will fetch the data and format it using the bill licence services', async () => {

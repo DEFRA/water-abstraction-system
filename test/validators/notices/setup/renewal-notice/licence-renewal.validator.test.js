@@ -16,7 +16,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
   let licenceRef
 
   beforeEach(() => {
-    clock = vi.useFakeTimers({ now: new Date('2026-05-21' }))
+    clock = vi.useFakeTimers({ now: new Date('2026-05-21') })
 
     licenceRef = generateLicenceRef()
 

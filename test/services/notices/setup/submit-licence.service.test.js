@@ -27,7 +27,7 @@ describe('Notices - Setup - Submit Licence service', () => {
   beforeEach(() => {
     licenceRef = generateLicenceRef()
 
-    clock = vi.useFakeTimers({ now: new Date('2020-06-06' }))
+    clock = vi.useFakeTimers({ now: new Date('2020-06-06') })
 
     sessionData = {}
 

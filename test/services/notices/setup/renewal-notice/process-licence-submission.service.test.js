@@ -34,7 +34,7 @@ describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Sub
       revokedDate: null
     })
 
-    clock = vi.useFakeTimers({ now: new Date('2026-05-21' }))
+    clock = vi.useFakeTimers({ now: new Date('2026-05-21') })
 
     vi.spyOn(FetchRenewalLicenceDal, 'default').mockResolvedValue(licenceRenewal)
   })

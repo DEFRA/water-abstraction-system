@@ -31,7 +31,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
     // matching return cycles, but the next year there would be one, then two, and so on. By fixing the date we can use
     // test data that still covers all possible scenarios, but doesn't require us to make them overly complicated by
     // trying to make it dynamic.
-    clock = vi.useFakeTimers({ now: new Date('2026-01-09' }))
+    clock = vi.useFakeTimers({ now: new Date('2026-01-09') })
 
     returnCycleModelStub =     vi.fn()
         vi.spyOn(ReturnCycleModel, 'query').mockReturnValue({
