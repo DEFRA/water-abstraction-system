@@ -242,7 +242,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
 
           // For every return cycle fetched, we need to call the void service, even if no return logs were created. If
           // this is the case, it means any existing return logs for that cycle need to be voided.
-          expect(VoidLicenceReturnLogsService.callCount).toEqual(returnCycles.length)
+          expect(VoidLicenceReturnLogsService).toHaveBeenCalledTimes(returnCycles.length)
 
           // First cycle is summer ending 2026-10-31; should be ignored
           // Second cycle is winter ending 2026-03-31; should process our new requirement
@@ -282,7 +282,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
 
           // For every return cycle fetched, we need to call the void service, even if no return logs were created. If
           // this is the case, it means any existing return logs for that cycle need to be voided.
-          expect(VoidLicenceReturnLogsService.callCount).toEqual(returnCycles.length)
+          expect(VoidLicenceReturnLogsService).toHaveBeenCalledTimes(returnCycles.length)
 
           // First cycle is winter ending 2025-03-31; should process our new requirement
           // Second cycle is summer ending 2024-10-31; should be ignored

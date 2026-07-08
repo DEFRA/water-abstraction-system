@@ -47,7 +47,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
       const firstLicence = licences[0]
       const lastLicence = licences[licences.length - 1]
 
-      expect(CheckLicenceEndDatesService.callCount).toEqual(licences.length)
+      expect(CheckLicenceEndDatesService).toHaveBeenCalledTimes(licences.length)
       expect(CheckLicenceEndDatesService.getCall(0).firstArg).toEqual(firstLicence)
       expect(CheckLicenceEndDatesService.getCall(licences.length - 1).firstArg).toEqual(lastLicence)
     })

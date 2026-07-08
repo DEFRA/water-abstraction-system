@@ -39,7 +39,7 @@ describe('Bill Runs - Setup - Create service', () => {
     it('triggers both bill run engines', async () => {
       await CreateService(session, blockingResults, user)
 
-      expect(StartBillRunProcessService.calledWith(regionId, 'supplementary', 'carol.shaw@atari.com', 2025)).toBe(true)
+      expect(StartBillRunProcessService).toHaveBeenCalledWith(regionId, 'supplementary', 'carol.shaw@atari.com', 2025)
       expect(legacyCreateBillRunRequestStub).toHaveBeenCalledWith('supplementary', regionId, 2025, user, false)
     })
   })
