@@ -36,7 +36,7 @@ const LEGACY_SCHEMAS = ['crm', 'crm_v2', 'idm', 'permit', 'returns', 'water']
  * Once it has that info it creates a query that tells PostgreSQL to TRUNCATE all the tables and restart their
  * identity columns. For example, if a table relies on an incrementing ID the query will reset that to 1.
  */
-async function clean() {
+export async function clean() {
   const schemas = ['public', ...LEGACY_SCHEMAS]
 
   for (const schema of schemas) {
@@ -60,7 +60,7 @@ async function clean() {
  * of this is it will cause the next migration run to error. That was until we added this function to wipe the test DB
  * of all tables, views and schemas. If this gets run before the migrations it will be starting with a clean slate.
  */
-async function wipe() {
+export async function wipe() {
   // Drop the public views first
   const viewNames = await _viewNames('public')
 
@@ -130,17 +130,6 @@ async function _viewNames(schema) {
  * Close the connection to the database
  *
  */
-async function closeConnection() {
+export async function closeConnection() {
   await db.destroy()
-}
-
-export {
-  clean,
-  closeConnection,
-  wipe
-}
-export default {
-  clean,
-  closeConnection,
-  wipe
 }
