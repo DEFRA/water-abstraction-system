@@ -16,7 +16,7 @@ import DatabaseConfig from '../../../config/database.config.js'
  *
  * @returns {Promise<object>} the contacts for the company
  */
-async function go(companyId, roles, page = '1') {
+export default async function go(companyId, roles, page = '1') {
   const authorisedForBilling = roles.includes('billing')
 
   const [{ rows: contacts }, { rows: totalNumber }] = await Promise.all([
@@ -259,11 +259,4 @@ function _query(paginationAndOrderBy = '') {
     results r
   ${paginationAndOrderBy}
   ;`
-}
-
-export {
-  go
-}
-export default {
-  go
 }

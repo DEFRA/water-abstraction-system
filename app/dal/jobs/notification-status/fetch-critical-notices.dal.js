@@ -14,7 +14,7 @@ import { NoticeTypes } from '../../../lib/static-lookups.lib.js'
  * @returns {Promise<module:EventModel[]>} any matching notices which are critical, and contain errored notifications
  * to primary users that have not been sent an alternate notification
  */
-async function go(noticeIds) {
+export default async function go(noticeIds) {
   return EventModel.query()
     .select('id', 'issuer', 'metadata', 'subtype')
     .whereIn('subtype', [NoticeTypes.renewalInvitations.subType, NoticeTypes.invitations.subType])
@@ -32,11 +32,4 @@ async function go(noticeIds) {
         .where('messageType', 'email')
         .whereNull('alternateNoticeId')
     )
-}
-
-export {
-  go
-}
-export default {
-  go
 }

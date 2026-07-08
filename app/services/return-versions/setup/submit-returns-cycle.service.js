@@ -28,7 +28,7 @@ import ReturnsCycleValidator from '../../../validators/return-versions/setup/ret
  * the page data for the returns cycle page including the validation error details
  */
 async function go(sessionId, requirementIndex, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload, session)
 

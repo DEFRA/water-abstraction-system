@@ -18,7 +18,7 @@ import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
  * @returns {Promise<object>} The view data for the check page
  */
 async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
   const blockingResults = await DetermineBlockingBillRunService.go(session)
 
   const formattedData = _formattedData(session, blockingResults)

@@ -23,7 +23,7 @@ import { flashNotification } from '../../../../lib/general.lib.js'
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(auth, sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 
@@ -61,7 +61,7 @@ async function _save(session, payload) {
 }
 
 async function _showSuperPermission(auth) {
-  const currentUser = await FetchUserDetailsDal.go(auth.credentials.user.id)
+  const currentUser = await FetchUserDetailsDal(auth.credentials.user.id)
 
   return currentUser.$permissions().key === 'super'
 }

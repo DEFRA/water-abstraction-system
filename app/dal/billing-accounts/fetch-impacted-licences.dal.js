@@ -15,7 +15,7 @@ import ChargeVersionModel from '../../models/charge-version.model.js'
  *
  * @returns {Promise<string[]>} The `licenceRef` of the impacted licences.
  */
-async function go(billingAccountId) {
+export default async function go(billingAccountId) {
   const chargeVersions = await ChargeVersionModel.query()
     .select(['licenceRef'])
     .where('billingAccountId', billingAccountId)
@@ -28,11 +28,4 @@ async function go(billingAccountId) {
   })
 
   return impactedLicences
-}
-
-export {
-  go
-}
-export default {
-  go
 }

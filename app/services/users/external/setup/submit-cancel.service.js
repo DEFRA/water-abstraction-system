@@ -15,9 +15,9 @@ import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
  * @returns {Promise<object>} An object containing the URL to redirect the user to after cancelling
  */
 async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
-  await DeleteSessionDal.go(sessionId)
+  await DeleteSessionDal(sessionId)
 
   const { user } = session
 

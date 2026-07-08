@@ -27,7 +27,7 @@ import NoteValidator from '../../../validators/return-versions/setup/note.valida
  * validation error details
  */
 async function go(sessionId, payload, user, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
   const validationResult = _validate(payload)
 
   if (!validationResult) {

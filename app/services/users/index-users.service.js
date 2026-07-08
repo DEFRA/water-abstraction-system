@@ -23,7 +23,7 @@ import featureFlagsConfig from '../../../config/feature-flags.config.js'
 async function go(yar, auth, page) {
   const filters = _filters(yar)
 
-  const { results: users, total: totalNumber } = await FetchUsersDal.go(filters, page)
+  const { results: users, total: totalNumber } = await FetchUsersDal(filters, page)
 
   const pagination = PaginatorPresenter.go(totalNumber, page, `/system/users`, users.length, 'users')
 

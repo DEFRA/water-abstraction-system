@@ -13,16 +13,9 @@
  *
  * @returns {object} An object containing the SQL `query` string and its `bindings`
  */
-function go(licenceRef) {
+export default function go(licenceRef) {
   return {
     bindings: [licenceRef],
     query: `SELECT l.licence_ref FROM public.licences l WHERE l.licence_ref = ?`
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -19,11 +19,11 @@ import { flashNotification } from '../../../../lib/general.lib.js'
  * @returns {Promise<object>} An object containing the URL to redirect the user to after confirming
  */
 async function go(sessionId, yar, auth) {
-  const sessionData = await FetchSessionDal.go(sessionId)
+  const sessionData = await FetchSessionDal(sessionId)
 
-  await DeleteSessionDal.go(sessionId)
+  await DeleteSessionDal(sessionId)
 
-  await UnregisterLicencesDal.go(sessionData, auth.credentials.user)
+  await UnregisterLicencesDal(sessionData, auth.credentials.user)
 
   flashNotification(yar, 'Updated', 'Licences unregistered.')
 

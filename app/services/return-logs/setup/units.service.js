@@ -17,7 +17,7 @@ import UnitsPresenter from '../../../presenters/return-logs/setup/units.presente
  * @returns {Promise<object>} The view data for the units page
  */
 async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const pageData = UnitsPresenter.go(session)
 

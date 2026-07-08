@@ -18,7 +18,7 @@ import FrequencyCollectedPresenter from '../../../presenters/return-versions/set
  * @returns {Promise<object>} The view data for the frequency collected page
  */
 async function go(sessionId, requirementIndex) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const formattedData = FrequencyCollectedPresenter.go(session, requirementIndex)
 

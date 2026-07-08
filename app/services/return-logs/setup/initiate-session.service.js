@@ -32,7 +32,7 @@ async function go(returnLogId) {
 
   const data = { ...referenceData, ...submissionData }
 
-  const { id: sessionId } = await CreateSessionDal.go(data)
+  const { id: sessionId } = await CreateSessionDal(data)
 
   const redirect = data.submissionType === 'edit' ? 'check' : 'received'
 

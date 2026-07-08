@@ -28,7 +28,7 @@ import { flashNotification } from '../../../lib/general.lib.js'
  * the page data for the frequency collected page including the validation error details
  */
 async function go(sessionId, requirementIndex, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 

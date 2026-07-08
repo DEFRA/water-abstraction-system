@@ -20,9 +20,9 @@ import { flashNotification } from '../../../lib/general.lib.js'
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(sessionId, yar, auth) {
-  const sessionData = await FetchSessionDal.go(sessionId)
+  const sessionData = await FetchSessionDal(sessionId)
 
-  await DeleteSessionDal.go(sessionId)
+  await DeleteSessionDal(sessionId)
 
   if (sessionData.companyContact) {
     await _updateCompanyContact(sessionData, auth, yar)
@@ -60,7 +60,7 @@ async function _createCompanyContact(session, auth, yar) {
     name: session.name
   }
 
-  await CreateCompanyContactDal.go(session.company.id, companyContact)
+  await CreateCompanyContactDal(session.company.id, companyContact)
 
   flashNotification(yar, 'Contact added', `${session.name} was added to this company`)
 }
@@ -76,7 +76,7 @@ async function _updateCompanyContact(session, auth, yar) {
     updatedBy: auth.credentials.user.id
   }
 
-  await UpdateCompanyContactDal.go(companyContact)
+  await UpdateCompanyContactDal(companyContact)
 
   flashNotification(yar, 'Updated', 'Contact details updated.')
 }

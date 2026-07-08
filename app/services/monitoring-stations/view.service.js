@@ -18,7 +18,7 @@ import { readFlashNotification } from '../../lib/general.lib.js'
  */
 async function go(auth, monitoringStationId, yar) {
   const { licenceMonitoringStations, monitoringStation } =
-    await FetchMonitoringStationDetailsDal.go(monitoringStationId)
+    await FetchMonitoringStationDetailsDal(monitoringStationId)
 
   const pageData = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 

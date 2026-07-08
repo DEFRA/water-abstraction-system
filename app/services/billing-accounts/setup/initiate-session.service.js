@@ -28,7 +28,7 @@ async function go(billingAccountId) {
     billingAccount
   }
 
-  return CreateSessionDal.go(data)
+  return CreateSessionDal(data)
 }
 
 export {

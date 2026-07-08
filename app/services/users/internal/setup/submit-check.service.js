@@ -22,9 +22,9 @@ import { flashNotification } from '../../../../lib/general.lib.js'
  * @returns {Promise<object>} An object containing the URL to redirect the user to after confirming
  */
 async function go(auth, sessionId, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
-  await DeleteSessionDal.go(sessionId)
+  await DeleteSessionDal(sessionId)
 
   if (session.user) {
     await _updateUser(auth, session, yar)
@@ -40,12 +40,12 @@ async function go(auth, sessionId, yar) {
 async function _updateUser(auth, session, yar) {
   const { email } = session
 
-  const resetGuid = await UpdateUserDal.go(auth, session)
+  const resetGuid = await UpdateUserDal(auth, session)
 
   // A resetGuid will only exist if the users email has been updated. This can only happen if the user has not yet
   // verified their email address
   if (resetGuid) {
-    const notification = await CreateVerificationNotificationDal.go(email, resetGuid)
+    const notification = await CreateVerificationNotificationDal(email, resetGuid)
 
     flashNotification(yar, 'User updated', `We have emailed ${email} instructions to complete their account set up.`)
 
@@ -59,9 +59,9 @@ async function _updateUser(auth, session, yar) {
 async function _createUser(auth, session, yar) {
   const { email } = session
 
-  const resetGuid = await CreateUserDal.go(auth, session)
+  const resetGuid = await CreateUserDal(auth, session)
 
-  const notification = await CreateVerificationNotificationDal.go(email, resetGuid)
+  const notification = await CreateVerificationNotificationDal(email, resetGuid)
 
   flashNotification(yar, 'User added', `We have emailed ${email} instructions to complete their account set up.`)
 

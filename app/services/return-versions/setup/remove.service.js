@@ -20,7 +20,7 @@ import RemovePresenter from '../../../presenters/return-versions/setup/remove.pr
  * @returns {Promise<object>} The view data for the remove requirements page
  */
 async function go(sessionId, requirementIndex) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
   const formattedData = RemovePresenter.go(session, requirementIndex)
 
   return {

@@ -27,7 +27,7 @@ import GenerateFromExistingRequirementsService from './generate-from-existing-re
  * validation error details
  */
 async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload, session)
 

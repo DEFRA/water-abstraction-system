@@ -21,11 +21,11 @@ import SendNoticeService from './send/send-notice.service.js'
  * @returns {Promise<string>} - the created notice Id
  */
 async function go(sessionId, auth) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const recipients = await FetchRecipientsService.go(session)
 
-  await DeleteSessionDal.go(sessionId)
+  await DeleteSessionDal(sessionId)
 
   const notice = await _notice(session, recipients, auth)
 

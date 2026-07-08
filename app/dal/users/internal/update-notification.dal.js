@@ -13,17 +13,10 @@ import { timestampForPostgres } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<object>} The updated notification record
  */
-async function go(notification, sendResult) {
+export default async function go(notification, sendResult) {
   const { notifyError, notifyId, notifyStatus, plaintext, status } = sendResult
 
   const updatedAt = timestampForPostgres()
 
   return notification.$query().patch({ notifyError, notifyId, notifyStatus, plaintext, status, updatedAt })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

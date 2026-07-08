@@ -12,7 +12,7 @@ import NotificationModel from '../../models/notification.model.js'
  *
  * @returns {Promise<module:NotificationModel>} the matching `NotificationModel` instance
  */
-async function go(notificationId) {
+export default async function go(notificationId) {
   return NotificationModel.query()
     .findById(notificationId)
     .select([
@@ -27,11 +27,4 @@ async function go(notificationId) {
       'recipient',
       'status'
     ])
-}
-
-export {
-  go
-}
-export default {
-  go
 }

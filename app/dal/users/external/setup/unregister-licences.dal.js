@@ -38,7 +38,7 @@ import { timestampForPostgres } from '../../../../lib/general.lib.js'
  * @param {module:SessionModel} session - The session instance
  * @param {module:UserModel} user - The user that is deregistering the licences
  */
-async function go(session, user) {
+export default async function go(session, user) {
   const { id: userId } = user
 
   const timestamp = timestampForPostgres()
@@ -78,11 +78,4 @@ async function _unregisterLicence(licenceDocumentHeaderId, timestamp, trx) {
   await LicenceDocumentHeaderModel.query(trx)
     .findById(licenceDocumentHeaderId)
     .patch({ companyEntityId: null, updatedAt: timestamp })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

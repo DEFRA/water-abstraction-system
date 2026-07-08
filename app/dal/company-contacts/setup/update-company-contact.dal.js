@@ -13,7 +13,7 @@ import { today } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<string>} the updated company contact
  */
-async function go(companyContact) {
+export default async function go(companyContact) {
   const result = await _update(companyContact)
 
   return result.id
@@ -45,11 +45,4 @@ async function _update(companyContact) {
     },
     { noDelete: true }
   )
-}
-
-export {
-  go
-}
-export default {
-  go
 }

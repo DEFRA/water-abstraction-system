@@ -17,7 +17,7 @@ import ReadingsPresenter from '../../../presenters/return-logs/setup/readings.pr
  * @returns {Promise<object>} The view data for the readings page
  */
 async function go(sessionId, yearMonth) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const formattedData = ReadingsPresenter.go(session, yearMonth)
 

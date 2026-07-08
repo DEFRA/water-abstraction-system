@@ -21,14 +21,14 @@ import { userPermissions } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<string>} The resetGuid for the updated user
  */
-async function go(auth, session) {
+export default async function go(auth, session) {
   const { access, email, permission, user } = session
 
   const { currentPermission, id, userId, username: currentUsername } = user
 
   const newGroupsRoles = await _newGroupsRoles(currentPermission, permission)
 
-  const { username: issuer } = await FetchUserDal.go(auth.credentials.user.id)
+  const { username: issuer } = await FetchUserDal(auth.credentials.user.id)
 
   return UserModel.transaction(async (trx) => {
     const resetGuid = await _updateUser(access, currentUsername, email, id, trx)
@@ -121,11 +121,4 @@ async function _updateUser(access, currentUsername, email, id, trx) {
   await UserModel.query(trx).findById(id).patch(userData)
 
   return userData.resetGuid
-}
-
-export {
-  go
-}
-export default {
-  go
 }

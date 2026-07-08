@@ -39,9 +39,9 @@ import { engineTriggers } from '../../../lib/static-lookups.lib.js'
  * '/exists' page.
  */
 async function go(sessionId, auth) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
-  await DeleteSessionDal.go(session.id)
+  await DeleteSessionDal(session.id)
 
   const blockingResults = await DetermineBlockingBillRunService.go(session)
 

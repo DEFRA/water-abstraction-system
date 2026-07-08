@@ -21,7 +21,7 @@ import { NoticeJourney, NoticeType } from '../../../lib/static-lookups.lib.js'
  * @returns {Promise<object>} The data for the download link (csv string, filename and type)
  */
 async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const { notificationType, referenceCode } = session
 

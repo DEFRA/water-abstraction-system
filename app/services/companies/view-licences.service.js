@@ -20,9 +20,9 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(companyId, auth, page) {
-  const company = await FetchCompanyDal.go(companyId)
+  const company = await FetchCompanyDal(companyId)
 
-  const { licences, totalNumber } = await FetchLicencesDal.go(companyId, page)
+  const { licences, totalNumber } = await FetchLicencesDal(companyId, page)
 
   const pageData = LicencesPresenter.go(company, licences)
 

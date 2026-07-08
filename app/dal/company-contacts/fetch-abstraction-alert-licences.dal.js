@@ -12,7 +12,7 @@ import LicenceModel from '../../models/licence.model.js'
  *
  * @returns {Promise<object[]>} An array of licences
  */
-async function go(abstractionAlertLicences) {
+export default async function go(abstractionAlertLicences) {
   if (abstractionAlertLicences === null) {
     return []
   }
@@ -21,11 +21,4 @@ async function go(abstractionAlertLicences) {
     .select(['id', 'licenceRef', 'revokedDate', 'lapsedDate', 'expiredDate'])
     .whereIn('id', abstractionAlertLicences)
     .orderBy('licenceRef')
-}
-
-export {
-  go
-}
-export default {
-  go
 }

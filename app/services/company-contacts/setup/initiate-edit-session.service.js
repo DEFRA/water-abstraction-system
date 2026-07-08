@@ -16,13 +16,13 @@ import { formatEmail } from '../../../presenters/base.presenter.js'
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
 async function go(companyContactId) {
-  const companyContact = await FetchCompanyContactDal.go(companyContactId)
+  const companyContact = await FetchCompanyContactDal(companyContactId)
 
-  const licences = await FetchCompanyLicencesDal.go(companyContact.company.id)
+  const licences = await FetchCompanyLicencesDal(companyContact.company.id)
 
   const data = _formatDataForJourney(companyContact, licences)
 
-  return CreateSessionDal.go(data)
+  return CreateSessionDal(data)
 }
 
 /**

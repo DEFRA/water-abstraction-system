@@ -38,7 +38,7 @@ import StartDateValidator from '../../../validators/return-versions/setup/start-
  * next page in the journey else the page data for the start date page including the validation error details
  */
 async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const { endDate, startDate } = session.licence
   const validationResult = _validate(payload, startDate, endDate)

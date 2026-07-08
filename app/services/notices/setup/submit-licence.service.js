@@ -25,7 +25,7 @@ import { NoticeJourney, NoticeType } from '../../../lib/static-lookups.lib.js'
  * with the presenter data and an `error` property
  */
 async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const { additionalSessionData, validationResult } = await _processedLicenceSubmission(session.noticeType, payload)
 

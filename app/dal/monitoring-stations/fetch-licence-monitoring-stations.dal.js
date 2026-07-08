@@ -16,7 +16,7 @@ import MonitoringStationModel from '../../models/monitoring-station.model.js'
  * @returns {Promise<object>} the matching instance of the `MonitoringStationModel`, `LicenceModel` and associated
  * `LicenceMonitoringStationModel` instances
  */
-async function go(licenceId, monitoringStationId) {
+export default async function go(licenceId, monitoringStationId) {
   const licence = await _fetchLicence(licenceId)
   const monitoringStation = await _fetchMonitoringStation(monitoringStationId)
   const licenceMonitoringStations = await _fetchLicenceMonitoringStations(licenceId, monitoringStationId)
@@ -80,11 +80,4 @@ async function _fetchLicenceMonitoringStations(licenceId, monitoringStationId) {
 
 async function _fetchMonitoringStation(monitoringStationId) {
   return MonitoringStationModel.query().findById(monitoringStationId).select(['id', 'label', 'riverName'])
-}
-
-export {
-  go
-}
-export default {
-  go
 }

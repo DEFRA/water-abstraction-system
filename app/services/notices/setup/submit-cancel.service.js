@@ -17,9 +17,9 @@ import { NoticeJourney } from '../../../lib/static-lookups.lib.js'
  * @returns {Promise<string>} - returns the redirect url, which can contain some session data that needs to be deleted
  */
 async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
-  await DeleteSessionDal.go(sessionId)
+  await DeleteSessionDal(sessionId)
 
   if (session.journey === NoticeJourney.ALERTS) {
     return `/system/monitoring-stations/${session.monitoringStationId}`

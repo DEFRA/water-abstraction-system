@@ -28,7 +28,7 @@ import { returnRequirementFrequencies } from '../../../lib/static-lookups.lib.js
  * including the validation error details
  */
 async function go(sessionId, payload, yar) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const measurementType = session.reported === 'abstractionVolumes' ? 'volumes' : 'meter readings'
   const frequency = returnRequirementFrequencies[session.returnsFrequency]

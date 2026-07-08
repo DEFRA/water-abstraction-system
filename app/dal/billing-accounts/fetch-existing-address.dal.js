@@ -15,15 +15,8 @@ import AddressModel from '../../models/address.model.js'
  *
  * @returns {Promise<object>} An address object.
  */
-async function go(addressId) {
+export default async function go(addressId) {
   return AddressModel.query()
     .select(['addresses.id', 'address1', 'address2', 'address3', 'address4', 'address5', 'address6', 'postcode'])
     .findById(addressId)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

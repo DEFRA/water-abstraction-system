@@ -26,7 +26,7 @@ import MethodValidator from '../../../../validators/return-versions/setup/method
  * setup page including the validation error details
  */
 async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 

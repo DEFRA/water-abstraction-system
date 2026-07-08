@@ -17,7 +17,7 @@ import NoReturnsRequiredPresenter from '../../../presenters/return-versions/setu
  * @returns {Promise<object>} The view data for the no returns required page
  */
 async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const formattedData = NoReturnsRequiredPresenter.go(session)
 

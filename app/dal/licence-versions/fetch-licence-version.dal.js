@@ -14,7 +14,7 @@ import LicenceVersionModel from '../../models/licence-version.model.js'
  *
  * @returns {Promise<object>} an object with the licence version and the licence versions for pagination
  */
-async function go(licenceVersionId) {
+export default async function go(licenceVersionId) {
   return {
     licenceVersion: await _fetch(licenceVersionId),
     licenceVersionsForPagination: await _fetchPagination(licenceVersionId)
@@ -118,11 +118,4 @@ async function _fetch(licenceVersionId) {
           purposeBuilder.select(['id', 'description'])
         })
     })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -19,7 +19,7 @@ import FetchSessionDal from '../../../dal/fetch-session.dal.js'
  * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go(sessionId, payload) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
 

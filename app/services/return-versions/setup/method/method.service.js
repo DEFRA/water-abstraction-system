@@ -17,7 +17,7 @@ import MethodPresenter from '../../../../presenters/return-versions/setup/method
  * @returns {Promise<object>} page data needed by the view template
  */
 async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
 
   const formattedData = MethodPresenter.go(session)
 

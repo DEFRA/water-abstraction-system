@@ -20,7 +20,7 @@ import { markCheckPageVisited } from '../../../lib/check-page.lib.js'
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(sessionId) {
-  const session = await FetchSessionDal.go(sessionId)
+  const session = await FetchSessionDal(sessionId)
   const companyContacts = await _fetchCompanyContacts(session)
   const companysHouseResult = await FetchCompanyService.go(session.companiesHouseNumber)
   const existingAddress = await _fetchExistingAddress(session)
