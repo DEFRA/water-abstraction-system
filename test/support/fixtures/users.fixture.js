@@ -16,7 +16,7 @@ import { compareStrings, generateUUID } from '../../../app/lib/general.lib.js'
  *
  * @returns {module:UserModel} the populated `UserModel` instance
  */
-function adminInternal() {
+export function adminInternal() {
   return user(0)
 }
 
@@ -25,7 +25,7 @@ function adminInternal() {
  *
  * @returns {module:UserModel} the populated `UserModel` instance
  */
-function basicAccess() {
+export function basicAccess() {
   return user(10)
 }
 
@@ -34,7 +34,7 @@ function basicAccess() {
  *
  * @returns {module:UserModel} the populated `UserModel` instance
  */
-function billingAndData() {
+export function billingAndData() {
   return user(4)
 }
 
@@ -43,7 +43,7 @@ function billingAndData() {
  *
  * @returns {module:UserModel} the populated `UserModel` instance
  */
-function digitiseApprover() {
+export function digitiseApprover() {
   return user(12)
 }
 
@@ -52,7 +52,7 @@ function digitiseApprover() {
  *
  * @returns {module:UserModel} the populated `UserModel` instance
  */
-function digitiseEditor() {
+export function digitiseEditor() {
   return user(11)
 }
 
@@ -61,7 +61,7 @@ function digitiseEditor() {
  *
  * @returns {module:UserModel} the populated `UserModel` instance
  */
-function environmentOfficer() {
+export function environmentOfficer() {
   return user(2)
 }
 
@@ -73,7 +73,7 @@ function environmentOfficer() {
  *
  * @returns {module:UserModel} the populated `UserModel` instance
  */
-function external(role = null) {
+export function external(role = null) {
   const userData = user(7)
 
   if (role) {
@@ -91,7 +91,7 @@ function external(role = null) {
  *
  * @returns {module:UserModel} the populated `UserModel` instance
  */
-function jonLee(role = null) {
+export function jonLee(role = null) {
   const userData = user(8)
 
   if (role) {
@@ -106,7 +106,7 @@ function jonLee(role = null) {
  *
  * @returns {module:UserModel} the populated `UserModel` instance
  */
-function nationalPermittingService() {
+export function nationalPermittingService() {
   return user(6)
 }
 
@@ -115,7 +115,7 @@ function nationalPermittingService() {
  *
  * @returns {module:UserModel} the populated `UserModel` instance
  */
-function permittingSupportCentre() {
+export function permittingSupportCentre() {
   return user(5)
 }
 
@@ -127,7 +127,7 @@ function permittingSupportCentre() {
  *
  * @returns {module:UserModel} the populated `UserModel` instance
  */
-function rachelStevens(role = null) {
+export function rachelStevens(role = null) {
   const userData = user(9)
 
   if (role) {
@@ -142,7 +142,7 @@ function rachelStevens(role = null) {
  *
  * @returns {module:UserModel} the populated `UserModel` instance
  */
-function superUser() {
+export function superUser() {
   return user(1)
 }
 
@@ -154,7 +154,7 @@ function superUser() {
  *
  * @returns {module:UserModel} the populated `UserModel` instance
  */
-function tinaBarrett(role = null) {
+export function tinaBarrett(role = null) {
   const userData = user(13)
 
   if (role) {
@@ -175,7 +175,7 @@ function tinaBarrett(role = null) {
  *
  * @param {object} user - The user fixture object to transform to `FetchUserInternalService` result format
  */
-function transformToFetchUserInternalResult(user) {
+export function transformToFetchUserInternalResult(user) {
   const groupRoles = GroupRoleHelper.data.filter((groupRole) => {
     return groupRole.groupId === user.groups[0].id
   })
@@ -211,7 +211,7 @@ function transformToFetchUserInternalResult(user) {
  *
  * @returns {module:UserModel} The transformed user fixture object
  */
-function transformToFetchUsersResult(user) {
+export function transformToFetchUsersResult(user) {
   const {
     application,
     enabled,
@@ -258,7 +258,7 @@ function transformToFetchUsersResult(user) {
  *
  * @returns {module:UserModel} the populated `UserModel` instance
  */
-function user(seedIndex) {
+export function user(seedIndex) {
   const user = UserHelper.select(seedIndex)
 
   user.groups = _groups(user.userId)
@@ -272,7 +272,7 @@ function user(seedIndex) {
  *
  * @returns {module:UserModel} the populated `UserModel` instance
  */
-function wasteIndustryRegulatoryServices() {
+export function wasteIndustryRegulatoryServices() {
   return user(3)
 }
 
@@ -368,43 +368,4 @@ function _transformLicenceEntity(licenceEntity) {
       })
     })
   })
-}
-
-export {
-  adminInternal,
-  basicAccess,
-  billingAndData,
-  digitiseApprover,
-  digitiseEditor,
-  environmentOfficer,
-  external,
-  jonLee,
-  nationalPermittingService,
-  permittingSupportCentre,
-  rachelStevens,
-  superUser,
-  tinaBarrett,
-  transformToFetchUserInternalResult,
-  transformToFetchUsersResult,
-  user,
-  wasteIndustryRegulatoryServices
-}
-export default {
-  adminInternal,
-  basicAccess,
-  billingAndData,
-  digitiseApprover,
-  digitiseEditor,
-  environmentOfficer,
-  external,
-  jonLee,
-  nationalPermittingService,
-  permittingSupportCentre,
-  rachelStevens,
-  superUser,
-  tinaBarrett,
-  transformToFetchUserInternalResult,
-  transformToFetchUsersResult,
-  user,
-  wasteIndustryRegulatoryServices
 }

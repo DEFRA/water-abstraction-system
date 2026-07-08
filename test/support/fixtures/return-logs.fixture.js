@@ -15,7 +15,7 @@ import { relativeToToday } from '../general.js'
  *
  * @param {module:ReturnLogModel} returnLog - The return log instance to apply the fields to
  */
-function applyFetchReturnLogFields(returnLog) {
+export function applyFetchReturnLogFields(returnLog) {
   returnLog.siteDescription = returnLog.metadata.description
   returnLog.periodStartDay = returnLog.metadata.nald.periodStartDay
   returnLog.periodStartMonth = returnLog.metadata.nald.periodStartMonth
@@ -33,7 +33,7 @@ function applyFetchReturnLogFields(returnLog) {
  *
  * @returns {object} Returns an enhanced version of the module:ReturnLogModel in line with the fetch service
  */
-function dueReturn() {
+export function dueReturn() {
   const dueReturn = returnLog()
 
   // NOTE: Due date is calculated 28 days after todays date. But when dealing with dates in code the addition is
@@ -62,7 +62,7 @@ function dueReturn() {
  * @returns {module:ReturnLogModel} The generated return log instance with attributes such as start date, end date,
  * licence reference, return reference, and status
  */
-function returnLog(returnsFrequency = 'month', addLicence = false) {
+export function returnLog(returnsFrequency = 'month', addLicence = false) {
   const returnLogData = _returnLogData(returnsFrequency)
   const returnLog = ReturnLogModel.fromJson(returnLogData)
 
@@ -85,7 +85,7 @@ function returnLog(returnsFrequency = 'month', addLicence = false) {
  *
  * @returns {module:ReturnSubmissionModel} The generated return submission
  */
-function returnSubmission(returnLog, type = 'estimated', userUnit = 'm³') {
+export function returnSubmission(returnLog, type = 'estimated', userUnit = 'm³') {
   returnLog.status = 'completed'
   returnLog.receivedDate = new Date('2023-04-12')
 
@@ -217,17 +217,4 @@ function _returnSubmissionLines(returnLog, returnSubmissionId, type, userUnit) {
       userUnit
     })
   })
-}
-
-export {
-  applyFetchReturnLogFields,
-  dueReturn,
-  returnLog,
-  returnSubmission
-}
-export default {
-  applyFetchReturnLogFields,
-  dueReturn,
-  returnLog,
-  returnSubmission
 }

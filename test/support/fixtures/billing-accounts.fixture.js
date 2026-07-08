@@ -8,7 +8,7 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
  *
  * @returns {object} an object representing the billing account, bills and its related licence
  */
-function billingAccount() {
+export function billingAccount() {
   const contact = ContactModel.fromJson({
     id: generateUUID(),
     contactType: 'person',
@@ -66,11 +66,4 @@ function billingAccount() {
     ],
     totalNumber: 1
   }
-}
-
-export {
-  billingAccount
-}
-export default {
-  billingAccount
 }

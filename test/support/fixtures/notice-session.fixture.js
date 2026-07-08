@@ -14,7 +14,7 @@ import { NoticeJourney, NoticeType, NoticeTypes } from '../../../app/lib/static-
  *
  * @returns {object} The notice setup session fixture
  */
-function abstractionAlertStop(licenceRef = null) {
+export function abstractionAlertStop(licenceRef = null) {
   if (!licenceRef) {
     licenceRef = generateLicenceRef()
   }
@@ -93,7 +93,7 @@ function abstractionAlertStop(licenceRef = null) {
  *
  * @returns {object} The notice setup session fixture
  */
-function adHocRenewalInvitation(licenceRef = null) {
+export function adHocRenewalInvitation(licenceRef = null) {
   if (!licenceRef) {
     licenceRef = generateLicenceRef()
   }
@@ -126,7 +126,7 @@ function adHocRenewalInvitation(licenceRef = null) {
  *
  * @returns {object} The notice setup session fixture
  */
-function adHocInvitation(licenceRef = null) {
+export function adHocInvitation(licenceRef = null) {
   if (!licenceRef) {
     licenceRef = generateLicenceRef()
   }
@@ -169,7 +169,7 @@ function adHocInvitation(licenceRef = null) {
  *
  * @returns {object} The notice setup session fixture
  */
-function adHocReminder(licenceRef = null) {
+export function adHocReminder(licenceRef = null) {
   if (!licenceRef) {
     licenceRef = generateLicenceRef()
   }
@@ -214,7 +214,7 @@ function adHocReminder(licenceRef = null) {
  *
  * @returns {object} The notice setup session fixture
  */
-function paperReturn(licenceRef = null, selectedReturnLog = null) {
+export function paperReturn(licenceRef = null, selectedReturnLog = null) {
   if (!licenceRef) {
     licenceRef = generateLicenceRef()
   }
@@ -259,7 +259,7 @@ function paperReturn(licenceRef = null, selectedReturnLog = null) {
  *
  * @returns {object} The notice setup session fixture
  */
-function standardInvitation(licenceRef = null) {
+export function standardInvitation(licenceRef = null) {
   if (!licenceRef) {
     licenceRef = generateLicenceRef()
   }
@@ -310,7 +310,7 @@ function standardInvitation(licenceRef = null) {
  *
  * @returns {object} The notice setup session fixture
  */
-function standardReminder(licenceRef = null) {
+export function standardReminder(licenceRef = null) {
   if (!licenceRef) {
     licenceRef = generateLicenceRef()
   }
@@ -391,23 +391,4 @@ function _transformReturnLog(returnLog) {
     startDate: returnLog.startDate.toISOString(),
     twoPartTariff: isTwoPartTariff
   }
-}
-
-export {
-  abstractionAlertStop,
-  adHocInvitation,
-  adHocReminder,
-  adHocRenewalInvitation,
-  paperReturn,
-  standardInvitation,
-  standardReminder
-}
-export default {
-  abstractionAlertStop,
-  adHocInvitation,
-  adHocReminder,
-  adHocRenewalInvitation,
-  paperReturn,
-  standardInvitation,
-  standardReminder
 }
