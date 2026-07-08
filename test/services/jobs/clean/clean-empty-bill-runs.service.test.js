@@ -81,12 +81,12 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
         const result = await CleanEmptyBillRunsService()
 
         expect(CancelBillRunService).toHaveBeenCalledTimes(2)
-        expect(CancelBillRunService.firstCall).toHaveBeenCalledWith(emptyBillRuns[0].id)
-        expect(CancelBillRunService.secondCall).toHaveBeenCalledWith(emptyBillRuns[1].id)
+        expect(CancelBillRunService).toHaveBeenNthCalledWith(1, emptyBillRuns[0].id)
+        expect(CancelBillRunService).toHaveBeenNthCalledWith(2, emptyBillRuns[1].id)
 
         expect(UnassignBillRunToLicencesService).toHaveBeenCalledTimes(2)
-        expect(UnassignBillRunToLicencesService.firstCall).toHaveBeenCalledWith(emptyBillRuns[0].id)
-        expect(UnassignBillRunToLicencesService.secondCall).toHaveBeenCalledWith(emptyBillRuns[1].id)
+        expect(UnassignBillRunToLicencesService).toHaveBeenNthCalledWith(1, emptyBillRuns[0].id)
+        expect(UnassignBillRunToLicencesService).toHaveBeenNthCalledWith(2, emptyBillRuns[1].id)
 
         expect(DeleteBillRunService).toHaveBeenCalledTimes(2)
 
@@ -113,11 +113,11 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
         const result = await CleanEmptyBillRunsService()
 
         expect(CancelBillRunService).toHaveBeenCalledTimes(2)
-        expect(CancelBillRunService.firstCall).toHaveBeenCalledWith(emptyBillRuns[0].id)
-        expect(CancelBillRunService.secondCall).toHaveBeenCalledWith(emptyBillRuns[1].id)
+        expect(CancelBillRunService).toHaveBeenNthCalledWith(1, emptyBillRuns[0].id)
+        expect(CancelBillRunService).toHaveBeenNthCalledWith(2, emptyBillRuns[1].id)
 
         expect(UnassignBillRunToLicencesService.default).toHaveBeenCalledOnce()
-        expect(UnassignBillRunToLicencesService.firstCall).toHaveBeenCalledWith(emptyBillRuns[0].id)
+        expect(UnassignBillRunToLicencesService).toHaveBeenNthCalledWith(1, emptyBillRuns[0].id)
 
         expect(DeleteBillRunService.default).toHaveBeenCalledOnce()
 

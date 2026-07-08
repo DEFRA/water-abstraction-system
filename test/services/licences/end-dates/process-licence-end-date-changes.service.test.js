@@ -78,7 +78,7 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
       it('logs the time taken in milliseconds and seconds', async () => {
         await ProcessLicenceEndDateChangesService()
 
-        const logDataArg = notifierStub.omg.secondCall.mock.calls[1]
+        const logDataArg = notifierStub.omg.mock.calls[1][1]
 
         expect(notifierStub.omg).toHaveBeenCalledWith('Process licence end date changes complete', expect.any(Object))
         expect(logDataArg.timeTakenMs).toBeDefined()

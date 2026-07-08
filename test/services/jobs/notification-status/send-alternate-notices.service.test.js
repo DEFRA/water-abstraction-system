@@ -39,7 +39,7 @@ describe('Job - Notifications - Send Alternate Notices service', () => {
 
       expect(SendAlternateNoticeService.default).toHaveBeenCalled()
       expect(SendAlternateNoticeService.default.mock.calls[0][0]).toEqual(criticalNotices[0])
-      expect(SendAlternateNoticeService.secondCall.mock.calls[0]).toEqual(criticalNotices[1])
+      expect(SendAlternateNoticeService.mock.calls[1][0]).toEqual(criticalNotices[1])
     })
   })
 

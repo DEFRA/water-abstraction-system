@@ -222,7 +222,7 @@ describe('BaseNotifierLib class', () => {
           expect(firstCallArgs[0].err.message).toEqual(message)
           expect(firstCallArgs[1]).toEqual(message)
 
-          const secondCallArgs = pinoFake.error.secondCall.args
+          const secondCallArgs = pinoFake.error.mock.calls[1]
 
           expect(secondCallArgs[0]).toBeInstanceOf(Error)
           expect(secondCallArgs[0].message).toEqual(airbrakeFailure.message)
@@ -254,7 +254,7 @@ describe('BaseNotifierLib class', () => {
           expect(firstCallArgs[0].err.message).toEqual(message)
           expect(firstCallArgs[1]).toEqual(message)
 
-          const secondCallArgs = pinoFake.error.secondCall.args
+          const secondCallArgs = pinoFake.error.mock.calls[1]
 
           expect(secondCallArgs[0]).toBeInstanceOf(Error)
           expect(secondCallArgs[0].message).toEqual(airbrakeError.message)
@@ -312,7 +312,7 @@ describe('BaseNotifierLib class', () => {
           testNotifier.redAlert(message, error)
 
           const firstArgs = createEmailRequestFake.send.mock.calls[0]
-          const secondArgs = createEmailRequestFake.send.secondCall.args
+          const secondArgs = createEmailRequestFake.send.mock.calls[1]
 
           expect(firstArgs[0]).toEqual(NOTIFY_TEMPLATES.system.statusAlert)
           expect(firstArgs[1]).toEqual('admin-internal@wrls.gov.uk')
