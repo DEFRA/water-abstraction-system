@@ -1,16 +1,11 @@
-'use strict'
-
-// Test framework dependencies
-const Sinon = require('sinon')
-
 // Test helpers
-const SessionModelStub = require('__STUBS_SESSION_PATH__')
+import SessionModelStub from '__STUBS_SESSION_PATH__'
 
 // Things we need to stub
-const FetchSessionDal = require('__FETCH_SESSION_DAL_TEST_PATH__')
+import FetchSessionDal from '__FETCH_SESSION_DAL_TEST_PATH__'
 
 // Thing under test
-const __MODULE_NAME__ = require('__REQUIRE_PATH__')
+import __MODULE_NAME__ from '__REQUIRE_PATH__'
 
 describe('__DESCRIBE_LABEL__', () => {
   let payload
@@ -21,25 +16,26 @@ describe('__DESCRIBE_LABEL__', () => {
     payload = { placeholder: 'change me' }
     sessionData = {}
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub.build(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('__FETCH_SESSION_DAL_TEST_PATH__')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('saves the submitted value', async () => {
-      await __MODULE_NAME__.go(session.id, payload)
+      await __MODULE_NAME__(session.id, payload)
 
       expect(session).toEqual(session)
       expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
-      const result = await __MODULE_NAME__.go(session.id, payload)
+      const result = await __MODULE_NAME__(session.id, payload)
 
       expect(result).toEqual({})
     })
@@ -51,7 +47,7 @@ describe('__DESCRIBE_LABEL__', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await __MODULE_NAME__.go(session.id, payload)
+      const result = await __MODULE_NAME__(session.id, payload)
 
       expect(result).toEqual({
         backLink: {
