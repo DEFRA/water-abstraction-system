@@ -69,7 +69,7 @@ function _submissionData(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = CompanySearchValidator.go(payload)
+  const validationResult = CompanySearchValidator(payload)
 
   return formatValidationResult(validationResult)
 }

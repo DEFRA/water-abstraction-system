@@ -12,7 +12,7 @@ import ViewBillingAccountService from '../services/billing-accounts/view-billing
 const { HTTP_STATUS_CREATED } = http2.constants
 
 export async function changeAddress(request, h) {
-  const validatedData = ChangeAddressValidator.go(request.payload)
+  const validatedData = ChangeAddressValidator(request.payload)
 
   if (validatedData.error) {
     return _formattedValidationError(validatedData.error)

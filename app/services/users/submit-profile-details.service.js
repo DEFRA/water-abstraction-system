@@ -64,7 +64,7 @@ async function _save(userId, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = ProfileDetailsValidator.go(payload)
+  const validationResult = ProfileDetailsValidator(payload)
 
   return formatValidationResult(validationResult)
 }

@@ -85,7 +85,7 @@ function _submittedSessionData(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = NoteValidator.go(payload)
+  const validationResult = NoteValidator(payload)
 
   return formatValidationResult(validationResult)
 }

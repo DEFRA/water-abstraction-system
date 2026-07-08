@@ -88,7 +88,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = PaperReturnValidator.go(payload)
+  const validationResult = PaperReturnValidator(payload)
 
   return formatValidationResult(validationResult)
 }

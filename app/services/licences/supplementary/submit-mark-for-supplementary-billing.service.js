@@ -116,7 +116,7 @@ async function _getPageData(licenceId) {
 }
 
 function _validate(payload) {
-  const validationResult = SupplementaryYearValidator.go(payload)
+  const validationResult = SupplementaryYearValidator(payload)
 
   return formatValidationResult(validationResult)
 }

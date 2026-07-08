@@ -51,7 +51,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload, licenceMonitoringStations) {
-  const validationResult = AlertTypeValidator.go(payload, licenceMonitoringStations)
+  const validationResult = AlertTypeValidator(payload, licenceMonitoringStations)
 
   return formatValidationResult(validationResult)
 }

@@ -93,7 +93,7 @@ function _submittedSessionData(session, auth, validationResult, payload) {
  * need to be displayed
  */
 function _validate(payload) {
-  const validationResult = AlertEmailAddressValidator.go(payload)
+  const validationResult = AlertEmailAddressValidator(payload)
 
   return formatValidationResult(validationResult)
 }

@@ -82,7 +82,7 @@ function _submittedSessionData(session, payload) {
 }
 
 function _validate(payload, session) {
-  const validation = AdditionalSubmissionOptionsValidator.go(payload, session)
+  const validation = AdditionalSubmissionOptionsValidator(payload, session)
 
   return formatValidationResult(validation)
 }

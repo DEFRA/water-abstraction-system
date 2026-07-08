@@ -64,7 +64,7 @@ function _submittedSessionData(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = ThresholdAndUnitValidator.go(payload)
+  const validation = ThresholdAndUnitValidator(payload)
 
   if (!validation.error) {
     return { formattedError: null, value: validation.value }

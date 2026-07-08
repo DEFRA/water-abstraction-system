@@ -61,7 +61,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload, emailExists) {
-  const validationResult = EmailValidator.go(payload, emailExists)
+  const validationResult = EmailValidator(payload, emailExists)
 
   return formatValidationResult(validationResult)
 }

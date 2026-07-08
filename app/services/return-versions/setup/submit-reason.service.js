@@ -58,7 +58,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = ReasonValidator.go(payload)
+  const validation = ReasonValidator(payload)
 
   return formatValidationResult(validation)
 }

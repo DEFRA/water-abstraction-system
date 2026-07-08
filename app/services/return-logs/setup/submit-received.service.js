@@ -88,7 +88,7 @@ function _submittedSessionData(session, payload) {
 }
 
 function _validate(payload, startDate) {
-  const validation = ReceivedDateValidator.go(payload, startDate)
+  const validation = ReceivedDateValidator(payload, startDate)
 
   return formatValidationResult(validation)
 }

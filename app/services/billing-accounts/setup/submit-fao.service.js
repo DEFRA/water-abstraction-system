@@ -73,7 +73,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = FAOValidator.go(payload)
+  const validationResult = FAOValidator(payload)
 
   return formatValidationResult(validationResult)
 }

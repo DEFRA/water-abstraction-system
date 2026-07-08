@@ -76,7 +76,7 @@ function _validate(session) {
     return null
   }
 
-  const validationResult = CheckValidator.go(session)
+  const validationResult = CheckValidator(session)
 
   return formatValidationResult(validationResult)
 }

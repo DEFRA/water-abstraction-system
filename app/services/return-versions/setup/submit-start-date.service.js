@@ -157,7 +157,7 @@ function _submittedSessionData(session, payload) {
 }
 
 function _validate(payload, licenceStartDate, licenceEndDate) {
-  const validation = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
+  const validation = StartDateValidator(payload, licenceStartDate, licenceEndDate)
 
   return formatValidationResult(validation)
 }

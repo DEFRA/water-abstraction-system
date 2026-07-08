@@ -86,7 +86,7 @@ function _submissionData(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = AccountTypeValidator.go(payload)
+  const validationResult = AccountTypeValidator(payload)
 
   return formatValidationResult(validationResult)
 }

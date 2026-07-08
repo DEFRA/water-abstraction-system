@@ -64,7 +64,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = UnitsValidator.go(payload)
+  const validationResult = UnitsValidator(payload)
 
   return formatValidationResult(validationResult)
 }

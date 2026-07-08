@@ -67,7 +67,7 @@ async function _showSuperPermission(auth) {
 }
 
 function _validate(payload) {
-  const validationResult = PermissionsValidator.go(payload)
+  const validationResult = PermissionsValidator(payload)
 
   return formatValidationResult(validationResult)
 }

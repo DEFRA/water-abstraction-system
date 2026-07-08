@@ -63,7 +63,7 @@ async function _save(session, payload, regions) {
 }
 
 function _validate(payload, regions) {
-  const validation = RegionValidator.go(payload, regions)
+  const validation = RegionValidator(payload, regions)
 
   if (!validation.error) {
     return null

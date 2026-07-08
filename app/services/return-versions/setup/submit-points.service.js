@@ -64,7 +64,7 @@ async function _save(session, requirementIndex, payload) {
 }
 
 function _validate(payload) {
-  const validation = PointsValidator.go(payload)
+  const validation = PointsValidator(payload)
 
   return formatValidationResult(validation)
 }

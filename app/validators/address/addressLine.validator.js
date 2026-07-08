@@ -11,7 +11,7 @@ import { invalidStartCharacters } from '../helpers/notify-address-line.validator
  *
  * @returns {object} A Joi schema object.
  */
-function addressLineValidator() {
+export function addressLineValidator() {
   return {
     addressLine1: Joi.string().required().custom(_addressLineCustom).messages({
       'any.required': 'Enter address line 1',
@@ -34,11 +34,4 @@ function _addressLineCustom(value, helper) {
     return helper.error('string.custom')
   }
   return value
-}
-
-export {
-  addressLineValidator
-}
-export default {
-  addressLineValidator
 }

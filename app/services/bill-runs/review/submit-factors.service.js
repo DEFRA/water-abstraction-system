@@ -52,7 +52,7 @@ async function _save(reviewChargeReferenceId, payload) {
 }
 
 function _validate(payload) {
-  const validation = FactorsValidator.go(payload)
+  const validation = FactorsValidator(payload)
 
   if (!validation.error) {
     return null

@@ -49,7 +49,7 @@ async function _licenceRenewal(payload) {
 }
 
 function _validate(payload, licenceRenewal) {
-  const validationResult = LicenceRenewalValidator.go(payload, licenceRenewal)
+  const validationResult = LicenceRenewalValidator(payload, licenceRenewal)
 
   return formatValidationResult(validationResult)
 }

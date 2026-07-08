@@ -59,7 +59,7 @@ async function _save(session, requirementIndex, payload) {
 }
 
 function _validate(payload, session) {
-  const validation = ReturnsCycleValidator.go(payload, session)
+  const validation = ReturnsCycleValidator(payload, session)
 
   return formatValidationResult(validation)
 }

@@ -82,7 +82,7 @@ async function _submissionData(session) {
 }
 
 function _validate(payload) {
-  const validationResult = ContactValidator.go(payload)
+  const validationResult = ContactValidator(payload)
 
   return formatValidationResult(validationResult)
 }

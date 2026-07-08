@@ -16,7 +16,7 @@ import Joi from 'joi'
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+export default function go(payload) {
   const schema = Joi.object({
     postcode: Joi.string()
       .required()
@@ -33,11 +33,4 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

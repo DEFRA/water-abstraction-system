@@ -23,7 +23,7 @@ import { formatValidationResult } from '../../presenters/base.presenter.js'
  * page to display, which could be the search results or the display page for a specific record
  */
 export default async function go(auth, payload, yar) {
-  const validationResult = SearchValidator.go(payload)
+  const validationResult = SearchValidator(payload)
 
   if (validationResult.error) {
     return _failedValidationResponse(auth, payload, validationResult)

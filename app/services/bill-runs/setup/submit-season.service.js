@@ -53,7 +53,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = SeasonValidator.go(payload)
+  const validation = SeasonValidator(payload)
 
   if (!validation.error) {
     return null

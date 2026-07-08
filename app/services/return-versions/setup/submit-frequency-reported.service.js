@@ -59,7 +59,7 @@ async function _save(session, requirementIndex, payload) {
 }
 
 function _validate(payload) {
-  const validation = FrequencyReportedValidator.go(payload)
+  const validation = FrequencyReportedValidator(payload)
 
   return formatValidationResult(validation)
 }

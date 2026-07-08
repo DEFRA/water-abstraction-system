@@ -20,7 +20,7 @@ const Joi = base.extend(joiDate)
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload, startDate, endDate) {
+export default function go(payload, startDate, endDate) {
   const {
     periodUsedFromDay,
     periodUsedFromMonth,
@@ -75,11 +75,4 @@ function _validateDate(payload, startDate, endDate) {
   })
 
   return schema.validate(payload, { abortEarly: false, allowUnknown: true })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -99,7 +99,7 @@ function _submissionData(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = AccountValidator.go(payload)
+  const validationResult = AccountValidator(payload)
 
   return formatValidationResult(validationResult)
 }

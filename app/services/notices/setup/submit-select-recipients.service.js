@@ -66,7 +66,7 @@ function _clearSelectedRecipients(session) {
 }
 
 function _validate(payload) {
-  const validationResult = SelectRecipientsValidator.go(payload)
+  const validationResult = SelectRecipientsValidator(payload)
 
   return formatValidationResult(validationResult)
 }

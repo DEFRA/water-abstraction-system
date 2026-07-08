@@ -111,7 +111,7 @@ function _submittedSessionData(session, payload) {
 }
 
 function _validate(payload, session) {
-  const validationResult = PeriodUsedValidator.go(payload, session.startDate, session.endDate)
+  const validationResult = PeriodUsedValidator(payload, session.startDate, session.endDate)
 
   return formatValidationResult(validationResult)
 }

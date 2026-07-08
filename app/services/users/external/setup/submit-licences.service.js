@@ -101,7 +101,7 @@ function _payloadDiffers(payloadSelection, session) {
 }
 
 function _validate(payload) {
-  const validationResult = LicencesValidator.go(payload)
+  const validationResult = LicencesValidator(payload)
 
   return formatValidationResult(validationResult)
 }
