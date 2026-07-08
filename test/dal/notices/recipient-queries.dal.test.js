@@ -8,7 +8,7 @@ import { db } from '../../../db/db.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-import RecipientQueriesDal from '../../../app/dal/notices/recipient-queries.dal.js'
+import * as RecipientQueriesDal from '../../../app/dal/notices/recipient-queries.dal.js'
 
 describe('Notices - Recipient Queries DAL', () => {
   describe('#currentLicenceVersionsJoin', () => {
