@@ -1,11 +1,28 @@
-import CompanyContactsSetupController from '../controllers/company-contacts-setup.controller.js'
+import {
+  setup,
+  setupEdit,
+  submitAbstractionAlerts,
+  submitCancel,
+  submitCheck,
+  submitContactEmail,
+  submitContactName,
+  submitLicences,
+  submitRestore,
+  viewAbstractionAlerts,
+  viewCancel,
+  viewCheck,
+  viewContactEmail,
+  viewContactName,
+  viewLicences,
+  viewRestore
+} from '../controllers/company-contacts-setup.controller.js'
 
 const routes = [
   {
     method: 'GET',
     path: '/company-contacts/setup/{companyId}',
     options: {
-      handler: CompanyContactsSetupController.setup,
+      handler: setup,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -17,7 +34,7 @@ const routes = [
     method: 'GET',
     path: '/company-contacts/setup/{companyContactId}/edit',
     options: {
-      handler: CompanyContactsSetupController.setupEdit,
+      handler: setupEdit,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -29,7 +46,7 @@ const routes = [
     method: 'GET',
     path: '/company-contacts/setup/{sessionId}/abstraction-alerts',
     options: {
-      handler: CompanyContactsSetupController.viewAbstractionAlerts,
+      handler: viewAbstractionAlerts,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -41,7 +58,7 @@ const routes = [
     method: 'POST',
     path: '/company-contacts/setup/{sessionId}/abstraction-alerts',
     options: {
-      handler: CompanyContactsSetupController.submitAbstractionAlerts,
+      handler: submitAbstractionAlerts,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -53,7 +70,7 @@ const routes = [
     method: 'GET',
     path: '/company-contacts/setup/{sessionId}/cancel',
     options: {
-      handler: CompanyContactsSetupController.viewCancel,
+      handler: viewCancel,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -65,7 +82,7 @@ const routes = [
     method: 'POST',
     path: '/company-contacts/setup/{sessionId}/cancel',
     options: {
-      handler: CompanyContactsSetupController.submitCancel,
+      handler: submitCancel,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -77,7 +94,7 @@ const routes = [
     method: 'GET',
     path: '/company-contacts/setup/{sessionId}/check',
     options: {
-      handler: CompanyContactsSetupController.viewCheck,
+      handler: viewCheck,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -89,7 +106,7 @@ const routes = [
     method: 'POST',
     path: '/company-contacts/setup/{sessionId}/check',
     options: {
-      handler: CompanyContactsSetupController.submitCheck,
+      handler: submitCheck,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -101,7 +118,7 @@ const routes = [
     method: 'GET',
     path: '/company-contacts/setup/{sessionId}/contact-email',
     options: {
-      handler: CompanyContactsSetupController.viewContactEmail,
+      handler: viewContactEmail,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -113,7 +130,7 @@ const routes = [
     method: 'POST',
     path: '/company-contacts/setup/{sessionId}/contact-email',
     options: {
-      handler: CompanyContactsSetupController.submitContactEmail,
+      handler: submitContactEmail,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -125,7 +142,7 @@ const routes = [
     method: 'GET',
     path: '/company-contacts/setup/{sessionId}/contact-name',
     options: {
-      handler: CompanyContactsSetupController.viewContactName,
+      handler: viewContactName,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -137,7 +154,7 @@ const routes = [
     method: 'POST',
     path: '/company-contacts/setup/{sessionId}/contact-name',
     options: {
-      handler: CompanyContactsSetupController.submitContactName,
+      handler: submitContactName,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -149,7 +166,7 @@ const routes = [
     method: 'GET',
     path: '/company-contacts/setup/{sessionId}/licences',
     options: {
-      handler: CompanyContactsSetupController.viewLicences,
+      handler: viewLicences,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -161,7 +178,7 @@ const routes = [
     method: 'POST',
     path: '/company-contacts/setup/{sessionId}/licences',
     options: {
-      handler: CompanyContactsSetupController.submitLicences,
+      handler: submitLicences,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -173,7 +190,7 @@ const routes = [
     method: 'GET',
     path: '/company-contacts/setup/{sessionId}/restore',
     options: {
-      handler: CompanyContactsSetupController.viewRestore,
+      handler: viewRestore,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -185,7 +202,7 @@ const routes = [
     method: 'POST',
     path: '/company-contacts/setup/{sessionId}/restore',
     options: {
-      handler: CompanyContactsSetupController.submitRestore,
+      handler: submitRestore,
       auth: {
         access: {
           scope: ['hof_notifications']

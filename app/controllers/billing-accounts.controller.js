@@ -11,7 +11,7 @@ import ViewBillingAccountService from '../services/billing-accounts/view-billing
 
 const { HTTP_STATUS_CREATED } = http2.constants
 
-async function changeAddress(request, h) {
+export async function changeAddress(request, h) {
   const validatedData = ChangeAddressValidator.go(request.payload)
 
   if (validatedData.error) {
@@ -25,7 +25,7 @@ async function changeAddress(request, h) {
   return h.response(result).code(HTTP_STATUS_CREATED)
 }
 
-async function view(request, h) {
+export async function view(request, h) {
   const { id } = request.params
   const { 'charge-version-id': chargeVersionId, 'company-id': companyId, 'licence-id': licenceId, page } = request.query
 
@@ -37,13 +37,4 @@ async function view(request, h) {
 // Takes an error from a validator and returns a suitable Boom error
 function _formattedValidationError(error) {
   return Boom.badRequest(error.details[0].message)
-}
-
-export {
-  changeAddress,
-  view
-}
-export default {
-  changeAddress,
-  view
 }

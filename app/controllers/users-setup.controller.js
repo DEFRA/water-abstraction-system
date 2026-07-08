@@ -23,7 +23,7 @@ import ViewInternalCheckService from '../services/users/internal/setup/view-chec
 import ViewInternalEmailService from '../services/users/internal/setup/view-email.service.js'
 import ViewInternalPermissionsService from '../services/users/internal/setup/view-permissions.service.js'
 
-async function setupExternal(request, h) {
+export async function setupExternal(request, h) {
   const {
     params: { id },
     query: { back }
@@ -34,13 +34,13 @@ async function setupExternal(request, h) {
   return h.redirect(`/system/users/external/setup/${sessionId}/licences`)
 }
 
-async function setupInternal(_request, h) {
+export async function setupInternal(_request, h) {
   const { id: sessionId } = await InitiateInternalSessionService.go()
 
   return h.redirect(`/system/users/internal/setup/${sessionId}/email`)
 }
 
-async function setupInternalEdit(request, h) {
+export async function setupInternalEdit(request, h) {
   const {
     params: { id }
   } = request
@@ -50,7 +50,7 @@ async function setupInternalEdit(request, h) {
   return h.redirect(`/system/users/internal/setup/${sessionId}/check`)
 }
 
-async function submitExternalCancel(request, h) {
+export async function submitExternalCancel(request, h) {
   const {
     params: { sessionId }
   } = request
@@ -60,7 +60,7 @@ async function submitExternalCancel(request, h) {
   return h.redirect(redirectUrl)
 }
 
-async function submitExternalCheck(request, h) {
+export async function submitExternalCheck(request, h) {
   const {
     auth,
     params: { sessionId },
@@ -76,7 +76,7 @@ async function submitExternalCheck(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
-async function submitExternalLicences(request, h) {
+export async function submitExternalLicences(request, h) {
   const {
     payload,
     params: { sessionId },
@@ -92,7 +92,7 @@ async function submitExternalLicences(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
-async function submitInternalAccess(request, h) {
+export async function submitInternalAccess(request, h) {
   const {
     payload,
     params: { sessionId },
@@ -108,7 +108,7 @@ async function submitInternalAccess(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
-async function submitInternalCancel(request, h) {
+export async function submitInternalCancel(request, h) {
   const {
     params: { sessionId }
   } = request
@@ -118,7 +118,7 @@ async function submitInternalCancel(request, h) {
   return h.redirect(redirectUrl)
 }
 
-async function submitInternalCheck(request, h) {
+export async function submitInternalCheck(request, h) {
   const {
     auth,
     params: { sessionId },
@@ -130,7 +130,7 @@ async function submitInternalCheck(request, h) {
   return h.redirect(redirectUrl)
 }
 
-async function submitInternalEmail(request, h) {
+export async function submitInternalEmail(request, h) {
   const {
     payload,
     params: { sessionId },
@@ -146,7 +146,7 @@ async function submitInternalEmail(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
-async function submitInternalPermissions(request, h) {
+export async function submitInternalPermissions(request, h) {
   const {
     auth,
     payload,
@@ -163,7 +163,7 @@ async function submitInternalPermissions(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
-async function viewExternalCancel(request, h) {
+export async function viewExternalCancel(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewExternalCancelService.go(sessionId)
@@ -171,7 +171,7 @@ async function viewExternalCancel(request, h) {
   return h.view('users/external/setup/cancel.njk', pageData)
 }
 
-async function viewExternalCheck(request, h) {
+export async function viewExternalCheck(request, h) {
   const {
     params: { sessionId },
     yar
@@ -182,7 +182,7 @@ async function viewExternalCheck(request, h) {
   return h.view('users/external/setup/check.njk', pageData)
 }
 
-async function viewExternalLicences(request, h) {
+export async function viewExternalLicences(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewExternalLicencesService.go(sessionId)
@@ -190,7 +190,7 @@ async function viewExternalLicences(request, h) {
   return h.view('users/external/setup/licences.njk', pageData)
 }
 
-async function viewInternalAccess(request, h) {
+export async function viewInternalAccess(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewInternalAccessService.go(sessionId)
@@ -198,7 +198,7 @@ async function viewInternalAccess(request, h) {
   return h.view('users/internal/setup/access.njk', pageData)
 }
 
-async function viewInternalCancel(request, h) {
+export async function viewInternalCancel(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewInternalCancelService.go(sessionId)
@@ -206,7 +206,7 @@ async function viewInternalCancel(request, h) {
   return h.view('users/internal/setup/cancel.njk', pageData)
 }
 
-async function viewInternalCheck(request, h) {
+export async function viewInternalCheck(request, h) {
   const {
     params: { sessionId },
     yar
@@ -217,7 +217,7 @@ async function viewInternalCheck(request, h) {
   return h.view('users/internal/setup/check.njk', pageData)
 }
 
-async function viewInternalEmail(request, h) {
+export async function viewInternalEmail(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewInternalEmailService.go(sessionId)
@@ -225,7 +225,7 @@ async function viewInternalEmail(request, h) {
   return h.view('users/internal/setup/email.njk', pageData)
 }
 
-async function viewInternalPermissions(request, h) {
+export async function viewInternalPermissions(request, h) {
   const {
     auth,
     params: { sessionId }
@@ -234,47 +234,4 @@ async function viewInternalPermissions(request, h) {
   const pageData = await ViewInternalPermissionsService.go(auth, sessionId)
 
   return h.view('users/internal/setup/permissions.njk', pageData)
-}
-
-export {
-  setupExternal,
-  setupInternal,
-  setupInternalEdit,
-  submitExternalCancel,
-  submitExternalCheck,
-  submitExternalLicences,
-  submitInternalAccess,
-  submitInternalCancel,
-  submitInternalCheck,
-  submitInternalEmail,
-  submitInternalPermissions,
-  viewInternalAccess,
-  viewExternalCancel,
-  viewExternalCheck,
-  viewExternalLicences,
-  viewInternalCancel,
-  viewInternalCheck,
-  viewInternalEmail,
-  viewInternalPermissions
-}
-export default {
-  setupExternal,
-  setupInternal,
-  setupInternalEdit,
-  submitExternalCancel,
-  submitExternalCheck,
-  submitExternalLicences,
-  submitInternalAccess,
-  submitInternalCancel,
-  submitInternalCheck,
-  submitInternalEmail,
-  submitInternalPermissions,
-  viewInternalAccess,
-  viewExternalCancel,
-  viewExternalCheck,
-  viewExternalLicences,
-  viewInternalCancel,
-  viewInternalCheck,
-  viewInternalEmail,
-  viewInternalPermissions
 }

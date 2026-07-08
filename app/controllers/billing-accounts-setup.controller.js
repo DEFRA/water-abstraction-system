@@ -25,7 +25,7 @@ import ViewExistingAccountService from '../services/billing-accounts/setup/view-
 import ViewFAOService from '../services/billing-accounts/setup/view-fao.service.js'
 import ViewSelectCompanyService from '../services/billing-accounts/setup/view-select-company.service.js'
 
-async function setup(request, h) {
+export async function setup(request, h) {
   const { billingAccountId } = request.params
 
   const session = await InitiateSessionService.go(billingAccountId)
@@ -33,7 +33,7 @@ async function setup(request, h) {
   return h.redirect(`/system/billing-accounts/setup/${session.id}/account`)
 }
 
-async function submitAccount(request, h) {
+export async function submitAccount(request, h) {
   const {
     payload,
     params: { sessionId }
@@ -48,7 +48,7 @@ async function submitAccount(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
-async function submitAccountType(request, h) {
+export async function submitAccountType(request, h) {
   const {
     payload,
     params: { sessionId }
@@ -63,7 +63,7 @@ async function submitAccountType(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
-async function submitCheck(request, h) {
+export async function submitCheck(request, h) {
   const {
     params: { sessionId }
   } = request
@@ -73,7 +73,7 @@ async function submitCheck(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
-async function submitCompanySearch(request, h) {
+export async function submitCompanySearch(request, h) {
   const {
     payload,
     params: { sessionId }
@@ -88,7 +88,7 @@ async function submitCompanySearch(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
-async function submitContact(request, h) {
+export async function submitContact(request, h) {
   const {
     payload,
     params: { sessionId }
@@ -103,7 +103,7 @@ async function submitContact(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
-async function submitContactName(request, h) {
+export async function submitContactName(request, h) {
   const {
     payload,
     params: { sessionId }
@@ -118,7 +118,7 @@ async function submitContactName(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
-async function submitExistingAccount(request, h) {
+export async function submitExistingAccount(request, h) {
   const {
     payload,
     params: { sessionId }
@@ -133,7 +133,7 @@ async function submitExistingAccount(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
-async function submitExistingAddress(request, h) {
+export async function submitExistingAddress(request, h) {
   const {
     payload,
     params: { sessionId }
@@ -148,7 +148,7 @@ async function submitExistingAddress(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
-async function submitFAO(request, h) {
+export async function submitFAO(request, h) {
   const {
     payload,
     params: { sessionId }
@@ -163,7 +163,7 @@ async function submitFAO(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
-async function submitSelectCompany(request, h) {
+export async function submitSelectCompany(request, h) {
   const {
     payload,
     params: { sessionId }
@@ -178,7 +178,7 @@ async function submitSelectCompany(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
-async function viewAccount(request, h) {
+export async function viewAccount(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewAccountService.go(sessionId)
@@ -186,7 +186,7 @@ async function viewAccount(request, h) {
   return h.view(`billing-accounts/setup/account.njk`, pageData)
 }
 
-async function viewAccountType(request, h) {
+export async function viewAccountType(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewAccountTypeService.go(sessionId)
@@ -194,7 +194,7 @@ async function viewAccountType(request, h) {
   return h.view(`billing-accounts/setup/account-type.njk`, pageData)
 }
 
-async function viewCheck(request, h) {
+export async function viewCheck(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewCheckService.go(sessionId)
@@ -202,7 +202,7 @@ async function viewCheck(request, h) {
   return h.view(`billing-accounts/setup/check.njk`, pageData)
 }
 
-async function viewCompanySearch(request, h) {
+export async function viewCompanySearch(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewCompanySearchService.go(sessionId)
@@ -210,7 +210,7 @@ async function viewCompanySearch(request, h) {
   return h.view(`billing-accounts/setup/company-search.njk`, pageData)
 }
 
-async function viewContact(request, h) {
+export async function viewContact(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewContactService.go(sessionId)
@@ -218,7 +218,7 @@ async function viewContact(request, h) {
   return h.view(`billing-accounts/setup/contact.njk`, pageData)
 }
 
-async function viewContactName(request, h) {
+export async function viewContactName(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewContactNameService.go(sessionId)
@@ -226,7 +226,7 @@ async function viewContactName(request, h) {
   return h.view(`billing-accounts/setup/contact-name.njk`, pageData)
 }
 
-async function viewExistingAccount(request, h) {
+export async function viewExistingAccount(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewExistingAccountService.go(sessionId)
@@ -234,7 +234,7 @@ async function viewExistingAccount(request, h) {
   return h.view(`billing-accounts/setup/existing-account.njk`, pageData)
 }
 
-async function viewExistingAddress(request, h) {
+export async function viewExistingAddress(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewExistingAddressService.go(sessionId)
@@ -242,7 +242,7 @@ async function viewExistingAddress(request, h) {
   return h.view(`billing-accounts/setup/existing-address.njk`, pageData)
 }
 
-async function viewFAO(request, h) {
+export async function viewFAO(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewFAOService.go(sessionId)
@@ -250,57 +250,10 @@ async function viewFAO(request, h) {
   return h.view(`billing-accounts/setup/fao.njk`, pageData)
 }
 
-async function viewSelectCompany(request, h) {
+export async function viewSelectCompany(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewSelectCompanyService.go(sessionId)
 
   return h.view(`billing-accounts/setup/select-company.njk`, pageData)
-}
-
-export {
-  setup,
-  submitAccount,
-  submitAccountType,
-  submitCheck,
-  submitCompanySearch,
-  submitContact,
-  submitContactName,
-  submitExistingAccount,
-  submitExistingAddress,
-  submitFAO,
-  submitSelectCompany,
-  viewCheck,
-  viewCompanySearch,
-  viewContact,
-  viewContactName,
-  viewAccount,
-  viewAccountType,
-  viewExistingAccount,
-  viewExistingAddress,
-  viewFAO,
-  viewSelectCompany
-}
-export default {
-  setup,
-  submitAccount,
-  submitAccountType,
-  submitCheck,
-  submitCompanySearch,
-  submitContact,
-  submitContactName,
-  submitExistingAccount,
-  submitExistingAddress,
-  submitFAO,
-  submitSelectCompany,
-  viewCheck,
-  viewCompanySearch,
-  viewContact,
-  viewContactName,
-  viewAccount,
-  viewAccountType,
-  viewExistingAccount,
-  viewExistingAddress,
-  viewFAO,
-  viewSelectCompany
 }

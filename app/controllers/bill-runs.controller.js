@@ -14,7 +14,7 @@ import ViewBillRunService from '../services/bill-runs/view-bill-run.service.js'
 import ViewCancelBillRunService from '../services/bill-runs/cancel/view-cancel-bill-run.service.js'
 import ViewSendBillRunService from '../services/bill-runs/send/view-send-bill-run.service.js'
 
-async function cancel(request, h) {
+export async function cancel(request, h) {
   const { id } = request.params
 
   const pageData = await ViewCancelBillRunService.go(id)
@@ -22,7 +22,7 @@ async function cancel(request, h) {
   return h.view('bill-runs/cancel.njk', pageData)
 }
 
-async function index(request, h) {
+export async function index(request, h) {
   const {
     query: { page },
     yar
@@ -33,7 +33,7 @@ async function index(request, h) {
   return h.view('bill-runs/index.njk', pageData)
 }
 
-async function send(request, h) {
+export async function send(request, h) {
   const { id } = request.params
 
   const pageData = await ViewSendBillRunService.go(id)
@@ -41,7 +41,7 @@ async function send(request, h) {
   return h.view('bill-runs/send.njk', pageData)
 }
 
-async function submitCancel(request, h) {
+export async function submitCancel(request, h) {
   const { id } = request.params
 
   // NOTE: What we are awaiting here is for the SubmitCancelBillRunService to update the status of the bill run to
@@ -51,7 +51,7 @@ async function submitCancel(request, h) {
   return h.redirect('/system/bill-runs')
 }
 
-async function submitIndex(request, h) {
+export async function submitIndex(request, h) {
   const {
     payload,
     query: { page },
@@ -67,7 +67,7 @@ async function submitIndex(request, h) {
   return h.redirect('/system/bill-runs')
 }
 
-async function submitSend(request, h) {
+export async function submitSend(request, h) {
   const { id } = request.params
 
   // NOTE: What we are awaiting here is for the SubmitSendBillRunService to update the status of the bill run to
@@ -78,7 +78,7 @@ async function submitSend(request, h) {
   return h.redirect(`/billing/batch/${id}/processing`)
 }
 
-async function twoPartTariff(request, h) {
+export async function twoPartTariff(request, h) {
   const { id } = request.params
 
   try {
@@ -93,31 +93,10 @@ async function twoPartTariff(request, h) {
   }
 }
 
-async function view(request, h) {
+export async function view(request, h) {
   const { id } = request.params
 
   const pageData = await ViewBillRunService.go(id)
 
   return h.view(pageData.view, pageData)
-}
-
-export {
-  cancel,
-  index,
-  send,
-  submitCancel,
-  submitIndex,
-  submitSend,
-  twoPartTariff,
-  view
-}
-export default {
-  cancel,
-  index,
-  send,
-  submitCancel,
-  submitIndex,
-  submitSend,
-  twoPartTariff,
-  view
 }

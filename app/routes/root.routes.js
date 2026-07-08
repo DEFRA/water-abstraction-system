@@ -1,11 +1,11 @@
-import RootController from '../controllers/root.controller.js'
+import { index } from '../controllers/root.controller.js'
 
 const routes = [
   {
     method: 'GET',
     path: '/',
     options: {
-      handler: RootController.index,
+      handler: index,
       app: {
         plainOutput: true
       },
@@ -26,7 +26,7 @@ const routes = [
     method: 'GET',
     path: '/status',
     options: {
-      handler: RootController.index,
+      handler: index,
       app: {
         plainOutput: true
       },

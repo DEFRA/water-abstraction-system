@@ -1,18 +1,18 @@
-import NotificationsController from '../controllers/notifications.controller.js'
+import { download, returnedLetter, view } from '../controllers/notifications.controller.js'
 
 const routes = [
   {
     method: 'GET',
     path: '/notifications/{id}/download',
     options: {
-      handler: NotificationsController.download
+      handler: download
     }
   },
   {
     method: 'GET',
     path: '/notifications/{id}',
     options: {
-      handler: NotificationsController.view
+      handler: view
     }
   },
   {
@@ -23,7 +23,7 @@ const routes = [
         plainOutput: true
       },
       auth: { strategy: 'callback' },
-      handler: NotificationsController.returnedLetter,
+      handler: returnedLetter,
       plugins: {
         crumb: false
       }

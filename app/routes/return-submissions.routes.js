@@ -1,11 +1,11 @@
-import ReturnSubmissionsController from '../controllers/return-submissions.controller.js'
+import { view } from '../controllers/return-submissions.controller.js'
 
 const routes = [
   {
     method: 'GET',
     path: '/return-submissions/{returnSubmissionId}/{yearMonth}',
     options: {
-      handler: ReturnSubmissionsController.view
+      handler: view
     }
   }
 ]

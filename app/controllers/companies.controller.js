@@ -10,7 +10,7 @@ import ViewContactsService from '../services/companies/view-contacts.service.js'
 import ViewHistoryService from '../services/companies/view-history.service.js'
 import ViewLicencesService from '../services/companies/view-licences.service.js'
 
-async function viewBillingAccounts(request, h) {
+export async function viewBillingAccounts(request, h) {
   const {
     params: { id },
     auth,
@@ -22,7 +22,7 @@ async function viewBillingAccounts(request, h) {
   return h.view(`companies/billing-accounts.njk`, pageData)
 }
 
-async function viewCompany(request, h) {
+export async function viewCompany(request, h) {
   const {
     params: { id, role }
   } = request
@@ -31,7 +31,7 @@ async function viewCompany(request, h) {
   return h.view(`companies/company.njk`, pageData)
 }
 
-async function viewCompanyWithAddress(request, h) {
+export async function viewCompanyWithAddress(request, h) {
   const {
     params: { addressId, id, role },
     query: { 'licence-id': licenceId }
@@ -41,7 +41,7 @@ async function viewCompanyWithAddress(request, h) {
   return h.view(`companies/company-with-address.njk`, pageData)
 }
 
-async function viewContacts(request, h) {
+export async function viewContacts(request, h) {
   const {
     params: { id },
     auth,
@@ -54,7 +54,7 @@ async function viewContacts(request, h) {
   return h.view(`companies/contacts.njk`, pageData)
 }
 
-async function viewHistory(request, h) {
+export async function viewHistory(request, h) {
   const {
     params: { id },
     auth,
@@ -66,7 +66,7 @@ async function viewHistory(request, h) {
   return h.view(`companies/history.njk`, pageData)
 }
 
-async function viewLicences(request, h) {
+export async function viewLicences(request, h) {
   const {
     params: { id },
     auth,
@@ -76,21 +76,4 @@ async function viewLicences(request, h) {
   const pageData = await ViewLicencesService.go(id, auth, page)
 
   return h.view(`companies/licences.njk`, pageData)
-}
-
-export {
-  viewBillingAccounts,
-  viewCompany,
-  viewCompanyWithAddress,
-  viewContacts,
-  viewHistory,
-  viewLicences
-}
-export default {
-  viewBillingAccounts,
-  viewCompany,
-  viewCompanyWithAddress,
-  viewContacts,
-  viewHistory,
-  viewLicences
 }

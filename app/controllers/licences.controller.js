@@ -22,7 +22,7 @@ import ViewSummaryService from '../services/licences/view-summary.service.js'
 
 const { HTTP_STATUS_NO_CONTENT } = http2.constants
 
-async function markedForSupplementaryBilling(request, h) {
+export async function markedForSupplementaryBilling(request, h) {
   const { id: licenceId } = request.params
 
   const pageData = await ViewMarkedForSupplementaryBillingService.go(licenceId)
@@ -30,7 +30,7 @@ async function markedForSupplementaryBilling(request, h) {
   return h.view('licences/marked-for-supplementary-billing.njk', pageData)
 }
 
-async function markForSupplementaryBilling(request, h) {
+export async function markForSupplementaryBilling(request, h) {
   const { id: licenceId } = request.params
 
   const pageData = await ViewMarkForSupplementaryBillingService.go(licenceId)
@@ -38,7 +38,7 @@ async function markForSupplementaryBilling(request, h) {
   return h.view('licences/mark-for-supplementary-billing.njk', pageData)
 }
 
-async function noReturnsRequired(request, h) {
+export async function noReturnsRequired(request, h) {
   const { id } = request.params
 
   const session = await InitiateSessionService.go(id, 'no-returns-required')
@@ -46,7 +46,7 @@ async function noReturnsRequired(request, h) {
   return h.redirect(`/system/return-versions/setup/${session.id}/start-date`)
 }
 
-async function returnsRequired(request, h) {
+export async function returnsRequired(request, h) {
   const { id } = request.params
 
   const session = await InitiateSessionService.go(id, 'returns-required')
@@ -54,7 +54,7 @@ async function returnsRequired(request, h) {
   return h.redirect(`/system/return-versions/setup/${session.id}/start-date`)
 }
 
-async function submitMarkForSupplementaryBilling(request, h) {
+export async function submitMarkForSupplementaryBilling(request, h) {
   const { id: licenceId } = request.params
 
   const pageData = await SubmitMarkForSupplementaryBillingService.go(licenceId, request.payload)
@@ -66,13 +66,13 @@ async function submitMarkForSupplementaryBilling(request, h) {
   return h.redirect(`/system/licences/${licenceId}/marked-for-supplementary-billing`)
 }
 
-async function supplementary(request, h) {
+export async function supplementary(request, h) {
   await LicenceSupplementaryProcessBillingFlagService.go(request.payload)
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-async function viewBills(request, h) {
+export async function viewBills(request, h) {
   const {
     params: { id },
     auth,
@@ -84,7 +84,7 @@ async function viewBills(request, h) {
   return h.view('licences/bills.njk', pageData)
 }
 
-async function viewCommunications(request, h) {
+export async function viewCommunications(request, h) {
   const {
     params: { id },
     auth,
@@ -96,7 +96,7 @@ async function viewCommunications(request, h) {
   return h.view('licences/communications.njk', pageData)
 }
 
-async function viewLicenceConditions(request, h) {
+export async function viewLicenceConditions(request, h) {
   const {
     params: { id },
     auth
@@ -107,7 +107,7 @@ async function viewLicenceConditions(request, h) {
   return h.view('licences/conditions.njk', pageData)
 }
 
-async function viewContactDetails(request, h) {
+export async function viewContactDetails(request, h) {
   const {
     params: { id },
     auth,
@@ -119,7 +119,7 @@ async function viewContactDetails(request, h) {
   return h.view('licences/contact-details.njk', pageData)
 }
 
-async function viewLicencePoints(request, h) {
+export async function viewLicencePoints(request, h) {
   const {
     params: { id },
     auth
@@ -130,7 +130,7 @@ async function viewLicencePoints(request, h) {
   return h.view('licences/points.njk', pageData)
 }
 
-async function viewLicencePurposes(request, h) {
+export async function viewLicencePurposes(request, h) {
   const {
     params: { id },
     auth
@@ -140,7 +140,7 @@ async function viewLicencePurposes(request, h) {
   return h.view('licences/purposes.njk', pageData)
 }
 
-async function viewHistory(request, h) {
+export async function viewHistory(request, h) {
   const {
     params: { id },
     auth
@@ -151,7 +151,7 @@ async function viewHistory(request, h) {
   return h.view('licences/history.njk', pageData)
 }
 
-async function viewReturns(request, h) {
+export async function viewReturns(request, h) {
   const {
     params: { id },
     auth,
@@ -163,7 +163,7 @@ async function viewReturns(request, h) {
   return h.view('licences/returns.njk', pageData)
 }
 
-async function viewSetUp(request, h) {
+export async function viewSetUp(request, h) {
   const {
     params: { id },
     auth
@@ -174,7 +174,7 @@ async function viewSetUp(request, h) {
   return h.view('licences/set-up.njk', pageData)
 }
 
-async function viewSummary(request, h) {
+export async function viewSummary(request, h) {
   const {
     params: { id },
     auth
@@ -183,41 +183,4 @@ async function viewSummary(request, h) {
   const pageData = await ViewSummaryService.go(id, auth)
 
   return h.view('licences/summary.njk', pageData)
-}
-
-export {
-  markedForSupplementaryBilling,
-  markForSupplementaryBilling,
-  noReturnsRequired,
-  returnsRequired,
-  submitMarkForSupplementaryBilling,
-  supplementary,
-  viewBills,
-  viewCommunications,
-  viewContactDetails,
-  viewHistory,
-  viewLicenceConditions,
-  viewLicencePoints,
-  viewLicencePurposes,
-  viewReturns,
-  viewSetUp,
-  viewSummary
-}
-export default {
-  markedForSupplementaryBilling,
-  markForSupplementaryBilling,
-  noReturnsRequired,
-  returnsRequired,
-  submitMarkForSupplementaryBilling,
-  supplementary,
-  viewBills,
-  viewCommunications,
-  viewContactDetails,
-  viewHistory,
-  viewLicenceConditions,
-  viewLicencePoints,
-  viewLicencePurposes,
-  viewReturns,
-  viewSetUp,
-  viewSummary
 }

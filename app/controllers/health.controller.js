@@ -9,7 +9,7 @@ import InfoService from '../services/health/info.service.js'
 
 const { HTTP_STATUS_OK } = http2.constants
 
-async function airbrake(request, _h) {
+export async function airbrake(request, _h) {
   // First section tests connecting to Airbrake through a manual notification
   request.server.app.airbrake.notify({
     message: 'Airbrake manual health check',
@@ -25,25 +25,14 @@ async function airbrake(request, _h) {
   throw new Error('Airbrake automatic health check error')
 }
 
-async function database(_request, h) {
+export async function database(_request, h) {
   const result = await DatabaseHealthCheckService.go()
 
   return h.response(result).code(HTTP_STATUS_OK)
 }
 
-async function info(_request, h) {
+export async function info(_request, h) {
   const pageData = await InfoService.go()
 
   return h.view('health/info.njk', pageData)
-}
-
-export {
-  airbrake,
-  database,
-  info
-}
-export default {
-  airbrake,
-  database,
-  info
 }

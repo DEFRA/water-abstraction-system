@@ -8,7 +8,7 @@ import SubmitIndexNoticesService from '../services/notices/submit-index-notices.
 import SubmitViewNoticeService from '../services/notices/submit-view-notice.service.js'
 import ViewNoticeService from '../services/notices/view-notice.service.js'
 
-async function index(request, h) {
+export async function index(request, h) {
   const {
     auth,
     query: { page },
@@ -20,7 +20,7 @@ async function index(request, h) {
   return h.view('notices/index.njk', pageData)
 }
 
-async function submitIndex(request, h) {
+export async function submitIndex(request, h) {
   const {
     auth,
     payload,
@@ -37,7 +37,7 @@ async function submitIndex(request, h) {
   return h.redirect('/system/notices')
 }
 
-async function submitView(request, h) {
+export async function submitView(request, h) {
   const { payload, yar } = request
   const { page } = request.query
   const { id } = request.params
@@ -51,7 +51,7 @@ async function submitView(request, h) {
   return h.redirect(`/system/notices/${id}`)
 }
 
-async function view(request, h) {
+export async function view(request, h) {
   const {
     params: { id },
     query: { page },
@@ -61,17 +61,4 @@ async function view(request, h) {
   const pageData = await ViewNoticeService.go(id, yar, page)
 
   return h.view('notices/view.njk', pageData)
-}
-
-export {
-  index,
-  submitIndex,
-  submitView,
-  view
-}
-export default {
-  index,
-  submitIndex,
-  submitView,
-  view
 }

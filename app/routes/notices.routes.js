@@ -1,11 +1,11 @@
-import NoticesController from '../controllers/notices.controller.js'
+import { index, submitIndex, submitView, view } from '../controllers/notices.controller.js'
 
 const routes = [
   {
     method: 'GET',
     path: '/notices',
     options: {
-      handler: NoticesController.index,
+      handler: index,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications', 'returns']
@@ -17,7 +17,7 @@ const routes = [
     method: 'POST',
     path: '/notices',
     options: {
-      handler: NoticesController.submitIndex,
+      handler: submitIndex,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications', 'returns']
@@ -29,7 +29,7 @@ const routes = [
     method: 'GET',
     path: '/notices/{id}',
     options: {
-      handler: NoticesController.view,
+      handler: view,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications', 'returns']
@@ -41,7 +41,7 @@ const routes = [
     method: 'POST',
     path: '/notices/{id}',
     options: {
-      handler: NoticesController.submitView,
+      handler: submitView,
       auth: {
         access: {
           scope: ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications', 'returns']

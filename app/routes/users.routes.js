@@ -1,11 +1,24 @@
-import UsersController from '../controllers/users.controller.js'
+import {
+  index,
+  submitIndex,
+  submitInternalDetails,
+  submitProfileDetails,
+  viewExternalCommunications,
+  viewExternalDetails,
+  viewExternalLicences,
+  viewExternalVerifications,
+  viewInternalCommunications,
+  viewInternalDetails,
+  viewNotification,
+  viewProfileDetails
+} from '../controllers/users.controller.js'
 
 const routes = [
   {
     method: 'GET',
     path: '/users',
     options: {
-      handler: UsersController.index,
+      handler: index,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -17,7 +30,7 @@ const routes = [
     method: 'POST',
     path: '/users',
     options: {
-      handler: UsersController.submitIndex,
+      handler: submitIndex,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -29,35 +42,35 @@ const routes = [
     method: 'GET',
     path: '/users/external/{id}/communications',
     options: {
-      handler: UsersController.viewExternalCommunications
+      handler: viewExternalCommunications
     }
   },
   {
     method: 'GET',
     path: '/users/external/{id}/details',
     options: {
-      handler: UsersController.viewExternalDetails
+      handler: viewExternalDetails
     }
   },
   {
     method: 'GET',
     path: '/users/external/{id}/licences',
     options: {
-      handler: UsersController.viewExternalLicences
+      handler: viewExternalLicences
     }
   },
   {
     method: 'GET',
     path: '/users/external/{id}/verifications',
     options: {
-      handler: UsersController.viewExternalVerifications
+      handler: viewExternalVerifications
     }
   },
   {
     method: 'GET',
     path: '/users/internal/{id}/communications',
     options: {
-      handler: UsersController.viewInternalCommunications,
+      handler: viewInternalCommunications,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -69,7 +82,7 @@ const routes = [
     method: 'GET',
     path: '/users/internal/{id}/details',
     options: {
-      handler: UsersController.viewInternalDetails,
+      handler: viewInternalDetails,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -81,7 +94,7 @@ const routes = [
     method: 'POST',
     path: '/users/internal/{id}/details',
     options: {
-      handler: UsersController.submitInternalDetails,
+      handler: submitInternalDetails,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -93,14 +106,14 @@ const routes = [
     method: 'GET',
     path: '/users/{type}/{id}/notifications/{notificationId}',
     options: {
-      handler: UsersController.viewNotification
+      handler: viewNotification
     }
   },
   {
     method: 'GET',
     path: '/users/me/profile-details',
     options: {
-      handler: UsersController.viewProfileDetails,
+      handler: viewProfileDetails,
       auth: {
         access: {
           scope: ['hof_notifications', 'renewal_notifications']
@@ -112,7 +125,7 @@ const routes = [
     method: 'POST',
     path: '/users/me/profile-details',
     options: {
-      handler: UsersController.submitProfileDetails,
+      handler: submitProfileDetails,
       auth: {
         access: {
           scope: ['hof_notifications', 'renewal_notifications']

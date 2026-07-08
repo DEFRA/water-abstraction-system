@@ -17,17 +17,10 @@ const { HTTP_STATUS_NO_CONTENT } = http2.constants
  *
  * @returns {Promise<object>} - A promise that resolves to an HTTP response object with a 204 status code
  */
-async function placeholder(request, h) {
+export async function placeholder(request, h) {
   const { id } = request.payload
 
   globalThis.GlobalNotifier.omg('Placeholder endpoint called', { id })
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
-}
-
-export {
-  placeholder
-}
-export default {
-  placeholder
 }

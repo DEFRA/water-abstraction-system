@@ -45,7 +45,7 @@ import ViewRemoveLicencesService from '../services/notices/setup/view-remove-lic
 import ViewReturnsPeriodService from '../services/notices/setup/view-returns-period.service.js'
 import ViewSelectRecipientsService from '../services/notices/setup/view-select-recipients.service.js'
 
-async function processAddRecipient(request, h) {
+export async function processAddRecipient(request, h) {
   const {
     params: { sessionId },
     yar
@@ -56,7 +56,7 @@ async function processAddRecipient(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/check`)
 }
 
-async function processDownloadRecipients(request, h) {
+export async function processDownloadRecipients(request, h) {
   const {
     params: { sessionId }
   } = request
@@ -71,7 +71,7 @@ async function processDownloadRecipients(request, h) {
     .header('Content-Disposition', `attachment; filename="${filename}"`)
 }
 
-async function processPreviewPaperReturn(request, h) {
+export async function processPreviewPaperReturn(request, h) {
   const { contactHashId, sessionId, returnLogId } = request.params
 
   const fileBuffer = await ProcessPreviewPaperReturnService.go(sessionId, contactHashId, returnLogId)
@@ -79,7 +79,7 @@ async function processPreviewPaperReturn(request, h) {
   return h.response(fileBuffer).type('application/pdf').header('Content-Disposition', 'inline; filename="example.pdf"')
 }
 
-async function processRemoveThreshold(request, h) {
+export async function processRemoveThreshold(request, h) {
   const {
     params: { sessionId, licenceMonitoringStationId },
     yar
@@ -90,7 +90,7 @@ async function processRemoveThreshold(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
 }
 
-async function setup(request, h) {
+export async function setup(request, h) {
   const {
     params: { journey },
     query: { monitoringStationId }
@@ -101,7 +101,7 @@ async function setup(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/${path}`)
 }
 
-async function submitAlertEmailAddress(request, h) {
+export async function submitAlertEmailAddress(request, h) {
   const {
     auth,
     payload,
@@ -117,7 +117,7 @@ async function submitAlertEmailAddress(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/check`)
 }
 
-async function submitAlertThresholds(request, h) {
+export async function submitAlertThresholds(request, h) {
   const {
     payload,
     params: { sessionId }
@@ -132,7 +132,7 @@ async function submitAlertThresholds(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
 }
 
-async function submitAlertType(request, h) {
+export async function submitAlertType(request, h) {
   const {
     payload,
     params: { sessionId }
@@ -147,7 +147,7 @@ async function submitAlertType(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/alert-thresholds`)
 }
 
-async function submitCancel(request, h) {
+export async function submitCancel(request, h) {
   const { sessionId } = request.params
 
   const redirectURl = await SubmitCancelService.go(sessionId)
@@ -155,7 +155,7 @@ async function submitCancel(request, h) {
   return h.redirect(redirectURl)
 }
 
-async function submitCancelAlerts(request, h) {
+export async function submitCancelAlerts(request, h) {
   const {
     params: { sessionId }
   } = request
@@ -165,7 +165,7 @@ async function submitCancelAlerts(request, h) {
   return h.redirect(`/system/monitoring-stations/${monitoringStationId}`)
 }
 
-async function submitCheck(request, h) {
+export async function submitCheck(request, h) {
   const {
     auth,
     params: { sessionId }
@@ -176,7 +176,7 @@ async function submitCheck(request, h) {
   return h.redirect(`/system/notices/setup/${eventId}/confirmation`)
 }
 
-async function submitCheckLicenceMatches(request, h) {
+export async function submitCheckLicenceMatches(request, h) {
   const {
     params: { sessionId }
   } = request
@@ -186,7 +186,7 @@ async function submitCheckLicenceMatches(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/alert-email-address`)
 }
 
-async function submitCheckNoticeType(request, h) {
+export async function submitCheckNoticeType(request, h) {
   const {
     params: { sessionId }
   } = request
@@ -196,7 +196,7 @@ async function submitCheckNoticeType(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/check`)
 }
 
-async function submitContactType(request, h) {
+export async function submitContactType(request, h) {
   const {
     params: { sessionId },
     payload,
@@ -216,7 +216,7 @@ async function submitContactType(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/check`)
 }
 
-async function submitLicence(request, h) {
+export async function submitLicence(request, h) {
   const {
     params: { sessionId },
     yar
@@ -231,7 +231,7 @@ async function submitLicence(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/${pageData.redirectUrl}`)
 }
 
-async function submitNoticeType(request, h) {
+export async function submitNoticeType(request, h) {
   const {
     auth,
     params: { sessionId },
@@ -248,7 +248,7 @@ async function submitNoticeType(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/${pageData.redirectUrl}`)
 }
 
-async function submitRecipientName(request, h) {
+export async function submitRecipientName(request, h) {
   const {
     payload,
     params: { sessionId }
@@ -263,7 +263,7 @@ async function submitRecipientName(request, h) {
   return h.redirect(`/system/address/${sessionId}/postcode`)
 }
 
-async function submitRemoveLicences(request, h) {
+export async function submitRemoveLicences(request, h) {
   const {
     payload,
     params: { sessionId }
@@ -278,7 +278,7 @@ async function submitRemoveLicences(request, h) {
   return h.redirect(`/system/notices/setup/${pageData.redirect}`)
 }
 
-async function submitReturnsPeriod(request, h) {
+export async function submitReturnsPeriod(request, h) {
   const {
     payload,
     params: { sessionId },
@@ -294,7 +294,7 @@ async function submitReturnsPeriod(request, h) {
   return h.redirect(`/system/notices/setup/${pageData.redirect}`)
 }
 
-async function submitPaperReturn(request, h) {
+export async function submitPaperReturn(request, h) {
   const {
     payload,
     params: { sessionId },
@@ -310,7 +310,7 @@ async function submitPaperReturn(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/check-notice-type`)
 }
 
-async function submitSelectRecipients(request, h) {
+export async function submitSelectRecipients(request, h) {
   const {
     payload,
     params: { sessionId },
@@ -326,7 +326,7 @@ async function submitSelectRecipients(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/check`)
 }
 
-async function viewAlertEmailAddress(request, h) {
+export async function viewAlertEmailAddress(request, h) {
   const {
     auth,
     params: { sessionId }
@@ -337,7 +337,7 @@ async function viewAlertEmailAddress(request, h) {
   return h.view(`notices/setup/alert-email-address.njk`, pageData)
 }
 
-async function viewAlertThresholds(request, h) {
+export async function viewAlertThresholds(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewAlertThresholdsService.go(sessionId)
@@ -345,7 +345,7 @@ async function viewAlertThresholds(request, h) {
   return h.view(`notices/setup/alert-thresholds.njk`, pageData)
 }
 
-async function viewAlertType(request, h) {
+export async function viewAlertType(request, h) {
   const {
     params: { sessionId }
   } = request
@@ -355,7 +355,7 @@ async function viewAlertType(request, h) {
   return h.view(`notices/setup/alert-type.njk`, pageData)
 }
 
-async function viewCancel(request, h) {
+export async function viewCancel(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewCancelService.go(sessionId)
@@ -363,7 +363,7 @@ async function viewCancel(request, h) {
   return h.view(`notices/setup/cancel.njk`, pageData)
 }
 
-async function viewCancelAlerts(request, h) {
+export async function viewCancelAlerts(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewCancelAlertsService.go(sessionId)
@@ -371,7 +371,7 @@ async function viewCancelAlerts(request, h) {
   return h.view(`notices/setup/cancel-alerts.njk`, pageData)
 }
 
-async function viewCheck(request, h) {
+export async function viewCheck(request, h) {
   const {
     params: { sessionId },
     query: { page },
@@ -383,7 +383,7 @@ async function viewCheck(request, h) {
   return h.view(`notices/setup/check.njk`, pageData)
 }
 
-async function viewCheckLicenceMatches(request, h) {
+export async function viewCheckLicenceMatches(request, h) {
   const {
     params: { sessionId },
     yar
@@ -394,7 +394,7 @@ async function viewCheckLicenceMatches(request, h) {
   return h.view(`notices/setup/check-licence-matches.njk`, pageData)
 }
 
-async function viewCheckNoticeType(request, h) {
+export async function viewCheckNoticeType(request, h) {
   const {
     params: { sessionId },
     yar
@@ -405,7 +405,7 @@ async function viewCheckNoticeType(request, h) {
   return h.view(`notices/setup/check-notice-type.njk`, pageData)
 }
 
-async function viewConfirmation(request, h) {
+export async function viewConfirmation(request, h) {
   const { eventId } = request.params
 
   const pageData = await ViewConfirmationService.go(eventId)
@@ -413,7 +413,7 @@ async function viewConfirmation(request, h) {
   return h.view(`notices/setup/confirmation.njk`, pageData)
 }
 
-async function viewContactType(request, h) {
+export async function viewContactType(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewContactTypeService.go(sessionId)
@@ -421,7 +421,7 @@ async function viewContactType(request, h) {
   return h.view(`notices/setup/contact-type.njk`, pageData)
 }
 
-async function viewLicence(request, h) {
+export async function viewLicence(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewLicenceService.go(sessionId)
@@ -429,7 +429,7 @@ async function viewLicence(request, h) {
   return h.view(`notices/setup/licence.njk`, pageData)
 }
 
-async function viewNoticeType(request, h) {
+export async function viewNoticeType(request, h) {
   const {
     auth,
     params: { sessionId }
@@ -440,7 +440,7 @@ async function viewNoticeType(request, h) {
   return h.view(`notices/setup/notice-type.njk`, pageData)
 }
 
-async function viewPaperReturn(request, h) {
+export async function viewPaperReturn(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewPaperReturnService.go(sessionId)
@@ -448,7 +448,7 @@ async function viewPaperReturn(request, h) {
   return h.view(`notices/setup/paper-return.njk`, pageData)
 }
 
-async function viewPreview(request, h) {
+export async function viewPreview(request, h) {
   const { contactHashId, licenceMonitoringStationId, sessionId } = request.params
 
   const pageData = await ViewPreviewService.go(sessionId, contactHashId, licenceMonitoringStationId)
@@ -456,7 +456,7 @@ async function viewPreview(request, h) {
   return h.view('notices/setup/preview.njk', pageData)
 }
 
-async function viewPreviewCheckAlert(request, h) {
+export async function viewPreviewCheckAlert(request, h) {
   const { contactHashId, sessionId } = request.params
 
   const pageData = await ViewPreviewCheckAlertService.go(contactHashId, sessionId)
@@ -464,7 +464,7 @@ async function viewPreviewCheckAlert(request, h) {
   return h.view('notices/setup/preview-check-alert.njk', pageData)
 }
 
-async function viewPreviewCheckPaperReturn(request, h) {
+export async function viewPreviewCheckPaperReturn(request, h) {
   const { contactHashId, sessionId } = request.params
 
   const pageData = await ViewPreviewCheckPaperReturnService.go(sessionId, contactHashId)
@@ -472,7 +472,7 @@ async function viewPreviewCheckPaperReturn(request, h) {
   return h.view(`notices/setup/preview-check-paper-return.njk`, pageData)
 }
 
-async function viewRecipientName(request, h) {
+export async function viewRecipientName(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewRecipientNameService.go(sessionId)
@@ -480,7 +480,7 @@ async function viewRecipientName(request, h) {
   return h.view(`notices/setup/recipient-name.njk`, pageData)
 }
 
-async function viewRemoveLicences(request, h) {
+export async function viewRemoveLicences(request, h) {
   const {
     params: { sessionId }
   } = request
@@ -490,7 +490,7 @@ async function viewRemoveLicences(request, h) {
   return h.view(`notices/setup/remove-licences.njk`, pageData)
 }
 
-async function viewReturnsPeriod(request, h) {
+export async function viewReturnsPeriod(request, h) {
   const {
     params: { sessionId }
   } = request
@@ -500,97 +500,10 @@ async function viewReturnsPeriod(request, h) {
   return h.view(`notices/setup/returns-period.njk`, pageData)
 }
 
-async function viewSelectRecipients(request, h) {
+export async function viewSelectRecipients(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ViewSelectRecipientsService.go(sessionId)
 
   return h.view(`notices/setup/select-recipients.njk`, pageData)
-}
-
-export {
-  processAddRecipient,
-  processDownloadRecipients,
-  processPreviewPaperReturn,
-  processRemoveThreshold,
-  setup,
-  submitAlertEmailAddress,
-  submitAlertThresholds,
-  submitAlertType,
-  submitCancel,
-  submitCancelAlerts,
-  submitCheck,
-  submitCheckLicenceMatches,
-  submitCheckNoticeType,
-  submitContactType,
-  submitLicence,
-  submitNoticeType,
-  submitPaperReturn,
-  submitRecipientName,
-  submitRemoveLicences,
-  submitReturnsPeriod,
-  submitSelectRecipients,
-  viewAlertEmailAddress,
-  viewAlertThresholds,
-  viewAlertType,
-  viewCancel,
-  viewCancelAlerts,
-  viewCheck,
-  viewCheckLicenceMatches,
-  viewCheckNoticeType,
-  viewConfirmation,
-  viewContactType,
-  viewLicence,
-  viewNoticeType,
-  viewPaperReturn,
-  viewPreview,
-  viewPreviewCheckAlert,
-  viewPreviewCheckPaperReturn,
-  viewRecipientName,
-  viewRemoveLicences,
-  viewReturnsPeriod,
-  viewSelectRecipients
-}
-export default {
-  processAddRecipient,
-  processDownloadRecipients,
-  processPreviewPaperReturn,
-  processRemoveThreshold,
-  setup,
-  submitAlertEmailAddress,
-  submitAlertThresholds,
-  submitAlertType,
-  submitCancel,
-  submitCancelAlerts,
-  submitCheck,
-  submitCheckLicenceMatches,
-  submitCheckNoticeType,
-  submitContactType,
-  submitLicence,
-  submitNoticeType,
-  submitPaperReturn,
-  submitRecipientName,
-  submitRemoveLicences,
-  submitReturnsPeriod,
-  submitSelectRecipients,
-  viewAlertEmailAddress,
-  viewAlertThresholds,
-  viewAlertType,
-  viewCancel,
-  viewCancelAlerts,
-  viewCheck,
-  viewCheckLicenceMatches,
-  viewCheckNoticeType,
-  viewConfirmation,
-  viewContactType,
-  viewLicence,
-  viewNoticeType,
-  viewPaperReturn,
-  viewPreview,
-  viewPreviewCheckAlert,
-  viewPreviewCheckPaperReturn,
-  viewRecipientName,
-  viewRemoveLicences,
-  viewReturnsPeriod,
-  viewSelectRecipients
 }

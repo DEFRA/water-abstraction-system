@@ -5,7 +5,7 @@
 
 import ViewService from '../services/licence-versions/view.service.js'
 
-async function view(request, h) {
+export async function view(request, h) {
   const {
     auth,
     params: { id }
@@ -14,11 +14,4 @@ async function view(request, h) {
   const pageData = await ViewService.go(id, auth)
 
   return h.view(`licence-versions/view.njk`, pageData)
-}
-
-export {
-  view
-}
-export default {
-  view
 }

@@ -6,7 +6,7 @@
 import ViewLicenceService from '../services/monitoring-stations/view-licence.service.js'
 import ViewService from '../services/monitoring-stations/view.service.js'
 
-async function licence(request, h) {
+export async function licence(request, h) {
   const {
     auth,
     params: { licenceId, monitoringStationId }
@@ -17,7 +17,7 @@ async function licence(request, h) {
   return h.view('monitoring-stations/licence.njk', pageData)
 }
 
-async function view(request, h) {
+export async function view(request, h) {
   const {
     auth,
     params: { monitoringStationId }
@@ -26,13 +26,4 @@ async function view(request, h) {
   const pageData = await ViewService.go(auth, monitoringStationId, request.yar)
 
   return h.view('monitoring-stations/view.njk', pageData)
-}
-
-export {
-  licence,
-  view
-}
-export default {
-  licence,
-  view
 }
