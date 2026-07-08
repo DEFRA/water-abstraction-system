@@ -80,15 +80,15 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
       it('removes the empty bill runs and returns the count', async () => {
         const result = await CleanEmptyBillRunsService()
 
-        expect(CancelBillRunService.calledTwice).toBe(true)
+        expect(CancelBillRunService).toHaveBeenCalledTimes(2)
         expect(CancelBillRunService.firstCall).toHaveBeenCalledWith(emptyBillRuns[0].id)
         expect(CancelBillRunService.secondCall).toHaveBeenCalledWith(emptyBillRuns[1].id)
 
-        expect(UnassignBillRunToLicencesService.calledTwice).toBe(true)
+        expect(UnassignBillRunToLicencesService).toHaveBeenCalledTimes(2)
         expect(UnassignBillRunToLicencesService.firstCall).toHaveBeenCalledWith(emptyBillRuns[0].id)
         expect(UnassignBillRunToLicencesService.secondCall).toHaveBeenCalledWith(emptyBillRuns[1].id)
 
-        expect(DeleteBillRunService.calledTwice).toBe(true)
+        expect(DeleteBillRunService).toHaveBeenCalledTimes(2)
 
         expect(result).toEqual(2)
       })
@@ -112,7 +112,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
       it('removes only the one that could be cancelled and returns the count', async () => {
         const result = await CleanEmptyBillRunsService()
 
-        expect(CancelBillRunService.calledTwice).toBe(true)
+        expect(CancelBillRunService).toHaveBeenCalledTimes(2)
         expect(CancelBillRunService.firstCall).toHaveBeenCalledWith(emptyBillRuns[0].id)
         expect(CancelBillRunService.secondCall).toHaveBeenCalledWith(emptyBillRuns[1].id)
 

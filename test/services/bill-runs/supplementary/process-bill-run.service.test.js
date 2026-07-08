@@ -67,7 +67,7 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
       it('sets the bill run status first to "processing" and then to "empty"', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        expect(billRunPatchStub.calledTwice).toBe(true)
+        expect(billRunPatchStub).toHaveBeenCalledTimes(2)
         expect(billRunPatchStub.mock.calls[0][0]).toEqual({ status: 'processing' })
         expect(billRunPatchStub.mock.calls[1][0]).toEqual({ status: 'empty' })
       })

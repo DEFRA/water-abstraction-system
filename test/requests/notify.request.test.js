@@ -244,7 +244,7 @@ describe('Notify Request', () => {
         it('retries the request after the configured pause', async () => {
           const result = await NotifyRequest.postRequest(testRoute, { test: 'yes' })
 
-          expect(baseRequestStub.calledTwice).toBe(true)
+          expect(baseRequestStub).toHaveBeenCalledTimes(2)
           expect(result.succeeded).toBe(true)
           expect(result.response.statusCode).toEqual(HTTP_STATUS_OK)
           expect(result.response.body.testObject.test).toEqual('yes')

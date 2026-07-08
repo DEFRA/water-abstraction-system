@@ -92,7 +92,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
       it('updates the bills with the Charging Module invoice numbers', async () => {
         await UpdateInvoiceNumbersService(billRun)
 
-        expect(billPatchStub.calledTwice).toBe(true)
+        expect(billPatchStub).toHaveBeenCalledTimes(2)
         expect(billPatchStub.mock.calls[0][0]).toEqual({ invoiceNumber: 'WAI1000429' })
         expect(billPatchStub.mock.calls[1][0]).toEqual({ invoiceNumber: 'WAI1000428' })
       })
