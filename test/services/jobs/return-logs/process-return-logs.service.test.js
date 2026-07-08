@@ -113,7 +113,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
       it('records the error by calling "omfg()"', async () => {
         await ProcessReturnLogsService(cycle)
 
-        const args = notifierStub.omfg.firstCall.args
+        const args = notifierStub.omfg.mock.calls[0]
 
         expect(args[0]).toEqual('Return logs job failed')
         expect(args[1]).toEqual({ cycle })
@@ -123,7 +123,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
       it('notifies the team by calling "redAlert()"', async () => {
         await ProcessReturnLogsService(cycle)
 
-        const args = notifierStub.redAlert.firstCall.args
+        const args = notifierStub.redAlert.mock.calls[0]
 
         expect(args[0]).toEqual('Return logs job failed')
       })
@@ -145,7 +145,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
       it('records the error by calling "omfg()"', async () => {
         await ProcessReturnLogsService(cycle)
 
-        const args = notifierStub.omfg.firstCall.args
+        const args = notifierStub.omfg.mock.calls[0]
 
         expect(args[0]).toEqual('Return logs creation errored')
         expect(args[1].returnRequirement).toEqual(returnRequirement)

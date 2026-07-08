@@ -40,7 +40,7 @@ describe('Companies House - Search Companies request', () => {
     it('hits the correct endpoint', async () => {
       await SearchCompaniesRequest.send(queryString)
 
-      const requestArgs = CompaniesHouseRequest.getRequest.firstCall.args
+      const requestArgs = CompaniesHouseRequest.getRequest.mock.calls[0]
 
       expect(requestArgs[0]).toEqual('search/companies')
     })

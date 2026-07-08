@@ -172,7 +172,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
     it('records the error by calling "omfg()"', async () => {
       await ProcessCustomerFilesService()
 
-      const args = notifierStub.omfg.firstCall.args
+      const args = notifierStub.omfg.mock.calls[0]
 
       expect(args[0]).toEqual('Customer files job failed')
       expect(args[1]).toBeNull()
@@ -182,7 +182,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
     it('notifies the team by calling "redAlert()"', async () => {
       await ProcessCustomerFilesService()
 
-      const args = notifierStub.redAlert.firstCall.args
+      const args = notifierStub.redAlert.mock.calls[0]
 
       expect(args[0]).toEqual('Customer files job failed')
     })

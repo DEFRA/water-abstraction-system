@@ -56,7 +56,7 @@ describe('Notices - Setup - Send - Renewal Invitation Alternate Notice service',
       const renewalDate = new Date(mainNotice.metadata.renewalDate)
 
       expect(CreateAlternateRenewalNoticeService).toHaveBeenCalledOnce()
-      expect(CreateAlternateRenewalNoticeService.firstCall.args).toEqual([
+      expect(CreateAlternateRenewalNoticeService.mock.calls[0]).toEqual([
         mainNotice,
         failedNotification.licences,
         expiryDate,

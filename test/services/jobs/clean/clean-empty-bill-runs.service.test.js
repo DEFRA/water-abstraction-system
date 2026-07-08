@@ -142,7 +142,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
       it('logs the error with no bill run ID', async () => {
         await CleanEmptyBillRunsService()
 
-        const errorLogArgs = notifierStub.omfg.firstCall.args
+        const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
         expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed')
         expect(errorLogArgs[1]).toEqual({ billRunId: undefined, job: 'clean-empty-bill-runs' })
@@ -170,7 +170,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
       it('logs the error including the ID of the bill run that errored', async () => {
         await CleanEmptyBillRunsService()
 
-        const errorLogArgs = notifierStub.omfg.firstCall.args
+        const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
         expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed')
         expect(errorLogArgs[1]).toEqual({ billRunId: emptyBillRuns[0].id, job: 'clean-empty-bill-runs' })

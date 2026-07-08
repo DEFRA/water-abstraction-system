@@ -33,7 +33,7 @@ describe('Legacy Request', () => {
       it('calls the legacy service with the required options', async () => {
         await LegacyRequest.deleteRequest('import', testPath)
 
-        const requestArgs = BaseRequest.deleteRequest.firstCall.args
+        const requestArgs = BaseRequest.deleteRequest.mock.calls[0]
 
         expect(requestArgs[0]).toEqual(testPath)
         expect(requestArgs[1].prefixUrl).toEqual(`${legacyConfig.import.url}/import/1.0`)
@@ -62,7 +62,7 @@ describe('Legacy Request', () => {
       it('can handle none API requests', async () => {
         await LegacyRequest.deleteRequest('import', testPath, null, false)
 
-        const requestArgs = BaseRequest.deleteRequest.firstCall.args
+        const requestArgs = BaseRequest.deleteRequest.mock.calls[0]
 
         expect(requestArgs[1].prefixUrl).toEqual(legacyConfig.import.url)
       })
@@ -70,7 +70,7 @@ describe('Legacy Request', () => {
       it('can add the defra-user-id header', async () => {
         await LegacyRequest.deleteRequest('import', testPath, 1234, true)
 
-        const requestArgs = BaseRequest.deleteRequest.firstCall.args
+        const requestArgs = BaseRequest.deleteRequest.mock.calls[0]
 
         expect(requestArgs[1].headers['defra-internal-user-id']).toEqual(1234)
       })
@@ -131,7 +131,7 @@ describe('Legacy Request', () => {
       it('calls the legacy service with the required options', async () => {
         await LegacyRequest.getRequest('import', testPath)
 
-        const requestArgs = BaseRequest.getRequest.firstCall.args
+        const requestArgs = BaseRequest.getRequest.mock.calls[0]
 
         expect(requestArgs[0]).toEqual(testPath)
         expect(requestArgs[1].prefixUrl).toEqual(`${legacyConfig.import.url}/import/1.0`)
@@ -162,7 +162,7 @@ describe('Legacy Request', () => {
       it('can handle none API requests', async () => {
         await LegacyRequest.getRequest('import', testPath, null, false)
 
-        const requestArgs = BaseRequest.getRequest.firstCall.args
+        const requestArgs = BaseRequest.getRequest.mock.calls[0]
 
         expect(requestArgs[1].prefixUrl).toEqual(legacyConfig.import.url)
       })
@@ -170,7 +170,7 @@ describe('Legacy Request', () => {
       it('can add the defra-user-id header', async () => {
         await LegacyRequest.getRequest('import', testPath, 1234, false)
 
-        const requestArgs = BaseRequest.getRequest.firstCall.args
+        const requestArgs = BaseRequest.getRequest.mock.calls[0]
 
         expect(requestArgs[1].headers['defra-internal-user-id']).toEqual(1234)
       })
@@ -231,7 +231,7 @@ describe('Legacy Request', () => {
       it('calls the legacy service with the required options', async () => {
         await LegacyRequest.postRequest('import', testPath, null, true, requestBody)
 
-        const requestArgs = BaseRequest.postRequest.firstCall.args
+        const requestArgs = BaseRequest.postRequest.mock.calls[0]
 
         expect(requestArgs[0]).toEqual(testPath)
         expect(requestArgs[1].prefixUrl).toEqual(`${legacyConfig.import.url}/import/1.0`)
@@ -262,7 +262,7 @@ describe('Legacy Request', () => {
       it('can handle none API requests', async () => {
         await LegacyRequest.postRequest('import', testPath, null, false, requestBody)
 
-        const requestArgs = BaseRequest.postRequest.firstCall.args
+        const requestArgs = BaseRequest.postRequest.mock.calls[0]
 
         expect(requestArgs[1].prefixUrl).toEqual(legacyConfig.import.url)
       })
@@ -270,7 +270,7 @@ describe('Legacy Request', () => {
       it('can add the defra-user-id header', async () => {
         await LegacyRequest.postRequest('import', testPath, 1234, false, requestBody)
 
-        const requestArgs = BaseRequest.postRequest.firstCall.args
+        const requestArgs = BaseRequest.postRequest.mock.calls[0]
 
         expect(requestArgs[1].headers['defra-internal-user-id']).toEqual(1234)
       })

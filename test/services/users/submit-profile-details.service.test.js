@@ -146,7 +146,7 @@ describe('Users - Submit profile details service', () => {
       it('does not flash a notification', async () => {
         await SubmitProfileDetailsService(userId, payload, yarStub)
 
-        expect(yarStub.flash.notCalled).toBe(true)
+        expect(yarStub.flash).not.toHaveBeenCalled()
       })
     })
   })

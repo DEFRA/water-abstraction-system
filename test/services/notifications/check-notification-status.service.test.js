@@ -1374,7 +1374,7 @@ describe('Notifications - Check Notification Status service', () => {
     it('logs the failure', async () => {
       await CheckNotificationStatusService(notification)
 
-      const errorLogArgs = notifierStub.omfg.firstCall.args
+      const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
       expect(notifierStub.omfg).toHaveBeenCalledWith('Check notification status failed')
       expect(errorLogArgs[1]).toEqual({
@@ -1425,7 +1425,7 @@ describe('Notifications - Check Notification Status service', () => {
     it('makes no changes and logs the failure', async () => {
       await CheckNotificationStatusService(notification)
 
-      const errorLogArgs = notifierStub.omfg.firstCall.args
+      const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
       expect(notifierStub.omfg).toHaveBeenCalledWith('Check notification status failed')
       expect(errorLogArgs[1]).toEqual(notification)

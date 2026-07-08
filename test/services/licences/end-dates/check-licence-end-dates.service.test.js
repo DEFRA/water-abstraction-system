@@ -82,7 +82,7 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
     it('handles the error', async () => {
       await CheckLicenceEndDatesService(licence)
 
-      const errorLogArgs = notifierStub.omfg.firstCall.args
+      const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
       expect(notifierStub.omfg).toHaveBeenCalledWith('Check licence end dates failed')
       expect(errorLogArgs[1]).toEqual({

@@ -157,7 +157,7 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
     it('logs the error', async () => {
       await CleanOrphanedContactsService()
 
-      const errorLogArgs = notifierStub.omfg.firstCall.args
+      const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
       expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed')
       expect(errorLogArgs[1]).toEqual({ job: 'clean-orphaned-contacts' })

@@ -129,14 +129,14 @@ describe('Return Logs Setup - Submit Check service', () => {
     it('generates metadata for the return submission', async () => {
       await SubmitCheckService(session.id, user)
 
-      const callArgs = GenerateReturnSubmissionMetadata.firstCall.args
+      const callArgs = GenerateReturnSubmissionMetadata.mock.calls[0]
       expect(callArgs[0]).toBeInstanceOf(SessionModel)
     })
 
     it('calls CreateReturnSubmissionService with correct parameters', async () => {
       await SubmitCheckService(session.id, user)
 
-      const callArgs = CreateReturnSubmissionService.firstCall.args
+      const callArgs = CreateReturnSubmissionService.mock.calls[0]
       expect(callArgs[0]).toEqual(mockGeneratedMetadata)
       expect(callArgs[1]).toBeInstanceOf(SessionModel)
       expect(callArgs[3]).toEqual(user)
@@ -145,7 +145,7 @@ describe('Return Logs Setup - Submit Check service', () => {
     it('calls CreateReturnLinesService with correct parameters', async () => {
       await SubmitCheckService(session.id, user)
 
-      const callArgs = CreateReturnLinesService.firstCall.args
+      const callArgs = CreateReturnLinesService.mock.calls[0]
       expect(callArgs[0]).toEqual(mockNewReturnSubmissionId)
       expect(callArgs[1]).toBeInstanceOf(SessionModel)
     })

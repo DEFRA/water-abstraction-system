@@ -43,7 +43,7 @@ describe('Notify Token Cache plugin', () => {
 
       expect(result).not.toBeNull()
 
-      const jwtSignFirstCall = jwtSignSpy.firstCall.args
+      const jwtSignFirstCall = jwtSignSpy.mock.calls[0]
 
       expect(jwtSignFirstCall).toEqual([
         {

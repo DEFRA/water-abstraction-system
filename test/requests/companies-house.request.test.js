@@ -47,7 +47,7 @@ describe('Companies House Request', () => {
       it('calls Companies House with the required options', async () => {
         await CompaniesHouseRequest.getRequest(testRoute, searchParams)
 
-        const requestArgs = BaseRequest.getRequest.firstCall.args
+        const requestArgs = BaseRequest.getRequest.mock.calls[0]
 
         expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
         expect(requestArgs[1].headers).toMatchObject({ authorization: `Basic ${accessToken}` })

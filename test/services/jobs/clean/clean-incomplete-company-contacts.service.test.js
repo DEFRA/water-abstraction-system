@@ -124,7 +124,7 @@ describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
     it('logs the error', async () => {
       await CleanIncompleteCompanyContactsService()
 
-      const errorLogArgs = notifierStub.omfg.firstCall.args
+      const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
       expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed')
       expect(errorLogArgs[1]).toEqual({ job: 'clean-incomplete-company-contacts' })

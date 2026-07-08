@@ -62,7 +62,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
 
         const [insertObject] = insertStub.mock.calls[0]
 
-        expect(insertStub.callCount).toEqual(1)
+        expect(insertStub).toHaveBeenCalledTimes(1)
         expect(insertObject).toMatchObject({
           dueDate: null,
           endDate: cycleData.endDate,
@@ -110,7 +110,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
 
         const [insertObject] = insertStub.mock.calls[0]
 
-        expect(insertStub.callCount).toEqual(1)
+        expect(insertStub).toHaveBeenCalledTimes(1)
         expect(insertObject).toMatchObject({
           dueDate: null,
           endDate: cycleData.endDate,

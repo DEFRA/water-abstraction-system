@@ -108,7 +108,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
     it('records the error by calling "omfg()"', async () => {
       await ProcessNotificationStatusService()
 
-      const args = notifierStub.omfg.firstCall.args
+      const args = notifierStub.omfg.mock.calls[0]
 
       expect(args[0]).toEqual('Notification status job failed')
       expect(args[1]).toBeNull()
@@ -118,7 +118,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
     it('notifies the team by calling "redAlert()"', async () => {
       await ProcessNotificationStatusService()
 
-      const args = notifierStub.redAlert.firstCall.args
+      const args = notifierStub.redAlert.mock.calls[0]
 
       expect(args[0]).toEqual('Notification status job failed')
     })

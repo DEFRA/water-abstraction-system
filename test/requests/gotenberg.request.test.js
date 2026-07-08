@@ -58,7 +58,7 @@ describe('Gotenberg Request', () => {
       it('calls Gotenberg with the required options', async () => {
         await GotenbergRequest.postRequest(testRoute, formData)
 
-        const requestArgs = BaseRequest.postRequest.firstCall.args
+        const requestArgs = BaseRequest.postRequest.mock.calls[0]
 
         expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
         expect(requestArgs[1].responseType).toEqual('buffer')
@@ -68,7 +68,7 @@ describe('Gotenberg Request', () => {
       it('uses the Gotenberg timeout', async () => {
         await GotenbergRequest.postRequest(testRoute, formData)
 
-        const requestArgs = BaseRequest.postRequest.firstCall.args
+        const requestArgs = BaseRequest.postRequest.mock.calls[0]
 
         expect(requestArgs[1].timeout).toEqual({ request: 1234 })
       })

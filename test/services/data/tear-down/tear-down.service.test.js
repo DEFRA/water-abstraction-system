@@ -40,7 +40,7 @@ describe('Tear down service', () => {
   it('tears down the schemas', async () => {
     await TearDownService()
 
-    const args = notifierStub.omg.firstCall.args
+    const args = notifierStub.omg.mock.calls[0]
 
     expect(args[0]).toEqual('Tear down complete')
     expect(args[1].timeTakenMs).toBeDefined()

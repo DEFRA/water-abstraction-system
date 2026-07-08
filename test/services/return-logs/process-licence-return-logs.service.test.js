@@ -121,8 +121,8 @@ describe('Return Logs - Process Licence Return Logs service', () => {
           it('processes the _right_ return requirements for each return cycle', async () => {
             await ProcessLicenceReturnLogsService(licenceId, changeDate)
 
-            expect(CreateReturnLogsService.callCount).toEqual(5)
-            expect(VoidLicenceReturnLogsService.callCount).toEqual(3)
+            expect(CreateReturnLogsService).toHaveBeenCalledTimes(5)
+            expect(VoidLicenceReturnLogsService).toHaveBeenCalledTimes(3)
 
             // First cycle is summer ending 2026-10-31; should process current summer req only
             expect(CreateReturnLogsService.getCall(0).args).toEqual([returnRequirements[0], returnCycles[0], null, null])
@@ -241,7 +241,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
           await ProcessLicenceReturnLogsService(licenceId, changeDate)
 
           // The requirement matches with two of the return cycles (winter), so 'create' is called twice
-          expect(CreateReturnLogsService.callCount).toEqual(2)
+          expect(CreateReturnLogsService).toHaveBeenCalledTimes(2)
 
           // For every return cycle fetched, we need to call the void service, even if no return logs were created. If
           // this is the case, it means any existing return logs for that cycle need to be voided.
@@ -281,7 +281,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
           await ProcessLicenceReturnLogsService(licenceId, changeDate, returnVersionEndDate)
 
           // The requirement only matches with one of the return cycles, hence 'create' is only called once
-          expect(CreateReturnLogsService.callCount).toEqual(1)
+          expect(CreateReturnLogsService).toHaveBeenCalledTimes(1)
 
           // For every return cycle fetched, we need to call the void service, even if no return logs were created. If
           // this is the case, it means any existing return logs for that cycle need to be voided.

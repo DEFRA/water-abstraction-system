@@ -61,7 +61,7 @@ describe('Charging Module Request', () => {
       it('calls the Charging Module with the required options', async () => {
         await ChargingModuleRequest.deleteRequest(testRoute)
 
-        const requestArgs = BaseRequest.deleteRequest.firstCall.args
+        const requestArgs = BaseRequest.deleteRequest.mock.calls[0]
 
         expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
         expect(requestArgs[1].headers).toMatchObject({ authorization: 'Bearer ACCESS_TOKEN' })
@@ -70,7 +70,7 @@ describe('Charging Module Request', () => {
       it('uses the charging module timeout', async () => {
         await ChargingModuleRequest.deleteRequest(testRoute)
 
-        const requestArgs = BaseRequest.deleteRequest.firstCall.args
+        const requestArgs = BaseRequest.deleteRequest.mock.calls[0]
 
         expect(requestArgs[1].timeout).toEqual({ request: 1234 })
       })
@@ -161,7 +161,7 @@ describe('Charging Module Request', () => {
       it('calls the Charging Module with the required options', async () => {
         await ChargingModuleRequest.getRequest(testRoute)
 
-        const requestArgs = BaseRequest.getRequest.firstCall.args
+        const requestArgs = BaseRequest.getRequest.mock.calls[0]
 
         expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
         expect(requestArgs[1].headers).toMatchObject({ authorization: 'Bearer ACCESS_TOKEN' })
@@ -170,7 +170,7 @@ describe('Charging Module Request', () => {
       it('uses the charging module timeout', async () => {
         await ChargingModuleRequest.getRequest(testRoute)
 
-        const requestArgs = BaseRequest.getRequest.firstCall.args
+        const requestArgs = BaseRequest.getRequest.mock.calls[0]
 
         expect(requestArgs[1].timeout).toEqual({ request: 1234 })
       })
@@ -261,7 +261,7 @@ describe('Charging Module Request', () => {
       it('calls the Charging Module with the required options', async () => {
         await ChargingModuleRequest.patchRequest(testRoute)
 
-        const requestArgs = BaseRequest.patchRequest.firstCall.args
+        const requestArgs = BaseRequest.patchRequest.mock.calls[0]
 
         expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
         expect(requestArgs[1].headers).toMatchObject({ authorization: 'Bearer ACCESS_TOKEN' })
@@ -270,7 +270,7 @@ describe('Charging Module Request', () => {
       it('uses the charging module timeout', async () => {
         await ChargingModuleRequest.patchRequest(testRoute)
 
-        const requestArgs = BaseRequest.patchRequest.firstCall.args
+        const requestArgs = BaseRequest.patchRequest.mock.calls[0]
 
         expect(requestArgs[1].timeout).toEqual({ request: 1234 })
       })
@@ -361,7 +361,7 @@ describe('Charging Module Request', () => {
       it('calls the Charging Module with the required options', async () => {
         await ChargingModuleRequest.postRequest(testRoute, { test: 'yes' })
 
-        const requestArgs = BaseRequest.postRequest.firstCall.args
+        const requestArgs = BaseRequest.postRequest.mock.calls[0]
 
         expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
         expect(requestArgs[1].headers).toMatchObject({ authorization: 'Bearer ACCESS_TOKEN' })
@@ -371,7 +371,7 @@ describe('Charging Module Request', () => {
       it('uses the charging module timeout', async () => {
         await ChargingModuleRequest.postRequest(testRoute)
 
-        const requestArgs = BaseRequest.postRequest.firstCall.args
+        const requestArgs = BaseRequest.postRequest.mock.calls[0]
 
         expect(requestArgs[1].timeout).toEqual({ request: 1234 })
       })

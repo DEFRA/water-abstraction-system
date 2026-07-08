@@ -125,7 +125,7 @@ describe('Process Time Limited Licences service', () => {
     it('records the error by calling "omfg()"', async () => {
       await ProcessTimeLimitedLicencesService()
 
-      const args = notifierStub.omfg.firstCall.args
+      const args = notifierStub.omfg.mock.calls[0]
 
       expect(args[0]).toEqual('Time limited job failed')
       expect(args[1]).toBeNull()
@@ -135,7 +135,7 @@ describe('Process Time Limited Licences service', () => {
     it('notifies the team by calling "redAlert()"', async () => {
       await ProcessTimeLimitedLicencesService()
 
-      const args = notifierStub.redAlert.firstCall.args
+      const args = notifierStub.redAlert.mock.calls[0]
 
       expect(args[0]).toEqual('Time limited job failed')
     })
