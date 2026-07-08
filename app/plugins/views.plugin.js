@@ -17,7 +17,6 @@ import MarkdownFilter from '../views/filters/markdown.filter.js'
 
 import ServerConfig from '../../config/server.config.js'
 
-
 /**
  * The rendering function for the view engine
  *
