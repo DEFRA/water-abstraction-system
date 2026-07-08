@@ -80,18 +80,18 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
       }
     ]
 
-      .onFirstCall()
-      .resolves({
+      
+      .mockResolvedValueOnce({
         primaryPurposeId: 'c6fd4b2a-82b5-42b0-a98a-087ba52f9a4f',
         secondaryPurposeId: '0a80d135-9bd4-40ec-90ff-f4a365ccac3f'
       })
-      .onSecondCall()
-      .resolves({
+      
+      .mockResolvedValueOnce({
         primaryPurposeId: 'c6fd4b2a-82b5-42b0-a98a-087ba52f9a4f',
         secondaryPurposeId: '0a80d135-9bd4-40ec-90ff-f4a365ccac3f'
       })
-      .onThirdCall()
-      .resolves({
+      
+      .mockResolvedValueOnce({
         primaryPurposeId: '6f1bb87e-02f6-4cfb-87cb-57dc2af3e2af',
         secondaryPurposeId: '8391fe23-a85e-4e7e-a0f8-d819be97d789'
       })

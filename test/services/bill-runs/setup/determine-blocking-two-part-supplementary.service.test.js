@@ -56,11 +56,11 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
       billRunQueryStub.first = vi
         .fn()
         // Find last annual bill run
-        .onFirstCall()
-        .resolves(lastAnnualMatch)
+        
+        .mockResolvedValueOnce(lastAnnualMatch)
         // Find matching bill run
-        .onSecondCall()
-        .resolves(match)
+        
+        .mockResolvedValueOnce(match)
 
       vi.spyOn(BillRunModel, 'query').mockReturnValue(billRunQueryStub)
     })
@@ -77,11 +77,11 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
       billRunQueryStub.first = vi
         .fn()
         // Find last annual bill run
-        .onFirstCall()
-        .resolves(lastAnnualMatch)
+        
+        .mockResolvedValueOnce(lastAnnualMatch)
         // Find matching bill run
-        .onSecondCall()
-        .resolves(null)
+        
+        .mockResolvedValueOnce(null)
 
       vi.spyOn(BillRunModel, 'query').mockReturnValue(billRunQueryStub)
     })

@@ -232,14 +232,13 @@ describe('Reissue Bill service', () => {
 
         billRunStatusStub = vi
           .spyOn(ChargingModuleViewBillRunStatusRequest, 'send')
-          .mockImplementation(() => {})
-          .onFirstCall()
-          .resolves({
+          
+          .mockResolvedValueOnce({
             succeeded: true,
             response: { body: { status: 'pending' } }
           })
-          .onSecondCall()
-          .resolves({
+          
+          .mockResolvedValueOnce({
             succeeded: true,
             response: { body: { status: 'initialised' } }
           })
