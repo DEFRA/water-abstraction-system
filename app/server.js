@@ -53,7 +53,7 @@ async function registerPlugins(server) {
   await server.register(KeepYarAlivePlugin)
 }
 
-async function init() {
+export async function init() {
   // Create the hapi server
   const server = Hapi.server(ServerConfig.hapi)
 
@@ -63,7 +63,7 @@ async function init() {
   return server
 }
 
-async function start() {
+export async function start() {
   const server = await init()
 
   await server.start()
@@ -75,6 +75,3 @@ process.on('unhandledRejection', (err) => {
   console.error(err)
   process.exit(1)
 })
-
-export { init, start }
-export default { init, start }
