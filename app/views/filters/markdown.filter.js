@@ -26,15 +26,8 @@ import { marked } from 'marked'
  * @param {string} input - The markdown input to be processed.
  * @returns {string} The HTML output generated after replacing carets (`^`) with `>` and parsing the markdown.
  */
-function markdown(input = '') {
+export default function markdown(input = '') {
   const replacedCaret = input.replace(/\^/gm, '>')
 
   return marked.parse(replacedCaret)
-}
-
-export {
-  markdown
-}
-export default {
-  markdown
 }

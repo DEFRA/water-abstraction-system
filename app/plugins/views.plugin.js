@@ -13,7 +13,7 @@ import Nunjucks from 'nunjucks'
 import Vision from '@hapi/vision'
 
 import { enableBillingAccountChangeAddress } from '../../config/feature-flags.config.js'
-import { markdown } from '../views/filters/markdown.filter.js'
+import markdown from '../views/filters/markdown.filter.js'
 
 import ServerConfig from '../../config/server.config.js'
 
