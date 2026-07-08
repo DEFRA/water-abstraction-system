@@ -9,7 +9,7 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
  *
  * @returns {module:SessionModel} A model instance with stubbed methods.
  */
-function build(_sinon, sessionData) {
+export default function build(_sinon, sessionData) {
   const session = SessionModel.fromJson({
     id: generateUUID(),
     ...sessionData
@@ -18,11 +18,4 @@ function build(_sinon, sessionData) {
   vi.spyOn(session, '$update').mockResolvedValue(session)
 
   return session
-}
-
-export {
-  build
-}
-export default {
-  build
 }

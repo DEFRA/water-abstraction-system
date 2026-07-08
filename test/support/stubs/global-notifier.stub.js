@@ -6,17 +6,10 @@
  *
  * @returns {object} A stubbed GlobalNotifier with omg, omfg and redAlert methods
  */
-function build() {
+export default function build() {
   return {
     omg: vi.fn(),
     omfg: vi.fn(),
     redAlert: vi.fn()
   }
-}
-
-export {
-  build
-}
-export default {
-  build
 }
