@@ -2,10 +2,10 @@
  * @module EmptyLicenceSeeder
  */
 
-import LicenceDocumentHeaderHelper from '../helpers/licence-document-header.helper.js'
-import LicenceDocumentHelper from '../helpers/licence-document.helper.js'
-import LicenceHelper from '../helpers/licence.helper.js'
-import RegionHelper from '../helpers/region.helper.js'
+import * as LicenceDocumentHeaderHelper from '../helpers/licence-document-header.helper.js'
+import * as LicenceDocumentHelper from '../helpers/licence-document.helper.js'
+import * as LicenceHelper from '../helpers/licence.helper.js'
+import * as RegionHelper from '../helpers/region.helper.js'
 
 const { generateLicenceRef } = LicenceHelper
 

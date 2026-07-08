@@ -1,5 +1,5 @@
 import LicenceModel from '../../../app/models/licence.model.js'
-import ReturnLogHelper from '../helpers/return-log.helper.js'
+import * as ReturnLogHelper from '../helpers/return-log.helper.js'
 import ReturnLogModel from '../../../app/models/return-log.model.js'
 import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
 import ReturnSubmissionLineModel from '../../../app/models/return-submission-line.model.js'

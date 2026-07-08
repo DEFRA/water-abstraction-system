@@ -1,4 +1,4 @@
-import RegionHelper from '../helpers/region.helper.js'
+import * as RegionHelper from '../helpers/region.helper.js'
 import { generateNoticeReferenceCode, generateUUID } from '../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../helpers/licence.helper.js'
 import { generateReference } from '../helpers/return-requirement.helper.js'
