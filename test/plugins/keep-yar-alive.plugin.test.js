@@ -75,7 +75,7 @@ describe('Keep Yar Alive plugin', () => {
 
       expect(yarStub.touch).toHaveBeenCalled()
 
-      expect(globalThis.GlobalNotifier.omfg.called).toBe(false)
+      expect(globalThis.GlobalNotifier.omfg).not.toHaveBeenCalled()
     })
   })
 
@@ -94,7 +94,7 @@ describe('Keep Yar Alive plugin', () => {
 
       expect(yarStub.touch).not.toHaveBeenCalled()
 
-      expect(globalThis.GlobalNotifier.omfg.called).toBe(false)
+      expect(globalThis.GlobalNotifier.omfg).not.toHaveBeenCalled()
     })
   })
 
@@ -107,7 +107,7 @@ describe('Keep Yar Alive plugin', () => {
 
       expect(yarStub.touch).not.toHaveBeenCalled()
 
-      expect(globalThis.GlobalNotifier.omfg.called).toBe(false)
+      expect(globalThis.GlobalNotifier.omfg).not.toHaveBeenCalled()
     })
   })
 

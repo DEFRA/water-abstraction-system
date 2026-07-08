@@ -117,7 +117,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         await SendMainNoticeService(notice, notifications)
 
         // Check we record the Notify responses against the notifications
-        expect(notificationPatchStub.calledTwice).toBe(true)
+        expect(notificationPatchStub).toHaveBeenCalledTimes(2)
         expect(notificationPatchStub.mock.calls[0][0]).toEqual({
           pdf: undefined,
           plaintext: letterPlaintext,
@@ -173,7 +173,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         await SendMainNoticeService(notice, notifications)
 
         // Check we record the Notify responses against the notifications
-        expect(notificationPatchStub.calledTwice).toBe(true)
+        expect(notificationPatchStub).toHaveBeenCalledTimes(2)
         expect(notificationPatchStub.mock.calls[0][0]).toEqual({
           pdf: undefined,
           plaintext: undefined,

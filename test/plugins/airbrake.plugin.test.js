@@ -49,7 +49,7 @@ describe('Airbrake plugin', () => {
     it('calls airbrake.notify', async () => {
       await server.inject(path)
 
-      expect(server.app.airbrake.notify.called).toBe(true)
+      expect(server.app.airbrake.notify).toHaveBeenCalled()
     })
   })
 

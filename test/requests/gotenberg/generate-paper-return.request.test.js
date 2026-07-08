@@ -60,7 +60,7 @@ describe('Gotenberg - Generate Paper Return Request', () => {
       it('containing the expected fields', async () => {
         await GeneratePaperReturnRequest.send(pageData)
 
-        expect(GotenbergRequest.postRequest.calledWithMatch('forms/chromium/convert/html', expect.any(FormData))).toBe(true)
+        expect(GotenbergRequest.postRequest).toHaveBeenCalledWith('forms/chromium/convert/html', expect.any(FormData))
 
         // Check the html has been added to the form data
         const appendCall = FormData.prototype.append.getCall(0)
@@ -81,7 +81,7 @@ describe('Gotenberg - Generate Paper Return Request', () => {
       it('containing the html', async () => {
         await GeneratePaperReturnRequest.send(pageData)
 
-        expect(GotenbergRequest.postRequest.calledWithMatch('forms/chromium/convert/html', expect.any(FormData))).toBe(true)
+        expect(GotenbergRequest.postRequest).toHaveBeenCalledWith('forms/chromium/convert/html', expect.any(FormData))
 
         // Get the second call to append (index 0) - this should be the html file
         const appendCall = FormData.prototype.append.getCall(0)
@@ -102,7 +102,7 @@ describe('Gotenberg - Generate Paper Return Request', () => {
       it('containing the footer', async () => {
         await GeneratePaperReturnRequest.send(pageData)
 
-        expect(GotenbergRequest.postRequest.calledWithMatch('forms/chromium/convert/html', expect.any(FormData))).toBe(true)
+        expect(GotenbergRequest.postRequest).toHaveBeenCalledWith('forms/chromium/convert/html', expect.any(FormData))
 
         // Get the second call to append (index 1) - this should be the footer file
         const appendCall = FormData.prototype.append.getCall(1)

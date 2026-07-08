@@ -88,7 +88,7 @@ describe('Notify Token Cache plugin', () => {
 
       expect(firstCall).not.toEqual(secondCall)
 
-      expect(jwtSignSpy.calledTwice).toBe(true)
+      expect(jwtSignSpy).toHaveBeenCalledTimes(2)
     })
   })
 })

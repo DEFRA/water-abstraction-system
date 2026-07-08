@@ -78,7 +78,7 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
 
       // The first call is recording the result. The second is updating the failed notifications with the alternate
       // notice ID (tested elsewhere)
-      expect(notificationPatchStub.calledTwice).toBe(true)
+      expect(notificationPatchStub).toHaveBeenCalledTimes(2)
       expect(notificationPatchStub.mock.calls[0][0]).toEqual({
         notifyError: undefined,
         notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
@@ -91,7 +91,7 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
     it('updates the failed notifications with the alternate notice ID', async () => {
       await SendAlternateNoticeService(mainNotice)
 
-      expect(notificationPatchStub.calledTwice).toBe(true)
+      expect(notificationPatchStub).toHaveBeenCalledTimes(2)
       expect(notificationPatchStub.secondCall.mock.calls[0]).toMatchObject({ alternateNoticeId: alternateNotice.id })
     })
 
