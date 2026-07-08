@@ -6,6 +6,8 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import LicenceEntityRoleModel from './licence-entity-role.model.js'
+import LicenceModel from './licence.model.js'
 
 /**
  * Represents an instance of a licence document header record
@@ -43,7 +45,7 @@ class LicenceDocumentHeaderModel extends BaseModel {
     return {
       licence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'licenceDocumentHeaders.licenceRef',
           to: 'licences.licenceRef'
@@ -51,7 +53,7 @@ class LicenceDocumentHeaderModel extends BaseModel {
       },
       licenceEntityRoles: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-entity-role.model',
+        modelClass: LicenceEntityRoleModel,
         join: {
           from: 'licenceDocumentHeaders.companyEntityId',
           to: 'licenceEntityRoles.companyEntityId'

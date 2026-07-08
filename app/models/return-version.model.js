@@ -7,6 +7,10 @@ import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
 import { returnRequirementReasons } from '../lib/static-lookups.lib.js'
+import LicenceModel from './licence.model.js'
+import ModLogModel from './mod-log.model.js'
+import ReturnRequirementModel from './return-requirement.model.js'
+import UserModel from './user.model.js'
 
 class ReturnVersionModel extends BaseModel {
   static get tableName() {
@@ -17,7 +21,7 @@ class ReturnVersionModel extends BaseModel {
     return {
       licence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'returnVersions.licenceId',
           to: 'licences.id'
@@ -25,7 +29,7 @@ class ReturnVersionModel extends BaseModel {
       },
       modLogs: {
         relation: Model.HasManyRelation,
-        modelClass: 'mod-log.model',
+        modelClass: ModLogModel,
         join: {
           from: 'returnVersions.id',
           to: 'modLogs.returnVersionId'
@@ -33,7 +37,7 @@ class ReturnVersionModel extends BaseModel {
       },
       returnRequirements: {
         relation: Model.HasManyRelation,
-        modelClass: 'return-requirement.model',
+        modelClass: ReturnRequirementModel,
         join: {
           from: 'returnVersions.id',
           to: 'returnRequirements.returnVersionId'
@@ -41,7 +45,7 @@ class ReturnVersionModel extends BaseModel {
       },
       user: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'user.model',
+        modelClass: UserModel,
         join: {
           from: 'returnVersions.createdBy',
           to: 'users.userId'

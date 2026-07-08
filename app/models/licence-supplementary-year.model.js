@@ -6,6 +6,8 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import BillRunModel from './bill-run.model.js'
+import LicenceModel from './licence.model.js'
 
 class LicenceSupplementaryYearModel extends BaseModel {
   static get tableName() {
@@ -16,7 +18,7 @@ class LicenceSupplementaryYearModel extends BaseModel {
     return {
       licence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'licenceSupplementaryYears.licenceId',
           to: 'licences.id'
@@ -24,7 +26,7 @@ class LicenceSupplementaryYearModel extends BaseModel {
       },
       billRun: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'bill-run.model',
+        modelClass: BillRunModel,
         join: {
           from: 'licenceSupplementaryYears.billRunId',
           to: 'billRuns.id'

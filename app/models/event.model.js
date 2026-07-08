@@ -6,6 +6,7 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import NotificationModel from './notification.model.js'
 
 class EventModel extends BaseModel {
   static get tableName() {
@@ -21,7 +22,7 @@ class EventModel extends BaseModel {
     return {
       notifications: {
         relation: Model.HasManyRelation,
-        modelClass: 'notification.model',
+        modelClass: NotificationModel,
         join: {
           from: 'events.id',
           to: 'notifications.eventId'

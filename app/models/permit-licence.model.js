@@ -6,6 +6,7 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import LicenceModel from './licence.model.js'
 
 class PermitLicenceModel extends BaseModel {
   static get tableName() {
@@ -21,7 +22,7 @@ class PermitLicenceModel extends BaseModel {
     return {
       permitLicence: {
         relation: Model.HasOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'permitLicences.licenceRef',
           to: 'licences.licenceRef'

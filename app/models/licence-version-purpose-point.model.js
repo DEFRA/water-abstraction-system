@@ -6,6 +6,8 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import LicenceVersionPurposeModel from './licence-version-purpose.model.js'
+import PointModel from './point.model.js'
 
 class LicenceVersionPurposePointModel extends BaseModel {
   static get tableName() {
@@ -16,7 +18,7 @@ class LicenceVersionPurposePointModel extends BaseModel {
     return {
       licenceVersionPurpose: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-version-purpose.model',
+        modelClass: LicenceVersionPurposeModel,
         join: {
           from: 'licenceVersionPurposePoints.licenceVersionPurposeId',
           to: 'licenceVersionPurposes.id'
@@ -24,7 +26,7 @@ class LicenceVersionPurposePointModel extends BaseModel {
       },
       point: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'point.model',
+        modelClass: PointModel,
         join: {
           from: 'licenceVersionPurposePoints.pointId',
           to: 'points.id'

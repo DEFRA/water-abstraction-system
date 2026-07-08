@@ -6,6 +6,8 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import LicenceModel from './licence.model.js'
+import UserModel from './user.model.js'
 
 class LicenceUnregistrationModel extends BaseModel {
   static get tableName() {
@@ -16,7 +18,7 @@ class LicenceUnregistrationModel extends BaseModel {
     return {
       licence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'licenceUnregistrations.licenceId',
           to: 'licences.id'
@@ -24,7 +26,7 @@ class LicenceUnregistrationModel extends BaseModel {
       },
       user: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'user.model',
+        modelClass: UserModel,
         join: {
           from: 'licenceUnregistrations.createdBy',
           to: 'users.id'

@@ -6,6 +6,10 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import LicenceDocumentHeaderModel from './licence-document-header.model.js'
+import LicenceEntityRoleModel from './licence-entity-role.model.js'
+import UserModel from './user.model.js'
+import UserVerificationModel from './user-verification.model.js'
 
 /**
  * Represents an instance of a licence entity record
@@ -37,7 +41,7 @@ class LicenceEntityModel extends BaseModel {
     return {
       licenceDocumentHeaders: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-document-header.model',
+        modelClass: LicenceDocumentHeaderModel,
         join: {
           from: 'licenceEntities.id',
           to: 'licenceDocumentHeaders.companyEntityId'
@@ -45,7 +49,7 @@ class LicenceEntityModel extends BaseModel {
       },
       licenceEntityRoles: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-entity-role.model',
+        modelClass: LicenceEntityRoleModel,
         join: {
           from: 'licenceEntities.id',
           to: 'licenceEntityRoles.licenceEntityId'
@@ -53,7 +57,7 @@ class LicenceEntityModel extends BaseModel {
       },
       user: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'user.model',
+        modelClass: UserModel,
         join: {
           from: 'licenceEntities.id',
           to: 'users.licenceEntityId'
@@ -61,7 +65,7 @@ class LicenceEntityModel extends BaseModel {
       },
       userVerifications: {
         relation: Model.HasManyRelation,
-        modelClass: 'user-verification.model',
+        modelClass: UserVerificationModel,
         join: {
           from: 'licenceEntities.id',
           to: 'userVerifications.licenceEntityId'

@@ -6,6 +6,8 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import PointModel from './point.model.js'
+import ReturnRequirementModel from './return-requirement.model.js'
 
 class ReturnRequirementPointModel extends BaseModel {
   static get tableName() {
@@ -16,7 +18,7 @@ class ReturnRequirementPointModel extends BaseModel {
     return {
       point: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'point.model',
+        modelClass: PointModel,
         join: {
           from: 'returnRequirementPoints.pointId',
           to: 'points.id'
@@ -24,7 +26,7 @@ class ReturnRequirementPointModel extends BaseModel {
       },
       returnRequirement: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'return-requirement.model',
+        modelClass: ReturnRequirementModel,
         join: {
           from: 'returnRequirementPoints.returnRequirementId',
           to: 'returnRequirements.id'

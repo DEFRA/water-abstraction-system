@@ -6,6 +6,8 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import EventModel from './event.model.js'
+import LicenceMonitoringStationModel from './licence-monitoring-station.model.js'
 
 class NotificationModel extends BaseModel {
   static get tableName() {
@@ -21,7 +23,7 @@ class NotificationModel extends BaseModel {
     return {
       event: {
         relation: Model.HasOneRelation,
-        modelClass: 'event.model',
+        modelClass: EventModel,
         join: {
           from: 'notifications.eventId',
           to: 'events.id'
@@ -29,7 +31,7 @@ class NotificationModel extends BaseModel {
       },
       licenceMonitoringStation: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-monitoring-station.model',
+        modelClass: LicenceMonitoringStationModel,
         join: {
           from: 'notifications.licenceMonitoringStationId',
           to: 'licenceMonitoringStations.id'

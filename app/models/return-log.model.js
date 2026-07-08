@@ -6,6 +6,11 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import LicenceModel from './licence.model.js'
+import ReturnCycleModel from './return-cycle.model.js'
+import ReturnRequirementModel from './return-requirement.model.js'
+import ReturnSubmissionModel from './return-submission.model.js'
+import ReviewReturnModel from './review-return.model.js'
 
 class ReturnLogModel extends BaseModel {
   static get tableName() {
@@ -21,7 +26,7 @@ class ReturnLogModel extends BaseModel {
     return {
       licence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'returnLogs.licenceRef',
           to: 'licences.licenceRef'
@@ -29,7 +34,7 @@ class ReturnLogModel extends BaseModel {
       },
       returnCycle: {
         relation: Model.HasOneRelation,
-        modelClass: 'return-cycle.model',
+        modelClass: ReturnCycleModel,
         join: {
           from: 'returnLogs.returnCycleId',
           to: 'returnCycles.id'
@@ -37,7 +42,7 @@ class ReturnLogModel extends BaseModel {
       },
       returnRequirement: {
         relation: Model.HasOneRelation,
-        modelClass: 'return-requirement.model',
+        modelClass: ReturnRequirementModel,
         join: {
           from: 'returnLogs.returnRequirementId',
           to: 'returnRequirements.id'
@@ -45,7 +50,7 @@ class ReturnLogModel extends BaseModel {
       },
       returnSubmissions: {
         relation: Model.HasManyRelation,
-        modelClass: 'return-submission.model',
+        modelClass: ReturnSubmissionModel,
         join: {
           from: 'returnLogs.id',
           to: 'returnSubmissions.returnLogId'
@@ -53,7 +58,7 @@ class ReturnLogModel extends BaseModel {
       },
       reviewReturns: {
         relation: Model.HasManyRelation,
-        modelClass: 'review-return.model',
+        modelClass: ReviewReturnModel,
         join: {
           from: 'returnLogs.id',
           to: 'reviewReturns.returnLogId'

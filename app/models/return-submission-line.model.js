@@ -6,6 +6,7 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import ReturnSubmissionModel from './return-submission.model.js'
 
 class ReturnSubmissionLineModel extends BaseModel {
   static get tableName() {
@@ -16,7 +17,7 @@ class ReturnSubmissionLineModel extends BaseModel {
     return {
       returnSubmission: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'return-submission.model',
+        modelClass: ReturnSubmissionModel,
         join: {
           from: 'returnSubmissionLines.returnSubmissionId',
           to: 'returnSubmissions.id'

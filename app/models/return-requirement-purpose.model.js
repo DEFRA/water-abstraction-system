@@ -6,6 +6,10 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import PrimaryPurposeModel from './primary-purpose.model.js'
+import PurposeModel from './purpose.model.js'
+import ReturnRequirementModel from './return-requirement.model.js'
+import SecondaryPurposeModel from './secondary-purpose.model.js'
 
 class ReturnRequirementPurposeModel extends BaseModel {
   static get tableName() {
@@ -16,7 +20,7 @@ class ReturnRequirementPurposeModel extends BaseModel {
     return {
       primaryPurpose: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'primary-purpose.model.js',
+        modelClass: PrimaryPurposeModel,
         join: {
           from: 'returnRequirementPurposes.primaryPurposeId',
           to: 'primaryPurposes.id'
@@ -24,7 +28,7 @@ class ReturnRequirementPurposeModel extends BaseModel {
       },
       purpose: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'purpose.model',
+        modelClass: PurposeModel,
         join: {
           from: 'returnRequirementPurposes.purposeId',
           to: 'purposes.id'
@@ -32,7 +36,7 @@ class ReturnRequirementPurposeModel extends BaseModel {
       },
       returnRequirement: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'return-requirement.model',
+        modelClass: ReturnRequirementModel,
         join: {
           from: 'returnRequirementPurposes.returnRequirementId',
           to: 'returnRequirements.id'
@@ -40,7 +44,7 @@ class ReturnRequirementPurposeModel extends BaseModel {
       },
       secondaryPurpose: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'secondary-purpose.model.js',
+        modelClass: SecondaryPurposeModel,
         join: {
           from: 'returnRequirementPurposes.secondaryPurposeId',
           to: 'secondaryPurposes.id'

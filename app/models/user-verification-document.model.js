@@ -6,6 +6,8 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import LicenceDocumentHeaderModel from './licence-document-header.model.js'
+import UserVerificationModel from './user-verification.model.js'
 
 /**
  * Represents an instance of a user verification document record
@@ -45,7 +47,7 @@ class UserVerificationDocumentModel extends BaseModel {
     return {
       userVerification: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'user-verification.model',
+        modelClass: UserVerificationModel,
         join: {
           from: 'userVerificationDocuments.userVerificationId',
           to: 'userVerifications.id'
@@ -53,7 +55,7 @@ class UserVerificationDocumentModel extends BaseModel {
       },
       licenceDocumentHeader: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-document-header.model',
+        modelClass: LicenceDocumentHeaderModel,
         join: {
           from: 'userVerificationDocuments.licenceDocumentHeaderId',
           to: 'licenceDocumentHeaders.id'

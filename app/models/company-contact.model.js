@@ -6,6 +6,10 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import CompanyModel from './company.model.js'
+import ContactModel from './contact.model.js'
+import LicenceRoleModel from './licence-role.model.js'
+import UserModel from './user.model.js'
 
 class CompanyContactModel extends BaseModel {
   static get tableName() {
@@ -16,7 +20,7 @@ class CompanyContactModel extends BaseModel {
     return {
       company: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'company.model',
+        modelClass: CompanyModel,
         join: {
           from: 'companyContacts.companyId',
           to: 'companies.id'
@@ -24,7 +28,7 @@ class CompanyContactModel extends BaseModel {
       },
       contact: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'contact.model',
+        modelClass: ContactModel,
         join: {
           from: 'companyContacts.contactId',
           to: 'contacts.id'
@@ -32,7 +36,7 @@ class CompanyContactModel extends BaseModel {
       },
       createdByUser: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'user.model',
+        modelClass: UserModel,
         join: {
           from: 'companyContacts.createdBy',
           to: 'users.id'
@@ -40,7 +44,7 @@ class CompanyContactModel extends BaseModel {
       },
       licenceRole: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-role.model',
+        modelClass: LicenceRoleModel,
         join: {
           from: 'companyContacts.licenceRoleId',
           to: 'licenceRoles.id'
@@ -48,7 +52,7 @@ class CompanyContactModel extends BaseModel {
       },
       updatedByUser: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'user.model',
+        modelClass: UserModel,
         join: {
           from: 'companyContacts.updatedBy',
           to: 'users.id'

@@ -6,6 +6,8 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import LicenceVersionPurposeModel from './licence-version-purpose.model.js'
+import ReturnRequirementPurposeModel from './return-requirement-purpose.model.js'
 
 class PrimaryPurposeModel extends BaseModel {
   static get tableName() {
@@ -16,7 +18,7 @@ class PrimaryPurposeModel extends BaseModel {
     return {
       licenceVersionPurposes: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-version-purpose.model',
+        modelClass: LicenceVersionPurposeModel,
         join: {
           from: 'primaryPurposes.id',
           to: 'licenceVersionPurposes.primaryPurposeId'
@@ -24,7 +26,7 @@ class PrimaryPurposeModel extends BaseModel {
       },
       returnRequirementPurposes: {
         relation: Model.HasManyRelation,
-        modelClass: 'return-requirement-purpose.model',
+        modelClass: ReturnRequirementPurposeModel,
         join: {
           from: 'primaryPurposes.id',
           to: 'returnRequirementPurposes.primaryPurposeId'

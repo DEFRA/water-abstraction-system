@@ -6,6 +6,8 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import LicenceDocumentHeaderModel from './licence-document-header.model.js'
+import LicenceEntityModel from './licence-entity.model.js'
 
 /**
  * Represents an instance of a user verification record
@@ -31,7 +33,7 @@ class UserVerificationModel extends BaseModel {
       // The "company" entity (just a notional group of licences) that the user is claiming the licences for
       companyEntity: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-entity.model',
+        modelClass: LicenceEntityModel,
         join: {
           from: 'userVerifications.companyEntityId',
           to: 'licenceEntities.id'
@@ -40,7 +42,7 @@ class UserVerificationModel extends BaseModel {
       // The group of licences being claimed
       licenceDocumentHeaders: {
         relation: Model.ManyToManyRelation,
-        modelClass: 'licence-document-header.model',
+        modelClass: LicenceDocumentHeaderModel,
         join: {
           from: 'userVerifications.id',
           through: {
@@ -53,7 +55,7 @@ class UserVerificationModel extends BaseModel {
       // The "individual" entity (the registered user) that is claiming the licence
       licenceEntity: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-entity.model',
+        modelClass: LicenceEntityModel,
         join: {
           from: 'userVerifications.licenceEntityId',
           to: 'licenceEntities.id'

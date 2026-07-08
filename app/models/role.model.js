@@ -6,6 +6,10 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import GroupModel from './group.model.js'
+import GroupRoleModel from './group-role.model.js'
+import UserModel from './user.model.js'
+import UserRoleModel from './user-role.model.js'
 
 class RoleModel extends BaseModel {
   static get tableName() {
@@ -16,7 +20,7 @@ class RoleModel extends BaseModel {
     return {
       groupRoles: {
         relation: Model.HasManyRelation,
-        modelClass: 'group-role.model',
+        modelClass: GroupRoleModel,
         join: {
           from: 'roles.id',
           to: 'groupRoles.roleId'
@@ -24,7 +28,7 @@ class RoleModel extends BaseModel {
       },
       userRoles: {
         relation: Model.HasManyRelation,
-        modelClass: 'user-role.model',
+        modelClass: UserRoleModel,
         join: {
           from: 'roles.id',
           to: 'userRoles.roleId'
@@ -32,7 +36,7 @@ class RoleModel extends BaseModel {
       },
       groups: {
         relation: Model.ManyToManyRelation,
-        modelClass: 'group.model',
+        modelClass: GroupModel,
         join: {
           from: 'roles.id',
           through: {
@@ -44,7 +48,7 @@ class RoleModel extends BaseModel {
       },
       users: {
         relation: Model.ManyToManyRelation,
-        modelClass: 'user.model',
+        modelClass: UserModel,
         join: {
           from: 'roles.id',
           through: {

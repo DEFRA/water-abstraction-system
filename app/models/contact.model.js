@@ -6,6 +6,9 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import BillingAccountAddressModel from './billing-account-address.model.js'
+import CompanyContactModel from './company-contact.model.js'
+import LicenceDocumentRoleModel from './licence-document-role.model.js'
 
 /**
  * Objection model that represents a `contact` in the `crm_v2.contacts` table
@@ -43,7 +46,7 @@ class ContactModel extends BaseModel {
     return {
       billingAccountAddresses: {
         relation: Model.HasManyRelation,
-        modelClass: 'billing-account-address.model',
+        modelClass: BillingAccountAddressModel,
         join: {
           from: 'contacts.id',
           to: 'billingAccountAddresses.contactId'
@@ -51,7 +54,7 @@ class ContactModel extends BaseModel {
       },
       companyContacts: {
         relation: Model.HasManyRelation,
-        modelClass: 'company-contact.model',
+        modelClass: CompanyContactModel,
         join: {
           from: 'contacts.id',
           to: 'companyContacts.contactId'
@@ -59,7 +62,7 @@ class ContactModel extends BaseModel {
       },
       licenceDocumentRoles: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-document-role.model',
+        modelClass: LicenceDocumentRoleModel,
         join: {
           from: 'contacts.id',
           to: 'licenceDocumentRoles.contactId'
