@@ -90,7 +90,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
     it('deletes the session', async () => {
       await SubmitCheckService(session.id, userId, yarStub)
 
-      expect(DeleteSessionDal.go).toHaveBeenCalledWith(session.id)
+      expect(DeleteSessionDal.default).toHaveBeenCalledWith(session.id)
     })
 
     it('continues the journey', async () => {

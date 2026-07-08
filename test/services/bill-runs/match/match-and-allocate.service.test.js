@@ -57,15 +57,15 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
         it('processes the licence for matching allocating', async () => {
           await MatchAndAllocateService(billRun, billingPeriods)
 
-          expect(FetchLicencesService.go).toHaveBeenCalled()
-          expect(PrepareReturnLogsService.go).toHaveBeenCalled()
-          expect(PrepareChargeVersionService.go).toHaveBeenCalled()
+          expect(FetchLicencesService.default).toHaveBeenCalled()
+          expect(PrepareReturnLogsService.default).toHaveBeenCalled()
+          expect(PrepareChargeVersionService.default).toHaveBeenCalled()
 
-          expect(MatchReturnsToChargeElementService.go).toHaveBeenCalled()
-          expect(AllocateReturnsToChargeElementService.go).toHaveBeenCalled()
+          expect(MatchReturnsToChargeElementService.default).toHaveBeenCalled()
+          expect(AllocateReturnsToChargeElementService.default).toHaveBeenCalled()
 
-          expect(DetermineLicenceIssuesService.go).toHaveBeenCalled()
-          expect(PersistAllocatedLicenceToResultsService.go).toHaveBeenCalled()
+          expect(DetermineLicenceIssuesService.default).toHaveBeenCalled()
+          expect(PersistAllocatedLicenceToResultsService.default).toHaveBeenCalled()
         })
 
         it('returns "true" as there are licences to process', async () => {
@@ -83,15 +83,15 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
         it('processes the licence for matching but does not call the allocate returns service', async () => {
           await MatchAndAllocateService(billRun, billingPeriods)
 
-          expect(FetchLicencesService.go).toHaveBeenCalled()
-          expect(PrepareReturnLogsService.go).toHaveBeenCalled()
-          expect(PrepareChargeVersionService.go).toHaveBeenCalled()
+          expect(FetchLicencesService.default).toHaveBeenCalled()
+          expect(PrepareReturnLogsService.default).toHaveBeenCalled()
+          expect(PrepareChargeVersionService.default).toHaveBeenCalled()
 
-          expect(MatchReturnsToChargeElementService.go).toHaveBeenCalled()
+          expect(MatchReturnsToChargeElementService.default).toHaveBeenCalled()
           expect(AllocateReturnsToChargeElementService.go).not.toHaveBeenCalled()
 
-          expect(DetermineLicenceIssuesService.go).toHaveBeenCalled()
-          expect(PersistAllocatedLicenceToResultsService.go).toHaveBeenCalled()
+          expect(DetermineLicenceIssuesService.default).toHaveBeenCalled()
+          expect(PersistAllocatedLicenceToResultsService.default).toHaveBeenCalled()
         })
 
         it('allocates the authorised quantities to the elements up to the references authorised quantity', async () => {
@@ -121,7 +121,7 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
       it('calls the fetchLicencesService', async () => {
         await MatchAndAllocateService(billRun, billingPeriods)
 
-        expect(FetchLicencesService.go).toHaveBeenCalled()
+        expect(FetchLicencesService.default).toHaveBeenCalled()
       })
 
       it('does not process the licences', async () => {

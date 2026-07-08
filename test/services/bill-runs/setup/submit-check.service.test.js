@@ -60,7 +60,7 @@ describe('Bill Runs - Setup - Submit Check service', () => {
       it('deletes the session data', async () => {
         await SubmitCheckService(session.id, auth)
 
-        expect(DeleteSessionDal.go).toHaveBeenCalledWith(session.id)
+        expect(DeleteSessionDal.default).toHaveBeenCalledWith(session.id)
       })
     })
 

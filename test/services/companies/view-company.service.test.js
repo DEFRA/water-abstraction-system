@@ -69,7 +69,7 @@ describe('Companies - View Company Service', () => {
       it('calls the fetch service with role converted to camelCase', async () => {
         await ViewCompanyService(companyDetails.id, role)
 
-        expect(FetchCompanyDetailsDal.go).toHaveBeenCalledWith(companyDetails.id, 'licenceHolder')
+        expect(FetchCompanyDetailsDal.default).toHaveBeenCalledWith(companyDetails.id, 'licenceHolder')
       })
     })
 
@@ -109,7 +109,7 @@ describe('Companies - View Company Service', () => {
       it('calls the fetch service with role converted to camelCase', async () => {
         await ViewCompanyService(companyDetails.id, role)
 
-        expect(FetchCompanyDetailsDal.go).toHaveBeenCalledWith(companyDetails.id, 'returnsTo')
+        expect(FetchCompanyDetailsDal.default).toHaveBeenCalledWith(companyDetails.id, 'returnsTo')
       })
     })
   })

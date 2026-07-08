@@ -62,7 +62,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
       it('calls the delete company contact service with the id and true', async () => {
         await SubmitRemoveCompanyContactService(companyContact.id, yarStub)
 
-        expect(DeleteCompanyContactService.go.calledWithExactly(companyContact.id, true)).toBe(true)
+        expect(DeleteCompanyContactService.default).toHaveBeenCalledWith(companyContact.id, true)
       })
     })
 
@@ -96,7 +96,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
       it('calls the delete company contact service with the id and false', async () => {
         await SubmitRemoveCompanyContactService(companyContact.id, yarStub)
 
-        expect(DeleteCompanyContactService.go.calledWithExactly(companyContact.id, false)).toBe(true)
+        expect(DeleteCompanyContactService.default).toHaveBeenCalledWith(companyContact.id, false)
       })
     })
   })

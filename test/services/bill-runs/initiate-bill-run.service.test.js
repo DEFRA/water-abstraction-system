@@ -68,7 +68,7 @@ describe('Initiate Bill Run service', () => {
     it('creates a new event record', async () => {
       await InitiateBillRunService(financialYearEndings, regionId, batchType, user)
 
-      expect(CreateBillRunEventService.go).toHaveBeenCalled()
+      expect(CreateBillRunEventService.default).toHaveBeenCalled()
     })
 
     it('returns the new bill run', async () => {

@@ -43,7 +43,7 @@ describe('Users - External - Setup - Submit Check Service', () => {
     it('deletes the session record', async () => {
       await SubmitCheckService(session.id, yarStub, auth)
 
-      expect(DeleteSessionDal.go).toHaveBeenCalledWith(session.id)
+      expect(DeleteSessionDal.default).toHaveBeenCalledWith(session.id)
     })
 
     it('returns the redirect URL', async () => {
@@ -57,7 +57,7 @@ describe('Users - External - Setup - Submit Check Service', () => {
     it('unregisters the selected licences', async () => {
       await SubmitCheckService(session.id, yarStub, auth)
 
-      expect(UnregisterLicencesDal.go).toHaveBeenCalledWith(session, auth.credentials.user)
+      expect(UnregisterLicencesDal.default).toHaveBeenCalledWith(session, auth.credentials.user)
     })
 
     it('sets a notification', async () => {

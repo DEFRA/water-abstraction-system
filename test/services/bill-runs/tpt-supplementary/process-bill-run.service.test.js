@@ -120,7 +120,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       it('calls HandleErroredBillRunService', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        expect(HandleErroredBillRunService.go).toHaveBeenCalled()
+        expect(HandleErroredBillRunService.default).toHaveBeenCalled()
       })
 
       it('logs the error', async () => {
@@ -143,7 +143,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       it('calls HandleErroredBillRunService', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        expect(HandleErroredBillRunService.go).toHaveBeenCalled()
+        expect(HandleErroredBillRunService.default).toHaveBeenCalled()
       })
 
       it('logs the error', async () => {

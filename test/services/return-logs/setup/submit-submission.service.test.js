@@ -93,7 +93,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
           expect(refreshedReturnLog.updatedAt.getTime()).toBeGreaterThan(returnLog.updatedAt.getTime())
 
           // Check the session got deleted
-          expect(DeleteSessionDal.go).toHaveBeenCalledWith(session.id)
+          expect(DeleteSessionDal.default).toHaveBeenCalledWith(session.id)
 
           // Check the redirect takes will tell the controller to redirect to the return received confirmation page
           expect(result.redirect).toEqual('confirm-received')
