@@ -85,7 +85,7 @@ describe('Return Logs controller', () => {
         it('passes 0 to the service and returns the page successfully', async () => {
           const response = await server.inject(getOptions)
 
-          const calls = ViewDetailsService.go.firstCall
+          const calls = ViewDetailsService.default.mock.calls[0]
 
           expect(calls.args).toContain(0)
 
@@ -102,7 +102,7 @@ describe('Return Logs controller', () => {
         it('passes the version to the service and returns the page successfully', async () => {
           const response = await server.inject(getOptions)
 
-          const calls = ViewDetailsService.go.firstCall
+          const calls = ViewDetailsService.default.mock.calls[0]
 
           expect(calls.args).toContain(1)
 
