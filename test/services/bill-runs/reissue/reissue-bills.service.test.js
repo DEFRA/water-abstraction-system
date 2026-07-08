@@ -67,9 +67,9 @@ describe('Reissue Bills service', () => {
 
         // This stub will result in one new bill, bill licence and transaction for each dummy invoice returned by
         // FetchBillsToBeReissuedService.
-        ReissueBillService.onFirstCall().resolves(reissueBillOne)
-        ReissueBillService.onSecondCall().resolves(reissueBillTwo)
-        ReissueBillService.onThirdCall().resolves(reissueBillThree)
+        ReissueBillService.mockResolvedValueOnce(reissueBillOne)
+        ReissueBillService.mockResolvedValueOnce(reissueBillTwo)
+        ReissueBillService.mockResolvedValueOnce(reissueBillThree)
       })
 
       it('returns "true"', async () => {

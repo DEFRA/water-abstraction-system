@@ -29,7 +29,8 @@ describe('Bill Runs - Review - Submit Remove service', () => {
       .resolves()
 
     yarStub = YarStub()
-  })
+     vi.spyOn(CreateLicenceSupplementaryYearService, 'default').mockResolvedValue()
+   })
 
   afterEach(() => {
     vi.restoreAllMocks()

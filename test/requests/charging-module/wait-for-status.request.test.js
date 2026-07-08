@@ -35,7 +35,7 @@ describe('Charging Module Wait For Status request', () => {
   describe('when the Charging Module returns one of the statuses waited for', () => {
     describe('on the first attempt', () => {
       beforeEach(() => {
-        chargingModuleViewBillRunStatusRequestStub.onFirstCall().resolves(_testResponse('billing_not_required'))
+        chargingModuleViewBillRunStatusRequestStub.mockResolvedValueOnce(_testResponse('billing_not_required'))
       })
 
       it('returns a "true" succeeded status', async () => {
@@ -63,9 +63,9 @@ describe('Charging Module Wait For Status request', () => {
         // service returns as soon as the status we are waiting for is returned.
         maxNumberOfAttempts = 5
 
-        chargingModuleViewBillRunStatusRequestStub.onFirstCall().resolves(_testResponse('processing'))
-        chargingModuleViewBillRunStatusRequestStub.onSecondCall().resolves(_testResponse('processing'))
-        chargingModuleViewBillRunStatusRequestStub.onThirdCall().resolves(_testResponse('billed'))
+        chargingModuleViewBillRunStatusRequestStub.mockResolvedValueOnce(_testResponse('processing'))
+        chargingModuleViewBillRunStatusRequestStub.mockResolvedValueOnce(_testResponse('processing'))
+        chargingModuleViewBillRunStatusRequestStub.mockResolvedValueOnce(_testResponse('billed'))
       })
 
       it('returns a "true" success status', async () => {
@@ -93,9 +93,9 @@ describe('Charging Module Wait For Status request', () => {
       // Set the number of attempts to the same as the number of requests we've stubbed
       maxNumberOfAttempts = 3
 
-      chargingModuleViewBillRunStatusRequestStub.onFirstCall().resolves(_testResponse('processing'))
-      chargingModuleViewBillRunStatusRequestStub.onSecondCall().resolves(_testResponse('processing'))
-      chargingModuleViewBillRunStatusRequestStub.onThirdCall().resolves(_testResponse('processing'))
+      chargingModuleViewBillRunStatusRequestStub.mockResolvedValueOnce(_testResponse('processing'))
+      chargingModuleViewBillRunStatusRequestStub.mockResolvedValueOnce(_testResponse('processing'))
+      chargingModuleViewBillRunStatusRequestStub.mockResolvedValueOnce(_testResponse('processing'))
     })
 
     it('returns a "false" success status', async () => {

@@ -95,6 +95,7 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
         primaryPurposeId: '6f1bb87e-02f6-4cfb-87cb-57dc2af3e2af',
         secondaryPurposeId: '8391fe23-a85e-4e7e-a0f8-d819be97d789'
       })
+    vi.spyOn(FetchOtherPurposeIdsDal, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
