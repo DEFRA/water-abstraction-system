@@ -12,7 +12,7 @@ describe('Notices - Setup - Recipient Name Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = RecipientNameValidator.go(payload)
+      const result = RecipientNameValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -25,7 +25,7 @@ describe('Notices - Setup - Recipient Name Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = RecipientNameValidator.go(payload)
+      const result = RecipientNameValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

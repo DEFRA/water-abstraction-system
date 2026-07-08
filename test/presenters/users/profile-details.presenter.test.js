@@ -12,7 +12,7 @@ describe('Users - Profile Details Presenter', () => {
     })
 
     it('returns the basic page data for the view', () => {
-      const result = ProfileDetailsPresenter.go(profileDetails)
+      const result = ProfileDetailsPresenter(profileDetails)
 
       expect(result).toEqual({
         address: '',
@@ -50,7 +50,7 @@ describe('Users - Profile Details Presenter', () => {
     })
 
     it('returns the basic page data for the view', () => {
-      const result = ProfileDetailsPresenter.go(profileDetails)
+      const result = ProfileDetailsPresenter(profileDetails)
 
       expect(result).toEqual({
         address: profileDetails.address,

@@ -34,7 +34,7 @@ describe('Notifications - Notification Table presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
+        const result = NotificationsTablePresenter([notification], licenceId, returnLogId, companyContactId)
 
         expect(result).toEqual([
           {
@@ -58,7 +58,7 @@ describe('Notifications - Notification Table presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
+        const result = NotificationsTablePresenter([notification], licenceId, returnLogId, companyContactId)
 
         expect(result).toEqual([
           {
@@ -82,7 +82,7 @@ describe('Notifications - Notification Table presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
+        const result = NotificationsTablePresenter([notification], licenceId, returnLogId, companyContactId)
 
         expect(result).toEqual([
           {
@@ -115,7 +115,7 @@ describe('Notifications - Notification Table presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
+        const result = NotificationsTablePresenter([notification], licenceId, returnLogId, companyContactId)
 
         expect(result).toEqual([
           {
@@ -139,7 +139,7 @@ describe('Notifications - Notification Table presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
+        const result = NotificationsTablePresenter([notification], licenceId, returnLogId, companyContactId)
 
         expect(result).toEqual([
           {
@@ -161,7 +161,7 @@ describe('Notifications - Notification Table presenter', () => {
   describe('when someone has removed the query params from the url', () => {
     describe('and neither licenceId,  returnLogId or companyContactId are present', () => {
       it('correctly presents the data', () => {
-        const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
+        const result = NotificationsTablePresenter([notification], licenceId, returnLogId, companyContactId)
 
         expect(result).toEqual([
           {
@@ -186,7 +186,7 @@ describe('Notifications - Notification Table presenter', () => {
     })
 
     it('returns an empty array', () => {
-      const result = NotificationsTablePresenter.go([], licenceId, returnLogId, companyContactId)
+      const result = NotificationsTablePresenter([], licenceId, returnLogId, companyContactId)
 
       expect(result).toEqual([])
     })

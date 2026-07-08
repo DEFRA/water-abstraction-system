@@ -15,7 +15,7 @@ describe('Return Logs Setup - Meter Details presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = MeterDetailsPresenter.go(session)
+      const result = MeterDetailsPresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -39,7 +39,7 @@ describe('Return Logs Setup - Meter Details presenter', () => {
       })
 
       it('returns the "meterMake" property populated to re-select the option', () => {
-        const result = MeterDetailsPresenter.go(session)
+        const result = MeterDetailsPresenter(session)
 
         expect(result.meterMake).toEqual('WATER')
       })
@@ -53,7 +53,7 @@ describe('Return Logs Setup - Meter Details presenter', () => {
       })
 
       it('returns the "meterSerialNumber" property populated to re-select the option', () => {
-        const result = MeterDetailsPresenter.go(session)
+        const result = MeterDetailsPresenter(session)
 
         expect(result.meterSerialNumber).toEqual('1234')
       })
@@ -67,7 +67,7 @@ describe('Return Logs Setup - Meter Details presenter', () => {
       })
 
       it('returns the "meter10TimesDisplay" property populated to re-select the option', () => {
-        const result = MeterDetailsPresenter.go(session)
+        const result = MeterDetailsPresenter(session)
 
         expect(result.meter10TimesDisplay).toEqual('yes')
       })
@@ -79,7 +79,7 @@ describe('Return Logs Setup - Meter Details presenter', () => {
       })
 
       it('returns the "meter10TimesDisplay" property populated to re-select the option', () => {
-        const result = MeterDetailsPresenter.go(session)
+        const result = MeterDetailsPresenter(session)
 
         expect(result.meter10TimesDisplay).toEqual('no')
       })

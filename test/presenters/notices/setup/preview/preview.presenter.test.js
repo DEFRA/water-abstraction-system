@@ -79,7 +79,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
         })
 
         it('correctly presents the data', async () => {
-          const result = await PreviewPresenter.go(
+          const result = await PreviewPresenter(
             contactHashId,
             noticeType,
             notification,
@@ -143,7 +143,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
         })
 
         it('correctly presents the data', async () => {
-          const result = await PreviewPresenter.go(
+          const result = await PreviewPresenter(
             contactHashId,
             noticeType,
             notification,
@@ -220,7 +220,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
         })
 
         it('correctly presents the data', async () => {
-          const result = await PreviewPresenter.go(
+          const result = await PreviewPresenter(
             contactHashId,
             noticeType,
             notification,
@@ -290,7 +290,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
         })
 
         it('correctly presents the data', async () => {
-          const result = await PreviewPresenter.go(
+          const result = await PreviewPresenter(
             contactHashId,
             noticeType,
             notification,
@@ -350,7 +350,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
     })
 
     it('correctly presents the data', async () => {
-      const result = await PreviewPresenter.go(
+      const result = await PreviewPresenter(
         contactHashId,
         noticeType,
         notification,

@@ -12,7 +12,7 @@ import SecondaryPurposeModel from '../../app/models/secondary-purpose.model.js'
  * Public table name - public.secondary_purposes
  *
  */
-async function seed() {
+export default async function seed() {
   for (const purpose of secondaryPurposes) {
     await _upsert(purpose)
   }
@@ -26,8 +26,5 @@ async function _upsert(secondaryPurpose) {
 }
 
 export {
-  seed
-}
-export default {
   seed
 }

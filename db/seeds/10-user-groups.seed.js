@@ -6,7 +6,7 @@ import { data as users } from './data/users.js'
 
 import ServerConfig from '../../config/server.config.js'
 
-async function seed() {
+export default async function seed() {
   // These user groups relate to users that are only for use in our non-production environments
   if (ServerConfig.environment === 'production') {
     return
@@ -62,8 +62,5 @@ function _names(userGroup) {
 }
 
 export {
-  seed
-}
-export default {
   seed
 }

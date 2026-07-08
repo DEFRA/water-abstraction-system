@@ -12,7 +12,7 @@ describe('Users - Internal - Setup - Access Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = AccessValidator.go(payload)
+      const result = AccessValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -26,7 +26,7 @@ describe('Users - Internal - Setup - Access Validator', () => {
       })
 
       it('fails validation', () => {
-        const result = AccessValidator.go(payload)
+        const result = AccessValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -40,7 +40,7 @@ describe('Users - Internal - Setup - Access Validator', () => {
       })
 
       it('fails validation', () => {
-        const result = AccessValidator.go(payload)
+        const result = AccessValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

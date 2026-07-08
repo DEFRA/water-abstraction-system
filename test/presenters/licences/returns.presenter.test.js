@@ -22,7 +22,7 @@ describe('Licences - Returns presenter', () => {
 
   describe('when provided with returns data', () => {
     it('correctly presents the data', () => {
-      const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
+      const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
 
       expect(result).toEqual({
         backLink: {
@@ -57,7 +57,7 @@ describe('Licences - Returns presenter', () => {
 
     describe('the "dates" property', () => {
       it('returns the start and end date in long format (2 January 2020 to 1 February 2020)', () => {
-        const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
+        const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
 
         expect(result.returns[0].dates).toEqual('2 January 2020 to 1 February 2020')
       })
@@ -66,7 +66,7 @@ describe('Licences - Returns presenter', () => {
     describe('the "description" property', () => {
       describe('when description in the metadata is set', () => {
         it('returns an empty string', () => {
-          const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
+          const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
 
           expect(result.returns[0].description).toEqual('empty description')
         })
@@ -80,7 +80,7 @@ describe('Licences - Returns presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
+          const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
 
           expect(result.returns[0].description).toEqual('')
         })
@@ -90,7 +90,7 @@ describe('Licences - Returns presenter', () => {
     describe('the "dueDate" property', () => {
       describe('when the due date is set', () => {
         it('returns the formatted due date', () => {
-          const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
+          const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
 
           expect(result.returns[0].dueDate).toEqual('28 November 2020')
         })
@@ -102,7 +102,7 @@ describe('Licences - Returns presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
+          const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
 
           expect(result.returns[0].dueDate).toEqual('')
         })
@@ -113,7 +113,7 @@ describe('Licences - Returns presenter', () => {
   describe('the "noReturnsMessage" property', () => {
     describe('when a licence has returns and requirements', () => {
       it('returns null', () => {
-        const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
+        const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
 
         expect(result.noReturnsMessage).toBeNull()
       })
@@ -126,7 +126,7 @@ describe('Licences - Returns presenter', () => {
       })
 
       it('returns the message "No requirements for returns have been set up for this licence."', () => {
-        const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
+        const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
 
         expect(result.noReturnsMessage).toEqual('No requirements for returns have been set up for this licence.')
       })
@@ -138,7 +138,7 @@ describe('Licences - Returns presenter', () => {
       })
 
       it('returns the message "No returns for this licence."', () => {
-        const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
+        const result = ReturnsPresenter(returnLogs, hasRequirements, licence)
 
         expect(result.noReturnsMessage).toEqual('No returns for this licence.')
       })

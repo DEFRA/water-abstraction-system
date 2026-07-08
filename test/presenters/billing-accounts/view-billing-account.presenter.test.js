@@ -22,7 +22,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
 
   describe('when provided with a populated billing account', () => {
     it('returns the correctly presents the data', () => {
-      const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
+      const result = ViewBillingAccountPresenter(billingAccountData, licenceId, chargeVersionId, companyId)
 
       expect(result).toEqual({
         address: [
@@ -68,7 +68,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
       })
 
       it('returns the title "Go back to search" and the link to search page', () => {
-        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
+        const result = ViewBillingAccountPresenter(billingAccountData, licenceId, chargeVersionId, companyId)
 
         expect(result.backLink).toEqual({
           href: '/',
@@ -79,7 +79,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
 
     describe('when the licenceId and chargeVersionId are not undefined', () => {
       it('returns the title "Go back to charge information" and the link to the charge information page', () => {
-        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
+        const result = ViewBillingAccountPresenter(billingAccountData, licenceId, chargeVersionId, companyId)
 
         expect(result.backLink).toEqual({
           href: `/licences/${licenceId}/charge-information/${chargeVersionId}/view`,
@@ -94,7 +94,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
       })
 
       it('returns the title "Go back to bills" and the link to the licence bills page', () => {
-        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
+        const result = ViewBillingAccountPresenter(billingAccountData, licenceId, chargeVersionId, companyId)
 
         expect(result.backLink).toEqual({
           href: `/system/licences/${licenceId}/bills`,
@@ -110,7 +110,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
       })
 
       it('returns the title "Go back to customer" and the link to the customer page', () => {
-        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
+        const result = ViewBillingAccountPresenter(billingAccountData, licenceId, chargeVersionId, companyId)
 
         expect(result.backLink).toEqual({
           href: `/system/companies/${companyId}/billing-accounts`,
@@ -128,7 +128,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
         })
 
         it('returns the "invoiceNumber" value', () => {
-          const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
+          const result = ViewBillingAccountPresenter(billingAccountData, licenceId, chargeVersionId, companyId)
 
           expect(result.bills[0].billNumber).toEqual('Test123')
         })
@@ -136,7 +136,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
 
       describe('when the "invoiceNumber" is null', () => {
         it('returns the string "Zero value bill"', () => {
-          const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
+          const result = ViewBillingAccountPresenter(billingAccountData, licenceId, chargeVersionId, companyId)
 
           expect(result.bills[0].billNumber).toEqual('Zero value bill')
         })
@@ -150,7 +150,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
         })
 
         it('returns the formatted "bill.netAmount" value followed by the string "Credit"', () => {
-          const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
+          const result = ViewBillingAccountPresenter(billingAccountData, licenceId, chargeVersionId, companyId)
 
           expect(result.bills[0].billTotal).toEqual('£103.84 Credit')
         })
@@ -158,7 +158,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
 
       describe('when the "bill.credit" property is false', () => {
         it('returns the formatted "bill.netAmount" value', () => {
-          const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
+          const result = ViewBillingAccountPresenter(billingAccountData, licenceId, chargeVersionId, companyId)
 
           expect(result.bills[0].billTotal).toEqual('£103.84')
         })
@@ -173,7 +173,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
       })
 
       it('returns the formatted "lastTransactionFileCreatedAt" date value', () => {
-        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
+        const result = ViewBillingAccountPresenter(billingAccountData, licenceId, chargeVersionId, companyId)
 
         expect(result.lastUpdated).toEqual('14 December 2023')
       })
@@ -181,7 +181,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
 
     describe('when the "lastTransactionFileCreatedAt" is null', () => {
       it('returns null', () => {
-        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
+        const result = ViewBillingAccountPresenter(billingAccountData, licenceId, chargeVersionId, companyId)
 
         expect(result.lastUpdated).toBeNull()
       })

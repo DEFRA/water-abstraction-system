@@ -19,7 +19,7 @@ describe('Licences - Summary Heading presenter', () => {
 
   describe('when provided with a populated licence', () => {
     it('correctly presents the data', () => {
-      const result = SummaryHeadingPresenter.go(licence, summary)
+      const result = SummaryHeadingPresenter(licence, summary)
 
       expect(result).toEqual({
         backLink: {
@@ -47,7 +47,7 @@ describe('Licences - Summary Heading presenter', () => {
   describe('the "currentVersion" property', () => {
     describe('when the current version is null', () => {
       it('returns the text with the "startDate"', () => {
-        const result = SummaryHeadingPresenter.go(licence, summary)
+        const result = SummaryHeadingPresenter(licence, summary)
 
         expect(result.currentVersion).toEqual('The current version of the licence starting 1 April 2019')
       })
@@ -63,7 +63,7 @@ describe('Licences - Summary Heading presenter', () => {
       })
 
       it('returns the text with the licence versions "startDate"', () => {
-        const result = SummaryHeadingPresenter.go(licence, summary)
+        const result = SummaryHeadingPresenter(licence, summary)
 
         expect(result.currentVersion).toEqual('The current version of the licence starting 1 January 2021')
       })
@@ -74,7 +74,7 @@ describe('Licences - Summary Heading presenter', () => {
     describe('when the licence has a primary user (registered user)', () => {
       describe('and they have added a custom name for the licence', () => {
         it('returns the licence name', () => {
-          const result = SummaryHeadingPresenter.go(licence, summary)
+          const result = SummaryHeadingPresenter(licence, summary)
 
           expect(result.pageTitleCaption).toEqual('Between two ferns')
         })
@@ -86,7 +86,7 @@ describe('Licences - Summary Heading presenter', () => {
         })
 
         it('returns null', () => {
-          const result = SummaryHeadingPresenter.go(licence, summary)
+          const result = SummaryHeadingPresenter(licence, summary)
 
           expect(result.pageTitleCaption).toBeNull()
         })
@@ -99,7 +99,7 @@ describe('Licences - Summary Heading presenter', () => {
       })
 
       it('returns "Unregistered licence"', () => {
-        const result = SummaryHeadingPresenter.go(licence, summary)
+        const result = SummaryHeadingPresenter(licence, summary)
 
         expect(result.pageTitleCaption).toEqual('Unregistered licence')
       })
@@ -113,7 +113,7 @@ describe('Licences - Summary Heading presenter', () => {
       })
 
       it('returns the warning', () => {
-        const result = SummaryHeadingPresenter.go(licence, summary)
+        const result = SummaryHeadingPresenter(licence, summary)
 
         expect(result.warning).toEqual({
           iconFallbackText: 'Warning',
@@ -130,7 +130,7 @@ describe('Licences - Summary Heading presenter', () => {
       })
 
       it('returns false', () => {
-        const result = SummaryHeadingPresenter.go(licence, summary)
+        const result = SummaryHeadingPresenter(licence, summary)
 
         expect(result.workflowWarning).toBe(false)
       })
@@ -143,7 +143,7 @@ describe('Licences - Summary Heading presenter', () => {
         })
 
         it('returns false', () => {
-          const result = SummaryHeadingPresenter.go(licence, summary)
+          const result = SummaryHeadingPresenter(licence, summary)
 
           expect(result.workflowWarning).toBe(false)
         })
@@ -151,7 +151,7 @@ describe('Licences - Summary Heading presenter', () => {
 
       describe('and the status is "to_setup"', () => {
         it('returns true', () => {
-          const result = SummaryHeadingPresenter.go(licence, summary)
+          const result = SummaryHeadingPresenter(licence, summary)
 
           expect(result.workflowWarning).toBe(true)
         })

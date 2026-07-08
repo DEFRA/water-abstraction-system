@@ -19,7 +19,7 @@ describe('Company Contacts - Setup - Contact Name Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ContactNamePresenter.go(session)
+      const result = ContactNamePresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -39,7 +39,7 @@ describe('Company Contacts - Setup - Contact Name Presenter', () => {
         })
 
         it('returns the name from the session', () => {
-          const result = ContactNamePresenter.go(session)
+          const result = ContactNamePresenter(session)
 
           expect(result.name).toEqual('Eric')
         })
@@ -47,7 +47,7 @@ describe('Company Contacts - Setup - Contact Name Presenter', () => {
 
       describe('when the name has not previously been saved', () => {
         it('returns an empty string', () => {
-          const result = ContactNamePresenter.go(session)
+          const result = ContactNamePresenter(session)
 
           expect(result.name).toEqual('')
         })
@@ -61,7 +61,7 @@ describe('Company Contacts - Setup - Contact Name Presenter', () => {
         })
 
         it('returns the link to the "check" page', () => {
-          const result = ContactNamePresenter.go(session)
+          const result = ContactNamePresenter(session)
 
           expect(result.backLink).toEqual({
             href: `/system/company-contacts/setup/${session.id}/check`,
@@ -72,7 +72,7 @@ describe('Company Contacts - Setup - Contact Name Presenter', () => {
 
       describe('when the check page has not been visited', () => {
         it('returns a link to the company "contacts" page', () => {
-          const result = ContactNamePresenter.go(session)
+          const result = ContactNamePresenter(session)
 
           expect(result.backLink).toEqual({
             href: `/system/companies/${company.id}/contacts`,

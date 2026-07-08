@@ -12,7 +12,7 @@ describe('Notice Type Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = NoticeTypeValidator.go(payload)
+      const result = NoticeTypeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -25,7 +25,7 @@ describe('Notice Type Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = NoticeTypeValidator.go(payload)
+      const result = NoticeTypeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

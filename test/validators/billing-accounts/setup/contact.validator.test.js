@@ -10,7 +10,7 @@ describe('Billing Accounts - Setup - Contact Validator', () => {
   describe('when called with valid data', () => {
     describe('such as "new"', () => {
       it('returns with no errors', () => {
-        const result = ContactValidator.go({
+        const result = ContactValidator({
           contactSelected: 'new'
         })
 
@@ -21,7 +21,7 @@ describe('Billing Accounts - Setup - Contact Validator', () => {
 
     describe('such as the UUID of a contact', () => {
       it('returns with no errors', () => {
-        const result = ContactValidator.go({
+        const result = ContactValidator({
           contactSelected: generateUUID()
         })
 
@@ -34,7 +34,7 @@ describe('Billing Accounts - Setup - Contact Validator', () => {
   describe('when called with invalid data', () => {
     describe('such as an empty object', () => {
       it('returns with errors', () => {
-        const result = ContactValidator.go({})
+        const result = ContactValidator({})
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

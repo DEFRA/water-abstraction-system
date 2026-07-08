@@ -14,7 +14,7 @@ describe('Return Versions Setup - Frequency reported validator', () => {
     })
 
     it('confirms the data is valid', async () => {
-      const result = FrequencyReportedValidator.go(payload)
+      const result = FrequencyReportedValidator(payload)
 
       expect(result.value.frequencyReported).toEqual('month')
       expect(result.error).toBeUndefined()
@@ -29,7 +29,7 @@ describe('Return Versions Setup - Frequency reported validator', () => {
     })
 
     it('fails validation', () => {
-      const result = FrequencyReportedValidator.go(payload)
+      const result = FrequencyReportedValidator(payload)
 
       expect(result.error.details[0].message).toEqual('Select how often readings or volumes are reported')
     })
@@ -41,7 +41,7 @@ describe('Return Versions Setup - Frequency reported validator', () => {
     })
 
     it('fails validation', () => {
-      const result = FrequencyReportedValidator.go(payload)
+      const result = FrequencyReportedValidator(payload)
 
       expect(result.error.details[0].message).toEqual('Select how often readings or volumes are reported')
     })

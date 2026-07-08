@@ -15,7 +15,7 @@ describe('Bill Runs Review - Factors presenter', () => {
 
   describe('when provided with the result of fetch review charge reference service', () => {
     it('correctly presents the data', () => {
-      const result = FactorsPresenter.go(reviewChargeReference)
+      const result = FactorsPresenter(reviewChargeReference)
 
       expect(result).toEqual({
         amendedAggregate: 0.333333333,
@@ -45,7 +45,7 @@ describe('Bill Runs Review - Factors presenter', () => {
       })
 
       it('the otherAdjustments property only contains the adjustment', () => {
-        const result = FactorsPresenter.go(reviewChargeReference)
+        const result = FactorsPresenter(reviewChargeReference)
 
         expect(result.otherAdjustments).toEqual(['Abatement agreement (0.3)'])
       })
@@ -57,7 +57,7 @@ describe('Bill Runs Review - Factors presenter', () => {
       })
 
       it('the otherAdjustments property only contains the additional charge', () => {
-        const result = FactorsPresenter.go(reviewChargeReference)
+        const result = FactorsPresenter(reviewChargeReference)
 
         expect(result.otherAdjustments).toEqual(['Public Water Supply'])
       })
@@ -70,7 +70,7 @@ describe('Bill Runs Review - Factors presenter', () => {
       })
 
       it('the otherAdjustments property contains both', () => {
-        const result = FactorsPresenter.go(reviewChargeReference)
+        const result = FactorsPresenter(reviewChargeReference)
 
         expect(result.otherAdjustments).toEqual(['Public Water Supply', 'Abatement agreement (0.3)'])
       })
@@ -82,7 +82,7 @@ describe('Bill Runs Review - Factors presenter', () => {
       })
 
       it('sets the otherAdjustments property as empty', () => {
-        const result = FactorsPresenter.go(reviewChargeReference)
+        const result = FactorsPresenter(reviewChargeReference)
 
         expect(result.otherAdjustments).toEqual([])
       })

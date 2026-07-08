@@ -27,7 +27,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ContactPresenter.go(session, companyContacts)
+      const result = ContactPresenter(session, companyContacts)
 
       expect(result).toEqual({
         backLink: {
@@ -61,7 +61,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
   describe('the "contactSelected" property', () => {
     describe('when no contact has been selected', () => {
       it('returns null', () => {
-        const result = ContactPresenter.go(session, companyContacts)
+        const result = ContactPresenter(session, companyContacts)
 
         expect(result.contactSelected).toEqual(null)
       })
@@ -73,7 +73,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
       })
 
       it('returns the selected contact ID', () => {
-        const result = ContactPresenter.go(session, companyContacts)
+        const result = ContactPresenter(session, companyContacts)
 
         expect(result.contactSelected).toEqual(session.contactSelected)
       })
@@ -83,7 +83,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
   describe('"pageTitle" property', () => {
     describe('when there are contacts returned', () => {
       it('returns the correct page title', () => {
-        const result = ContactPresenter.go(session, companyContacts)
+        const result = ContactPresenter(session, companyContacts)
 
         expect(result.pageTitle).toEqual(`Set up a contact for ${company.name}`)
       })
@@ -95,7 +95,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
       })
 
       it('returns the correct page title', () => {
-        const result = ContactPresenter.go(session, companyContacts)
+        const result = ContactPresenter(session, companyContacts)
 
         expect(result.pageTitle).toEqual(`No company contacts found for "${company.name}"`)
       })
@@ -112,7 +112,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
       })
 
       it('returns the correct back link', () => {
-        const result = ContactPresenter.go(session, companyContacts)
+        const result = ContactPresenter(session, companyContacts)
 
         expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/fao`)
       })
@@ -128,7 +128,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
       })
 
       it('returns the correct back link', () => {
-        const result = ContactPresenter.go(session, companyContacts)
+        const result = ContactPresenter(session, companyContacts)
 
         expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })

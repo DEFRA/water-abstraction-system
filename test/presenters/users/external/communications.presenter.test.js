@@ -22,7 +22,7 @@ describe('Users - External - Communications presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = CommunicationsPresenter.go(user, notifications, viewingUserScope, back)
+    const result = CommunicationsPresenter(user, notifications, viewingUserScope, back)
 
     expect(result).toEqual({
       activeNavBar: 'users',

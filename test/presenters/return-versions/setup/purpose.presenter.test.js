@@ -61,7 +61,7 @@ describe('Return Versions - Setup - Purpose presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
+      const result = PurposePresenter(session, requirementIndex, licencePurposes)
 
       expect(result).toEqual({
         backLink: {
@@ -96,7 +96,7 @@ describe('Return Versions - Setup - Purpose presenter', () => {
         })
 
         it('returns a link back to the "check" page', () => {
-          const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
+          const result = PurposePresenter(session, requirementIndex, licencePurposes)
 
           expect(result.backLink).toEqual({
             href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
@@ -114,7 +114,7 @@ describe('Return Versions - Setup - Purpose presenter', () => {
         })
 
         it('returns a link back to the "check" page', () => {
-          const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
+          const result = PurposePresenter(session, requirementIndex, licencePurposes)
 
           expect(result.backLink).toEqual({
             href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
@@ -126,7 +126,7 @@ describe('Return Versions - Setup - Purpose presenter', () => {
 
     describe('when the user has come from somewhere else', () => {
       it('returns a link back to the "method" page', () => {
-        const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
+        const result = PurposePresenter(session, requirementIndex, licencePurposes)
 
         expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/method',
@@ -146,7 +146,7 @@ describe('Return Versions - Setup - Purpose presenter', () => {
       })
 
       it('returns all the licence purposes with those previously submitted checked and optional aliases populate', () => {
-        const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
+        const result = PurposePresenter(session, requirementIndex, licencePurposes)
 
         expect(result.purposes).toEqual([
           {
@@ -179,7 +179,7 @@ describe('Return Versions - Setup - Purpose presenter', () => {
 
     describe('when the user has not previously submitted a purpose', () => {
       it('returns all the licence purposes with nothing checked and no aliases populated', () => {
-        const result = PurposePresenter.go(session, requirementIndex, licencePurposes)
+        const result = PurposePresenter(session, requirementIndex, licencePurposes)
 
         expect(result.purposes).toEqual([
           {

@@ -29,7 +29,7 @@ describe('Return Versions Setup - Frequency Collected presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = FrequencyCollectedPresenter.go(session, requirementIndex)
+      const result = FrequencyCollectedPresenter(session, requirementIndex)
 
       expect(result).toEqual({
         backLink: {
@@ -53,7 +53,7 @@ describe('Return Versions Setup - Frequency Collected presenter', () => {
       })
 
       it('returns a link back to the "check" page', () => {
-        const result = FrequencyCollectedPresenter.go(session, requirementIndex)
+        const result = FrequencyCollectedPresenter(session, requirementIndex)
 
         expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
@@ -64,7 +64,7 @@ describe('Return Versions Setup - Frequency Collected presenter', () => {
 
     describe('when the user has come from somewhere else', () => {
       it('returns a link back to the "site-description" page', () => {
-        const result = FrequencyCollectedPresenter.go(session, requirementIndex)
+        const result = FrequencyCollectedPresenter(session, requirementIndex)
 
         expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/site-description/0',
@@ -81,7 +81,7 @@ describe('Return Versions Setup - Frequency Collected presenter', () => {
       })
 
       it('returns a populated frequency collected', () => {
-        const result = FrequencyCollectedPresenter.go(session, requirementIndex)
+        const result = FrequencyCollectedPresenter(session, requirementIndex)
 
         expect(result.frequencyCollected).toEqual('week')
       })
@@ -89,7 +89,7 @@ describe('Return Versions Setup - Frequency Collected presenter', () => {
 
     describe('when the user has not previously submitted the frequency collected', () => {
       it('returns an empty frequency collected', () => {
-        const result = FrequencyCollectedPresenter.go(session, requirementIndex)
+        const result = FrequencyCollectedPresenter(session, requirementIndex)
 
         expect(result.frequencyCollected).toBeNull()
       })

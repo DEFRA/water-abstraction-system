@@ -18,7 +18,7 @@ describe('Return Logs - Download Return Log presenter', () => {
       })
 
       it('correctly formats the data into a CSV string where the "reading" column is empty', () => {
-        const result = DownloadReturnLogPresenter.go(returnLog)
+        const result = DownloadReturnLogPresenter(returnLog)
 
         const rows = result.data.split('\n')
 
@@ -44,7 +44,7 @@ describe('Return Logs - Download Return Log presenter', () => {
       })
 
       it('correctly formats the data into a CSV string where the "reading" column is empty', () => {
-        const result = DownloadReturnLogPresenter.go(returnLog)
+        const result = DownloadReturnLogPresenter(returnLog)
 
         const rows = result.data.split('\n')
 
@@ -71,7 +71,7 @@ describe('Return Logs - Download Return Log presenter', () => {
     })
 
     it('returns the name in the format: returnReference_startDate_endDate_version', () => {
-      const result = DownloadReturnLogPresenter.go(returnLog)
+      const result = DownloadReturnLogPresenter(returnLog)
 
       const { endDate, returnReference, returnSubmissions, startDate } = returnLog
       const { version } = returnSubmissions[0]

@@ -19,7 +19,7 @@ describe('Billing Accounts - Setup - Contact Name Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ContactNamePresenter.go(session)
+      const result = ContactNamePresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -36,7 +36,7 @@ describe('Billing Accounts - Setup - Contact Name Presenter', () => {
   describe('the "contactName" property', () => {
     describe('when no contact has been selected', () => {
       it('returns null', () => {
-        const result = ContactNamePresenter.go(session)
+        const result = ContactNamePresenter(session)
 
         expect(result.contactName).toEqual(null)
       })
@@ -48,7 +48,7 @@ describe('Billing Accounts - Setup - Contact Name Presenter', () => {
       })
 
       it('returns the selected contact name', () => {
-        const result = ContactNamePresenter.go(session)
+        const result = ContactNamePresenter(session)
 
         expect(result.contactName).toEqual(session.contactName)
       })
@@ -65,7 +65,7 @@ describe('Billing Accounts - Setup - Contact Name Presenter', () => {
       })
 
       it('returns the correct back link', () => {
-        const result = ContactNamePresenter.go(session)
+        const result = ContactNamePresenter(session)
 
         expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/contact`)
       })
@@ -81,7 +81,7 @@ describe('Billing Accounts - Setup - Contact Name Presenter', () => {
       })
 
       it('returns the correct back link', () => {
-        const result = ContactNamePresenter.go(session)
+        const result = ContactNamePresenter(session)
 
         expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })

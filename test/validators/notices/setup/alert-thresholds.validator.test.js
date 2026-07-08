@@ -12,7 +12,7 @@ describe('Notices Setup - Setup - Alert Thresholds validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = AlertThresholdsValidator.go(payload)
+      const result = AlertThresholdsValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -25,7 +25,7 @@ describe('Notices Setup - Setup - Alert Thresholds validator', () => {
         })
 
         it('returns with no errors', () => {
-          const result = AlertThresholdsValidator.go(payload)
+          const result = AlertThresholdsValidator(payload)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeUndefined()
@@ -42,7 +42,7 @@ describe('Notices Setup - Setup - Alert Thresholds validator', () => {
         })
 
         it('returns with errors', () => {
-          const result = AlertThresholdsValidator.go(payload)
+          const result = AlertThresholdsValidator(payload)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -56,7 +56,7 @@ describe('Notices Setup - Setup - Alert Thresholds validator', () => {
         })
 
         it('returns with errors', () => {
-          const result = AlertThresholdsValidator.go(payload)
+          const result = AlertThresholdsValidator(payload)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()

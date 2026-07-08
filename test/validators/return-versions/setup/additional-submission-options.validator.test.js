@@ -17,7 +17,7 @@ describe('Return Versions Setup - Additional Submission Options validator', () =
 
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = AdditionalSubmissionOptionsValidator.go(payload, session)
+      const result = AdditionalSubmissionOptionsValidator(payload, session)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -32,7 +32,7 @@ describe('Return Versions Setup - Additional Submission Options validator', () =
     })
 
     it('fails validation with the error message "Select additional submission options for the requirements for returns"', () => {
-      const result = AdditionalSubmissionOptionsValidator.go(payload, session)
+      const result = AdditionalSubmissionOptionsValidator(payload, session)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()
@@ -52,7 +52,7 @@ describe('Return Versions Setup - Additional Submission Options validator', () =
     })
 
     it('fails validation with the error message "Quarterly returns submissions cannot be set for returns requirements in the summer cycle"', () => {
-      const result = AdditionalSubmissionOptionsValidator.go(payload, session)
+      const result = AdditionalSubmissionOptionsValidator(payload, session)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()
@@ -68,7 +68,7 @@ describe('Return Versions Setup - Additional Submission Options validator', () =
     })
 
     it('fails validation', () => {
-      const result = AdditionalSubmissionOptionsValidator.go(payload, session)
+      const result = AdditionalSubmissionOptionsValidator(payload, session)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

@@ -19,7 +19,7 @@ describe('Billing Accounts - Setup - Account Type Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = AccountTypePresenter.go(session)
+      const result = AccountTypePresenter(session)
 
       expect(result).toEqual({
         accountType: null,
@@ -41,7 +41,7 @@ describe('Billing Accounts - Setup - Account Type Presenter', () => {
       })
 
       it('returns page data for the view', () => {
-        const result = AccountTypePresenter.go(session)
+        const result = AccountTypePresenter(session)
 
         expect(result.accountType).toEqual(session.accountType)
       })
@@ -54,7 +54,7 @@ describe('Billing Accounts - Setup - Account Type Presenter', () => {
       })
 
       it('returns page data for the view', () => {
-        const result = AccountTypePresenter.go(session)
+        const result = AccountTypePresenter(session)
 
         expect(result.accountType).toEqual(session.accountType)
         expect(result.individualName).toEqual(session.individualName)

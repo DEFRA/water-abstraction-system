@@ -17,7 +17,7 @@ describe('Notices - Setup - Remove Licences validator', () => {
     })
 
     it('confirms the data is valid', () => {
-      const result = RemoveLicencesValidator.go(payload, licenceRefsWithDueReturns)
+      const result = RemoveLicencesValidator(payload, licenceRefsWithDueReturns)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -31,7 +31,7 @@ describe('Notices - Setup - Remove Licences validator', () => {
       })
 
       it('fails validation', () => {
-        const result = RemoveLicencesValidator.go(payload, licenceRefsWithDueReturns)
+        const result = RemoveLicencesValidator(payload, licenceRefsWithDueReturns)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -45,7 +45,7 @@ describe('Notices - Setup - Remove Licences validator', () => {
       })
 
       it('fails validation', () => {
-        const result = RemoveLicencesValidator.go(payload, licenceRefsWithDueReturns)
+        const result = RemoveLicencesValidator(payload, licenceRefsWithDueReturns)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

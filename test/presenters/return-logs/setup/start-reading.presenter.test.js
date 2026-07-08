@@ -15,7 +15,7 @@ describe('Return Logs Setup - Start Reading presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = StartReadingPresenter.go(session)
+      const result = StartReadingPresenter(session)
 
       expect(result).toEqual({
         backLink: { href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported', text: 'Back' },
@@ -34,7 +34,7 @@ describe('Return Logs Setup - Start Reading presenter', () => {
       })
 
       it('returns the "startReading" property populated to display the input', () => {
-        const result = StartReadingPresenter.go(session)
+        const result = StartReadingPresenter(session)
 
         expect(result.startReading).toEqual(156000)
       })
@@ -46,7 +46,7 @@ describe('Return Logs Setup - Start Reading presenter', () => {
       })
 
       it('returns the "startReading" property with a string version of 0 to display the input', () => {
-        const result = StartReadingPresenter.go(session)
+        const result = StartReadingPresenter(session)
 
         expect(result.startReading).toEqual('0')
       })
@@ -60,7 +60,7 @@ describe('Return Logs Setup - Start Reading presenter', () => {
       })
 
       it('returns a link back to the "check" page', () => {
-        const result = StartReadingPresenter.go(session)
+        const result = StartReadingPresenter(session)
 
         expect(result.backLink.href).toEqual('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
       })
@@ -68,7 +68,7 @@ describe('Return Logs Setup - Start Reading presenter', () => {
 
     describe('when the user has come from somewhere else', () => {
       it('returns a link back to the "Reported" page', () => {
-        const result = StartReadingPresenter.go(session)
+        const result = StartReadingPresenter(session)
 
         expect(result.backLink.href).toEqual('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported')
       })

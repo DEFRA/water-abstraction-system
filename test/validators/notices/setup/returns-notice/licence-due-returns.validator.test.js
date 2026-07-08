@@ -15,7 +15,7 @@ describe('Notices - Setup - Returns Notice - licence due returns validator', () 
   })
 
   it('confirms the data is valid', () => {
-    const result = LicenceDueReturnsValidator.go(payload, licenceExists, dueReturnsExist)
+    const result = LicenceDueReturnsValidator(payload, licenceExists, dueReturnsExist)
 
     expect(result.value).toBeDefined()
     expect(result.error).toBeUndefined()
@@ -29,7 +29,7 @@ describe('Notices - Setup - Returns Notice - licence due returns validator', () 
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceDueReturnsValidator.go(payload, licenceExists, dueReturnsExist)
+        const result = LicenceDueReturnsValidator(payload, licenceExists, dueReturnsExist)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -43,7 +43,7 @@ describe('Notices - Setup - Returns Notice - licence due returns validator', () 
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceDueReturnsValidator.go(payload, licenceExists, dueReturnsExist)
+        const result = LicenceDueReturnsValidator(payload, licenceExists, dueReturnsExist)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -57,7 +57,7 @@ describe('Notices - Setup - Returns Notice - licence due returns validator', () 
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceDueReturnsValidator.go(payload, licenceExists, dueReturnsExist)
+        const result = LicenceDueReturnsValidator(payload, licenceExists, dueReturnsExist)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

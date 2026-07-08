@@ -23,7 +23,7 @@ describe('Licences - Bills presenter', () => {
 
   describe('when provided with a bills data', () => {
     it('correctly presents the data', () => {
-      const result = BillsPresenter.go([bill], licence)
+      const result = BillsPresenter([bill], licence)
 
       expect(result).toEqual({
         backLink: {
@@ -53,7 +53,7 @@ describe('Licences - Bills presenter', () => {
       describe('for each bill returned', () => {
         describe('when the invoice number exists', () => {
           it('correctly formats the "billNumber" to the invoice number', () => {
-            const result = BillsPresenter.go([bill], licence)
+            const result = BillsPresenter([bill], licence)
 
             expect(result.bills[0].billNumber).toEqual('WAC0003872T')
           })
@@ -66,7 +66,7 @@ describe('Licences - Bills presenter', () => {
           })
 
           it('correctly formats the "billNumber" to "De minimis bill"', () => {
-            const result = BillsPresenter.go([bill], licence)
+            const result = BillsPresenter([bill], licence)
 
             expect(result.bills[0].billNumber).toEqual('De minimis bill')
           })
@@ -79,7 +79,7 @@ describe('Licences - Bills presenter', () => {
           })
 
           it('correctly formats the "billNumber" to "NALD revised bill"', () => {
-            const result = BillsPresenter.go([bill], licence)
+            const result = BillsPresenter([bill], licence)
 
             expect(result.bills[0].billNumber).toEqual('NALD revised bill')
           })
@@ -92,7 +92,7 @@ describe('Licences - Bills presenter', () => {
           })
 
           it('correctly formats the "billNumber" to "Zero value bill"', () => {
-            const result = BillsPresenter.go([bill], licence)
+            const result = BillsPresenter([bill], licence)
 
             expect(result.bills[0].billNumber).toEqual('Zero value bill')
           })
@@ -104,7 +104,7 @@ describe('Licences - Bills presenter', () => {
           })
 
           it('returns an empty string', () => {
-            const result = BillsPresenter.go([bill], licence)
+            const result = BillsPresenter([bill], licence)
 
             expect(result.bills[0].billNumber).toEqual('')
           })

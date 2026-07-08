@@ -7,7 +7,7 @@ describe('Billing Accounts - Setup - Account Type Validator', () => {
   describe('when called', () => {
     describe('with "accountType" as "company"', () => {
       it('returns with no errors', () => {
-        const result = AccountTypeValidator.go({
+        const result = AccountTypeValidator({
           accountType: 'company'
         })
 
@@ -18,7 +18,7 @@ describe('Billing Accounts - Setup - Account Type Validator', () => {
 
     describe('with "accountType" as "indiviudual" and a value for "individualName"', () => {
       it('returns with no errors', () => {
-        const result = AccountTypeValidator.go({
+        const result = AccountTypeValidator({
           accountType: 'individual',
           individualName: 'John Doe'
         })
@@ -30,7 +30,7 @@ describe('Billing Accounts - Setup - Account Type Validator', () => {
 
     describe('with "accountType" as "indiviudual" and no value for "individualName"', () => {
       it('returns with errors', () => {
-        const result = AccountTypeValidator.go({
+        const result = AccountTypeValidator({
           accountType: 'individual'
         })
 
@@ -42,7 +42,7 @@ describe('Billing Accounts - Setup - Account Type Validator', () => {
 
     describe('with no value for "accountType"', () => {
       it('returns with errors', () => {
-        const result = AccountTypeValidator.go({})
+        const result = AccountTypeValidator({})
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -52,7 +52,7 @@ describe('Billing Accounts - Setup - Account Type Validator', () => {
 
     describe('with an incorrect value for "accountType"', () => {
       it('returns with errors', () => {
-        const result = AccountTypeValidator.go({
+        const result = AccountTypeValidator({
           accountType: 'wrong'
         })
 

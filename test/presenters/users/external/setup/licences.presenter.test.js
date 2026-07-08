@@ -14,7 +14,7 @@ describe('Users - External - Setup - Licences Presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = LicencesPresenter.go(session)
+    const result = LicencesPresenter(session)
 
     expect(result).toEqual({
       activeNavBar: 'users',
@@ -58,7 +58,7 @@ describe('Users - External - Setup - Licences Presenter', () => {
       })
 
       it('does not include a divider or an "All licences" option', () => {
-        const result = LicencesPresenter.go(session)
+        const result = LicencesPresenter(session)
 
         expect(result.checkBoxItems).not.toContainEqual({ divider: 'or' })
         expect(result.checkBoxItems).not.toContainEqual({ behaviour: 'exclusive', text: 'All licences', value: 'all' })
@@ -67,7 +67,7 @@ describe('Users - External - Setup - Licences Presenter', () => {
 
     describe('when there is more than one licence to unregister', () => {
       it('includes a divider and an "All licences" option', () => {
-        const result = LicencesPresenter.go(session)
+        const result = LicencesPresenter(session)
 
         expect(result.checkBoxItems).toContainEqual({ divider: 'or' })
         expect(result.checkBoxItems).toContainEqual({
@@ -82,7 +82,7 @@ describe('Users - External - Setup - Licences Presenter', () => {
     describe('the "checked" property', () => {
       describe('when the user did not select any licences', () => {
         it('returns the matching licence option as checked', () => {
-          const result = LicencesPresenter.go(session)
+          const result = LicencesPresenter(session)
 
           expect(result.checkBoxItems[0].checked).toBe(false)
           expect(result.checkBoxItems[1].checked).toBe(false)
@@ -98,7 +98,7 @@ describe('Users - External - Setup - Licences Presenter', () => {
         })
 
         it('returns the matching licence option as checked', () => {
-          const result = LicencesPresenter.go(session)
+          const result = LicencesPresenter(session)
 
           expect(result.checkBoxItems[0].checked).toBe(true)
           expect(result.checkBoxItems[1].checked).toBe(false)
@@ -114,7 +114,7 @@ describe('Users - External - Setup - Licences Presenter', () => {
         })
 
         it('returns the "All licences" option as checked', () => {
-          const result = LicencesPresenter.go(session)
+          const result = LicencesPresenter(session)
 
           expect(result.checkBoxItems[result.checkBoxItems.length - 1].text).toEqual('All licences')
           expect(result.checkBoxItems[result.checkBoxItems.length - 1].checked).toBe(true)
@@ -130,7 +130,7 @@ describe('Users - External - Setup - Licences Presenter', () => {
       })
 
       it('returns "false"', () => {
-        const result = LicencesPresenter.go(session)
+        const result = LicencesPresenter(session)
 
         expect(result.showHint).toBe(false)
       })
@@ -138,7 +138,7 @@ describe('Users - External - Setup - Licences Presenter', () => {
 
     describe('when there is more than one licence to unregister', () => {
       it('returns "true"', () => {
-        const result = LicencesPresenter.go(session)
+        const result = LicencesPresenter(session)
 
         expect(result.showHint).toBe(true)
       })

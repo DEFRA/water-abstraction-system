@@ -15,7 +15,7 @@ describe('Full Condition Validator', () => {
       })
 
       it('returns with no errors', () => {
-        const result = FullConditionValidator.go(payload)
+        const result = FullConditionValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -30,7 +30,7 @@ describe('Full Condition Validator', () => {
       })
 
       it('returns with no errors', () => {
-        const result = FullConditionValidator.go(payload)
+        const result = FullConditionValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -45,7 +45,7 @@ describe('Full Condition Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = FullConditionValidator.go(payload)
+        const result = FullConditionValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -61,7 +61,7 @@ describe('Full Condition Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = FullConditionValidator.go(payload)
+        const result = FullConditionValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

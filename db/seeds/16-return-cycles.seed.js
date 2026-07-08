@@ -6,7 +6,7 @@ import {
 } from '../../app/lib/return-cycle-dates.lib.js'
 import ReturnCycleModel from '../../app/models/return-cycle.model.js'
 
-async function seed() {
+export default async function seed() {
   const currentYear = new Date().getFullYear()
 
   let year = 1959
@@ -51,8 +51,5 @@ async function _upsert(cycle) {
 }
 
 export {
-  seed
-}
-export default {
   seed
 }

@@ -6,7 +6,7 @@ const TypeValidator = require('../../../../app/validators/bill-runs/setup/type.v
 describe('Bill Runs Setup Type validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = TypeValidator.go({ type: 'annual' })
+      const result = TypeValidator({ type: 'annual' })
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -16,7 +16,7 @@ describe('Bill Runs Setup Type validator', () => {
   describe('when invalid data is provided', () => {
     describe('because no "type" is given', () => {
       it('fails validation', () => {
-        const result = TypeValidator.go({ type: '' })
+        const result = TypeValidator({ type: '' })
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -26,7 +26,7 @@ describe('Bill Runs Setup Type validator', () => {
 
     describe('because an unknown "type" is given', () => {
       it('fails validation', () => {
-        const result = TypeValidator.go({ type: 'free_one' })
+        const result = TypeValidator({ type: 'free_one' })
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

@@ -21,7 +21,7 @@ describe('Notices - Setup - Remove Licences presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = RemoveLicencesPresenter.go(licences, session)
+    const result = RemoveLicencesPresenter(licences, session)
 
     expect(result).toEqual({
       backLink: {

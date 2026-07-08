@@ -8,7 +8,7 @@ import UserModel from '../../app/models/user.model.js'
 import DatabaseConfig from '../../config/database.config.js'
 import ServerConfig from '../../config/server.config.js'
 
-async function seed() {
+export default async function seed() {
   // These users are for use in our non-production environments only
   if (ServerConfig.environment === 'production') {
     return
@@ -172,8 +172,5 @@ async function _update(user, password) {
 }
 
 export {
-  seed
-}
-export default {
   seed
 }

@@ -19,7 +19,7 @@ describe('Bill Runs - Setup - No Annual Bill Run presenter', () => {
 
   describe('when provided with a bill run setup session record where the financial year end could not be determined', () => {
     it('correctly presents the data', () => {
-      const result = NoAnnualBillRunPresenter.go(session)
+      const result = NoAnnualBillRunPresenter(session)
 
       expect(result).toEqual({
         backLink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region',

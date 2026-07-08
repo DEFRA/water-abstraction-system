@@ -45,7 +45,7 @@ describe('Return Versions Setup - Remove presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = RemovePresenter.go(session, requirementIndex)
+      const result = RemovePresenter(session, requirementIndex)
 
       expect(result).toEqual({
         backLink: {
@@ -65,7 +65,7 @@ describe('Return Versions Setup - Remove presenter', () => {
 
   describe('the "backLink" property', () => {
     it('returns a link back to the "setup" page', () => {
-      const result = RemovePresenter.go(session, requirementIndex)
+      const result = RemovePresenter(session, requirementIndex)
 
       expect(result.backLink).toEqual({
         href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
@@ -95,7 +95,7 @@ describe('Return Versions Setup - Remove presenter', () => {
       })
 
       it('returns the formatted requirement for returns', () => {
-        const result = RemovePresenter.go(session, requirementIndex)
+        const result = RemovePresenter(session, requirementIndex)
 
         expect(result.returnRequirement).toEqual(
           'Summer monthly requirements for returns, This is a valid return requirements description.'

@@ -19,7 +19,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = AbstractionAlertsPresenter.go(session)
+      const result = AbstractionAlertsPresenter(session)
 
       expect(result).toEqual({
         abstractionAlerts: null,
@@ -40,7 +40,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Presenter', () => {
         })
 
         it('returns the "abstractionAlerts" value', () => {
-          const result = AbstractionAlertsPresenter.go(session)
+          const result = AbstractionAlertsPresenter(session)
 
           expect(result.abstractionAlerts).toEqual('yes')
         })
@@ -48,7 +48,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Presenter', () => {
 
       describe('when the "abstractionAlerts" has not previously been saved', () => {
         it('returns null', () => {
-          const result = AbstractionAlertsPresenter.go(session)
+          const result = AbstractionAlertsPresenter(session)
 
           expect(result.abstractionAlerts).toBeNull()
         })
@@ -62,7 +62,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Presenter', () => {
         })
 
         it('returns true', () => {
-          const result = AbstractionAlertsPresenter.go(session)
+          const result = AbstractionAlertsPresenter(session)
 
           expect(result.showSomeLicences).toBe(true)
         })
@@ -70,7 +70,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Presenter', () => {
 
       describe('when there are no licences', () => {
         it('returns false', () => {
-          const result = AbstractionAlertsPresenter.go(session)
+          const result = AbstractionAlertsPresenter(session)
 
           expect(result.showSomeLicences).toBe(false)
         })

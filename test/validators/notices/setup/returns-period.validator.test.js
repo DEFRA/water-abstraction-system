@@ -8,7 +8,7 @@ describe('Notices - Setup - Returns Period validator', () => {
 
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = ReturnsPeriodValidator.go({ returnsPeriod: 'summer' }, noticeType)
+      const result = ReturnsPeriodValidator({ returnsPeriod: 'summer' }, noticeType)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -18,7 +18,7 @@ describe('Notices - Setup - Returns Period validator', () => {
   describe('when invalid data is provided', () => {
     describe('because no "returnsPeriod" is given', () => {
       it('fails validation', () => {
-        const result = ReturnsPeriodValidator.go({ returnsPeriod: '' }, noticeType)
+        const result = ReturnsPeriodValidator({ returnsPeriod: '' }, noticeType)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -28,7 +28,7 @@ describe('Notices - Setup - Returns Period validator', () => {
 
     describe('because an unknown "returnsPeriod" is given', () => {
       it('fails validation', () => {
-        const result = ReturnsPeriodValidator.go({ returnsPeriod: 'just-because' }, noticeType)
+        const result = ReturnsPeriodValidator({ returnsPeriod: 'just-because' }, noticeType)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

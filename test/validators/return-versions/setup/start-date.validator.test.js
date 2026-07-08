@@ -18,7 +18,7 @@ describe('Return Versions Setup - Start Date validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
+        const result = StartDateValidator(payload, licenceStartDate, licenceEndDate)
 
         expect(result.error).toBeUndefined()
       })
@@ -35,7 +35,7 @@ describe('Return Versions Setup - Start Date validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
+        const result = StartDateValidator(payload, licenceStartDate, licenceEndDate)
 
         expect(result.error).toBeUndefined()
       })
@@ -49,7 +49,7 @@ describe('Return Versions Setup - Start Date validator', () => {
       })
 
       it('fails validation with the message "Select the start date for the requirements for returns"', () => {
-        const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
+        const result = StartDateValidator(payload, licenceStartDate, licenceEndDate)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Select the start date for the requirements for returns')
@@ -69,7 +69,7 @@ describe('Return Versions Setup - Start Date validator', () => {
         })
 
         it('fails validation with the message "Enter a real start date"', () => {
-          const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
+          const result = StartDateValidator(payload, licenceStartDate, licenceEndDate)
 
           expect(result.error).toBeDefined()
           expect(result.error.details[0].message).toEqual('Enter a real start date')
@@ -84,7 +84,7 @@ describe('Return Versions Setup - Start Date validator', () => {
         })
 
         it('fails validation with the message "Enter a real start date"', () => {
-          const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
+          const result = StartDateValidator(payload, licenceStartDate, licenceEndDate)
 
           expect(result.error).toBeDefined()
           expect(result.error.details[0].message).toEqual('Enter a real start date')
@@ -99,7 +99,7 @@ describe('Return Versions Setup - Start Date validator', () => {
         })
 
         it('fails validation with the message "Enter a real start date"', () => {
-          const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
+          const result = StartDateValidator(payload, licenceStartDate, licenceEndDate)
 
           expect(result.error).toBeDefined()
           expect(result.error.details[0].message).toEqual('Enter a real start date')
@@ -114,7 +114,7 @@ describe('Return Versions Setup - Start Date validator', () => {
         })
 
         it('fails validation with the message "Enter a real start date"', () => {
-          const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
+          const result = StartDateValidator(payload, licenceStartDate, licenceEndDate)
 
           expect(result.error).toBeDefined()
           expect(result.error.details[0].message).toEqual('Enter a real start date')
@@ -129,7 +129,7 @@ describe('Return Versions Setup - Start Date validator', () => {
         })
 
         it('fails validation with the message "Enter a real start date"', () => {
-          const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
+          const result = StartDateValidator(payload, licenceStartDate, licenceEndDate)
 
           expect(result.error).toBeDefined()
           expect(result.error.details[0].message).toEqual('Enter a real start date')
@@ -144,7 +144,7 @@ describe('Return Versions Setup - Start Date validator', () => {
         })
 
         it('fails validation with the message "Start date must be on or after the original licence start date"', () => {
-          const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
+          const result = StartDateValidator(payload, licenceStartDate, licenceEndDate)
 
           expect(result.error).toBeDefined()
           expect(result.error.details[0].message).toEqual(
@@ -161,7 +161,7 @@ describe('Return Versions Setup - Start Date validator', () => {
         })
 
         it('fails validation with the message "Start date must be on or after 1 April 1959"', () => {
-          const result = StartDateValidator.go(payload, '1958-01-01T00:00:00.000Z', licenceEndDate)
+          const result = StartDateValidator(payload, '1958-01-01T00:00:00.000Z', licenceEndDate)
 
           expect(result.error).toBeDefined()
           expect(result.error.details[0].message).toEqual('Start date must be on or after 1 April 1959')
@@ -176,7 +176,7 @@ describe('Return Versions Setup - Start Date validator', () => {
         })
 
         it('fails validation with the message "Start date must be before the licence end date"', () => {
-          const result = StartDateValidator.go(payload, licenceStartDate, licenceEndDate)
+          const result = StartDateValidator(payload, licenceStartDate, licenceEndDate)
 
           expect(result.error).toBeDefined()
           expect(result.error.details[0].message).toEqual('Start date must be before the licence end date')

@@ -12,7 +12,7 @@ describe('Empty Bill Run presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = EmptyBillRunPresenter.go(billRun)
+      const result = EmptyBillRunPresenter(billRun)
 
       expect(result).toEqual({
         backLink: '/system/bill-runs',

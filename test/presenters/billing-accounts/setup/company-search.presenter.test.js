@@ -17,7 +17,7 @@ describe('Billing Accounts - Setup - Company Search Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CompanySearchPresenter.go(session)
+      const result = CompanySearchPresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -34,7 +34,7 @@ describe('Billing Accounts - Setup - Company Search Presenter', () => {
   describe('the "companySearch" property', () => {
     describe('when no company search value has been entered', () => {
       it('returns null', () => {
-        const result = CompanySearchPresenter.go(session)
+        const result = CompanySearchPresenter(session)
 
         expect(result.companySearch).toEqual(null)
       })
@@ -46,7 +46,7 @@ describe('Billing Accounts - Setup - Company Search Presenter', () => {
       })
 
       it('returns the company search value', () => {
-        const result = CompanySearchPresenter.go(session)
+        const result = CompanySearchPresenter(session)
 
         expect(result.companySearch).toEqual(session.companySearch)
       })

@@ -16,7 +16,7 @@ describe('Return Logs Setup - Meter Details validator', () => {
     })
 
     it('confirms the data is valid', () => {
-      const result = MeterDetailsValidator.go(payload)
+      const result = MeterDetailsValidator(payload)
 
       expect(result.error).toBeUndefined()
     })
@@ -37,7 +37,7 @@ describe('Return Logs Setup - Meter Details validator', () => {
       })
 
       it('fails validation', () => {
-        const result = MeterDetailsValidator.go(payload)
+        const result = MeterDetailsValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Make must be 310 characters or less')
@@ -57,7 +57,7 @@ describe('Return Logs Setup - Meter Details validator', () => {
       })
 
       it('fails validation', () => {
-        const result = MeterDetailsValidator.go(payload)
+        const result = MeterDetailsValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Serial number must be 180 characters or less')
@@ -71,7 +71,7 @@ describe('Return Logs Setup - Meter Details validator', () => {
     })
 
     it('fails validation', () => {
-      const result = MeterDetailsValidator.go(payload)
+      const result = MeterDetailsValidator(payload)
 
       expect(result.error).toBeDefined()
       expect(result.error.details[0].message).toEqual('Enter the make of the meter')
@@ -86,7 +86,7 @@ describe('Return Logs Setup - Meter Details validator', () => {
     })
 
     it('fails validation', () => {
-      const result = MeterDetailsValidator.go(payload)
+      const result = MeterDetailsValidator(payload)
 
       expect(result.error).toBeDefined()
       expect(result.error.details[0].message).toEqual('Enter a serial number')
@@ -100,7 +100,7 @@ describe('Return Logs Setup - Meter Details validator', () => {
     })
 
     it('fails validation', () => {
-      const result = MeterDetailsValidator.go(payload)
+      const result = MeterDetailsValidator(payload)
 
       expect(result.error).toBeDefined()
       expect(result.error.details[0].message).toEqual('Enter the make of the meter')
@@ -114,7 +114,7 @@ describe('Return Logs Setup - Meter Details validator', () => {
     })
 
     it('fails validation', () => {
-      const result = MeterDetailsValidator.go(payload)
+      const result = MeterDetailsValidator(payload)
 
       expect(result.error).toBeDefined()
       expect(result.error.details[0].message).toEqual('Enter the make of the meter')

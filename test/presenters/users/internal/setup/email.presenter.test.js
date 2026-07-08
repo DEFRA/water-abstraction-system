@@ -14,7 +14,7 @@ describe('Users - Internal - Setup - Email Presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = EmailPresenter.go(session)
+    const result = EmailPresenter(session)
 
     expect(result).toEqual({
       activeNavBar: 'users',
@@ -35,7 +35,7 @@ describe('Users - Internal - Setup - Email Presenter', () => {
       })
 
       it('returns the correct href', () => {
-        const result = EmailPresenter.go(session)
+        const result = EmailPresenter(session)
 
         expect(result.backLink.href).toEqual(`/system/users/internal/setup/${session.id}/check`)
       })
@@ -43,7 +43,7 @@ describe('Users - Internal - Setup - Email Presenter', () => {
 
     describe('when the check page has not previously been visited', () => {
       it('returns the correct href', () => {
-        const result = EmailPresenter.go(session)
+        const result = EmailPresenter(session)
 
         expect(result.backLink.href).toEqual('/system/users')
       })
@@ -57,7 +57,7 @@ describe('Users - Internal - Setup - Email Presenter', () => {
       })
 
       it('returns the email from the session in lowercase', () => {
-        const result = EmailPresenter.go(session)
+        const result = EmailPresenter(session)
 
         expect(result.email).toEqual('bob@test.com')
       })
@@ -65,7 +65,7 @@ describe('Users - Internal - Setup - Email Presenter', () => {
 
     describe('when the email has not previously been saved', () => {
       it('returns an empty string', () => {
-        const result = EmailPresenter.go(session)
+        const result = EmailPresenter(session)
 
         expect(result.email).toBeNull()
       })

@@ -15,7 +15,7 @@ describe('Licence Monitoring Station - Remove presenter', () => {
 
   describe('when provided with the result of the fetch licence monitoring station service', () => {
     it('correctly presents the data', () => {
-      const result = RemovePresenter.go(licenceMonitoringStation)
+      const result = RemovePresenter(licenceMonitoringStation)
 
       expect(result).toEqual({
         backLink: `/system/monitoring-stations/${monitoringStationId}/licence/${licenceId}`,
@@ -39,7 +39,7 @@ describe('Licence Monitoring Station - Remove presenter', () => {
       })
 
       it('returns the string "Not linked to a condition"', () => {
-        const result = RemovePresenter.go(licenceMonitoringStation)
+        const result = RemovePresenter(licenceMonitoringStation)
 
         expect(result.linkedCondition).toEqual('Not linked to a condition')
       })
@@ -56,7 +56,7 @@ describe('Licence Monitoring Station - Remove presenter', () => {
       })
 
       it('returns the condition title and NALD ID, which is the last set of digits of the "externalId"', () => {
-        const result = RemovePresenter.go(licenceMonitoringStation)
+        const result = RemovePresenter(licenceMonitoringStation)
 
         expect(result.linkedCondition).toEqual('The condition title, NALD ID 98765')
       })
@@ -71,7 +71,7 @@ describe('Licence Monitoring Station - Remove presenter', () => {
       })
 
       it('returns the correct "station" name', () => {
-        const result = RemovePresenter.go(licenceMonitoringStation)
+        const result = RemovePresenter(licenceMonitoringStation)
 
         expect(result.station).toEqual('The Station')
       })
@@ -84,7 +84,7 @@ describe('Licence Monitoring Station - Remove presenter', () => {
       })
 
       it('returns the correct "station" name', () => {
-        const result = RemovePresenter.go(licenceMonitoringStation)
+        const result = RemovePresenter(licenceMonitoringStation)
 
         expect(result.station).toEqual('River Piddle at The Station')
       })

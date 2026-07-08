@@ -31,7 +31,7 @@ describe('Licences - History presenter', () => {
 
   describe('when provided with populated licence history', () => {
     it('correctly presents the data', () => {
-      const result = HistoryPresenter.go(licenceHistory, licence)
+      const result = HistoryPresenter(licenceHistory, licence)
 
       expect(result).toEqual({
         backLink: {

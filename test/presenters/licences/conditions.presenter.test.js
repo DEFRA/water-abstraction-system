@@ -17,7 +17,7 @@ describe('Licences - Conditions presenter', () => {
 
   describe('when provided with a populated licence with licence conditions', () => {
     it('returns the expected licence conditions', () => {
-      const result = ConditionsPresenter.go(conditions, licence)
+      const result = ConditionsPresenter(conditions, licence)
 
       expect(result).toEqual({
         backLink: {

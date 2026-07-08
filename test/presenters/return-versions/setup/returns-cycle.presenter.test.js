@@ -29,7 +29,7 @@ describe('Return Versions Setup - Returns Cycle presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = ReturnsCyclePresenter.go(session, requirementIndex)
+      const result = ReturnsCyclePresenter(session, requirementIndex)
 
       expect(result).toEqual({
         backLink: {
@@ -53,7 +53,7 @@ describe('Return Versions Setup - Returns Cycle presenter', () => {
       })
 
       it('returns a link back to the "check" page', () => {
-        const result = ReturnsCyclePresenter.go(session, requirementIndex)
+        const result = ReturnsCyclePresenter(session, requirementIndex)
 
         expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
@@ -64,7 +64,7 @@ describe('Return Versions Setup - Returns Cycle presenter', () => {
 
     describe('when the user has come from somewhere else', () => {
       it('returns a link back to the "abstraction-period" page', () => {
-        const result = ReturnsCyclePresenter.go(session, requirementIndex)
+        const result = ReturnsCyclePresenter(session, requirementIndex)
 
         expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/abstraction-period/0',
@@ -81,7 +81,7 @@ describe('Return Versions Setup - Returns Cycle presenter', () => {
       })
 
       it('returns a populated frequency collected', () => {
-        const result = ReturnsCyclePresenter.go(session, requirementIndex)
+        const result = ReturnsCyclePresenter(session, requirementIndex)
 
         expect(result.returnsCycle).toEqual('summer')
       })
@@ -89,7 +89,7 @@ describe('Return Versions Setup - Returns Cycle presenter', () => {
 
     describe('when the user has not previously submitted the returns cycle', () => {
       it('returns an empty frequency collected', () => {
-        const result = ReturnsCyclePresenter.go(session, requirementIndex)
+        const result = ReturnsCyclePresenter(session, requirementIndex)
 
         expect(result.returnsCycle).toBeNull()
       })

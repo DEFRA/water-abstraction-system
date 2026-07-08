@@ -34,7 +34,7 @@ describe('View Bill Licence presenter', () => {
         })
 
         it('returns the path to the remove bill licence endpoint', () => {
-          const result = ViewBillLicencePresenter.go(billLicence)
+          const result = ViewBillLicencePresenter(billLicence)
 
           expect(result.removeLicenceLink).toEqual('/system/bill-licences/a4fbaa27-a91c-4328-a1b8-774ade11027b/remove')
         })
@@ -46,7 +46,7 @@ describe('View Bill Licence presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewBillLicencePresenter.go(billLicence)
+          const result = ViewBillLicencePresenter(billLicence)
 
           expect(result.removeLicenceLink).toBeNull()
         })
@@ -60,7 +60,7 @@ describe('View Bill Licence presenter', () => {
         })
 
         it('returns the count and caption singular', () => {
-          const result = ViewBillLicencePresenter.go(billLicence)
+          const result = ViewBillLicencePresenter(billLicence)
 
           expect(result.tableCaption).toEqual('1 transaction')
         })
@@ -68,7 +68,7 @@ describe('View Bill Licence presenter', () => {
 
       describe('when there are multiple transactions', () => {
         it('returns the count and caption pluralised', () => {
-          const result = ViewBillLicencePresenter.go(billLicence)
+          const result = ViewBillLicencePresenter(billLicence)
 
           expect(result.tableCaption).toEqual('4 transactions')
         })
@@ -77,7 +77,7 @@ describe('View Bill Licence presenter', () => {
 
     describe('and the total for the transactions is a debit', () => {
       it('correctly presents the data', () => {
-        const result = ViewBillLicencePresenter.go(billLicence)
+        const result = ViewBillLicencePresenter(billLicence)
 
         // NOTE: The transaction details we pass in and what we get back is not what would actually happen. Our
         // transaction presenter tests exhaust what we expect back for all scenarios. What we are confirming though is
@@ -115,7 +115,7 @@ describe('View Bill Licence presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = ViewBillLicencePresenter.go(billLicence)
+        const result = ViewBillLicencePresenter(billLicence)
 
         // NOTE: The transaction details we pass in and what we get back is not what would actually happen. Our
         // transaction presenter tests exhaust what we expect back for all scenarios. What we are confirming though is

@@ -41,7 +41,7 @@ describe('Bill Runs - Setup - Blocked Bill Run presenter', () => {
 
   describe('when provided with a bill run setup session record where the bill run is blocked', () => {
     it('correctly presents the data', async () => {
-      const result = BlockedBillRunPresenter.go(session, blockingResults)
+      const result = BlockedBillRunPresenter(session, blockingResults)
 
       expect(result).toEqual({
         backLink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region',
@@ -64,7 +64,7 @@ describe('Bill Runs - Setup - Blocked Bill Run presenter', () => {
   describe('the "billRunLink" property', () => {
     describe('when the matching bill is not in "review"', () => {
       it('returns a link to the view bill run page', () => {
-        const result = BlockedBillRunPresenter.go(session, blockingResults)
+        const result = BlockedBillRunPresenter(session, blockingResults)
 
         expect(result.billRunLink).toEqual('/system/bill-runs/c0608545-9870-4605-a407-5ff49f8a5182')
       })
@@ -77,7 +77,7 @@ describe('Bill Runs - Setup - Blocked Bill Run presenter', () => {
 
       describe('and its financial year is SROC', () => {
         it('returns a link to the SROC two-part tariff review screen', () => {
-          const result = BlockedBillRunPresenter.go(session, blockingResults)
+          const result = BlockedBillRunPresenter(session, blockingResults)
 
           expect(result.billRunLink).toEqual('/system/bill-runs/review/c0608545-9870-4605-a407-5ff49f8a5182')
         })
@@ -90,7 +90,7 @@ describe('Bill Runs - Setup - Blocked Bill Run presenter', () => {
         })
 
         it('returns a link to the legacy two-part tariff review screen', () => {
-          const result = BlockedBillRunPresenter.go(session, blockingResults)
+          const result = BlockedBillRunPresenter(session, blockingResults)
 
           expect(result.billRunLink).toEqual(
             '/billing/batch/c0608545-9870-4605-a407-5ff49f8a5182/two-part-tariff-review'
@@ -107,7 +107,7 @@ describe('Bill Runs - Setup - Blocked Bill Run presenter', () => {
       })
 
       it('returns "This bill run is blocked"', () => {
-        const result = BlockedBillRunPresenter.go(session, blockingResults)
+        const result = BlockedBillRunPresenter(session, blockingResults)
 
         expect(result.pageTitle).toEqual('This bill run is blocked')
       })
@@ -119,7 +119,7 @@ describe('Bill Runs - Setup - Blocked Bill Run presenter', () => {
       })
 
       it('returns "This bill run already exists"', () => {
-        const result = BlockedBillRunPresenter.go(session, blockingResults)
+        const result = BlockedBillRunPresenter(session, blockingResults)
 
         expect(result.pageTitle).toEqual('This bill run already exists')
       })
@@ -133,7 +133,7 @@ describe('Bill Runs - Setup - Blocked Bill Run presenter', () => {
       })
 
       it('returns a warning that tells the user to confirm or cancel ths existing bill run', () => {
-        const result = BlockedBillRunPresenter.go(session, blockingResults)
+        const result = BlockedBillRunPresenter(session, blockingResults)
 
         expect(result.warningMessage).toEqual(
           'You need to confirm or cancel the existing bill run before you can create a new one'
@@ -147,7 +147,7 @@ describe('Bill Runs - Setup - Blocked Bill Run presenter', () => {
       })
 
       it('returns a warning that tells the user to cancel the existing bill run', () => {
-        const result = BlockedBillRunPresenter.go(session, blockingResults)
+        const result = BlockedBillRunPresenter(session, blockingResults)
 
         expect(result.warningMessage).toEqual(
           'You need to cancel the existing bill run before you can create a new one'
@@ -157,7 +157,7 @@ describe('Bill Runs - Setup - Blocked Bill Run presenter', () => {
 
     describe('when the matching bill run is not supplementary and its status is "sent"', () => {
       it('returns a warning that tells the user they can only have one bill run of that type', () => {
-        const result = BlockedBillRunPresenter.go(session, blockingResults)
+        const result = BlockedBillRunPresenter(session, blockingResults)
 
         expect(result.warningMessage).toEqual('You can only have one Annual bill run per region in a financial year')
       })

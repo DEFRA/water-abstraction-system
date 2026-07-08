@@ -19,7 +19,7 @@ describe('Company Contacts - Setup - Restore Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = RestorePresenter.go(session)
+      const result = RestorePresenter(session)
 
       expect(result).toEqual({
         abstractionAlerts: 'Yes',

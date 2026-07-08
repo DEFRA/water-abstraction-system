@@ -12,7 +12,7 @@ describe('Select Recipients Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = SelectRecipientsValidator.go(payload)
+      const result = SelectRecipientsValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -26,7 +26,7 @@ describe('Select Recipients Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = SelectRecipientsValidator.go(payload)
+        const result = SelectRecipientsValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -40,7 +40,7 @@ describe('Select Recipients Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = SelectRecipientsValidator.go(payload)
+        const result = SelectRecipientsValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

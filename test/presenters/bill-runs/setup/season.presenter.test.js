@@ -16,7 +16,7 @@ describe('Bill Runs - Setup - Season presenter', () => {
 
     describe('where the user has not previously selected a season', () => {
       it('correctly presents the data', () => {
-        const result = SeasonPresenter.go(session)
+        const result = SeasonPresenter(session)
 
         expect(result).toEqual({
           backlink: `/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/year`,
@@ -33,7 +33,7 @@ describe('Bill Runs - Setup - Season presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = SeasonPresenter.go(session)
+        const result = SeasonPresenter(session)
 
         expect(result).toEqual({
           backlink: `/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/year`,

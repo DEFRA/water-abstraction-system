@@ -18,7 +18,7 @@ describe('Notices - Setup - Recipient Name presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = RecipientNamePresenter.go(session)
+      const result = RecipientNamePresenter(session)
 
       expect(result).toEqual({
         backLink: { text: 'Back', href: `/system/notices/setup/${session.id}/select-recipients` },
@@ -34,7 +34,7 @@ describe('Notices - Setup - Recipient Name presenter', () => {
       })
 
       it('returns previously set name', () => {
-        const result = RecipientNamePresenter.go(session)
+        const result = RecipientNamePresenter(session)
 
         expect(result.name).toEqual('Ronald Weasley')
       })

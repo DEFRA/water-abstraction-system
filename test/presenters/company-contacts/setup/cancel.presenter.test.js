@@ -31,7 +31,7 @@ describe('Company Contacts - Setup - Cancel Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CancelPresenter.go(session)
+      const result = CancelPresenter(session)
 
       expect(result).toEqual({
         abstractionAlertsLabel: 'Yes, for all licences',
@@ -53,7 +53,7 @@ describe('Company Contacts - Setup - Cancel Presenter', () => {
       })
 
       it('returns page data for the view', () => {
-        const result = CancelPresenter.go(session)
+        const result = CancelPresenter(session)
 
         expect(result.pageTitle).toEqual('You are about to cancel editing this contact')
       })

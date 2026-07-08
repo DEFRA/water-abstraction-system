@@ -18,7 +18,7 @@ describe('Notices - Setup - Abstraction Alerts - Cancel Alerts presenter', () =>
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CancelAlertsPresenter.go(session)
+      const result = CancelAlertsPresenter(session)
 
       expect(result).toEqual({
         backLink: {

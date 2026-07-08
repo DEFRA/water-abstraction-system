@@ -6,7 +6,7 @@ const ReasonValidator = require('../../../../app/validators/return-versions/setu
 describe('Return Versions Setup - Reason validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = ReasonValidator.go({ reason: 'new-licence' })
+      const result = ReasonValidator({ reason: 'new-licence' })
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -16,7 +16,7 @@ describe('Return Versions Setup - Reason validator', () => {
   describe('when valid data is provided', () => {
     describe('because no "reason" is given', () => {
       it('fails validation', () => {
-        const result = ReasonValidator.go({ reason: '' })
+        const result = ReasonValidator({ reason: '' })
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -26,7 +26,7 @@ describe('Return Versions Setup - Reason validator', () => {
 
     describe('because an unknown "reason" is given', () => {
       it('fails validation', () => {
-        const result = ReasonValidator.go({ reason: 'just-because' })
+        const result = ReasonValidator({ reason: 'just-because' })
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

@@ -12,7 +12,7 @@ describe('Notices - Setup - Contact Type presenter', () => {
     })
 
     it('returns page data for the view', () => {
-      const result = ContactTypePresenter.go(session)
+      const result = ContactTypePresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -38,7 +38,7 @@ describe('Notices - Setup - Contact Type presenter', () => {
     })
 
     it('returns page data for the view', () => {
-      const result = ContactTypePresenter.go(session)
+      const result = ContactTypePresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -64,7 +64,7 @@ describe('Notices - Setup - Contact Type presenter', () => {
     })
 
     it('returns page data for the view', () => {
-      const result = ContactTypePresenter.go(session)
+      const result = ContactTypePresenter(session)
 
       expect(result).toEqual({
         backLink: {

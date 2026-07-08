@@ -18,7 +18,7 @@ describe('Users - Internal - Communications presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = CommunicationsPresenter.go(user, notifications)
+    const result = CommunicationsPresenter(user, notifications)
 
     expect(result).toEqual({
       backLink: {

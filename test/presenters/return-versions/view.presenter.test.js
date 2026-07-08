@@ -20,7 +20,7 @@ describe('Return Versions - View presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = ViewPresenter.go(returnVersionData)
+    const result = ViewPresenter(returnVersionData)
 
     expect(result).toEqual({
       backLink: {
@@ -65,7 +65,7 @@ describe('Return Versions - View presenter', () => {
       })
 
       it('returns "Yes"', () => {
-        const result = ViewPresenter.go(returnVersionData)
+        const result = ViewPresenter(returnVersionData)
 
         expect(result.multipleUpload).toEqual('Yes')
       })
@@ -73,7 +73,7 @@ describe('Return Versions - View presenter', () => {
 
     describe('when multipleUpload is false', () => {
       it('returns "No"', () => {
-        const result = ViewPresenter.go(returnVersionData)
+        const result = ViewPresenter(returnVersionData)
 
         expect(result.multipleUpload).toEqual('No')
       })
@@ -88,7 +88,7 @@ describe('Return Versions - View presenter', () => {
       })
 
       it('returns "null"', () => {
-        const result = ViewPresenter.go(returnVersionData)
+        const result = ViewPresenter(returnVersionData)
 
         expect(result.notes).toBeNull()
       })
@@ -101,7 +101,7 @@ describe('Return Versions - View presenter', () => {
       })
 
       it('returns the note', () => {
-        const result = ViewPresenter.go(returnVersionData)
+        const result = ViewPresenter(returnVersionData)
 
         expect(result.notes).toEqual({
           additionalNotes: [],
@@ -117,7 +117,7 @@ describe('Return Versions - View presenter', () => {
       })
 
       it('returns the note', () => {
-        const result = ViewPresenter.go(returnVersionData)
+        const result = ViewPresenter(returnVersionData)
 
         expect(result.notes).toEqual({
           additionalNotes: [],
@@ -133,7 +133,7 @@ describe('Return Versions - View presenter', () => {
       })
 
       it('returns the notes, with the mod log notes taking precedence over those on the return version', () => {
-        const result = ViewPresenter.go(returnVersionData)
+        const result = ViewPresenter(returnVersionData)
 
         expect(result.notes).toEqual({
           additionalNotes: ['Mod log note 2', 'A note on the return version record'],
@@ -145,7 +145,7 @@ describe('Return Versions - View presenter', () => {
 
   describe('the "pageTitle" property', () => {
     it('returns the title incorporating the return versions start date', () => {
-      const result = ViewPresenter.go(returnVersionData)
+      const result = ViewPresenter(returnVersionData)
 
       expect(result.pageTitle).toEqual('Requirements for returns starting 1 April 2022')
     })
@@ -154,7 +154,7 @@ describe('Return Versions - View presenter', () => {
   describe('the "pagination" property', () => {
     describe('when there is no "pagination" required', () => {
       it('returns null', () => {
-        const result = ViewPresenter.go(returnVersionData)
+        const result = ViewPresenter(returnVersionData)
 
         expect(result.pagination).toBeNull()
       })
@@ -182,7 +182,7 @@ describe('Return Versions - View presenter', () => {
         })
 
         it('returns the "previous" and "next" links', () => {
-          const result = ViewPresenter.go(returnVersionData)
+          const result = ViewPresenter(returnVersionData)
 
           expect(result.pagination).toEqual({
             next: {
@@ -205,7 +205,7 @@ describe('Return Versions - View presenter', () => {
         })
 
         it('returns the "next" link', () => {
-          const result = ViewPresenter.go(returnVersionData)
+          const result = ViewPresenter(returnVersionData)
 
           expect(result.pagination).toEqual({
             next: {
@@ -223,7 +223,7 @@ describe('Return Versions - View presenter', () => {
         })
 
         it('returns the "previous" link', () => {
-          const result = ViewPresenter.go(returnVersionData)
+          const result = ViewPresenter(returnVersionData)
 
           expect(result.pagination).toEqual({
             previous: {
@@ -244,7 +244,7 @@ describe('Return Versions - View presenter', () => {
       })
 
       it('returns "Yes"', () => {
-        const result = ViewPresenter.go(returnVersionData)
+        const result = ViewPresenter(returnVersionData)
 
         expect(result.quarterlyReturns).toEqual('Yes')
       })
@@ -252,7 +252,7 @@ describe('Return Versions - View presenter', () => {
 
     describe('when quarterlyReturns is false', () => {
       it('returns "No"', () => {
-        const result = ViewPresenter.go(returnVersionData)
+        const result = ViewPresenter(returnVersionData)
 
         expect(result.quarterlyReturns).toEqual('No')
       })
@@ -266,7 +266,7 @@ describe('Return Versions - View presenter', () => {
       })
 
       it('returns true', () => {
-        const result = ViewPresenter.go(returnVersionData)
+        const result = ViewPresenter(returnVersionData)
 
         expect(result.quarterlyReturnSubmissions).toBe(true)
       })
@@ -274,7 +274,7 @@ describe('Return Versions - View presenter', () => {
 
     describe('when return version start date is not for quarterly return submissions', () => {
       it('returns false', () => {
-        const result = ViewPresenter.go(returnVersionData)
+        const result = ViewPresenter(returnVersionData)
 
         expect(result.quarterlyReturnSubmissions).toBe(false)
       })
@@ -285,7 +285,7 @@ describe('Return Versions - View presenter', () => {
     describe('the requirements "abstractionPeriod" property', () => {
       describe('when the abstraction period has been set', () => {
         it('formats the abstraction period for display', () => {
-          const result = ViewPresenter.go(returnVersionData)
+          const result = ViewPresenter(returnVersionData)
 
           const { abstractionPeriod } = result.requirements[0]
 
@@ -302,7 +302,7 @@ describe('Return Versions - View presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ViewPresenter.go(returnVersionData)
+          const result = ViewPresenter(returnVersionData)
 
           expect(result.requirements[0].abstractionPeriod).toEqual('')
         })
@@ -312,7 +312,7 @@ describe('Return Versions - View presenter', () => {
     describe('the requirements "agreementsExceptions" property', () => {
       describe('when no agreements or exceptions have been applied', () => {
         it('returns "None"', () => {
-          const result = ViewPresenter.go(returnVersionData)
+          const result = ViewPresenter(returnVersionData)
 
           const { agreementsExceptions } = result.requirements[0]
 
@@ -326,7 +326,7 @@ describe('Return Versions - View presenter', () => {
         })
 
         it("returns it's display text (Gravity fill)", () => {
-          const result = ViewPresenter.go(returnVersionData)
+          const result = ViewPresenter(returnVersionData)
 
           const { agreementsExceptions } = result.requirements[0]
 
@@ -341,7 +341,7 @@ describe('Return Versions - View presenter', () => {
         })
 
         it('returns them joined with an "and" (Gravity fill and Transfer re-abstraction scheme)', () => {
-          const result = ViewPresenter.go(returnVersionData)
+          const result = ViewPresenter(returnVersionData)
 
           const { agreementsExceptions } = result.requirements[0]
 
@@ -358,7 +358,7 @@ describe('Return Versions - View presenter', () => {
         })
 
         it('returns them joined with an ", and" (Gravity fill, Transfer re-abstraction scheme, Two-part tariff, and 56 returns exception)', () => {
-          const result = ViewPresenter.go(returnVersionData)
+          const result = ViewPresenter(returnVersionData)
 
           const { agreementsExceptions } = result.requirements[0]
 
@@ -372,7 +372,7 @@ describe('Return Versions - View presenter', () => {
     describe('the requirements "points" property', () => {
       // Formatting of the points is handled by PointModel.$describe() so testing is light here
       it('formats the points for display', () => {
-        const result = ViewPresenter.go(returnVersionData)
+        const result = ViewPresenter(returnVersionData)
 
         const { points } = result.requirements[0]
 
@@ -387,7 +387,7 @@ describe('Return Versions - View presenter', () => {
         })
 
         it('formats the purposes for display with the purpose description in brackets', () => {
-          const result = ViewPresenter.go(returnVersionData)
+          const result = ViewPresenter(returnVersionData)
 
           const { purposes } = result.requirements[0]
 
@@ -397,7 +397,7 @@ describe('Return Versions - View presenter', () => {
 
       describe('when a purpose description (alias) was not added to the purpose', () => {
         it('formats the purposes for display with just the default description', () => {
-          const result = ViewPresenter.go(returnVersionData)
+          const result = ViewPresenter(returnVersionData)
 
           const { purposes } = result.requirements[0]
 
@@ -413,7 +413,7 @@ describe('Return Versions - View presenter', () => {
         })
 
         it('formats the cycle for display (Summer)', () => {
-          const result = ViewPresenter.go(returnVersionData)
+          const result = ViewPresenter(returnVersionData)
 
           const { returnsCycle } = result.requirements[0]
 
@@ -423,7 +423,7 @@ describe('Return Versions - View presenter', () => {
 
       describe('when the requirement is for the "winter-and-all-year" returns cycle', () => {
         it('formats the cycle for display (Winter and all year)', () => {
-          const result = ViewPresenter.go(returnVersionData)
+          const result = ViewPresenter(returnVersionData)
 
           const { returnsCycle } = result.requirements[0]
 
@@ -435,7 +435,7 @@ describe('Return Versions - View presenter', () => {
     describe('the requirements "siteDescription" property', () => {
       describe('when there is a site description', () => {
         it('returns the site description', () => {
-          const result = ViewPresenter.go(returnVersionData)
+          const result = ViewPresenter(returnVersionData)
 
           const { siteDescription } = result.requirements[0]
 
@@ -449,7 +449,7 @@ describe('Return Versions - View presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ViewPresenter.go(returnVersionData)
+          const result = ViewPresenter(returnVersionData)
 
           const { siteDescription } = result.requirements[0]
 
@@ -461,7 +461,7 @@ describe('Return Versions - View presenter', () => {
     describe('the requirements "title" property', () => {
       describe('when there is a site description', () => {
         it('returns the site description as the title', () => {
-          const result = ViewPresenter.go(returnVersionData)
+          const result = ViewPresenter(returnVersionData)
 
           const { title } = result.requirements[0]
 
@@ -475,7 +475,7 @@ describe('Return Versions - View presenter', () => {
         })
 
         it('returns an empty string as the title', () => {
-          const result = ViewPresenter.go(returnVersionData)
+          const result = ViewPresenter(returnVersionData)
 
           const { title } = result.requirements[0]
 

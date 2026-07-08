@@ -15,7 +15,7 @@ describe('Bill Runs Review - Authorised presenter', () => {
 
   describe('when provided with the result of fetch review charge reference service', () => {
     it('correctly presents the data', () => {
-      const result = AuthorisedPresenter.go(reviewChargeReference)
+      const result = AuthorisedPresenter(reviewChargeReference)
 
       expect(result).toEqual({
         amendedAuthorisedVolume: 9.092,

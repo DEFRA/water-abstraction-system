@@ -12,7 +12,7 @@ import LicenceVersionPurposeConditionTypeModel from '../../app/models/licence-ve
  * Public table name - public.licence_version_purpose_condition_types
  *
  */
-async function seed() {
+export default async function seed() {
   for (const licenceVersionPurposeConditionType of licenceVersionPurposeConditionTypes) {
     await _upsert(licenceVersionPurposeConditionType)
   }
@@ -26,8 +26,5 @@ async function _upsert(licenceVersionPurposeConditionType) {
 }
 
 export {
-  seed
-}
-export default {
   seed
 }

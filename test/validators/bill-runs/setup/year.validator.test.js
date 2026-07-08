@@ -6,7 +6,7 @@ const YearValidator = require('../../../../app/validators/bill-runs/setup/year.v
 describe('Bill Runs Setup Year validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = YearValidator.go({ year: '2022' })
+      const result = YearValidator({ year: '2022' })
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -16,7 +16,7 @@ describe('Bill Runs Setup Year validator', () => {
   describe('when invalid data is provided', () => {
     describe('because no "year" is given', () => {
       it('fails validation', () => {
-        const result = YearValidator.go({ year: '' })
+        const result = YearValidator({ year: '' })
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -26,7 +26,7 @@ describe('Bill Runs Setup Year validator', () => {
 
     describe('because an unknown "year" is given', () => {
       it('fails validation', () => {
-        const result = YearValidator.go({ year: '2020' })
+        const result = YearValidator({ year: '2020' })
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

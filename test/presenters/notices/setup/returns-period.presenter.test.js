@@ -36,7 +36,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = ReturnsPeriodPresenter.go(session)
+      const result = ReturnsPeriodPresenter(session)
 
       expect(result).toMatchObject({
         backLink: {
@@ -55,7 +55,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       })
 
       it('correctly returns the back link', () => {
-        const result = ReturnsPeriodPresenter.go(session)
+        const result = ReturnsPeriodPresenter(session)
 
         expect(result.backLink).toEqual({
           href: `/system/notices/setup/${session.id}/check-notice-type`,
@@ -70,7 +70,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       })
 
       it('correctly returns the back link', () => {
-        const result = ReturnsPeriodPresenter.go(session)
+        const result = ReturnsPeriodPresenter(session)
 
         expect(result.backLink).toEqual({
           href: `/system/notices/setup/${session.id}/notice-type`,
@@ -88,7 +88,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
 
     describe('when the noticeType is "invitations"', () => {
       it('correctly presents the data', () => {
-        const result = ReturnsPeriodPresenter.go(session)
+        const result = ReturnsPeriodPresenter(session)
 
         expect(result.pageTitle).toEqual('Select the returns periods for the invitations')
       })
@@ -100,7 +100,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = ReturnsPeriodPresenter.go(session)
+        const result = ReturnsPeriodPresenter(session)
 
         expect(result.pageTitle).toEqual('Select the returns periods for the reminders')
       })
@@ -119,7 +119,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       it('should mark the returns period as checked', () => {
         const {
           returnsPeriod: [currentReturnPeriod]
-        } = ReturnsPeriodPresenter.go(session)
+        } = ReturnsPeriodPresenter(session)
 
         expect(currentReturnPeriod).toEqual({
           checked: true,
@@ -139,7 +139,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       it('returns the current return period as "quarterFour"', () => {
         const {
           returnsPeriod: [currentReturnPeriod]
-        } = ReturnsPeriodPresenter.go(session)
+        } = ReturnsPeriodPresenter(session)
 
         expect(currentReturnPeriod).toEqual({
           checked: false,
@@ -152,7 +152,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       it('returns the next return period as "allYear"', () => {
         const {
           returnsPeriod: [, nextReturnPeriod]
-        } = ReturnsPeriodPresenter.go(session)
+        } = ReturnsPeriodPresenter(session)
 
         expect(nextReturnPeriod).toEqual({
           checked: false,
@@ -173,7 +173,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         it('returns the current return period as "quarterFour"', () => {
           const {
             returnsPeriod: [currentReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(currentReturnPeriod).toEqual({
             checked: false,
@@ -186,7 +186,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         it('returns the next return period as "allYear"', () => {
           const {
             returnsPeriod: [, nextReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(nextReturnPeriod).toEqual({
             checked: false,
@@ -208,7 +208,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         it('returns the current return period as "quarterOne"', () => {
           const {
             returnsPeriod: [currentReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(currentReturnPeriod).toEqual({
             checked: false,
@@ -221,7 +221,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         it('returns the next return period as "quarterTwo"', () => {
           const {
             returnsPeriod: [, nextReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(nextReturnPeriod).toEqual({
             checked: false,
@@ -243,7 +243,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         it('returns the current return period as "quarterTwo"', () => {
           const {
             returnsPeriod: [currentReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(currentReturnPeriod).toEqual({
             checked: false,
@@ -256,7 +256,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         it('returns the next return period as "summer"', () => {
           const {
             returnsPeriod: [, nextReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(nextReturnPeriod).toEqual({
             checked: false,
@@ -278,7 +278,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         it('returns the current return period as "summer"', () => {
           const {
             returnsPeriod: [currentReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(currentReturnPeriod).toEqual({
             checked: false,
@@ -291,7 +291,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         it('returns the next return period as "quarterThree"', () => {
           const {
             returnsPeriod: [, nextReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(nextReturnPeriod).toEqual({
             checked: false,
@@ -313,7 +313,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         it('returns the current return period as "quarterThree"', () => {
           const {
             returnsPeriod: [currentReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(currentReturnPeriod).toEqual({
             checked: false,
@@ -326,7 +326,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         it('returns the next return period as "quarterFour"', () => {
           const {
             returnsPeriod: [, nextReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(nextReturnPeriod).toEqual({
             checked: false,
@@ -346,7 +346,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         it('returns the current return period as "quarterThree" - with the start and end date in the previous year', () => {
           const {
             returnsPeriod: [currentReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(currentReturnPeriod).toEqual({
             checked: false,
@@ -359,7 +359,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         it('returns the next return period as "quarterFour" - with the start and end date in the current year', () => {
           const {
             returnsPeriod: [, nextReturnPeriod]
-          } = ReturnsPeriodPresenter.go(session)
+          } = ReturnsPeriodPresenter(session)
 
           expect(nextReturnPeriod).toEqual({
             checked: false,

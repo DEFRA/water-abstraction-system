@@ -22,7 +22,7 @@ describe('Address - Postcode Presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = PostcodePresenter.go(session)
+    const result = PostcodePresenter(session)
 
     expect(result).toEqual({
       activeNavBar: 'manage',
@@ -40,7 +40,7 @@ describe('Address - Postcode Presenter', () => {
   describe('the "pageTitleCaption" property', () => {
     describe('when the property has not been configured', () => {
       it('returns null', () => {
-        const result = PostcodePresenter.go(session)
+        const result = PostcodePresenter(session)
 
         expect(result.pageTitleCaption).toEqual(null)
       })
@@ -52,7 +52,7 @@ describe('Address - Postcode Presenter', () => {
       })
 
       it('returns the set value', () => {
-        const result = PostcodePresenter.go(session)
+        const result = PostcodePresenter(session)
 
         expect(result.pageTitleCaption).toEqual('Super awesome caption')
       })
@@ -66,7 +66,7 @@ describe('Address - Postcode Presenter', () => {
       })
 
       it('returns the postcode', () => {
-        const result = PostcodePresenter.go(session)
+        const result = PostcodePresenter(session)
 
         expect(result.postcode).toEqual('SW1A 1AA')
       })
@@ -74,7 +74,7 @@ describe('Address - Postcode Presenter', () => {
 
     describe('when called with no postcode set in the session', () => {
       it('returns null', () => {
-        const result = PostcodePresenter.go(session)
+        const result = PostcodePresenter(session)
 
         expect(result.postcode).toEqual(null)
       })
@@ -84,7 +84,7 @@ describe('Address - Postcode Presenter', () => {
   describe('the "activeNavBar" property', () => {
     describe('when called with an activeNavBar set in the session', () => {
       it('returns the activeNavBar', () => {
-        const result = PostcodePresenter.go(session)
+        const result = PostcodePresenter(session)
 
         expect(result.activeNavBar).toEqual(session.addressJourney.activeNavBar)
       })
@@ -96,7 +96,7 @@ describe('Address - Postcode Presenter', () => {
       })
 
       it('returns null', () => {
-        const result = PostcodePresenter.go(session)
+        const result = PostcodePresenter(session)
 
         expect(result.activeNavBar).toEqual(null)
       })

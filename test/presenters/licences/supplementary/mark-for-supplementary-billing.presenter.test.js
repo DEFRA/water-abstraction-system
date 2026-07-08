@@ -36,7 +36,7 @@ describe('Mark For Supplementary Billing presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = MarkForSupplementaryBillingPresenter.go(licence)
+        const result = MarkForSupplementaryBillingPresenter(licence)
 
         expect(result).toEqual({
           backLink: {
@@ -70,7 +70,7 @@ describe('Mark For Supplementary Billing presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = MarkForSupplementaryBillingPresenter.go(licence)
+        const result = MarkForSupplementaryBillingPresenter(licence)
 
         expect(result).toEqual({
           backLink: {
@@ -105,7 +105,7 @@ describe('Mark For Supplementary Billing presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = MarkForSupplementaryBillingPresenter.go(licence)
+        const result = MarkForSupplementaryBillingPresenter(licence)
 
         expect(result).toEqual({
           backLink: {

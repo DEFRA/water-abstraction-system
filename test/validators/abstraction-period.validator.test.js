@@ -18,7 +18,7 @@ describe('Abstraction Period validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = AbstractionPeriodValidator.go(payload)
+        const result = AbstractionPeriodValidator(payload)
 
         expect(result.value.abstractionPeriodStart).toBeDefined()
         expect(result.value.abstractionPeriodEnd).toBeDefined()
@@ -37,7 +37,7 @@ describe('Abstraction Period validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = AbstractionPeriodValidator.go(payload)
+        const result = AbstractionPeriodValidator(payload)
 
         expect(result.value.abstractionPeriodStart).toBeDefined()
         expect(result.value.abstractionPeriodEnd).toBeDefined()
@@ -58,7 +58,7 @@ describe('Abstraction Period validator', () => {
       })
 
       it('fails validation for only the start date', () => {
-        const result = AbstractionPeriodValidator.go(payload)
+        const result = AbstractionPeriodValidator(payload)
 
         expect(result.value.abstractionPeriodStart).toBeDefined()
         expect(result.value.abstractionPeriodEnd).toBeDefined()
@@ -78,7 +78,7 @@ describe('Abstraction Period validator', () => {
       })
 
       it('fails validation for only the end date', () => {
-        const result = AbstractionPeriodValidator.go(payload)
+        const result = AbstractionPeriodValidator(payload)
 
         expect(result.value.abstractionPeriodStart).toBeDefined()
         expect(result.value.abstractionPeriodEnd).toBeDefined()
@@ -98,7 +98,7 @@ describe('Abstraction Period validator', () => {
       })
 
       it('fails validation correctly for both dates', () => {
-        const result = AbstractionPeriodValidator.go(payload)
+        const result = AbstractionPeriodValidator(payload)
 
         expect(result.value.abstractionPeriodStart).toBeDefined()
         expect(result.value.abstractionPeriodEnd).toBeNull()
@@ -119,7 +119,7 @@ describe('Abstraction Period validator', () => {
       })
 
       it('fails validation correctly for both dates', () => {
-        const result = AbstractionPeriodValidator.go(payload)
+        const result = AbstractionPeriodValidator(payload)
 
         expect(result.value.abstractionPeriodStart).toBeNull()
         expect(result.value.abstractionPeriodEnd).toBeDefined()
@@ -140,7 +140,7 @@ describe('Abstraction Period validator', () => {
       })
 
       it('fails validation correctly for both dates', () => {
-        const result = AbstractionPeriodValidator.go(payload)
+        const result = AbstractionPeriodValidator(payload)
 
         expect(result.value.abstractionPeriodStart).toBeDefined()
         expect(result.value.abstractionPeriodEnd).toBeDefined()
@@ -162,7 +162,7 @@ describe('Abstraction Period validator', () => {
     })
 
     it('fails validation for only the end date', () => {
-      const result = AbstractionPeriodValidator.go(payload)
+      const result = AbstractionPeriodValidator(payload)
 
       expect(result.value.abstractionPeriodStart).toBeDefined()
       expect(result.value.abstractionPeriodEnd).toBeNull()
@@ -182,7 +182,7 @@ describe('Abstraction Period validator', () => {
     })
 
     it('fails validation for only the start date', () => {
-      const result = AbstractionPeriodValidator.go(payload)
+      const result = AbstractionPeriodValidator(payload)
 
       expect(result.value.abstractionPeriodStart).toBeNull()
       expect(result.value.abstractionPeriodEnd).toBeDefined()
@@ -197,7 +197,7 @@ describe('Abstraction Period validator', () => {
     })
 
     it('fails validation correctly for both dates', () => {
-      const result = AbstractionPeriodValidator.go(payload)
+      const result = AbstractionPeriodValidator(payload)
 
       expect(result.value.abstractionPeriodStart).toBeNull()
       expect(result.value.abstractionPeriodEnd).toBeNull()

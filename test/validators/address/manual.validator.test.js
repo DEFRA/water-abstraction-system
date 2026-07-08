@@ -18,7 +18,7 @@ describe('Address - Manual Validator', () => {
     })
 
     it('returns with no errors', () => {
-      const result = ManualAddressValidator.go(payload)
+      const result = ManualAddressValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -31,7 +31,7 @@ describe('Address - Manual Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ManualAddressValidator.go(payload)
+      const result = ManualAddressValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error.details[0].message).toEqual('Enter address line 1')
@@ -45,7 +45,7 @@ describe('Address - Manual Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ManualAddressValidator.go(payload)
+      const result = ManualAddressValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error.details[0].message).toEqual('Address line 1 cannot start with a special character')
@@ -58,7 +58,7 @@ describe('Address - Manual Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ManualAddressValidator.go(payload)
+      const result = ManualAddressValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error.details[0].message).toEqual('Address line 2 cannot start with a special character')
@@ -71,7 +71,7 @@ describe('Address - Manual Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ManualAddressValidator.go(payload)
+      const result = ManualAddressValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error.details[0].message).toEqual('Address line 3 cannot start with a special character')
@@ -84,7 +84,7 @@ describe('Address - Manual Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ManualAddressValidator.go(payload)
+      const result = ManualAddressValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error.details[0].message).toEqual('Address line 4 cannot start with a special character')
@@ -97,7 +97,7 @@ describe('Address - Manual Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ManualAddressValidator.go(payload)
+      const result = ManualAddressValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error.details[0].message).toEqual('Enter a valid UK postcode')

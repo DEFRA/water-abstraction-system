@@ -52,7 +52,7 @@ describe('Search - Fetch Search Results service', () => {
 
     // Add the Licences and licence holders in non-alphabetical order, including region, and ID to prove the ordering in
     // the results
-    licenceSeedData = await EmptyLicenceSeeder.seed(null, walesRegion.id)
+    licenceSeedData = await EmptyLicenceSeeder(null, walesRegion.id)
     licences.push(licenceSeedData)
     licenceHolderSeedData = await CRMContactsSeeder.licenceHolder(
       licenceSeedData,
@@ -61,7 +61,7 @@ describe('Search - Fetch Search Results service', () => {
     )
     licenceHolders.push(licenceHolderSeedData)
 
-    licenceSeedData = await EmptyLicenceSeeder.seed()
+    licenceSeedData = await EmptyLicenceSeeder()
     licences.push(licenceSeedData)
     licenceHolderSeedData = await CRMContactsSeeder.licenceHolder(
       licenceSeedData,
@@ -70,7 +70,7 @@ describe('Search - Fetch Search Results service', () => {
     )
     licenceHolders.push(licenceHolderSeedData)
 
-    licenceSeedData = await EmptyLicenceSeeder.seed()
+    licenceSeedData = await EmptyLicenceSeeder()
     licences.push(licenceSeedData)
     licenceHolderSeedData = await CRMContactsSeeder.licenceHolder(
       licenceSeedData,
@@ -80,7 +80,7 @@ describe('Search - Fetch Search Results service', () => {
     licenceHolders.push(licenceHolderSeedData)
 
     // Add the licences in non-alphabetical order to prove the ordering in the results
-    licenceSeedData = await EmptyLicenceSeeder.seed('02/01/TESTSEARCH01/05')
+    licenceSeedData = await EmptyLicenceSeeder('02/01/TESTSEARCH01/05')
     licences.push(licenceSeedData)
     licenceHolderSeedData = await CRMContactsSeeder.licenceHolder(
       licenceSeedData,
@@ -89,7 +89,7 @@ describe('Search - Fetch Search Results service', () => {
     )
     licenceHolders.push(licenceHolderSeedData)
 
-    licenceSeedData = await EmptyLicenceSeeder.seed('01/02/TESTSEARCH02/06')
+    licenceSeedData = await EmptyLicenceSeeder('01/02/TESTSEARCH02/06')
     licences.push(licenceSeedData)
     licenceHolderSeedData = await CRMContactsSeeder.licenceHolder(
       licenceSeedData,

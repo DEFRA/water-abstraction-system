@@ -43,7 +43,7 @@ describe('Return Logs - Communications presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = CommunicationsPresenter.go(returnLog, notifications)
+    const result = CommunicationsPresenter(returnLog, notifications)
 
     expect(result).toEqual({
       backLink: {

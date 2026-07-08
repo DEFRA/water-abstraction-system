@@ -23,7 +23,7 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
     })
 
     it('returns page data for the view', () => {
-      const result = ExistingAccountPresenter.go(session, companies)
+      const result = ExistingAccountPresenter(session, companies)
 
       expect(result).toEqual({
         backLink: {
@@ -62,7 +62,7 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       })
 
       it('the checked property should be true', () => {
-        const result = ExistingAccountPresenter.go(session, companies)
+        const result = ExistingAccountPresenter(session, companies)
 
         expect(result.items[2].checked).toEqual(true)
       })
@@ -78,7 +78,7 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       })
 
       it('each of the checked properties should be false', () => {
-        const result = ExistingAccountPresenter.go(session, companies)
+        const result = ExistingAccountPresenter(session, companies)
 
         expect(result.items).toEqual([
           {
@@ -109,7 +109,7 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       })
 
       it('returns the correct page title', () => {
-        const result = ExistingAccountPresenter.go(session, companies)
+        const result = ExistingAccountPresenter(session, companies)
 
         expect(result.pageTitle).toEqual('Does this account already exist?')
       })
@@ -124,7 +124,7 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       })
 
       it('returns the correct page title', () => {
-        const result = ExistingAccountPresenter.go(session, [])
+        const result = ExistingAccountPresenter(session, [])
 
         expect(result.pageTitle).toEqual(`No search results found for "${session.searchInput}"`)
       })
@@ -141,7 +141,7 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       })
 
       it('returns the correct back link', () => {
-        const result = ExistingAccountPresenter.go(session, companies)
+        const result = ExistingAccountPresenter(session, companies)
 
         expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/account`)
       })
@@ -157,7 +157,7 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       })
 
       it('returns the correct back link', () => {
-        const result = ExistingAccountPresenter.go(session, [])
+        const result = ExistingAccountPresenter(session, [])
 
         expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/check`)
       })

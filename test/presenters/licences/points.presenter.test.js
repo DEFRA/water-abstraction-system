@@ -24,7 +24,7 @@ describe('Licences - Points presenter', () => {
 
   describe('when provided with a populated licence and points', () => {
     it('returns the expected licence points details', () => {
-      const result = PointsPresenter.go(points, licence)
+      const result = PointsPresenter(points, licence)
 
       expect(result).toEqual({
         backLink: {

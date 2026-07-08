@@ -16,7 +16,7 @@ describe('Billing Accounts - Setup - Existing Account validator', () => {
       })
 
       it('returns with no errors', () => {
-        const result = ExistingAccountValidator.go(payload)
+        const result = ExistingAccountValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -29,7 +29,7 @@ describe('Billing Accounts - Setup - Existing Account validator', () => {
       })
 
       it('returns with no errors', () => {
-        const result = ExistingAccountValidator.go(payload)
+        const result = ExistingAccountValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -43,7 +43,7 @@ describe('Billing Accounts - Setup - Existing Account validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ExistingAccountValidator.go(payload)
+      const result = ExistingAccountValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

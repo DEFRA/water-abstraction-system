@@ -2,7 +2,7 @@ import { timestampForPostgres } from '../../app/lib/general.lib.js'
 import { data as sources } from './data/sources.js'
 import SourceModel from '../../app/models/source.model.js'
 
-async function seed() {
+export default async function seed() {
   for (const source of sources) {
     await _upsert(source)
   }
@@ -16,8 +16,5 @@ async function _upsert(source) {
 }
 
 export {
-  seed
-}
-export default {
   seed
 }

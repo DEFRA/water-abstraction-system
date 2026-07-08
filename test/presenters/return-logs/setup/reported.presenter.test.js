@@ -15,7 +15,7 @@ describe('Return Logs Setup - Reported presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = ReportedPresenter.go(session)
+      const result = ReportedPresenter(session)
 
       expect(result).toEqual({
         backLink: { href: `/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/submission`, text: 'Back' },
@@ -34,7 +34,7 @@ describe('Return Logs Setup - Reported presenter', () => {
       })
 
       it('returns a link back to the "check" page', () => {
-        const result = ReportedPresenter.go(session)
+        const result = ReportedPresenter(session)
 
         expect(result.backLink).toEqual({
           href: `/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check`,
@@ -45,7 +45,7 @@ describe('Return Logs Setup - Reported presenter', () => {
 
     describe('when the user has come from somewhere else', () => {
       it('returns a link back to the "Submission" page', () => {
-        const result = ReportedPresenter.go(session)
+        const result = ReportedPresenter(session)
 
         expect(result.backLink).toEqual({
           href: `/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/submission`,
@@ -62,7 +62,7 @@ describe('Return Logs Setup - Reported presenter', () => {
       })
 
       it('returns the "reported" property populated to re-select the option', () => {
-        const result = ReportedPresenter.go(session)
+        const result = ReportedPresenter(session)
 
         expect(result.reported).toEqual('meterReadings')
       })
@@ -74,7 +74,7 @@ describe('Return Logs Setup - Reported presenter', () => {
       })
 
       it('returns the "reported" property populated to re-select the option', () => {
-        const result = ReportedPresenter.go(session)
+        const result = ReportedPresenter(session)
 
         expect(result.reported).toEqual('abstractionVolumes')
       })

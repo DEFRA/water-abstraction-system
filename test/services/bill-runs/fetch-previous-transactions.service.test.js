@@ -13,7 +13,7 @@ describe('Bill Runs - Fetch Previous Transactions service', () => {
   let twoPartTariffFlag
 
   beforeAll(async () => {
-    seededData = await PreviousBillingDataSeeder.seed()
+    seededData = await PreviousBillingDataSeeder()
 
     standard = seededData.standard
     twoPartTariff = seededData.twoPartTariff
