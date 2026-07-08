@@ -141,7 +141,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
 
         const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-        expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed')
+        expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed', expect.any(Object))
         expect(errorLogArgs[1]).toEqual({ billRunId: undefined, job: 'clean-empty-bill-runs' })
         expect(errorLogArgs[2]).toBeInstanceOf(Error)
       })
@@ -169,7 +169,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
 
         const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-        expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed')
+        expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed', expect.any(Object))
         expect(errorLogArgs[1]).toEqual({ billRunId: emptyBillRuns[0].id, job: 'clean-empty-bill-runs' })
         expect(errorLogArgs[2]).toBeInstanceOf(Error)
       })

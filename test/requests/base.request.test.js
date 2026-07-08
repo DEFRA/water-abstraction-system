@@ -86,7 +86,7 @@ describe('Base Request', () => {
 
           const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg).toHaveBeenCalledWith('DELETE request failed')
+          expect(notifierStub.omg).toHaveBeenCalledWith('DELETE request failed', expect.any(Object))
           expect(logDataArg.method).toEqual('DELETE')
           expect(logDataArg.url).toEqual('http://example.com')
           expect(logDataArg.additionalOptions).toEqual({})
@@ -129,7 +129,7 @@ describe('Base Request', () => {
             await BaseRequest.deleteRequest(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg).toHaveBeenCalledTimes(2)
-            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request')
+            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request', expect.any(Object))
           })
 
           it('logs and records the error', async () => {
@@ -137,7 +137,7 @@ describe('Base Request', () => {
 
             const logDataArg = notifierStub.omfg.mock.calls[0][1]
 
-            expect(notifierStub.omfg).toHaveBeenCalledWith('DELETE request errored')
+            expect(notifierStub.omfg).toHaveBeenCalledWith('DELETE request errored', expect.any(Object))
             expect(logDataArg.method).toEqual('DELETE')
             expect(logDataArg.url).toEqual('http://example.com')
             expect(logDataArg.additionalOptions).toBeDefined()
@@ -180,7 +180,7 @@ describe('Base Request', () => {
             await BaseRequest.deleteRequest(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg).toHaveBeenCalledTimes(1)
-            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request')
+            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request', expect.any(Object))
           })
 
           describe('the result it returns', () => {
@@ -224,7 +224,7 @@ describe('Base Request', () => {
             await BaseRequest.deleteRequest(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg).toHaveBeenCalledTimes(2)
-            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request')
+            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request', expect.any(Object))
           })
 
           it('logs and records the error', async () => {
@@ -232,7 +232,7 @@ describe('Base Request', () => {
 
             const logDataArg = notifierStub.omfg.mock.calls[0][1]
 
-            expect(notifierStub.omfg).toHaveBeenCalledWith('DELETE request errored')
+            expect(notifierStub.omfg).toHaveBeenCalledWith('DELETE request errored', expect.any(Object))
             expect(logDataArg.method).toEqual('DELETE')
             expect(logDataArg.url).toEqual('http://example.com')
             expect(logDataArg.additionalOptions).toBeDefined()
@@ -276,7 +276,7 @@ describe('Base Request', () => {
             await BaseRequest.deleteRequest(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg).toHaveBeenCalledTimes(1)
-            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request')
+            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request', expect.any(Object))
           })
 
           describe('the result it returns', () => {
@@ -366,7 +366,7 @@ describe('Base Request', () => {
 
           const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg).toHaveBeenCalledWith('GET request failed')
+          expect(notifierStub.omg).toHaveBeenCalledWith('GET request failed', expect.any(Object))
           expect(logDataArg.method).toEqual('GET')
           expect(logDataArg.url).toEqual('http://example.com')
           expect(logDataArg.additionalOptions).toEqual({})
@@ -409,7 +409,7 @@ describe('Base Request', () => {
             await BaseRequest.getRequest(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg).toHaveBeenCalledTimes(2)
-            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request')
+            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request', expect.any(Object))
           })
 
           it('logs and records the error', async () => {
@@ -417,7 +417,7 @@ describe('Base Request', () => {
 
             const logDataArg = notifierStub.omfg.mock.calls[0][1]
 
-            expect(notifierStub.omfg).toHaveBeenCalledWith('GET request errored')
+            expect(notifierStub.omfg).toHaveBeenCalledWith('GET request errored', expect.any(Object))
             expect(logDataArg.method).toEqual('GET')
             expect(logDataArg.url).toEqual('http://example.com')
             expect(logDataArg.additionalOptions).toBeDefined()
@@ -460,7 +460,7 @@ describe('Base Request', () => {
             await BaseRequest.getRequest(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg).toHaveBeenCalledTimes(1)
-            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request')
+            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request', expect.any(Object))
           })
 
           describe('the result it returns', () => {
@@ -504,7 +504,7 @@ describe('Base Request', () => {
             await BaseRequest.getRequest(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg).toHaveBeenCalledTimes(2)
-            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request')
+            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request', expect.any(Object))
           })
 
           it('logs and records the error', async () => {
@@ -512,7 +512,7 @@ describe('Base Request', () => {
 
             const logDataArg = notifierStub.omfg.mock.calls[0][1]
 
-            expect(notifierStub.omfg).toHaveBeenCalledWith('GET request errored')
+            expect(notifierStub.omfg).toHaveBeenCalledWith('GET request errored', expect.any(Object))
             expect(logDataArg.method).toEqual('GET')
             expect(logDataArg.url).toEqual('http://example.com')
             expect(logDataArg.additionalOptions).toBeDefined()
@@ -556,7 +556,7 @@ describe('Base Request', () => {
             await BaseRequest.getRequest(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg).toHaveBeenCalledTimes(1)
-            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request')
+            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request', expect.any(Object))
           })
 
           describe('the result it returns', () => {
@@ -646,7 +646,7 @@ describe('Base Request', () => {
 
           const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg).toHaveBeenCalledWith('PATCH request failed')
+          expect(notifierStub.omg).toHaveBeenCalledWith('PATCH request failed', expect.any(Object))
           expect(logDataArg.method).toEqual('PATCH')
           expect(logDataArg.url).toEqual('http://example.com')
           expect(logDataArg.additionalOptions).toEqual({})
@@ -689,7 +689,7 @@ describe('Base Request', () => {
             await BaseRequest.patchRequest(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg).toHaveBeenCalledTimes(2)
-            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request')
+            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request', expect.any(Object))
           })
 
           it('logs and records the error', async () => {
@@ -697,7 +697,7 @@ describe('Base Request', () => {
 
             const logDataArg = notifierStub.omfg.mock.calls[0][1]
 
-            expect(notifierStub.omfg).toHaveBeenCalledWith('PATCH request errored')
+            expect(notifierStub.omfg).toHaveBeenCalledWith('PATCH request errored', expect.any(Object))
             expect(logDataArg.method).toEqual('PATCH')
             expect(logDataArg.url).toEqual('http://example.com')
             expect(logDataArg.additionalOptions).toBeDefined()
@@ -740,7 +740,7 @@ describe('Base Request', () => {
             await BaseRequest.patchRequest(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg).toHaveBeenCalledTimes(1)
-            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request')
+            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request', expect.any(Object))
           })
 
           describe('the result it returns', () => {
@@ -784,7 +784,7 @@ describe('Base Request', () => {
             await BaseRequest.patchRequest(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg).toHaveBeenCalledTimes(2)
-            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request')
+            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request', expect.any(Object))
           })
 
           it('logs and records the error', async () => {
@@ -792,7 +792,7 @@ describe('Base Request', () => {
 
             const logDataArg = notifierStub.omfg.mock.calls[0][1]
 
-            expect(notifierStub.omfg).toHaveBeenCalledWith('PATCH request errored')
+            expect(notifierStub.omfg).toHaveBeenCalledWith('PATCH request errored', expect.any(Object))
             expect(logDataArg.method).toEqual('PATCH')
             expect(logDataArg.url).toEqual('http://example.com')
             expect(logDataArg.additionalOptions).toBeDefined()
@@ -836,7 +836,7 @@ describe('Base Request', () => {
             await BaseRequest.patchRequest(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg).toHaveBeenCalledTimes(1)
-            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request')
+            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request', expect.any(Object))
           })
 
           describe('the result it returns', () => {
@@ -926,7 +926,7 @@ describe('Base Request', () => {
 
           const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg).toHaveBeenCalledWith('POST request failed')
+          expect(notifierStub.omg).toHaveBeenCalledWith('POST request failed', expect.any(Object))
           expect(logDataArg.method).toEqual('POST')
           expect(logDataArg.url).toEqual('http://example.com')
           expect(logDataArg.additionalOptions).toEqual({})
@@ -969,7 +969,7 @@ describe('Base Request', () => {
             await BaseRequest.postRequest(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg).toHaveBeenCalledTimes(2)
-            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request')
+            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request', expect.any(Object))
           })
 
           it('logs and records the error', async () => {
@@ -977,7 +977,7 @@ describe('Base Request', () => {
 
             const logDataArg = notifierStub.omfg.mock.calls[0][1]
 
-            expect(notifierStub.omfg).toHaveBeenCalledWith('POST request errored')
+            expect(notifierStub.omfg).toHaveBeenCalledWith('POST request errored', expect.any(Object))
             expect(logDataArg.method).toEqual('POST')
             expect(logDataArg.url).toEqual('http://example.com')
             expect(logDataArg.additionalOptions).toBeDefined()
@@ -1020,7 +1020,7 @@ describe('Base Request', () => {
             await BaseRequest.postRequest(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg).toHaveBeenCalledTimes(1)
-            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request')
+            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request', expect.any(Object))
           })
 
           describe('the result it returns', () => {
@@ -1064,7 +1064,7 @@ describe('Base Request', () => {
             await BaseRequest.postRequest(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg).toHaveBeenCalledTimes(2)
-            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request')
+            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request', expect.any(Object))
           })
 
           it('logs and records the error', async () => {
@@ -1072,7 +1072,7 @@ describe('Base Request', () => {
 
             const logDataArg = notifierStub.omfg.mock.calls[0][1]
 
-            expect(notifierStub.omfg).toHaveBeenCalledWith('POST request errored')
+            expect(notifierStub.omfg).toHaveBeenCalledWith('POST request errored', expect.any(Object))
             expect(logDataArg.method).toEqual('POST')
             expect(logDataArg.url).toEqual('http://example.com')
             expect(logDataArg.additionalOptions).toBeDefined()
@@ -1116,7 +1116,7 @@ describe('Base Request', () => {
             await BaseRequest.postRequest(testDomain, { retry: shortBackoffLimitRetryOptions })
 
             expect(notifierStub.omg).toHaveBeenCalledTimes(1)
-            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request')
+            expect(notifierStub.omg).toHaveBeenCalledWith('Retrying HTTP request', expect.any(Object))
           })
 
           describe('the result it returns', () => {

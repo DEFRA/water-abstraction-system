@@ -64,7 +64,7 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
 
         const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-        expect(notifierStub.omg).toHaveBeenCalledWith('Process licence end date change complete')
+        expect(notifierStub.omg).toHaveBeenCalledWith('Process licence end date change complete', expect.any(Object))
         expect(logDataArg).toEqual({
           id: licenceEndDateChange.id,
           licenceId: licenceEndDateChange.licenceId,
@@ -80,7 +80,7 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
 
         const logDataArg = notifierStub.omg.secondCall.mock.calls[1]
 
-        expect(notifierStub.omg).toHaveBeenCalledWith('Process licence end date changes complete')
+        expect(notifierStub.omg).toHaveBeenCalledWith('Process licence end date changes complete', expect.any(Object))
         expect(logDataArg.timeTakenMs).toBeDefined()
         expect(logDataArg.timeTakenSs).toBeDefined()
         expect(logDataArg.count).toBeDefined()
@@ -99,7 +99,7 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
 
         const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-        expect(notifierStub.omfg).toHaveBeenCalledWith('Process licence end date change failed')
+        expect(notifierStub.omfg).toHaveBeenCalledWith('Process licence end date change failed', expect.any(Object))
         expect(errorLogArgs[1]).toEqual({
           id: licenceEndDateChange.id,
           licenceId: licenceEndDateChange.licenceId,
@@ -124,7 +124,7 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
 
         const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-        expect(notifierStub.omfg).toHaveBeenCalledWith('Process licence end date changes failed')
+        expect(notifierStub.omfg).toHaveBeenCalledWith('Process licence end date changes failed', expect.any(Object))
         expect(errorLogArgs[1]).toBeNull()
         expect(errorLogArgs[2]).toBeInstanceOf(Error)
       })

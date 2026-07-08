@@ -99,7 +99,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
         const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-        expect(notifierStub.omg).toHaveBeenCalledWith('Delete bill run complete')
+        expect(notifierStub.omg).toHaveBeenCalledWith('Delete bill run complete', expect.any(Object))
         expect(logDataArg.timeTakenMs).toBeDefined()
         expect(logDataArg.timeTakenSs).toBeDefined()
         expect(logDataArg.billRun).toEqual(billRun)
@@ -165,7 +165,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-          expect(notifierStub.omfg).toHaveBeenCalledWith('Delete bill run failed')
+          expect(notifierStub.omfg).toHaveBeenCalledWith('Delete bill run failed', expect.any(Object))
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })
@@ -187,7 +187,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-          expect(notifierStub.omfg).toHaveBeenCalledWith('Delete bill run failed')
+          expect(notifierStub.omfg).toHaveBeenCalledWith('Delete bill run failed', expect.any(Object))
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })
@@ -213,7 +213,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-          expect(notifierStub.omfg).toHaveBeenCalledWith('Delete bill run failed')
+          expect(notifierStub.omfg).toHaveBeenCalledWith('Delete bill run failed', expect.any(Object))
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })
@@ -239,7 +239,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-          expect(notifierStub.omfg).toHaveBeenCalledWith('Delete bill run failed')
+          expect(notifierStub.omfg).toHaveBeenCalledWith('Delete bill run failed', expect.any(Object))
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })
@@ -263,7 +263,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
       const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-      expect(notifierStub.omg).toHaveBeenCalledWith('Delete bill run complete')
+      expect(notifierStub.omg).toHaveBeenCalledWith('Delete bill run complete', expect.any(Object))
       expect(logDataArg.timeTakenMs).toBeDefined()
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.billRun).toEqual(billRun)

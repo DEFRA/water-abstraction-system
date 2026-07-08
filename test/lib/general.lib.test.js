@@ -47,7 +47,7 @@ describe('GeneralLib', () => {
 
         const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-        expect(notifierStub.omg).toHaveBeenCalledWith('I am the test with no data')
+        expect(notifierStub.omg).toHaveBeenCalledWith('I am the test with no data', expect.any(Object))
         expect(logDataArg.timeTakenMs).toBeDefined()
         expect(logDataArg.timeTakenSs).toBeDefined()
         expect(logDataArg.name).toBeUndefined()
@@ -60,7 +60,7 @@ describe('GeneralLib', () => {
 
         const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-        expect(notifierStub.omg).toHaveBeenCalledWith('I am the test with data')
+        expect(notifierStub.omg).toHaveBeenCalledWith('I am the test with data', expect.any(Object))
         expect(logDataArg.timeTakenMs).toBeDefined()
         expect(logDataArg.name).toBeDefined()
       })

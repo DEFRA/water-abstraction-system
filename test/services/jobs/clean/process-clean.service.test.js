@@ -59,7 +59,7 @@ describe('Jobs - Clean - Process Clean service', () => {
 
       const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-      expect(notifierStub.omg).toHaveBeenCalledWith('Clean job complete')
+      expect(notifierStub.omg).toHaveBeenCalledWith('Clean job complete', expect.any(Object))
       expect(logDataArg.timeTakenMs).toBeDefined()
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.counts).toEqual({
@@ -89,7 +89,7 @@ describe('Jobs - Clean - Process Clean service', () => {
 
       const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-      expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed')
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed', expect.any(Object))
       expect(errorLogArgs[1]).toEqual({})
       expect(errorLogArgs[2]).toBeInstanceOf(Error)
     })

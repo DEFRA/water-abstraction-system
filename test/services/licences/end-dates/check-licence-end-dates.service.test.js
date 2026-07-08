@@ -84,7 +84,7 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
 
       const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-      expect(notifierStub.omfg).toHaveBeenCalledWith('Check licence end dates failed')
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Check licence end dates failed', expect.any(Object))
       expect(errorLogArgs[1]).toEqual({
         id: licence.id,
         changedDateDetails: {

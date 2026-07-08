@@ -82,7 +82,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
       const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-      expect(notifierStub.omg).toHaveBeenCalledWith('Notification status job complete')
+      expect(notifierStub.omg).toHaveBeenCalledWith('Notification status job complete', expect.any(Object))
       expect(logDataArg.timeTakenMs).toBeDefined()
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.count).toEqual(3)

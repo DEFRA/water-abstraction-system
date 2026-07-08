@@ -85,7 +85,7 @@ describe('Delete Files service', () => {
 
       await DeleteFilesService(noFile)
 
-      expect(notifierStub.omfg).toHaveBeenCalledWith('Delete file service errored')
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Delete file service errored', expect.any(Object))
     })
   })
 })

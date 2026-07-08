@@ -246,7 +246,7 @@ describe('Fetch Return Logs for Licence service', () => {
 
       const logDataArg = notifierStub.omfg.mock.calls[0][1]
 
-      expect(notifierStub.omfg).toHaveBeenCalledWith('Bill run process fetch return logs for licence failed')
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Bill run process fetch return logs for licence failed', expect.any(Object))
       expect(logDataArg).toEqual({ licenceRef, billingPeriod })
     })
   })
