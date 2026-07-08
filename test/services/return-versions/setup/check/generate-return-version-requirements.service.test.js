@@ -168,9 +168,9 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
       // Because the two session data requirements share the same purpose, but the second has an additional one, we
       // expect the FetchOtherPurposeIdsService to be called three times - once for each 'valid' purpose
       expect(FetchOtherPurposeIdsDal.default).toHaveBeenCalledTimes(3)
-      expect(FetchOtherPurposeIdsDal.getCall(0).args).toEqual([licenceId, 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'])
-      expect(FetchOtherPurposeIdsDal.getCall(1).args).toEqual([licenceId, 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'])
-      expect(FetchOtherPurposeIdsDal.getCall(2).args).toEqual([licenceId, '58855070-25d1-4f17-92e5-2a67721a4434'])
+      expect(FetchOtherPurposeIdsDal.default.mock.calls[0]).toEqual([licenceId, 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'])
+      expect(FetchOtherPurposeIdsDal.default.mock.calls[1]).toEqual([licenceId, 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'])
+      expect(FetchOtherPurposeIdsDal.default.mock.calls[2]).toEqual([licenceId, '58855070-25d1-4f17-92e5-2a67721a4434'])
     })
   })
 })

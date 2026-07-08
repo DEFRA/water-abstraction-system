@@ -122,15 +122,15 @@ describe('Return Logs - Process Licence Return Logs service', () => {
             expect(VoidLicenceReturnLogsService.default).toHaveBeenCalledTimes(3)
 
             // First cycle is summer ending 2026-10-31; should process current summer req only
-            expect(CreateReturnLogsService.getCall(0).args).toEqual([returnRequirements[0], returnCycles[0], null, null])
+            expect(CreateReturnLogsService.default.mock.calls[0]).toEqual([returnRequirements[0], returnCycles[0], null, null])
 
             // Second cycle is winter ending 2026-03-31; should process current and previous winter req
-            expect(CreateReturnLogsService.getCall(1).args).toEqual([returnRequirements[1], returnCycles[1], null, null])
-            expect(CreateReturnLogsService.getCall(2).args).toEqual([returnRequirements[3], returnCycles[1], null, null])
+            expect(CreateReturnLogsService.default.mock.calls[1]).toEqual([returnRequirements[1], returnCycles[1], null, null])
+            expect(CreateReturnLogsService.default.mock.calls[2]).toEqual([returnRequirements[3], returnCycles[1], null, null])
 
             // Third cycle is summer ending 2025-10-31; should process current and previous summer req
-            expect(CreateReturnLogsService.getCall(3).args).toEqual([returnRequirements[0], returnCycles[2], null, null])
-            expect(CreateReturnLogsService.getCall(4).args).toEqual([returnRequirements[2], returnCycles[2], null, null])
+            expect(CreateReturnLogsService.default.mock.calls[3]).toEqual([returnRequirements[0], returnCycles[2], null, null])
+            expect(CreateReturnLogsService.default.mock.calls[4]).toEqual([returnRequirements[2], returnCycles[2], null, null])
           })
         })
 
@@ -249,8 +249,8 @@ describe('Return Logs - Process Licence Return Logs service', () => {
           // Third cycle is summer ending 2025-10-31; should be ignored
           // Fourth cycle is winter ending 2025-03-31; should process our new requirement
           // Fifth cycle is summer ending 2024-10-31; should be ignored
-          expect(CreateReturnLogsService.getCall(0).args).toEqual([returnRequirements[0], returnCycles[1], null, null])
-          expect(CreateReturnLogsService.getCall(1).args).toEqual([returnRequirements[0], returnCycles[3], null, null])
+          expect(CreateReturnLogsService.default.mock.calls[0]).toEqual([returnRequirements[0], returnCycles[1], null, null])
+          expect(CreateReturnLogsService.default.mock.calls[1]).toEqual([returnRequirements[0], returnCycles[3], null, null])
         })
       })
 
@@ -286,7 +286,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
 
           // First cycle is winter ending 2025-03-31; should process our new requirement
           // Second cycle is summer ending 2024-10-31; should be ignored
-          expect(CreateReturnLogsService.getCall(0).args).toEqual([returnRequirements[0], returnCycles[0], null, null])
+          expect(CreateReturnLogsService.default.mock.calls[0]).toEqual([returnRequirements[0], returnCycles[0], null, null])
         })
       })
     })

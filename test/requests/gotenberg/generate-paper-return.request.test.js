@@ -63,9 +63,9 @@ describe('Gotenberg - Generate Paper Return Request', () => {
         expect(GotenbergRequest.postRequest).toHaveBeenCalledWith('forms/chromium/convert/html', expect.any(FormData))
 
         // Check the html has been added to the form data
-        const appendCall = FormData.prototype.append.getCall(0)
+        const appendCall = FormData.prototype.append.mock.calls[0]
         expect(appendCall).toBeDefined()
-        const blob = appendCall.mock.calls[1]
+        const blob = appendCall[1]
         expect(blob).toBeInstanceOf(Blob)
         const content = await blob.text()
         expect(content).toContain('<!DOCTYPE html>')
@@ -84,11 +84,11 @@ describe('Gotenberg - Generate Paper Return Request', () => {
         expect(GotenbergRequest.postRequest).toHaveBeenCalledWith('forms/chromium/convert/html', expect.any(FormData))
 
         // Get the second call to append (index 0) - this should be the html file
-        const appendCall = FormData.prototype.append.getCall(0)
+        const appendCall = FormData.prototype.append.mock.calls[0]
         expect(appendCall).toBeDefined()
 
         // Check that the second argument (the value being appended) is a Blob
-        const blob = appendCall.mock.calls[1]
+        const blob = appendCall[1]
         expect(blob).toBeInstanceOf(Blob)
 
         // Verify the blob content contains '<!DOCTYPE html>'
@@ -105,11 +105,11 @@ describe('Gotenberg - Generate Paper Return Request', () => {
         expect(GotenbergRequest.postRequest).toHaveBeenCalledWith('forms/chromium/convert/html', expect.any(FormData))
 
         // Get the second call to append (index 1) - this should be the footer file
-        const appendCall = FormData.prototype.append.getCall(1)
+        const appendCall = FormData.prototype.append.mock.calls[1]
         expect(appendCall).toBeDefined()
 
         // Check that the second argument (the value being appended) is a Blob
-        const blob = appendCall.mock.calls[1]
+        const blob = appendCall[1]
         expect(blob).toBeInstanceOf(Blob)
 
         // Verify the blob content contains 'footer'
