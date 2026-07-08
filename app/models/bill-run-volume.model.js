@@ -9,7 +9,7 @@ import BaseModel from './base.model.js'
 import BillRunModel from './bill-run.model.js'
 import ChargeReferenceModel from './charge-reference.model.js'
 
-class BillRunVolumeModel extends BaseModel {
+export default class BillRunVolumeModel extends BaseModel {
   static get tableName() {
     return 'billRunVolumes'
   }
@@ -61,5 +61,3 @@ class BillRunVolumeModel extends BaseModel {
     return null
   }
 }
-
-export default BillRunVolumeModel

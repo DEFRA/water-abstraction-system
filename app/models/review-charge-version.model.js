@@ -10,7 +10,7 @@ import ChargeVersionModel from './charge-version.model.js'
 import ReviewChargeReferenceModel from './review-charge-reference.model.js'
 import ReviewLicenceModel from './review-licence.model.js'
 
-class ReviewChargeVersionModel extends BaseModel {
+export default class ReviewChargeVersionModel extends BaseModel {
   static get tableName() {
     return 'reviewChargeVersions'
   }
@@ -44,5 +44,3 @@ class ReviewChargeVersionModel extends BaseModel {
     }
   }
 }
-
-export default ReviewChargeVersionModel

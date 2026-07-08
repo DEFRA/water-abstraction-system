@@ -46,7 +46,7 @@ import RegionModel from './region.model.js'
  * We currently do not know how `organisationType` gets populated!
  *
  */
-class CompanyModel extends BaseModel {
+export default class CompanyModel extends BaseModel {
   static get tableName() {
     return 'companies'
   }
@@ -112,5 +112,3 @@ class CompanyModel extends BaseModel {
     }
   }
 }
-
-export default CompanyModel

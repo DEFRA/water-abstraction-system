@@ -8,7 +8,7 @@ import { Model } from 'objection'
 import BaseModel from './base.model.js'
 import ChargeVersionModel from './charge-version.model.js'
 
-class ChangeReasonModel extends BaseModel {
+export default class ChangeReasonModel extends BaseModel {
   static get tableName() {
     return 'changeReasons'
   }
@@ -26,5 +26,3 @@ class ChangeReasonModel extends BaseModel {
     }
   }
 }
-
-export default ChangeReasonModel

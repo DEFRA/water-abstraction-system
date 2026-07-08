@@ -11,7 +11,7 @@ import BillingAccountAddressModel from './billing-account-address.model.js'
 import ChargeVersionModel from './charge-version.model.js'
 import CompanyModel from './company.model.js'
 
-class BillingAccountModel extends BaseModel {
+export default class BillingAccountModel extends BaseModel {
   static get tableName() {
     return 'billingAccounts'
   }
@@ -241,5 +241,3 @@ class BillingAccountModel extends BaseModel {
     return [addressCompanyName, contactName, ...address].filter(Boolean)
   }
 }
-
-export default BillingAccountModel

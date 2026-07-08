@@ -8,7 +8,7 @@ import { Model } from 'objection'
 import BaseModel from './base.model.js'
 import ReturnSubmissionModel from './return-submission.model.js'
 
-class ReturnSubmissionLineModel extends BaseModel {
+export default class ReturnSubmissionLineModel extends BaseModel {
   static get tableName() {
     return 'returnSubmissionLines'
   }
@@ -26,5 +26,3 @@ class ReturnSubmissionLineModel extends BaseModel {
     }
   }
 }
-
-export default ReturnSubmissionLineModel

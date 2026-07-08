@@ -8,7 +8,7 @@ import { Model } from 'objection'
 import BaseModel from './base.model.js'
 import ReturnLogModel from './return-log.model.js'
 
-class ReturnCycleModel extends BaseModel {
+export default class ReturnCycleModel extends BaseModel {
   static get tableName() {
     return 'returnCycles'
   }
@@ -26,5 +26,3 @@ class ReturnCycleModel extends BaseModel {
     }
   }
 }
-
-export default ReturnCycleModel

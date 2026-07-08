@@ -10,7 +10,7 @@ import ChargeReferenceModel from './charge-reference.model.js'
 import ReviewChargeElementModel from './review-charge-element.model.js'
 import ReviewChargeVersionModel from './review-charge-version.model.js'
 
-class ReviewChargeReferenceModel extends BaseModel {
+export default class ReviewChargeReferenceModel extends BaseModel {
   static get tableName() {
     return 'reviewChargeReferences'
   }
@@ -44,5 +44,3 @@ class ReviewChargeReferenceModel extends BaseModel {
     }
   }
 }
-
-export default ReviewChargeReferenceModel

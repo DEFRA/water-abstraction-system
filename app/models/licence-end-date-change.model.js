@@ -8,7 +8,7 @@ import { Model } from 'objection'
 import BaseModel from './base.model.js'
 import LicenceModel from './licence.model.js'
 
-class LicenceEndDateChangeModel extends BaseModel {
+export default class LicenceEndDateChangeModel extends BaseModel {
   static get tableName() {
     return 'licenceEndDateChanges'
   }
@@ -26,5 +26,3 @@ class LicenceEndDateChangeModel extends BaseModel {
     }
   }
 }
-
-export default LicenceEndDateChangeModel

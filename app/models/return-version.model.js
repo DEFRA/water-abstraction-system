@@ -12,7 +12,7 @@ import ModLogModel from './mod-log.model.js'
 import ReturnRequirementModel from './return-requirement.model.js'
 import UserModel from './user.model.js'
 
-class ReturnVersionModel extends BaseModel {
+export default class ReturnVersionModel extends BaseModel {
   static get tableName() {
     return 'returnVersions'
   }
@@ -241,5 +241,3 @@ class ReturnVersionModel extends BaseModel {
     return null
   }
 }
-
-export default ReturnVersionModel

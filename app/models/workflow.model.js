@@ -8,7 +8,7 @@ import { Model } from 'objection'
 import BaseModel from './base.model.js'
 import LicenceModel from './licence.model.js'
 
-class WorkflowModel extends BaseModel {
+export default class WorkflowModel extends BaseModel {
   static get tableName() {
     return 'workflows'
   }
@@ -26,5 +26,3 @@ class WorkflowModel extends BaseModel {
     }
   }
 }
-
-export default WorkflowModel

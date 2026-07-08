@@ -8,7 +8,7 @@ import { Model } from 'objection'
 import BaseModel from './base.model.js'
 import PointModel from './point.model.js'
 
-class SourceModel extends BaseModel {
+export default class SourceModel extends BaseModel {
   static get tableName() {
     return 'sources'
   }
@@ -26,5 +26,3 @@ class SourceModel extends BaseModel {
     }
   }
 }
-
-export default SourceModel

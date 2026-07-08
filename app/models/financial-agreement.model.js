@@ -8,7 +8,7 @@ import { Model } from 'objection'
 import BaseModel from './base.model.js'
 import LicenceAgreementModel from './licence-agreement.model.js'
 
-class FinancialAgreementModel extends BaseModel {
+export default class FinancialAgreementModel extends BaseModel {
   static get tableName() {
     return 'financialAgreements'
   }
@@ -26,5 +26,3 @@ class FinancialAgreementModel extends BaseModel {
     }
   }
 }
-
-export default FinancialAgreementModel

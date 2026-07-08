@@ -11,7 +11,7 @@ import PurposeModel from './purpose.model.js'
 import ReturnRequirementModel from './return-requirement.model.js'
 import SecondaryPurposeModel from './secondary-purpose.model.js'
 
-class ReturnRequirementPurposeModel extends BaseModel {
+export default class ReturnRequirementPurposeModel extends BaseModel {
   static get tableName() {
     return 'returnRequirementPurposes'
   }
@@ -53,5 +53,3 @@ class ReturnRequirementPurposeModel extends BaseModel {
     }
   }
 }
-
-export default ReturnRequirementPurposeModel

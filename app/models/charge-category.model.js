@@ -8,7 +8,7 @@ import { Model } from 'objection'
 import BaseModel from './base.model.js'
 import ChargeReferenceModel from './charge-reference.model.js'
 
-class ChargeCategoryModel extends BaseModel {
+export default class ChargeCategoryModel extends BaseModel {
   static get tableName() {
     return 'chargeCategories'
   }
@@ -26,5 +26,3 @@ class ChargeCategoryModel extends BaseModel {
     }
   }
 }
-
-export default ChargeCategoryModel

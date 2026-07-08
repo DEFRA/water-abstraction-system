@@ -9,7 +9,7 @@ import BaseModel from './base.model.js'
 import LicenceVersionPurposeModel from './licence-version-purpose.model.js'
 import ReturnRequirementPurposeModel from './return-requirement-purpose.model.js'
 
-class PrimaryPurposeModel extends BaseModel {
+export default class PrimaryPurposeModel extends BaseModel {
   static get tableName() {
     return 'primaryPurposes'
   }
@@ -35,5 +35,3 @@ class PrimaryPurposeModel extends BaseModel {
     }
   }
 }
-
-export default PrimaryPurposeModel

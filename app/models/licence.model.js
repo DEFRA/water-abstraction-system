@@ -26,7 +26,7 @@ import ReturnVersionModel from './return-version.model.js'
 import ReviewLicenceModel from './review-licence.model.js'
 import WorkflowModel from './workflow.model.js'
 
-class LicenceModel extends BaseModel {
+export default class LicenceModel extends BaseModel {
   static get tableName() {
     return 'licences'
   }
@@ -438,5 +438,3 @@ class LicenceModel extends BaseModel {
     return primaryUser || null
   }
 }
-
-export default LicenceModel

@@ -12,7 +12,7 @@ import ReturnRequirementModel from './return-requirement.model.js'
 import ReturnSubmissionModel from './return-submission.model.js'
 import ReviewReturnModel from './review-return.model.js'
 
-class ReturnLogModel extends BaseModel {
+export default class ReturnLogModel extends BaseModel {
   static get tableName() {
     return 'returnLogs'
   }
@@ -67,5 +67,3 @@ class ReturnLogModel extends BaseModel {
     }
   }
 }
-
-export default ReturnLogModel

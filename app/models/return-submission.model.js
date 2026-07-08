@@ -11,7 +11,7 @@ import { unitNames } from '../lib/static-lookups.lib.js'
 import ReturnLogModel from './return-log.model.js'
 import ReturnSubmissionLineModel from './return-submission-line.model.js'
 
-class ReturnSubmissionModel extends BaseModel {
+export default class ReturnSubmissionModel extends BaseModel {
   static get tableName() {
     return 'returnSubmissions'
   }
@@ -102,5 +102,3 @@ class ReturnSubmissionModel extends BaseModel {
     return this.metadata.units
   }
 }
-
-export default ReturnSubmissionModel

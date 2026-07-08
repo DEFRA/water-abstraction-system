@@ -10,7 +10,7 @@ import BillRunModel from './bill-run.model.js'
 import CompanyModel from './company.model.js'
 import LicenceModel from './licence.model.js'
 
-class RegionModel extends BaseModel {
+export default class RegionModel extends BaseModel {
   static get tableName() {
     return 'regions'
   }
@@ -44,5 +44,3 @@ class RegionModel extends BaseModel {
     }
   }
 }
-
-export default RegionModel

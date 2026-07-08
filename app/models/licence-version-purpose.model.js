@@ -14,7 +14,7 @@ import PrimaryPurposeModel from './primary-purpose.model.js'
 import PurposeModel from './purpose.model.js'
 import SecondaryPurposeModel from './secondary-purpose.model.js'
 
-class LicenceVersionPurposeModel extends BaseModel {
+export default class LicenceVersionPurposeModel extends BaseModel {
   static get tableName() {
     return 'licenceVersionPurposes'
   }
@@ -147,5 +147,3 @@ class LicenceVersionPurposeModel extends BaseModel {
     return electricityGenerationPurposes.includes(this.purpose.legacyId)
   }
 }
-
-export default LicenceVersionPurposeModel

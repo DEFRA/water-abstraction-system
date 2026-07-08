@@ -14,7 +14,7 @@ import PurposeModel from './purpose.model.js'
 import ReviewChargeReferenceModel from './review-charge-reference.model.js'
 import TransactionModel from './transaction.model.js'
 
-class ChargeReferenceModel extends BaseModel {
+export default class ChargeReferenceModel extends BaseModel {
   static get tableName() {
     return 'chargeReferences'
   }
@@ -80,5 +80,3 @@ class ChargeReferenceModel extends BaseModel {
     }
   }
 }
-
-export default ChargeReferenceModel

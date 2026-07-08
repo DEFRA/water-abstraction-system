@@ -20,7 +20,7 @@ import LicenceEntityModel from './licence-entity.model.js'
  *
  * Through it we can identify which 'entities' have which roles for licences.
  */
-class LicenceEntityRoleModel extends BaseModel {
+export default class LicenceEntityRoleModel extends BaseModel {
   static get tableName() {
     return 'licenceEntityRoles'
   }
@@ -54,5 +54,3 @@ class LicenceEntityRoleModel extends BaseModel {
     }
   }
 }
-
-export default LicenceEntityRoleModel

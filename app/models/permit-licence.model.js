@@ -8,7 +8,7 @@ import { Model } from 'objection'
 import BaseModel from './base.model.js'
 import LicenceModel from './licence.model.js'
 
-class PermitLicenceModel extends BaseModel {
+export default class PermitLicenceModel extends BaseModel {
   static get tableName() {
     return 'permitLicences'
   }
@@ -31,5 +31,3 @@ class PermitLicenceModel extends BaseModel {
     }
   }
 }
-
-export default PermitLicenceModel

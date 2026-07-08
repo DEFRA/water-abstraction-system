@@ -11,7 +11,7 @@ import BillingAccountModel from './billing-account.model.js'
 import CompanyModel from './company.model.js'
 import ContactModel from './contact.model.js'
 
-class BillingAccountAddressModel extends BaseModel {
+export default class BillingAccountAddressModel extends BaseModel {
   static get tableName() {
     return 'billingAccountAddresses'
   }
@@ -53,5 +53,3 @@ class BillingAccountAddressModel extends BaseModel {
     }
   }
 }
-
-export default BillingAccountAddressModel

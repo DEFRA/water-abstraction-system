@@ -32,7 +32,7 @@ import UserVerificationModel from './user-verification.model.js'
  * need to add this model)
  * - delete_me (no idea! But only one record has this type so it can be ignored)
  */
-class LicenceEntityModel extends BaseModel {
+export default class LicenceEntityModel extends BaseModel {
   static get tableName() {
     return 'licenceEntities'
   }
@@ -74,5 +74,3 @@ class LicenceEntityModel extends BaseModel {
     }
   }
 }
-
-export default LicenceEntityModel

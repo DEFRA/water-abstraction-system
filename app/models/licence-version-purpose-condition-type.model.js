@@ -8,7 +8,7 @@ import { Model } from 'objection'
 import BaseModel from './base.model.js'
 import LicenceVersionPurposeConditionModel from './licence-version-purpose-condition.model.js'
 
-class LicenceVersionPurposeConditionTypeModel extends BaseModel {
+export default class LicenceVersionPurposeConditionTypeModel extends BaseModel {
   static get tableName() {
     return 'licenceVersionPurposeConditionTypes'
   }
@@ -26,5 +26,3 @@ class LicenceVersionPurposeConditionTypeModel extends BaseModel {
     }
   }
 }
-
-export default LicenceVersionPurposeConditionTypeModel

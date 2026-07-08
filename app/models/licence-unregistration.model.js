@@ -9,7 +9,7 @@ import BaseModel from './base.model.js'
 import LicenceModel from './licence.model.js'
 import UserModel from './user.model.js'
 
-class LicenceUnregistrationModel extends BaseModel {
+export default class LicenceUnregistrationModel extends BaseModel {
   static get tableName() {
     return 'licenceUnregistrations'
   }
@@ -35,5 +35,3 @@ class LicenceUnregistrationModel extends BaseModel {
     }
   }
 }
-
-export default LicenceUnregistrationModel

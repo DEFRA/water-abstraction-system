@@ -9,7 +9,7 @@ import BaseModel from './base.model.js'
 import EventModel from './event.model.js'
 import LicenceMonitoringStationModel from './licence-monitoring-station.model.js'
 
-class NotificationModel extends BaseModel {
+export default class NotificationModel extends BaseModel {
   static get tableName() {
     return 'notifications'
   }
@@ -40,5 +40,3 @@ class NotificationModel extends BaseModel {
     }
   }
 }
-
-export default NotificationModel

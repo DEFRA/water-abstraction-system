@@ -9,7 +9,7 @@ import BaseModel from './base.model.js'
 import GroupModel from './group.model.js'
 import UserModel from './user.model.js'
 
-class UserGroupModel extends BaseModel {
+export default class UserGroupModel extends BaseModel {
   static get tableName() {
     return 'userGroups'
   }
@@ -35,5 +35,3 @@ class UserGroupModel extends BaseModel {
     }
   }
 }
-
-export default UserGroupModel

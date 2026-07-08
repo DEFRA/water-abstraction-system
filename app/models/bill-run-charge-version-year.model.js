@@ -22,7 +22,7 @@ import ChargeVersionModel from './charge-version.model.js'
  *
  * Welcome to dealing with the legacy database schema! ¯\_(ツ)_/¯
  */
-class BillRunChargeVersionYearModel extends BaseModel {
+export default class BillRunChargeVersionYearModel extends BaseModel {
   static get tableName() {
     return 'billRunChargeVersionYears'
   }
@@ -48,5 +48,3 @@ class BillRunChargeVersionYearModel extends BaseModel {
     }
   }
 }
-
-export default BillRunChargeVersionYearModel

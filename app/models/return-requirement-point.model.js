@@ -9,7 +9,7 @@ import BaseModel from './base.model.js'
 import PointModel from './point.model.js'
 import ReturnRequirementModel from './return-requirement.model.js'
 
-class ReturnRequirementPointModel extends BaseModel {
+export default class ReturnRequirementPointModel extends BaseModel {
   static get tableName() {
     return 'returnRequirementPoints'
   }
@@ -35,5 +35,3 @@ class ReturnRequirementPointModel extends BaseModel {
     }
   }
 }
-
-export default ReturnRequirementPointModel

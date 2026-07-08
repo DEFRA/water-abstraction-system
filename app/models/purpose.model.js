@@ -11,7 +11,7 @@ import ChargeReferenceModel from './charge-reference.model.js'
 import LicenceVersionPurposeModel from './licence-version-purpose.model.js'
 import ReturnRequirementPurposeModel from './return-requirement-purpose.model.js'
 
-class PurposeModel extends BaseModel {
+export default class PurposeModel extends BaseModel {
   static get tableName() {
     return 'purposes'
   }
@@ -53,5 +53,3 @@ class PurposeModel extends BaseModel {
     }
   }
 }
-
-export default PurposeModel

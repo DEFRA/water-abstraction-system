@@ -9,7 +9,7 @@ import BaseModel from './base.model.js'
 import RoleModel from './role.model.js'
 import UserModel from './user.model.js'
 
-class UserRoleModel extends BaseModel {
+export default class UserRoleModel extends BaseModel {
   static get tableName() {
     return 'userRoles'
   }
@@ -35,5 +35,3 @@ class UserRoleModel extends BaseModel {
     }
   }
 }
-
-export default UserRoleModel

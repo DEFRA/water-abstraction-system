@@ -34,7 +34,7 @@ import UserVerificationModel from './user-verification.model.js'
  *
  * Thereafter, whenever the user claims more licences, they will be associated with that "company" entity.
  */
-class UserVerificationDocumentModel extends BaseModel {
+export default class UserVerificationDocumentModel extends BaseModel {
   static get tableName() {
     return 'userVerificationDocuments'
   }
@@ -64,5 +64,3 @@ class UserVerificationDocumentModel extends BaseModel {
     }
   }
 }
-
-export default UserVerificationDocumentModel

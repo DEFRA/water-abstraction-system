@@ -10,7 +10,7 @@ import LicenceVersionPurposeModel from './licence-version-purpose.model.js'
 import ReturnRequirementModel from './return-requirement.model.js'
 import SourceModel from './source.model.js'
 
-class PointModel extends BaseModel {
+export default class PointModel extends BaseModel {
   static get tableName() {
     return 'points'
   }
@@ -86,5 +86,3 @@ class PointModel extends BaseModel {
     return abstractionPoint
   }
 }
-
-export default PointModel

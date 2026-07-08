@@ -11,7 +11,7 @@ import ReviewChargeElementModel from './review-charge-element.model.js'
 import ReviewChargeElementReturnModel from './review-charge-element-return.model.js'
 import ReviewLicenceModel from './review-licence.model.js'
 
-class ReviewReturnModel extends BaseModel {
+export default class ReviewReturnModel extends BaseModel {
   static get tableName() {
     return 'reviewReturns'
   }
@@ -62,5 +62,3 @@ class ReviewReturnModel extends BaseModel {
     }
   }
 }
-
-export default ReviewReturnModel

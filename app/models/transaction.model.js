@@ -9,7 +9,7 @@ import BaseModel from './base.model.js'
 import BillLicenceModel from './bill-licence.model.js'
 import ChargeReferenceModel from './charge-reference.model.js'
 
-class TransactionModel extends BaseModel {
+export default class TransactionModel extends BaseModel {
   static get tableName() {
     return 'transactions'
   }
@@ -40,5 +40,3 @@ class TransactionModel extends BaseModel {
     return ['abstractionPeriod', 'grossValuesCalculated', 'metadata', 'purposes']
   }
 }
-
-export default TransactionModel

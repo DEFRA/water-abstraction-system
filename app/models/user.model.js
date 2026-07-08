@@ -20,7 +20,7 @@ import RoleModel from './role.model.js'
 import UserGroupModel from './user-group.model.js'
 import UserRoleModel from './user-role.model.js'
 
-class UserModel extends BaseModel {
+export default class UserModel extends BaseModel {
   static get tableName() {
     return 'users'
   }
@@ -385,5 +385,3 @@ class UserModel extends BaseModel {
     return userPermissions[digitisePermission]
   }
 }
-
-export default UserModel
