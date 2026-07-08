@@ -213,9 +213,8 @@ describe('Notify Request', () => {
         beforeEach(async () => {
           baseRequestStub = vi
             .spyOn(BaseRequest, 'post')
-            .mockImplementation(() => {})
-            .onFirstCall()
-            .resolves({
+            
+            .mockResolvedValueOnce({
               succeeded: false,
               response: {
                 statusCode: HTTP_STATUS_TOO_MANY_REQUESTS,
@@ -231,8 +230,8 @@ describe('Notify Request', () => {
                 }
               }
             })
-            .onSecondCall()
-            .resolves({
+            
+            .mockResolvedValueOnce({
               succeeded: true,
               response: {
                 statusCode: HTTP_STATUS_OK,
