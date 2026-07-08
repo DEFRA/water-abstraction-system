@@ -11,7 +11,7 @@ import { send } from '../requests/resp/token.request.js'
 const ONE_HOUR_IN_MS = 60 * 60 * 1000
 const ONE_MINUTE_IN_MS = 60 * 1000
 
-const RespTokenCachePlugin = {
+export default {
   name: 'RespTokenCache',
   register: (server, _options) => {
     // `flags` is passed to our server method automatically by hapi. Overwriting `flags.ttl` in our method lets us
@@ -46,5 +46,3 @@ function _setExpiryTime(expiresIn) {
   // request can be made
   return (expiresIn - 60) * 1000
 }
-
-export default RespTokenCachePlugin

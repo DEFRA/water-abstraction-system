@@ -31,8 +31,6 @@ import Bearer from 'hapi-auth-bearer-token'
  * environment variables.
  *
  */
-const BearerPlugin = {
+export default {
   plugin: Bearer
 }
-
-export default BearerPlugin

@@ -71,7 +71,7 @@ import AuthenticationConfig from '../../config/authentication.config.js'
 
 const FIFTEEN_MINUTES_IN_MILLISECONDS = 15 * 60 * 1000
 
-const YarPlugin = {
+export default {
   plugin: Yar,
   options: {
     cookieOptions: {
@@ -84,5 +84,3 @@ const YarPlugin = {
     name: 'wrlsSession'
   }
 }
-
-export default YarPlugin

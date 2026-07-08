@@ -5,7 +5,7 @@
 
 import PayloadCleaningService from '../services/plugins/payload-cleaning.service.js'
 
-const PayloadCleanerPlugin = {
+export default {
   name: 'payload-cleaner',
   register: (server, _options) => {
     server.ext('onPostAuth', (request, h) => {
@@ -19,5 +19,3 @@ const PayloadCleanerPlugin = {
     })
   }
 }
-
-export default PayloadCleanerPlugin

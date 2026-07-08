@@ -29,7 +29,7 @@ import serverConfig from '../../config/server.config.js'
 // here and reuse it across every registration to avoid that leak.
 let _notifier
 
-const AirbrakePlugin = {
+export default {
   name: 'airbrake',
   register: async (server, _options) => {
     // We add an instance of the Airbrake Notifier so we can send notifications via Airbrake to Errbit manually if
@@ -81,5 +81,3 @@ async function _notifierArgs() {
 
   return args
 }
-
-export default AirbrakePlugin

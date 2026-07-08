@@ -38,11 +38,9 @@ import Crumb from '@hapi/crumb'
  *   }
  * ```
  */
-const CrumbPlugin = {
+export default {
   plugin: Crumb,
   options: {
     key: 'wrlsCrumb'
   }
 }
-
-export default CrumbPlugin

@@ -16,7 +16,7 @@ import HapiPinoSerializersService from '../services/plugins/hapi-pino-serializer
 
 import LogConfig from '../../config/log.config.js'
 
-const HapiPinoPlugin = {
+export default {
   plugin: HapiPino,
   options: {
     // Include our test configuration
@@ -46,5 +46,3 @@ const HapiPinoPlugin = {
     serializers: HapiPinoSerializersService()
   }
 }
-
-export default HapiPinoPlugin

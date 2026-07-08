@@ -9,7 +9,7 @@
 
 import RequestNotifierLib from '../lib/request-notifier.lib.js'
 
-const RequestNotifierPlugin = {
+export default {
   name: 'Notifier',
   register: (server, _options) => {
     server.ext('onRequest', (request, h) => {
@@ -19,5 +19,3 @@ const RequestNotifierPlugin = {
     })
   }
 }
-
-export default RequestNotifierPlugin

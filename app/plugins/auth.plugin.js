@@ -38,7 +38,7 @@ const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000
  * More info on authorisation and scope can be found at https://hapi.dev/api/?v=21.3.2#-routeoptionsauthaccessscope
  */
 
-const AuthPlugin = {
+export default {
   name: 'authentication',
   register: async (server, _options) => {
     server.auth.strategy('session', 'cookie', {
@@ -78,5 +78,3 @@ const AuthPlugin = {
     server.auth.default('session')
   }
 }
-
-export default AuthPlugin
