@@ -29,11 +29,8 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
+    vi.spyOn(HandleErroredBillRunService, 'default').mockResolvedValue()
   })
-
-  afterEach(() => {
-    vi.restoreAllMocks()
-    delete globalThis.GlobalNotifier
   })
 
   describe('when the service is called', () => {

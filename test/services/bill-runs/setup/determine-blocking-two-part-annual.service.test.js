@@ -55,6 +55,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run servic
         billRunQueryStub.first = vi.fn().mockResolvedValue(match)
 
         vi.spyOn(BillRunModel, 'query').mockReturnValue(billRunQueryStub)
+        vi.spyOn(FetchLiveBillRunService, 'default').mockResolvedValue()
       })
 
       it('returns the match and determines that neither engine can be triggered', async () => {
@@ -81,6 +82,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run servic
         billRunQueryStub.first = vi.fn().mockResolvedValue(match)
 
         vi.spyOn(BillRunModel, 'query').mockReturnValue(billRunQueryStub)
+        vi.spyOn(FetchLiveBillRunService, 'default').mockResolvedValue()
       })
 
       it('returns the match and determines that neither engine can be triggered', async () => {
