@@ -16,7 +16,7 @@ import ViewPresenter from '../../presenters/return-versions/view.presenter.js'
 export default async function go(returnVersionId) {
   const returnVersionData = await FetchReturnVersionService(returnVersionId)
 
-  const formattedData = ViewPresenter.go(returnVersionData)
+  const formattedData = ViewPresenter(returnVersionData)
 
   return {
     ...formattedData

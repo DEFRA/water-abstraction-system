@@ -28,7 +28,7 @@ export default async function go(sessionId, yar) {
 
   await markCheckPageVisited(session)
 
-  const pageData = CheckPresenter.go(session, companyContacts, sentNotification)
+  const pageData = CheckPresenter(session, companyContacts, sentNotification)
 
   const notification = readFlashNotification(yar)
 

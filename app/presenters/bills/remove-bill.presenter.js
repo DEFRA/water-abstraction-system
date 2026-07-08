@@ -13,7 +13,7 @@ import { formatBillRunType, formatChargeScheme } from '../billing.presenter.js'
  *
  * @returns {object} - the prepared bill summary data to be passed to the confirm remove a bill page
  */
-function go(bill) {
+export default function go(bill) {
   const { id: billId, billingAccount, billLicences, billRun } = bill
 
   const { billRunNumber, billRunStatus, billRunType, chargeScheme, dateCreated, financialYear, region } =
@@ -70,9 +70,4 @@ function _pageTitle(accountName) {
 
 function _supplementaryMessage(licencesText) {
   return `The ${licencesText.toLowerCase()} will go into the next supplementary bill run.`
-}
-
-export { go }
-export default {
-  go
 }

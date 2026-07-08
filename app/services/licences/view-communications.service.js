@@ -23,9 +23,9 @@ export default async function go(licenceId, auth, page) {
 
   const { notifications, totalNumber } = await FetchNotificationsDal(licence.licenceRef, page)
 
-  const pageData = CommunicationsPresenter.go(notifications, licence)
+  const pageData = CommunicationsPresenter(notifications, licence)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/licences/${licenceId}/communications`,

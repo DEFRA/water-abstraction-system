@@ -18,7 +18,7 @@ import ViewStandardChargeTransactionPresenter from './view-standard-charge-trans
  * @returns {object} a formatted representation of the bill licence and its transactions specifically for the
  * view bill-licence page
  */
-function go(billLicence) {
+export default function go(billLicence) {
   const { id: billLicenceId, bill, licenceId, licenceRef, transactions } = billLicence
 
   const { creditTotal, debitTotal, total } = _totals(transactions)
@@ -88,18 +88,13 @@ function _transactions(transactions) {
     const { chargeType } = transaction
 
     if (chargeType === 'minimum_charge') {
-      return ViewMinimumChargeTransactionPresenter.go(transaction)
+      return ViewMinimumChargeTransactionPresenter(transaction)
     }
 
     if (chargeType === 'compensation') {
-      return ViewCompensationChargeTransactionPresenter.go(transaction)
+      return ViewCompensationChargeTransactionPresenter(transaction)
     }
 
-    return ViewStandardChargeTransactionPresenter.go(transaction)
+    return ViewStandardChargeTransactionPresenter(transaction)
   })
-}
-
-export { go }
-export default {
-  go
 }

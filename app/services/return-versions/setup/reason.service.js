@@ -19,7 +19,7 @@ import SelectReasonPresenter from '../../../presenters/return-versions/setup/rea
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const formattedData = SelectReasonPresenter.go(session)
+  const formattedData = SelectReasonPresenter(session)
 
   return {
     ...formattedData

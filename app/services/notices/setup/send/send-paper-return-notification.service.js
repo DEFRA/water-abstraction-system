@@ -25,7 +25,7 @@ export default async function go(notification, referenceCode) {
     const notifyResult = await send(pdf, referenceCode)
 
     return {
-      ...NotifyUpdatePresenter.go(notifyResult),
+      ...NotifyUpdatePresenter(notifyResult),
       id: notification.id,
       pdf
     }
@@ -38,7 +38,7 @@ function _returnFromError(notification, returnFormRequest) {
   const errors = [returnFormRequest.response.message]
 
   return {
-    ...NotifyErrorPresenter.go(returnFormRequest.response.code, `Failed to generate the paper return PDF`, errors),
+    ...NotifyErrorPresenter(returnFormRequest.response.code, `Failed to generate the paper return PDF`, errors),
     id: notification.id
   }
 }

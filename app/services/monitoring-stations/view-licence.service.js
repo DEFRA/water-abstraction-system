@@ -21,7 +21,7 @@ export default async function go(auth, licenceId, monitoringStationId) {
     monitoringStationId
   )
 
-  const formattedData = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+  const formattedData = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
   return {
     ...formattedData

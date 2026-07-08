@@ -67,7 +67,7 @@ async function _save(session, requirementIndex, payload) {
 function _submittedSessionData(session, requirementIndex, payload) {
   session.requirements[requirementIndex].abstractionPeriod = Object.keys(payload).length > 0 ? payload : null
 
-  return AbstractionPeriodPresenter.go(session, requirementIndex)
+  return AbstractionPeriodPresenter(session, requirementIndex)
 }
 
 function _validate(payload) {

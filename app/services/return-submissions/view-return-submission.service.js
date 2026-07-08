@@ -17,7 +17,7 @@ import ViewReturnSubmissionPresenter from '../../presenters/return-submissions/v
 export default async function go(returnSubmissionId, yearMonth) {
   const returnSubmission = await FetchReturnSubmissionService(returnSubmissionId)
 
-  const pageData = ViewReturnSubmissionPresenter.go(returnSubmission, yearMonth)
+  const pageData = ViewReturnSubmissionPresenter(returnSubmission, yearMonth)
 
   return {
     ...pageData

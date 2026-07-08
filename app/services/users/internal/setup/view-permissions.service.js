@@ -20,7 +20,7 @@ import PermissionsPresenter from '../../../../presenters/users/internal/setup/pe
 export default async function go(auth, sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = PermissionsPresenter.go(session)
+  const pageData = PermissionsPresenter(session)
 
   const showSuperPermission = await _showSuperPermission(auth)
 

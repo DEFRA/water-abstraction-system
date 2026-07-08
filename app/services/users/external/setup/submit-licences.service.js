@@ -43,7 +43,7 @@ export default async function go(sessionId, payload, yar) {
   session.allLicences = payloadSelection.allLicences
   session.selectedLicences = payloadSelection.selectedLicences
 
-  const pageData = LicencesPresenter.go(session)
+  const pageData = LicencesPresenter(session)
 
   return {
     error,

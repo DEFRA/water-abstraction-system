@@ -34,7 +34,7 @@ export default async function go(userId, payload, yar) {
     })
   }
 
-  const pageData = ProfileDetailsPresenter.go(payload)
+  const pageData = ProfileDetailsPresenter(payload)
 
   return {
     error: validationResult,

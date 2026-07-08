@@ -14,7 +14,7 @@ import { formatLongDateTime, sentenceCase } from '../../base.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(auth, user) {
+export default function go(auth, user) {
   const { id, username } = user
 
   const status = user.$status()
@@ -100,9 +100,4 @@ function _mapRole(role) {
   }
 
   return { description, name: _convertToSentenceCase(name) }
-}
-
-export { go }
-export default {
-  go
 }

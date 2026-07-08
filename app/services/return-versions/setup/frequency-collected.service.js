@@ -20,7 +20,7 @@ import FrequencyCollectedPresenter from '../../../presenters/return-versions/set
 export default async function go(sessionId, requirementIndex) {
   const session = await FetchSessionDal(sessionId)
 
-  const formattedData = FrequencyCollectedPresenter.go(session, requirementIndex)
+  const formattedData = FrequencyCollectedPresenter(session, requirementIndex)
 
   return {
     ...formattedData

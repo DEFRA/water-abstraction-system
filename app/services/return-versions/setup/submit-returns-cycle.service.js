@@ -44,7 +44,7 @@ export default async function go(sessionId, requirementIndex, payload, yar) {
     }
   }
 
-  const formattedData = ReturnsCyclePresenter.go(session, requirementIndex)
+  const formattedData = ReturnsCyclePresenter(session, requirementIndex)
 
   return {
     error: validationResult,

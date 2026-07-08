@@ -52,7 +52,7 @@ function _submittedSessionData(session, payload) {
   session.abstractionPeriodStartDay = payload.abstractionPeriodStartDay ?? null
   session.abstractionPeriodStartMonth = payload.abstractionPeriodStartMonth ?? null
 
-  return AbstractionPeriodPresenter.go(session)
+  return AbstractionPeriodPresenter(session)
 }
 
 function _validate(payload) {

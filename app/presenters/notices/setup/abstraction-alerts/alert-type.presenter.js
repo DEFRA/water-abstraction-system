@@ -11,7 +11,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   return {
     alertTypeOptions: _alertTypeOptions(session.alertType),
     backLink: { href: `/system/monitoring-stations/${session.monitoringStationId}`, text: 'Back' },
@@ -55,9 +55,4 @@ function _alertTypeOptions(alertType) {
       }
     }
   ]
-}
-
-export { go }
-export default {
-  go
 }

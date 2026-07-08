@@ -12,7 +12,7 @@ import { checkUrl } from '../../../../lib/check-page.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { id: sessionId, permission } = session
 
   return {
@@ -25,9 +25,4 @@ function go(session) {
     pageTitleCaption: 'Internal',
     permission
   }
-}
-
-export { go }
-export default {
-  go
 }

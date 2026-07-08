@@ -10,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { company } = session
 
   return {
@@ -35,9 +35,4 @@ function _backLink(session) {
     href: `/system/companies/${company.id}/contacts`,
     text: 'Back'
   }
-}
-
-export { go }
-export default {
-  go
 }

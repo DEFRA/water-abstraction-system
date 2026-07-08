@@ -43,7 +43,7 @@ export default async function go(sessionId, payload, yar) {
     }
   }
 
-  const pageData = MeterProvidedPresenter.go(session)
+  const pageData = MeterProvidedPresenter(session)
 
   return {
     error,

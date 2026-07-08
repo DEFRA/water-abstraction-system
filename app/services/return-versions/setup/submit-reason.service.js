@@ -43,7 +43,7 @@ export default async function go(sessionId, payload, yar) {
     }
   }
 
-  const formattedData = ReasonPresenter.go(session, payload)
+  const formattedData = ReasonPresenter(session, payload)
 
   return {
     error: validationResult,

@@ -22,9 +22,9 @@ export default async function go(id, page) {
 
   const { notifications, totalNumber } = await FetchNotificationsDal(user.username, page)
 
-  const pageData = CommunicationsPresenter.go(user, notifications)
+  const pageData = CommunicationsPresenter(user, notifications)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/users/internal/${id}/communications`,

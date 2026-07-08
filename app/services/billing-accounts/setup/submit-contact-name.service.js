@@ -69,7 +69,7 @@ async function _save(session, payload) {
 function _submissionData(session, payload) {
   session.contactName = payload.contactName ?? null
 
-  return ContactNamePresenter.go(session)
+  return ContactNamePresenter(session)
 }
 
 function _validate(payload) {

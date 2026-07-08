@@ -14,7 +14,7 @@ import { formatLicencePoints } from '../licence.presenter.js'
  *
  * @returns {object} licence and points data needed by the view template
  */
-function go(points, licence) {
+export default function go(points, licence) {
   const { id: licenceId, licenceRef } = licence
 
   const licencePoints = formatLicencePoints(points)
@@ -29,9 +29,4 @@ function go(points, licence) {
     pageTitleCaption: `Licence ${licenceRef}`,
     showingPoints: `Showing ${licencePoints.length} abstraction ${pluralise('point', licencePoints.length)}`
   }
-}
-
-export { go }
-export default {
-  go
 }

@@ -17,7 +17,7 @@ const LAST_PRESROC_YEAR = 2022
  *
  * @returns {object} - The data formatted for the /check view template
  */
-function go(session, blockingResults) {
+export default function go(session, blockingResults) {
   const { id: sessionId, regionName } = session
 
   const { matches, toFinancialYearEnding } = blockingResults
@@ -78,9 +78,4 @@ function _messages(firstMatch, billRunType) {
     title: 'This bill run already exists',
     warning: `You can only have one ${billRunType} bill run per region in a financial year`
   }
-}
-
-export { go }
-export default {
-  go
 }

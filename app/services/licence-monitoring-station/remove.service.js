@@ -20,7 +20,7 @@ import RemovePresenter from '../../presenters/licence-monitoring-station/remove.
 export default async function go(licenceMonitoringStationId) {
   const licenceMonitoringStation = await FetchLicenceMonitoringStationService(licenceMonitoringStationId)
 
-  const formattedData = RemovePresenter.go(licenceMonitoringStation)
+  const formattedData = RemovePresenter(licenceMonitoringStation)
 
   return {
     ...formattedData

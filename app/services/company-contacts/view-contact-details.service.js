@@ -27,7 +27,7 @@ export default async function go(id, auth, yar) {
 
   const licences = await FetchAbstractionAlertLicencesDal(companyContact.abstractionAlertLicences)
 
-  const pageData = ContactDetailsPresenter.go(company, companyContact, licences)
+  const pageData = ContactDetailsPresenter(company, companyContact, licences)
 
   const notification = readFlashNotification(yar)
 

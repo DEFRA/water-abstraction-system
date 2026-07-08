@@ -14,7 +14,7 @@ import { today } from '../../lib/general.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(company, licences) {
+export default function go(company, licences) {
   return {
     backLink: {
       href: '/',
@@ -66,9 +66,4 @@ function _status(licenceEndDetails) {
   }
 
   return null
-}
-
-export { go }
-export default {
-  go
 }

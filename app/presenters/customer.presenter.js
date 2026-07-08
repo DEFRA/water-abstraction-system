@@ -9,7 +9,7 @@ import { formatEmail } from './base.presenter.js'
  *
  * @returns {object} The company contact for the view
  */
-function formatCompanyContact(companyContact) {
+export function formatCompanyContact(companyContact) {
   return {
     communicationType: _communicationType(companyContact),
     name: companyContact.contact.$name(),
@@ -23,9 +23,4 @@ function _communicationType(companyContact) {
   }
 
   return companyContact.licenceRole.label
-}
-
-export { formatCompanyContact }
-export default {
-  formatCompanyContact
 }

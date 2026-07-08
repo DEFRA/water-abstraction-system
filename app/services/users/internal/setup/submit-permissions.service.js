@@ -37,7 +37,7 @@ export default async function go(auth, sessionId, payload, yar) {
     }
   }
 
-  const pageData = PermissionsPresenter.go(session)
+  const pageData = PermissionsPresenter(session)
 
   const showSuperPermission = await _showSuperPermission(auth)
 

@@ -20,12 +20,12 @@ import { formatLongDate } from '../base.presenter.js'
  *
  * @returns {string[]} - a CSV string of empty fields or the address lines
  */
-function addressToCSV(address) {
+export function addressToCSV(address) {
   if (!address) {
     return ['', '', '', '', '', '', '']
   }
 
-  const notifyAddress = NotifyAddressPresenter.go(address)
+  const notifyAddress = NotifyAddressPresenter(address)
 
   return [
     notifyAddress.address_line_1,
@@ -54,7 +54,7 @@ function addressToCSV(address) {
  *
  * @returns {Date} A date either 28 or 29 days from 'today'
  */
-function futureDueDate(messageType = 'email') {
+export function futureDueDate(messageType = 'email') {
   const dueDate = today()
   const daysToAdd = messageType === 'letter' ? 29 : 28
 
@@ -72,7 +72,7 @@ function futureDueDate(messageType = 'email') {
  *
  * @returns {string} - the display text for the returns period
  */
-function returnsPeriodText(returnsPeriod) {
+export function returnsPeriodText(returnsPeriod) {
   const textPrefix = _returnsPeriodTextPrefix(returnsPeriod)
 
   return `${textPrefix} ${formatLongDate(returnsPeriod.startDate)} to ${formatLongDate(returnsPeriod.endDate)}`
@@ -88,11 +88,4 @@ function _returnsPeriodTextPrefix(returnPeriod) {
   }
 
   return 'Quarterly'
-}
-
-export { addressToCSV, futureDueDate, returnsPeriodText }
-export default {
-  addressToCSV,
-  futureDueDate,
-  returnsPeriodText
 }

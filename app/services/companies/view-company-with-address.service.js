@@ -22,7 +22,7 @@ export default async function go(companyId, addressId, role, licenceId = null) {
   const company = await FetchCompanyDal(companyId)
   const address = await FetchAddressDal(addressId)
 
-  const pageData = CompanyWithAddressPresenter.go(company, address, role, licenceId)
+  const pageData = CompanyWithAddressPresenter(company, address, role, licenceId)
 
   return {
     ...pageData

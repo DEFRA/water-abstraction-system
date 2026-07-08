@@ -19,7 +19,7 @@ import ReadingsPresenter from '../../../presenters/return-logs/setup/readings.pr
 export default async function go(sessionId, yearMonth) {
   const session = await FetchSessionDal(sessionId)
 
-  const formattedData = ReadingsPresenter.go(session, yearMonth)
+  const formattedData = ReadingsPresenter(session, yearMonth)
 
   return {
     ...formattedData

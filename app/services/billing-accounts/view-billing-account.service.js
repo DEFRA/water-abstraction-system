@@ -24,11 +24,11 @@ import ViewBillingAccountPresenter from '../../presenters/billing-accounts/view-
 export default async function go(id, page, licenceId, chargeVersionId, companyId) {
   const { totalNumber, ...billingAccountData } = await FetchViewBillingAccountService(id, page)
 
-  const pageData = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
+  const pageData = ViewBillingAccountPresenter(billingAccountData, licenceId, chargeVersionId, companyId)
 
   const queryArgs = _queryArgs(chargeVersionId, licenceId)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/billing-accounts/${id}`,

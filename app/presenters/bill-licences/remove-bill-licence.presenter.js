@@ -13,7 +13,7 @@ import { formatBillRunType, formatChargeScheme } from '../billing.presenter.js'
  *
  * @returns {object} - the prepared bill licence summary data to be passed to the confirm remove a bill licence page
  */
-function go(billLicence) {
+export default function go(billLicence) {
   const { id: billLicenceId, bill, licenceRef, transactions } = billLicence
 
   const { billRunNumber, billRunStatus, billRunType, chargeScheme, dateCreated, financialYear, region } =
@@ -72,9 +72,4 @@ function _total(transactions) {
   }, 0)
 
   return formatMoney(transactionTotal, true)
-}
-
-export { go }
-export default {
-  go
 }

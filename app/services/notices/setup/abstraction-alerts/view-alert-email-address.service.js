@@ -18,7 +18,7 @@ import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 export default async function go(sessionId, auth) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = AlertEmailAddressPresenter.go(session, auth)
+  const pageData = AlertEmailAddressPresenter(session, auth)
 
   return {
     activeNavBar: 'notices',

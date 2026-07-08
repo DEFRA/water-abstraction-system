@@ -18,7 +18,7 @@ import NoticeTypePresenter from '../../../presenters/notices/setup/notice-type.p
 export default async function go(sessionId, auth) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = NoticeTypePresenter.go(session, auth)
+  const pageData = NoticeTypePresenter(session, auth)
 
   return {
     activeNavBar: 'notices',

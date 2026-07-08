@@ -16,7 +16,7 @@ import StartReadingPresenter from '../../../presenters/return-logs/setup/start-r
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = StartReadingPresenter.go(session)
+  const pageData = StartReadingPresenter(session)
 
   return {
     ...pageData

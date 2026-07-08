@@ -91,7 +91,7 @@ async function _save(session, requirementIndex, purposes) {
 function _submittedSessionData(session, requirementIndex, purposes, licencePurposes) {
   session.requirements[requirementIndex].purposes = purposes
 
-  return PurposePresenter.go(session, requirementIndex, licencePurposes)
+  return PurposePresenter(session, requirementIndex, licencePurposes)
 }
 
 async function _validate(payload, purposesData) {

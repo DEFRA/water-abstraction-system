@@ -10,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { id: sessionId, note, returnReference } = session
 
   return {
@@ -20,9 +20,4 @@ function go(session) {
     pageTitleCaption: `Return reference ${returnReference}`,
     sessionId
   }
-}
-
-export { go }
-export default {
-  go
 }

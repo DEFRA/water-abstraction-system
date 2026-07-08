@@ -34,22 +34,22 @@ function _pageData(fetchResult) {
   if (billRun.status === 'empty') {
     return {
       view: 'bill-runs/empty.njk',
-      ...EmptyBillRunPresenter.go(billRun)
+      ...EmptyBillRunPresenter(billRun)
     }
   }
 
   if (billRun.status === 'error') {
     return {
       view: 'bill-runs/errored.njk',
-      ...ErroredBillRunPresenter.go(billRun)
+      ...ErroredBillRunPresenter(billRun)
     }
   }
 
-  const billGroups = ViewBillSummariesPresenter.go(billSummaries)
+  const billGroups = ViewBillSummariesPresenter(billSummaries)
 
   return {
     view: 'bill-runs/view.njk',
-    ...ViewBillRunPresenter.go(billRun, billSummaries),
+    ...ViewBillRunPresenter(billRun, billSummaries),
     billGroupsCount: billGroups.length,
     billGroups
   }

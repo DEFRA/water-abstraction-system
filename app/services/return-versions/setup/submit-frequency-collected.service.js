@@ -44,7 +44,7 @@ export default async function go(sessionId, requirementIndex, payload, yar) {
     }
   }
 
-  const formattedData = FrequencyCollectedPresenter.go(session, requirementIndex)
+  const formattedData = FrequencyCollectedPresenter(session, requirementIndex)
 
   return {
     error: validationResult,

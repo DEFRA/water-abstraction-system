@@ -38,7 +38,7 @@ export default async function go(reviewChargeReferenceId, yar, payload) {
   }
 
   const reviewChargeReference = await FetchReviewChargeReferenceService(reviewChargeReferenceId)
-  const pageData = FactorsPresenter.go(reviewChargeReference)
+  const pageData = FactorsPresenter(reviewChargeReference)
 
   return {
     activeNavBar: 'bill-runs',

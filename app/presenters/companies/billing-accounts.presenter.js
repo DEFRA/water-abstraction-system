@@ -11,7 +11,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-function go(company, billingAccounts) {
+export default function go(company, billingAccounts) {
   return {
     backLink: {
       href: '/',
@@ -31,9 +31,4 @@ function _billingAccounts(billingAccounts) {
       link: `/system/billing-accounts/${billingAccount.id}?company-id=${billingAccount.company.id}`
     }
   })
-}
-
-export { go }
-export default {
-  go
 }

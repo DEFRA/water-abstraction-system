@@ -20,7 +20,7 @@ export default async function go(sessionId) {
 
   const conditions = await FetchFullConditionService(session.licenceId)
 
-  const pageData = FullConditionPresenter.go(session, conditions)
+  const pageData = FullConditionPresenter(session, conditions)
 
   return {
     ...pageData

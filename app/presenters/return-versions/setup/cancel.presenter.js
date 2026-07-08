@@ -13,7 +13,7 @@ import { returnRequirementFrequencies, returnRequirementReasons } from '../../..
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { id: sessionId, journey, licence, reason, requirements } = session
 
   return {
@@ -57,9 +57,4 @@ function _startDate(session) {
   }
 
   return formatLongDate(date)
-}
-
-export { go }
-export default {
-  go
 }

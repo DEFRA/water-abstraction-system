@@ -42,7 +42,7 @@ export default async function go(sessionId, payload, yar) {
 
   const recipients = await FetchRecipientsService(session)
 
-  const pageData = SelectRecipientsPresenter.go(session, recipients, selectedRecipients)
+  const pageData = SelectRecipientsPresenter(session, recipients, selectedRecipients)
 
   return {
     error,

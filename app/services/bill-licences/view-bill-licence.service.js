@@ -17,7 +17,7 @@ import ViewBillLicencePresenter from '../../presenters/bill-licences/view-bill-l
 export default async function go(id) {
   const billLicence = await FetchBillLicenceService(id)
 
-  const formattedData = ViewBillLicencePresenter.go(billLicence)
+  const formattedData = ViewBillLicencePresenter(billLicence)
 
   return {
     activeNavBar: 'bill-runs',

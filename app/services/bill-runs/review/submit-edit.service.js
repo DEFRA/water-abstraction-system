@@ -30,7 +30,7 @@ export default async function go(reviewChargeElementId, elementIndex, yar, paylo
   }
 
   const reviewChargeElement = await FetchReviewChargeElementService(reviewChargeElementId)
-  const pageData = EditPresenter.go(reviewChargeElement, elementIndex)
+  const pageData = EditPresenter(reviewChargeElement, elementIndex)
 
   return {
     activeNavBar: 'bill-runs',

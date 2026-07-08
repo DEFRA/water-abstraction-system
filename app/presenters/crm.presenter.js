@@ -7,7 +7,7 @@ import { roles } from '../lib/static-lookups.lib.js'
  *
  * @returns {string} The label for the abstraction alerts value
  */
-function abstractionAlertsLabel(abstractionAlerts) {
+export function abstractionAlertsLabel(abstractionAlerts) {
   const abstractionAlertsText = {
     no: 'No',
     some: 'Yes, for some licences',
@@ -25,7 +25,7 @@ function abstractionAlertsLabel(abstractionAlerts) {
  *
  * @returns {object} The formatted contact
  */
-function formatContact(contact, billingQueryArgs) {
+export function formatContact(contact, billingQueryArgs) {
   return {
     link: _contactLink(contact, billingQueryArgs),
     name: contact.contactName,
@@ -59,7 +59,7 @@ function formatContact(contact, billingQueryArgs) {
  * @returns {string[]} The licence references of 'live' licences the user has selected, or an empty array if not
  * applicable
  */
-function selectedLiveLicences(liveLicences, selectedLicences, noticeSetting) {
+export function selectedLiveLicences(liveLicences, selectedLicences, noticeSetting) {
   if (noticeSetting !== 'some' || !selectedLicences?.length) {
     return []
   }
@@ -96,11 +96,4 @@ function _contactLink(contact, billingQueryArgs) {
   }
 
   return `/system/companies/${contact.id}/${contact.contactType}`
-}
-
-export { abstractionAlertsLabel, formatContact, selectedLiveLicences }
-export default {
-  abstractionAlertsLabel,
-  formatContact,
-  selectedLiveLicences
 }

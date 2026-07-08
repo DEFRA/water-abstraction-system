@@ -49,9 +49,9 @@ export default async function go(payload, yar, auth, page) {
 async function _replayView(payload, error, page, savedFilters, auth) {
   const { results: notices, total: totalNumber } = await FetchNoticesService(savedFilters, page)
 
-  const pagination = PaginatorPresenter.go(totalNumber, page, `/system/notices`, notices.length, 'notices')
+  const pagination = PaginatorPresenter(totalNumber, page, `/system/notices`, notices.length, 'notices')
 
-  const pageData = NoticesIndexPresenter.go(notices, auth)
+  const pageData = NoticesIndexPresenter(notices, auth)
 
   return {
     activeNavBar: 'notices',

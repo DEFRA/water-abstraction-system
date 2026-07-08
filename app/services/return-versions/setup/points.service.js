@@ -22,7 +22,7 @@ export default async function go(sessionId, requirementIndex) {
   const session = await FetchSessionDal(sessionId)
   const points = await FetchPointsService(session.licenceVersion.id)
 
-  const formattedData = PointsPresenter.go(session, requirementIndex, points)
+  const formattedData = PointsPresenter(session, requirementIndex, points)
 
   return {
     ...formattedData

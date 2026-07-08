@@ -42,7 +42,7 @@ export default async function go(sessionId, payload, yar) {
   }
 
   session.startReading = payload.startReading
-  const pageData = StartReadingPresenter.go(session)
+  const pageData = StartReadingPresenter(session)
 
   return {
     error,

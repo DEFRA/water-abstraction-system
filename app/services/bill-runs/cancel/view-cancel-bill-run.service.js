@@ -17,7 +17,7 @@ import ViewCancelBillRunPresenter from '../../../presenters/bill-runs/view-cance
 export default async function go(id) {
   const billRun = await _fetchBillRun(id)
 
-  const formattedData = ViewCancelBillRunPresenter.go(billRun)
+  const formattedData = ViewCancelBillRunPresenter(billRun)
 
   return {
     activeNavBar: 'bill-runs',

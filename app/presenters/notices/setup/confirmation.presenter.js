@@ -12,7 +12,7 @@ import { NoticeType, NoticeTypes } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(event) {
+export default function go(event) {
   const { referenceCode, subtype, id: eventId, metadata } = event
 
   return {
@@ -56,9 +56,4 @@ function _pageTitle(subType) {
   }
 
   return `Returns ${subTypes[subType]} sent`
-}
-
-export { go }
-export default {
-  go
 }

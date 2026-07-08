@@ -5,7 +5,7 @@
  *
  * @returns {string[]} Array of selected licence references or 'All licences' if that option was selected
  */
-function formatLicencesToUnlink(session) {
+export function formatLicencesToUnlink(session) {
   const { allLicences, licences, selectedLicences } = session
 
   if (allLicences) {
@@ -49,7 +49,7 @@ function formatLicencesToUnlink(session) {
  *
  * @returns {object} The query string to use
  */
-function sourceNavigation(requestedQueryValue, canManageAccounts) {
+export function sourceNavigation(requestedQueryValue, canManageAccounts) {
   if (!canManageAccounts || requestedQueryValue === 'search') {
     return {
       activeNavBar: 'search',
@@ -69,10 +69,4 @@ function sourceNavigation(requestedQueryValue, canManageAccounts) {
     },
     backQueryString: '?back=users'
   }
-}
-
-export { formatLicencesToUnlink, sourceNavigation }
-export default {
-  formatLicencesToUnlink,
-  sourceNavigation
 }

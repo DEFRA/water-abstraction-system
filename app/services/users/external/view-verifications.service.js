@@ -23,9 +23,9 @@ export default async function go(id, auth, page, back = 'users') {
 
   const { verifications, totalNumber } = await FetchVerificationsDal(user.licenceEntityId, page)
 
-  const pageData = VerificationsPresenter.go(user, verifications, auth.credentials.scope, back)
+  const pageData = VerificationsPresenter(user, verifications, auth.credentials.scope, back)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/users/external/${id}/verifications`,

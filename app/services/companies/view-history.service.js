@@ -24,9 +24,9 @@ export default async function go(companyId, auth, page) {
 
   const { licences, totalNumber } = await FetchHistoryDal(companyId, page)
 
-  const pageData = HistoryPresenter.go(company, licences)
+  const pageData = HistoryPresenter(company, licences)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/companies/${companyId}/history`,

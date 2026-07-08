@@ -19,7 +19,7 @@ import { formatLicencePoints, formatLicencePurposes, formatConditionTypes } from
  *
  * @returns {object} The data formatted for the view template
  */
-function go(licenceVersionData, auth, conditions) {
+export default function go(licenceVersionData, auth, conditions) {
   const { licenceVersion, licenceVersionsForPagination } = licenceVersionData
 
   const { licence } = licenceVersion
@@ -52,7 +52,7 @@ function go(licenceVersionData, auth, conditions) {
  * @private
  */
 function _address(licenceVersion) {
-  const address = NotifyAddressPresenter.go({
+  const address = NotifyAddressPresenter({
     name: licenceVersion.company.name,
     ...licenceVersion.address
   })
@@ -126,7 +126,7 @@ function _notes(licenceVersion, billingAndDataRole) {
  * @private
  */
 function _pagination(licenceVersionsForPagination, licenceVersion) {
-  const { previous, next } = PreviousAndNextPresenter.go(licenceVersionsForPagination, licenceVersion)
+  const { previous, next } = PreviousAndNextPresenter(licenceVersionsForPagination, licenceVersion)
 
   if (!next && !previous) {
     return null
@@ -209,9 +209,4 @@ function _sortPointsByDescription(first, second) {
     sensitivity: 'base',
     ignorePunctuation: true
   })
-}
-
-export { go }
-export default {
-  go
 }

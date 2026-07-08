@@ -54,7 +54,7 @@ const MAX_ADDRESS_LINE_LENGTH = 240
  *
  * @returns {object} the request data needed in the format required by the Charging Module
  */
-function go(billingAccount, address, company, contact) {
+export default function go(billingAccount, address, company, contact) {
   const { accountNumber: customerReference } = billingAccount
 
   const region = customerReference.charAt(0)
@@ -158,9 +158,4 @@ function _truncate(stringToTruncate, maximumLength) {
   const truncatedString = stringToTruncate.slice(0, maximumLength - 3)
 
   return `${truncatedString}...`
-}
-
-export { go }
-export default {
-  go
 }

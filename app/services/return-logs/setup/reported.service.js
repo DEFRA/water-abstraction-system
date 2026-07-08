@@ -19,7 +19,7 @@ import ReportedPresenter from '../../../presenters/return-logs/setup/reported.pr
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = ReportedPresenter.go(session)
+  const pageData = ReportedPresenter(session)
 
   return {
     ...pageData

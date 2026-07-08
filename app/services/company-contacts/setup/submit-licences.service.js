@@ -34,7 +34,7 @@ export default async function go(sessionId, payload) {
     }
   }
 
-  const pageData = LicencesPresenter.go(session)
+  const pageData = LicencesPresenter(session)
 
   return {
     error: validationResult,

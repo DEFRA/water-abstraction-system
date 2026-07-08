@@ -20,7 +20,7 @@ export default async function go(licenceId, auth) {
   const licence = await FetchLicenceService(licenceId)
   const purposes = await FetchPurposesService(licenceId)
 
-  const pageData = PurposesPresenter.go(purposes, licence)
+  const pageData = PurposesPresenter(purposes, licence)
 
   return {
     ...pageData,

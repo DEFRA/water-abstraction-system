@@ -19,7 +19,7 @@ import MethodPresenter from '../../../../presenters/return-versions/setup/method
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const formattedData = MethodPresenter.go(session)
+  const formattedData = MethodPresenter(session)
 
   return {
     ...formattedData

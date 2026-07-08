@@ -20,7 +20,7 @@ import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 export default async function go(sessionId, requirementIndex) {
   const session = await FetchSessionDal(sessionId)
 
-  const formattedData = AgreementsExceptionsPresenter.go(session, requirementIndex)
+  const formattedData = AgreementsExceptionsPresenter(session, requirementIndex)
 
   return {
     ...formattedData

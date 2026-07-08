@@ -19,7 +19,7 @@ import DetailsPresenter from '../../presenters/return-logs/details.presenter.js'
 export default async function go(returnLogId, auth, version) {
   const returnLog = await FetchReturnLogDetailsService(returnLogId, version)
 
-  const pageData = DetailsPresenter.go(returnLog, auth)
+  const pageData = DetailsPresenter(returnLog, auth)
 
   return {
     activeSecondaryNav: 'details',

@@ -10,7 +10,7 @@
  *
  * @returns {object} page data needed by the view template
  */
-function go(returnLog) {
+export default function go(returnLog) {
   const {
     id: returnLogId,
     licenceId,
@@ -65,9 +65,4 @@ function _purposeDetails(purposes) {
     label: 'Purposes',
     value: formattedPurposes.join(', ')
   }
-}
-
-export { go }
-export default {
-  go
 }

@@ -10,7 +10,7 @@ import { formatLongDate } from '../../base.presenter.js'
  *
  * @returns {string} the sum of allocated volume against all review charge elements without loss of precision
  */
-function calculateTotalBillableReturns(reviewChargeElements) {
+export function calculateTotalBillableReturns(reviewChargeElements) {
   return reviewChargeElements.reduce((total, reviewChargeElement) => {
     const { amendedAllocated } = reviewChargeElement
 
@@ -37,7 +37,7 @@ function calculateTotalBillableReturns(reviewChargeElements) {
  *
  * @returns {string[]} the additional charges (if present) formatted as a string for display
  */
-function formatAdditionalCharges(chargeReference) {
+export function formatAdditionalCharges(chargeReference) {
   const { supportedSourceName, waterCompanyCharge } = chargeReference
 
   const additionalCharges = []
@@ -74,7 +74,7 @@ function formatAdditionalCharges(chargeReference) {
  *
  * @returns {string[]} the adjustments (if present) formatted as a string for display
  */
-function formatAdjustments(reviewChargeReference) {
+export function formatAdjustments(reviewChargeReference) {
   const adjustments = []
 
   if (reviewChargeReference.abatementAgreement && reviewChargeReference.abatementAgreement !== 1) {
@@ -104,7 +104,7 @@ function formatAdjustments(reviewChargeReference) {
  *
  * @returns {string} The review charge version's charge period formatted as a 'DD MMMM YYYY to DD MMMM YYYY' string
  */
-function formatChargePeriod(reviewChargeVersion) {
+export function formatChargePeriod(reviewChargeVersion) {
   const chargePeriod = _chargePeriod(reviewChargeVersion)
 
   return `${formatLongDate(chargePeriod.startDate)} to ${formatLongDate(chargePeriod.endDate)}`
@@ -131,7 +131,7 @@ function formatChargePeriod(reviewChargeVersion) {
  * @returns {string[]} an array containing the review charge element's charge period(s) formatted as 'DD MMMM YYYY to DD
  * MMMM YYYY'
  */
-function formatChargePeriods(reviewChargeElement, chargePeriod = null) {
+export function formatChargePeriods(reviewChargeElement, chargePeriod = null) {
   const { chargeElement, reviewChargeReference } = reviewChargeElement
 
   const { abstractionPeriodStartDay, abstractionPeriodStartMonth, abstractionPeriodEndDay, abstractionPeriodEndMonth } =
@@ -169,7 +169,7 @@ function formatChargePeriods(reviewChargeElement, chargePeriod = null) {
  *
  * @returns {string[]} the issues as a string array, else an empty array if issues is equal to ''
  */
-function formatIssues(issues) {
+export function formatIssues(issues) {
   if (issues === '') {
     return []
   }
@@ -191,7 +191,7 @@ function formatIssues(issues) {
  *
  * @returns {string} the return's status formatted for display
  */
-function formatReturnStatus(reviewReturn) {
+export function formatReturnStatus(reviewReturn) {
   const { returnStatus, underQuery } = reviewReturn
 
   if (returnStatus === 'due') {
@@ -212,7 +212,7 @@ function formatReturnStatus(reviewReturn) {
  *
  * @returns the return's totals formatted for display
  */
-function formatReturnTotals(reviewReturn) {
+export function formatReturnTotals(reviewReturn) {
   const { allocated, quantity, returnStatus } = reviewReturn
 
   if (['due', 'received'].includes(returnStatus)) {
@@ -226,25 +226,4 @@ function _chargePeriod(reviewChargeVersion) {
   const { chargePeriodStartDate, chargePeriodEndDate } = reviewChargeVersion
 
   return { startDate: chargePeriodStartDate, endDate: chargePeriodEndDate }
-}
-
-export {
-  calculateTotalBillableReturns,
-  formatAdditionalCharges,
-  formatAdjustments,
-  formatChargePeriod,
-  formatChargePeriods,
-  formatIssues,
-  formatReturnStatus,
-  formatReturnTotals
-}
-export default {
-  calculateTotalBillableReturns,
-  formatAdditionalCharges,
-  formatAdjustments,
-  formatChargePeriod,
-  formatChargePeriods,
-  formatIssues,
-  formatReturnStatus,
-  formatReturnTotals
 }

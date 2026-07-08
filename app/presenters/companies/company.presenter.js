@@ -14,7 +14,7 @@ import { roles } from '../../lib/static-lookups.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(companyDetails, role) {
+export default function go(companyDetails, role) {
   const { name: companyName, id: companyId, companyAddresses } = companyDetails
 
   return {
@@ -51,9 +51,4 @@ function _companyAddresses(companyAddresses) {
       endDate: companyAddress.endDate ? formatLongDate(companyAddress.endDate) : null
     }
   })
-}
-
-export { go }
-export default {
-  go
 }

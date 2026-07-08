@@ -13,7 +13,7 @@ import { formatBillRunType, formatChargeScheme, generateBillRunTitle } from '../
  *
  * @returns {object} - the prepared bill run data to be passed to the empty bill run page
  */
-function go(billRun) {
+export default function go(billRun) {
   const { batchType, billRunNumber, createdAt, id, region, scheme, status, summer, toFinancialYearEnding } = billRun
 
   return {
@@ -28,9 +28,4 @@ function go(billRun) {
     pageTitle: generateBillRunTitle(region.displayName, batchType, scheme, summer),
     region: titleCase(region.displayName)
   }
-}
-
-export { go }
-export default {
-  go
 }

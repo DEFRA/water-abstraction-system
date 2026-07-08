@@ -18,7 +18,7 @@ import { returnUnits, unitNames } from '../../lib/static-lookups.lib.js'
  *
  * @returns {object} page data needed by the view template
  */
-function go(returnSubmission, yearMonth) {
+export default function go(returnSubmission, yearMonth) {
   const { returnSubmissionLines } = returnSubmission
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
@@ -135,9 +135,4 @@ function _total(lines, units) {
     cubicMetresTotal: formatNumber(totalQuantityCubicMetres),
     unitTotal: formatNumber(totalQuantityUnits)
   }
-}
-
-export { go }
-export default {
-  go
 }

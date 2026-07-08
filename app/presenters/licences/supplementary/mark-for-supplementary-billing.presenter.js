@@ -16,7 +16,7 @@ const PREVIOUS_SIX_YEARS = 6
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(licence) {
+export default function go(licence) {
   const { id, licenceRef } = licence
 
   return {
@@ -64,9 +64,4 @@ function _yearsToDisplay() {
   }
 
   return lastSixFinancialYears
-}
-
-export { go }
-export default {
-  go
 }

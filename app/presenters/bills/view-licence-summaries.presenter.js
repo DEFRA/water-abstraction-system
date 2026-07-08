@@ -12,7 +12,7 @@ import { formatMoney } from '../base.presenter.js'
  *
  * @returns {object} a formatted representation of the bill's licence summaries
  */
-function go(licenceSummaries) {
+export default function go(licenceSummaries) {
   const billLicences = _billLicences(licenceSummaries)
 
   const formattedBill = {
@@ -43,9 +43,4 @@ function _tableCaption(billLicences) {
   }
 
   return `${numberOfRows} licences`
-}
-
-export { go }
-export default {
-  go
 }

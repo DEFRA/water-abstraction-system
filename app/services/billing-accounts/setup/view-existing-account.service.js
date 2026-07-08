@@ -19,7 +19,7 @@ export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
   const companySearchResults = await FetchExistingCompaniesService(session.searchInput)
 
-  const pageData = ExistingAccountPresenter.go(session, companySearchResults)
+  const pageData = ExistingAccountPresenter(session, companySearchResults)
 
   return {
     ...pageData

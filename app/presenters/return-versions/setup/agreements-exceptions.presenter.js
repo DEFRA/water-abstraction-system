@@ -11,7 +11,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, requirementIndex) {
+export default function go(session, requirementIndex) {
   const { id: sessionId, licence, requirements } = session
   const requirement = requirements[requirementIndex]
 
@@ -34,9 +34,4 @@ function _backLinkHref(session, requirementIndex) {
   }
 
   return `/system/return-versions/setup/${id}/frequency-reported/${requirementIndex}`
-}
-
-export { go }
-export default {
-  go
 }

@@ -26,7 +26,7 @@ export default async function go(userId, yar) {
 
   const notification = readFlashNotification(yar)
 
-  const pageData = ProfileDetailsPresenter.go(profileDetails)
+  const pageData = ProfileDetailsPresenter(profileDetails)
 
   return {
     notification,

@@ -30,7 +30,7 @@ export default async function go(sessionId, payload) {
     return {}
   }
 
-  const pageData = PostcodePresenter.go(session)
+  const pageData = PostcodePresenter(session)
 
   return {
     error,

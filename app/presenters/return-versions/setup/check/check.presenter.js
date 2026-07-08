@@ -14,7 +14,7 @@ import { returnRequirementReasons } from '../../../../lib/static-lookups.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const {
     id: sessionId,
     journey,
@@ -70,9 +70,4 @@ function _reasonLink(sessionId, returnsRequired) {
 
 function _startDate(session) {
   return formatLongDate(new Date(session.returnVersionStartDate))
-}
-
-export { go }
-export default {
-  go
 }

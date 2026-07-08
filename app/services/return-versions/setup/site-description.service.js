@@ -20,7 +20,7 @@ import SiteDescriptionPresenter from '../../../presenters/return-versions/setup/
 export default async function go(sessionId, requirementIndex) {
   const session = await FetchSessionDal(sessionId)
 
-  const formattedData = SiteDescriptionPresenter.go(session, requirementIndex)
+  const formattedData = SiteDescriptionPresenter(session, requirementIndex)
 
   return {
     ...formattedData

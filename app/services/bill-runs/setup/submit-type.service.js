@@ -37,7 +37,7 @@ export default async function go(sessionId, payload) {
     return {}
   }
 
-  const pageData = TypePresenter.go(session)
+  const pageData = TypePresenter(session)
 
   return {
     activeNavBar: 'bill-runs',

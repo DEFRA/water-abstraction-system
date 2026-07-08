@@ -24,7 +24,7 @@ const AGREEMENTS_EXCEPTIONS = {
  *
  * @returns {object} returns requirement data needed by the view template
  */
-function go(requirements, points, journey) {
+export default function go(requirements, points, journey) {
   return {
     returnsRequired: journey === 'returns-required',
     requirements: _requirements(requirements, points)
@@ -104,9 +104,4 @@ function _mapPoints(selectedPoints, points) {
 
     return matchedPoint.$describe()
   })
-}
-
-export { go }
-export default {
-  go
 }

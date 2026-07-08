@@ -30,7 +30,7 @@ const NOTIFICATIONS_STATUS = {
  *
  * @returns {object} - returns what 'status' and 'notifyStatus' should be applied to the notification
  */
-function go(notifyStatus, notification) {
+export default function go(notifyStatus, notification) {
   if (notification.messageType === 'email') {
     return _emailStatus(notifyStatus)
   }
@@ -108,9 +108,4 @@ function _letterStatus(notifyStatus) {
     status,
     notifyStatus
   }
-}
-
-export { go }
-export default {
-  go
 }

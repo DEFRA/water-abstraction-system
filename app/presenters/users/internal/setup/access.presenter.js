@@ -10,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { access, id: sessionId } = session
 
   return {
@@ -23,9 +23,4 @@ function go(session) {
     pageTitle: 'Select access for the user',
     pageTitleCaption: 'Internal'
   }
-}
-
-export { go }
-export default {
-  go
 }

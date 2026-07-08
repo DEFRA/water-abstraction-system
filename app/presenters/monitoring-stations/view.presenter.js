@@ -24,7 +24,7 @@ import { determineRestrictionHeading, formatRestrictions } from './base.presente
  *
  * @returns {object} page data needed by the view template
  */
-function go(monitoringStation, licenceMonitoringStations, auth) {
+export default function go(monitoringStation, licenceMonitoringStations, auth) {
   const {
     id: monitoringStationId,
     catchmentName,
@@ -101,9 +101,4 @@ function _tagLicenceButton(auth, monitoringStationId) {
   return {
     value: monitoringStationId
   }
-}
-
-export { go }
-export default {
-  go
 }

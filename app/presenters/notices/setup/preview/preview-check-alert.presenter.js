@@ -15,7 +15,7 @@ import { determineRestrictionHeading, formatRestrictions } from '../../../monito
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(contactHashId, recipientLicenceRefs, session) {
+export default function go(contactHashId, recipientLicenceRefs, session) {
   const recipientLicenceMonitoringStations = _recipientLicenceMonitoringStations(recipientLicenceRefs, session)
 
   return {
@@ -69,9 +69,4 @@ function _recipientLicenceMonitoringStations(recipientLicenceRefs, session) {
   return relevantLicenceMonitoringStations.filter((relevantLicenceMonitoringStation) => {
     return recipientLicenceRefs.includes(relevantLicenceMonitoringStation.licence.licenceRef)
   })
-}
-
-export { go }
-export default {
-  go
 }

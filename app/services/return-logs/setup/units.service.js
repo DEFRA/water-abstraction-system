@@ -19,7 +19,7 @@ import UnitsPresenter from '../../../presenters/return-logs/setup/units.presente
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = UnitsPresenter.go(session)
+  const pageData = UnitsPresenter(session)
 
   return {
     ...pageData

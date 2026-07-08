@@ -56,7 +56,7 @@ async function _save(session, payload, licence) {
 function _submittedSessionData(session, payload) {
   session.licenceRef = payload['licenceRef'] ?? null
 
-  return LicenceNumberPresenter.go(session)
+  return LicenceNumberPresenter(session)
 }
 
 async function _validate(payload, licence) {

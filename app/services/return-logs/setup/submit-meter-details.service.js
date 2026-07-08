@@ -61,7 +61,7 @@ function _submittedSessionData(session, payload) {
   session.meterSerialNumber = payload.meterSerialNumber ?? null
   session.meter10TimesDisplay = payload.meter10TimesDisplay ?? null
 
-  return MeterDetailsPresenter.go(session)
+  return MeterDetailsPresenter(session)
 }
 
 async function _save(session, payload) {

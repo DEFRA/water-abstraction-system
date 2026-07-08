@@ -12,7 +12,7 @@ import { formatLongDate } from '../../base.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { id: sessionId, licence, startDateOptions, startDateDay, startDateMonth, startDateYear } = session
 
   return {
@@ -48,9 +48,4 @@ function _licenceVersionStartDate(licence) {
   const dateObj = new Date(currentVersionStartDate)
 
   return formatLongDate(dateObj)
-}
-
-export { go }
-export default {
-  go
 }

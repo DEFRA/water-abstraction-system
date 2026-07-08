@@ -26,5 +26,5 @@ export default async function go(sessionId) {
     }
   }
 
-  return SelectPresenter.go(session, result.matches)
+  return SelectPresenter(session, result.matches)
 }

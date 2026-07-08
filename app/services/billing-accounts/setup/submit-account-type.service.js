@@ -82,7 +82,7 @@ function _submissionData(session, payload) {
   session.accountType = payload.accountType
   session.individualName = payload.accountType === 'individual' ? payload.individualName : null
 
-  return AccountTypePresenter.go(session)
+  return AccountTypePresenter(session)
 }
 
 function _validate(payload) {

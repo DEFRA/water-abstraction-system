@@ -17,7 +17,7 @@ import MarkForSupplementaryBillingPresenter from '../../../presenters/licences/s
 export default async function go(licenceId) {
   const licenceData = await _fetchLicenceData(licenceId)
 
-  const pageData = MarkForSupplementaryBillingPresenter.go(licenceData)
+  const pageData = MarkForSupplementaryBillingPresenter(licenceData)
 
   return {
     ...pageData

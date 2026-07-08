@@ -15,7 +15,7 @@ import { returnRequirementFrequencies } from '../../lib/static-lookups.lib.js'
  *
  * @returns {object} page data formatted for the view template
  */
-function go(returnVersionData) {
+export default function go(returnVersionData) {
   const { returnVersion, returnVersionsForPagination } = returnVersionData
 
   const { licence, multipleUpload, quarterlyReturns, returnRequirements, startDate, status } = returnVersion
@@ -130,7 +130,7 @@ function _notes(returnVersion) {
  * @private
  */
 function _pagination(returnVersionsForPagination, returnVersion) {
-  const { previous, next } = PreviousAndNextPresenter.go(returnVersionsForPagination, returnVersion)
+  const { previous, next } = PreviousAndNextPresenter(returnVersionsForPagination, returnVersion)
 
   if (!next && !previous) {
     return null
@@ -177,9 +177,4 @@ function _requirements(requirements) {
   return requirements.map((requirement) => {
     return _mapRequirement(requirement)
   })
-}
-
-export { go }
-export default {
-  go
 }

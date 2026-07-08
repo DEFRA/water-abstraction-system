@@ -12,7 +12,7 @@ import { abstractionAlertsLabel, selectedLiveLicences } from '../../crm.presente
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { abstractionAlertLicences, abstractionAlerts, company, email, licences, name } = session
 
   return {
@@ -35,9 +35,4 @@ function _pageTitle(session) {
   }
 
   return 'You are about to cancel this contact'
-}
-
-export { go }
-export default {
-  go
 }

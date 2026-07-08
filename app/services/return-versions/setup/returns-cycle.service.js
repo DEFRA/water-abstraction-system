@@ -20,7 +20,7 @@ import ReturnsCyclePresenter from '../../../presenters/return-versions/setup/ret
 export default async function go(sessionId, requirementIndex) {
   const session = await FetchSessionDal(sessionId)
 
-  const formattedData = ReturnsCyclePresenter.go(session, requirementIndex)
+  const formattedData = ReturnsCyclePresenter(session, requirementIndex)
 
   return {
     ...formattedData

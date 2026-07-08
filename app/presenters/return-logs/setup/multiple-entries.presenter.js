@@ -13,7 +13,7 @@ import { returnRequirementFrequencies } from '../../../lib/static-lookups.lib.js
  *
  * @returns {object} page data needed by the view template
  */
-function go(session) {
+export default function go(session) {
   const { id: sessionId, lines, multipleEntries, returnReference, returnsFrequency, reported } = session
 
   const measurementType = reported === 'abstractionVolumes' ? 'volumes' : 'readings'
@@ -31,9 +31,4 @@ function go(session) {
     sessionId,
     startDate: formatLongDate(new Date(lines[0].startDate))
   }
-}
-
-export { go }
-export default {
-  go
 }

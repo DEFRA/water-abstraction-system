@@ -14,7 +14,7 @@ import { formatMoney } from '../base.presenter.js'
  * are water company bills, they are grouped under 'water-companies'. If there are other abstractor bills, they are
  * grouped under 'other-abstractors'.
  */
-function go(billSummaries) {
+export default function go(billSummaries) {
   const waterCompanies = _waterCompanies(billSummaries)
   const otherAbstractors = _otherAbstractors(billSummaries)
 
@@ -89,9 +89,4 @@ function _waterCompanies(summaries) {
   })
 
   return _bills(filteredSummaries)
-}
-
-export { go }
-export default {
-  go
 }

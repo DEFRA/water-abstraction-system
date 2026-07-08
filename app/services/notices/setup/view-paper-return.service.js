@@ -17,7 +17,7 @@ import PaperReturnPresenter from '../../../presenters/notices/setup/paper-return
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = PaperReturnPresenter.go(session)
+  const pageData = PaperReturnPresenter(session)
 
   return {
     activeNavBar: 'notices',

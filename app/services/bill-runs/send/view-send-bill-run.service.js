@@ -17,7 +17,7 @@ import ViewSendBillRunPresenter from '../../../presenters/bill-runs/view-send-bi
 export default async function go(id) {
   const billRun = await _fetchBillRun(id)
 
-  const formattedData = ViewSendBillRunPresenter.go(billRun)
+  const formattedData = ViewSendBillRunPresenter(billRun)
 
   return {
     activeNavBar: 'bill-runs',

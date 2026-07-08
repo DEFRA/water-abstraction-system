@@ -41,7 +41,7 @@ export default async function go(sessionId, payload) {
     return { setupComplete: !session.type.startsWith('two_part') }
   }
 
-  const formattedData = RegionPresenter.go(session, regions)
+  const formattedData = RegionPresenter(session, regions)
 
   return {
     activeNavBar: 'bill-runs',

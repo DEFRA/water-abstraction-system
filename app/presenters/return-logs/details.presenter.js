@@ -25,7 +25,7 @@ import { returnRequirementFrequencies, unitNames } from '../../lib/static-lookup
  *
  * @returns {object} The data formatted for the view template
  */
-function go(returnLog, auth) {
+export default function go(returnLog, auth) {
   const {
     current,
     endDate,
@@ -283,9 +283,4 @@ function _warning(status, latest) {
   }
 
   return null
-}
-
-export { go }
-export default {
-  go
 }

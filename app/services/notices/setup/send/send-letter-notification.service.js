@@ -21,7 +21,7 @@ export default async function go(notification, referenceCode) {
   })
 
   return {
-    ...NotifyUpdatePresenter.go(notifyResult),
+    ...NotifyUpdatePresenter(notifyResult),
     id: notification.id
   }
 }

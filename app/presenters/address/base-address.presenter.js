@@ -10,7 +10,7 @@ import { countries } from '../../lib/static-lookups.lib.js'
  *
  * @returns {object[]} List of countries in the format { value, selected, text }.
  */
-function countryLookup(selectedCountry = 'select') {
+export function countryLookup(selectedCountry = 'select') {
   const displayCountries = [
     {
       selected: selectedCountry === 'select',
@@ -28,9 +28,4 @@ function countryLookup(selectedCountry = 'select') {
   }
 
   return displayCountries
-}
-
-export { countryLookup }
-export default {
-  countryLookup
 }

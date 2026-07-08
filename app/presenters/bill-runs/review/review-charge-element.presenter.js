@@ -22,7 +22,7 @@ import {
  *
  * @returns {object} page date needed for the review charge element page
  */
-function go(reviewChargeElement, elementIndex) {
+export default function go(reviewChargeElement, elementIndex) {
   const {
     amendedAllocated: billableReturns,
     chargeElement,
@@ -70,9 +70,4 @@ function _matchedReturns(reviewReturns) {
       returnTotal: formatReturnTotals(reviewReturn)
     }
   })
-}
-
-export { go }
-export default {
-  go
 }

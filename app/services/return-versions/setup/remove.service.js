@@ -21,7 +21,7 @@ import RemovePresenter from '../../../presenters/return-versions/setup/remove.pr
  */
 export default async function go(sessionId, requirementIndex) {
   const session = await FetchSessionDal(sessionId)
-  const formattedData = RemovePresenter.go(session, requirementIndex)
+  const formattedData = RemovePresenter(session, requirementIndex)
 
   return {
     ...formattedData

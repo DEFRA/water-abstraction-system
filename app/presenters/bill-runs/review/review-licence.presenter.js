@@ -22,7 +22,7 @@ import {
  *
  * @returns {object} page date needed for the review licence page
  */
-function go(reviewLicence) {
+export default function go(reviewLicence) {
   const {
     billRun,
     id: reviewLicenceId,
@@ -194,9 +194,4 @@ function _formatReviewReturns(reviewReturns) {
   })
 
   return { matchedReturns, unmatchedReturns }
-}
-
-export { go }
-export default {
-  go
 }

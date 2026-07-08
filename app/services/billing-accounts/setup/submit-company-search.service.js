@@ -65,7 +65,7 @@ async function _save(session, payload) {
 function _submissionData(session, payload) {
   session.companySearch = payload.companySearch
 
-  return CompanySearchPresenter.go(session)
+  return CompanySearchPresenter(session)
 }
 
 function _validate(payload) {

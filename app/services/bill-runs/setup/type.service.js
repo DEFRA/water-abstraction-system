@@ -19,7 +19,7 @@ import TypePresenter from '../../../presenters/bill-runs/setup/type.presenter.js
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = TypePresenter.go(session)
+  const pageData = TypePresenter(session)
 
   return {
     activeNavBar: 'bill-runs',

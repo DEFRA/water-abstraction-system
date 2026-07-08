@@ -61,16 +61,16 @@ function _notifications(session, recipients, noticeId) {
   const { noticeType } = session
 
   if (noticeType === NoticeType.ABSTRACTION_ALERTS) {
-    return AbstractionAlertNotificationsPresenter.go(session, recipients, noticeId)
+    return AbstractionAlertNotificationsPresenter(session, recipients, noticeId)
   }
 
   if (noticeType === NoticeType.PAPER_RETURN) {
-    return PaperReturnNotificationsPresenter.go(session, recipients, noticeId)
+    return PaperReturnNotificationsPresenter(session, recipients, noticeId)
   }
 
   if (noticeType === NoticeType.RENEWAL_INVITATIONS) {
-    return ReturnsInvitationNotificationsPresenter.go(session, recipients, noticeId)
+    return ReturnsInvitationNotificationsPresenter(session, recipients, noticeId)
   }
 
-  return ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
+  return ReturnsNoticeNotificationsPresenter(session, recipients, noticeId)
 }

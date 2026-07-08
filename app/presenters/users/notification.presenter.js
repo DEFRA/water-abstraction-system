@@ -24,13 +24,13 @@ import { userNotificationTypes } from '../../lib/static-lookups.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(notification, user, type, superUser) {
+export default function go(notification, user, type, superUser) {
   const { createdAt, messageRef, messageType, recipient } = notification
 
   return {
     backLink: _backLink(user, type),
     contents: _contents(notification, superUser),
-    errorDetails: NotificationErrorPresenter.go(notification),
+    errorDetails: NotificationErrorPresenter(notification),
     messageType,
     pageTitle: userNotificationTypes[messageRef].label,
     pageTitleCaption: user.username,
@@ -58,9 +58,4 @@ function _contents(notification, superUser) {
   }
 
   return plaintext
-}
-
-export { go }
-export default {
-  go
 }

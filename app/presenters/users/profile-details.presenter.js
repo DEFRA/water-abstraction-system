@@ -18,7 +18,7 @@ const NAVIGATION_LINKS = [
  *
  * @returns {object} The data formatted for the view template
  */
-function go(profileDetails) {
+export default function go(profileDetails) {
   return {
     address: profileDetails.address || '',
     backLink: {
@@ -32,9 +32,4 @@ function go(profileDetails) {
     pageTitle: 'Profile details',
     tel: profileDetails.tel || ''
   }
-}
-
-export { go }
-export default {
-  go
 }

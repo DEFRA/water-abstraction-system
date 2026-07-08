@@ -11,7 +11,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(removeLicences, session) {
+export default function go(removeLicences, session) {
   const { referenceCode, id: sessionId } = session
 
   return {
@@ -21,9 +21,4 @@ function go(removeLicences, session) {
     pageTitleCaption: `Notice ${referenceCode}`,
     removeLicences
   }
-}
-
-export { go }
-export default {
-  go
 }

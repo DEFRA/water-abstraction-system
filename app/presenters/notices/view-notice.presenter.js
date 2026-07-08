@@ -13,7 +13,7 @@ import { formatLongDate, formatNoticeType } from '../base.presenter.js'
  *
  * @returns {object[]} - The data formatted for the view template
  */
-function go(notice, notifications) {
+export default function go(notice, notifications) {
   const tableRows = _formatTableData(notifications)
 
   return {
@@ -63,9 +63,4 @@ function _recipient(notification) {
     personalisation['address_line_7'],
     personalisation['postcode']
   ].filter(Boolean)
-}
-
-export { go }
-export default {
-  go
 }

@@ -10,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { id: sessionId, licence, note } = session
 
   return {
@@ -24,9 +24,4 @@ function go(session) {
     pageTitleCaption: `Licence ${licence.licenceRef}`,
     sessionId
   }
-}
-
-export { go }
-export default {
-  go
 }

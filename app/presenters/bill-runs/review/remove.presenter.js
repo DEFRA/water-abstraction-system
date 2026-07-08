@@ -13,7 +13,7 @@ import { formatFinancialYear, formatLongDate } from '../../base.presenter.js'
  *
  * @returns {object} page date needed for the remove review licence confirmation page
  */
-function go(reviewLicence) {
+export default function go(reviewLicence) {
   const { billRun, id: reviewLicenceId, licenceRef } = reviewLicence
   const { billRunNumber, createdAt, region, status, toFinancialYearEnding } = billRun
 
@@ -26,9 +26,4 @@ function go(reviewLicence) {
     region: region.displayName,
     reviewLicenceId
   }
-}
-
-export { go }
-export default {
-  go
 }

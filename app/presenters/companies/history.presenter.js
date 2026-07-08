@@ -14,7 +14,7 @@ import { linkToLicenceVersion } from '../licence-version.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(company, licences) {
+export default function go(company, licences) {
   return {
     backLink: {
       href: '/',
@@ -50,9 +50,4 @@ function _licenceVersions(licences) {
   }
 
   return versions
-}
-
-export { go }
-export default {
-  go
 }

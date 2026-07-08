@@ -51,6 +51,6 @@ function _failedValidationResponse(auth, payload, validationResult) {
 
   return {
     error: formatValidationResult(validationResult),
-    ...SearchPresenter.go(userScopes, query, resultType)
+    ...SearchPresenter(userScopes, query, resultType)
   }
 }

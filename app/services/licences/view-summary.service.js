@@ -21,8 +21,8 @@ export default async function go(licenceId, auth) {
   const licence = await FetchLicenceService(licenceId)
   const summary = await FetchSummaryService(licenceId)
 
-  const summaryHeadingData = SummaryHeadingPresenter.go(licence, summary)
-  const pageData = SummaryPresenter.go(licence, summary)
+  const summaryHeadingData = SummaryHeadingPresenter(licence, summary)
+  const pageData = SummaryPresenter(licence, summary)
 
   return {
     ...summaryHeadingData,

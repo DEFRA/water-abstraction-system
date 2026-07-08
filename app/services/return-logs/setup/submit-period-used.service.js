@@ -107,7 +107,7 @@ function _submittedSessionData(session, payload) {
   session.periodUsedToMonth = payload.periodUsedToMonth ?? null
   session.periodUsedToYear = payload.periodUsedToYear ?? null
 
-  return PeriodUsedPresenter.go(session)
+  return PeriodUsedPresenter(session)
 }
 
 function _validate(payload, session) {

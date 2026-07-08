@@ -18,7 +18,7 @@ import PreparePaperReturnPresenter from '../../../presenters/notices/setup/prepa
  * @returns {Promise<object>} - Resolves the response from the Gotenberg request wrapper
  */
 export default async function go(notification) {
-  const pageData = PreparePaperReturnPresenter.go(notification)
+  const pageData = PreparePaperReturnPresenter(notification)
 
   return send(pageData)
 }

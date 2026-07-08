@@ -14,7 +14,7 @@
  *
  * @returns {object} the notification error data
  */
-function go(statusCode, message, errors) {
+export default function go(statusCode, message, errors) {
   return {
     notifyError: JSON.stringify({
       status: statusCode,
@@ -23,9 +23,4 @@ function go(statusCode, message, errors) {
     }),
     status: 'error'
   }
-}
-
-export { go }
-export default {
-  go
 }

@@ -49,7 +49,7 @@ export default async function go(sessionId, requirementIndex, payload, yar) {
   }
 
   const pointsData = await FetchPointsService(session.licenceVersion.id)
-  const formattedData = PointsPresenter.go(session, requirementIndex, pointsData)
+  const formattedData = PointsPresenter(session, requirementIndex, pointsData)
 
   return {
     error,

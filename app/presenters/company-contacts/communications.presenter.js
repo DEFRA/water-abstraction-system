@@ -14,19 +14,14 @@ import NotificationsTablePresenter from '../notifications/notifications-table.pr
  *
  * @returns {object} The data formatted for the view template
  */
-function go(company, companyContact, notifications) {
+export default function go(company, companyContact, notifications) {
   return {
     backLink: {
       href: `/system/companies/${company.id}/contacts`,
       text: 'Go back to licence holder contacts'
     },
-    notifications: NotificationsTablePresenter.go(notifications, null, null, companyContact.id),
+    notifications: NotificationsTablePresenter(notifications, null, null, companyContact.id),
     pageTitle: `Communications for ${companyContact.contact.$name()}`,
     pageTitleCaption: company.name
   }
-}
-
-export { go }
-export default {
-  go
 }

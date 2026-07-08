@@ -14,7 +14,7 @@ import { linkToLicenceVersion } from '../licence-version.presenter.js'
  *
  * @returns The data formatted and sorted for the view template
  */
-function go(licenceHistory, licence) {
+export default function go(licenceHistory, licence) {
   const { licenceRef } = licence
 
   return {
@@ -38,9 +38,4 @@ function _licenceVersionEntries(licenceVersions) {
       startDate: formatLongDate(licenceVersion.startDate)
     }
   })
-}
-
-export { go }
-export default {
-  go
 }

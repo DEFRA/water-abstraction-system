@@ -19,7 +19,7 @@ import MeterDetailsPresenter from '../../../presenters/return-logs/setup/meter-d
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = MeterDetailsPresenter.go(session)
+  const pageData = MeterDetailsPresenter(session)
 
   return {
     ...pageData

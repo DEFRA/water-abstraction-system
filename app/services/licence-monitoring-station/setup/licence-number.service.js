@@ -18,7 +18,7 @@ import LicenceNumberPresenter from '../../../presenters/licence-monitoring-stati
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = LicenceNumberPresenter.go(session)
+  const pageData = LicenceNumberPresenter(session)
 
   return {
     ...pageData

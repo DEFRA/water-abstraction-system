@@ -24,9 +24,9 @@ export default async function go(companyId, auth, page) {
 
   const { billingAccounts, totalNumber } = await FetchBillingAccountsDal(companyId, page)
 
-  const pageData = BillingAccountsPresenter.go(company, billingAccounts)
+  const pageData = BillingAccountsPresenter(company, billingAccounts)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/companies/${companyId}/billing-accounts`,

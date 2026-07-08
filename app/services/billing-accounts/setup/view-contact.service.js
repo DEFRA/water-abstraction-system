@@ -19,7 +19,7 @@ export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
   const companyContacts = await _fetchCompanyContacts(session)
 
-  const pageData = ContactPresenter.go(session, companyContacts)
+  const pageData = ContactPresenter(session, companyContacts)
 
   return {
     ...pageData

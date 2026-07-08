@@ -25,9 +25,9 @@ export default async function go(id, page) {
 
   const { notifications, totalNumber } = await FetchNotificationsDal(companyContact.contact.email, page)
 
-  const pageData = CommunicationsPresenter.go(company, companyContact, notifications)
+  const pageData = CommunicationsPresenter(company, companyContact, notifications)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/company-contacts/${companyContact.id}/communications`,

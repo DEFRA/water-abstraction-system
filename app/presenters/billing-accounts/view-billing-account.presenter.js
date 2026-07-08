@@ -19,7 +19,7 @@ import { formatLongDate, formatMoney, titleCase } from '../base.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(billingAccountData, licenceId, chargeVersionId, companyId) {
+export default function go(billingAccountData, licenceId, chargeVersionId, companyId) {
   const { billingAccount, bills } = billingAccountData
   const { company, createdAt, id, lastTransactionFile, lastTransactionFileCreatedAt } = billingAccount
 
@@ -78,9 +78,4 @@ function _bills(bills) {
       financialYear: bill.financialYearEnding
     }
   })
-}
-
-export { go }
-export default {
-  go
 }

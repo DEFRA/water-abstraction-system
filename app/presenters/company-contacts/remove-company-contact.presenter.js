@@ -15,7 +15,7 @@ import { abstractionAlertsLabel } from '../crm.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(company, companyContact, licences) {
+export default function go(company, companyContact, licences) {
   const abstractionAlertType = companyContact.$abstractionAlertType()
 
   return {
@@ -58,9 +58,4 @@ function _warning(companyContact) {
   }
 
   return {}
-}
-
-export { go }
-export default {
-  go
 }

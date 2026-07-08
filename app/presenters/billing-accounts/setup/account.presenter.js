@@ -10,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { billingAccount } = session
 
   return {
@@ -33,9 +33,4 @@ function _backLink(session) {
   }
 
   return `/system/billing-accounts/${session.billingAccount.id}`
-}
-
-export { go }
-export default {
-  go
 }

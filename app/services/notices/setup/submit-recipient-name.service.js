@@ -30,7 +30,7 @@ export default async function go(sessionId, payload) {
 
   session.contactName = payload.name
 
-  const pageData = RecipientNamePresenter.go(session)
+  const pageData = RecipientNamePresenter(session)
 
   return {
     error: validationResult,

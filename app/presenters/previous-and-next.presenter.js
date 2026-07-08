@@ -30,7 +30,7 @@
  * item or the `id` is not found.
  *
  */
-function go(arrayOfElements, anchorElement) {
+export default function go(arrayOfElements, anchorElement) {
   const index = _indexOfAnchorId(arrayOfElements, anchorElement)
 
   if (index === -1) {
@@ -47,9 +47,4 @@ function _indexOfAnchorId(arrayOfElements, anchorElement) {
   return arrayOfElements.findIndex((element) => {
     return element.id === anchorElement.id
   })
-}
-
-export { go }
-export default {
-  go
 }

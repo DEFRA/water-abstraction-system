@@ -21,7 +21,7 @@ export default async function go(contactHashId, sessionId) {
 
   const recipientLicenceRefs = await _recipientLicenceRefs(contactHashId, session)
 
-  const pageData = CheckAlertPresenter.go(contactHashId, recipientLicenceRefs, session)
+  const pageData = CheckAlertPresenter(contactHashId, recipientLicenceRefs, session)
 
   return {
     activeNavBar: 'notices',

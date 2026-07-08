@@ -12,7 +12,7 @@ import { formatAbstractionAmounts } from './licences/base-licences.presenter.js'
  *
  * @returns {object[]} - the condition types formatted to be displayed
  */
-function formatConditionTypes(conditionTypes) {
+export function formatConditionTypes(conditionTypes) {
   return conditionTypes.map((conditionType) => {
     const { displayTitle, licenceVersionPurposeConditions } = conditionType
 
@@ -34,7 +34,7 @@ function formatConditionTypes(conditionTypes) {
  *
  * @returns {object[]} - the points formatted to be displayed
  */
-function formatLicencePoints(points) {
+export function formatLicencePoints(points) {
   return points.map((point) => {
     // NOTE: We create a `PointModel` instance so we can use the `$describe()` instance method
     const pointInstance = PointModel.fromJson(point)
@@ -68,7 +68,7 @@ function formatLicencePoints(points) {
  *
  * @returns {object[]} - the purposes formatted to be displayed
  */
-function formatLicencePurposes(purposes) {
+export function formatLicencePurposes(purposes) {
   return purposes.map((purpose) => {
     const abstractionAmounts = _formatAbstractionAmounts(purpose)
     const abstractionMethods = _formatAbstractionMethod(purpose.licenceVersionPurposePoints)
@@ -184,7 +184,7 @@ function _param(paramLabel, param, noteNumber) {
  *
  * @returns {object} `null` if the licence has not ended else an object containing the warning
  */
-function licenceEndsWarning(licence) {
+export function licenceEndsWarning(licence) {
   const ends = licence.$ends()
 
   if (!ends || ends.date > today()) {
@@ -211,12 +211,4 @@ function licenceEndsWarning(licence) {
     text: `This licence expired on ${formattedDate}`,
     iconFallbackText: 'Warning'
   }
-}
-
-export { formatConditionTypes, formatLicencePoints, formatLicencePurposes, licenceEndsWarning }
-export default {
-  formatConditionTypes,
-  formatLicencePoints,
-  formatLicencePurposes,
-  licenceEndsWarning
 }

@@ -34,7 +34,7 @@ export default async function go(sessionId, payload, yar) {
     }
   }
 
-  const pageData = AccessPresenter.go(session)
+  const pageData = AccessPresenter(session)
 
   return {
     error: validationResult,

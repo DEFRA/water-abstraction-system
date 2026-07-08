@@ -21,7 +21,7 @@ export default async function go(sessionId, yar) {
 
   await _updateSession(session)
 
-  const formattedData = CheckPresenter.go(session)
+  const formattedData = CheckPresenter(session)
 
   const notification = readFlashNotification(yar)
 

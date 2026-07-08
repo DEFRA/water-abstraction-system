@@ -15,7 +15,7 @@ import { userNotificationTypes } from '../../lib/static-lookups.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(notifications, userId, type) {
+export default function go(notifications, userId, type) {
   return notifications.map((notification) => {
     const { createdAt, messageType, status } = notification
     const sentDate = formatLongDate(createdAt)
@@ -39,9 +39,4 @@ function _link(notification, sentDate, userId, type) {
     href: `/system/users/${type}/${userId}/notifications/${notificationId}`,
     text: userNotificationTypes[messageRef].label
   }
-}
-
-export { go }
-export default {
-  go
 }

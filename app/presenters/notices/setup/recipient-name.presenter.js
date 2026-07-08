@@ -10,7 +10,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { id: sessionId, contactName: name, referenceCode } = session
 
   return {
@@ -19,9 +19,4 @@ function go(session) {
     pageTitle: "Enter the recipient's name",
     pageTitleCaption: `Notice ${referenceCode}`
   }
-}
-
-export { go }
-export default {
-  go
 }

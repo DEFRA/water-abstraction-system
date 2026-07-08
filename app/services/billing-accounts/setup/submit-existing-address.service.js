@@ -75,7 +75,7 @@ async function _save(session, payload) {
 function _submissionData(session, payload, companyAddresses) {
   session.addressSelected = payload.addressSelected
 
-  return ExistingAddressPresenter.go(session, companyAddresses)
+  return ExistingAddressPresenter(session, companyAddresses)
 }
 
 function _validate(payload, name) {

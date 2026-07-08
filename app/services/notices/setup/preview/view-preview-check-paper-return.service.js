@@ -18,7 +18,7 @@ import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 export default async function go(sessionId, contactHashId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = CheckPaperReturnPresenter.go(session, contactHashId)
+  const pageData = CheckPaperReturnPresenter(session, contactHashId)
 
   return {
     activeNavBar: 'notices',

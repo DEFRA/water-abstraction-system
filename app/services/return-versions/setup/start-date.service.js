@@ -19,7 +19,7 @@ import StartDatePresenter from '../../../presenters/return-versions/setup/start-
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const formattedData = StartDatePresenter.go(session)
+  const formattedData = StartDatePresenter(session)
 
   return {
     ...formattedData

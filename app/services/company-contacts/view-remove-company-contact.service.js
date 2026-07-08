@@ -23,7 +23,7 @@ export default async function go(id) {
 
   const licences = await FetchAbstractionAlertLicencesDal(companyContact.abstractionAlertLicences)
 
-  const pageData = RemoveCompanyContactPresenter.go(company, companyContact, licences)
+  const pageData = RemoveCompanyContactPresenter(company, companyContact, licences)
 
   return {
     ...pageData

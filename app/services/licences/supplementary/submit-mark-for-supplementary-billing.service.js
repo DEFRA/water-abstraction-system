@@ -110,7 +110,7 @@ async function _flagForBilling(supplementaryYears, licenceId) {
 async function _getPageData(licenceId) {
   const licenceData = await _fetchLicenceData(licenceId)
 
-  const pageData = MarkForSupplementaryBillingPresenter.go(licenceData)
+  const pageData = MarkForSupplementaryBillingPresenter(licenceData)
 
   return pageData
 }

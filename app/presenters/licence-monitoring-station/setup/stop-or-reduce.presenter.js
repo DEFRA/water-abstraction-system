@@ -12,7 +12,7 @@ import { checkUrl } from '../../../lib/check-page.lib.js'
  *
  * @returns {object} page data needed by the view template
  */
-function go(session) {
+export default function go(session) {
   const { id: sessionId, label, stopOrReduce, reduceAtThreshold } = session
 
   return {
@@ -23,9 +23,4 @@ function go(session) {
     sessionId,
     stopOrReduce: stopOrReduce ?? null
   }
-}
-
-export { go }
-export default {
-  go
 }

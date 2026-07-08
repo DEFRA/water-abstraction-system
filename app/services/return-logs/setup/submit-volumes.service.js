@@ -37,7 +37,7 @@ export default async function go(sessionId, payload, yar, yearMonth) {
 
   _addValidationResultToSession(payload, session, requestedYear, requestedMonth, error)
 
-  const formattedData = VolumesPresenter.go(session, yearMonth)
+  const formattedData = VolumesPresenter(session, yearMonth)
 
   return {
     error,

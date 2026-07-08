@@ -19,7 +19,7 @@ import SingleVolumePresenter from '../../../presenters/return-logs/setup/single-
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = SingleVolumePresenter.go(session)
+  const pageData = SingleVolumePresenter(session)
 
   return {
     ...pageData

@@ -46,9 +46,9 @@ export default async function go(payload, yar, auth, page) {
 async function _replayView(payload, error, page, savedFilters, auth) {
   const { results: users, total: totalNumber } = await FetchUsersDal(savedFilters, page)
 
-  const pagination = PaginatorPresenter.go(totalNumber, page, `/system/users`, users.length, 'users')
+  const pagination = PaginatorPresenter(totalNumber, page, `/system/users`, users.length, 'users')
 
-  const pageData = IndexUsersPresenter.go(users, auth)
+  const pageData = IndexUsersPresenter(users, auth)
 
   return {
     error,

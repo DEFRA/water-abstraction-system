@@ -14,7 +14,7 @@ import ViewInvalidAddressesPresenter from '../../presenters/reports/view-invalid
 export default async function go() {
   const invalidAddresses = await FetchInvalidAddressesService()
 
-  const pageData = ViewInvalidAddressesPresenter.go(invalidAddresses)
+  const pageData = ViewInvalidAddressesPresenter(invalidAddresses)
 
   return {
     activeNavBar: 'manage',

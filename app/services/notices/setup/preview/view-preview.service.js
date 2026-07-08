@@ -27,7 +27,7 @@ export default async function go(sessionId, contactHashId, licenceMonitoringStat
   const recipient = await _recipient(contactHashId, session)
   const notification = _notification(recipient, session, licenceMonitoringStationId)
 
-  const formattedData = await PreviewPresenter.go(
+  const formattedData = await PreviewPresenter(
     contactHashId,
     session.noticeType,
     notification,
@@ -46,15 +46,15 @@ function _notification(recipient, session, licenceMonitoringStationId) {
   let notification
 
   if (session.noticeType === NoticeType.ABSTRACTION_ALERTS) {
-    const unfilteredNotifications = AbstractionAlertNotificationsPresenter.go(session, [recipient], null)
+    const unfilteredNotifications = AbstractionAlertNotificationsPresenter(session, [recipient], null)
 
     notification = unfilteredNotifications.find((unfilteredNotification) => {
       return unfilteredNotification.personalisation.licenceGaugingStationId === licenceMonitoringStationId
     })
   } else if (session.noticeType === NoticeType.RENEWAL_INVITATIONS) {
-    notification = RenewalInvitationNotificationsPresenter.go(session, [recipient], null)[0]
+    notification = RenewalInvitationNotificationsPresenter(session, [recipient], null)[0]
   } else {
-    notification = ReturnsNoticeNotificationsPresenter.go(session, [recipient], null)[0]
+    notification = ReturnsNoticeNotificationsPresenter(session, [recipient], null)[0]
   }
 
   return notification

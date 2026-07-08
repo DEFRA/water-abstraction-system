@@ -15,7 +15,7 @@ import { formatEmail, formatLongDate } from '../base.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(company, companyContact, licences) {
+export default function go(company, companyContact, licences) {
   return {
     additionalContact: companyContact.licenceRole.name === 'additionalContact',
     backLink: {
@@ -87,9 +87,4 @@ function _warning(licences) {
     text: 'One or more licences for abstraction alerts have ended. No alerts will be sent for these.',
     iconFallbackText: 'Warning'
   }
-}
-
-export { go }
-export default {
-  go
 }

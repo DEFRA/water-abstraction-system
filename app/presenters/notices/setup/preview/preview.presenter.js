@@ -21,7 +21,14 @@ import { sentenceCase } from '../../../base.presenter.js'
  *
  * @returns {Promise<object>} The data formatted for the preview page
  */
-async function go(contactHashId, noticeType, notification, sessionId, licenceMonitoringStationId, referenceCode) {
+export default async function go(
+  contactHashId,
+  noticeType,
+  notification,
+  sessionId,
+  licenceMonitoringStationId,
+  referenceCode
+) {
   const { messageRef, messageType, personalisation, recipient, templateId } = notification
 
   return {
@@ -73,9 +80,4 @@ function _refreshPageLink(contactHashId, noticeType, licenceMonitoringStationId,
   }
 
   return baseRefreshPageLink
-}
-
-export { go }
-export default {
-  go
 }

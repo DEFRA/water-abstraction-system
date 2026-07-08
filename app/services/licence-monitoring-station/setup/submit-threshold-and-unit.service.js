@@ -60,7 +60,7 @@ function _submittedSessionData(session, payload) {
   session.threshold = payload.threshold ?? null
   session.unit = payload.unit ?? null
 
-  return ThresholdAndUnitPresenter.go(session)
+  return ThresholdAndUnitPresenter(session)
 }
 
 function _validate(payload) {

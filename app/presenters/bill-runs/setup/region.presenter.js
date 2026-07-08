@@ -11,7 +11,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, regions) {
+export default function go(session, regions) {
   return {
     backlink: `/system/bill-runs/setup/${session.id}/type`,
     pageTitle: 'Select the region',
@@ -19,9 +19,4 @@ function go(session, regions) {
     sessionId: session.id,
     selectedRegion: session.region ? session.region : null
   }
-}
-
-export { go }
-export default {
-  go
 }

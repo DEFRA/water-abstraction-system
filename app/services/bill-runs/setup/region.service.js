@@ -21,7 +21,7 @@ export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
   const regions = await FetchRegionsService()
 
-  const formattedData = RegionPresenter.go(session, regions)
+  const formattedData = RegionPresenter(session, regions)
 
   return {
     activeNavBar: 'bill-runs',

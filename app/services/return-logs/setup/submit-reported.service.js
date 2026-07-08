@@ -42,7 +42,7 @@ export default async function go(sessionId, payload, yar) {
     }
   }
 
-  const pageData = ReportedPresenter.go(session)
+  const pageData = ReportedPresenter(session)
 
   return {
     error,

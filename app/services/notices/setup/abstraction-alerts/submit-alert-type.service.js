@@ -30,7 +30,7 @@ export default async function go(sessionId, payload) {
 
   session.alertType = payload.alertType
 
-  const pageData = AlertTypePresenter.go(session)
+  const pageData = AlertTypePresenter(session)
 
   return {
     activeNavBar: 'notices',

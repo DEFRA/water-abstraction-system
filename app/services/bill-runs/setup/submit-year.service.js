@@ -43,7 +43,7 @@ export default async function go(sessionId, payload) {
   const twoPartTariffSupplementary = session.type === 'two_part_supplementary'
   const licenceSupplementaryYears = await FetchLicenceSupplementaryYearsService(regionId, twoPartTariffSupplementary)
 
-  const pageData = YearPresenter.go(licenceSupplementaryYears, session)
+  const pageData = YearPresenter(licenceSupplementaryYears, session)
 
   return {
     activeNavBar: 'bill-runs',

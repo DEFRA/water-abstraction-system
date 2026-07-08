@@ -13,7 +13,7 @@ import NotificationsTablePresenter from '../notifications-table.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(user, notifications) {
+export default function go(user, notifications) {
   const { id, username } = user
 
   return {
@@ -21,13 +21,8 @@ function go(user, notifications) {
       href: '/system/users',
       text: 'Go back to users'
     },
-    notifications: NotificationsTablePresenter.go(notifications, id, 'internal'),
+    notifications: NotificationsTablePresenter(notifications, id, 'internal'),
     pageTitle: 'Communications',
     pageTitleCaption: username
   }
-}
-
-export { go }
-export default {
-  go
 }

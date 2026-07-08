@@ -18,7 +18,7 @@ export default async function go(sessionId) {
 
   const { removeLicences = [] } = session
 
-  const formattedData = RemoveLicencesPresenter.go(removeLicences, session)
+  const formattedData = RemoveLicencesPresenter(removeLicences, session)
 
   return {
     activeNavBar: 'notices',

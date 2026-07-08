@@ -46,7 +46,7 @@ export default async function go(sessionId, payload, yar) {
 
   session.licenceRef = payload.licenceRef
 
-  const pageData = LicencePresenter.go(session)
+  const pageData = LicencePresenter(session)
 
   return {
     activeNavBar: 'notices',

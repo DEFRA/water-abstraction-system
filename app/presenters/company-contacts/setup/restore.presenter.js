@@ -12,7 +12,7 @@ import { titleCase } from '../../base.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { company, email, name, abstractionAlerts } = session
 
   return {
@@ -26,9 +26,4 @@ function go(session) {
     pageTitle: 'You are about to restore this contact',
     pageTitleCaption: company.name
   }
-}
-
-export { go }
-export default {
-  go
 }

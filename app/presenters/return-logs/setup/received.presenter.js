@@ -13,7 +13,7 @@ import { today } from '../../../lib/general.lib.js'
  *
  * @returns {object} page data needed by the view template
  */
-function go(session) {
+export default function go(session) {
   const {
     id: sessionId,
     returnReference,
@@ -52,9 +52,4 @@ function _yesterdaysDate() {
   yesterdaysDate.setDate(yesterdaysDate.getDate() - 1)
 
   return formatLongDate(yesterdaysDate)
-}
-
-export { go }
-export default {
-  go
 }

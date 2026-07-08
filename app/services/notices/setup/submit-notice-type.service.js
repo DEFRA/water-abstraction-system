@@ -41,7 +41,7 @@ export default async function go(sessionId, payload, yar, auth) {
     return _redirect(session.journey, hasBeenVisited, noticeTypeChanged)
   }
 
-  const pageData = NoticeTypePresenter.go(session, auth)
+  const pageData = NoticeTypePresenter(session, auth)
 
   return {
     activeNavBar: 'notices',
