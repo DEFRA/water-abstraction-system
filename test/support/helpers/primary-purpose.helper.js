@@ -20,19 +20,10 @@ import { data as primaryPurposes } from '../../../db/seeds/data/primary-purposes
  *
  * @returns {module:PrimaryPurposeModel} The selected reference entry or one picked at random
  */
-function select(index = -1) {
+export function select(index = -1) {
   if (index > -1) {
     return PrimaryPurposeModel.fromJson(primaryPurposes[index])
   }
 
   return PrimaryPurposeModel.fromJson(selectRandomEntry(primaryPurposes))
-}
-
-export {
-  primaryPurposes as data,
-  select
-}
-export default {
-  data: primaryPurposes,
-  select
 }

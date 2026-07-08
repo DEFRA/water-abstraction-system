@@ -30,7 +30,7 @@ import { generateReference } from './return-requirement.helper.js'
  *
  * @returns {Promise<module:ReturnLogModel>} The instance of the newly created record
  */
-function add(data = {}) {
+export function add(data = {}) {
   const insertData = defaults(data)
 
   return ReturnLogModel.query()
@@ -48,7 +48,7 @@ function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults(data = {}) {
+export function defaults(data = {}) {
   const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
   const returnReference = data.returnReference ? data.returnReference : generateReference()
   const timestamp = timestampForPostgres()
@@ -118,7 +118,7 @@ function defaults(data = {}) {
  *
  * @returns {string} the generated return log ID
  */
-function generateReturnId(
+export function generateReturnId(
   startDate = new Date('2022-04-01'),
   endDate = new Date('2023-03-31'),
   version = 1,
@@ -147,7 +147,7 @@ function generateReturnId(
  * @returns {Promise<boolean>} - A promise that resolves to true if the return logs are continuous,
  * or false otherwise.
  */
-async function hasContinuousReturnLogs(licenceReference) {
+export async function hasContinuousReturnLogs(licenceReference) {
   const returnLogs = await ReturnLogModel.query()
     .select(['endDate', 'startDate'])
     .where('licenceRef', licenceReference)
@@ -175,17 +175,4 @@ function _areDatesSequential(endDate, startDate) {
   const differenceInDays = differenceInMs / (24 * 60 * 60 * 1000)
 
   return differenceInDays <= 1
-}
-
-export {
-  add,
-  defaults,
-  generateReturnId,
-  hasContinuousReturnLogs
-}
-export default {
-  add,
-  defaults,
-  generateReturnId,
-  hasContinuousReturnLogs
 }

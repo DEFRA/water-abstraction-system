@@ -20,19 +20,10 @@ import { data as purposes } from '../../../db/seeds/data/purposes.js'
  *
  * @returns {module:PurposeModel} The selected reference entry or one picked at random
  */
-function select(index = -1) {
+export function select(index = -1) {
   if (index > -1) {
     return PurposeModel.fromJson(purposes[index])
   }
 
   return PurposeModel.fromJson(selectRandomEntry(purposes))
-}
-
-export {
-  purposes as data,
-  select
-}
-export default {
-  data: purposes,
-  select
 }

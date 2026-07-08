@@ -20,19 +20,10 @@ import { data as groupRoles } from '../../../db/seeds/data/group-roles.js'
  *
  * @returns {module:GroupRoleModel} The selected reference entry or one picked at random
  */
-function select(index = -1) {
+export function select(index = -1) {
   if (index > -1) {
     return GroupRoleModel.fromJson(groupRoles[index])
   }
 
   return GroupRoleModel.fromJson(selectRandomEntry(groupRoles))
-}
-
-export {
-  groupRoles as data,
-  select
-}
-export default {
-  data: groupRoles,
-  select
 }

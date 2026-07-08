@@ -10,9 +10,9 @@ import { data as users } from '../../../db/seeds/data/users.js'
 /**
  * List of attributes to skip when comparing user records in tests
  */
-const SKIP_COMPARE_LIST = Object.freeze(['createdAt', 'licenceEntityId', 'password', 'updatedAt', 'userData'])
+export const SKIP_COMPARE_LIST = Object.freeze(['createdAt', 'licenceEntityId', 'password', 'updatedAt', 'userData'])
 
-const DEFAULT_INDEX = 4
+export const DEFAULT_INDEX = 4
 
 /**
  * Add a new user
@@ -30,7 +30,7 @@ const DEFAULT_INDEX = 4
  *
  * @returns {Promise<module:UserModel>} The instance of the newly created record
  */
-function add(data = {}) {
+export function add(data = {}) {
   const insertData = defaults(data)
 
   // Overwrite the current password with the hashed version we want to persist unless it's set to 'VOID'
@@ -53,7 +53,7 @@ function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults(data = {}) {
+export function defaults(data = {}) {
   const defaults = {
     username: generateUserName(),
     password: 'P@55word',
@@ -73,7 +73,7 @@ function defaults(data = {}) {
  *
  * @returns {number} a random integer between 100011 and 199999
  */
-function generateUserId() {
+export function generateUserId() {
   // The last ID in the pre-seeded users is 100010
   return generateRandomInteger(100011, 199999)
 }
@@ -83,7 +83,7 @@ function generateUserId() {
  *
  * @returns {string} a random user name in the format [random UUID]@wrls.gov.uk
  */
-function generateUserName() {
+export function generateUserName() {
   return `${generateUUID()}@wrls.gov.uk`
 }
 
@@ -101,31 +101,10 @@ function generateUserName() {
  *
  * @returns {module:UserModel} The selected reference entry or one picked at random
  */
-function select(index = -1) {
+export function select(index = -1) {
   if (index > -1) {
     return UserModel.fromJson(users[index])
   }
 
   return UserModel.fromJson(selectRandomEntry(users))
-}
-
-export {
-  add,
-  users as data,
-  DEFAULT_INDEX,
-  defaults,
-  generateUserId,
-  generateUserName,
-  select,
-  SKIP_COMPARE_LIST
-}
-export default {
-  add,
-  data: users,
-  DEFAULT_INDEX,
-  defaults,
-  generateUserId,
-  generateUserName,
-  select,
-  SKIP_COMPARE_LIST
 }

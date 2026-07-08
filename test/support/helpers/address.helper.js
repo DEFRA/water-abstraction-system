@@ -25,7 +25,7 @@ import { generateRandomInteger } from '../../../app/lib/general.lib.js'
  *
  * @returns {module:AddressModel} The instance of the newly created record
  */
-function add(data = {}) {
+export function add(data = {}) {
   const insertData = defaults(data)
 
   return AddressModel.query()
@@ -43,7 +43,7 @@ function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults(data = {}) {
+export function defaults(data = {}) {
   const defaults = {
     address1: 'ENVIRONMENT AGENCY',
     address2: 'HORIZON HOUSE',
@@ -69,7 +69,7 @@ function defaults(data = {}) {
  *
  * @returns {string} - The md5 'hash ID' of the contact name and address
  */
-function generateContactHashId(contactName, address) {
+export function generateContactHashId(contactName, address) {
   const addressLine1 = address.addressLine1
   const addressLine2 = address.addressLine2 ?? ''
   const addressLine3 = address.addressLine3 ?? ''
@@ -87,7 +87,7 @@ function generateContactHashId(contactName, address) {
  *
  * @returns {string} - A random UPRN
  */
-function generateUprn() {
+export function generateUprn() {
   return generateRandomInteger(100, 999999)
 }
 
@@ -98,24 +98,9 @@ function generateUprn() {
  *
  * @returns {string} - A random external id
  */
-function generateExternalId() {
+export function generateExternalId() {
   const regionCode = generateRandomInteger(1, 9)
   const addressId = generateRandomInteger(100, 99998)
 
   return `${regionCode}:${addressId}`
-}
-
-export {
-  add,
-  defaults,
-  generateContactHashId,
-  generateUprn,
-  generateExternalId
-}
-export default {
-  add,
-  defaults,
-  generateContactHashId,
-  generateUprn,
-  generateExternalId
 }

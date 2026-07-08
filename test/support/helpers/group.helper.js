@@ -20,19 +20,10 @@ import { data as groups } from '../../../db/seeds/data/groups.js'
  *
  * @returns {module:GroupModel} The selected reference entry or one picked at random
  */
-function select(index = -1) {
+export function select(index = -1) {
   if (index > -1) {
     return GroupModel.fromJson(groups[index])
   }
 
   return GroupModel.fromJson(selectRandomEntry(groups))
-}
-
-export {
-  groups as data,
-  select
-}
-export default {
-  data: groups,
-  select
 }

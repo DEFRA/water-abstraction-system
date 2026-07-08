@@ -20,19 +20,10 @@ import { selectRandomEntry } from '../general.js'
  *
  * @returns {module:ChargeReasonModel} The selected reference entry or one picked at random
  */
-function select(index = -1) {
+export function select(index = -1) {
   if (index > -1) {
     return ChargeReasonModel.fromJson(changeReasons[index])
   }
 
   return ChargeReasonModel.fromJson(selectRandomEntry(changeReasons))
-}
-
-export {
-  changeReasons as data,
-  select
-}
-export default {
-  data: changeReasons,
-  select
 }

@@ -17,7 +17,7 @@ import ChargeVersionNoteModel from '../../../app/models/charge-version-note.mode
  *
  * @returns {Promise<module:NoteModel>} The instance of the newly created record
  */
-function add(data = {}) {
+export function add(data = {}) {
   const insertData = defaults(data)
 
   return ChargeVersionNoteModel.query()
@@ -35,7 +35,7 @@ function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults(data = {}) {
+export function defaults(data = {}) {
   const defaults = {
     note: 'This is a test note',
     userId: generateUserId()
@@ -45,13 +45,4 @@ function defaults(data = {}) {
     ...defaults,
     ...data
   }
-}
-
-export {
-  add,
-  defaults
-}
-export default {
-  add,
-  defaults
 }

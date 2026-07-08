@@ -34,7 +34,7 @@ import SecondaryPurposeHelper from './secondary-purpose.helper.js'
  *
  * @returns {Promise<module:ChargeElementModel>} The instance of the newly created record
  */
-function add(data = {}) {
+export function add(data = {}) {
   const insertData = defaults(data)
 
   return ChargeElementModel.query()
@@ -52,7 +52,7 @@ function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults(data = {}) {
+export function defaults(data = {}) {
   const { id: purposeId } = PurposeHelper.select()
   const { id: purposePrimaryId } = PrimaryPurposeHelper.select()
   const { id: purposeSecondaryId } = SecondaryPurposeHelper.select()
@@ -80,13 +80,4 @@ function defaults(data = {}) {
     ...defaults,
     ...data
   }
-}
-
-export {
-  add,
-  defaults
-}
-export default {
-  add,
-  defaults
 }

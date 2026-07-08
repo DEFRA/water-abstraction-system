@@ -24,7 +24,7 @@ import ModLogModel from '../../../app/models/mod-log.model.js'
  *
  * @returns {Promise<module:ModLogModel>} The instance of the newly created record
  */
-function add(data = {}) {
+export function add(data = {}) {
   const insertData = defaults(data)
 
   return ModLogModel.query()
@@ -42,7 +42,7 @@ function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults(data = {}) {
+export function defaults(data = {}) {
   const regionCode = randomRegionCode()
 
   const defaults = {
@@ -71,19 +71,8 @@ function defaults(data = {}) {
  *
  * @returns {string} The generated external ID
  */
-function generateRegionNaldPatternExternalId(regionCode = null) {
+export function generateRegionNaldPatternExternalId(regionCode = null) {
   const regionCodeToUse = regionCode ?? generateRandomInteger(1, 9)
 
   return `${regionCodeToUse}:${generateRandomInteger(100, 99999)}`
-}
-
-export {
-  add,
-  defaults,
-  generateRegionNaldPatternExternalId
-}
-export default {
-  add,
-  defaults,
-  generateRegionNaldPatternExternalId
 }

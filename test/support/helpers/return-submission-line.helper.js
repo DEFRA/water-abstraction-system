@@ -25,7 +25,7 @@ import ReturnSubmissionLineModel from '../../../app/models/return-submission-lin
  *
  * @returns {Promise<module:ReturnSubmissionLineModel>} The instance of the newly created record
  */
-function add(data = {}) {
+export function add(data = {}) {
   const insertData = defaults(data)
 
   return ReturnSubmissionLineModel.query()
@@ -43,7 +43,7 @@ function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults(data = {}) {
+export function defaults(data = {}) {
   const defaults = {
     id: generateUUID(),
     returnSubmissionId: generateUUID(),
@@ -67,13 +67,4 @@ function defaults(data = {}) {
     ...defaults,
     ...data
   }
-}
-
-export {
-  add,
-  defaults
-}
-export default {
-  add,
-  defaults
 }
