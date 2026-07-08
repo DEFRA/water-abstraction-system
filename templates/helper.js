@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars, no-undef */
+/* eslint-disable no-unused-vars */
 
 // Controller code
 import __SERVICE_NAME__ from '__SERVICE_PATH__'
