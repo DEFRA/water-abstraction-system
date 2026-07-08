@@ -24,7 +24,7 @@ import LicenceVersionHelper from '../helpers/licence-version.helper.js'
  *
  * @returns {Promise<object>} an object containing all records related to an additional contact
  */
-async function additionalContact(
+export async function additionalContact(
   licenceHolderSeedData,
   additionalContactSeedData = null,
   abstractionAlerts = true,
@@ -73,7 +73,7 @@ async function additionalContact(
  * @param licenceVersionEndDate
  * @returns {Promise<object>} an object containing all records related to a licence holder
  */
-async function licenceHolder(licenceSeedData, name, existingRegionId = null, licenceVersionEndDate = null) {
+export async function licenceHolder(licenceSeedData, name, existingRegionId = null, licenceVersionEndDate = null) {
   const regionId = existingRegionId || licenceSeedData.licence.regionId
 
   const company = await CompanyHelper.add({
@@ -124,7 +124,7 @@ async function licenceHolder(licenceSeedData, name, existingRegionId = null, lic
  *
  * @returns {Promise<object>} an object containing all records related to a primary user
  */
-async function primaryUser(licenceSeedData, email) {
+export async function primaryUser(licenceSeedData, email) {
   const individualEntity = await LicenceEntityHelper.add({ name: email, type: 'individual' })
 
   const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
@@ -162,7 +162,7 @@ async function primaryUser(licenceSeedData, email) {
  *
  * @returns {Promise<object>} an object containing all records related to a 'returnsTo'
  */
-async function returnsTo(licenceSeedData, licenceHolderSeedData, name) {
+export async function returnsTo(licenceSeedData, licenceHolderSeedData, name) {
   let company = licenceHolderSeedData.company
   let address = licenceHolderSeedData.address
 
@@ -217,7 +217,7 @@ async function returnsTo(licenceSeedData, licenceHolderSeedData, name) {
  *
  * @returns {Promise<object>} an object containing all records related to a returns user
  */
-async function returnsUser(licenceSeedData, email) {
+export async function returnsUser(licenceSeedData, email) {
   const individualEntity = await LicenceEntityHelper.add({ name: email, type: 'individual' })
   const licenceEntityRole = await LicenceEntityRoleHelper.add({
     companyEntityId: licenceSeedData.licenceDocumentHeader.companyEntityId,
@@ -233,19 +233,4 @@ async function returnsUser(licenceSeedData, email) {
       await licenceEntityRole.$query().delete()
     }
   }
-}
-
-export {
-  additionalContact,
-  licenceHolder,
-  primaryUser,
-  returnsTo,
-  returnsUser
-}
-export default {
-  additionalContact,
-  licenceHolder,
-  primaryUser,
-  returnsTo,
-  returnsUser
 }

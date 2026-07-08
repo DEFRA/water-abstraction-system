@@ -33,7 +33,7 @@ const { generateLicenceVersionPurposeExternalId } = LicenceVersionPurposeHelper
  *
  * @returns {Promise<object>} all the named IDs for then seeded records in an object
  */
-async function seed(optionalLicenceRef = undefined) {
+export async function seed(optionalLicenceRef = undefined) {
   const records = {}
 
   let licenceRef = generateLicenceRef()
@@ -176,11 +176,4 @@ async function _purposes() {
     primaryPurposes: { primaryAgricultureId, primaryElectricityId },
     secondaryPurposes: { secondaryAgricultureId, secondaryElectricityId }
   }
-}
-
-export {
-  seed
-}
-export default {
-  seed
 }

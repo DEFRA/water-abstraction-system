@@ -20,7 +20,7 @@ const { generateLicenceRef } = LicenceHelper
  *
  * @returns {Promise<object>} an object containing all records related to a licence
  */
-async function seed(existingLicenceRef = null, existingRegionId = null, expiredDate = null) {
+export async function seed(existingLicenceRef = null, existingRegionId = null, expiredDate = null) {
   // Set the defaults
   const regionId = existingRegionId ?? RegionHelper.select().id
   const licenceRef = existingLicenceRef ?? generateLicenceRef()
@@ -49,11 +49,4 @@ async function seed(existingLicenceRef = null, existingRegionId = null, expiredD
       await licenceDocumentHeader.$query().delete()
     }
   }
-}
-
-export {
-  seed
-}
-export default {
-  seed
 }
