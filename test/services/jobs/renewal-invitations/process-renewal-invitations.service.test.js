@@ -38,7 +38,7 @@ describe('Jobs - Renewal Invitations - Process Renewal Invitations service', () 
 
     const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-    expect(notifierStub.omg).toHaveBeenCalledWith('Renewals invitation status job complete')
+    expect(notifierStub.omg).toHaveBeenCalledWith('Renewals invitation status job complete', expect.any(Object))
     expect(logDataArg.timeTakenMs).toBeDefined()
     expect(logDataArg.timeTakenSs).toBeDefined()
     expect(logDataArg.count).toEqual(1)

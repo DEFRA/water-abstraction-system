@@ -73,7 +73,7 @@ describe('Notifications - Process Returned Letter service', () => {
 
       const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-      expect(notifierStub.omg).toHaveBeenCalledWith('Returned letter complete')
+      expect(notifierStub.omg).toHaveBeenCalledWith('Returned letter complete', expect.any(Object))
       expect(logDataArg.timeTakenMs).toBeDefined()
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.payload).toEqual(payload)
@@ -97,7 +97,7 @@ describe('Notifications - Process Returned Letter service', () => {
 
       const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-      expect(notifierStub.omg).toHaveBeenCalledWith('Returned letter complete')
+      expect(notifierStub.omg).toHaveBeenCalledWith('Returned letter complete', expect.any(Object))
       expect(logDataArg.timeTakenMs).toBeDefined()
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.payload).toEqual(payload)
@@ -124,7 +124,7 @@ describe('Notifications - Process Returned Letter service', () => {
 
       const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-      expect(notifierStub.omfg).toHaveBeenCalledWith('Returned letter failed')
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Returned letter failed', expect.any(Object))
       expect(errorLogArgs[1]).toEqual(payload)
       expect(errorLogArgs[2]).toBeInstanceOf(Error)
     })

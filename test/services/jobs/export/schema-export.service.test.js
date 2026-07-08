@@ -80,7 +80,7 @@ describe('Schema export service', () => {
 
       await SchemaExportService('water')
 
-      expect(notifierStub.omfg).toHaveBeenCalledWith('Error: Failed to export schema water')
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Error: Failed to export schema water', expect.any(Object))
       expect(SendToS3BucketService.default).not.toHaveBeenCalled()
       expect(CompressSchemaFolderService.default).not.toHaveBeenCalled()
     })

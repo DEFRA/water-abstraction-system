@@ -126,7 +126,7 @@ describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
 
       const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-      expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed')
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed', expect.any(Object))
       expect(errorLogArgs[1]).toEqual({ job: 'clean-incomplete-company-contacts' })
       expect(errorLogArgs[2]).toBeInstanceOf(Error)
     })

@@ -66,7 +66,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete', expect.any(Object))
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -97,7 +97,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete', expect.any(Object))
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -136,7 +136,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete', expect.any(Object))
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -166,7 +166,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete', expect.any(Object))
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -205,7 +205,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete', expect.any(Object))
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -235,7 +235,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete', expect.any(Object))
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -280,7 +280,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete', expect.any(Object))
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -310,7 +310,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete', expect.any(Object))
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -347,7 +347,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService(payload)
           const logDataArg = notifierStub.omg.mock.calls[0][1]
-          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete', expect.any(Object))
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -375,7 +375,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService(payload)
           const logDataArg = notifierStub.omg.mock.calls[0][1]
-          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete', expect.any(Object))
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -414,7 +414,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete', expect.any(Object))
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -444,7 +444,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
           const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete', expect.any(Object))
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()

@@ -119,7 +119,7 @@ describe('Fetch Bills To Be Reissued service', () => {
       // Force an error by calling the service with an invalid uuid
       await FetchBillsToBeReissuedService('NOT_A_UUID')
 
-      expect(notifierStub.omfg).toHaveBeenCalledWith('Could not fetch reissue bills')
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Could not fetch reissue bills', expect.any(Object))
     })
 
     it('returns an empty array', async () => {

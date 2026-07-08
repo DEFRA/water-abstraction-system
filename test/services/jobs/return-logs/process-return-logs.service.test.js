@@ -50,7 +50,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
         const logDataArg = notifierStub.omg.mock.calls[0][1]
 
         expect(CreateReturnLogsService.default).toHaveBeenCalled()
-        expect(notifierStub.omg).toHaveBeenCalledWith('Return logs job complete')
+        expect(notifierStub.omg).toHaveBeenCalledWith('Return logs job complete', expect.any(Object))
         expect(logDataArg.timeTakenMs).toBeDefined()
         expect(logDataArg.timeTakenSs).toBeDefined()
         expect(logDataArg.count).toEqual(1)
@@ -71,7 +71,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
         const logDataArg = notifierStub.omg.mock.calls[0][1]
 
         expect(CreateReturnLogsService.default).toHaveBeenCalled()
-        expect(notifierStub.omg).toHaveBeenCalledWith('Return logs job complete')
+        expect(notifierStub.omg).toHaveBeenCalledWith('Return logs job complete', expect.any(Object))
         expect(logDataArg.timeTakenMs).toBeDefined()
         expect(logDataArg.timeTakenSs).toBeDefined()
         expect(logDataArg.count).toEqual(1)
@@ -89,7 +89,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
 
         const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-        expect(notifierStub.omg).toHaveBeenCalledWith('Return logs job complete')
+        expect(notifierStub.omg).toHaveBeenCalledWith('Return logs job complete', expect.any(Object))
         expect(logDataArg.timeTakenMs).toBeDefined()
         expect(logDataArg.timeTakenSs).toBeDefined()
         expect(logDataArg.count).toEqual(0)

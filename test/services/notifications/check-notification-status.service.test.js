@@ -1376,7 +1376,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-      expect(notifierStub.omfg).toHaveBeenCalledWith('Check notification status failed')
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Check notification status failed', expect.any(Object))
       expect(errorLogArgs[1]).toEqual({
         notifyId: notification.notifyId,
         response: {
@@ -1427,7 +1427,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-      expect(notifierStub.omfg).toHaveBeenCalledWith('Check notification status failed')
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Check notification status failed', expect.any(Object))
       expect(errorLogArgs[1]).toEqual(notification)
       expect(errorLogArgs[2]).toEqual(error)
     })

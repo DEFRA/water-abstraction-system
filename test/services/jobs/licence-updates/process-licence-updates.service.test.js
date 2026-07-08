@@ -71,7 +71,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
 
       const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-      expect(notifierStub.omg).toHaveBeenCalledWith('Licence updates job complete')
+      expect(notifierStub.omg).toHaveBeenCalledWith('Licence updates job complete', expect.any(Object))
       expect(logDataArg.timeTakenMs).toBeDefined()
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.count).toBeDefined()
@@ -100,7 +100,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
 
       const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-      expect(notifierStub.omg).toHaveBeenCalledWith('Licence updates job complete')
+      expect(notifierStub.omg).toHaveBeenCalledWith('Licence updates job complete', expect.any(Object))
       expect(logDataArg.timeTakenMs).toBeDefined()
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.count).toBeDefined()
