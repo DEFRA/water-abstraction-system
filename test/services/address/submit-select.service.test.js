@@ -1,20 +1,18 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../support/stubs/session.stub.js')
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import SessionModelStub from '../../support/stubs/session.stub.js'
+import http2 from 'node:http2'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../app/dal/fetch-session.dal.js')
-const LookupPostcodeRequest = require('../../../app/requests/address-facade/lookup-postcode.request.js')
-const LookupUPRNRequest = require('../../../app/requests/address-facade/lookup-uprn.request.js')
+import FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
+import * as LookupPostcodeRequest from '../../../app/requests/address-facade/lookup-postcode.request.js'
+import * as LookupUPRNRequest from '../../../app/requests/address-facade/lookup-uprn.request.js'
 
 // Thing under test
-const SubmitSelectService = require('../../../app/services/address/submit-select.service.js')
+import SubmitSelectService from '../../../app/services/address/submit-select.service.js'
 
 describe('Address - Submit Select Service', () => {
   const match = {
@@ -53,16 +51,17 @@ describe('Address - Submit Select Service', () => {
       }
     }
 
-    lookupPostcodeRequestStub = Sinon.stub(LookupPostcodeRequest, 'send')
-    lookupUPRNRequestStub = Sinon.stub(LookupUPRNRequest, 'send')
+    lookupPostcodeRequestStub = vi.spyOn(LookupPostcodeRequest, 'send').mockImplementation(() => {})
+    lookupUPRNRequestStub = vi.spyOn(LookupUPRNRequest, 'send').mockImplementation(() => {})
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -71,7 +70,7 @@ describe('Address - Submit Select Service', () => {
         beforeEach(() => {
           payload = { addresses: '340116' }
 
-          lookupUPRNRequestStub.resolves({
+          lookupUPRNRequestStub.mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: HTTP_STATUS_OK,
@@ -112,7 +111,7 @@ describe('Address - Submit Select Service', () => {
             organisation: null
           }
 
-          lookupUPRNRequestStub.resolves({
+          lookupUPRNRequestStub.mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: HTTP_STATUS_OK,
@@ -153,7 +152,7 @@ describe('Address - Submit Select Service', () => {
             premises: null
           }
 
-          lookupUPRNRequestStub.resolves({
+          lookupUPRNRequestStub.mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: HTTP_STATUS_OK,
@@ -194,7 +193,7 @@ describe('Address - Submit Select Service', () => {
             street_address: null
           }
 
-          lookupUPRNRequestStub.resolves({
+          lookupUPRNRequestStub.mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: HTTP_STATUS_OK,
@@ -235,7 +234,7 @@ describe('Address - Submit Select Service', () => {
             locality: null
           }
 
-          lookupUPRNRequestStub.resolves({
+          lookupUPRNRequestStub.mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: HTTP_STATUS_OK,
@@ -269,7 +268,7 @@ describe('Address - Submit Select Service', () => {
         beforeEach(() => {
           payload = { addresses: '340116' }
 
-          lookupUPRNRequestStub.resolves({
+          lookupUPRNRequestStub.mockResolvedValue({
             succeeded: false,
             response: {
               statusCode: HTTP_STATUS_NOT_FOUND,
@@ -297,7 +296,7 @@ describe('Address - Submit Select Service', () => {
 
       describe('but the UPRN lookup _now_ returns no matches', () => {
         beforeEach(() => {
-          lookupUPRNRequestStub.resolves({
+          lookupUPRNRequestStub.mockResolvedValue({
             succeeded: true,
             response: {
               statusCode: HTTP_STATUS_OK,
@@ -329,7 +328,7 @@ describe('Address - Submit Select Service', () => {
 
         describe('and the postcode lookup succeeds', () => {
           beforeEach(() => {
-            lookupPostcodeRequestStub.resolves({
+            lookupPostcodeRequestStub.mockResolvedValue({
               succeeded: true,
               response: {
                 statusCode: HTTP_STATUS_OK,
@@ -380,7 +379,7 @@ describe('Address - Submit Select Service', () => {
 
         describe('but the postcode lookup fails', () => {
           beforeEach(() => {
-            lookupPostcodeRequestStub.resolves({
+            lookupPostcodeRequestStub.mockResolvedValue({
               succeeded: false,
               response: {
                 statusCode: HTTP_STATUS_NOT_FOUND,
@@ -401,7 +400,7 @@ describe('Address - Submit Select Service', () => {
 
         describe('but the postcode lookup _now_ returns no matches', () => {
           beforeEach(() => {
-            lookupPostcodeRequestStub.resolves({
+            lookupPostcodeRequestStub.mockResolvedValue({
               succeeded: true,
               response: {
                 statusCode: HTTP_STATUS_OK,

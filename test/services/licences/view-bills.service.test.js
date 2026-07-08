@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 
 // Things we need to stub
-const FetchBillsService = require('../../../app/services/licences/fetch-bills.service.js')
-const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
+import FetchBillsService from '../../../app/services/licences/fetch-bills.service.js'
+import FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
 
 // Thing under test
-const ViewBillsService = require('../../../app/services/licences/view-bills.service.js')
+import ViewBillsService from '../../../app/services/licences/view-bills.service.js'
 
 describe('Licences - View Bills service', () => {
   let auth
@@ -33,19 +30,21 @@ describe('Licences - View Bills service', () => {
     licenceId = generateUUID()
     licenceRef = generateLicenceRef()
 
-    Sinon.stub(FetchLicenceService, 'go').returns({
+    vi.mock('../../../app/services/licences/fetch-licence.service.js')
+    FetchLicenceService.mockReturnValue({
       id: licenceId,
       licenceRef
     })
 
-    Sinon.stub(FetchBillsService, 'go').returns({
+    vi.mock('../../../app/services/licences/fetch-bills.service.js')
+    FetchBillsService.mockReturnValue({
       bills: [],
       totalNumber: 1
     })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when a bill', () => {

@@ -1,19 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const CRMContactsSeeder = require('../../support/seeders/crm-contacts.seeder.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
+import CRMContactsSeeder from '../../support/seeders/crm-contacts.seeder.js'
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import * as LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const databaseConfig = require('../../../config/database.config.js')
+import databaseConfig from '../../../config/database.config.js'
 
 // Thing under test
-const FetchLicencesDal = require('../../../app/dal/companies/fetch-licences.dal.js')
+import FetchLicencesDal from '../../../app/dal/companies/fetch-licences.dal.js'
 
 describe('Companies - Fetch Licences dal', () => {
   let anotherLicence
@@ -77,11 +74,11 @@ describe('Companies - Fetch Licences dal', () => {
 
     // NOTE: We set the default page size to 1000 to ensure we get all records and avoid failed tests when run as
     // part of the full suite, and the risk our test record is returned in the second page of results.
-    Sinon.stub(databaseConfig, 'defaultPageSize').value(1000)
+    vi.replaceProperty(databaseConfig, 'defaultPageSize', 1000)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {

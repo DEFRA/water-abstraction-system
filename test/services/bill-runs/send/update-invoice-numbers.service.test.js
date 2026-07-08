@@ -1,48 +1,48 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
-const BillModel = require('../../../../app/models/bill.model.js')
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const ExpandedError = require('../../../../app/errors/expanded.error.js')
+import BillModel from '../../../../app/models/bill.model.js'
+import BillRunModel from '../../../../app/models/bill-run.model.js'
+import ExpandedError from '../../../../app/errors/expanded.error.js'
 
 // Things we need to stub
-const ChargingModuleSendBillRunRequest = require('../../../../app/requests/charging-module/send-bill-run.request.js')
-const ChargingModuleViewBillRunRequest = require('../../../../app/requests/charging-module/view-bill-run.request.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
-const UnflagBilledSupplementaryLicencesService = require('../../../../app/services/bill-runs/unflag-billed-supplementary-licences.service.js')
+import * as ChargingModuleSendBillRunRequest from '../../../../app/requests/charging-module/send-bill-run.request.js'
+import * as ChargingModuleViewBillRunRequest from '../../../../app/requests/charging-module/view-bill-run.request.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import UnflagBilledSupplementaryLicencesService from '../../../../app/services/bill-runs/unflag-billed-supplementary-licences.service.js'
 
 // Thing under test
-const UpdateInvoiceNumbersService = require('../../../../app/services/bill-runs/send/update-invoice-numbers.service.js')
+import UpdateInvoiceNumbersService from '../../../../app/services/bill-runs/send/update-invoice-numbers.service.js'
 
 describe('Bill Runs - Send - Update Invoice Numbers service', () => {
   let billRun
   let chargingModuleSendBillRunRequestStub
   let chargingModuleViewBillRunRequestStub
   let notifierStub
-  let unflagBilledLicencesServiceStub
-
   let billPatchStub
   let billRunPatchStub
 
   beforeEach(async () => {
-    chargingModuleSendBillRunRequestStub = Sinon.stub(ChargingModuleSendBillRunRequest, 'send')
-    chargingModuleViewBillRunRequestStub = Sinon.stub(ChargingModuleViewBillRunRequest, 'send')
-    unflagBilledLicencesServiceStub = Sinon.stub(UnflagBilledSupplementaryLicencesService, 'go').resolves()
+    chargingModuleSendBillRunRequestStub = vi
+      .spyOn(ChargingModuleSendBillRunRequest, 'send')
+      .mockImplementation(() => {})
+    chargingModuleViewBillRunRequestStub = vi
+      .spyOn(ChargingModuleViewBillRunRequest, 'send')
+      .mockImplementation(() => {})
+    vi.mock('../../../../app/services/bill-runs/unflag-billed-supplementary-licences.service.js')
+    UnflagBilledSupplementaryLicencesService.mockResolvedValue()
 
-    billPatchStub = Sinon.stub().resolves()
-    billRunPatchStub = Sinon.stub().resolves()
+    billPatchStub = vi.fn().mockResolvedValue()
+    billRunPatchStub = vi.fn().mockResolvedValue()
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -51,8 +51,8 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
       beforeEach(async () => {
         billRun = _billRun()
 
-        chargingModuleSendBillRunRequestStub.resolves()
-        chargingModuleViewBillRunRequestStub.resolves({
+        chargingModuleSendBillRunRequestStub.mockResolvedValue()
+        chargingModuleViewBillRunRequestStub.mockResolvedValue({
           succeeded: true,
           response: {
             body: {
@@ -67,13 +67,13 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
           }
         })
 
-        Sinon.stub(BillModel, 'query').returns({
+        vi.spyOn(BillModel, 'query').mockReturnValue({
           patch: billPatchStub.returnsThis(),
-          where: Sinon.stub().resolves()
+          where: vi.fn().mockResolvedValue()
         })
 
-        Sinon.stub(BillRunModel, 'query').returns({
-          findById: Sinon.stub().withArgs('20f530db-aa69-42d1-8a27-0ab838ca1916').returnsThis(),
+        vi.spyOn(BillRunModel, 'query').mockReturnValue({
+          findById: vi.fn().mockReturnThis(),
           patch: billRunPatchStub
         })
       })
@@ -81,13 +81,13 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
       it('sends a request to the Charging Module API to send its copy', async () => {
         await UpdateInvoiceNumbersService(billRun)
 
-        expect(chargingModuleSendBillRunRequestStub.called).toBe(true)
+        expect(chargingModuleSendBillRunRequestStub).toHaveBeenCalled()
       })
 
       it('requests a copy of the bill run from the Charging Module API with its generated invoice numbers', async () => {
         await UpdateInvoiceNumbersService(billRun)
 
-        expect(chargingModuleViewBillRunRequestStub.called).toBe(true)
+        expect(chargingModuleViewBillRunRequestStub).toHaveBeenCalled()
       })
 
       it('updates the bills with the Charging Module invoice numbers', async () => {
@@ -101,7 +101,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
       it('updates the bill run with the Charging Module transaction reference', async () => {
         await UpdateInvoiceNumbersService(billRun)
 
-        expect(billRunPatchStub.calledOnce).toBe(true)
+        expect(billRunPatchStub).toHaveBeenCalledOnce()
         expect(billRunPatchStub.firstCall.firstArg).toMatchObject({
           status: 'sent',
           transactionFileReference: 'nalwi50031'
@@ -111,9 +111,9 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
       it('logs a "complete" message, the bill run passed in, and the time taken in milliseconds and seconds', async () => {
         await UpdateInvoiceNumbersService(billRun)
 
-        const logDataArg = notifierStub.omg.args[0][1]
+        const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-        expect(notifierStub.omg.calledWith('Send bill run complete')).toBe(true)
+        expect(notifierStub.omg).toHaveBeenCalledWith('Send bill run complete')
         expect(logDataArg.timeTakenMs).toBeDefined()
         expect(logDataArg.timeTakenSs).toBeDefined()
         expect(logDataArg.billRun).toEqual(billRun)
@@ -127,7 +127,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         it('also unflags the licences for supplementary billing', async () => {
           await UpdateInvoiceNumbersService(billRun)
 
-          expect(unflagBilledLicencesServiceStub.called).toBe(true)
+          expect(UnflagBilledSupplementaryLicencesService).toHaveBeenCalled()
         })
       })
 
@@ -139,7 +139,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         it('also unflags the licences for supplementary billing', async () => {
           await UpdateInvoiceNumbersService(billRun)
 
-          expect(unflagBilledLicencesServiceStub.called).toBe(true)
+          expect(UnflagBilledSupplementaryLicencesService).toHaveBeenCalled()
         })
       })
 
@@ -147,7 +147,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         it('leaves the licences supplementary billing flags alone', async () => {
           await UpdateInvoiceNumbersService(billRun)
 
-          expect(unflagBilledLicencesServiceStub.called).toBe(false)
+          expect(UnflagBilledSupplementaryLicencesService).not.toHaveBeenCalled()
         })
       })
     })
@@ -167,7 +167,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Send bill run failed')).toBe(true)
+          expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed')
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })
@@ -177,7 +177,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         beforeEach(async () => {
           billRun = _billRun()
 
-          chargingModuleSendBillRunRequestStub.rejects(new ExpandedError('Charging Module send request failed', {}))
+          chargingModuleSendBillRunRequestStub.mockRejectedValue(new ExpandedError('Charging Module send request failed', {}))
         })
 
         it('does not throw an error', async () => {
@@ -189,7 +189,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Send bill run failed')).toBe(true)
+          expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed')
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(ExpandedError)
         })
@@ -199,8 +199,8 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         beforeEach(async () => {
           billRun = _billRun()
 
-          chargingModuleSendBillRunRequestStub.resolves()
-          chargingModuleViewBillRunRequestStub.resolves({ result: { succeeded: false } })
+          chargingModuleSendBillRunRequestStub.mockResolvedValue()
+          chargingModuleViewBillRunRequestStub.mockResolvedValue({ result: { succeeded: false } })
         })
 
         it('does not throw an error', async () => {
@@ -212,7 +212,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Send bill run failed')).toBe(true)
+          expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed')
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(ExpandedError)
         })
@@ -222,12 +222,12 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         beforeEach(async () => {
           billRun = _billRun()
 
-          chargingModuleSendBillRunRequestStub.resolves()
-          chargingModuleViewBillRunRequestStub.resolves()
+          chargingModuleSendBillRunRequestStub.mockResolvedValue()
+          chargingModuleViewBillRunRequestStub.mockResolvedValue()
 
-          Sinon.stub(BillModel, 'query').returns({
-            patch: Sinon.stub().returnsThis(),
-            where: Sinon.stub().rejects()
+          vi.spyOn(BillModel, 'query').mockReturnValue({
+            patch: vi.fn().mockReturnThis(),
+            where: vi.fn().rejects()
           })
         })
 
@@ -240,7 +240,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Send bill run failed')).toBe(true)
+          expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed')
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })
@@ -250,16 +250,16 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         beforeEach(async () => {
           billRun = _billRun()
 
-          chargingModuleSendBillRunRequestStub.resolves()
-          chargingModuleViewBillRunRequestStub.resolves()
+          chargingModuleSendBillRunRequestStub.mockResolvedValue()
+          chargingModuleViewBillRunRequestStub.mockResolvedValue()
 
-          Sinon.stub(BillModel, 'query').returns({
-            patch: Sinon.stub().returnsThis(),
-            where: Sinon.stub().resolves()
+          vi.spyOn(BillModel, 'query').mockReturnValue({
+            patch: vi.fn().mockReturnThis(),
+            where: vi.fn().mockResolvedValue()
           })
-          Sinon.stub(BillRunModel, 'query').returns({
-            findById: Sinon.stub().returnsThis(),
-            patch: Sinon.stub().rejects()
+          vi.spyOn(BillRunModel, 'query').mockReturnValue({
+            findById: vi.fn().mockReturnThis(),
+            patch: vi.fn().rejects()
           })
         })
 
@@ -272,7 +272,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Send bill run failed')).toBe(true)
+          expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed')
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })

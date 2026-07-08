@@ -1,10 +1,7 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Thing under test
-const RequestNotifierLib = require('../../app/lib/request-notifier.lib.js')
+import * as RequestNotifierLib from '../../app/lib/request-notifier.lib.js'
 
 describe('RequestNotifierLib class', () => {
   const id = '1234567890'
@@ -14,12 +11,12 @@ describe('RequestNotifierLib class', () => {
   let pinoFake
 
   beforeEach(async () => {
-    airbrakeFake = { notify: Sinon.fake.resolves({ id: 1 }), flush: Sinon.fake() }
-    pinoFake = { info: Sinon.fake(), error: Sinon.fake() }
+    airbrakeFake = { notify: vi.fn().mockResolvedValue({ id: 1 }), flush: vi.fn() }
+    pinoFake = { info: vi.fn(), error: vi.fn() }
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('#omg()', () => {
@@ -29,7 +26,7 @@ describe('RequestNotifierLib class', () => {
 
         testNotifier.omg(message)
 
-        expect(pinoFake.info.calledOnceWith({ req: { id } }, message)).toBe(true)
+        expect(pinoFake.info).toHaveBeenCalledExactlyOnceWith({ req: { id } }, message)
       })
     })
 
@@ -39,7 +36,7 @@ describe('RequestNotifierLib class', () => {
 
         testNotifier.omg(message, { name: 'foo' })
 
-        expect(pinoFake.info.calledOnceWith({ name: 'foo', req: { id } }, message)).toBe(true)
+        expect(pinoFake.info).toHaveBeenCalledExactlyOnceWith({ name: 'foo', req: { id } }, message)
       })
     })
   })
@@ -53,7 +50,7 @@ describe('RequestNotifierLib class', () => {
 
         testNotifier.omfg(message)
 
-        const logPacketArgs = pinoFake.error.args[0]
+        const logPacketArgs = pinoFake.error.mock.calls[0]
 
         expect(logPacketArgs[0].err).toBeInstanceOf(Error)
         expect(logPacketArgs[0].err.message).toEqual(message)
@@ -66,7 +63,7 @@ describe('RequestNotifierLib class', () => {
 
         testNotifier.omfg(message)
 
-        const { error, session } = airbrakeFake.notify.args[0][0]
+        const { error, session } = airbrakeFake.notify.mock.calls[0][0]
 
         expect(error).toBeInstanceOf(Error)
         expect(error.message).toEqual(message)
@@ -80,7 +77,7 @@ describe('RequestNotifierLib class', () => {
 
         testNotifier.omfg(message, { name: 'foo' })
 
-        const logPacketArgs = pinoFake.error.args[0]
+        const logPacketArgs = pinoFake.error.mock.calls[0]
 
         expect(logPacketArgs[0].err).toBeInstanceOf(Error)
         expect(logPacketArgs[0].err.message).toEqual(message)
@@ -94,7 +91,7 @@ describe('RequestNotifierLib class', () => {
 
         testNotifier.omfg(message, { name: 'foo' })
 
-        const { error, session } = airbrakeFake.notify.args[0][0]
+        const { error, session } = airbrakeFake.notify.mock.calls[0][0]
 
         expect(error).toBeInstanceOf(Error)
         expect(error.message).toEqual(message)
@@ -108,7 +105,7 @@ describe('RequestNotifierLib class', () => {
 
         testNotifier.omfg(message, { name: 'foo' }, testError)
 
-        const logPacketArgs = pinoFake.error.args[0]
+        const logPacketArgs = pinoFake.error.mock.calls[0]
 
         expect(logPacketArgs[0].err).toBeInstanceOf(Error)
         expect(logPacketArgs[0].err.message).toEqual(testError.message)
@@ -122,7 +119,7 @@ describe('RequestNotifierLib class', () => {
 
         testNotifier.omfg(message, { name: 'foo' }, testError)
 
-        const { error, session } = airbrakeFake.notify.args[0][0]
+        const { error, session } = airbrakeFake.notify.mock.calls[0][0]
 
         expect(error).toBeInstanceOf(Error)
         expect(error.message).toEqual(testError.message)
@@ -136,7 +133,7 @@ describe('RequestNotifierLib class', () => {
 
         testNotifier.omfg(message, null, testError)
 
-        const logPacketArgs = pinoFake.error.args[0]
+        const logPacketArgs = pinoFake.error.mock.calls[0]
 
         expect(logPacketArgs[0].err).toBeInstanceOf(Error)
         expect(logPacketArgs[0].err.message).toEqual(testError.message)
@@ -149,7 +146,7 @@ describe('RequestNotifierLib class', () => {
 
         testNotifier.omfg(message, null, testError)
 
-        const { error, session } = airbrakeFake.notify.args[0][0]
+        const { error, session } = airbrakeFake.notify.mock.calls[0][0]
 
         expect(error).toBeInstanceOf(Error)
         expect(error.message).toEqual(testError.message)

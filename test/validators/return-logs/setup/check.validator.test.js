@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const CheckValidator = require('../../../../app/validators/return-logs/setup/check.validator.js')
+import CheckValidator from '../../../../app/validators/return-logs/setup/check.validator.js'
 
 describe('Return Logs Setup - Check validator', () => {
   let lines

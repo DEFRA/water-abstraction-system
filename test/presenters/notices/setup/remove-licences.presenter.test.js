@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateNoticeReferenceCode, generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const RemoveLicencesPresenter = require('../../../../app/presenters/notices/setup/remove-licences.presenter.js')
+import RemoveLicencesPresenter from '../../../../app/presenters/notices/setup/remove-licences.presenter.js'
 
 describe('Notices - Setup - Remove Licences presenter', () => {
   const licences = []

@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 
 // Thing under test
-const BaseUsersPresenter = require('../../../app/presenters/users/base-users.presenter.js')
+import BaseUsersPresenter from '../../../app/presenters/users/base-users.presenter.js'
 
 describe('Users - Base Users presenter', () => {
   describe('#formatLicencesToUnlink', () => {

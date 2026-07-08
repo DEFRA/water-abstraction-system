@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ViewPresenter = require('../../../app/presenters/monitoring-stations/view.presenter.js')
+import ViewPresenter from '../../../app/presenters/monitoring-stations/view.presenter.js'
 
 describe('Monitoring Stations - View presenter', () => {
   let auth

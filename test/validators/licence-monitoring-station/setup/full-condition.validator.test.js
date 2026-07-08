@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const FullConditionValidator = require('../../../../app/validators/licence-monitoring-station/setup/full-condition.validator.js')
+import FullConditionValidator from '../../../../app/validators/licence-monitoring-station/setup/full-condition.validator.js'
 
 describe('Full Condition Validator', () => {
   let payload

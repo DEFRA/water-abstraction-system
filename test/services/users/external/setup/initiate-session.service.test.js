@@ -1,19 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModel = require('../../../../../app/models/session.model.js')
-const UsersFixture = require('../../../../support/fixtures/users.fixture.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+import SessionModel from '../../../../../app/models/session.model.js'
+import * as UsersFixture from '../../../../support/fixtures/users.fixture.js'
+import { generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Things to stub
-const FetchLicencesDal = require('../../../../../app/dal/users/external/setup/fetch-licences.dal.js')
-const FetchUsersDal = require('../../../../../app/dal/users/fetch-user.dal.js')
+import FetchLicencesDal from '../../../../../app/dal/users/external/setup/fetch-licences.dal.js'
+import FetchUsersDal from '../../../../../app/dal/users/fetch-user.dal.js'
 
 // Thing under test
-const InitiateSessionService = require('../../../../../app/services/users/external/setup/initiate-session.service.js')
+import InitiateSessionService from '../../../../../app/services/users/external/setup/initiate-session.service.js'
 
 describe('Users - External - Setup - Initiate Session service', () => {
   let back
@@ -48,12 +45,14 @@ describe('Users - External - Setup - Initiate Session service', () => {
       }
     ]
 
-    Sinon.stub(FetchUsersDal, 'go').resolves(user)
-    Sinon.stub(FetchLicencesDal, 'go').resolves(licences)
+    vi.mock('../../../../../app/dal/users/fetch-user.dal.js')
+    FetchUsersDal.mockResolvedValue(user)
+    vi.mock('../../../../../app/dal/users/external/setup/fetch-licences.dal.js')
+    FetchLicencesDal.mockResolvedValue(licences)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

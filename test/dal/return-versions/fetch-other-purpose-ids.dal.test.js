@@ -1,15 +1,13 @@
-'use strict'
-
 // Test helpers
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
-const PrimaryPurposeHelper = require('../../support/helpers/primary-purpose.helper.js')
-const PurposeHelper = require('../../support/helpers/purpose.helper.js')
-const SecondaryPurposeHelper = require('../../support/helpers/secondary-purpose.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import * as LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
+import * as PrimaryPurposeHelper from '../../support/helpers/primary-purpose.helper.js'
+import * as PurposeHelper from '../../support/helpers/purpose.helper.js'
+import * as SecondaryPurposeHelper from '../../support/helpers/secondary-purpose.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const FetchOtherPurposeIdsDal = require('../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js')
+import FetchOtherPurposeIdsDal from '../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js'
 
 describe('DAL - Return Versions - Fetch Other Purpose Ids dal', () => {
   let currentPurposeDetails

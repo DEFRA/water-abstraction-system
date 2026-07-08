@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const GroupModel = require('../../app/models/group.model.js')
-const GroupHelper = require('../support/helpers/group.helper.js')
-const UserGroupHelper = require('../support/helpers/user-group.helper.js')
-const UserModel = require('../../app/models/user.model.js')
-const UserHelper = require('../support/helpers/user.helper.js')
+import GroupModel from '../../app/models/group.model.js'
+import * as GroupHelper from '../support/helpers/group.helper.js'
+import * as UserGroupHelper from '../support/helpers/user-group.helper.js'
+import UserModel from '../../app/models/user.model.js'
+import * as UserHelper from '../support/helpers/user.helper.js'
 
 // Thing under test
-const UserGroupModel = require('../../app/models/user-group.model.js')
+import UserGroupModel from '../../app/models/user-group.model.js'
 
 const GROUP_WIRS_INDEX = 2
 const USER_GROUP_WIRS_INDEX = 3

@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const ChangeReasonHelper = require('../../support/helpers/change-reason.helper.js')
-const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
+import * as ChangeReasonHelper from '../../support/helpers/change-reason.helper.js'
+import * as ChargeVersionHelper from '../../support/helpers/charge-version.helper.js'
 
 // Thing under test
-const DetermineMinimumChargeService = require('../../../app/services/bill-runs/determine-minimum-charge.service.js')
+import DetermineMinimumChargeService from '../../../app/services/bill-runs/determine-minimum-charge.service.js'
 
 const CHANGE_REASON_CHARGE_CANCELLED_INDEX = 7
 const CHANGE_REASON_NEW_LICENCE_PART_INDEX = 10

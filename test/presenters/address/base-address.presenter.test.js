@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const BaseAddressPresenter = require('../../../app/presenters/address/base-address.presenter.js')
+import BaseAddressPresenter from '../../../app/presenters/address/base-address.presenter.js'
 
 describe('Address - Base Address presenter', () => {
   describe('#countryLookup()', () => {

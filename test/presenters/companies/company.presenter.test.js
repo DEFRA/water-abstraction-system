@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
-const { formatLongDate } = require('../../../app/presenters/base.presenter.js')
-const { tomorrow } = require('../../support/general.js')
+import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
+import { formatLongDate } from '../../../app/presenters/base.presenter.js'
+import { tomorrow } from '../../support/general.js'
 
 // Thing under test
-const CompanyPresenter = require('../../../app/presenters/companies/company.presenter.js')
+import CompanyPresenter from '../../../app/presenters/companies/company.presenter.js'
 
 describe('Companies - Company Presenter', () => {
   const role = 'licence-holder'

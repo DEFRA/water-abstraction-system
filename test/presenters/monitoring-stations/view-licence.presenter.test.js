@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { licenceEnds } = require('../../support/fixtures/licence.fixture.js')
-const { generateUserId } = require('../../support/helpers/user.helper.js')
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import { licenceEnds } from '../../support/fixtures/licence.fixture.js'
+import { generateUserId } from '../../support/helpers/user.helper.js'
 
 // Thing under test
-const ViewLicencePresenter = require('../../../app/presenters/monitoring-stations/view-licence.presenter.js')
+import ViewLicencePresenter from '../../../app/presenters/monitoring-stations/view-licence.presenter.js'
 
 describe('Monitoring Stations - View Licence presenter', () => {
   let auth

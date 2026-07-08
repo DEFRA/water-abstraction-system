@@ -1,14 +1,11 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { today } = require('../../app/lib/general.lib.js')
-const { returnCycleDates } = require('../../app/lib/static-lookups.lib.js')
+import { today } from '../../app/lib/general.lib.js'
+import { returnCycleDates } from '../../app/lib/static-lookups.lib.js'
 
 // Thing under test
-const ReturnCycleDatesLib = require('../../app/lib/return-cycle-dates.lib.js')
+import * as ReturnCycleDatesLib from '../../app/lib/return-cycle-dates.lib.js'
 
 describe('Return Cycle Dates lib', () => {
   const todaysDate = today()
@@ -20,7 +17,7 @@ describe('Return Cycle Dates lib', () => {
   let testDate
 
   afterEach(() => {
-    clock.restore()
+    vi.useRealTimers()
   })
 
   describe('determineCycleDueDate', () => {
@@ -33,7 +30,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is after the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-12-01`)
-            clock = Sinon.useFakeTimers(testDate)
+            clock = vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear() + 1,
@@ -52,7 +49,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is before the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-09-01`)
-            clock = Sinon.useFakeTimers(testDate)
+            clock = vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear(),
@@ -113,7 +110,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is after the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-05-01`)
-            clock = Sinon.useFakeTimers(testDate)
+            clock = vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear() + 1,
@@ -132,7 +129,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is before the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-03-01`)
-            clock = Sinon.useFakeTimers(testDate)
+            clock = vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear(),
@@ -195,7 +192,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is after the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-12-01`)
-            clock = Sinon.useFakeTimers(testDate)
+            clock = vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear() + 1,
@@ -214,7 +211,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is before the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-09-01`)
-            clock = Sinon.useFakeTimers(testDate)
+            clock = vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear(),
@@ -275,7 +272,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is after the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-05-01`)
-            clock = Sinon.useFakeTimers(testDate)
+            clock = vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear() + 1,
@@ -294,7 +291,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is before the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-02-01`)
-            clock = Sinon.useFakeTimers(testDate)
+            clock = vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear(),
@@ -357,7 +354,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is after the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-12-01`)
-            clock = Sinon.useFakeTimers(testDate)
+            clock = vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear(),
@@ -376,7 +373,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is before the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-09-01`)
-            clock = Sinon.useFakeTimers(testDate)
+            clock = vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear() - 1,
@@ -439,7 +436,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is after the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-05-01`)
-            clock = Sinon.useFakeTimers(testDate)
+            clock = vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear(),
@@ -458,7 +455,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is before the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-02-01`)
-            clock = Sinon.useFakeTimers(testDate)
+            clock = vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear() - 1,

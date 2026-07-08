@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
+import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Things we need to stub
-const FetchRemoveReviewLicenceService = require('../../../../app/services/bill-runs/review/fetch-remove-review-licence.service.js')
+import FetchRemoveReviewLicenceService from '../../../../app/services/bill-runs/review/fetch-remove-review-licence.service.js'
 
 // Thing under test
-const ViewRemoveService = require('../../../../app/services/bill-runs/review/view-remove.service.js')
+import ViewRemoveService from '../../../../app/services/bill-runs/review/view-remove.service.js'
 
 describe('Bill Runs - Review - View Remove service', () => {
   let removeReviewLicence
@@ -18,11 +15,12 @@ describe('Bill Runs - Review - View Remove service', () => {
   beforeEach(() => {
     removeReviewLicence = BillRunsReviewFixture.removeReviewLicence()
 
-    Sinon.stub(FetchRemoveReviewLicenceService, 'go').resolves(removeReviewLicence)
+    vi.mock('../../../../app/services/bill-runs/review/fetch-remove-review-licence.service.js')
+    FetchRemoveReviewLicenceService.mockResolvedValue(removeReviewLicence)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

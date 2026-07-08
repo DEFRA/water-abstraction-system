@@ -1,17 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { HTTP_STATUS_NOT_FOUND } = require('node:http2').constants
-const LicenceModel = require('../../../../app/models/licence.model.js')
+import http2 from 'node:http2'
+const { HTTP_STATUS_NOT_FOUND } = http2.constants
+import LicenceModel from '../../../../app/models/licence.model.js'
 
 // Things we need to stub
-const FetchLicenceService = require('../../../../app/services/return-versions/setup/fetch-licence.service.js')
+import FetchLicenceService from '../../../../app/services/return-versions/setup/fetch-licence.service.js'
 
 // Thing under test
-const InitiateSessionService = require('../../../../app/services/return-versions/setup/initiate-session.service.js')
+import InitiateSessionService from '../../../../app/services/return-versions/setup/initiate-session.service.js'
 
 describe('Return Versions - Setup - Initiate Session service', () => {
   const journey = 'returns-required'
@@ -19,7 +17,7 @@ describe('Return Versions - Setup - Initiate Session service', () => {
   let licence
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -28,7 +26,8 @@ describe('Return Versions - Setup - Initiate Session service', () => {
         beforeEach(async () => {
           licence = _licence()
 
-          Sinon.stub(FetchLicenceService, 'go').resolves(licence)
+          vi.mock('../../../../app/services/return-versions/setup/fetch-licence.service.js')
+          FetchLicenceService.mockResolvedValue(licence)
         })
 
         it('creates a new session record containing details of the licence', async () => {
@@ -72,7 +71,8 @@ describe('Return Versions - Setup - Initiate Session service', () => {
           licence = _licence()
           licence.expiredDate = null
 
-          Sinon.stub(FetchLicenceService, 'go').resolves(licence)
+          vi.mock('../../../../app/services/return-versions/setup/fetch-licence.service.js')
+          FetchLicenceService.mockResolvedValue(licence)
         })
 
         it('creates a new session record containing details of the licence', async () => {
@@ -115,7 +115,8 @@ describe('Return Versions - Setup - Initiate Session service', () => {
     describe('and the matching licence does not exist', () => {
       beforeEach(async () => {
         licence = undefined
-        Sinon.stub(FetchLicenceService, 'go').resolves(licence)
+        vi.mock('../../../../app/services/return-versions/setup/fetch-licence.service.js')
+        FetchLicenceService.mockResolvedValue(licence)
       })
 
       it('throws a Boom not found error', async () => {

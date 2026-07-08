@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const SelectCompanyValidator = require('../../../../app/validators/billing-accounts/setup/select-company.validator.js')
+import SelectCompanyValidator from '../../../../app/validators/billing-accounts/setup/select-company.validator.js'
 
 describe('Billing Accounts - Setup - Select Company Validator', () => {
   let payload

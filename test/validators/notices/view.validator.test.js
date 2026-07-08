@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ViewValidator = require('../../../app/validators/notices/view.validator.js')
+import ViewValidator from '../../../app/validators/notices/view.validator.js'
 
 describe('Notices - View validator', () => {
   let payload

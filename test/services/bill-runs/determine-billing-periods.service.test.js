@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const DetermineBillingPeriodsService = require('../../../app/services/bill-runs/determine-billing-periods.service.js')
+import DetermineBillingPeriodsService from '../../../app/services/bill-runs/determine-billing-periods.service.js'
 
 describe('Bill Runs - Determine Billing Periods service', () => {
   let billRunType

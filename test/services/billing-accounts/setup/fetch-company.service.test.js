@@ -1,15 +1,13 @@
-'use strict'
-
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const LookupCompanysHouseNumberRequest = require('../../../../app/requests/companies-house/lookup-companies-house-number.request.js')
+import * as LookupCompanysHouseNumberRequest from '../../../../app/requests/companies-house/lookup-companies-house-number.request.js'
 
 // Thing under test
-const FetchCompanyService = require('../../../../app/services/billing-accounts/setup/fetch-company.service.js')
+import FetchCompanyService from '../../../../app/services/billing-accounts/setup/fetch-company.service.js'
 
 describe('Billing Accounts - Setup - Fetch Company service', () => {
   const body = {
@@ -19,12 +17,12 @@ describe('Billing Accounts - Setup - Fetch Company service', () => {
   const companiesHouseNumber = body.company_number
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called with a "companiesHouseNumber" that has a reponse', () => {
     beforeEach(async () => {
-      Sinon.stub(LookupCompanysHouseNumberRequest, 'send').resolves({
+      vi.spyOn(LookupCompanysHouseNumberRequest, 'send').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -45,7 +43,7 @@ describe('Billing Accounts - Setup - Fetch Company service', () => {
 
   describe('when called with a "companySearch" that has no responses', () => {
     beforeEach(async () => {
-      Sinon.stub(LookupCompanysHouseNumberRequest, 'send').resolves({
+      vi.spyOn(LookupCompanysHouseNumberRequest, 'send').mockResolvedValue({
         succeeded: false,
         response: {
           statusCode: HTTP_STATUS_NOT_FOUND,

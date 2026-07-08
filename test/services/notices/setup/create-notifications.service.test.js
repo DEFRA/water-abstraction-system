@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
-const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
-const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
-const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.js')
+import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
+import { futureDueDate } from '../../../../app/presenters/notices/base.presenter.js'
+import { generateNoticeReferenceCode, generateUUID } from '../../../../app/lib/general.lib.js'
+import { NOTIFY_TEMPLATES } from '../../../../app/lib/notify-templates.lib.js'
 
 // Thing under test
-const CreateNotificationsService = require('../../../../app/services/notices/setup/create-notifications.service.js')
+import CreateNotificationsService from '../../../../app/services/notices/setup/create-notifications.service.js'
 
 describe('Notices - Setup - Create Notifications service', () => {
   const noticeId = generateUUID()

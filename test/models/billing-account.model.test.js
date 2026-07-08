@@ -1,20 +1,18 @@
-'use strict'
-
 // Test helpers
-const AddressHelper = require('../support/helpers/address.helper.js')
-const BillHelper = require('../support/helpers/bill.helper.js')
-const BillModel = require('../../app/models/bill.model.js')
-const BillingAccountAddressHelper = require('../support/helpers/billing-account-address.helper.js')
-const BillingAccountAddressModel = require('../../app/models/billing-account-address.model.js')
-const BillingAccountHelper = require('../support/helpers/billing-account.helper.js')
-const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
-const ChargeVersionModel = require('../../app/models/charge-version.model.js')
-const CompanyHelper = require('../support/helpers/company.helper.js')
-const CompanyModel = require('../../app/models/company.model.js')
-const ContactHelper = require('../support/helpers/contact.helper.js')
+import * as AddressHelper from '../support/helpers/address.helper.js'
+import * as BillHelper from '../support/helpers/bill.helper.js'
+import BillModel from '../../app/models/bill.model.js'
+import * as BillingAccountAddressHelper from '../support/helpers/billing-account-address.helper.js'
+import BillingAccountAddressModel from '../../app/models/billing-account-address.model.js'
+import * as BillingAccountHelper from '../support/helpers/billing-account.helper.js'
+import * as ChargeVersionHelper from '../support/helpers/charge-version.helper.js'
+import ChargeVersionModel from '../../app/models/charge-version.model.js'
+import * as CompanyHelper from '../support/helpers/company.helper.js'
+import CompanyModel from '../../app/models/company.model.js'
+import * as ContactHelper from '../support/helpers/contact.helper.js'
 
 // Thing under test
-const BillingAccountModel = require('../../app/models/billing-account.model.js')
+import BillingAccountModel from '../../app/models/billing-account.model.js'
 
 describe('Billing Account model', () => {
   let testBillingAccountAddresses

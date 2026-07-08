@@ -1,15 +1,13 @@
-'use strict'
-
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const NotifyRequest = require('../../../app/requests/notify.request.js')
+import * as NotifyRequest from '../../../app/requests/notify.request.js'
 
 // Thing under test
-const ViewMessageDataRequest = require('../../../app/requests/notify/view-message-data.request.js')
+import * as ViewMessageDataRequest from '../../../app/requests/notify/view-message-data.request.js'
 
 describe('Notify - View Message Data request', () => {
   const notificationId = '5a714bec-4ca0-45ba-8edf-8fa37db09499'
@@ -17,7 +15,7 @@ describe('Notify - View Message Data request', () => {
   let response
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request succeeds', () => {
@@ -58,7 +56,7 @@ describe('Notify - View Message Data request', () => {
         }
       }
 
-      Sinon.stub(NotifyRequest, 'get').resolves({
+      vi.spyOn(NotifyRequest, 'getRequest').mockResolvedValue({
         succeeded: true,
         response
       })
@@ -93,7 +91,7 @@ describe('Notify - View Message Data request', () => {
           }
         }
 
-        Sinon.stub(NotifyRequest, 'get').resolves({
+        vi.spyOn(NotifyRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response
         })

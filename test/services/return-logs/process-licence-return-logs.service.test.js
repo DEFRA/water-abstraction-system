@@ -1,34 +1,28 @@
-'use strict'
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const ReturnCyclesFixture = require('../../support/fixtures/return-cycles.fixture.js')
-const ReturnRequirementsFixture = require('../../support/fixtures/return-requirements.fixture.js')
+import * as ReturnCyclesFixture from '../../support/fixtures/return-cycles.fixture.js'
+import * as ReturnRequirementsFixture from '../../support/fixtures/return-requirements.fixture.js'
 
 // Things we need to stub
-const CreateReturnLogsService = require('../../../app/services/return-logs/create-return-logs.service.js')
-const FetchLicenceReturnRequirementsService = require('../../../app/services/return-logs/fetch-licence-return-requirements.service.js')
-const ReturnCycleModel = require('../../../app/models/return-cycle.model.js')
-const VoidLicenceReturnLogsService = require('../../../app/services/return-logs/void-licence-return-logs.service.js')
+import CreateReturnLogsService from '../../../app/services/return-logs/create-return-logs.service.js'
+import FetchLicenceReturnRequirementsService from '../../../app/services/return-logs/fetch-licence-return-requirements.service.js'
+import ReturnCycleModel from '../../../app/models/return-cycle.model.js'
+import VoidLicenceReturnLogsService from '../../../app/services/return-logs/void-licence-return-logs.service.js'
 
 // Thing under test
-const ProcessLicenceReturnLogsService = require('../../../app/services/return-logs/process-licence-return-logs.service.js')
+import ProcessLicenceReturnLogsService from '../../../app/services/return-logs/process-licence-return-logs.service.js'
 
 describe('Return Logs - Process Licence Return Logs service', () => {
   const licenceId = '3acf7d80-cf74-4e86-8128-13ef687ea091'
 
   let changeDate
   let clock
-  let createReturnLogsStub
-  let fetchReturnRequirementsStub
   let returnCycles
   let returnCycleModelStub
   let returnRequirements
   let returnVersionEndDate
-  let voidReturnLogsStub
-
   beforeEach(() => {
     // NOTE: We set the clock, not because it is needed for the services called, but so that the test data we're
     // providing makes sense in the context we use it.
@@ -37,31 +31,33 @@ describe('Return Logs - Process Licence Return Logs service', () => {
     // matching return cycles, but the next year there would be one, then two, and so on. By fixing the date we can use
     // test data that still covers all possible scenarios, but doesn't require us to make them overly complicated by
     // trying to make it dynamic.
-    clock = Sinon.useFakeTimers(new Date('2026-01-09'))
+    clock = vi.useFakeTimers({ now: new Date('2026-01-09' }))
 
-    returnCycleModelStub = Sinon.stub()
-    Sinon.stub(ReturnCycleModel, 'query').returns({
-      select: Sinon.stub().returnsThis(),
-      where: Sinon.stub().returnsThis(),
+    returnCycleModelStub =     vi.fn()
+        vi.spyOn(ReturnCycleModel, 'query').mockReturnValue({
+      select: vi.fn().mockReturnThis(),
+      where: vi.fn().mockReturnThis(),
       orderBy: returnCycleModelStub
     })
 
-    fetchReturnRequirementsStub = Sinon.stub(FetchLicenceReturnRequirementsService, 'go')
+        vi.mock('../../../app/services/return-logs/fetch-licence-return-requirements.service.js')
 
     // Whatever CreateReturnLogsService is pushed into an array that is then passed to VoidLicenceReturnLogsService.
     // Our tests check that CreateReturnLogsService returns the results expected depending on what is passed in, so
     // we control what values are coming back. And the tests for VoidLicenceReturnLogsService ensure it does what is
     // expected with those values. So, any further tests here would not only complicate the tests further, they'd just
     // be duplicating work elsewhere.
-    createReturnLogsStub = Sinon.stub(CreateReturnLogsService, 'go').resolves([
+        vi.mock('../../../app/services/return-logs/create-return-logs.service.js')
+    CreateReturnLogsService.mockResolvedValue([
       'v1:1:01/10/79/9184:21042654:2022-04-01:2023-03-31'
     ])
-    voidReturnLogsStub = Sinon.stub(VoidLicenceReturnLogsService, 'go').resolves()
+        vi.mock('../../../app/services/return-logs/void-licence-return-logs.service.js')
+    VoidLicenceReturnLogsService.mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
-    clock.restore()
+    vi.restoreAllMocks()
+    vi.useRealTimers()
   })
 
   describe('when processing a licence end date change', () => {
@@ -86,7 +82,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
           //
           // The next winter ends 2025-03-31, which is before our change date, so the results would stop here.
           returnCycles = ReturnCyclesFixture.returnCycles(3)
-          returnCycleModelStub.resolves(returnCycles)
+          returnCycleModelStub.mockResolvedValue(returnCycles)
         })
 
         describe('and the licence has return versions that align with the cycles', () => {
@@ -119,25 +115,25 @@ describe('Return Logs - Process Licence Return Logs service', () => {
             currentWinterReq.returnVersion = currentSummerReq.returnVersion
 
             returnRequirements = [currentSummerReq, currentWinterReq, previousSummerReq, previousWinterReq]
-            fetchReturnRequirementsStub.resolves(returnRequirements)
+            FetchLicenceReturnRequirementsService.mockResolvedValue(returnRequirements)
           })
 
           it('processes the _right_ return requirements for each return cycle', async () => {
             await ProcessLicenceReturnLogsService(licenceId, changeDate)
 
-            expect(createReturnLogsStub.callCount).toEqual(5)
-            expect(voidReturnLogsStub.callCount).toEqual(3)
+            expect(CreateReturnLogsService.callCount).toEqual(5)
+            expect(VoidLicenceReturnLogsService.callCount).toEqual(3)
 
             // First cycle is summer ending 2026-10-31; should process current summer req only
-            expect(createReturnLogsStub.getCall(0).args).toEqual([returnRequirements[0], returnCycles[0], null, null])
+            expect(CreateReturnLogsService.getCall(0).args).toEqual([returnRequirements[0], returnCycles[0], null, null])
 
             // Second cycle is winter ending 2026-03-31; should process current and previous winter req
-            expect(createReturnLogsStub.getCall(1).args).toEqual([returnRequirements[1], returnCycles[1], null, null])
-            expect(createReturnLogsStub.getCall(2).args).toEqual([returnRequirements[3], returnCycles[1], null, null])
+            expect(CreateReturnLogsService.getCall(1).args).toEqual([returnRequirements[1], returnCycles[1], null, null])
+            expect(CreateReturnLogsService.getCall(2).args).toEqual([returnRequirements[3], returnCycles[1], null, null])
 
             // Third cycle is summer ending 2025-10-31; should process current and previous summer req
-            expect(createReturnLogsStub.getCall(3).args).toEqual([returnRequirements[0], returnCycles[2], null, null])
-            expect(createReturnLogsStub.getCall(4).args).toEqual([returnRequirements[2], returnCycles[2], null, null])
+            expect(CreateReturnLogsService.getCall(3).args).toEqual([returnRequirements[0], returnCycles[2], null, null])
+            expect(CreateReturnLogsService.getCall(4).args).toEqual([returnRequirements[2], returnCycles[2], null, null])
           })
         })
 
@@ -145,14 +141,14 @@ describe('Return Logs - Process Licence Return Logs service', () => {
           describe('because it has none', () => {
             beforeEach(() => {
               returnRequirements = []
-              fetchReturnRequirementsStub.resolves(returnRequirements)
+              FetchLicenceReturnRequirementsService.mockResolvedValue(returnRequirements)
             })
 
             it('does not attempt to process any return cycles', async () => {
               await ProcessLicenceReturnLogsService(licenceId, changeDate)
 
-              expect(fetchReturnRequirementsStub.called).toBe(true)
-              expect(returnCycleModelStub.called).toBe(false)
+              expect(FetchLicenceReturnRequirementsService).toHaveBeenCalled()
+              expect(returnCycleModelStub).not.toHaveBeenCalled()
             })
           })
 
@@ -164,19 +160,19 @@ describe('Return Logs - Process Licence Return Logs service', () => {
               futureWinterReq.returnVersion.startDate = new Date('2026-07-01')
 
               returnRequirements = [futureWinterReq]
-              fetchReturnRequirementsStub.resolves(returnRequirements)
+              FetchLicenceReturnRequirementsService.mockResolvedValue(returnRequirements)
             })
 
             it('does not attempt to generate return logs', async () => {
               await ProcessLicenceReturnLogsService(licenceId, changeDate)
 
-              expect(createReturnLogsStub.called).toBe(false)
+              expect(CreateReturnLogsService).not.toHaveBeenCalled()
             })
 
             it('still checks if return logs should be voided', async () => {
               await ProcessLicenceReturnLogsService(licenceId, changeDate)
 
-              expect(voidReturnLogsStub.called).toBe(true)
+              expect(VoidLicenceReturnLogsService).toHaveBeenCalled()
             })
           })
         })
@@ -186,26 +182,26 @@ describe('Return Logs - Process Licence Return Logs service', () => {
         beforeEach(() => {
           changeDate = new Date('2030-06-15')
 
-          returnCycleModelStub.resolves([])
+          returnCycleModelStub.mockResolvedValue([])
         })
 
         describe('though the licence has return requirements', () => {
           beforeEach(() => {
             returnRequirements = [ReturnRequirementsFixture.winterReturnRequirement()]
 
-            fetchReturnRequirementsStub.resolves(returnRequirements)
+            FetchLicenceReturnRequirementsService.mockResolvedValue(returnRequirements)
           })
 
           it('does not attempt to generate return logs', async () => {
             await ProcessLicenceReturnLogsService(licenceId, changeDate)
 
-            expect(createReturnLogsStub.called).toBe(false)
+            expect(CreateReturnLogsService).not.toHaveBeenCalled()
           })
 
           it('does not check if return logs should be voided (no return cycles were processed)', async () => {
             await ProcessLicenceReturnLogsService(licenceId, changeDate)
 
-            expect(voidReturnLogsStub.called).toBe(false)
+            expect(VoidLicenceReturnLogsService).not.toHaveBeenCalled()
           })
         })
       })
@@ -227,7 +223,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
         beforeEach(() => {
           returnVersionEndDate = returnRequirements[0].returnVersion.endDate
 
-          fetchReturnRequirementsStub.resolves(returnRequirements)
+          FetchLicenceReturnRequirementsService.mockResolvedValue(returnRequirements)
 
           // NOTE: If todays date was 2026-01-09, these are the return cycles that would be fetched for a "change date"
           // of 2024-04-01 and no end date on the return version
@@ -238,26 +234,26 @@ describe('Return Logs - Process Licence Return Logs service', () => {
           // - Winter ending 2025-03-31
           // - Summer ending 2024-10-31
           returnCycles = ReturnCyclesFixture.returnCycles(5)
-          returnCycleModelStub.resolves(returnCycles)
+          returnCycleModelStub.mockResolvedValue(returnCycles)
         })
 
         it('processes the return requirements for _all_ matching return cycles that exist', async () => {
           await ProcessLicenceReturnLogsService(licenceId, changeDate)
 
           // The requirement matches with two of the return cycles (winter), so 'create' is called twice
-          expect(createReturnLogsStub.callCount).toEqual(2)
+          expect(CreateReturnLogsService.callCount).toEqual(2)
 
           // For every return cycle fetched, we need to call the void service, even if no return logs were created. If
           // this is the case, it means any existing return logs for that cycle need to be voided.
-          expect(voidReturnLogsStub.callCount).toEqual(returnCycles.length)
+          expect(VoidLicenceReturnLogsService.callCount).toEqual(returnCycles.length)
 
           // First cycle is summer ending 2026-10-31; should be ignored
           // Second cycle is winter ending 2026-03-31; should process our new requirement
           // Third cycle is summer ending 2025-10-31; should be ignored
           // Fourth cycle is winter ending 2025-03-31; should process our new requirement
           // Fifth cycle is summer ending 2024-10-31; should be ignored
-          expect(createReturnLogsStub.getCall(0).args).toEqual([returnRequirements[0], returnCycles[1], null, null])
-          expect(createReturnLogsStub.getCall(1).args).toEqual([returnRequirements[0], returnCycles[3], null, null])
+          expect(CreateReturnLogsService.getCall(0).args).toEqual([returnRequirements[0], returnCycles[1], null, null])
+          expect(CreateReturnLogsService.getCall(1).args).toEqual([returnRequirements[0], returnCycles[3], null, null])
         })
       })
 
@@ -267,7 +263,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
 
           returnVersionEndDate = returnRequirements[0].returnVersion.endDate
 
-          fetchReturnRequirementsStub.resolves(returnRequirements)
+          FetchLicenceReturnRequirementsService.mockResolvedValue(returnRequirements)
 
           // NOTE: If todays date was 2026-01-09, and "change date" is 2024-04-01 we'd fetch the same 5 as previous.
           // However, because the return version has an end date of 2024-12-31, only the return cycles that start before
@@ -278,22 +274,22 @@ describe('Return Logs - Process Licence Return Logs service', () => {
           const allReturnCycles = ReturnCyclesFixture.returnCycles(5)
 
           returnCycles = [allReturnCycles[3], allReturnCycles[4]]
-          returnCycleModelStub.resolves(returnCycles)
+          returnCycleModelStub.mockResolvedValue(returnCycles)
         })
 
         it('processes the return requirements for _only_ the matching return cycles that exist', async () => {
           await ProcessLicenceReturnLogsService(licenceId, changeDate, returnVersionEndDate)
 
           // The requirement only matches with one of the return cycles, hence 'create' is only called once
-          expect(createReturnLogsStub.callCount).toEqual(1)
+          expect(CreateReturnLogsService.callCount).toEqual(1)
 
           // For every return cycle fetched, we need to call the void service, even if no return logs were created. If
           // this is the case, it means any existing return logs for that cycle need to be voided.
-          expect(voidReturnLogsStub.callCount).toEqual(returnCycles.length)
+          expect(VoidLicenceReturnLogsService.callCount).toEqual(returnCycles.length)
 
           // First cycle is winter ending 2025-03-31; should process our new requirement
           // Second cycle is summer ending 2024-10-31; should be ignored
-          expect(createReturnLogsStub.getCall(0).args).toEqual([returnRequirements[0], returnCycles[0], null, null])
+          expect(CreateReturnLogsService.getCall(0).args).toEqual([returnRequirements[0], returnCycles[0], null, null])
         })
       })
     })
@@ -309,23 +305,23 @@ describe('Return Logs - Process Licence Return Logs service', () => {
 
         // NOTE: If todays date was 2026-01-09, no return cycles would be fetched for a "change date" of 2024-04-01 by
         // the service (they wouldn't exist yet)
-        returnCycleModelStub.resolves([])
+        returnCycleModelStub.mockResolvedValue([])
 
         returnVersionEndDate = returnRequirement.returnVersion.endDate
 
-        fetchReturnRequirementsStub.resolves(returnRequirements)
+        FetchLicenceReturnRequirementsService.mockResolvedValue(returnRequirements)
       })
 
       it('does not attempt to generate return logs', async () => {
         await ProcessLicenceReturnLogsService(licenceId, changeDate, returnVersionEndDate)
 
-        expect(createReturnLogsStub.called).toBe(false)
+        expect(CreateReturnLogsService).not.toHaveBeenCalled()
       })
 
       it('does not check if return logs should be voided (no return cycles were processed)', async () => {
         await ProcessLicenceReturnLogsService(licenceId, changeDate, returnVersionEndDate)
 
-        expect(voidReturnLogsStub.called).toBe(false)
+        expect(VoidLicenceReturnLogsService).not.toHaveBeenCalled()
       })
     })
   })

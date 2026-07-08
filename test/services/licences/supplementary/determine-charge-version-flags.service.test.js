@@ -1,20 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const GeneralLib = require('../../../../app/lib/general.lib.js')
-const FetchChargeVersionBillingDataService = require('../../../../app/services/licences/supplementary/fetch-charge-version-billing-data.service.js')
+import * as GeneralLib from '../../../../app/lib/general.lib.js'
+import FetchChargeVersionBillingDataService from '../../../../app/services/licences/supplementary/fetch-charge-version-billing-data.service.js'
 
 // Thing under test
-const DetermineChargeVersionFlagsService = require('../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js')
+import DetermineChargeVersionFlagsService from '../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js'
 
 describe('Licences - Supplementary - Determine Charge Version Flags service', () => {
   const chargeVersionId = '41187430-6a49-43a8-b12d-35a657dd1048'
 
   let chargeVersion
-  let fetchChargeVersionBillingDataStub
   let srocBillRuns
 
   beforeEach(() => {
@@ -32,16 +28,16 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
     }
 
     // Control what the 'current financial year' is for the purpose of testing
-    Sinon.stub(GeneralLib, 'determineCurrentFinancialYear').returns({
+    vi.spyOn(GeneralLib, 'determineCurrentFinancialYear').mockReturnValue({
       startDate: new Date('2024-04-01'),
       endDate: new Date('2025-03-31')
     })
 
-    fetchChargeVersionBillingDataStub = Sinon.stub(FetchChargeVersionBillingDataService, 'go')
+    vi.mock('../../../../app/services/licences/supplementary/fetch-charge-version-billing-data.service.js')
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the start date of the charge version', () => {
@@ -56,7 +52,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
 
           srocBillRuns = []
 
-          fetchChargeVersionBillingDataStub.resolves({ chargeVersion, srocBillRuns })
+          FetchChargeVersionBillingDataService.mockResolvedValue({ chargeVersion, srocBillRuns })
         })
 
         it('returns the result with the PRE-SROC flag set to true and the other flags unchanged', async () => {
@@ -84,7 +80,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             beforeEach(() => {
               srocBillRuns = [{ batchType: 'annual' }]
 
-              fetchChargeVersionBillingDataStub.resolves({ chargeVersion, srocBillRuns })
+              FetchChargeVersionBillingDataService.mockResolvedValue({ chargeVersion, srocBillRuns })
             })
 
             it('returns the result with the SROC flag set to true and the other flags unchanged', async () => {
@@ -106,7 +102,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             beforeEach(() => {
               srocBillRuns = [{ batchType: 'two_part_tariff' }]
 
-              fetchChargeVersionBillingDataStub.resolves({ chargeVersion, srocBillRuns })
+              FetchChargeVersionBillingDataService.mockResolvedValue({ chargeVersion, srocBillRuns })
             })
 
             it('returns the result with the SROC flag and two-part tariff set to true', async () => {
@@ -128,7 +124,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             beforeEach(() => {
               srocBillRuns = []
 
-              fetchChargeVersionBillingDataStub.resolves({ chargeVersion, srocBillRuns })
+              FetchChargeVersionBillingDataService.mockResolvedValue({ chargeVersion, srocBillRuns })
             })
 
             it('returns the result with the SROC flag set to true and the other flags unchanged', async () => {
@@ -156,7 +152,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             beforeEach(() => {
               srocBillRuns = [{ batchType: 'annual' }]
 
-              fetchChargeVersionBillingDataStub.resolves({ chargeVersion, srocBillRuns })
+              FetchChargeVersionBillingDataService.mockResolvedValue({ chargeVersion, srocBillRuns })
             })
 
             it('returns the result with the SROC flag and two-part tariff set to true', async () => {
@@ -178,7 +174,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             beforeEach(() => {
               srocBillRuns = [{ batchType: 'two_part_tariff' }]
 
-              fetchChargeVersionBillingDataStub.resolves({ chargeVersion, srocBillRuns })
+              FetchChargeVersionBillingDataService.mockResolvedValue({ chargeVersion, srocBillRuns })
             })
 
             it('returns the result with the SROC flag and two-part tariff set to true', async () => {
@@ -200,7 +196,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             beforeEach(() => {
               srocBillRuns = []
 
-              fetchChargeVersionBillingDataStub.resolves({ chargeVersion, srocBillRuns })
+              FetchChargeVersionBillingDataService.mockResolvedValue({ chargeVersion, srocBillRuns })
             })
 
             it('returns the result with the SROC flag and two-part tariff set to true', async () => {
@@ -228,7 +224,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             beforeEach(() => {
               srocBillRuns = [{ batchType: 'annual' }]
 
-              fetchChargeVersionBillingDataStub.resolves({ chargeVersion, srocBillRuns })
+              FetchChargeVersionBillingDataService.mockResolvedValue({ chargeVersion, srocBillRuns })
             })
 
             it('returns the result with the SROC flag set to true and the other flags unchanged', async () => {
@@ -250,7 +246,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             beforeEach(() => {
               srocBillRuns = [{ batchType: 'two_part_tariff' }]
 
-              fetchChargeVersionBillingDataStub.resolves({ chargeVersion, srocBillRuns })
+              FetchChargeVersionBillingDataService.mockResolvedValue({ chargeVersion, srocBillRuns })
             })
 
             it('returns the result with only the two-part tariff set to true', async () => {
@@ -272,7 +268,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
             beforeEach(() => {
               srocBillRuns = []
 
-              fetchChargeVersionBillingDataStub.resolves({ chargeVersion, srocBillRuns })
+              FetchChargeVersionBillingDataService.mockResolvedValue({ chargeVersion, srocBillRuns })
             })
 
             it('returns the result with the PRE-SROC and SROC flags unchanged and the two-part tariff flag as false', async () => {
@@ -299,7 +295,7 @@ describe('Licences - Supplementary - Determine Charge Version Flags service', ()
 
         srocBillRuns = []
 
-        fetchChargeVersionBillingDataStub.resolves({ chargeVersion, srocBillRuns })
+        FetchChargeVersionBillingDataService.mockResolvedValue({ chargeVersion, srocBillRuns })
       })
 
       it('returns the result with the PRE-SROC and SROC flags unchanged and the two-part tariff flag as false', async () => {

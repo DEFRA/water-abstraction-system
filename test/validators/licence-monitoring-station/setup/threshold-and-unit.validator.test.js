@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ThresholdAndUnitValidator = require('../../../../app/validators/licence-monitoring-station/setup/threshold-and-unit.validator.js')
+import ThresholdAndUnitValidator from '../../../../app/validators/licence-monitoring-station/setup/threshold-and-unit.validator.js'
 
 describe('Licence Monitoring Station Setup - Threshold and Unit validator', () => {
   let payload

@@ -1,20 +1,17 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-companies.service.js'
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
+import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
 
 // Thing under test
-const ViewSelectCompanyService = require('../../../../app/services/billing-accounts/setup/view-select-company.service.js')
+import ViewSelectCompanyService from '../../../../app/services/billing-accounts/setup/view-select-company.service.js'
 
 describe('Billing Accounts - Setup - View Select Company Service', () => {
   const companies = [
@@ -33,15 +30,17 @@ describe('Billing Accounts - Setup - View Select Company Service', () => {
       billingAccount: BillingAccountsFixture.billingAccount().billingAccount
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
-    Sinon.stub(FetchCompaniesService, 'go').returns(companies)
+    vi.mock('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
+    FetchCompaniesService.mockReturnValue(companies)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

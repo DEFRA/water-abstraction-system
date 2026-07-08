@@ -1,24 +1,22 @@
-'use strict'
-
-const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const BaseRequest = require('../../../app/requests/base.request.js')
+import * as BaseRequest from '../../../app/requests/base.request.js'
 
 // Thing under test
-const TokenRequest = require('../../../app/requests/resp/token.request.js')
+import * as TokenRequest from '../../../app/requests/resp/token.request.js'
 
 describe('ReSP API Token request', () => {
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request is able to generate a token', () => {
     beforeEach(() => {
-      Sinon.stub(BaseRequest, 'post').resolves({
+      vi.spyOn(BaseRequest, 'postRequest').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -37,7 +35,7 @@ describe('ReSP API Token request', () => {
 
   describe('when the request cannot generate a token', () => {
     beforeEach(() => {
-      Sinon.stub(BaseRequest, 'post').resolves({
+      vi.spyOn(BaseRequest, 'postRequest').mockResolvedValue({
         succeeded: false,
         response: {
           statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR,

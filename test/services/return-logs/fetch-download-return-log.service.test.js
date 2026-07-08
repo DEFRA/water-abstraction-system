@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const ReturnSubmissionHelper = require('../../support/helpers/return-submission.helper.js')
-const ReturnSubmissionLineHelper = require('../../support/helpers/return-submission-line.helper.js')
+import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import * as ReturnSubmissionHelper from '../../support/helpers/return-submission.helper.js'
+import * as ReturnSubmissionLineHelper from '../../support/helpers/return-submission-line.helper.js'
 
 // Thing under test
-const FetchDownloadReturnLogService = require('../../../app/services/return-logs/fetch-download-return-log.service.js')
+import FetchDownloadReturnLogService from '../../../app/services/return-logs/fetch-download-return-log.service.js'
 
 describe('Fetch Download Return Log service', () => {
   let returnLog

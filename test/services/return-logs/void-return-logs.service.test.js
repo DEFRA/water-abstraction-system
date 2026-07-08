@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
+import ReturnLogModel from '../../../app/models/return-log.model.js'
+import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
 
 // Thing under test
-const VoidReturnLogsService = require('../../../app/services/return-logs/void-return-logs.service.js')
+import VoidReturnLogsService from '../../../app/services/return-logs/void-return-logs.service.js'
 
 describe('Return Logs - Void Return Logs service', () => {
   let licenceRef = 'return-logs'

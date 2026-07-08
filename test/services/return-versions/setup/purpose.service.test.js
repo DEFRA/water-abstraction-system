@@ -1,19 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Things we need to stub
-const FetchPurposesService = require('../../../../app/services/return-versions/setup/fetch-purposes.service.js')
+import FetchPurposesService from '../../../../app/services/return-versions/setup/fetch-purposes.service.js'
 
 // Thing under test
-const PurposeService = require('../../../../app/services/return-versions/setup/purpose.service.js')
+import PurposeService from '../../../../app/services/return-versions/setup/purpose.service.js'
 
 describe('Return Versions - Setup - Purpose service', () => {
   const requirementIndex = 0
@@ -22,7 +19,8 @@ describe('Return Versions - Setup - Purpose service', () => {
   let sessionData
 
   beforeEach(() => {
-    Sinon.stub(FetchPurposesService, 'go').resolves([
+    vi.mock('../../../../app/services/return-versions/setup/fetch-purposes.service.js')
+    FetchPurposesService.mockResolvedValue([
       { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
       { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' }
     ])
@@ -67,13 +65,14 @@ describe('Return Versions - Setup - Purpose service', () => {
       reason: 'major-change'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

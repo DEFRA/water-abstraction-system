@@ -1,18 +1,16 @@
-'use strict'
-
 // Test helpers
-const GroupHelper = require('../support/helpers/group.helper.js')
-const GroupRoleHelper = require('../support/helpers/group-role.helper.js')
-const GroupRoleModel = require('../../app/models/group-role.model.js')
-const RoleHelper = require('../support/helpers/role.helper.js')
-const RoleModel = require('../../app/models/role.model.js')
-const UserGroupHelper = require('../support/helpers/user-group.helper.js')
-const UserGroupModel = require('../../app/models/user-group.model.js')
-const UserHelper = require('../support/helpers/user.helper.js')
-const UserModel = require('../../app/models/user.model.js')
+import * as GroupHelper from '../support/helpers/group.helper.js'
+import * as GroupRoleHelper from '../support/helpers/group-role.helper.js'
+import GroupRoleModel from '../../app/models/group-role.model.js'
+import * as RoleHelper from '../support/helpers/role.helper.js'
+import RoleModel from '../../app/models/role.model.js'
+import * as UserGroupHelper from '../support/helpers/user-group.helper.js'
+import UserGroupModel from '../../app/models/user-group.model.js'
+import * as UserHelper from '../support/helpers/user.helper.js'
+import UserModel from '../../app/models/user.model.js'
 
 // Thing under test
-const GroupModel = require('../../app/models/group.model.js')
+import GroupModel from '../../app/models/group.model.js'
 
 const GROUP_ROLE_WIRS_RTNS_INDEX = 5
 const GROUP_WIRS_INDEX = 2

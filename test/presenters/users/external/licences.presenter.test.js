@@ -1,13 +1,11 @@
-'use strict'
-
 // Test helpers
-const UsersFixture = require('../../../support/fixtures/users.fixture.js')
-const { generateUUID, today } = require('../../../../app/lib/general.lib.js')
-const { licenceEnds } = require('../../../support/fixtures/licence.fixture.js')
-const { tomorrow } = require('../../../support/general.js')
+import * as UsersFixture from '../../../support/fixtures/users.fixture.js'
+import { generateUUID, today } from '../../../../app/lib/general.lib.js'
+import { licenceEnds } from '../../../support/fixtures/licence.fixture.js'
+import { tomorrow } from '../../../support/general.js'
 
 // Thing under test
-const LicencesPresenter = require('../../../../app/presenters/users/external/licences.presenter.js')
+import LicencesPresenter from '../../../../app/presenters/users/external/licences.presenter.js'
 
 describe('Users - External - Licences Presenter', () => {
   let back

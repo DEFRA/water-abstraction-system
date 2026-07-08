@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeHelper = require('../../../support/helpers/licence-version-purpose.helper.js')
-const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
+import * as LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
+import * as LicenceVersionPurposeHelper from '../../../support/helpers/licence-version-purpose.helper.js'
+import * as PurposeHelper from '../../../support/helpers/purpose.helper.js'
 
 // Thing under test
-const FetchPurposesService = require('../../../../app/services/return-versions/setup/fetch-purposes.service.js')
+import FetchPurposesService from '../../../../app/services/return-versions/setup/fetch-purposes.service.js'
 
 describe('Return Versions - Setup - Fetch Purposes service', () => {
   let licenceVersion

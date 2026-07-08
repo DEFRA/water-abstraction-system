@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
-const YarStub = require('../../../../support/stubs/yar.stub.js')
+import * as AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import YarStub from '../../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewCheckLicenceMatchesService = require('../../../../../app/services/notices/setup/abstraction-alerts/view-check-licence-matches.service.js')
+import ViewCheckLicenceMatchesService from '../../../../../app/services/notices/setup/abstraction-alerts/view-check-licence-matches.service.js'
 
 describe('Notices - Setup - Abstraction Alerts - View Check Licence Matches service', () => {
   let licenceMonitoringStations
@@ -34,16 +31,17 @@ describe('Notices - Setup - Abstraction Alerts - View Check Licence Matches serv
       ]
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.resolves()
+    yarStub = YarStub()
+    yarStub.flash.mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -110,8 +108,8 @@ describe('Notices - Setup - Abstraction Alerts - View Check Licence Matches serv
 
     describe('when there is a notification', () => {
       beforeEach(() => {
-        yarStub = YarStub.build(Sinon)
-        yarStub.flash.returns(['Test notification'])
+        yarStub = YarStub()
+        yarStub.flash.mockReturnValue(['Test notification'])
       })
 
       it('should set the notification', async () => {

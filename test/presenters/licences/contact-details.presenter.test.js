@@ -1,11 +1,9 @@
-'use strict'
-
 // Test Helpers
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 
 // Thing under test
-const ContactDetailsPresenter = require('../../../app/presenters/licences/contact-details.presenter.js')
+import ContactDetailsPresenter from '../../../app/presenters/licences/contact-details.presenter.js'
 
 describe('Licences - Contact Details presenter', () => {
   let companyId

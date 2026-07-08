@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ConfirmedPresenter = require('../../../../app/presenters/return-logs/setup/confirmed.presenter.js')
+import ConfirmedPresenter from '../../../../app/presenters/return-logs/setup/confirmed.presenter.js'
 
 describe('Return Logs - Setup - Confirmed presenter', () => {
   let returnLog

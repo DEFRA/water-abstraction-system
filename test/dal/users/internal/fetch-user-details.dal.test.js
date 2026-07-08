@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const UsersFixture = require('../../../support/fixtures/users.fixture.js')
+import * as UsersFixture from '../../../support/fixtures/users.fixture.js'
 
 // Thing under test
-const FetchUserDetailsDal = require('../../../../app/dal/users/internal/fetch-user-details.dal.js')
+import FetchUserDetailsDal from '../../../../app/dal/users/internal/fetch-user-details.dal.js'
 
 // NOTE: The users are seeded as part of setting up the test database, along with with their groups and roles. So,
 // unlike other fetch tests we don't create any test records and assert they are in our results as we already have

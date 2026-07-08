@@ -1,21 +1,19 @@
-'use strict'
-
 // Test helpers
-const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
-const ReviewChargeElementModel = require('../../../../app/models/review-charge-element.model.js')
-const ReviewChargeElementReturnHelper = require('../../../support/helpers/review-charge-element-return.helper.js')
-const ReviewChargeElementReturnModel = require('../../../../app/models/review-charge-element-return.model.js')
-const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
-const ReviewChargeReferenceModel = require('../../../../app/models/review-charge-reference.model.js')
-const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
-const ReviewChargeVersionModel = require('../../../../app/models/review-charge-version.model.js')
-const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
-const ReviewLicenceModel = require('../../../../app/models/review-licence.model.js')
-const ReviewReturnHelper = require('../../../support/helpers/review-return.helper.js')
-const ReviewReturnModel = require('../../../../app/models/review-return.model.js')
+import * as ReviewChargeElementHelper from '../../../support/helpers/review-charge-element.helper.js'
+import ReviewChargeElementModel from '../../../../app/models/review-charge-element.model.js'
+import * as ReviewChargeElementReturnHelper from '../../../support/helpers/review-charge-element-return.helper.js'
+import ReviewChargeElementReturnModel from '../../../../app/models/review-charge-element-return.model.js'
+import * as ReviewChargeReferenceHelper from '../../../support/helpers/review-charge-reference.helper.js'
+import ReviewChargeReferenceModel from '../../../../app/models/review-charge-reference.model.js'
+import * as ReviewChargeVersionHelper from '../../../support/helpers/review-charge-version.helper.js'
+import ReviewChargeVersionModel from '../../../../app/models/review-charge-version.model.js'
+import * as ReviewLicenceHelper from '../../../support/helpers/review-licence.helper.js'
+import ReviewLicenceModel from '../../../../app/models/review-licence.model.js'
+import * as ReviewReturnHelper from '../../../support/helpers/review-return.helper.js'
+import ReviewReturnModel from '../../../../app/models/review-return.model.js'
 
 // Thing under test
-const RemoveReviewLicenceService = require('../../../../app/services/bill-runs/review/remove-review-licence.service.js')
+import RemoveReviewLicenceService from '../../../../app/services/bill-runs/review/remove-review-licence.service.js'
 
 describe('Bill Runs Review - Remove Review Licence service', () => {
   describe('when called', () => {

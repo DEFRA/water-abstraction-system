@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const ContactValidator = require('../../../../app/validators/billing-accounts/setup/contact.validator.js')
+import ContactValidator from '../../../../app/validators/billing-accounts/setup/contact.validator.js'
 
 describe('Billing Accounts - Setup - Contact Validator', () => {
   describe('when called with valid data', () => {

@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const CustomersFixtures = require('../support/fixtures/customers.fixture.js')
+import * as CustomersFixtures from '../support/fixtures/customers.fixture.js'
 
 // Thing under test
-const CustomerPresenter = require('../../app/presenters/customer.presenter.js')
+import CustomerPresenter from '../../app/presenters/customer.presenter.js'
 
 describe('Customer presenter', () => {
   describe('#formatCompanyContact', () => {

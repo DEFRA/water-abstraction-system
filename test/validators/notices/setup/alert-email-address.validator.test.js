@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const AlertEmailAddressValidator = require('../../../../app/validators/notices/setup/alert-email-address.validator.js')
+import AlertEmailAddressValidator from '../../../../app/validators/notices/setup/alert-email-address.validator.js'
 
 describe('Notices - Setup - Alert Email Address validator', () => {
   let payload

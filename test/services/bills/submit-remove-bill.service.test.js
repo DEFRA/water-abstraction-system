@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const BillModel = require('../../../app/models/bill.model.js')
-const LegacyDeleteBillRequest = require('../../../app/requests/legacy/delete-bill.request.js')
-const ProcessBillingFlagService = require('../../../app/services/licences/supplementary/process-billing-flag.service.js')
-const UnassignLicencesToBillRunService = require('../../../app/services/bill-runs/unassign-licences-to-bill-run.service.js')
+import BillModel from '../../../app/models/bill.model.js'
+import * as LegacyDeleteBillRequest from '../../../app/requests/legacy/delete-bill.request.js'
+import ProcessBillingFlagService from '../../../app/services/licences/supplementary/process-billing-flag.service.js'
+import UnassignLicencesToBillRunService from '../../../app/services/bill-runs/unassign-licences-to-bill-run.service.js'
 
 // Thing under test
-const SubmitRemoveBillService = require('../../../app/services/bills/submit-remove-bill.service.js')
+import SubmitRemoveBillService from '../../../app/services/bills/submit-remove-bill.service.js'
 
 describe('Bills - Submit Remove Bill service', () => {
   const user = { id: '0aa9dcaa-9a26-4a77-97ab-c17db54d38a1', useremail: 'carol.shaw@atari.com' }
@@ -18,9 +15,6 @@ describe('Bills - Submit Remove Bill service', () => {
   let bill
   let billStub
   let legacyDeleteBillRequestStub
-  let processBillingFlagsStub
-  let unassignLicencesToBillRunStub
-
   beforeEach(async () => {
     bill = {
       id: '274a3c01-42fe-4ed0-9212-c703ea5feaab',
@@ -31,40 +25,42 @@ describe('Bills - Submit Remove Bill service', () => {
       ]
     }
 
-    billStub = Sinon.stub().resolves(bill)
-    Sinon.stub(BillModel, 'query').returns({
-      findById: Sinon.stub().returnsThis(),
-      select: Sinon.stub().returnsThis(),
-      withGraphFetched: Sinon.stub().returnsThis(),
+    billStub = vi.fn().mockResolvedValue(bill)
+    vi.spyOn(BillModel, 'query').mockReturnValue({
+      findById: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      withGraphFetched: vi.fn().mockReturnThis(),
       modifyGraph: billStub
     })
 
-    legacyDeleteBillRequestStub = Sinon.stub(LegacyDeleteBillRequest, 'send').resolves()
-    processBillingFlagsStub = Sinon.stub(ProcessBillingFlagService, 'go').resolves()
-    unassignLicencesToBillRunStub = Sinon.stub(UnassignLicencesToBillRunService, 'go').resolves()
+    legacyDeleteBillRequestStub = vi.spyOn(LegacyDeleteBillRequest, 'send').mockResolvedValue()
+    vi.mock('../../../app/services/licences/supplementary/process-billing-flag.service.js')
+    ProcessBillingFlagService.mockResolvedValue()
+    vi.mock('../../../app/services/bill-runs/unassign-licences-to-bill-run.service.js')
+    UnassignLicencesToBillRunService.mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('unassigns any two-part tariff supplementary licences in the bill from the bill run', async () => {
       await SubmitRemoveBillService(bill.id, user)
 
-      expect(unassignLicencesToBillRunStub.called).toBe(true)
+      expect(UnassignLicencesToBillRunService).toHaveBeenCalled()
     })
 
     it('flags the two licences in the bill for supplementary billing', async () => {
       await SubmitRemoveBillService(bill.id, user)
 
-      expect(processBillingFlagsStub.calledTwice).toBe(true)
+      expect(ProcessBillingFlagService.calledTwice).toBe(true)
     })
 
     it('sends a request to the legacy service to delete the bill', async () => {
       await SubmitRemoveBillService(bill.id, user)
 
-      expect(legacyDeleteBillRequestStub.called).toBe(true)
+      expect(legacyDeleteBillRequestStub).toHaveBeenCalled()
     })
 
     it('returns the path to the legacy bill run processing page', async () => {

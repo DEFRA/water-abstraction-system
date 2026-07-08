@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const StopOrReduceValidator = require('../../../../app/validators/licence-monitoring-station/setup/stop-or-reduce.validator.js')
+import StopOrReduceValidator from '../../../../app/validators/licence-monitoring-station/setup/stop-or-reduce.validator.js'
 
 describe('Licence Monitoring Station Setup - Stop Or Reduce validator', () => {
   let payload

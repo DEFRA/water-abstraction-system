@@ -1,22 +1,19 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillRunError = require('../../../../app/errors/bill-run.error.js')
+import BillRunError from '../../../../app/errors/bill-run.error.js'
 
 // Things we need to stub
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const ChargingModuleGenerateRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
-const FetchBillingAccountsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
-const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
-const LegacyRefreshBillRunRequest = require('../../../../app/requests/legacy/refresh-bill-run.request.js')
-const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/two-part-tariff/process-billing-period.service.js')
+import BillRunModel from '../../../../app/models/bill-run.model.js'
+import * as ChargingModuleGenerateRequest from '../../../../app/requests/charging-module/generate-bill-run.request.js'
+import FetchBillingAccountsService from '../../../../app/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
+import * as LegacyRefreshBillRunRequest from '../../../../app/requests/legacy/refresh-bill-run.request.js'
+import ProcessBillingPeriodService from '../../../../app/services/bill-runs/two-part-tariff/process-billing-period.service.js'
 
 // Thing under test
-const GenerateBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js')
+import GenerateBillRunService from '../../../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js'
 
 describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
   const billRun = {
@@ -28,28 +25,27 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
   }
 
   let billRunPatchStub
-  let processBillingPeriodStub
   let notifierStub
 
   beforeEach(async () => {
-    billRunPatchStub = Sinon.stub().resolves()
+    billRunPatchStub = vi.fn().mockResolvedValue()
 
-    Sinon.stub(BillRunModel, 'query').returns({
-      findById: Sinon.stub().returnsThis(),
+    vi.spyOn(BillRunModel, 'query').mockReturnValue({
+      findById: vi.fn().mockReturnThis(),
       patch: billRunPatchStub
     })
 
-    processBillingPeriodStub = Sinon.stub(ProcessBillingPeriodService, 'go')
+    vi.mock('../../../../app/services/bill-runs/two-part-tariff/process-billing-period.service.js')
 
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -58,18 +54,19 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
       // We stub FetchTwoPartTariffBillingAccountsService to return no results in all scenarios because it is the result
       // of ProcessBillingPeriodService which determines if there is anything to bill. We change the stub of that
       // service to dictate the scenario we're trying to test.
-      Sinon.stub(FetchBillingAccountsService, 'go').resolves([])
+      vi.mock('../../../../app/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js')
+      FetchBillingAccountsService.mockResolvedValue([])
     })
 
     describe('but there is nothing to bill', () => {
       beforeEach(async () => {
-        processBillingPeriodStub.resolves(false)
+        ProcessBillingPeriodService.mockResolvedValue(false)
       })
 
       it('sets the bill run status to "empty"', async () => {
         await GenerateBillRunService(billRun)
 
-        expect(billRunPatchStub.calledOnce).toBe(true)
+        expect(billRunPatchStub).toHaveBeenCalledOnce()
         expect(billRunPatchStub.firstCall.firstArg).toMatchObject({ status: 'empty' })
       })
     })
@@ -79,45 +76,45 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
       let legacyRefreshBillRunRequestStub
 
       beforeEach(() => {
-        chargingModuleGenerateRequestStub = Sinon.stub(ChargingModuleGenerateRequest, 'send')
-        legacyRefreshBillRunRequestStub = Sinon.stub(LegacyRefreshBillRunRequest, 'send')
+        chargingModuleGenerateRequestStub = vi.spyOn(ChargingModuleGenerateRequest, 'send').mockImplementation(() => {})
+        legacyRefreshBillRunRequestStub = vi.spyOn(LegacyRefreshBillRunRequest, 'send').mockImplementation(() => {})
 
-        processBillingPeriodStub.resolves(true)
+        ProcessBillingPeriodService.mockResolvedValue(true)
       })
 
       it('tells the charging module API to "generate" the bill run', async () => {
         await GenerateBillRunService(billRun)
 
-        expect(chargingModuleGenerateRequestStub.called).toBe(true)
+        expect(chargingModuleGenerateRequestStub).toHaveBeenCalled()
       })
 
       it('tells the legacy service to start its refresh job', async () => {
         await GenerateBillRunService(billRun)
 
-        expect(legacyRefreshBillRunRequestStub.called).toBe(true)
+        expect(legacyRefreshBillRunRequestStub).toHaveBeenCalled()
       })
     })
   })
 
   describe('when the service errors', () => {
-    let handleErroredBillRunStub
     let thrownError
 
     beforeEach(async () => {
-      handleErroredBillRunStub = Sinon.stub(HandleErroredBillRunService, 'go')
+      vi.mock('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
     })
 
     describe('because fetching the billing accounts fails', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        Sinon.stub(FetchBillingAccountsService, 'go').rejects(thrownError)
+        vi.mock('../../../../app/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js')
+        FetchBillingAccountsService.mockRejectedValue(thrownError)
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
         await GenerateBillRunService(billRun)
 
-        const handlerArgs = handleErroredBillRunStub.firstCall.args
+        const handlerArgs = HandleErroredBillRunService.firstCall.args
 
         expect(handlerArgs[1]).toEqual(BillRunModel.errorCodes.failedToProcessChargeVersions)
       })
@@ -141,14 +138,15 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
         beforeEach(() => {
           thrownError = new BillRunError(new Error(), BillRunModel.errorCodes.failedToPrepareTransactions)
 
-          Sinon.stub(FetchBillingAccountsService, 'go').resolves([])
-          processBillingPeriodStub.rejects(thrownError)
+          vi.mock('../../../../app/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js')
+          FetchBillingAccountsService.mockResolvedValue([])
+          ProcessBillingPeriodService.mockRejectedValue(thrownError)
         })
 
         it('calls HandleErroredBillRunService with appropriate error code', async () => {
           await GenerateBillRunService(billRun)
 
-          const handlerArgs = handleErroredBillRunStub.firstCall.args
+          const handlerArgs = HandleErroredBillRunService.firstCall.args
 
           expect(handlerArgs[1]).toEqual(BillRunModel.errorCodes.failedToPrepareTransactions)
         })
@@ -172,15 +170,16 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        Sinon.stub(FetchBillingAccountsService, 'go').resolves([])
-        processBillingPeriodStub.resolves(true)
-        Sinon.stub(ChargingModuleGenerateRequest, 'send').rejects(thrownError)
+        vi.mock('../../../../app/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js')
+        FetchBillingAccountsService.mockResolvedValue([])
+        ProcessBillingPeriodService.mockResolvedValue(true)
+        vi.spyOn(ChargingModuleGenerateRequest, 'send').mockRejectedValue(thrownError)
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
         await GenerateBillRunService(billRun)
 
-        const handlerArgs = handleErroredBillRunStub.firstCall.args
+        const handlerArgs = HandleErroredBillRunService.firstCall.args
 
         expect(handlerArgs[1]).toBeUndefined()
       })

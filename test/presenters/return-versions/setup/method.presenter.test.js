@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const MethodPresenter = require('../../../../app/presenters/return-versions/setup/method.presenter.js')
+import MethodPresenter from '../../../../app/presenters/return-versions/setup/method.presenter.js'
 
 describe('Return Versions - Setup - Method presenter', () => {
   let session

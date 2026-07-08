@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const PointModel = require('../../../../../app/models/point.model.js')
+import PointModel from '../../../../../app/models/point.model.js'
 
 // Thing under test
-const ReturnRequirementsPresenter = require('../../../../../app/presenters/return-versions/setup/check/returns-requirements.presenter.js')
+import ReturnRequirementsPresenter from '../../../../../app/presenters/return-versions/setup/check/returns-requirements.presenter.js'
 
 describe('Return Versions Setup - Return Requirements presenter', () => {
   let journey

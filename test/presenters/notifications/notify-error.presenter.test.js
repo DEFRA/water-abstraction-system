@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const NotifyErrorPresenter = require('../../../app/presenters/notifications/notify-error.presenter.js')
+import NotifyErrorPresenter from '../../../app/presenters/notifications/notify-error.presenter.js'
 
 describe('Notifications - Notify Error presenter', () => {
   let message

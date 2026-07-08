@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const NoticeSessionFixture = require('../../../support/fixtures/notice-session.fixture.js')
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { addressToCSV } = require('../../../../app/presenters/notices/base.presenter.js')
-const { transformArrayToCSVRow } = require('../../../../app/lib/transform-to-csv.lib.js')
+import * as NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
+import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import { addressToCSV } from '../../../../app/presenters/notices/base.presenter.js'
+import { transformArrayToCSVRow } from '../../../../app/lib/transform-to-csv.lib.js'
 
 // Thing under test
-const DownloadRenewalInvitationPresenter = require('../../../../app/presenters/notices/setup/download-renewal-invitation.presenter.js')
+import DownloadRenewalInvitationPresenter from '../../../../app/presenters/notices/setup/download-renewal-invitation.presenter.js'
 
 describe('Notices - Setup - Download Renewal Invitation presenter', () => {
   let recipient

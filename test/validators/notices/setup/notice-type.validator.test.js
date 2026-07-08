@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const NoticeTypeValidator = require('../../../../app/validators/notices/setup/notice-type.validator.js')
+import NoticeTypeValidator from '../../../../app/validators/notices/setup/notice-type.validator.js'
 
 describe('Notice Type Validator', () => {
   let payload

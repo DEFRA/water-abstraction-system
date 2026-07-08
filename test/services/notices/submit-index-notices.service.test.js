@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
+import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
 
 // Things to stub
-const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')
-const YarStub = require('../../support/stubs/yar.stub.js')
+import FetchNoticesService from '../../../app/services/notices/fetch-notices.service.js'
+import YarStub from '../../support/stubs/yar.stub.js'
 
 // Thing under test
-const SubmitIndexNoticesService = require('../../../app/services/notices/submit-index-notices.service.js')
+import SubmitIndexNoticesService from '../../../app/services/notices/submit-index-notices.service.js'
 
 describe('Notices - Submit Index Notices service', () => {
   let auth
@@ -25,11 +22,11 @@ describe('Notices - Submit Index Notices service', () => {
       credentials: { scope: ['bulk_return_notifications', 'returns'] }
     }
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -49,7 +46,7 @@ describe('Notices - Submit Index Notices service', () => {
       it('clears the "noticesFilter" object from the session', async () => {
         await SubmitIndexNoticesService(payload, yarStub, auth)
 
-        expect(yarStub.clear.called).toBe(true)
+        expect(yarStub.clear).toHaveBeenCalled()
       })
     })
 
@@ -67,7 +64,7 @@ describe('Notices - Submit Index Notices service', () => {
       it('saves a default "noticesFilter" object in the session', async () => {
         await SubmitIndexNoticesService(payload, yarStub, auth)
 
-        const setArgs = yarStub.set.args[0]
+        const setArgs = yarStub.set.mock.calls[0]
 
         expect(setArgs[0]).toEqual('noticesFilter')
         expect(setArgs[1]).toEqual({
@@ -111,7 +108,7 @@ describe('Notices - Submit Index Notices service', () => {
         it('saves the submitted filters as the "noticesFilter" object in the session', async () => {
           await SubmitIndexNoticesService(payload, yarStub, auth)
 
-          const setArgs = yarStub.set.args[0]
+          const setArgs = yarStub.set.mock.calls[0]
 
           expect(setArgs[0]).toEqual('noticesFilter')
           expect(setArgs[1]).toEqual({
@@ -145,7 +142,7 @@ describe('Notices - Submit Index Notices service', () => {
         it('saves the submitted filters as the "noticesFilter" object in the session', async () => {
           await SubmitIndexNoticesService(payload, yarStub, auth)
 
-          const setArgs = yarStub.set.args[0]
+          const setArgs = yarStub.set.mock.calls[0]
 
           expect(setArgs[0]).toEqual('noticesFilter')
           expect(setArgs[1]).toEqual({
@@ -179,7 +176,7 @@ describe('Notices - Submit Index Notices service', () => {
         it('saves the submitted filters as the "noticesFilter" object in the session', async () => {
           await SubmitIndexNoticesService(payload, yarStub, auth)
 
-          const setArgs = yarStub.set.args[0]
+          const setArgs = yarStub.set.mock.calls[0]
 
           expect(setArgs[0]).toEqual('noticesFilter')
           expect(setArgs[1]).toEqual({
@@ -214,7 +211,8 @@ describe('Notices - Submit Index Notices service', () => {
 
       describe('and the results are paginated', () => {
         beforeEach(() => {
-          Sinon.stub(FetchNoticesService, 'go').resolves({ results, total: 70 })
+          vi.mock('../../../app/services/notices/fetch-notices.service.js')
+          FetchNoticesService.mockResolvedValue({ results, total: 70 })
         })
 
         it('returns the page data for the view, including any errors', async () => {
@@ -304,7 +302,8 @@ describe('Notices - Submit Index Notices service', () => {
 
       describe('and the results are not paginated', () => {
         beforeEach(() => {
-          Sinon.stub(FetchNoticesService, 'go').resolves({ results, total: 1 })
+          vi.mock('../../../app/services/notices/fetch-notices.service.js')
+          FetchNoticesService.mockResolvedValue({ results, total: 1 })
         })
 
         it('returns the page data for the view, including any errors', async () => {

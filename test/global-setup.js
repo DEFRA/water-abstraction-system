@@ -3,7 +3,7 @@
  * @module GlobalSetup
  */
 
-import Database from './support/database.js'
+import * as Database from './support/database.js'
 
 /**
  * Clean and seed the test database before any tests run

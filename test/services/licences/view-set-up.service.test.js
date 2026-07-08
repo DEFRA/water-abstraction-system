@@ -1,22 +1,19 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const ReturnVersionModel = require('../../../app/models/return-version.model.js')
-const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import ReturnVersionModel from '../../../app/models/return-version.model.js'
+import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const FetchAgreementsService = require('../../../app/services/licences/fetch-agreements.service.js')
-const FetchChargeVersionsService = require('../../../app/services/licences/fetch-charge-versions.service.js')
-const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
-const FetchReturnVersionsService = require('../../../app/services/licences/fetch-return-versions.service.js')
-const FetchWorkflowsService = require('../../../app/services/licences/fetch-workflows.service.js')
+import FetchAgreementsService from '../../../app/services/licences/fetch-agreements.service.js'
+import FetchChargeVersionsService from '../../../app/services/licences/fetch-charge-versions.service.js'
+import FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import FetchReturnVersionsService from '../../../app/services/licences/fetch-return-versions.service.js'
+import FetchWorkflowsService from '../../../app/services/licences/fetch-workflows.service.js'
 
 // Thing under test
-const ViewSetUpService = require('../../../app/services/licences/view-set-up.service.js')
+import ViewSetUpService from '../../../app/services/licences/view-set-up.service.js'
 
 describe('Licences - View Set Up service', () => {
   let agreement
@@ -86,19 +83,24 @@ describe('Licences - View Set Up service', () => {
       licenceId: licence.id
     }
 
-    Sinon.stub(FetchAgreementsService, 'go').returns([agreement])
+    vi.mock('../../../app/services/licences/fetch-agreements.service.js')
+    FetchAgreementsService.mockReturnValue([agreement])
 
-    Sinon.stub(FetchChargeVersionsService, 'go').returns([chargeVersion])
+    vi.mock('../../../app/services/licences/fetch-charge-versions.service.js')
+    FetchChargeVersionsService.mockReturnValue([chargeVersion])
 
-    Sinon.stub(FetchReturnVersionsService, 'go').returns([returnVersion])
+    vi.mock('../../../app/services/licences/fetch-return-versions.service.js')
+    FetchReturnVersionsService.mockReturnValue([returnVersion])
 
-    Sinon.stub(FetchWorkflowsService, 'go').returns([workflow])
+    vi.mock('../../../app/services/licences/fetch-workflows.service.js')
+    FetchWorkflowsService.mockReturnValue([workflow])
 
-    Sinon.stub(FetchLicenceService, 'go').resolves(licence)
+    vi.mock('../../../app/services/licences/fetch-licence.service.js')
+    FetchLicenceService.mockResolvedValue(licence)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

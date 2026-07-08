@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ManualAddressValidator = require('../../../app/validators/address/manual.validator.js')
+import ManualAddressValidator from '../../../app/validators/address/manual.validator.js'
 
 describe('Address - Manual Validator', () => {
   let payload

@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const SearchPresenter = require('../../../app/presenters/search/search.presenter.js')
+import SearchPresenter from '../../../app/presenters/search/search.presenter.js'
 
 describe('Search - Search presenter', () => {
   let allSearchMatches

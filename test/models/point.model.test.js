@@ -1,18 +1,16 @@
-'use strict'
-
 // Test helpers
-const LicenceVersionPurposeHelper = require('../support/helpers/licence-version-purpose.helper.js')
-const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
-const LicenceVersionPurposePointHelper = require('../support/helpers/licence-version-purpose-point.helper.js')
-const PointHelper = require('../support/helpers/point.helper.js')
-const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
-const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
-const ReturnRequirementPointHelper = require('../support/helpers/return-requirement-point.helper.js')
-const SourceHelper = require('../support/helpers/source.helper.js')
-const SourceModel = require('../../app/models/source.model.js')
+import * as LicenceVersionPurposeHelper from '../support/helpers/licence-version-purpose.helper.js'
+import LicenceVersionPurposeModel from '../../app/models/licence-version-purpose.model.js'
+import * as LicenceVersionPurposePointHelper from '../support/helpers/licence-version-purpose-point.helper.js'
+import * as PointHelper from '../support/helpers/point.helper.js'
+import * as ReturnRequirementHelper from '../support/helpers/return-requirement.helper.js'
+import ReturnRequirementModel from '../../app/models/return-requirement.model.js'
+import * as ReturnRequirementPointHelper from '../support/helpers/return-requirement-point.helper.js'
+import * as SourceHelper from '../support/helpers/source.helper.js'
+import SourceModel from '../../app/models/source.model.js'
 
 // Thing under test
-const PointModel = require('../../app/models/point.model.js')
+import PointModel from '../../app/models/point.model.js'
 
 describe('Point model', () => {
   let testLicenceVersionPurpose

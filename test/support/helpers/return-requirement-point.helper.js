@@ -3,7 +3,7 @@
  */
 
 import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
-import PointHelper from './point.helper.js'
+import * as PointHelper from './point.helper.js'
 import ReturnRequirementPointModel from '../../../app/models/return-requirement-point.model.js'
 
 /**

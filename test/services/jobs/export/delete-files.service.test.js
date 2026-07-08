@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const fs = require('fs')
-const path = require('path')
-const mockFs = require('mock-fs')
+import fs from 'fs'
+import path from 'path'
+import mockFs from 'mock-fs'
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const DeleteFilesService = require('../../../../app/services/jobs/export/delete-files.service.js')
+import DeleteFilesService from '../../../../app/services/jobs/export/delete-files.service.js'
 
 describe('Delete Files service', () => {
   let filenameWithPath
@@ -22,7 +19,7 @@ describe('Delete Files service', () => {
   beforeEach(() => {
     folderNameWithPath = 'testFolder'
     filenameWithPath = path.join(folderNameWithPath, 'testFile')
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
 
     mockFs({
@@ -34,7 +31,7 @@ describe('Delete Files service', () => {
 
   afterEach(() => {
     mockFs.restore()
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -88,7 +85,7 @@ describe('Delete Files service', () => {
 
       await DeleteFilesService(noFile)
 
-      expect(notifierStub.omfg.calledWith('Delete file service errored')).toBe(true)
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Delete file service errored')
     })
   })
 })

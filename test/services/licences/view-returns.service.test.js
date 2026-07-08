@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 
 // Things we need to stub
-const DetermineLicenceHasReturnVersionsService = require('../../../app/services/licences/determine-licence-has-return-versions.service.js')
-const FetchReturnsService = require('../../../app/services/licences/fetch-returns.service.js')
-const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
+import DetermineLicenceHasReturnVersionsService from '../../../app/services/licences/determine-licence-has-return-versions.service.js'
+import FetchReturnsService from '../../../app/services/licences/fetch-returns.service.js'
+import FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
 
 // Thing under test
-const ViewReturnsService = require('../../../app/services/licences/view-returns.service.js')
+import ViewReturnsService from '../../../app/services/licences/view-returns.service.js'
 
 describe('Licences - View Returns service', () => {
   const page = '1'
@@ -40,18 +37,21 @@ describe('Licences - View Returns service', () => {
       licenceRef: generateLicenceRef()
     }
 
-    Sinon.stub(DetermineLicenceHasReturnVersionsService, 'go').returns(true)
+    vi.mock('../../../app/services/licences/determine-licence-has-return-versions.service.js')
+    DetermineLicenceHasReturnVersionsService.mockReturnValue(true)
 
-    Sinon.stub(FetchLicenceService, 'go').resolves(licence)
+    vi.mock('../../../app/services/licences/fetch-licence.service.js')
+    FetchLicenceService.mockResolvedValue(licence)
 
-    Sinon.stub(FetchReturnsService, 'go').resolves({
+    vi.mock('../../../app/services/licences/fetch-returns.service.js')
+    FetchReturnsService.mockResolvedValue({
       totalNumber: 1,
       returns: _returnLogs()
     })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when a return', () => {

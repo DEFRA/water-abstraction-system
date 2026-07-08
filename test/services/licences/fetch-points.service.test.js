@@ -1,15 +1,13 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
-const LicenceVersionPurposePointHelper = require('../../support/helpers/licence-version-purpose-point.helper.js')
-const PointHelper = require('../../support/helpers/point.helper.js')
-const SourceHelper = require('../../support/helpers/source.helper.js')
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import * as LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import * as LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
+import * as LicenceVersionPurposePointHelper from '../../support/helpers/licence-version-purpose-point.helper.js'
+import * as PointHelper from '../../support/helpers/point.helper.js'
+import * as SourceHelper from '../../support/helpers/source.helper.js'
 
 // Thing under test
-const FetchPointsService = require('../../../app/services/licences/fetch-points.service.js')
+import FetchPointsService from '../../../app/services/licences/fetch-points.service.js'
 
 describe('Licences - Fetch Points service', () => {
   let licence

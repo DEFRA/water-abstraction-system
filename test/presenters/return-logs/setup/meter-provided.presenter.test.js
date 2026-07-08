@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const MeterProvidedPresenter = require('../../../../app/presenters/return-logs/setup/meter-provided.presenter.js')
+import MeterProvidedPresenter from '../../../../app/presenters/return-logs/setup/meter-provided.presenter.js'
 
 describe('Return Logs Setup - Meter Provided presenter', () => {
   let session

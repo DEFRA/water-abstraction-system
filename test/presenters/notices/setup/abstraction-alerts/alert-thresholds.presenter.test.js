@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
+import * as AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 
 // Thing under test
-const AlertThresholdsPresenter = require('../../../../../app/presenters/notices/setup/abstraction-alerts/alert-thresholds.presenter.js')
+import AlertThresholdsPresenter from '../../../../../app/presenters/notices/setup/abstraction-alerts/alert-thresholds.presenter.js'
 
 describe('Notices - Setup - Abstraction Alerts - Alert Thresholds presenter', () => {
   let licenceMonitoringStations

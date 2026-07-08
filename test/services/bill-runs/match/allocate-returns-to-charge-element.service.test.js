@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const AllocateReturnsToChargeElementService = require('../../../../app/services/bill-runs/match/allocate-returns-to-charge-element.service.js')
+import AllocateReturnsToChargeElementService from '../../../../app/services/bill-runs/match/allocate-returns-to-charge-element.service.js'
 
 describe('Allocate Returns to Charge Element Service', () => {
   describe('when there are records to process', () => {

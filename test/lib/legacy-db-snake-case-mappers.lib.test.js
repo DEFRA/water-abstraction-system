@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const LegacyDbSnakeCaseMappersLib = require('../../app/lib/legacy-db-snake-case-mappers.lib.js')
+import * as LegacyDbSnakeCaseMappersLib from '../../app/lib/legacy-db-snake-case-mappers.lib.js'
 
 // NOTE: Ideally, we would have liked to spy on the Objection snakeCase and camelCase methods to confirm they are or are
 // not being called depending on the circumstance. But all our attempts with Sinon failed (a common issue we have when

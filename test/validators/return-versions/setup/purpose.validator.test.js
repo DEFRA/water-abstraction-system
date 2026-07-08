@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const PurposeValidator = require('../../../../app/validators/return-versions/setup/purpose.validator.js')
+import PurposeValidator from '../../../../app/validators/return-versions/setup/purpose.validator.js'
 
 describe('Return Versions Setup - Purpose validator', () => {
   const validPurposeIds = [

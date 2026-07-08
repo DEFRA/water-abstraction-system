@@ -1,24 +1,21 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const SessionModel = require('../../../../app/models/session.model.js')
+import * as AbstractionAlertSessionData from '../../../support/fixtures/abstraction-alert-session-data.fixture.js'
+import SessionModel from '../../../../app/models/session.model.js'
 
 // Things we need to stub
-const DetermineLicenceMonitoringStationsService = require('../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js')
+import DetermineLicenceMonitoringStationsService from '../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js'
 
 // Thing under test
-const InitiateSessionService = require('../../../../app/services/notices/setup/initiate-session.service.js')
+import InitiateSessionService from '../../../../app/services/notices/setup/initiate-session.service.js'
 
 describe('Notices - Setup - Initiate Session service', () => {
   let journey
   let monitoringStationId
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -79,7 +76,10 @@ describe('Notices - Setup - Initiate Session service', () => {
         journey = 'alerts'
         monitoringStationId = monitoringStationData.monitoringStationId
 
-        Sinon.stub(DetermineLicenceMonitoringStationsService, 'go').resolves(monitoringStationData)
+        vi.mock(
+          '../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js'
+        )
+        DetermineLicenceMonitoringStationsService.mockResolvedValue(monitoringStationData)
       })
 
       it('initiates the session for the abstraction alerts setup journey and returns the session ID and redirect path', async () => {

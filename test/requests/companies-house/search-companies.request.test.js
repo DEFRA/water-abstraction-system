@@ -1,15 +1,13 @@
-'use strict'
-
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const CompaniesHouseRequest = require('../../../app/requests/companies-house.request.js')
+import * as CompaniesHouseRequest from '../../../app/requests/companies-house.request.js'
 
 // Thing under test
-const SearchCompaniesRequest = require('../../../app/requests/companies-house/search-companies.request.js')
+import * as SearchCompaniesRequest from '../../../app/requests/companies-house/search-companies.request.js'
 
 describe('Companies House - Search Companies request', () => {
   const matches = [
@@ -22,12 +20,12 @@ describe('Companies House - Search Companies request', () => {
   const queryString = 'Example Ltd'
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request succeeds', () => {
     beforeEach(async () => {
-      Sinon.stub(CompaniesHouseRequest, 'get').resolves({
+      vi.spyOn(CompaniesHouseRequest, 'getRequest').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -42,7 +40,7 @@ describe('Companies House - Search Companies request', () => {
     it('hits the correct endpoint', async () => {
       await SearchCompaniesRequest.send(queryString)
 
-      const requestArgs = CompaniesHouseRequest.get.firstCall.args
+      const requestArgs = CompaniesHouseRequest.getRequest.firstCall.args
 
       expect(requestArgs[0]).toEqual('search/companies')
     })
@@ -63,7 +61,7 @@ describe('Companies House - Search Companies request', () => {
   describe('when the request cannot lookup companies', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
-        Sinon.stub(CompaniesHouseRequest, 'get').resolves({
+        vi.spyOn(CompaniesHouseRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response: {
             statusCode: HTTP_STATUS_NOT_FOUND,
@@ -100,7 +98,7 @@ describe('Companies House - Search Companies request', () => {
 
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
-        Sinon.stub(CompaniesHouseRequest, 'get').resolves({
+        vi.spyOn(CompaniesHouseRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response: new Error("Timeout awaiting 'request' for 5000ms"),
           matches: []

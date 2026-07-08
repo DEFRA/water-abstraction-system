@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchReviewChargeElementService = require('../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js')
+import FetchReviewChargeElementService from '../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js'
 
 // Thing under test
-const ViewReviewChargeElementService = require('../../../../app/services/bill-runs/review/view-review-charge-element.service.js')
+import ViewReviewChargeElementService from '../../../../app/services/bill-runs/review/view-review-charge-element.service.js'
 
 describe('Bill Runs - Review - View Review Charge Element Service', () => {
   const elementIndex = 1
@@ -22,17 +19,18 @@ describe('Bill Runs - Review - View Review Charge Element Service', () => {
   beforeEach(() => {
     reviewChargeElement = BillRunsReviewFixture.reviewChargeElement()
 
-    Sinon.stub(FetchReviewChargeElementService, 'go').resolves(reviewChargeElement)
+    vi.mock('../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js')
+    FetchReviewChargeElementService.mockResolvedValue(reviewChargeElement)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     describe('and there is a flash message to display', () => {
       beforeEach(() => {
-        yarStub = YarStub.build(Sinon)
+        yarStub = YarStub()
         yarStub.flash.withArgs('banner').returns(['The billable returns for this licence have been updated'])
       })
 
@@ -75,7 +73,7 @@ describe('Bill Runs - Review - View Review Charge Element Service', () => {
 
     describe('and there is no flash message to display', () => {
       beforeEach(() => {
-        yarStub = YarStub.build(Sinon)
+        yarStub = YarStub()
         yarStub.flash.withArgs('banner').returns([undefined])
       })
 

@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const ReviewChargeElementHelper = require('../support/helpers/review-charge-element.helper.js')
-const ReviewChargeElementModel = require('../../app/models/review-charge-element.model.js')
-const ReviewChargeElementReturnHelper = require('../support/helpers/review-charge-element-return.helper.js')
-const ReviewReturnHelper = require('../support/helpers/review-return.helper.js')
-const ReviewReturnModel = require('../../app/models/review-return.model.js')
+import * as ReviewChargeElementHelper from '../support/helpers/review-charge-element.helper.js'
+import ReviewChargeElementModel from '../../app/models/review-charge-element.model.js'
+import * as ReviewChargeElementReturnHelper from '../support/helpers/review-charge-element-return.helper.js'
+import * as ReviewReturnHelper from '../support/helpers/review-return.helper.js'
+import ReviewReturnModel from '../../app/models/review-return.model.js'
 
 // Thing under test
-const ReviewChargeElementReturnModel = require('../../app/models/review-charge-element-return.model.js')
+import ReviewChargeElementReturnModel from '../../app/models/review-charge-element-return.model.js'
 
 describe('Review Charge Element Return model', () => {
   let testRecord

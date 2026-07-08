@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceModel = require('../../../app/models/licence.model.js')
-const { ref } = require('objection')
-const RegionHelper = require('../../support/helpers/region.helper.js')
-const TransactionHelper = require('../../support/helpers/transaction.helper.js')
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import LicenceModel from '../../../app/models/licence.model.js'
+import { ref } from 'objection'
+import * as RegionHelper from '../../support/helpers/region.helper.js'
+import * as TransactionHelper from '../../support/helpers/transaction.helper.js'
 
 // Thing under test
-const CreateTransactionPresenter = require('../../../app/presenters/charging-module/create-transaction.presenter.js')
+import CreateTransactionPresenter from '../../../app/presenters/charging-module/create-transaction.presenter.js'
 
 describe('Charging Module Create Transaction presenter', () => {
   const accountNumber = 'A51542397A'

@@ -1,19 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const FetchCompanyContactDal = require('../../../app/dal/company-contacts/fetch-company-contact.dal.js')
-const FetchCompanyService = require('../../../app/dal/companies/fetch-company.dal.js')
-const FetchNotificationsDal = require('../../../app/dal/company-contacts/fetch-notifications.dal.js')
+import FetchCompanyContactDal from '../../../app/dal/company-contacts/fetch-company-contact.dal.js'
+import FetchCompanyService from '../../../app/dal/companies/fetch-company.dal.js'
+import FetchNotificationsDal from '../../../app/dal/company-contacts/fetch-notifications.dal.js'
 
 // Thing under test
-const ViewCommunicationsService = require('../../../app/services/company-contacts/view-communications.service.js')
+import ViewCommunicationsService from '../../../app/services/company-contacts/view-communications.service.js'
 
 describe('Company Contacts - View Communications Service', () => {
   const page = '1'
@@ -30,16 +27,19 @@ describe('Company Contacts - View Communications Service', () => {
       id: generateUUID()
     }
 
-    Sinon.stub(FetchCompanyService, 'go').returns(company)
-    Sinon.stub(FetchCompanyContactDal, 'go').returns(companyContact)
-    Sinon.stub(FetchNotificationsDal, 'go').returns({
+    vi.mock('../../../app/dal/companies/fetch-company.dal.js')
+    FetchCompanyService.mockReturnValue(company)
+    vi.mock('../../../app/dal/company-contacts/fetch-company-contact.dal.js')
+    FetchCompanyContactDal.mockReturnValue(companyContact)
+    vi.mock('../../../app/dal/company-contacts/fetch-notifications.dal.js')
+    FetchNotificationsDal.mockReturnValue({
       notifications: [],
       totalNumber: 0
     })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

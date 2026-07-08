@@ -1,22 +1,20 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { HTTP_STATUS_CONFLICT } = require('node:http2').constants
-const BillHelper = require('../../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
+import http2 from 'node:http2'
+const { HTTP_STATUS_CONFLICT } = http2.constants
+import * as BillHelper from '../../../support/helpers/bill.helper.js'
+import * as BillLicenceHelper from '../../../support/helpers/bill-licence.helper.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
+import * as TransactionHelper from '../../../support/helpers/transaction.helper.js'
 
 // Things we need to stub
-const ChargingModuleReissueBillRequest = require('../../../../app/requests/charging-module/reissue-bill.request.js')
-const ChargingModuleViewBillRequest = require('../../../../app/requests/charging-module/view-bill.request.js')
-const ChargingModuleViewBillRunStatusRequest = require('../../../../app/requests/charging-module/view-bill-run-status.request.js')
+import * as ChargingModuleReissueBillRequest from '../../../../app/requests/charging-module/reissue-bill.request.js'
+import * as ChargingModuleViewBillRequest from '../../../../app/requests/charging-module/view-bill.request.js'
+import * as ChargingModuleViewBillRunStatusRequest from '../../../../app/requests/charging-module/view-bill-run-status.request.js'
 
 // Thing under test
-const ReissueBillService = require('../../../../app/services/bill-runs/reissue/reissue-bill.service.js')
+import ReissueBillService from '../../../../app/services/bill-runs/reissue/reissue-bill.service.js'
 
 const ORIGINAL_BILLING_BATCH_EXTERNAL_ID = generateUUID()
 const INVOICE_EXTERNAL_ID = generateUUID()
@@ -87,14 +85,16 @@ describe('Reissue Bill service', () => {
   beforeEach(async () => {
     reissueBillRun = { externalId: generateUUID() }
 
-    Sinon.stub(ChargingModuleReissueBillRequest, 'send')
+    vi.spyOn(ChargingModuleReissueBillRequest, 'send')
+      .mockImplementation(() => {})
       .withArgs(reissueBillRun.externalId, INVOICE_EXTERNAL_ID)
       .resolves({
         succeeded: true,
         response: { body: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE }
       })
 
-    Sinon.stub(ChargingModuleViewBillRequest, 'send')
+    vi.spyOn(ChargingModuleViewBillRequest, 'send')
+      .mockImplementation(() => {})
       .withArgs(reissueBillRun.externalId, CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE.invoice.id)
       .resolves({
         succeeded: true,
@@ -106,7 +106,7 @@ describe('Reissue Bill service', () => {
         response: { body: CHARGING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE }
       })
 
-    Sinon.stub(ChargingModuleViewBillRunStatusRequest, 'send').resolves({
+    vi.spyOn(ChargingModuleViewBillRunStatusRequest, 'send').mockResolvedValue({
       succeeded: true,
       response: {
         body: {
@@ -152,7 +152,7 @@ describe('Reissue Bill service', () => {
   afterEach(async () => {
     await sourceBill.$query().delete()
 
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the service is called', () => {
@@ -230,7 +230,9 @@ describe('Reissue Bill service', () => {
       beforeEach(() => {
         ChargingModuleViewBillRunStatusRequest.send.restore()
 
-        billRunStatusStub = Sinon.stub(ChargingModuleViewBillRunStatusRequest, 'send')
+        billRunStatusStub = vi
+          .spyOn(ChargingModuleViewBillRunStatusRequest, 'send')
+          .mockImplementation(() => {})
           .onFirstCall()
           .resolves({
             succeeded: true,
@@ -255,7 +257,7 @@ describe('Reissue Bill service', () => {
     describe('when sending the reissue request', () => {
       beforeEach(() => {
         ChargingModuleReissueBillRequest.send.restore()
-        Sinon.stub(ChargingModuleReissueBillRequest, 'send').resolves({
+        vi.spyOn(ChargingModuleReissueBillRequest, 'send').mockResolvedValue({
           succeeded: false,
           response: {
             body: {
@@ -298,7 +300,7 @@ describe('Reissue Bill service', () => {
     describe('when viewing a bill', () => {
       beforeEach(() => {
         ChargingModuleViewBillRequest.send.restore()
-        Sinon.stub(ChargingModuleViewBillRequest, 'send').resolves({
+        vi.spyOn(ChargingModuleViewBillRequest, 'send').mockResolvedValue({
           succeeded: false,
           response: {
             body: {

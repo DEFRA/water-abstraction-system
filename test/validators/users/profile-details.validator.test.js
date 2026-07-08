@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ProfileDetailsValidator = require('../../../app/validators/users/profile-details.validator.js')
+import ProfileDetailsValidator from '../../../app/validators/users/profile-details.validator.js'
 
 describe('Users - Profile Details validator', () => {
   let payload

@@ -1,21 +1,18 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
-const UserSessionsFixture = require('../../../../support/fixtures/user-sessions.fixture.js')
-const YarStub = require('../../../../support/stubs/yar.stub.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import * as UserSessionsFixture from '../../../../support/fixtures/user-sessions.fixture.js'
+import YarStub from '../../../../support/stubs/yar.stub.js'
+import { generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const DeleteSessionDal = require('../../../../../app/dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
-const UnregisterLicencesDal = require('../../../../../app/dal/users/external/setup/unregister-licences.dal.js')
+import DeleteSessionDal from '../../../../../app/dal/delete-session.dal.js'
+import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import UnregisterLicencesDal from '../../../../../app/dal/users/external/setup/unregister-licences.dal.js'
 
 // Thing under test
-const SubmitCheckService = require('../../../../../app/services/users/external/setup/submit-check.service.js')
+import SubmitCheckService from '../../../../../app/services/users/external/setup/submit-check.service.js'
 
 describe('Users - External - Setup - Submit Check Service', () => {
   let auth
@@ -29,24 +26,27 @@ describe('Users - External - Setup - Submit Check Service', () => {
     sessionData = UserSessionsFixture.unregistrationSession()
     sessionData.allLicences = true
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(DeleteSessionDal, 'go').resolves()
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
-    Sinon.stub(UnregisterLicencesDal, 'go').resolves()
+    vi.mock('../../../../../app/dal/delete-session.dal.js')
+    DeleteSessionDal.mockResolvedValue()
+    vi.mock('../../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
+    vi.mock('../../../../../app/dal/users/external/setup/unregister-licences.dal.js')
+    UnregisterLicencesDal.mockResolvedValue()
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('deletes the session record', async () => {
       await SubmitCheckService(session.id, yarStub, auth)
 
-      expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
+      expect(DeleteSessionDal.go).toHaveBeenCalledWith(session.id)
     })
 
     it('returns the redirect URL', async () => {
@@ -60,13 +60,13 @@ describe('Users - External - Setup - Submit Check Service', () => {
     it('unregisters the selected licences', async () => {
       await SubmitCheckService(session.id, yarStub, auth)
 
-      expect(UnregisterLicencesDal.go.calledWith(session, auth.credentials.user)).toBe(true)
+      expect(UnregisterLicencesDal.go).toHaveBeenCalledWith(session, auth.credentials.user)
     })
 
     it('sets a notification', async () => {
       await SubmitCheckService(session.id, yarStub, auth)
 
-      const [flashType, notificationData] = yarStub.flash.args[0]
+      const [flashType, notificationData] = yarStub.flash.mock.calls[0]
 
       expect(flashType).toEqual('notification')
       expect(notificationData).toEqual({

@@ -1,30 +1,28 @@
-'use strict'
-
 // Test helpers
-const BillingAccountHelper = require('../support/helpers/billing-account.helper.js')
-const BillingAccountModel = require('../../app/models/billing-account.model.js')
-const BillRunChargeVersionYearHelper = require('../support/helpers/bill-run-charge-version-year.helper.js')
-const BillRunChargeVersionYearModel = require('../../app/models/bill-run-charge-version-year.model.js')
-const ChangeReasonHelper = require('../support/helpers/change-reason.helper.js')
-const ChangeReasonModel = require('../../app/models/change-reason.model.js')
-const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
-const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
-const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
-const ChargeVersionNoteHelper = require('../support/helpers/charge-version-note.helper.js')
-const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
-const LicenceHelper = require('../support/helpers/licence.helper.js')
-const LicenceModel = require('../../app/models/licence.model.js')
-const ModLogHelper = require('../support/helpers/mod-log.helper.js')
-const ModLogModel = require('../../app/models/mod-log.model.js')
-const ReviewChargeVersionHelper = require('../support/helpers/review-charge-version.helper.js')
-const ReviewChargeVersionModel = require('../../app/models/review-charge-version.model.js')
-const UserHelper = require('../support/helpers/user.helper.js')
-const { generateRandomInteger } = require('../../app/lib/general.lib.js')
+import * as BillingAccountHelper from '../support/helpers/billing-account.helper.js'
+import BillingAccountModel from '../../app/models/billing-account.model.js'
+import * as BillRunChargeVersionYearHelper from '../support/helpers/bill-run-charge-version-year.helper.js'
+import BillRunChargeVersionYearModel from '../../app/models/bill-run-charge-version-year.model.js'
+import * as ChangeReasonHelper from '../support/helpers/change-reason.helper.js'
+import ChangeReasonModel from '../../app/models/change-reason.model.js'
+import * as ChargeReferenceHelper from '../support/helpers/charge-reference.helper.js'
+import ChargeReferenceModel from '../../app/models/charge-reference.model.js'
+import * as ChargeVersionHelper from '../support/helpers/charge-version.helper.js'
+import * as ChargeVersionNoteHelper from '../support/helpers/charge-version-note.helper.js'
+import ChargeVersionNoteModel from '../../app/models/charge-version-note.model.js'
+import * as LicenceHelper from '../support/helpers/licence.helper.js'
+import LicenceModel from '../../app/models/licence.model.js'
+import * as ModLogHelper from '../support/helpers/mod-log.helper.js'
+import ModLogModel from '../../app/models/mod-log.model.js'
+import * as ReviewChargeVersionHelper from '../support/helpers/review-charge-version.helper.js'
+import ReviewChargeVersionModel from '../../app/models/review-charge-version.model.js'
+import * as UserHelper from '../support/helpers/user.helper.js'
+import { generateRandomInteger } from '../../app/lib/general.lib.js'
 
 const CHANGE_REASON_NEW_LICENCE_PART_INDEX = 10
 
 // Thing under test
-const ChargeVersionModel = require('../../app/models/charge-version.model.js')
+import ChargeVersionModel from '../../app/models/charge-version.model.js'
 
 describe('Charge Version model', () => {
   let testBillingAccount

@@ -1,21 +1,18 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const MarkForSupplementaryBillingPresenter = require('../../../../app/presenters/licences/supplementary/mark-for-supplementary-billing.presenter.js')
+import MarkForSupplementaryBillingPresenter from '../../../../app/presenters/licences/supplementary/mark-for-supplementary-billing.presenter.js'
 
 describe('Mark For Supplementary Billing presenter', () => {
   let testDate
   let clock
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when provided with a licence record', () => {
@@ -28,11 +25,11 @@ describe('Mark For Supplementary Billing presenter', () => {
     describe('and the current date is before April', () => {
       beforeEach(() => {
         testDate = new Date('2024-03-31')
-        clock = Sinon.useFakeTimers(testDate)
+        clock = vi.useFakeTimers({ now: testDate })
       })
 
       afterEach(() => {
-        clock.restore()
+        vi.useRealTimers()
       })
 
       it('correctly presents the data', () => {
@@ -62,11 +59,11 @@ describe('Mark For Supplementary Billing presenter', () => {
     describe('and the current date is during or after April', () => {
       beforeEach(() => {
         testDate = new Date('2024-04-01')
-        clock = Sinon.useFakeTimers(testDate)
+        clock = vi.useFakeTimers({ now: testDate })
       })
 
       afterEach(() => {
-        clock.restore()
+        vi.useRealTimers()
       })
 
       it('correctly presents the data', () => {
@@ -97,11 +94,11 @@ describe('Mark For Supplementary Billing presenter', () => {
     describe('and the previous 6 years no longer include pre sroc years', () => {
       beforeEach(() => {
         testDate = new Date('2028-03-31')
-        clock = Sinon.useFakeTimers(testDate)
+        clock = vi.useFakeTimers({ now: testDate })
       })
 
       afterEach(() => {
-        clock.restore()
+        vi.useRealTimers()
       })
 
       it('correctly presents the data', () => {

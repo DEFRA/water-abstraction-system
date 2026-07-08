@@ -1,19 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillingAccountModel = require('../../../app/models/billing-account.model.js')
+import BillingAccountModel from '../../../app/models/billing-account.model.js'
 
 // Thing under test
-const RemoveBillPresenter = require('../../../app/presenters/bills/remove-bill.presenter.js')
+import RemoveBillPresenter from '../../../app/presenters/bills/remove-bill.presenter.js'
 
 describe('Remove Bill presenter', () => {
   let bill
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when provided with a populated bill', () => {

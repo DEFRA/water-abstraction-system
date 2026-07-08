@@ -1,13 +1,10 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
+import BillRunModel from '../../../../app/models/bill-run.model.js'
 
 // Thing under test
-const SendBillBunService = require('../../../../app/services/bill-runs/send/send-bill-run.service.js')
+import SendBillBunService from '../../../../app/services/bill-runs/send/send-bill-run.service.js'
 
 describe('Bill Runs - Send Bill Run service', () => {
   let billRun
@@ -15,13 +12,13 @@ describe('Bill Runs - Send Bill Run service', () => {
   let billRunPatchStub
 
   beforeEach(() => {
-    billRunPatchStub = Sinon.stub().resolves()
+    billRunPatchStub = vi.fn().mockResolvedValue()
 
-    queryStub = Sinon.stub(BillRunModel, 'query')
+    queryStub = vi.spyOn(BillRunModel, 'query').mockImplementation(() => {})
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the bill run exists', () => {
@@ -30,12 +27,12 @@ describe('Bill Runs - Send Bill Run service', () => {
         billRun = _billRun()
 
         queryStub.onFirstCall().returns({
-          findById: Sinon.stub().withArgs(billRun.id).returnsThis(),
-          select: Sinon.stub().withArgs('id', 'externalId', 'status').resolves(billRun)
+          findById: vi.fn().mockReturnThis(),
+          select: vi.fn().mockResolvedValue(billRun)
         })
 
         queryStub.onSecondCall().returns({
-          findById: Sinon.stub().withArgs(billRun.id).returnsThis(),
+          findById: vi.fn().mockReturnThis(),
           patch: billRunPatchStub
         })
       })
@@ -44,7 +41,7 @@ describe('Bill Runs - Send Bill Run service', () => {
         await SendBillBunService(billRun.id)
 
         // Check we set the bill run status
-        const [patchObject] = billRunPatchStub.args[0]
+        const [patchObject] = billRunPatchStub.mock.calls[0]
 
         expect(patchObject).toMatchObject({ status: 'sending' })
       })
@@ -62,8 +59,8 @@ describe('Bill Runs - Send Bill Run service', () => {
         billRun.status = 'sent'
 
         queryStub.onFirstCall().returns({
-          findById: Sinon.stub().withArgs(billRun.id).returnsThis(),
-          select: Sinon.stub().withArgs('id', 'externalId', 'status').resolves(billRun)
+          findById: vi.fn().mockReturnThis(),
+          select: vi.fn().mockResolvedValue(billRun)
         })
       })
 
@@ -71,7 +68,7 @@ describe('Bill Runs - Send Bill Run service', () => {
         await SendBillBunService(billRun.id)
 
         // Check we do not change the bill run status
-        expect(billRunPatchStub.called).toBe(false)
+        expect(billRunPatchStub).not.toHaveBeenCalled()
       })
 
       it('returns an instance of the bill run with its status unchanged', async () => {

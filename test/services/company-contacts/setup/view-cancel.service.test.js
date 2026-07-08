@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import * as CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewCancelService = require('../../../../app/services/company-contacts/setup/view-cancel.service.js')
+import ViewCancelService from '../../../../app/services/company-contacts/setup/view-cancel.service.js'
 
 describe('Company Contacts - Setup - Cancel Service', () => {
   let company
@@ -23,13 +20,14 @@ describe('Company Contacts - Setup - Cancel Service', () => {
 
     sessionData = { company, abstractionAlerts: 'yes', name: 'Eric', email: 'eric@test.com' }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

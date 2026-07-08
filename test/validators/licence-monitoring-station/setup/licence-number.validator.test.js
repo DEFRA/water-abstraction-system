@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const { licenceEnds } = require('../../../support/fixtures/licence.fixture.js')
-const { yesterday } = require('../../../support/general.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+import { licenceEnds } from '../../../support/fixtures/licence.fixture.js'
+import { yesterday } from '../../../support/general.js'
+import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const LicenceNumberValidator = require('../../../../app/validators/licence-monitoring-station/setup/licence-number.validator.js')
+import LicenceNumberValidator from '../../../../app/validators/licence-monitoring-station/setup/licence-number.validator.js'
 
 describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
   let licence

@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const SiteDescriptionPresenter = require('../../../../app/presenters/return-versions/setup/site-description.presenter.js')
+import SiteDescriptionPresenter from '../../../../app/presenters/return-versions/setup/site-description.presenter.js'
 
 describe('Return Versions Setup - Site Description presenter', () => {
   const requirementIndex = 0

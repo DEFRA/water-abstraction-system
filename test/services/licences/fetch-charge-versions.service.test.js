@@ -1,13 +1,11 @@
-'use strict'
-
 // Test helpers
-const ChangeReasonHelper = require('../../support/helpers/change-reason.helper.js')
-const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
-const ChargeVersionModel = require('../../../app/models/charge-version.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as ChangeReasonHelper from '../../support/helpers/change-reason.helper.js'
+import * as ChargeVersionHelper from '../../support/helpers/charge-version.helper.js'
+import ChargeVersionModel from '../../../app/models/charge-version.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const FetchChargeVersionsService = require('../../../app/services/licences/fetch-charge-versions.service.js')
+import FetchChargeVersionsService from '../../../app/services/licences/fetch-charge-versions.service.js'
 
 describe('Licences - Fetch Charge Versions service', () => {
   const licenceId = generateUUID()

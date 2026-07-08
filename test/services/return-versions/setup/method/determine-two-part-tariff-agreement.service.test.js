@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const FinancialAgreementHelper = require('../../../../support/helpers/financial-agreement.helper.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
-const LicenceAgreementHelper = require('../../../../support/helpers/licence-agreement.helper.js')
+import * as FinancialAgreementHelper from '../../../../support/helpers/financial-agreement.helper.js'
+import { generateLicenceRef } from '../../../../support/helpers/licence.helper.js'
+import * as LicenceAgreementHelper from '../../../../support/helpers/licence-agreement.helper.js'
 
 // Thing under test
-const DetermineTwoPartTariffAgreementService = require('../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js')
+import DetermineTwoPartTariffAgreementService from '../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'
 
 describe('Return Versions - Setup - Determine Two-Part Tariff Agreement service', () => {
   const licenceAgreements = {}

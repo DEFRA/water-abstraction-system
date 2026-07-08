@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
-const { db } = require('../../../../../db/db.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
-const { tomorrow } = require('../../../../support/general.js')
-const { NoticeType } = require('../../../../../app/lib/static-lookups.lib.js')
+import * as ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
+import { db } from '../../../../../db/db.js'
+import { generateLicenceRef } from '../../../../support/helpers/licence.helper.js'
+import { tomorrow } from '../../../../support/general.js'
+import { NoticeType } from '../../../../../app/lib/static-lookups.lib.js'
 
 // Thing under test
-const GenerateReturnLogsByLicenceQueryService = require('../../../../../app/services/notices/setup/returns-notice/generate-return-logs-by-licence-query.service.js')
+import GenerateReturnLogsByLicenceQueryService from '../../../../../app/services/notices/setup/returns-notice/generate-return-logs-by-licence-query.service.js'
 
 describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Query Service', () => {
   let licenceRef

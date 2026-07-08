@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
+import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Thing under test
-const ReviewChargeElementPresenter = require('../../../../app/presenters/bill-runs/review/review-charge-element.presenter.js')
+import ReviewChargeElementPresenter from '../../../../app/presenters/bill-runs/review/review-charge-element.presenter.js'
 
 describe('Bill Runs Review - Review Charge Element presenter', () => {
   const elementIndex = 1

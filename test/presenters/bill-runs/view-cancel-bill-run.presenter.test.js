@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ViewCancelBillRunPresenter = require('../../../app/presenters/bill-runs/view-cancel-bill-run.presenter.js')
+import ViewCancelBillRunPresenter from '../../../app/presenters/bill-runs/view-cancel-bill-run.presenter.js'
 
 describe('Bill Runs - View Cancel Bill Run presenter', () => {
   let billRun

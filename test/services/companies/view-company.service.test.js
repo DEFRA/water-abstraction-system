@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
+import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Things we need to stub
-const FetchCompanyDetailsDal = require('../../../app/dal/companies/fetch-company-details.dal.js')
+import FetchCompanyDetailsDal from '../../../app/dal/companies/fetch-company-details.dal.js'
 
 // Thing under test
-const ViewCompanyService = require('../../../app/services/companies/view-company.service.js')
+import ViewCompanyService from '../../../app/services/companies/view-company.service.js'
 
 describe('Companies - View Company Service', () => {
   let companyDetails
@@ -28,11 +25,12 @@ describe('Companies - View Company Service', () => {
     companyAddress.address.country = null
     companyDetails.companyAddresses.push({ ...companyAddress })
 
-    Sinon.stub(FetchCompanyDetailsDal, 'go').returns(companyDetails)
+    vi.mock('../../../app/dal/companies/fetch-company-details.dal.js')
+    FetchCompanyDetailsDal.mockReturnValue(companyDetails)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -72,7 +70,7 @@ describe('Companies - View Company Service', () => {
       it('calls the fetch service with role converted to camelCase', async () => {
         await ViewCompanyService(companyDetails.id, role)
 
-        expect(FetchCompanyDetailsDal.go.calledWith(companyDetails.id, 'licenceHolder')).toBe(true)
+        expect(FetchCompanyDetailsDal.go).toHaveBeenCalledWith(companyDetails.id, 'licenceHolder')
       })
     })
 
@@ -112,7 +110,7 @@ describe('Companies - View Company Service', () => {
       it('calls the fetch service with role converted to camelCase', async () => {
         await ViewCompanyService(companyDetails.id, role)
 
-        expect(FetchCompanyDetailsDal.go.calledWith(companyDetails.id, 'returnsTo')).toBe(true)
+        expect(FetchCompanyDetailsDal.go).toHaveBeenCalledWith(companyDetails.id, 'returnsTo')
       })
     })
   })

@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const AgreementsExceptionsValidator = require('../../../../app/validators/return-versions/setup/agreements-exceptions.validator.js')
+import AgreementsExceptionsValidator from '../../../../app/validators/return-versions/setup/agreements-exceptions.validator.js'
 
 describe('Return Versions Setup - Agreements Exception validator', () => {
   let payload

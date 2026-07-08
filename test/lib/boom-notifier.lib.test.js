@@ -1,10 +1,7 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Thing under test
-const BoomNotifierLib = require('../../app/lib/boom-notifier.lib.js')
+import * as BoomNotifierLib from '../../app/lib/boom-notifier.lib.js'
 
 describe('BoomNotifierLib class', () => {
   const id = '1234567890'
@@ -12,12 +9,12 @@ describe('BoomNotifierLib class', () => {
   let pinoFake
 
   beforeEach(async () => {
-    airbrakeFake = { notify: Sinon.fake.resolves({ id: 1 }), flush: Sinon.fake() }
-    pinoFake = { info: Sinon.fake(), error: Sinon.fake() }
+    airbrakeFake = { notify: vi.fn().mockResolvedValue({ id: 1 }), flush: vi.fn() }
+    pinoFake = { info: vi.fn(), error: vi.fn() }
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when an airbrake notification is sent', () => {

@@ -1,4 +1,4 @@
-import UsersFixture from './users.fixture.js'
+import * as UsersFixture from './users.fixture.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../helpers/licence.helper.js'
 

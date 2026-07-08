@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const PrepareChargeVersionService = require('../../../../app/services/bill-runs/match/prepare-charge-version.service.js')
+import PrepareChargeVersionService from '../../../../app/services/bill-runs/match/prepare-charge-version.service.js'
 
 describe('Prepare Charge Version Service', () => {
   const billingPeriod = {

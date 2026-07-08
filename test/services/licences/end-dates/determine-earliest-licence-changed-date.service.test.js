@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const DetermineEarliestLicenceChangedDateService = require('../../../../app/services/licences/end-dates/determine-earliest-licence-changed-date.service.js')
+import DetermineEarliestLicenceChangedDateService from '../../../../app/services/licences/end-dates/determine-earliest-licence-changed-date.service.js'
 
 describe('Licences - End Dates - Determine Earliest Licence Changed Date service', () => {
   let licence

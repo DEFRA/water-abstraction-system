@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const BillLicenceModel = require('../../../app/models/bill-licence.model.js')
-const LegacyDeleteBillLicenceRequest = require('../../../app/requests/legacy/delete-bill-licence.request.js')
-const ProcessBillingFlagService = require('../../../app/services/licences/supplementary/process-billing-flag.service.js')
-const UnassignLicencesToBillRunService = require('../../../app/services/bill-runs/unassign-licences-to-bill-run.service.js')
+import BillLicenceModel from '../../../app/models/bill-licence.model.js'
+import * as LegacyDeleteBillLicenceRequest from '../../../app/requests/legacy/delete-bill-licence.request.js'
+import ProcessBillingFlagService from '../../../app/services/licences/supplementary/process-billing-flag.service.js'
+import UnassignLicencesToBillRunService from '../../../app/services/bill-runs/unassign-licences-to-bill-run.service.js'
 
 // Thing under test
-const SubmitRemoveBillLicenceService = require('../../../app/services/bill-licences/submit-remove-bill-licence.service.js')
+import SubmitRemoveBillLicenceService from '../../../app/services/bill-licences/submit-remove-bill-licence.service.js'
 
 describe('Bill Licences - Submit Remove Bill Licence service', () => {
   const user = { id: '0aa9dcaa-9a26-4a77-97ab-c17db54d38a1', useremail: 'carol.shaw@atari.com' }
@@ -18,9 +15,6 @@ describe('Bill Licences - Submit Remove Bill Licence service', () => {
   let billLicence
   let billLicenceStub
   let legacyDeleteBillLicenceRequestStub
-  let processBillingFlagStub
-  let unassignLicencesToBillRunStub
-
   beforeEach(async () => {
     billLicence = {
       id: '59f2510d-4b2f-4b09-a972-e0b2370d191d',
@@ -31,40 +25,42 @@ describe('Bill Licences - Submit Remove Bill Licence service', () => {
       }
     }
 
-    billLicenceStub = Sinon.stub().resolves(billLicence)
-    Sinon.stub(BillLicenceModel, 'query').returns({
-      findById: Sinon.stub().returnsThis(),
-      select: Sinon.stub().returnsThis(),
-      withGraphFetched: Sinon.stub().returnsThis(),
+    billLicenceStub = vi.fn().mockResolvedValue(billLicence)
+    vi.spyOn(BillLicenceModel, 'query').mockReturnValue({
+      findById: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      withGraphFetched: vi.fn().mockReturnThis(),
       modifyGraph: billLicenceStub
     })
 
-    legacyDeleteBillLicenceRequestStub = Sinon.stub(LegacyDeleteBillLicenceRequest, 'send').resolves()
-    processBillingFlagStub = Sinon.stub(ProcessBillingFlagService, 'go').resolves()
-    unassignLicencesToBillRunStub = Sinon.stub(UnassignLicencesToBillRunService, 'go').resolves()
+    legacyDeleteBillLicenceRequestStub = vi.spyOn(LegacyDeleteBillLicenceRequest, 'send').mockResolvedValue()
+    vi.mock('../../../app/services/licences/supplementary/process-billing-flag.service.js')
+    ProcessBillingFlagService.mockResolvedValue()
+    vi.mock('../../../app/services/bill-runs/unassign-licences-to-bill-run.service.js')
+    UnassignLicencesToBillRunService.mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('calls the "UnassignLicencesToBillRunService" to unassign any licence supplementary year records from the bill run', async () => {
       await SubmitRemoveBillLicenceService(billLicence.id, user)
 
-      expect(unassignLicencesToBillRunStub.called).toBe(true)
+      expect(UnassignLicencesToBillRunService).toHaveBeenCalled()
     })
 
     it('calls the "ProcessBillingFlagService" to check if the licence needs a supplementary billing flag', async () => {
       await SubmitRemoveBillLicenceService(billLicence.id, user)
 
-      expect(processBillingFlagStub.called).toBe(true)
+      expect(ProcessBillingFlagService).toHaveBeenCalled()
     })
 
     it('sends a request to the legacy service to delete the bill licence', async () => {
       await SubmitRemoveBillLicenceService(billLicence.id, user)
 
-      expect(legacyDeleteBillLicenceRequestStub.called).toBe(true)
+      expect(legacyDeleteBillLicenceRequestStub).toHaveBeenCalled()
     })
 
     it('returns the path to the legacy bill run processing page with invoice ID option', async () => {

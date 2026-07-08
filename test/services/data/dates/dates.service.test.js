@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const DatesService = require('../../../../app/services/data/dates/dates.service.js')
+import DatesService from '../../../../app/services/data/dates/dates.service.js'
 
 // NOTE: The service is calling a series of other services that actually determine the dates we return. So, we are not
 // interested in duplicating that testing here. Instead, we focus on confirming the structure is as we expect whilst

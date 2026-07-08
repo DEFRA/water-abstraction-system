@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const RequirementsForReturnsSeeder = require('../../support/seeders/requirements-for-returns.seeder.js')
-const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
+import RequirementsForReturnsSeeder from '../../support/seeders/requirements-for-returns.seeder.js'
+import * as ModLogHelper from '../../support/helpers/mod-log.helper.js'
 
 // Thing under test
-const FetchReturnVersionService = require('../../../app/services/return-versions/fetch-return-version.service.js')
+import FetchReturnVersionService from '../../../app/services/return-versions/fetch-return-version.service.js'
 
 describe('Return Versions - Fetch Return Version service', () => {
   let modLog

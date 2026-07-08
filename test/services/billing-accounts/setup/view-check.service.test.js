@@ -1,19 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchExistingAddressDal = require('../../../../app/dal/billing-accounts/fetch-existing-address.dal.js')
-const FetchImpactedLicences = require('../../../../app/dal/billing-accounts/fetch-impacted-licences.dal.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchExistingAddressDal from '../../../../app/dal/billing-accounts/fetch-existing-address.dal.js'
+import FetchImpactedLicences from '../../../../app/dal/billing-accounts/fetch-impacted-licences.dal.js'
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewCheckService = require('../../../../app/services/billing-accounts/setup/view-check.service.js')
+import ViewCheckService from '../../../../app/services/billing-accounts/setup/view-check.service.js'
 
 describe('Billing Accounts - Setup - View Check Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
@@ -26,15 +23,18 @@ describe('Billing Accounts - Setup - View Check Service', () => {
       fao: 'no'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchExistingAddressDal, 'go').resolves()
-    Sinon.stub(FetchImpactedLicences, 'go').resolves([])
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/billing-accounts/fetch-existing-address.dal.js')
+    FetchExistingAddressDal.mockResolvedValue()
+    vi.mock('../../../../app/dal/billing-accounts/fetch-impacted-licences.dal.js')
+    FetchImpactedLicences.mockResolvedValue([])
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

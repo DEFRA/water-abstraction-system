@@ -1,18 +1,16 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
-const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
-const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
-const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
-const NotificationHelper = require('../../support/helpers/notification.helper.js')
-const UserHelper = require('../../support/helpers/user.helper.js')
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import * as LicenceMonitoringStationHelper from '../../support/helpers/licence-monitoring-station.helper.js'
+import * as LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import * as LicenceVersionPurposeConditionHelper from '../../support/helpers/licence-version-purpose-condition.helper.js'
+import * as LicenceVersionPurposeConditionTypeHelper from '../../support/helpers/licence-version-purpose-condition-type.helper.js'
+import * as LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
+import * as MonitoringStationHelper from '../../support/helpers/monitoring-station.helper.js'
+import * as NotificationHelper from '../../support/helpers/notification.helper.js'
+import * as UserHelper from '../../support/helpers/user.helper.js'
 
 // Thing under test
-const FetchLicenceMonitoringStationsDal = require('../../../app/dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js')
+import FetchLicenceMonitoringStationsDal from '../../../app/dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js'
 
 describe('Monitoring Stations - Fetch Licence Monitoring Stations dal', () => {
   let licence

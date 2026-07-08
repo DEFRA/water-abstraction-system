@@ -1,15 +1,13 @@
-'use strict'
-
 // Test helpers
-const BillHelper = require('../../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+import * as BillHelper from '../../../support/helpers/bill.helper.js'
+import * as BillLicenceHelper from '../../../support/helpers/bill-licence.helper.js'
+import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import * as ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
+import * as ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const FetchChargeVersionBillingDataService = require('../../../../app/services/licences/supplementary/fetch-charge-version-billing-data.service.js')
+import FetchChargeVersionBillingDataService from '../../../../app/services/licences/supplementary/fetch-charge-version-billing-data.service.js'
 
 describe('Licences - Supplementary - Fetch Charge Version Billing Data service', () => {
   describe('when passed a charge version ID', () => {

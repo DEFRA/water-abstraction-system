@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
-const ReturnSubmissionLineHelper = require('../../../support/helpers/return-submission-line.helper.js')
-const SessionModel = require('../../../../app/models/session.model.js')
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import * as ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
+import * as ReturnSubmissionLineHelper from '../../../support/helpers/return-submission-line.helper.js'
+import SessionModel from '../../../../app/models/session.model.js'
 
 // Thing under test
-const InitiateSessionService = require('../../../../app/services/return-logs/setup/initiate-session.service.js')
+import InitiateSessionService from '../../../../app/services/return-logs/setup/initiate-session.service.js'
 
 describe('Return Logs - Setup - Initiate Session service', () => {
   let licence

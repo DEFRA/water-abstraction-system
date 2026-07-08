@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const { generateUUID, timestampForPostgres } = require('../../../../app/lib/general.lib.js')
-const ReturnSubmissionLineModel = require('../../../../app/models/return-submission-line.model.js')
+import { generateUUID, timestampForPostgres } from '../../../../app/lib/general.lib.js'
+import ReturnSubmissionLineModel from '../../../../app/models/return-submission-line.model.js'
 
 // Thing under test
-const CreateReturnLinesService = require('../../../../app/services/return-logs/setup/create-return-lines.service.js')
+import CreateReturnLinesService from '../../../../app/services/return-logs/setup/create-return-lines.service.js'
 
 describe('Return Logs - Setup - Create New Return Lines service', () => {
   const timestamp = timestampForPostgres()

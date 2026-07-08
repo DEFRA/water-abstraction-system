@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ReturnsCycleValidator = require('../../../../app/validators/return-versions/setup/returns-cycle.validator.js')
+import ReturnsCycleValidator from '../../../../app/validators/return-versions/setup/returns-cycle.validator.js'
 
 describe('Return Versions Setup - Returns Cycle validator', () => {
   let payload

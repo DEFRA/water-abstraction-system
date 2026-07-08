@@ -1,16 +1,14 @@
-'use strict'
-
 // Test helpers
-const ReturnSubmissionLineHelper = require('../support/helpers/return-submission-line.helper.js')
-const ReturnSubmissionLineModel = require('../../app/models/return-submission-line.model.js')
-const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
-const ReturnLogModel = require('../../app/models/return-log.model.js')
-const ReturnSubmissionHelper = require('../support/helpers/return-submission.helper.js')
+import * as ReturnSubmissionLineHelper from '../support/helpers/return-submission-line.helper.js'
+import ReturnSubmissionLineModel from '../../app/models/return-submission-line.model.js'
+import * as ReturnLogHelper from '../support/helpers/return-log.helper.js'
+import ReturnLogModel from '../../app/models/return-log.model.js'
+import * as ReturnSubmissionHelper from '../support/helpers/return-submission.helper.js'
 
 // Thing under test
-const ReturnSubmissionModel = require('../../app/models/return-submission.model.js')
+import ReturnSubmissionModel from '../../app/models/return-submission.model.js'
 
-const { unitNames } = require('../../app/lib/static-lookups.lib.js')
+import { unitNames } from '../../app/lib/static-lookups.lib.js'
 
 describe('Return Submission model', () => {
   let testRecord

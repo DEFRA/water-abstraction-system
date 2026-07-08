@@ -1,26 +1,22 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const AddressHelper = require('../../../support/helpers/address.helper.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import * as AddressHelper from '../../../support/helpers/address.helper.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Test helpers
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ProcessAddRecipientService = require('../../../../app/services/notices/setup/process-add-recipient.service.js')
+import ProcessAddRecipientService from '../../../../app/services/notices/setup/process-add-recipient.service.js'
 
 describe('Notices - Setup - Process Add Recipient service', () => {
   let contactHashId
-  let fetchSessionStub
   let licenceRef
   let session
   let sessionData
@@ -38,13 +34,14 @@ describe('Notices - Setup - Process Add Recipient service', () => {
       selectedRecipients: []
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when there is an address saved in the session', () => {
@@ -72,21 +69,21 @@ describe('Notices - Setup - Process Add Recipient service', () => {
 
       describe('and this is the first additional contact to be added', () => {
         beforeEach(() => {
-          session = SessionModelStub.build(Sinon, {
+          session = SessionModelStub({
             ...sessionData,
             id: sessionId
           })
 
-          fetchSessionStub.resolves(session)
+          FetchSessionDal.mockResolvedValue(session)
 
-          yarStub = YarStub.build(Sinon)
-          yarStub.flash.returns([{ title: 'Updated', text: 'Additional recipient added' }])
+          yarStub = YarStub()
+          yarStub.flash.mockReturnValue([{ title: 'Updated', text: 'Additional recipient added' }])
         })
 
         it('adds an `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {
           await ProcessAddRecipientService(sessionId, yarStub)
 
-          const [flashType, bannerMessage] = yarStub.flash.args[0]
+          const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
           expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Additional recipient added' })
@@ -135,21 +132,21 @@ describe('Notices - Setup - Process Add Recipient service', () => {
           ]
           sessionData.selectedRecipients = ['78de9d5db4c52b66818004e2b0dc4392']
 
-          session = SessionModelStub.build(Sinon, {
+          session = SessionModelStub({
             ...sessionData,
             id: sessionId
           })
 
-          fetchSessionStub.resolves(session)
+          FetchSessionDal.mockResolvedValue(session)
 
-          yarStub = YarStub.build(Sinon)
-          yarStub.flash.returns([{ title: 'Updated', text: 'Additional recipient added' }])
+          yarStub = YarStub()
+          yarStub.flash.mockReturnValue([{ title: 'Updated', text: 'Additional recipient added' }])
         })
 
         it('adds the recipient to `additionalRecipients` and pushes its hash ID into `selectedRecipients`', async () => {
           await ProcessAddRecipientService(sessionId, yarStub)
 
-          const [flashType, bannerMessage] = yarStub.flash.args[0]
+          const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
           expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Additional recipient added' })
@@ -214,21 +211,21 @@ describe('Notices - Setup - Process Add Recipient service', () => {
 
       describe('and this is the first additional contact to be added', () => {
         beforeEach(() => {
-          session = SessionModelStub.build(Sinon, {
+          session = SessionModelStub({
             ...sessionData,
             id: sessionId
           })
 
-          fetchSessionStub.resolves(session)
+          FetchSessionDal.mockResolvedValue(session)
 
-          yarStub = YarStub.build(Sinon)
-          yarStub.flash.returns([{ title: 'Updated', text: 'Additional recipient added' }])
+          yarStub = YarStub()
+          yarStub.flash.mockReturnValue([{ title: 'Updated', text: 'Additional recipient added' }])
         })
 
         it('adds a `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {
           await ProcessAddRecipientService(sessionId, yarStub)
 
-          const [flashType, bannerMessage] = yarStub.flash.args[0]
+          const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
           expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Additional recipient added' })

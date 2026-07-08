@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
+import * as ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
+import * as ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
+import * as ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import * as WorkflowHelper from '../../../support/helpers/workflow.helper.js'
 
 // Thing under test
-const FetchLicenceService = require('../../../../app/services/licences/supplementary/fetch-licence.service.js')
+import FetchLicenceService from '../../../../app/services/licences/supplementary/fetch-licence.service.js'
 
 describe('Fetch Licence Service', () => {
   let workflow

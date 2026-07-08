@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ExpandedError = require('../../app/errors/expanded.error.js')
+import ExpandedError from '../../app/errors/expanded.error.js'
 
 describe('ExpandedError', () => {
   describe('when instantiated with additional data properties', () => {

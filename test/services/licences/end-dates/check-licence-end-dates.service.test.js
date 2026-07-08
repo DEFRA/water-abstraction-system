@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const LicenceEndDateChangeModel = require('../../../../app/models/licence-end-date-change.model.js')
+import { generateUUID } from '../../../../app/lib/general.lib.js'
+import LicenceEndDateChangeModel from '../../../../app/models/licence-end-date-change.model.js'
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const CheckLicenceEndDatesService = require('../../../../app/services/licences/end-dates/check-licence-end-dates.service.js')
+import CheckLicenceEndDatesService from '../../../../app/services/licences/end-dates/check-licence-end-dates.service.js'
 
 describe('Licences - End Dates - Check Licence End Dates service', () => {
   let licence
@@ -32,12 +29,12 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(async () => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
 
     if (licenceEndDateChanges) {
@@ -75,10 +72,10 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
       licence.nald_revoked_date = new Date('2023-01-01')
       licence.wrls_revoked_date = null
 
-      Sinon.stub(LicenceEndDateChangeModel, 'query').returns({
-        insert: Sinon.stub().returnsThis(),
-        onConflict: Sinon.stub().returnsThis(),
-        merge: Sinon.stub().rejects()
+      vi.spyOn(LicenceEndDateChangeModel, 'query').mockReturnValue({
+        insert: vi.fn().mockReturnThis(),
+        onConflict: vi.fn().mockReturnThis(),
+        merge: vi.fn().rejects()
       })
     })
 
@@ -87,7 +84,7 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
 
       const errorLogArgs = notifierStub.omfg.firstCall.args
 
-      expect(notifierStub.omfg.calledWith('Check licence end dates failed')).toBe(true)
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Check licence end dates failed')
       expect(errorLogArgs[1]).toEqual({
         id: licence.id,
         changedDateDetails: {

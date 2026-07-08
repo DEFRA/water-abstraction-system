@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const NoReturnsRequiredValidator = require('../../../../app/validators/return-versions/setup/no-returns-required.validator.js')
+import NoReturnsRequiredValidator from '../../../../app/validators/return-versions/setup/no-returns-required.validator.js'
 
 describe('Return Versions Setup - No Returns Required validator', () => {
   describe('when valid data is provided', () => {

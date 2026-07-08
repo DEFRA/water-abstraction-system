@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 //
-const DatabaseConfig = require('../../../../config/database.config.js')
+import DatabaseConfig from '../../../../config/database.config.js'
 
 // Thing under test
-const CheckPresenter = require('../../../../app/presenters/notices/setup/check.presenter.js')
+import CheckPresenter from '../../../../app/presenters/notices/setup/check.presenter.js'
 
 describe('Notices - Setup - Check presenter', () => {
   let defaultPageSizeStub
@@ -35,11 +32,11 @@ describe('Notices - Setup - Check presenter', () => {
 
     recipients = [...Object.values(testRecipients)]
 
-    defaultPageSizeStub = Sinon.stub(DatabaseConfig, 'defaultPageSize').value(25)
+    defaultPageSizeStub = vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 25)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   it('correctly presents the data', () => {

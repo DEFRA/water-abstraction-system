@@ -1,25 +1,20 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const ReturnCyclesFixture = require('../../../support/fixtures/return-cycles.fixture.js')
-const ReturnRequirementsFixture = require('../../../support/fixtures/return-requirements.fixture.js')
+import * as ReturnCyclesFixture from '../../../support/fixtures/return-cycles.fixture.js'
+import * as ReturnRequirementsFixture from '../../../support/fixtures/return-requirements.fixture.js'
 
 // Things we need to stub
-const CreateReturnLogsService = require('../../../../app/services/return-logs/create-return-logs.service.js')
-const CheckReturnCycleService = require('../../../../app/services/jobs/return-logs/check-return-cycle.service.js')
-const FetchReturnRequirementsService = require('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+import CreateReturnLogsService from '../../../../app/services/return-logs/create-return-logs.service.js'
+import CheckReturnCycleService from '../../../../app/services/jobs/return-logs/check-return-cycle.service.js'
+import FetchReturnRequirementsService from '../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const ProcessReturnLogsService = require('../../../../app/services/jobs/return-logs/process-return-logs.service.js')
+import ProcessReturnLogsService from '../../../../app/services/jobs/return-logs/process-return-logs.service.js'
 
 describe('Jobs - Return Logs - Process Return Logs service', () => {
   const cycle = 'all-year'
-
-  let createReturnLogsStub
   let notifierStub
   let returnRequirement
 
@@ -27,35 +22,38 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
   describe('when the requested return cycle exists', () => {
     beforeEach(() => {
-      createReturnLogsStub = Sinon.stub(CreateReturnLogsService, 'go').resolves()
+      vi.mock('../../../../app/services/return-logs/create-return-logs.service.js')
+      CreateReturnLogsService.mockResolvedValue()
 
-      Sinon.stub(CheckReturnCycleService, 'go').resolves(ReturnCyclesFixture.winterCycle())
+      vi.mock('../../../../app/services/jobs/return-logs/check-return-cycle.service.js')
+      CheckReturnCycleService.mockResolvedValue(ReturnCyclesFixture.winterCycle())
     })
 
     describe('and there are return requirements that need return logs created', () => {
       beforeEach(() => {
         returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
-        Sinon.stub(FetchReturnRequirementsService, 'go').resolves([returnRequirement])
+        vi.mock('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
+        FetchReturnRequirementsService.mockResolvedValue([returnRequirement])
       })
 
       it('logs the time taken in milliseconds and seconds', async () => {
         await ProcessReturnLogsService(cycle)
 
-        const logDataArg = notifierStub.omg.firstCall.args[1]
+        const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-        expect(createReturnLogsStub.called).toBe(true)
-        expect(notifierStub.omg.calledWith('Return logs job complete')).toBe(true)
+        expect(CreateReturnLogsService).toHaveBeenCalled()
+        expect(notifierStub.omg).toHaveBeenCalledWith('Return logs job complete')
         expect(logDataArg.timeTakenMs).toBeDefined()
         expect(logDataArg.timeTakenSs).toBeDefined()
         expect(logDataArg.count).toEqual(1)
@@ -67,16 +65,17 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
       beforeEach(() => {
         returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
         returnRequirement.returnVersion.endDate = '2023-05-28'
-        Sinon.stub(FetchReturnRequirementsService, 'go').resolves([returnRequirement])
+        vi.mock('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
+        FetchReturnRequirementsService.mockResolvedValue([returnRequirement])
       })
 
       it('logs the time taken in milliseconds and seconds', async () => {
         await ProcessReturnLogsService(cycle)
 
-        const logDataArg = notifierStub.omg.firstCall.args[1]
+        const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-        expect(createReturnLogsStub.called).toBe(true)
-        expect(notifierStub.omg.calledWith('Return logs job complete')).toBe(true)
+        expect(CreateReturnLogsService).toHaveBeenCalled()
+        expect(notifierStub.omg).toHaveBeenCalledWith('Return logs job complete')
         expect(logDataArg.timeTakenMs).toBeDefined()
         expect(logDataArg.timeTakenSs).toBeDefined()
         expect(logDataArg.count).toEqual(1)
@@ -86,15 +85,16 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
 
     describe('but there are no return requirements that need return logs created', () => {
       beforeEach(() => {
-        Sinon.stub(FetchReturnRequirementsService, 'go').resolves([])
+        vi.mock('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
+        FetchReturnRequirementsService.mockResolvedValue([])
       })
 
       it('still logs the time taken in milliseconds and seconds', async () => {
         await ProcessReturnLogsService(cycle)
 
-        const logDataArg = notifierStub.omg.firstCall.args[1]
+        const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-        expect(notifierStub.omg.calledWith('Return logs job complete')).toBe(true)
+        expect(notifierStub.omg).toHaveBeenCalledWith('Return logs job complete')
         expect(logDataArg.timeTakenMs).toBeDefined()
         expect(logDataArg.timeTakenSs).toBeDefined()
         expect(logDataArg.count).toEqual(0)
@@ -106,7 +106,8 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
   describe('when the service errors', () => {
     describe('because the check return cycle service errors', () => {
       beforeEach(() => {
-        Sinon.stub(CheckReturnCycleService, 'go').rejects()
+        vi.mock('../../../../app/services/jobs/return-logs/check-return-cycle.service.js')
+        CheckReturnCycleService.mockRejectedValue()
       })
 
       it('records the error by calling "omfg()"', async () => {
@@ -134,9 +135,11 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
     describe('because the create return logs service errors', () => {
       beforeEach(() => {
         returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
-        Sinon.stub(FetchReturnRequirementsService, 'go').resolves([returnRequirement])
+        vi.mock('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
+        FetchReturnRequirementsService.mockResolvedValue([returnRequirement])
 
-        Sinon.stub(CreateReturnLogsService, 'go').rejects()
+        vi.mock('../../../../app/services/return-logs/create-return-logs.service.js')
+        CreateReturnLogsService.mockRejectedValue()
       })
 
       it('records the error by calling "omfg()"', async () => {

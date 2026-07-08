@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const PaperReturnPresenter = require('../../../../app/presenters/notices/setup/paper-return.presenter.js')
+import PaperReturnPresenter from '../../../../app/presenters/notices/setup/paper-return.presenter.js'
 
 describe('Notices - Setup - Paper Return presenter', () => {
   let dueReturn

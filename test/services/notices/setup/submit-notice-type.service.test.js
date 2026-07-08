@@ -1,21 +1,17 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitNoticeTypeService = require('../../../../app/services/notices/setup/submit-notice-type.service.js')
+import SubmitNoticeTypeService from '../../../../app/services/notices/setup/submit-notice-type.service.js'
 
 describe('Notices - Setup - Submit Notice Type service', () => {
   let auth
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -31,15 +27,16 @@ describe('Notices - Setup - Submit Notice Type service', () => {
     payload = { noticeType }
     sessionData = {}
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -65,12 +62,12 @@ describe('Notices - Setup - Submit Notice Type service', () => {
     describe('and the user comes from the check page', () => {
       describe('and the notice type has been updated', () => {
         beforeEach(() => {
-          session = SessionModelStub.build(Sinon, {
+          session = SessionModelStub({
             checkPageVisited: true,
             noticeType: 'test'
           })
 
-          fetchSessionStub.resolves(session)
+          FetchSessionDal.mockResolvedValue(session)
         })
 
         it('redirects to the licence page', async () => {
@@ -90,7 +87,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
           await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
           // Check we add the flash message
-          const [flashType, bannerMessage] = yarStub.flash.args[0]
+          const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
           expect(bannerMessage).toEqual({
@@ -102,12 +99,12 @@ describe('Notices - Setup - Submit Notice Type service', () => {
 
       describe('and the notice type has not been updated', () => {
         beforeEach(() => {
-          session = SessionModelStub.build(Sinon, {
+          session = SessionModelStub({
             noticeType,
             checkPageVisited: true
           })
 
-          fetchSessionStub.resolves(session)
+          FetchSessionDal.mockResolvedValue(session)
         })
 
         it('does not update the session "checkPageVisited" flag', async () => {
@@ -120,7 +117,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
         it('does not set a flash message', async () => {
           await SubmitNoticeTypeService(session.id, payload, yarStub, auth)
 
-          expect(yarStub.flash.args[0]).toBeUndefined()
+          expect(yarStub.flash.mock.calls[0]).toBeUndefined()
         })
       })
     })
@@ -132,9 +129,9 @@ describe('Notices - Setup - Submit Notice Type service', () => {
           sessionData.checkPageVisited = true
           sessionData.noticeType = noticeType
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          FetchSessionDal.mockResolvedValue(session)
         })
 
         it('returns a redirect to the "/check-notice-type" page', async () => {
@@ -149,9 +146,9 @@ describe('Notices - Setup - Submit Notice Type service', () => {
           sessionData.journey = 'standard'
           sessionData.checkPageVisited = false
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          FetchSessionDal.mockResolvedValue(session)
         })
 
         it('returns a redirect to the "/returns-period" page', async () => {
@@ -169,9 +166,9 @@ describe('Notices - Setup - Submit Notice Type service', () => {
           sessionData.checkPageVisited = true
           sessionData.noticeType = noticeType
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          FetchSessionDal.mockResolvedValue(session)
         })
 
         it('returns a redirect to the "/check-notice-type" page', async () => {
@@ -186,9 +183,9 @@ describe('Notices - Setup - Submit Notice Type service', () => {
           sessionData.journey = 'adhoc'
           sessionData.checkPageVisited = false
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          FetchSessionDal.mockResolvedValue(session)
         })
 
         it('returns a redirect to the "licence" page', async () => {

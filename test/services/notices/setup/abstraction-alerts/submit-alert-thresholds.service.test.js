@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+import * as AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitAlertThresholdsService = require('../../../../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
+import SubmitAlertThresholdsService from '../../../../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js'
 
 describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service', () => {
   let licenceMonitoringStations
@@ -20,7 +17,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
   let sessionData
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -36,9 +33,10 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
         alertThresholds: [licenceMonitoringStations.one.thresholdGroup, licenceMonitoringStations.two.thresholdGroup]
       }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.mock('../../../../../app/dal/fetch-session.dal.js')
+      FetchSessionDal.mockResolvedValue(session)
     })
 
     it('continues the journey', async () => {
@@ -89,9 +87,10 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
           alertType: 'stop'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        Sinon.stub(FetchSessionDal, 'go').resolves(session)
+        vi.mock('../../../../../app/dal/fetch-session.dal.js')
+        FetchSessionDal.mockResolvedValue(session)
 
         payload = {}
       })
@@ -138,9 +137,10 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
           alertType: 'stop'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        Sinon.stub(FetchSessionDal, 'go').resolves(session)
+        vi.mock('../../../../../app/dal/fetch-session.dal.js')
+        FetchSessionDal.mockResolvedValue(session)
 
         payload = {}
       })

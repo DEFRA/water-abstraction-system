@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
+import RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
 
 // Thing under test
-const FetchAbstractionAlertRecipientsDal = require('../../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
+import FetchAbstractionAlertRecipientsDal from '../../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'
 
 describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipients DAL', () => {
   let scenarios

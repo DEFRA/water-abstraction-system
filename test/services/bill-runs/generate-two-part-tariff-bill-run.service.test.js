@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const ExpandedErrorError = require('../../../app/errors/expanded.error.js')
+import ExpandedErrorError from '../../../app/errors/expanded.error.js'
 
 // Things we need to stub
-const BillRunModel = require('../../../app/models/bill-run.model.js')
-const GenerateAnnualBillRunService = require('../../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js')
-const GenerateSupplementaryBillRunService = require('../../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js')
+import BillRunModel from '../../../app/models/bill-run.model.js'
+import GenerateAnnualBillRunService from '../../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js'
+import GenerateSupplementaryBillRunService from '../../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js'
 
 // Thing under test
-const GenerateTwoPartTariffBillRunService = require('../../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js')
+import GenerateTwoPartTariffBillRunService from '../../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js'
 
 describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
   const billRunDetails = {
@@ -24,25 +21,22 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
   let billRun
   let billRunPatchStub
   let billRunSelectStub
-  let generateAnnualStub
-  let generateSupplementaryStub
-
   beforeEach(async () => {
-    billRunPatchStub = Sinon.stub().resolves()
-    billRunSelectStub = Sinon.stub()
+    billRunPatchStub = vi.fn().mockResolvedValue()
+    billRunSelectStub = vi.fn()
 
-    Sinon.stub(BillRunModel, 'query').returns({
-      findById: Sinon.stub().returnsThis(),
+    vi.spyOn(BillRunModel, 'query').mockReturnValue({
+      findById: vi.fn().mockReturnThis(),
       patch: billRunPatchStub,
       select: billRunSelectStub
     })
 
-    generateAnnualStub = Sinon.stub(GenerateAnnualBillRunService, 'go')
-    generateSupplementaryStub = Sinon.stub(GenerateSupplementaryBillRunService, 'go')
+    vi.mock('../../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js')
+    vi.mock('../../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js')
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -55,7 +49,7 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
       describe('and the bill run does not have a status of "review"', () => {
         beforeEach(async () => {
           billRun.status = 'processing'
-          billRunSelectStub.resolves(billRun)
+          billRunSelectStub.mockResolvedValue(billRun)
         })
 
         it('throws an error', async () => {
@@ -74,21 +68,21 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
       describe('and the bill run has a status of "review"', () => {
         beforeEach(() => {
           billRun.status = 'review'
-          billRunSelectStub.resolves(billRun)
+          billRunSelectStub.mockResolvedValue(billRun)
         })
 
         it('sets the bill run status to "processing"', async () => {
           await GenerateTwoPartTariffBillRunService(billRunDetails.id)
 
-          expect(billRunPatchStub.calledOnce).toBe(true)
+          expect(billRunPatchStub).toHaveBeenCalledOnce()
           expect(billRunPatchStub.firstCall.firstArg).toMatchObject({ status: 'processing' })
         })
 
         it('triggers the "generate annual bill run" service', async () => {
           await GenerateTwoPartTariffBillRunService(billRunDetails.id)
 
-          expect(generateAnnualStub.calledOnce).toBe(true)
-          expect(generateSupplementaryStub.called).toBe(false)
+          expect(GenerateAnnualBillRunService).toHaveBeenCalledOnce()
+          expect(GenerateSupplementaryBillRunService).not.toHaveBeenCalled()
         })
       })
     })
@@ -101,7 +95,7 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
       describe('and the bill run does not have a status of "review" or "processing"', () => {
         beforeEach(async () => {
           billRun.status = 'ready'
-          billRunSelectStub.resolves(billRun)
+          billRunSelectStub.mockResolvedValue(billRun)
         })
 
         it('throws an error', async () => {
@@ -120,41 +114,41 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
       describe('and the bill run has a status of "review"', () => {
         beforeEach(() => {
           billRun.status = 'review'
-          billRunSelectStub.resolves(billRun)
+          billRunSelectStub.mockResolvedValue(billRun)
         })
 
         it('sets the bill run status to "processing"', async () => {
           await GenerateTwoPartTariffBillRunService(billRunDetails.id)
 
-          expect(billRunPatchStub.calledOnce).toBe(true)
+          expect(billRunPatchStub).toHaveBeenCalledOnce()
           expect(billRunPatchStub.firstCall.firstArg).toMatchObject({ status: 'processing' })
         })
 
         it('triggers the "generate supplementary bill run" service', async () => {
           await GenerateTwoPartTariffBillRunService(billRunDetails.id)
 
-          expect(generateSupplementaryStub.calledOnce).toBe(true)
-          expect(generateAnnualStub.called).toBe(false)
+          expect(GenerateSupplementaryBillRunService).toHaveBeenCalledOnce()
+          expect(GenerateAnnualBillRunService).not.toHaveBeenCalled()
         })
       })
 
       describe('and the bill run has a status of "processing"', () => {
         beforeEach(() => {
           billRun.status = 'processing'
-          billRunSelectStub.resolves(billRun)
+          billRunSelectStub.mockResolvedValue(billRun)
         })
 
         it('does not update the bill run status', async () => {
           await GenerateTwoPartTariffBillRunService(billRunDetails.id)
 
-          expect(billRunPatchStub.called).toBe(false)
+          expect(billRunPatchStub).not.toHaveBeenCalled()
         })
 
         it('triggers the "generate supplementary bill run" service', async () => {
           await GenerateTwoPartTariffBillRunService(billRunDetails.id)
 
-          expect(generateSupplementaryStub.calledOnce).toBe(true)
-          expect(generateAnnualStub.called).toBe(false)
+          expect(GenerateSupplementaryBillRunService).toHaveBeenCalledOnce()
+          expect(GenerateAnnualBillRunService).not.toHaveBeenCalled()
         })
       })
     })

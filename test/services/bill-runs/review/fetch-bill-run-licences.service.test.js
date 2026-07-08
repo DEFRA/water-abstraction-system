@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const DatabaseConfig = require('../../../../config/database.config.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
-const { generateRandomInteger, today } = require('../../../../app/lib/general.lib.js')
+import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import DatabaseConfig from '../../../../config/database.config.js'
+import * as RegionHelper from '../../../support/helpers/region.helper.js'
+import * as ReviewLicenceHelper from '../../../support/helpers/review-licence.helper.js'
+import { generateRandomInteger, today } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const FetchBillRunLicencesService = require('../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js')
+import FetchBillRunLicencesService from '../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js'
 
 describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
   const todaysDate = today()
@@ -68,7 +65,7 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -82,7 +79,7 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
     beforeEach(() => {
       // NOTE: We set the default page size to 1000 to ensure we get all records and avoid failed tests when run as
       // part of the full suite, and the risk our test record is returned in the second page of results.
-      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1000)
+      vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 1000)
     })
 
     it('returns details of the bill run and the licences in it', async () => {
@@ -146,7 +143,7 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
 
   describe('when a filter is applied', () => {
     beforeEach(() => {
-      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1000)
+      vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 1000)
     })
 
     describe('and "Issues" has been set', () => {
@@ -343,7 +340,7 @@ describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
       page = '2'
 
       // NOTE: We know we create 3 records so we set the value to 2 to ensure the results are paginated
-      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(2)
+      vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 2)
     })
 
     it('can return the selected page of licences', async () => {

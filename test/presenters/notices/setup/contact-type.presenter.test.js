@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ContactTypePresenter = require('../../../../app/presenters/notices/setup/contact-type.presenter.js')
+import ContactTypePresenter from '../../../../app/presenters/notices/setup/contact-type.presenter.js'
 
 describe('Notices - Setup - Contact Type presenter', () => {
   let session

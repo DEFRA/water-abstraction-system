@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const EmailValidator = require('../../../../../app/validators/users/internal/setup/email.validator.js')
+import EmailValidator from '../../../../../app/validators/users/internal/setup/email.validator.js'
 
 describe('Users - Internal - Setup - Email Validator', () => {
   let emailExists

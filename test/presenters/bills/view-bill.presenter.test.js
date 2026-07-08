@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const BillingAccountModel = require('../../../app/models/billing-account.model.js')
+import BillingAccountModel from '../../../app/models/billing-account.model.js'
 
 // Thing under test
-const ViewBillPresenter = require('../../../app/presenters/bills/view-bill.presenter.js')
+import ViewBillPresenter from '../../../app/presenters/bills/view-bill.presenter.js'
 
 describe('View Bill presenter', () => {
   let bill

@@ -1,13 +1,11 @@
-'use strict'
-
 // Test helpers
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const ReturnRequirementHelper = require('../../support/helpers/return-requirement.helper.js')
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import * as ReturnRequirementHelper from '../../support/helpers/return-requirement.helper.js'
 
 // Thing under test
-const VoidLicenceReturnLogsService = require('../../../app/services/return-logs/void-licence-return-logs.service.js')
+import VoidLicenceReturnLogsService from '../../../app/services/return-logs/void-licence-return-logs.service.js'
 
 describe('Return Logs - Void Licence Return Logs service', () => {
   let reissuedReturnIds

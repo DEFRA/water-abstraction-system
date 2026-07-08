@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const BillRunHelper = require('../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../app/models/bill-run.model.js')
-const LicenceHelper = require('../support/helpers/licence.helper.js')
-const LicenceModel = require('../../app/models/licence.model.js')
-const LicenceSupplementaryYearHelper = require('../support/helpers/licence-supplementary-year.helper.js')
+import * as BillRunHelper from '../support/helpers/bill-run.helper.js'
+import BillRunModel from '../../app/models/bill-run.model.js'
+import * as LicenceHelper from '../support/helpers/licence.helper.js'
+import LicenceModel from '../../app/models/licence.model.js'
+import * as LicenceSupplementaryYearHelper from '../support/helpers/licence-supplementary-year.helper.js'
 
 // Thing under test
-const LicenceSupplementaryYearModel = require('../../app/models/licence-supplementary-year.model.js')
+import LicenceSupplementaryYearModel from '../../app/models/licence-supplementary-year.model.js'
 
 describe('Licence Supplementary Year model', () => {
   let testBillRun

@@ -1,17 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_OK } = http2.constants
 
 // Things we need to stub
-const ViewLicenceService = require('../../app/services/monitoring-stations/view-licence.service.js')
-const ViewService = require('../../app/services/monitoring-stations/view.service.js')
+import ViewLicenceService from '../../app/services/monitoring-stations/view-licence.service.js'
+import ViewService from '../../app/services/monitoring-stations/view.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
 
 describe('Monitoring stations controller', () => {
   let options
@@ -25,14 +23,14 @@ describe('Monitoring stations controller', () => {
   beforeEach(async () => {
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
-    Sinon.stub(server.logger, 'error')
+    vi.spyOn(server.logger, 'error').mockImplementation(() => {})
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -51,7 +49,8 @@ describe('Monitoring stations controller', () => {
           }
         }
 
-        Sinon.stub(ViewService, 'go').resolves({
+        vi.mock('../../app/services/monitoring-stations/view.service.js')
+        ViewService.mockResolvedValue({
           pageTitle: 'Bodney Bridge',
           monitoringStationId: '499247a2-bebf-4a94-87dc-b83af2a133f3',
           monitoringStationName: 'Bodney Bridge',
@@ -105,7 +104,8 @@ describe('Monitoring stations controller', () => {
           }
         }
 
-        Sinon.stub(ViewLicenceService, 'go').resolves({
+        vi.mock('../../app/services/monitoring-stations/view-licence.service.js')
+        ViewLicenceService.mockResolvedValue({
           backLink: '/system/monitoring-stations/499247a2-bebf-4a94-87dc-b83af2a133f3',
           lastAlertSent: 'Warning letter on 13 August 2024 sent to Big Farm Co Ltd',
           licenceTags: [

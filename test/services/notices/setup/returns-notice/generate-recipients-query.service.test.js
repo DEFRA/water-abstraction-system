@@ -1,13 +1,11 @@
-'use strict'
-
 // Test helpers
-const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
-const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
-const { db } = require('../../../../../db/db.js')
-const { NoticeType } = require('../../../../../app/lib/static-lookups.lib.js')
+import RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
+import * as ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
+import { db } from '../../../../../db/db.js'
+import { NoticeType } from '../../../../../app/lib/static-lookups.lib.js'
 
 // Thing under test
-const GenerateRecipientsQueryService = require('../../../../../app/services/notices/setup/returns-notice/generate-recipients-query.service.js')
+import GenerateRecipientsQueryService from '../../../../../app/services/notices/setup/returns-notice/generate-recipients-query.service.js'
 
 describe('Notices - Setup - Returns Notice - Generate Recipients Query service', () => {
   const dueReturnLogsQuery = `

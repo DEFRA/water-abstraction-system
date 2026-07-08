@@ -1,17 +1,15 @@
-'use strict'
-
 // Test helpers
-const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
-const BillModel = require('../../../app/models/bill.model.js')
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../../app/models/bill-run.model.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
-const RegionModel = require('../../../app/models/region.model.js')
-const TransactionHelper = require('../../support/helpers/transaction.helper.js')
+import * as BillHelper from '../../support/helpers/bill.helper.js'
+import * as BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
+import BillModel from '../../../app/models/bill.model.js'
+import * as BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import BillRunModel from '../../../app/models/bill-run.model.js'
+import * as RegionHelper from '../../support/helpers/region.helper.js'
+import RegionModel from '../../../app/models/region.model.js'
+import * as TransactionHelper from '../../support/helpers/transaction.helper.js'
 
 // Thing under test
-const FetchBillService = require('../../../app/services/bills/fetch-bill-service.js')
+import FetchBillService from '../../../app/services/bills/fetch-bill-service.js'
 
 describe('Fetch Bill service', () => {
   let linkedBillLicences

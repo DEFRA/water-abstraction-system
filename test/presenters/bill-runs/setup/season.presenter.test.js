@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const SeasonPresenter = require('../../../../app/presenters/bill-runs/setup/season.presenter.js')
+import SeasonPresenter from '../../../../app/presenters/bill-runs/setup/season.presenter.js'
 
 describe('Bill Runs - Setup - Season presenter', () => {
   let session

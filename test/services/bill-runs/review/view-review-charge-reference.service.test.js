@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchReviewChargeReferenceService = require('../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js')
+import FetchReviewChargeReferenceService from '../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js'
 
 // Thing under test
-const ViewReviewChargeReferenceService = require('../../../../app/services/bill-runs/review/view-review-charge-reference.service.js')
+import ViewReviewChargeReferenceService from '../../../../app/services/bill-runs/review/view-review-charge-reference.service.js'
 
 describe('Bill Runs - Review - View Review Charge Reference Service', () => {
   let reviewChargeReference
@@ -20,22 +17,23 @@ describe('Bill Runs - Review - View Review Charge Reference Service', () => {
   beforeEach(() => {
     reviewChargeReference = BillRunsReviewFixture.reviewChargeReference()
 
-    Sinon.stub(FetchReviewChargeReferenceService, 'go').resolves(reviewChargeReference)
+    vi.mock('../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js')
+    FetchReviewChargeReferenceService.mockResolvedValue(reviewChargeReference)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     describe('and there is a banner flash message to display', () => {
       beforeEach(() => {
-        const stub = Sinon.stub()
+        const stub = vi.fn()
 
         stub.withArgs('banner').returns(['The authorised volume for this licence have been updated'])
         stub.withArgs('charge').returns([undefined])
 
-        yarStub = YarStub.build(Sinon)
+        yarStub = YarStub()
         yarStub.flash = stub
       })
 
@@ -68,12 +66,12 @@ describe('Bill Runs - Review - View Review Charge Reference Service', () => {
 
     describe('and there is a charge flash message to display', () => {
       beforeEach(() => {
-        const stub = Sinon.stub()
+        const stub = vi.fn()
 
         stub.withArgs('banner').returns([undefined])
         stub.withArgs('charge').returns(['Based on this information the example charge is £256.48.'])
 
-        yarStub = YarStub.build(Sinon)
+        yarStub = YarStub()
         yarStub.flash = stub
       })
 
@@ -106,12 +104,12 @@ describe('Bill Runs - Review - View Review Charge Reference Service', () => {
 
     describe('and there is no flash message to display', () => {
       beforeEach(() => {
-        const stub = Sinon.stub()
+        const stub = vi.fn()
 
         stub.withArgs('banner').returns([undefined])
         stub.withArgs('charge').returns([undefined])
 
-        yarStub = YarStub.build(Sinon)
+        yarStub = YarStub()
         yarStub.flash = stub
       })
 

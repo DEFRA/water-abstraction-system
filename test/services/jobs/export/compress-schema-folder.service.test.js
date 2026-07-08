@@ -1,5 +1,3 @@
-'use strict'
-
 // Things we need to stub (dynamically required in beforeEach to support mocking)
 let tar
 

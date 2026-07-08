@@ -1,15 +1,13 @@
-'use strict'
-
 // Test helpers
-const BillRunChargeVersionYearHelper = require('../../../support/helpers/bill-run-charge-version-year.helper.js')
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
-const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
+import * as BillRunChargeVersionYearHelper from '../../../support/helpers/bill-run-charge-version-year.helper.js'
+import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import * as ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import * as LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
+import * as WorkflowHelper from '../../../support/helpers/workflow.helper.js'
 
 // Thing under test
-const FetchLicenceUpdatesService = require('../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js')
+import FetchLicenceUpdatesService from '../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js'
 
 describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
   let licence

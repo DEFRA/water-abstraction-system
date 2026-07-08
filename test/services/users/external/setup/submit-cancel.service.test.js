@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const UserSessionsFixture = require('../../../../support/fixtures/user-sessions.fixture.js')
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+import * as UserSessionsFixture from '../../../../support/fixtures/user-sessions.fixture.js'
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const DeleteSessionDal = require('../../../../../app/dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import DeleteSessionDal from '../../../../../app/dal/delete-session.dal.js'
+import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitCancelService = require('../../../../../app/services/users/external/setup/submit-cancel.service.js')
+import SubmitCancelService from '../../../../../app/services/users/external/setup/submit-cancel.service.js'
 
 describe('Users - External - Setup - Submit Cancel service', () => {
   let session
@@ -22,21 +19,23 @@ describe('Users - External - Setup - Submit Cancel service', () => {
     sessionData = UserSessionsFixture.unregistrationSession()
     sessionData.allLicences = true
 
-    session = SessionModelStub.build(Sinon, sessionData)
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    session = SessionModelStub(sessionData)
+    vi.mock('../../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
-    Sinon.stub(DeleteSessionDal, 'go').resolves()
+    vi.mock('../../../../../app/dal/delete-session.dal.js')
+    DeleteSessionDal.mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('clears the session', async () => {
       await SubmitCancelService(session.id)
 
-      expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
+      expect(DeleteSessionDal.go).toHaveBeenCalledWith(session.id)
     })
 
     it('returns the redirect url', async () => {

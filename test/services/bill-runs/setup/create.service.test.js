@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
 
 // Things we need to stub
-const LegacyCreateBillRunRequest = require('../../../../app/requests/legacy/create-bill-run.request.js')
-const StartBillRunProcessService = require('../../../../app/services/bill-runs/start-bill-run-process.service.js')
+import * as LegacyCreateBillRunRequest from '../../../../app/requests/legacy/create-bill-run.request.js'
+import StartBillRunProcessService from '../../../../app/services/bill-runs/start-bill-run-process.service.js'
 
 // Thing under test
-const CreateService = require('../../../../app/services/bill-runs/setup/create.service.js')
+import CreateService from '../../../../app/services/bill-runs/setup/create.service.js'
 
 describe('Bill Runs - Setup - Create service', () => {
   const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'
@@ -22,22 +19,20 @@ describe('Bill Runs - Setup - Create service', () => {
   let legacyCreateBillRunRequestStub
   let session
   let sessionData
-  let startBillRunProcessServiceStub
-
   beforeEach(() => {
-    legacyCreateBillRunRequestStub = Sinon.stub(LegacyCreateBillRunRequest, 'send')
-    startBillRunProcessServiceStub = Sinon.stub(StartBillRunProcessService, 'go')
+    legacyCreateBillRunRequestStub = vi.spyOn(LegacyCreateBillRunRequest, 'send').mockImplementation(() => {})
+    vi.mock('../../../../app/services/bill-runs/start-bill-run-process.service.js')
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the "blockingResults" determines both bill runs should be triggered', () => {
     beforeEach(() => {
       sessionData = { region: regionId, type: 'supplementary' }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
       blockingResults = { matches: [], toFinancialYearEnding: 2025, trigger: engineTriggers.both }
     })
@@ -45,10 +40,8 @@ describe('Bill Runs - Setup - Create service', () => {
     it('triggers both bill run engines', async () => {
       await CreateService(session, blockingResults, user)
 
-      expect(startBillRunProcessServiceStub.calledWith(regionId, 'supplementary', 'carol.shaw@atari.com', 2025)).toBe(
-        true
-      )
-      expect(legacyCreateBillRunRequestStub.calledWith('supplementary', regionId, 2025, user, false)).toBe(true)
+      expect(StartBillRunProcessService.calledWith(regionId, 'supplementary', 'carol.shaw@atari.com', 2025)).toBe(true)
+      expect(legacyCreateBillRunRequestStub).toHaveBeenCalledWith('supplementary', regionId, 2025, user, false)
     })
   })
 
@@ -56,7 +49,7 @@ describe('Bill Runs - Setup - Create service', () => {
     beforeEach(() => {
       sessionData = { region: regionId, type: 'annual' }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
       blockingResults = { matches: [], toFinancialYearEnding: 2025, trigger: engineTriggers.current }
     })
@@ -64,8 +57,8 @@ describe('Bill Runs - Setup - Create service', () => {
     it('triggers only the "current" bill run engine', async () => {
       await CreateService(session, blockingResults, user)
 
-      expect(startBillRunProcessServiceStub.calledWith(regionId, 'annual', 'carol.shaw@atari.com', 2025)).toBe(true)
-      expect(legacyCreateBillRunRequestStub.called).toBe(false)
+      expect(StartBillRunProcessService).toHaveBeenCalledWith(regionId, 'annual', 'carol.shaw@atari.com', 2025)
+      expect(legacyCreateBillRunRequestStub).not.toHaveBeenCalled()
     })
   })
 
@@ -73,7 +66,7 @@ describe('Bill Runs - Setup - Create service', () => {
     beforeEach(() => {
       sessionData = { region: regionId, type: 'two_part_tariff', season: 'summer' }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
       blockingResults = { matches: [], toFinancialYearEnding: 2022, trigger: engineTriggers.old }
     })
@@ -81,8 +74,8 @@ describe('Bill Runs - Setup - Create service', () => {
     it('triggers only the "old" bill run engine', async () => {
       await CreateService(session, blockingResults, user)
 
-      expect(startBillRunProcessServiceStub.called).toBe(false)
-      expect(legacyCreateBillRunRequestStub.calledWith('two_part_tariff', regionId, 2022, user, true)).toBe(true)
+      expect(StartBillRunProcessService).not.toHaveBeenCalled()
+      expect(legacyCreateBillRunRequestStub).toHaveBeenCalledWith('two_part_tariff', regionId, 2022, user, true)
     })
   })
 })

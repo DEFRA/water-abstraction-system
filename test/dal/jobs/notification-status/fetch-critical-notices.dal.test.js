@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const EventHelper = require('../../../support/helpers/event.helper.js')
-const EventModel = require('../../../../app/models/event.model.js')
-const NoticesFixture = require('../../../support/fixtures/notices.fixture.js')
-const NotificationHelper = require('../../../support/helpers/notification.helper.js')
-const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
+import * as EventHelper from '../../../support/helpers/event.helper.js'
+import EventModel from '../../../../app/models/event.model.js'
+import * as NoticesFixture from '../../../support/fixtures/notices.fixture.js'
+import * as NotificationHelper from '../../../support/helpers/notification.helper.js'
+import * as NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
 
 // Thing under test
-const FetchCriticalNoticesDal = require('../../../../app/dal/jobs/notification-status/fetch-critical-notices.dal.js')
+import FetchCriticalNoticesDal from '../../../../app/dal/jobs/notification-status/fetch-critical-notices.dal.js'
 
 describe('Jobs - Notification Status - Fetch Critical Notices DAL', () => {
   let criticalNoticeWithErrors

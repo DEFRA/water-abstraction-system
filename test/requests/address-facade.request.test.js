@@ -1,15 +1,13 @@
-'use strict'
-
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const BaseRequest = require('../../app/requests/base.request.js')
+import * as BaseRequest from '../../app/requests/base.request.js'
 
 // Thing under test
-const AddressFacadeRequest = require('../../app/requests/address-facade.request.js')
+import * as AddressFacadeRequest from '../../app/requests/address-facade.request.js'
 
 describe('Address Facade request', () => {
   const headers = {
@@ -21,17 +19,17 @@ describe('Address Facade request', () => {
   beforeEach(() => {
     // Set the timeout value to 500ms for these tests. We don't trigger a timeout but we do test that the module
     // uses it when making a request
-    // Sinon.replace(serverConfig, 'requestTimeout', 500)
+    // vi.replaceProperty(serverConfig, 'requestTimeout', 500)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('#get', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(BaseRequest, 'get').resolves({
+        vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
           succeeded: true,
           response: {
             statusCode: HTTP_STATUS_OK,
@@ -78,21 +76,21 @@ describe('Address Facade request', () => {
       })
 
       it('calls the Address Facade with the required options', async () => {
-        await AddressFacadeRequest.get(testRoute)
+        await AddressFacadeRequest.getRequest(testRoute)
 
-        const requestArgs = BaseRequest.get.firstCall.args
+        const requestArgs = BaseRequest.getRequest.firstCall.args
 
         expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
       })
 
       it('returns a "true" success status', async () => {
-        const result = await AddressFacadeRequest.get(testRoute)
+        const result = await AddressFacadeRequest.getRequest(testRoute)
 
         expect(result.succeeded).toBe(true)
       })
 
       it('returns the matches from the Address Facade', async () => {
-        const result = await AddressFacadeRequest.get(testRoute)
+        const result = await AddressFacadeRequest.getRequest(testRoute)
 
         expect(result.matches).toBeDefined()
         expect(result.matches).toBeInstanceOf(Array)
@@ -100,7 +98,7 @@ describe('Address Facade request', () => {
       })
 
       it('returns the status code', async () => {
-        const result = await AddressFacadeRequest.get(testRoute)
+        const result = await AddressFacadeRequest.getRequest(testRoute)
 
         expect(result.response.statusCode).toEqual(HTTP_STATUS_OK)
       })
@@ -108,7 +106,7 @@ describe('Address Facade request', () => {
 
     describe('when the request fails', () => {
       beforeEach(async () => {
-        Sinon.stub(BaseRequest, 'get').resolves({
+        vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response: {
             headers,
@@ -120,25 +118,25 @@ describe('Address Facade request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await AddressFacadeRequest.get(testRoute)
+        const result = await AddressFacadeRequest.getRequest(testRoute)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error response', async () => {
-        const result = await AddressFacadeRequest.get(testRoute)
+        const result = await AddressFacadeRequest.getRequest(testRoute)
 
         expect(result.response.body.message).toEqual('Not Found')
       })
 
       it('returns the status code', async () => {
-        const result = await AddressFacadeRequest.get(testRoute)
+        const result = await AddressFacadeRequest.getRequest(testRoute)
 
         expect(result.response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
       })
 
       it('does not returns any matches', async () => {
-        const result = await AddressFacadeRequest.get(testRoute)
+        const result = await AddressFacadeRequest.getRequest(testRoute)
 
         expect(result.matches).toBeDefined()
         expect(result.matches).toBeInstanceOf(Array)

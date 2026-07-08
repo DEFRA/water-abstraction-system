@@ -1,16 +1,14 @@
-'use strict'
-
 // Test helpers
-const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
+import * as ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
+import * as ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
+import * as ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import * as LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
+import * as RegionHelper from '../../../support/helpers/region.helper.js'
+import * as WorkflowHelper from '../../../support/helpers/workflow.helper.js'
 
 // Thing under test
-const FetchTimeLimitedLicencesService = require('../../../../app/services/jobs/time-limited/fetch-time-limited-licences.service.js')
+import FetchTimeLimitedLicencesService from '../../../../app/services/jobs/time-limited/fetch-time-limited-licences.service.js'
 
 describe('Fetch Time Limited Licences service', () => {
   let chargeVersionId

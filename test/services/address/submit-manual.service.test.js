@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../support/stubs/session.stub.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import SessionModelStub from '../../support/stubs/session.stub.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitManualService = require('../../../app/services/address/submit-manual.service.js')
+import SubmitManualService from '../../../app/services/address/submit-manual.service.js'
 
 describe('Address - Submit Manual Service', () => {
   let payload
@@ -36,13 +33,14 @@ describe('Address - Submit Manual Service', () => {
       }
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

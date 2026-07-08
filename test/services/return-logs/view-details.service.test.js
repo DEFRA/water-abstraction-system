@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const ReturnLogsFixture = require('../../support/fixtures/return-logs.fixture.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
+import * as ReturnLogsFixture from '../../support/fixtures/return-logs.fixture.js'
+import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
 
 // Things we need to stub
-const FetchReturnLogDetailsService = require('../../../app/services/return-logs/fetch-return-log-details.service.js')
+import FetchReturnLogDetailsService from '../../../app/services/return-logs/fetch-return-log-details.service.js'
 
 // Thing under test
-const ViewDetailsService = require('../../../app/services/return-logs/view-details.service.js')
+import ViewDetailsService from '../../../app/services/return-logs/view-details.service.js'
 
 describe('Return Logs - View Details service', () => {
   let returnLog
@@ -39,11 +36,12 @@ describe('Return Logs - View Details service', () => {
     returnLog.current = metadata.isCurrent
     returnLog.twoPartTariff = metadata.isTwoPartTariff
 
-    Sinon.stub(FetchReturnLogDetailsService, 'go').resolves(returnLog)
+    vi.mock('../../../app/services/return-logs/fetch-return-log-details.service.js')
+    FetchReturnLogDetailsService.mockResolvedValue(returnLog)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   it('correctly fetches return log, return log notifications and transforms it via the presenter', async () => {

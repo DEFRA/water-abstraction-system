@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ThresholdAndUnitService = require('../../../../app/services/licence-monitoring-station/setup/threshold-and-unit.service.js')
+import ThresholdAndUnitService from '../../../../app/services/licence-monitoring-station/setup/threshold-and-unit.service.js'
 
 describe('Licence Monitoring Station Setup - Threshold and Unit service', () => {
   let session
@@ -19,13 +16,14 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
   beforeEach(() => {
     sessionData = { monitoringStationId: 'e1c44f9b-51c2-4aee-a518-5509d6f05869', label: 'Monitoring Station Label' }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

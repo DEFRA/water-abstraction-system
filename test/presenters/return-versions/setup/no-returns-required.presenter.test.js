@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const NoReturnsRequiredPresenter = require('../../../../app/presenters/return-versions/setup/no-returns-required.presenter.js')
+import NoReturnsRequiredPresenter from '../../../../app/presenters/return-versions/setup/no-returns-required.presenter.js'
 
 describe('Return Versions Setup - No Returns Required presenter', () => {
   let session

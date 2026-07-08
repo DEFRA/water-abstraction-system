@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const SingleVolumePresenter = require('../../../../app/presenters/return-logs/setup/single-volume.presenter.js')
+import SingleVolumePresenter from '../../../../app/presenters/return-logs/setup/single-volume.presenter.js'
 
 describe('Return Logs Setup - Single Volume presenter', () => {
   let session

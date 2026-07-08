@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
+import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Thing under test
-const RemovePresenter = require('../../../../app/presenters/bill-runs/review/remove.presenter.js')
+import RemovePresenter from '../../../../app/presenters/bill-runs/review/remove.presenter.js'
 
 describe('Bill Runs Review - Remove presenter', () => {
   let removeReviewLicence

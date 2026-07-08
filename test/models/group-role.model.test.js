@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const GroupHelper = require('../support/helpers/group.helper.js')
-const GroupModel = require('../../app/models/group.model.js')
-const GroupRoleHelper = require('../support/helpers/group-role.helper.js')
-const RoleHelper = require('../support/helpers/role.helper.js')
-const RoleModel = require('../../app/models/role.model.js')
+import * as GroupHelper from '../support/helpers/group.helper.js'
+import GroupModel from '../../app/models/group.model.js'
+import * as GroupRoleHelper from '../support/helpers/group-role.helper.js'
+import * as RoleHelper from '../support/helpers/role.helper.js'
+import RoleModel from '../../app/models/role.model.js'
 
 // Thing under test
-const GroupRoleModel = require('../../app/models/group-role.model.js')
+import GroupRoleModel from '../../app/models/group-role.model.js'
 
 const GROUP_BILLING_DATA_INDEX = 1
 const GROUP_ROLE_BILLING_DATA_INDEX = 18

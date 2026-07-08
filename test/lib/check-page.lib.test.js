@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Thing under test
-const CheckPageLib = require('../../app/lib/check-page.lib.js')
+import * as CheckPageLib from '../../app/lib/check-page.lib.js'
 
 describe('CheckPage Lib', () => {
   let session
 
   beforeEach(() => {
     session = {
-      $update: Sinon.stub().resolves(1),
+      $update: vi.fn().mockResolvedValue(1),
       checkPageVisited: false,
       // We want to ensure the functions do not modify the rest of the session data
       extraSessionData: 'some extra data'
@@ -19,7 +16,7 @@ describe('CheckPage Lib', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('#checkUrl', () => {

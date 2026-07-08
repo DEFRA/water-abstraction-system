@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const NotificationsFixture = require('../../../../support/fixtures/notifications.fixture.js')
-const NotifyResponseFixture = require('../../../../support/fixtures/notify-response.fixture.js')
-const { generateNoticeReferenceCode } = require('../../../../../app/lib/general.lib.js')
+import * as NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
+import * as NotifyResponseFixture from '../../../../support/fixtures/notify-response.fixture.js'
+import { generateNoticeReferenceCode } from '../../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const CreateEmailRequest = require('../../../../../app/requests/notify/create-email.request.js')
+import * as CreateEmailRequest from '../../../../../app/requests/notify/create-email.request.js'
 
 // Thing under test
-const SendEmailNotificationService = require('../../../../../app/services/notices/setup/send/send-email-notification.service.js')
+import SendEmailNotificationService from '../../../../../app/services/notices/setup/send/send-email-notification.service.js'
 
 describe('Notices - Setup - Send - Send Email Notification service', () => {
   let notification
@@ -25,11 +22,11 @@ describe('Notices - Setup - Send - Send Email Notification service', () => {
 
     notifyResponse = NotifyResponseFixture.successfulResponse(referenceCode).email
 
-    Sinon.stub(CreateEmailRequest, 'send').onCall(0).resolves(notifyResponse)
+    vi.spyOn(CreateEmailRequest, 'send') // TODO: onCall not auto-converted.mockResolvedValue(notifyResponse)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   it('should return the notification notify response', async () => {

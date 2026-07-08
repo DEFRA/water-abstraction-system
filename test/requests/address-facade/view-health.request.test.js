@@ -1,26 +1,24 @@
-'use strict'
-
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const addressFacadeConfig = require('../../../config/address-facade.config.js')
-const BaseRequest = require('../../../app/requests/base.request.js')
+import addressFacadeConfig from '../../../config/address-facade.config.js'
+import * as BaseRequest from '../../../app/requests/base.request.js'
 
 // Thing under test
-const ViewHealthRequest = require('../../../app/requests/address-facade/view-health.request.js')
+import * as ViewHealthRequest from '../../../app/requests/address-facade/view-health.request.js'
 
 describe('Address Facade - View Health request', () => {
   let response
 
   beforeEach(() => {
-    Sinon.stub(addressFacadeConfig, 'url').value('http://localhost:8009')
+    vi.replaceProperty(addressFacadeConfig, 'url', 'http://localhost:8009')
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request succeeds', () => {
@@ -30,7 +28,8 @@ describe('Address Facade - View Health request', () => {
         body: 'hola'
       }
 
-      Sinon.stub(BaseRequest, 'get')
+      vi.spyOn(BaseRequest, 'getRequest')
+        .mockImplementation(() => {})
         .withArgs('http://localhost:8009/address-service/hola', { responseType: 'text' })
         .resolves({
           succeeded: true,
@@ -66,7 +65,8 @@ describe('Address Facade - View Health request', () => {
           }
         }
 
-        Sinon.stub(BaseRequest, 'get')
+        vi.spyOn(BaseRequest, 'getRequest')
+          .mockImplementation(() => {})
           .withArgs('http://localhost:8009/address-service/hola', { responseType: 'text' })
           .resolves({
             succeeded: false,

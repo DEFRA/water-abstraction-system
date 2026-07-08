@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const VolumesPresenter = require('../../../../app/presenters/return-logs/setup/volumes.presenter.js')
+import VolumesPresenter from '../../../../app/presenters/return-logs/setup/volumes.presenter.js'
 
 describe('Return Logs Setup - Volumes presenter', () => {
   let session

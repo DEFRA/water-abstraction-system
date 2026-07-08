@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const MeterProvidedValidator = require('../../../../app/validators/return-logs/setup/meter-provided.validator.js')
+import MeterProvidedValidator from '../../../../app/validators/return-logs/setup/meter-provided.validator.js'
 
 describe('Return Logs Setup - Meter Provided validator', () => {
   let payload

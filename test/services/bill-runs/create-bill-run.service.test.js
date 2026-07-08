@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const BillRunModel = require('../../../app/models/bill-run.model.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
-const RegionModel = require('../../../app/models/region.model.js')
+import BillRunModel from '../../../app/models/bill-run.model.js'
+import * as RegionHelper from '../../support/helpers/region.helper.js'
+import RegionModel from '../../../app/models/region.model.js'
 
 // Thing under test
-const CreateBillRunService = require('../../../app/services/bill-runs/create-bill-run.service.js')
+import CreateBillRunService from '../../../app/services/bill-runs/create-bill-run.service.js'
 
 describe('Create Bill Run service', () => {
   const financialYearEndings = { fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 }

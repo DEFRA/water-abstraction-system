@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ContactTypeValidator = require('../../../../app/validators/notices/setup/contact-type.validator.js')
+import ContactTypeValidator from '../../../../app/validators/notices/setup/contact-type.validator.js'
 
 describe('Contact Type Validator', () => {
   let payload

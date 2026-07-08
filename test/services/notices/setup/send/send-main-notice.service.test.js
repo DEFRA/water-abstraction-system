@@ -1,22 +1,19 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const NoticesFixture = require('../../../../support/fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../../../support/fixtures/notifications.fixture.js')
+import * as NoticesFixture from '../../../../support/fixtures/notices.fixture.js'
+import * as NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
 
 // Things we need to stub
-const CheckNotificationStatusService = require('../../../../../app/services/notifications/check-notification-status.service.js')
-const NotificationModel = require('../../../../../app/models/notification.model.js')
-const NotifyConfig = require('../../../../../config/notify.config.js')
-const SendEmailNotificationService = require('../../../../../app/services/notices/setup/send/send-email-notification.service.js')
-const SendLetterNotificationService = require('../../../../../app/services/notices/setup/send/send-letter-notification.service.js')
-const SendPaperReturnNotificationService = require('../../../../../app/services/notices/setup/send/send-paper-return-notification.service.js')
+import CheckNotificationStatusService from '../../../../../app/services/notifications/check-notification-status.service.js'
+import NotificationModel from '../../../../../app/models/notification.model.js'
+import NotifyConfig from '../../../../../config/notify.config.js'
+import SendEmailNotificationService from '../../../../../app/services/notices/setup/send/send-email-notification.service.js'
+import SendLetterNotificationService from '../../../../../app/services/notices/setup/send/send-letter-notification.service.js'
+import SendPaperReturnNotificationService from '../../../../../app/services/notices/setup/send/send-paper-return-notification.service.js'
 
 // Thing under test
-const SendMainNoticeService = require('../../../../../app/services/notices/setup/send/send-main-notice.service.js')
+import SendMainNoticeService from '../../../../../app/services/notices/setup/send/send-main-notice.service.js'
 
 describe('Notices - Setup - Send - Send Main Notice service', () => {
   const emailPlaintext =
@@ -32,8 +29,6 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
     '^ You must submit a record of your water abstraction. \r\n' +
     '\r\n' +
     '^ You’ll need to submit your returns by  2 December 2025.\r\n'
-
-  let checkNotificationStatusStub
   let notice
   let notifications
   let notificationPatchStub
@@ -41,23 +36,24 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
   beforeEach(() => {
     notifications = []
 
-    notificationPatchStub = Sinon.stub().returnsThis()
-    Sinon.stub(NotificationModel, 'query').returns({
+    notificationPatchStub = vi.fn().mockReturnThis()
+    vi.spyOn(NotificationModel, 'query').mockReturnValue({
       patch: notificationPatchStub,
-      findById: Sinon.stub().resolves(),
-      where: Sinon.stub().returnsThis(),
-      whereNull: Sinon.stub().returnsThis()
+      findById: vi.fn().mockResolvedValue(),
+      where: vi.fn().mockReturnThis(),
+      whereNull: vi.fn().mockReturnThis()
     })
 
-    checkNotificationStatusStub = Sinon.stub(CheckNotificationStatusService, 'go').resolves()
+    vi.mock('../../../../../app/services/notifications/check-notification-status.service.js')
+    CheckNotificationStatusService.mockResolvedValue()
 
     // We have to set wait for status to 25ms to avoid the tests timing out. By default it would be 5 seconds and is
     // used to give Notify a chance to process the email notifications.
-    Sinon.stub(NotifyConfig, 'waitForStatus').value(25)
+    vi.replaceProperty(NotifyConfig, 'waitForStatus', 25)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when sending a notice that is not a Paper return (compiled PDF letter)', () => {
@@ -101,7 +97,8 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
 
     describe('and all are sent to Notify successfully', () => {
       beforeEach(() => {
-        Sinon.stub(SendEmailNotificationService, 'go').resolves({
+        vi.mock('../../../../../app/services/notices/setup/send/send-email-notification.service.js')
+        SendEmailNotificationService.mockResolvedValue({
           id: notifications[1].id,
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
           notifyStatus: 'created',
@@ -109,7 +106,8 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
           status: 'pending'
         })
 
-        Sinon.stub(SendLetterNotificationService, 'go').resolves({
+        vi.mock('../../../../../app/services/notices/setup/send/send-letter-notification.service.js')
+        SendLetterNotificationService.mockResolvedValue({
           id: notifications[0].id,
           notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
           notifyStatus: 'created',
@@ -123,7 +121,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
 
         // Check we record the Notify responses against the notifications
         expect(notificationPatchStub.calledTwice).toBe(true)
-        expect(notificationPatchStub.firstCall.args[0]).toEqual({
+        expect(notificationPatchStub.mock.calls[0][0]).toEqual({
           pdf: undefined,
           plaintext: letterPlaintext,
           notifyError: undefined,
@@ -131,7 +129,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
           notifyStatus: 'created',
           status: 'pending'
         })
-        expect(notificationPatchStub.secondCall.args[0]).toEqual({
+        expect(notificationPatchStub.secondCall.mock.calls[0]).toEqual({
           pdf: undefined,
           plaintext: emailPlaintext,
           notifyError: undefined,
@@ -145,8 +143,8 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         await SendMainNoticeService(notice, notifications)
 
         // We only check the notification status for emails
-        expect(checkNotificationStatusStub.calledOnce).toBe(true)
-        expect(checkNotificationStatusStub.firstCall.args[0]).toEqual({
+        expect(CheckNotificationStatusService).toHaveBeenCalledOnce()
+        expect(CheckNotificationStatusService.mock.calls[0][0]).toEqual({
           ...notifications[1],
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
           notifyStatus: 'created',
@@ -158,7 +156,8 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
 
     describe('and a letter notification fails to send to Notify', () => {
       beforeEach(() => {
-        Sinon.stub(SendEmailNotificationService, 'go').resolves({
+        vi.mock('../../../../../app/services/notices/setup/send/send-email-notification.service.js')
+        SendEmailNotificationService.mockResolvedValue({
           id: notifications[1].id,
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
           notifyStatus: 'created',
@@ -166,7 +165,8 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
           status: 'pending'
         })
 
-        Sinon.stub(SendLetterNotificationService, 'go').resolves({
+        vi.mock('../../../../../app/services/notices/setup/send/send-letter-notification.service.js')
+        SendLetterNotificationService.mockResolvedValue({
           id: notifications[0].id,
           notifyError:
             '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"ValidationError","message":"Last line of address must be a real UK postcode or another country"}]}',
@@ -179,7 +179,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
 
         // Check we record the Notify responses against the notifications
         expect(notificationPatchStub.calledTwice).toBe(true)
-        expect(notificationPatchStub.firstCall.args[0]).toEqual({
+        expect(notificationPatchStub.mock.calls[0][0]).toEqual({
           pdf: undefined,
           plaintext: undefined,
           notifyError:
@@ -188,7 +188,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
           notifyStatus: undefined,
           status: 'error'
         })
-        expect(notificationPatchStub.secondCall.args[0]).toEqual({
+        expect(notificationPatchStub.secondCall.mock.calls[0]).toEqual({
           pdf: undefined,
           plaintext: emailPlaintext,
           notifyError: undefined,
@@ -204,8 +204,8 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         // NOTE: We still call CheckNotificationStatusService because we know it has logic to only check pending
         // notifications. So, we don't worry about that in SendNoticeService, even though we've rigged our test to fail
         // the email notification.
-        expect(checkNotificationStatusStub.calledOnce).toBe(true)
-        expect(checkNotificationStatusStub.firstCall.args[0]).toEqual({
+        expect(CheckNotificationStatusService).toHaveBeenCalledOnce()
+        expect(CheckNotificationStatusService.mock.calls[0][0]).toEqual({
           ...notifications[1],
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
           notifyStatus: 'created',
@@ -217,7 +217,8 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
 
     describe('and an email notification fails to send to Notify', () => {
       beforeEach(() => {
-        Sinon.stub(SendEmailNotificationService, 'go').resolves({
+        vi.mock('../../../../../app/services/notices/setup/send/send-email-notification.service.js')
+        SendEmailNotificationService.mockResolvedValue({
           ...notifications[1],
           id: notifications[1].id,
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
@@ -231,7 +232,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
       it('sends the notice, records the Notify responses, including errors', async () => {
         await SendMainNoticeService(notice, [notifications[1]])
 
-        expect(checkNotificationStatusStub.called).toBe(false)
+        expect(CheckNotificationStatusService).not.toHaveBeenCalled()
       })
     })
   })
@@ -260,7 +261,8 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
 
     describe('and it is sent to Notify successfully', () => {
       beforeEach(() => {
-        Sinon.stub(SendPaperReturnNotificationService, 'go').resolves({
+        vi.mock('../../../../../app/services/notices/setup/send/send-paper-return-notification.service.js')
+        SendPaperReturnNotificationService.mockResolvedValue({
           id: notifications[0].id,
           notifyId: '95296b09-fef6-4723-9716-e962fcd48e8f',
           notifyStatus: 'created',
@@ -274,8 +276,8 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         await SendMainNoticeService(notice, notifications)
 
         // Check we record the Notify responses against the notifications
-        expect(notificationPatchStub.calledOnce).toBe(true)
-        expect(notificationPatchStub.firstCall.args[0]).toEqual({
+        expect(notificationPatchStub).toHaveBeenCalledOnce()
+        expect(notificationPatchStub.mock.calls[0][0]).toEqual({
           pdf: Buffer.from('mock file'),
           plaintext: null,
           notifyError: undefined,
@@ -289,13 +291,14 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         await SendMainNoticeService(notice, notifications)
 
         // We only check the notification status for emails
-        expect(checkNotificationStatusStub.called).toBe(false)
+        expect(CheckNotificationStatusService).not.toHaveBeenCalled()
       })
     })
 
     describe('and it fails to send to Notify', () => {
       beforeEach(() => {
-        Sinon.stub(SendPaperReturnNotificationService, 'go').resolves({
+        vi.mock('../../../../../app/services/notices/setup/send/send-paper-return-notification.service.js')
+        SendPaperReturnNotificationService.mockResolvedValue({
           id: notifications[0].id,
           notifyError: '{"status":404,"message":"Request failed with status code 404"}',
           pdf: Buffer.from('mock file'),
@@ -307,8 +310,8 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         await SendMainNoticeService(notice, notifications)
 
         // Check we record the Notify responses against the notifications
-        expect(notificationPatchStub.calledOnce).toBe(true)
-        expect(notificationPatchStub.firstCall.args[0]).toEqual({
+        expect(notificationPatchStub).toHaveBeenCalledOnce()
+        expect(notificationPatchStub.mock.calls[0][0]).toEqual({
           pdf: Buffer.from('mock file'),
           plaintext: undefined,
           notifyError: '{"status":404,"message":"Request failed with status code 404"}',
@@ -322,7 +325,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         await SendMainNoticeService(notice, notifications)
 
         // We only check the notification status for emails
-        expect(checkNotificationStatusStub.called).toBe(false)
+        expect(CheckNotificationStatusService).not.toHaveBeenCalled()
       })
     })
   })

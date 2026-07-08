@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
+import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Thing under test
-const HistoryPresenter = require('../../../app/presenters/companies/history.presenter.js')
+import HistoryPresenter from '../../../app/presenters/companies/history.presenter.js'
 
 describe('Companies - History presenter', () => {
   let company

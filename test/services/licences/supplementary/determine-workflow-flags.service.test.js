@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
+import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const FetchLicenceService = require('../../../../app/services/licences/supplementary/fetch-licence.service.js')
+import FetchLicenceService from '../../../../app/services/licences/supplementary/fetch-licence.service.js'
 
 // Thing under test
-const DetermineWorkflowFlagsService = require('../../../../app/services/licences/supplementary/determine-workflow-flags.service.js')
+import DetermineWorkflowFlagsService from '../../../../app/services/licences/supplementary/determine-workflow-flags.service.js'
 
 describe('Determine Workflow Flags Service', () => {
   describe('when passed a workflowId', () => {
@@ -21,7 +18,7 @@ describe('Determine Workflow Flags Service', () => {
     let licenceData
 
     afterEach(() => {
-      Sinon.restore()
+      vi.restoreAllMocks()
     })
 
     describe('for a licence that is already flagged', () => {
@@ -37,7 +34,8 @@ describe('Determine Workflow Flags Service', () => {
           sroc_charge_versions: false
         }
 
-        Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
+        vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
+        FetchLicenceService.mockResolvedValue(licenceData)
       })
 
       it('always returns the licenceId, regionId, startDate and endDate', async () => {
@@ -51,7 +49,8 @@ describe('Determine Workflow Flags Service', () => {
 
       describe('and has no charge versions', () => {
         beforeAll(() => {
-          Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
+          vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
+          FetchLicenceService.mockResolvedValue(licenceData)
         })
 
         it('returns the correct flags', async () => {
@@ -67,7 +66,8 @@ describe('Determine Workflow Flags Service', () => {
         describe('and an annual bill run has not been sent while the licence was in workflow', () => {
           beforeAll(() => {
             licenceData.sroc_charge_versions = true
-            Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
+            vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
+            FetchLicenceService.mockResolvedValue(licenceData)
           })
 
           it('returns the correct flags', async () => {
@@ -87,7 +87,8 @@ describe('Determine Workflow Flags Service', () => {
               batchType: 'annual'
             })
 
-            Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
+            vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
+            FetchLicenceService.mockResolvedValue(licenceData)
           })
 
           it('returns the correct flags', async () => {
@@ -103,7 +104,8 @@ describe('Determine Workflow Flags Service', () => {
       describe('and has two-part tariff charge versions', () => {
         beforeAll(() => {
           licenceData.two_part_tariff_charge_versions = true
-          Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
+          vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
+          FetchLicenceService.mockResolvedValue(licenceData)
         })
 
         it('returns the correct flags', async () => {
@@ -129,7 +131,8 @@ describe('Determine Workflow Flags Service', () => {
           sroc_charge_versions: false
         }
 
-        Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
+        vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
+        FetchLicenceService.mockResolvedValue(licenceData)
       })
 
       it('always returns the licenceId, regionId, startDate and endDate', async () => {
@@ -143,7 +146,8 @@ describe('Determine Workflow Flags Service', () => {
 
       describe('and has no charge versions', () => {
         beforeAll(() => {
-          Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
+          vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
+          FetchLicenceService.mockResolvedValue(licenceData)
         })
 
         it('returns the correct flags', async () => {
@@ -159,7 +163,8 @@ describe('Determine Workflow Flags Service', () => {
         describe('and an annual bill run has not been sent while the licence was in workflow', () => {
           beforeAll(() => {
             licenceData.sroc_charge_versions = true
-            Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
+            vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
+            FetchLicenceService.mockResolvedValue(licenceData)
           })
 
           it('returns the correct flags', async () => {
@@ -179,7 +184,8 @@ describe('Determine Workflow Flags Service', () => {
               batchType: 'annual'
             })
 
-            Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
+            vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
+            FetchLicenceService.mockResolvedValue(licenceData)
           })
 
           it('returns the correct flags', async () => {
@@ -195,7 +201,8 @@ describe('Determine Workflow Flags Service', () => {
       describe('and has two-part tariff charge versions', () => {
         beforeAll(() => {
           licenceData.two_part_tariff_charge_versions = true
-          Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
+          vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
+          FetchLicenceService.mockResolvedValue(licenceData)
         })
 
         it('returns the correct flags', async () => {
@@ -210,7 +217,8 @@ describe('Determine Workflow Flags Service', () => {
       describe('for a licence that has ended', () => {
         beforeAll(() => {
           licenceData.ended = true
-          Sinon.stub(FetchLicenceService, 'go').resolves(licenceData)
+          vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
+          FetchLicenceService.mockResolvedValue(licenceData)
         })
 
         it('returns the unchanged flags', async () => {

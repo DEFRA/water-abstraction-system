@@ -1,23 +1,19 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import * as ReturnRequirementHelper from '../../../support/helpers/return-requirement.helper.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitSubmissionService = require('../../../../app/services/return-logs/setup/submit-submission.service.js')
+import SubmitSubmissionService from '../../../../app/services/return-logs/setup/submit-submission.service.js'
 
 describe('Return Logs - Setup - Submit Submission service', () => {
-  let fetchSessionStub
   let payload
   let returnLog
   let returnLogId
@@ -35,14 +31,16 @@ describe('Return Logs - Setup - Submit Submission service', () => {
       returnReference: ReturnRequirementHelper.generateReference()
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
-    Sinon.stub(DeleteSessionDal, 'go').resolves()
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
+    vi.mock('../../../../app/dal/delete-session.dal.js')
+    DeleteSessionDal.mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -97,7 +95,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
           expect(refreshedReturnLog.updatedAt.getTime()).toBeGreaterThan(returnLog.updatedAt.getTime())
 
           // Check the session got deleted
-          expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
+          expect(DeleteSessionDal.go).toHaveBeenCalledWith(session.id)
 
           // Check the redirect takes will tell the controller to redirect to the return received confirmation page
           expect(result.redirect).toEqual('confirm-received')
@@ -110,9 +108,9 @@ describe('Return Logs - Setup - Submit Submission service', () => {
 
           sessionData = { beenReceived: false, checkPageVisited: true, returnLogId, returnReference: '1234' }
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          FetchSessionDal.mockResolvedValue(session)
         })
 
         it('updates "checkPageVisited" to false in the session data', async () => {

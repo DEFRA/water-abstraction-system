@@ -1,21 +1,18 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
-const crypto = require('crypto')
+
+import crypto from 'crypto'
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitContactTypeService = require('../../../../app/services/notices/setup/submit-contact-type.service.js')
+import SubmitContactTypeService from '../../../../app/services/notices/setup/submit-contact-type.service.js'
 
 describe('Notices - Setup - Submit Contact Type service', () => {
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -31,15 +28,16 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       selectedRecipients: ['123']
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called with a valid', () => {
@@ -80,7 +78,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       it('continues the journey', async () => {
         const result = await SubmitContactTypeService(session.id, payload, yarStub)
 
-        const [flashType, bannerMessage] = yarStub.flash.args[0]
+        const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('notification')
         expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Additional recipient added' })
@@ -98,9 +96,9 @@ describe('Notices - Setup - Submit Contact Type service', () => {
           contactEmail: 'test@test.gov.uk'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -123,7 +121,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       it('continues the journey', async () => {
         const result = await SubmitContactTypeService(session.id, payload, yarStub)
 
-        const [flashType, bannerMessage] = yarStub.flash.args[0]
+        const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('notification')
         expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Additional recipient added' })
@@ -141,9 +139,9 @@ describe('Notices - Setup - Submit Contact Type service', () => {
           contactEmail: 'TEST@TEST.GOV.UK'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value with the email address in lowercase', async () => {
@@ -166,7 +164,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       it('continues the journey', async () => {
         const result = await SubmitContactTypeService(session.id, payload, yarStub)
 
-        const [flashType, bannerMessage] = yarStub.flash.args[0]
+        const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('notification')
         expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Additional recipient added' })
@@ -196,9 +194,9 @@ describe('Notices - Setup - Submit Contact Type service', () => {
           }
         ]
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -230,7 +228,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       it('continues the journey', async () => {
         const result = await SubmitContactTypeService(session.id, payload, yarStub)
 
-        const [flashType, bannerMessage] = yarStub.flash.args[0]
+        const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('notification')
         expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Additional recipient added' })
@@ -248,9 +246,9 @@ describe('Notices - Setup - Submit Contact Type service', () => {
           contactName: 'Fake Name'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -263,7 +261,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       it('continues the journey', async () => {
         const result = await SubmitContactTypeService(session.id, payload, yarStub)
 
-        expect(yarStub.flash.called).toBe(false)
+        expect(yarStub.flash).not.toHaveBeenCalled()
         expect(result).toEqual({
           contactType: 'post'
         })
@@ -276,9 +274,9 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       beforeEach(() => {
         sessionData = { referenceCode: 'RINV-CPFRQ4' }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('returns page data for the view, with errors', async () => {
@@ -318,9 +316,9 @@ describe('Notices - Setup - Submit Contact Type service', () => {
 
         sessionData = { referenceCode: 'RINV-CPFRQ4' }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('returns page data for the view, with errors', async () => {
@@ -360,9 +358,9 @@ describe('Notices - Setup - Submit Contact Type service', () => {
 
         sessionData = { referenceCode: 'RINV-CPFRQ4' }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('returns page data for the view, with errors', async () => {

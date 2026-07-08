@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
+import * as AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 
 // Thing under test
-const CheckLicenceMatchesPresenter = require('../../../../../app/presenters/notices/setup/abstraction-alerts/check-licence-matches.presenter.js')
+import CheckLicenceMatchesPresenter from '../../../../../app/presenters/notices/setup/abstraction-alerts/check-licence-matches.presenter.js'
 
 describe('Notices - Setup - Abstraction Alerts - Check Licence Matches presenter', () => {
   let licenceMonitoringStations

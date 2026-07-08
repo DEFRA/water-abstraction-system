@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { data: chargeCategories } = require('../../../../db/seeds/data/charge-categories.js')
-const { db } = require('../../../../db/db.js')
-const fs = require('fs')
-const path = require('path')
+import { data as chargeCategories } from '../../../../db/seeds/data/charge-categories.js'
+import { db } from '../../../../db/db.js'
+import fs from 'fs'
+import path from 'path'
 
 // Thing under test
-const WriteTableToFileService = require('../../../../app/services/jobs/export/write-table-to-file.service.js')
+import WriteTableToFileService from '../../../../app/services/jobs/export/write-table-to-file.service.js'
 
 const tableName = 'billing_charge_categories'
 const schemaName = 'water'
@@ -68,7 +65,7 @@ describe('Write table to file service', () => {
     })
 
     afterEach(() => {
-      Sinon.restore()
+      vi.restoreAllMocks()
       // Delete the file
       fs.unlinkSync(filePath)
     })

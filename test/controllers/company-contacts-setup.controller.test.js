@@ -1,34 +1,32 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { HTTP_STATUS_OK, HTTP_STATUS_FOUND } = require('node:http2').constants
-const { generateUUID } = require('../../app/lib/general.lib.js')
+import http2 from 'node:http2'
+const { HTTP_STATUS_OK, HTTP_STATUS_FOUND } = http2.constants
+import { generateUUID } from '../../app/lib/general.lib.js'
 
 // Things we need to stub
-const InitiateEditSessionService = require('../../app/services/company-contacts/setup/initiate-edit-session.service.js')
-const InitiateSessionService = require('../../app/services/company-contacts/setup/initiate-session.service.js')
-const SubmitAbstractionAlertsService = require('../../app/services/company-contacts/setup/submit-abstraction-alerts.service.js')
-const SubmitCancelService = require('../../app/services/company-contacts/setup/submit-cancel.service.js')
-const SubmitCheckService = require('../../app/services/company-contacts/setup/submit-check.service.js')
-const SubmitContactEmailService = require('../../app/services/company-contacts/setup/submit-contact-email.service.js')
-const SubmitContactNameService = require('../../app/services/company-contacts/setup/submit-contact-name.service.js')
-const SubmitLicencesService = require('../../app/services/company-contacts/setup/submit-licences.service.js')
-const SubmitRestoreService = require('../../app/services/company-contacts/setup/submit-restore.service.js')
-const ViewAbstractionAlertsService = require('../../app/services/company-contacts/setup/view-abstraction-alerts.service.js')
-const ViewCancelService = require('../../app/services/company-contacts/setup/view-cancel.service.js')
-const ViewCheckService = require('../../app/services/company-contacts/setup/view-check.service.js')
-const ViewContactEmailService = require('../../app/services/company-contacts/setup/view-contact-email.service.js')
-const ViewContactNameService = require('../../app/services/company-contacts/setup/view-contact-name.service.js')
-const ViewLicencesService = require('../../app/services/company-contacts/setup/view-licences.service.js')
-const ViewRestoreService = require('../../app/services/company-contacts/setup/view-restore.service.js')
+import InitiateEditSessionService from '../../app/services/company-contacts/setup/initiate-edit-session.service.js'
+import InitiateSessionService from '../../app/services/company-contacts/setup/initiate-session.service.js'
+import SubmitAbstractionAlertsService from '../../app/services/company-contacts/setup/submit-abstraction-alerts.service.js'
+import SubmitCancelService from '../../app/services/company-contacts/setup/submit-cancel.service.js'
+import SubmitCheckService from '../../app/services/company-contacts/setup/submit-check.service.js'
+import SubmitContactEmailService from '../../app/services/company-contacts/setup/submit-contact-email.service.js'
+import SubmitContactNameService from '../../app/services/company-contacts/setup/submit-contact-name.service.js'
+import SubmitLicencesService from '../../app/services/company-contacts/setup/submit-licences.service.js'
+import SubmitRestoreService from '../../app/services/company-contacts/setup/submit-restore.service.js'
+import ViewAbstractionAlertsService from '../../app/services/company-contacts/setup/view-abstraction-alerts.service.js'
+import ViewCancelService from '../../app/services/company-contacts/setup/view-cancel.service.js'
+import ViewCheckService from '../../app/services/company-contacts/setup/view-check.service.js'
+import ViewContactEmailService from '../../app/services/company-contacts/setup/view-contact-email.service.js'
+import ViewContactNameService from '../../app/services/company-contacts/setup/view-contact-name.service.js'
+import ViewLicencesService from '../../app/services/company-contacts/setup/view-licences.service.js'
+import ViewRestoreService from '../../app/services/company-contacts/setup/view-restore.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
 
-const { postRequestOptions } = require('../support/general.js')
+import { postRequestOptions } from '../support/general.js'
 
 describe('Company Contacts Setup controller', () => {
   let options
@@ -44,14 +42,14 @@ describe('Company Contacts Setup controller', () => {
   beforeEach(async () => {
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
-    Sinon.stub(server.logger, 'error')
+    vi.spyOn(server.logger, 'error').mockImplementation(() => {})
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -74,7 +72,8 @@ describe('Company Contacts Setup controller', () => {
 
         id = generateUUID()
 
-        Sinon.stub(InitiateSessionService, 'go').returns({ id })
+        vi.mock('../../app/services/company-contacts/setup/initiate-session.service.js')
+        InitiateSessionService.mockReturnValue({ id })
       })
 
       it('returns the page successfully', async () => {
@@ -102,7 +101,8 @@ describe('Company Contacts Setup controller', () => {
 
         id = generateUUID()
 
-        Sinon.stub(InitiateEditSessionService, 'go').returns({ id })
+        vi.mock('../../app/services/company-contacts/setup/initiate-edit-session.service.js')
+        InitiateEditSessionService.mockReturnValue({ id })
       })
 
       it('returns the page successfully', async () => {
@@ -126,7 +126,8 @@ describe('Company Contacts Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewAbstractionAlertsService, 'go').returns({ pageTitle: 'Abstraction alerts' })
+        vi.mock('../../app/services/company-contacts/setup/view-abstraction-alerts.service.js')
+        ViewAbstractionAlertsService.mockReturnValue({ pageTitle: 'Abstraction alerts' })
       })
 
       it('returns the page successfully', async () => {
@@ -145,7 +146,8 @@ describe('Company Contacts Setup controller', () => {
           'hof_notifications'
         ])
 
-        Sinon.stub(SubmitAbstractionAlertsService, 'go').returns({
+        vi.mock('../../app/services/company-contacts/setup/submit-abstraction-alerts.service.js')
+        SubmitAbstractionAlertsService.mockReturnValue({
           redirectUrl: `/system/company-contacts/setup/${sessionId}/check`
         })
       })
@@ -171,7 +173,8 @@ describe('Company Contacts Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewCancelService, 'go').returns({ pageTitle: 'Cancel' })
+        vi.mock('../../app/services/company-contacts/setup/view-cancel.service.js')
+        ViewCancelService.mockReturnValue({ pageTitle: 'Cancel' })
       })
 
       it('returns the page successfully', async () => {
@@ -192,7 +195,8 @@ describe('Company Contacts Setup controller', () => {
 
         postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/cancel`, {}, ['hof_notifications'])
 
-        Sinon.stub(SubmitCancelService, 'go').returns({ redirectUrl: `/system/companies/${companyId}/contacts` })
+        vi.mock('../../app/services/company-contacts/setup/submit-cancel.service.js')
+        SubmitCancelService.mockReturnValue({ redirectUrl: `/system/companies/${companyId}/contacts` })
       })
 
       it('redirects to companies contacts setup contact email page', async () => {
@@ -216,7 +220,8 @@ describe('Company Contacts Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewCheckService, 'go').returns({ pageTitle: 'Check' })
+        vi.mock('../../app/services/company-contacts/setup/view-check.service.js')
+        ViewCheckService.mockReturnValue({ pageTitle: 'Check' })
       })
 
       it('returns the page successfully', async () => {
@@ -237,7 +242,8 @@ describe('Company Contacts Setup controller', () => {
 
         postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/check`, {}, ['hof_notifications'])
 
-        Sinon.stub(SubmitCheckService, 'go').returns({ redirectUrl: `/system/companies/${companyId}/contacts` })
+        vi.mock('../../app/services/company-contacts/setup/submit-check.service.js')
+        SubmitCheckService.mockReturnValue({ redirectUrl: `/system/companies/${companyId}/contacts` })
       })
 
       it('redirects to companies contacts setup contact email page', async () => {
@@ -261,7 +267,8 @@ describe('Company Contacts Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewContactNameService, 'go').returns({ pageTitle: 'Contact name' })
+        vi.mock('../../app/services/company-contacts/setup/view-contact-name.service.js')
+        ViewContactNameService.mockReturnValue({ pageTitle: 'Contact name' })
       })
 
       it('returns the page successfully', async () => {
@@ -278,7 +285,8 @@ describe('Company Contacts Setup controller', () => {
 
         postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/contact-name`, {}, ['hof_notifications'])
 
-        Sinon.stub(SubmitContactNameService, 'go').returns({
+        vi.mock('../../app/services/company-contacts/setup/submit-contact-name.service.js')
+        SubmitContactNameService.mockReturnValue({
           redirectUrl: `/system/company-contacts/setup/${sessionId}/contact-email`
         })
       })
@@ -304,7 +312,8 @@ describe('Company Contacts Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewContactEmailService, 'go').returns({ pageTitle: 'Contact email' })
+        vi.mock('../../app/services/company-contacts/setup/view-contact-email.service.js')
+        ViewContactEmailService.mockReturnValue({ pageTitle: 'Contact email' })
       })
 
       it('returns the page successfully', async () => {
@@ -323,7 +332,8 @@ describe('Company Contacts Setup controller', () => {
           'hof_notifications'
         ])
 
-        Sinon.stub(SubmitContactEmailService, 'go').returns({
+        vi.mock('../../app/services/company-contacts/setup/submit-contact-email.service.js')
+        SubmitContactEmailService.mockReturnValue({
           redirectUrl: `/system/company-contacts/setup/${sessionId}/abstraction-alerts`
         })
       })
@@ -349,7 +359,8 @@ describe('Company Contacts Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewLicencesService, 'go').returns({ pageTitle: 'Licences' })
+        vi.mock('../../app/services/company-contacts/setup/view-licences.service.js')
+        ViewLicencesService.mockReturnValue({ pageTitle: 'Licences' })
       })
 
       it('returns the page successfully', async () => {
@@ -366,7 +377,8 @@ describe('Company Contacts Setup controller', () => {
 
         postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/licences`, {}, ['hof_notifications'])
 
-        Sinon.stub(SubmitLicencesService, 'go').returns({
+        vi.mock('../../app/services/company-contacts/setup/submit-licences.service.js')
+        SubmitLicencesService.mockReturnValue({
           redirectUrl: `/system/company-contacts/setup/${sessionId}/check`
         })
       })
@@ -392,7 +404,8 @@ describe('Company Contacts Setup controller', () => {
           }
         }
 
-        Sinon.stub(ViewRestoreService, 'go').returns({ pageTitle: 'Restore' })
+        vi.mock('../../app/services/company-contacts/setup/view-restore.service.js')
+        ViewRestoreService.mockReturnValue({ pageTitle: 'Restore' })
       })
 
       it('returns the page successfully', async () => {
@@ -412,7 +425,8 @@ describe('Company Contacts Setup controller', () => {
 
         postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/restore`, {}, ['hof_notifications'])
 
-        Sinon.stub(SubmitRestoreService, 'go').returns({
+        vi.mock('../../app/services/company-contacts/setup/submit-restore.service.js')
+        SubmitRestoreService.mockReturnValue({
           redirectUrl: `/system/companies/${companyId}/contacts`
         })
       })

@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const SingleVolumeValidator = require('../../../../app/validators/return-logs/setup/single-volume.validator.js')
+import SingleVolumeValidator from '../../../../app/validators/return-logs/setup/single-volume.validator.js'
 
 describe('Return Logs Setup - Single Volume validator', () => {
   let payload

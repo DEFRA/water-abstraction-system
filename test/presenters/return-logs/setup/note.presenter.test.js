@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const NotePresenter = require('../../../../app/presenters/return-logs/setup/note.presenter.js')
+import NotePresenter from '../../../../app/presenters/return-logs/setup/note.presenter.js'
 
 describe('Return Logs Setup - Note presenter', () => {
   let session

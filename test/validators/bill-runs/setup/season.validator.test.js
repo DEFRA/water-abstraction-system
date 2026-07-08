@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const SeasonValidator = require('../../../../app/validators/bill-runs/setup/season.validator.js')
+import SeasonValidator from '../../../../app/validators/bill-runs/setup/season.validator.js'
 
 describe('Bill Runs Setup Season validator', () => {
   describe('when valid data is provided', () => {

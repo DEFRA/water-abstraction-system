@@ -1,27 +1,25 @@
-'use strict'
-
-const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
+import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
 
 // Thing under test
-const ReissueBillRequest = require('../../../app/requests/charging-module/reissue-bill.request.js')
+import * as ReissueBillRequest from '../../../app/requests/charging-module/reissue-bill.request.js'
 
 describe('Charging Module Reissue Bill request', () => {
   const billId = '45ddee2c-c423-4382-8abe-a6a9f284f829'
   const billRunId = 'db82bf38-638a-44d3-b1b3-1ae8524d9c38'
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request can reissue an bill', () => {
     beforeEach(async () => {
-      Sinon.stub(ChargingModuleRequest, 'patch').resolves({
+      vi.spyOn(ChargingModuleRequest, 'patchRequest').mockResolvedValue({
         succeeded: true,
         response: {
           info: {
@@ -47,7 +45,7 @@ describe('Charging Module Reissue Bill request', () => {
 
     it('hits the correct endpoint', async () => {
       await ReissueBillRequest.send(billRunId, billId)
-      const endpoint = ChargingModuleRequest.patch.firstCall.firstArg
+      const endpoint = ChargingModuleRequest.patchRequest.firstCall.firstArg
 
       expect(endpoint).toEqual(`v3/wrls/bill-runs/${billRunId}/invoices/${billId}/rebill`)
     })
@@ -71,7 +69,7 @@ describe('Charging Module Reissue Bill request', () => {
   describe('when the request cannot reissue a bill run', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequest, 'patch').resolves({
+        vi.spyOn(ChargingModuleRequest, 'patchRequest').mockResolvedValue({
           succeeded: false,
           response: {
             info: {
@@ -106,7 +104,7 @@ describe('Charging Module Reissue Bill request', () => {
 
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequest, 'patch').resolves({
+        vi.spyOn(ChargingModuleRequest, 'patchRequest').mockResolvedValue({
           succeeded: false,
           response: new Error("Timeout awaiting 'request' for 5000ms")
         })

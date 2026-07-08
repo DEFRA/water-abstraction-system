@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitAbstractionPeriodService = require('../../../../app/services/licence-monitoring-station/setup/submit-abstraction-period.service.js')
+import SubmitAbstractionPeriodService from '../../../../app/services/licence-monitoring-station/setup/submit-abstraction-period.service.js'
 
 describe('Licence Monitoring Station Setup - Abstraction Period Service', () => {
   let payload
@@ -30,13 +27,14 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       licenceRef: 'LICENCE_REF'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

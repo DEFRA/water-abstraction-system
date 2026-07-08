@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const UsersFixture = require('../../../support/fixtures/users.fixture.js')
+import * as UsersFixture from '../../../support/fixtures/users.fixture.js'
 
 // Things we need to stub
-const FetchNotificationsDal = require('../../../../app/dal/users/internal/fetch-notifications.dal.js')
-const FetchUserDal = require('../../../../app/dal/users/fetch-user.dal.js')
+import FetchNotificationsDal from '../../../../app/dal/users/internal/fetch-notifications.dal.js'
+import FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
 
 // Thing under test
-const ViewCommunicationsService = require('../../../../app/services/users/internal/view-communications.service.js')
+import ViewCommunicationsService from '../../../../app/services/users/internal/view-communications.service.js'
 
 describe('Users - Internal - View Communications Service', () => {
   const page = '1'
@@ -23,16 +20,18 @@ describe('Users - Internal - View Communications Service', () => {
 
     user = { id, username }
 
-    Sinon.stub(FetchUserDal, 'go').returns(user)
+    vi.mock('../../../../app/dal/users/fetch-user.dal.js')
+    FetchUserDal.mockReturnValue(user)
 
-    Sinon.stub(FetchNotificationsDal, 'go').returns({
+    vi.mock('../../../../app/dal/users/internal/fetch-notifications.dal.js')
+    FetchNotificationsDal.mockReturnValue({
       notifications: [],
       totalNumber: 0
     })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

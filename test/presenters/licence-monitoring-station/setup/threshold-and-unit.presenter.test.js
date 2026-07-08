@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ThresholdAndUnitPresenter = require('../../../../app/presenters/licence-monitoring-station/setup/threshold-and-unit.presenter.js')
+import ThresholdAndUnitPresenter from '../../../../app/presenters/licence-monitoring-station/setup/threshold-and-unit.presenter.js'
 
 describe('Licence Monitoring Station Setup - Threshold and Unit presenter', () => {
   let session

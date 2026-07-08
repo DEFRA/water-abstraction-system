@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
-const YarStub = require('../../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import YarStub from '../../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitAccessService = require('../../../../../app/services/users/internal/setup/submit-access.service.js')
+import SubmitAccessService from '../../../../../app/services/users/internal/setup/submit-access.service.js'
 
 describe('Users - Internal - Setup - Submit Access Service', () => {
   let payload
@@ -22,15 +19,16 @@ describe('Users - Internal - Setup - Submit Access Service', () => {
   beforeEach(() => {
     sessionData = { access: 'enabled' }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called with a valid payload', () => {
@@ -66,7 +64,7 @@ describe('Users - Internal - Setup - Submit Access Service', () => {
           it('does not set a notification', async () => {
             await SubmitAccessService(session.id, payload, yarStub)
 
-            expect(yarStub.flash.called).toBe(false)
+            expect(yarStub.flash).not.toHaveBeenCalled()
           })
         })
 
@@ -78,7 +76,7 @@ describe('Users - Internal - Setup - Submit Access Service', () => {
           it('sets a notification', async () => {
             await SubmitAccessService(session.id, payload, yarStub)
 
-            const [flashType, bannerMessage] = yarStub.flash.args[0]
+            const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
             expect(flashType).toEqual('notification')
             expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Access updated' })

@@ -4,7 +4,7 @@
 
 import { generateRandomInteger, generateUUID, timestampForPostgres } from '../../../app/lib/general.lib.js'
 import LicenceVersionPurposeConditionModel from '../../../app/models/licence-version-purpose-condition.model.js'
-import LicenceVersionPurposeConditionTypeHelper from './licence-version-purpose-condition-type.helper.js'
+import * as LicenceVersionPurposeConditionTypeHelper from './licence-version-purpose-condition-type.helper.js'
 
 /**
  * Add a new licence version purpose condition

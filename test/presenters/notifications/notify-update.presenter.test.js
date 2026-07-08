@@ -1,9 +1,8 @@
-'use strict'
-
-const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = http2.constants
 
 // Thing under test
-const NotifyUpdatePresenter = require('../../../app/presenters/notifications/notify-update.presenter.js')
+import NotifyUpdatePresenter from '../../../app/presenters/notifications/notify-update.presenter.js'
 
 describe('Notifications - Notify Update presenter', () => {
   let notifyResult

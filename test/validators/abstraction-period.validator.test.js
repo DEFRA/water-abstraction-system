@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const AbstractionPeriodValidator = require('../../app/validators/abstraction-period.validator.js')
+import AbstractionPeriodValidator from '../../app/validators/abstraction-period.validator.js'
 
 describe('Abstraction Period validator', () => {
   let payload

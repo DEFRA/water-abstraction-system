@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const StartDateValidator = require('../../../../app/validators/return-versions/setup/start-date.validator.js')
+import StartDateValidator from '../../../../app/validators/return-versions/setup/start-date.validator.js'
 
 describe('Return Versions Setup - Start Date validator', () => {
   const licenceEndDate = '2023-12-31T00:00:00.000Z'

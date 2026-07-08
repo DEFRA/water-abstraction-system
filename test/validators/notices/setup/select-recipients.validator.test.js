@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const SelectRecipientsValidator = require('../../../../app/validators/notices/setup/select-recipients.validator.js')
+import SelectRecipientsValidator from '../../../../app/validators/notices/setup/select-recipients.validator.js'
 
 describe('Select Recipients Validator', () => {
   let payload

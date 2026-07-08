@@ -1,24 +1,22 @@
-'use strict'
-
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const BaseRequest = require('../../app/requests/base.request.js')
+import * as BaseRequest from '../../app/requests/base.request.js'
 
 // Thing under test
-const RespRequest = require('../../app/requests/resp.request.js')
+import * as RespRequest from '../../app/requests/resp.request.js'
 
 describe('ReSP API Request', () => {
   const testRoute = 'TEST_ROUTE'
 
   beforeAll(() => {
     // RespRequest makes use of the getRespToken() server method, which we therefore need to stub
-    // Note that we only need to do this once as it is unaffected by the Sinon.restore() in our afterEach()
+    // Note that we only need to do this once as it is unaffected by the vi.restoreAllMocks() in our afterEach()
     globalThis.HapiServerMethods = {
-      getRespToken: Sinon.stub().resolves({
+      getRespToken: vi.fn().mockResolvedValue({
         accessToken: 'ACCESS_TOKEN',
         expiresIn: 3600
       })
@@ -26,7 +24,7 @@ describe('ReSP API Request', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(() => {
@@ -37,7 +35,7 @@ describe('ReSP API Request', () => {
   describe('#get', () => {
     describe('when the request succeeds', () => {
       beforeEach(() => {
-        Sinon.stub(BaseRequest, 'get').resolves({
+        vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
           succeeded: true,
           response: {
             statusCode: HTTP_STATUS_OK,
@@ -47,28 +45,28 @@ describe('ReSP API Request', () => {
       })
 
       it('calls the ReSP API with the required options', async () => {
-        await RespRequest.get(testRoute)
+        await RespRequest.getRequest(testRoute)
 
-        const requestArgs = BaseRequest.get.firstCall.args
+        const requestArgs = BaseRequest.getRequest.firstCall.args
 
         expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
         expect(requestArgs[1].headers).toMatchObject({ authorization: 'Bearer ACCESS_TOKEN' })
       })
 
       it('returns a "true" success status', async () => {
-        const result = await RespRequest.get(testRoute)
+        const result = await RespRequest.getRequest(testRoute)
 
         expect(result.succeeded).toBe(true)
       })
 
       it('returns the response body as an object', async () => {
-        const result = await RespRequest.get(testRoute)
+        const result = await RespRequest.getRequest(testRoute)
 
         expect(result.response.body.testObject.test).toEqual('yes')
       })
 
       it('returns the status code', async () => {
-        const result = await RespRequest.get(testRoute)
+        const result = await RespRequest.getRequest(testRoute)
 
         expect(result.response.statusCode).toEqual(HTTP_STATUS_OK)
       })
@@ -76,7 +74,7 @@ describe('ReSP API Request', () => {
 
     describe('when the request fails', () => {
       beforeEach(() => {
-        Sinon.stub(BaseRequest, 'get').resolves({
+        vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response: {
             statusCode: HTTP_STATUS_NOT_FOUND,
@@ -87,19 +85,19 @@ describe('ReSP API Request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await RespRequest.get(testRoute)
+        const result = await RespRequest.getRequest(testRoute)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error response', async () => {
-        const result = await RespRequest.get(testRoute)
+        const result = await RespRequest.getRequest(testRoute)
 
         expect(result.response.body.message).toEqual('Not Found')
       })
 
       it('returns the status code', async () => {
-        const result = await RespRequest.get(testRoute)
+        const result = await RespRequest.getRequest(testRoute)
 
         expect(result.response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
       })

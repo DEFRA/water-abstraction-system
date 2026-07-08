@@ -1,14 +1,11 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const GenerateTwoPartTariffBillRunService = require('../../../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js')
+import BillRunModel from '../../../../app/models/bill-run.model.js'
+import GenerateTwoPartTariffBillRunService from '../../../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js'
 
 // Thing under test
-const ProcessBillRunPostRemoveService = require('../../../../app/services/bill-runs/review/process-bill-run-post-remove.service.js')
+import ProcessBillRunPostRemoveService from '../../../../app/services/bill-runs/review/process-bill-run-post-remove.service.js'
 
 describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
   const billRunId = 'd4b76592-8f98-4064-892c-399ff83928f7'
@@ -16,25 +13,24 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
   let billRun
   let billRunModifyGraphStub
   let billRunPatchStub
-  let generateTwoPartTariffBillRunStub
-
   beforeEach(() => {
-    billRunModifyGraphStub = Sinon.stub()
-    billRunPatchStub = Sinon.stub().resolves()
+    billRunModifyGraphStub = vi.fn()
+    billRunPatchStub = vi.fn().mockResolvedValue()
 
-    Sinon.stub(BillRunModel, 'query').returns({
-      findById: Sinon.stub().withArgs(billRunId).returnsThis(),
-      select: Sinon.stub().returnsThis(),
-      withGraphFetched: Sinon.stub().returnsThis(),
+    vi.spyOn(BillRunModel, 'query').mockReturnValue({
+      findById: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      withGraphFetched: vi.fn().mockReturnThis(),
       modifyGraph: billRunModifyGraphStub,
       patch: billRunPatchStub
     })
 
-    generateTwoPartTariffBillRunStub = Sinon.stub(GenerateTwoPartTariffBillRunService, 'go').resolves()
+    vi.mock('../../../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js')
+    GenerateTwoPartTariffBillRunService.mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -47,7 +43,7 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
         beforeEach(() => {
           billRun.reviewLicences = []
 
-          billRunModifyGraphStub.resolves(billRun)
+          billRunModifyGraphStub.mockResolvedValue(billRun)
         })
 
         it('sets the status of the bill run to "empty" and returns "true"', async () => {
@@ -56,14 +52,14 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
           expect(result).toBe(true)
 
           // Check we set the bill run status
-          expect(billRunPatchStub.calledOnce).toBe(true)
+          expect(billRunPatchStub).toHaveBeenCalledOnce()
           expect(billRunPatchStub.firstCall.firstArg).toMatchObject({ status: 'empty' })
         })
 
         it('does not trigger the generate two-part tariff bill run process', async () => {
           await ProcessBillRunPostRemoveService(billRunId)
 
-          expect(generateTwoPartTariffBillRunStub.called).toBe(false)
+          expect(GenerateTwoPartTariffBillRunService).not.toHaveBeenCalled()
         })
       })
 
@@ -71,7 +67,7 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
         beforeEach(() => {
           billRun.reviewLicences = [{ id: '5662b6e6-674d-4803-855b-22ddf8fea53b' }]
 
-          billRunModifyGraphStub.resolves(billRun)
+          billRunModifyGraphStub.mockResolvedValue(billRun)
         })
 
         it('does not change the bill run status and returns "false"', async () => {
@@ -80,13 +76,13 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
           expect(result).toBe(false)
 
           // Check we not change the bill run status
-          expect(billRunPatchStub.called).toBe(false)
+          expect(billRunPatchStub).not.toHaveBeenCalled()
         })
 
         it('does not trigger the generate two-part tariff bill run process', async () => {
           await ProcessBillRunPostRemoveService(billRunId)
 
-          expect(generateTwoPartTariffBillRunStub.called).toBe(false)
+          expect(GenerateTwoPartTariffBillRunService).not.toHaveBeenCalled()
         })
       })
     })
@@ -100,7 +96,7 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
         beforeEach(() => {
           billRun.reviewLicences = []
 
-          billRunModifyGraphStub.resolves(billRun)
+          billRunModifyGraphStub.mockResolvedValue(billRun)
         })
 
         it('triggers the generate two-part tariff bill run process and returns "true"', async () => {
@@ -108,13 +104,13 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
 
           expect(result).toBe(true)
 
-          expect(generateTwoPartTariffBillRunStub.called).toBe(true)
+          expect(GenerateTwoPartTariffBillRunService).toHaveBeenCalled()
         })
 
         it('does change the status of the bill run to "empty"', async () => {
           await ProcessBillRunPostRemoveService(billRunId)
 
-          expect(billRunPatchStub.calledOnce).toBe(false)
+          expect(billRunPatchStub).not.toHaveBeenCalled()
         })
       })
 
@@ -122,7 +118,7 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
         beforeEach(() => {
           billRun.reviewLicences = [{ id: '5662b6e6-674d-4803-855b-22ddf8fea53b' }]
 
-          billRunModifyGraphStub.resolves(billRun)
+          billRunModifyGraphStub.mockResolvedValue(billRun)
         })
 
         it('does not trigger the generate two-part tariff bill run process and returns "false"', async () => {
@@ -130,13 +126,13 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
 
           expect(result).toBe(false)
 
-          expect(generateTwoPartTariffBillRunStub.called).toBe(false)
+          expect(GenerateTwoPartTariffBillRunService).not.toHaveBeenCalled()
         })
 
         it('does change the status of the bill run', async () => {
           await ProcessBillRunPostRemoveService(billRunId)
 
-          expect(billRunPatchStub.calledOnce).toBe(false)
+          expect(billRunPatchStub).not.toHaveBeenCalled()
         })
       })
     })

@@ -1,13 +1,11 @@
-'use strict'
-
 // Test helpers
-const AddressHelper = require('../../support/helpers/address.helper.js')
-const CompanyHelper = require('../../support/helpers/company.helper.js')
-const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
-const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
+import * as AddressHelper from '../../support/helpers/address.helper.js'
+import * as CompanyHelper from '../../support/helpers/company.helper.js'
+import * as BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
+import * as BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
 
 // Thing under test
-const FetchCompanyDal = require('../../../app/dal/companies/fetch-billing-accounts.dal.js')
+import FetchCompanyDal from '../../../app/dal/companies/fetch-billing-accounts.dal.js'
 
 describe('Companies - Fetch Billing Accounts dal', () => {
   let address

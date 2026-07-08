@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const LicenceNumberService = require('../../../../app/services/licence-monitoring-station/setup/licence-number.service.js')
+import LicenceNumberService from '../../../../app/services/licence-monitoring-station/setup/licence-number.service.js'
 
 describe('Licence Monitoring Station Setup - Licence Number Service', () => {
   let session
@@ -23,13 +20,14 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
       checkPageVisited: false
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

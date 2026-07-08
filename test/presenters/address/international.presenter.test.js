@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const { countryLookup } = require('../../../app/presenters/address/base-address.presenter.js')
+import { countryLookup } from '../../../app/presenters/address/base-address.presenter.js'
 
 // Thing under test
-const InternationalPresenter = require('../../../app/presenters/address/international.presenter.js')
+import InternationalPresenter from '../../../app/presenters/address/international.presenter.js'
 
 describe('Address - International Presenter', () => {
   let session

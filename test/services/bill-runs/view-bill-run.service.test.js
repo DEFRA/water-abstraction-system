@@ -1,20 +1,17 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const FetchBillRunService = require('../../../app/services/bill-runs/fetch-bill-run.service.js')
+import FetchBillRunService from '../../../app/services/bill-runs/fetch-bill-run.service.js'
 
 // Thing under test
-const ViewBillRunService = require('../../../app/services/bill-runs/view-bill-run.service.js')
+import ViewBillRunService from '../../../app/services/bill-runs/view-bill-run.service.js'
 
 describe('View Bill Run service', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
   let fetchBillRunResult
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when a bill with a matching ID exists', () => {
@@ -23,7 +20,8 @@ describe('View Bill Run service', () => {
         fetchBillRunResult = _singleGroupBillRun()
         fetchBillRunResult.billRun.status = 'empty'
 
-        Sinon.stub(FetchBillRunService, 'go').resolves(fetchBillRunResult)
+        vi.mock('../../../app/services/bill-runs/fetch-bill-run.service.js')
+        FetchBillRunService.mockResolvedValue(fetchBillRunResult)
       })
 
       it('will fetch the data and format it for use in the empty bill run page', async () => {
@@ -51,7 +49,8 @@ describe('View Bill Run service', () => {
         fetchBillRunResult = _singleGroupBillRun()
         fetchBillRunResult.billRun.status = 'error'
 
-        Sinon.stub(FetchBillRunService, 'go').resolves(fetchBillRunResult)
+        vi.mock('../../../app/services/bill-runs/fetch-bill-run.service.js')
+        FetchBillRunService.mockResolvedValue(fetchBillRunResult)
       })
 
       it('will fetch the data and format it for use in the errored bill run page', async () => {
@@ -79,7 +78,8 @@ describe('View Bill Run service', () => {
       describe('and it is linked to bills from both groups (water companies and other abstractors)', () => {
         beforeEach(() => {
           fetchBillRunResult = _multipleGroupBillRun()
-          Sinon.stub(FetchBillRunService, 'go').resolves(fetchBillRunResult)
+          vi.mock('../../../app/services/bill-runs/fetch-bill-run.service.js')
+          FetchBillRunService.mockResolvedValue(fetchBillRunResult)
         })
 
         it('will fetch the data and format it for use in the view bill run page', async () => {
@@ -150,7 +150,8 @@ describe('View Bill Run service', () => {
       describe('and it is linked to bills from a single group (water companies or other abstractors)', () => {
         beforeEach(() => {
           fetchBillRunResult = _singleGroupBillRun()
-          Sinon.stub(FetchBillRunService, 'go').resolves(fetchBillRunResult)
+          vi.mock('../../../app/services/bill-runs/fetch-bill-run.service.js')
+          FetchBillRunService.mockResolvedValue(fetchBillRunResult)
         })
 
         it('will fetch the data and format it for use in the view bill run page', async () => {
@@ -207,7 +208,8 @@ describe('View Bill Run service', () => {
 
   describe('when a bill run with a matching ID does not exist', () => {
     beforeEach(() => {
-      Sinon.stub(FetchBillRunService, 'go').resolves({
+      vi.mock('../../../app/services/bill-runs/fetch-bill-run.service.js')
+      FetchBillRunService.mockResolvedValue({
         billRun: undefined,
         billSummaries: []
       })

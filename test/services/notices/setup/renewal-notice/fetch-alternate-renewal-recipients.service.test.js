@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
+import RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
 
 // Thing under test
-const FetchAlternateRenewalRecipientsService = require('../../../../../app/services/notices/setup/renewal-notice/fetch-alternate-renewal-recipients.service.js')
+import FetchAlternateRenewalRecipientsService from '../../../../../app/services/notices/setup/renewal-notice/fetch-alternate-renewal-recipients.service.js'
 
 describe('Notices - Setup - Renewal Notice - Fetch Alternate Renewal Recipients service', () => {
   let scenarios

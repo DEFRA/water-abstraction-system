@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const CompanyHelper = require('../../support/helpers/company.helper.js')
+import * as CompanyHelper from '../../support/helpers/company.helper.js'
 
 // Thing under test
-const FetchCompanyDal = require('../../../app/dal/companies/fetch-company.dal.js')
+import FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'
 
 describe('Companies - Fetch Company dal', () => {
   let company

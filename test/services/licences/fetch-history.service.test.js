@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import * as LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import * as ModLogHelper from '../../support/helpers/mod-log.helper.js'
 
 // Thing under test
-const FetchHistoryService = require('../../../app/services/licences/fetch-history.service.js')
+import FetchHistoryService from '../../../app/services/licences/fetch-history.service.js'
 
 describe('Licences - Fetch History service', () => {
   let licence

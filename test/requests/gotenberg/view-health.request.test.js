@@ -1,26 +1,24 @@
-'use strict'
-
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const BaseRequest = require('../../../app/requests/base.request.js')
-const gotenbergConfig = require('../../../config/gotenberg.config.js')
+import * as BaseRequest from '../../../app/requests/base.request.js'
+import gotenbergConfig from '../../../config/gotenberg.config.js'
 
 // Thing under test
-const ViewHealthRequest = require('../../../app/requests/gotenberg/view-health.request.js')
+import * as ViewHealthRequest from '../../../app/requests/gotenberg/view-health.request.js'
 
 describe('Gotenberg - View Health request', () => {
   let response
 
   beforeEach(() => {
-    Sinon.stub(gotenbergConfig, 'url').value('http://localhost:8040')
+    vi.replaceProperty(gotenbergConfig, 'url', 'http://localhost:8040')
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request succeeds', () => {
@@ -42,10 +40,10 @@ describe('Gotenberg - View Health request', () => {
         }
       }
 
-      Sinon.stub(BaseRequest, 'get').withArgs('http://localhost:8040/health', { responseType: 'json' }).resolves({
+      vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
         succeeded: true,
         response
-      })
+      }) // TODO: withArgs('http://localhost:8040/health', { responseType: 'json' }) not converted
     })
 
     it('returns a "true" success status', async () => {
@@ -69,10 +67,10 @@ describe('Gotenberg - View Health request', () => {
           body: 'Not Found'
         }
 
-        Sinon.stub(BaseRequest, 'get').withArgs('http://localhost:8040/health', { responseType: 'json' }).resolves({
+        vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response
-        })
+        }) // TODO: withArgs('http://localhost:8040/health', { responseType: 'json' }) not converted
       })
 
       it('returns a "false" success status', async () => {

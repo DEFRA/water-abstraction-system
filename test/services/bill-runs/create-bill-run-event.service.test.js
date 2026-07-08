@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../../app/models/bill-run.model.js')
-const EventModel = require('../../../app/models/event.model.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
+import * as BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import BillRunModel from '../../../app/models/bill-run.model.js'
+import EventModel from '../../../app/models/event.model.js'
+import * as RegionHelper from '../../support/helpers/region.helper.js'
 
 // Thing under test
-const CreateBillRunEventService = require('../../../app/services/bill-runs/create-bill-run-event.service.js')
+import CreateBillRunEventService from '../../../app/services/bill-runs/create-bill-run-event.service.js'
 
 describe('Create Bill Run Event service', () => {
   let clock
@@ -18,12 +15,12 @@ describe('Create Bill Run Event service', () => {
 
   beforeEach(async () => {
     testDate = new Date(2015, 9, 21, 20, 31, 57)
-    clock = Sinon.useFakeTimers({ now: testDate, toFake: ['Date'] })
+    clock = vi.useFakeTimers({ now: { now: testDate, toFake: ['Date'] } })
   })
 
   afterEach(() => {
-    clock.restore()
-    Sinon.restore()
+    vi.useRealTimers()
+    vi.restoreAllMocks()
   })
 
   describe('when a BillRunModel instance is provided', () => {

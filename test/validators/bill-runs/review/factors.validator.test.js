@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const FactorsValidator = require('../../../../app/validators/bill-runs/review/factors.validator.js')
+import FactorsValidator from '../../../../app/validators/bill-runs/review/factors.validator.js'
 
 describe('Bill Runs Review - Factors validator', () => {
   let payload

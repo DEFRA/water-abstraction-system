@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
+import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Thing under test
-const PointsPresenter = require('../../../app/presenters/licences/points.presenter.js')
+import PointsPresenter from '../../../app/presenters/licences/points.presenter.js'
 
 describe('Licences - Points presenter', () => {
   let licence

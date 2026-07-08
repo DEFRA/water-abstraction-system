@@ -1,13 +1,11 @@
-'use strict'
-
 // Test helpers
-const NotificationModel = require('../../../../app/models/notification.model.js')
-const { domains } = require('../../../../config/server.config.js')
-const { generateUserName } = require('../../../support/helpers/user.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import NotificationModel from '../../../../app/models/notification.model.js'
+import { domains } from '../../../../config/server.config.js'
+import { generateUserName } from '../../../support/helpers/user.helper.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const CreateVerificationNotificationDal = require('../../../../app/dal/users/internal/create-verification-notification.dal.js')
+import CreateVerificationNotificationDal from '../../../../app/dal/users/internal/create-verification-notification.dal.js'
 
 describe('Users - Internal - Create Verification Notification DAL', () => {
   let email

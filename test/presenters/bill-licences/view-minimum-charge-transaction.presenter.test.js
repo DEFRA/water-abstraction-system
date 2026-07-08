@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ViewMinimumChargeTransactionPresenter = require('../../../app/presenters/bill-licences/view-minimum-charge-transaction.presenter.js')
+import ViewMinimumChargeTransactionPresenter from '../../../app/presenters/bill-licences/view-minimum-charge-transaction.presenter.js'
 
 describe('View Minimum Charge Transaction presenter', () => {
   let transaction

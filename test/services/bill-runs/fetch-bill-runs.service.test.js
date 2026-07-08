@@ -1,15 +1,12 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const DatabaseConfig = require('../../../config/database.config.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
+import * as BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import DatabaseConfig from '../../../config/database.config.js'
+import * as RegionHelper from '../../support/helpers/region.helper.js'
 
 // Thing under test
-const FetchBillRunsService = require('../../../app/services/bill-runs/fetch-bill-runs.service.js')
+import FetchBillRunsService from '../../../app/services/bill-runs/fetch-bill-runs.service.js'
 
 describe('Fetch Bill Runs service', () => {
   const region = RegionHelper.select()
@@ -22,11 +19,11 @@ describe('Fetch Bill Runs service', () => {
     page = '1'
 
     // Set the default page size to 3 so we don't have to create loads of bill runs to test the service
-    Sinon.replace(DatabaseConfig, 'defaultPageSize', 3)
+    vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 3)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when there are bill runs', () => {

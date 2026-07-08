@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const EventHelper = require('../../../support/helpers/event.helper.js')
-const NotificationHelper = require('../../../support/helpers/notification.helper.js')
-const { timestampForPostgres } = require('../../../../app/lib/general.lib.js')
+import * as EventHelper from '../../../support/helpers/event.helper.js'
+import * as NotificationHelper from '../../../support/helpers/notification.helper.js'
+import { timestampForPostgres } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const UpdateNotificationsService = require('../../../../app/services/jobs/notification-status/update-notifications.service.js')
+import UpdateNotificationsService from '../../../../app/services/jobs/notification-status/update-notifications.service.js'
 
 describe('Job - Notification Status - Update Notifications service', () => {
   let eventId

@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
-const ReturnVersionModel = require('../../../app/models/return-version.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
+import ReturnVersionModel from '../../../app/models/return-version.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things under test
-const FetchCurrentReturnVersionsDal = require('../../../app/dal/return-versions/fetch-current-return-versions.dal.js')
+import FetchCurrentReturnVersionsDal from '../../../app/dal/return-versions/fetch-current-return-versions.dal.js'
 
 describe('DAL - Return Versions - Fetch Current Return Versions dal', () => {
   let licenceId

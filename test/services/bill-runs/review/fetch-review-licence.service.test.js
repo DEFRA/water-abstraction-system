@@ -1,29 +1,27 @@
-'use strict'
-
 // Test helpers
-const AddressHelper = require('../../../support/helpers/address.helper.js')
-const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
-const BillingAccountAddressHelper = require('../../../support/helpers/billing-account-address.helper.js')
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
-const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const CompanyHelper = require('../../../support/helpers/company.helper.js')
-const ContactHelper = require('../../../support/helpers/contact.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
-const ReviewChargeElementReturnHelper = require('../../../support/helpers/review-charge-element-return.helper.js')
-const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
-const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
-const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
-const ReviewReturnHelper = require('../../../support/helpers/review-return.helper.js')
+import * as AddressHelper from '../../../support/helpers/address.helper.js'
+import * as BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
+import * as BillingAccountAddressHelper from '../../../support/helpers/billing-account-address.helper.js'
+import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import * as ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
+import * as ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
+import * as ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
+import * as ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
+import * as CompanyHelper from '../../../support/helpers/company.helper.js'
+import * as ContactHelper from '../../../support/helpers/contact.helper.js'
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import * as PurposeHelper from '../../../support/helpers/purpose.helper.js'
+import * as RegionHelper from '../../../support/helpers/region.helper.js'
+import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import * as ReviewChargeElementHelper from '../../../support/helpers/review-charge-element.helper.js'
+import * as ReviewChargeElementReturnHelper from '../../../support/helpers/review-charge-element-return.helper.js'
+import * as ReviewChargeReferenceHelper from '../../../support/helpers/review-charge-reference.helper.js'
+import * as ReviewChargeVersionHelper from '../../../support/helpers/review-charge-version.helper.js'
+import * as ReviewLicenceHelper from '../../../support/helpers/review-licence.helper.js'
+import * as ReviewReturnHelper from '../../../support/helpers/review-return.helper.js'
 
 // Thing under test
-const FetchReviewLicenceService = require('../../../../app/services/bill-runs/review/fetch-review-licence.service.js')
+import FetchReviewLicenceService from '../../../../app/services/bill-runs/review/fetch-review-licence.service.js'
 
 describe('Bill Runs Review - Fetch Review Licence service', () => {
   let address

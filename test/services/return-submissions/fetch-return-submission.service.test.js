@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const ReturnSubmissionHelper = require('../../support/helpers/return-submission.helper.js')
-const ReturnSubmissionModel = require('../../../app/models/return-submission.model.js')
-const ReturnSubmissionLineHelper = require('../../support/helpers/return-submission-line.helper.js')
-const ReturnSubmissionLineModel = require('../../../app/models/return-submission-line.model.js')
+import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import ReturnLogModel from '../../../app/models/return-log.model.js'
+import * as ReturnSubmissionHelper from '../../support/helpers/return-submission.helper.js'
+import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
+import * as ReturnSubmissionLineHelper from '../../support/helpers/return-submission-line.helper.js'
+import ReturnSubmissionLineModel from '../../../app/models/return-submission-line.model.js'
 
 // Thing under test
-const FetchReturnSubmissionService = require('../../../app/services/return-submissions/fetch-return-submission.service.js')
+import FetchReturnSubmissionService from '../../../app/services/return-submissions/fetch-return-submission.service.js'
 
 describe('Fetch Return Submission service', () => {
   let testReturnSubmission
@@ -41,7 +38,7 @@ describe('Fetch Return Submission service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the service is called', () => {

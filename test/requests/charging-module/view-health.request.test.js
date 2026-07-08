@@ -1,21 +1,19 @@
-'use strict'
-
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
+import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
 
 // Thing under test
-const ViewHealthRequest = require('../../../app/requests/charging-module/view-health.request.js')
+import * as ViewHealthRequest from '../../../app/requests/charging-module/view-health.request.js'
 
 describe('Charging Module - View Health request', () => {
   let response
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request succeeds', () => {
@@ -25,7 +23,7 @@ describe('Charging Module - View Health request', () => {
         body: { status: 'alive' }
       }
 
-      Sinon.stub(ChargingModuleRequest, 'get').resolves({
+      vi.spyOn(ChargingModuleRequest, 'getRequest').mockResolvedValue({
         succeeded: true,
         response
       })
@@ -56,7 +54,7 @@ describe('Charging Module - View Health request', () => {
           }
         }
 
-        Sinon.stub(ChargingModuleRequest, 'get').resolves({
+        vi.spyOn(ChargingModuleRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response
         })

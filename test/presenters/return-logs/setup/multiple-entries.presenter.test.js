@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const MultipleEntriesPresenter = require('../../../../app/presenters/return-logs/setup/multiple-entries.presenter.js')
+import MultipleEntriesPresenter from '../../../../app/presenters/return-logs/setup/multiple-entries.presenter.js'
 
 describe('Return Logs Setup - Multiple Entries presenter', () => {
   let session

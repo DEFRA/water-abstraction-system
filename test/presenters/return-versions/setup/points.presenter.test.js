@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const PointModel = require('../../../../app/models/point.model.js')
+import PointModel from '../../../../app/models/point.model.js'
 
 // Thing under test
-const PointsPresenter = require('../../../../app/presenters/return-versions/setup/points.presenter.js')
+import PointsPresenter from '../../../../app/presenters/return-versions/setup/points.presenter.js'
 
 describe('Return Versions Setup - Points presenter', () => {
   const requirementIndex = 0

@@ -1,33 +1,32 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things to stub
-const CheckBusyBillRunsService = require('../../../app/services/bill-runs/check-busy-bill-runs.service.js')
-const FetchBillRunsService = require('../../../app/services/bill-runs/fetch-bill-runs.service.js')
-const FetchRegionsService = require('../../../app/services/bill-runs/setup/fetch-regions.service.js')
-const YarStub = require('../../support/stubs/yar.stub.js')
+import CheckBusyBillRunsService from '../../../app/services/bill-runs/check-busy-bill-runs.service.js'
+import FetchBillRunsService from '../../../app/services/bill-runs/fetch-bill-runs.service.js'
+import FetchRegionsService from '../../../app/services/bill-runs/setup/fetch-regions.service.js'
+import YarStub from '../../support/stubs/yar.stub.js'
 
 // Thing under test
-const SubmitIndexBillRunsService = require('../../../app/services/bill-runs/submit-index-bill-runs.service.js')
+import SubmitIndexBillRunsService from '../../../app/services/bill-runs/submit-index-bill-runs.service.js'
 
 describe('Bill Runs - Submit Index Bill Runs service', () => {
   let payload
   let yarStub
 
   beforeEach(() => {
-    Sinon.stub(CheckBusyBillRunsService, 'go').resolves('none')
-    Sinon.stub(FetchRegionsService, 'go').resolves([
+    vi.mock('../../../app/services/bill-runs/check-busy-bill-runs.service.js')
+    CheckBusyBillRunsService.mockResolvedValue('none')
+    vi.mock('../../../app/services/bill-runs/setup/fetch-regions.service.js')
+    FetchRegionsService.mockResolvedValue([
       { id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' },
       { id: 'fd3d1154-c83d-4580-bcd6-46bfc380f233', displayName: 'Midlands' }
     ])
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -47,7 +46,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
       it('clears the "billRunsFilter" object from the session', async () => {
         await SubmitIndexBillRunsService(payload, yarStub)
 
-        expect(yarStub.clear.called).toBe(true)
+        expect(yarStub.clear).toHaveBeenCalled()
       })
     })
 
@@ -65,7 +64,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
       it('saves a default "billRunsFilter" object in the session', async () => {
         await SubmitIndexBillRunsService(payload, yarStub)
 
-        const setArgs = yarStub.set.args[0]
+        const setArgs = yarStub.set.mock.calls[0]
 
         expect(setArgs[0]).toEqual('billRunsFilter')
         expect(setArgs[1]).toEqual({ number: null, regions: [], runTypes: [], statuses: [], yearCreated: null })
@@ -86,7 +85,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
       it('saves the state of the filters as the "billRunsFilter" object in the session', async () => {
         await SubmitIndexBillRunsService(payload, yarStub)
 
-        const setArgs = yarStub.set.args[0]
+        const setArgs = yarStub.set.mock.calls[0]
 
         expect(setArgs[0]).toEqual('billRunsFilter')
         expect(setArgs[1]).toEqual({ number: '1001', regions: [], runTypes: [], statuses: [], yearCreated: '2025' })
@@ -100,7 +99,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         it('saves the state of the "Run type" filter as an array in the session', async () => {
           await SubmitIndexBillRunsService(payload, yarStub)
 
-          const setArgs = yarStub.set.args[0]
+          const setArgs = yarStub.set.mock.calls[0]
 
           expect(setArgs[0]).toEqual('billRunsFilter')
           expect(setArgs[1]).toEqual({
@@ -123,7 +122,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         it('saves the state of the "Run type" filter as an array in the session', async () => {
           await SubmitIndexBillRunsService(payload, yarStub)
 
-          const setArgs = yarStub.set.args[0]
+          const setArgs = yarStub.set.mock.calls[0]
 
           expect(setArgs[0]).toEqual('billRunsFilter')
           expect(setArgs[1]).toEqual({
@@ -144,7 +143,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         it('saves the state of the "Region" filter as an array in the session', async () => {
           await SubmitIndexBillRunsService(payload, yarStub)
 
-          const setArgs = yarStub.set.args[0]
+          const setArgs = yarStub.set.mock.calls[0]
 
           expect(setArgs[0]).toEqual('billRunsFilter')
           expect(setArgs[1]).toEqual({
@@ -167,7 +166,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         it('saves the state of the "Region" filter as an array in the session', async () => {
           await SubmitIndexBillRunsService(payload, yarStub)
 
-          const setArgs = yarStub.set.args[0]
+          const setArgs = yarStub.set.mock.calls[0]
 
           expect(setArgs[0]).toEqual('billRunsFilter')
           expect(setArgs[1]).toEqual({
@@ -188,7 +187,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         it('saves the state of the "Status" filter as an array in the session', async () => {
           await SubmitIndexBillRunsService(payload, yarStub)
 
-          const setArgs = yarStub.set.args[0]
+          const setArgs = yarStub.set.mock.calls[0]
 
           expect(setArgs[0]).toEqual('billRunsFilter')
           expect(setArgs[1]).toEqual({
@@ -211,7 +210,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         it('saves the state of the "Status" filter as an array in the session', async () => {
           await SubmitIndexBillRunsService(payload, yarStub)
 
-          const setArgs = yarStub.set.args[0]
+          const setArgs = yarStub.set.mock.calls[0]
 
           expect(setArgs[0]).toEqual('billRunsFilter')
           expect(setArgs[1]).toEqual({
@@ -232,7 +231,8 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
 
       describe('and the results are paginated', () => {
         beforeEach(() => {
-          Sinon.stub(FetchBillRunsService, 'go').resolves({
+          vi.mock('../../../app/services/bill-runs/fetch-bill-runs.service.js')
+          FetchBillRunsService.mockResolvedValue({
             results: _fetchedBillRuns(),
             total: 70
           })
@@ -407,7 +407,8 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
 
       describe('and the results are not paginated', () => {
         beforeEach(() => {
-          Sinon.stub(FetchBillRunsService, 'go').resolves({
+          vi.mock('../../../app/services/bill-runs/fetch-bill-runs.service.js')
+          FetchBillRunsService.mockResolvedValue({
             results: _fetchedBillRuns(),
             total: 2
           })

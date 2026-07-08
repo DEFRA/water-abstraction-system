@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const SelectPresenter = require('../../../app/presenters/address/select.presenter.js')
+import SelectPresenter from '../../../app/presenters/address/select.presenter.js'
 
 describe('Address - Select Presenter', () => {
   let addresses

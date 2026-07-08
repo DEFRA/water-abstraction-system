@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const NotificationHelper = require('../../../support/helpers/notification.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { generateUserName } = require('../../../support/helpers/user.helper.js')
+import * as NotificationHelper from '../../../support/helpers/notification.helper.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateUserName } from '../../../support/helpers/user.helper.js'
 
 // Thing under test
-const UpdateNotificationDal = require('../../../../app/dal/users/internal/update-notification.dal.js')
+import UpdateNotificationDal from '../../../../app/dal/users/internal/update-notification.dal.js'
 
 describe('Users - Internal - Update Notification DAL', () => {
   let notification

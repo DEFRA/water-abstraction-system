@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const UnitsValidator = require('../../../../app/validators/return-logs/setup/units.validator.js')
+import UnitsValidator from '../../../../app/validators/return-logs/setup/units.validator.js'
 
 describe('Return Logs Setup - Units validator', () => {
   let payload

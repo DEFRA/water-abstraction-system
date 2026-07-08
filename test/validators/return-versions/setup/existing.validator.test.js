@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ExistingValidator = require('../../../../app/validators/return-versions/setup/existing.validator.js')
+import ExistingValidator from '../../../../app/validators/return-versions/setup/existing.validator.js'
 
 describe('Return Versions Setup - Existing validator', () => {
   const returnVersions = [

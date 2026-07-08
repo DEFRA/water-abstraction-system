@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewAccountTypeService = require('../../../../app/services/billing-accounts/setup/view-account-type.service.js')
+import ViewAccountTypeService from '../../../../app/services/billing-accounts/setup/view-account-type.service.js'
 
 describe('Billing Accounts - Setup - Account Type Service', () => {
   let session
@@ -22,13 +19,14 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
       billingAccount: BillingAccountsFixture.billingAccount().billingAccount
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

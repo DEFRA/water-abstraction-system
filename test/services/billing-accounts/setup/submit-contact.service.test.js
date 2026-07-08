@@ -1,19 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import * as CustomersFixture from '../../../support/fixtures/customers.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchCompanyContactsService = require('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchCompanyContactsService from '../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js'
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitContactService = require('../../../../app/services/billing-accounts/setup/submit-contact.service.js')
+import SubmitContactService from '../../../../app/services/billing-accounts/setup/submit-contact.service.js'
 
 describe('Billing Accounts - Setup - Contact Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
@@ -24,18 +21,17 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     company: billingAccount.company,
     contacts: [contact]
   }
-
-  let fetchSessionStub
   let payload
   let session
   let sessionData
 
   beforeEach(() => {
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves()
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the user picks to set up a "new" contact with an existing address', () => {
@@ -49,9 +45,9 @@ describe('Billing Accounts - Setup - Contact Service', () => {
         billingAccount
       }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      fetchSessionStub.resolves(session)
+      FetchSessionDal.mockResolvedValue(session)
     })
 
     it('saves the submitted value', async () => {
@@ -80,9 +76,9 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           contactSelected: 'new'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -112,9 +108,9 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           contactSelected: 'new'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -148,9 +144,9 @@ describe('Billing Accounts - Setup - Contact Service', () => {
         billingAccount
       }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      fetchSessionStub.resolves(session)
+      FetchSessionDal.mockResolvedValue(session)
     })
 
     it('saves the submitted value', async () => {
@@ -185,9 +181,9 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           contactSelected: contact.id
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -223,9 +219,9 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           contactSelected: contact.id
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -262,9 +258,9 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           contactName: 'Contact Name'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -302,11 +298,12 @@ describe('Billing Accounts - Setup - Contact Service', () => {
             contactName: 'Contact Name'
           }
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          FetchSessionDal.mockResolvedValue(session)
 
-          Sinon.stub(FetchCompanyContactsService, 'go').resolves(companyContacts)
+          vi.mock('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
+          FetchCompanyContactsService.mockResolvedValue(companyContacts)
         })
 
         it('returns page data for the view, with errors', async () => {
@@ -338,11 +335,12 @@ describe('Billing Accounts - Setup - Contact Service', () => {
             existingAccount: billingAccount.company.id
           }
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          FetchSessionDal.mockResolvedValue(session)
 
-          Sinon.stub(FetchCompanyContactsService, 'go').resolves(companyContacts)
+          vi.mock('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
+          FetchCompanyContactsService.mockResolvedValue(companyContacts)
         })
 
         it('returns page data for the view, with errors', async () => {

@@ -1,15 +1,13 @@
-'use strict'
-
 // Test helpers
-const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceSupplementaryYearHelper = require('../../support/helpers/licence-supplementary-year.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
-const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
+import * as BillHelper from '../../support/helpers/bill.helper.js'
+import * as BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import * as LicenceSupplementaryYearHelper from '../../support/helpers/licence-supplementary-year.helper.js'
+import * as RegionHelper from '../../support/helpers/region.helper.js'
+import * as WorkflowHelper from '../../support/helpers/workflow.helper.js'
 
 // Thing under test
-const UnflagBilledSupplementaryLicencesService = require('../../../app/services/bill-runs/unflag-billed-supplementary-licences.service.js')
+import UnflagBilledSupplementaryLicencesService from '../../../app/services/bill-runs/unflag-billed-supplementary-licences.service.js'
 
 describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
   const { id: regionId } = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)

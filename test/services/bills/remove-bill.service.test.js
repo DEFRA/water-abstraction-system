@@ -1,26 +1,24 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillingAccountModel = require('../../../app/models/billing-account.model.js')
+import BillingAccountModel from '../../../app/models/billing-account.model.js'
 
 // Things we need to stub
-const FetchBillSummaryService = require('../../../app/services/bills/fetch-bill-summary.service.js')
+import FetchBillSummaryService from '../../../app/services/bills/fetch-bill-summary.service.js'
 
 // Thing under test
-const RemoveBillService = require('../../../app/services/bills/remove-bill.service.js')
+import RemoveBillService from '../../../app/services/bills/remove-bill.service.js'
 
 describe('Remove Bill service', () => {
   const testId = '71d03336-f683-42fe-b67c-c861f25f1fbd'
 
   beforeEach(() => {
-    Sinon.stub(FetchBillSummaryService, 'go').resolves(_billSummary())
+    vi.mock('../../../app/services/bills/fetch-bill-summary.service.js')
+    FetchBillSummaryService.mockResolvedValue(_billSummary())
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

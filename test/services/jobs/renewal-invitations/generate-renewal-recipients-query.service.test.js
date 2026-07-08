@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const RecipientScenariosSeeder = require('../../../support/seeders/recipient-scenarios.seeder.js')
-const { db } = require('../../../../db/db.js')
+import RecipientScenariosSeeder from '../../../support/seeders/recipient-scenarios.seeder.js'
+import { db } from '../../../../db/db.js'
 
 // Thing under test
-const GenerateRenewalRecipientsQueryService = require('../../../../app/services/jobs/renewal-invitations/generate-renewal-recipients-query.service.js')
+import GenerateRenewalRecipientsQueryService from '../../../../app/services/jobs/renewal-invitations/generate-renewal-recipients-query.service.js'
 
 describe('Jobs - Renewal Invitations - Generate Renewal Recipients Query Service', () => {
   const expiringLicencesQuery = `SELECT

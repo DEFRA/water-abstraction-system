@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateNoticeReferenceCode, generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const ConfirmationPresenter = require('../../../../app/presenters/notices/setup/confirmation.presenter.js')
+import ConfirmationPresenter from '../../../../app/presenters/notices/setup/confirmation.presenter.js'
 
 describe('Notices - Setup - Confirmation presenter', () => {
   const referenceCode = generateNoticeReferenceCode('RINV-')

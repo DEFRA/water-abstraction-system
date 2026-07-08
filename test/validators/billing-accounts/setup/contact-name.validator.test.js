@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ContactNameValidator = require('../../../../app/validators/billing-accounts/setup/contact-name.validator.js')
+import ContactNameValidator from '../../../../app/validators/billing-accounts/setup/contact-name.validator.js'
 
 describe('Billing Accounts - Setup - Contact Name Validator', () => {
   let payload

@@ -1,21 +1,19 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we want to stub
-const FetchInvalidAddressesService = require('../../../app/services/reports/fetch-invalid-addresses.service.js')
+import FetchInvalidAddressesService from '../../../app/services/reports/fetch-invalid-addresses.service.js'
 
 // Thing under test
-const ViewInvalidAddressesService = require('../../../app/services/reports/view-invalid-addresses.service.js')
+import ViewInvalidAddressesService from '../../../app/services/reports/view-invalid-addresses.service.js'
 
 describe('Reports - View Invalid Addresses service', () => {
   beforeEach(() => {
-    Sinon.stub(FetchInvalidAddressesService, 'go').returns(_invalidAddresses())
+    vi.mock('../../../app/services/reports/fetch-invalid-addresses.service.js')
+    FetchInvalidAddressesService.mockReturnValue(_invalidAddresses())
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

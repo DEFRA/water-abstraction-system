@@ -1,29 +1,24 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const CompanyContactModel = require('../../../../app/models/company-contact.model.js')
-const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const SessionModel = require('../../../../app/models/session.model.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+import CompanyContactModel from '../../../../app/models/company-contact.model.js'
+import * as CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import SessionModel from '../../../../app/models/session.model.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 
 // Things we need to stub
-const FetchCompanyContactDal = require('../../../../app/dal/company-contacts/setup/fetch-company-contact.dal.js')
-const FetchCompanyLicencesDal = require('../../../../app/dal/company-contacts/fetch-company-licences.dal.js')
+import FetchCompanyContactDal from '../../../../app/dal/company-contacts/setup/fetch-company-contact.dal.js'
+import FetchCompanyLicencesDal from '../../../../app/dal/company-contacts/fetch-company-licences.dal.js'
 
 // Thing under test
-const InitiateEditSessionService = require('../../../../app/services/company-contacts/setup/initiate-edit-session.service.js')
+import InitiateEditSessionService from '../../../../app/services/company-contacts/setup/initiate-edit-session.service.js'
 
 describe('Company Contacts - Setup - Initiate edit Session service', () => {
   let company
   let companyContact
   let contact
   let licences
-  let stubFetchCompanyLicencesDal
-
   beforeEach(() => {
     company = CustomersFixtures.company()
     contact = CustomersFixtures.contact()
@@ -38,12 +33,14 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
       contact
     })
 
-    Sinon.stub(FetchCompanyContactDal, 'go').resolves(companyContact)
-    stubFetchCompanyLicencesDal = Sinon.stub(FetchCompanyLicencesDal, 'go').resolves(licences)
+    vi.mock('../../../../app/dal/company-contacts/setup/fetch-company-contact.dal.js')
+    FetchCompanyContactDal.mockResolvedValue(companyContact)
+    vi.mock('../../../../app/dal/company-contacts/fetch-company-licences.dal.js')
+    FetchCompanyLicencesDal.mockResolvedValue(licences)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -107,7 +104,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
     describe('and the company has no active licences', () => {
       beforeEach(() => {
-        stubFetchCompanyLicencesDal.resolves([])
+        FetchCompanyLicencesDal.mockResolvedValue([])
       })
 
       describe('when the "abstractionAlerts" property is true', () => {

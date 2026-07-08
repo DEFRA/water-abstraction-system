@@ -1,25 +1,20 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
-const { licenceEnds } = require('../../../../support/fixtures/licence.fixture.js')
-const { yesterday } = require('../../../../support/general.js')
+import { generateUUID } from '../../../../../app/lib/general.lib.js'
+import { licenceEnds } from '../../../../support/fixtures/licence.fixture.js'
+import { yesterday } from '../../../../support/general.js'
 
 // Things we need to stub
-const FetchMonitoringStationDetailsDal = require('../../../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js')
+import FetchMonitoringStationDetailsDal from '../../../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js'
 
 // Thing under test
-const DetermineLicenceMonitoringStationsService = require('../../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js')
+import DetermineLicenceMonitoringStationsService from '../../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js'
 
 describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stations service', () => {
   let licenceMonitoringStations
   let monitoringStation
   let monitoringStationId
-  let stubFetchMonitoringStationDetailsDal
-
   beforeEach(() => {
     monitoringStationId = generateUUID()
 
@@ -84,14 +79,15 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
       }
     ]
 
-    stubFetchMonitoringStationDetailsDal = Sinon.stub(FetchMonitoringStationDetailsDal, 'go').resolves({
+    vi.mock('../../../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js')
+    FetchMonitoringStationDetailsDal.mockResolvedValue({
       licenceMonitoringStations,
       monitoringStation
     })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   it('correctly returns the data', async () => {
@@ -174,7 +170,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
       licenceMonitoringStations[1].licence.revokedDate = yesterday()
       licenceMonitoringStations[2].licence.expiredDate = yesterday()
 
-      stubFetchMonitoringStationDetailsDal.resolves({
+      FetchMonitoringStationDetailsDal.mockResolvedValue({
         licenceMonitoringStations,
         monitoringStation
       })

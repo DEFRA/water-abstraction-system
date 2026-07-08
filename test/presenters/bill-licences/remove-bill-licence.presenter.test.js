@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Thing under test
-const RemoveBillLicencePresenter = require('../../../app/presenters/bill-licences/remove-bill-licence.presenter.js')
+import RemoveBillLicencePresenter from '../../../app/presenters/bill-licences/remove-bill-licence.presenter.js'
 
 describe('Remove Bill Licence presenter', () => {
   let billLicence
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when provided with a populated bill licence', () => {

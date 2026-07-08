@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
+import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Things we need to stub
-const FetchConditionsService = require('../../../app/services/licences/fetch-conditions.service.js')
-const FetchLicenceVersionDal = require('../../../app/dal/licence-versions/fetch-licence-version.dal.js')
-const NotifyConfig = require('../../../config/notify.config.js')
+import FetchConditionsService from '../../../app/services/licences/fetch-conditions.service.js'
+import FetchLicenceVersionDal from '../../../app/dal/licence-versions/fetch-licence-version.dal.js'
+import NotifyConfig from '../../../config/notify.config.js'
 
 // Thing under test
-const ViewService = require('../../../app/services/licence-versions/view.service.js')
+import ViewService from '../../../app/services/licence-versions/view.service.js'
 
 describe('Licence Versions - View service', () => {
   let auth
@@ -30,18 +27,20 @@ describe('Licence Versions - View service', () => {
 
     conditions = []
 
-    Sinon.stub(FetchLicenceVersionDal, 'go').returns({
+    vi.mock('../../../app/dal/licence-versions/fetch-licence-version.dal.js')
+    FetchLicenceVersionDal.mockReturnValue({
       licenceVersion,
       licenceVersionsForPagination: [licenceVersion]
     })
 
-    Sinon.stub(FetchConditionsService, 'go').returns(conditions)
+    vi.mock('../../../app/services/licences/fetch-conditions.service.js')
+    FetchConditionsService.mockReturnValue(conditions)
 
-    Sinon.stub(NotifyConfig, 'replyTo').value('notify@test.gov.uk')
+    vi.replaceProperty(NotifyConfig, 'replyTo', 'notify@test.gov.uk')
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

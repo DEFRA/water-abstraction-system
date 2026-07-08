@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const NoteValidator = require('../../../../app/validators/return-logs/setup/note.validator.js')
+import NoteValidator from '../../../../app/validators/return-logs/setup/note.validator.js'
 
 describe('Return Logs Setup - Note validator', () => {
   describe('when valid data is provided', () => {

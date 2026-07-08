@@ -1,19 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
-const YarStub = require('../../support/stubs/yar.stub.js')
+import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
+import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchAbstractionAlertLicencesDal = require('../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
-const FetchCompanyContactDetailsService = require('../../../app/services/company-contacts/fetch-company-contact-details.service.js')
-const FetchCompanyService = require('../../../app/dal/companies/fetch-company.dal.js')
+import FetchAbstractionAlertLicencesDal from '../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js'
+import FetchCompanyContactDetailsService from '../../../app/services/company-contacts/fetch-company-contact-details.service.js'
+import FetchCompanyService from '../../../app/dal/companies/fetch-company.dal.js'
 
 // Thing under test
-const ViewContactDetailsService = require('../../../app/services/company-contacts/view-contact-details.service.js')
+import ViewContactDetailsService from '../../../app/services/company-contacts/view-contact-details.service.js'
 
 describe('Company Contacts - View Contact Details Service', () => {
   let auth
@@ -28,16 +25,19 @@ describe('Company Contacts - View Contact Details Service', () => {
 
     company = CustomersFixtures.company()
 
-    Sinon.stub(FetchAbstractionAlertLicencesDal, 'go').resolves([])
-    Sinon.stub(FetchCompanyService, 'go').resolves(company)
-    Sinon.stub(FetchCompanyContactDetailsService, 'go').resolves(companyContact)
+    vi.mock('../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
+    FetchAbstractionAlertLicencesDal.mockResolvedValue([])
+    vi.mock('../../../app/dal/companies/fetch-company.dal.js')
+    FetchCompanyService.mockResolvedValue(company)
+    vi.mock('../../../app/services/company-contacts/fetch-company-contact-details.service.js')
+    FetchCompanyContactDetailsService.mockResolvedValue(companyContact)
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([{ titleText: 'Updated', text: 'Contact details updated.' }])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([{ titleText: 'Updated', text: 'Contact details updated.' }])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

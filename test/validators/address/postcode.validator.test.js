@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const PostcodeValidator = require('../../../app/validators/address/postcode.validator.js')
+import PostcodeValidator from '../../../app/validators/address/postcode.validator.js'
 
 describe('Address - Postcode Validator', () => {
   let payload

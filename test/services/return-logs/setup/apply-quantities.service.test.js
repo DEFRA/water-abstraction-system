@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ApplyQuantitiesService = require('../../../../app/services/return-logs/setup/apply-quantities.service.js')
+import ApplyQuantitiesService from '../../../../app/services/return-logs/setup/apply-quantities.service.js'
 
 describe('Return Logs Setup - Update Quantities service', () => {
   let session

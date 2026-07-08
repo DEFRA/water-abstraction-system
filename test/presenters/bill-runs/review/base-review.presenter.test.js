@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const BaseReviewPresenter = require('../../../../app/presenters/bill-runs/review/base-review.presenter.js')
+import BaseReviewPresenter from '../../../../app/presenters/bill-runs/review/base-review.presenter.js'
 
 describe('Bill Runs Review - Base Review presenter', () => {
   describe('#calculateTotalBillableReturns()', () => {

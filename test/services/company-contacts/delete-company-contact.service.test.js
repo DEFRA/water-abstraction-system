@@ -1,14 +1,11 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
-const CompanyContactModel = require('../../../app/models/company-contact.model.js')
+import * as CompanyContactHelper from '../../support/helpers/company-contact.helper.js'
+import CompanyContactModel from '../../../app/models/company-contact.model.js'
 
 // Thing under test
-const DeleteCompanyContactService = require('../../../app/services/company-contacts/delete-company-contact.service.js')
+import DeleteCompanyContactService from '../../../app/services/company-contacts/delete-company-contact.service.js'
 
 describe('Company contact - Delete company contact service', () => {
   let clock
@@ -21,11 +18,11 @@ describe('Company contact - Delete company contact service', () => {
 
     today = new Date('2020-06-06')
 
-    clock = Sinon.useFakeTimers({ now: today, toFake: ['Date'] })
+    clock = vi.useFakeTimers({ now: { now: today, toFake: ['Date'] } })
   })
 
   afterEach(async () => {
-    clock.restore()
+    vi.useRealTimers()
 
     await companyContact.$query().delete()
   })

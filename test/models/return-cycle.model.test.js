@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const ReturnCycleHelper = require('../support/helpers/return-cycle.helper.js')
-const ReturnLogModel = require('../../app/models/return-log.model.js')
-const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
+import * as ReturnCycleHelper from '../support/helpers/return-cycle.helper.js'
+import ReturnLogModel from '../../app/models/return-log.model.js'
+import * as ReturnLogHelper from '../support/helpers/return-log.helper.js'
 
 // Thing under test
-const ReturnCycleModel = require('../../app/models/return-cycle.model.js')
+import ReturnCycleModel from '../../app/models/return-cycle.model.js'
 
 describe('Return Cycle model', () => {
   let testRecord

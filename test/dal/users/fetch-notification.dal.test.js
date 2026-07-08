@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
-const NotificationHelper = require('../../support/helpers/notification.helper.js')
-const UsersFixture = require('../../support/fixtures/users.fixture.js')
+import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
+import * as NotificationHelper from '../../support/helpers/notification.helper.js'
+import * as UsersFixture from '../../support/fixtures/users.fixture.js'
 
 // Thing under test
-const FetchNotificationDal = require('../../../app/dal/users/fetch-notification.dal.js')
+import FetchNotificationDal from '../../../app/dal/users/fetch-notification.dal.js'
 
 describe('Users - Fetch Notification DAL', () => {
   let notification

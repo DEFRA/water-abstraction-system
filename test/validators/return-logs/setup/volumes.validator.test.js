@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const VolumesValidator = require('../../../../app/validators/return-logs/setup/volumes.validator.js')
+import VolumesValidator from '../../../../app/validators/return-logs/setup/volumes.validator.js'
 
 describe('Return Logs Setup - Volumes validator', () => {
   let payload

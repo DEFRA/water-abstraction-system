@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
+import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
 
 // Thing under test
-const CompanySearchPresenter = require('../../../../app/presenters/billing-accounts/setup/company-search.presenter.js')
+import CompanySearchPresenter from '../../../../app/presenters/billing-accounts/setup/company-search.presenter.js'
 
 describe('Billing Accounts - Setup - Company Search Presenter', () => {
   let session

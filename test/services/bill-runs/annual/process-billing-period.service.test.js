@@ -1,21 +1,18 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const BillModel = require('../../../../app/models/bill.model.js')
-const BillRunError = require('../../../../app/errors/bill-run.error.js')
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const ChargingModuleCreateTransactionRequest = require('../../../../app/requests/charging-module/create-transaction.request.js')
-const GenerateTransactionsService = require('../../../../app/services/bill-runs/generate-transactions.service.js')
+import BillModel from '../../../../app/models/bill.model.js'
+import BillRunError from '../../../../app/errors/bill-run.error.js'
+import BillRunModel from '../../../../app/models/bill-run.model.js'
+import * as ChargingModuleCreateTransactionRequest from '../../../../app/requests/charging-module/create-transaction.request.js'
+import GenerateTransactionsService from '../../../../app/services/bill-runs/generate-transactions.service.js'
 
 // Thing under test
-const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/annual/process-billing-period.service.js')
+import ProcessBillingPeriodService from '../../../../app/services/bill-runs/annual/process-billing-period.service.js'
 
 describe('Annual Process billing period service', () => {
   const billingPeriod = determineCurrentFinancialYear()
@@ -30,11 +27,13 @@ describe('Annual Process billing period service', () => {
       externalId: generateUUID()
     }
 
-    chargingModuleCreateTransactionRequestStub = Sinon.stub(ChargingModuleCreateTransactionRequest, 'send')
+    chargingModuleCreateTransactionRequestStub = vi
+      .spyOn(ChargingModuleCreateTransactionRequest, 'send')
+      .mockImplementation(() => {})
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the service is called', () => {
@@ -137,7 +136,8 @@ describe('Annual Process billing period service', () => {
 
     describe('because generating the calculated transactions fails', () => {
       beforeEach(async () => {
-        Sinon.stub(GenerateTransactionsService, 'go').throws()
+        vi.mock('../../../../app/services/bill-runs/generate-transactions.service.js')
+        GenerateTransactionsService.mockRejectedValue(new Error())
       })
 
       it('throws a BillRunError with the correct code', async () => {
@@ -152,7 +152,7 @@ describe('Annual Process billing period service', () => {
 
     describe('because sending the transactions fails', () => {
       beforeEach(async () => {
-        chargingModuleCreateTransactionRequestStub.rejects()
+        chargingModuleCreateTransactionRequestStub.mockRejectedValue()
       })
 
       it('throws a BillRunError with the correct code', async () => {

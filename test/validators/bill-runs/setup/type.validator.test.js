@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const TypeValidator = require('../../../../app/validators/bill-runs/setup/type.validator.js')
+import TypeValidator from '../../../../app/validators/bill-runs/setup/type.validator.js'
 
 describe('Bill Runs Setup Type validator', () => {
   describe('when valid data is provided', () => {

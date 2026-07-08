@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const FAOValidator = require('../../../../app/validators/billing-accounts/setup/fao.validator.js')
+import FAOValidator from '../../../../app/validators/billing-accounts/setup/fao.validator.js'
 
 describe('Billing Accounts - Setup - FAO Validator', () => {
   let payload

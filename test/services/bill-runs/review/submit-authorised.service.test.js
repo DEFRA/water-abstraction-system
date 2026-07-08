@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchReviewChargeReferenceService = require('../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js')
-const ReviewChargeReferenceModel = require('../../../../app/models/review-charge-reference.model.js')
+import FetchReviewChargeReferenceService from '../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js'
+import ReviewChargeReferenceModel from '../../../../app/models/review-charge-reference.model.js'
 
 // Thing under test
-const SubmitAuthorisedService = require('../../../../app/services/bill-runs/review/submit-authorised.service.js')
+import SubmitAuthorisedService from '../../../../app/services/bill-runs/review/submit-authorised.service.js'
 
 describe('Bill Runs Review - Submit Authorised Service', () => {
   let payload
@@ -23,19 +20,20 @@ describe('Bill Runs Review - Submit Authorised Service', () => {
   beforeEach(() => {
     reviewChargeReference = BillRunsReviewFixture.reviewChargeReference()
 
-    Sinon.stub(FetchReviewChargeReferenceService, 'go').resolves(reviewChargeReference)
+    vi.mock('../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js')
+    FetchReviewChargeReferenceService.mockResolvedValue(reviewChargeReference)
 
-    patchStub = Sinon.stub().resolves()
-    Sinon.stub(ReviewChargeReferenceModel, 'query').returns({
-      findById: Sinon.stub().withArgs(reviewChargeReference.id).returnsThis(),
+    patchStub = vi.fn().mockResolvedValue()
+    vi.spyOn(ReviewChargeReferenceModel, 'query').mockReturnValue({
+      findById: vi.fn().mockReturnThis(),
       patch: patchStub
     })
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -48,12 +46,12 @@ describe('Bill Runs Review - Submit Authorised Service', () => {
         const result = await SubmitAuthorisedService(reviewChargeReference.id, yarStub, payload)
 
         // Check we save the change
-        const [patchObject] = patchStub.args[0]
+        const [patchObject] = patchStub.mock.calls[0]
 
         expect(patchObject).toEqual({ amendedAuthorisedVolume: '9.092' })
 
         // Check we add the flash message
-        const [flashType, bannerMessage] = yarStub.flash.args[0]
+        const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('banner')
         expect(bannerMessage).toEqual('The authorised volume for this licence have been updated')
@@ -72,10 +70,10 @@ describe('Bill Runs Review - Submit Authorised Service', () => {
         const result = await SubmitAuthorisedService(reviewChargeReference.id, yarStub, payload)
 
         // Check we didn't save
-        expect(patchStub.called).toBe(false)
+        expect(patchStub).not.toHaveBeenCalled()
 
         // Check we didn't add the flash message
-        expect(yarStub.flash.called).toBe(false)
+        expect(yarStub.flash).not.toHaveBeenCalled()
 
         // Check we return page data including error (controller knows POST failed so re-renders)
         expect(result).toEqual({

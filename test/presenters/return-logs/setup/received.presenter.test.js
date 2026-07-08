@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
-const { today } = require('../../../../app/lib/general.lib.js')
+import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
+import { today } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const ReceivedPresenter = require('../../../../app/presenters/return-logs/setup/received.presenter.js')
+import ReceivedPresenter from '../../../../app/presenters/return-logs/setup/received.presenter.js'
 
 describe('Return Logs - Setup - Received presenter', () => {
   let session

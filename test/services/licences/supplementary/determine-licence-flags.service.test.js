@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const DetermineLicenceFlagsService = require('../../../../app/services/licences/supplementary/determine-licence-flags.service.js')
+import DetermineLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-licence-flags.service.js'
 
 describe('Determine Licence Flags Service', () => {
   describe('when passed a licence ID', () => {

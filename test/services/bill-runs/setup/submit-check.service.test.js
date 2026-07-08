@@ -1,19 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
+import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
 
 // Things we need to stub
-const CreateService = require('../../../../app/services/bill-runs/setup/create.service.js')
-const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
-const DetermineBlockingBillRunService = require('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import CreateService from '../../../../app/services/bill-runs/setup/create.service.js'
+import DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
+import DetermineBlockingBillRunService from '../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js'
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitCheckService = require('../../../../app/services/bill-runs/setup/submit-check.service.js')
+import SubmitCheckService from '../../../../app/services/bill-runs/setup/submit-check.service.js'
 
 describe('Bill Runs - Setup - Submit Check service', () => {
   const auth = {
@@ -30,18 +27,19 @@ describe('Bill Runs - Setup - Submit Check service', () => {
   const sessionId = '4bcb28c5-95ae-487c-8f13-ac71ec3c5ff6'
 
   let blockingResults
-  let createStub
   let session
 
   beforeEach(async () => {
     session = { id: sessionId, region: region.id, regionName: region.displayName, type: 'annual' }
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
-    Sinon.stub(DeleteSessionDal, 'go').resolves()
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
+    vi.mock('../../../../app/dal/delete-session.dal.js')
+    DeleteSessionDal.mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -49,22 +47,24 @@ describe('Bill Runs - Setup - Submit Check service', () => {
       beforeEach(async () => {
         blockingResults = { matches: [], toFinancialYearEnding: 2025, trigger: engineTriggers.current }
 
-        Sinon.stub(DetermineBlockingBillRunService, 'go').resolves(blockingResults)
+        vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
+        DetermineBlockingBillRunService.mockResolvedValue(blockingResults)
 
-        createStub = Sinon.stub(CreateService, 'go').resolves()
+        vi.mock('../../../../app/services/bill-runs/setup/create.service.js')
+        CreateService.mockResolvedValue()
       })
 
       it('triggers creation of the bill run and returns empty page data', async () => {
         const result = await SubmitCheckService(session.id, auth)
 
-        expect(createStub.called).toBe(true)
+        expect(CreateService).toHaveBeenCalled()
         expect(result).toEqual({})
       })
 
       it('deletes the session data', async () => {
         await SubmitCheckService(session.id, auth)
 
-        expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
+        expect(DeleteSessionDal.go).toHaveBeenCalledWith(session.id)
       })
     })
 
@@ -90,7 +90,8 @@ describe('Bill Runs - Setup - Submit Check service', () => {
           trigger: engineTriggers.neither
         }
 
-        Sinon.stub(DetermineBlockingBillRunService, 'go').resolves(blockingResults)
+        vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
+        DetermineBlockingBillRunService.mockResolvedValue(blockingResults)
       })
 
       it('returns page data needed to re-render the view', async () => {
@@ -118,6 +119,6 @@ describe('Bill Runs - Setup - Submit Check service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 })

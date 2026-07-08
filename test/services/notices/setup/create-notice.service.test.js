@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const EventModel = require('../../../../app/models/event.model.js')
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+import EventModel from '../../../../app/models/event.model.js'
+import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const CreateNoticeService = require('../../../../app/services/notices/setup/create-notice.service.js')
+import CreateNoticeService from '../../../../app/services/notices/setup/create-notice.service.js'
 
 describe('Notices - Setup - Create Notice service', () => {
   const issuer = 'hello@world.com'

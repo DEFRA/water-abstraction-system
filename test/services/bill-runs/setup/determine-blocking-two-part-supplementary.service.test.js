@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
+import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
 
 // Things we need to stub
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
+import BillRunModel from '../../../../app/models/bill-run.model.js'
 
 // Thing under test
-const DetermineBlockingTwoPartSupplementaryService = require('../../../../app/services/bill-runs/setup/determine-blocking-two-part-supplementary.service.js')
+import DetermineBlockingTwoPartSupplementaryService from '../../../../app/services/bill-runs/setup/determine-blocking-two-part-supplementary.service.js'
 
 describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run service', () => {
   const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'
@@ -40,23 +37,24 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
     }
 
     billRunQueryStub = {
-      select: Sinon.stub().returnsThis(),
-      where: Sinon.stub().returnsThis(),
-      whereIn: Sinon.stub().returnsThis(),
-      orderBy: Sinon.stub().returnsThis(),
-      withGraphFetched: Sinon.stub().returnsThis(),
-      modifyGraph: Sinon.stub().returnsThis(),
-      limit: Sinon.stub().returnsThis()
+      select: vi.fn().mockReturnThis(),
+      where: vi.fn().mockReturnThis(),
+      whereIn: vi.fn().mockReturnThis(),
+      orderBy: vi.fn().mockReturnThis(),
+      withGraphFetched: vi.fn().mockReturnThis(),
+      modifyGraph: vi.fn().mockReturnThis(),
+      limit: vi.fn().mockReturnThis()
     }
   })
 
   afterEach(async () => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when there is a live bill run', () => {
     beforeEach(() => {
-      billRunQueryStub.first = Sinon.stub()
+      billRunQueryStub.first = vi
+        .fn()
         // Find last annual bill run
         .onFirstCall()
         .resolves(lastAnnualMatch)
@@ -64,7 +62,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
         .onSecondCall()
         .resolves(match)
 
-      Sinon.stub(BillRunModel, 'query').returns(billRunQueryStub)
+      vi.spyOn(BillRunModel, 'query').mockReturnValue(billRunQueryStub)
     })
 
     it('returns the match and determines that neither engine can be triggered', async () => {
@@ -76,7 +74,8 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
 
   describe('when there is no live bill run', () => {
     beforeEach(() => {
-      billRunQueryStub.first = Sinon.stub()
+      billRunQueryStub.first = vi
+        .fn()
         // Find last annual bill run
         .onFirstCall()
         .resolves(lastAnnualMatch)
@@ -84,7 +83,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
         .onSecondCall()
         .resolves(null)
 
-      Sinon.stub(BillRunModel, 'query').returns(billRunQueryStub)
+      vi.spyOn(BillRunModel, 'query').mockReturnValue(billRunQueryStub)
     })
 
     it('returns no matches and determines that the "current" engine can be triggered', async () => {
@@ -96,9 +95,9 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
 
   describe('when the two-part tariff annual bill run for the region has not been run for the selected year (it is outstanding)', () => {
     beforeEach(() => {
-      billRunQueryStub.first = Sinon.stub().resolves(null)
+      billRunQueryStub.first = vi.fn().mockResolvedValue(null)
 
-      Sinon.stub(BillRunModel, 'query').returns(billRunQueryStub)
+      vi.spyOn(BillRunModel, 'query').mockReturnValue(billRunQueryStub)
     })
 
     it("determines the 'toFinancialEndYear' to be 0 and that 'neither' engine can be triggered", async () => {

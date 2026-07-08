@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const FetchLicenceRefsWithDueReturnsService = require('../../../../app/services/notices/setup/fetch-licence-refs-with-due-returns.service.js')
+import FetchLicenceRefsWithDueReturnsService from '../../../../app/services/notices/setup/fetch-licence-refs-with-due-returns.service.js'
 
 describe('Notices - Setup - Fetch Licence Refs With Due Returns service', () => {
   const returnsPeriod = {

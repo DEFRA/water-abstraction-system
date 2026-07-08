@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
+import * as WorkflowHelper from '../../support/helpers/workflow.helper.js'
 
 // Thing under test
-const FetchWorkflowsService = require('../../../app/services/licences/fetch-workflows.service.js')
+import FetchWorkflowsService from '../../../app/services/licences/fetch-workflows.service.js'
 
 describe('Licences - Fetch Workflows service', () => {
   let workflow

@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeHelper = require('../../../support/helpers/licence-version-purpose.helper.js')
-const LicenceVersionPurposePointHelper = require('../../../support/helpers/licence-version-purpose-point.helper.js')
-const PointHelper = require('../../../support/helpers/point.helper.js')
-const PointModel = require('../../../../app/models/point.model.js')
+import * as LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
+import * as LicenceVersionPurposeHelper from '../../../support/helpers/licence-version-purpose.helper.js'
+import * as LicenceVersionPurposePointHelper from '../../../support/helpers/licence-version-purpose-point.helper.js'
+import * as PointHelper from '../../../support/helpers/point.helper.js'
+import PointModel from '../../../../app/models/point.model.js'
 
 // Thing under test
-const FetchPointsService = require('../../../../app/services/return-versions/setup/fetch-points.service.js')
+import FetchPointsService from '../../../../app/services/return-versions/setup/fetch-points.service.js'
 
 describe('Return Versions - Setup - Fetch Points service', () => {
   let licenceVersion

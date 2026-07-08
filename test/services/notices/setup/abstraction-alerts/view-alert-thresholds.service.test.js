@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+import * as AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewAlertThresholdsService = require('../../../../../app/services/notices/setup/abstraction-alerts/view-alert-thresholds.service.js')
+import ViewAlertThresholdsService from '../../../../../app/services/notices/setup/abstraction-alerts/view-alert-thresholds.service.js'
 
 describe('Notices - Setup - Abstraction Alerts - View Alert Thresholds service', () => {
   let session
@@ -26,13 +23,14 @@ describe('Notices - Setup - Abstraction Alerts - View Alert Thresholds service',
       alertType: 'stop'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

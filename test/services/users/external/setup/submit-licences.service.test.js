@@ -1,21 +1,17 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
-const UserSessionsFixture = require('../../../../support/fixtures/user-sessions.fixture.js')
-const YarStub = require('../../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import * as UserSessionsFixture from '../../../../support/fixtures/user-sessions.fixture.js'
+import YarStub from '../../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitLicencesService = require('../../../../../app/services/users/external/setup/submit-licences.service.js')
+import SubmitLicencesService from '../../../../../app/services/users/external/setup/submit-licences.service.js'
 
 describe('Users - External - Setup - Submit Licences Service', () => {
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -24,15 +20,16 @@ describe('Users - External - Setup - Submit Licences Service', () => {
   beforeEach(() => {
     sessionData = UserSessionsFixture.unregistrationSession()
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called with a valid payload', () => {
@@ -63,13 +60,13 @@ describe('Users - External - Setup - Submit Licences Service', () => {
         describe('and the "session" and "payload" value', () => {
           describe('match', () => {
             beforeEach(() => {
-              session = SessionModelStub.build(Sinon, {
+              session = SessionModelStub({
                 ...sessionData,
                 checkPageVisited: true,
                 allLicences: true
               })
 
-              fetchSessionStub.resolves(session)
+              FetchSessionDal.mockResolvedValue(session)
 
               payload = { licences: 'all' }
             })
@@ -77,20 +74,20 @@ describe('Users - External - Setup - Submit Licences Service', () => {
             it('does not set a notification', async () => {
               await SubmitLicencesService(session.id, payload, yarStub)
 
-              expect(yarStub.flash.called).toBe(false)
+              expect(yarStub.flash).not.toHaveBeenCalled()
             })
           })
 
           describe('do not match', () => {
             describe('because the user has changed from "All licences" to a specific one', () => {
               beforeEach(() => {
-                session = SessionModelStub.build(Sinon, {
+                session = SessionModelStub({
                   ...sessionData,
                   checkPageVisited: true,
                   allLicences: true
                 })
 
-                fetchSessionStub.resolves(session)
+                FetchSessionDal.mockResolvedValue(session)
 
                 payload = { licences: sessionData.licences[0].id }
               })
@@ -98,7 +95,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
               it('sets a notification', async () => {
                 await SubmitLicencesService(session.id, payload, yarStub)
 
-                const [flashType, bannerMessage] = yarStub.flash.args[0]
+                const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
                 expect(flashType).toEqual('notification')
                 expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Licences to unregister updated' })
@@ -107,14 +104,14 @@ describe('Users - External - Setup - Submit Licences Service', () => {
 
             describe('because the user has changed the number of licences selected', () => {
               beforeEach(() => {
-                session = SessionModelStub.build(Sinon, {
+                session = SessionModelStub({
                   ...sessionData,
                   checkPageVisited: true,
                   allLicences: false,
                   selectedLicences: [sessionData.licences[0].id, sessionData.licences[1].id]
                 })
 
-                fetchSessionStub.resolves(session)
+                FetchSessionDal.mockResolvedValue(session)
 
                 payload = { licences: sessionData.licences[0].id }
               })
@@ -122,7 +119,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
               it('sets a notification', async () => {
                 await SubmitLicencesService(session.id, payload, yarStub)
 
-                const [flashType, bannerMessage] = yarStub.flash.args[0]
+                const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
                 expect(flashType).toEqual('notification')
                 expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Licences to unregister updated' })
@@ -131,14 +128,14 @@ describe('Users - External - Setup - Submit Licences Service', () => {
 
             describe('because the user has changed the specific licences selected', () => {
               beforeEach(() => {
-                session = SessionModelStub.build(Sinon, {
+                session = SessionModelStub({
                   ...sessionData,
                   checkPageVisited: true,
                   allLicences: false,
                   selectedLicences: [sessionData.licences[1].id]
                 })
 
-                fetchSessionStub.resolves(session)
+                FetchSessionDal.mockResolvedValue(session)
 
                 payload = { licences: sessionData.licences[0].id }
               })
@@ -146,7 +143,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
               it('sets a notification', async () => {
                 await SubmitLicencesService(session.id, payload, yarStub)
 
-                const [flashType, bannerMessage] = yarStub.flash.args[0]
+                const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
                 expect(flashType).toEqual('notification')
                 expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Licences to unregister updated' })
@@ -160,7 +157,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
         it('does not set a notification', async () => {
           await SubmitLicencesService(session.id, payload, yarStub)
 
-          expect(yarStub.flash.called).toBe(false)
+          expect(yarStub.flash).not.toHaveBeenCalled()
         })
       })
     })

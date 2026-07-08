@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const ReturnSubmissionHelper = require('../../support/helpers/return-submission.helper.js')
-const ReturnSubmissionModel = require('../../../app/models/return-submission.model.js')
-const ReturnSubmissionLineHelper = require('../../support/helpers/return-submission-line.helper.js')
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import * as ReturnSubmissionHelper from '../../support/helpers/return-submission.helper.js'
+import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
+import * as ReturnSubmissionLineHelper from '../../support/helpers/return-submission-line.helper.js'
 
 // Thing under test
-const FetchReturnLogDetailsService = require('../../../app/services/return-logs/fetch-return-log-details.service.js')
+import FetchReturnLogDetailsService from '../../../app/services/return-logs/fetch-return-log-details.service.js'
 
 describe('Return Logs - Fetch Return Log Details service', () => {
   let licence
@@ -27,11 +24,11 @@ describe('Return Logs - Fetch Return Log Details service', () => {
   beforeEach(async () => {
     // We stub on the model prototype so that any created instances have $applyReadings stubbed. We don't set any return
     // value as we don't need it to actually do anything; we just want to be able to assert that it was called.
-    Sinon.stub(ReturnSubmissionModel.prototype, '$applyReadings')
+    vi.spyOn(ReturnSubmissionModel.prototype, '$applyReadings').mockImplementation(() => {})
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {

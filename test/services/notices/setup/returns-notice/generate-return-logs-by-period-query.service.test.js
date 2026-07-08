@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
-const { db } = require('../../../../../db/db.js')
-const { NoticeType } = require('../../../../../app/lib/static-lookups.lib.js')
+import * as ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
+import { db } from '../../../../../db/db.js'
+import { NoticeType } from '../../../../../app/lib/static-lookups.lib.js'
 
 // Thing under test
-const GenerateReturnLogsByPeriodQueryService = require('../../../../../app/services/notices/setup/returns-notice/generate-return-logs-by-period-query.service.js')
+import GenerateReturnLogsByPeriodQueryService from '../../../../../app/services/notices/setup/returns-notice/generate-return-logs-by-period-query.service.js'
 
 describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Query Service', () => {
   let licencesToExclude

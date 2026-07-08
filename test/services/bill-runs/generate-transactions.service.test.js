@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const ChargeCategoryHelper = require('../../support/helpers/charge-category.helper.js')
-const ChargeElementHelper = require('../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../support/helpers/charge-reference.helper.js')
+import * as ChargeCategoryHelper from '../../support/helpers/charge-category.helper.js'
+import * as ChargeElementHelper from '../../support/helpers/charge-element.helper.js'
+import * as ChargeReferenceHelper from '../../support/helpers/charge-reference.helper.js'
 
 // Things we need to stub
-const CalculateAuthorisedAndBillableDaysService = require('../../../app/services/bill-runs/calculate-authorised-and-billable-days.service.js')
+import CalculateAuthorisedAndBillableDaysService from '../../../app/services/bill-runs/calculate-authorised-and-billable-days.service.js'
 
 // Thing under test
-const GenerateTransactionsService = require('../../../app/services/bill-runs/generate-transactions.service.js')
+import GenerateTransactionsService from '../../../app/services/bill-runs/generate-transactions.service.js'
 
 describe('Generate Transactions service', () => {
   const billLicenceId = '5e2afb53-ca92-4515-ad71-36a7cefbcebb'
@@ -43,7 +40,7 @@ describe('Generate Transactions service', () => {
   })
 
   afterEach(async () => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when a charge reference has billable days', () => {
@@ -90,7 +87,8 @@ describe('Generate Transactions service', () => {
         winterOnly: false
       }
 
-      Sinon.stub(CalculateAuthorisedAndBillableDaysService, 'go').returns({ authorisedDays: 365, billableDays: 214 })
+      vi.mock('../../../app/services/bill-runs/calculate-authorised-and-billable-days.service.js')
+      CalculateAuthorisedAndBillableDaysService.mockReturnValue({ authorisedDays: 365, billableDays: 214 })
     })
 
     describe('and is a water undertaker', () => {
@@ -273,7 +271,8 @@ describe('Generate Transactions service', () => {
         endDate: new Date('2022-10-31')
       }
 
-      Sinon.stub(CalculateAuthorisedAndBillableDaysService, 'go').returns({ authorisedDays: 365, billableDays: 0 })
+      vi.mock('../../../app/services/bill-runs/calculate-authorised-and-billable-days.service.js')
+      CalculateAuthorisedAndBillableDaysService.mockReturnValue({ authorisedDays: 365, billableDays: 0 })
     })
 
     it('returns an empty array', () => {

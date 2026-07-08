@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const PointHelper = require('../support/helpers/point.helper.js')
-const PointModel = require('../../app/models/point.model.js')
-const ReturnRequirementHelper = require('../support/helpers/return-requirement.helper.js')
-const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
-const ReturnRequirementPointHelper = require('../support/helpers/return-requirement-point.helper.js')
+import * as PointHelper from '../support/helpers/point.helper.js'
+import PointModel from '../../app/models/point.model.js'
+import * as ReturnRequirementHelper from '../support/helpers/return-requirement.helper.js'
+import ReturnRequirementModel from '../../app/models/return-requirement.model.js'
+import * as ReturnRequirementPointHelper from '../support/helpers/return-requirement-point.helper.js'
 
 // Thing under test
-const ReturnRequirementPointModel = require('../../app/models/return-requirement-point.model.js')
+import ReturnRequirementPointModel from '../../app/models/return-requirement-point.model.js'
 
 describe('Return Requirement Point model', () => {
   let testPoint

@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const AddressHelper = require('../../support/helpers/address.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as AddressHelper from '../../support/helpers/address.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const FetchExistingAddress = require('../../../app/dal/billing-accounts/fetch-existing-address.dal.js')
+import FetchExistingAddress from '../../../app/dal/billing-accounts/fetch-existing-address.dal.js'
 
 describe('DAL - Fetch Existing Address dal', () => {
   let address
@@ -20,7 +18,7 @@ describe('DAL - Fetch Existing Address dal', () => {
 
   describe('when there is a matching address found', () => {
     it('returns the matching address', async () => {
-      const result = await FetchExistingAddress.go(address.id)
+      const result = await FetchExistingAddress(address.id)
 
       expect(result).toEqual({
         address1: address.address1,
@@ -37,7 +35,7 @@ describe('DAL - Fetch Existing Address dal', () => {
 
   describe('when there are no matching addresses found', () => {
     it('returns "undefined', async () => {
-      const result = await FetchExistingAddress.go(generateUUID())
+      const result = await FetchExistingAddress(generateUUID())
 
       expect(result).toBeUndefined()
     })

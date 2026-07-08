@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const AbstractionAlertSessionDataFixture = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
+import * as AbstractionAlertSessionDataFixture from '../../../support/fixtures/abstraction-alert-session-data.fixture.js'
+import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 
 // Thing under test
-const AbstractionAlertNotificationsPresenter = require('../../../../app/presenters/notices/setup/abstraction-alert-notifications.presenter.js')
+import AbstractionAlertNotificationsPresenter from '../../../../app/presenters/notices/setup/abstraction-alert-notifications.presenter.js'
 
 describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
   const noticeId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'

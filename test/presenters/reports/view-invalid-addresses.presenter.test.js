@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
-const { tomorrow } = require('../../support/general.js')
+import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
+import { tomorrow } from '../../support/general.js'
 
 // Thing under test
-const ViewInvalidAddressesPresenter = require('../../../app/presenters/reports/view-invalid-addresses.presenter.js')
+import ViewInvalidAddressesPresenter from '../../../app/presenters/reports/view-invalid-addresses.presenter.js'
 
 describe('Reports - View invalid addresses presenter', () => {
   describe('when there are no addresses to display', () => {

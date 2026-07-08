@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const LicenceAbstractionDataSeeder = require('../../../../support/seeders/licence-abstraction-data.seeder.js')
+import LicenceAbstractionDataSeeder from '../../../../support/seeders/licence-abstraction-data.seeder.js'
 
 // Thing under test
-const FetchAbstractionDataService = require('../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js')
+import FetchAbstractionDataService from '../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js'
 
 describe('Return Versions - Setup - Fetch Abstraction Data service', () => {
   let seedData

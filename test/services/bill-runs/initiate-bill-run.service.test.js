@@ -1,19 +1,17 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { HTTP_STATUS_FORBIDDEN, HTTP_STATUS_OK } = require('node:http2').constants
-const BillRunModel = require('../../../app/models/bill-run.model.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
+import http2 from 'node:http2'
+const { HTTP_STATUS_FORBIDDEN, HTTP_STATUS_OK } = http2.constants
+import BillRunModel from '../../../app/models/bill-run.model.js'
+import * as RegionHelper from '../../support/helpers/region.helper.js'
 
 // Things we need to stub
-const ChargingModuleCreateBillRunRequest = require('../../../app/requests/charging-module/create-bill-run.request.js')
-const CreateBillRunEventService = require('../../../app/services/bill-runs/create-bill-run-event.service.js')
+import * as ChargingModuleCreateBillRunRequest from '../../../app/requests/charging-module/create-bill-run.request.js'
+import CreateBillRunEventService from '../../../app/services/bill-runs/create-bill-run-event.service.js'
 
 // Thing under test
-const InitiateBillRunService = require('../../../app/services/bill-runs/initiate-bill-run.service.js')
+import InitiateBillRunService from '../../../app/services/bill-runs/initiate-bill-run.service.js'
 
 describe('Initiate Bill Run service', () => {
   const financialYearEndings = { fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 }
@@ -27,11 +25,12 @@ describe('Initiate Bill Run service', () => {
 
     regionId = region.id
 
-    Sinon.stub(CreateBillRunEventService, 'go').resolves()
+    vi.mock('../../../app/services/bill-runs/create-bill-run-event.service.js')
+    CreateBillRunEventService.mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when initiating a bill run succeeds', () => {
@@ -45,7 +44,7 @@ describe('Initiate Bill Run service', () => {
     beforeEach(() => {
       batchType = 'supplementary'
 
-      Sinon.stub(ChargingModuleCreateBillRunRequest, 'send').resolves({
+      vi.spyOn(ChargingModuleCreateBillRunRequest, 'send').mockResolvedValue({
         succeeded: true,
         response: {
           info: {
@@ -70,7 +69,7 @@ describe('Initiate Bill Run service', () => {
     it('creates a new event record', async () => {
       await InitiateBillRunService(financialYearEndings, regionId, batchType, user)
 
-      expect(CreateBillRunEventService.go.called).toBe(true)
+      expect(CreateBillRunEventService.go).toHaveBeenCalled()
     })
 
     it('returns the new bill run', async () => {
@@ -89,7 +88,7 @@ describe('Initiate Bill Run service', () => {
   describe('when initiating a bill run fails', () => {
     describe('because a bill run could not be created in the Charging Module', () => {
       beforeEach(() => {
-        Sinon.stub(ChargingModuleCreateBillRunRequest, 'send').resolves({
+        vi.spyOn(ChargingModuleCreateBillRunRequest, 'send').mockResolvedValue({
           succeeded: false,
           response: {
             info: {

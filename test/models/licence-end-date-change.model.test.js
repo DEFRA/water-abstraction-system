@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../support/helpers/licence.helper.js')
-const LicenceModel = require('../../app/models/licence.model.js')
-const LicenceEndDateChangeHelper = require('../support/helpers/licence-end-date-change.helper.js')
+import * as LicenceHelper from '../support/helpers/licence.helper.js'
+import LicenceModel from '../../app/models/licence.model.js'
+import * as LicenceEndDateChangeHelper from '../support/helpers/licence-end-date-change.helper.js'
 
 // Thing under test
-const LicenceEndDateChangeModel = require('../../app/models/licence-end-date-change.model.js')
+import LicenceEndDateChangeModel from '../../app/models/licence-end-date-change.model.js'
 
 describe('Licence End Date Change model', () => {
   let testLicence

@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
+import * as BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
 
 // Thing under test
-const FetchBillingAccountsService = require('../../../../app/services/bill-runs/supplementary/fetch-billing-accounts.service.js')
+import FetchBillingAccountsService from '../../../../app/services/bill-runs/supplementary/fetch-billing-accounts.service.js'
 
 describe('Fetch Billing Accounts service', () => {
   describe('when the service is called with an array of charge version', () => {

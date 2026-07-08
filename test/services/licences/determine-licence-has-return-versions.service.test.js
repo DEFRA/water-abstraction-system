@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
+import * as ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
 
 // Thing under test
-const FetchLicenceHasRequirementsService = require('../../../app/services/licences/determine-licence-has-return-versions.service.js')
+import FetchLicenceHasRequirementsService from '../../../app/services/licences/determine-licence-has-return-versions.service.js'
 
 describe('Fetch Licence Has Requirements service', () => {
   const licenceId = 'e004c0c9-0316-42fc-a6e3-5ae9a271b3c6'

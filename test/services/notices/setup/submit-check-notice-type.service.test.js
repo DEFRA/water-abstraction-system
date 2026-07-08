@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitCheckNoticeTypeService = require('../../../../app/services/notices/setup/submit-check-notice-type.service.js')
+import SubmitCheckNoticeTypeService from '../../../../app/services/notices/setup/submit-check-notice-type.service.js'
 
 describe('Notices - Setup - Submit Check Notice Type service', () => {
   let session
@@ -29,7 +26,7 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -43,9 +40,10 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
 
         sessionData.id = sessionId
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        Sinon.stub(FetchSessionDal, 'go').resolves(session)
+        vi.mock('../../../../app/dal/fetch-session.dal.js')
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('adds the "addressJourney" property to the session configured for going back to contact-type', async () => {
@@ -85,9 +83,10 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
 
         sessionData.id = sessionId
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        Sinon.stub(FetchSessionDal, 'go').resolves(session)
+        vi.mock('../../../../app/dal/fetch-session.dal.js')
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('adds the "addressJourney" property to the session configured for going back to recipient-name', async () => {

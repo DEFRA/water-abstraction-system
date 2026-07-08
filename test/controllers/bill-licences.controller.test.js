@@ -1,20 +1,18 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { HTTP_STATUS_FOUND, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
-const { postRequestOptions } = require('../support/general.js')
+import http2 from 'node:http2'
+const { HTTP_STATUS_FOUND, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
+import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-const Boom = require('@hapi/boom')
-const RemoveBillLicenceService = require('../../app/services/bill-licences/remove-bill-licence.service.js')
-const SubmitRemoveBillLicenceService = require('../../app/services/bill-licences/submit-remove-bill-licence.service.js')
-const ViewBillLicenceService = require('../../app/services/bill-licences/view-bill-licence.service.js')
+import Boom from '@hapi/boom'
+import RemoveBillLicenceService from '../../app/services/bill-licences/remove-bill-licence.service.js'
+import SubmitRemoveBillLicenceService from '../../app/services/bill-licences/submit-remove-bill-licence.service.js'
+import ViewBillLicenceService from '../../app/services/bill-licences/view-bill-licence.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
 
 describe('Bill Licences controller', () => {
   let options
@@ -28,14 +26,14 @@ describe('Bill Licences controller', () => {
   beforeEach(async () => {
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
-    Sinon.stub(server.logger, 'error')
+    vi.spyOn(server.logger, 'error').mockImplementation(() => {})
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -51,7 +49,8 @@ describe('Bill Licences controller', () => {
       describe('when the request succeeds', () => {
         describe('and is for a PRESROC bill licence', () => {
           beforeEach(async () => {
-            Sinon.stub(ViewBillLicenceService, 'go').resolves(_presrocPageData())
+            vi.mock('../../app/services/bill-licences/view-bill-licence.service.js')
+            ViewBillLicenceService.mockResolvedValue(_presrocPageData())
           })
 
           it('returns the page successfully', async () => {
@@ -67,7 +66,8 @@ describe('Bill Licences controller', () => {
 
         describe('and is for an SROC bill licence', () => {
           beforeEach(async () => {
-            Sinon.stub(ViewBillLicenceService, 'go').resolves(_srocPageData())
+            vi.mock('../../app/services/bill-licences/view-bill-licence.service.js')
+            ViewBillLicenceService.mockResolvedValue(_srocPageData())
           })
 
           it('returns the page successfully', async () => {
@@ -89,7 +89,8 @@ describe('Bill Licences controller', () => {
       beforeEach(() => {
         options = _options('remove')
 
-        Sinon.stub(RemoveBillLicenceService, 'go').resolves({
+        vi.mock('../../app/services/bill-licences/remove-bill-licence.service.js')
+        RemoveBillLicenceService.mockResolvedValue({
           pageTitle: "You're about to remove AT/SROC/SUPB/02 from the bill run"
         })
       })
@@ -111,7 +112,8 @@ describe('Bill Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitRemoveBillLicenceService, 'go').resolves(
+          vi.mock('../../app/services/bill-licences/submit-remove-bill-licence.service.js')
+          SubmitRemoveBillLicenceService.mockResolvedValue(
             '/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing?invoiceId=9a87e3ee-038e-4e58-99f2-1081292a7710'
           )
         })
@@ -129,10 +131,11 @@ describe('Bill Licences controller', () => {
       describe('when the request fails', () => {
         describe('because the removing service threw an error', () => {
           beforeEach(async () => {
-            Sinon.stub(Boom, 'badImplementation').returns(
+            vi.spyOn(Boom, 'badImplementation').mockReturnValue(
               new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR })
             )
-            Sinon.stub(SubmitRemoveBillLicenceService, 'go').rejects()
+            vi.mock('../../app/services/bill-licences/submit-remove-bill-licence.service.js')
+            SubmitRemoveBillLicenceService.mockRejectedValue()
           })
 
           it('returns the error page', async () => {

@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as BillHelper from '../../support/helpers/bill.helper.js'
+import * as BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
+import * as BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const FetchBillService = require('../../../app/services/licences/fetch-bills.service.js')
+import FetchBillService from '../../../app/services/licences/fetch-bills.service.js'
 
 describe('Licences - Fetch Bills service', () => {
   const createdDate = new Date('2022-01-01')

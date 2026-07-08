@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ReadingsValidator = require('../../../../app/validators/return-logs/setup/readings.validator.js')
+import ReadingsValidator from '../../../../app/validators/return-logs/setup/readings.validator.js'
 
 describe('Return Logs Setup - Readings validator', () => {
   const session = {

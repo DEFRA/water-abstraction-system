@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const RegionHelper = require('../../support/helpers/region.helper.js')
+import * as RegionHelper from '../../support/helpers/region.helper.js'
 
 // Thing under test
-const FetchRegionService = require('../../../app/services/bill-runs/fetch-region.service.js')
+import FetchRegionService from '../../../app/services/bill-runs/fetch-region.service.js'
 
 describe('Fetch Region service', () => {
   const region = RegionHelper.select(RegionHelper.TEST_REGION_INDEX)

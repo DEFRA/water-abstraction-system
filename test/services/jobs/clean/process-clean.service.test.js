@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const CleanEmptyBillRunsService = require('../../../../app/services/jobs/clean/clean-empty-bill-runs.service.js')
-const CleanEmptyVoidReturnLogsService = require('../../../../app/services/jobs/clean/clean-empty-void-return-logs.service.js')
-const CleanExpiredSessionsService = require('../../../../app/services/jobs/clean/clean-expired-sessions.service.js')
-const CleanIncompleteCompanyContactsService = require('../../../../app/services/jobs/clean/clean-incomplete-company-contacts.service.js')
-const CleanOrphanedContactsService = require('../../../../app/services/jobs/clean/clean-orphaned-contacts.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+import CleanEmptyBillRunsService from '../../../../app/services/jobs/clean/clean-empty-bill-runs.service.js'
+import CleanEmptyVoidReturnLogsService from '../../../../app/services/jobs/clean/clean-empty-void-return-logs.service.js'
+import CleanExpiredSessionsService from '../../../../app/services/jobs/clean/clean-expired-sessions.service.js'
+import CleanIncompleteCompanyContactsService from '../../../../app/services/jobs/clean/clean-incomplete-company-contacts.service.js'
+import CleanOrphanedContactsService from '../../../../app/services/jobs/clean/clean-orphaned-contacts.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const ProcessCleanService = require('../../../../app/services/jobs/clean/process-clean.service.js')
+import ProcessCleanService from '../../../../app/services/jobs/clean/process-clean.service.js'
 
 describe('Jobs - Clean - Process Clean service', () => {
   const emptyBillRunsCount = 3
@@ -20,57 +17,54 @@ describe('Jobs - Clean - Process Clean service', () => {
   const expiredSessionsCount = 5
   const incompleteCompanyContactsCount = 6
   const orphanedContactsCount = 7
-
-  let cleanEmptyBillRunsStub
-  let cleanEmptyVoidReturnLogsStub
-  let cleanExpiredSessionsStub
-  let cleanIncompleteCompanyContactsStub
-  let cleanOrphanedContactsStub
   let notifierStub
 
   beforeEach(async () => {
     // We stub these services to always runs successfully
-    cleanEmptyVoidReturnLogsStub = Sinon.stub(CleanEmptyVoidReturnLogsService, 'go').resolves(emptyVoidReturnLogsCount)
-    cleanExpiredSessionsStub = Sinon.stub(CleanExpiredSessionsService, 'go').resolves(expiredSessionsCount)
-    cleanIncompleteCompanyContactsStub = Sinon.stub(CleanIncompleteCompanyContactsService, 'go').resolves(
-      incompleteCompanyContactsCount
-    )
-    cleanOrphanedContactsStub = Sinon.stub(CleanOrphanedContactsService, 'go').resolves(orphanedContactsCount)
+    vi.mock('../../../../app/services/jobs/clean/clean-empty-void-return-logs.service.js')
+    CleanEmptyVoidReturnLogsService.mockResolvedValue(emptyVoidReturnLogsCount)
+    vi.mock('../../../../app/services/jobs/clean/clean-expired-sessions.service.js')
+    CleanExpiredSessionsService.mockResolvedValue(expiredSessionsCount)
+    vi.mock('../../../../app/services/jobs/clean/clean-incomplete-company-contacts.service.js')
+    CleanIncompleteCompanyContactsService.mockResolvedValue(incompleteCompanyContactsCount)
+    vi.mock('../../../../app/services/jobs/clean/clean-orphaned-contacts.service.js')
+    CleanOrphanedContactsService.mockResolvedValue(orphanedContactsCount)
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
   describe('when all clean tasks succeed', () => {
     beforeEach(() => {
       // For these tests we have the first task complete successfully
-      cleanEmptyBillRunsStub = Sinon.stub(CleanEmptyBillRunsService, 'go').resolves(emptyBillRunsCount)
+      vi.mock('../../../../app/services/jobs/clean/clean-empty-bill-runs.service.js')
+      CleanEmptyBillRunsService.mockResolvedValue(emptyBillRunsCount)
     })
 
     it('cleans expired sessions', async () => {
       await ProcessCleanService()
 
-      expect(cleanEmptyBillRunsStub.called).toBe(true)
-      expect(cleanEmptyVoidReturnLogsStub.called).toBe(true)
-      expect(cleanExpiredSessionsStub.called).toBe(true)
-      expect(cleanIncompleteCompanyContactsStub.called).toBe(true)
-      expect(cleanOrphanedContactsStub.called).toBe(true)
+      expect(CleanEmptyBillRunsService).toHaveBeenCalled()
+      expect(CleanEmptyVoidReturnLogsService).toHaveBeenCalled()
+      expect(CleanExpiredSessionsService).toHaveBeenCalled()
+      expect(CleanIncompleteCompanyContactsService).toHaveBeenCalled()
+      expect(CleanOrphanedContactsService).toHaveBeenCalled()
     })
 
     it('logs the time taken in milliseconds and seconds, plus the count of rows deleted', async () => {
       await ProcessCleanService()
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-      expect(notifierStub.omg.calledWith('Clean job complete')).toBe(true)
+      expect(notifierStub.omg).toHaveBeenCalledWith('Clean job complete')
       expect(logDataArg.timeTakenMs).toBeDefined()
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.counts).toEqual({
@@ -88,7 +82,8 @@ describe('Jobs - Clean - Process Clean service', () => {
   // try/catch. Hence, we have tests to confirm it is doing what we expect.
   describe('when a clean task errors', () => {
     beforeEach(() => {
-      Sinon.stub(CleanEmptyBillRunsService, 'go').rejects()
+      vi.mock('../../../../app/services/jobs/clean/clean-empty-bill-runs.service.js')
+      CleanEmptyBillRunsService.mockRejectedValue()
     })
 
     it('does not throw an error', async () => {
@@ -100,7 +95,7 @@ describe('Jobs - Clean - Process Clean service', () => {
 
       const errorLogArgs = notifierStub.omfg.firstCall.args
 
-      expect(notifierStub.omfg.calledWith('Clean job failed')).toBe(true)
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed')
       expect(errorLogArgs[1]).toEqual({})
       expect(errorLogArgs[2]).toBeInstanceOf(Error)
     })

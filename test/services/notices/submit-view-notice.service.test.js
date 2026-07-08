@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
+import { generateNoticeReferenceCode } from '../../../app/lib/general.lib.js'
 
 // Things to stub
-const FetchNoticeService = require('../../../app/services/notices/fetch-notice.service.js')
-const YarStub = require('../../support/stubs/yar.stub.js')
+import FetchNoticeService from '../../../app/services/notices/fetch-notice.service.js'
+import YarStub from '../../support/stubs/yar.stub.js'
 
 // Thing under test
-const SubmitViewNoticeService = require('../../../app/services/notices/submit-view-notice.service.js')
+import SubmitViewNoticeService from '../../../app/services/notices/submit-view-notice.service.js'
 
 describe('Notices - Submit View Notice service', () => {
   const noticeId = 'ed9e8145-8f2b-4561-b200-d3ee95d30938'
@@ -82,11 +79,11 @@ describe('Notices - Submit View Notice service', () => {
         status: 'error'
       }
     ]
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -106,7 +103,7 @@ describe('Notices - Submit View Notice service', () => {
       it('clears the "noticesFilter" object from the session', async () => {
         await SubmitViewNoticeService(noticeId, payload, yarStub)
 
-        expect(yarStub.clear.called).toBe(true)
+        expect(yarStub.clear).toHaveBeenCalled()
       })
     })
 
@@ -124,7 +121,7 @@ describe('Notices - Submit View Notice service', () => {
       it('saves a default "noticesFilter" object in the session', async () => {
         await SubmitViewNoticeService(noticeId, payload, yarStub)
 
-        const setArgs = yarStub.set.args[0]
+        const setArgs = yarStub.set.mock.calls[0]
 
         expect(setArgs[0]).toEqual(`noticeFilter-${noticeId}`)
         expect(setArgs[1]).toEqual({
@@ -153,7 +150,7 @@ describe('Notices - Submit View Notice service', () => {
       it('saves the submitted filters as the "noticesFilter" object in the session', async () => {
         await SubmitViewNoticeService(noticeId, payload, yarStub)
 
-        const setArgs = yarStub.set.args[0]
+        const setArgs = yarStub.set.mock.calls[0]
 
         expect(setArgs[0]).toEqual(`noticeFilter-${noticeId}`)
         expect(setArgs[1]).toEqual({
@@ -173,7 +170,8 @@ describe('Notices - Submit View Notice service', () => {
 
       describe('and the results are paginated', () => {
         beforeEach(() => {
-          Sinon.stub(FetchNoticeService, 'go').resolves({ notice, notifications, totalNumber: 70 })
+          vi.mock('../../../app/services/notices/fetch-notice.service.js')
+          FetchNoticeService.mockResolvedValue({ notice, notifications, totalNumber: 70 })
         })
 
         it('returns the page data for the view, including any errors', async () => {
@@ -265,7 +263,8 @@ describe('Notices - Submit View Notice service', () => {
 
       describe('and the results are not paginated', () => {
         beforeEach(() => {
-          Sinon.stub(FetchNoticeService, 'go').resolves({ notice, notifications, totalNumber: 2 })
+          vi.mock('../../../app/services/notices/fetch-notice.service.js')
+          FetchNoticeService.mockResolvedValue({ notice, notifications, totalNumber: 2 })
         })
 
         it('returns the page data for the view, including any errors', async () => {

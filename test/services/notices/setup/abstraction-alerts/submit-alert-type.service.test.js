@@ -1,20 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+import * as AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitAlertTypeService = require('../../../../../app/services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
+import SubmitAlertTypeService from '../../../../../app/services/notices/setup/abstraction-alerts/submit-alert-type.service.js'
 
 describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () => {
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -23,13 +19,14 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
     payload = { alertType: 'stop' }
     sessionData = AbstractionAlertSessionData.get()
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -53,9 +50,9 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
         sessionData.alertType = 'resume'
         sessionData.removedThresholds = ['123']
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('sets the "alertThresholds" to an empty array', async () => {
@@ -78,9 +75,9 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
         sessionData.alertType = 'stop'
         sessionData.alertThresholds = ['100-flow']
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('does not change the existing "alertThresholds"', async () => {
@@ -166,9 +163,9 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
           }
         ]
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('returns page data for the view, with errors (and the selected alert type checked)', async () => {

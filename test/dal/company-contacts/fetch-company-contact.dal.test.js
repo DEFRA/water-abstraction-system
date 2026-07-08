@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
-const ContactHelper = require('../../support/helpers/contact.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as CompanyContactHelper from '../../support/helpers/company-contact.helper.js'
+import * as ContactHelper from '../../support/helpers/contact.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const FetchCompanyContactDal = require('../../../app/dal/company-contacts/fetch-company-contact.dal.js')
+import FetchCompanyContactDal from '../../../app/dal/company-contacts/fetch-company-contact.dal.js'
 
 describe('Company Contacts - Fetch Company Contact dal', () => {
   const companyId = generateUUID()

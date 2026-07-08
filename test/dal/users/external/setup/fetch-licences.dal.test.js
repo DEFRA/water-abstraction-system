@@ -1,16 +1,14 @@
-'use strict'
-
 // Test helpers
-const CompanyHelper = require('../../../../support/helpers/company.helper.js')
-const LicenceDocumentHeaderHelper = require('../../../../support/helpers/licence-document-header.helper.js')
-const LicenceEntityHelper = require('../../../../support/helpers/licence-entity.helper.js')
-const LicenceEntityRoleHelper = require('../../../../support/helpers/licence-entity-role.helper.js')
-const LicenceHelper = require('../../../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../../../support/helpers/licence-version.helper.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+import * as CompanyHelper from '../../../../support/helpers/company.helper.js'
+import * as LicenceDocumentHeaderHelper from '../../../../support/helpers/licence-document-header.helper.js'
+import * as LicenceEntityHelper from '../../../../support/helpers/licence-entity.helper.js'
+import * as LicenceEntityRoleHelper from '../../../../support/helpers/licence-entity-role.helper.js'
+import * as LicenceHelper from '../../../../support/helpers/licence.helper.js'
+import * as LicenceVersionHelper from '../../../../support/helpers/licence-version.helper.js'
+import { generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Thing under test
-const FetchLicencesDal = require('../../../../../app/dal/users/external/setup/fetch-licences.dal.js')
+import FetchLicencesDal from '../../../../../app/dal/users/external/setup/fetch-licences.dal.js'
 
 describe('Users - External - Setup - Fetch Licences DAL', () => {
   let licenceData1

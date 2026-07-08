@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const RecipientNameValidator = require('../../../../app/validators/notices/setup/recipient-name.validator.js')
+import RecipientNameValidator from '../../../../app/validators/notices/setup/recipient-name.validator.js'
 
 describe('Notices - Setup - Recipient Name Validator', () => {
   let payload

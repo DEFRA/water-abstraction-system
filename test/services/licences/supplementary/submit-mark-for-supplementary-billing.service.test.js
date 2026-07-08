@@ -1,22 +1,19 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceModel = require('../../../../app/models/licence.model.js')
-const LicenceSupplementaryYearModel = require('../../../../app/models/licence-supplementary-year.model.js')
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import LicenceModel from '../../../../app/models/licence.model.js'
+import LicenceSupplementaryYearModel from '../../../../app/models/licence-supplementary-year.model.js'
 
 // Things we need to stub
-const DetermineExistingBillRunYearsService = require('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
+import DetermineExistingBillRunYearsService from '../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js'
 
 // Thing under test
-const SubmitMarkForSupplementaryBillingService = require('../../../../app/services/licences/supplementary/submit-mark-for-supplementary-billing.service.js')
+import SubmitMarkForSupplementaryBillingService from '../../../../app/services/licences/supplementary/submit-mark-for-supplementary-billing.service.js'
 
 describe('Submit Mark For Supplementary Billing Service', () => {
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called with a valid licenceId', () => {
@@ -27,7 +24,8 @@ describe('Submit Mark For Supplementary Billing Service', () => {
     beforeEach(async () => {
       licence = await LicenceHelper.add()
 
-      Sinon.stub(DetermineExistingBillRunYearsService, 'go').resolves([2023])
+      vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
+      DetermineExistingBillRunYearsService.mockResolvedValue([2023])
     })
 
     describe('and only a single sroc year selected', () => {
@@ -120,11 +118,11 @@ describe('Submit Mark For Supplementary Billing Service', () => {
         payload = {}
 
         testDate = new Date('2024-03-31')
-        clock = Sinon.useFakeTimers(testDate)
+        clock = vi.useFakeTimers({ now: testDate })
       })
 
       afterEach(() => {
-        clock.restore()
+        vi.useRealTimers()
       })
 
       describe('because the user did not select any', () => {

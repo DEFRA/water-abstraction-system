@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
+import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 
 // Thing under test
-const ContactPresenter = require('../../../../app/presenters/notices/setup/contact.presenter.js')
+import ContactPresenter from '../../../../app/presenters/notices/setup/contact.presenter.js'
 
 describe('Notices - Setup - Contact presenter', () => {
   let recipients

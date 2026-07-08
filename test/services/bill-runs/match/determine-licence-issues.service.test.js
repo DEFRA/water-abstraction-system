@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const DetermineLicenceIssuesService = require('../../../../app/services/bill-runs/match/determine-licence-issues.service.js')
+import DetermineLicenceIssuesService from '../../../../app/services/bill-runs/match/determine-licence-issues.service.js'
 
 describe('Determine Licence Issues Service', () => {
   describe('when given a licence', () => {

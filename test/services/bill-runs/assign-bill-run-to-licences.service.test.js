@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceSupplementaryYearHelper = require('../../support/helpers/licence-supplementary-year.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
+import * as BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import * as LicenceSupplementaryYearHelper from '../../support/helpers/licence-supplementary-year.helper.js'
+import * as RegionHelper from '../../support/helpers/region.helper.js'
 
 // Thing under test
-const AssignBillRunToLicencesService = require('../../../app/services/bill-runs/assign-bill-run-to-licences.service.js')
+import AssignBillRunToLicencesService from '../../../app/services/bill-runs/assign-bill-run-to-licences.service.js'
 
 // NOTE: These are declared outside the describe to make them accessible to our `_cleanUp()` function
 let billRun

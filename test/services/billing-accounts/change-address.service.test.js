@@ -1,23 +1,20 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const AddressHelper = require('../../support/helpers/address.helper.js')
-const AddressModel = require('../../../app/models/address.model.js')
-const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
-const BillingAccountAddressModel = require('../../../app/models/billing-account-address.model.js')
-const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
-const CompanyHelper = require('../../support/helpers/company.helper.js')
-const CompanyModel = require('../../../app/models/company.model.js')
-const ContactModel = require('../../../app/models/contact.model.js')
+import * as AddressHelper from '../../support/helpers/address.helper.js'
+import AddressModel from '../../../app/models/address.model.js'
+import * as BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
+import BillingAccountAddressModel from '../../../app/models/billing-account-address.model.js'
+import * as BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
+import * as CompanyHelper from '../../support/helpers/company.helper.js'
+import CompanyModel from '../../../app/models/company.model.js'
+import ContactModel from '../../../app/models/contact.model.js'
 
 // Things we need to stub
-const SendCustomerChangeService = require('../../../app/services/billing-accounts/send-customer-change.service.js')
+import SendCustomerChangeService from '../../../app/services/billing-accounts/send-customer-change.service.js'
 
 // Thing under test
-const ChangeAddressService = require('../../../app/services/billing-accounts/change-address.service.js')
+import ChangeAddressService from '../../../app/services/billing-accounts/change-address.service.js'
 
 describe('Change address service', () => {
   let address
@@ -30,12 +27,13 @@ describe('Change address service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request to the Charging Module API succeeds', () => {
     beforeEach(async () => {
-      Sinon.stub(SendCustomerChangeService, 'go').resolves()
+      vi.mock('../../../app/services/billing-accounts/send-customer-change.service.js')
+      SendCustomerChangeService.mockResolvedValue()
     })
 
     describe('and only an address is provided', () => {
@@ -318,11 +316,11 @@ describe('Change address service', () => {
 
         const testDate = new Date(2023, 8, 4, 10, 31, 57, 2)
 
-        clock = Sinon.useFakeTimers({ now: testDate, toFake: ['Date'] })
+        clock = vi.useFakeTimers({ now: { now: testDate, toFake: ['Date'] } })
       })
 
       afterEach(() => {
-        clock.restore()
+        vi.useRealTimers()
       })
 
       describe('has a matching start date', () => {
@@ -403,7 +401,8 @@ describe('Change address service', () => {
 
   describe('when the request to the Charging Module API fails', () => {
     beforeEach(() => {
-      Sinon.stub(SendCustomerChangeService, 'go').rejects()
+      vi.mock('../../../app/services/billing-accounts/send-customer-change.service.js')
+      SendCustomerChangeService.mockRejectedValue()
     })
 
     it('throws an error', async () => {
@@ -427,7 +426,7 @@ describe('Change address service', () => {
 
       // We just need something within the transaction to go bang. `fromJson() is ideal because a) we can stub it!, and
       // b) it gets called after we have supposedly persisted the address, company and contact records.
-      Sinon.stub(BillingAccountAddressModel, 'fromJson').rejects()
+      vi.spyOn(BillingAccountAddressModel, 'fromJson').mockRejectedValue()
     })
 
     it('throws an error', async () => {

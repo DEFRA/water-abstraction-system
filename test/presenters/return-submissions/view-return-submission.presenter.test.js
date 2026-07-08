@@ -1,20 +1,17 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Thing under test
-const ViewReturnSubmissionPresenter = require('../../../app/presenters/return-submissions/view-return-submission.presenter.js')
+import ViewReturnSubmissionPresenter from '../../../app/presenters/return-submissions/view-return-submission.presenter.js'
 
 // Test helpers
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const ReturnSubmissionModel = require('../../../app/models/return-submission.model.js')
-const ReturnSubmissionHelper = require('../../support/helpers/return-submission.helper.js')
-const ReturnSubmissionLineModel = require('../../../app/models/return-submission-line.model.js')
-const ReturnSubmissionLineHelper = require('../../support/helpers/return-submission-line.helper.js')
+import ReturnLogModel from '../../../app/models/return-log.model.js'
+import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
+import * as ReturnSubmissionHelper from '../../support/helpers/return-submission.helper.js'
+import ReturnSubmissionLineModel from '../../../app/models/return-submission-line.model.js'
+import * as ReturnSubmissionLineHelper from '../../support/helpers/return-submission-line.helper.js'
 
-const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
+import { unitNames } from '../../../app/lib/static-lookups.lib.js'
 
 describe('View Return Submissions presenter', () => {
   let testReturnSubmission
@@ -24,7 +21,7 @@ describe('View Return Submissions presenter', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('the "backLink" property', () => {
@@ -78,7 +75,7 @@ describe('View Return Submissions presenter', () => {
   describe('the "displayReadings" property', () => {
     describe('when the return submission method is abstractionVolumes', () => {
       beforeEach(() => {
-        Sinon.stub(testReturnSubmission, '$method').returns('abstractionVolumes')
+        vi.spyOn(testReturnSubmission, '$method').mockReturnValue('abstractionVolumes')
       })
 
       it('returns false', () => {
@@ -90,7 +87,7 @@ describe('View Return Submissions presenter', () => {
 
     describe("when the return submission method isn't abstractionVolumes", () => {
       beforeEach(() => {
-        Sinon.stub(testReturnSubmission, '$method').returns('NOT_ABSTRACTION_VOLUMES')
+        vi.spyOn(testReturnSubmission, '$method').mockReturnValue('NOT_ABSTRACTION_VOLUMES')
       })
 
       it('returns true', () => {
@@ -104,7 +101,7 @@ describe('View Return Submissions presenter', () => {
   describe('the "displayUnits" property', () => {
     describe('when the unit is not cubic metres', () => {
       beforeEach(() => {
-        Sinon.stub(testReturnSubmission, '$units').returns(unitNames.GALLONS)
+        vi.spyOn(testReturnSubmission, '$units').mockReturnValue(unitNames.GALLONS)
       })
 
       it('returns true', () => {
@@ -116,7 +113,7 @@ describe('View Return Submissions presenter', () => {
 
     describe('when the unit is cubic metres', () => {
       beforeEach(() => {
-        Sinon.stub(testReturnSubmission, '$units').returns(unitNames.CUBIC_METRES)
+        vi.spyOn(testReturnSubmission, '$units').mockReturnValue(unitNames.CUBIC_METRES)
       })
 
       it('returns false', () => {
@@ -146,12 +143,12 @@ describe('View Return Submissions presenter', () => {
   describe('the "tableData" property', () => {
     describe('when the return submission contains volumes', () => {
       beforeEach(() => {
-        Sinon.stub(testReturnSubmission, '$method').returns('abstractionVolumes')
+        vi.spyOn(testReturnSubmission, '$method').mockReturnValue('abstractionVolumes')
       })
 
       describe('and the volumes are cubic metres', () => {
         beforeEach(() => {
-          Sinon.stub(testReturnSubmission, '$units').returns(unitNames.CUBIC_METRES)
+          vi.spyOn(testReturnSubmission, '$units').mockReturnValue(unitNames.CUBIC_METRES)
         })
 
         it('includes the expected headers', () => {
@@ -187,7 +184,7 @@ describe('View Return Submissions presenter', () => {
       describe('and the volumes are not cubic metres', () => {
         beforeEach(() => {
           testReturnSubmission = _createSubmission({ userUnit: unitNames.GALLONS })
-          Sinon.stub(testReturnSubmission, '$units').returns(unitNames.GALLONS)
+          vi.spyOn(testReturnSubmission, '$units').mockReturnValue(unitNames.GALLONS)
         })
 
         it('includes the expected headers', () => {
@@ -224,7 +221,7 @@ describe('View Return Submissions presenter', () => {
     describe('when the return submission contains readings', () => {
       beforeEach(() => {
         testReturnSubmission = _createSubmission({ readings: true })
-        Sinon.stub(testReturnSubmission, '$method').returns('NOT_ABSTRACTION_VOLUMES')
+        vi.spyOn(testReturnSubmission, '$method').mockReturnValue('NOT_ABSTRACTION_VOLUMES')
       })
 
       it('includes the expected headers', () => {
@@ -258,8 +255,8 @@ describe('View Return Submissions presenter', () => {
     describe('when the return submission contains non-cubic metre volumes and readings', () => {
       beforeEach(() => {
         testReturnSubmission = _createSubmission({ readings: true })
-        Sinon.stub(testReturnSubmission, '$units').returns(unitNames.GALLONS)
-        Sinon.stub(testReturnSubmission, '$method').returns('NOT_ABSTRACTION_VOLUMES')
+        vi.spyOn(testReturnSubmission, '$units').mockReturnValue(unitNames.GALLONS)
+        vi.spyOn(testReturnSubmission, '$method').mockReturnValue('NOT_ABSTRACTION_VOLUMES')
       })
 
       it('includes the expected headers', () => {
@@ -275,8 +272,8 @@ describe('View Return Submissions presenter', () => {
 
     describe('when the return submission frequency is daily', () => {
       beforeEach(() => {
-        Sinon.stub(testReturnSubmission, '$method').returns('abstractionVolumes')
-        Sinon.stub(testReturnSubmission, '$units').returns(unitNames.CUBIC_METRES)
+        vi.spyOn(testReturnSubmission, '$method').mockReturnValue('abstractionVolumes')
+        vi.spyOn(testReturnSubmission, '$units').mockReturnValue(unitNames.CUBIC_METRES)
       })
 
       it('includes the expected headers', () => {
@@ -301,8 +298,8 @@ describe('View Return Submissions presenter', () => {
     describe('when the return submission frequency is weekly', () => {
       beforeEach(() => {
         testReturnSubmission = _createSubmission({ returnsFrequency: 'week' })
-        Sinon.stub(testReturnSubmission, '$method').returns('abstractionVolumes')
-        Sinon.stub(testReturnSubmission, '$units').returns(unitNames.CUBIC_METRES)
+        vi.spyOn(testReturnSubmission, '$method').mockReturnValue('abstractionVolumes')
+        vi.spyOn(testReturnSubmission, '$units').mockReturnValue(unitNames.CUBIC_METRES)
       })
 
       it('includes the expected headers', () => {

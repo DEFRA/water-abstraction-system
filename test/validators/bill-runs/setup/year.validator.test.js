@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const YearValidator = require('../../../../app/validators/bill-runs/setup/year.validator.js')
+import YearValidator from '../../../../app/validators/bill-runs/setup/year.validator.js'
 
 describe('Bill Runs Setup Year validator', () => {
   describe('when valid data is provided', () => {

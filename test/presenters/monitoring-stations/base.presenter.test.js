@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const BasePresenter = require('../../../app/presenters/monitoring-stations/base.presenter.js')
+import BasePresenter from '../../../app/presenters/monitoring-stations/base.presenter.js'
 
 describe('Monitoring Stations - Base presenter', () => {
   let licenceMonitoringStations

@@ -1,11 +1,9 @@
-'use strict'
-
 // Test framework dependencies
 
-const Hoek = require('@hapi/hoek')
+import Hoek from '@hapi/hoek'
 
 // Thing under test
-const FilterRoutesService = require('../../../app/services/plugins/filter-routes.service.js')
+import FilterRoutesService from '../../../app/services/plugins/filter-routes.service.js'
 
 describe('Filter routes service', () => {
   const routes = [

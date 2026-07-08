@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const { engineTriggers } = require('../../../../../app/lib/static-lookups.lib.js')
+import { engineTriggers } from '../../../../../app/lib/static-lookups.lib.js'
 
 // Thing under test
-const AllowedBillRunPresenter = require('../../../../../app/presenters/bill-runs/setup/check/allowed-bill-run.presenter.js')
+import AllowedBillRunPresenter from '../../../../../app/presenters/bill-runs/setup/check/allowed-bill-run.presenter.js'
 
 describe('Bill Runs - Setup - Allowed Bill Run presenter', () => {
   const regionId = '292fe1c3-c9d4-47dd-a01b-0ac916497af5'

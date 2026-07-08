@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const RegionPresenter = require('../../../../app/presenters/bill-runs/setup/region.presenter.js')
+import RegionPresenter from '../../../../app/presenters/bill-runs/setup/region.presenter.js'
 
 describe('Bill Runs - Setup - Region presenter', () => {
   const regions = [

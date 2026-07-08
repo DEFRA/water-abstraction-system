@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const LicenceVersionModel = require('../../app/models/licence-version.model.js')
-const ReturnVersionModel = require('../../app/models/return-version.model.js')
-const { ValidationError } = require('joi')
-const { generateUUID, today } = require('../../app/lib/general.lib.js')
-const { tomorrow, yesterday } = require('../support/general.js')
+import LicenceVersionModel from '../../app/models/licence-version.model.js'
+import ReturnVersionModel from '../../app/models/return-version.model.js'
+import { ValidationError } from 'joi'
+import { generateUUID, today } from '../../app/lib/general.lib.js'
+import { tomorrow, yesterday } from '../support/general.js'
 
 // Thing under test
-const BasePresenter = require('../../app/presenters/base.presenter.js')
+import BasePresenter from '../../app/presenters/base.presenter.js'
 
 describe('Base presenter', () => {
   describe('#convertPenceToPounds()', () => {

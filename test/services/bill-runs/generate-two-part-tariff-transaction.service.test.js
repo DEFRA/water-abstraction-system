@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const GenerateTwoPartTariffTransactionService = require('../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js')
+import GenerateTwoPartTariffTransactionService from '../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js'
 
 describe('Bill Runs - Generate Two Part Tariff Transaction service', () => {
   const billLicenceId = '5e2afb53-ca92-4515-ad71-36a7cefbcebb'

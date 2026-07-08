@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ReverseSupplementaryTransactionsService = require('../../../app/services/bill-runs/reverse-supplementary-transactions.service.js')
+import ReverseSupplementaryTransactionsService from '../../../app/services/bill-runs/reverse-supplementary-transactions.service.js'
 
 describe('Bill Runs - Reverse Supplementary Transactions service', () => {
   const transactions = [

@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ContactNameValidator = require('../../../../app/validators/company-contacts/setup/contact-name.validator.js')
+import ContactNameValidator from '../../../../app/validators/company-contacts/setup/contact-name.validator.js'
 
 describe('Company Contacts - Setup - Contact Name Validator', () => {
   let payload

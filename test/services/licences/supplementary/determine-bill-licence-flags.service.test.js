@@ -1,13 +1,11 @@
-'use strict'
-
 // Test helpers
-const BillHelper = require('../../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+import * as BillHelper from '../../../support/helpers/bill.helper.js'
+import * as BillLicenceHelper from '../../../support/helpers/bill-licence.helper.js'
+import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const DetermineBillLicenceFlagsService = require('../../../../app/services/licences/supplementary/determine-bill-licence-flags.service.js')
+import DetermineBillLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-bill-licence-flags.service.js'
 
 describe('Determine Bill Licence Flags Service', () => {
   describe('when passed a bill licence ID', () => {

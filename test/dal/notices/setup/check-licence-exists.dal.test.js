@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const CheckLicenceExistsDal = require('../../../../app/dal/notices/setup/check-licence-exists.dal.js')
+import CheckLicenceExistsDal from '../../../../app/dal/notices/setup/check-licence-exists.dal.js'
 
 describe('Notices - Setup - Check Licence Exists DAL', () => {
   let licence

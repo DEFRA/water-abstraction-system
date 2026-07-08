@@ -1,10 +1,7 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Thing under test
-const SubmitSearchService = require('../../../app/services/search/submit-search.service.js')
+import SubmitSearchService from '../../../app/services/search/submit-search.service.js'
 
 const EXPECTED_ERROR = {
   errorList: [
@@ -31,12 +28,12 @@ describe('Search - Submit Search service', () => {
       }
     }
 
-    yarSpy = Sinon.spy()
+    yarSpy = vi.fn()
     yar = { set: yarSpy }
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called with a valid query', () => {
@@ -101,7 +98,7 @@ describe('Search - Submit Search service', () => {
         showResults: false
       })
 
-      expect(yarSpy.called).toBe(false)
+      expect(yarSpy).not.toHaveBeenCalled()
     })
   })
 
@@ -127,7 +124,7 @@ describe('Search - Submit Search service', () => {
     it('redirects to the blank search page without setting session values', async () => {
       const result = await SubmitSearchService(auth, payload, yar)
 
-      expect(yarSpy.called).toBe(false)
+      expect(yarSpy).not.toHaveBeenCalled()
       expect(result).toEqual({ redirect: '/system/search' })
     })
   })
@@ -140,7 +137,7 @@ describe('Search - Submit Search service', () => {
     it('redirects to the blank search page without setting session values', async () => {
       const result = await SubmitSearchService(auth, payload, yar)
 
-      expect(yarSpy.called).toBe(false)
+      expect(yarSpy).not.toHaveBeenCalled()
       expect(result).toEqual({ redirect: '/system/search' })
     })
   })

@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const NoticeSessionFixture = require('../../../../support/fixtures/notice-session.fixture.js')
-const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
-const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
+import * as NoticeSessionFixture from '../../../../support/fixtures/notice-session.fixture.js'
+import RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
+import * as ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
 
 // Thing under test
-const FetchPaperReturnsRecipientsService = require('../../../../../app/services/notices/setup/returns-notice/fetch-paper-returns-recipients.service.js')
+import FetchPaperReturnsRecipientsService from '../../../../../app/services/notices/setup/returns-notice/fetch-paper-returns-recipients.service.js'
 
 describe('Notices - Setup - Returns Notice - Fetch Paper Returns Recipients service', () => {
   let download

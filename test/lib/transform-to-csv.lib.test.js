@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const { transformArrayToCSVRow } = require('../../app/lib/transform-to-csv.lib.js')
+import { transformArrayToCSVRow } from '../../app/lib/transform-to-csv.lib.js'
 
 describe('Transform to csv', () => {
   describe('#transformArrayToCSVRow', () => {

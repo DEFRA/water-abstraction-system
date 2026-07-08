@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const PreviousBillingDataSeeder = require('../../support/seeders/previous-billing-data.seeder.js')
+import PreviousBillingDataSeeder from '../../support/seeders/previous-billing-data.seeder.js'
 
 // Thing under test
-const FetchPreviousTransactionsService = require('../../../app/services/bill-runs/fetch-previous-transactions.service.js')
+import FetchPreviousTransactionsService from '../../../app/services/bill-runs/fetch-previous-transactions.service.js'
 
 describe('Bill Runs - Fetch Previous Transactions service', () => {
   let seededData

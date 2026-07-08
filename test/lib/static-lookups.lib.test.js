@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const StaticLookups = require('../../app/lib/static-lookups.lib.js')
+import * as StaticLookups from '../../app/lib/static-lookups.lib.js'
 
 describe('Static Lookups', () => {
   describe('#NoticeJourney', () => {

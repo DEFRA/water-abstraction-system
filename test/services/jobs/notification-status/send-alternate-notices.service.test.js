@@ -1,23 +1,18 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const FetchCriticalNoticesDal = require('../../../../app/dal/jobs/notification-status/fetch-critical-notices.dal.js')
-const SendAlternateNoticeService = require('../../../../app/services/notices/setup/send/send-alternate-notice.service.js')
+import FetchCriticalNoticesDal from '../../../../app/dal/jobs/notification-status/fetch-critical-notices.dal.js'
+import SendAlternateNoticeService from '../../../../app/services/notices/setup/send/send-alternate-notice.service.js'
 
 // Thing under test
-const SendAlternateNoticesService = require('../../../../app/services/jobs/notification-status/send-alternate-notices.service.js')
+import SendAlternateNoticesService from '../../../../app/services/jobs/notification-status/send-alternate-notices.service.js'
 
 describe('Job - Notifications - Send Alternate Notices service', () => {
   let criticalNotices
   let notifications
-  let sendAlternateNoticeStub
-
   beforeEach(async () => {
     notifications = [
       { id: generateUUID(), eventId: generateUUID() },
@@ -25,38 +20,41 @@ describe('Job - Notifications - Send Alternate Notices service', () => {
       { id: generateUUID(), eventId: generateUUID() }
     ]
 
-    sendAlternateNoticeStub = Sinon.stub(SendAlternateNoticeService, 'go').resolves()
+    vi.mock('../../../../app/services/notices/setup/send/send-alternate-notice.service.js')
+    SendAlternateNoticeService.mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the notifications are linked to critical notices with errors', () => {
     beforeEach(() => {
       criticalNotices = [{ id: notifications[1].eventId }, { id: notifications[2].eventId }]
 
-      Sinon.stub(FetchCriticalNoticesDal, 'go').resolves(criticalNotices)
+      vi.mock('../../../../app/dal/jobs/notification-status/fetch-critical-notices.dal.js')
+      FetchCriticalNoticesDal.mockResolvedValue(criticalNotices)
     })
 
     it('sends an alternate notice', async () => {
       await SendAlternateNoticesService(notifications)
 
-      expect(sendAlternateNoticeStub.called).toBe(true)
-      expect(sendAlternateNoticeStub.firstCall.args[0]).toEqual(criticalNotices[0])
-      expect(sendAlternateNoticeStub.secondCall.args[0]).toEqual(criticalNotices[1])
+      expect(SendAlternateNoticeService).toHaveBeenCalled()
+      expect(SendAlternateNoticeService.mock.calls[0][0]).toEqual(criticalNotices[0])
+      expect(SendAlternateNoticeService.secondCall.mock.calls[0]).toEqual(criticalNotices[1])
     })
   })
 
   describe('when the notifications are not linked to critical notices with errors', () => {
     beforeEach(() => {
-      Sinon.stub(FetchCriticalNoticesDal, 'go').resolves([])
+      vi.mock('../../../../app/dal/jobs/notification-status/fetch-critical-notices.dal.js')
+      FetchCriticalNoticesDal.mockResolvedValue([])
     })
 
     it('does not send an alternate notice', async () => {
       await SendAlternateNoticesService(notifications)
 
-      expect(sendAlternateNoticeStub.called).toBe(false)
+      expect(SendAlternateNoticeService).not.toHaveBeenCalled()
     })
   })
 })

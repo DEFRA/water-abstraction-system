@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const EventHelper = require('../../support/helpers/event.helper.js')
-const NotificationHelper = require('../../support/helpers/notification.helper.js')
-const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
+import * as EventHelper from '../../support/helpers/event.helper.js'
+import * as NotificationHelper from '../../support/helpers/notification.helper.js'
+import { generateNoticeReferenceCode } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const FetchNoticeService = require('../../../app/services/notices/fetch-notice.service.js')
+import FetchNoticeService from '../../../app/services/notices/fetch-notice.service.js'
 
 describe('Notices - Fetch Notice service', () => {
   const pageNumber = '1'

@@ -1,22 +1,20 @@
-'use strict'
-
-const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const AddressFacadeViewHealthRequest = require('../../../app/requests/address-facade/view-health.request.js')
-const ChargingModuleViewHealthRequest = require('../../../app/requests/charging-module/view-health.request.js')
-const CreateRedisClientService = require('../../../app/services/health/create-redis-client.service.js')
-const GotenbergViewHealthRequest = require('../../../app/requests/gotenberg/view-health.request.js')
-const LegacyViewHealthRequest = require('../../../app/requests/legacy/view-health.request.js')
-const NotifyViewHealthRequest = require('../../../app/requests/notify/view-health.request.js')
-const RespViewHealthRequest = require('../../../app/requests/resp/view-health.request.js')
-const util = require('node:util')
+import * as AddressFacadeViewHealthRequest from '../../../app/requests/address-facade/view-health.request.js'
+import * as ChargingModuleViewHealthRequest from '../../../app/requests/charging-module/view-health.request.js'
+import CreateRedisClientService from '../../../app/services/health/create-redis-client.service.js'
+import * as GotenbergViewHealthRequest from '../../../app/requests/gotenberg/view-health.request.js'
+import * as LegacyViewHealthRequest from '../../../app/requests/legacy/view-health.request.js'
+import * as NotifyViewHealthRequest from '../../../app/requests/notify/view-health.request.js'
+import * as RespViewHealthRequest from '../../../app/requests/resp/view-health.request.js'
+import util from 'node:util'
 
 // Thing under test
-const InfoService = require('../../../app/services/health/info.service.js')
+import InfoService from '../../../app/services/health/info.service.js'
 
 describe('Health - Info service', () => {
   const goodRequestResults = {
@@ -67,17 +65,16 @@ describe('Health - Info service', () => {
   let gotenbergViewHealthRequestStub
   let legacyViewHealthRequestStub
   let notifyViewHealthRequestStub
-  let redisStub
   let respViewHealthRequestStub
 
   beforeEach(() => {
-    addressFacadeViewStatusRequestStub = Sinon.stub(AddressFacadeViewHealthRequest, 'send')
-    chargingModuleViewHealthRequestStub = Sinon.stub(ChargingModuleViewHealthRequest, 'send')
-    gotenbergViewHealthRequestStub = Sinon.stub(GotenbergViewHealthRequest, 'send')
-    legacyViewHealthRequestStub = Sinon.stub(LegacyViewHealthRequest, 'send')
-    notifyViewHealthRequestStub = Sinon.stub(NotifyViewHealthRequest, 'send')
-    redisStub = Sinon.stub(CreateRedisClientService, 'go')
-    respViewHealthRequestStub = Sinon.stub(RespViewHealthRequest, 'send')
+    addressFacadeViewStatusRequestStub = vi.spyOn(AddressFacadeViewHealthRequest, 'send').mockImplementation(() => {})
+    chargingModuleViewHealthRequestStub = vi.spyOn(ChargingModuleViewHealthRequest, 'send').mockImplementation(() => {})
+    gotenbergViewHealthRequestStub = vi.spyOn(GotenbergViewHealthRequest, 'send').mockImplementation(() => {})
+    legacyViewHealthRequestStub = vi.spyOn(LegacyViewHealthRequest, 'send').mockImplementation(() => {})
+    notifyViewHealthRequestStub = vi.spyOn(NotifyViewHealthRequest, 'send').mockImplementation(() => {})
+    vi.mock('../../../app/services/health/create-redis-client.service.js')
+    respViewHealthRequestStub = vi.spyOn(RespViewHealthRequest, 'send').mockImplementation(() => {})
 
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
     // water-api (foreground-service) though, which is why they are defined separately in each test.
@@ -91,31 +88,31 @@ describe('Health - Info service', () => {
     legacyViewHealthRequestStub.withArgs('permits').resolves(goodRequestResults.app)
     legacyViewHealthRequestStub.withArgs('returns').resolves(goodRequestResults.app)
 
-    chargingModuleViewHealthRequestStub.resolves(goodRequestResults.chargingModule)
-    gotenbergViewHealthRequestStub.resolves(goodRequestResults.gotenberg)
-    notifyViewHealthRequestStub.resolves(goodRequestResults.notify)
-    respViewHealthRequestStub.resolves(goodRequestResults.resp)
+    chargingModuleViewHealthRequestStub.mockResolvedValue(goodRequestResults.chargingModule)
+    gotenbergViewHealthRequestStub.mockResolvedValue(goodRequestResults.gotenberg)
+    notifyViewHealthRequestStub.mockResolvedValue(goodRequestResults.notify)
+    respViewHealthRequestStub.mockResolvedValue(goodRequestResults.resp)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when all the services are running', () => {
     beforeEach(() => {
-      redisStub.returns({ ping: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
+      CreateRedisClientService.mockReturnValue({ ping: vi.fn().mockResolvedValue(), disconnect: vi.fn().mockResolvedValue() })
 
       // In this scenario everything is hunky-dory so we return 2xx responses from these services
-      addressFacadeViewStatusRequestStub.resolves(goodRequestResults.addressFacade)
+      addressFacadeViewStatusRequestStub.mockResolvedValue(goodRequestResults.addressFacade)
 
       legacyViewHealthRequestStub.withArgs('water').resolves(goodRequestResults.app)
 
-      const execStub = Sinon.stub().withArgs('clamdscan --version').resolves({
+      const execStub = vi.fn().mockResolvedValue({
         stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
         stderror: null
       })
 
-      Sinon.stub(util, 'promisify').returns(execStub)
+      vi.spyOn(util, 'promisify').mockReturnValue(execStub)
     })
 
     it('returns details on each', async () => {
@@ -153,23 +150,23 @@ describe('Health - Info service', () => {
   describe('when Redis', () => {
     beforeEach(async () => {
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
-      addressFacadeViewStatusRequestStub.resolves(goodRequestResults.addressFacade)
+      addressFacadeViewStatusRequestStub.mockResolvedValue(goodRequestResults.addressFacade)
 
       legacyViewHealthRequestStub.withArgs('water').resolves(goodRequestResults.app)
 
-      const execStub = Sinon.stub().withArgs('clamdscan --version').resolves({
+      const execStub = vi.fn().mockResolvedValue({
         stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
         stderror: null
       })
 
-      Sinon.stub(util, 'promisify').returns(execStub)
+      vi.spyOn(util, 'promisify').mockReturnValue(execStub)
     })
 
     describe('is not running', () => {
       beforeEach(async () => {
-        redisStub.returns({
-          ping: Sinon.stub().throwsException(new Error('Redis check went boom')),
-          disconnect: Sinon.stub().resolves()
+        CreateRedisClientService.mockReturnValue({
+          ping: vi.fn().throwsException(new Error('Redis check went boom')),
+          disconnect: vi.fn().mockResolvedValue()
         })
       })
 
@@ -204,10 +201,10 @@ describe('Health - Info service', () => {
 
   describe('when ClamAV', () => {
     beforeEach(async () => {
-      redisStub.returns({ ping: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
+      CreateRedisClientService.mockReturnValue({ ping: vi.fn().mockResolvedValue(), disconnect: vi.fn().mockResolvedValue() })
 
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
-      addressFacadeViewStatusRequestStub.resolves(goodRequestResults.addressFacade)
+      addressFacadeViewStatusRequestStub.mockResolvedValue(goodRequestResults.addressFacade)
 
       legacyViewHealthRequestStub.withArgs('water').resolves(goodRequestResults.app)
     })
@@ -216,12 +213,12 @@ describe('Health - Info service', () => {
       beforeEach(async () => {
         // We tweak the execStub so that it returns stderr populated, which is what happens if the shell call
         // returns a non-zero exit code.
-        const execStub = Sinon.stub().withArgs('clamdscan --version').resolves({
+        const execStub = vi.fn().mockResolvedValue({
           stdout: null,
           stderr: 'Could not connect to clamd'
         })
 
-        Sinon.stub(util, 'promisify').returns(execStub)
+        vi.spyOn(util, 'promisify').mockReturnValue(execStub)
       })
 
       it('handles the error and still returns a result for the other services', async () => {
@@ -256,11 +253,9 @@ describe('Health - Info service', () => {
       beforeEach(async () => {
         // In this tweak we tell the execStub to throw an exception when invoked. Not sure when this would happen
         // but we've coded for the eventuality so we need to test it
-        const execStub = Sinon.stub()
-          .withArgs('clamdscan --version')
-          .throwsException(new Error('ClamAV check went boom'))
+        const execStub = vi.fn().withArgs('clamdscan --version').throwsException(new Error('ClamAV check went boom'))
 
-        Sinon.stub(util, 'promisify').returns(execStub)
+        vi.spyOn(util, 'promisify').mockReturnValue(execStub)
       })
 
       it('handles the error and still returns a result for the other services', async () => {
@@ -295,21 +290,21 @@ describe('Health - Info service', () => {
   describe('when a service we check via http request', () => {
     beforeEach(async () => {
       // In these scenarios everything is hunky-dory with clamav and redis. So, we go back to our original stubbing
-      const execStub = Sinon.stub().withArgs('clamdscan --version').resolves({
+      const execStub = vi.fn().mockResolvedValue({
         stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
         stderror: null
       })
 
-      Sinon.stub(util, 'promisify').returns(execStub)
+      vi.spyOn(util, 'promisify').mockReturnValue(execStub)
 
-      redisStub.returns({ ping: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
+      CreateRedisClientService.mockReturnValue({ ping: vi.fn().mockResolvedValue(), disconnect: vi.fn().mockResolvedValue() })
     })
 
     describe('cannot be reached because of a network error', () => {
       beforeEach(async () => {
         const badResult = { succeeded: false, response: new Error('Kaboom') }
 
-        addressFacadeViewStatusRequestStub.resolves(badResult)
+        addressFacadeViewStatusRequestStub.mockResolvedValue(badResult)
 
         legacyViewHealthRequestStub.withArgs('water').resolves(badResult)
       })
@@ -349,7 +344,7 @@ describe('Health - Info service', () => {
           response: { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR, body: { message: 'Kaboom' } }
         }
 
-        addressFacadeViewStatusRequestStub.resolves(badResult)
+        addressFacadeViewStatusRequestStub.mockResolvedValue(badResult)
 
         legacyViewHealthRequestStub.withArgs('water').resolves(badResult)
       })

@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
-const FetchUserDetailsDal = require('../../../../../app/dal/users/internal/fetch-user-details.dal.js')
+import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import FetchUserDetailsDal from '../../../../../app/dal/users/internal/fetch-user-details.dal.js'
 
 // Thing under test
-const ViewPermissionsService = require('../../../../../app/services/users/internal/setup/view-permissions.service.js')
+import ViewPermissionsService from '../../../../../app/services/users/internal/setup/view-permissions.service.js'
 
 describe('Users - Internal - Setup - View Permissions Service', () => {
   let auth
@@ -23,13 +20,15 @@ describe('Users - Internal - Setup - View Permissions Service', () => {
 
     sessionData = {}
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
     const currentUserPermissions = 'super'
 
-    Sinon.stub(FetchUserDetailsDal, 'go').resolves({
+    vi.mock('../../../../../app/dal/users/internal/fetch-user-details.dal.js')
+    FetchUserDetailsDal.mockResolvedValue({
       $permissions: () => {
         return { key: currentUserPermissions }
       }
@@ -37,7 +36,7 @@ describe('Users - Internal - Setup - View Permissions Service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

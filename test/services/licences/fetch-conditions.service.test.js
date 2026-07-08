@@ -1,18 +1,16 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
-const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
-const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
-const LicenceVersionPurposePointHelper = require('../../support/helpers/licence-version-purpose-point.helper.js')
-const PointHelper = require('../../support/helpers/point.helper.js')
-const PurposeHelper = require('../../support/helpers/purpose.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import * as LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import * as LicenceVersionPurposeConditionHelper from '../../support/helpers/licence-version-purpose-condition.helper.js'
+import * as LicenceVersionPurposeConditionTypeHelper from '../../support/helpers/licence-version-purpose-condition-type.helper.js'
+import * as LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
+import * as LicenceVersionPurposePointHelper from '../../support/helpers/licence-version-purpose-point.helper.js'
+import * as PointHelper from '../../support/helpers/point.helper.js'
+import * as PurposeHelper from '../../support/helpers/purpose.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const FetchConditionsService = require('../../../app/services/licences/fetch-conditions.service.js')
+import FetchConditionsService from '../../../app/services/licences/fetch-conditions.service.js'
 
 describe('Licences - Fetch Conditions service', () => {
   let licence

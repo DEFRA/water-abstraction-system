@@ -1,13 +1,11 @@
-'use strict'
-
 // Test Helpers
-const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
+import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
+import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const CommunicationsPresenter = require('../../../app/presenters/licences/communications.presenter.js')
+import CommunicationsPresenter from '../../../app/presenters/licences/communications.presenter.js'
 
 describe('Licences - Communications presenter', () => {
   let licence

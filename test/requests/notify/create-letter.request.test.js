@@ -1,17 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = require('node:http2').constants
-const { NOTIFY_TEMPLATES } = require('../../../app/lib/notify-templates.lib.js')
+import http2 from 'node:http2'
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = http2.constants
+import { NOTIFY_TEMPLATES } from '../../../app/lib/notify-templates.lib.js'
 
 // Things we need to stub
-const NotifyRequest = require('../../../app/requests/notify.request.js')
+import * as NotifyRequest from '../../../app/requests/notify.request.js'
 
 // Thing under test
-const CreateLetterRequest = require('../../../app/requests/notify/create-letter.request.js')
+import * as CreateLetterRequest from '../../../app/requests/notify/create-letter.request.js'
 
 describe('Notify - Create Letter request', () => {
   let options
@@ -38,7 +36,7 @@ describe('Notify - Create Letter request', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request succeeds', () => {
@@ -62,7 +60,7 @@ describe('Notify - Create Letter request', () => {
         }
       }
 
-      Sinon.stub(NotifyRequest, 'post').resolves({
+      vi.spyOn(NotifyRequest, 'postRequest').mockResolvedValue({
         succeeded: true,
         response
       })
@@ -97,7 +95,7 @@ describe('Notify - Create Letter request', () => {
           }
         }
 
-        Sinon.stub(NotifyRequest, 'post').resolves({
+        vi.spyOn(NotifyRequest, 'postRequest').mockResolvedValue({
           succeeded: false,
           response
         })

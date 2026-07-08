@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
-const { formatDateObjectToISO } = require('../../../../app/lib/dates.lib.js')
+import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import { futureDueDate } from '../../../../app/presenters/notices/base.presenter.js'
+import { formatDateObjectToISO } from '../../../../app/lib/dates.lib.js'
 
 // Thing under test
-const CreateNoticePresenter = require('../../../../app/presenters/notices/setup/create-notice.presenter.js')
+import CreateNoticePresenter from '../../../../app/presenters/notices/setup/create-notice.presenter.js'
 
 describe('Notices - Setup - Create Notice presenter', () => {
   const issuer = 'hello@world.com'

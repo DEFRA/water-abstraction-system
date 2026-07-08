@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const UsersFixture = require('../../../support/fixtures/users.fixture.js')
+import * as UsersFixture from '../../../support/fixtures/users.fixture.js'
 
 // Thing under test
-const DetailsPresenter = require('../../../../app/presenters/users/internal/details.presenter.js')
+import DetailsPresenter from '../../../../app/presenters/users/internal/details.presenter.js'
 
 describe('Users - Internal - Details Presenter', () => {
   let auth

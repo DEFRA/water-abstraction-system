@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const FrequencyReportedValidator = require('../../../../app/validators/return-versions/setup/frequency-reported.validator.js')
+import FrequencyReportedValidator from '../../../../app/validators/return-versions/setup/frequency-reported.validator.js'
 
 describe('Return Versions Setup - Frequency reported validator', () => {
   let payload

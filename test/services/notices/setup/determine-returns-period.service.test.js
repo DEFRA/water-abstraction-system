@@ -1,10 +1,8 @@
-'use strict'
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Thing under test
-const DetermineReturnsPeriodService = require('../../../../app/services/notices/setup/determine-returns-period.service.js')
+import DetermineReturnsPeriodService from '../../../../app/services/notices/setup/determine-returns-period.service.js'
 
 describe('Notices - Setup - Determine Returns Period service', () => {
   const year = 2025
@@ -13,13 +11,13 @@ describe('Notices - Setup - Determine Returns Period service', () => {
   let returnsPeriod
 
   beforeEach(async () => {
-    clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
+    clock = vi.useFakeTimers({ now: new Date(`${year}-01-01` }))
 
     returnsPeriod = 'quarterFour'
   })
 
   afterEach(() => {
-    clock.restore()
+    vi.useRealTimers()
   })
 
   describe('when the returns period is not for summer', () => {

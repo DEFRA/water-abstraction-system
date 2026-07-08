@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const LicenceDocumentHeaderHelper = require('../../../../support/helpers/licence-document-header.helper.js')
-const LicenceDocumentHeaderModel = require('../../../../../app/models/licence-document-header.model.js')
-const LicenceUnregistrationModel = require('../../../../../app/models/licence-unregistration.model.js')
-const UsersFixture = require('../../../../support/fixtures/users.fixture.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+import * as LicenceDocumentHeaderHelper from '../../../../support/helpers/licence-document-header.helper.js'
+import LicenceDocumentHeaderModel from '../../../../../app/models/licence-document-header.model.js'
+import LicenceUnregistrationModel from '../../../../../app/models/licence-unregistration.model.js'
+import * as UsersFixture from '../../../../support/fixtures/users.fixture.js'
+import { generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Thing under test
-const UnregisterLicencesDal = require('../../../../../app/dal/users/external/setup/unregister-licences.dal.js')
+import UnregisterLicencesDal from '../../../../../app/dal/users/external/setup/unregister-licences.dal.js'
 
 describe('Users - External - Setup - Unregister Licences DAL', () => {
   let firstLicenceId

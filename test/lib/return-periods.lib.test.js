@@ -1,13 +1,11 @@
-'use strict'
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
-const { returnPeriodDates } = require('../../app/lib/static-lookups.lib.js')
-const ReturnCycleHelper = require('../support/helpers/return-cycle.helper.js')
+import { returnPeriodDates } from '../../app/lib/static-lookups.lib.js'
+import * as ReturnCycleHelper from '../support/helpers/return-cycle.helper.js'
 
 // Thing under test
-const ReturnPeriodLib = require('../../app/lib/return-periods.lib.js')
+import * as ReturnPeriodLib from '../../app/lib/return-periods.lib.js'
 
 describe('Return Period lib', () => {
   const year = 2024
@@ -20,11 +18,11 @@ describe('Return Period lib', () => {
   let dueDateNextYear
 
   beforeEach(() => {
-    clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
+    clock = vi.useFakeTimers({ now: new Date(`${year}-01-01` }))
   })
 
   afterEach(() => {
-    clock.restore()
+    vi.useRealTimers()
   })
 
   describe('determineReturnsPeriods', () => {

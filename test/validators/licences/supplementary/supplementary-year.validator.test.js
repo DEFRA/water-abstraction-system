@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const SupplementaryYearValidator = require('../../../../app/validators/licences/supplementary/supplementary-year.validator.js')
+import SupplementaryYearValidator from '../../../../app/validators/licences/supplementary/supplementary-year.validator.js'
 
 describe('Supplementary Year validator', () => {
   let payload

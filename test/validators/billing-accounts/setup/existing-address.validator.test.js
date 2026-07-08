@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const ExistingAddressValidator = require('../../../../app/validators/billing-accounts/setup/existing-address.validator.js')
+import ExistingAddressValidator from '../../../../app/validators/billing-accounts/setup/existing-address.validator.js'
 
 describe('Billing Accounts - Setup - Existing Address Validator', () => {
   let payload

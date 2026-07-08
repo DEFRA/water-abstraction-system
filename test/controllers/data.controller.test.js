@@ -1,18 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 
 // Things we need to stub
-const LoadService = require('../../app/services/data/load/load.service.js')
-const SeedService = require('../../app/services/data/seed/seed.service.js')
-const TearDownService = require('../../app/services/data/tear-down/tear-down.service.js')
+import LoadService from '../../app/services/data/load/load.service.js'
+import SeedService from '../../app/services/data/seed/seed.service.js'
+import TearDownService from '../../app/services/data/tear-down/tear-down.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
 
 describe('Data controller', () => {
   let server
@@ -25,14 +23,14 @@ describe('Data controller', () => {
   beforeEach(async () => {
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
-    Sinon.stub(server.logger, 'error')
+    vi.spyOn(server.logger, 'error').mockImplementation(() => {})
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -70,7 +68,8 @@ describe('Data controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(LoadService, 'go').resolves({
+          vi.mock('../../app/services/data/load/load.service.js')
+          LoadService.mockResolvedValue({
             regions: ['d0a4123d-1e19-480d-9dd4-f70f3387c4b9']
           })
         })
@@ -86,7 +85,8 @@ describe('Data controller', () => {
       describe('when the request fails', () => {
         describe('because the LoadService errors', () => {
           beforeEach(async () => {
-            Sinon.stub(LoadService, 'go').rejects()
+            vi.mock('../../app/services/data/load/load.service.js')
+            LoadService.mockRejectedValue()
           })
 
           it('returns a 500 status', async () => {
@@ -108,7 +108,8 @@ describe('Data controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(SeedService, 'go').resolves()
+          vi.mock('../../app/services/data/seed/seed.service.js')
+          SeedService.mockResolvedValue()
         })
 
         it('displays the correct message', async () => {
@@ -121,7 +122,8 @@ describe('Data controller', () => {
       describe('when the request fails', () => {
         describe('because the SeedService errors', () => {
           beforeEach(async () => {
-            Sinon.stub(SeedService, 'go').rejects()
+            vi.mock('../../app/services/data/seed/seed.service.js')
+            SeedService.mockRejectedValue()
           })
 
           it('returns a 500 status', async () => {
@@ -143,7 +145,8 @@ describe('Data controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          Sinon.stub(TearDownService, 'go').resolves()
+          vi.mock('../../app/services/data/tear-down/tear-down.service.js')
+          TearDownService.mockResolvedValue()
         })
 
         it('returns a 204 status', async () => {
@@ -156,7 +159,8 @@ describe('Data controller', () => {
       describe('when the request fails', () => {
         describe('because the TearDownService errors', () => {
           beforeEach(async () => {
-            Sinon.stub(TearDownService, 'go').rejects()
+            vi.mock('../../app/services/data/tear-down/tear-down.service.js')
+            TearDownService.mockRejectedValue()
           })
 
           it('returns a 500 status', async () => {

@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
+import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Things we need to stub
-const FetchAddressDal = require('../../../app/dal/companies/fetch-address.dal.js')
-const FetchCompanyDal = require('../../../app/dal/companies/fetch-company.dal.js')
+import FetchAddressDal from '../../../app/dal/companies/fetch-address.dal.js'
+import FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'
 
 // Thing under test
-const ViewCompanyWithAddressService = require('../../../app/services/companies/view-company-with-address.service.js')
+import ViewCompanyWithAddressService from '../../../app/services/companies/view-company-with-address.service.js'
 
 describe('Companies - View Company With Address Service', () => {
   const licenceId = 'fbf2df24-ac78-4ee2-b5bb-eb7f9cf6b59a'
@@ -24,12 +21,14 @@ describe('Companies - View Company With Address Service', () => {
     company = CustomersFixtures.company()
     address = CustomersFixtures.companyAddress().address
 
-    Sinon.stub(FetchCompanyDal, 'go').returns(company)
-    Sinon.stub(FetchAddressDal, 'go').returns(address)
+    vi.mock('../../../app/dal/companies/fetch-company.dal.js')
+    FetchCompanyDal.mockReturnValue(company)
+    vi.mock('../../../app/dal/companies/fetch-address.dal.js')
+    FetchAddressDal.mockReturnValue(address)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

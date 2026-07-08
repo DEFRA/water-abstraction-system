@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const SessionHelper = require('../support/helpers/session.helper.js')
-const SessionModel = require('../../app/models/session.model.js')
+import * as SessionHelper from '../support/helpers/session.helper.js'
+import SessionModel from '../../app/models/session.model.js'
 
 // Thing under test
-const DeleteSessionDal = require('../../app/dal/delete-session.dal.js')
+import DeleteSessionDal from '../../app/dal/delete-session.dal.js'
 
 describe('DAL - Delete session dal', () => {
   let session

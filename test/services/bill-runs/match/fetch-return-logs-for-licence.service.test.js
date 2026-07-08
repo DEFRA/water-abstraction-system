@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
-const ReturnSubmissionLineHelper = require('../../../support/helpers/return-submission-line.helper.js')
+import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import * as ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
+import * as ReturnSubmissionLineHelper from '../../../support/helpers/return-submission-line.helper.js'
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const FetchReturnLogsForLicenceService = require('../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js')
+import FetchReturnLogsForLicenceService from '../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js'
 
 describe('Fetch Return Logs for Licence service', () => {
   const billingPeriod = { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
@@ -24,12 +21,12 @@ describe('Fetch Return Logs for Licence service', () => {
     // This depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -247,9 +244,9 @@ describe('Fetch Return Logs for Licence service', () => {
 
       await expect(FetchReturnLogsForLicenceService(licenceRef, billingPeriod)).rejects.toThrow()
 
-      const logDataArg = notifierStub.omfg.args[0][1]
+      const logDataArg = notifierStub.omfg.mock.calls[0][1]
 
-      expect(notifierStub.omfg.calledWith('Bill run process fetch return logs for licence failed')).toBe(true)
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Bill run process fetch return logs for licence failed')
       expect(logDataArg).toEqual({ licenceRef, billingPeriod })
     })
   })

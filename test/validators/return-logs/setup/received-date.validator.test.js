@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const { today } = require('../../../../app/lib/general.lib.js')
+import { today } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const ReceivedDateValidator = require('../../../../app/validators/return-logs/setup/received-date.validator.js')
+import ReceivedDateValidator from '../../../../app/validators/return-logs/setup/received-date.validator.js'
 
 describe('Return Logs Setup - Received Date validator', () => {
   const returnStartDate = '2023-01-01T00:00:00.000Z'

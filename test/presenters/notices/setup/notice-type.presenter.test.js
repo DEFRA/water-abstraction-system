@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const NoticeTypePresenter = require('../../../../app/presenters/notices/setup/notice-type.presenter.js')
+import NoticeTypePresenter from '../../../../app/presenters/notices/setup/notice-type.presenter.js'
 
 describe('Notice - Setup - Notice Type Presenter', () => {
   let auth

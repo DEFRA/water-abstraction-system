@@ -1,17 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = require('node:http2').constants
-const { generateNoticeReferenceCode } = require('../../../../../app/lib/general.lib.js')
+import http2 from 'node:http2'
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = http2.constants
+import { generateNoticeReferenceCode } from '../../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const GeneratePreviewRequest = require('../../../../../app/requests/notify/generate-preview.request.js')
+import * as GeneratePreviewRequest from '../../../../../app/requests/notify/generate-preview.request.js'
 
 // Thing under test
-const PreviewPresenter = require('../../../../../app/presenters/notices/setup/preview/preview.presenter.js')
+import PreviewPresenter from '../../../../../app/presenters/notices/setup/preview/preview.presenter.js'
 
 describe('Notices - Setup - Preview - Preview presenter', () => {
   const contactHashId = '9df5923f179a0ed55c13173c16651ed9'
@@ -28,7 +26,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when previewing the notification succeeds', () => {
@@ -72,7 +70,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             }
           }
 
-          Sinon.stub(GeneratePreviewRequest, 'send').resolves({
+          vi.spyOn(GeneratePreviewRequest, 'send').mockResolvedValue({
             succeeded: true,
             response
           })
@@ -136,7 +134,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             }
           }
 
-          Sinon.stub(GeneratePreviewRequest, 'send').resolves({
+          vi.spyOn(GeneratePreviewRequest, 'send').mockResolvedValue({
             succeeded: true,
             response
           })
@@ -213,7 +211,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             }
           }
 
-          Sinon.stub(GeneratePreviewRequest, 'send').resolves({
+          vi.spyOn(GeneratePreviewRequest, 'send').mockResolvedValue({
             succeeded: true,
             response
           })
@@ -283,7 +281,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
             }
           }
 
-          Sinon.stub(GeneratePreviewRequest, 'send').resolves({
+          vi.spyOn(GeneratePreviewRequest, 'send').mockResolvedValue({
             succeeded: true,
             response
           })
@@ -343,7 +341,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
         }
       }
 
-      Sinon.stub(GeneratePreviewRequest, 'send').resolves({
+      vi.spyOn(GeneratePreviewRequest, 'send').mockResolvedValue({
         succeeded: false,
         response
       })

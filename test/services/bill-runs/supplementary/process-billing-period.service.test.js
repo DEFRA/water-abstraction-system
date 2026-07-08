@@ -1,30 +1,27 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
-const BillRunError = require('../../../../app/errors/bill-run.error.js')
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const ChangeReasonHelper = require('../../../support/helpers/change-reason.helper.js')
-const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
-const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const FetchChargeVersionsService = require('../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
+import * as BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
+import BillRunError from '../../../../app/errors/bill-run.error.js'
+import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import BillRunModel from '../../../../app/models/bill-run.model.js'
+import * as ChangeReasonHelper from '../../../support/helpers/change-reason.helper.js'
+import * as ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
+import * as ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
+import * as ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
+import * as ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
+import FetchChargeVersionsService from '../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js'
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import * as RegionHelper from '../../../support/helpers/region.helper.js'
 
 // Things we need to stub
-const ChargingModuleGenerateBillRunRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
-const FetchPreviousTransactionsService = require('../../../../app/services/bill-runs/fetch-previous-transactions.service.js')
-const GenerateTransactionsService = require('../../../../app/services/bill-runs/generate-transactions.service.js')
-const SendTransactionsService = require('../../../../app/services/bill-runs/send-transactions.service.js')
+import * as ChargingModuleGenerateBillRunRequest from '../../../../app/requests/charging-module/generate-bill-run.request.js'
+import FetchPreviousTransactionsService from '../../../../app/services/bill-runs/fetch-previous-transactions.service.js'
+import GenerateTransactionsService from '../../../../app/services/bill-runs/generate-transactions.service.js'
+import SendTransactionsService from '../../../../app/services/bill-runs/send-transactions.service.js'
 
 // Thing under test
-const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/supplementary/process-billing-period.service.js')
+import ProcessBillingPeriodService from '../../../../app/services/bill-runs/supplementary/process-billing-period.service.js'
 
 const CHANGE_NEW_AGREEMENT_INDEX = 2
 const REGION_SOUTH_WEST_INDEX = 4
@@ -53,11 +50,12 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
 
     billRun = await BillRunHelper.add({ regionId: region.id })
 
-    Sinon.stub(FetchPreviousTransactionsService, 'go').resolves([])
+    vi.mock('../../../../app/services/bill-runs/fetch-previous-transactions.service.js')
+    FetchPreviousTransactionsService.mockResolvedValue([])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the service is called', () => {
@@ -212,8 +210,9 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
             }
           ]
 
-          Sinon.stub(SendTransactionsService, 'go').resolves(sentTransactions)
-          Sinon.stub(ChargingModuleGenerateBillRunRequest, 'send').resolves({
+          vi.mock('../../../../app/services/bill-runs/send-transactions.service.js')
+          SendTransactionsService.mockResolvedValue(sentTransactions)
+          vi.spyOn(ChargingModuleGenerateBillRunRequest, 'send').mockResolvedValue({
             succeeded: true,
             response: {}
           })
@@ -249,7 +248,8 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
 
     describe('because generating the calculated transactions fails', () => {
       beforeEach(async () => {
-        Sinon.stub(GenerateTransactionsService, 'go').throws()
+        vi.mock('../../../../app/services/bill-runs/generate-transactions.service.js')
+        GenerateTransactionsService.mockRejectedValue(new Error())
       })
 
       it('throws a BillRunError with the correct code', async () => {
@@ -266,7 +266,8 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
       beforeEach(async () => {
         const thrownError = new BillRunError(new Error(), BillRunModel.errorCodes.failedToCreateCharge)
 
-        Sinon.stub(SendTransactionsService, 'go').rejects(thrownError)
+        vi.mock('../../../../app/services/bill-runs/send-transactions.service.js')
+        SendTransactionsService.mockRejectedValue(thrownError)
       })
 
       it('throws a BillRunError with the correct code', async () => {

@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
+import * as AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 
 // Thing under test
-const AlertTypePresenter = require('../../../../../app/presenters/notices/setup/abstraction-alerts/alert-type.presenter.js')
+import AlertTypePresenter from '../../../../../app/presenters/notices/setup/abstraction-alerts/alert-type.presenter.js'
 
 describe('Notices - Setup - Abstraction Alerts - Alert Type presenter', () => {
   let sessionData

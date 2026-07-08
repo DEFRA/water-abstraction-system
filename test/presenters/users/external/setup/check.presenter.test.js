@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const UserSessionsFixture = require('../../../../support/fixtures/user-sessions.fixture.js')
+import * as UserSessionsFixture from '../../../../support/fixtures/user-sessions.fixture.js'
 
 // Thing under test
-const CheckPresenter = require('../../../../../app/presenters/users/external/setup/check.presenter.js')
+import CheckPresenter from '../../../../../app/presenters/users/external/setup/check.presenter.js'
 
 describe('Users - External - Setup - Check Presenter', () => {
   let session

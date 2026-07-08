@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const LicenceNumberPresenter = require('../../../../app/presenters/licence-monitoring-station/setup/licence-number.presenter.js')
+import LicenceNumberPresenter from '../../../../app/presenters/licence-monitoring-station/setup/licence-number.presenter.js'
 
 describe('Licence Monitoring Station Setup - Licence Number Presenter', () => {
   let session
