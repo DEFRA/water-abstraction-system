@@ -87,7 +87,7 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     it('sends the email via Notify with the correct recipient and personalisation', async () => {
       await SendVerificationEmailService(notification)
 
-      const args = createEmailRequestStub.firstCall.args
+      const args = createEmailRequestStub.mock.calls[0]
 
       expect(createEmailRequestStub).toHaveBeenCalledOnce()
       expect(args[1]).toEqual(notification.recipient)
@@ -162,7 +162,7 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     it('handles the error', async () => {
       await SendVerificationEmailService(notification)
 
-      const args = notifierStub.omfg.firstCall.args
+      const args = notifierStub.omfg.mock.calls[0]
 
       expect(args[0]).toEqual('Failed when trying to send internal user verification email')
       expect(args[1]).toEqual({ notification })

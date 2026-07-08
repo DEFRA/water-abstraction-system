@@ -248,7 +248,7 @@ describe('Reissue Bill service', () => {
       it('retries until it is no longer "pending"', async () => {
         await ReissueBillService(sourceBill, reissueBillRun)
 
-        expect(billRunStatusStub.callCount).toEqual(2)
+        expect(billRunStatusStub).toHaveBeenCalledTimes(2)
       })
     })
   })

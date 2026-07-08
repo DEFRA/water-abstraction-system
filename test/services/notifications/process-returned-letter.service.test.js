@@ -124,7 +124,7 @@ describe('Notifications - Process Returned Letter service', () => {
     it('logs the error', async () => {
       await ProcessReturnedLetterService(payload)
 
-      const errorLogArgs = notifierStub.omfg.firstCall.args
+      const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
       expect(notifierStub.omfg).toHaveBeenCalledWith('Returned letter failed')
       expect(errorLogArgs[1]).toEqual(payload)

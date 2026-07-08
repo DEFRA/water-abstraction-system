@@ -56,7 +56,7 @@ describe('Notify Request', () => {
       it('calls Notify with the required options', async () => {
         await NotifyRequest.getRequest(testRoute)
 
-        const requestArgs = BaseRequest.getRequest.firstCall.args
+        const requestArgs = BaseRequest.getRequest.mock.calls[0]
 
         expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
         expect(requestArgs[1].headers).toMatchObject({ authorization: 'Bearer ACCESS_TOKEN' })
@@ -65,7 +65,7 @@ describe('Notify Request', () => {
       it('uses the notify timeout', async () => {
         await NotifyRequest.getRequest(testRoute)
 
-        const requestArgs = BaseRequest.getRequest.firstCall.args
+        const requestArgs = BaseRequest.getRequest.mock.calls[0]
 
         expect(requestArgs[1].timeout).toEqual({ request: 1234 })
       })
@@ -136,7 +136,7 @@ describe('Notify Request', () => {
       it('calls Notify with the required options', async () => {
         await NotifyRequest.postRequest(testRoute, { test: 'yes' })
 
-        const requestArgs = BaseRequest.postRequest.firstCall.args
+        const requestArgs = BaseRequest.postRequest.mock.calls[0]
 
         expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
         expect(requestArgs[1].headers).toMatchObject({ authorization: 'Bearer ACCESS_TOKEN' })
@@ -146,7 +146,7 @@ describe('Notify Request', () => {
       it('uses the Notify timeout', async () => {
         await NotifyRequest.postRequest(testRoute)
 
-        const requestArgs = BaseRequest.postRequest.firstCall.args
+        const requestArgs = BaseRequest.postRequest.mock.calls[0]
 
         expect(requestArgs[1].timeout).toEqual({ request: 1234 })
       })

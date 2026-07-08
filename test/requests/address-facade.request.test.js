@@ -78,7 +78,7 @@ describe('Address Facade request', () => {
       it('calls the Address Facade with the required options', async () => {
         await AddressFacadeRequest.getRequest(testRoute)
 
-        const requestArgs = BaseRequest.getRequest.firstCall.args
+        const requestArgs = BaseRequest.getRequest.mock.calls[0]
 
         expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
       })

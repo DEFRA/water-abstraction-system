@@ -165,7 +165,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         it('logs the error', async () => {
           await UpdateInvoiceNumbersService(billRun)
 
-          const errorLogArgs = notifierStub.omfg.firstCall.args
+          const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
           expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed')
           expect(errorLogArgs[1]).toEqual(billRun)
@@ -187,7 +187,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         it('logs the error', async () => {
           await UpdateInvoiceNumbersService(billRun)
 
-          const errorLogArgs = notifierStub.omfg.firstCall.args
+          const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
           expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed')
           expect(errorLogArgs[1]).toEqual(billRun)
@@ -210,7 +210,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         it('logs the error', async () => {
           await UpdateInvoiceNumbersService(billRun)
 
-          const errorLogArgs = notifierStub.omfg.firstCall.args
+          const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
           expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed')
           expect(errorLogArgs[1]).toEqual(billRun)
@@ -238,7 +238,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         it('logs the error', async () => {
           await UpdateInvoiceNumbersService(billRun)
 
-          const errorLogArgs = notifierStub.omfg.firstCall.args
+          const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
           expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed')
           expect(errorLogArgs[1]).toEqual(billRun)
@@ -270,7 +270,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         it('logs the error', async () => {
           await UpdateInvoiceNumbersService(billRun)
 
-          const errorLogArgs = notifierStub.omfg.firstCall.args
+          const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
           expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed')
           expect(errorLogArgs[1]).toEqual(billRun)

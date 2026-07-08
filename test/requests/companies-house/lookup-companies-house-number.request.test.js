@@ -33,7 +33,7 @@ describe('Companies House - Lookup Companies House Number request', () => {
     it('hits the correct endpoint', async () => {
       await LookupCompaniesHouseNumberRequest.send(companiesHouseNumber)
 
-      const requestArgs = CompaniesHouseRequest.getRequest.firstCall.args
+      const requestArgs = CompaniesHouseRequest.getRequest.mock.calls[0]
 
       expect(requestArgs[0]).toEqual(`company/${companiesHouseNumber}`)
     })

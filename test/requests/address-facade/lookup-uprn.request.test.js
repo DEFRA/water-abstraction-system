@@ -44,7 +44,7 @@ describe('Address Facade - Lookup UPRN request', () => {
     it('hits the correct endpoint', async () => {
       await LookupUPRNRequest.send(uprn)
 
-      const requestArgs = AddressFacadeRequest.getRequest.firstCall.args
+      const requestArgs = AddressFacadeRequest.getRequest.mock.calls[0]
 
       expect(requestArgs[0]).toEqual(`address-service/v1/addresses/${uprn}?key=client1`)
     })

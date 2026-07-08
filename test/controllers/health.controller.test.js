@@ -52,7 +52,7 @@ describe('Health controller', () => {
     it('causes Airbrake to send a notification', async () => {
       await server.inject(options)
 
-      expect(airbrakeStub.called).toEqual(true)
+      expect(airbrakeStub).toHaveBeenCalled()
     })
   })
 

@@ -69,7 +69,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       it('logs the time taken', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        const args = notifierStub.omg.firstCall.args
+        const args = notifierStub.omg.mock.calls[0]
 
         expect(args[0]).toEqual('Process bill run complete')
         expect(args[1].timeTakenMs).toBeDefined()
@@ -105,7 +105,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       it('logs the time taken', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        const args = notifierStub.omg.firstCall.args
+        const args = notifierStub.omg.mock.calls[0]
 
         expect(args[0]).toEqual('Process bill run complete')
         expect(args[1].timeTakenMs).toBeDefined()
@@ -132,7 +132,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       it('logs the error', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        const args = notifierStub.omfg.firstCall.args
+        const args = notifierStub.omfg.mock.calls[0]
 
         expect(args[0]).toEqual('Process bill run failed')
         expect(args[1].billRun.id).toEqual(billRun.id)
@@ -158,7 +158,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       it('logs the error', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        const args = notifierStub.omfg.firstCall.args
+        const args = notifierStub.omfg.mock.calls[0]
 
         expect(args[0]).toEqual('Process bill run failed')
         expect(args[1].billRun.id).toEqual(billRun.id)

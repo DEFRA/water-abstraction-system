@@ -118,7 +118,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     it('records the error by calling "omfg()"', async () => {
       await ProcessLicenceUpdatesService()
 
-      const args = notifierStub.omfg.firstCall.args
+      const args = notifierStub.omfg.mock.calls[0]
 
       expect(args[0]).toEqual('Licence updates job failed')
       expect(args[1]).toBeNull()
@@ -128,7 +128,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     it('notifies the team by calling "redAlert()"', async () => {
       await ProcessLicenceUpdatesService()
 
-      const args = notifierStub.redAlert.firstCall.args
+      const args = notifierStub.redAlert.mock.calls[0]
 
       expect(args[0]).toEqual('Licence updates job failed')
     })

@@ -84,7 +84,7 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
     it('should call "GeneratePaperReturnRequest"', async () => {
       await ProcessPreviewPaperReturnService(session.id, contactHashId, returnLogId)
 
-      expect(GeneratePaperReturnRequest.send.calledOnce).toBe(true)
+      expect(GeneratePaperReturnRequest.send).toHaveBeenCalledOnce()
 
       const actualCallArgs = GeneratePaperReturnRequest.send.getCall(0).args[0]
 

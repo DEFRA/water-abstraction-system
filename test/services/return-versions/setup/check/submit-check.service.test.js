@@ -286,7 +286,7 @@ describe('Return Versions - Setup - Submit Check service', () => {
       it('logs the error and rethrows it', async () => {
         await expect(SubmitCheckService(session.id, userId)).rejects.toThrow()
 
-        const args = notifierStub.omfg.firstCall.args
+        const args = notifierStub.omfg.mock.calls[0]
 
         expect(args[0]).toEqual('Failed to create return version')
         expect(args[1]).toEqual(session)

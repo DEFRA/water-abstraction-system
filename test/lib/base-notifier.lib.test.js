@@ -63,7 +63,7 @@ describe('BaseNotifierLib class', () => {
 
       testNotifier.omg(message)
 
-      expect(airbrakeFake.notify.notCalled).toBe(true)
+      expect(airbrakeFake.notify).not.toHaveBeenCalled()
     })
 
     it('does not log an "error" message', () => {
@@ -71,7 +71,7 @@ describe('BaseNotifierLib class', () => {
 
       testNotifier.omg(message)
 
-      expect(pinoFake.error.notCalled).toBe(true)
+      expect(pinoFake.error).not.toHaveBeenCalled()
     })
   })
 
@@ -216,7 +216,7 @@ describe('BaseNotifierLib class', () => {
         // resolved. So, callsFake() tells Sinon to call our anonymous function below that includes our assertion only
         // when pinoFake.error is called i.e. the Airbrake.notify() promise has resolved.
         pinoFake.error.callsFake(async () => {
-          const firstCallArgs = pinoFake.error.firstCall.args
+          const firstCallArgs = pinoFake.error.mock.calls[0]
 
           expect(firstCallArgs[0].err).toBeInstanceOf(Error)
           expect(firstCallArgs[0].err.message).toEqual(message)
@@ -248,7 +248,7 @@ describe('BaseNotifierLib class', () => {
         testNotifier.omfg(message)
 
         pinoFake.error.callsFake(async () => {
-          const firstCallArgs = pinoFake.error.firstCall.args
+          const firstCallArgs = pinoFake.error.mock.calls[0]
 
           expect(firstCallArgs[0].err).toBeInstanceOf(Error)
           expect(firstCallArgs[0].err.message).toEqual(message)
@@ -279,7 +279,7 @@ describe('BaseNotifierLib class', () => {
 
           testNotifier.redAlert(message)
 
-          const args = createEmailRequestFake.send.firstCall.args
+          const args = createEmailRequestFake.send.mock.calls[0]
 
           expect(args[0]).toEqual(NOTIFY_TEMPLATES.system.statusAlert)
           expect(args[1]).toEqual(NotifyConfig.alertEmailAddresses)
@@ -293,7 +293,7 @@ describe('BaseNotifierLib class', () => {
 
           testNotifier.redAlert(message, error)
 
-          const args = createEmailRequestFake.send.firstCall.args
+          const args = createEmailRequestFake.send.mock.calls[0]
 
           expect(args[0]).toEqual(NOTIFY_TEMPLATES.system.statusAlert)
           expect(args[1]).toEqual(NotifyConfig.alertEmailAddresses)
@@ -311,7 +311,7 @@ describe('BaseNotifierLib class', () => {
 
           testNotifier.redAlert(message, error)
 
-          const firstArgs = createEmailRequestFake.send.firstCall.args
+          const firstArgs = createEmailRequestFake.send.mock.calls[0]
           const secondArgs = createEmailRequestFake.send.secondCall.args
 
           expect(firstArgs[0]).toEqual(NOTIFY_TEMPLATES.system.statusAlert)
@@ -340,7 +340,7 @@ describe('BaseNotifierLib class', () => {
         testNotifier.redAlert(message)
 
         pinoFake.error.callsFake(async () => {
-          const firstCallArgs = pinoFake.error.firstCall.args
+          const firstCallArgs = pinoFake.error.mock.calls[0]
 
           expect(firstCallArgs[0]).toBeInstanceOf(Error)
           expect(firstCallArgs[0].message).toEqual('CreateEmailRequest errored')

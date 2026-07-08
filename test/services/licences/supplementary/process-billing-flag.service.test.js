@@ -487,7 +487,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
       it('throws an error', async () => {
         await ProcessBillingFlagService(payload)
 
-        const args = notifierStub.omfg.firstCall.args
+        const args = notifierStub.omfg.mock.calls[0]
 
         expect(args[0]).toEqual('Supplementary Billing Flag failed')
         expect(args[1]).toEqual(payload)

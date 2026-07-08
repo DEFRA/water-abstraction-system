@@ -65,7 +65,7 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
     it('creates a notice for renewal invitations', async () => {
       await SendRenewalInvitations(days)
 
-      const [firstArg, secondArg, thirdArg] = CreateNoticeService.firstCall.args
+      const [firstArg, secondArg, thirdArg] = CreateNoticeService.mock.calls[0]
 
       // Argument 1: Notice type
       expect(firstArg).toMatchObject({
@@ -88,7 +88,7 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
     it('creates the notifications', async () => {
       await SendRenewalInvitations(days)
 
-      const [firstArg, secondArg, thirdArg] = CreateNotificationsService.firstCall.args
+      const [firstArg, secondArg, thirdArg] = CreateNotificationsService.mock.calls[0]
 
       // Argument 1: Notice type
       expect(firstArg).toMatchObject({
@@ -111,7 +111,7 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
     it('sends the notice', async () => {
       await SendRenewalInvitations(days)
 
-      const [firstArg, secondArg] = SendNoticeService.firstCall.args
+      const [firstArg, secondArg] = SendNoticeService.mock.calls[0]
 
       // Argument 1: The notice
       expect(firstArg).toMatchObject({ id: noticeId })

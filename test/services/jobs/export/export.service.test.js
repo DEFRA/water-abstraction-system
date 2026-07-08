@@ -37,7 +37,7 @@ describe('Export Service', () => {
   it('logs the time taken to export the db', async () => {
     await ExportService()
 
-    const args = notifierStub.omg.firstCall.args
+    const args = notifierStub.omg.mock.calls[0]
 
     expect(args[0]).toEqual('DB export complete')
     expect(args[1].timeTakenMs).toBeDefined()

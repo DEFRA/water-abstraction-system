@@ -114,7 +114,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
         await GenerateBillRunService(billRun)
 
-        const handlerArgs = HandleErroredBillRunService.firstCall.args
+        const handlerArgs = HandleErroredBillRunService.mock.calls[0]
 
         expect(handlerArgs[1]).toEqual(BillRunModel.errorCodes.failedToProcessChargeVersions)
       })
@@ -122,7 +122,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
       it('logs the error', async () => {
         await GenerateBillRunService(billRun)
 
-        const args = notifierStub.omfg.firstCall.args
+        const args = notifierStub.omfg.mock.calls[0]
 
         expect(args[0]).toEqual('Generate annual two-part tariff bill run failed')
         expect(args[1].billRun.id).toEqual(billRun.id)
@@ -146,7 +146,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
         it('calls HandleErroredBillRunService with appropriate error code', async () => {
           await GenerateBillRunService(billRun)
 
-          const handlerArgs = HandleErroredBillRunService.firstCall.args
+          const handlerArgs = HandleErroredBillRunService.mock.calls[0]
 
           expect(handlerArgs[1]).toEqual(BillRunModel.errorCodes.failedToPrepareTransactions)
         })
@@ -154,7 +154,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
         it('logs the error', async () => {
           await GenerateBillRunService(billRun)
 
-          const args = notifierStub.omfg.firstCall.args
+          const args = notifierStub.omfg.mock.calls[0]
 
           expect(args[0]).toEqual('Generate annual two-part tariff bill run failed')
           expect(args[1].billRun.id).toEqual(billRun.id)
@@ -179,7 +179,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
         await GenerateBillRunService(billRun)
 
-        const handlerArgs = HandleErroredBillRunService.firstCall.args
+        const handlerArgs = HandleErroredBillRunService.mock.calls[0]
 
         expect(handlerArgs[1]).toBeUndefined()
       })
@@ -187,7 +187,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
       it('logs the error', async () => {
         await GenerateBillRunService(billRun)
 
-        const args = notifierStub.omfg.firstCall.args
+        const args = notifierStub.omfg.mock.calls[0]
 
         expect(args[0]).toEqual('Generate annual two-part tariff bill run failed')
         expect(args[1].billRun.id).toEqual(billRun.id)

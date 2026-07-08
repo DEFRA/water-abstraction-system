@@ -47,7 +47,7 @@ describe('ReSP API Request', () => {
       it('calls the ReSP API with the required options', async () => {
         await RespRequest.getRequest(testRoute)
 
-        const requestArgs = BaseRequest.getRequest.firstCall.args
+        const requestArgs = BaseRequest.getRequest.mock.calls[0]
 
         expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
         expect(requestArgs[1].headers).toMatchObject({ authorization: 'Bearer ACCESS_TOKEN' })

@@ -83,7 +83,7 @@ describe('Jobs - Clean - Clean Expired Sessions service', () => {
     it('logs the error', async () => {
       await CleanExpiredSessionsService()
 
-      const errorLogArgs = notifierStub.omfg.firstCall.args
+      const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
       expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed')
       expect(errorLogArgs[1]).toEqual({ job: 'clean-expired-sessions' })

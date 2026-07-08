@@ -112,7 +112,7 @@ describe('Annual Process Bill Run service', () => {
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
         await ProcessBillRunService(billRun, [billingPeriod])
 
-        const handlerArgs = HandleErroredBillRunService.firstCall.args
+        const handlerArgs = HandleErroredBillRunService.mock.calls[0]
 
         expect(handlerArgs[1]).toEqual(BillRunModel.errorCodes.failedToProcessChargeVersions)
       })
@@ -120,7 +120,7 @@ describe('Annual Process Bill Run service', () => {
       it('logs the error', async () => {
         await ProcessBillRunService(billRun, [billingPeriod])
 
-        const args = notifierStub.omfg.firstCall.args
+        const args = notifierStub.omfg.mock.calls[0]
 
         expect(args[0]).toEqual('Bill run process errored')
         expect(args[1].billRun.id).toEqual(billRun.id)
@@ -145,7 +145,7 @@ describe('Annual Process Bill Run service', () => {
         it('calls HandleErroredBillRunService with appropriate error code', async () => {
           await ProcessBillRunService(billRun, [billingPeriod])
 
-          const handlerArgs = HandleErroredBillRunService.firstCall.args
+          const handlerArgs = HandleErroredBillRunService.mock.calls[0]
 
           expect(handlerArgs[1]).toEqual(BillRunModel.errorCodes.failedToPrepareTransactions)
         })
@@ -153,7 +153,7 @@ describe('Annual Process Bill Run service', () => {
         it('logs the error', async () => {
           await ProcessBillRunService(billRun, [billingPeriod])
 
-          const args = notifierStub.omfg.firstCall.args
+          const args = notifierStub.omfg.mock.calls[0]
 
           expect(args[0]).toEqual('Bill run process errored')
           expect(args[1].billRun.id).toEqual(billRun.id)
@@ -179,7 +179,7 @@ describe('Annual Process Bill Run service', () => {
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
         await ProcessBillRunService(billRun, [billingPeriod])
 
-        const handlerArgs = HandleErroredBillRunService.firstCall.args
+        const handlerArgs = HandleErroredBillRunService.mock.calls[0]
 
         expect(handlerArgs[1]).toBeUndefined()
       })
@@ -187,7 +187,7 @@ describe('Annual Process Bill Run service', () => {
       it('logs the error', async () => {
         await ProcessBillRunService(billRun, [billingPeriod])
 
-        const args = notifierStub.omfg.firstCall.args
+        const args = notifierStub.omfg.mock.calls[0]
 
         expect(args[0]).toEqual('Bill run process errored')
         expect(args[1].billRun.id).toEqual(billRun.id)

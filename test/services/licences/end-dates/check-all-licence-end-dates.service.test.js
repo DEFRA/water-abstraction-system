@@ -98,7 +98,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
     it('takes less time to complete the job than doing them one at a time', { timeout: 4000 }, async () => {
       await CheckAllLicenceEndDatesService()
 
-      const args = notifierStub.omg.firstCall.args
+      const args = notifierStub.omg.mock.calls[0]
 
       expect(args[1].timeTakenSs).toBeLessThan(3n)
     })
@@ -113,7 +113,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
     it('handles the error', async () => {
       await CheckAllLicenceEndDatesService()
 
-      const args = notifierStub.omfg.firstCall.args
+      const args = notifierStub.omfg.mock.calls[0]
 
       expect(args[0]).toEqual('Check all licence end dates failed')
       expect(args[1]).toBeNull()

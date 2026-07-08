@@ -73,7 +73,7 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
       await SendAlternateNoticeService(mainNotice)
 
       expect(SendLetterNotificationService).toHaveBeenCalledOnce()
-      expect(SendLetterNotificationService.firstCall.args).toEqual([
+      expect(SendLetterNotificationService.mock.calls[0]).toEqual([
         alternateNotification,
         alternateNotice.referenceCode
       ])
@@ -144,7 +144,7 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
     it('delegates to RenewalInvitationAlternateNoticeService', async () => {
       await SendAlternateNoticeService(mainNotice)
 
-      expect(RenewalInvitationAlternateNoticeService.go.calledOnce).toBe(true)
+      expect(RenewalInvitationAlternateNoticeService.go).toHaveBeenCalledOnce()
     })
 
     it('returns the sent alternate notice', async () => {

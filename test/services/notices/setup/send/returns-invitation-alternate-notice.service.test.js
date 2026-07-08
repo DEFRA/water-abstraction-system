@@ -55,7 +55,7 @@ describe('Notices - Setup - Send - Returns Invitation Alternate Notice service',
       await ReturnsInvitationAlternateNoticeService(mainNotice)
 
       expect(CreateAlternateReturnsNoticeService).toHaveBeenCalledOnce()
-      expect(CreateAlternateReturnsNoticeService.firstCall.args).toEqual([
+      expect(CreateAlternateReturnsNoticeService.mock.calls[0]).toEqual([
         mainNotice,
         failedNotification.licences,
         failedNotification.dueDate,

@@ -44,7 +44,7 @@ describe('Address Facade - Lookup Postcode request', () => {
     it('hits the correct endpoint', async () => {
       await LookupPostcodeRequest.send(postcode)
 
-      const requestArgs = AddressFacadeRequest.getRequest.firstCall.args
+      const requestArgs = AddressFacadeRequest.getRequest.mock.calls[0]
 
       expect(requestArgs[0]).toEqual(`address-service/v1/addresses/postcode?query-string=${postcode}&key=client1`)
     })

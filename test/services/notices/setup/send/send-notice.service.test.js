@@ -73,7 +73,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       it('logs the time taken', async () => {
         await SendNoticeService(notice, notifications)
 
-        const args = notifierStub.omg.firstCall.args
+        const args = notifierStub.omg.mock.calls[0]
 
         expect(args[0]).toEqual('Send notice complete')
         expect(args[1].timeTakenMs).toBeDefined()
@@ -141,7 +141,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       it('logs the time taken', async () => {
         await SendNoticeService(notice, notifications)
 
-        const args = notifierStub.omg.firstCall.args
+        const args = notifierStub.omg.mock.calls[0]
 
         expect(args[0]).toEqual('Send notice complete')
         expect(args[1].timeTakenMs).toBeDefined()
@@ -163,7 +163,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
     it('logs the error', async () => {
       await SendNoticeService(notice, notifications)
 
-      const args = notifierStub.omfg.firstCall.args
+      const args = notifierStub.omfg.mock.calls[0]
 
       expect(args[0]).toEqual('Send notice failed')
       expect(args[1].notice.id).toEqual(notice.id)

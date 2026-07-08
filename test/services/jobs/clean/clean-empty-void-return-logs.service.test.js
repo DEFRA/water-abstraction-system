@@ -103,7 +103,7 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
     it('logs the error', async () => {
       await CleanEmptyVoidReturnLogsService()
 
-      const errorLogArgs = notifierStub.omfg.firstCall.args
+      const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
       expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed')
       expect(errorLogArgs[1]).toEqual({ job: 'clean-empty-void-return-logs' })

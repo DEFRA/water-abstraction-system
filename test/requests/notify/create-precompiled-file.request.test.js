@@ -55,7 +55,7 @@ describe('Notify - Create precompiled file request', () => {
     it('calls NotifyRequest.postRequest with the correct arguments', async () => {
       await CreatePrecompiledFileRequest.send(content, referenceCode)
 
-      expect(NotifyRequest.postRequest.calledOnce).toBe(true)
+      expect(NotifyRequest.postRequest).toHaveBeenCalledOnce()
       expect(NotifyRequest.postRequest.mock.calls[0][0]).toEqual('v2/notifications/letter')
       expect(NotifyRequest.postRequest.mock.calls[0][1]).toEqual({ content: 'VGVzdCBkYXRh', reference: referenceCode })
     })
