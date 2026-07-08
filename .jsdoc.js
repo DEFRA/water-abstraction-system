@@ -1,6 +1,4 @@
-'use strict'
-
-module.exports = {
+export default {
   // Some of these are exposed via the command line. Specifying them here means we only need to pass this conf file
   // as an argument to jsdoc on the command line.
   opts: {
