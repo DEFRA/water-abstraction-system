@@ -17,25 +17,6 @@ import MarkdownFilter from '../views/filters/markdown.filter.js'
 
 import ServerConfig from '../../config/server.config.js'
 
-const ViewsPlugin = {
-  plugin: Vision,
-  options: {
-    engines: {
-      // The 'engine' is the file extension this applies to; in this case, .njk
-      njk: {
-        compile,
-        prepare
-      }
-    },
-    context,
-    // the root file path used to resolve and load the templates identified when calling h.view()
-    path: '../views',
-    // a base path used as prefix for `path:`
-    relativeTo: import.meta.dirname,
-    // Only enable caching of templates if we are running in production
-    isCached: ServerConfig.environment === 'production'
-  }
-}
 
 /**
  * The rendering function for the view engine
@@ -178,4 +159,22 @@ function _navigationLinks(auth) {
   return links
 }
 
-export default ViewsPlugin
+export default {
+  plugin: Vision,
+  options: {
+    engines: {
+      // The 'engine' is the file extension this applies to; in this case, .njk
+      njk: {
+        compile,
+        prepare
+      }
+    },
+    context,
+    // the root file path used to resolve and load the templates identified when calling h.view()
+    path: '../views',
+    // a base path used as prefix for `path:`
+    relativeTo: import.meta.dirname,
+    // Only enable caching of templates if we are running in production
+    isCached: ServerConfig.environment === 'production'
+  }
+}
