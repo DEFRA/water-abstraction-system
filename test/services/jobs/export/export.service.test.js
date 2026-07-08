@@ -26,9 +26,7 @@ describe('Export Service', () => {
 
     await ExportService()
 
-    const allArgs = SchemaExportService.getCalls().flatMap((call) => {
-      return call.args
-    })
+    const allArgs = SchemaExportService.default.mock.calls.flatMap((args) => args)
 
     expect(allArgs).toEqual(schemaNames)
   })

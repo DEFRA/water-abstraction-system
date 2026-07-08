@@ -4,7 +4,9 @@ import NotificationModel from '../../../app/models/notification.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 import { NOTIFY_TEMPLATES } from '../../../app/lib/notify-templates.lib.js'
 
-import { domains } from '../../../config/server.config.js'
+import ServerConfig from '../../../config/server.config.js'
+
+const { domains } = ServerConfig
 
 const ADDRESS = {
   address_line_1: 'ACME Services Ltd',

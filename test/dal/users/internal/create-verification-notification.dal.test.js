@@ -1,6 +1,8 @@
 // Test helpers
 import NotificationModel from '../../../../app/models/notification.model.js'
-import { domains } from '../../../../config/server.config.js'
+import ServerConfig from '../../../../config/server.config.js'
+
+const { domains } = ServerConfig
 import { generateUserName } from '../../../support/helpers/user.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
