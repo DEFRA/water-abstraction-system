@@ -7,7 +7,7 @@
  *
  * @returns {object} A stubbed Yar instance with flash, get, set, clear and touch methods
  */
-function build() {
+export default function build() {
   return {
     flash: vi.fn(),
     get: vi.fn(),
@@ -15,11 +15,4 @@ function build() {
     clear: vi.fn(),
     touch: vi.fn()
   }
-}
-
-export {
-  build
-}
-export default {
-  build
 }
