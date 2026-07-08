@@ -34,9 +34,7 @@ describe('Bill Runs - Cancel Bill Run service', () => {
         queryStub.mockReturnValueOnce({
           findById: vi.fn().mockReturnThis(),
           select: vi
-            .fn()
-            .withArgs('id', 'externalId', 'status')
-            .resolves({ id: billRunId, externalId, status: 'ready' })
+            .fn().mockResolvedValue({ id: billRunId, externalId, status: 'ready' })
         })
       })
 

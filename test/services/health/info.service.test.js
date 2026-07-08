@@ -254,7 +254,7 @@ describe('Health - Info service', () => {
       beforeEach(async () => {
         // In this tweak we tell the execStub to throw an exception when invoked. Not sure when this would happen
         // but we've coded for the eventuality so we need to test it
-        const execStub = vi.fn().withArgs('clamdscan --version').throwsException(new Error('ClamAV check went boom'))
+        const execStub = vi.fn().mockImplementation(() => { throw new Error('ClamAV check went boom') })
 
         vi.spyOn(util, 'promisify').mockReturnValue(execStub)
       })

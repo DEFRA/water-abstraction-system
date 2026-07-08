@@ -44,8 +44,8 @@ describe('Search - Submit Search service', () => {
     it('sets the session value and returns a redirect to the search results page', async () => {
       const result = await SubmitSearchService(auth, payload, yar)
 
-      expect(yarSpy.calledWithExactly('searchQuery', 'searchthis')).toBe(true)
-      expect(yarSpy.calledWithExactly('searchResultType', 'monitoringStation')).toBe(true)
+      expect(yarSpy).toHaveBeenCalledWith('searchQuery', 'searchthis')
+      expect(yarSpy).toHaveBeenCalledWith('searchResultType', 'monitoringStation')
       expect(result).toEqual({ redirect: '/system/search?page=1' })
     })
   })
@@ -110,7 +110,7 @@ describe('Search - Submit Search service', () => {
     it('sets the session value and returns a redirect to the search results page', async () => {
       const result = await SubmitSearchService(auth, payload, yar)
 
-      expect(yarSpy.calledWithExactly('searchQuery', 'searchthis')).toBe(true)
+      expect(yarSpy).toHaveBeenCalledWith('searchQuery', 'searchthis')
       expect(yarSpy.calledWithExactly('searchResultType', 'all')).toBe(true)
       expect(result).toEqual({ redirect: '/system/search?page=1' })
     })
