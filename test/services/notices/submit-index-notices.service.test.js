@@ -4,7 +4,7 @@
 import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
 
 // Things to stub
-import FetchNoticesService from '../../../app/services/notices/fetch-notices.service.js'
+import * as FetchNoticesService from '../../../app/services/notices/fetch-notices.service.js'
 import YarStub from '../../support/stubs/yar.stub.js'
 
 // Thing under test
@@ -211,8 +211,7 @@ describe('Notices - Submit Index Notices service', () => {
 
       describe('and the results are paginated', () => {
         beforeEach(() => {
-          vi.mock('../../../app/services/notices/fetch-notices.service.js')
-          FetchNoticesService.mockResolvedValue({ results, total: 70 })
+          vi.spyOn(FetchNoticesService, 'default').mockResolvedValue({ results, total: 70 })
         })
 
         it('returns the page data for the view, including any errors', async () => {
@@ -302,8 +301,7 @@ describe('Notices - Submit Index Notices service', () => {
 
       describe('and the results are not paginated', () => {
         beforeEach(() => {
-          vi.mock('../../../app/services/notices/fetch-notices.service.js')
-          FetchNoticesService.mockResolvedValue({ results, total: 1 })
+          vi.spyOn(FetchNoticesService, 'default').mockResolvedValue({ results, total: 1 })
         })
 
         it('returns the page data for the view, including any errors', async () => {

@@ -7,7 +7,7 @@ import { generateUUID } from '../../../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../../../../support/helpers/licence.helper.js'
 
 // Things we need to stub
-import FetchRenewalLicenceDal from '../../../../../app/dal/notices/setup/fetch-renewal-licence.dal.js'
+import * as FetchRenewalLicenceDal from '../../../../../app/dal/notices/setup/fetch-renewal-licence.dal.js'
 
 // Thing under test
 import ProcessRenewalsNoticeLicenceSubmission from '../../../../../app/services/notices/setup/renewal-notice/process-licence-submission.service.js'
@@ -36,8 +36,7 @@ describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Sub
 
     clock = vi.useFakeTimers({ now: new Date('2026-05-21' }))
 
-        vi.mock('../../../../../app/dal/notices/setup/fetch-renewal-licence.dal.js')
-    FetchRenewalLicenceDal.mockResolvedValue(licenceRenewal)
+    vi.spyOn(FetchRenewalLicenceDal, 'default').mockResolvedValue(licenceRenewal)
   })
 
   afterEach(() => {
@@ -81,7 +80,7 @@ describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Sub
           beforeEach(() => {
             payload = { licenceRef }
 
-            FetchRenewalLicenceDal.mockResolvedValue(undefined)
+            vi.spyOn(FetchRenewalLicenceDal, 'default').mockResolvedValue(undefined)
           })
 
           it('returns a validation error', async () => {

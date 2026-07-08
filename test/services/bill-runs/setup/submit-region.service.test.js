@@ -5,8 +5,8 @@ import * as RegionHelper from '../../../support/helpers/region.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchRegionsService from '../../../../app/services/bill-runs/setup/fetch-regions.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchRegionsService from '../../../../app/services/bill-runs/setup/fetch-regions.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitRegionService from '../../../../app/services/bill-runs/setup/submit-region.service.js'
@@ -26,11 +26,9 @@ describe('Bill Runs - Setup - Submit Region service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    vi.mock('../../../../app/services/bill-runs/setup/fetch-regions.service.js')
-    FetchRegionsService.mockResolvedValue(regions)
+    vi.spyOn(FetchRegionsService, 'default').mockResolvedValue(regions)
   })
 
   afterEach(() => {
@@ -51,7 +49,7 @@ describe('Bill Runs - Setup - Submit Region service', () => {
 
           session = SessionModelStub(sessionData)
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('saves the submitted region ID and its name and returns an object confirming setup is complete', async () => {
@@ -69,7 +67,7 @@ describe('Bill Runs - Setup - Submit Region service', () => {
 
           session = SessionModelStub(sessionData)
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('saves the submitted region ID and its name and returns an object confirming setup is not complete', async () => {
@@ -87,7 +85,7 @@ describe('Bill Runs - Setup - Submit Region service', () => {
 
           session = SessionModelStub(sessionData)
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('saves the submitted region ID and its name and returns an object confirming setup is not complete', async () => {
@@ -109,7 +107,7 @@ describe('Bill Runs - Setup - Submit Region service', () => {
 
           session = SessionModelStub(sessionData)
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {

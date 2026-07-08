@@ -1,7 +1,7 @@
 // Test framework dependencies
 
 // Things we need to stub
-import FetchBillRunService from '../../../app/services/bill-runs/fetch-bill-run.service.js'
+import * as FetchBillRunService from '../../../app/services/bill-runs/fetch-bill-run.service.js'
 
 // Thing under test
 import ViewBillRunService from '../../../app/services/bill-runs/view-bill-run.service.js'
@@ -20,8 +20,7 @@ describe('View Bill Run service', () => {
         fetchBillRunResult = _singleGroupBillRun()
         fetchBillRunResult.billRun.status = 'empty'
 
-        vi.mock('../../../app/services/bill-runs/fetch-bill-run.service.js')
-        FetchBillRunService.mockResolvedValue(fetchBillRunResult)
+        vi.spyOn(FetchBillRunService, 'default').mockResolvedValue(fetchBillRunResult)
       })
 
       it('will fetch the data and format it for use in the empty bill run page', async () => {
@@ -49,8 +48,7 @@ describe('View Bill Run service', () => {
         fetchBillRunResult = _singleGroupBillRun()
         fetchBillRunResult.billRun.status = 'error'
 
-        vi.mock('../../../app/services/bill-runs/fetch-bill-run.service.js')
-        FetchBillRunService.mockResolvedValue(fetchBillRunResult)
+        vi.spyOn(FetchBillRunService, 'default').mockResolvedValue(fetchBillRunResult)
       })
 
       it('will fetch the data and format it for use in the errored bill run page', async () => {
@@ -78,8 +76,7 @@ describe('View Bill Run service', () => {
       describe('and it is linked to bills from both groups (water companies and other abstractors)', () => {
         beforeEach(() => {
           fetchBillRunResult = _multipleGroupBillRun()
-          vi.mock('../../../app/services/bill-runs/fetch-bill-run.service.js')
-          FetchBillRunService.mockResolvedValue(fetchBillRunResult)
+          vi.spyOn(FetchBillRunService, 'default').mockResolvedValue(fetchBillRunResult)
         })
 
         it('will fetch the data and format it for use in the view bill run page', async () => {
@@ -150,8 +147,7 @@ describe('View Bill Run service', () => {
       describe('and it is linked to bills from a single group (water companies or other abstractors)', () => {
         beforeEach(() => {
           fetchBillRunResult = _singleGroupBillRun()
-          vi.mock('../../../app/services/bill-runs/fetch-bill-run.service.js')
-          FetchBillRunService.mockResolvedValue(fetchBillRunResult)
+          vi.spyOn(FetchBillRunService, 'default').mockResolvedValue(fetchBillRunResult)
         })
 
         it('will fetch the data and format it for use in the view bill run page', async () => {
@@ -208,8 +204,7 @@ describe('View Bill Run service', () => {
 
   describe('when a bill run with a matching ID does not exist', () => {
     beforeEach(() => {
-      vi.mock('../../../app/services/bill-runs/fetch-bill-run.service.js')
-      FetchBillRunService.mockResolvedValue({
+      vi.spyOn(FetchBillRunService, 'default').mockResolvedValue({
         billRun: undefined,
         billSummaries: []
       })

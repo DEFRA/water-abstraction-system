@@ -5,14 +5,14 @@ import http2 from 'node:http2'
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT } = http2.constants
 
 // Things we need to stub
-import ExportService from '../../app/services/jobs/export/export.service.js'
-import ProcessCleanService from '../../app/services/jobs/clean/process-clean.service.js'
-import ProcessCustomerFilesService from '../../app/services/jobs/customer-files/process-customer-files.service.js'
-import ProcessLicenceUpdatesService from '../../app/services/jobs/licence-updates/process-licence-updates.service.js'
-import ProcessNotificationStatusService from '../../app/services/jobs/notification-status/process-notification-status.service.js'
-import ProcessRenewalInvitationsService from '../../app/services/jobs/renewal-invitations/process-renewal-invitations.service.js'
-import ProcessReturnLogsService from '../../app/services/jobs/return-logs/process-return-logs.service.js'
-import ProcessTimeLimitedLicencesService from '../../app/services/jobs/time-limited/process-time-limited-licences.service.js'
+import * as ExportService from '../../app/services/jobs/export/export.service.js'
+import * as ProcessCleanService from '../../app/services/jobs/clean/process-clean.service.js'
+import * as ProcessCustomerFilesService from '../../app/services/jobs/customer-files/process-customer-files.service.js'
+import * as ProcessLicenceUpdatesService from '../../app/services/jobs/licence-updates/process-licence-updates.service.js'
+import * as ProcessNotificationStatusService from '../../app/services/jobs/notification-status/process-notification-status.service.js'
+import * as ProcessRenewalInvitationsService from '../../app/services/jobs/renewal-invitations/process-renewal-invitations.service.js'
+import * as ProcessReturnLogsService from '../../app/services/jobs/return-logs/process-return-logs.service.js'
+import * as ProcessTimeLimitedLicencesService from '../../app/services/jobs/time-limited/process-time-limited-licences.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -51,8 +51,7 @@ describe('Jobs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/jobs/clean/process-clean.service.js')
-          ProcessCleanService.mockResolvedValue()
+          vi.spyOn(ProcessCleanService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {
@@ -72,8 +71,7 @@ describe('Jobs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/jobs/customer-files/process-customer-files.service.js')
-          ProcessCustomerFilesService.mockResolvedValue()
+          vi.spyOn(ProcessCustomerFilesService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {
@@ -93,8 +91,7 @@ describe('Jobs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/jobs/export/export.service.js')
-          ExportService.mockResolvedValue()
+          vi.spyOn(ExportService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {
@@ -114,8 +111,7 @@ describe('Jobs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/jobs/licence-updates/process-licence-updates.service.js')
-          ProcessLicenceUpdatesService.mockResolvedValue()
+          vi.spyOn(ProcessLicenceUpdatesService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {
@@ -135,8 +131,7 @@ describe('Jobs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/jobs/notification-status/process-notification-status.service.js')
-          ProcessNotificationStatusService.mockResolvedValue()
+          vi.spyOn(ProcessNotificationStatusService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {
@@ -156,8 +151,7 @@ describe('Jobs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
-          ProcessTimeLimitedLicencesService.mockResolvedValue()
+          vi.spyOn(ProcessTimeLimitedLicencesService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {
@@ -177,8 +171,7 @@ describe('Jobs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/jobs/renewal-invitations/process-renewal-invitations.service.js')
-          ProcessRenewalInvitationsService.mockResolvedValue()
+          vi.spyOn(ProcessRenewalInvitationsService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {
@@ -205,8 +198,7 @@ describe('Jobs controller', () => {
 
         describe('when the request succeeds', () => {
           beforeEach(() => {
-            vi.mock('../../app/services/jobs/return-logs/process-return-logs.service.js')
-            ProcessReturnLogsService.mockResolvedValue()
+            vi.spyOn(ProcessReturnLogsService, 'default').mockResolvedValue()
           })
 
           it('returns a 204 response', async () => {
@@ -226,8 +218,7 @@ describe('Jobs controller', () => {
 
         describe('when the request succeeds', () => {
           beforeEach(() => {
-            vi.mock('../../app/services/jobs/return-logs/process-return-logs.service.js')
-            ProcessReturnLogsService.mockResolvedValue()
+            vi.spyOn(ProcessReturnLogsService, 'default').mockResolvedValue()
           })
 
           it('returns a 204 response', async () => {

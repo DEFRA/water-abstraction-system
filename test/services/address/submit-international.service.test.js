@@ -6,7 +6,7 @@ import { countryLookup } from '../../../app/presenters/address/base-address.pres
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitInternationalService from '../../../app/services/address/submit-international.service.js'
@@ -35,8 +35,7 @@ describe('Address - Submit International Service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {

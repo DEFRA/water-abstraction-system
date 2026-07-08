@@ -4,7 +4,7 @@
 import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import DeleteSessionDal from '../../../../../app/dal/delete-session.dal.js'
+import * as DeleteSessionDal from '../../../../../app/dal/delete-session.dal.js'
 
 // Thing under test
 import SubmitCancelService from '../../../../../app/services/users/internal/setup/submit-cancel.service.js'
@@ -21,8 +21,7 @@ describe('Users - Internal - Setup - Submit Cancel service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../../app/dal/delete-session.dal.js')
-    DeleteSessionDal.mockResolvedValue(session)
+    vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {

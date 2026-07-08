@@ -5,7 +5,7 @@ import WorkflowModel from '../../../../app/models/workflow.model.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchTimeLimitedLicencesService from '../../../../app/services/jobs/time-limited/fetch-time-limited-licences.service.js'
+import * as FetchTimeLimitedLicencesService from '../../../../app/services/jobs/time-limited/fetch-time-limited-licences.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
@@ -43,8 +43,7 @@ describe('Process Time Limited Licences service', () => {
         }
       ]
 
-      vi.mock('../../../../app/services/jobs/time-limited/fetch-time-limited-licences.service.js')
-      FetchTimeLimitedLicencesService.mockResolvedValue(fetchResults)
+      vi.spyOn(FetchTimeLimitedLicencesService, 'default').mockResolvedValue(fetchResults)
     })
 
     it('adds the licences to the workflow table', async () => {
@@ -89,8 +88,7 @@ describe('Process Time Limited Licences service', () => {
     beforeEach(() => {
       fetchResults = []
 
-      vi.mock('../../../../app/services/jobs/time-limited/fetch-time-limited-licences.service.js')
-      FetchTimeLimitedLicencesService.mockResolvedValue(fetchResults)
+      vi.spyOn(FetchTimeLimitedLicencesService, 'default').mockResolvedValue(fetchResults)
     })
 
     it('adds nothing to workflow', async () => {
@@ -118,8 +116,7 @@ describe('Process Time Limited Licences service', () => {
 
   describe('when there is an error', () => {
     beforeEach(() => {
-      vi.mock('../../../../app/services/jobs/time-limited/fetch-time-limited-licences.service.js')
-      FetchTimeLimitedLicencesService.mockRejectedValue()
+      vi.spyOn(FetchTimeLimitedLicencesService, 'default').mockRejectedValue()
     })
 
     it('records the error by calling "omfg()"', async () => {

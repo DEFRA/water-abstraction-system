@@ -3,9 +3,9 @@
 // Things we need to stub
 import BillingAccountModel from '../../../app/models/billing-account.model.js'
 import FetchBillService from '../../../app/services/bills/fetch-bill-service.js'
-import ViewBillPresenter from '../../../app/presenters/bills/view-bill.presenter.js'
-import ViewLicenceSummariesPresenter from '../../../app/presenters/bills/view-licence-summaries.presenter.js'
-import ViewBillLicencePresenter from '../../../app/presenters/bill-licences/view-bill-licence.presenter.js'
+import * as ViewBillPresenter from '../../../app/presenters/bills/view-bill.presenter.js'
+import * as ViewLicenceSummariesPresenter from '../../../app/presenters/bills/view-licence-summaries.presenter.js'
+import * as ViewBillLicencePresenter from '../../../app/presenters/bill-licences/view-bill-licence.presenter.js'
 
 // Thing under test
 import ViewBillService from '../../../app/services/bills/view-bill.service.js'
@@ -37,13 +37,11 @@ describe('View Bill service', () => {
           modify: vi.fn().mockResolvedValue()
         })
 
-        vi.mock('../../../app/presenters/bills/view-bill.presenter.js')
-        ViewBillPresenter.mockReturnValue({
+        vi.spyOn(ViewBillPresenter, 'default').mockReturnValue({
           billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
         })
 
-        vi.mock('../../../app/presenters/bills/view-licence-summaries.presenter.js')
-        ViewLicenceSummariesPresenter.mockReturnValue({
+        vi.spyOn(ViewLicenceSummariesPresenter, 'default').mockReturnValue({
           billLicences: [
             {
               id: 'e37320ba-10c8-4954-8bc4-6982e56ded41',
@@ -94,13 +92,11 @@ describe('View Bill service', () => {
           licenceSummaries: [{ id: '82c106dd-ee90-4566-b06b-a66d9e56b4b1' }]
         })
 
-        vi.mock('../../../app/presenters/bills/view-bill.presenter.js')
-        ViewBillPresenter.mockReturnValue({
+        vi.spyOn(ViewBillPresenter, 'default').mockReturnValue({
           billingAccountId: '34183769-40d8-4d23-8bbb-f28e4d00c737'
         })
 
-        vi.mock('../../../app/presenters/bill-licences/view-bill-licence.presenter.js')
-        ViewBillLicencePresenter.mockReturnValue({
+        vi.spyOn(ViewBillLicencePresenter, 'default').mockReturnValue({
           tableCaption: '2 transactions',
           transactions: [{ chargeType: 'standard' }, { chargeType: 'compensation' }]
         })

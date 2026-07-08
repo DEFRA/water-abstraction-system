@@ -6,7 +6,7 @@ import LicenceVersionPurposeModel from '../../../../../app/models/licence-versio
 
 // Things we need to stub
 import DetermineTwoPartTariffAgreementService from '../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'
-import FetchAbstractionDataService from '../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js'
+import * as FetchAbstractionDataService from '../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js'
 
 // Thing under test
 import GenerateFromAbstractionDataService from '../../../../../app/services/return-versions/setup/method/generate-from-abstraction-data.service.js'
@@ -29,8 +29,7 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
         abstractionData = _fetchAbstractionDataResult(licenceId)
         twoPartTariffAgreement = false
 
-        vi.mock('../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js')
-        FetchAbstractionDataService.mockResolvedValue(abstractionData)
+        vi.spyOn(FetchAbstractionDataService, 'default').mockResolvedValue(abstractionData)
         vi.mock(
           '../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'
         )
@@ -113,8 +112,7 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
         abstractionData = _fetchAbstractionDataResult(licenceId)
         twoPartTariffAgreement = true
 
-        vi.mock('../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js')
-        FetchAbstractionDataService.mockResolvedValue(abstractionData)
+        vi.spyOn(FetchAbstractionDataService, 'default').mockResolvedValue(abstractionData)
         vi.mock(
           '../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'
         )
@@ -141,8 +139,7 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
         abstractionData.licenceVersions[0].licenceVersionPurposes[1].purpose.twoPartTariff = true
         twoPartTariffAgreement = false
 
-        vi.mock('../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js')
-        FetchAbstractionDataService.mockResolvedValue(abstractionData)
+        vi.spyOn(FetchAbstractionDataService, 'default').mockResolvedValue(abstractionData)
         vi.mock(
           '../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'
         )
@@ -164,8 +161,7 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
         abstractionData.waterUndertaker = true
         twoPartTariffAgreement = false
 
-        vi.mock('../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js')
-        FetchAbstractionDataService.mockResolvedValue(abstractionData)
+        vi.spyOn(FetchAbstractionDataService, 'default').mockResolvedValue(abstractionData)
         vi.mock(
           '../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'
         )

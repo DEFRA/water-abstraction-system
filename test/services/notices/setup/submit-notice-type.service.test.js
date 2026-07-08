@@ -5,7 +5,7 @@ import SessionModelStub from '../../../support/stubs/session.stub.js'
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitNoticeTypeService from '../../../../app/services/notices/setup/submit-notice-type.service.js'
@@ -29,8 +29,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     yarStub = YarStub()
   })
@@ -67,7 +66,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
             noticeType: 'test'
           })
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('redirects to the licence page', async () => {
@@ -104,7 +103,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
             checkPageVisited: true
           })
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('does not update the session "checkPageVisited" flag', async () => {
@@ -131,7 +130,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
 
           session = SessionModelStub(sessionData)
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('returns a redirect to the "/check-notice-type" page', async () => {
@@ -148,7 +147,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
 
           session = SessionModelStub(sessionData)
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('returns a redirect to the "/returns-period" page', async () => {
@@ -168,7 +167,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
 
           session = SessionModelStub(sessionData)
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('returns a redirect to the "/check-notice-type" page', async () => {
@@ -185,7 +184,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
 
           session = SessionModelStub(sessionData)
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('returns a redirect to the "licence" page', async () => {

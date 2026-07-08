@@ -5,9 +5,9 @@ import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import DeleteCompanyContactService from '../../../app/services/company-contacts/delete-company-contact.service.js'
-import FetchCompanyContactDal from '../../../app/dal/company-contacts/fetch-company-contact.dal.js'
-import FetchNotificationService from '../../../app/services/company-contacts/fetch-notification.service.js'
+import * as DeleteCompanyContactService from '../../../app/services/company-contacts/delete-company-contact.service.js'
+import * as FetchCompanyContactDal from '../../../app/dal/company-contacts/fetch-company-contact.dal.js'
+import * as FetchNotificationService from '../../../app/services/company-contacts/fetch-notification.service.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -21,10 +21,8 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
   beforeEach(() => {
     companyContact = CustomersFixtures.companyContact()
 
-    vi.mock('../../../app/services/company-contacts/delete-company-contact.service.js')
-    DeleteCompanyContactService.mockResolvedValue()
-    vi.mock('../../../app/dal/company-contacts/fetch-company-contact.dal.js')
-    FetchCompanyContactDal.mockResolvedValue(companyContact)
+    vi.spyOn(DeleteCompanyContactService, 'default').mockResolvedValue()
+    vi.spyOn(FetchCompanyContactDal, 'default').mockResolvedValue(companyContact)
 
     yarStub = YarStub()
   })
@@ -37,8 +35,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
     describe('and there are notifications', () => {
       beforeEach(() => {
         notification = { id: generateUUID() }
-        vi.mock('../../../app/services/company-contacts/fetch-notification.service.js')
-        FetchNotificationService.mockResolvedValue(notification)
+        vi.spyOn(FetchNotificationService, 'default').mockResolvedValue(notification)
       })
 
       it('returns page data for the view', async () => {
@@ -72,8 +69,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
     describe('and there are no notifications', () => {
       beforeEach(() => {
         notification = undefined
-        vi.mock('../../../app/services/company-contacts/fetch-notification.service.js')
-        FetchNotificationService.mockResolvedValue(notification)
+        vi.spyOn(FetchNotificationService, 'default').mockResolvedValue(notification)
       })
 
       it('returns page data for the view', async () => {

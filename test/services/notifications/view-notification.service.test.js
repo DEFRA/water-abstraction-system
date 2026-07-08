@@ -7,7 +7,7 @@ import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchNotificationService from '../../../app/services/notifications/fetch-notification.service.js'
+import * as FetchNotificationService from '../../../app/services/notifications/fetch-notification.service.js'
 
 // Thing under test
 import ViewNotificationService from '../../../app/services/notifications/view-notification.service.js'
@@ -42,8 +42,7 @@ describe('Notifications - View Notification service', () => {
           licenceRef: generateLicenceRef()
         }
 
-        vi.mock('../../../app/services/notifications/fetch-notification.service.js')
-        FetchNotificationService.mockResolvedValue({ licence, notification })
+        vi.spyOn(FetchNotificationService, 'default').mockResolvedValue({ licence, notification })
       })
 
       it('returns the page data for the view', async () => {
@@ -72,8 +71,7 @@ describe('Notifications - View Notification service', () => {
 
     describe('from the view notice page', () => {
       beforeEach(() => {
-        vi.mock('../../../app/services/notifications/fetch-notification.service.js')
-        FetchNotificationService.mockResolvedValue({ licence: null, notification })
+        vi.spyOn(FetchNotificationService, 'default').mockResolvedValue({ licence: null, notification })
       })
 
       it('returns the page data for the view', async () => {
@@ -106,8 +104,7 @@ describe('Notifications - View Notification service', () => {
     describe('from the view return log page', () => {
       beforeEach(() => {
         returnLogId = generateUUID()
-        vi.mock('../../../app/services/notifications/fetch-notification.service.js')
-        FetchNotificationService.mockResolvedValue({ licence: null, notification })
+        vi.spyOn(FetchNotificationService, 'default').mockResolvedValue({ licence: null, notification })
       })
 
       it('returns the page data for the view', async () => {
@@ -140,8 +137,7 @@ describe('Notifications - View Notification service', () => {
     describe('from the view company contacts page', () => {
       beforeEach(() => {
         companyContactId = generateUUID()
-        vi.mock('../../../app/services/notifications/fetch-notification.service.js')
-        FetchNotificationService.mockResolvedValue({ licence: null, notification })
+        vi.spyOn(FetchNotificationService, 'default').mockResolvedValue({ licence: null, notification })
       })
 
       it('returns the page data for the view', async () => {

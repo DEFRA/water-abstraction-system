@@ -6,7 +6,7 @@ import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
 
 // Things we need to stub
 import * as LegacyCreateBillRunRequest from '../../../../app/requests/legacy/create-bill-run.request.js'
-import StartBillRunProcessService from '../../../../app/services/bill-runs/start-bill-run-process.service.js'
+import * as StartBillRunProcessService from '../../../../app/services/bill-runs/start-bill-run-process.service.js'
 
 // Thing under test
 import CreateService from '../../../../app/services/bill-runs/setup/create.service.js'
@@ -21,7 +21,6 @@ describe('Bill Runs - Setup - Create service', () => {
   let sessionData
   beforeEach(() => {
     legacyCreateBillRunRequestStub = vi.spyOn(LegacyCreateBillRunRequest, 'send').mockImplementation(() => {})
-    vi.mock('../../../../app/services/bill-runs/start-bill-run-process.service.js')
   })
 
   afterEach(() => {
@@ -57,7 +56,7 @@ describe('Bill Runs - Setup - Create service', () => {
     it('triggers only the "current" bill run engine', async () => {
       await CreateService(session, blockingResults, user)
 
-      expect(StartBillRunProcessService).toHaveBeenCalledWith(regionId, 'annual', 'carol.shaw@atari.com', 2025)
+      expect(StartBillRunProcessService.default).toHaveBeenCalledWith(regionId, 'annual', 'carol.shaw@atari.com', 2025)
       expect(legacyCreateBillRunRequestStub).not.toHaveBeenCalled()
     })
   })
@@ -74,7 +73,7 @@ describe('Bill Runs - Setup - Create service', () => {
     it('triggers only the "old" bill run engine', async () => {
       await CreateService(session, blockingResults, user)
 
-      expect(StartBillRunProcessService).not.toHaveBeenCalled()
+      expect(StartBillRunProcessService.default).not.toHaveBeenCalled()
       expect(legacyCreateBillRunRequestStub).toHaveBeenCalledWith('two_part_tariff', regionId, 2022, user, true)
     })
   })

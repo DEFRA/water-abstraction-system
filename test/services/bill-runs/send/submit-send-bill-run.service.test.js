@@ -4,8 +4,8 @@
 import { pause } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import SendBillRunService from '../../../../app/services/bill-runs/send/send-bill-run.service.js'
-import UpdateInvoiceNumbersService from '../../../../app/services/bill-runs/send/update-invoice-numbers.service.js'
+import * as SendBillRunService from '../../../../app/services/bill-runs/send/send-bill-run.service.js'
+import * as UpdateInvoiceNumbersService from '../../../../app/services/bill-runs/send/update-invoice-numbers.service.js'
 
 // Thing under test
 import SubmitSendBillRunService from '../../../../app/services/bill-runs/send/submit-send-bill-run.service.js'
@@ -14,10 +14,8 @@ describe('Bill Runs - Submit Cancel Bill Run service', () => {
   const billRunId = '800b8ff7-80e6-4855-a394-c79550115265'
   let updateDoneFake
   beforeEach(async () => {
-    vi.mock('../../../../app/services/bill-runs/send/send-bill-run.service.js')
     updateDoneFake = vi.fn()
-    vi.mock('../../../../app/services/bill-runs/send/update-invoice-numbers.service.js')
-    UpdateInvoiceNumbersService.mockImplementation(async () => {
+    vi.spyOn(UpdateInvoiceNumbersService, 'default').mockImplementation(async () => {
       await pause(500)
       updateDoneFake()
     })
@@ -32,14 +30,14 @@ describe('Bill Runs - Submit Cancel Bill Run service', () => {
       beforeEach(() => {
         const billRun = _billRun()
 
-        SendBillRunService.mockResolvedValue(billRun)
+        vi.spyOn(SendBillRunService, 'default').mockResolvedValue(billRun)
       })
 
       it('updates the bill run invoice numbers in the background and does not throw an error', async () => {
         await SubmitSendBillRunService(billRunId)
 
-        expect(SendBillRunService).toHaveBeenCalled()
-        expect(UpdateInvoiceNumbersService).toHaveBeenCalled()
+        expect(SendBillRunService.default).toHaveBeenCalled()
+        expect(UpdateInvoiceNumbersService.default).toHaveBeenCalled()
 
         // NOTE: We have faked the UpdateInvoiceNumbersService taking some time to complete so we can test that
         // SubmitSendBillRunService returns control back to us whilst the update is still in progress. We then pause and
@@ -57,13 +55,13 @@ describe('Bill Runs - Submit Cancel Bill Run service', () => {
     // force a rejection it would not represent anything that would ever happen in the app.
     describe('and the CancelBillRunService fails', () => {
       beforeEach(() => {
-        SendBillRunService.mockRejectedValue()
+        vi.spyOn(SendBillRunService, 'default').mockRejectedValue()
       })
 
       it('does not update the bill run and throws an error', async () => {
         await expect(SubmitSendBillRunService(billRunId)).rejects.toThrow()
 
-        expect(UpdateInvoiceNumbersService).not.toHaveBeenCalled()
+        expect(UpdateInvoiceNumbersService.default).not.toHaveBeenCalled()
       })
     })
   })

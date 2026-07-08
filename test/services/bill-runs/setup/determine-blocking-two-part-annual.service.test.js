@@ -5,7 +5,7 @@ import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
 
 // Things we need to stub
 import BillRunModel from '../../../../app/models/bill-run.model.js'
-import FetchLiveBillRunService from '../../../../app/services/bill-runs/setup/fetch-live-bill-run.service.js'
+import * as FetchLiveBillRunService from '../../../../app/services/bill-runs/setup/fetch-live-bill-run.service.js'
 
 // Thing under test
 import DetermineBlockingTwoPartAnnualService from '../../../../app/services/bill-runs/setup/determine-blocking-two-part-annual.service.js'
@@ -43,7 +43,6 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run servic
       limit: vi.fn().mockReturnThis()
     }
 
-    vi.mock('../../../../app/services/bill-runs/setup/fetch-live-bill-run.service.js')
   })
 
   afterEach(async () => {
@@ -67,7 +66,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run servic
       it('does not bother to check for live bill runs', async () => {
         await DetermineBlockingTwoPartAnnualService(regionId, year)
 
-        expect(FetchLiveBillRunService).not.toHaveBeenCalled()
+        expect(FetchLiveBillRunService.default).not.toHaveBeenCalled()
       })
     })
 
@@ -93,7 +92,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run servic
       it('does not bother to check for live bill runs', async () => {
         await DetermineBlockingTwoPartAnnualService(regionId, year)
 
-        expect(FetchLiveBillRunService).not.toHaveBeenCalled()
+        expect(FetchLiveBillRunService.default).not.toHaveBeenCalled()
       })
     })
   })
@@ -105,7 +104,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run servic
 
     describe('and no live bill run', () => {
       beforeEach(() => {
-        FetchLiveBillRunService.mockResolvedValue(null)
+        vi.spyOn(FetchLiveBillRunService, 'default').mockResolvedValue(null)
       })
 
       describe('for an SROC era bill run', () => {
@@ -135,7 +134,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run servic
         match.batchType = 'supplementary'
         match.status = 'ready'
 
-        FetchLiveBillRunService.mockResolvedValue(match)
+        vi.spyOn(FetchLiveBillRunService, 'default').mockResolvedValue(match)
       })
 
       it('returns the match and determines that neither engine can be triggered', async () => {

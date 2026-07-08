@@ -6,12 +6,12 @@ import BillRunError from '../../../../app/errors/bill-run.error.js'
 // Things we need to stub
 import BillRunModel from '../../../../app/models/bill-run.model.js'
 import * as ChargingModuleGenerateRequest from '../../../../app/requests/charging-module/generate-bill-run.request.js'
-import FetchBillingAccountsService from '../../../../app/services/bill-runs/tpt-supplementary/fetch-billing-accounts.service.js'
+import * as FetchBillingAccountsService from '../../../../app/services/bill-runs/tpt-supplementary/fetch-billing-accounts.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
-import HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
+import * as HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
 import * as LegacyRefreshBillRunRequest from '../../../../app/requests/legacy/refresh-bill-run.request.js'
-import ProcessBillingPeriodService from '../../../../app/services/bill-runs/tpt-supplementary/process-billing-period.service.js'
-import UnflagUnbilledSupplementaryLicencesService from '../../../../app/services/bill-runs/unflag-unbilled-supplementary-licences.service.js'
+import * as ProcessBillingPeriodService from '../../../../app/services/bill-runs/tpt-supplementary/process-billing-period.service.js'
+import * as UnflagUnbilledSupplementaryLicencesService from '../../../../app/services/bill-runs/unflag-unbilled-supplementary-licences.service.js'
 
 // Thing under test
 import GenerateBillRunService from '../../../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js'
@@ -35,8 +35,6 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
       patch: billRunPatchStub
     })
 
-    vi.mock('../../../../app/services/bill-runs/tpt-supplementary/process-billing-period.service.js')
-    vi.mock('../../../../app/services/bill-runs/unflag-unbilled-supplementary-licences.service.js')
 
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -55,14 +53,13 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
       // We stub FetchTwoPartTariffBillingAccountsService to return no results in all scenarios because it is the result
       // of ProcessBillingPeriodService which determines if there is anything to bill. We change the stub of that
       // service to dictate the scenario we're trying to test.
-      vi.mock('../../../../app/services/bill-runs/tpt-supplementary/fetch-billing-accounts.service.js')
-      FetchBillingAccountsService.mockResolvedValue([])
+      vi.spyOn(FetchBillingAccountsService, 'default').mockResolvedValue([])
     })
 
     describe('but there is nothing to bill', () => {
       beforeEach(async () => {
-        ProcessBillingPeriodService.mockResolvedValue(false)
-        UnflagUnbilledSupplementaryLicencesService.mockResolvedValue()
+        vi.spyOn(ProcessBillingPeriodService, 'default').mockResolvedValue(false)
+        vi.spyOn(UnflagUnbilledSupplementaryLicencesService, 'default').mockResolvedValue()
       })
 
       it('sets the bill run status to "empty"', async () => {
@@ -75,7 +72,7 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
       it('triggers the "unflag unbilled supplementary licences" service', async () => {
         await GenerateBillRunService(billRun)
 
-        expect(UnflagUnbilledSupplementaryLicencesService).toHaveBeenCalledOnce()
+        expect(UnflagUnbilledSupplementaryLicencesService.default).toHaveBeenCalledOnce()
       })
     })
 
@@ -87,8 +84,8 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
         chargingModuleGenerateRequestStub = vi.spyOn(ChargingModuleGenerateRequest, 'send').mockImplementation(() => {})
         legacyRefreshBillRunRequestStub = vi.spyOn(LegacyRefreshBillRunRequest, 'send').mockImplementation(() => {})
 
-        ProcessBillingPeriodService.mockResolvedValue(true)
-        UnflagUnbilledSupplementaryLicencesService.mockResolvedValue()
+        vi.spyOn(ProcessBillingPeriodService, 'default').mockResolvedValue(true)
+        vi.spyOn(UnflagUnbilledSupplementaryLicencesService, 'default').mockResolvedValue()
       })
 
       it('tells the charging module API to "generate" the bill run', async () => {
@@ -106,7 +103,7 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
       it('triggers the "unflag unbilled supplementary licences" service', async () => {
         await GenerateBillRunService(billRun)
 
-        expect(UnflagUnbilledSupplementaryLicencesService).toHaveBeenCalledOnce()
+        expect(UnflagUnbilledSupplementaryLicencesService.default).toHaveBeenCalledOnce()
       })
     })
   })
@@ -115,21 +112,19 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
     let thrownError
 
     beforeEach(async () => {
-      vi.mock('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
     })
 
     describe('because fetching the billing accounts fails', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        vi.mock('../../../../app/services/bill-runs/tpt-supplementary/fetch-billing-accounts.service.js')
-        FetchBillingAccountsService.mockRejectedValue(thrownError)
+        vi.spyOn(FetchBillingAccountsService, 'default').mockRejectedValue(thrownError)
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
         await GenerateBillRunService(billRun)
 
-        const handlerArgs = HandleErroredBillRunService.mock.calls[0]
+        const handlerArgs = HandleErroredBillRunService.default.mock.calls[0]
 
         expect(handlerArgs[1]).toEqual(BillRunModel.errorCodes.failedToProcessChargeVersions)
       })
@@ -153,15 +148,14 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
         beforeEach(() => {
           thrownError = new BillRunError(new Error(), BillRunModel.errorCodes.failedToPrepareTransactions)
 
-          vi.mock('../../../../app/services/bill-runs/tpt-supplementary/fetch-billing-accounts.service.js')
-          FetchBillingAccountsService.mockResolvedValue([])
-          ProcessBillingPeriodService.mockRejectedValue(thrownError)
+          vi.spyOn(FetchBillingAccountsService, 'default').mockResolvedValue([])
+          vi.spyOn(ProcessBillingPeriodService, 'default').mockRejectedValue(thrownError)
         })
 
         it('calls HandleErroredBillRunService with appropriate error code', async () => {
           await GenerateBillRunService(billRun)
 
-          const handlerArgs = HandleErroredBillRunService.mock.calls[0]
+          const handlerArgs = HandleErroredBillRunService.default.mock.calls[0]
 
           expect(handlerArgs[1]).toEqual(BillRunModel.errorCodes.failedToPrepareTransactions)
         })
@@ -185,16 +179,15 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        vi.mock('../../../../app/services/bill-runs/tpt-supplementary/fetch-billing-accounts.service.js')
-        FetchBillingAccountsService.mockResolvedValue([])
-        ProcessBillingPeriodService.mockResolvedValue(true)
+        vi.spyOn(FetchBillingAccountsService, 'default').mockResolvedValue([])
+        vi.spyOn(ProcessBillingPeriodService, 'default').mockResolvedValue(true)
         vi.spyOn(ChargingModuleGenerateRequest, 'send').mockRejectedValue(thrownError)
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
         await GenerateBillRunService(billRun)
 
-        const handlerArgs = HandleErroredBillRunService.mock.calls[0]
+        const handlerArgs = HandleErroredBillRunService.default.mock.calls[0]
 
         expect(handlerArgs[1]).toBeUndefined()
       })

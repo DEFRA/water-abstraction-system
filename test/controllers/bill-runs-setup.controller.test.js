@@ -6,18 +6,18 @@ const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-import CheckService from '../../app/services/bill-runs/setup/check.service.js'
-import InitiateSessionService from '../../app/services/bill-runs/setup/initiate-session.service.js'
-import NoLicencesService from '../../app/services/bill-runs/setup/no-licences.service.js'
-import RegionService from '../../app/services/bill-runs/setup/region.service.js'
-import SeasonService from '../../app/services/bill-runs/setup/season.service.js'
-import SubmitCheckService from '../../app/services/bill-runs/setup/submit-check.service.js'
-import SubmitRegionService from '../../app/services/bill-runs/setup/submit-region.service.js'
-import SubmitSeasonService from '../../app/services/bill-runs/setup/submit-season.service.js'
-import SubmitTypeService from '../../app/services/bill-runs/setup/submit-type.service.js'
-import SubmitYearService from '../../app/services/bill-runs/setup/submit-year.service.js'
-import TypeService from '../../app/services/bill-runs/setup/type.service.js'
-import YearService from '../../app/services/bill-runs/setup/year.service.js'
+import * as CheckService from '../../app/services/bill-runs/setup/check.service.js'
+import * as InitiateSessionService from '../../app/services/bill-runs/setup/initiate-session.service.js'
+import * as NoLicencesService from '../../app/services/bill-runs/setup/no-licences.service.js'
+import * as RegionService from '../../app/services/bill-runs/setup/region.service.js'
+import * as SeasonService from '../../app/services/bill-runs/setup/season.service.js'
+import * as SubmitCheckService from '../../app/services/bill-runs/setup/submit-check.service.js'
+import * as SubmitRegionService from '../../app/services/bill-runs/setup/submit-region.service.js'
+import * as SubmitSeasonService from '../../app/services/bill-runs/setup/submit-season.service.js'
+import * as SubmitTypeService from '../../app/services/bill-runs/setup/submit-type.service.js'
+import * as SubmitYearService from '../../app/services/bill-runs/setup/submit-year.service.js'
+import * as TypeService from '../../app/services/bill-runs/setup/type.service.js'
+import * as YearService from '../../app/services/bill-runs/setup/year.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -60,8 +60,7 @@ describe('Bill Runs Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/bill-runs/setup/initiate-session.service.js')
-          InitiateSessionService.mockResolvedValue(session)
+          vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
         })
 
         it('redirects to select bill run type page', async () => {
@@ -83,8 +82,7 @@ describe('Bill Runs Setup controller', () => {
       describe('when the request succeeds', () => {
         describe('but there is an existing bill run', () => {
           beforeEach(() => {
-            vi.mock('../../app/services/bill-runs/setup/check.service.js')
-            CheckService.mockResolvedValue({
+            vi.spyOn(CheckService, 'default').mockResolvedValue({
               backLink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region',
               billRunLink: '/system/bill-runs/c0608545-9870-4605-a407-5ff49f8a5182',
               billRunNumber: 12345,
@@ -112,8 +110,7 @@ describe('Bill Runs Setup controller', () => {
 
         describe('and there is no existing bill run', () => {
           beforeEach(() => {
-            vi.mock('../../app/services/bill-runs/setup/check.service.js')
-            CheckService.mockResolvedValue({
+            vi.spyOn(CheckService, 'default').mockResolvedValue({
               backLink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region',
               billRunLink: null,
               billRunNumber: null,
@@ -144,8 +141,7 @@ describe('Bill Runs Setup controller', () => {
       describe('when no one else has kicked off a blocking bill run whilst this one is in progress', () => {
         beforeEach(async () => {
           options = _postOptions('check')
-          vi.mock('../../app/services/bill-runs/setup/submit-check.service.js')
-          SubmitCheckService.mockResolvedValue({})
+          vi.spyOn(SubmitCheckService, 'default').mockResolvedValue({})
         })
 
         it('redirects to the bill runs page', async () => {
@@ -160,8 +156,7 @@ describe('Bill Runs Setup controller', () => {
         beforeEach(async () => {
           options = _postOptions('check')
 
-          vi.mock('../../app/services/bill-runs/setup/submit-check.service.js')
-          SubmitCheckService.mockResolvedValue({
+          vi.spyOn(SubmitCheckService, 'default').mockResolvedValue({
             error: true,
             backLink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region',
             billRunLink: '/system/bill-runs/c0608545-9870-4605-a407-5ff49f8a5182',
@@ -195,8 +190,7 @@ describe('Bill Runs Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions('no-licences')
 
-        vi.mock('../../app/services/bill-runs/setup/no-licences.service.js')
-        NoLicencesService.mockResolvedValue({
+        vi.spyOn(NoLicencesService, 'default').mockResolvedValue({
           pageTitle: 'There are no licences marked for two-part tariff supplementary billing in the Test region',
           sessionId: '173ad76b-8400-43fb-a8d6-323d318a511e'
         })
@@ -220,8 +214,7 @@ describe('Bill Runs Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions('region')
 
-        vi.mock('../../app/services/bill-runs/setup/region.service.js')
-        RegionService.mockResolvedValue({
+        vi.spyOn(RegionService, 'default').mockResolvedValue({
           pageTitle: 'Select the region',
           regions: [
             { id: 'e21b987c-7a5f-4eb3-a794-e4aae4a96a28', displayName: 'Riverlands' },
@@ -250,8 +243,7 @@ describe('Bill Runs Setup controller', () => {
 
         describe('and the bill run setup is complete', () => {
           beforeEach(async () => {
-            vi.mock('../../app/services/bill-runs/setup/submit-region.service.js')
-            SubmitRegionService.mockResolvedValue({ setupComplete: true })
+            vi.spyOn(SubmitRegionService, 'default').mockResolvedValue({ setupComplete: true })
           })
 
           it('redirects to the "check" page', async () => {
@@ -266,8 +258,7 @@ describe('Bill Runs Setup controller', () => {
 
         describe('and the bill run setup is not complete', () => {
           beforeEach(async () => {
-            vi.mock('../../app/services/bill-runs/setup/submit-region.service.js')
-            SubmitRegionService.mockResolvedValue({ setupComplete: false })
+            vi.spyOn(SubmitRegionService, 'default').mockResolvedValue({ setupComplete: false })
           })
 
           it('redirects to the "select financial year" page', async () => {
@@ -285,8 +276,7 @@ describe('Bill Runs Setup controller', () => {
         beforeEach(async () => {
           options = _postOptions('region', { region: '' })
 
-          vi.mock('../../app/services/bill-runs/setup/submit-region.service.js')
-          SubmitRegionService.mockResolvedValue({
+          vi.spyOn(SubmitRegionService, 'default').mockResolvedValue({
             error: { text: 'Select a region' },
             pageTitle: 'Select a region',
             regions: [{ id: 'e21b987c-7a5f-4eb3-a794-e4aae4a96a28', displayName: 'Riverlands' }],
@@ -311,8 +301,7 @@ describe('Bill Runs Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions('season')
 
-        vi.mock('../../app/services/bill-runs/setup/season.service.js')
-        SeasonService.mockResolvedValue({
+        vi.spyOn(SeasonService, 'default').mockResolvedValue({
           pageTitle: 'Select the season',
           sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
           selectedSeason: null
@@ -334,8 +323,7 @@ describe('Bill Runs Setup controller', () => {
         beforeEach(async () => {
           options = _postOptions('season', { season: 'summer' })
 
-          vi.mock('../../app/services/bill-runs/setup/submit-season.service.js')
-          SubmitSeasonService.mockResolvedValue({})
+          vi.spyOn(SubmitSeasonService, 'default').mockResolvedValue({})
         })
 
         it('redirects to the "check" page', async () => {
@@ -352,8 +340,7 @@ describe('Bill Runs Setup controller', () => {
         beforeEach(async () => {
           options = _postOptions('season', { type: '' })
 
-          vi.mock('../../app/services/bill-runs/setup/submit-season.service.js')
-          SubmitSeasonService.mockResolvedValue({
+          vi.spyOn(SubmitSeasonService, 'default').mockResolvedValue({
             error: { text: 'Select the season' },
             pageTitle: 'Select the season',
             sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
@@ -377,8 +364,7 @@ describe('Bill Runs Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions('type')
 
-        vi.mock('../../app/services/bill-runs/setup/type.service.js')
-        TypeService.mockResolvedValue({
+        vi.spyOn(TypeService, 'default').mockResolvedValue({
           pageTitle: 'Select the bill run type',
           sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
           selectedType: null
@@ -400,8 +386,7 @@ describe('Bill Runs Setup controller', () => {
         beforeEach(async () => {
           options = _postOptions('type', { type: 'annual' })
 
-          vi.mock('../../app/services/bill-runs/setup/submit-type.service.js')
-          SubmitTypeService.mockResolvedValue({})
+          vi.spyOn(SubmitTypeService, 'default').mockResolvedValue({})
         })
 
         it('redirects to select a region page', async () => {
@@ -418,8 +403,7 @@ describe('Bill Runs Setup controller', () => {
         beforeEach(async () => {
           options = _postOptions('type', { type: '' })
 
-          vi.mock('../../app/services/bill-runs/setup/submit-type.service.js')
-          SubmitTypeService.mockResolvedValue({
+          vi.spyOn(SubmitTypeService, 'default').mockResolvedValue({
             error: { text: 'Select the bill run type' },
             pageTitle: 'Select the bill run type',
             sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
@@ -446,8 +430,7 @@ describe('Bill Runs Setup controller', () => {
 
       describe('when the request succeeds with at least 1 year to display', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/bill-runs/setup/year.service.js')
-          YearService.mockResolvedValue({
+          vi.spyOn(YearService, 'default').mockResolvedValue({
             financialYearsData: [
               {
                 text: '2023 to 2024',
@@ -471,8 +454,7 @@ describe('Bill Runs Setup controller', () => {
 
       describe('when the request succeeds with no years to display', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/bill-runs/setup/year.service.js')
-          YearService.mockResolvedValue({
+          vi.spyOn(YearService, 'default').mockResolvedValue({
             financialYearsData: [],
             sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',
             selectedYear: null
@@ -498,8 +480,7 @@ describe('Bill Runs Setup controller', () => {
 
         describe('and the bill run setup is complete', () => {
           beforeEach(async () => {
-            vi.mock('../../app/services/bill-runs/setup/submit-year.service.js')
-            SubmitYearService.mockResolvedValue({ setupComplete: true })
+            vi.spyOn(SubmitYearService, 'default').mockResolvedValue({ setupComplete: true })
           })
 
           it('redirects to the "check"', async () => {
@@ -514,8 +495,7 @@ describe('Bill Runs Setup controller', () => {
 
         describe('and the bill run setup is not complete', () => {
           beforeEach(async () => {
-            vi.mock('../../app/services/bill-runs/setup/submit-year.service.js')
-            SubmitYearService.mockResolvedValue({ setupComplete: false })
+            vi.spyOn(SubmitYearService, 'default').mockResolvedValue({ setupComplete: false })
           })
 
           it('redirects to the select season', async () => {
@@ -533,8 +513,7 @@ describe('Bill Runs Setup controller', () => {
         beforeEach(async () => {
           options = _postOptions('year', { year: '' })
 
-          vi.mock('../../app/services/bill-runs/setup/submit-year.service.js')
-          SubmitYearService.mockResolvedValue({
+          vi.spyOn(SubmitYearService, 'default').mockResolvedValue({
             error: { text: 'Select a financial year' },
             pageTitle: 'Select the financial year',
             sessionId: 'e009b394-8405-4358-86af-1a9eb31298a5',

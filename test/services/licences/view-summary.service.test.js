@@ -6,8 +6,8 @@ import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
-import FetchSummaryService from '../../../app/services/licences/fetch-summary.service.js'
+import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import * as FetchSummaryService from '../../../app/services/licences/fetch-summary.service.js'
 
 // Thing under test
 import ViewSummaryService from '../../../app/services/licences/view-summary.service.js'
@@ -41,10 +41,8 @@ describe('Licences - View Summary service', () => {
   describe('when a licence with a matching ID exists', () => {
     describe('and it has no optional fields', () => {
       beforeEach(() => {
-        vi.mock('../../../app/services/licences/fetch-licence.service.js')
-        FetchLicenceService.mockResolvedValue(licence)
-        vi.mock('../../../app/services/licences/fetch-summary.service.js')
-        FetchSummaryService.mockResolvedValue(summary)
+        vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licence)
+        vi.spyOn(FetchSummaryService, 'default').mockResolvedValue(summary)
       })
 
       it('will return all the mandatory data and default values for use in the licence summary page', async () => {

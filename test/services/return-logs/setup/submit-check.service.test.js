@@ -10,10 +10,10 @@ import SessionModelStub from '../../../support/stubs/session.stub.js'
 import * as UserHelper from '../../../support/helpers/user.helper.js'
 
 // Things we need to stub
-import CreateReturnLinesService from '../../../../app/services/return-logs/setup/create-return-lines.service.js'
-import CreateReturnSubmissionService from '../../../../app/services/return-logs/setup/create-return-submission.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
-import GenerateReturnSubmissionMetadata from '../../../../app/services/return-logs/setup/generate-return-submission-metadata.service.js'
+import * as CreateReturnLinesService from '../../../../app/services/return-logs/setup/create-return-lines.service.js'
+import * as CreateReturnSubmissionService from '../../../../app/services/return-logs/setup/create-return-submission.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as GenerateReturnSubmissionMetadata from '../../../../app/services/return-logs/setup/generate-return-submission-metadata.service.js'
 
 // Thing under test
 import SubmitCheckService from '../../../../app/services/return-logs/setup/submit-check.service.js'
@@ -76,21 +76,17 @@ describe('Return Logs Setup - Submit Check service', () => {
       meterProvided: false
     }
 
-    vi.mock('../../../../app/services/return-logs/setup/generate-return-submission-metadata.service.js')
-    GenerateReturnSubmissionMetadata.mockReturnValue(mockGeneratedMetadata)
+    vi.spyOn(GenerateReturnSubmissionMetadata, 'default').mockReturnValue(mockGeneratedMetadata)
 
-    vi.mock('../../../../app/services/return-logs/setup/create-return-submission.service.js')
-    CreateReturnSubmissionService.mockResolvedValue({
+    vi.spyOn(CreateReturnSubmissionService, 'default').mockResolvedValue({
       id: mockNewReturnSubmissionId
     })
 
-    vi.mock('../../../../app/services/return-logs/setup/create-return-lines.service.js')
-    CreateReturnLinesService.mockResolvedValue([])
+    vi.spyOn(CreateReturnLinesService, 'default').mockResolvedValue([])
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
@@ -129,14 +125,14 @@ describe('Return Logs Setup - Submit Check service', () => {
     it('generates metadata for the return submission', async () => {
       await SubmitCheckService(session.id, user)
 
-      const callArgs = GenerateReturnSubmissionMetadata.mock.calls[0]
+      const callArgs = GenerateReturnSubmissionMetadata.default.mock.calls[0]
       expect(callArgs[0]).toBeInstanceOf(SessionModel)
     })
 
     it('calls CreateReturnSubmissionService with correct parameters', async () => {
       await SubmitCheckService(session.id, user)
 
-      const callArgs = CreateReturnSubmissionService.mock.calls[0]
+      const callArgs = CreateReturnSubmissionService.default.mock.calls[0]
       expect(callArgs[0]).toEqual(mockGeneratedMetadata)
       expect(callArgs[1]).toBeInstanceOf(SessionModel)
       expect(callArgs[3]).toEqual(user)
@@ -145,7 +141,7 @@ describe('Return Logs Setup - Submit Check service', () => {
     it('calls CreateReturnLinesService with correct parameters', async () => {
       await SubmitCheckService(session.id, user)
 
-      const callArgs = CreateReturnLinesService.mock.calls[0]
+      const callArgs = CreateReturnLinesService.default.mock.calls[0]
       expect(callArgs[0]).toEqual(mockNewReturnSubmissionId)
       expect(callArgs[1]).toBeInstanceOf(SessionModel)
     })
@@ -174,7 +170,7 @@ describe('Return Logs Setup - Submit Check service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('returns the original returnLogId', async () => {
@@ -202,7 +198,7 @@ describe('Return Logs Setup - Submit Check service', () => {
 
       session = SessionModelStub(sessionData)
 
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('returns the page data including a validation error', async () => {

@@ -6,7 +6,7 @@ import { licenceEnds } from '../../../../support/fixtures/licence.fixture.js'
 import { yesterday } from '../../../../support/general.js'
 
 // Things we need to stub
-import FetchMonitoringStationDetailsDal from '../../../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js'
+import * as FetchMonitoringStationDetailsDal from '../../../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js'
 
 // Thing under test
 import DetermineLicenceMonitoringStationsService from '../../../../../app/services/notices/setup/abstraction-alerts/determine-licence-monitoring-stations.service.js'
@@ -79,8 +79,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
       }
     ]
 
-    vi.mock('../../../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js')
-    FetchMonitoringStationDetailsDal.mockResolvedValue({
+    vi.spyOn(FetchMonitoringStationDetailsDal, 'default').mockResolvedValue({
       licenceMonitoringStations,
       monitoringStation
     })
@@ -170,7 +169,7 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
       licenceMonitoringStations[1].licence.revokedDate = yesterday()
       licenceMonitoringStations[2].licence.expiredDate = yesterday()
 
-      FetchMonitoringStationDetailsDal.mockResolvedValue({
+      vi.spyOn(FetchMonitoringStationDetailsDal, 'default').mockResolvedValue({
         licenceMonitoringStations,
         monitoringStation
       })

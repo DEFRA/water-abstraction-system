@@ -1,9 +1,9 @@
 // Test framework dependencies
 
 // Things to stub
-import CheckBusyBillRunsService from '../../../app/services/bill-runs/check-busy-bill-runs.service.js'
-import FetchBillRunsService from '../../../app/services/bill-runs/fetch-bill-runs.service.js'
-import FetchRegionsService from '../../../app/services/bill-runs/setup/fetch-regions.service.js'
+import * as CheckBusyBillRunsService from '../../../app/services/bill-runs/check-busy-bill-runs.service.js'
+import * as FetchBillRunsService from '../../../app/services/bill-runs/fetch-bill-runs.service.js'
+import * as FetchRegionsService from '../../../app/services/bill-runs/setup/fetch-regions.service.js'
 import YarStub from '../../support/stubs/yar.stub.js'
 
 // Thing under test
@@ -14,10 +14,8 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
   let yarStub
 
   beforeEach(() => {
-    vi.mock('../../../app/services/bill-runs/check-busy-bill-runs.service.js')
-    CheckBusyBillRunsService.mockResolvedValue('none')
-    vi.mock('../../../app/services/bill-runs/setup/fetch-regions.service.js')
-    FetchRegionsService.mockResolvedValue([
+    vi.spyOn(CheckBusyBillRunsService, 'default').mockResolvedValue('none')
+    vi.spyOn(FetchRegionsService, 'default').mockResolvedValue([
       { id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' },
       { id: 'fd3d1154-c83d-4580-bcd6-46bfc380f233', displayName: 'Midlands' }
     ])
@@ -231,8 +229,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
 
       describe('and the results are paginated', () => {
         beforeEach(() => {
-          vi.mock('../../../app/services/bill-runs/fetch-bill-runs.service.js')
-          FetchBillRunsService.mockResolvedValue({
+          vi.spyOn(FetchBillRunsService, 'default').mockResolvedValue({
             results: _fetchedBillRuns(),
             total: 70
           })
@@ -407,8 +404,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
 
       describe('and the results are not paginated', () => {
         beforeEach(() => {
-          vi.mock('../../../app/services/bill-runs/fetch-bill-runs.service.js')
-          FetchBillRunsService.mockResolvedValue({
+          vi.spyOn(FetchBillRunsService, 'default').mockResolvedValue({
             results: _fetchedBillRuns(),
             total: 2
           })

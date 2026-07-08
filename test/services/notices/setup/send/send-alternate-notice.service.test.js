@@ -7,9 +7,9 @@ import { generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Things we need to stub
 import NotificationModel from '../../../../../app/models/notification.model.js'
-import RenewalInvitationAlternateNoticeService from '../../../../../app/services/notices/setup/send/renewal-invitation-alternate-notice.service.js'
-import ReturnsInvitationAlternateNoticeService from '../../../../../app/services/notices/setup/send/returns-invitation-alternate-notice.service.js'
-import SendLetterNotificationService from '../../../../../app/services/notices/setup/send/send-letter-notification.service.js'
+import * as RenewalInvitationAlternateNoticeService from '../../../../../app/services/notices/setup/send/renewal-invitation-alternate-notice.service.js'
+import * as ReturnsInvitationAlternateNoticeService from '../../../../../app/services/notices/setup/send/returns-invitation-alternate-notice.service.js'
+import * as SendLetterNotificationService from '../../../../../app/services/notices/setup/send/send-letter-notification.service.js'
 
 // Thing under test
 import SendAlternateNoticeService from '../../../../../app/services/notices/setup/send/send-alternate-notice.service.js'
@@ -37,8 +37,7 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
 
     alternateNotification = NotificationsFixture.returnsInvitationLetter(alternateNotice)
 
-    vi.mock('../../../../../app/services/notices/setup/send/send-letter-notification.service.js')
-    SendLetterNotificationService.mockResolvedValue({
+    vi.spyOn(SendLetterNotificationService, 'default').mockResolvedValue({
       id: alternateNotification.id,
       notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
       notifyStatus: 'created',
@@ -61,8 +60,7 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
 
   describe('when the main notice has failed primary user email notifications', () => {
     beforeEach(() => {
-      vi.mock('../../../../../app/services/notices/setup/send/returns-invitation-alternate-notice.service.js')
-      ReturnsInvitationAlternateNoticeService.mockResolvedValue({
+      vi.spyOn(ReturnsInvitationAlternateNoticeService, 'default').mockResolvedValue({
         notice: alternateNotice,
         notificationIds: [failedNotificationId],
         notifications: [alternateNotification]
@@ -72,8 +70,8 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
     it('sends the alternate notifications to Notify and records the results', async () => {
       await SendAlternateNoticeService(mainNotice)
 
-      expect(SendLetterNotificationService).toHaveBeenCalledOnce()
-      expect(SendLetterNotificationService.mock.calls[0]).toEqual([
+      expect(SendLetterNotificationService.default).toHaveBeenCalledOnce()
+      expect(SendLetterNotificationService.default.mock.calls[0]).toEqual([
         alternateNotification,
         alternateNotice.referenceCode
       ])
@@ -106,14 +104,13 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
 
   describe('when the main notice has no failed primary user email notifications', () => {
     beforeEach(() => {
-      vi.mock('../../../../../app/services/notices/setup/send/returns-invitation-alternate-notice.service.js')
-      ReturnsInvitationAlternateNoticeService.mockResolvedValue(null)
+      vi.spyOn(ReturnsInvitationAlternateNoticeService, 'default').mockResolvedValue(null)
     })
 
     it('does not proceed with sending', async () => {
       await SendAlternateNoticeService(mainNotice)
 
-      expect(SendLetterNotificationService).not.toHaveBeenCalled()
+      expect(SendLetterNotificationService.default).not.toHaveBeenCalled()
     })
 
     it('returns null', async () => {
@@ -133,8 +130,7 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
 
       alternateNotification = NotificationsFixture.renewalInvitationLetter(alternateNotice)
 
-      vi.mock('../../../../../app/services/notices/setup/send/renewal-invitation-alternate-notice.service.js')
-      RenewalInvitationAlternateNoticeService.mockResolvedValue({
+      vi.spyOn(RenewalInvitationAlternateNoticeService, 'default').mockResolvedValue({
         notice: alternateNotice,
         notificationIds: [failedNotificationId],
         notifications: [alternateNotification]

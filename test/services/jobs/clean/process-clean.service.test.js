@@ -1,11 +1,11 @@
 // Test framework dependencies
 
 // Things we need to stub
-import CleanEmptyBillRunsService from '../../../../app/services/jobs/clean/clean-empty-bill-runs.service.js'
-import CleanEmptyVoidReturnLogsService from '../../../../app/services/jobs/clean/clean-empty-void-return-logs.service.js'
-import CleanExpiredSessionsService from '../../../../app/services/jobs/clean/clean-expired-sessions.service.js'
-import CleanIncompleteCompanyContactsService from '../../../../app/services/jobs/clean/clean-incomplete-company-contacts.service.js'
-import CleanOrphanedContactsService from '../../../../app/services/jobs/clean/clean-orphaned-contacts.service.js'
+import * as CleanEmptyBillRunsService from '../../../../app/services/jobs/clean/clean-empty-bill-runs.service.js'
+import * as CleanEmptyVoidReturnLogsService from '../../../../app/services/jobs/clean/clean-empty-void-return-logs.service.js'
+import * as CleanExpiredSessionsService from '../../../../app/services/jobs/clean/clean-expired-sessions.service.js'
+import * as CleanIncompleteCompanyContactsService from '../../../../app/services/jobs/clean/clean-incomplete-company-contacts.service.js'
+import * as CleanOrphanedContactsService from '../../../../app/services/jobs/clean/clean-orphaned-contacts.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
@@ -21,14 +21,10 @@ describe('Jobs - Clean - Process Clean service', () => {
 
   beforeEach(async () => {
     // We stub these services to always runs successfully
-    vi.mock('../../../../app/services/jobs/clean/clean-empty-void-return-logs.service.js')
-    CleanEmptyVoidReturnLogsService.mockResolvedValue(emptyVoidReturnLogsCount)
-    vi.mock('../../../../app/services/jobs/clean/clean-expired-sessions.service.js')
-    CleanExpiredSessionsService.mockResolvedValue(expiredSessionsCount)
-    vi.mock('../../../../app/services/jobs/clean/clean-incomplete-company-contacts.service.js')
-    CleanIncompleteCompanyContactsService.mockResolvedValue(incompleteCompanyContactsCount)
-    vi.mock('../../../../app/services/jobs/clean/clean-orphaned-contacts.service.js')
-    CleanOrphanedContactsService.mockResolvedValue(orphanedContactsCount)
+    vi.spyOn(CleanEmptyVoidReturnLogsService, 'default').mockResolvedValue(emptyVoidReturnLogsCount)
+    vi.spyOn(CleanExpiredSessionsService, 'default').mockResolvedValue(expiredSessionsCount)
+    vi.spyOn(CleanIncompleteCompanyContactsService, 'default').mockResolvedValue(incompleteCompanyContactsCount)
+    vi.spyOn(CleanOrphanedContactsService, 'default').mockResolvedValue(orphanedContactsCount)
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -45,18 +41,17 @@ describe('Jobs - Clean - Process Clean service', () => {
   describe('when all clean tasks succeed', () => {
     beforeEach(() => {
       // For these tests we have the first task complete successfully
-      vi.mock('../../../../app/services/jobs/clean/clean-empty-bill-runs.service.js')
-      CleanEmptyBillRunsService.mockResolvedValue(emptyBillRunsCount)
+      vi.spyOn(CleanEmptyBillRunsService, 'default').mockResolvedValue(emptyBillRunsCount)
     })
 
     it('cleans expired sessions', async () => {
       await ProcessCleanService()
 
-      expect(CleanEmptyBillRunsService).toHaveBeenCalled()
-      expect(CleanEmptyVoidReturnLogsService).toHaveBeenCalled()
-      expect(CleanExpiredSessionsService).toHaveBeenCalled()
-      expect(CleanIncompleteCompanyContactsService).toHaveBeenCalled()
-      expect(CleanOrphanedContactsService).toHaveBeenCalled()
+      expect(CleanEmptyBillRunsService.default).toHaveBeenCalled()
+      expect(CleanEmptyVoidReturnLogsService.default).toHaveBeenCalled()
+      expect(CleanExpiredSessionsService.default).toHaveBeenCalled()
+      expect(CleanIncompleteCompanyContactsService.default).toHaveBeenCalled()
+      expect(CleanOrphanedContactsService.default).toHaveBeenCalled()
     })
 
     it('logs the time taken in milliseconds and seconds, plus the count of rows deleted', async () => {
@@ -82,8 +77,7 @@ describe('Jobs - Clean - Process Clean service', () => {
   // try/catch. Hence, we have tests to confirm it is doing what we expect.
   describe('when a clean task errors', () => {
     beforeEach(() => {
-      vi.mock('../../../../app/services/jobs/clean/clean-empty-bill-runs.service.js')
-      CleanEmptyBillRunsService.mockRejectedValue()
+      vi.spyOn(CleanEmptyBillRunsService, 'default').mockRejectedValue()
     })
 
     it('does not throw an error', async () => {

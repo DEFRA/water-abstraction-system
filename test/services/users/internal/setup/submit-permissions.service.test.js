@@ -5,8 +5,8 @@ import SessionModelStub from '../../../../support/stubs/session.stub.js'
 import YarStub from '../../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
-import FetchUserDetailsDal from '../../../../../app/dal/users/internal/fetch-user-details.dal.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as FetchUserDetailsDal from '../../../../../app/dal/users/internal/fetch-user-details.dal.js'
 
 // Thing under test
 import SubmitPermissionsService from '../../../../../app/services/users/internal/setup/submit-permissions.service.js'
@@ -25,13 +25,11 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     const currentUserPermissions = 'billing_and_data'
 
-    vi.mock('../../../../../app/dal/users/internal/fetch-user-details.dal.js')
-    FetchUserDetailsDal.mockResolvedValue({
+    vi.spyOn(FetchUserDetailsDal, 'default').mockResolvedValue({
       $permissions: () => {
         return { key: currentUserPermissions }
       }
@@ -76,7 +74,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
             permission: 'basic'
           })
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         describe('and the "session" and "payload" value', () => {

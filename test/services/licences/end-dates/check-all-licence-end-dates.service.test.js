@@ -1,10 +1,10 @@
 // Test framework dependencies
 
 // Things we need to stub
-import FetchLicencesService from '../../../../app/services/licences/end-dates/fetch-licences.service.js'
+import * as FetchLicencesService from '../../../../app/services/licences/end-dates/fetch-licences.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 import LicencesConfig from '../../../../config/licences.config.js'
-import CheckLicenceEndDatesService from '../../../../app/services/licences/end-dates/check-licence-end-dates.service.js'
+import * as CheckLicenceEndDatesService from '../../../../app/services/licences/end-dates/check-licence-end-dates.service.js'
 import { generateUUID, pause } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
@@ -22,8 +22,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
     // run, might mean this value is different.
     vi.replaceProperty(LicencesConfig, 'endDates', { batchSize })
 
-    vi.mock('../../../../app/services/licences/end-dates/fetch-licences.service.js')
-    FetchLicencesService.mockResolvedValue(licences)
+    vi.spyOn(FetchLicencesService, 'default').mockResolvedValue(licences)
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -39,8 +38,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
 
   describe('when processing the licences', () => {
     beforeEach(() => {
-      vi.mock('../../../../app/services/licences/end-dates/check-licence-end-dates.service.js')
-      CheckLicenceEndDatesService.mockResolvedValue()
+      vi.spyOn(CheckLicenceEndDatesService, 'default').mockResolvedValue()
     })
 
     it('processes all licences with a current licence version in NALD and a matching record in WRLS', async () => {
@@ -89,8 +87,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
     beforeEach(() => {
       const delayInMilliseconds = 250 // 0.25 seconds
 
-      vi.mock('../../../../app/services/licences/end-dates/check-licence-end-dates.service.js')
-      CheckLicenceEndDatesService.mockImplementation(() => {
+      vi.spyOn(CheckLicenceEndDatesService, 'default').mockImplementation(() => {
         return pause(delayInMilliseconds)
       })
     })
@@ -106,8 +103,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
 
   describe('when there is an error', () => {
     beforeEach(() => {
-      vi.mock('../../../../app/services/licences/end-dates/check-licence-end-dates.service.js')
-      CheckLicenceEndDatesService.mockRejectedValue()
+      vi.spyOn(CheckLicenceEndDatesService, 'default').mockRejectedValue()
     })
 
     it('handles the error', async () => {

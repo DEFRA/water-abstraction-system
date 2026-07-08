@@ -4,7 +4,7 @@
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitAbstractionPeriodService from '../../../../app/services/licence-monitoring-station/setup/submit-abstraction-period.service.js'
@@ -29,8 +29,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {

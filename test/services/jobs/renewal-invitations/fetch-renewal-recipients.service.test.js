@@ -1,5 +1,5 @@
 // Test helpers
-import RecipientScenariosSeeder from '../../../support/seeders/recipient-scenarios.seeder.js'
+import * as RecipientScenariosSeeder from '../../../support/seeders/recipient-scenarios.seeder.js'
 
 // Thing under test
 import FetchRenewalRecipients from '../../../../app/services/jobs/renewal-invitations/fetch-renewal-recipients.service.js'

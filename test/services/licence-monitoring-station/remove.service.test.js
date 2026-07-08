@@ -1,7 +1,7 @@
 // Test framework dependencies
 
 // Things we need to stub
-import FetchLicenceMonitoringStationService from '../../../app/services/licence-monitoring-station/fetch-licence-monitoring-station.service.js'
+import * as FetchLicenceMonitoringStationService from '../../../app/services/licence-monitoring-station/fetch-licence-monitoring-station.service.js'
 
 // Thing under test
 import RemoveService from '../../../app/services/licence-monitoring-station/remove.service.js'
@@ -31,8 +31,7 @@ describe('Licence Monitoring Station - Remove service', () => {
       licenceVersionPurposeCondition: null
     }
 
-    vi.mock('../../../app/services/licence-monitoring-station/fetch-licence-monitoring-station.service.js')
-    FetchLicenceMonitoringStationService.mockResolvedValue(licenceMonitoringStation)
+    vi.spyOn(FetchLicenceMonitoringStationService, 'default').mockResolvedValue(licenceMonitoringStation)
   })
 
   afterEach(() => {

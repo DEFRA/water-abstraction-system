@@ -8,8 +8,8 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
 import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchCompanyContactsDal from '../../../app/dal/companies/fetch-company-crm-data.dal.js'
-import FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'
+import * as FetchCompanyContactsDal from '../../../app/dal/companies/fetch-company-crm-data.dal.js'
+import * as FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'
 
 // Thing under test
 import ViewContactsService from '../../../app/services/companies/view-contacts.service.js'
@@ -34,11 +34,9 @@ describe('Companies - View Contacts service', () => {
       }
     ]
 
-    vi.mock('../../../app/dal/companies/fetch-company.dal.js')
-    FetchCompanyDal.mockReturnValue(company)
+    vi.spyOn(FetchCompanyDal, 'default').mockReturnValue(company)
 
-    vi.mock('../../../app/dal/companies/fetch-company-crm-data.dal.js')
-    FetchCompanyContactsDal.mockReturnValue({
+    vi.spyOn(FetchCompanyContactsDal, 'default').mockReturnValue({
       contacts,
       totalNumber: contacts.length
     })

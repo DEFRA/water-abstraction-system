@@ -5,8 +5,8 @@ import http2 from 'node:http2'
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 // Things we need to stub
-import DatabaseHealthCheckService from '../../app/services/health/database-health-check.service.js'
-import InfoService from '../../app/services/health/info.service.js'
+import * as DatabaseHealthCheckService from '../../app/services/health/database-health-check.service.js'
+import * as InfoService from '../../app/services/health/info.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -64,8 +64,7 @@ describe('Health controller', () => {
 
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        vi.mock('../../app/services/health/database-health-check.service.js')
-        DatabaseHealthCheckService.mockResolvedValue()
+        vi.spyOn(DatabaseHealthCheckService, 'default').mockResolvedValue()
       })
 
       it('returns stats about each table', async () => {
@@ -84,8 +83,7 @@ describe('Health controller', () => {
 
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        vi.mock('../../app/services/health/info.service.js')
-        InfoService.mockResolvedValue({
+        vi.spyOn(InfoService, 'default').mockResolvedValue({
           virusScannerData: 'ClamAV 0.103.6/26738/Fri Dec 2 11:12:06 2022',
           redisConnectivityData: 'ERROR: Command failed: redis-server --version /bin/sh: 1: redis-server: not found',
           addressFacadeData: 'hola',

@@ -5,7 +5,7 @@ import * as UsersFixture from '../../support/fixtures/users.fixture.js'
 
 // Things to stub
 import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
-import FetchUsersDal from '../../../app/dal/users/fetch-users.dal.js'
+import * as FetchUsersDal from '../../../app/dal/users/fetch-users.dal.js'
 import YarStub from '../../support/stubs/yar.stub.js'
 
 // Thing under test
@@ -120,8 +120,7 @@ describe('Users - Submit Index Users service', () => {
 
       describe('and the results are paginated', () => {
         beforeEach(() => {
-          vi.mock('../../../app/dal/users/fetch-users.dal.js')
-          FetchUsersDal.mockResolvedValue({ results, total: 70 })
+          vi.spyOn(FetchUsersDal, 'default').mockResolvedValue({ results, total: 70 })
         })
 
         it('returns the page data for the view, including any errors', async () => {
@@ -201,8 +200,7 @@ describe('Users - Submit Index Users service', () => {
 
       describe('and the results are not paginated', () => {
         beforeEach(() => {
-          vi.mock('../../../app/dal/users/fetch-users.dal.js')
-          FetchUsersDal.mockResolvedValue({ results, total: 1 })
+          vi.spyOn(FetchUsersDal, 'default').mockResolvedValue({ results, total: 1 })
         })
 
         it('returns the page data for the view, including any errors', async () => {

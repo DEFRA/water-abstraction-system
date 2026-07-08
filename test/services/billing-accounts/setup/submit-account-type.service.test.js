@@ -5,7 +5,7 @@ import * as BillingAccountsFixture from '../../../support/fixtures/billing-accou
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitAccountTypeService from '../../../../app/services/billing-accounts/setup/submit-account-type.service.js'
@@ -22,8 +22,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
@@ -62,7 +61,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -94,7 +93,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -123,7 +122,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -180,7 +179,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -213,7 +212,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -242,7 +241,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -278,7 +277,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {

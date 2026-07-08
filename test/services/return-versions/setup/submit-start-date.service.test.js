@@ -5,10 +5,10 @@ import SessionModelStub from '../../../support/stubs/session.stub.js'
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Things we need to stub
-import DetermineRelevantLicenceVersionService from '../../../../app/services/return-versions/setup/determine-relevant-licence-version.service.js'
+import * as DetermineRelevantLicenceVersionService from '../../../../app/services/return-versions/setup/determine-relevant-licence-version.service.js'
 
 // Thing under test
 import SubmitStartDateService from '../../../../app/services/return-versions/setup/submit-start-date.service.js'
@@ -46,8 +46,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     yarStub = YarStub()
   })
@@ -71,8 +70,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
             id: 'c0e59520-3164-43ac-8f64-e1d38dfb90c4',
             startDate: new Date('2023-01-01')
           }
-          vi.mock('../../../../app/services/return-versions/setup/determine-relevant-licence-version.service.js')
-          DetermineRelevantLicenceVersionService.mockResolvedValue(relevantLicenceVersion)
+          vi.spyOn(DetermineRelevantLicenceVersionService, 'default').mockResolvedValue(relevantLicenceVersion)
         })
 
         it('returns a result that tells the controller to redirect to the next page in the journey', async () => {
@@ -144,7 +142,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
 
             session = SessionModelStub(sessionData)
 
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           describe('and the selected start date is before 1 April 2025', () => {
@@ -200,7 +198,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
 
           session = SessionModelStub(sessionData)
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         describe('and the start date is not changed (user just clicks continue)', () => {
@@ -208,8 +206,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
             payload = {
               startDateOptions: 'licenceStartDate'
             }
-            vi.mock('../../../../app/services/return-versions/setup/determine-relevant-licence-version.service.js')
-            DetermineRelevantLicenceVersionService.mockResolvedValue(relevantLicenceVersion)
+            vi.spyOn(DetermineRelevantLicenceVersionService, 'default').mockResolvedValue(relevantLicenceVersion)
           })
 
           it('returns a result that tells the controller to redirect back to the "check" page', async () => {
@@ -251,8 +248,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
               startDateYear: '2024'
             }
 
-            vi.mock('../../../../app/services/return-versions/setup/determine-relevant-licence-version.service.js')
-            DetermineRelevantLicenceVersionService.mockResolvedValue(relevantLicenceVersion)
+            vi.spyOn(DetermineRelevantLicenceVersionService, 'default').mockResolvedValue(relevantLicenceVersion)
           })
 
           it('returns a result that tells the controller to redirect back to the "check" page', async () => {
@@ -303,8 +299,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
               startDateYear: '2021'
             }
 
-            vi.mock('../../../../app/services/return-versions/setup/determine-relevant-licence-version.service.js')
-            DetermineRelevantLicenceVersionService.mockResolvedValue(newRelevantLicenceVersion)
+            vi.spyOn(DetermineRelevantLicenceVersionService, 'default').mockResolvedValue(newRelevantLicenceVersion)
           })
 
           it('returns a result that tells the controller to redirect to the next page in the journey', async () => {

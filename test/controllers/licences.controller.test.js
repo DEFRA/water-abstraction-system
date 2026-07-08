@@ -7,21 +7,21 @@ const { HTTP_STATUS_FOUND, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_S
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-import InitiateSessionService from '../../app/services/return-versions/setup/initiate-session.service.js'
-import LicenceSupplementaryProcessBillingFlagService from '../../app/services/licences/supplementary/process-billing-flag.service.js'
-import SubmitMarkForSupplementaryBillingService from '../../app/services/licences/supplementary/submit-mark-for-supplementary-billing.service.js'
-import ViewBillsService from '../../app/services/licences/view-bills.service.js'
-import ViewCommunicationsService from '../../app/services/licences/view-communications.service.js'
-import ViewConditionsService from '../../app/services/licences/view-conditions.service.js'
-import ViewContactDetailsService from '../../app/services/licences/view-contact-details.service.js'
-import ViewHistoryService from '../../app/services/licences/view-history.service.js'
-import ViewMarkForSupplementaryBillingService from '../../app/services/licences/supplementary/view-mark-for-supplementary-billing.service.js'
-import ViewMarkedForSupplementaryBillingService from '../../app/services/licences/supplementary/view-marked-for-supplementary-billing.service.js'
-import ViewPointsService from '../../app/services/licences/view-points.service.js'
-import ViewPurposesService from '../../app/services/licences/view-purposes.service.js'
-import ViewReturnsService from '../../app/services/licences/view-returns.service.js'
-import ViewSetUpService from '../../app/services/licences/view-set-up.service.js'
-import ViewSummaryService from '../../app/services/licences/view-summary.service.js'
+import * as InitiateSessionService from '../../app/services/return-versions/setup/initiate-session.service.js'
+import * as LicenceSupplementaryProcessBillingFlagService from '../../app/services/licences/supplementary/process-billing-flag.service.js'
+import * as SubmitMarkForSupplementaryBillingService from '../../app/services/licences/supplementary/submit-mark-for-supplementary-billing.service.js'
+import * as ViewBillsService from '../../app/services/licences/view-bills.service.js'
+import * as ViewCommunicationsService from '../../app/services/licences/view-communications.service.js'
+import * as ViewConditionsService from '../../app/services/licences/view-conditions.service.js'
+import * as ViewContactDetailsService from '../../app/services/licences/view-contact-details.service.js'
+import * as ViewHistoryService from '../../app/services/licences/view-history.service.js'
+import * as ViewMarkForSupplementaryBillingService from '../../app/services/licences/supplementary/view-mark-for-supplementary-billing.service.js'
+import * as ViewMarkedForSupplementaryBillingService from '../../app/services/licences/supplementary/view-marked-for-supplementary-billing.service.js'
+import * as ViewPointsService from '../../app/services/licences/view-points.service.js'
+import * as ViewPurposesService from '../../app/services/licences/view-purposes.service.js'
+import * as ViewReturnsService from '../../app/services/licences/view-returns.service.js'
+import * as ViewSetUpService from '../../app/services/licences/view-set-up.service.js'
+import * as ViewSummaryService from '../../app/services/licences/view-summary.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -67,8 +67,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/licences/view-bills.service.js')
-          ViewBillsService.mockResolvedValue(_viewBills())
+          vi.spyOn(ViewBillsService, 'default').mockResolvedValue(_viewBills())
         })
 
         it('returns the page successfully', async () => {
@@ -96,8 +95,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid and has conditions', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/licences/view-conditions.service.js')
-          ViewConditionsService.mockResolvedValue(_viewConditions())
+          vi.spyOn(ViewConditionsService, 'default').mockResolvedValue(_viewConditions())
         })
 
         it('returns the page successfully', async () => {
@@ -125,8 +123,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/licences/view-communications.service.js')
-          ViewCommunicationsService.mockResolvedValue(_viewCommunications())
+          vi.spyOn(ViewCommunicationsService, 'default').mockResolvedValue(_viewCommunications())
         })
 
         it('returns the page successfully', async () => {
@@ -154,8 +151,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid and has contacts', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/licences/view-contact-details.service.js')
-          ViewContactDetailsService.mockResolvedValue(_viewContactDetails())
+          vi.spyOn(ViewContactDetailsService, 'default').mockResolvedValue(_viewContactDetails())
         })
 
         it('returns the page successfully', async () => {
@@ -183,8 +179,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/licences/view-history.service.js')
-          ViewHistoryService.mockResolvedValue(_viewHistory())
+          vi.spyOn(ViewHistoryService, 'default').mockResolvedValue(_viewHistory())
         })
 
         it('returns the page successfully', async () => {
@@ -214,8 +209,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/return-versions/setup/initiate-session.service.js')
-          InitiateSessionService.mockResolvedValue(session)
+          vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
         })
 
         it('redirects to select return start date page', async () => {
@@ -229,8 +223,7 @@ describe('Licences controller', () => {
       describe('when a request is invalid', () => {
         describe('because the licence ID is unrecognised', () => {
           beforeEach(async () => {
-            vi.mock('../../app/services/return-versions/setup/initiate-session.service.js')
-            InitiateSessionService.mockRejectedValue(Boom.notFound())
+            vi.spyOn(InitiateSessionService, 'default').mockRejectedValue(Boom.notFound())
           })
 
           it('returns a 404 and page not found', async () => {
@@ -243,8 +236,7 @@ describe('Licences controller', () => {
 
         describe('because the initialise session service errors', () => {
           beforeEach(async () => {
-            vi.mock('../../app/services/return-versions/setup/initiate-session.service.js')
-            InitiateSessionService.mockRejectedValue()
+            vi.spyOn(InitiateSessionService, 'default').mockRejectedValue()
           })
 
           it('returns a 200 and there is a problem with the service page', async () => {
@@ -273,8 +265,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/licences/view-points.service.js')
-          ViewPointsService.mockResolvedValue(_viewPoints())
+          vi.spyOn(ViewPointsService, 'default').mockResolvedValue(_viewPoints())
         })
 
         it('returns the page successfully', async () => {
@@ -302,8 +293,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/licences/view-purposes.service.js')
-          ViewPurposesService.mockResolvedValue(_viewPurposes())
+          vi.spyOn(ViewPurposesService, 'default').mockResolvedValue(_viewPurposes())
         })
 
         it('returns the page successfully', async () => {
@@ -333,8 +323,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/return-versions/setup/initiate-session.service.js')
-          InitiateSessionService.mockResolvedValue(session)
+          vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
         })
 
         it('redirects to select return start date page', async () => {
@@ -348,8 +337,7 @@ describe('Licences controller', () => {
       describe('when a request is invalid', () => {
         describe('because the licence ID is unrecognised', () => {
           beforeEach(async () => {
-            vi.mock('../../app/services/return-versions/setup/initiate-session.service.js')
-            InitiateSessionService.mockRejectedValue(Boom.notFound())
+            vi.spyOn(InitiateSessionService, 'default').mockRejectedValue(Boom.notFound())
           })
 
           it('returns a 404 and page not found', async () => {
@@ -362,8 +350,7 @@ describe('Licences controller', () => {
 
         describe('because the initialise session service errors', () => {
           beforeEach(async () => {
-            vi.mock('../../app/services/return-versions/setup/initiate-session.service.js')
-            InitiateSessionService.mockRejectedValue()
+            vi.spyOn(InitiateSessionService, 'default').mockRejectedValue()
           })
 
           it('returns a 200 and there is a problem with the service page', async () => {
@@ -392,8 +379,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/licences/view-returns.service.js')
-          ViewReturnsService.mockResolvedValue(_viewReturns())
+          vi.spyOn(ViewReturnsService, 'default').mockResolvedValue(_viewReturns())
         })
 
         it('returns the page successfully', async () => {
@@ -421,8 +407,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/licences/view-set-up.service.js')
-          ViewSetUpService.mockResolvedValue(_viewSetUp())
+          vi.spyOn(ViewSetUpService, 'default').mockResolvedValue(_viewSetUp())
         })
 
         it('returns the page successfully', async () => {
@@ -450,8 +435,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/licences/view-summary.service.js')
-          ViewSummaryService.mockResolvedValue(_viewSummary())
+          vi.spyOn(ViewSummaryService, 'default').mockResolvedValue(_viewSummary())
         })
 
         it('returns the page successfully', async () => {
@@ -472,8 +456,7 @@ describe('Licences controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/licences/supplementary/process-billing-flag.service.js')
-          LicenceSupplementaryProcessBillingFlagService.mockResolvedValue()
+          vi.spyOn(LicenceSupplementaryProcessBillingFlagService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {
@@ -500,8 +483,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/licences/supplementary/view-mark-for-supplementary-billing.service.js')
-          ViewMarkForSupplementaryBillingService.mockResolvedValue(_markForSupplementaryBilling())
+          vi.spyOn(ViewMarkForSupplementaryBillingService, 'default').mockResolvedValue(_markForSupplementaryBilling())
         })
 
         it('returns the page successfully', async () => {
@@ -520,8 +502,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/licences/supplementary/submit-mark-for-supplementary-billing.service.js')
-          SubmitMarkForSupplementaryBillingService.mockResolvedValue({ error: null })
+          vi.spyOn(SubmitMarkForSupplementaryBillingService, 'default').mockResolvedValue({ error: null })
         })
 
         it('redirects to the marked for supplementary billing page', async () => {
@@ -536,8 +517,7 @@ describe('Licences controller', () => {
 
       describe('when a request is invalid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/licences/supplementary/submit-mark-for-supplementary-billing.service.js')
-          SubmitMarkForSupplementaryBillingService.mockResolvedValue({
+          vi.spyOn(SubmitMarkForSupplementaryBillingService, 'default').mockResolvedValue({
             pageTitle: 'Mark for the supplementary bill run',
             error: {
               errorList: [
@@ -587,8 +567,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/licences/supplementary/view-marked-for-supplementary-billing.service.js')
-          ViewMarkedForSupplementaryBillingService.mockResolvedValue({
+          vi.spyOn(ViewMarkedForSupplementaryBillingService, 'default').mockResolvedValue({
             licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
             licenceRef: '01/test',
             pageTitle: "You've marked this licence for the next supplementary bill run"

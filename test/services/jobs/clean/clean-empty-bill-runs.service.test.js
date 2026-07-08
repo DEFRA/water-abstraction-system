@@ -4,10 +4,10 @@
 import BillRunModel from '../../../../app/models/bill-run.model.js'
 
 // Things we need to stub
-import CancelBillRunService from '../../../../app/services/bill-runs/cancel/cancel-bill-run.service.js'
-import DeleteBillRunService from '../../../../app/services/bill-runs/cancel/delete-bill-run.service.js'
+import * as CancelBillRunService from '../../../../app/services/bill-runs/cancel/cancel-bill-run.service.js'
+import * as DeleteBillRunService from '../../../../app/services/bill-runs/cancel/delete-bill-run.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
-import UnassignBillRunToLicencesService from '../../../../app/services/bill-runs/unassign-bill-run-to-licences.service.js'
+import * as UnassignBillRunToLicencesService from '../../../../app/services/bill-runs/unassign-bill-run-to-licences.service.js'
 
 // Thing under test
 import CleanEmptyBillRunsService from '../../../../app/services/jobs/clean/clean-empty-bill-runs.service.js'
@@ -25,13 +25,10 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
     })
 
     // We'll control whether this one succeeds or not in the tests
-    vi.mock('../../../../app/services/bill-runs/cancel/cancel-bill-run.service.js')
 
     // These we stub to always resolve
-    vi.mock('../../../../app/services/bill-runs/cancel/delete-bill-run.service.js')
-    DeleteBillRunService.mockResolvedValue()
-    vi.mock('../../../../app/services/bill-runs/unassign-bill-run-to-licences.service.js')
-    UnassignBillRunToLicencesService.mockResolvedValue()
+    vi.spyOn(DeleteBillRunService, 'default').mockResolvedValue()
+    vi.spyOn(UnassignBillRunToLicencesService, 'default').mockResolvedValue()
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -53,10 +50,10 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
     it('does not attempt to delete any bill runs', async () => {
       await CleanEmptyBillRunsService()
 
-      expect(CancelBillRunService).not.toHaveBeenCalled()
+      expect(CancelBillRunService.default).not.toHaveBeenCalled()
 
-      expect(UnassignBillRunToLicencesService).not.toHaveBeenCalled()
-      expect(DeleteBillRunService).not.toHaveBeenCalled()
+      expect(UnassignBillRunToLicencesService.default).not.toHaveBeenCalled()
+      expect(DeleteBillRunService.default).not.toHaveBeenCalled()
     })
   })
 
@@ -119,10 +116,10 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
         expect(CancelBillRunService.firstCall).toHaveBeenCalledWith(emptyBillRuns[0].id)
         expect(CancelBillRunService.secondCall).toHaveBeenCalledWith(emptyBillRuns[1].id)
 
-        expect(UnassignBillRunToLicencesService).toHaveBeenCalledOnce()
+        expect(UnassignBillRunToLicencesService.default).toHaveBeenCalledOnce()
         expect(UnassignBillRunToLicencesService.firstCall).toHaveBeenCalledWith(emptyBillRuns[0].id)
 
-        expect(DeleteBillRunService).toHaveBeenCalledOnce()
+        expect(DeleteBillRunService.default).toHaveBeenCalledOnce()
 
         expect(result).toEqual(1)
       })
@@ -160,7 +157,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
       beforeEach(() => {
         emptyBillRunFetchStub.mockResolvedValue(emptyBillRuns)
 
-        CancelBillRunService.mockRejectedValue()
+        vi.spyOn(CancelBillRunService, 'default').mockRejectedValue()
       })
 
       it('does not throw an error', async () => {

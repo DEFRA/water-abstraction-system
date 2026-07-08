@@ -4,8 +4,8 @@
 import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Things we need to stub
-import FetchConditionsService from '../../../app/services/licences/fetch-conditions.service.js'
-import FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import * as FetchConditionsService from '../../../app/services/licences/fetch-conditions.service.js'
+import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
 
 // Thing under test
 import ViewConditionsService from '../../../app/services/licences/view-conditions.service.js'
@@ -36,11 +36,9 @@ describe('Licences - View Conditions service', () => {
       licence = ViewLicencesFixture.licence()
       conditions = [ViewLicencesFixture.condition()]
 
-      vi.mock('../../../app/services/licences/fetch-licence.service.js')
-      FetchLicenceService.mockReturnValue(licence)
+      vi.spyOn(FetchLicenceService, 'default').mockReturnValue(licence)
 
-      vi.mock('../../../app/services/licences/fetch-conditions.service.js')
-      FetchConditionsService.mockReturnValue(conditions)
+      vi.spyOn(FetchConditionsService, 'default').mockReturnValue(conditions)
     })
 
     it('correctly presents the data', async () => {
@@ -97,8 +95,7 @@ describe('Licences - View Conditions service', () => {
       licence = ViewLicencesFixture.licence()
       licence.licenceVersions = []
 
-      vi.mock('../../../app/services/licences/fetch-licence.service.js')
-      FetchLicenceService.mockReturnValue(licence)
+      vi.spyOn(FetchLicenceService, 'default').mockReturnValue(licence)
     })
 
     it('correctly presents the data', async () => {

@@ -1,12 +1,12 @@
 // Test framework dependencies
 
 // Things we need to stub
-import AssignBillRunToLicencesService from '../../../../app/services/bill-runs/assign-bill-run-to-licences.service.js'
+import * as AssignBillRunToLicencesService from '../../../../app/services/bill-runs/assign-bill-run-to-licences.service.js'
 import BillRunModel from '../../../../app/models/bill-run.model.js'
-import GenerateBillRunService from '../../../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js'
+import * as GenerateBillRunService from '../../../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
-import HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
-import MatchAndAllocateService from '../../../../app/services/bill-runs/match/match-and-allocate.service.js'
+import * as HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
+import * as MatchAndAllocateService from '../../../../app/services/bill-runs/match/match-and-allocate.service.js'
 
 // Thing under test
 import ProcessBillRunService from '../../../../app/services/bill-runs/tpt-supplementary/process-bill-run.service.js'
@@ -26,7 +26,6 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       patch: billRunPatchStub
     })
 
-    vi.mock('../../../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js')
 
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -42,15 +41,13 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
 
   describe('when the service is called', () => {
     beforeEach(() => {
-      vi.mock('../../../../app/services/bill-runs/assign-bill-run-to-licences.service.js')
-      AssignBillRunToLicencesService.mockResolvedValue()
+      vi.spyOn(AssignBillRunToLicencesService, 'default').mockResolvedValue()
     })
 
     describe('and no licences are matched and allocated', () => {
       beforeEach(() => {
-        vi.mock('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
-        MatchAndAllocateService.mockResolvedValue(false)
-        GenerateBillRunService.mockResolvedValue()
+        vi.spyOn(MatchAndAllocateService, 'default').mockResolvedValue(false)
+        vi.spyOn(GenerateBillRunService, 'default').mockResolvedValue()
       })
 
       it('sets the bill run status only to "processing"', async () => {
@@ -63,7 +60,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       it('skips to "generating" the bill run', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        expect(GenerateBillRunService).toHaveBeenCalledOnce()
+        expect(GenerateBillRunService.default).toHaveBeenCalledOnce()
       })
 
       it('logs the time taken', async () => {
@@ -84,8 +81,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
         // it is calling. As long as MatchAndAllocateService returns a 'licence', ProcessBillRunService will trigger the
         // work to happen. This is why for these tests it is not critical what we stub MatchAndAllocateService to
         // return, only that it returns something!
-        vi.mock('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
-        MatchAndAllocateService.mockResolvedValue(true)
+        vi.spyOn(MatchAndAllocateService, 'default').mockResolvedValue(true)
       })
 
       it('sets the bill run status first to "processing" and then to "review"', async () => {
@@ -99,7 +95,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       it('does not skip to "generating" the bill run', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        expect(GenerateBillRunService).not.toHaveBeenCalled()
+        expect(GenerateBillRunService.default).not.toHaveBeenCalled()
       })
 
       it('logs the time taken', async () => {
@@ -118,9 +114,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
   describe('when the service errors', () => {
     describe('because assigning the bill run to the licences fails', () => {
       beforeEach(() => {
-        vi.mock('../../../../app/services/bill-runs/assign-bill-run-to-licences.service.js')
-        AssignBillRunToLicencesService.mockRejectedValue()
-        vi.mock('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
+        vi.spyOn(AssignBillRunToLicencesService, 'default').mockRejectedValue()
       })
 
       it('calls HandleErroredBillRunService', async () => {
@@ -142,11 +136,8 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
 
     describe('because matching and allocating fails', () => {
       beforeEach(() => {
-        vi.mock('../../../../app/services/bill-runs/assign-bill-run-to-licences.service.js')
-        AssignBillRunToLicencesService.mockResolvedValue()
-        vi.mock('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
-        MatchAndAllocateService.mockRejectedValue()
-        vi.mock('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
+        vi.spyOn(AssignBillRunToLicencesService, 'default').mockResolvedValue()
+        vi.spyOn(MatchAndAllocateService, 'default').mockRejectedValue()
       })
 
       it('calls HandleErroredBillRunService', async () => {

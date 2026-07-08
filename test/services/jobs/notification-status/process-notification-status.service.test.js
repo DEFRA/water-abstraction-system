@@ -5,11 +5,11 @@ import * as NoticesFixture from '../../../support/fixtures/notices.fixture.js'
 import * as NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
 
 // Things we need to stub
-import CheckNotificationStatusService from '../../../../app/services/notifications/check-notification-status.service.js'
-import FetchNotificationsService from '../../../../app/services/jobs/notification-status/fetch-notifications.service.js'
+import * as CheckNotificationStatusService from '../../../../app/services/notifications/check-notification-status.service.js'
+import * as FetchNotificationsService from '../../../../app/services/jobs/notification-status/fetch-notifications.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
-import SendAlternateNoticesService from '../../../../app/services/jobs/notification-status/send-alternate-notices.service.js'
-import UpdateNoticeService from '../../../../app/services/notices/update-notice.service.js'
+import * as SendAlternateNoticesService from '../../../../app/services/jobs/notification-status/send-alternate-notices.service.js'
+import * as UpdateNoticeService from '../../../../app/services/notices/update-notice.service.js'
 
 // Thing under test
 import ProcessNotificationStatusService from '../../../../app/services/jobs/notification-status/process-notification-status.service.js'
@@ -41,13 +41,10 @@ describe('Job - Notifications - Process Notification Status service', () => {
     notification = NotificationsFixture.abstractionAlertEmail(noticeB)
     notifications.push(_transformNotificationToResult(notification))
 
-    vi.mock('../../../../app/services/jobs/notification-status/fetch-notifications.service.js')
-    FetchNotificationsService.mockResolvedValue(notifications)
+    vi.spyOn(FetchNotificationsService, 'default').mockResolvedValue(notifications)
 
-    vi.mock('../../../../app/services/notices/update-notice.service.js')
-    UpdateNoticeService.mockResolvedValue()
-    vi.mock('../../../../app/services/jobs/notification-status/send-alternate-notices.service.js')
-    SendAlternateNoticesService.mockResolvedValue()
+    vi.spyOn(UpdateNoticeService, 'default').mockResolvedValue()
+    vi.spyOn(SendAlternateNoticesService, 'default').mockResolvedValue()
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -63,22 +60,21 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
   describe('when the notification status check does not error', () => {
     beforeEach(() => {
-      vi.mock('../../../../app/services/notifications/check-notification-status.service.js')
-      CheckNotificationStatusService.mockResolvedValue()
+      vi.spyOn(CheckNotificationStatusService, 'default').mockResolvedValue()
     })
 
     it('updates the linked notices overall status and counts', async () => {
       await ProcessNotificationStatusService()
 
-      expect(UpdateNoticeService).toHaveBeenCalled()
-      expect(UpdateNoticeService.mock.calls[0][0]).toEqual([noticeA.id, noticeB.id])
+      expect(UpdateNoticeService.default).toHaveBeenCalled()
+      expect(UpdateNoticeService.default.mock.calls[0][0]).toEqual([noticeA.id, noticeB.id])
     })
 
     it('checks whether any alternate notices need to be sent', async () => {
       await ProcessNotificationStatusService()
 
-      expect(SendAlternateNoticesService).toHaveBeenCalled()
-      expect(SendAlternateNoticesService.mock.calls[0][0]).toEqual(notifications)
+      expect(SendAlternateNoticesService.default).toHaveBeenCalled()
+      expect(SendAlternateNoticesService.default.mock.calls[0][0]).toEqual(notifications)
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
@@ -95,14 +91,13 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
   describe('when the notification status check errors', () => {
     beforeEach(() => {
-      vi.mock('../../../../app/services/notifications/check-notification-status.service.js')
-      CheckNotificationStatusService.mockRejectedValue()
+      vi.spyOn(CheckNotificationStatusService, 'default').mockRejectedValue()
     })
 
     it('does not update the linked notices', async () => {
       await ProcessNotificationStatusService()
 
-      expect(UpdateNoticeService).not.toHaveBeenCalled()
+      expect(UpdateNoticeService.default).not.toHaveBeenCalled()
     })
 
     it('records the error by calling "omfg()"', async () => {

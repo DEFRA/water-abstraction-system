@@ -4,7 +4,7 @@
 import SessionModel from '../../../../../app/models/session.model.js'
 
 // Things we need to stub
-import FetchUserDetailsDal from '../../../../../app/dal/users/internal/fetch-user-details.dal.js'
+import * as FetchUserDetailsDal from '../../../../../app/dal/users/internal/fetch-user-details.dal.js'
 
 // Thing under test
 import InitiateEditSessionService from '../../../../../app/services/users/internal/setup/initiate-edit-session.service.js'
@@ -30,8 +30,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
           username: 'bob.bobbles@environment-agency.gov.uk'
         }
 
-        vi.mock('../../../../../app/dal/users/internal/fetch-user-details.dal.js')
-        FetchUserDetailsDal.mockResolvedValue(user)
+        vi.spyOn(FetchUserDetailsDal, 'default').mockResolvedValue(user)
       })
 
       it('returns the session Id and a formatted data object', async () => {
@@ -85,8 +84,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
           username: 'bob.bobbles@environment-agency.gov.uk'
         }
 
-        vi.mock('../../../../../app/dal/users/internal/fetch-user-details.dal.js')
-        FetchUserDetailsDal.mockResolvedValue(user)
+        vi.spyOn(FetchUserDetailsDal, 'default').mockResolvedValue(user)
       })
 
       it('returns the session Id and a formatted data object', async () => {
@@ -140,8 +138,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
           username: 'bob.bobbles@environment-agency.gov.uk'
         }
 
-        vi.mock('../../../../../app/dal/users/internal/fetch-user-details.dal.js')
-        FetchUserDetailsDal.mockResolvedValue(user)
+        vi.spyOn(FetchUserDetailsDal, 'default').mockResolvedValue(user)
       })
 
       it('returns the users access status of "enabled"', async () => {
@@ -162,8 +159,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
           username: 'bob.bobbles@environment-agency.gov.uk'
         }
 
-        vi.mock('../../../../../app/dal/users/internal/fetch-user-details.dal.js')
-        FetchUserDetailsDal.mockResolvedValue(user)
+        vi.spyOn(FetchUserDetailsDal, 'default').mockResolvedValue(user)
       })
 
       it('returns the users access status of "disabled"', async () => {

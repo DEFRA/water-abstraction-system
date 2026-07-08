@@ -2,9 +2,9 @@
 
 // Test helpers
 import * as BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
-import CRMContactsSeeder from '../../support/seeders/crm-contacts.seeder.js'
+import * as CRMContactsSeeder from '../../support/seeders/crm-contacts.seeder.js'
 import * as CompanyHelper from '../../support/helpers/company.helper.js'
-import EmptyLicenceSeeder from '../../support/seeders/empty-licence.seeder.js'
+import * as EmptyLicenceSeeder from '../../support/seeders/empty-licence.seeder.js'
 import * as MonitoringStationHelper from '../../support/helpers/monitoring-station.helper.js'
 import * as RegionHelper from '../../support/helpers/region.helper.js'
 import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'

@@ -1,12 +1,12 @@
 // Test framework dependencies
 
 // Test helpers
-import FetchPointsService from '../../../../../app/services/return-versions/setup/fetch-points.service.js'
+import * as FetchPointsService from '../../../../../app/services/return-versions/setup/fetch-points.service.js'
 import SessionModelStub from '../../../../support/stubs/session.stub.js'
 import YarStub from '../../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import CheckService from '../../../../../app/services/return-versions/setup/check/check.service.js'
@@ -17,8 +17,7 @@ describe('Return Versions - Setup - Check service', () => {
   let yarStub
 
   beforeEach(() => {
-    vi.mock('../../../../../app/services/return-versions/setup/fetch-points.service.js')
-    FetchPointsService.mockResolvedValue([])
+    vi.spyOn(FetchPointsService, 'default').mockResolvedValue([])
 
     sessionData = {
       checkPageVisited: false,
@@ -62,8 +61,7 @@ describe('Return Versions - Setup - Check service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     yarStub = YarStub()
     yarStub.flash.mockReturnValue([])

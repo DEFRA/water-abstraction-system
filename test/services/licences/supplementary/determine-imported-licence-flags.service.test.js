@@ -1,7 +1,7 @@
 // Test framework dependencies
 
 // Test helpers
-import FetchExistingLicenceDetailsService from '../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js'
+import * as FetchExistingLicenceDetailsService from '../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js'
 
 // Thing under test
 import DetermineImportedLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-imported-licence-flags.service.js'
@@ -34,8 +34,7 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
         describe('for a licence with no charge versions', () => {
           describe('and the licence is already flagged for billing', () => {
             beforeEach(async () => {
-              vi.mock('../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js')
-              FetchExistingLicenceDetailsService.mockResolvedValue(_licenceData(true, false))
+              vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(true, false))
             })
 
             it('always returns the licenceId, regionId, startDate and endDate', async () => {
@@ -58,8 +57,7 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
 
           describe('and the licence is not already flagged for billing', () => {
             beforeEach(async () => {
-              vi.mock('../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js')
-              FetchExistingLicenceDetailsService.mockResolvedValue(_licenceData(false, false))
+              vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(false, false))
             })
 
             it('always returns the licenceId, regionId, startDate and endDate', async () => {
@@ -84,8 +82,7 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
         describe('for a licence with pre-sroc and sroc charge versions', () => {
           describe('and the licence is already flagged for billing', () => {
             beforeEach(async () => {
-              vi.mock('../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js')
-              FetchExistingLicenceDetailsService.mockResolvedValue(_licenceData(true, true))
+              vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(true, true))
             })
 
             it('returns the correct flags', async () => {
@@ -99,8 +96,7 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
 
           describe('and the licence is not already flagged for billing', () => {
             beforeEach(async () => {
-              vi.mock('../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js')
-              FetchExistingLicenceDetailsService.mockResolvedValue(_licenceData(false, true))
+              vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(false, true))
             })
 
             it('returns the correct flags', async () => {
@@ -123,8 +119,7 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
       describe('for a licence with no charge versions', () => {
         describe('and the licence is already flagged for billing', () => {
           beforeEach(async () => {
-            vi.mock('../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js')
-            FetchExistingLicenceDetailsService.mockResolvedValue(_licenceData(true, false))
+            vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(true, false))
           })
 
           it('returns the correct flags', async () => {
@@ -138,8 +133,7 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
 
         describe('and the licence is not already flagged for billing', () => {
           beforeEach(async () => {
-            vi.mock('../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js')
-            FetchExistingLicenceDetailsService.mockResolvedValue(_licenceData(false, false))
+            vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(false, false))
           })
 
           it('returns the correct flags', async () => {
@@ -155,8 +149,7 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
       describe('for a licence with pre-sroc and sroc charge versions', () => {
         describe('and the licence is already flagged for billing', () => {
           beforeEach(async () => {
-            vi.mock('../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js')
-            FetchExistingLicenceDetailsService.mockResolvedValue(_licenceData(true, true))
+            vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(true, true))
           })
 
           it('returns the correct flags', async () => {
@@ -170,8 +163,7 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
 
         describe('and the licence is not already flagged for billing', () => {
           beforeEach(async () => {
-            vi.mock('../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js')
-            FetchExistingLicenceDetailsService.mockResolvedValue(_licenceData(false, true))
+            vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(false, true))
           })
 
           it('returns the correct flags', async () => {
@@ -193,8 +185,7 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
       describe('for a licence with no charge versions', () => {
         describe('and the licence is already flagged for billing', () => {
           beforeEach(async () => {
-            vi.mock('../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js')
-            FetchExistingLicenceDetailsService.mockResolvedValue(_licenceData(true, false))
+            vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(true, false))
           })
 
           it('returns the correct flags', async () => {
@@ -208,8 +199,7 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
 
         describe('and the licence is not already flagged for billing', () => {
           beforeEach(async () => {
-            vi.mock('../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js')
-            FetchExistingLicenceDetailsService.mockResolvedValue(_licenceData(false, false))
+            vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(false, false))
           })
 
           it('returns the correct flags', async () => {
@@ -225,8 +215,7 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
       describe('for a licence with pre-sroc and sroc charge versions', () => {
         describe('and the licence is already flagged for billing', () => {
           beforeEach(async () => {
-            vi.mock('../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js')
-            FetchExistingLicenceDetailsService.mockResolvedValue(_licenceData(true, true))
+            vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(true, true))
           })
 
           it('returns the correct flags', async () => {
@@ -240,8 +229,7 @@ describe('Licences - Supplementary - Determine Imported Licence Flags service', 
 
         describe('and the licence is not already flagged for billing', () => {
           beforeEach(async () => {
-            vi.mock('../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js')
-            FetchExistingLicenceDetailsService.mockResolvedValue(_licenceData(false, true))
+            vi.spyOn(FetchExistingLicenceDetailsService, 'default').mockResolvedValue(_licenceData(false, true))
           })
 
           it('returns the correct flags', async () => {

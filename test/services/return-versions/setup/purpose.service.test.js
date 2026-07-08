@@ -4,10 +4,10 @@
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Things we need to stub
-import FetchPurposesService from '../../../../app/services/return-versions/setup/fetch-purposes.service.js'
+import * as FetchPurposesService from '../../../../app/services/return-versions/setup/fetch-purposes.service.js'
 
 // Thing under test
 import PurposeService from '../../../../app/services/return-versions/setup/purpose.service.js'
@@ -19,8 +19,7 @@ describe('Return Versions - Setup - Purpose service', () => {
   let sessionData
 
   beforeEach(() => {
-    vi.mock('../../../../app/services/return-versions/setup/fetch-purposes.service.js')
-    FetchPurposesService.mockResolvedValue([
+    vi.spyOn(FetchPurposesService, 'default').mockResolvedValue([
       { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },
       { id: '49088608-ee9f-491a-8070-6831240945ac', description: 'Horticultural Watering' }
     ])
@@ -67,8 +66,7 @@ describe('Return Versions - Setup - Purpose service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {

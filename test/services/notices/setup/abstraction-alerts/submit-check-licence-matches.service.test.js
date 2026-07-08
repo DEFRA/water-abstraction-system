@@ -5,7 +5,7 @@ import * as AbstractionAlertSessionData from '../../../../support/fixtures/abstr
 import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitCheckLicenceMatchesService from '../../../../../app/services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js'
@@ -36,8 +36,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Check Licence Matches se
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
@@ -75,7 +74,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Check Licence Matches se
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the "licenceRefs" to the session with duplicates removed', async () => {
@@ -100,7 +99,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Check Licence Matches se
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the "licenceRefs" to the session without the removed thresholds', async () => {

@@ -4,7 +4,7 @@
 import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchMonitoringStationDetailsDal from '../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js'
+import * as FetchMonitoringStationDetailsDal from '../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js'
 
 // Thing under test
 import ViewService from '../../../app/services/monitoring-stations/view.service.js'
@@ -55,8 +55,7 @@ describe('Monitoring Stations - View service', () => {
     yarStub = YarStub()
     yarStub.flash.mockReturnValue(['Tag removed for 99/999/9999'])
 
-    vi.mock('../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js')
-    FetchMonitoringStationDetailsDal.mockResolvedValue({ licenceMonitoringStations, monitoringStation })
+    vi.spyOn(FetchMonitoringStationDetailsDal, 'default').mockResolvedValue({ licenceMonitoringStations, monitoringStation })
   })
 
   afterEach(() => {

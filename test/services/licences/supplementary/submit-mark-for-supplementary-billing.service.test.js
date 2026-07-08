@@ -6,7 +6,7 @@ import LicenceModel from '../../../../app/models/licence.model.js'
 import LicenceSupplementaryYearModel from '../../../../app/models/licence-supplementary-year.model.js'
 
 // Things we need to stub
-import DetermineExistingBillRunYearsService from '../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js'
+import * as DetermineExistingBillRunYearsService from '../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js'
 
 // Thing under test
 import SubmitMarkForSupplementaryBillingService from '../../../../app/services/licences/supplementary/submit-mark-for-supplementary-billing.service.js'
@@ -24,8 +24,7 @@ describe('Submit Mark For Supplementary Billing Service', () => {
     beforeEach(async () => {
       licence = await LicenceHelper.add()
 
-      vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
-      DetermineExistingBillRunYearsService.mockResolvedValue([2023])
+      vi.spyOn(DetermineExistingBillRunYearsService, 'default').mockResolvedValue([2023])
     })
 
     describe('and only a single sroc year selected', () => {

@@ -8,11 +8,11 @@ import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.j
 
 // Things we need to stub
 import * as ChargingModuleGenerateRequest from '../../../../app/requests/charging-module/generate-bill-run.request.js'
-import FetchBillingAccountsService from '../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js'
+import * as FetchBillingAccountsService from '../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
-import HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
+import * as HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
 import * as LegacyRefreshBillRunRequest from '../../../../app/requests/legacy/refresh-bill-run.request.js'
-import ProcessBillingPeriodService from '../../../../app/services/bill-runs/annual/process-billing-period.service.js'
+import * as ProcessBillingPeriodService from '../../../../app/services/bill-runs/annual/process-billing-period.service.js'
 
 // Thing under test
 import ProcessBillRunService from '../../../../app/services/bill-runs/annual/process-bill-run.service.js'
@@ -46,8 +46,7 @@ describe('Annual Process Bill Run service', () => {
 
   describe('when the service is called', () => {
     beforeEach(() => {
-      vi.mock('../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js')
-      FetchBillingAccountsService.mockResolvedValue([])
+      vi.spyOn(FetchBillingAccountsService, 'default').mockResolvedValue([])
     })
 
     describe('and nothing is billed', () => {
@@ -68,8 +67,7 @@ describe('Annual Process Bill Run service', () => {
         chargingModuleGenerateRequestStub = vi.spyOn(ChargingModuleGenerateRequest, 'send').mockImplementation(() => {})
         legacyRefreshBillRunRequestStub = vi.spyOn(LegacyRefreshBillRunRequest, 'send').mockImplementation(() => {})
 
-        vi.mock('../../../../app/services/bill-runs/annual/process-billing-period.service.js')
-        ProcessBillingPeriodService.mockResolvedValue(true)
+        vi.spyOn(ProcessBillingPeriodService, 'default').mockResolvedValue(true)
       })
 
       it('sets the bill run status to "processing"', async () => {
@@ -98,21 +96,19 @@ describe('Annual Process Bill Run service', () => {
     let thrownError
 
     beforeEach(() => {
-      vi.mock('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
     })
 
     describe('because fetching the billing accounts fails', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        vi.mock('../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js')
-        FetchBillingAccountsService.mockRejectedValue(thrownError)
+        vi.spyOn(FetchBillingAccountsService, 'default').mockRejectedValue(thrownError)
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
         await ProcessBillRunService(billRun, [billingPeriod])
 
-        const handlerArgs = HandleErroredBillRunService.mock.calls[0]
+        const handlerArgs = HandleErroredBillRunService.default.mock.calls[0]
 
         expect(handlerArgs[1]).toEqual(BillRunModel.errorCodes.failedToProcessChargeVersions)
       })
@@ -136,16 +132,14 @@ describe('Annual Process Bill Run service', () => {
         beforeEach(() => {
           thrownError = new BillRunError(new Error(), BillRunModel.errorCodes.failedToPrepareTransactions)
 
-          vi.mock('../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js')
-          FetchBillingAccountsService.mockResolvedValue([])
-          vi.mock('../../../../app/services/bill-runs/annual/process-billing-period.service.js')
-          ProcessBillingPeriodService.mockRejectedValue(thrownError)
+          vi.spyOn(FetchBillingAccountsService, 'default').mockResolvedValue([])
+          vi.spyOn(ProcessBillingPeriodService, 'default').mockRejectedValue(thrownError)
         })
 
         it('calls HandleErroredBillRunService with appropriate error code', async () => {
           await ProcessBillRunService(billRun, [billingPeriod])
 
-          const handlerArgs = HandleErroredBillRunService.mock.calls[0]
+          const handlerArgs = HandleErroredBillRunService.default.mock.calls[0]
 
           expect(handlerArgs[1]).toEqual(BillRunModel.errorCodes.failedToPrepareTransactions)
         })
@@ -169,17 +163,15 @@ describe('Annual Process Bill Run service', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        vi.mock('../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js')
-        FetchBillingAccountsService.mockResolvedValue([])
-        vi.mock('../../../../app/services/bill-runs/annual/process-billing-period.service.js')
-        ProcessBillingPeriodService.mockResolvedValue(true)
+        vi.spyOn(FetchBillingAccountsService, 'default').mockResolvedValue([])
+        vi.spyOn(ProcessBillingPeriodService, 'default').mockResolvedValue(true)
         vi.spyOn(ChargingModuleGenerateRequest, 'send').mockRejectedValue(thrownError)
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
         await ProcessBillRunService(billRun, [billingPeriod])
 
-        const handlerArgs = HandleErroredBillRunService.mock.calls[0]
+        const handlerArgs = HandleErroredBillRunService.default.mock.calls[0]
 
         expect(handlerArgs[1]).toBeUndefined()
       })

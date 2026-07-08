@@ -2,7 +2,7 @@
 
 // Test helpers
 import DatabaseConfig from '../../../config/database.config.js'
-import CRMSeeder from '../../support/seeders/crm.seeder.js'
+import * as CRMSeeder from '../../support/seeders/crm.seeder.js'
 
 // Thing under test
 import FetchLicenceCRMDataService from '../../../app/services/licences/fetch-licence-crm-data.service.js'

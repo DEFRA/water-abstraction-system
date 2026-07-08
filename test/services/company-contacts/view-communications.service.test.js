@@ -5,9 +5,9 @@ import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchCompanyContactDal from '../../../app/dal/company-contacts/fetch-company-contact.dal.js'
-import FetchCompanyService from '../../../app/dal/companies/fetch-company.dal.js'
-import FetchNotificationsDal from '../../../app/dal/company-contacts/fetch-notifications.dal.js'
+import * as FetchCompanyContactDal from '../../../app/dal/company-contacts/fetch-company-contact.dal.js'
+import * as FetchCompanyService from '../../../app/dal/companies/fetch-company.dal.js'
+import * as FetchNotificationsDal from '../../../app/dal/company-contacts/fetch-notifications.dal.js'
 
 // Thing under test
 import ViewCommunicationsService from '../../../app/services/company-contacts/view-communications.service.js'
@@ -27,12 +27,9 @@ describe('Company Contacts - View Communications Service', () => {
       id: generateUUID()
     }
 
-    vi.mock('../../../app/dal/companies/fetch-company.dal.js')
-    FetchCompanyService.mockReturnValue(company)
-    vi.mock('../../../app/dal/company-contacts/fetch-company-contact.dal.js')
-    FetchCompanyContactDal.mockReturnValue(companyContact)
-    vi.mock('../../../app/dal/company-contacts/fetch-notifications.dal.js')
-    FetchNotificationsDal.mockReturnValue({
+    vi.spyOn(FetchCompanyService, 'default').mockReturnValue(company)
+    vi.spyOn(FetchCompanyContactDal, 'default').mockReturnValue(companyContact)
+    vi.spyOn(FetchNotificationsDal, 'default').mockReturnValue({
       notifications: [],
       totalNumber: 0
     })

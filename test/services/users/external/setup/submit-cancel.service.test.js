@@ -5,8 +5,8 @@ import * as UserSessionsFixture from '../../../../support/fixtures/user-sessions
 import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import DeleteSessionDal from '../../../../../app/dal/delete-session.dal.js'
-import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as DeleteSessionDal from '../../../../../app/dal/delete-session.dal.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitCancelService from '../../../../../app/services/users/external/setup/submit-cancel.service.js'
@@ -20,11 +20,9 @@ describe('Users - External - Setup - Submit Cancel service', () => {
     sessionData.allLicences = true
 
     session = SessionModelStub(sessionData)
-    vi.mock('../../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    vi.mock('../../../../../app/dal/delete-session.dal.js')
-    DeleteSessionDal.mockResolvedValue()
+    vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue()
   })
 
   afterEach(() => {

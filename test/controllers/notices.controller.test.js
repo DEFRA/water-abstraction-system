@@ -7,10 +7,10 @@ import { generateNoticeReferenceCode } from '../../app/lib/general.lib.js'
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-import IndexNoticesService from '../../app/services/notices/index-notices.service.js'
-import SubmitIndexNoticesService from '../../app/services/notices/submit-index-notices.service.js'
-import SubmitViewNoticeService from '../../app/services/notices/submit-view-notice.service.js'
-import ViewNoticeService from '../../app/services/notices/view-notice.service.js'
+import * as IndexNoticesService from '../../app/services/notices/index-notices.service.js'
+import * as SubmitIndexNoticesService from '../../app/services/notices/submit-index-notices.service.js'
+import * as SubmitViewNoticeService from '../../app/services/notices/submit-view-notice.service.js'
+import * as ViewNoticeService from '../../app/services/notices/view-notice.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -57,8 +57,7 @@ describe('Notices controller', () => {
 
           const pageData = _noticesPageData()
 
-          vi.mock('../../app/services/notices/index-notices.service.js')
-          IndexNoticesService.mockReturnValue(pageData)
+          vi.spyOn(IndexNoticesService, 'default').mockReturnValue(pageData)
         })
 
         it('returns the page successfully', async () => {
@@ -86,8 +85,7 @@ describe('Notices controller', () => {
           pageData.pageTitle = 'Notices (page 2 of 3)'
           pageData.pagination.showingMessage = 'Showing 25 of 70 notices'
 
-          vi.mock('../../app/services/notices/index-notices.service.js')
-          IndexNoticesService.mockReturnValue(pageData)
+          vi.spyOn(IndexNoticesService, 'default').mockReturnValue(pageData)
         })
 
         it('returns the page successfully', async () => {
@@ -107,8 +105,7 @@ describe('Notices controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/notices/submit-index-notices.service.js')
-          SubmitIndexNoticesService.mockReturnValue({})
+          vi.spyOn(SubmitIndexNoticesService, 'default').mockReturnValue({})
         })
 
         it('redirects back to the index page', async () => {
@@ -124,8 +121,7 @@ describe('Notices controller', () => {
           beforeEach(() => {
             const pageData = _noticesPageData(true)
 
-            vi.mock('../../app/services/notices/submit-index-notices.service.js')
-            SubmitIndexNoticesService.mockReturnValue(pageData)
+            vi.spyOn(SubmitIndexNoticesService, 'default').mockReturnValue(pageData)
           })
 
           it('re-renders the index page with no pagination and an error', async () => {
@@ -146,8 +142,7 @@ describe('Notices controller', () => {
             pageData.pageTitle = 'Notices (page 2 of 3)'
             pageData.pagination.showingMessage = 'Showing 25 of 70 notices'
 
-            vi.mock('../../app/services/notices/submit-index-notices.service.js')
-            SubmitIndexNoticesService.mockReturnValue(pageData)
+            vi.spyOn(SubmitIndexNoticesService, 'default').mockReturnValue(pageData)
           })
 
           it('re-renders the index page with pagination and an error', async () => {
@@ -179,8 +174,7 @@ describe('Notices controller', () => {
 
           const pageData = _noticePageData()
 
-          vi.mock('../../app/services/notices/view-notice.service.js')
-          ViewNoticeService.mockReturnValue(pageData)
+          vi.spyOn(ViewNoticeService, 'default').mockReturnValue(pageData)
         })
 
         it('returns the page successfully', async () => {
@@ -208,8 +202,7 @@ describe('Notices controller', () => {
           pageData.pageTitle = 'Warning alert (page 2 of 3)'
           pageData.pagination.showingMessage = 'Showing 25 of 70 notifications'
 
-          vi.mock('../../app/services/notices/view-notice.service.js')
-          ViewNoticeService.mockReturnValue(pageData)
+          vi.spyOn(ViewNoticeService, 'default').mockReturnValue(pageData)
         })
 
         it('returns the page successfully', async () => {
@@ -229,8 +222,7 @@ describe('Notices controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/notices/submit-view-notice.service.js')
-          SubmitViewNoticeService.mockReturnValue({})
+          vi.spyOn(SubmitViewNoticeService, 'default').mockReturnValue({})
         })
 
         it('redirects back to the view page', async () => {
@@ -246,8 +238,7 @@ describe('Notices controller', () => {
           beforeEach(() => {
             const pageData = _noticePageData(true)
 
-            vi.mock('../../app/services/notices/submit-view-notice.service.js')
-            SubmitViewNoticeService.mockReturnValue(pageData)
+            vi.spyOn(SubmitViewNoticeService, 'default').mockReturnValue(pageData)
           })
 
           it('re-renders the index page with no pagination and an error', async () => {
@@ -268,8 +259,7 @@ describe('Notices controller', () => {
             pageData.pageTitle = 'Warning alert (page 2 of 3)'
             pageData.pagination.showingMessage = 'Showing 25 of 70 notifications'
 
-            vi.mock('../../app/services/notices/submit-view-notice.service.js')
-            SubmitViewNoticeService.mockReturnValue(pageData)
+            vi.spyOn(SubmitViewNoticeService, 'default').mockReturnValue(pageData)
           })
 
           it('re-renders the index page with pagination and an error', async () => {

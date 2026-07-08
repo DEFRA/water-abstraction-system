@@ -5,7 +5,7 @@ import http2 from 'node:http2'
 const { HTTP_STATUS_OK } = http2.constants
 
 // Things we need to stub
-import ViewReturnSubmissionService from '../../app/services/return-submissions/view-return-submission.service.js'
+import * as ViewReturnSubmissionService from '../../app/services/return-submissions/view-return-submission.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -39,8 +39,7 @@ describe('Return Submissions controller', () => {
   describe('/system/return-submissions/{yearMonth}/{returnSubmissionId}', () => {
     describe('GET', () => {
       beforeEach(() => {
-        vi.mock('../../app/services/return-submissions/view-return-submission.service.js')
-        ViewReturnSubmissionService.mockResolvedValue({
+        vi.spyOn(ViewReturnSubmissionService, 'default').mockResolvedValue({
           pageTitle: 'Return Submission'
         })
 

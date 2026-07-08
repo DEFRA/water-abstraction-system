@@ -4,8 +4,8 @@
 import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Things we need to stub
-import FetchPointsService from '../../../app/services/licences/fetch-points.service.js'
-import FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import * as FetchPointsService from '../../../app/services/licences/fetch-points.service.js'
+import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
 
 // Thing under test
 import ViewPointsService from '../../../app/services/licences/view-points.service.js'
@@ -27,11 +27,9 @@ describe('Licences - View Points service', () => {
 
     licence = ViewLicencesFixture.licence()
 
-    vi.mock('../../../app/services/licences/fetch-licence.service.js')
-    FetchLicenceService.mockReturnValue(licence)
+    vi.spyOn(FetchLicenceService, 'default').mockReturnValue(licence)
 
-    vi.mock('../../../app/services/licences/fetch-points.service.js')
-    FetchPointsService.mockReturnValue([
+    vi.spyOn(FetchPointsService, 'default').mockReturnValue([
       {
         ...ViewLicencesFixture.point(),
         sourceDescription: 'SURFACE WATER SOURCE OF SUPPLY',

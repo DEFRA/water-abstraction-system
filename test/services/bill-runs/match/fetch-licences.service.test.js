@@ -1,7 +1,7 @@
 // Test framework dependencies
 
 // Things we need to stub
-import FetchChargeVersionsService from '../../../../app/services/bill-runs/match/fetch-charge-versions.service.js'
+import * as FetchChargeVersionsService from '../../../../app/services/bill-runs/match/fetch-charge-versions.service.js'
 
 // Thing under test
 import FetchLicencesService from '../../../../app/services/bill-runs/match/fetch-licences.service.js'
@@ -35,8 +35,7 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
 
     describe('and there is a single licence linked to a single charge version', () => {
       beforeEach(() => {
-        vi.mock('../../../../app/services/bill-runs/match/fetch-charge-versions.service.js')
-        FetchChargeVersionsService.mockResolvedValue([
+        vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue([
           {
             id: '9407b74d-816c-44a2-9926-73a89a9da985',
             startDate: '2022-04-01T00:00:00.000Z',
@@ -80,8 +79,7 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
       }
 
       beforeEach(() => {
-        vi.mock('../../../../app/services/bill-runs/match/fetch-charge-versions.service.js')
-        FetchChargeVersionsService.mockResolvedValue([
+        vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue([
           {
             id: '9407b74d-816c-44a2-9926-73a89a9da985',
             startDate: '2022-10-01T00:00:00.000Z',
@@ -124,8 +122,7 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
 
   describe('when no 2PT licences exist for the region and billing period', () => {
     beforeEach(() => {
-      vi.mock('../../../../app/services/bill-runs/match/fetch-charge-versions.service.js')
-      FetchChargeVersionsService.mockResolvedValue([])
+      vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue([])
     })
 
     it('will return an empty array', async () => {

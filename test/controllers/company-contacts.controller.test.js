@@ -6,10 +6,10 @@ const { HTTP_STATUS_OK, HTTP_STATUS_FOUND } = http2.constants
 import { generateUUID } from '../../app/lib/general.lib.js'
 
 // Things we need to stub
-import SubmitRemoveCompanyContactService from '../../app/services/company-contacts/submit-remove-company-contact.service.js'
-import ViewCommunicationsService from '../../app/services/company-contacts/view-communications.service.js'
-import ViewContactDetailsService from '../../app/services/company-contacts/view-contact-details.service.js'
-import ViewRemoveCompanyContactService from '../../app/services/company-contacts/view-remove-company-contact.service.js'
+import * as SubmitRemoveCompanyContactService from '../../app/services/company-contacts/submit-remove-company-contact.service.js'
+import * as ViewCommunicationsService from '../../app/services/company-contacts/view-communications.service.js'
+import * as ViewContactDetailsService from '../../app/services/company-contacts/view-contact-details.service.js'
+import * as ViewRemoveCompanyContactService from '../../app/services/company-contacts/view-remove-company-contact.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -54,8 +54,7 @@ describe('Company Contacts controller', () => {
           }
         }
 
-        vi.mock('../../app/services/company-contacts/view-communications.service.js')
-        ViewCommunicationsService.mockReturnValue({ pageTitle: 'Communications for Rachael Tyrell' })
+        vi.spyOn(ViewCommunicationsService, 'default').mockReturnValue({ pageTitle: 'Communications for Rachael Tyrell' })
       })
 
       it('returns the page successfully', async () => {
@@ -79,8 +78,7 @@ describe('Company Contacts controller', () => {
           }
         }
 
-        vi.mock('../../app/services/company-contacts/view-contact-details.service.js')
-        ViewContactDetailsService.mockReturnValue({
+        vi.spyOn(ViewContactDetailsService, 'default').mockReturnValue({
           pageTitle: 'Contact details for Rachael Tyrell',
           roles: []
         })
@@ -107,8 +105,7 @@ describe('Company Contacts controller', () => {
           }
         }
 
-        vi.mock('../../app/services/company-contacts/view-remove-company-contact.service.js')
-        ViewRemoveCompanyContactService.mockReturnValue({ pageTitle: 'Remove page' })
+        vi.spyOn(ViewRemoveCompanyContactService, 'default').mockReturnValue({ pageTitle: 'Remove page' })
       })
 
       it('returns the page successfully', async () => {
@@ -127,8 +124,7 @@ describe('Company Contacts controller', () => {
 
         postOptions = postRequestOptions(`/company-contacts/${generateUUID()}/remove`, {}, ['hof_notifications'])
 
-        vi.mock('../../app/services/company-contacts/submit-remove-company-contact.service.js')
-        SubmitRemoveCompanyContactService.mockReturnValue({ companyId })
+        vi.spyOn(SubmitRemoveCompanyContactService, 'default').mockReturnValue({ companyId })
       })
 
       it('redirects to companies contacts page', async () => {

@@ -6,8 +6,8 @@ import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 // Thing under test
 import SubmitCancelService from '../../../../app/services/company-contacts/setup/submit-cancel.service.js'
 
@@ -23,11 +23,9 @@ describe('Company Contacts - Setup - Cancel Service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    vi.mock('../../../../app/dal/delete-session.dal.js')
-    DeleteSessionDal.mockResolvedValue()
+    vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
@@ -58,7 +56,7 @@ describe('Company Contacts - Setup - Cancel Service', () => {
           email: 'ERICE@TEST.COM'
         })
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('continues the journey', async () => {

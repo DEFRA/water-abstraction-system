@@ -4,7 +4,7 @@
 import { generateNoticeReferenceCode } from '../../../app/lib/general.lib.js'
 
 // Things to stub
-import FetchNoticeService from '../../../app/services/notices/fetch-notice.service.js'
+import * as FetchNoticeService from '../../../app/services/notices/fetch-notice.service.js'
 import YarStub from '../../support/stubs/yar.stub.js'
 
 // Thing under test
@@ -170,8 +170,7 @@ describe('Notices - Submit View Notice service', () => {
 
       describe('and the results are paginated', () => {
         beforeEach(() => {
-          vi.mock('../../../app/services/notices/fetch-notice.service.js')
-          FetchNoticeService.mockResolvedValue({ notice, notifications, totalNumber: 70 })
+          vi.spyOn(FetchNoticeService, 'default').mockResolvedValue({ notice, notifications, totalNumber: 70 })
         })
 
         it('returns the page data for the view, including any errors', async () => {
@@ -263,8 +262,7 @@ describe('Notices - Submit View Notice service', () => {
 
       describe('and the results are not paginated', () => {
         beforeEach(() => {
-          vi.mock('../../../app/services/notices/fetch-notice.service.js')
-          FetchNoticeService.mockResolvedValue({ notice, notifications, totalNumber: 2 })
+          vi.spyOn(FetchNoticeService, 'default').mockResolvedValue({ notice, notifications, totalNumber: 2 })
         })
 
         it('returns the page data for the view, including any errors', async () => {

@@ -6,8 +6,8 @@ import * as CustomersFixture from '../../../support/fixtures/customers.fixture.j
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchCompanyContactsService from '../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchCompanyContactsService from '../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitContactService from '../../../../app/services/billing-accounts/setup/submit-contact.service.js'
@@ -26,8 +26,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
   let sessionData
 
   beforeEach(() => {
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue()
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
@@ -47,7 +46,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
 
       session = SessionModelStub(sessionData)
 
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('saves the submitted value', async () => {
@@ -78,7 +77,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -110,7 +109,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -146,7 +145,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
 
       session = SessionModelStub(sessionData)
 
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('saves the submitted value', async () => {
@@ -183,7 +182,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -221,7 +220,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -260,7 +259,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -300,10 +299,9 @@ describe('Billing Accounts - Setup - Contact Service', () => {
 
           session = SessionModelStub(sessionData)
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-          vi.mock('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
-          FetchCompanyContactsService.mockResolvedValue(companyContacts)
+          vi.spyOn(FetchCompanyContactsService, 'default').mockResolvedValue(companyContacts)
         })
 
         it('returns page data for the view, with errors', async () => {
@@ -337,10 +335,9 @@ describe('Billing Accounts - Setup - Contact Service', () => {
 
           session = SessionModelStub(sessionData)
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-          vi.mock('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
-          FetchCompanyContactsService.mockResolvedValue(companyContacts)
+          vi.spyOn(FetchCompanyContactsService, 'default').mockResolvedValue(companyContacts)
         })
 
         it('returns page data for the view, with errors', async () => {

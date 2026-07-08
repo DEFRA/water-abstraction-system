@@ -1,5 +1,5 @@
 // Test helpers
-import RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
+import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
 import * as ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
 
 // Thing under test

@@ -7,8 +7,8 @@ import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
 
 // Things we need to stub
-import FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 import * as GeneratePaperReturnRequest from '../../../../app/requests/gotenberg/generate-paper-return.request.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
@@ -42,8 +42,7 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     const buffer = new TextEncoder().encode('mock file').buffer
 
@@ -53,8 +52,7 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
       }
     })
 
-    vi.mock('../../../../app/services/notices/setup/fetch-recipients.service.js')
-    FetchRecipientsService.mockResolvedValue([
+    vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([
       {
         ...recipient
       },

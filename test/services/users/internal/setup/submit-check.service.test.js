@@ -5,12 +5,12 @@ import SessionModelStub from '../../../../support/stubs/session.stub.js'
 import YarStub from '../../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import CreateUserDal from '../../../../../app/dal/users/internal/create-user.dal.js'
-import CreateVerificationNotificationDal from '../../../../../app/dal/users/internal/create-verification-notification.dal.js'
-import DeleteSessionDal from '../../../../../app/dal/delete-session.dal.js'
-import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
-import SendVerificationEmailService from '../../../../../app/services/users/internal/setup/send-verification-email.service.js'
-import UpdateUserDal from '../../../../../app/dal/users/internal/update-user.dal.js'
+import * as CreateUserDal from '../../../../../app/dal/users/internal/create-user.dal.js'
+import * as CreateVerificationNotificationDal from '../../../../../app/dal/users/internal/create-verification-notification.dal.js'
+import * as DeleteSessionDal from '../../../../../app/dal/delete-session.dal.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as SendVerificationEmailService from '../../../../../app/services/users/internal/setup/send-verification-email.service.js'
+import * as UpdateUserDal from '../../../../../app/dal/users/internal/update-user.dal.js'
 
 // Thing under test
 import SubmitCheckService from '../../../../../app/services/users/internal/setup/submit-check.service.js'
@@ -25,10 +25,8 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
   beforeEach(() => {
     auth = { credentials: { user: { id: '89b25863-918f-484f-b7fa-49f7062b4af3' } } }
 
-    vi.mock('../../../../../app/dal/delete-session.dal.js')
-    DeleteSessionDal.mockResolvedValue()
-    vi.mock('../../../../../app/services/users/internal/setup/send-verification-email.service.js')
-    SendVerificationEmailService.mockResolvedValue()
+    vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue()
+    vi.spyOn(SendVerificationEmailService, 'default').mockResolvedValue()
 
     yarStub = YarStub()
   })
@@ -55,12 +53,9 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
 
       session = SessionModelStub(sessionData)
 
-      vi.mock('../../../../../app/dal/users/internal/create-user.dal.js')
-      CreateUserDal.mockResolvedValue(resetGuid)
-      vi.mock('../../../../../app/dal/users/internal/create-verification-notification.dal.js')
-      CreateVerificationNotificationDal.mockResolvedValue(notification)
-      vi.mock('../../../../../app/dal/fetch-session.dal.js')
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(CreateUserDal, 'default').mockResolvedValue(resetGuid)
+      vi.spyOn(CreateVerificationNotificationDal, 'default').mockResolvedValue(notification)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('deletes the session', async () => {
@@ -100,10 +95,8 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
 
       session = SessionModelStub(sessionData)
 
-      vi.mock('../../../../../app/dal/fetch-session.dal.js')
-      FetchSessionDal.mockResolvedValue(session)
-      vi.mock('../../../../../app/dal/users/internal/update-user.dal.js')
-      UpdateUserDal.mockResolvedValue(null)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+      vi.spyOn(UpdateUserDal, 'default').mockResolvedValue(null)
     })
 
     it('returns the redirect URL', async () => {
@@ -126,10 +119,9 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
           recipient: 'bob.bobbles@environment-agency.gov.uk'
         }
 
-        UpdateUserDal.mockResolvedValue(newResetGuid)
+        vi.spyOn(UpdateUserDal, 'default').mockResolvedValue(newResetGuid)
 
-        vi.mock('../../../../../app/dal/users/internal/create-verification-notification.dal.js')
-        CreateVerificationNotificationDal.mockResolvedValue(notification)
+        vi.spyOn(CreateVerificationNotificationDal, 'default').mockResolvedValue(notification)
       })
 
       it('creates a new password reset link', async () => {

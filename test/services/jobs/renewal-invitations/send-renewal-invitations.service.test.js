@@ -5,11 +5,11 @@ import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import CreateNoticeService from '../../../../app/services/notices/setup/create-notice.service.js'
-import CreateNotificationsService from '../../../../app/services/notices/setup/create-notifications.service.js'
-import FetchRenewalRecipients from '../../../../app/services/jobs/renewal-invitations/fetch-renewal-recipients.service.js'
+import * as CreateNoticeService from '../../../../app/services/notices/setup/create-notice.service.js'
+import * as CreateNotificationsService from '../../../../app/services/notices/setup/create-notifications.service.js'
+import * as FetchRenewalRecipients from '../../../../app/services/jobs/renewal-invitations/fetch-renewal-recipients.service.js'
 import NotifyConfig from '../../../../config/notify.config.js'
-import SendNoticeService from '../../../../app/services/notices/setup/send/send-notice.service.js'
+import * as SendNoticeService from '../../../../app/services/notices/setup/send/send-notice.service.js'
 
 // Thing under test
 import SendRenewalInvitations from '../../../../app/services/jobs/renewal-invitations/send-renewal-invitations.service.js'
@@ -40,14 +40,10 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
 
     vi.replaceProperty(NotifyConfig, 'replyTo', 'notify@test.gov.uk')
 
-    vi.mock('../../../../app/services/jobs/renewal-invitations/fetch-renewal-recipients.service.js')
-    FetchRenewalRecipients.mockResolvedValue(recipients)
-    vi.mock('../../../../app/services/notices/setup/create-notice.service.js')
-    CreateNoticeService.mockResolvedValue({ id: noticeId })
-    vi.mock('../../../../app/services/notices/setup/create-notifications.service.js')
-    CreateNotificationsService.mockResolvedValue(notifications)
-    vi.mock('../../../../app/services/notices/setup/send/send-notice.service.js')
-    SendNoticeService.mockResolvedValue()
+    vi.spyOn(FetchRenewalRecipients, 'default').mockResolvedValue(recipients)
+    vi.spyOn(CreateNoticeService, 'default').mockResolvedValue({ id: noticeId })
+    vi.spyOn(CreateNotificationsService, 'default').mockResolvedValue(notifications)
+    vi.spyOn(SendNoticeService, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
@@ -65,7 +61,7 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
     it('creates a notice for renewal invitations', async () => {
       await SendRenewalInvitations(days)
 
-      const [firstArg, secondArg, thirdArg] = CreateNoticeService.mock.calls[0]
+      const [firstArg, secondArg, thirdArg] = CreateNoticeService.default.mock.calls[0]
 
       // Argument 1: Notice type
       expect(firstArg).toMatchObject({
@@ -88,7 +84,7 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
     it('creates the notifications', async () => {
       await SendRenewalInvitations(days)
 
-      const [firstArg, secondArg, thirdArg] = CreateNotificationsService.mock.calls[0]
+      const [firstArg, secondArg, thirdArg] = CreateNotificationsService.default.mock.calls[0]
 
       // Argument 1: Notice type
       expect(firstArg).toMatchObject({
@@ -111,7 +107,7 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
     it('sends the notice', async () => {
       await SendRenewalInvitations(days)
 
-      const [firstArg, secondArg] = SendNoticeService.mock.calls[0]
+      const [firstArg, secondArg] = SendNoticeService.default.mock.calls[0]
 
       // Argument 1: The notice
       expect(firstArg).toMatchObject({ id: noticeId })
@@ -123,7 +119,7 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
 
   describe('when there are no renewal invitations to send', () => {
     beforeEach(() => {
-      FetchRenewalRecipients.mockResolvedValue([])
+      vi.spyOn(FetchRenewalRecipients, 'default').mockResolvedValue([])
     })
 
     it('returns the empty recipients', async () => {
@@ -135,9 +131,9 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
     it('does not call the services', async () => {
       await SendRenewalInvitations(days)
 
-      expect(CreateNoticeService).not.toHaveBeenCalled()
-      expect(CreateNotificationsService).not.toHaveBeenCalled()
-      expect(SendNoticeService).not.toHaveBeenCalled()
+      expect(CreateNoticeService.default).not.toHaveBeenCalled()
+      expect(CreateNotificationsService.default).not.toHaveBeenCalled()
+      expect(SendNoticeService.default).not.toHaveBeenCalled()
     })
   })
 })

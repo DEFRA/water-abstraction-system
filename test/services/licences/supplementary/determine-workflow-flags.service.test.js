@@ -5,7 +5,7 @@ import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
 import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchLicenceService from '../../../../app/services/licences/supplementary/fetch-licence.service.js'
+import * as FetchLicenceService from '../../../../app/services/licences/supplementary/fetch-licence.service.js'
 
 // Thing under test
 import DetermineWorkflowFlagsService from '../../../../app/services/licences/supplementary/determine-workflow-flags.service.js'
@@ -34,8 +34,7 @@ describe('Determine Workflow Flags Service', () => {
           sroc_charge_versions: false
         }
 
-        vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
-        FetchLicenceService.mockResolvedValue(licenceData)
+        vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licenceData)
       })
 
       it('always returns the licenceId, regionId, startDate and endDate', async () => {
@@ -49,8 +48,7 @@ describe('Determine Workflow Flags Service', () => {
 
       describe('and has no charge versions', () => {
         beforeAll(() => {
-          vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
-          FetchLicenceService.mockResolvedValue(licenceData)
+          vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licenceData)
         })
 
         it('returns the correct flags', async () => {
@@ -66,8 +64,7 @@ describe('Determine Workflow Flags Service', () => {
         describe('and an annual bill run has not been sent while the licence was in workflow', () => {
           beforeAll(() => {
             licenceData.sroc_charge_versions = true
-            vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
-            FetchLicenceService.mockResolvedValue(licenceData)
+            vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licenceData)
           })
 
           it('returns the correct flags', async () => {
@@ -87,8 +84,7 @@ describe('Determine Workflow Flags Service', () => {
               batchType: 'annual'
             })
 
-            vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
-            FetchLicenceService.mockResolvedValue(licenceData)
+            vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licenceData)
           })
 
           it('returns the correct flags', async () => {
@@ -104,8 +100,7 @@ describe('Determine Workflow Flags Service', () => {
       describe('and has two-part tariff charge versions', () => {
         beforeAll(() => {
           licenceData.two_part_tariff_charge_versions = true
-          vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
-          FetchLicenceService.mockResolvedValue(licenceData)
+          vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licenceData)
         })
 
         it('returns the correct flags', async () => {
@@ -131,8 +126,7 @@ describe('Determine Workflow Flags Service', () => {
           sroc_charge_versions: false
         }
 
-        vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
-        FetchLicenceService.mockResolvedValue(licenceData)
+        vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licenceData)
       })
 
       it('always returns the licenceId, regionId, startDate and endDate', async () => {
@@ -146,8 +140,7 @@ describe('Determine Workflow Flags Service', () => {
 
       describe('and has no charge versions', () => {
         beforeAll(() => {
-          vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
-          FetchLicenceService.mockResolvedValue(licenceData)
+          vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licenceData)
         })
 
         it('returns the correct flags', async () => {
@@ -163,8 +156,7 @@ describe('Determine Workflow Flags Service', () => {
         describe('and an annual bill run has not been sent while the licence was in workflow', () => {
           beforeAll(() => {
             licenceData.sroc_charge_versions = true
-            vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
-            FetchLicenceService.mockResolvedValue(licenceData)
+            vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licenceData)
           })
 
           it('returns the correct flags', async () => {
@@ -184,8 +176,7 @@ describe('Determine Workflow Flags Service', () => {
               batchType: 'annual'
             })
 
-            vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
-            FetchLicenceService.mockResolvedValue(licenceData)
+            vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licenceData)
           })
 
           it('returns the correct flags', async () => {
@@ -201,8 +192,7 @@ describe('Determine Workflow Flags Service', () => {
       describe('and has two-part tariff charge versions', () => {
         beforeAll(() => {
           licenceData.two_part_tariff_charge_versions = true
-          vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
-          FetchLicenceService.mockResolvedValue(licenceData)
+          vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licenceData)
         })
 
         it('returns the correct flags', async () => {
@@ -217,8 +207,7 @@ describe('Determine Workflow Flags Service', () => {
       describe('for a licence that has ended', () => {
         beforeAll(() => {
           licenceData.ended = true
-          vi.mock('../../../../app/services/licences/supplementary/fetch-licence.service.js')
-          FetchLicenceService.mockResolvedValue(licenceData)
+          vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licenceData)
         })
 
         it('returns the unchanged flags', async () => {

@@ -5,7 +5,7 @@ import SessionModelStub from '../../../support/stubs/session.stub.js'
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitReportedService from '../../../../app/services/return-logs/setup/submit-reported.service.js'
@@ -23,8 +23,7 @@ describe('Return Logs Setup - Submit Reported service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     yarStub = YarStub()
     yarStub.flash.mockReturnValue([])
@@ -62,7 +61,7 @@ describe('Return Logs Setup - Submit Reported service', () => {
         beforeEach(() => {
           session = SessionModelStub({ ...sessionData, checkPageVisited: true })
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {

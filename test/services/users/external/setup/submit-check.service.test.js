@@ -7,9 +7,9 @@ import YarStub from '../../../../support/stubs/yar.stub.js'
 import { generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import DeleteSessionDal from '../../../../../app/dal/delete-session.dal.js'
-import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
-import UnregisterLicencesDal from '../../../../../app/dal/users/external/setup/unregister-licences.dal.js'
+import * as DeleteSessionDal from '../../../../../app/dal/delete-session.dal.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as UnregisterLicencesDal from '../../../../../app/dal/users/external/setup/unregister-licences.dal.js'
 
 // Thing under test
 import SubmitCheckService from '../../../../../app/services/users/external/setup/submit-check.service.js'
@@ -28,12 +28,9 @@ describe('Users - External - Setup - Submit Check Service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../../app/dal/delete-session.dal.js')
-    DeleteSessionDal.mockResolvedValue()
-    vi.mock('../../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
-    vi.mock('../../../../../app/dal/users/external/setup/unregister-licences.dal.js')
-    UnregisterLicencesDal.mockResolvedValue()
+    vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue()
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+    vi.spyOn(UnregisterLicencesDal, 'default').mockResolvedValue()
 
     yarStub = YarStub()
   })

@@ -7,8 +7,8 @@ import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchExistingCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchExistingCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitExistingAccountService from '../../../../app/services/billing-accounts/setup/submit-existing-account.service.js'
@@ -27,8 +27,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
@@ -68,7 +67,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -99,7 +98,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -127,7 +126,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value and deletes the previously saved data', async () => {
@@ -183,7 +182,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -210,7 +209,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -236,8 +235,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
   describe('when validation fails', () => {
     beforeEach(() => {
       payload = {}
-      vi.mock('../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js')
-      FetchExistingCompaniesService.mockReturnValue(companies)
+      vi.spyOn(FetchExistingCompaniesService, 'default').mockReturnValue(companies)
     })
 
     it('returns page data for the view, with errors', async () => {

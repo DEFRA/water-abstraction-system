@@ -5,7 +5,7 @@ import SessionModelStub from '../../support/stubs/session.stub.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitPostcodeService from '../../../app/services/address/submit-postcode.service.js'
@@ -34,8 +34,7 @@ describe('Address - Submit Postcode Service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {

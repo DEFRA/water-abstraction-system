@@ -9,10 +9,10 @@ import BillModel from '../../../../app/models/bill.model.js'
 import BillLicenceModel from '../../../../app/models/bill-licence.model.js'
 import BillRunError from '../../../../app/errors/bill-run.error.js'
 import BillRunModel from '../../../../app/models/bill-run.model.js'
-import FetchPreviousTransactionsService from '../../../../app/services/bill-runs/fetch-previous-transactions.service.js'
-import GenerateTwoPartTariffTransactionService from '../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js'
-import ProcessSupplementaryTransactionsService from '../../../../app/services/bill-runs/process-supplementary-transactions.service.js'
-import SendTransactionsService from '../../../../app/services/bill-runs/send-transactions.service.js'
+import * as FetchPreviousTransactionsService from '../../../../app/services/bill-runs/fetch-previous-transactions.service.js'
+import * as GenerateTwoPartTariffTransactionService from '../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js'
+import * as ProcessSupplementaryTransactionsService from '../../../../app/services/bill-runs/process-supplementary-transactions.service.js'
+import * as SendTransactionsService from '../../../../app/services/bill-runs/send-transactions.service.js'
 import TransactionModel from '../../../../app/models/transaction.model.js'
 
 // Thing under test
@@ -38,7 +38,6 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
     billingAccount = TwoPartTariffFixture.billingAccount()
     licence = TwoPartTariffFixture.licence(region)
 
-    vi.mock('../../../../app/services/bill-runs/send-transactions.service.js')
 
     billInsertStub = vi.fn()
     billLicenceInsertStub = vi.fn()
@@ -48,8 +47,7 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
     vi.spyOn(BillLicenceModel, 'query').mockReturnValue({ insert: billLicenceInsertStub })
     vi.spyOn(TransactionModel, 'query').mockReturnValue({ insert: transactionInsertStub })
 
-    vi.mock('../../../../app/services/bill-runs/fetch-previous-transactions.service.js')
-    FetchPreviousTransactionsService.mockResolvedValue([])
+    vi.spyOn(FetchPreviousTransactionsService, 'default').mockResolvedValue([])
   })
 
   afterEach(() => {
@@ -180,8 +178,7 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
               // NOTE: If FetchPreviousTransactions finds existing transactions that 'cancel' out those generated as part
               // of the current bill run, ProcessSupplementaryTransactionsService will return nothing, and the engine uses
               // this to know not to create a bill.
-              vi.mock('../../../../app/services/bill-runs/process-supplementary-transactions.service.js')
-              ProcessSupplementaryTransactionsService.mockResolvedValue([])
+              vi.spyOn(ProcessSupplementaryTransactionsService, 'default').mockResolvedValue([])
 
               billingAccount.chargeVersions = [TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)]
             })
@@ -223,8 +220,7 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
             // NOTE: If FetchPreviousTransactions finds existing transactions it'll pass them to
             // ProcessSupplementaryTransactionsService which will then reverse them as credits to
             // ProcessBillingPeriodService.
-            vi.mock('../../../../app/services/bill-runs/process-supplementary-transactions.service.js')
-            ProcessSupplementaryTransactionsService.mockImplementation(
+            vi.spyOn(ProcessSupplementaryTransactionsService, 'default').mockImplementation(
               async (_previousTransactions, _generatedTransactions, billLicenceId) => {
                 return [{ billLicenceId, credit: true, id: '3032d87b-176a-4db8-8b6d-f3c04311ca80' }]
               }
@@ -287,8 +283,7 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
 
     describe('because generating the calculated transaction fails', () => {
       beforeEach(async () => {
-        vi.mock('../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js')
-        GenerateTwoPartTariffTransactionService.mockRejectedValue(new Error())
+        vi.spyOn(GenerateTwoPartTariffTransactionService, 'default').mockRejectedValue(new Error())
       })
 
       it('throws a BillRunError with the correct code', async () => {
@@ -303,7 +298,7 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
 
     describe('because sending the transactions fails', () => {
       beforeEach(async () => {
-        SendTransactionsService.mockRejectedValue()
+        vi.spyOn(SendTransactionsService, 'default').mockRejectedValue()
       })
 
       it('throws an error', async () => {

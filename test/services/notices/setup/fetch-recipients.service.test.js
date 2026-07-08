@@ -5,11 +5,11 @@ import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture
 import { NoticeJourney, NoticeType } from '../../../../app/lib/static-lookups.lib.js'
 
 // Things we need to stub
-import FetchAbstractionAlertRecipientsDal from '../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'
-import FetchPaperReturnsRecipientsService from '../../../../app/services/notices/setup/returns-notice/fetch-paper-returns-recipients.service.js'
-import FetchRenewalInvitationRecipientsService from '../../../../app/services/notices/setup/renewal-notice/fetch-renewal-invitation-recipients.service.js'
-import FetchReturnsInvitationRecipientsService from '../../../../app/services/notices/setup/returns-notice/fetch-returns-invitation-recipients.service.js'
-import FetchReturnsReminderRecipientsService from '../../../../app/services/notices/setup/returns-notice/fetch-returns-reminder-recipients.service.js'
+import * as FetchAbstractionAlertRecipientsDal from '../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'
+import * as FetchPaperReturnsRecipientsService from '../../../../app/services/notices/setup/returns-notice/fetch-paper-returns-recipients.service.js'
+import * as FetchRenewalInvitationRecipientsService from '../../../../app/services/notices/setup/renewal-notice/fetch-renewal-invitation-recipients.service.js'
+import * as FetchReturnsInvitationRecipientsService from '../../../../app/services/notices/setup/returns-notice/fetch-returns-invitation-recipients.service.js'
+import * as FetchReturnsReminderRecipientsService from '../../../../app/services/notices/setup/returns-notice/fetch-returns-reminder-recipients.service.js'
 
 // Thing under test
 import FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
@@ -20,16 +20,11 @@ describe('Notices - Setup - Fetch Recipients service', () => {
   let session
 
   beforeEach(() => {
-    vi.mock('../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
-    FetchAbstractionAlertRecipientsDal.mockResolvedValue()
-    vi.mock('../../../../app/services/notices/setup/returns-notice/fetch-paper-returns-recipients.service.js')
-    FetchPaperReturnsRecipientsService.mockResolvedValue()
-    vi.mock('../../../../app/services/notices/setup/renewal-notice/fetch-renewal-invitation-recipients.service.js')
-    FetchRenewalInvitationRecipientsService.mockResolvedValue()
-    vi.mock('../../../../app/services/notices/setup/returns-notice/fetch-returns-invitation-recipients.service.js')
-    FetchReturnsInvitationRecipientsService.mockResolvedValue()
-    vi.mock('../../../../app/services/notices/setup/returns-notice/fetch-returns-reminder-recipients.service.js')
-    FetchReturnsReminderRecipientsService.mockResolvedValue()
+    vi.spyOn(FetchAbstractionAlertRecipientsDal, 'default').mockResolvedValue()
+    vi.spyOn(FetchPaperReturnsRecipientsService, 'default').mockResolvedValue()
+    vi.spyOn(FetchRenewalInvitationRecipientsService, 'default').mockResolvedValue()
+    vi.spyOn(FetchReturnsInvitationRecipientsService, 'default').mockResolvedValue()
+    vi.spyOn(FetchReturnsReminderRecipientsService, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
@@ -50,18 +45,18 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       beforeEach(() => {
         recipients = [RecipientsFixture.alertNoticePrimaryUser(), RecipientsFixture.alertNoticeAdditionalContact()]
 
-        FetchAbstractionAlertRecipientsDal.mockResolvedValue(recipients)
+        vi.spyOn(FetchAbstractionAlertRecipientsDal, 'default').mockResolvedValue(recipients)
       })
 
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService(session, download)
 
-        expect(FetchAbstractionAlertRecipientsDal).toHaveBeenCalledExactlyOnceWith(session)
+        expect(FetchAbstractionAlertRecipientsDal.default).toHaveBeenCalledExactlyOnceWith(session)
 
-        expect(FetchReturnsInvitationRecipientsService).not.toHaveBeenCalled()
-        expect(FetchRenewalInvitationRecipientsService).not.toHaveBeenCalled()
-        expect(FetchPaperReturnsRecipientsService).not.toHaveBeenCalled()
-        expect(FetchReturnsReminderRecipientsService).not.toHaveBeenCalled()
+        expect(FetchReturnsInvitationRecipientsService.default).not.toHaveBeenCalled()
+        expect(FetchRenewalInvitationRecipientsService.default).not.toHaveBeenCalled()
+        expect(FetchPaperReturnsRecipientsService.default).not.toHaveBeenCalled()
+        expect(FetchReturnsReminderRecipientsService.default).not.toHaveBeenCalled()
 
         expect(results).toEqual(recipients)
       })
@@ -85,18 +80,18 @@ describe('Notices - Setup - Fetch Recipients service', () => {
           RecipientsFixture.returnsNoticeReturnsAgent(download)
         ]
 
-        FetchPaperReturnsRecipientsService.mockResolvedValue(recipients)
+        vi.spyOn(FetchPaperReturnsRecipientsService, 'default').mockResolvedValue(recipients)
       })
 
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService(session, download)
 
-        expect(FetchPaperReturnsRecipientsService).toHaveBeenCalledExactlyOnceWith(session, download)
+        expect(FetchPaperReturnsRecipientsService.default).toHaveBeenCalledExactlyOnceWith(session, download)
 
-        expect(FetchAbstractionAlertRecipientsDal).not.toHaveBeenCalled()
-        expect(FetchRenewalInvitationRecipientsService).not.toHaveBeenCalled()
-        expect(FetchReturnsInvitationRecipientsService).not.toHaveBeenCalled()
-        expect(FetchReturnsReminderRecipientsService).not.toHaveBeenCalled()
+        expect(FetchAbstractionAlertRecipientsDal.default).not.toHaveBeenCalled()
+        expect(FetchRenewalInvitationRecipientsService.default).not.toHaveBeenCalled()
+        expect(FetchReturnsInvitationRecipientsService.default).not.toHaveBeenCalled()
+        expect(FetchReturnsReminderRecipientsService.default).not.toHaveBeenCalled()
 
         expect(results).toEqual(recipients)
       })
@@ -111,18 +106,18 @@ describe('Notices - Setup - Fetch Recipients service', () => {
           RecipientsFixture.returnsNoticeReturnsAgent(download)
         ]
 
-        FetchPaperReturnsRecipientsService.mockResolvedValue(recipients)
+        vi.spyOn(FetchPaperReturnsRecipientsService, 'default').mockResolvedValue(recipients)
       })
 
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService(session, download)
 
-        expect(FetchPaperReturnsRecipientsService).toHaveBeenCalledExactlyOnceWith(session, download)
+        expect(FetchPaperReturnsRecipientsService.default).toHaveBeenCalledExactlyOnceWith(session, download)
 
-        expect(FetchAbstractionAlertRecipientsDal).not.toHaveBeenCalled()
-        expect(FetchRenewalInvitationRecipientsService).not.toHaveBeenCalled()
-        expect(FetchReturnsInvitationRecipientsService).not.toHaveBeenCalled()
-        expect(FetchReturnsReminderRecipientsService).not.toHaveBeenCalled()
+        expect(FetchAbstractionAlertRecipientsDal.default).not.toHaveBeenCalled()
+        expect(FetchRenewalInvitationRecipientsService.default).not.toHaveBeenCalled()
+        expect(FetchReturnsInvitationRecipientsService.default).not.toHaveBeenCalled()
+        expect(FetchReturnsReminderRecipientsService.default).not.toHaveBeenCalled()
 
         expect(results).toEqual(recipients)
       })
@@ -143,18 +138,18 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       beforeEach(() => {
         recipients = [RecipientsFixture.renewalInvitationPrimaryUser()]
 
-        FetchRenewalInvitationRecipientsService.mockResolvedValue(recipients)
+        vi.spyOn(FetchRenewalInvitationRecipientsService, 'default').mockResolvedValue(recipients)
       })
 
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService(session, download)
 
-        expect(FetchRenewalInvitationRecipientsService).toHaveBeenCalledExactlyOnceWith(session)
+        expect(FetchRenewalInvitationRecipientsService.default).toHaveBeenCalledExactlyOnceWith(session)
 
-        expect(FetchAbstractionAlertRecipientsDal).not.toHaveBeenCalled()
-        expect(FetchPaperReturnsRecipientsService).not.toHaveBeenCalled()
-        expect(FetchReturnsInvitationRecipientsService).not.toHaveBeenCalled()
-        expect(FetchReturnsReminderRecipientsService).not.toHaveBeenCalled()
+        expect(FetchAbstractionAlertRecipientsDal.default).not.toHaveBeenCalled()
+        expect(FetchPaperReturnsRecipientsService.default).not.toHaveBeenCalled()
+        expect(FetchReturnsInvitationRecipientsService.default).not.toHaveBeenCalled()
+        expect(FetchReturnsReminderRecipientsService.default).not.toHaveBeenCalled()
 
         expect(results).toEqual(recipients)
       })
@@ -178,18 +173,18 @@ describe('Notices - Setup - Fetch Recipients service', () => {
           RecipientsFixture.returnsNoticeReturnsAgent(download)
         ]
 
-        FetchReturnsInvitationRecipientsService.mockResolvedValue(recipients)
+        vi.spyOn(FetchReturnsInvitationRecipientsService, 'default').mockResolvedValue(recipients)
       })
 
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService(session, download)
 
-        expect(FetchReturnsInvitationRecipientsService).toHaveBeenCalledExactlyOnceWith(session, download)
+        expect(FetchReturnsInvitationRecipientsService.default).toHaveBeenCalledExactlyOnceWith(session, download)
 
-        expect(FetchAbstractionAlertRecipientsDal).not.toHaveBeenCalled()
-        expect(FetchPaperReturnsRecipientsService).not.toHaveBeenCalled()
-        expect(FetchRenewalInvitationRecipientsService).not.toHaveBeenCalled()
-        expect(FetchReturnsReminderRecipientsService).not.toHaveBeenCalled()
+        expect(FetchAbstractionAlertRecipientsDal.default).not.toHaveBeenCalled()
+        expect(FetchPaperReturnsRecipientsService.default).not.toHaveBeenCalled()
+        expect(FetchRenewalInvitationRecipientsService.default).not.toHaveBeenCalled()
+        expect(FetchReturnsReminderRecipientsService.default).not.toHaveBeenCalled()
 
         expect(results).toEqual(recipients)
       })
@@ -204,18 +199,18 @@ describe('Notices - Setup - Fetch Recipients service', () => {
           RecipientsFixture.returnsNoticeReturnsAgent(download)
         ]
 
-        FetchReturnsInvitationRecipientsService.mockResolvedValue(recipients)
+        vi.spyOn(FetchReturnsInvitationRecipientsService, 'default').mockResolvedValue(recipients)
       })
 
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService(session, download)
 
-        expect(FetchReturnsInvitationRecipientsService).toHaveBeenCalledExactlyOnceWith(session, download)
+        expect(FetchReturnsInvitationRecipientsService.default).toHaveBeenCalledExactlyOnceWith(session, download)
 
-        expect(FetchAbstractionAlertRecipientsDal).not.toHaveBeenCalled()
-        expect(FetchPaperReturnsRecipientsService).not.toHaveBeenCalled()
-        expect(FetchRenewalInvitationRecipientsService).not.toHaveBeenCalled()
-        expect(FetchReturnsReminderRecipientsService).not.toHaveBeenCalled()
+        expect(FetchAbstractionAlertRecipientsDal.default).not.toHaveBeenCalled()
+        expect(FetchPaperReturnsRecipientsService.default).not.toHaveBeenCalled()
+        expect(FetchRenewalInvitationRecipientsService.default).not.toHaveBeenCalled()
+        expect(FetchReturnsReminderRecipientsService.default).not.toHaveBeenCalled()
 
         expect(results).toEqual(recipients)
       })
@@ -239,18 +234,18 @@ describe('Notices - Setup - Fetch Recipients service', () => {
           RecipientsFixture.returnsNoticeReturnsAgent(download)
         ]
 
-        FetchReturnsReminderRecipientsService.mockResolvedValue(recipients)
+        vi.spyOn(FetchReturnsReminderRecipientsService, 'default').mockResolvedValue(recipients)
       })
 
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService(session, download)
 
-        expect(FetchReturnsReminderRecipientsService).toHaveBeenCalledExactlyOnceWith(session, download)
+        expect(FetchReturnsReminderRecipientsService.default).toHaveBeenCalledExactlyOnceWith(session, download)
 
-        expect(FetchAbstractionAlertRecipientsDal).not.toHaveBeenCalled()
-        expect(FetchPaperReturnsRecipientsService).not.toHaveBeenCalled()
-        expect(FetchRenewalInvitationRecipientsService).not.toHaveBeenCalled()
-        expect(FetchReturnsInvitationRecipientsService).not.toHaveBeenCalled()
+        expect(FetchAbstractionAlertRecipientsDal.default).not.toHaveBeenCalled()
+        expect(FetchPaperReturnsRecipientsService.default).not.toHaveBeenCalled()
+        expect(FetchRenewalInvitationRecipientsService.default).not.toHaveBeenCalled()
+        expect(FetchReturnsInvitationRecipientsService.default).not.toHaveBeenCalled()
 
         expect(results).toEqual(recipients)
       })
@@ -265,18 +260,18 @@ describe('Notices - Setup - Fetch Recipients service', () => {
           RecipientsFixture.returnsNoticeReturnsAgent(download)
         ]
 
-        FetchReturnsReminderRecipientsService.mockResolvedValue(recipients)
+        vi.spyOn(FetchReturnsReminderRecipientsService, 'default').mockResolvedValue(recipients)
       })
 
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService(session, download)
 
-        expect(FetchReturnsReminderRecipientsService).toHaveBeenCalledExactlyOnceWith(session, download)
+        expect(FetchReturnsReminderRecipientsService.default).toHaveBeenCalledExactlyOnceWith(session, download)
 
-        expect(FetchAbstractionAlertRecipientsDal).not.toHaveBeenCalled()
-        expect(FetchPaperReturnsRecipientsService).not.toHaveBeenCalled()
-        expect(FetchRenewalInvitationRecipientsService).not.toHaveBeenCalled()
-        expect(FetchReturnsInvitationRecipientsService).not.toHaveBeenCalled()
+        expect(FetchAbstractionAlertRecipientsDal.default).not.toHaveBeenCalled()
+        expect(FetchPaperReturnsRecipientsService.default).not.toHaveBeenCalled()
+        expect(FetchRenewalInvitationRecipientsService.default).not.toHaveBeenCalled()
+        expect(FetchReturnsInvitationRecipientsService.default).not.toHaveBeenCalled()
 
         expect(results).toEqual(recipients)
       })

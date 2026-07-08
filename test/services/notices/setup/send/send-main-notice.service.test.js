@@ -5,12 +5,12 @@ import * as NoticesFixture from '../../../../support/fixtures/notices.fixture.js
 import * as NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
 
 // Things we need to stub
-import CheckNotificationStatusService from '../../../../../app/services/notifications/check-notification-status.service.js'
+import * as CheckNotificationStatusService from '../../../../../app/services/notifications/check-notification-status.service.js'
 import NotificationModel from '../../../../../app/models/notification.model.js'
 import NotifyConfig from '../../../../../config/notify.config.js'
-import SendEmailNotificationService from '../../../../../app/services/notices/setup/send/send-email-notification.service.js'
-import SendLetterNotificationService from '../../../../../app/services/notices/setup/send/send-letter-notification.service.js'
-import SendPaperReturnNotificationService from '../../../../../app/services/notices/setup/send/send-paper-return-notification.service.js'
+import * as SendEmailNotificationService from '../../../../../app/services/notices/setup/send/send-email-notification.service.js'
+import * as SendLetterNotificationService from '../../../../../app/services/notices/setup/send/send-letter-notification.service.js'
+import * as SendPaperReturnNotificationService from '../../../../../app/services/notices/setup/send/send-paper-return-notification.service.js'
 
 // Thing under test
 import SendMainNoticeService from '../../../../../app/services/notices/setup/send/send-main-notice.service.js'
@@ -44,8 +44,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
       whereNull: vi.fn().mockReturnThis()
     })
 
-    vi.mock('../../../../../app/services/notifications/check-notification-status.service.js')
-    CheckNotificationStatusService.mockResolvedValue()
+    vi.spyOn(CheckNotificationStatusService, 'default').mockResolvedValue()
 
     // We have to set wait for status to 25ms to avoid the tests timing out. By default it would be 5 seconds and is
     // used to give Notify a chance to process the email notifications.
@@ -97,8 +96,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
 
     describe('and all are sent to Notify successfully', () => {
       beforeEach(() => {
-        vi.mock('../../../../../app/services/notices/setup/send/send-email-notification.service.js')
-        SendEmailNotificationService.mockResolvedValue({
+        vi.spyOn(SendEmailNotificationService, 'default').mockResolvedValue({
           id: notifications[1].id,
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
           notifyStatus: 'created',
@@ -106,8 +104,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
           status: 'pending'
         })
 
-        vi.mock('../../../../../app/services/notices/setup/send/send-letter-notification.service.js')
-        SendLetterNotificationService.mockResolvedValue({
+        vi.spyOn(SendLetterNotificationService, 'default').mockResolvedValue({
           id: notifications[0].id,
           notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
           notifyStatus: 'created',
@@ -143,8 +140,8 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         await SendMainNoticeService(notice, notifications)
 
         // We only check the notification status for emails
-        expect(CheckNotificationStatusService).toHaveBeenCalledOnce()
-        expect(CheckNotificationStatusService.mock.calls[0][0]).toEqual({
+        expect(CheckNotificationStatusService.default).toHaveBeenCalledOnce()
+        expect(CheckNotificationStatusService.default.mock.calls[0][0]).toEqual({
           ...notifications[1],
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
           notifyStatus: 'created',
@@ -156,8 +153,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
 
     describe('and a letter notification fails to send to Notify', () => {
       beforeEach(() => {
-        vi.mock('../../../../../app/services/notices/setup/send/send-email-notification.service.js')
-        SendEmailNotificationService.mockResolvedValue({
+        vi.spyOn(SendEmailNotificationService, 'default').mockResolvedValue({
           id: notifications[1].id,
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
           notifyStatus: 'created',
@@ -165,8 +161,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
           status: 'pending'
         })
 
-        vi.mock('../../../../../app/services/notices/setup/send/send-letter-notification.service.js')
-        SendLetterNotificationService.mockResolvedValue({
+        vi.spyOn(SendLetterNotificationService, 'default').mockResolvedValue({
           id: notifications[0].id,
           notifyError:
             '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"ValidationError","message":"Last line of address must be a real UK postcode or another country"}]}',
@@ -204,8 +199,8 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         // NOTE: We still call CheckNotificationStatusService because we know it has logic to only check pending
         // notifications. So, we don't worry about that in SendNoticeService, even though we've rigged our test to fail
         // the email notification.
-        expect(CheckNotificationStatusService).toHaveBeenCalledOnce()
-        expect(CheckNotificationStatusService.mock.calls[0][0]).toEqual({
+        expect(CheckNotificationStatusService.default).toHaveBeenCalledOnce()
+        expect(CheckNotificationStatusService.default.mock.calls[0][0]).toEqual({
           ...notifications[1],
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
           notifyStatus: 'created',
@@ -217,8 +212,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
 
     describe('and an email notification fails to send to Notify', () => {
       beforeEach(() => {
-        vi.mock('../../../../../app/services/notices/setup/send/send-email-notification.service.js')
-        SendEmailNotificationService.mockResolvedValue({
+        vi.spyOn(SendEmailNotificationService, 'default').mockResolvedValue({
           ...notifications[1],
           id: notifications[1].id,
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
@@ -232,7 +226,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
       it('sends the notice, records the Notify responses, including errors', async () => {
         await SendMainNoticeService(notice, [notifications[1]])
 
-        expect(CheckNotificationStatusService).not.toHaveBeenCalled()
+        expect(CheckNotificationStatusService.default).not.toHaveBeenCalled()
       })
     })
   })
@@ -261,8 +255,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
 
     describe('and it is sent to Notify successfully', () => {
       beforeEach(() => {
-        vi.mock('../../../../../app/services/notices/setup/send/send-paper-return-notification.service.js')
-        SendPaperReturnNotificationService.mockResolvedValue({
+        vi.spyOn(SendPaperReturnNotificationService, 'default').mockResolvedValue({
           id: notifications[0].id,
           notifyId: '95296b09-fef6-4723-9716-e962fcd48e8f',
           notifyStatus: 'created',
@@ -291,14 +284,13 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         await SendMainNoticeService(notice, notifications)
 
         // We only check the notification status for emails
-        expect(CheckNotificationStatusService).not.toHaveBeenCalled()
+        expect(CheckNotificationStatusService.default).not.toHaveBeenCalled()
       })
     })
 
     describe('and it fails to send to Notify', () => {
       beforeEach(() => {
-        vi.mock('../../../../../app/services/notices/setup/send/send-paper-return-notification.service.js')
-        SendPaperReturnNotificationService.mockResolvedValue({
+        vi.spyOn(SendPaperReturnNotificationService, 'default').mockResolvedValue({
           id: notifications[0].id,
           notifyError: '{"status":404,"message":"Request failed with status code 404"}',
           pdf: Buffer.from('mock file'),
@@ -325,7 +317,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         await SendMainNoticeService(notice, notifications)
 
         // We only check the notification status for emails
-        expect(CheckNotificationStatusService).not.toHaveBeenCalled()
+        expect(CheckNotificationStatusService.default).not.toHaveBeenCalled()
       })
     })
   })

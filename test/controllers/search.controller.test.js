@@ -6,8 +6,8 @@ const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-import SubmitSearchService from '../../app/services/search/submit-search.service.js'
-import ViewSearchService from '../../app/services/search/view-search.service.js'
+import * as SubmitSearchService from '../../app/services/search/submit-search.service.js'
+import * as ViewSearchService from '../../app/services/search/view-search.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -48,8 +48,7 @@ describe('Search controller', () => {
       describe('when the request succeeds', () => {
         describe('and provides the search page', () => {
           beforeEach(async () => {
-            vi.mock('../../app/services/search/view-search.service.js')
-            ViewSearchService.mockResolvedValue({
+            vi.spyOn(ViewSearchService, 'default').mockResolvedValue({
               pageTitle: 'Search'
             })
           })
@@ -65,8 +64,7 @@ describe('Search controller', () => {
         describe('and shows search results', () => {
           beforeEach(async () => {
             getOptions.url = '/search?page=1'
-            vi.mock('../../app/services/search/view-search.service.js')
-            ViewSearchService.mockResolvedValue({
+            vi.spyOn(ViewSearchService, 'default').mockResolvedValue({
               pageTitle: 'Search results for "searchthis"',
               pagination: { currentPageNumber: 1, numberOfPages: 2, showingMessage: 'Showing all 2 matches' },
               query: 'searchthis',
@@ -97,8 +95,7 @@ describe('Search controller', () => {
         beforeEach(async () => {
           postOptions.payload.query = 'searchthis'
 
-          vi.mock('../../app/services/search/submit-search.service.js')
-          SubmitSearchService.mockResolvedValue({ redirect: '/system/search?page=1' })
+          vi.spyOn(SubmitSearchService, 'default').mockResolvedValue({ redirect: '/system/search?page=1' })
         })
 
         it('redirects to the first page of results', async () => {
@@ -113,8 +110,7 @@ describe('Search controller', () => {
         beforeEach(async () => {
           postOptions.payload.query = ''
 
-          vi.mock('../../app/services/search/submit-search.service.js')
-          SubmitSearchService.mockResolvedValue({
+          vi.spyOn(SubmitSearchService, 'default').mockResolvedValue({
             error: {
               errorList: [
                 {

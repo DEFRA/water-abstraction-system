@@ -1,7 +1,7 @@
 // Test framework dependencies
 
 // Things we need to stub
-import FetchBillLicenceSummaryService from '../../../app/services/bill-licences/fetch-bill-licence-summary.service.js'
+import * as FetchBillLicenceSummaryService from '../../../app/services/bill-licences/fetch-bill-licence-summary.service.js'
 
 // Thing under test
 import RemoveBillLicenceService from '../../../app/services/bill-licences/remove-bill-licence.service.js'
@@ -10,8 +10,7 @@ describe('Remove Bill Licence service', () => {
   const testId = 'a4fbaa27-a91c-4328-a1b8-774ade11027b'
 
   beforeEach(() => {
-    vi.mock('../../../app/services/bill-licences/fetch-bill-licence-summary.service.js')
-    FetchBillLicenceSummaryService.mockResolvedValue(_billLicenceSummary())
+    vi.spyOn(FetchBillLicenceSummaryService, 'default').mockResolvedValue(_billLicenceSummary())
   })
 
   afterEach(() => {

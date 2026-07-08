@@ -8,8 +8,8 @@ import { generateUUID } from '../../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 
 // Things we need to stub
-import FetchCompanyContactDal from '../../../../app/dal/company-contacts/setup/fetch-company-contact.dal.js'
-import FetchCompanyLicencesDal from '../../../../app/dal/company-contacts/fetch-company-licences.dal.js'
+import * as FetchCompanyContactDal from '../../../../app/dal/company-contacts/setup/fetch-company-contact.dal.js'
+import * as FetchCompanyLicencesDal from '../../../../app/dal/company-contacts/fetch-company-licences.dal.js'
 
 // Thing under test
 import InitiateEditSessionService from '../../../../app/services/company-contacts/setup/initiate-edit-session.service.js'
@@ -33,10 +33,8 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
       contact
     })
 
-    vi.mock('../../../../app/dal/company-contacts/setup/fetch-company-contact.dal.js')
-    FetchCompanyContactDal.mockResolvedValue(companyContact)
-    vi.mock('../../../../app/dal/company-contacts/fetch-company-licences.dal.js')
-    FetchCompanyLicencesDal.mockResolvedValue(licences)
+    vi.spyOn(FetchCompanyContactDal, 'default').mockResolvedValue(companyContact)
+    vi.spyOn(FetchCompanyLicencesDal, 'default').mockResolvedValue(licences)
   })
 
   afterEach(() => {
@@ -104,7 +102,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
     describe('and the company has no active licences', () => {
       beforeEach(() => {
-        FetchCompanyLicencesDal.mockResolvedValue([])
+        vi.spyOn(FetchCompanyLicencesDal, 'default').mockResolvedValue([])
       })
 
       describe('when the "abstractionAlerts" property is true', () => {

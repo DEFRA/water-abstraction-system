@@ -5,7 +5,7 @@ import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-revi
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchReviewChargeElementService from '../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js'
+import * as FetchReviewChargeElementService from '../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js'
 import ReviewChargeElementModel from '../../../../app/models/review-charge-element.model.js'
 
 // Thing under test
@@ -22,8 +22,7 @@ describe('Bill Runs Review - Submit Edit Service', () => {
   beforeEach(() => {
     reviewChargeElement = BillRunsReviewFixture.reviewChargeElement()
 
-    vi.mock('../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js')
-    FetchReviewChargeElementService.mockResolvedValue(reviewChargeElement)
+    vi.spyOn(FetchReviewChargeElementService, 'default').mockResolvedValue(reviewChargeElement)
 
     patchStub = vi.fn().mockResolvedValue()
     vi.spyOn(ReviewChargeElementModel, 'query').mockReturnValue({

@@ -5,7 +5,7 @@ import SessionModelStub from '../../../support/stubs/session.stub.js'
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitMeterProvidedService from '../../../../app/services/return-logs/setup/submit-meter-provided.service.js'
@@ -24,8 +24,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     yarStub = YarStub()
     yarStub.flash.mockReturnValue([])
@@ -92,7 +91,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
 
               session = SessionModelStub(sessionData)
 
-              FetchSessionDal.mockResolvedValue(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('removes the previously entered meter details from the session data', async () => {
@@ -114,7 +113,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
               checkPageVisited: true
             })
 
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('returns the correct details the controller needs to redirect the journey', async () => {

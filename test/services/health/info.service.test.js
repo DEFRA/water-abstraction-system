@@ -6,7 +6,7 @@ const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 // Things we need to stub
 import * as AddressFacadeViewHealthRequest from '../../../app/requests/address-facade/view-health.request.js'
 import * as ChargingModuleViewHealthRequest from '../../../app/requests/charging-module/view-health.request.js'
-import CreateRedisClientService from '../../../app/services/health/create-redis-client.service.js'
+import * as CreateRedisClientService from '../../../app/services/health/create-redis-client.service.js'
 import * as GotenbergViewHealthRequest from '../../../app/requests/gotenberg/view-health.request.js'
 import * as LegacyViewHealthRequest from '../../../app/requests/legacy/view-health.request.js'
 import * as NotifyViewHealthRequest from '../../../app/requests/notify/view-health.request.js'
@@ -73,7 +73,6 @@ describe('Health - Info service', () => {
     gotenbergViewHealthRequestStub = vi.spyOn(GotenbergViewHealthRequest, 'send').mockImplementation(() => {})
     legacyViewHealthRequestStub = vi.spyOn(LegacyViewHealthRequest, 'send').mockImplementation(() => {})
     notifyViewHealthRequestStub = vi.spyOn(NotifyViewHealthRequest, 'send').mockImplementation(() => {})
-    vi.mock('../../../app/services/health/create-redis-client.service.js')
     respViewHealthRequestStub = vi.spyOn(RespViewHealthRequest, 'send').mockImplementation(() => {})
 
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
@@ -100,7 +99,7 @@ describe('Health - Info service', () => {
 
   describe('when all the services are running', () => {
     beforeEach(() => {
-      CreateRedisClientService.mockReturnValue({ ping: vi.fn().mockResolvedValue(), disconnect: vi.fn().mockResolvedValue() })
+      vi.spyOn(CreateRedisClientService, 'default').mockReturnValue({ ping: vi.fn().mockResolvedValue(), disconnect: vi.fn().mockResolvedValue() })
 
       // In this scenario everything is hunky-dory so we return 2xx responses from these services
       addressFacadeViewStatusRequestStub.mockResolvedValue(goodRequestResults.addressFacade)
@@ -164,7 +163,7 @@ describe('Health - Info service', () => {
 
     describe('is not running', () => {
       beforeEach(async () => {
-        CreateRedisClientService.mockReturnValue({
+        vi.spyOn(CreateRedisClientService, 'default').mockReturnValue({
           ping: vi.fn().throwsException(new Error('Redis check went boom')),
           disconnect: vi.fn().mockResolvedValue()
         })
@@ -201,7 +200,7 @@ describe('Health - Info service', () => {
 
   describe('when ClamAV', () => {
     beforeEach(async () => {
-      CreateRedisClientService.mockReturnValue({ ping: vi.fn().mockResolvedValue(), disconnect: vi.fn().mockResolvedValue() })
+      vi.spyOn(CreateRedisClientService, 'default').mockReturnValue({ ping: vi.fn().mockResolvedValue(), disconnect: vi.fn().mockResolvedValue() })
 
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
       addressFacadeViewStatusRequestStub.mockResolvedValue(goodRequestResults.addressFacade)
@@ -297,7 +296,7 @@ describe('Health - Info service', () => {
 
       vi.spyOn(util, 'promisify').mockReturnValue(execStub)
 
-      CreateRedisClientService.mockReturnValue({ ping: vi.fn().mockResolvedValue(), disconnect: vi.fn().mockResolvedValue() })
+      vi.spyOn(CreateRedisClientService, 'default').mockReturnValue({ ping: vi.fn().mockResolvedValue(), disconnect: vi.fn().mockResolvedValue() })
     })
 
     describe('cannot be reached because of a network error', () => {

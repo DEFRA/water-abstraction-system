@@ -5,8 +5,8 @@ import * as RegionHelper from '../../../support/helpers/region.helper.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchRegionsService from '../../../../app/services/bill-runs/setup/fetch-regions.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchRegionsService from '../../../../app/services/bill-runs/setup/fetch-regions.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import RegionService from '../../../../app/services/bill-runs/setup/region.service.js'
@@ -25,11 +25,9 @@ describe('Bill Runs - Setup - Region service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    vi.mock('../../../../app/services/bill-runs/setup/fetch-regions.service.js')
-    FetchRegionsService.mockResolvedValue(regions)
+    vi.spyOn(FetchRegionsService, 'default').mockResolvedValue(regions)
   })
 
   afterEach(() => {

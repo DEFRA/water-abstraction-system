@@ -6,8 +6,8 @@ import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things to stub
-import FetchCompanyAddressesService from '../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchCompanyAddressesService from '../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitExistingAddressService from '../../../../app/services/billing-accounts/setup/submit-existing-address.service.js'
@@ -23,15 +23,13 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
   let sessionData
 
   beforeEach(() => {
-    vi.mock('../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js')
-    FetchCompanyAddressesService.mockReturnValue(companyAddresses)
+    vi.spyOn(FetchCompanyAddressesService, 'default').mockReturnValue(companyAddresses)
 
     sessionData = {}
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
@@ -47,7 +45,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
       session = SessionModelStub(sessionData)
 
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
       payload = {
         addressSelected: companyAddresses.addresses[0].id
@@ -80,7 +78,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -110,7 +108,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -137,7 +135,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -169,7 +167,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
       session = SessionModelStub(sessionData)
 
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
       payload = {
         addressSelected: 'new'
@@ -201,7 +199,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -231,7 +229,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -258,7 +256,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -290,7 +288,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
       session = SessionModelStub(sessionData)
 
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
       payload = {}
     })

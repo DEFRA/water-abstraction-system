@@ -4,9 +4,9 @@
 import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 
 // Things we need to stub
-import DetermineLicenceHasReturnVersionsService from '../../../app/services/licences/determine-licence-has-return-versions.service.js'
-import FetchReturnsService from '../../../app/services/licences/fetch-returns.service.js'
-import FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import * as DetermineLicenceHasReturnVersionsService from '../../../app/services/licences/determine-licence-has-return-versions.service.js'
+import * as FetchReturnsService from '../../../app/services/licences/fetch-returns.service.js'
+import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
 
 // Thing under test
 import ViewReturnsService from '../../../app/services/licences/view-returns.service.js'
@@ -37,14 +37,11 @@ describe('Licences - View Returns service', () => {
       licenceRef: generateLicenceRef()
     }
 
-    vi.mock('../../../app/services/licences/determine-licence-has-return-versions.service.js')
-    DetermineLicenceHasReturnVersionsService.mockReturnValue(true)
+    vi.spyOn(DetermineLicenceHasReturnVersionsService, 'default').mockReturnValue(true)
 
-    vi.mock('../../../app/services/licences/fetch-licence.service.js')
-    FetchLicenceService.mockResolvedValue(licence)
+    vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licence)
 
-    vi.mock('../../../app/services/licences/fetch-returns.service.js')
-    FetchReturnsService.mockResolvedValue({
+    vi.spyOn(FetchReturnsService, 'default').mockResolvedValue({
       totalNumber: 1,
       returns: _returnLogs()
     })

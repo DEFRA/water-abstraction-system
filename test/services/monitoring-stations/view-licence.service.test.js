@@ -6,7 +6,7 @@ import { licenceEnds } from '../../support/fixtures/licence.fixture.js'
 import { generateUserId } from '../../support/helpers/user.helper.js'
 
 // Things we need to stub
-import FetchLicenceMonitoringStationsDal from '../../../app/dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js'
+import * as FetchLicenceMonitoringStationsDal from '../../../app/dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js'
 
 // Thing under test
 import ViewLicenceService from '../../../app/services/monitoring-stations/view-licence.service.js'
@@ -78,8 +78,7 @@ describe('Monitoring Stations - View Licence service', () => {
     ]
     monitoringStation = { id: generateUUID(), label: 'Hades', riverName: 'The River Styx' }
 
-    vi.mock('../../../app/dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js')
-    FetchLicenceMonitoringStationsDal.mockResolvedValue({
+    vi.spyOn(FetchLicenceMonitoringStationsDal, 'default').mockResolvedValue({
       licence,
       licenceMonitoringStations,
       monitoringStation

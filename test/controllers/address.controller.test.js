@@ -6,14 +6,14 @@ const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-import InternationalAddressService from '../../app/services/address/international.service.js'
-import ManualAddressService from '../../app/services/address/manual.service.js'
-import PostcodeService from '../../app/services/address/postcode.service.js'
-import SelectAddressService from '../../app/services/address/select.service.js'
-import SubmitInternationalAddressService from '../../app/services/address/submit-international.service.js'
-import SubmitManualAddressService from '../../app/services/address/submit-manual.service.js'
-import SubmitPostcodeService from '../../app/services/address/submit-postcode.service.js'
-import SubmitSelectAddressService from '../../app/services/address/submit-select.service.js'
+import * as InternationalAddressService from '../../app/services/address/international.service.js'
+import * as ManualAddressService from '../../app/services/address/manual.service.js'
+import * as PostcodeService from '../../app/services/address/postcode.service.js'
+import * as SelectAddressService from '../../app/services/address/select.service.js'
+import * as SubmitInternationalAddressService from '../../app/services/address/submit-international.service.js'
+import * as SubmitManualAddressService from '../../app/services/address/submit-manual.service.js'
+import * as SubmitPostcodeService from '../../app/services/address/submit-postcode.service.js'
+import * as SubmitSelectAddressService from '../../app/services/address/submit-select.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -58,8 +58,7 @@ describe('Address controller', () => {
         }
 
         const pageData = _postcodePageData()
-        vi.mock('../../app/services/address/postcode.service.js')
-        PostcodeService.mockReturnValue(pageData)
+        vi.spyOn(PostcodeService, 'default').mockReturnValue(pageData)
       })
 
       it('returns the page successfully', async () => {
@@ -76,8 +75,7 @@ describe('Address controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/address/submit-postcode.service.js')
-          SubmitPostcodeService.mockReturnValue({})
+          vi.spyOn(SubmitPostcodeService, 'default').mockReturnValue({})
         })
 
         it('redirects to the select address page', async () => {
@@ -92,8 +90,7 @@ describe('Address controller', () => {
         beforeEach(() => {
           const pageData = _postcodePageData(true)
 
-          vi.mock('../../app/services/address/submit-postcode.service.js')
-          SubmitPostcodeService.mockReturnValue(pageData)
+          vi.spyOn(SubmitPostcodeService, 'default').mockReturnValue(pageData)
         })
 
         it('re-renders the postcode page with an error', async () => {
@@ -123,8 +120,7 @@ describe('Address controller', () => {
 
       describe('when addresses are found', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/address/select.service.js')
-          SelectAddressService.mockReturnValue({})
+          vi.spyOn(SelectAddressService, 'default').mockReturnValue({})
         })
 
         it('returns the page successfully', async () => {
@@ -136,8 +132,7 @@ describe('Address controller', () => {
 
       describe('when addresses are not found', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/address/select.service.js')
-          SelectAddressService.mockReturnValue({
+          vi.spyOn(SelectAddressService, 'default').mockReturnValue({
             redirect: true
           })
         })
@@ -158,8 +153,7 @@ describe('Address controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/address/submit-select.service.js')
-          SubmitSelectAddressService.mockReturnValue({
+          vi.spyOn(SubmitSelectAddressService, 'default').mockReturnValue({
             redirect: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/add-recipient'
           })
         })
@@ -179,8 +173,7 @@ describe('Address controller', () => {
           beforeEach(() => {
             const pageData = _selectPageData(true)
 
-            vi.mock('../../app/services/address/submit-select.service.js')
-            SubmitSelectAddressService.mockReturnValue(pageData)
+            vi.spyOn(SubmitSelectAddressService, 'default').mockReturnValue(pageData)
           })
 
           it('re-renders the select page with an error', async () => {
@@ -195,8 +188,7 @@ describe('Address controller', () => {
 
         describe('and we do not get any resutls back from the postcode lookup', () => {
           beforeEach(() => {
-            vi.mock('../../app/services/address/submit-select.service.js')
-            SubmitSelectAddressService.mockReturnValue({
+            vi.spyOn(SubmitSelectAddressService, 'default').mockReturnValue({
               redirect: '/system/address/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/manual'
             })
           })
@@ -227,8 +219,7 @@ describe('Address controller', () => {
 
       describe('when addresses are found', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/address/manual.service.js')
-          ManualAddressService.mockReturnValue({})
+          vi.spyOn(ManualAddressService, 'default').mockReturnValue({})
         })
 
         it('returns the page successfully', async () => {
@@ -246,8 +237,7 @@ describe('Address controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/address/submit-manual.service.js')
-          SubmitManualAddressService.mockReturnValue({
+          vi.spyOn(SubmitManualAddressService, 'default').mockReturnValue({
             redirect: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/add-recipient'
           })
         })
@@ -266,8 +256,7 @@ describe('Address controller', () => {
         beforeEach(() => {
           const pageData = _manualPageData(true)
 
-          vi.mock('../../app/services/address/submit-manual.service.js')
-          SubmitManualAddressService.mockReturnValue(pageData)
+          vi.spyOn(SubmitManualAddressService, 'default').mockReturnValue(pageData)
         })
 
         it('re-renders the page with an error', async () => {
@@ -297,8 +286,7 @@ describe('Address controller', () => {
 
       describe('when addresses are found', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/address/international.service.js')
-          InternationalAddressService.mockReturnValue({})
+          vi.spyOn(InternationalAddressService, 'default').mockReturnValue({})
         })
 
         it('returns the page successfully', async () => {
@@ -316,8 +304,7 @@ describe('Address controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/address/submit-international.service.js')
-          SubmitInternationalAddressService.mockReturnValue({
+          vi.spyOn(SubmitInternationalAddressService, 'default').mockReturnValue({
             redirect: '/system/notices/setup/fecd5f15-bacf-4b3d-bdcd-ef279a97b061/add-recipient'
           })
         })
@@ -336,8 +323,7 @@ describe('Address controller', () => {
         beforeEach(() => {
           const pageData = _manualPageData(true)
 
-          vi.mock('../../app/services/address/submit-international.service.js')
-          SubmitInternationalAddressService.mockReturnValue(pageData)
+          vi.spyOn(SubmitInternationalAddressService, 'default').mockReturnValue(pageData)
         })
 
         it('re-renders the page with an error', async () => {

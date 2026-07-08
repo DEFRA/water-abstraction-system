@@ -4,12 +4,12 @@
 import NoBillingPeriodsError from '../../../app/errors/no-billing-periods.error.js'
 
 // Things we need to stub
-import AnnualProcessBillRunService from '../../../app/services/bill-runs/annual/process-bill-run.service.js'
-import DetermineBillingPeriodsService from '../../../app/services/bill-runs/determine-billing-periods.service.js'
-import InitiateBillRunService from '../../../app/services/bill-runs/initiate-bill-run.service.js'
-import SupplementaryProcessBillRunService from '../../../app/services/bill-runs/supplementary/process-bill-run.service.js'
-import TwoPartTariffProcessBillRunService from '../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js'
-import TwoPartTariffSupplementaryProcessBillRunService from '../../../app/services/bill-runs/tpt-supplementary/process-bill-run.service.js'
+import * as AnnualProcessBillRunService from '../../../app/services/bill-runs/annual/process-bill-run.service.js'
+import * as DetermineBillingPeriodsService from '../../../app/services/bill-runs/determine-billing-periods.service.js'
+import * as InitiateBillRunService from '../../../app/services/bill-runs/initiate-bill-run.service.js'
+import * as SupplementaryProcessBillRunService from '../../../app/services/bill-runs/supplementary/process-bill-run.service.js'
+import * as TwoPartTariffProcessBillRunService from '../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js'
+import * as TwoPartTariffSupplementaryProcessBillRunService from '../../../app/services/bill-runs/tpt-supplementary/process-bill-run.service.js'
 
 // Thing under test
 import StartBillRunProcessService from '../../../app/services/bill-runs/start-bill-run-process.service.js'
@@ -41,8 +41,7 @@ describe('Start Bill Run Process service', () => {
         { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
       ]
 
-      vi.mock('../../../app/services/bill-runs/determine-billing-periods.service.js')
-      DetermineBillingPeriodsService.mockReturnValue(billingPeriods)
+      vi.spyOn(DetermineBillingPeriodsService, 'default').mockReturnValue(billingPeriods)
     })
 
     describe('and the bill run type is "annual"', () => {
@@ -54,10 +53,8 @@ describe('Start Bill Run Process service', () => {
           batchType
         }
 
-        vi.mock('../../../app/services/bill-runs/initiate-bill-run.service.js')
-        InitiateBillRunService.mockResolvedValue(annualBillRun)
+        vi.spyOn(InitiateBillRunService, 'default').mockResolvedValue(annualBillRun)
 
-        vi.mock('../../../app/services/bill-runs/annual/process-bill-run.service.js')
       })
 
       it('initiates a new bill run', async () => {
@@ -84,10 +81,8 @@ describe('Start Bill Run Process service', () => {
           batchType
         }
 
-        vi.mock('../../../app/services/bill-runs/initiate-bill-run.service.js')
-        InitiateBillRunService.mockResolvedValue(supplementaryBillRun)
+        vi.spyOn(InitiateBillRunService, 'default').mockResolvedValue(supplementaryBillRun)
 
-        vi.mock('../../../app/services/bill-runs/supplementary/process-bill-run.service.js')
       })
 
       it('initiates a new bill run', async () => {
@@ -114,10 +109,8 @@ describe('Start Bill Run Process service', () => {
           batchType
         }
 
-        vi.mock('../../../app/services/bill-runs/initiate-bill-run.service.js')
-        InitiateBillRunService.mockResolvedValue(twoPartTariffBillRun)
+        vi.spyOn(InitiateBillRunService, 'default').mockResolvedValue(twoPartTariffBillRun)
 
-        vi.mock('../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js')
       })
 
       it('initiates a new bill run', async () => {
@@ -144,10 +137,8 @@ describe('Start Bill Run Process service', () => {
           batchType
         }
 
-        vi.mock('../../../app/services/bill-runs/initiate-bill-run.service.js')
-        InitiateBillRunService.mockResolvedValue(twoPartTariffSupplementaryBillRun)
+        vi.spyOn(InitiateBillRunService, 'default').mockResolvedValue(twoPartTariffSupplementaryBillRun)
 
-        vi.mock('../../../app/services/bill-runs/tpt-supplementary/process-bill-run.service.js')
       })
 
       it('initiates a new bill run', async () => {
@@ -169,8 +160,7 @@ describe('Start Bill Run Process service', () => {
   describe('when calling the service fails', () => {
     describe('because of an unexpected error', () => {
       beforeEach(() => {
-        vi.mock('../../../app/services/bill-runs/determine-billing-periods.service.js')
-        DetermineBillingPeriodsService.mockRejectedValue(new Error())
+        vi.spyOn(DetermineBillingPeriodsService, 'default').mockRejectedValue(new Error())
       })
 
       it('throws an error', async () => {
@@ -180,8 +170,7 @@ describe('Start Bill Run Process service', () => {
 
     describe('because no billing periods could be determined', () => {
       beforeEach(() => {
-        vi.mock('../../../app/services/bill-runs/determine-billing-periods.service.js')
-        DetermineBillingPeriodsService.mockReturnValue([])
+        vi.spyOn(DetermineBillingPeriodsService, 'default').mockReturnValue([])
       })
 
       it('throws a NoBillingPeriodsError', async () => {

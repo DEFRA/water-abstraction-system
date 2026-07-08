@@ -7,8 +7,8 @@ import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitSubmissionService from '../../../../app/services/return-logs/setup/submit-submission.service.js'
@@ -33,10 +33,8 @@ describe('Return Logs - Setup - Submit Submission service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
-    vi.mock('../../../../app/dal/delete-session.dal.js')
-    DeleteSessionDal.mockResolvedValue()
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+    vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
@@ -110,7 +108,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
 
           session = SessionModelStub(sessionData)
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('updates "checkPageVisited" to false in the session data', async () => {

@@ -1,5 +1,5 @@
 // Test helpers
-import LicenceAbstractionDataSeeder from '../../../../support/seeders/licence-abstraction-data.seeder.js'
+import * as LicenceAbstractionDataSeeder from '../../../../support/seeders/licence-abstraction-data.seeder.js'
 
 // Thing under test
 import FetchAbstractionDataService from '../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js'

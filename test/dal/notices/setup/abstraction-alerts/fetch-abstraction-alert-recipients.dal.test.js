@@ -1,5 +1,5 @@
 // Test helpers
-import RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
+import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
 
 // Thing under test
 import FetchAbstractionAlertRecipientsDal from '../../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'

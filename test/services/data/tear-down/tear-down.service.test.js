@@ -1,12 +1,12 @@
 // Test framework dependencies
 
 // Things we need to stub
-import CrmSchemaService from '../../../../app/services/data/tear-down/crm-schema.service.js'
+import * as CrmSchemaService from '../../../../app/services/data/tear-down/crm-schema.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
-import IdmSchemaService from '../../../../app/services/data/tear-down/idm-schema.service.js'
-import PermitSchemaService from '../../../../app/services/data/tear-down/permit-schema.service.js'
-import ReturnsSchemaService from '../../../../app/services/data/tear-down/returns-schema.service.js'
-import WaterSchemaService from '../../../../app/services/data/tear-down/water-schema.service.js'
+import * as IdmSchemaService from '../../../../app/services/data/tear-down/idm-schema.service.js'
+import * as PermitSchemaService from '../../../../app/services/data/tear-down/permit-schema.service.js'
+import * as ReturnsSchemaService from '../../../../app/services/data/tear-down/returns-schema.service.js'
+import * as WaterSchemaService from '../../../../app/services/data/tear-down/water-schema.service.js'
 
 // Thing under test
 import TearDownService from '../../../../app/services/data/tear-down/tear-down.service.js'
@@ -14,16 +14,11 @@ import TearDownService from '../../../../app/services/data/tear-down/tear-down.s
 describe('Tear down service', () => {
   let notifierStub
   beforeEach(async () => {
-    vi.mock('../../../../app/services/data/tear-down/crm-schema.service.js')
-    CrmSchemaService.mockResolvedValue()
-    vi.mock('../../../../app/services/data/tear-down/idm-schema.service.js')
-    IdmSchemaService.mockResolvedValue()
-    vi.mock('../../../../app/services/data/tear-down/permit-schema.service.js')
-    PermitSchemaService.mockResolvedValue()
-    vi.mock('../../../../app/services/data/tear-down/returns-schema.service.js')
-    ReturnsSchemaService.mockResolvedValue()
-    vi.mock('../../../../app/services/data/tear-down/water-schema.service.js')
-    WaterSchemaService.mockResolvedValue()
+    vi.spyOn(CrmSchemaService, 'default').mockResolvedValue()
+    vi.spyOn(IdmSchemaService, 'default').mockResolvedValue()
+    vi.spyOn(PermitSchemaService, 'default').mockResolvedValue()
+    vi.spyOn(ReturnsSchemaService, 'default').mockResolvedValue()
+    vi.spyOn(WaterSchemaService, 'default').mockResolvedValue()
 
     // TearDownService depends on the GlobalNotifier being set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -45,10 +40,10 @@ describe('Tear down service', () => {
     expect(args[0]).toEqual('Tear down complete')
     expect(args[1].timeTakenMs).toBeDefined()
 
-    expect(CrmSchemaService).toHaveBeenCalled()
-    expect(IdmSchemaService).toHaveBeenCalled()
-    expect(PermitSchemaService).toHaveBeenCalled()
-    expect(ReturnsSchemaService).toHaveBeenCalled()
-    expect(WaterSchemaService).toHaveBeenCalled()
+    expect(CrmSchemaService.default).toHaveBeenCalled()
+    expect(IdmSchemaService.default).toHaveBeenCalled()
+    expect(PermitSchemaService.default).toHaveBeenCalled()
+    expect(ReturnsSchemaService.default).toHaveBeenCalled()
+    expect(WaterSchemaService.default).toHaveBeenCalled()
   })
 })

@@ -6,7 +6,7 @@ import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things to stub
 import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
-import FetchUsersDal from '../../../app/dal/users/fetch-users.dal.js'
+import * as FetchUsersDal from '../../../app/dal/users/fetch-users.dal.js'
 
 // Thing under test
 import IndexUsersService from '../../../app/services/users/index-users.service.js'
@@ -40,8 +40,7 @@ describe('Users - Index Users service', () => {
       const results = [UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess())]
 
       fetchResults = { results, total: 1 }
-      vi.mock('../../../app/dal/users/fetch-users.dal.js')
-      FetchUsersDal.mockResolvedValue(fetchResults)
+      vi.spyOn(FetchUsersDal, 'default').mockResolvedValue(fetchResults)
     })
 
     it('returns page data for the view', async () => {
@@ -81,8 +80,7 @@ describe('Users - Index Users service', () => {
     beforeEach(() => {
       // For the purposes of these tests the results don't matter
       fetchResults = { results: [], total: 0 }
-      vi.mock('../../../app/dal/users/fetch-users.dal.js')
-      FetchUsersDal.mockResolvedValue(fetchResults)
+      vi.spyOn(FetchUsersDal, 'default').mockResolvedValue(fetchResults)
     })
 
     describe('and none were ever set or they were cleared', () => {

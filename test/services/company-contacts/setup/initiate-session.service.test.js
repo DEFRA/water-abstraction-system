@@ -7,8 +7,8 @@ import { generateUUID } from '../../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 
 // Things we need to stub
-import FetchCompanyLicencesDal from '../../../../app/dal/company-contacts/fetch-company-licences.dal.js'
-import FetchCompanyService from '../../../../app/dal/companies/fetch-company.dal.js'
+import * as FetchCompanyLicencesDal from '../../../../app/dal/company-contacts/fetch-company-licences.dal.js'
+import * as FetchCompanyService from '../../../../app/dal/companies/fetch-company.dal.js'
 
 // Thing under test
 import InitiateSessionService from '../../../../app/services/company-contacts/setup/initiate-session.service.js'
@@ -21,10 +21,8 @@ describe('Company Contacts - Setup - Initiate Session service', () => {
     company = CustomersFixtures.company()
     licences = [{ id: generateUUID(), licenceRef: generateLicenceRef() }]
 
-    vi.mock('../../../../app/dal/companies/fetch-company.dal.js')
-    FetchCompanyService.mockReturnValue(company)
-    vi.mock('../../../../app/dal/company-contacts/fetch-company-licences.dal.js')
-    FetchCompanyLicencesDal.mockReturnValue(licences)
+    vi.spyOn(FetchCompanyService, 'default').mockReturnValue(company)
+    vi.spyOn(FetchCompanyLicencesDal, 'default').mockReturnValue(licences)
   })
 
   afterEach(() => {

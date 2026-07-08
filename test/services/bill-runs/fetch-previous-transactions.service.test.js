@@ -1,5 +1,5 @@
 // Test helpers
-import PreviousBillingDataSeeder from '../../support/seeders/previous-billing-data.seeder.js'
+import * as PreviousBillingDataSeeder from '../../support/seeders/previous-billing-data.seeder.js'
 
 // Thing under test
 import FetchPreviousTransactionsService from '../../../app/services/bill-runs/fetch-previous-transactions.service.js'

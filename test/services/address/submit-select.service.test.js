@@ -7,7 +7,7 @@ const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
 import * as LookupPostcodeRequest from '../../../app/requests/address-facade/lookup-postcode.request.js'
 import * as LookupUPRNRequest from '../../../app/requests/address-facade/lookup-uprn.request.js'
 
@@ -56,8 +56,7 @@ describe('Address - Submit Select Service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {

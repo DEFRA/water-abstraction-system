@@ -5,8 +5,8 @@ import ExpandedErrorError from '../../../app/errors/expanded.error.js'
 
 // Things we need to stub
 import BillRunModel from '../../../app/models/bill-run.model.js'
-import GenerateAnnualBillRunService from '../../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js'
-import GenerateSupplementaryBillRunService from '../../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js'
+import * as GenerateAnnualBillRunService from '../../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js'
+import * as GenerateSupplementaryBillRunService from '../../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js'
 
 // Thing under test
 import GenerateTwoPartTariffBillRunService from '../../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js'
@@ -31,8 +31,6 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
       select: billRunSelectStub
     })
 
-    vi.mock('../../../app/services/bill-runs/two-part-tariff/generate-bill-run.service.js')
-    vi.mock('../../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js')
   })
 
   afterEach(() => {
@@ -81,8 +79,8 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
         it('triggers the "generate annual bill run" service', async () => {
           await GenerateTwoPartTariffBillRunService(billRunDetails.id)
 
-          expect(GenerateAnnualBillRunService).toHaveBeenCalledOnce()
-          expect(GenerateSupplementaryBillRunService).not.toHaveBeenCalled()
+          expect(GenerateAnnualBillRunService.default).toHaveBeenCalledOnce()
+          expect(GenerateSupplementaryBillRunService.default).not.toHaveBeenCalled()
         })
       })
     })
@@ -127,8 +125,8 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
         it('triggers the "generate supplementary bill run" service', async () => {
           await GenerateTwoPartTariffBillRunService(billRunDetails.id)
 
-          expect(GenerateSupplementaryBillRunService).toHaveBeenCalledOnce()
-          expect(GenerateAnnualBillRunService).not.toHaveBeenCalled()
+          expect(GenerateSupplementaryBillRunService.default).toHaveBeenCalledOnce()
+          expect(GenerateAnnualBillRunService.default).not.toHaveBeenCalled()
         })
       })
 
@@ -147,8 +145,8 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
         it('triggers the "generate supplementary bill run" service', async () => {
           await GenerateTwoPartTariffBillRunService(billRunDetails.id)
 
-          expect(GenerateSupplementaryBillRunService).toHaveBeenCalledOnce()
-          expect(GenerateAnnualBillRunService).not.toHaveBeenCalled()
+          expect(GenerateSupplementaryBillRunService.default).toHaveBeenCalledOnce()
+          expect(GenerateAnnualBillRunService.default).not.toHaveBeenCalled()
         })
       })
     })

@@ -1,15 +1,15 @@
 // Test framework dependencies
 
 // Things we need to stub
-import DetermineBillLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-bill-licence-flags.service.js'
-import DetermineChargeVersionFlagsService from '../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js'
-import DetermineExistingBillRunYearsService from '../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js'
-import DetermineImportedLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-imported-licence-flags.service.js'
-import DetermineLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-licence-flags.service.js'
-import DetermineReturnLogFlagsService from '../../../../app/services/licences/supplementary/determine-return-log-flags.service.js'
-import DetermineWorkflowFlagsService from '../../../../app/services/licences/supplementary/determine-workflow-flags.service.js'
+import * as DetermineBillLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-bill-licence-flags.service.js'
+import * as DetermineChargeVersionFlagsService from '../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js'
+import * as DetermineExistingBillRunYearsService from '../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js'
+import * as DetermineImportedLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-imported-licence-flags.service.js'
+import * as DetermineLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-licence-flags.service.js'
+import * as DetermineReturnLogFlagsService from '../../../../app/services/licences/supplementary/determine-return-log-flags.service.js'
+import * as DetermineWorkflowFlagsService from '../../../../app/services/licences/supplementary/determine-workflow-flags.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
-import PersistSupplementaryBillingFlagsService from '../../../../app/services/licences/supplementary/persist-supplementary-billing-flags.service.js'
+import * as PersistSupplementaryBillingFlagsService from '../../../../app/services/licences/supplementary/persist-supplementary-billing-flags.service.js'
 
 // Thing under test
 import ProcessBillingFlagService from '../../../../app/services/licences/supplementary/process-billing-flag.service.js'
@@ -19,8 +19,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
   let payload
 
   beforeEach(() => {
-    vi.mock('../../../../app/services/licences/supplementary/persist-supplementary-billing-flags.service.js')
-    PersistSupplementaryBillingFlagsService.mockResolvedValue()
+    vi.spyOn(PersistSupplementaryBillingFlagsService, 'default').mockResolvedValue()
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -45,10 +44,8 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          vi.mock('../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js')
-          DetermineChargeVersionFlagsService.mockResolvedValue(_licenceData(true))
-          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
-          DetermineExistingBillRunYearsService.mockResolvedValue([2023])
+          vi.spyOn(DetermineChargeVersionFlagsService, 'default').mockResolvedValue(_licenceData(true))
+          vi.spyOn(DetermineExistingBillRunYearsService, 'default').mockResolvedValue([2023])
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" with the correct flags to persist', async () => {
@@ -78,10 +75,8 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should not be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          vi.mock('../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js')
-          DetermineChargeVersionFlagsService.mockResolvedValue(_licenceData(false))
-          vi.mock('../../../../app/services/licences/supplementary/determine-workflow-flags.service.js')
-          DetermineWorkflowFlagsService.mockResolvedValue(_licenceData(false))
+          vi.spyOn(DetermineChargeVersionFlagsService, 'default').mockResolvedValue(_licenceData(false))
+          vi.spyOn(DetermineWorkflowFlagsService, 'default').mockResolvedValue(_licenceData(false))
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -119,10 +114,8 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          vi.mock('../../../../app/services/licences/supplementary/determine-workflow-flags.service.js')
-          DetermineWorkflowFlagsService.mockResolvedValue(_licenceData(true))
-          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
-          DetermineExistingBillRunYearsService.mockResolvedValue([2023])
+          vi.spyOn(DetermineWorkflowFlagsService, 'default').mockResolvedValue(_licenceData(true))
+          vi.spyOn(DetermineExistingBillRunYearsService, 'default').mockResolvedValue([2023])
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -152,9 +145,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should not be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          vi.mock('../../../../app/services/licences/supplementary/determine-workflow-flags.service.js')
-          DetermineWorkflowFlagsService.mockResolvedValue(_licenceData(false))
-          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
+          vi.spyOn(DetermineWorkflowFlagsService, 'default').mockResolvedValue(_licenceData(false))
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -192,10 +183,8 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          vi.mock('../../../../app/services/licences/supplementary/determine-return-log-flags.service.js')
-          DetermineReturnLogFlagsService.mockResolvedValue(_licenceData(true))
-          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
-          DetermineExistingBillRunYearsService.mockResolvedValue([2023])
+          vi.spyOn(DetermineReturnLogFlagsService, 'default').mockResolvedValue(_licenceData(true))
+          vi.spyOn(DetermineExistingBillRunYearsService, 'default').mockResolvedValue([2023])
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -225,9 +214,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should not be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          vi.mock('../../../../app/services/licences/supplementary/determine-return-log-flags.service.js')
-          DetermineReturnLogFlagsService.mockResolvedValue(_licenceData(false))
-          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
+          vi.spyOn(DetermineReturnLogFlagsService, 'default').mockResolvedValue(_licenceData(false))
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -271,10 +258,8 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          vi.mock('../../../../app/services/licences/supplementary/determine-imported-licence-flags.service.js')
-          DetermineImportedLicenceFlagsService.mockResolvedValue(_licenceData(true))
-          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
-          DetermineExistingBillRunYearsService.mockResolvedValue([2023])
+          vi.spyOn(DetermineImportedLicenceFlagsService, 'default').mockResolvedValue(_licenceData(true))
+          vi.spyOn(DetermineExistingBillRunYearsService, 'default').mockResolvedValue([2023])
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -304,9 +289,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should not be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          vi.mock('../../../../app/services/licences/supplementary/determine-imported-licence-flags.service.js')
-          DetermineImportedLicenceFlagsService.mockResolvedValue(_licenceData(false))
-          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
+          vi.spyOn(DetermineImportedLicenceFlagsService, 'default').mockResolvedValue(_licenceData(false))
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -344,10 +327,8 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should be flagged for sroc supplementary billing', () => {
         beforeEach(() => {
-          vi.mock('../../../../app/services/licences/supplementary/determine-licence-flags.service.js')
-          DetermineLicenceFlagsService.mockResolvedValue(_srocLicenceData(true))
-          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
-          DetermineExistingBillRunYearsService.mockResolvedValue([2023])
+          vi.spyOn(DetermineLicenceFlagsService, 'default').mockResolvedValue(_srocLicenceData(true))
+          vi.spyOn(DetermineExistingBillRunYearsService, 'default').mockResolvedValue([2023])
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -375,9 +356,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should not be flagged for sroc supplementary billing', () => {
         beforeEach(() => {
-          vi.mock('../../../../app/services/licences/supplementary/determine-licence-flags.service.js')
-          DetermineLicenceFlagsService.mockResolvedValue(_srocLicenceData(false))
-          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
+          vi.spyOn(DetermineLicenceFlagsService, 'default').mockResolvedValue(_srocLicenceData(false))
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -413,10 +392,8 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          vi.mock('../../../../app/services/licences/supplementary/determine-bill-licence-flags.service.js')
-          DetermineBillLicenceFlagsService.mockResolvedValue(_licenceData(true))
-          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
-          DetermineExistingBillRunYearsService.mockResolvedValue([2023])
+          vi.spyOn(DetermineBillLicenceFlagsService, 'default').mockResolvedValue(_licenceData(true))
+          vi.spyOn(DetermineExistingBillRunYearsService, 'default').mockResolvedValue([2023])
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -446,9 +423,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should not be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          vi.mock('../../../../app/services/licences/supplementary/determine-bill-licence-flags.service.js')
-          DetermineBillLicenceFlagsService.mockResolvedValue(_licenceData(false))
-          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
+          vi.spyOn(DetermineBillLicenceFlagsService, 'default').mockResolvedValue(_licenceData(false))
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {

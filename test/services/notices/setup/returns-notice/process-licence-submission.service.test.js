@@ -1,8 +1,8 @@
 // Test framework dependencies
 
 // Things we need to stub
-import CheckLicenceExistsDal from '../../../../../app/dal/notices/setup/check-licence-exists.dal.js'
-import FetchDueReturnsForLicenceService from '../../../../../app/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js'
+import * as CheckLicenceExistsDal from '../../../../../app/dal/notices/setup/check-licence-exists.dal.js'
+import * as FetchDueReturnsForLicenceService from '../../../../../app/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js'
 
 // Thing under test
 import ProcessReturnsNoticeLicenceSubmission from '../../../../../app/services/notices/setup/returns-notice/process-licence-submission.service.js'
@@ -17,10 +17,8 @@ describe('Notices - Setup - Returns Notice - Process Returns Notice Licence Subm
     licenceRef = '01/234/R01'
     payload = { licenceRef }
 
-    vi.mock('../../../../../app/dal/notices/setup/check-licence-exists.dal.js')
-    CheckLicenceExistsDal.mockResolvedValue(true)
-    vi.mock('../../../../../app/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js')
-    FetchDueReturnsForLicenceService.mockResolvedValue(dueReturns)
+    vi.spyOn(CheckLicenceExistsDal, 'default').mockResolvedValue(true)
+    vi.spyOn(FetchDueReturnsForLicenceService, 'default').mockResolvedValue(dueReturns)
   })
 
   afterEach(() => {

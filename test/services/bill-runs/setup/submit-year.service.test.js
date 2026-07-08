@@ -4,8 +4,8 @@
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchLicenceSupplementaryYearsService from '../../../../app/services/bill-runs/setup/fetch-licence-supplementary-years.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchLicenceSupplementaryYearsService from '../../../../app/services/bill-runs/setup/fetch-licence-supplementary-years.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitYearService from '../../../../app/services/bill-runs/setup/submit-year.service.js'
@@ -20,8 +20,7 @@ describe('Bill Runs - Setup - Submit Year service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
@@ -72,16 +71,15 @@ describe('Bill Runs - Setup - Submit Year service', () => {
 
           session = SessionModelStub(sessionData)
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           payload = {}
-          vi.mock('../../../../app/services/bill-runs/setup/fetch-licence-supplementary-years.service.js')
-          FetchLicenceSupplementaryYearsService.mockResolvedValue([{ financialYearEnd: 2024 }])
+          vi.spyOn(FetchLicenceSupplementaryYearsService, 'default').mockResolvedValue([{ financialYearEnd: 2024 }])
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
           const result = await SubmitYearService(session.id, payload)
 
-          expect(FetchLicenceSupplementaryYearsService).toHaveBeenCalledWith(regionId, true)
+          expect(FetchLicenceSupplementaryYearsService.default).toHaveBeenCalledWith(regionId, true)
 
           expect(result).toEqual({
             activeNavBar: 'bill-runs',

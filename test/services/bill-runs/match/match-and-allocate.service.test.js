@@ -1,14 +1,14 @@
 // Test framework dependencies
 
 // Things we need to stub
-import AllocateReturnsToChargeElementService from '../../../../app/services/bill-runs/match/allocate-returns-to-charge-element.service.js'
-import DetermineLicenceIssuesService from '../../../../app/services/bill-runs/match/determine-licence-issues.service.js'
-import FetchLicencesService from '../../../../app/services/bill-runs/match/fetch-licences.service.js'
+import * as AllocateReturnsToChargeElementService from '../../../../app/services/bill-runs/match/allocate-returns-to-charge-element.service.js'
+import * as DetermineLicenceIssuesService from '../../../../app/services/bill-runs/match/determine-licence-issues.service.js'
+import * as FetchLicencesService from '../../../../app/services/bill-runs/match/fetch-licences.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
-import MatchReturnsToChargeElementService from '../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js'
-import PrepareChargeVersionService from '../../../../app/services/bill-runs/match/prepare-charge-version.service.js'
-import PrepareReturnLogsService from '../../../../app/services/bill-runs/match/prepare-return-logs.service.js'
-import PersistAllocatedLicenceToResultsService from '../../../../app/services/bill-runs/match/persist-allocated-licence-to-results.service.js'
+import * as MatchReturnsToChargeElementService from '../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js'
+import * as PrepareChargeVersionService from '../../../../app/services/bill-runs/match/prepare-charge-version.service.js'
+import * as PrepareReturnLogsService from '../../../../app/services/bill-runs/match/prepare-return-logs.service.js'
+import * as PersistAllocatedLicenceToResultsService from '../../../../app/services/bill-runs/match/persist-allocated-licence-to-results.service.js'
 
 // Thing under test
 import MatchAndAllocateService from '../../../../app/services/bill-runs/match/match-and-allocate.service.js'
@@ -41,22 +41,15 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
     describe('when there are licences to be processed', () => {
       beforeEach(() => {
         licences = _generateLicencesData()
-        vi.mock('../../../../app/services/bill-runs/match/determine-licence-issues.service.js')
 
-        vi.mock('../../../../app/services/bill-runs/match/allocate-returns-to-charge-element.service.js')
-        vi.mock('../../../../app/services/bill-runs/match/fetch-licences.service.js')
-        FetchLicencesService.mockReturnValue(licences)
-        vi.mock('../../../../app/services/bill-runs/match/persist-allocated-licence-to-results.service.js')
-        vi.mock('../../../../app/services/bill-runs/match/prepare-charge-version.service.js')
-        vi.mock('../../../../app/services/bill-runs/match/prepare-return-logs.service.js')
+        vi.spyOn(FetchLicencesService, 'default').mockReturnValue(licences)
       })
 
       describe('and a charge element has a matching return', () => {
         beforeEach(() => {
           const matchingReturns = _generateMatchingReturnsData()
 
-          vi.mock('../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js')
-          MatchReturnsToChargeElementService.mockReturnValue(matchingReturns)
+          vi.spyOn(MatchReturnsToChargeElementService, 'default').mockReturnValue(matchingReturns)
         })
 
         it('processes the licence for matching allocating', async () => {
@@ -82,8 +75,7 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
 
       describe('and the charge elements do not have matching returns', () => {
         beforeEach(() => {
-          vi.mock('../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js')
-          MatchReturnsToChargeElementService.mockReturnValue([])
+          vi.spyOn(MatchReturnsToChargeElementService, 'default').mockReturnValue([])
         })
 
         it('processes the licence for matching but does not call the allocate returns service', async () => {
@@ -103,7 +95,7 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
         it('allocates the authorised quantities to the elements up to the references authorised quantity', async () => {
           await MatchAndAllocateService(billRun, billingPeriods)
 
-          const { chargeVersions } = DetermineLicenceIssuesService.mock.calls[0][0]
+          const { chargeVersions } = DetermineLicenceIssuesService.default.mock.calls[0][0]
           const chargeReference = chargeVersions[0].chargeReferences[0]
 
           expect(chargeReference.allocatedQuantity).toEqual(32)
@@ -121,14 +113,7 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
 
     describe('when there are no licences to be processed', () => {
       beforeEach(() => {
-        vi.mock('../../../../app/services/bill-runs/match/fetch-licences.service.js')
-        FetchLicencesService.mockReturnValue([])
-        vi.mock('../../../../app/services/bill-runs/match/prepare-return-logs.service.js')
-        vi.mock('../../../../app/services/bill-runs/match/prepare-charge-version.service.js')
-        vi.mock('../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js')
-        vi.mock('../../../../app/services/bill-runs/match/allocate-returns-to-charge-element.service.js')
-        vi.mock('../../../../app/services/bill-runs/match/determine-licence-issues.service.js')
-        vi.mock('../../../../app/services/bill-runs/match/persist-allocated-licence-to-results.service.js')
+        vi.spyOn(FetchLicencesService, 'default').mockReturnValue([])
       })
 
       it('calls the fetchLicencesService', async () => {

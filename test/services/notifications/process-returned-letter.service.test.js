@@ -8,7 +8,7 @@ import { generateNoticeReferenceCode } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
 import GlobalNotifierStub from '../../support/stubs/global-notifier.stub.js'
-import UpdateNoticeService from '../../../app/services/notices/update-notice.service.js'
+import * as UpdateNoticeService from '../../../app/services/notices/update-notice.service.js'
 
 // Thing under test
 import ProcessReturnedLetterService from '../../../app/services/notifications/process-returned-letter.service.js'
@@ -50,8 +50,7 @@ describe('Notifications - Process Returned Letter service', () => {
         reference: generateNoticeReferenceCode('RREM-')
       }
 
-      vi.mock('../../../app/services/notices/update-notice.service.js')
-      UpdateNoticeService.mockResolvedValue()
+      vi.spyOn(UpdateNoticeService, 'default').mockResolvedValue()
     })
 
     it('updates "status" to returned and "returnedAt" to current date on the matching notification', async () => {
@@ -66,7 +65,7 @@ describe('Notifications - Process Returned Letter service', () => {
     it('updates the linked notice to recalculate its overall status and status counts', async () => {
       await ProcessReturnedLetterService(payload)
 
-      expect(UpdateNoticeService).toHaveBeenCalledWith([notification.eventId])
+      expect(UpdateNoticeService.default).toHaveBeenCalledWith([notification.eventId])
     })
 
     it('logs the time taken in milliseconds and seconds, plus the payload and matching notification', async () => {
@@ -113,8 +112,7 @@ describe('Notifications - Process Returned Letter service', () => {
         reference: generateNoticeReferenceCode('RREM-')
       }
 
-      vi.mock('../../../app/services/notices/update-notice.service.js')
-      UpdateNoticeService.mockRejectedValue()
+      vi.spyOn(UpdateNoticeService, 'default').mockRejectedValue()
     })
 
     it('does not throw an error', async () => {

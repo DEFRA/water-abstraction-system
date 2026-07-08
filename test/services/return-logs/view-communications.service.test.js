@@ -5,8 +5,8 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 
 // Things we need to stub
-import FetchNotificationsDal from '../../../app/dal/return-logs/fetch-notifications.dal.js'
-import FetchReturnLogService from '../../../app/services/return-logs/fetch-return-log.service.js'
+import * as FetchNotificationsDal from '../../../app/dal/return-logs/fetch-notifications.dal.js'
+import * as FetchReturnLogService from '../../../app/services/return-logs/fetch-return-log.service.js'
 
 // Thing under test
 import ViewCommunicationsService from '../../../app/services/return-logs/view-communications.service.js'
@@ -25,10 +25,8 @@ describe('Return Logs - View Communications Service', () => {
       }
     }
 
-    vi.mock('../../../app/services/return-logs/fetch-return-log.service.js')
-    FetchReturnLogService.mockReturnValue(returnLog)
-    vi.mock('../../../app/dal/return-logs/fetch-notifications.dal.js')
-    FetchNotificationsDal.mockReturnValue({
+    vi.spyOn(FetchReturnLogService, 'default').mockReturnValue(returnLog)
+    vi.spyOn(FetchNotificationsDal, 'default').mockReturnValue({
       notifications: [],
       totalNumber: 0
     })

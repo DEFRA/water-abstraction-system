@@ -1,7 +1,7 @@
 // Test framework dependencies
 
 // Things we need to stub
-import FetchDownloadNotificationService from '../../../app/services/notifications/fetch-notification-download.service.js'
+import * as FetchDownloadNotificationService from '../../../app/services/notifications/fetch-notification-download.service.js'
 
 // Thing under test
 import DownloadNotificationService from '../../../app/services/notifications/download-notification.service.js'
@@ -16,8 +16,7 @@ describe('Notifications - Download Notification service', () => {
 
     pdf = Buffer.from('mock file')
 
-    vi.mock('../../../app/services/notifications/fetch-notification-download.service.js')
-    FetchDownloadNotificationService.mockResolvedValue({ pdf })
+    vi.spyOn(FetchDownloadNotificationService, 'default').mockResolvedValue({ pdf })
   })
 
   afterEach(() => {

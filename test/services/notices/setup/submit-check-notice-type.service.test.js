@@ -5,7 +5,7 @@ import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitCheckNoticeTypeService from '../../../../app/services/notices/setup/submit-check-notice-type.service.js'
@@ -42,8 +42,7 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
 
         session = SessionModelStub(sessionData)
 
-        vi.mock('../../../../app/dal/fetch-session.dal.js')
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('adds the "addressJourney" property to the session configured for going back to contact-type', async () => {
@@ -85,8 +84,7 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
 
         session = SessionModelStub(sessionData)
 
-        vi.mock('../../../../app/dal/fetch-session.dal.js')
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('adds the "addressJourney" property to the session configured for going back to recipient-name', async () => {

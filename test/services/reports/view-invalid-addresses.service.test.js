@@ -1,15 +1,14 @@
 // Test framework dependencies
 
 // Things we want to stub
-import FetchInvalidAddressesService from '../../../app/services/reports/fetch-invalid-addresses.service.js'
+import * as FetchInvalidAddressesService from '../../../app/services/reports/fetch-invalid-addresses.service.js'
 
 // Thing under test
 import ViewInvalidAddressesService from '../../../app/services/reports/view-invalid-addresses.service.js'
 
 describe('Reports - View Invalid Addresses service', () => {
   beforeEach(() => {
-    vi.mock('../../../app/services/reports/fetch-invalid-addresses.service.js')
-    FetchInvalidAddressesService.mockReturnValue(_invalidAddresses())
+    vi.spyOn(FetchInvalidAddressesService, 'default').mockReturnValue(_invalidAddresses())
   })
 
   afterEach(() => {

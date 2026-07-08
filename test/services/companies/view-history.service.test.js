@@ -4,8 +4,8 @@
 import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Things we need to stub
-import FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'
-import FetchHistoryDal from '../../../app/dal/companies/fetch-history.dal.js'
+import * as FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'
+import * as FetchHistoryDal from '../../../app/dal/companies/fetch-history.dal.js'
 
 // Thing under test
 import ViewHistoryService from '../../../app/services/companies/view-history.service.js'
@@ -23,10 +23,8 @@ describe('Companies - View History service', () => {
 
     licences = CustomersFixtures.licences()
 
-    vi.mock('../../../app/dal/companies/fetch-company.dal.js')
-    FetchCompanyDal.mockReturnValue(company)
-    vi.mock('../../../app/dal/companies/fetch-history.dal.js')
-    FetchHistoryDal.mockReturnValue({
+    vi.spyOn(FetchCompanyDal, 'default').mockReturnValue(company)
+    vi.spyOn(FetchHistoryDal, 'default').mockReturnValue({
       licences,
       totalNumber: 1
     })

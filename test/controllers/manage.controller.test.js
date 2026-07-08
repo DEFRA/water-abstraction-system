@@ -5,7 +5,7 @@ import http2 from 'node:http2'
 const { HTTP_STATUS_OK } = http2.constants
 
 // Things we need to stub
-import ViewManageService from '../../app/services/manage/view-manage.service.js'
+import * as ViewManageService from '../../app/services/manage/view-manage.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -38,8 +38,7 @@ describe('Manage controller', () => {
   describe('/manage', () => {
     describe('GET', () => {
       beforeEach(async () => {
-        vi.mock('../../app/services/manage/view-manage.service.js')
-        ViewManageService.mockResolvedValue({
+        vi.spyOn(ViewManageService, 'default').mockResolvedValue({
           pageTitle: 'Manage reports and notices'
         })
       })

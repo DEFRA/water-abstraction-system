@@ -4,7 +4,7 @@
 import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
 
 // Things we need to stub
-import DetermineBlockingBillRunService from '../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js'
+import * as DetermineBlockingBillRunService from '../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js'
 import SessionModel from '../../../../app/models/session.model.js'
 
 // Thing under test
@@ -41,8 +41,7 @@ describe('Bill Runs - Setup - Check service', () => {
 
       describe('and there is no existing blocking bill run', () => {
         beforeEach(() => {
-          vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
-          DetermineBlockingBillRunService.mockResolvedValue({
+          vi.spyOn(DetermineBlockingBillRunService, 'default').mockResolvedValue({
             matches: [],
             toFinancialYearEnding: 2025,
             trigger: engineTriggers.current
@@ -73,8 +72,7 @@ describe('Bill Runs - Setup - Check service', () => {
 
       describe('and there is an existing blocking bill run', () => {
         beforeEach(() => {
-          vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
-          DetermineBlockingBillRunService.mockResolvedValue({
+          vi.spyOn(DetermineBlockingBillRunService, 'default').mockResolvedValue({
             matches: [
               {
                 id: 'c0608545-9870-4605-a407-5ff49f8a5182',
@@ -132,8 +130,7 @@ describe('Bill Runs - Setup - Check service', () => {
 
         describe('and there is no existing blocking bill run', () => {
           beforeEach(() => {
-            vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
-            DetermineBlockingBillRunService.mockResolvedValue({
+            vi.spyOn(DetermineBlockingBillRunService, 'default').mockResolvedValue({
               matches: [],
               toFinancialYearEnding: Number(session.year),
               trigger: engineTriggers.current
@@ -164,8 +161,7 @@ describe('Bill Runs - Setup - Check service', () => {
 
         describe('and there is an existing blocking bill run', () => {
           beforeEach(() => {
-            vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
-            DetermineBlockingBillRunService.mockResolvedValue({
+            vi.spyOn(DetermineBlockingBillRunService, 'default').mockResolvedValue({
               matches: [
                 {
                   id: 'c0608545-9870-4605-a407-5ff49f8a5182',
@@ -219,8 +215,7 @@ describe('Bill Runs - Setup - Check service', () => {
 
         describe('and there is no existing blocking bill run', () => {
           beforeEach(() => {
-            vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
-            DetermineBlockingBillRunService.mockResolvedValue({
+            vi.spyOn(DetermineBlockingBillRunService, 'default').mockResolvedValue({
               matches: [],
               toFinancialYearEnding: 2022,
               trigger: engineTriggers.old
@@ -251,8 +246,7 @@ describe('Bill Runs - Setup - Check service', () => {
 
         describe('and there is an existing blocking bill run', () => {
           beforeEach(() => {
-            vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
-            DetermineBlockingBillRunService.mockResolvedValue({
+            vi.spyOn(DetermineBlockingBillRunService, 'default').mockResolvedValue({
               matches: [
                 {
                   id: 'c0608545-9870-4605-a407-5ff49f8a5182',
@@ -307,8 +301,7 @@ describe('Bill Runs - Setup - Check service', () => {
 
       describe('and there are no existing blocking bill runs', () => {
         beforeEach(() => {
-          vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
-          DetermineBlockingBillRunService.mockResolvedValue({
+          vi.spyOn(DetermineBlockingBillRunService, 'default').mockResolvedValue({
             matches: [],
             toFinancialYearEnding: 2025,
             trigger: engineTriggers.both
@@ -339,8 +332,7 @@ describe('Bill Runs - Setup - Check service', () => {
 
       describe('and there are existing blocking bill runs for both schemes', () => {
         beforeEach(() => {
-          vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
-          DetermineBlockingBillRunService.mockResolvedValue({
+          vi.spyOn(DetermineBlockingBillRunService, 'default').mockResolvedValue({
             matches: [
               {
                 id: 'c0608545-9870-4605-a407-5ff49f8a5182',
@@ -392,8 +384,7 @@ describe('Bill Runs - Setup - Check service', () => {
 
       describe('and there is an existing blocking PRESROC bill run', () => {
         beforeEach(() => {
-          vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
-          DetermineBlockingBillRunService.mockResolvedValue({
+          vi.spyOn(DetermineBlockingBillRunService, 'default').mockResolvedValue({
             matches: [
               {
                 id: 'c0608545-9870-4605-a407-5ff49f8a5182',
@@ -435,8 +426,7 @@ describe('Bill Runs - Setup - Check service', () => {
 
       describe('and there is an existing blocking SROC bill run', () => {
         beforeEach(() => {
-          vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
-          DetermineBlockingBillRunService.mockResolvedValue({
+          vi.spyOn(DetermineBlockingBillRunService, 'default').mockResolvedValue({
             matches: [
               {
                 id: 'c0608545-9870-4605-a407-5ff49f8a5182',
@@ -483,8 +473,7 @@ describe('Bill Runs - Setup - Check service', () => {
           // year from
           describe('but the financial year could not be determined (no annual bill runs for the region)', () => {
             beforeEach(() => {
-              vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
-              DetermineBlockingBillRunService.mockResolvedValue({
+              vi.spyOn(DetermineBlockingBillRunService, 'default').mockResolvedValue({
                 matches: [],
                 toFinancialYearEnding: 0,
                 trigger: engineTriggers.neither
@@ -518,8 +507,7 @@ describe('Bill Runs - Setup - Check service', () => {
           // years SROC annual has not been run, so last year's is the latest. But never only PRESROC.
           describe('but the financial year determined as 2022 (last annual for the region was for FY 2022)', () => {
             beforeEach(() => {
-              vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
-              DetermineBlockingBillRunService.mockResolvedValue({
+              vi.spyOn(DetermineBlockingBillRunService, 'default').mockResolvedValue({
                 matches: [],
                 toFinancialYearEnding: 2022,
                 trigger: engineTriggers.old

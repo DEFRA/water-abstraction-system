@@ -5,8 +5,8 @@ import * as BillingAccountsFixture from '../../../support/fixtures/billing-accou
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchCompanyAddressesService from '../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchCompanyAddressesService from '../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import ViewExistingAddressService from '../../../../app/services/billing-accounts/setup/view-existing-address.service.js'
@@ -27,11 +27,9 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    vi.mock('../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js')
-    FetchCompanyAddressesService.mockReturnValue(companyAddresses)
+    vi.spyOn(FetchCompanyAddressesService, 'default').mockReturnValue(companyAddresses)
   })
 
   afterEach(() => {
@@ -48,7 +46,7 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('returns page data for the view', async () => {
@@ -90,7 +88,7 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('returns page data for the view', async () => {
@@ -133,7 +131,7 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('returns page data for the view', async () => {

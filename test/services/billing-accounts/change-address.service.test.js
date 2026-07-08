@@ -11,7 +11,7 @@ import CompanyModel from '../../../app/models/company.model.js'
 import ContactModel from '../../../app/models/contact.model.js'
 
 // Things we need to stub
-import SendCustomerChangeService from '../../../app/services/billing-accounts/send-customer-change.service.js'
+import * as SendCustomerChangeService from '../../../app/services/billing-accounts/send-customer-change.service.js'
 
 // Thing under test
 import ChangeAddressService from '../../../app/services/billing-accounts/change-address.service.js'
@@ -32,8 +32,7 @@ describe('Change address service', () => {
 
   describe('when the request to the Charging Module API succeeds', () => {
     beforeEach(async () => {
-      vi.mock('../../../app/services/billing-accounts/send-customer-change.service.js')
-      SendCustomerChangeService.mockResolvedValue()
+      vi.spyOn(SendCustomerChangeService, 'default').mockResolvedValue()
     })
 
     describe('and only an address is provided', () => {
@@ -401,8 +400,7 @@ describe('Change address service', () => {
 
   describe('when the request to the Charging Module API fails', () => {
     beforeEach(() => {
-      vi.mock('../../../app/services/billing-accounts/send-customer-change.service.js')
-      SendCustomerChangeService.mockRejectedValue()
+      vi.spyOn(SendCustomerChangeService, 'default').mockRejectedValue()
     })
 
     it('throws an error', async () => {

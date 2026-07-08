@@ -1,7 +1,7 @@
 // Test framework dependencies
 
 // Things to stub
-import FindAllSearchMatchesService from '../../../app/services/search/find-all-search-matches.service.js'
+import * as FindAllSearchMatchesService from '../../../app/services/search/find-all-search-matches.service.js'
 
 // Thing under test
 import ViewSearchService from '../../../app/services/search/view-search.service.js'
@@ -30,8 +30,7 @@ describe('Search - View Search service', () => {
   beforeEach(() => {
     page = '1'
 
-    vi.mock('../../../app/services/search/find-all-search-matches.service.js')
-    FindAllSearchMatchesService.mockResolvedValue({
+    vi.spyOn(FindAllSearchMatchesService, 'default').mockResolvedValue({
       results: [
         {
           exact: false,

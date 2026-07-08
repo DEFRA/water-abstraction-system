@@ -5,8 +5,8 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 
 // Things we need to stub
-import FetchBillsService from '../../../app/services/licences/fetch-bills.service.js'
-import FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import * as FetchBillsService from '../../../app/services/licences/fetch-bills.service.js'
+import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
 
 // Thing under test
 import ViewBillsService from '../../../app/services/licences/view-bills.service.js'
@@ -30,14 +30,12 @@ describe('Licences - View Bills service', () => {
     licenceId = generateUUID()
     licenceRef = generateLicenceRef()
 
-    vi.mock('../../../app/services/licences/fetch-licence.service.js')
-    FetchLicenceService.mockReturnValue({
+    vi.spyOn(FetchLicenceService, 'default').mockReturnValue({
       id: licenceId,
       licenceRef
     })
 
-    vi.mock('../../../app/services/licences/fetch-bills.service.js')
-    FetchBillsService.mockReturnValue({
+    vi.spyOn(FetchBillsService, 'default').mockReturnValue({
       bills: [],
       totalNumber: 1
     })

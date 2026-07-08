@@ -10,7 +10,7 @@ import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
 import * as CalculateChargeRequest from '../../../../app/requests/charging-module/calculate-charge.request.js'
-import FetchReviewChargeReferenceService from '../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js'
+import * as FetchReviewChargeReferenceService from '../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js'
 
 // Thing under test
 import PreviewService from '../../../../app/services/bill-runs/review/preview.service.js'
@@ -35,8 +35,7 @@ describe('Bill Runs Review - Preview service', () => {
       beforeEach(() => {
         reviewChargeReference.reviewChargeElements[0].amendedAllocated = 9.092
 
-        vi.mock('../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js')
-        FetchReviewChargeReferenceService.mockResolvedValue(reviewChargeReference)
+        vi.spyOn(FetchReviewChargeReferenceService, 'default').mockResolvedValue(reviewChargeReference)
       })
 
       describe('and the request to the Charging Module API succeeds', () => {
@@ -187,8 +186,7 @@ describe('Bill Runs Review - Preview service', () => {
 
     describe('for a review charge reference with a total allocation that is 0', () => {
       beforeEach(() => {
-        vi.mock('../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js')
-        FetchReviewChargeReferenceService.mockResolvedValue(reviewChargeReference)
+        vi.spyOn(FetchReviewChargeReferenceService, 'default').mockResolvedValue(reviewChargeReference)
 
         calculateChargeRequestStub = vi.spyOn(CalculateChargeRequest, 'send').mockResolvedValue()
       })

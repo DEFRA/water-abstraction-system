@@ -1,7 +1,7 @@
 // Test framework dependencies
 
 // Things we need to stub
-import FetchReturnSubmissionService from '../../../app/services/return-submissions/fetch-return-submission.service.js'
+import * as FetchReturnSubmissionService from '../../../app/services/return-submissions/fetch-return-submission.service.js'
 
 // Test helpers
 import ReturnLogModel from '../../../app/models/return-log.model.js'
@@ -30,8 +30,7 @@ describe('View Return Submission service', () => {
       })
     ]
 
-    vi.mock('../../../app/services/return-submissions/fetch-return-submission.service.js')
-    FetchReturnSubmissionService.mockResolvedValue(mockReturnSubmission)
+    vi.spyOn(FetchReturnSubmissionService, 'default').mockResolvedValue(mockReturnSubmission)
   })
 
   afterEach(() => {

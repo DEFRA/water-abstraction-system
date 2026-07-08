@@ -1,7 +1,7 @@
 // Test framework dependencies
 
 // Things we need to stub
-import FetchReturnLogsForLicenceService from '../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js'
+import * as FetchReturnLogsForLicenceService from '../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js'
 
 // Thing under test
 import PrepareReturnLogService from '../../../../app/services/bill-runs/match/prepare-return-logs.service.js'
@@ -28,8 +28,7 @@ describe('Prepare Return Logs Service', () => {
         beforeEach(async () => {
           const returnLog = _testReturnLog()
 
-          vi.mock('../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js')
-          FetchReturnLogsForLicenceService.mockResolvedValue([returnLog])
+          vi.spyOn(FetchReturnLogsForLicenceService, 'default').mockResolvedValue([returnLog])
         })
 
         it('preps the returns correctly', async () => {
@@ -92,8 +91,7 @@ describe('Prepare Return Logs Service', () => {
 
           returnLog.returnSubmissions[0].returnSubmissionLines[0].startDate = new Date('2023-04-05')
 
-          vi.mock('../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js')
-          FetchReturnLogsForLicenceService.mockResolvedValue([returnLog])
+          vi.spyOn(FetchReturnLogsForLicenceService, 'default').mockResolvedValue([returnLog])
         })
 
         it('flags the return as outside the abstraction period', async () => {
@@ -109,8 +107,7 @@ describe('Prepare Return Logs Service', () => {
 
           returnLog.returnSubmissions[0].nilReturn = true
 
-          vi.mock('../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js')
-          FetchReturnLogsForLicenceService.mockResolvedValue([returnLog])
+          vi.spyOn(FetchReturnLogsForLicenceService, 'default').mockResolvedValue([returnLog])
         })
 
         it('flags the return as a nil return', async () => {
@@ -123,8 +120,7 @@ describe('Prepare Return Logs Service', () => {
 
     describe('when no matching returns exist', () => {
       beforeEach(async () => {
-        vi.mock('../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js')
-        FetchReturnLogsForLicenceService.mockResolvedValue([])
+        vi.spyOn(FetchReturnLogsForLicenceService, 'default').mockResolvedValue([])
       })
 
       it('assigns no return logs to the licence', async () => {

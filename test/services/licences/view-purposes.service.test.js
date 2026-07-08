@@ -4,8 +4,8 @@
 import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Things we need to stub
-import FetchPurposesService from '../../../app/services/licences/fetch-purposes.service.js'
-import FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import * as FetchPurposesService from '../../../app/services/licences/fetch-purposes.service.js'
+import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
 
 // Thing under test
 import ViewPurposesService from '../../../app/services/licences/view-purposes.service.js'
@@ -30,11 +30,9 @@ describe('Licences - View Purposes service', () => {
 
     purposes = [ViewLicencesFixture.licenceVersionPurpose()]
 
-    vi.mock('../../../app/services/licences/fetch-licence.service.js')
-    FetchLicenceService.mockReturnValue(licence)
+    vi.spyOn(FetchLicenceService, 'default').mockReturnValue(licence)
 
-    vi.mock('../../../app/services/licences/fetch-purposes.service.js')
-    FetchPurposesService.mockReturnValue(purposes)
+    vi.spyOn(FetchPurposesService, 'default').mockReturnValue(purposes)
   })
 
   afterEach(() => {

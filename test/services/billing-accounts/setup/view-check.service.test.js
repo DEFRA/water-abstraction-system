@@ -5,9 +5,9 @@ import * as BillingAccountsFixture from '../../../support/fixtures/billing-accou
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchExistingAddressDal from '../../../../app/dal/billing-accounts/fetch-existing-address.dal.js'
-import FetchImpactedLicences from '../../../../app/dal/billing-accounts/fetch-impacted-licences.dal.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchExistingAddressDal from '../../../../app/dal/billing-accounts/fetch-existing-address.dal.js'
+import * as FetchImpactedLicences from '../../../../app/dal/billing-accounts/fetch-impacted-licences.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import ViewCheckService from '../../../../app/services/billing-accounts/setup/view-check.service.js'
@@ -25,12 +25,9 @@ describe('Billing Accounts - Setup - View Check Service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/billing-accounts/fetch-existing-address.dal.js')
-    FetchExistingAddressDal.mockResolvedValue()
-    vi.mock('../../../../app/dal/billing-accounts/fetch-impacted-licences.dal.js')
-    FetchImpactedLicences.mockResolvedValue([])
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchExistingAddressDal, 'default').mockResolvedValue()
+    vi.spyOn(FetchImpactedLicences, 'default').mockResolvedValue([])
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {

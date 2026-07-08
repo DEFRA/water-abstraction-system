@@ -4,9 +4,9 @@
 import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Things we need to stub
-import FetchAbstractionAlertLicencesDal from '../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js'
-import FetchCompanyContactDal from '../../../app/dal/company-contacts/fetch-company-contact.dal.js'
-import FetchCompanyService from '../../../app/dal/companies/fetch-company.dal.js'
+import * as FetchAbstractionAlertLicencesDal from '../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js'
+import * as FetchCompanyContactDal from '../../../app/dal/company-contacts/fetch-company-contact.dal.js'
+import * as FetchCompanyService from '../../../app/dal/companies/fetch-company.dal.js'
 
 // Thing under test
 import ViewRemoveCompanyContactService from '../../../app/services/company-contacts/view-remove-company-contact.service.js'
@@ -20,12 +20,9 @@ describe('Company Contacts - View Remove Company Contact Service', () => {
 
     company = CustomersFixtures.company()
 
-    vi.mock('../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
-    FetchAbstractionAlertLicencesDal.mockResolvedValue([])
-    vi.mock('../../../app/dal/companies/fetch-company.dal.js')
-    FetchCompanyService.mockReturnValue(company)
-    vi.mock('../../../app/dal/company-contacts/fetch-company-contact.dal.js')
-    FetchCompanyContactDal.mockReturnValue(companyContact)
+    vi.spyOn(FetchAbstractionAlertLicencesDal, 'default').mockResolvedValue([])
+    vi.spyOn(FetchCompanyService, 'default').mockReturnValue(company)
+    vi.spyOn(FetchCompanyContactDal, 'default').mockReturnValue(companyContact)
   })
 
   afterEach(() => {

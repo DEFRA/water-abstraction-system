@@ -4,8 +4,8 @@
 import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Things we need to stub
-import FetchBillingAccountsDal from '../../../app/dal/companies/fetch-billing-accounts.dal.js'
-import FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'
+import * as FetchBillingAccountsDal from '../../../app/dal/companies/fetch-billing-accounts.dal.js'
+import * as FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'
 
 // Thing under test
 import ViewBillingAccountsService from '../../../app/services/companies/view-billing-accounts.service.js'
@@ -26,11 +26,9 @@ describe('Companies - View Billing Accounts service', () => {
 
     billingAccount = billingAccounts[0]
 
-    vi.mock('../../../app/dal/companies/fetch-company.dal.js')
-    FetchCompanyDal.mockReturnValue(company)
+    vi.spyOn(FetchCompanyDal, 'default').mockReturnValue(company)
 
-    vi.mock('../../../app/dal/companies/fetch-billing-accounts.dal.js')
-    FetchBillingAccountsDal.mockReturnValue({
+    vi.spyOn(FetchBillingAccountsDal, 'default').mockReturnValue({
       billingAccounts,
       totalNumber: 1
     })

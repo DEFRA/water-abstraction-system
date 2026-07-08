@@ -4,8 +4,8 @@
 import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Things we need to stub
-import FetchConditionsService from '../../../app/services/licences/fetch-conditions.service.js'
-import FetchLicenceVersionDal from '../../../app/dal/licence-versions/fetch-licence-version.dal.js'
+import * as FetchConditionsService from '../../../app/services/licences/fetch-conditions.service.js'
+import * as FetchLicenceVersionDal from '../../../app/dal/licence-versions/fetch-licence-version.dal.js'
 import NotifyConfig from '../../../config/notify.config.js'
 
 // Thing under test
@@ -27,14 +27,12 @@ describe('Licence Versions - View service', () => {
 
     conditions = []
 
-    vi.mock('../../../app/dal/licence-versions/fetch-licence-version.dal.js')
-    FetchLicenceVersionDal.mockReturnValue({
+    vi.spyOn(FetchLicenceVersionDal, 'default').mockReturnValue({
       licenceVersion,
       licenceVersionsForPagination: [licenceVersion]
     })
 
-    vi.mock('../../../app/services/licences/fetch-conditions.service.js')
-    FetchConditionsService.mockReturnValue(conditions)
+    vi.spyOn(FetchConditionsService, 'default').mockReturnValue(conditions)
 
     vi.replaceProperty(NotifyConfig, 'replyTo', 'notify@test.gov.uk')
   })

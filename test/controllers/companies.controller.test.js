@@ -6,12 +6,12 @@ const { HTTP_STATUS_OK, HTTP_STATUS_NOT_FOUND } = http2.constants
 import { generateUUID } from '../../app/lib/general.lib.js'
 
 // Things we need to stub
-import ViewBillingAccountsService from '../../app/services/companies/view-billing-accounts.service.js'
-import ViewCompanyService from '../../app/services/companies/view-company.service.js'
-import ViewCompanyWithAddressService from '../../app/services/companies/view-company-with-address.service.js'
-import ViewContactsService from '../../app/services/companies/view-contacts.service.js'
-import ViewHistoryService from '../../app/services/companies/view-history.service.js'
-import ViewLicencesService from '../../app/services/companies/view-licences.service.js'
+import * as ViewBillingAccountsService from '../../app/services/companies/view-billing-accounts.service.js'
+import * as ViewCompanyService from '../../app/services/companies/view-company.service.js'
+import * as ViewCompanyWithAddressService from '../../app/services/companies/view-company-with-address.service.js'
+import * as ViewContactsService from '../../app/services/companies/view-contacts.service.js'
+import * as ViewHistoryService from '../../app/services/companies/view-history.service.js'
+import * as ViewLicencesService from '../../app/services/companies/view-licences.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -56,8 +56,7 @@ describe('Companies controller', () => {
           }
         }
 
-        vi.mock('../../app/services/companies/view-company.service.js')
-        ViewCompanyService.mockReturnValue({ pageTitle: 'Licence holder' })
+        vi.spyOn(ViewCompanyService, 'default').mockReturnValue({ pageTitle: 'Licence holder' })
       })
 
       it('returns the page successfully', async () => {
@@ -83,8 +82,7 @@ describe('Companies controller', () => {
           }
         }
 
-        vi.mock('../../app/services/companies/view-company-with-address.service.js')
-        ViewCompanyWithAddressService.mockReturnValue({ pageTitle: 'Licence holder' })
+        vi.spyOn(ViewCompanyWithAddressService, 'default').mockReturnValue({ pageTitle: 'Licence holder' })
       })
 
       it('returns the page successfully', async () => {
@@ -109,8 +107,7 @@ describe('Companies controller', () => {
             }
           }
 
-          vi.mock('../../app/services/companies/view-billing-accounts.service.js')
-          ViewBillingAccountsService.mockReturnValue({ pageTitle: 'Billing accounts', roles: ['billing'] })
+          vi.spyOn(ViewBillingAccountsService, 'default').mockReturnValue({ pageTitle: 'Billing accounts', roles: ['billing'] })
         })
 
         it('returns the page successfully', async () => {
@@ -132,8 +129,7 @@ describe('Companies controller', () => {
             }
           }
 
-          vi.mock('../../app/services/companies/view-billing-accounts.service.js')
-          ViewBillingAccountsService.mockReturnValue({ pageTitle: 'Billing accounts', roles: [] })
+          vi.spyOn(ViewBillingAccountsService, 'default').mockReturnValue({ pageTitle: 'Billing accounts', roles: [] })
         })
 
         it('returns "page not found"', async () => {
@@ -158,8 +154,7 @@ describe('Companies controller', () => {
           }
         }
 
-        vi.mock('../../app/services/companies/view-contacts.service.js')
-        ViewContactsService.mockReturnValue({ pageTitle: 'Contacts', roles: [] })
+        vi.spyOn(ViewContactsService, 'default').mockReturnValue({ pageTitle: 'Contacts', roles: [] })
       })
 
       it('returns the page successfully', async () => {
@@ -183,8 +178,7 @@ describe('Companies controller', () => {
           }
         }
 
-        vi.mock('../../app/services/companies/view-history.service.js')
-        ViewHistoryService.mockReturnValue({ pageTitle: 'History', roles: [] })
+        vi.spyOn(ViewHistoryService, 'default').mockReturnValue({ pageTitle: 'History', roles: [] })
       })
 
       it('returns the page successfully', async () => {
@@ -208,8 +202,7 @@ describe('Companies controller', () => {
           }
         }
 
-        vi.mock('../../app/services/companies/view-licences.service.js')
-        ViewLicencesService.mockReturnValue({ pageTitle: 'Licences', roles: [] })
+        vi.spyOn(ViewLicencesService, 'default').mockReturnValue({ pageTitle: 'Licences', roles: [] })
       })
 
       it('returns the page successfully', async () => {

@@ -5,7 +5,7 @@ import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
 import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
 
 // Things we need to stub
-import ProcessBillingFlagService from '../../../../app/services/licences/supplementary/process-billing-flag.service.js'
+import * as ProcessBillingFlagService from '../../../../app/services/licences/supplementary/process-billing-flag.service.js'
 
 // Thing under test
 import SubmitConfirmedService from '../../../../app/services/return-logs/setup/submit-confirmed.service.js'
@@ -18,8 +18,7 @@ describe('Return Logs Setup - Submit Confirmed service', () => {
 
     returnLog = await ReturnLogHelper.add({ licenceRef: licence.licenceRef })
 
-    vi.mock('../../../../app/services/licences/supplementary/process-billing-flag.service.js')
-    ProcessBillingFlagService.mockResolvedValue()
+    vi.spyOn(ProcessBillingFlagService, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
@@ -36,7 +35,7 @@ describe('Return Logs Setup - Submit Confirmed service', () => {
     it('sends the return to be processed by the "processBillingFlagsService"', async () => {
       await SubmitConfirmedService(returnLog.id)
 
-      expect(ProcessBillingFlagService).toHaveBeenCalled()
+      expect(ProcessBillingFlagService.default).toHaveBeenCalled()
     })
   })
 })

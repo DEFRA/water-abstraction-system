@@ -9,12 +9,12 @@ import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 import { generateNoticeReferenceCode, generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import CreateNoticeService from '../../../../app/services/notices/setup/create-notice.service.js'
-import CreateNotificationsService from '../../../../app/services/notices/setup/create-notifications.service.js'
-import DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
-import FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
-import SendNoticeService from '../../../../app/services/notices/setup/send/send-notice.service.js'
+import * as CreateNoticeService from '../../../../app/services/notices/setup/create-notice.service.js'
+import * as CreateNotificationsService from '../../../../app/services/notices/setup/create-notifications.service.js'
+import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
+import * as FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as SendNoticeService from '../../../../app/services/notices/setup/send/send-notice.service.js'
 
 // Thing under test
 import SubmitCheckService from '../../../../app/services/notices/setup/submit-check.service.js'
@@ -61,8 +61,7 @@ describe('Notices - Setup - Submit Check service', () => {
         return_log_ids: [dueReturns[0].returnLogId]
       }
     ]
-    vi.mock('../../../../app/services/notices/setup/fetch-recipients.service.js')
-    FetchRecipientsService.mockResolvedValue(recipients)
+    vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue(recipients)
 
     referenceCode = generateNoticeReferenceCode('RINV-')
 
@@ -92,23 +91,19 @@ describe('Notices - Setup - Submit Check service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    vi.mock('../../../../app/dal/delete-session.dal.js')
-    DeleteSessionDal.mockResolvedValue()
+    vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue()
 
     const notice = NoticesFixture.returnsInvitation()
 
     notice.referenceCode = session.referenceCode
     notice.metadata.recipients = 1
-    vi.mock('../../../../app/services/notices/setup/create-notice.service.js')
-    CreateNoticeService.mockResolvedValue(notice)
+    vi.spyOn(CreateNoticeService, 'default').mockResolvedValue(notice)
 
     const notification = NotificationsFixture.returnsInvitationEmail(notice)
 
-    vi.mock('../../../../app/services/notices/setup/create-notifications.service.js')
-    CreateNotificationsService.mockResolvedValue([notification])
+    vi.spyOn(CreateNotificationsService, 'default').mockResolvedValue([notification])
   })
 
   afterEach(() => {
@@ -117,20 +112,19 @@ describe('Notices - Setup - Submit Check service', () => {
 
   describe('when called', () => {
     beforeEach(() => {
-      vi.mock('../../../../app/services/notices/setup/send/send-notice.service.js')
-      SendNoticeService.mockResolvedValue()
+      vi.spyOn(SendNoticeService, 'default').mockResolvedValue()
     })
 
     it('creates a notice record', async () => {
       await SubmitCheckService(session.id, auth)
 
-      expect(CreateNoticeService).toHaveBeenCalled()
+      expect(CreateNoticeService.default).toHaveBeenCalled()
     })
 
     it('creates notification records', async () => {
       await SubmitCheckService(session.id, auth)
 
-      expect(CreateNotificationsService).toHaveBeenCalled()
+      expect(CreateNotificationsService.default).toHaveBeenCalled()
     })
 
     it('deletes the session record', async () => {
@@ -142,7 +136,7 @@ describe('Notices - Setup - Submit Check service', () => {
     it('sends the notice', async () => {
       await SubmitCheckService(session.id, auth)
 
-      expect(SendNoticeService).toHaveBeenCalled()
+      expect(SendNoticeService.default).toHaveBeenCalled()
     })
   })
 })

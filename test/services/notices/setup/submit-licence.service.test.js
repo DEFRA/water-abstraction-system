@@ -9,9 +9,9 @@ import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
-import ProcessRenewalsNoticeLicenceSubmission from '../../../../app/services/notices/setup/renewal-notice/process-licence-submission.service.js'
-import ProcessReturnsNoticeLicenceSubmission from '../../../../app/services/notices/setup/returns-notice/process-licence-submission.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as ProcessRenewalsNoticeLicenceSubmission from '../../../../app/services/notices/setup/renewal-notice/process-licence-submission.service.js'
+import * as ProcessReturnsNoticeLicenceSubmission from '../../../../app/services/notices/setup/returns-notice/process-licence-submission.service.js'
 
 // Thing under test
 import SubmitLicenceService from '../../../../app/services/notices/setup/submit-licence.service.js'
@@ -33,17 +33,14 @@ describe('Notices - Setup - Submit Licence service', () => {
 
     session = SessionModelStub(sessionData)
 
-        vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-        vi.mock('../../../../app/services/notices/setup/returns-notice/process-licence-submission.service.js')
-    ProcessReturnsNoticeLicenceSubmission.mockResolvedValue({
+    vi.spyOn(ProcessReturnsNoticeLicenceSubmission, 'default').mockResolvedValue({
       additionalSessionData: { dueReturns: [] },
       validationResult: null
     })
 
-        vi.mock('../../../../app/services/notices/setup/renewal-notice/process-licence-submission.service.js')
-    ProcessRenewalsNoticeLicenceSubmission.mockResolvedValue({
+    vi.spyOn(ProcessRenewalsNoticeLicenceSubmission, 'default').mockResolvedValue({
       additionalSessionData: {},
       validationResult: null
     })
@@ -82,7 +79,7 @@ describe('Notices - Setup - Submit Licence service', () => {
 
             session = SessionModelStub(sessionData)
 
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('returns a redirect to the "paper-return" page', async () => {
@@ -98,7 +95,7 @@ describe('Notices - Setup - Submit Licence service', () => {
 
             session = SessionModelStub(sessionData)
 
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('returns a redirect to the "check-notice-type" page', async () => {
@@ -115,7 +112,7 @@ describe('Notices - Setup - Submit Licence service', () => {
 
           session = SessionModelStub(sessionData)
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('calls the "ProcessRenewalsNoticeLicenceSubmission"', async () => {
@@ -138,7 +135,7 @@ describe('Notices - Setup - Submit Licence service', () => {
 
             session = SessionModelStub(sessionData)
 
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('returns a redirect to the "check-notice-type" page', async () => {
@@ -156,7 +153,7 @@ describe('Notices - Setup - Submit Licence service', () => {
 
             session = SessionModelStub(sessionData)
 
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('returns a redirect to the "check-notice-type" page', async () => {
@@ -172,7 +169,7 @@ describe('Notices - Setup - Submit Licence service', () => {
 
             session = SessionModelStub(sessionData)
 
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('returns a redirect to the "returns-period" page', async () => {
@@ -190,7 +187,7 @@ describe('Notices - Setup - Submit Licence service', () => {
 
             session = SessionModelStub(sessionData)
 
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('redirects to the check notice type page', async () => {
@@ -224,7 +221,7 @@ describe('Notices - Setup - Submit Licence service', () => {
 
             session = SessionModelStub(sessionData)
 
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('redirects to the check notice type page', async () => {
@@ -246,7 +243,7 @@ describe('Notices - Setup - Submit Licence service', () => {
       beforeEach(() => {
         payload = {}
 
-        ProcessReturnsNoticeLicenceSubmission.mockResolvedValue({
+        vi.spyOn(ProcessReturnsNoticeLicenceSubmission, 'default').mockResolvedValue({
           additionalSessionData: { dueReturns: [] },
           validationResult: {
             errorList: [{ href: '#licenceRef', text: 'Enter a licence number' }],

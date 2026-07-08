@@ -4,8 +4,8 @@
 import * as UsersFixture from '../../../support/fixtures/users.fixture.js'
 
 // Things we need to stub
-import FetchNotificationsDal from '../../../../app/dal/users/internal/fetch-notifications.dal.js'
-import FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
+import * as FetchNotificationsDal from '../../../../app/dal/users/internal/fetch-notifications.dal.js'
+import * as FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
 
 // Thing under test
 import ViewCommunicationsService from '../../../../app/services/users/internal/view-communications.service.js'
@@ -20,11 +20,9 @@ describe('Users - Internal - View Communications Service', () => {
 
     user = { id, username }
 
-    vi.mock('../../../../app/dal/users/fetch-user.dal.js')
-    FetchUserDal.mockReturnValue(user)
+    vi.spyOn(FetchUserDal, 'default').mockReturnValue(user)
 
-    vi.mock('../../../../app/dal/users/internal/fetch-notifications.dal.js')
-    FetchNotificationsDal.mockReturnValue({
+    vi.spyOn(FetchNotificationsDal, 'default').mockReturnValue({
       notifications: [],
       totalNumber: 0
     })
