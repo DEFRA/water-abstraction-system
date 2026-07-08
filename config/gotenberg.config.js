@@ -7,10 +7,8 @@
 // Importing dotenv in multiple places has no effect on the app when running for real.
 import 'dotenv/config'
 
-const config = {
+export default {
   delay: Number.parseInt(process.env.GOTENBERG_DELAY) || 2000,
   timeout: Number.parseInt(process.env.GOTENBERG_TIMEOUT) || 20000,
   url: process.env.GOTENBERG_URL
 }
-
-export default config

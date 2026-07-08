@@ -7,7 +7,7 @@
 // Importing dotenv in multiple places has no effect on the app when running for real.
 import 'dotenv/config'
 
-const config = {
+export default {
   domains: {
     external: process.env.EXTERNAL_DOMAIN,
     internal: process.env.INTERNAL_DOMAIN
@@ -35,6 +35,3 @@ const config = {
   // Default timeout for HTTP requests sent using app/requests/base.request.js
   requestTimeout: Number.parseInt(process.env.REQUEST_TIMEOUT) || 5000
 }
-
-export const { domains, environment, hapi, httpProxy, requestTimeout } = config
-export default config

@@ -7,7 +7,7 @@
 // Importing dotenv in multiple places has no effect on the app when running for real.
 import 'dotenv/config'
 
-const config = {
+export default {
   // Generating a bill run can require us to fire 1000's of requests at the charging module in a burst. Obviously, this
   // can put the API under pressure so requests can take longer to complete. To avoid a slow request causing the whole
   // bill run to error we give the CHA a little more wiggle-room to handle things
@@ -21,5 +21,3 @@ const config = {
   },
   url: process.env.CHARGING_MODULE_URL
 }
-
-export default config

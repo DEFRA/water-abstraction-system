@@ -7,8 +7,6 @@
 // Importing dotenv in multiple places has no effect on the app when running for real.
 import 'dotenv/config'
 
-const config = {
+export default {
   url: process.env.EA_ADDRESS_FACADE_URL
 }
-
-export default config
