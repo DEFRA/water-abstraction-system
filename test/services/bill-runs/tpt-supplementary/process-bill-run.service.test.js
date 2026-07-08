@@ -115,7 +115,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
   describe('when the service errors', () => {
     describe('because assigning the bill run to the licences fails', () => {
       beforeEach(() => {
-        vi.spyOn(AssignBillRunToLicencesService, 'default').mockRejectedValue()
+        vi.spyOn(AssignBillRunToLicencesService, 'default').mockRejectedValue(new Error())
       })
 
       it('calls HandleErroredBillRunService', async () => {
@@ -138,7 +138,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
     describe('because matching and allocating fails', () => {
       beforeEach(() => {
         vi.spyOn(AssignBillRunToLicencesService, 'default').mockResolvedValue()
-        vi.spyOn(MatchAndAllocateService, 'default').mockRejectedValue()
+        vi.spyOn(MatchAndAllocateService, 'default').mockRejectedValue(new Error())
       })
 
       it('calls HandleErroredBillRunService', async () => {

@@ -272,7 +272,7 @@ describe('Return Versions - Setup - Submit Check service', () => {
 
     describe('but the service errors', () => {
       beforeEach(() => {
-        vi.spyOn(ProcessLicenceReturnLogsService, 'default').mockRejectedValue()
+        vi.spyOn(ProcessLicenceReturnLogsService, 'default').mockRejectedValue(new Error())
       })
 
       it('logs the error and rethrows it', async () => {

@@ -153,7 +153,7 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
 
   describe('when there is an error', () => {
     beforeEach(() => {
-      vi.spyOn(CheckNotificationStatusService, 'default').mockRejectedValue()
+      vi.spyOn(CheckNotificationStatusService, 'default').mockRejectedValue(new Error())
     })
 
     it('handles the error', async () => {

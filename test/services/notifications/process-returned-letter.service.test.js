@@ -112,7 +112,7 @@ describe('Notifications - Process Returned Letter service', () => {
         reference: generateNoticeReferenceCode('RREM-')
       }
 
-      vi.spyOn(UpdateNoticeService, 'default').mockRejectedValue()
+      vi.spyOn(UpdateNoticeService, 'default').mockRejectedValue(new Error())
     })
 
     it('does not throw an error', async () => {
@@ -124,7 +124,7 @@ describe('Notifications - Process Returned Letter service', () => {
 
       const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-      expect(notifierStub.omfg).toHaveBeenCalledWith('Returned letter failed', expect.any(Object))
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Returned letter failed', expect.any(Object), expect.any(Error))
       expect(errorLogArgs[1]).toEqual(payload)
       expect(errorLogArgs[2]).toBeInstanceOf(Error)
     })

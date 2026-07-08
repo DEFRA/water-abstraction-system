@@ -166,7 +166,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
 
           const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-          expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed', expect.any(Object))
+          expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed', expect.any(Object), expect.any(Error))
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })
@@ -188,7 +188,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
 
           const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-          expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed', expect.any(Object))
+          expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed', expect.any(Object), expect.any(Error))
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(ExpandedError)
         })
@@ -211,7 +211,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
 
           const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-          expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed', expect.any(Object))
+          expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed', expect.any(Object), expect.any(Error))
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(ExpandedError)
         })
@@ -239,7 +239,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
 
           const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-          expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed', expect.any(Object))
+          expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed', expect.any(Object), expect.any(Error))
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })
@@ -271,7 +271,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
 
           const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-          expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed', expect.any(Object))
+          expect(notifierStub.omfg).toHaveBeenCalledWith('Send bill run failed', expect.any(Object), expect.any(Error))
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })

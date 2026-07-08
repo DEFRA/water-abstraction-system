@@ -109,7 +109,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
 
   describe('when there is an error', () => {
     beforeEach(() => {
-      vi.spyOn(FetchLicenceUpdatesService, 'default').mockRejectedValue()
+      vi.spyOn(FetchLicenceUpdatesService, 'default').mockRejectedValue(new Error())
     })
 
     it('records the error by calling "omfg()"', async () => {
