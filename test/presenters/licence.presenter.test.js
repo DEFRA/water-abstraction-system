@@ -5,7 +5,7 @@ import { generateUUID } from '../../app/lib/general.lib.js'
 import { licenceEnds } from '../support/fixtures/licence.fixture.js'
 
 // Thing under test
-import LicencePresenter from '../../app/presenters/licence.presenter.js'
+import * as LicencePresenter from '../../app/presenters/licence.presenter.js'
 
 describe('Licences presenter', () => {
   describe('#formatConditionTypes()', () => {

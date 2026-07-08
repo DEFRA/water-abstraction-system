@@ -48,7 +48,7 @@ describe('Charging Module - View Customer Files request', () => {
 
     it('hits the correct endpoint', async () => {
       await ChargingModuleViewCustomerFilesRequest.send(days)
-      const endpoint = ChargingModuleRequest.getRequest.firstCall.firstArg
+      const endpoint = ChargingModuleRequest.getRequest.mock.calls[0][0]
 
       expect(endpoint).toEqual(`v3/wrls/customer-files/${days}`)
     })

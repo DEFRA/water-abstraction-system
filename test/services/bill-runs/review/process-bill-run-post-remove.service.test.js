@@ -52,7 +52,7 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
 
           // Check we set the bill run status
           expect(billRunPatchStub).toHaveBeenCalledOnce()
-          expect(billRunPatchStub.firstCall.firstArg).toMatchObject({ status: 'empty' })
+          expect(billRunPatchStub.mock.calls[0][0]).toMatchObject({ status: 'empty' })
         })
 
         it('does not trigger the generate two-part tariff bill run process', async () => {

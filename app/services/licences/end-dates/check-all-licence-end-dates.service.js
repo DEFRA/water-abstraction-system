@@ -38,7 +38,7 @@ export default async function go() {
     const startTime = currentTimeInNanoseconds()
 
     // Fetch all licences from NALD and WRLS
-    const licences = await FetchLicences.go()
+    const licences = await FetchLicences()
 
     // Check for any licences with changed end dates
     await _checkLicences(licences)

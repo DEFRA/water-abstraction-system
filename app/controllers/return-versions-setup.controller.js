@@ -216,7 +216,7 @@ export async function submitAbstractionPeriod(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitAbstractionPeriod.go(sessionId, requirementIndex, payload, yar)
+  const pageData = await SubmitAbstractionPeriod(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/abstraction-period.njk', pageData)
@@ -236,7 +236,7 @@ export async function submitAgreementsExceptions(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitAgreementsExceptions.go(sessionId, requirementIndex, payload, yar)
+  const pageData = await SubmitAgreementsExceptions(sessionId, requirementIndex, payload, yar)
 
   if (pageData.error) {
     return h.view('return-versions/setup/agreements-exceptions.njk', pageData)
@@ -265,7 +265,7 @@ export async function submitCancel(request, h) {
   const { sessionId } = request.params
   const { licenceId } = request.payload
 
-  await SubmitCancel.go(sessionId)
+  await SubmitCancel(sessionId)
 
   return h.redirect(`/system/licences/${licenceId}/set-up`)
 }

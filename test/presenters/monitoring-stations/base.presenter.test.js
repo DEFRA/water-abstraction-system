@@ -1,5 +1,5 @@
 // Thing under test
-import BasePresenter from '../../../app/presenters/monitoring-stations/base.presenter.js'
+import * as BasePresenter from '../../../app/presenters/monitoring-stations/base.presenter.js'
 
 describe('Monitoring Stations - Base presenter', () => {
   let licenceMonitoringStations

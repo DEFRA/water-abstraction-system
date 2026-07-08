@@ -11,7 +11,7 @@ describe('Return Versions Setup - Fetch Existing Requirements service', () => {
 
   describe('when a matching return version exists', () => {
     beforeAll(async () => {
-      const seedData = await RequirementsForReturnsSeeder()
+      const seedData = await RequirementsForReturnsSeeder.seed()
 
       seededReturnVersion = seedData.returnVersion
       seededReturnRequirementOne = seededReturnVersion.returnRequirements[0]

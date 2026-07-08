@@ -92,7 +92,7 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
         delete: vi.fn().mockReturnThis(),
         where: vi.fn().mockReturnThis(),
         whereNotNull: vi.fn().mockReturnThis(),
-        whereNotExists: vi.fn().rejects()
+        whereNotExists: vi.fn().mockRejectedValue(new Error())
       })
     })
 

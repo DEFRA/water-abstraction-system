@@ -75,7 +75,7 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
       vi.spyOn(LicenceEndDateChangeModel, 'query').mockReturnValue({
         insert: vi.fn().mockReturnThis(),
         onConflict: vi.fn().mockReturnThis(),
-        merge: vi.fn().rejects()
+        merge: vi.fn().mockRejectedValue(new Error())
       })
     })
 

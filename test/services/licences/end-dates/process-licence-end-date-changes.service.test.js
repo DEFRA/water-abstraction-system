@@ -115,7 +115,7 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
     describe('trying to fetch the licence end date changes', () => {
       beforeEach(() => {
         vi.spyOn(LicenceEndDateChangeModel, 'query').mockReturnValue({
-          select: vi.fn().rejects()
+          select: vi.fn().mockRejectedValue(new Error())
         })
       })
 

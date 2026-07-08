@@ -10,7 +10,7 @@ import * as CreateEmailRequest from '../../app/requests/notify/create-email.requ
 import NotifyConfig from '../../config/notify.config.js'
 
 // Thing under test
-import * as BaseNotifierLib from '../../app/lib/base-notifier.lib.js'
+import BaseNotifierLib from '../../app/lib/base-notifier.lib.js'
 
 describe('BaseNotifierLib class', () => {
   const id = '1234567890'

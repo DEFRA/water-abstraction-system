@@ -146,7 +146,7 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
     beforeEach(() => {
       vi.spyOn(ContactModel, 'query').mockReturnValue({
         delete: vi.fn().mockReturnThis(),
-        whereRaw: vi.fn().rejects()
+        whereRaw: vi.fn().mockRejectedValue(new Error())
       })
     })
 

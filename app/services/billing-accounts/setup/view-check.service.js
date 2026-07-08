@@ -24,7 +24,7 @@ export default async function go(sessionId) {
   const companyContacts = await _fetchCompanyContacts(session)
   const companysHouseResult = await FetchCompanyService(session.companiesHouseNumber)
   const existingAddress = await _fetchExistingAddress(session)
-  const impactedLicences = await FetchImpactedLicences.go(session.billingAccount.id)
+  const impactedLicences = await FetchImpactedLicences(session.billingAccount.id)
 
   await markCheckPageVisited(session)
   await _updateAddressJourneyBackLink(session)
@@ -52,7 +52,7 @@ async function _fetchExistingAddress(session) {
     return []
   }
 
-  return FetchExistingAddress.go(session.addressSelected)
+  return FetchExistingAddress(session.addressSelected)
 }
 
 async function _updateAddressJourneyBackLink(session) {

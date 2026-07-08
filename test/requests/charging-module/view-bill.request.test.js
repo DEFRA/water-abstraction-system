@@ -40,7 +40,7 @@ describe('Charging Module View Bill request', () => {
 
     it('hits the correct endpoint', async () => {
       await ViewBillRequest.send(billRunId, billId)
-      const endpoint = ChargingModuleRequest.getRequest.firstCall.firstArg
+      const endpoint = ChargingModuleRequest.getRequest.mock.calls[0][0]
 
       expect(endpoint).toEqual(`v3/wrls/bill-runs/${billRunId}/invoices/${billId}`)
     })

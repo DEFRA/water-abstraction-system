@@ -1,5 +1,5 @@
 // Test helpers
-import * as GlobalNotifierLib from '../../app/lib/global-notifier.lib.js'
+import GlobalNotifierLib from '../../app/lib/global-notifier.lib.js'
 
 // For running our service
 import { init } from '../../app/server.js'

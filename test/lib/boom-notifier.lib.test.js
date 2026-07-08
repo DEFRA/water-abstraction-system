@@ -1,7 +1,7 @@
 // Test framework dependencies
 
 // Thing under test
-import * as BoomNotifierLib from '../../app/lib/boom-notifier.lib.js'
+import BoomNotifierLib from '../../app/lib/boom-notifier.lib.js'
 
 describe('BoomNotifierLib class', () => {
   const id = '1234567890'

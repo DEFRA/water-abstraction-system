@@ -24,7 +24,7 @@ export default async function go(days) {
   const expiryDate = renewalExpiryDate(days)
   const renewalDate = renewalNoticeDate(expiryDate)
 
-  const recipients = await FetchRenewalRecipients.go(expiryDate)
+  const recipients = await FetchRenewalRecipients(expiryDate)
 
   if (recipients.length > 0) {
     const noticeData = _noticeData(expiryDate, renewalDate)

@@ -54,7 +54,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
         expect(billRunPatchStub).toHaveBeenCalledOnce()
-        expect(billRunPatchStub.firstCall.firstArg).toEqual({ status: 'processing' })
+        expect(billRunPatchStub.mock.calls[0][0]).toEqual({ status: 'processing' })
       })
 
       it('skips to "generating" the bill run', async () => {
@@ -88,8 +88,8 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
         expect(billRunPatchStub.calledTwice).toBe(true)
-        expect(billRunPatchStub.firstCall.firstArg).toEqual({ status: 'processing' })
-        expect(billRunPatchStub.secondCall.firstArg).toEqual({ status: 'review' })
+        expect(billRunPatchStub.mock.calls[0][0]).toEqual({ status: 'processing' })
+        expect(billRunPatchStub.mock.calls[1][0]).toEqual({ status: 'review' })
       })
 
       it('does not skip to "generating" the bill run', async () => {

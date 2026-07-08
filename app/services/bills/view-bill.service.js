@@ -43,7 +43,7 @@ export default async function go(id) {
   } else {
     // Else we need to provide bill licence data for the single licence bill templates (ViewBillLicencePresenter handles
     // both PRESROC and SROC)
-    const billLicence = await FetchBillLicence.go(licenceSummaries[0].id)
+    const billLicence = await FetchBillLicence(licenceSummaries[0].id)
 
     additionalData = ViewBillLicencePresenter(billLicence)
   }

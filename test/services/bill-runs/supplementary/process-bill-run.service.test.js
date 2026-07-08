@@ -68,8 +68,8 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
         expect(billRunPatchStub.calledTwice).toBe(true)
-        expect(billRunPatchStub.firstCall.firstArg).toEqual({ status: 'processing' })
-        expect(billRunPatchStub.secondCall.firstArg).toEqual({ status: 'empty' })
+        expect(billRunPatchStub.mock.calls[0][0]).toEqual({ status: 'processing' })
+        expect(billRunPatchStub.mock.calls[1][0]).toEqual({ status: 'empty' })
       })
 
       it('logs the time taken', async () => {
@@ -93,7 +93,7 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
         expect(billRunPatchStub).toHaveBeenCalledOnce()
-        expect(billRunPatchStub.firstCall.firstArg).toMatchObject({ status: 'processing' })
+        expect(billRunPatchStub.mock.calls[0][0]).toMatchObject({ status: 'processing' })
       })
 
       it('tells the charging module API to "generate" the bill run', async () => {

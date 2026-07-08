@@ -46,8 +46,8 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
         expect(billRunPatchStub.calledTwice).toBe(true)
-        expect(billRunPatchStub.firstCall.firstArg).toEqual({ status: 'processing' })
-        expect(billRunPatchStub.secondCall.firstArg).toEqual({ status: 'empty' })
+        expect(billRunPatchStub.mock.calls[0][0]).toEqual({ status: 'processing' })
+        expect(billRunPatchStub.mock.calls[1][0]).toEqual({ status: 'empty' })
       })
 
       it('logs the time taken', async () => {
@@ -71,8 +71,8 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
         expect(billRunPatchStub.calledTwice).toBe(true)
-        expect(billRunPatchStub.firstCall.firstArg).toEqual({ status: 'processing' })
-        expect(billRunPatchStub.secondCall.firstArg).toEqual({ status: 'review' })
+        expect(billRunPatchStub.mock.calls[0][0]).toEqual({ status: 'processing' })
+        expect(billRunPatchStub.mock.calls[1][0]).toEqual({ status: 'review' })
       })
 
       it('logs the time taken', async () => {

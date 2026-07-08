@@ -58,7 +58,7 @@ describe('Search - Fetch Search Results service', () => {
     )
     licenceHolders.push(licenceHolderSeedData)
 
-    licenceSeedData = await EmptyLicenceSeeder()
+    licenceSeedData = await EmptyLicenceSeeder.seed()
     licences.push(licenceSeedData)
     licenceHolderSeedData = await CRMContactsSeeder.licenceHolder(
       licenceSeedData,
@@ -67,7 +67,7 @@ describe('Search - Fetch Search Results service', () => {
     )
     licenceHolders.push(licenceHolderSeedData)
 
-    licenceSeedData = await EmptyLicenceSeeder()
+    licenceSeedData = await EmptyLicenceSeeder.seed()
     licences.push(licenceSeedData)
     licenceHolderSeedData = await CRMContactsSeeder.licenceHolder(
       licenceSeedData,

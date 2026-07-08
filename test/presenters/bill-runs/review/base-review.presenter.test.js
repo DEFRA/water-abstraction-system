@@ -1,5 +1,5 @@
 // Thing under test
-import BaseReviewPresenter from '../../../../app/presenters/bill-runs/review/base-review.presenter.js'
+import * as BaseReviewPresenter from '../../../../app/presenters/bill-runs/review/base-review.presenter.js'
 
 describe('Bill Runs Review - Base Review presenter', () => {
   describe('#calculateTotalBillableReturns()', () => {

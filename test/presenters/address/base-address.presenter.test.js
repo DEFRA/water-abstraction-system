@@ -1,5 +1,5 @@
 // Thing under test
-import BaseAddressPresenter from '../../../app/presenters/address/base-address.presenter.js'
+import * as BaseAddressPresenter from '../../../app/presenters/address/base-address.presenter.js'
 
 describe('Address - Base Address presenter', () => {
   describe('#countryLookup()', () => {

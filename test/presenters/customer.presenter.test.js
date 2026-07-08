@@ -2,7 +2,7 @@
 import * as CustomersFixtures from '../support/fixtures/customers.fixture.js'
 
 // Thing under test
-import CustomerPresenter from '../../app/presenters/customer.presenter.js'
+import * as CustomerPresenter from '../../app/presenters/customer.presenter.js'
 
 describe('Customer presenter', () => {
   describe('#formatCompanyContact', () => {
