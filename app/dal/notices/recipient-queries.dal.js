@@ -3,7 +3,7 @@
  *
  * Consumers must include `FROM public.licences l` before this fragment.
  */
-const currentLicenceVersionsJoin = `
+export const currentLicenceVersionsJoin = `
   INNER JOIN (
     SELECT DISTINCT ON (lv.licence_id)
       lv.licence_id,
@@ -36,7 +36,7 @@ const currentLicenceVersionsJoin = `
  *
  * Requires 1 binding: licenceRefs
  */
-const additionalContactRecipientQuery = `
+export const additionalContactRecipientQuery = `
   SELECT DISTINCT
     l.licence_ref,
     'additional contact' AS contact_type,
@@ -65,7 +65,7 @@ const additionalContactRecipientQuery = `
  * SQL query fragment for fetching licence holder recipients from licence versions
  *
  */
-const licenceHolderRecipientQuery = `
+export const licenceHolderRecipientQuery = `
   SELECT
     ('licence holder') AS contact_type,
     2 AS priority,
@@ -105,7 +105,7 @@ const licenceHolderRecipientQuery = `
  * SQL query fragment for fetching primary user recipients from licence document headers
  *
  */
-const primaryUserRecipientQuery = `
+export const primaryUserRecipientQuery = `
   SELECT
     ('primary user') AS contact_type,
     1 AS priority,
@@ -120,16 +120,3 @@ const primaryUserRecipientQuery = `
   INNER JOIN public.licence_entities le
     ON le.id = ler.licence_entity_id
 `
-
-export {
-  additionalContactRecipientQuery,
-  currentLicenceVersionsJoin,
-  licenceHolderRecipientQuery,
-  primaryUserRecipientQuery
-}
-export default {
-  additionalContactRecipientQuery,
-  currentLicenceVersionsJoin,
-  licenceHolderRecipientQuery,
-  primaryUserRecipientQuery
-}
