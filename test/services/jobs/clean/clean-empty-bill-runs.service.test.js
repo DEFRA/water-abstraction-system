@@ -64,13 +64,13 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
 
     describe('and they can be cancelled (CancelBillRunService updates status to "cancel")', () => {
       beforeEach(() => {
-        CancelBillRunService.onFirstCall().resolves({
+        CancelBillRunService.mockResolvedValueOnce({
           id: emptyBillRuns[0].id,
           externalId: 'd704cb32-a309-4a04-9b0e-f316614a5927',
           status: 'cancel'
         })
 
-        CancelBillRunService.onSecondCall().resolves({
+        CancelBillRunService.mockResolvedValueOnce({
           id: emptyBillRuns[1].id,
           externalId: '4f64f905-94b4-460d-aefc-098f57834085',
           status: 'cancel'
@@ -96,13 +96,13 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
 
     describe('but one cannot be cancelled (CancelBillRunService does not update status)', () => {
       beforeEach(() => {
-        CancelBillRunService.onFirstCall().resolves({
+        CancelBillRunService.mockResolvedValueOnce({
           id: emptyBillRuns[0].id,
           externalId: 'd704cb32-a309-4a04-9b0e-f316614a5927',
           status: 'cancel'
         })
 
-        CancelBillRunService.onSecondCall().resolves({
+        CancelBillRunService.mockResolvedValueOnce({
           id: emptyBillRuns[1].id,
           externalId: '4f64f905-94b4-460d-aefc-098f57834085',
           status: 'sending'

@@ -29,7 +29,9 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
       findById: vi.fn().mockReturnThis(),
       patch: billRunPatchStub,
       select: billRunSelectStub
-    })
+       vi.spyOn(GenerateAnnualBillRunService, 'default').mockResolvedValue()
+      vi.spyOn(GenerateSupplementaryBillRunService, 'default').mockResolvedValue()
+   })
 
   })
 

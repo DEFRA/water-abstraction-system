@@ -63,7 +63,7 @@ describe('Charging Module Send Bill Run request', () => {
   describe('when the request cannot send a bill run', () => {
     describe('because the approve request fails', () => {
       beforeEach(async () => {
-        chargingModuleRequestStub.onFirstCall().resolves({
+        chargingModuleRequestStub.mockResolvedValueOnce({
           succeeded: false,
           response: { body: 'Boom' }
         })
@@ -83,8 +83,8 @@ describe('Charging Module Send Bill Run request', () => {
 
     describe('because the send request fails', () => {
       beforeEach(async () => {
-        chargingModuleRequestStub.onFirstCall().resolves({ succeeded: true })
-        chargingModuleRequestStub.onSecondCall().resolves({
+        chargingModuleRequestStub.mockResolvedValueOnce({ succeeded: true })
+        chargingModuleRequestStub.mockResolvedValueOnce({
           succeeded: false,
           response: { body: 'Boom' }
         })
@@ -104,8 +104,8 @@ describe('Charging Module Send Bill Run request', () => {
 
     describe('because the wait request fails', () => {
       beforeEach(async () => {
-        chargingModuleRequestStub.onFirstCall().resolves({ succeeded: true })
-        chargingModuleRequestStub.onSecondCall().resolves({ succeeded: true })
+        chargingModuleRequestStub.mockResolvedValueOnce({ succeeded: true })
+        chargingModuleRequestStub.mockResolvedValueOnce({ succeeded: true })
         vi.spyOn(WaitForStatusRequest, 'send').mockResolvedValue({
           succeeded: false,
           attempts: 100,

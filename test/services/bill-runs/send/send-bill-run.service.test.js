@@ -26,12 +26,12 @@ describe('Bill Runs - Send Bill Run service', () => {
       beforeEach(() => {
         billRun = _billRun()
 
-        queryStub.onFirstCall().returns({
+        queryStub.mockReturnValueOnce({
           findById: vi.fn().mockReturnThis(),
           select: vi.fn().mockResolvedValue(billRun)
         })
 
-        queryStub.onSecondCall().returns({
+        queryStub.mockReturnValueOnce({
           findById: vi.fn().mockReturnThis(),
           patch: billRunPatchStub
         })
@@ -58,7 +58,7 @@ describe('Bill Runs - Send Bill Run service', () => {
         billRun = _billRun()
         billRun.status = 'sent'
 
-        queryStub.onFirstCall().returns({
+        queryStub.mockReturnValueOnce({
           findById: vi.fn().mockReturnThis(),
           select: vi.fn().mockResolvedValue(billRun)
         })

@@ -49,10 +49,10 @@ describe('Annual Process billing period service', () => {
       beforeEach(async () => {
         billingAccount = _testBillingAccount()
 
-        chargingModuleCreateTransactionRequestStub.onFirstCall().resolves({
+        chargingModuleCreateTransactionRequestStub.mockResolvedValueOnce({
           ..._chargingModuleResponse('7e752fa6-a19c-4779-b28c-6e536f028795')
         })
-        chargingModuleCreateTransactionRequestStub.onSecondCall().resolves({
+        chargingModuleCreateTransactionRequestStub.mockResolvedValueOnce({
           ..._chargingModuleResponse('a2086da4-e3b6-4b83-afe1-0e2e5255efaf')
         })
       })
