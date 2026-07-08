@@ -29,7 +29,7 @@ describe('Bill Runs - Review - View Review Licence Service', () => {
     describe('and there is a flash message to display', () => {
       beforeEach(() => {
         yarStub = YarStub()
-        yarStub.flash.withArgs('banner').returns(['This licence has been marked.'])
+        yarStub.flash.mockReturnValue(['This licence has been marked.'])
       })
 
       it('returns page data for the view', async () => {
@@ -127,7 +127,7 @@ describe('Bill Runs - Review - View Review Licence Service', () => {
     describe('and there is no flash message to display', () => {
       beforeEach(() => {
         yarStub = YarStub()
-        yarStub.flash.withArgs('banner').returns([undefined])
+        yarStub.flash.mockReturnValue([undefined])
       })
 
       it('returns page data for the view', async () => {

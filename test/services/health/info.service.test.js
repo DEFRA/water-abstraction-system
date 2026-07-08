@@ -77,15 +77,15 @@ describe('Health - Info service', () => {
 
     // These requests will remain unchanged throughout the tests. We do alter the ones to the AddressFacade and the
     // water-api (foreground-service) though, which is why they are defined separately in each test.
-    legacyViewHealthRequestStub.withArgs('background').resolves(goodRequestResults.app)
-    legacyViewHealthRequestStub.withArgs('reporting').resolves(goodRequestResults.app)
-    legacyViewHealthRequestStub.withArgs('import').resolves(goodRequestResults.app)
-    legacyViewHealthRequestStub.withArgs('crm').resolves(goodRequestResults.app)
-    legacyViewHealthRequestStub.withArgs('external').resolves(goodRequestResults.app)
-    legacyViewHealthRequestStub.withArgs('internal').resolves(goodRequestResults.app)
-    legacyViewHealthRequestStub.withArgs('idm').resolves(goodRequestResults.app)
-    legacyViewHealthRequestStub.withArgs('permits').resolves(goodRequestResults.app)
-    legacyViewHealthRequestStub.withArgs('returns').resolves(goodRequestResults.app)
+    legacyViewHealthRequestStub.mockResolvedValue(goodRequestResults.app)
+    legacyViewHealthRequestStub.mockResolvedValue(goodRequestResults.app)
+    legacyViewHealthRequestStub.mockResolvedValue(goodRequestResults.app)
+    legacyViewHealthRequestStub.mockResolvedValue(goodRequestResults.app)
+    legacyViewHealthRequestStub.mockResolvedValue(goodRequestResults.app)
+    legacyViewHealthRequestStub.mockResolvedValue(goodRequestResults.app)
+    legacyViewHealthRequestStub.mockResolvedValue(goodRequestResults.app)
+    legacyViewHealthRequestStub.mockResolvedValue(goodRequestResults.app)
+    legacyViewHealthRequestStub.mockResolvedValue(goodRequestResults.app)
 
     chargingModuleViewHealthRequestStub.mockResolvedValue(goodRequestResults.chargingModule)
     gotenbergViewHealthRequestStub.mockResolvedValue(goodRequestResults.gotenberg)
@@ -104,7 +104,7 @@ describe('Health - Info service', () => {
       // In this scenario everything is hunky-dory so we return 2xx responses from these services
       addressFacadeViewStatusRequestStub.mockResolvedValue(goodRequestResults.addressFacade)
 
-      legacyViewHealthRequestStub.withArgs('water').resolves(goodRequestResults.app)
+      legacyViewHealthRequestStub.mockResolvedValue(goodRequestResults.app)
 
       const execStub = vi.fn().mockResolvedValue({
         stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
@@ -151,7 +151,7 @@ describe('Health - Info service', () => {
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
       addressFacadeViewStatusRequestStub.mockResolvedValue(goodRequestResults.addressFacade)
 
-      legacyViewHealthRequestStub.withArgs('water').resolves(goodRequestResults.app)
+      legacyViewHealthRequestStub.mockResolvedValue(goodRequestResults.app)
 
       const execStub = vi.fn().mockResolvedValue({
         stdout: 'ClamAV 9.99.9/26685/Mon Oct 10 08:00:01 2022\n',
@@ -207,7 +207,7 @@ describe('Health - Info service', () => {
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
       addressFacadeViewStatusRequestStub.mockResolvedValue(goodRequestResults.addressFacade)
 
-      legacyViewHealthRequestStub.withArgs('water').resolves(goodRequestResults.app)
+      legacyViewHealthRequestStub.mockResolvedValue(goodRequestResults.app)
     })
 
     describe('is not running', () => {
@@ -307,7 +307,7 @@ describe('Health - Info service', () => {
 
         addressFacadeViewStatusRequestStub.mockResolvedValue(badResult)
 
-        legacyViewHealthRequestStub.withArgs('water').resolves(badResult)
+        legacyViewHealthRequestStub.mockResolvedValue(badResult)
       })
 
       it('handles the error and still returns a result for the other services', async () => {
@@ -347,7 +347,7 @@ describe('Health - Info service', () => {
 
         addressFacadeViewStatusRequestStub.mockResolvedValue(badResult)
 
-        legacyViewHealthRequestStub.withArgs('water').resolves(badResult)
+        legacyViewHealthRequestStub.mockResolvedValue(badResult)
       })
 
       it('handles the error and still returns a result for the other services', async () => {
