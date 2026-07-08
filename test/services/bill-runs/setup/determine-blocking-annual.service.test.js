@@ -52,6 +52,7 @@ describe('Bill Runs - Setup - Determine Blocking Annual Bill Run service', () =>
       billRunQueryStub.first = vi.fn().mockResolvedValue(match)
 
       vi.spyOn(BillRunModel, 'query').mockReturnValue(billRunQueryStub)
+      vi.spyOn(FetchLiveBillRunService, 'default').mockResolvedValue()
     })
 
     it('returns the match and determines that neither engine can be triggered', async () => {
