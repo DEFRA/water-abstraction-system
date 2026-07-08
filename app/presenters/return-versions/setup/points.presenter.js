@@ -15,7 +15,7 @@ import { compareStrings } from '../../../lib/general.lib.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, requirementIndex, points) {
+export default function go(session, requirementIndex, points) {
   const { id: sessionId, licence, requirements } = session
   const requirement = requirements[requirementIndex]
 
@@ -54,9 +54,4 @@ function _licencePoints(points) {
   return licencePoints.sort((first, second) => {
     return compareStrings(first.description, second.description)
   })
-}
-
-export { go }
-export default {
-  go
 }

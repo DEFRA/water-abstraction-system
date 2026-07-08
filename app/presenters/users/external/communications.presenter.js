@@ -17,7 +17,7 @@ import { sourceNavigation } from '../base-users.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(user, notifications, viewingUserScope, back) {
+export default function go(user, notifications, viewingUserScope, back) {
   const { id, username } = user
 
   const canManageAccounts = viewingUserScope.includes('manage_accounts')
@@ -27,13 +27,8 @@ function go(user, notifications, viewingUserScope, back) {
     activeNavBar: sourceNavigationDetails.activeNavBar,
     backLink: sourceNavigationDetails.backLink,
     backQueryString: sourceNavigationDetails.backQueryString,
-    notifications: NotificationsTablePresenter.go(notifications, id, 'external'),
+    notifications: NotificationsTablePresenter(notifications, id, 'external'),
     pageTitle: 'Communications',
     pageTitleCaption: username
   }
-}
-
-export { go }
-export default {
-  go
 }

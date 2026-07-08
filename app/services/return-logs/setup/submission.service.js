@@ -16,7 +16,7 @@ import SubmissionPresenter from '../../../presenters/return-logs/setup/submissio
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const formattedData = SubmissionPresenter.go(session)
+  const formattedData = SubmissionPresenter(session)
 
   return {
     ...formattedData

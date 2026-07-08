@@ -10,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { company, id: sessionId, licences, abstractionAlertLicences } = session
 
   return {
@@ -32,9 +32,4 @@ function _licences(licences, abstractionAlertLicences) {
       checked: abstractionAlertLicences?.includes(licence.id) || false
     }
   })
-}
-
-export { go }
-export default {
-  go
 }

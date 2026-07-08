@@ -12,7 +12,7 @@ import { userPermissions } from '../../../../lib/static-lookups.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { email, id: sessionId, permission } = session
 
   return {
@@ -26,9 +26,4 @@ function go(session) {
     pageTitleCaption: 'Internal',
     permission: userPermissions[permission].label
   }
-}
-
-export { go }
-export default {
-  go
 }

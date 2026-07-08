@@ -37,5 +37,5 @@ export default async function go(billRun, issuer) {
 }
 
 function _metadata(billRun) {
-  return CreateBillRunEventPresenter.go(billRun)
+  return CreateBillRunEventPresenter(billRun)
 }

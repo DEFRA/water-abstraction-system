@@ -19,7 +19,7 @@ import { roles } from '../../lib/static-lookups.lib.js'
 export default async function go(companyId, role) {
   const companyDetails = await FetchCompanyDetailsDal(companyId, roles[role].name)
 
-  const pageData = CompanyPresenter.go(companyDetails, role)
+  const pageData = CompanyPresenter(companyDetails, role)
 
   return {
     ...pageData

@@ -17,7 +17,7 @@ import RemoveBillLicencePresenter from '../../presenters/bill-licences/remove-bi
 export default async function go(billLicenceId) {
   const billLicence = await FetchBillLicenceSummaryService(billLicenceId)
 
-  const formattedData = RemoveBillLicencePresenter.go(billLicence)
+  const formattedData = RemoveBillLicencePresenter(billLicence)
 
   return {
     activeNavBar: 'bill-runs',

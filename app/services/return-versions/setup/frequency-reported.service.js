@@ -20,7 +20,7 @@ import FrequencyReportedPresenter from '../../../presenters/return-versions/setu
 export default async function go(sessionId, requirementIndex) {
   const session = await FetchSessionDal(sessionId)
 
-  const formattedData = FrequencyReportedPresenter.go(session, requirementIndex)
+  const formattedData = FrequencyReportedPresenter(session, requirementIndex)
 
   return {
     ...formattedData

@@ -16,7 +16,7 @@ import StopOrReducePresenter from '../../../presenters/licence-monitoring-statio
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = StopOrReducePresenter.go(session)
+  const pageData = StopOrReducePresenter(session)
 
   return {
     ...pageData

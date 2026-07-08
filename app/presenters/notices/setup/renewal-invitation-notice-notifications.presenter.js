@@ -21,7 +21,7 @@ const MESSAGE_REFS = {
  *
  * @returns {object[]} the recipients transformed into notifications
  */
-function go(noticeData, recipients, noticeId) {
+export default function go(noticeData, recipients, noticeId) {
   const notifications = []
 
   for (const recipient of recipients) {
@@ -63,7 +63,7 @@ function _letter(recipient, noticeId, noticeData) {
   const { journey, noticeType } = noticeData
 
   const messageType = 'letter'
-  const address = NotifyAddressPresenter.go(recipient.contact)
+  const address = NotifyAddressPresenter(recipient.contact)
 
   return {
     contactType: recipient.contact_type,
@@ -103,9 +103,4 @@ function _templateType(recipient) {
   }
 
   return 'single licence'
-}
-
-export { go }
-export default {
-  go
 }

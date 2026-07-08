@@ -26,9 +26,9 @@ export default async function go(id, yar, page) {
 
   const notification = readFlashNotification(yar)
 
-  const pageData = ReviewPresenter.go(billRun, licences.results)
+  const pageData = ReviewPresenter(billRun, licences.results)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     licences.total,
     page,
     `/system/bill-runs/review/${id}`,

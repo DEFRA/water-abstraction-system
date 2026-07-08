@@ -110,7 +110,7 @@ const COMPLEX_END_PAGINATOR = 'end'
  * @returns {object} if no pagination is needed just the `numberOfPages` is returned else a `component:` property is
  * also included that can be directly passed to the `govukPagination()` in the view.
  */
-function go(numberOfRecords, page, path, numberOfShownItems, message, queryArgs = {}) {
+export default function go(numberOfRecords, page, path, numberOfShownItems, message, queryArgs = {}) {
   const numberOfPages = Math.ceil(numberOfRecords / DatabaseConfig.defaultPageSize)
   const showingMessage = _showingXofY(numberOfRecords, numberOfShownItems, message)
 
@@ -265,9 +265,4 @@ function _showingXofY(paginationTotal, currentAmount, message) {
   }
 
   return `Showing all ${paginationTotal} ${message}`
-}
-
-export { go }
-export default {
-  go
 }

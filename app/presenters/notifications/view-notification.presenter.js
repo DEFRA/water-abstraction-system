@@ -23,7 +23,7 @@ import { formatLongDate, formatNoticeType, formatRestrictionType, formatValueUni
  *
  * @returns {object} The data formatted for the view template
  */
-function go(notification, licence = null, returnLogId = null, companyContactId = null) {
+export default function go(notification, licence = null, returnLogId = null, companyContactId = null) {
   const { createdAt, event, messageType, plaintext, returnedAt } = notification
 
   return {
@@ -32,7 +32,7 @@ function go(notification, licence = null, returnLogId = null, companyContactId =
     alertDetails: _alertDetails(notification),
     backLink: _backLink(notification, licence, returnLogId, companyContactId),
     contents: plaintext,
-    errorDetails: NotificationErrorPresenter.go(notification),
+    errorDetails: NotificationErrorPresenter(notification),
     messageType,
     pageTitle: formatNoticeType(event.subtype, event.sendingAlertType),
     pageTitleCaption: _pageTitleCaption(notification, licence),
@@ -138,9 +138,4 @@ function _sentTo(notification) {
   }
 
   return personalisation['address_line_1']
-}
-
-export { go }
-export default {
-  go
 }

@@ -16,7 +16,7 @@ import LicencesPresenter from '../../../../presenters/users/external/setup/licen
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = LicencesPresenter.go(session)
+  const pageData = LicencesPresenter(session)
 
   return pageData
 }

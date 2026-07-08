@@ -31,7 +31,7 @@ import {
  *
  * @returns {string} - the restriction heading
  */
-function determineRestrictionHeading(licenceMonitoringStations) {
+export function determineRestrictionHeading(licenceMonitoringStations) {
   const containsFlow = licenceMonitoringStations.some((licenceMonitoringStation) => {
     return licenceMonitoringStation.measureType === 'flow'
   })
@@ -69,7 +69,7 @@ function determineRestrictionHeading(licenceMonitoringStations) {
  *
  * @returns {object[]}
  */
-function formatRestrictions(licenceMonitoringStations) {
+export function formatRestrictions(licenceMonitoringStations) {
   return licenceMonitoringStations.map((licenceMonitoringStation) => {
     const {
       abstractionPeriodEndDay,
@@ -119,10 +119,4 @@ function _restrictionCount(licenceId, licenceMonitoringStations) {
   })
 
   return count.length
-}
-
-export { determineRestrictionHeading, formatRestrictions }
-export default {
-  determineRestrictionHeading,
-  formatRestrictions
 }

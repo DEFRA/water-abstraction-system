@@ -33,7 +33,7 @@ export default async function go(sessionId, payload) {
 
   const companySearchResults = await FetchExistingCompaniesService(session.searchInput)
 
-  const pageData = ExistingAccountPresenter.go(session, companySearchResults)
+  const pageData = ExistingAccountPresenter(session, companySearchResults)
 
   return {
     error: validationResult,

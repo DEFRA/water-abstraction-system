@@ -17,7 +17,7 @@ import ManualAddressPresenter from '../../presenters/address/manual.presenter.js
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = ManualAddressPresenter.go(session)
+  const pageData = ManualAddressPresenter(session)
 
   return {
     ...pageData

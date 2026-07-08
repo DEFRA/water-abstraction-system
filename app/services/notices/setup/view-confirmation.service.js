@@ -16,7 +16,7 @@ import EventModel from '../../../models/event.model.js'
 export default async function go(eventId) {
   const event = await EventModel.query().findById(eventId)
 
-  const formattedData = ConfirmationPresenter.go(event)
+  const formattedData = ConfirmationPresenter(event)
 
   return {
     activeNavBar: 'notices',

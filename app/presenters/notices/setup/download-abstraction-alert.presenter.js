@@ -44,7 +44,7 @@ const HEADERS = [
  * @returns {string} - A CSV-formatted string that includes the recipients' data, with the first row as column headers
  * and subsequent rows corresponding to the recipient details.
  */
-function go(recipients, session) {
+export default function go(recipients, session) {
   const rows = _transformToCsv(recipients, session)
 
   return [HEADERS + '\n', ...rows].join('')
@@ -124,9 +124,4 @@ function _transformToCsv(recipients, session) {
   }
 
   return rows
-}
-
-export { go }
-export default {
-  go
 }

@@ -12,7 +12,7 @@ import { checkUrl } from '../../../lib/check-page.lib.js'
  *
  * @returns {object} page data needed for the `/return-logs/setup/{sessionId}/submission` page
  */
-function go(session) {
+export default function go(session) {
   const { beenReceived, journey, returnReference } = session
 
   return {
@@ -29,9 +29,4 @@ function _backLink(session) {
     href: checkUrl(session, `/system/return-logs/setup/${session.id}/received`),
     text: 'Back'
   }
-}
-
-export { go }
-export default {
-  go
 }

@@ -19,7 +19,7 @@ import { futureDueDate } from '../base.presenter.js'
  *
  * @returns {object} The data formatted for persisting as a `notice` record
  */
-function go(noticeData, recipients, issuer) {
+export default function go(noticeData, recipients, issuer) {
   const { referenceCode, subType, name } = noticeData
 
   const notice = {
@@ -111,9 +111,4 @@ function _summer(returnsPeriod) {
   return {
     isSummer: returnsPeriod.summer === 'true'
   }
-}
-
-export { go }
-export default {
-  go
 }

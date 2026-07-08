@@ -14,7 +14,7 @@ import { pluralise } from './base-licences.presenter.js'
  *
  * @returns {object} licence and conditions data needed by the view template
  */
-function go(conditions, licence) {
+export default function go(conditions, licence) {
   const { id: licenceId, licenceRef } = licence
   const conditionTypes = formatConditionTypes(conditions)
 
@@ -32,9 +32,4 @@ function go(conditions, licence) {
       iconFallbackText: 'Warning'
     }
   }
-}
-
-export { go }
-export default {
-  go
 }

@@ -43,7 +43,7 @@ export default async function go(auth, yar, page) {
 }
 
 async function _blankPage(userScopes) {
-  const formattedData = SearchPresenter.go(userScopes)
+  const formattedData = SearchPresenter(userScopes)
 
   return {
     ...formattedData
@@ -55,9 +55,9 @@ async function _pageOfResults(userScopes, searchQuery, resultType, pageNumber) {
 
   const { results, total } = allSearchMatches
 
-  const pagination = PaginatorPresenter.go(total, pageNumber, `/system/search`, results.length, 'matches')
+  const pagination = PaginatorPresenter(total, pageNumber, `/system/search`, results.length, 'matches')
 
-  const formattedData = SearchPresenter.go(userScopes, searchQuery, resultType, pageNumber, allSearchMatches)
+  const formattedData = SearchPresenter(userScopes, searchQuery, resultType, pageNumber, allSearchMatches)
 
   return {
     ...formattedData,

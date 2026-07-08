@@ -14,7 +14,7 @@ import { formatBillRunType, formatChargeScheme, generateBillRunTitle } from '../
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(billRun, licences) {
+export default function go(billRun, licences) {
   const formattedLicences = _formatLicences(licences)
 
   const {
@@ -80,9 +80,4 @@ function _reviewMessage(numberOfLicencesToReview) {
   }
 
   return `You need to review ${numberOfLicences} with returns data issues. You can then continue and send the bill run.`
-}
-
-export { go }
-export default {
-  go
 }

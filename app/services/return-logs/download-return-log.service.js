@@ -17,7 +17,7 @@ import FetchDownloadReturnLogService from './fetch-download-return-log.service.j
 export default async function go(returnLogId, version) {
   const returnLog = await FetchDownloadReturnLogService(returnLogId, version)
 
-  const { data, filename } = DownloadReturnLogPresenter.go(returnLog)
+  const { data, filename } = DownloadReturnLogPresenter(returnLog)
 
   return {
     data,

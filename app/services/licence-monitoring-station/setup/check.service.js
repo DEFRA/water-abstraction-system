@@ -19,7 +19,7 @@ export default async function go(sessionId) {
 
   await _markCheckPageVisited(session)
 
-  const pageData = CheckPresenter.go(session)
+  const pageData = CheckPresenter(session)
 
   return {
     ...pageData

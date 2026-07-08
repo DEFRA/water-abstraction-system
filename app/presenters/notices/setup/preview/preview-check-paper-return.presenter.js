@@ -13,7 +13,7 @@ import { formatLongDate } from '../../../base.presenter.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, contactHashId) {
+export default function go(session, contactHashId) {
   const { dueReturns, referenceCode, selectedReturns, id: sessionId } = session
 
   return {
@@ -40,9 +40,4 @@ function _returnLogs(dueReturns, selectedReturns, sessionId, contactHashId) {
       siteDescription: dueReturn.siteDescription
     }
   })
-}
-
-export { go }
-export default {
-  go
 }

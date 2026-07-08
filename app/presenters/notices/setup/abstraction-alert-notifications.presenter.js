@@ -31,7 +31,7 @@ import { NOTIFY_TEMPLATES } from '../../../lib/notify-templates.lib.js'
  *
  * @returns {object[]} the recipients transformed into notifications
  */
-function go(session, recipients, noticeId) {
+export default function go(session, recipients, noticeId) {
   const notifications = []
 
   const {
@@ -196,7 +196,7 @@ function _email(recipient, eventId, commonPersonalisation, alertType, restrictio
  */
 function _letter(recipient, eventId, commonPersonalisation, alertType, restrictionType) {
   const messageType = 'letter'
-  const address = NotifyAddressPresenter.go(recipient.contact)
+  const address = NotifyAddressPresenter(recipient.contact)
 
   return {
     contactType: recipient.contact_type,
@@ -311,9 +311,4 @@ function _templateId(alertType, restrictionType, type) {
  */
 function _source(monitoringStationRiverName) {
   return monitoringStationRiverName ? `* Source of supply: ${monitoringStationRiverName}` : ''
-}
-
-export { go }
-export default {
-  go
 }

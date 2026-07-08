@@ -30,7 +30,7 @@ export default async function go(sessionId, payload) {
     }
   }
 
-  const pageData = FAOPresenter.go(session)
+  const pageData = FAOPresenter(session)
 
   return {
     error: validationResult,

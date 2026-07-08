@@ -60,11 +60,11 @@ async function _replayView(payload, error, page, regions, savedFilters) {
     FetchBillRunsService(savedFilters, page)
   ])
 
-  const pagination = PaginatorPresenter.go(totalNumber, page, '/system/bill-runs', billRuns.length, 'bill runs')
+  const pagination = PaginatorPresenter(totalNumber, page, '/system/bill-runs', billRuns.length, 'bill runs')
 
   const filters = { ...savedFilters, ...payload }
 
-  const pageData = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
+  const pageData = IndexBillRunsPresenter(billRuns, busyResult, filters, regions)
 
   return {
     activeNavBar: 'bill-runs',

@@ -14,7 +14,7 @@ import { formatBillRunType, formatChargeScheme, displayCreditDebitTotals } from 
  *
  * @returns {object} page data formatted for the view template
  */
-function go(bill, billingAccount) {
+export default function go(bill, billingAccount) {
   const { billRun } = bill
   const accountName = billingAccount.$accountName()
 
@@ -87,9 +87,4 @@ function _billTotal(valueInPence, credit) {
   }
 
   return valueAsMoney
-}
-
-export { go }
-export default {
-  go
 }

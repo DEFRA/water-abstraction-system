@@ -40,7 +40,7 @@ export default async function go(sessionId, payload, yar) {
 
   session.email = payload.email
 
-  const pageData = EmailPresenter.go(session)
+  const pageData = EmailPresenter(session)
 
   return {
     error: validationResult,

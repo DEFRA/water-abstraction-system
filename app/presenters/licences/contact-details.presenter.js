@@ -13,7 +13,7 @@ import { formatContact } from '../crm.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(contacts, licence) {
+export default function go(contacts, licence) {
   const { id: licenceId, licenceRef } = licence
 
   return {
@@ -56,9 +56,4 @@ function _licenceHolderContactsLink(contacts) {
   }
 
   return `/system/companies/${companyId}/contacts`
-}
-
-export { go }
-export default {
-  go
 }

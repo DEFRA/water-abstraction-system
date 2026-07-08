@@ -25,9 +25,9 @@ export default async function go(yar, auth, page) {
 
   const { results: users, total: totalNumber } = await FetchUsersDal(filters, page)
 
-  const pagination = PaginatorPresenter.go(totalNumber, page, `/system/users`, users.length, 'users')
+  const pagination = PaginatorPresenter(totalNumber, page, `/system/users`, users.length, 'users')
 
-  const pageData = IndexUsersPresenter.go(users, auth)
+  const pageData = IndexUsersPresenter(users, auth)
 
   const notification = readFlashNotification(yar)
 

@@ -19,7 +19,7 @@ import {
  *
  * @returns {object} page date needed for the review charge reference page
  */
-function go(reviewChargeReference) {
+export default function go(reviewChargeReference) {
   const {
     amendedAuthorisedVolume,
     chargeReference,
@@ -67,9 +67,4 @@ function _canAmend(reviewChargeReference) {
   const { aggregate, chargeAdjustment } = reviewChargeReference
 
   return aggregate !== 1 || chargeAdjustment !== 1
-}
-
-export { go }
-export default {
-  go
 }

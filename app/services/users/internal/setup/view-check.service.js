@@ -22,7 +22,7 @@ export default async function go(sessionId, yar) {
 
   await markCheckPageVisited(session)
 
-  const pageData = CheckPresenter.go(session)
+  const pageData = CheckPresenter(session)
 
   const notification = readFlashNotification(yar)
 

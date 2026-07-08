@@ -33,7 +33,7 @@ export default async function go(sessionId, payload) {
     return {}
   }
 
-  const pageData = AlertThresholdsPresenter.go(session)
+  const pageData = AlertThresholdsPresenter(session)
 
   return {
     error,

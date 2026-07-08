@@ -13,7 +13,7 @@ import { formatMoney } from '../base.presenter.js'
  *
  * @returns {object} a formatted representation of the transaction specifically for the bill-licence page
  */
-function go(transaction) {
+export default function go(transaction) {
   const { chargeType, credit, netAmount } = transaction
 
   return {
@@ -24,9 +24,4 @@ function go(transaction) {
     description: 'Minimum charge',
     quantity: ''
   }
-}
-
-export { go }
-export default {
-  go
 }

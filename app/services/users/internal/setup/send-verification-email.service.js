@@ -44,7 +44,7 @@ async function _createEmailRequest(notification) {
 
   const notifyResult = await send(templateId, recipient, { personalisation })
 
-  return NotifyUpdatePresenter.go(notifyResult)
+  return NotifyUpdatePresenter(notifyResult)
 }
 
 async function _sendEmail(notification) {

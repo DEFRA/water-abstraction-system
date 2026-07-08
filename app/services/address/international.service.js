@@ -17,7 +17,7 @@ import InternationalPresenter from '../../presenters/address/international.prese
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = InternationalPresenter.go(session)
+  const pageData = InternationalPresenter(session)
 
   return {
     ...pageData

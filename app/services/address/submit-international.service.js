@@ -32,7 +32,7 @@ export default async function go(sessionId, payload) {
     }
   }
 
-  const pageData = InternationalPresenter.go(session)
+  const pageData = InternationalPresenter(session)
 
   return {
     error: validationResult,

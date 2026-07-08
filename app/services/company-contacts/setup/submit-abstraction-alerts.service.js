@@ -36,7 +36,7 @@ export default async function go(sessionId, payload, yar) {
 
   session.abstractionAlerts = payload.abstractionAlerts
 
-  const pageData = AbstractionAlertsPresenter.go(session)
+  const pageData = AbstractionAlertsPresenter(session)
 
   return {
     error: validationResult,

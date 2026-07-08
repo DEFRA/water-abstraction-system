@@ -28,9 +28,9 @@ export default async function go(companyId, auth, page, yar) {
 
   const { contacts, totalNumber } = await FetchCompanyCRMDataDal(companyId, roles, page)
 
-  const pageData = ContactsPresenter.go(company, contacts)
+  const pageData = ContactsPresenter(company, contacts)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/companies/${companyId}/contacts`,

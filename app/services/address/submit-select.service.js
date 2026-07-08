@@ -52,7 +52,7 @@ export default async function go(sessionId, payload) {
     }
   }
 
-  const pageData = SelectPresenter.go(session, postcodeResult.matches)
+  const pageData = SelectPresenter(session, postcodeResult.matches)
 
   return {
     error,

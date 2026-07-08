@@ -39,7 +39,7 @@ export default async function go(sessionId, payload, yar) {
 
   session.selectedReturns = []
 
-  const pageData = PaperReturnPresenter.go(session)
+  const pageData = PaperReturnPresenter(session)
 
   return {
     activeNavBar: 'notices',

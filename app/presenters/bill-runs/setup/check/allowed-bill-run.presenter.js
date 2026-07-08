@@ -15,7 +15,7 @@ import { engineTriggers } from '../../../../lib/static-lookups.lib.js'
  *
  * @returns {object} - The data formatted for the /check view template
  */
-function go(session, blockingResults) {
+export default function go(session, blockingResults) {
   const { id: sessionId, regionName } = session
 
   const { toFinancialYearEnding, trigger } = blockingResults
@@ -48,9 +48,4 @@ function _chargeScheme(trigger) {
   const scheme = trigger === engineTriggers.old ? 'presroc' : 'sroc'
 
   return formatChargeScheme(scheme)
-}
-
-export { go }
-export default {
-  go
 }

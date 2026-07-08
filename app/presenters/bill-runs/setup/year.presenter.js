@@ -12,7 +12,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(licenceSupplementaryYears, session) {
+export default function go(licenceSupplementaryYears, session) {
   const selectedYear = session.year ? session.year : null
 
   let financialYearsData = []
@@ -60,9 +60,4 @@ function _tptAnnualFinancialYearsData(selectedYear) {
     { text: '2021 to 2022', value: 2022, checked: selectedYear === '2022' },
     { text: '2020 to 2021', value: 2021, checked: selectedYear === '2021' }
   ]
-}
-
-export { go }
-export default {
-  go
 }

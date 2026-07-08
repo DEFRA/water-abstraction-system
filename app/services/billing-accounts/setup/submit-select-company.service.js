@@ -66,7 +66,7 @@ async function _save(session, payload) {
 function _submissionData(session, payload, companies) {
   session.companiesHouseNumber = payload.companiesHouseNumber
 
-  return SelectCompanyPresenter.go(session, companies)
+  return SelectCompanyPresenter(session, companies)
 }
 
 function _validate(payload) {

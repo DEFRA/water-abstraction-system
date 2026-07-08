@@ -67,7 +67,7 @@ async function _save(session, requirementIndex, payload) {
 function _submittedSessionData(session, requirementIndex, payload) {
   session.requirements[requirementIndex].siteDescription = payload.siteDescription ? payload.siteDescription : null
 
-  return SiteDescriptionPresenter.go(session, requirementIndex)
+  return SiteDescriptionPresenter(session, requirementIndex)
 }
 
 function _validate(payload) {

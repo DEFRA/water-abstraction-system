@@ -12,7 +12,7 @@ import { checkUrl } from '../../../lib/check-page.lib.js'
  *
  * @returns {object} page data needed by the view template
  */
-function go(session) {
+export default function go(session) {
   const { id: sessionId, returnReference, reported } = session
 
   return {
@@ -29,9 +29,4 @@ function _backLink(session) {
     href: checkUrl(session, `/system/return-logs/setup/${session.id}/submission`),
     text: 'Back'
   }
-}
-
-export { go }
-export default {
-  go
 }

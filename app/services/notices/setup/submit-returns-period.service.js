@@ -39,7 +39,7 @@ export default async function go(sessionId, payload, yar) {
     }
   }
 
-  const formattedData = ReturnsPeriodPresenter.go(session)
+  const formattedData = ReturnsPeriodPresenter(session)
 
   return {
     activeNavBar: 'notices',

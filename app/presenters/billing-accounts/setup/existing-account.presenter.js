@@ -13,7 +13,7 @@ import { checkUrl } from '../../../lib/check-page.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session, companies) {
+export default function go(session, companies) {
   const { billingAccount } = session
 
   return {
@@ -64,9 +64,4 @@ function _radioOptions(existingAccount, companies) {
   )
 
   return items
-}
-
-export { go }
-export default {
-  go
 }

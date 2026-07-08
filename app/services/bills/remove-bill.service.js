@@ -17,7 +17,7 @@ import RemoveBillPresenter from '../../presenters/bills/remove-bill.presenter.js
 export default async function go(billId) {
   const bill = await FetchBillSummaryService(billId)
 
-  const formattedData = RemoveBillPresenter.go(bill)
+  const formattedData = RemoveBillPresenter(bill)
 
   return {
     activeNavBar: 'bill-runs',

@@ -19,7 +19,7 @@ import PeriodUsedPresenter from '../../../presenters/return-logs/setup/period-us
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = PeriodUsedPresenter.go(session)
+  const pageData = PeriodUsedPresenter(session)
 
   return {
     ...pageData

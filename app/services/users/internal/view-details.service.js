@@ -16,7 +16,7 @@ import DetailsPresenter from '../../../presenters/users/internal/details.present
  */
 export default async function go(auth, id) {
   const internalUser = await FetchUserDetailsDal(id)
-  const pageData = DetailsPresenter.go(auth, internalUser)
+  const pageData = DetailsPresenter(auth, internalUser)
 
   return {
     activeNavBar: 'users',

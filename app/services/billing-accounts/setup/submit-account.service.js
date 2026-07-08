@@ -95,7 +95,7 @@ function _submissionData(session, payload) {
   session.accountSelected = payload.accountSelected
   session.searchInput = payload.searchInput ?? null
 
-  return AccountPresenter.go(session)
+  return AccountPresenter(session)
 }
 
 function _validate(payload) {

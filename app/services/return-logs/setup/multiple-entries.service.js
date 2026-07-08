@@ -19,7 +19,7 @@ import MultipleEntriesPresenter from '../../../presenters/return-logs/setup/mult
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = MultipleEntriesPresenter.go(session)
+  const pageData = MultipleEntriesPresenter(session)
 
   return {
     ...pageData

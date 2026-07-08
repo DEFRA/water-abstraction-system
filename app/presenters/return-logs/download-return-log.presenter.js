@@ -15,7 +15,7 @@ const HEADERS = ['end date', 'reading', 'volume']
  *
  * @returns {object} the data needed for the csv download
  */
-function go(returnLog) {
+export default function go(returnLog) {
   const { returnSubmissions } = returnLog
 
   const selectedReturnSubmission = returnSubmissions[0]
@@ -48,9 +48,4 @@ function _csvData(selectedReturnSubmission) {
 
     return transformArrayToCSVRow(row)
   })
-}
-
-export { go }
-export default {
-  go
 }

@@ -16,7 +16,7 @@ import FetchReturnLogService from '../../../services/return-logs/setup/fetch-ret
 export default async function go(returnLogId) {
   const returnLog = await FetchReturnLogService(returnLogId)
 
-  const formattedData = ConfirmedPresenter.go(returnLog)
+  const formattedData = ConfirmedPresenter(returnLog)
 
   return {
     ...formattedData

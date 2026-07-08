@@ -14,7 +14,7 @@ import { pluralise } from './base-licences.presenter.js'
  *
  * @returns {object} licence and licenceVersionPurposes data needed by the view template
  */
-function go(purposes, licence) {
+export default function go(purposes, licence) {
   const { id, licenceRef } = licence
 
   const licencePurposes = formatLicencePurposes(purposes)
@@ -29,9 +29,4 @@ function go(purposes, licence) {
     pageTitleCaption: `Licence ${licenceRef}`,
     showingPurposes: `Showing ${licencePurposes.length} ${pluralise('purpose', licencePurposes.length)}`
   }
-}
-
-export { go }
-export default {
-  go
 }

@@ -28,7 +28,7 @@ const EXTERNAL_ROLES = {
  *
  * @returns {object} The data formatted for the view template
  */
-function go(user, viewingUserScope, back) {
+export default function go(user, viewingUserScope, back) {
   const permissions = user.$permissions()
 
   const canManageAccounts = viewingUserScope.includes('manage_accounts')
@@ -74,9 +74,4 @@ function _lastSignedIn(user) {
   }
 
   return formatLongDateTime(lastLogin)
-}
-
-export { go }
-export default {
-  go
 }

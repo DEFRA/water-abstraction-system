@@ -13,7 +13,7 @@ import { formatEmail } from '../../base.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { id: sessionId, company } = session
 
   return {
@@ -25,9 +25,4 @@ function go(session) {
     pageTitleCaption: company.name,
     email: formatEmail(session.email)
   }
-}
-
-export { go }
-export default {
-  go
 }

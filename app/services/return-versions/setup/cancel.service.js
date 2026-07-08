@@ -19,7 +19,7 @@ import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const formattedData = CancelPresenter.go(session)
+  const formattedData = CancelPresenter(session)
 
   return {
     ...formattedData

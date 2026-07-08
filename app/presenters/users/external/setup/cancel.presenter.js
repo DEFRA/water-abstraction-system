@@ -12,7 +12,7 @@ import { formatLicencesToUnlink } from '../../base-users.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const licences = formatLicencesToUnlink(session)
 
   return {
@@ -25,9 +25,4 @@ function go(session) {
     pageTitle: 'You are about to cancel unregistering these licences',
     pageTitleCaption: session.user.username
   }
-}
-
-export { go }
-export default {
-  go
 }

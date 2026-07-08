@@ -19,7 +19,7 @@ import LicencePresenter from '../../../presenters/notices/setup/licence.presente
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const formattedData = LicencePresenter.go(session)
+  const formattedData = LicencePresenter(session)
 
   return {
     activeNavBar: 'notices',

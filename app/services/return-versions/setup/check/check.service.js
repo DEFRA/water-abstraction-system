@@ -24,7 +24,7 @@ export default async function go(sessionId, yar) {
 
   const returnRequirements = await _returnRequirements(session)
 
-  const formattedData = CheckPresenter.go(session)
+  const formattedData = CheckPresenter(session)
 
   const notification = readFlashNotification(yar)
 
@@ -46,5 +46,5 @@ async function _returnRequirements(session) {
 
   const points = await FetchPointsService(licenceVersion.id)
 
-  return ReturnRequirementsPresenter.go(requirements, points, journey)
+  return ReturnRequirementsPresenter(requirements, points, journey)
 }

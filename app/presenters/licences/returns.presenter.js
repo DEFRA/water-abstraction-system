@@ -14,7 +14,7 @@ import { formatLongDate, formatPurposes, formatReturnLogStatus } from '../base.p
  *
  * @returns {object} The data formatted for the view template
  */
-function go(returnLogs, hasRequirements, licence) {
+export default function go(returnLogs, hasRequirements, licence) {
   const returns = _returns(returnLogs)
 
   const { licenceRef } = licence
@@ -59,9 +59,4 @@ function _returns(returns) {
       status: formatReturnLogStatus(returnLog)
     }
   })
-}
-
-export { go }
-export default {
-  go
 }

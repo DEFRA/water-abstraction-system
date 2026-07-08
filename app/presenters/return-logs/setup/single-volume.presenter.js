@@ -10,7 +10,7 @@
  *
  * @returns {object} page data needed by the view template
  */
-function go(session) {
+export default function go(session) {
   const { id: sessionId, returnReference, singleVolume, singleVolumeQuantity, units } = session
 
   return {
@@ -32,9 +32,4 @@ function _backLinkHref(session) {
   }
 
   return `/system/return-logs/setup/${id}/meter-provided`
-}
-
-export { go }
-export default {
-  go
 }

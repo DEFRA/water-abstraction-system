@@ -37,7 +37,7 @@ export default async function go(sessionId, payload, yar) {
   session.contactType = payload?.contactType ?? null
   session.contactName = payload?.contactName ?? null
 
-  const pageData = ContactTypePresenter.go(session)
+  const pageData = ContactTypePresenter(session)
 
   return {
     activeNavBar: 'notices',

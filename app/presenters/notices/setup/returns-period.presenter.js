@@ -16,7 +16,7 @@ import { today } from '../../../lib/general.lib.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { checkPageVisited, noticeType, id: sessionId } = session
 
   const savedReturnsPeriod = session.returnsPeriod ?? null
@@ -60,9 +60,4 @@ function _formatReturnPeriod(returnsPeriod, savedReturnsPeriod) {
     },
     checked: returnsPeriod.name === savedReturnsPeriod
   }
-}
-
-export { go }
-export default {
-  go
 }

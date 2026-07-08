@@ -19,7 +19,7 @@ import SeasonPresenter from '../../../presenters/bill-runs/setup/season.presente
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const formattedData = SeasonPresenter.go(session)
+  const formattedData = SeasonPresenter(session)
 
   return {
     activeNavBar: 'bill-runs',

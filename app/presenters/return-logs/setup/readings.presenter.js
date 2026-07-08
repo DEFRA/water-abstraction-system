@@ -13,7 +13,7 @@ import { formatDateMonthYear, formatLongDate } from '../../base.presenter.js'
  *
  * @returns {object} page data needed by the view template
  */
-function go(session, yearMonth) {
+export default function go(session, yearMonth) {
   const { id: sessionId, lines, returnsFrequency, returnReference } = session
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
@@ -76,9 +76,4 @@ function _pageTitle(date) {
   const titleDate = formatDateMonthYear(date)
 
   return `Water abstracted ${titleDate}`
-}
-
-export { go }
-export default {
-  go
 }

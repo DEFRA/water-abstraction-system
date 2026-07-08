@@ -29,7 +29,7 @@ import ExpandedError from '../../errors/expanded.error.js'
  * the change address journey
  */
 export default async function go(billingAccount, address, company, contact) {
-  const requestData = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
+  const requestData = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
   const result = await send(requestData)
 

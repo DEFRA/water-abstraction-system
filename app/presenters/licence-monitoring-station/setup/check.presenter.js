@@ -12,7 +12,7 @@ import { formatAbstractionPeriod, formatValueUnit } from '../../base.presenter.j
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const {
     abstractionPeriodStartDay,
     abstractionPeriodStartMonth,
@@ -68,9 +68,4 @@ function _type(stopOrReduce, reduceAtThreshold) {
   }
 
   return 'Reduce with a maximum volume limit'
-}
-
-export { go }
-export default {
-  go
 }

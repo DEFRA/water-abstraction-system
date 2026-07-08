@@ -33,7 +33,7 @@ export default async function go(sessionId, contactHashId, returnLogId) {
 
   // The presenter returns an array because it is also used when sending the paper return. But in this case we just want
   // to look at a single recipient and return log so we know we'll just get one notification back in the array.
-  const notifications = PaperReturnNotificationsPresenter.go(session, [selectedRecipient], null)
+  const notifications = PaperReturnNotificationsPresenter(session, [selectedRecipient], null)
 
   const returnFormRequest = await PreparePaperReturnService(notifications[0])
 

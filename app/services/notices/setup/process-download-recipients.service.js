@@ -38,12 +38,12 @@ export default async function go(sessionId) {
 
 async function _formattedData(recipients, session) {
   if (session.journey === NoticeJourney.ALERTS) {
-    return DownloadAbstractionAlertPresenter.go(recipients, session)
+    return DownloadAbstractionAlertPresenter(recipients, session)
   }
 
   if (session.noticeType === NoticeType.RENEWAL_INVITATIONS) {
-    return DownloadRenewalInvitationPresenter.go(recipients, session)
+    return DownloadRenewalInvitationPresenter(recipients, session)
   }
 
-  return DownloadReturnsNoticePresenter.go(recipients, session)
+  return DownloadReturnsNoticePresenter(recipients, session)
 }

@@ -12,7 +12,7 @@ import { formatDateObjectToISO } from '../../lib/dates.lib.js'
  *
  * @returns {object} page data needed by the view template
  */
-function go(invalidAddresses) {
+export default function go(invalidAddresses) {
   return {
     backLink: { href: '/system/manage', text: 'Go back to manage' },
     invalidAddresses: _formatTableData(invalidAddresses),
@@ -51,9 +51,4 @@ function _formatTableData(invalidAddresses) {
 
 function _line(addressLine) {
   return addressLine ?? ''
-}
-
-export { go }
-export default {
-  go
 }

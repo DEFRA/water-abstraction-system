@@ -38,7 +38,7 @@ export default async function go(sessionId, user) {
     return { returnLogId: session.returnLogId }
   }
 
-  const formattedData = CheckPresenter.go(session)
+  const formattedData = CheckPresenter(session)
 
   return {
     error,

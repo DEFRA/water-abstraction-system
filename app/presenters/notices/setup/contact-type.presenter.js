@@ -10,7 +10,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const contactEmail = session?.contactEmail ?? null
   const contactName = session?.contactName ?? null
   const contactType = session?.contactType ?? null
@@ -26,9 +26,4 @@ function go(session) {
     pageTitle: 'Select how to contact the recipient',
     pageTitleCaption: `Notice ${session.referenceCode}`
   }
-}
-
-export { go }
-export default {
-  go
 }

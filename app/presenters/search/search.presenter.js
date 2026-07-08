@@ -20,7 +20,7 @@ import { today } from '../../lib/general.lib.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(userScopes, query, resultType, page, allSearchMatches) {
+export default function go(userScopes, query, resultType, page, allSearchMatches) {
   // If there's no page number provided, we're just displaying the blank search page, potentially with any search
   // query that the user may have entered but was not searchable, e.g. whitespace or other unsearchable text
   if (!page) {
@@ -241,9 +241,4 @@ function _user(user) {
     statusTag: model.$status(),
     type: 'User'
   }
-}
-
-export { go }
-export default {
-  go
 }

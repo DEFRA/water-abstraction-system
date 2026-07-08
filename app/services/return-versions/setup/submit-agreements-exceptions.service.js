@@ -48,7 +48,7 @@ export default async function go(sessionId, requirementIndex, payload, yar) {
     }
   }
 
-  const formattedData = AgreementsExceptionsPresenter.go(session, requirementIndex, payload)
+  const formattedData = AgreementsExceptionsPresenter(session, requirementIndex, payload)
 
   return {
     error,

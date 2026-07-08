@@ -17,7 +17,7 @@ import VolumesPresenter from '../../../presenters/return-logs/setup/volumes.pres
 export default async function go(sessionId, yearMonth) {
   const session = await FetchSessionDal(sessionId)
 
-  const formattedData = VolumesPresenter.go(session, yearMonth)
+  const formattedData = VolumesPresenter(session, yearMonth)
 
   return {
     ...formattedData

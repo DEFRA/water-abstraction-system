@@ -15,7 +15,7 @@ import { supplementaryBillingNotification } from './base-licences.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(licence, summary) {
+export default function go(licence, summary) {
   const { licenceRef } = licence
 
   const { workflows, startDate } = summary
@@ -62,9 +62,4 @@ function _workflowWarning(workflows) {
   return workflows.some((workflow) => {
     return workflow.status === 'to_setup'
   })
-}
-
-export { go }
-export default {
-  go
 }

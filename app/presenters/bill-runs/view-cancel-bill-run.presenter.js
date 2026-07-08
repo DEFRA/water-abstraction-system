@@ -13,7 +13,7 @@ import { formatBillRunType, formatChargeScheme } from '../billing.presenter.js'
  *
  * @returns {object} - the prepared bill run data to be passed to the cancel bill run confirmation page
  */
-function go(billRun) {
+export default function go(billRun) {
   const { batchType, billRunNumber, createdAt, id, region, scheme, status, summer, toFinancialYearEnding } = billRun
 
   return {
@@ -40,9 +40,4 @@ function _backLink(id, scheme, status) {
   }
 
   return `/system/bill-runs/${id}`
-}
-
-export { go }
-export default {
-  go
 }

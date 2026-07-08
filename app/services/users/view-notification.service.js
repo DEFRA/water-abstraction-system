@@ -22,7 +22,7 @@ export default async function go(notificationId, userId, type, auth) {
   const user = await FetchUserDal(userId)
   const superUser = _superUser(auth)
 
-  const pageData = NotificationPresenter.go(notification, user, type, superUser)
+  const pageData = NotificationPresenter(notification, user, type, superUser)
 
   return {
     activeNavBar: 'users',

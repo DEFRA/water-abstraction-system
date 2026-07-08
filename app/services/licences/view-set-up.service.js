@@ -27,7 +27,7 @@ export default async function go(licenceId, auth) {
   const workflows = await FetchWorkflowsService(licenceId)
   const returnVersions = await FetchReturnVersionsService(licenceId)
 
-  const pageData = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
+  const pageData = SetUpPresenter(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
   return {
     ...pageData,

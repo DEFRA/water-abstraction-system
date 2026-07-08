@@ -24,9 +24,9 @@ export default async function go(licenceId, auth, page) {
 
   const { contacts, totalNumber } = await FetchLicenceCRMDataService(licenceId, roles, page)
 
-  const pageData = ContactDetailsPresenter.go(contacts, licence)
+  const pageData = ContactDetailsPresenter(contacts, licence)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/licences/${licenceId}/contact-details`,

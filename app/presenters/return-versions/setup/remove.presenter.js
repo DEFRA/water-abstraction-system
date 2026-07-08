@@ -14,7 +14,7 @@ import { returnRequirementFrequencies } from '../../../lib/static-lookups.lib.js
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, requirementIndex) {
+export default function go(session, requirementIndex) {
   const { id: sessionId, licence, requirements } = session
   const requirement = requirements[requirementIndex]
 
@@ -53,9 +53,4 @@ function _startDate(session) {
   }
 
   return formatLongDate(date)
-}
-
-export { go }
-export default {
-  go
 }

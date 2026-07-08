@@ -12,7 +12,7 @@ import { checkUrl } from '../../../lib/check-page.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   return {
     backLink: {
       href: checkUrl(session, `/system/billing-accounts/setup/${session.id}/existing-address`),
@@ -22,9 +22,4 @@ function go(session) {
     pageTitle: 'Do you need to add an FAO?',
     pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
   }
-}
-
-export { go }
-export default {
-  go
 }

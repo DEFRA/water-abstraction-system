@@ -17,7 +17,7 @@ import { billRunStatuses, billRunTypes } from '../../lib/static-lookups.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(billRuns, busyResult, filters, regions) {
+export default function go(billRuns, busyResult, filters, regions) {
   return {
     billRuns: _billRuns(billRuns),
     notification: busyResult === 'none' ? null : _notification(busyResult),
@@ -129,9 +129,4 @@ function _statusItems(filters) {
       value: key
     }
   })
-}
-
-export { go }
-export default {
-  go
 }

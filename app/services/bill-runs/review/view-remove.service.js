@@ -16,7 +16,7 @@ import RemovePresenter from '../../../presenters/bill-runs/review/remove.present
 export default async function go(reviewLicenceId) {
   const reviewLicence = await FetchRemoveReviewLicenceService(reviewLicenceId)
 
-  const pageData = RemovePresenter.go(reviewLicence)
+  const pageData = RemovePresenter(reviewLicence)
 
   return {
     activeNavBar: 'bill-runs',

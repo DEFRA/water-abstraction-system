@@ -17,7 +17,7 @@ import FetchSessionDal from '../../../dal/fetch-session.dal.js'
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = ContactNamePresenter.go(session)
+  const pageData = ContactNamePresenter(session)
 
   return {
     ...pageData

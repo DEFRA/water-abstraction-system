@@ -15,7 +15,7 @@ import featureFlags from '../../../config/feature-flags.config.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(userScopes) {
+export default function go(userScopes) {
   return {
     manageUsers: _manageUsers(userScopes),
     pageTitle: 'Manage',
@@ -75,9 +75,4 @@ function _viewWorkflow(userScopes) {
   }
 
   return { show: links.checkLicences, links }
-}
-
-export { go }
-export default {
-  go
 }

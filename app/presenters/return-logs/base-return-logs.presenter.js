@@ -11,7 +11,7 @@ import { returnRequirementFrequencies, returnUnits, unitNames } from '../../lib/
  *
  * @returns {object|null} The formatted meter or null if the meter is null or undefined
  */
-function formatMeterDetails(meter) {
+export function formatMeterDetails(meter) {
   if (!meter || !meter?.manufacturer) {
     return null
   }
@@ -36,7 +36,7 @@ function formatMeterDetails(meter) {
  *
  * @returns {object[]} The table headers for the summary table
  */
-function generateSummaryTableHeaders(method, frequency, units, alwaysDisplayLinkHeader = false) {
+export function generateSummaryTableHeaders(method, frequency, units, alwaysDisplayLinkHeader = false) {
   const headers = [{ text: 'Month' }]
 
   if (method !== 'abstractionVolumes') {
@@ -90,7 +90,7 @@ function generateSummaryTableHeaders(method, frequency, units, alwaysDisplayLink
  * @returns {object[]} An array of row data objects for the summary table, each containing details like month, total
  * quantity, reading, and unit totals.
  */
-function generateSummaryTableRows(method, frequency, lines, id = null, rootPath = '/system/return-submissions') {
+export function generateSummaryTableRows(method, frequency, lines, id = null, rootPath = '/system/return-submissions') {
   const groups = _groupLinesByMonth(lines)
 
   return groups.map((group) => {
@@ -185,11 +185,4 @@ function _linkDetails(id, method, frequency, endDate, rootPath) {
     href: `${rootPath}/${id}/${yearMonth}`,
     text
   }
-}
-
-export { formatMeterDetails, generateSummaryTableHeaders, generateSummaryTableRows }
-export default {
-  formatMeterDetails,
-  generateSummaryTableHeaders,
-  generateSummaryTableRows
 }

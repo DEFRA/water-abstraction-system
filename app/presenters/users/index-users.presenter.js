@@ -13,7 +13,7 @@ import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(users, auth) {
+export default function go(users, auth) {
   const { scope } = auth.credentials
 
   return {
@@ -60,9 +60,4 @@ function _userRowData(users) {
       type: user.$internal() ? 'Internal' : 'External'
     }
   })
-}
-
-export { go }
-export default {
-  go
 }

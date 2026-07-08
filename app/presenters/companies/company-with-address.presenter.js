@@ -15,7 +15,7 @@ import { roles } from '../../lib/static-lookups.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(company, address, role, licenceId) {
+export default function go(company, address, role, licenceId) {
   const { id: companyId, name: companyName } = company
 
   return {
@@ -54,9 +54,4 @@ function _formatCompanyAddress(address) {
     address.postcode,
     address.country
   ].filter(Boolean)
-}
-
-export { go }
-export default {
-  go
 }

@@ -73,7 +73,7 @@ function _submittedSessionData(session, auth, validationResult, payload) {
 
   session.alertEmailAddressType = alertEmailAddressType
 
-  return AlertEmailAddressPresenter.go(session, auth, validationResult, payload)
+  return AlertEmailAddressPresenter(session, auth, validationResult, payload)
 }
 
 /**

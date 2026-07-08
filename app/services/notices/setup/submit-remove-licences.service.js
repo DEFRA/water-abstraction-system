@@ -26,7 +26,7 @@ export default async function go(sessionId, payload) {
   const validationResult = _validate(payload, licenceRefsWithDueReturns)
 
   if (validationResult) {
-    const formattedData = RemoveLicencesPresenter.go(payload.removeLicences, session)
+    const formattedData = RemoveLicencesPresenter(payload.removeLicences, session)
 
     return {
       activeNavBar: 'notices',

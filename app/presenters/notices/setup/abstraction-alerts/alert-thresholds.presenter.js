@@ -14,7 +14,7 @@ import { unitConversion } from '../../../../lib/static-lookups.lib.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   return {
     backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`, text: 'Back' },
     pageTitle: 'Which thresholds do you need to send an alert for?',
@@ -114,9 +114,4 @@ function _thresholdOptions(licenceMonitoringStations, alertType, alertThresholds
       }
     }
   })
-}
-
-export { go }
-export default {
-  go
 }

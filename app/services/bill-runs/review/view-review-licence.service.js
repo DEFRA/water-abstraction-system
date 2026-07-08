@@ -18,7 +18,7 @@ export default async function go(reviewLicenceId, yar) {
   const reviewLicence = await FetchReviewLicenceService(reviewLicenceId)
 
   const [bannerMessage] = yar.flash('banner')
-  const pageData = ReviewLicencePresenter.go(reviewLicence)
+  const pageData = ReviewLicencePresenter(reviewLicence)
 
   return {
     activeNavBar: 'bill-runs',

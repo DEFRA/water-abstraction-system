@@ -18,7 +18,7 @@ import FetchReviewChargeElementService from './fetch-review-charge-element.servi
 export default async function go(reviewChargeElementId, elementIndex) {
   const reviewChargeElement = await FetchReviewChargeElementService(reviewChargeElementId)
 
-  const pageData = EditPresenter.go(reviewChargeElement, elementIndex)
+  const pageData = EditPresenter(reviewChargeElement, elementIndex)
 
   return {
     activeNavBar: 'bill-runs',

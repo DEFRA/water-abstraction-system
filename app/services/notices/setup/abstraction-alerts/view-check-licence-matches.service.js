@@ -19,7 +19,7 @@ import { readFlashNotification } from '../../../../lib/general.lib.js'
 export default async function go(sessionId, yar) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = CheckLicenceMatchesPresenter.go(session)
+  const pageData = CheckLicenceMatchesPresenter(session)
 
   const notification = readFlashNotification(yar)
 

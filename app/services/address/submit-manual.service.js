@@ -32,7 +32,7 @@ export default async function go(sessionId, payload) {
     }
   }
 
-  const pageData = ManualAddressPresenter.go(session)
+  const pageData = ManualAddressPresenter(session)
 
   return {
     error,

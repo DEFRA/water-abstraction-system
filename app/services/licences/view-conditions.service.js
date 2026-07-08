@@ -23,7 +23,7 @@ export default async function go(licenceId, auth) {
 
   const conditions = currentLicenceVersion ? await FetchConditionsService(currentLicenceVersion.id) : []
 
-  const pageData = ConditionsPresenter.go(conditions, licence)
+  const pageData = ConditionsPresenter(conditions, licence)
 
   return {
     ...pageData,

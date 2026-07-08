@@ -83,7 +83,7 @@ function _submittedSessionData(session, payload) {
   session.receivedDateYear = payload.receivedDateYear ?? null
   session.receivedDateOptions = payload.receivedDateOptions ?? null
 
-  const data = ReceivedPresenter.go(session)
+  const data = ReceivedPresenter(session)
   return data
 }
 

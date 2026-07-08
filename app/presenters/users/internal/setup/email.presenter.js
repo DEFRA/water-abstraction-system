@@ -12,7 +12,7 @@ import { formatEmail } from '../../../base.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { checkPageVisited, email, id: sessionId } = session
 
   return {
@@ -33,9 +33,4 @@ function _href(checkPageVisited, sessionId) {
   }
 
   return '/system/users'
-}
-
-export { go }
-export default {
-  go
 }

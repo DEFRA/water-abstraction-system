@@ -14,7 +14,7 @@ import { calculateTotalBillableReturns, formatChargePeriod } from './base-review
  *
  * @returns {object} page date needed for the review charge reference factors page
  */
-function go(reviewChargeReference) {
+export default function go(reviewChargeReference) {
   const {
     amendedAuthorisedVolume,
     chargeReference,
@@ -32,9 +32,4 @@ function go(reviewChargeReference) {
     pageTitle: 'Set the authorised volume',
     totalBillableReturns: calculateTotalBillableReturns(reviewChargeElements)
   }
-}
-
-export { go }
-export default {
-  go
 }

@@ -19,7 +19,7 @@ import NotifyErrorPresenter from './notify-error.presenter.js'
  *
  * @returns {object} the data from the result needed to save to 'water.notifications'
  */
-function go(notifyResult) {
+export default function go(notifyResult) {
   const { response, succeeded } = notifyResult
 
   if (succeeded) {
@@ -34,14 +34,9 @@ function go(notifyResult) {
   // NOTE: The safe navigation operator is intended here. If the request fails to connect to Notify, for example, the
   // response object will not have a body property. In this case an error would be thrown if we did not use the safe
   // navigation operator.
-  return NotifyErrorPresenter.go(
+  return NotifyErrorPresenter(
     response.statusCode,
     `Request failed with status code ${response.statusCode}`,
     response.body?.errors
   )
-}
-
-export { go }
-export default {
-  go
 }

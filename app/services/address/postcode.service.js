@@ -17,7 +17,7 @@ import PostcodePresenter from '../../presenters/address/postcode.presenter.js'
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = PostcodePresenter.go(session)
+  const pageData = PostcodePresenter(session)
 
   return {
     activeNavBar: session.addressJourney.activeNavBar,

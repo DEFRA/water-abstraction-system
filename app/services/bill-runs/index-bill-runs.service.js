@@ -29,9 +29,9 @@ export default async function go(yar, page) {
     FetchRegionsService()
   ])
 
-  const pagination = PaginatorPresenter.go(totalNumber, page, '/system/bill-runs', billRuns.length, 'bill runs')
+  const pagination = PaginatorPresenter(totalNumber, page, '/system/bill-runs', billRuns.length, 'bill runs')
 
-  const pageData = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
+  const pageData = IndexBillRunsPresenter(billRuns, busyResult, filters, regions)
 
   return {
     activeNavBar: 'bill-runs',

@@ -10,7 +10,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { activeNavBar, address, pageTitleCaption } = session.addressJourney
 
   return {
@@ -32,9 +32,4 @@ function _backLink(address, sessionId) {
   }
 
   return { href: `/system/address/${sessionId}/postcode`, text: 'Back' }
-}
-
-export { go }
-export default {
-  go
 }

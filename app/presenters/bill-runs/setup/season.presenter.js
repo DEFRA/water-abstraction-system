@@ -10,16 +10,11 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   return {
     backlink: `/system/bill-runs/setup/${session.id}/year`,
     pageTitle: 'Select the season',
     sessionId: session.id,
     selectedSeason: session.season ? session.season : null
   }
-}
-
-export { go }
-export default {
-  go
 }

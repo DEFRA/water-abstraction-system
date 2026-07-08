@@ -17,7 +17,7 @@ import RecipientNamePresenter from '../../../presenters/notices/setup/recipient-
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = RecipientNamePresenter.go(session)
+  const pageData = RecipientNamePresenter(session)
 
   return {
     activeNavBar: 'notices',

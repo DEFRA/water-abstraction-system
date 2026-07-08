@@ -78,7 +78,7 @@ async function _submissionData(session) {
 
   const companyContacts = await FetchCompanyContactsService(companyId)
 
-  return ContactPresenter.go(session, companyContacts)
+  return ContactPresenter(session, companyContacts)
 }
 
 function _validate(payload) {

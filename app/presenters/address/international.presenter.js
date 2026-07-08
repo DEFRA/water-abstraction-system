@@ -12,7 +12,7 @@ import { countryLookup } from './base-address.presenter.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { activeNavBar, address, pageTitleCaption } = session.addressJourney
 
   return {
@@ -27,9 +27,4 @@ function go(session) {
     pageTitleCaption: pageTitleCaption ?? null,
     postcode: address.postcode ?? null
   }
-}
-
-export { go }
-export default {
-  go
 }

@@ -12,7 +12,7 @@ import { checkUrl } from '../../../lib/check-page.lib.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { label, licenceRef } = session
 
   return {
@@ -21,9 +21,4 @@ function go(session) {
     monitoringStationLabel: label,
     pageTitle: 'Enter the licence number this threshold applies to'
   }
-}
-
-export { go }
-export default {
-  go
 }

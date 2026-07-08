@@ -19,7 +19,7 @@ import NotePresenter from '../../../presenters/return-logs/setup/note.presenter.
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const formattedData = NotePresenter.go(session)
+  const formattedData = NotePresenter(session)
 
   return {
     ...formattedData

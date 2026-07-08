@@ -17,7 +17,7 @@ import { sourceNavigation } from '../base-users.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-function go(user, verifications, viewingUserScope, back) {
+export default function go(user, verifications, viewingUserScope, back) {
   const { username } = user
 
   const canManageAccounts = viewingUserScope.includes('manage_accounts')
@@ -55,9 +55,4 @@ function _verifications(verifications) {
   }
 
   return formattedVerifications
-}
-
-export { go }
-export default {
-  go
 }

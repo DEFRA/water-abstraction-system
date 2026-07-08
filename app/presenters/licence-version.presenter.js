@@ -7,7 +7,7 @@ import { formatLongDate } from './base.presenter.js'
  *
  * @returns {object} Link object containing hiddenText and href properties
  */
-function linkToLicenceVersion(licenceVersion) {
+export function linkToLicenceVersion(licenceVersion) {
   const { endDate, id } = licenceVersion
 
   let hiddenText = 'current licence version'
@@ -20,9 +20,4 @@ function linkToLicenceVersion(licenceVersion) {
     hiddenText,
     href: `/system/licence-versions/${id}`
   }
-}
-
-export { linkToLicenceVersion }
-export default {
-  linkToLicenceVersion
 }

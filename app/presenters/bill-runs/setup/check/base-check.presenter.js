@@ -5,7 +5,7 @@
  *
  * @returns {string} - The URL for the 'Back' link
  */
-function checkPageBackLink(session) {
+export function checkPageBackLink(session) {
   const { id, type, year } = session
   const srocStartYear = 2023
 
@@ -18,9 +18,4 @@ function checkPageBackLink(session) {
   }
 
   return `/system/bill-runs/setup/${id}/season`
-}
-
-export { checkPageBackLink }
-export default {
-  checkPageBackLink
 }

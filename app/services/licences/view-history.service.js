@@ -21,7 +21,7 @@ export default async function go(licenceId, auth) {
 
   const licenceHistory = await FetchHistoryService(licenceId)
 
-  const pageData = HistoryPresenter.go(licenceHistory, licence)
+  const pageData = HistoryPresenter(licenceHistory, licence)
 
   return {
     ...pageData,

@@ -65,12 +65,12 @@ export default async function go(sessionId, auth) {
 
 function _formattedData(session, blockingResults) {
   if (blockingResults.toFinancialYearEnding === 0) {
-    return NoAnnualBillRunPresenter.go(session)
+    return NoAnnualBillRunPresenter(session)
   }
 
   if (blockingResults.trigger === engineTriggers.neither) {
-    return BlockedBillRunPresenter.go(session, blockingResults)
+    return BlockedBillRunPresenter(session, blockingResults)
   }
 
-  return AllowedBillRunPresenter.go(session, blockingResults)
+  return AllowedBillRunPresenter(session, blockingResults)
 }

@@ -18,7 +18,7 @@ import DetailsPresenter from '../../../presenters/users/external/details.present
 export default async function go(id, auth, back = 'users') {
   const user = await FetchUserDetailsDal(id)
 
-  const pageData = DetailsPresenter.go(user, auth.credentials.scope, back)
+  const pageData = DetailsPresenter(user, auth.credentials.scope, back)
 
   return {
     activeSecondaryNav: 'details',

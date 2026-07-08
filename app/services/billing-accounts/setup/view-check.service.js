@@ -29,7 +29,7 @@ export default async function go(sessionId) {
   await markCheckPageVisited(session)
   await _updateAddressJourneyBackLink(session)
 
-  const pageData = CheckPresenter.go(session, companyContacts, existingAddress, companysHouseResult, impactedLicences)
+  const pageData = CheckPresenter(session, companyContacts, existingAddress, companysHouseResult, impactedLicences)
 
   return {
     ...pageData

@@ -15,7 +15,7 @@ import { abstractionAlertsLabel, selectedLiveLicences } from '../../crm.presente
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session, savedCompanyContacts, sentNotification) {
+export default function go(session, savedCompanyContacts, sentNotification) {
   const { abstractionAlertLicences, abstractionAlerts, company, companyContact, email, licences, name } = session
 
   const matchingContact = _matchingContact(email, name, savedCompanyContacts)
@@ -107,9 +107,4 @@ function _warning(matchingContact, abstractionAlertLicences, abstractionAlerts) 
     text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
     iconFallbackText: 'Warning'
   }
-}
-
-export { go }
-export default {
-  go
 }

@@ -13,10 +13,10 @@ import NotificationsTablePresenter from '../notifications/notifications-table.pr
  *
  * @returns {object} The data formatted for the view template
  */
-function go(notifications, licence) {
+export default function go(notifications, licence) {
   const { id: licenceId, licenceRef } = licence
 
-  const notificationsTableData = NotificationsTablePresenter.go(notifications, licenceId)
+  const notificationsTableData = NotificationsTablePresenter(notifications, licenceId)
 
   return {
     backLink: {
@@ -27,9 +27,4 @@ function go(notifications, licence) {
     pageTitle: 'Communications',
     pageTitleCaption: `Licence ${licenceRef}`
   }
-}
-
-export { go }
-export default {
-  go
 }

@@ -10,7 +10,7 @@
  *
  * @returns {object} - the formatted content
  */
-function go(billRun) {
+export default function go(billRun) {
   const {
     batchType,
     creditNoteCount,
@@ -56,9 +56,4 @@ function go(billRun) {
       creditNoteValue
     }
   }
-}
-
-export { go }
-export default {
-  go
 }

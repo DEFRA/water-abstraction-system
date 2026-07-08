@@ -10,7 +10,7 @@
  *
  * @returns {object} page data needed by the view template
  */
-function go(session) {
+export default function go(session) {
   const { id: sessionId, returnReference, meterMake, meterSerialNumber, meter10TimesDisplay } = session
 
   return {
@@ -22,9 +22,4 @@ function go(session) {
     pageTitleCaption: `Return reference ${returnReference}`,
     sessionId
   }
-}
-
-export { go }
-export default {
-  go
 }

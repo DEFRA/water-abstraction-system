@@ -15,7 +15,7 @@ import { NoticeType } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, recipients, selectedRecipients) {
+export default function go(session, recipients, selectedRecipients) {
   const { id: sessionId, noticeType, referenceCode } = session
 
   return {
@@ -56,7 +56,7 @@ function _checked(selectedRecipients, recipient) {
 
 function _recipients(recipients, selectedRecipients) {
   return recipients.map((recipient) => {
-    const contact = ContactPresenter.go(recipient)
+    const contact = ContactPresenter(recipient)
 
     return {
       checked: _checked(selectedRecipients, recipient),
@@ -64,9 +64,4 @@ function _recipients(recipients, selectedRecipients) {
       contact_hash_id: recipient.contact_hash_id
     }
   })
-}
-
-export { go }
-export default {
-  go
 }

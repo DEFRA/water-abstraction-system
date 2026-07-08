@@ -69,7 +69,7 @@ const NOTIFY_STATUS_DESCRIPTIONS = {
  *
  * @returns {object|null} If the notification is not errored returns null, else an applicable 'status' and 'description'
  */
-function go(notification) {
+export default function go(notification) {
   const { messageType, notifyError, notifyStatus, status } = notification
 
   if (status !== 'error') {
@@ -103,9 +103,4 @@ function _extractFromNotifyError(notifyError) {
   }
 
   return 'Internal system error'
-}
-
-export { go }
-export default {
-  go
 }

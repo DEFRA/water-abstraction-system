@@ -32,7 +32,7 @@ import { checkPageBackLink } from './base-check.presenter.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { id: sessionId, regionName } = session
 
   return {
@@ -51,9 +51,4 @@ function go(session) {
     warningMessage:
       'You cannot create a supplementary bill run for this region until you have created an annual bill run'
   }
-}
-
-export { go }
-export default {
-  go
 }

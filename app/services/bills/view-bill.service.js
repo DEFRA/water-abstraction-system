@@ -33,19 +33,19 @@ export default async function go(id) {
 
   // Irrespective of of how many licences are linked to the bill, the templates always need formatted bill and billing
   // account data
-  const billAndBillingAccountData = ViewBillPresenter.go(bill, billingAccount)
+  const billAndBillingAccountData = ViewBillPresenter(bill, billingAccount)
 
   let additionalData = {}
 
   // If we have multiple licences we need to provide formatted licence summary data for the multi licence bill template
   if (licenceSummaries.length > 1) {
-    additionalData = ViewLicenceSummariesPresenter.go(licenceSummaries)
+    additionalData = ViewLicenceSummariesPresenter(licenceSummaries)
   } else {
     // Else we need to provide bill licence data for the single licence bill templates (ViewBillLicencePresenter handles
     // both PRESROC and SROC)
     const billLicence = await FetchBillLicence.go(licenceSummaries[0].id)
 
-    additionalData = ViewBillLicencePresenter.go(billLicence)
+    additionalData = ViewBillLicencePresenter(billLicence)
   }
 
   return {

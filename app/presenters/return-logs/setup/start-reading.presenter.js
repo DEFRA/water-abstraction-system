@@ -12,7 +12,7 @@ import { checkUrl } from '../../../lib/check-page.lib.js'
  *
  * @returns {object} page data needed for the `/return-logs/setup/{sessionId}/start-reading` page
  */
-function go(session) {
+export default function go(session) {
   const { id: sessionId, returnReference, startReading } = session
 
   return {
@@ -37,9 +37,4 @@ function _savedValue(startReading) {
   }
 
   return startReading ?? null
-}
-
-export { go }
-export default {
-  go
 }

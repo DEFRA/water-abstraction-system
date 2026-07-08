@@ -12,7 +12,7 @@ import { isQuarterlyReturnSubmissions } from '../../../lib/dates.lib.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const {
     id: sessionId,
     licence: { id: licenceId, licenceRef },
@@ -37,9 +37,4 @@ function go(session) {
     pageTitleCaption: `Licence ${licenceRef}`,
     sessionId
   }
-}
-
-export { go }
-export default {
-  go
 }

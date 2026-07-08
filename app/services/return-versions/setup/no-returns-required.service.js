@@ -19,7 +19,7 @@ import NoReturnsRequiredPresenter from '../../../presenters/return-versions/setu
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const formattedData = NoReturnsRequiredPresenter.go(session)
+  const formattedData = NoReturnsRequiredPresenter(session)
 
   return {
     ...formattedData

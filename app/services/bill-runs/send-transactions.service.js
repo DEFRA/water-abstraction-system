@@ -39,7 +39,7 @@ export default async function go(transactions, billRunExternalId, accountNumber,
 
 async function _sendTransactionToChargingModule(transaction, billRunExternalId, accountNumber, licence) {
   try {
-    const chargingModuleRequest = ChargingModuleCreateTransactionPresenter.go(transaction, accountNumber, licence)
+    const chargingModuleRequest = ChargingModuleCreateTransactionPresenter(transaction, accountNumber, licence)
 
     const chargingModuleResponse = await send(billRunExternalId, chargingModuleRequest)
 

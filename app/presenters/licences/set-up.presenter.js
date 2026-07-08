@@ -33,7 +33,7 @@ const AGREEMENTS = {
  *
  * @returns {object} The data formatted for the view template
  */
-function go(chargeVersions, workflows, agreements, returnVersions, auth, licence) {
+export default function go(chargeVersions, workflows, agreements, returnVersions, auth, licence) {
   const licenceData = {
     licenceId: licence.id,
     ends: licence.$ends()
@@ -272,9 +272,4 @@ function _workflowStartDate(workflow) {
   const startDate = new Date(workflow.data.chargeVersion.dateRange.startDate)
 
   return formatLongDate(startDate)
-}
-
-export { go }
-export default {
-  go
 }

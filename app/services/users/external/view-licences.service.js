@@ -25,9 +25,9 @@ export default async function go(id, auth, page, yar, back = 'users') {
 
   const { licences, totalNumber } = await FetchLicencesDal(user.licenceEntityId, page)
 
-  const pageData = LicencesPresenter.go(user, licences, auth.credentials.scope, back)
+  const pageData = LicencesPresenter(user, licences, auth.credentials.scope, back)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/users/external/${id}/licences`,

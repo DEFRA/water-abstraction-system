@@ -55,7 +55,7 @@ function _submittedSessionData(session, payload) {
   session.singleVolume = payload.singleVolume ?? null
   session.singleVolumeQuantity = payload.singleVolumeQuantity ?? null
 
-  return SingleVolumePresenter.go(session)
+  return SingleVolumePresenter(session)
 }
 
 function _validate(payload) {

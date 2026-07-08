@@ -37,7 +37,7 @@ export default async function go(sessionId, payload) {
     return {}
   }
 
-  const pageData = SeasonPresenter.go(session)
+  const pageData = SeasonPresenter(session)
 
   return {
     activeNavBar: 'bill-runs',

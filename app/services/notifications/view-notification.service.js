@@ -28,5 +28,5 @@ import ViewNotificationPresenter from '../../presenters/notifications/view-notif
 export default async function go(notificationId, licenceId = null, returnLogId = null, companyContactId = null) {
   const { licence, notification } = await FetchNotificationService(notificationId, licenceId)
 
-  return ViewNotificationPresenter.go(notification, licence, returnLogId, companyContactId)
+  return ViewNotificationPresenter(notification, licence, returnLogId, companyContactId)
 }

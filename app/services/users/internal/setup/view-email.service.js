@@ -16,7 +16,7 @@ import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const pageData = EmailPresenter.go(session)
+  const pageData = EmailPresenter(session)
 
   return pageData
 }

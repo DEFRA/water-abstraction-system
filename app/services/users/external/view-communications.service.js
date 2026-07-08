@@ -24,9 +24,9 @@ export default async function go(id, auth, page, back = 'users') {
 
   const { notifications, totalNumber } = await FetchNotificationsDal(user.username, page)
 
-  const pageData = CommunicationsPresenter.go(user, notifications, auth.credentials.scope, back)
+  const pageData = CommunicationsPresenter(user, notifications, auth.credentials.scope, back)
 
-  const pagination = PaginatorPresenter.go(
+  const pagination = PaginatorPresenter(
     totalNumber,
     page,
     `/system/users/external/${id}/communications`,

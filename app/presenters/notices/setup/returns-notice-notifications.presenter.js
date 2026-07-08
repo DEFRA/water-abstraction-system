@@ -35,7 +35,7 @@ const MESSAGE_REFS = {
  *
  * @returns {object[]} the recipients transformed into notifications
  */
-function go(session, recipients, noticeId) {
+export default function go(session, recipients, noticeId) {
   const notifications = []
 
   for (const recipient of recipients) {
@@ -82,7 +82,7 @@ function _letter(recipient, noticeId, session) {
   const { determinedReturnsPeriod, journey, noticeType } = session
 
   const messageType = 'letter'
-  const address = NotifyAddressPresenter.go(recipient.contact)
+  const address = NotifyAddressPresenter(recipient.contact)
 
   return {
     contactType: recipient.contact_type,
@@ -104,9 +104,4 @@ function _letter(recipient, noticeId, session) {
     status: 'pending',
     templateId: NOTIFY_TEMPLATES[noticeType][journey][messageType][recipient.contact_type]
   }
-}
-
-export { go }
-export default {
-  go
 }

@@ -72,7 +72,7 @@ async function _save(session, payload) {
 function _submittedSessionData(session, payload) {
   session.multipleEntries = payload.multipleEntries ?? null
 
-  return MultipleEntriesPresenter.go(session)
+  return MultipleEntriesPresenter(session)
 }
 
 function _validate(frequency, measurementType, payload, session) {

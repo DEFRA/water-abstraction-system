@@ -21,7 +21,7 @@ export default async function go(reviewChargeElementId, elementIndex, yar) {
 
   const [bannerMessage] = yar.flash('banner')
 
-  const pageData = ReviewChargeElementPresenter.go(reviewChargeElement, elementIndex)
+  const pageData = ReviewChargeElementPresenter(reviewChargeElement, elementIndex)
 
   return {
     activeNavBar: 'bill-runs',

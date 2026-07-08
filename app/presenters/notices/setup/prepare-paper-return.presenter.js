@@ -37,7 +37,7 @@ const RETURN_TYPE = {
  *
  * @returns {object} - The data formatted for the return form
  */
-function go(notification) {
+export default function go(notification) {
   const {
     personalisation: {
       address_line_1: addressLine1,
@@ -267,9 +267,4 @@ function _generateDates(startDate, endDate, returnsFrequency) {
   }
 
   return _formatPeriodsToLongDate(dates)
-}
-
-export { go }
-export default {
-  go
 }

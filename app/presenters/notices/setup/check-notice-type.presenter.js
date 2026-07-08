@@ -21,7 +21,7 @@ const NOTICE_TYPE_TEXT = {
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const {
     determinedReturnsPeriod = null,
     dueReturns = [],
@@ -71,9 +71,4 @@ function _selectedDueReturns(selectedReturns, dueReturns) {
   return selectedDueReturns.map((returnItem) => {
     return `${returnItem.returnReference} - ${formatLongDate(new Date(returnItem.startDate))} to ${formatLongDate(new Date(returnItem.endDate))}`
   })
-}
-
-export { go }
-export default {
-  go
 }

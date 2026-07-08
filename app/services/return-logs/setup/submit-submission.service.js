@@ -37,7 +37,7 @@ export default async function go(sessionId, payload) {
     }
   }
 
-  const formattedData = SubmissionPresenter.go(session)
+  const formattedData = SubmissionPresenter(session)
 
   return {
     error,

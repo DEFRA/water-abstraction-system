@@ -19,7 +19,7 @@ import ReceivedPresenter from '../../../presenters/return-logs/setup/received.pr
 export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const formattedData = ReceivedPresenter.go(session)
+  const formattedData = ReceivedPresenter(session)
 
   return {
     ...formattedData

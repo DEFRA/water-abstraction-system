@@ -10,7 +10,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session) {
+export default function go(session) {
   const { addressJourney, id } = session
 
   return {
@@ -21,9 +21,4 @@ function go(session) {
     pageTitleCaption: addressJourney.pageTitleCaption ?? null,
     postcode: addressJourney.address?.postcode ?? null
   }
-}
-
-export { go }
-export default {
-  go
 }

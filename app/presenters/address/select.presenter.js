@@ -11,7 +11,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(session, addresses) {
+export default function go(session, addresses) {
   const { activeNavBar, address, pageTitleCaption } = session.addressJourney
 
   return {
@@ -39,9 +39,4 @@ function _addresses(addresses) {
   }
 
   return displayAddresses
-}
-
-export { go }
-export default {
-  go
 }

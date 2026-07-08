@@ -13,7 +13,7 @@ import { formatBillRunType, formatChargeScheme, generateBillRunTitle } from '../
  *
  * @returns {object} - the prepared bill run data to be passed to the errored bill run page
  */
-function go(billRun) {
+export default function go(billRun) {
   const { batchType, billRunNumber, createdAt, errorCode, id, region, scheme, status, summer, toFinancialYearEnding } =
     billRun
 
@@ -54,9 +54,4 @@ function _errorMessage(errorCode) {
   }
 
   return 'No error code was assigned. We have no further information at this time.'
-}
-
-export { go }
-export default {
-  go
 }

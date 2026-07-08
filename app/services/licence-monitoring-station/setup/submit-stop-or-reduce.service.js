@@ -47,7 +47,7 @@ function _submittedSessionData(session, payload) {
   session.stopOrReduce = payload.stopOrReduce ?? null
   session.reduceAtThreshold = payload.reduceAtThreshold ?? null
 
-  return StopOrReducePresenter.go(session)
+  return StopOrReducePresenter(session)
 }
 
 function _validate(payload) {
