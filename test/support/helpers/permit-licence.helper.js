@@ -20,7 +20,7 @@ import { generateLicenceRef } from './licence.helper.js'
  *
  * @returns {Promise<module:PermitLicenceModel>} The instance of the newly created record
  */
-async function add(data = {}) {
+export async function add(data = {}) {
   const insertData = defaults(data)
 
   return PermitLicenceModel.query()
@@ -38,7 +38,7 @@ async function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults(data = {}) {
+export function defaults(data = {}) {
   const licenceRef = data.licenceRef ? data.licenceRef : generateLicenceRef()
   const defaults = {
     licenceStatusId: 1,
@@ -436,13 +436,4 @@ function _licenceDataValue(licenceRef) {
     ORIG_SIG_DATE: '01/04/2022',
     FGAC_REGION_CODE: '9'
   }
-}
-
-export {
-  add,
-  defaults
-}
-export default {
-  add,
-  defaults
 }

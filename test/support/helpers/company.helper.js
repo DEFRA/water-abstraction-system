@@ -17,7 +17,7 @@ import { generateRandomInteger } from '../../../app/lib/general.lib.js'
  *
  * @returns {Promise<module:CompanyModel>} The instance of the newly created record
  */
-function add(data = {}) {
+export function add(data = {}) {
   const insertData = defaults(data)
 
   return CompanyModel.query()
@@ -35,7 +35,7 @@ function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults(data = {}) {
+export function defaults(data = {}) {
   const defaults = {
     name: 'Example Trading Ltd',
     type: 'organisation'
@@ -52,7 +52,7 @@ function defaults(data = {}) {
  *
  * @returns {int} - A random company number
  */
-function generateCompanyNumber() {
+export function generateCompanyNumber() {
   return generateRandomInteger(1000000, 9999999).toString()
 }
 
@@ -63,22 +63,9 @@ function generateCompanyNumber() {
  *
  * @returns {string} - A random external id
  */
-function generateExternalId() {
+export function generateExternalId() {
   const regionCode = generateRandomInteger(1, 9)
   const partyId = generateRandomInteger(100, 9999998)
 
   return `${regionCode}:${partyId}`
-}
-
-export {
-  add,
-  defaults,
-  generateCompanyNumber,
-  generateExternalId
-}
-export default {
-  add,
-  defaults,
-  generateCompanyNumber,
-  generateExternalId
 }

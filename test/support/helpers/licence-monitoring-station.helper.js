@@ -23,7 +23,7 @@ import LicenceMonitoringStationModel from '../../../app/models/licence-monitorin
  *
  * @returns {Promise<module:LicenceMonitoringStationModel>} The instance of the newly created record
  */
-async function add(data = {}) {
+export async function add(data = {}) {
   const insertData = defaults(data)
 
   return LicenceMonitoringStationModel.query()
@@ -41,7 +41,7 @@ async function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults(data = {}) {
+export function defaults(data = {}) {
   const timestamp = timestampForPostgres()
 
   const defaults = {
@@ -60,13 +60,4 @@ function defaults(data = {}) {
     ...defaults,
     ...data
   }
-}
-
-export {
-  add,
-  defaults
-}
-export default {
-  add,
-  defaults
 }

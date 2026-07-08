@@ -17,7 +17,7 @@ import LicenceDocumentModel from '../../../app/models/licence-document.model.js'
  *
  * @returns {Promise<module:LicenceDocumentModel>} The instance of the newly created record
  */
-async function add(data = {}) {
+export async function add(data = {}) {
   const insertData = defaults(data)
 
   return LicenceDocumentModel.query()
@@ -35,7 +35,7 @@ async function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults(data = {}) {
+export function defaults(data = {}) {
   const defaults = {
     licenceRef: generateLicenceRef(),
     startDate: new Date('2022-01-01')
@@ -45,13 +45,4 @@ function defaults(data = {}) {
     ...defaults,
     ...data
   }
-}
-
-export {
-  add,
-  defaults
-}
-export default {
-  add,
-  defaults
 }

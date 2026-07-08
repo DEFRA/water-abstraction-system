@@ -28,7 +28,7 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
  *
  * @returns {Promise<module:EventModel>} The instance of the newly created record
  */
-function add(data = {}) {
+export function add(data = {}) {
   const insertData = defaults(data)
 
   return EventModel.query()
@@ -46,7 +46,7 @@ function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults(data = {}) {
+export function defaults(data = {}) {
   const defaults = {
     type: 'billing-batch',
     subtype: 'supplementary',
@@ -68,13 +68,4 @@ function defaults(data = {}) {
     ...defaults,
     ...data
   }
-}
-
-export {
-  add,
-  defaults
-}
-export default {
-  add,
-  defaults
 }

@@ -20,19 +20,10 @@ import { data as sources } from '../../../db/seeds/data/sources.js'
  *
  * @returns {module:SourceModel} The selected reference entry or one picked at random
  */
-function select(index = -1) {
+export function select(index = -1) {
   if (index > -1) {
     return SourceModel.fromJson(sources[index])
   }
 
   return SourceModel.fromJson(selectRandomEntry(sources))
-}
-
-export {
-  sources as data,
-  select
-}
-export default {
-  data: sources,
-  select
 }

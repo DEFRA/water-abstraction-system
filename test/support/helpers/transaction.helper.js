@@ -38,7 +38,7 @@ import TransactionModel from '../../../app/models/transaction.model.js'
  *
  * @returns {Promise<module:TransactionModel>} The instance of the newly created record
  */
-function add(data = {}) {
+export function add(data = {}) {
   const insertData = defaults(data)
 
   return TransactionModel.query()
@@ -56,7 +56,7 @@ function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults(data = {}) {
+export function defaults(data = {}) {
   const { startDate, endDate } = determineCurrentFinancialYear()
   const { reference, shortDescription } = ChargeCategoryHelper.select()
 
@@ -89,13 +89,4 @@ function defaults(data = {}) {
     ...defaults,
     ...data
   }
-}
-
-export {
-  add,
-  defaults
-}
-export default {
-  add,
-  defaults
 }

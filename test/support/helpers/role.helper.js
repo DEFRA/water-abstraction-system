@@ -20,19 +20,10 @@ import { data as roles } from '../../../db/seeds/data/roles.js'
  *
  * @returns {module:RoleModel} The selected reference entry or one picked at random
  */
-function select(index = -1) {
+export function select(index = -1) {
   if (index > -1) {
     return RoleModel.fromJson(roles[index])
   }
 
   return RoleModel.fromJson(selectRandomEntry(roles))
-}
-
-export {
-  roles as data,
-  select
-}
-export default {
-  data: roles,
-  select
 }

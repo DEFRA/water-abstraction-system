@@ -9,7 +9,7 @@ import GroupHelper from './group.helper.js'
 import UserGroupModel from '../../../app/models/user-group.model.js'
 import { data as userGroups } from '../../../db/seeds/data/user-groups.js'
 
-const DEFAULT_INDEX = 4
+export const DEFAULT_INDEX = 4
 
 /**
  * Add a new user group
@@ -23,7 +23,7 @@ const DEFAULT_INDEX = 4
  *
  * @returns {Promise<module:UserGroupModel>} The instance of the newly created record
  */
-function add(data = {}) {
+export function add(data = {}) {
   const insertData = defaults(data)
 
   return UserGroupModel.query()
@@ -41,7 +41,7 @@ function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults(data = {}) {
+export function defaults(data = {}) {
   const { id: groupId } = GroupHelper.select()
 
   const defaults = {
@@ -71,25 +71,10 @@ function defaults(data = {}) {
  *
  * @returns {module:UserGroupModel} The selected reference entry or one picked at random
  */
-function select(index = -1) {
+export function select(index = -1) {
   if (index > -1) {
     return UserGroupModel.fromJson(userGroups[index])
   }
 
   return UserGroupModel.fromJson(selectRandomEntry(userGroups))
-}
-
-export {
-  add,
-  userGroups as data,
-  DEFAULT_INDEX,
-  defaults,
-  select
-}
-export default {
-  add,
-  data: userGroups,
-  DEFAULT_INDEX,
-  defaults,
-  select
 }

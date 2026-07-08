@@ -19,7 +19,7 @@ import ReturnRequirementPointModel from '../../../app/models/return-requirement-
  *
  * @returns {Promise<module:ReturnRequirementPointModel>} The instance of the newly created record
  */
-function add(data = {}) {
+export function add(data = {}) {
   const insertData = defaults(data)
 
   return ReturnRequirementPointModel.query()
@@ -37,7 +37,7 @@ function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults(data = {}) {
+export function defaults(data = {}) {
   const defaults = {
     externalId: generateReturnRequirementPointExternalId(),
     pointId: generateUUID(),
@@ -59,19 +59,8 @@ function defaults(data = {}) {
  *
  * @returns {string} - A randomly generated return requirement point external ID
  */
-function generateReturnRequirementPointExternalId() {
+export function generateReturnRequirementPointExternalId() {
   const naldPointId = PointHelper.generateNaldPointId()
 
   return `9:${generateRandomInteger(100, 99999)}:${naldPointId}`
-}
-
-export {
-  add,
-  defaults,
-  generateReturnRequirementPointExternalId
-}
-export default {
-  add,
-  defaults,
-  generateReturnRequirementPointExternalId
 }

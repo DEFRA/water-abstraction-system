@@ -21,7 +21,7 @@ import { data as userRoles } from '../../../db/seeds/data/user-roles.js'
  *
  * @returns {Promise<module:UserRoleModel>} The instance of the newly created record
  */
-function add(data = {}) {
+export function add(data = {}) {
   const insertData = defaults(data)
 
   return UserRoleModel.query()
@@ -39,7 +39,7 @@ function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults(data = {}) {
+export function defaults(data = {}) {
   const { id: roleId } = RoleHelper.select()
 
   const defaults = {
@@ -69,23 +69,10 @@ function defaults(data = {}) {
  *
  * @returns {module:UserRoleModel} The selected reference entry or one picked at random
  */
-function select(index = -1) {
+export function select(index = -1) {
   if (index > -1) {
     return UserRoleModel.fromJson(userRoles[index])
   }
 
   return UserRoleModel.fromJson(selectRandomEntry(userRoles))
-}
-
-export {
-  add,
-  userRoles as data,
-  defaults,
-  select
-}
-export default {
-  add,
-  data: userRoles,
-  defaults,
-  select
 }

@@ -20,19 +20,10 @@ import { selectRandomEntry } from '../general.js'
  *
  * @returns {module:FinancialAgreementModel} The selected reference entry or one picked at random
  */
-function select(index = -1) {
+export function select(index = -1) {
   if (index > -1) {
     return FinancialAgreementModel.fromJson(financialAgreements[index])
   }
 
   return FinancialAgreementModel.fromJson(selectRandomEntry(financialAgreements))
-}
-
-export {
-  financialAgreements as data,
-  select
-}
-export default {
-  data: financialAgreements,
-  select
 }

@@ -22,7 +22,7 @@ import RegionHelper from './region.helper.js'
  *
  * @returns {Promise<module:BillRunModel>} The instance of the newly created record
  */
-function add(data = {}) {
+export function add(data = {}) {
   const insertData = defaults(data)
 
   return BillRunModel.query()
@@ -40,7 +40,7 @@ function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults(data = {}) {
+export function defaults(data = {}) {
   const { id: regionId } = RegionHelper.select()
 
   const defaults = {
@@ -57,13 +57,4 @@ function defaults(data = {}) {
     ...defaults,
     ...data
   }
-}
-
-export {
-  add,
-  defaults
-}
-export default {
-  add,
-  defaults
 }

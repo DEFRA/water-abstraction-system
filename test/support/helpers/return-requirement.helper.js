@@ -22,7 +22,7 @@ import ReturnRequirementModel from '../../../app/models/return-requirement.model
  *
  * @returns {Promise<module:ReturnRequirementModel>} The instance of the newly created record
  */
-function add(data = {}) {
+export function add(data = {}) {
   const insertData = defaults(data)
 
   return ReturnRequirementModel.query()
@@ -40,7 +40,7 @@ function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults(data = {}) {
+export function defaults(data = {}) {
   const defaults = {
     abstractionPeriodStartDay: 1,
     abstractionPeriodStartMonth: 4,
@@ -66,17 +66,6 @@ function defaults(data = {}) {
  *
  * @returns {number}
  */
-function generateReference() {
+export function generateReference() {
   return generateRandomInteger(10000000, 99999999)
-}
-
-export {
-  add,
-  defaults,
-  generateReference
-}
-export default {
-  add,
-  defaults,
-  generateReference
 }

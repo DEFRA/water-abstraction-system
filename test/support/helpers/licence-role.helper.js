@@ -18,19 +18,10 @@ import { data as licenceRoles } from '../../../db/seeds/data/licence-roles.js'
  *
  * @returns {module:LicenceRoleModel} The selected reference entry or one picked at random
  */
-function select(name = 'licenceHolder') {
+export function select(name = 'licenceHolder') {
   const licenceRole = licenceRoles.find((licenceRole) => {
     return licenceRole.name === name
   })
 
   return LicenceRoleModel.fromJson(licenceRole)
-}
-
-export {
-  licenceRoles as data,
-  select
-}
-export default {
-  data: licenceRoles,
-  select
 }

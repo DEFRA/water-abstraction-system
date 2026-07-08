@@ -20,19 +20,10 @@ import { data as licenceVersionPurposeConditionTypes } from '../../../db/seeds/d
  *
  * @returns {module:LicenceVersionConditionTypeModel} The selected reference entry or one picked at random
  */
-function select(index = -1) {
+export function select(index = -1) {
   if (index > -1) {
     return LicenceVersionConditionTypeModel.fromJson(licenceVersionPurposeConditionTypes[index])
   }
 
   return LicenceVersionConditionTypeModel.fromJson(selectRandomEntry(licenceVersionPurposeConditionTypes))
-}
-
-export {
-  licenceVersionPurposeConditionTypes as data,
-  select
-}
-export default {
-  data: licenceVersionPurposeConditionTypes,
-  select
 }

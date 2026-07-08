@@ -33,7 +33,7 @@ import ChargeCategoryHelper from './charge-category.helper.js'
  *
  * @returns {Promise<module:ChargeReferenceModel>} The instance of the newly created record
  */
-function add(data = {}) {
+export function add(data = {}) {
   const insertData = defaults(data)
 
   return ChargeReferenceModel.query()
@@ -51,7 +51,7 @@ function add(data = {}) {
  *
  * @returns {object} - Returns the set defaults with the override data spread
  */
-function defaults(data = {}) {
+export function defaults(data = {}) {
   const { id: chargeCategoryId } = ChargeCategoryHelper.select()
 
   const defaults = {
@@ -78,13 +78,4 @@ function defaults(data = {}) {
     ...defaults,
     ...data
   }
-}
-
-export {
-  add,
-  defaults
-}
-export default {
-  add,
-  defaults
 }
