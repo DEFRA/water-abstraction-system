@@ -7,10 +7,10 @@ import { compareStrings } from '../../../../../app/lib/general.lib.js'
 import { db } from '../../../../../db/db.js'
 
 // Thing under test
-import abstractionAlertRecipientsQueryDal from '../../../../../app/dal/notices/setup/abstraction-alerts/abstraction-alert-recipients-query.dal.js'
+import * as AbstractionAlertRecipientsQueryDal from '../../../../../app/dal/notices/setup/abstraction-alerts/abstraction-alert-recipients-query.dal.js'
 
 describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Query DAL', () => {
-  const query = abstractionAlertRecipientsQueryDal.abstractionAlertRecipientsQuery
+  const query = AbstractionAlertRecipientsQueryDal.abstractionAlertRecipientsQuery
 
   let scenarios
 
