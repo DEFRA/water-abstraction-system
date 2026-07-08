@@ -126,7 +126,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
           notifyStatus: 'created',
           status: 'pending'
         })
-        expect(notificationPatchStub.secondCall.mock.calls[0]).toEqual({
+        expect(notificationPatchStub.mock.calls[1][0]).toEqual({
           pdf: undefined,
           plaintext: emailPlaintext,
           notifyError: undefined,
@@ -183,7 +183,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
           notifyStatus: undefined,
           status: 'error'
         })
-        expect(notificationPatchStub.secondCall.mock.calls[0]).toEqual({
+        expect(notificationPatchStub.mock.calls[1][0]).toEqual({
           pdf: undefined,
           plaintext: emailPlaintext,
           notifyError: undefined,

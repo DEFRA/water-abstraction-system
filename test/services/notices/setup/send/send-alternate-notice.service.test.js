@@ -92,7 +92,7 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
       await SendAlternateNoticeService(mainNotice)
 
       expect(notificationPatchStub).toHaveBeenCalledTimes(2)
-      expect(notificationPatchStub.secondCall.mock.calls[0]).toMatchObject({ alternateNoticeId: alternateNotice.id })
+      expect(notificationPatchStub.mock.calls[1][0]).toMatchObject({ alternateNoticeId: alternateNotice.id })
     })
 
     it('returns the sent alternate notice', async () => {
