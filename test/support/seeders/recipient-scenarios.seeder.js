@@ -5,7 +5,7 @@
 import * as CRMContactsSeeder from './crm-contacts.seeder.js'
 import * as EmptyLicence from './empty-licence.seeder.js'
 import * as RecipientsFormatter from './recipients.formatter.js'
-import LicenceVersionHelper from '../helpers/licence-version.helper.js'
+import * as LicenceVersionHelper from '../helpers/licence-version.helper.js'
 import { compareStrings } from '../../../app/lib/general.lib.js'
 
 /**
