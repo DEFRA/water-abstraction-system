@@ -11,7 +11,7 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
  *
  * @returns {object[]} A array of billing accounts
  */
-function billingAccounts() {
+export function billingAccounts() {
   return [
     BillingAccountModel.fromJson({
       accountNumber: generateAccountNumber(),
@@ -48,7 +48,7 @@ function billingAccounts() {
  *
  * @returns {object} A company object
  */
-function company() {
+export function company() {
   return {
     id: generateUUID(),
     name: 'Tyrell Corporation'
@@ -60,7 +60,7 @@ function company() {
  *
  * @returns {object[]} A array of company objects
  */
-function companies() {
+export function companies() {
   return [
     {
       id: generateUUID(),
@@ -74,7 +74,7 @@ function companies() {
  *
  * @returns {module:CompanyAddressModel} A company address
  */
-function companyAddress() {
+export function companyAddress() {
   return {
     id: generateUUID(),
     address: {
@@ -96,7 +96,7 @@ function companyAddress() {
  *
  * @returns {module:CompanyContactModel} A company contact
  */
-function companyContact() {
+export function companyContact() {
   return CompanyContactModel.fromJson({
     id: generateUUID(),
     abstractionAlertLicences: null,
@@ -126,7 +126,7 @@ function companyContact() {
  *
  * @returns {object[]} An array of company contact
  */
-function companyContacts() {
+export function companyContacts() {
   return [
     {
       ...companyContact(),
@@ -142,7 +142,7 @@ function companyContacts() {
  *
  * @returns {object[]} A contact
  */
-function contact() {
+export function contact() {
   return ContactModel.fromJson({
     id: generateUUID(),
     salutation: null,
@@ -163,7 +163,7 @@ function contact() {
  *
  * @returns {object[]} A array of licences
  */
-function licences() {
+export function licences() {
   return [
     LicenceModel.fromJson({
       expiredDate: null,
@@ -181,25 +181,4 @@ function licences() {
       startDate: new Date('2022-01-01')
     })
   ]
-}
-
-export {
-  billingAccounts,
-  company,
-  companies,
-  companyAddress,
-  companyContact,
-  companyContacts,
-  contact,
-  licences
-}
-export default {
-  billingAccounts,
-  company,
-  companies,
-  companyAddress,
-  companyContact,
-  companyContacts,
-  contact,
-  licences
 }

@@ -11,7 +11,7 @@ import { generateLicenceRef } from '../helpers/licence.helper.js'
  *
  * @returns {module:LicenceModel} A licence with a licence ref
  */
-function licence(data = {}) {
+export function licence(data = {}) {
   return LicenceModel.fromJson({
     id: generateUUID(),
     licenceRef: generateLicenceRef(),
@@ -30,13 +30,10 @@ function licence(data = {}) {
  *
  * @returns {module:LicenceModel} A licence to be used in tests that uses the 'ends' or 'ended' instance method
  */
-function licenceEnds(endDate = null) {
+export function licenceEnds(endDate = null) {
   return licence({
     expiredDate: endDate,
     lapsedDate: null,
     revokedDate: null
   })
 }
-
-export { licence, licenceEnds }
-export default { licence, licenceEnds }

@@ -6,7 +6,7 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
  *
  * @returns {object} - Returns three unique licence monitoring stations
  */
-function licenceMonitoringStations() {
+export function licenceMonitoringStations() {
   return {
     one: {
       abstractionPeriodEndDay: 1,
@@ -70,7 +70,7 @@ function licenceMonitoringStations() {
  *
  * @returns {object} - Returns nine unique unsorted licence monitoring stations
  */
-function unsortedLicenceMonitoringStations() {
+export function unsortedLicenceMonitoringStations() {
   return {
     one: {
       abstractionPeriodEndDay: 1,
@@ -246,7 +246,7 @@ function unsortedLicenceMonitoringStations() {
  *
  * @returns {object} an object representing the monitoring stations service
  */
-function get(_licenceMonitoringStations) {
+export function get(_licenceMonitoringStations) {
   const lms = _licenceMonitoringStations || licenceMonitoringStations()
 
   return {
@@ -271,7 +271,7 @@ function get(_licenceMonitoringStations) {
  *
  * @returns {object[]} an array of the licence monitoring station
  */
-function relevantLicenceMonitoringStations(licenceRefs, _licenceMonitoringStations) {
+export function relevantLicenceMonitoringStations(licenceRefs, _licenceMonitoringStations) {
   const lms = _licenceMonitoringStations || licenceMonitoringStations()
 
   const lmsArray = [...Object.values(lms)]
@@ -285,17 +285,4 @@ function relevantLicenceMonitoringStations(licenceRefs, _licenceMonitoringStatio
   }
 
   return lmsArray
-}
-
-export {
-  get,
-  licenceMonitoringStations,
-  relevantLicenceMonitoringStations,
-  unsortedLicenceMonitoringStations
-}
-export default {
-  get,
-  licenceMonitoringStations,
-  relevantLicenceMonitoringStations,
-  unsortedLicenceMonitoringStations
 }

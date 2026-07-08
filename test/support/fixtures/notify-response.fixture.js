@@ -10,7 +10,7 @@ const { HTTP_STATUS_OK } = http2.constants
  *
  * @returns {object} an object representing the successful response from the Notify API
  */
-function successfulResponse(referenceCode) {
+export function successfulResponse(referenceCode) {
   return {
     email: {
       succeeded: true,
@@ -67,11 +67,4 @@ function successfulResponse(referenceCode) {
       }
     }
   }
-}
-
-export {
-  successfulResponse
-}
-export default {
-  successfulResponse
 }

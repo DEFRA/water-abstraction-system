@@ -13,7 +13,7 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
  *
  * @returns {object} - licence condition
  **/
-function condition() {
+export function condition() {
   return {
     id: generateUUID(),
     displayTitle: 'Political cessation condition',
@@ -50,7 +50,7 @@ function condition() {
  *
  * @returns {LicenceModel} - licence
  **/
-function licence() {
+export function licence() {
   return LicenceModel.fromJson({
     id: generateUUID(),
     licenceRef: generateLicenceRef(),
@@ -72,7 +72,7 @@ function licence() {
  *
  * @returns {object} - licence version
  */
-function licenceVersion() {
+export function licenceVersion() {
   return LicenceVersionModel.fromJson({
     address: {
       address1: '12 GRIMMAULD PLACE',
@@ -117,7 +117,7 @@ function licenceVersion() {
  *
  * @returns {object} - licence version purpose
  **/
-function licenceVersionPurpose() {
+export function licenceVersionPurpose() {
   return {
     id: generateUUID(),
     abstractionPeriodStartDay: 1,
@@ -159,7 +159,7 @@ function licenceVersionPurpose() {
  *
  * @returns {PointModel} - licence point
  **/
-function point() {
+export function point() {
   return PointModel.fromJson({
     bgsReference: 'TL 14/123',
     category: 'Single Point',
@@ -197,7 +197,7 @@ function point() {
  *
  * @returns {PointModel} - licence point
  **/
-function pointWithSource() {
+export function pointWithSource() {
   return PointModel.fromJson({
     bgsReference: 'TL 14/123',
     category: 'Single Point',
@@ -225,27 +225,8 @@ function pointWithSource() {
  *
  * @returns {object} - licence purpose
  */
-function purpose() {
+export function purpose() {
   return {
     description: 'Spray Irrigation - Storage'
   }
-}
-
-export {
-  condition,
-  licence,
-  licenceVersion,
-  licenceVersionPurpose,
-  point,
-  pointWithSource,
-  purpose
-}
-export default {
-  condition,
-  licence,
-  licenceVersion,
-  licenceVersionPurpose,
-  point,
-  pointWithSource,
-  purpose
 }

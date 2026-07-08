@@ -9,7 +9,7 @@ import { generateLicenceRef } from '../helpers/licence.helper.js'
  *
  * @returns {object} The external user unregistration setup session fixture
  */
-function unregistrationSession() {
+export function unregistrationSession() {
   const user = UsersFixture.jonLee()
 
   return {
@@ -61,11 +61,4 @@ function unregistrationSession() {
       username: user.username
     }
   }
-}
-
-export {
-  unregistrationSession
-}
-export default {
-  unregistrationSession
 }

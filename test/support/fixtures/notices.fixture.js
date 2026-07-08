@@ -6,7 +6,7 @@ import { generateLicenceRef } from '../helpers/licence.helper.js'
  *
  * @returns {object}
  */
-function alertReduce() {
+export function alertReduce() {
   const data = _defaults()
 
   data.metadata = {
@@ -29,7 +29,7 @@ function alertReduce() {
  *
  * @returns {object}
  */
-function alertResume() {
+export function alertResume() {
   const data = _defaults()
 
   data.metadata = {
@@ -52,7 +52,7 @@ function alertResume() {
  *
  * @returns {object}
  */
-function alertStop() {
+export function alertStop() {
   const data = _defaults()
 
   data.metadata = {
@@ -75,7 +75,7 @@ function alertStop() {
  *
  * @returns {object}
  */
-function alertWarning() {
+export function alertWarning() {
   const data = _defaults()
 
   data.metadata = {
@@ -100,7 +100,7 @@ function alertWarning() {
  *
  * @returns {object}
  */
-function legacyHandsOffFlow() {
+export function legacyHandsOffFlow() {
   const data = _defaults()
 
   data.metadata = {
@@ -124,7 +124,7 @@ function legacyHandsOffFlow() {
  *
  * @returns {object}
  */
-function legacyRenewal() {
+export function legacyRenewal() {
   const data = _defaults()
 
   data.metadata = {
@@ -148,7 +148,7 @@ function legacyRenewal() {
  *
  * @returns {object[]} Array of mapped notice objects.
  */
-function mapToFetchNoticesResult(notices) {
+export function mapToFetchNoticesResult(notices) {
   return notices.map((notice) => {
     const { createdAt, id, issuer, referenceCode, subtype, metadata } = notice
 
@@ -171,7 +171,7 @@ function mapToFetchNoticesResult(notices) {
  *
  * @returns {object[]} all the notices as an array
  */
-function notices() {
+export function notices() {
   return [
     alertReduce(),
     alertResume(),
@@ -191,7 +191,7 @@ function notices() {
  *
  * @returns {object}
  */
-function renewalInvitation() {
+export function renewalInvitation() {
   const data = _defaults()
 
   data.metadata = {
@@ -213,7 +213,7 @@ function renewalInvitation() {
  *
  * @returns {object}
  */
-function returnsInvitation() {
+export function returnsInvitation() {
   const data = _defaults()
 
   data.metadata = {
@@ -234,7 +234,7 @@ function returnsInvitation() {
  *
  * @returns {object}
  */
-function returnsPaperForm() {
+export function returnsPaperForm() {
   const data = _defaults()
 
   data.metadata = {
@@ -255,7 +255,7 @@ function returnsPaperForm() {
  *
  * @returns {object}
  */
-function returnsReminder() {
+export function returnsReminder() {
   const data = _defaults()
 
   data.metadata = {
@@ -291,33 +291,4 @@ function _defaults() {
     type: 'notification',
     updatedAt: new Date('2025-03-25')
   }
-}
-
-export {
-  alertReduce,
-  alertResume,
-  alertStop,
-  alertWarning,
-  legacyHandsOffFlow,
-  legacyRenewal,
-  mapToFetchNoticesResult,
-  notices,
-  renewalInvitation,
-  returnsInvitation,
-  returnsPaperForm,
-  returnsReminder
-}
-export default {
-  alertReduce,
-  alertResume,
-  alertStop,
-  alertWarning,
-  legacyHandsOffFlow,
-  legacyRenewal,
-  mapToFetchNoticesResult,
-  notices,
-  renewalInvitation,
-  returnsInvitation,
-  returnsPaperForm,
-  returnsReminder
 }

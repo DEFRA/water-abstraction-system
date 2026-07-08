@@ -9,7 +9,7 @@ import { generateLicenceRef } from '../helpers/licence.helper.js'
  *
  * @returns {object} Bill run object with generated UUIDs
  */
-function billRun(regionId) {
+export function billRun(regionId) {
   return {
     id: generateUUID(),
     externalId: generateUUID(),
@@ -22,7 +22,7 @@ function billRun(regionId) {
  *
  * @returns {object} Billing account object with generated UUID and account number
  */
-function billingAccount() {
+export function billingAccount() {
   return {
     id: generateUUID(),
     accountNumber: generateAccountNumber()
@@ -36,7 +36,7 @@ function billingAccount() {
  *
  * @returns {object} Mock response object from the Charging Module API
  */
-function chargingModuleResponse(transactionId) {
+export function chargingModuleResponse(transactionId) {
   return {
     succeeded: true,
     response: {
@@ -57,7 +57,7 @@ function chargingModuleResponse(transactionId) {
  *
  * @returns {object} Charge version object with generated UUID and licence
  */
-function chargeVersion(billingAccountId, licence) {
+export function chargeVersion(billingAccountId, licence) {
   // NOTE: We are faking an Objection model which comes with a toJSON() method that gets called as part
   // of processing the billing account.
   const toJSON = () => {
@@ -133,7 +133,7 @@ function chargeVersion(billingAccountId, licence) {
  *
  * @returns {object} Licence object with generated UUID and licence reference
  */
-function licence(region) {
+export function licence(region) {
   return {
     id: generateUUID(),
     licenceRef: generateLicenceRef(),
@@ -149,19 +149,4 @@ function licence(region) {
       chargeRegionId: region.chargeRegionId
     }
   }
-}
-
-export {
-  billRun,
-  billingAccount,
-  chargingModuleResponse,
-  chargeVersion,
-  licence
-}
-export default {
-  billRun,
-  billingAccount,
-  chargingModuleResponse,
-  chargeVersion,
-  licence
 }

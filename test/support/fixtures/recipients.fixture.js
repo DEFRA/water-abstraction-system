@@ -16,7 +16,7 @@ import { generateReference } from '../helpers/return-requirement.helper.js'
  *
  * @returns {object} The ad-hoc returns notice additional email recipient fixture
  */
-function additionalEmailRecipient(licenceRef = null, email = null) {
+export function additionalEmailRecipient(licenceRef = null, email = null) {
   const recipientLicenceRef = licenceRef ?? generateLicenceRef()
   const recipientEmail = email ?? 'additional@returns-notice.com'
 
@@ -48,7 +48,7 @@ function additionalEmailRecipient(licenceRef = null, email = null) {
  *
  * @returns {object} The ad-hoc returns notice additional postal recipient fixture
  */
-function additionalPostalRecipient(licenceRef = null, contact = null) {
+export function additionalPostalRecipient(licenceRef = null, contact = null) {
   const recipientLicenceRef = licenceRef ?? generateLicenceRef()
 
   // NOTE: We take what our helper function would generate for a contact and modify it to match would be set after
@@ -84,7 +84,7 @@ function additionalPostalRecipient(licenceRef = null, contact = null) {
  *
  * @returns {object} The abstraction alert additional contact recipient fixture
  */
-function alertNoticeAdditionalContact() {
+export function alertNoticeAdditionalContact() {
   const email = 'additional.contact@abs-alerts.com'
 
   return {
@@ -105,7 +105,7 @@ function alertNoticeAdditionalContact() {
  *
  * @returns {object} The abstraction alert licence holder recipient fixture
  */
-function alertNoticeLicenceHolder() {
+export function alertNoticeLicenceHolder() {
   const contact = _contact('Alertholder', 'Licence holder')
 
   return {
@@ -126,7 +126,7 @@ function alertNoticeLicenceHolder() {
  *
  * @returns {object} The abstraction alert primary user recipient fixture
  */
-function alertNoticePrimaryUser() {
+export function alertNoticePrimaryUser() {
   const email = 'primary.user@abs-alerts.com'
 
   return {
@@ -147,7 +147,7 @@ function alertNoticePrimaryUser() {
  *
  * @returns {object} The renewal invitation licence holder recipient fixture
  */
-function renewalInvitationLicenceHolder() {
+export function renewalInvitationLicenceHolder() {
   const contact = _contact('4', 'Renewal licence holder')
 
   const recipient = {
@@ -170,7 +170,7 @@ function renewalInvitationLicenceHolder() {
  *
  * @returns {object} The renewal invitation primary user recipient fixture
  */
-function renewalInvitationPrimaryUser() {
+export function renewalInvitationPrimaryUser() {
   const email = 'primary.user@renewal-invitation.com'
 
   const recipient = {
@@ -195,7 +195,7 @@ function renewalInvitationPrimaryUser() {
  *
  * @returns {object} The returns notice licence holder recipient fixture
  */
-function returnsNoticeLicenceHolder(download = false) {
+export function returnsNoticeLicenceHolder(download = false) {
   const contact = _contact('4', 'Returnsholder')
 
   const recipient = {
@@ -231,7 +231,7 @@ function returnsNoticeLicenceHolder(download = false) {
  *
  * @returns {object} The returns notice primary user recipient fixture
  */
-function returnsNoticePrimaryUser(download = false) {
+export function returnsNoticePrimaryUser(download = false) {
   const email = 'primary.user@returns-notice.com'
 
   const recipient = {
@@ -267,7 +267,7 @@ function returnsNoticePrimaryUser(download = false) {
  *
  * @returns {object} The returns notice returns user recipient fixture
  */
-function returnsNoticeReturnsAgent(download = false) {
+export function returnsNoticeReturnsAgent(download = false) {
   const email = 'returns.agent@returns-notice.com'
 
   const recipient = {
@@ -303,7 +303,7 @@ function returnsNoticeReturnsAgent(download = false) {
  *
  * @returns {object} The returns notice returns to recipient fixture
  */
-function returnsNoticeReturnsTo(download = false) {
+export function returnsNoticeReturnsTo(download = false) {
   const contact = _contact('4', 'Returnsto')
 
   const recipient = {
@@ -335,7 +335,7 @@ function returnsNoticeReturnsTo(download = false) {
  *
  * @returns {object} - Returns recipients for primaryUser, licenceHolder and additional contact
  */
-function alertsRecipients() {
+export function alertsRecipients() {
   const licenceHolder = _addLicenceHolder()
 
   return {
@@ -351,7 +351,7 @@ function alertsRecipients() {
  * @returns {object} - Returns recipients for primaryUser, returnsUser, licenceHolder, returnsTo and
  * licenceHolderWithMultipleLicences
  */
-function recipients() {
+export function recipients() {
   return {
     primaryUser: _addPrimaryUser(),
     returnsUser: _addReturnsAgent(),
@@ -495,35 +495,4 @@ function _nonDownloadRecipient(recipient) {
     notificationDueDate: recipient.notificationDueDate,
     return_log_ids: [generateUUID()]
   }
-}
-
-export {
-  additionalEmailRecipient,
-  additionalPostalRecipient,
-  alertNoticeAdditionalContact,
-  alertNoticeLicenceHolder,
-  alertNoticePrimaryUser,
-  alertsRecipients,
-  recipients,
-  renewalInvitationLicenceHolder,
-  renewalInvitationPrimaryUser,
-  returnsNoticeLicenceHolder,
-  returnsNoticePrimaryUser,
-  returnsNoticeReturnsAgent,
-  returnsNoticeReturnsTo
-}
-export default {
-  additionalEmailRecipient,
-  additionalPostalRecipient,
-  alertNoticeAdditionalContact,
-  alertNoticeLicenceHolder,
-  alertNoticePrimaryUser,
-  alertsRecipients,
-  recipients,
-  renewalInvitationLicenceHolder,
-  renewalInvitationPrimaryUser,
-  returnsNoticeLicenceHolder,
-  returnsNoticePrimaryUser,
-  returnsNoticeReturnsAgent,
-  returnsNoticeReturnsTo
 }
