@@ -15,7 +15,7 @@ describe('Contact Type Validator', () => {
     })
 
     it('returns with no errors', () => {
-      const result = ContactTypeValidator.go(payload)
+      const result = ContactTypeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -31,7 +31,7 @@ describe('Contact Type Validator', () => {
     })
 
     it('returns with no errors', () => {
-      const result = ContactTypeValidator.go(payload)
+      const result = ContactTypeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -44,7 +44,7 @@ describe('Contact Type Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ContactTypeValidator.go(payload)
+      const result = ContactTypeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()
@@ -60,7 +60,7 @@ describe('Contact Type Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ContactTypeValidator.go(payload)
+      const result = ContactTypeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()
@@ -77,7 +77,7 @@ describe('Contact Type Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ContactTypeValidator.go(payload)
+      const result = ContactTypeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()
@@ -95,7 +95,7 @@ describe('Contact Type Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ContactTypeValidator.go(payload)
+      const result = ContactTypeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

@@ -23,7 +23,7 @@ describe('Notices - Setup - Alert Type validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
+      const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -40,7 +40,7 @@ describe('Notices - Setup - Alert Type validator', () => {
         })
 
         it('returns with errors', () => {
-          const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
+          const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -56,7 +56,7 @@ describe('Notices - Setup - Alert Type validator', () => {
         })
 
         it('returns with no errors', () => {
-          const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
+          const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeUndefined()
@@ -72,7 +72,7 @@ describe('Notices - Setup - Alert Type validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
+        const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -90,7 +90,7 @@ describe('Notices - Setup - Alert Type validator', () => {
 
     describe('when called with valid data', () => {
       it('returns with no errors', () => {
-        const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
+        const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -109,7 +109,7 @@ describe('Notices - Setup - Alert Type validator', () => {
         })
 
         it('returns with errors', () => {
-          const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
+          const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -125,7 +125,7 @@ describe('Notices - Setup - Alert Type validator', () => {
         })
 
         it('returns with errors', () => {
-          const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
+          const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -146,7 +146,7 @@ describe('Notices - Setup - Alert Type validator', () => {
 
     describe('when called with valid data', () => {
       it('returns with no errors', () => {
-        const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
+        const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -165,7 +165,7 @@ describe('Notices - Setup - Alert Type validator', () => {
         })
 
         it('returns with errors', () => {
-          const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
+          const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -181,7 +181,7 @@ describe('Notices - Setup - Alert Type validator', () => {
         })
 
         it('returns with errors', () => {
-          const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
+          const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -202,7 +202,7 @@ describe('Notices - Setup - Alert Type validator', () => {
 
     describe('when called with valid data', () => {
       it('returns with no errors', () => {
-        const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
+        const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -216,7 +216,7 @@ describe('Notices - Setup - Alert Type validator', () => {
         })
 
         it('returns with errors', () => {
-          const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
+          const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -237,7 +237,7 @@ describe('Notices - Setup - Alert Type validator', () => {
 
     describe('when called with valid data', () => {
       it('returns with no errors', () => {
-        const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
+        const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -251,7 +251,7 @@ describe('Notices - Setup - Alert Type validator', () => {
         })
 
         it('returns with errors', () => {
-          const result = AlertTypeValidator.go(payload, licenceMonitoringStationsData)
+          const result = AlertTypeValidator(payload, licenceMonitoringStationsData)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()

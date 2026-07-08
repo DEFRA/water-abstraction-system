@@ -74,7 +74,7 @@ describe('Notices - View Notice presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = ViewNoticePresenter.go(notice, notifications)
+    const result = ViewNoticePresenter(notice, notifications)
 
     expect(result).toEqual({
       backLink: { href: '/system/notices', text: 'Go back to notices' },
@@ -127,7 +127,7 @@ describe('Notices - View Notice presenter', () => {
           })
 
           it('returns only the populated address lines as an array', () => {
-            const result = ViewNoticePresenter.go(notice, notifications)
+            const result = ViewNoticePresenter(notice, notifications)
 
             expect(result.notifications[0].recipient).toEqual([
               'Clean Water Limited',
@@ -151,7 +151,7 @@ describe('Notices - View Notice presenter', () => {
           })
 
           it('returns only the populated address lines as an array', () => {
-            const result = ViewNoticePresenter.go(notice, notifications)
+            const result = ViewNoticePresenter(notice, notifications)
 
             expect(result.notifications[0].recipient).toEqual([
               'Clean Water Limited',
@@ -168,7 +168,7 @@ describe('Notices - View Notice presenter', () => {
 
       describe('when the "messageType" is "letter"', () => {
         it('returns the recipient email in an array', () => {
-          const result = ViewNoticePresenter.go(notice, notifications)
+          const result = ViewNoticePresenter(notice, notifications)
 
           expect(result.notifications[1].recipient).toEqual(['shaw.carol@atari.com'])
         })

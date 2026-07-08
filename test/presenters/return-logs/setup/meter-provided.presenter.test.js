@@ -15,7 +15,7 @@ describe('Return Logs Setup - Meter Provided presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = MeterProvidedPresenter.go(session)
+      const result = MeterProvidedPresenter(session)
 
       expect(result).toEqual({
         backLink: { href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/units', text: 'Back' },
@@ -34,7 +34,7 @@ describe('Return Logs Setup - Meter Provided presenter', () => {
       })
 
       it('returns a link back to the "check" page', () => {
-        const result = MeterProvidedPresenter.go(session)
+        const result = MeterProvidedPresenter(session)
 
         expect(result.backLink.href).toEqual('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
       })
@@ -42,7 +42,7 @@ describe('Return Logs Setup - Meter Provided presenter', () => {
 
     describe('when the user has come from somewhere else', () => {
       it('returns a link back to the "units" page on', () => {
-        const result = MeterProvidedPresenter.go(session)
+        const result = MeterProvidedPresenter(session)
 
         expect(result.backLink.href).toEqual('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/units')
       })
@@ -56,7 +56,7 @@ describe('Return Logs Setup - Meter Provided presenter', () => {
       })
 
       it('returns the "meterProvided" property populated to re-select the option', () => {
-        const result = MeterProvidedPresenter.go(session)
+        const result = MeterProvidedPresenter(session)
 
         expect(result.meterProvided).toEqual('yes')
       })
@@ -68,7 +68,7 @@ describe('Return Logs Setup - Meter Provided presenter', () => {
       })
 
       it('returns the "meterProvided" property populated to re-select the option', () => {
-        const result = MeterProvidedPresenter.go(session)
+        const result = MeterProvidedPresenter(session)
 
         expect(result.meterProvided).toEqual('no')
       })

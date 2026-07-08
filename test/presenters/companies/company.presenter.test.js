@@ -35,7 +35,7 @@ describe('Companies - Company Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CompanyPresenter.go(companyDetails, role)
+      const result = CompanyPresenter(companyDetails, role)
 
       expect(result).toEqual({
         backLink: {
@@ -80,7 +80,7 @@ describe('Companies - Company Presenter', () => {
       describe('the "address" property', () => {
         describe('when all properties of the address are present', () => {
           it('returns an array of all address properties', () => {
-            const result = CompanyPresenter.go(companyDetails, role)
+            const result = CompanyPresenter(companyDetails, role)
 
             expect(result.companyAddresses[1].address).toEqual([
               'The Tyrell Plaza',
@@ -97,7 +97,7 @@ describe('Companies - Company Presenter', () => {
 
         describe('when some properties of the address are missing', () => {
           it('returns an array of the address properties that are present', () => {
-            const result = CompanyPresenter.go(companyDetails, role)
+            const result = CompanyPresenter(companyDetails, role)
 
             expect(result.companyAddresses[0].address).toEqual([
               'The Tyrell Spire',

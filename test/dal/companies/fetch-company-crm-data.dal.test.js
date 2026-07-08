@@ -21,7 +21,7 @@ describe('Companies - Fetch Company CRM Data dal', () => {
   beforeAll(async () => {
     page = undefined
 
-    crmData = await CRMSeeder.seed()
+    crmData = await CRMSeeder()
 
     roles = ['billing']
 

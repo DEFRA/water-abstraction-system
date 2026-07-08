@@ -12,7 +12,7 @@ describe('Billing Accounts - Setup - Select Company Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = SelectCompanyValidator.go(payload)
+      const result = SelectCompanyValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -25,7 +25,7 @@ describe('Billing Accounts - Setup - Select Company Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = SelectCompanyValidator.go(payload)
+      const result = SelectCompanyValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

@@ -32,7 +32,7 @@ describe('Companies - Licences presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = LicencesPresenter.go(company, licences)
+      const result = LicencesPresenter(company, licences)
 
       expect(result).toEqual({
         backLink: {
@@ -61,7 +61,7 @@ describe('Companies - Licences presenter', () => {
     describe('the "currentLicenceHolder" property', () => {
       describe('when the current licence holder for the licence is the selected company', () => {
         it('returns the selected company name and a null id', () => {
-          const result = LicencesPresenter.go(company, licences)
+          const result = LicencesPresenter(company, licences)
 
           expect(result.licences[0].currentLicenceHolder).toEqual({
             id: null,
@@ -77,7 +77,7 @@ describe('Companies - Licences presenter', () => {
         })
 
         it('returns the current licence holder name and id for the licence', () => {
-          const result = LicencesPresenter.go(company, licences)
+          const result = LicencesPresenter(company, licences)
 
           expect(result.licences[0].currentLicenceHolder).toEqual({
             id: licences[0].currentLicenceHolderId,
@@ -90,7 +90,7 @@ describe('Companies - Licences presenter', () => {
     describe('the "status" property', () => {
       describe('when the licence does not have an end date', () => {
         it('returns null', () => {
-          const result = LicencesPresenter.go(company, licences)
+          const result = LicencesPresenter(company, licences)
 
           expect(result.licences[0].status).toEqual(null)
         })
@@ -102,7 +102,7 @@ describe('Companies - Licences presenter', () => {
         })
 
         it('returns the reason for the licence end', () => {
-          const result = LicencesPresenter.go(company, licences)
+          const result = LicencesPresenter(company, licences)
 
           expect(result.licences[0].status).toEqual('expired')
         })
@@ -114,7 +114,7 @@ describe('Companies - Licences presenter', () => {
         })
 
         it('returns null', () => {
-          const result = LicencesPresenter.go(company, licences)
+          const result = LicencesPresenter(company, licences)
 
           expect(result.licences[0].status).toEqual(null)
         })

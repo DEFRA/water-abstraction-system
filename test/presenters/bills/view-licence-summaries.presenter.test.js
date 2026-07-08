@@ -12,7 +12,7 @@ describe('View Licence Summaries presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = ViewLicenceSummariesPresenter.go(licenceSummaries)
+      const result = ViewLicenceSummariesPresenter(licenceSummaries)
 
       expect(result).toEqual({
         billLicences: [
@@ -45,7 +45,7 @@ describe('View Licence Summaries presenter', () => {
         })
 
         it('returns the count and caption singular', () => {
-          const result = ViewLicenceSummariesPresenter.go(singularLicenceSummary)
+          const result = ViewLicenceSummariesPresenter(singularLicenceSummary)
 
           expect(result.tableCaption).toEqual('1 licence')
         })
@@ -53,7 +53,7 @@ describe('View Licence Summaries presenter', () => {
 
       describe('when there are multiple licence summaries', () => {
         it('returns the count and caption pluralised', () => {
-          const result = ViewLicenceSummariesPresenter.go(licenceSummaries)
+          const result = ViewLicenceSummariesPresenter(licenceSummaries)
 
           expect(result.tableCaption).toEqual('3 licences')
         })

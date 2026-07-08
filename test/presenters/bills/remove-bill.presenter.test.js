@@ -22,7 +22,7 @@ describe('Remove Bill presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = RemoveBillPresenter.go(bill)
+      const result = RemoveBillPresenter(bill)
 
       expect(result).toEqual({
         accountName: 'Example Trading Ltd',
@@ -46,7 +46,7 @@ describe('Remove Bill presenter', () => {
     describe('the "accountName" property', () => {
       describe('when the billing account is not linked to an agent', () => {
         it('returns the name of the company linked to the billing account', () => {
-          const result = RemoveBillPresenter.go(bill)
+          const result = RemoveBillPresenter(bill)
 
           expect(result.accountName).toEqual('Example Trading Ltd')
         })
@@ -62,7 +62,7 @@ describe('Remove Bill presenter', () => {
         })
 
         it('returns the name of the agent company', () => {
-          const result = RemoveBillPresenter.go(bill)
+          const result = RemoveBillPresenter(bill)
 
           expect(result.accountName).toEqual('Alan Broke')
         })
@@ -72,7 +72,7 @@ describe('Remove Bill presenter', () => {
     describe('the "licences" property', () => {
       describe('when there is more than one licence', () => {
         it('returns them as a comma separated list', () => {
-          const result = RemoveBillPresenter.go(bill)
+          const result = RemoveBillPresenter(bill)
 
           expect(result.licences).toEqual('01/01/26/9400, 01/02/26/9400')
         })
@@ -84,7 +84,7 @@ describe('Remove Bill presenter', () => {
         })
 
         it('returns just the single licence reference', () => {
-          const result = RemoveBillPresenter.go(bill)
+          const result = RemoveBillPresenter(bill)
 
           expect(result.licences).toEqual('01/01/26/9400')
         })
@@ -94,7 +94,7 @@ describe('Remove Bill presenter', () => {
     describe('the "licencesText" property', () => {
       describe('when there is more than one licence', () => {
         it('returns "Licences" (plural)', () => {
-          const result = RemoveBillPresenter.go(bill)
+          const result = RemoveBillPresenter(bill)
 
           expect(result.licencesText).toEqual('Licences')
         })
@@ -106,7 +106,7 @@ describe('Remove Bill presenter', () => {
         })
 
         it('returns "Licence" (singular)', () => {
-          const result = RemoveBillPresenter.go(bill)
+          const result = RemoveBillPresenter(bill)
 
           expect(result.licencesText).toEqual('Licence')
         })
@@ -115,7 +115,7 @@ describe('Remove Bill presenter', () => {
 
     describe('the "pageTitle" property', () => {
       it('returns the account number as part of the title', () => {
-        const result = RemoveBillPresenter.go(bill)
+        const result = RemoveBillPresenter(bill)
 
         expect(result.pageTitle).toEqual("You're about to remove the bill for T65757520A from the bill run")
       })
@@ -124,7 +124,7 @@ describe('Remove Bill presenter', () => {
     describe('the "supplementaryMessage" property', () => {
       describe('when there is more than one licence', () => {
         it('returns the message with "licences" (plural)', () => {
-          const result = RemoveBillPresenter.go(bill)
+          const result = RemoveBillPresenter(bill)
 
           expect(result.supplementaryMessage).toEqual('The licences will go into the next supplementary bill run.')
         })
@@ -136,7 +136,7 @@ describe('Remove Bill presenter', () => {
         })
 
         it('returns the message with "licence" (singular)', () => {
-          const result = RemoveBillPresenter.go(bill)
+          const result = RemoveBillPresenter(bill)
 
           expect(result.supplementaryMessage).toEqual('The licence will go into the next supplementary bill run.')
         })

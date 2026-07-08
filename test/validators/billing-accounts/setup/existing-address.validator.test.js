@@ -16,7 +16,7 @@ describe('Billing Accounts - Setup - Existing Address Validator', () => {
       })
 
       it('returns with no errors', () => {
-        const result = ExistingAddressValidator.go(payload, 'Customer Name')
+        const result = ExistingAddressValidator(payload, 'Customer Name')
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -29,7 +29,7 @@ describe('Billing Accounts - Setup - Existing Address Validator', () => {
       })
 
       it('returns with no errors', () => {
-        const result = ExistingAddressValidator.go(payload, 'Customer Name')
+        const result = ExistingAddressValidator(payload, 'Customer Name')
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -43,7 +43,7 @@ describe('Billing Accounts - Setup - Existing Address Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ExistingAddressValidator.go(payload, 'Customer Name')
+      const result = ExistingAddressValidator(payload, 'Customer Name')
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

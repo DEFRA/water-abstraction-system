@@ -10,7 +10,7 @@ const ViewInvalidAddressesPresenter = require('../../../app/presenters/reports/v
 describe('Reports - View invalid addresses presenter', () => {
   describe('when there are no addresses to display', () => {
     it('returns the basic page data', async () => {
-      const result = await ViewInvalidAddressesPresenter.go([])
+      const result = await ViewInvalidAddressesPresenter([])
 
       expect(result).toEqual({
         backLink: { href: '/system/manage', text: 'Go back to manage' },
@@ -23,7 +23,7 @@ describe('Reports - View invalid addresses presenter', () => {
 
   describe('when there are addresses to display', () => {
     it('returns the formatted page data', async () => {
-      const result = await ViewInvalidAddressesPresenter.go(_invalidAddresses())
+      const result = await ViewInvalidAddressesPresenter(_invalidAddresses())
 
       expect(result).toEqual({
         backLink: { href: '/system/manage', text: 'Go back to manage' },

@@ -23,7 +23,7 @@ describe('Company Contacts - Contact Details presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ContactDetailsPresenter.go(company, companyContact, licences)
+      const result = ContactDetailsPresenter(company, companyContact, licences)
 
       expect(result).toEqual({
         additionalContact: true,
@@ -51,7 +51,7 @@ describe('Company Contacts - Contact Details presenter', () => {
       describe('the "additionalContact" property', () => {
         describe('when the contact is an additional contact', () => {
           it('returns true', () => {
-            const result = ContactDetailsPresenter.go(company, companyContact, licences)
+            const result = ContactDetailsPresenter(company, companyContact, licences)
 
             expect(result.additionalContact).toBe(true)
           })
@@ -63,7 +63,7 @@ describe('Company Contacts - Contact Details presenter', () => {
           })
 
           it('returns false', () => {
-            const result = ContactDetailsPresenter.go(company, companyContact, licences)
+            const result = ContactDetailsPresenter(company, companyContact, licences)
 
             expect(result.additionalContact).toBe(false)
           })
@@ -73,7 +73,7 @@ describe('Company Contacts - Contact Details presenter', () => {
       describe('the "created" property', () => {
         describe('when there is "createdByUser"', () => {
           it('returns the created text with the created at date and the created by username', () => {
-            const result = ContactDetailsPresenter.go(company, companyContact, licences)
+            const result = ContactDetailsPresenter(company, companyContact, licences)
 
             expect(result.contact.created).toEqual('1 January 2022 by nexus6.hunter@offworld.net')
           })
@@ -85,7 +85,7 @@ describe('Company Contacts - Contact Details presenter', () => {
           })
 
           it('returns the created text with the created at date', () => {
-            const result = ContactDetailsPresenter.go(company, companyContact, licences)
+            const result = ContactDetailsPresenter(company, companyContact, licences)
 
             expect(result.contact.created).toEqual('1 January 2022')
           })
@@ -95,7 +95,7 @@ describe('Company Contacts - Contact Details presenter', () => {
       describe('the "lastUpdated" property', () => {
         describe('when there is "updatedByUser"', () => {
           it('returns the created text with the updated at date and the updated by username', () => {
-            const result = ContactDetailsPresenter.go(company, companyContact, licences)
+            const result = ContactDetailsPresenter(company, companyContact, licences)
 
             expect(result.contact.lastUpdated).toEqual('1 January 2022 by void.kampff@tyrell.com')
           })
@@ -107,7 +107,7 @@ describe('Company Contacts - Contact Details presenter', () => {
           })
 
           it('returns the created text with the created at date', () => {
-            const result = ContactDetailsPresenter.go(company, companyContact, licences)
+            const result = ContactDetailsPresenter(company, companyContact, licences)
 
             expect(result.contact.lastUpdated).toEqual('1 January 2022')
           })
@@ -117,7 +117,7 @@ describe('Company Contacts - Contact Details presenter', () => {
       describe('the "licences" property', () => {
         describe('when the abstractionAlertType is not "some"', () => {
           it('returns an empty array', () => {
-            const result = ContactDetailsPresenter.go(company, companyContact, licences)
+            const result = ContactDetailsPresenter(company, companyContact, licences)
 
             expect(result.contact.licences).toEqual([])
           })
@@ -132,7 +132,7 @@ describe('Company Contacts - Contact Details presenter', () => {
           })
 
           it('returns the licence refs', () => {
-            const result = ContactDetailsPresenter.go(company, companyContact, licences)
+            const result = ContactDetailsPresenter(company, companyContact, licences)
 
             expect(result.contact.licences).toEqual([licences[0].licenceRef])
           })
@@ -143,7 +143,7 @@ describe('Company Contacts - Contact Details presenter', () => {
     describe('the "warning" property', () => {
       describe('when no licences have ended', () => {
         it('returns null', () => {
-          const result = ContactDetailsPresenter.go(company, companyContact, licences)
+          const result = ContactDetailsPresenter(company, companyContact, licences)
 
           expect(result.warning).toBeNull()
         })
@@ -155,7 +155,7 @@ describe('Company Contacts - Contact Details presenter', () => {
         })
 
         it('returns a warning object', () => {
-          const result = ContactDetailsPresenter.go(company, companyContact, licences)
+          const result = ContactDetailsPresenter(company, companyContact, licences)
 
           expect(result.warning).toEqual({
             text: 'One or more licences for abstraction alerts have ended. No alerts will be sent for these.',

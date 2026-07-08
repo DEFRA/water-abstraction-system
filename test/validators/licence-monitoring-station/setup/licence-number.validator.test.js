@@ -24,7 +24,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
     })
 
     it('returns with no errors', () => {
-      const result = LicenceNumberValidator.go(payload, licence)
+      const result = LicenceNumberValidator(payload, licence)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -38,7 +38,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = LicenceNumberValidator.go(payload, licence)
+        const result = LicenceNumberValidator(payload, licence)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -54,7 +54,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = LicenceNumberValidator.go(payload, licence)
+        const result = LicenceNumberValidator(payload, licence)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -72,7 +72,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = LicenceNumberValidator.go(payload, licence)
+        const result = LicenceNumberValidator(payload, licence)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -90,7 +90,7 @@ describe('Licence Monitoring Station Setup - Licence Number Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = LicenceNumberValidator.go(payload, licence)
+        const result = LicenceNumberValidator(payload, licence)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

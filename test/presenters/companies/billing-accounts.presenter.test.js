@@ -21,7 +21,7 @@ describe('Companies - Billing Accounts presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = BillingAccountsPresenter.go(company, billingAccounts)
+      const result = BillingAccountsPresenter(company, billingAccounts)
 
       expect(result).toEqual({
         backLink: {

@@ -22,7 +22,7 @@ describe('Return Logs Setup - Multiple Entries validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = MultipleEntriesValidator.go(frequency, length, measurementType, payload, startReading)
+        const result = MultipleEntriesValidator(frequency, length, measurementType, payload, startReading)
 
         expect(result.error).toBeUndefined()
       })
@@ -38,7 +38,7 @@ describe('Return Logs Setup - Multiple Entries validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = MultipleEntriesValidator.go(frequency, length, measurementType, payload, startReading)
+        const result = MultipleEntriesValidator(frequency, length, measurementType, payload, startReading)
 
         expect(result.error).toBeUndefined()
       })
@@ -54,7 +54,7 @@ describe('Return Logs Setup - Multiple Entries validator', () => {
       })
 
       it('fails validation with the message "Enter 12 monthly meter readings"', () => {
-        const result = MultipleEntriesValidator.go(frequency, length, measurementType, payload, startReading)
+        const result = MultipleEntriesValidator(frequency, length, measurementType, payload, startReading)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Enter 12 monthly meter readings')
@@ -69,7 +69,7 @@ describe('Return Logs Setup - Multiple Entries validator', () => {
       })
 
       it('fails validation with the message "Enter 12 monthly meter readings"', () => {
-        const result = MultipleEntriesValidator.go(frequency, length, measurementType, payload, startReading)
+        const result = MultipleEntriesValidator(frequency, length, measurementType, payload, startReading)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Enter 12 monthly meter readings')
@@ -86,7 +86,7 @@ describe('Return Logs Setup - Multiple Entries validator', () => {
       })
 
       it('fails validation with the message "Volumes must be 0 or more"', () => {
-        const result = MultipleEntriesValidator.go(frequency, length, measurementType, payload, startReading)
+        const result = MultipleEntriesValidator(frequency, length, measurementType, payload, startReading)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Volumes must be 0 or more')
@@ -103,7 +103,7 @@ describe('Return Logs Setup - Multiple Entries validator', () => {
       })
 
       it('fails validation with the message "Volumes must be a number or x for a blank row"', () => {
-        const result = MultipleEntriesValidator.go(frequency, length, measurementType, payload, startReading)
+        const result = MultipleEntriesValidator(frequency, length, measurementType, payload, startReading)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Volumes must be a number or x for a blank row')
@@ -118,7 +118,7 @@ describe('Return Logs Setup - Multiple Entries validator', () => {
       })
 
       it('fails validation with the message "The meter readings must be greater than or equal to the start reading of 100"', () => {
-        const result = MultipleEntriesValidator.go(frequency, length, measurementType, payload, startReading)
+        const result = MultipleEntriesValidator(frequency, length, measurementType, payload, startReading)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual(
@@ -137,7 +137,7 @@ describe('Return Logs Setup - Multiple Entries validator', () => {
       })
 
       it('fails validation with the message "Each meter reading must be greater than or equal to the previous reading"', () => {
-        const result = MultipleEntriesValidator.go(frequency, length, measurementType, payload, startReading)
+        const result = MultipleEntriesValidator(frequency, length, measurementType, payload, startReading)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual(
@@ -169,7 +169,7 @@ describe('Return Logs Setup - Multiple Entries validator', () => {
       })
 
       it('fails validation with the message "Volumes must be between 0 and 9007199254740991"', () => {
-        const result = MultipleEntriesValidator.go(frequency, length, measurementType, payload, startReading)
+        const result = MultipleEntriesValidator(frequency, length, measurementType, payload, startReading)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Volumes must be between 0 and 9007199254740991')

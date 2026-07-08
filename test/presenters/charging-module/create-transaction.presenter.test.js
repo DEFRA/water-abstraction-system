@@ -55,7 +55,7 @@ describe('Charging Module Create Transaction presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = CreateTransactionPresenter.go(transaction, accountNumber, licence)
+      const result = CreateTransactionPresenter(transaction, accountNumber, licence)
 
       expect(result.clientId).toEqual(transaction.id)
       expect(result.ruleset).toEqual('sroc')

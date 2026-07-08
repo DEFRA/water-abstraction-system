@@ -37,7 +37,7 @@ describe('Previous and next presenter', () => {
   describe('when the anchor element is in the array', () => {
     describe('and there is a "previous" and "next" element', () => {
       it('returns the populated "previous" and "next" elements', () => {
-        const result = PreviousAndNextPresenter.go(arrayOfElements, anchorElement)
+        const result = PreviousAndNextPresenter(arrayOfElements, anchorElement)
 
         expect(result).toEqual({
           previous: previousElement,
@@ -52,7 +52,7 @@ describe('Previous and next presenter', () => {
       })
 
       it('returns the populated "previous" element', () => {
-        const result = PreviousAndNextPresenter.go(arrayOfElements, anchorElement)
+        const result = PreviousAndNextPresenter(arrayOfElements, anchorElement)
 
         expect(result).toEqual({
           previous: previousElement,
@@ -67,7 +67,7 @@ describe('Previous and next presenter', () => {
       })
 
       it('returns the populated "next" element', () => {
-        const result = PreviousAndNextPresenter.go(arrayOfElements, anchorElement)
+        const result = PreviousAndNextPresenter(arrayOfElements, anchorElement)
 
         expect(result).toEqual({
           previous: null,
@@ -82,7 +82,7 @@ describe('Previous and next presenter', () => {
       })
 
       it('returns the "previous" and "next" elements as null', () => {
-        const result = PreviousAndNextPresenter.go(arrayOfElements, anchorElement)
+        const result = PreviousAndNextPresenter(arrayOfElements, anchorElement)
 
         expect(result).toEqual({
           previous: null,
@@ -105,7 +105,7 @@ describe('Previous and next presenter', () => {
     })
 
     it('returns the "previous" and "next" as null', () => {
-      const result = PreviousAndNextPresenter.go(arrayOfElements, anchorElement)
+      const result = PreviousAndNextPresenter(arrayOfElements, anchorElement)
 
       expect(result).toEqual({
         previous: null,

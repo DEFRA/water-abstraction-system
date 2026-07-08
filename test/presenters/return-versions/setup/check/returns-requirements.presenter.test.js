@@ -24,7 +24,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = ReturnRequirementsPresenter.go([requirement], [point], journey)
+        const result = ReturnRequirementsPresenter([requirement], [point], journey)
 
         expect(result).toEqual({
           returnsRequired: true,
@@ -46,7 +46,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
 
       describe('the requirements "abstractionPeriod" property', () => {
         it('formats the abstraction period for display', () => {
-          const result = ReturnRequirementsPresenter.go([requirement], [point], journey)
+          const result = ReturnRequirementsPresenter([requirement], [point], journey)
 
           const { abstractionPeriod } = result.requirements[0]
 
@@ -61,7 +61,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
           })
 
           it('returns "None"', () => {
-            const result = ReturnRequirementsPresenter.go([requirement], [point], journey)
+            const result = ReturnRequirementsPresenter([requirement], [point], journey)
 
             const { agreementsExceptions } = result.requirements[0]
 
@@ -71,7 +71,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
 
         describe('when one option was selected', () => {
           it("returns the option's display text (Gravity fill)", () => {
-            const result = ReturnRequirementsPresenter.go([requirement], [point], journey)
+            const result = ReturnRequirementsPresenter([requirement], [point], journey)
 
             const { agreementsExceptions } = result.requirements[0]
 
@@ -85,7 +85,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
           })
 
           it('returns the options display text joined with an "and" (Gravity fill and Transfer re-abstraction scheme)', () => {
-            const result = ReturnRequirementsPresenter.go([requirement], [point], journey)
+            const result = ReturnRequirementsPresenter([requirement], [point], journey)
 
             const { agreementsExceptions } = result.requirements[0]
 
@@ -104,7 +104,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
           })
 
           it('returns the options display text joined with an ", and" (Gravity fill, Transfer re-abstraction scheme, Two-part tariff, and 56 returns exception)', () => {
-            const result = ReturnRequirementsPresenter.go([requirement], [point], journey)
+            const result = ReturnRequirementsPresenter([requirement], [point], journey)
 
             const { agreementsExceptions } = result.requirements[0]
 
@@ -118,7 +118,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
       describe('the requirements "points" property', () => {
         // Formatting of the points is handled by PointModel.$describe() so testing is light here
         it('formats the points for display', () => {
-          const result = ReturnRequirementsPresenter.go([requirement], [point], journey)
+          const result = ReturnRequirementsPresenter([requirement], [point], journey)
 
           const { points } = result.requirements[0]
 
@@ -133,7 +133,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
           })
 
           it('formats the purposes for display with the purpose description in brackets', () => {
-            const result = ReturnRequirementsPresenter.go([requirement], [point], journey)
+            const result = ReturnRequirementsPresenter([requirement], [point], journey)
 
             const { purposes } = result.requirements[0]
 
@@ -143,7 +143,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
 
         describe('when a purpose description (alias) was not added to the selected purpose', () => {
           it('formats the purposes for display with just the default description', () => {
-            const result = ReturnRequirementsPresenter.go([requirement], [point], journey)
+            const result = ReturnRequirementsPresenter([requirement], [point], journey)
 
             const { purposes } = result.requirements[0]
 
@@ -155,7 +155,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
       describe('the requirements "returnsCycle" property', () => {
         describe('when the requirement is for the "summer" returns cycle', () => {
           it('formats the cycle for display (Summer)', () => {
-            const result = ReturnRequirementsPresenter.go([requirement], [point], journey)
+            const result = ReturnRequirementsPresenter([requirement], [point], journey)
 
             const { returnsCycle } = result.requirements[0]
 
@@ -169,7 +169,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
           })
 
           it('formats the cycle for display (Winter and all year)', () => {
-            const result = ReturnRequirementsPresenter.go([requirement], [point], journey)
+            const result = ReturnRequirementsPresenter([requirement], [point], journey)
 
             const { returnsCycle } = result.requirements[0]
 
@@ -186,7 +186,7 @@ describe('Return Versions Setup - Return Requirements presenter', () => {
       })
 
       it('correctly presents the data (empty requirements)', () => {
-        const result = ReturnRequirementsPresenter.go([requirement], [point], journey)
+        const result = ReturnRequirementsPresenter([requirement], [point], journey)
 
         expect(result).toEqual({
           returnsRequired: true,

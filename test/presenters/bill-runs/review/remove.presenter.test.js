@@ -15,7 +15,7 @@ describe('Bill Runs Review - Remove presenter', () => {
 
   describe('when provided with the result of fetch remove review licence service', () => {
     it('correctly presents the data', () => {
-      const result = RemovePresenter.go(removeReviewLicence)
+      const result = RemovePresenter(removeReviewLicence)
 
       expect(result).toEqual({
         billRunNumber: 10001,

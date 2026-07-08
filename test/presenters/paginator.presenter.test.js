@@ -42,7 +42,7 @@ describe('Paginator Presenter', () => {
       })
 
       it('returns just the number of pages calculated (no pagination component returned)', () => {
-        const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+        const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
         expect(result).toEqual({
           currentPageNumber: 1,
@@ -52,7 +52,7 @@ describe('Paginator Presenter', () => {
       })
 
       it('returns the "Showing all X <message>" message', () => {
-        const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+        const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
         expect(result.showingMessage).toEqual('Showing all 1 notices')
       })
@@ -72,7 +72,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns [1] 2 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -95,7 +95,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 [2]', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -124,7 +124,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns [1] 2  3 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -148,7 +148,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 [2] 3 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -173,7 +173,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 [3]', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -203,7 +203,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns [1] 2 3 4 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -228,7 +228,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 [2] 3 4 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -254,7 +254,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 3 [4]', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -285,7 +285,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns [1] 2 3 4 5 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -311,7 +311,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 [3] 4 5 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -338,7 +338,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 3 4 [5]', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -370,7 +370,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns [1] 2 3 4 5 6 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -397,7 +397,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 [3] 4 5 6 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -425,7 +425,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 3 4 5 [6]', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -458,7 +458,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns [1] 2 3 4 5 6 7 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -486,7 +486,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 3 [4] 5 6 7 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -515,7 +515,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 3 4 5 6 [7]', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -549,7 +549,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns [1] 2 3 4 5 .. 8 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -577,7 +577,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 3 [4] 5 .. 8 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -606,7 +606,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 .. 4 [5] 6 7 8 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -635,7 +635,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 .. 4 5 6 7 [8]', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -669,7 +669,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns [1] 2 3 4 5 .. 9 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -697,7 +697,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 3 [4] 5 .. 9 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -726,7 +726,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 .. 4 [5] 6 .. 9 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -755,7 +755,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 .. 5 [6] 7 8 9 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -784,7 +784,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 .. 5 6 7 8 [9]', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -818,7 +818,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns [1] 2 3 4 5 .. 100 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -846,7 +846,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 3 [4] 5 .. 100 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -875,7 +875,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 .. 48 [49] 50 .. 100 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -904,7 +904,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 .. 96 [97] 98 99 100 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -934,7 +934,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 .. 96 97 98 99 [100]', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -957,7 +957,7 @@ describe('Paginator Presenter', () => {
 
           describe('when "numberOfShownItems" is less than the default page size', () => {
             it('returns the "Showing 3 of 4975 notices"', () => {
-              const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
+              const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message)
 
               expect(result.showingMessage).toEqual(`Showing ${currentAmount} of 4975 notices`)
             })
@@ -982,7 +982,7 @@ describe('Paginator Presenter', () => {
         })
 
         it('encodes special characters correctly', () => {
-          const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+          const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
           expect(result.component.previous.href).toEqual('/system/bill-runs?page=99&name=Mr+T')
         })
@@ -999,7 +999,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns [1] 2 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -1034,7 +1034,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 [2]', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -1075,7 +1075,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns [1] 2  3 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -1116,7 +1116,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 [2] 3 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -1160,7 +1160,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 [3]', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -1207,7 +1207,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns [1] 2 3 4 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -1254,7 +1254,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 [2] 3 4 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -1304,7 +1304,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 3 [4]', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -1357,7 +1357,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns [1] 2 3 4 5 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -1410,7 +1410,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 [3] 4 5 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -1466,7 +1466,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 3 4 [5]', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -1525,7 +1525,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns [1] 2 3 4 5 6 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -1584,7 +1584,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 [3] 4 5 6 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -1646,7 +1646,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 3 4 5 [6]', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -1711,7 +1711,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns [1] 2 3 4 5 6 7 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -1776,7 +1776,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 3 [4] 5 6 7 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -1844,7 +1844,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 3 4 5 6 [7]', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -1915,7 +1915,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns [1] 2 3 4 5 .. 8 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -1975,7 +1975,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 3 [4] 5 .. 8 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -2038,7 +2038,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 .. 4 [5] 6 7 8 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -2101,7 +2101,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 .. 4 5 6 7 [8]', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -2167,7 +2167,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns [1] 2 3 4 5 .. 9 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -2227,7 +2227,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 3 [4] 5 .. 9 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -2290,7 +2290,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 .. 4 [5] 6 .. 9 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -2348,7 +2348,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 .. 5 [6] 7 8 9 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -2411,7 +2411,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 .. 5 6 7 8 [9]', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -2477,7 +2477,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns [1] 2 3 4 5 .. 100 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -2537,7 +2537,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 2 3 [4] 5 .. 100 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -2600,7 +2600,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 .. 48 [49] 50 .. 100 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -2658,7 +2658,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 .. 96 [97] 98 99 100 Next ->', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,
@@ -2721,7 +2721,7 @@ describe('Paginator Presenter', () => {
           })
 
           it('returns <- Previous 1 .. 96 97 98 99 [100]', () => {
-            const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
+            const result = PaginatorPresenter(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).toEqual({
               currentPageNumber: selectedPage,

@@ -179,7 +179,7 @@ describe('Search - Search presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
+    const result = SearchPresenter(userScopes, query, resultType, page, allSearchMatches)
 
     expect(result).toEqual({
       filterItems: [
@@ -363,7 +363,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns no selected items', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
+        const result = SearchPresenter(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.filterItems).toEqual([
           {
@@ -406,7 +406,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns the selected item', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
+        const result = SearchPresenter(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.filterItems).toEqual([
           {
@@ -449,7 +449,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns no selected items', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
+        const result = SearchPresenter(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.filterItems).toEqual([
           {
@@ -492,7 +492,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('does not include the "billingAccount" item', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
+        const result = SearchPresenter(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.filterItems).toEqual([
           {
@@ -535,7 +535,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns "true"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
+        const result = SearchPresenter(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.noResults).toBe(true)
       })
@@ -551,7 +551,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns "Search"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
+        const result = SearchPresenter(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.pageTitle).toEqual('Search')
       })
@@ -559,7 +559,7 @@ describe('Search - Search presenter', () => {
 
     describe('when there are search results', () => {
       it('returns "Search results" with the text being searched for', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
+        const result = SearchPresenter(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.pageTitle).toEqual('Search results for "searchthis"')
       })
@@ -573,7 +573,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns "false"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
+        const result = SearchPresenter(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.showResults).toBe(false)
       })
@@ -581,7 +581,7 @@ describe('Search - Search presenter', () => {
 
     describe('when a search result page is requested', () => {
       it('returns "true"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
+        const result = SearchPresenter(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.showResults).toBe(true)
       })
@@ -595,7 +595,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns a blank name', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
+        const result = SearchPresenter(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.results[2].col2Value).toEqual('')
       })
@@ -609,7 +609,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns a blank name', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
+        const result = SearchPresenter(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.results[2].col2Value).toEqual('')
       })
@@ -628,7 +628,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns the `reason` value', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
+        const result = SearchPresenter(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.results[2].statusTag).toEqual('revoked')
       })
@@ -648,7 +648,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns an empty value', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
+        const result = SearchPresenter(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.results[2].statusTag).toBeNull()
       })
@@ -658,7 +658,7 @@ describe('Search - Search presenter', () => {
   describe('the licence holder property "col2Value" for users', () => {
     describe('when a user has a last login date', () => {
       it('returns the formatted last login date', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
+        const result = SearchPresenter(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.results[5].col3Value).toEqual('1 January 2001')
       })
@@ -670,7 +670,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns "Never"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
+        const result = SearchPresenter(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.results[5].col3Value).toEqual('Never')
       })

@@ -40,7 +40,7 @@ describe('Company Contacts - Communications presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CommunicationsPresenter.go(company, companyContact, notifications)
+      const result = CommunicationsPresenter(company, companyContact, notifications)
 
       expect(result).toEqual({
         backLink: {
@@ -67,7 +67,7 @@ describe('Company Contacts - Communications presenter', () => {
 
     describe('the "notifications" property', () => {
       it('returns the notifications with the company id as query string in the link', () => {
-        const result = CommunicationsPresenter.go(company, companyContact, notifications)
+        const result = CommunicationsPresenter(company, companyContact, notifications)
 
         expect(result.notifications[0].link.href).toEqual(
           `/system/notifications/${notification.id}?companyContactId=${companyContact.id}`

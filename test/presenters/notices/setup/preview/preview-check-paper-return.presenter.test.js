@@ -32,7 +32,7 @@ describe('Notices - Setup - Preview - Check Paper Return presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = PreviewCheckPaperReturnPresenter.go(session, contactHashId)
+      const result = PreviewCheckPaperReturnPresenter(session, contactHashId)
 
       expect(result).toEqual({
         backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
@@ -73,7 +73,7 @@ describe('Notices - Setup - Preview - Check Paper Return presenter', () => {
           })
 
           it('returns page data for the view', () => {
-            const result = PreviewCheckPaperReturnPresenter.go(session, contactHashId)
+            const result = PreviewCheckPaperReturnPresenter(session, contactHashId)
 
             expect(result.returnLogs).toEqual([
               {
@@ -105,7 +105,7 @@ describe('Notices - Setup - Preview - Check Paper Return presenter', () => {
           })
 
           it('returns page data for the view - with only the selected returns', () => {
-            const result = PreviewCheckPaperReturnPresenter.go(session, contactHashId)
+            const result = PreviewCheckPaperReturnPresenter(session, contactHashId)
 
             expect(result.returnLogs).toEqual([
               {

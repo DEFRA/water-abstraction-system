@@ -13,7 +13,7 @@ describe('Return Logs Setup - Units validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = UnitsValidator.go(payload)
+        const result = UnitsValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -25,7 +25,7 @@ describe('Return Logs Setup - Units validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = UnitsValidator.go(payload)
+        const result = UnitsValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -37,7 +37,7 @@ describe('Return Logs Setup - Units validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = UnitsValidator.go(payload)
+        const result = UnitsValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -49,7 +49,7 @@ describe('Return Logs Setup - Units validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = UnitsValidator.go(payload)
+        const result = UnitsValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -63,7 +63,7 @@ describe('Return Logs Setup - Units validator', () => {
       })
 
       it('fails validation with the message "Select which units were used"', () => {
-        const result = UnitsValidator.go(payload)
+        const result = UnitsValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Select which units were used')

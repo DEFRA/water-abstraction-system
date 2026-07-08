@@ -26,7 +26,7 @@ describe('Notifications - View Notification presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = ViewNotificationPresenter.go(notification, licence)
+    const result = ViewNotificationPresenter(notification, licence)
 
     expect(result).toEqual({
       activeNavBar: 'search',
@@ -51,7 +51,7 @@ describe('Notifications - View Notification presenter', () => {
   describe('the "activeNavBar" property', () => {
     describe('when a licence is provided', () => {
       it('returns "search"', () => {
-        const result = ViewNotificationPresenter.go(notification, licence)
+        const result = ViewNotificationPresenter(notification, licence)
 
         expect(result.activeNavBar).to.be.toEqual('search')
       })
@@ -59,7 +59,7 @@ describe('Notifications - View Notification presenter', () => {
 
     describe('when no licence is provided', () => {
       it('returns "notices"', () => {
-        const result = ViewNotificationPresenter.go(notification)
+        const result = ViewNotificationPresenter(notification)
 
         expect(result.activeNavBar).to.be.toEqual('notices')
       })
@@ -69,7 +69,7 @@ describe('Notifications - View Notification presenter', () => {
   describe('the "address" property', () => {
     describe('when the "messageType" is "email"', () => {
       it('returns an empty array', () => {
-        const result = ViewNotificationPresenter.go(notification, licence)
+        const result = ViewNotificationPresenter(notification, licence)
 
         expect(result.address).toHaveLength(0)
       })
@@ -88,7 +88,7 @@ describe('Notifications - View Notification presenter', () => {
         })
 
         it('returns all populated address fields including postcode', () => {
-          const result = ViewNotificationPresenter.go(notification, licence)
+          const result = ViewNotificationPresenter(notification, licence)
 
           expect(result.address).toEqual([
             'ACME Services Ltd',
@@ -104,7 +104,7 @@ describe('Notifications - View Notification presenter', () => {
 
       describe('and it is a newer notification where "address_line_7" is populated', () => {
         it('returns all populated address fields', () => {
-          const result = ViewNotificationPresenter.go(notification, licence)
+          const result = ViewNotificationPresenter(notification, licence)
 
           expect(result.address).toEqual([
             'ACME Services Ltd',
@@ -125,7 +125,7 @@ describe('Notifications - View Notification presenter', () => {
         })
 
         it('returns only the populated address fields', () => {
-          const result = ViewNotificationPresenter.go(notification, licence)
+          const result = ViewNotificationPresenter(notification, licence)
 
           expect(result.address).toEqual([
             'ACME Services Ltd',
@@ -142,7 +142,7 @@ describe('Notifications - View Notification presenter', () => {
   describe('the "alertDetails" property', () => {
     describe('when the notification is not a water abstraction alert', () => {
       it('returns null', () => {
-        const result = ViewNotificationPresenter.go(notification, licence)
+        const result = ViewNotificationPresenter(notification, licence)
 
         expect(result.alertDetails).toBeNull()
       })
@@ -163,7 +163,7 @@ describe('Notifications - View Notification presenter', () => {
 
         describe('where "monitoring_station_name" is populated', () => {
           it('returns details for the alert, including the monitoring station name', () => {
-            const result = ViewNotificationPresenter.go(notification, licence)
+            const result = ViewNotificationPresenter(notification, licence)
 
             expect(result.alertDetails).toEqual({
               alertType: 'Not recorded',
@@ -175,7 +175,7 @@ describe('Notifications - View Notification presenter', () => {
 
         describe('where "alertType" is not populated', () => {
           it('returns details for the alert, though alert type is "Not recorded"', () => {
-            const result = ViewNotificationPresenter.go(notification, licence)
+            const result = ViewNotificationPresenter(notification, licence)
 
             expect(result.alertDetails).toEqual({
               alertType: 'Not recorded',
@@ -189,7 +189,7 @@ describe('Notifications - View Notification presenter', () => {
       describe('and its a newer notification', () => {
         describe('where "label" is populated', () => {
           it('returns details for the alert, including the monitoring station name', () => {
-            const result = ViewNotificationPresenter.go(notification, licence)
+            const result = ViewNotificationPresenter(notification, licence)
 
             expect(result.alertDetails).toEqual({
               alertType: 'Stop',
@@ -207,7 +207,7 @@ describe('Notifications - View Notification presenter', () => {
           })
 
           it('returns details for the alert, including the alert type', () => {
-            const result = ViewNotificationPresenter.go(notification, licence)
+            const result = ViewNotificationPresenter(notification, licence)
 
             expect(result.alertDetails).toEqual({
               alertType: 'Stop or reduce',
@@ -223,7 +223,7 @@ describe('Notifications - View Notification presenter', () => {
   describe('the "backLink" property', () => {
     describe('when a licence is provided', () => {
       it('returns a back link to the view licence communications page', () => {
-        const result = ViewNotificationPresenter.go(notification, licence)
+        const result = ViewNotificationPresenter(notification, licence)
 
         expect(result.backLink).to.be.toEqual({
           href: `/system/licences/${licence.id}/communications`,
@@ -236,7 +236,7 @@ describe('Notifications - View Notification presenter', () => {
       it('returns a back link to the view return log communications page', () => {
         const returnLogId = generateUUID()
 
-        const result = ViewNotificationPresenter.go(notification, null, returnLogId)
+        const result = ViewNotificationPresenter(notification, null, returnLogId)
 
         expect(result.backLink).to.be.toEqual({
           href: `/system/return-logs/${returnLogId}/communications`,
@@ -249,7 +249,7 @@ describe('Notifications - View Notification presenter', () => {
       it('returns a back link to the view company contact page', () => {
         const companyContactId = generateUUID()
 
-        const result = ViewNotificationPresenter.go(notification, null, null, companyContactId)
+        const result = ViewNotificationPresenter(notification, null, null, companyContactId)
 
         expect(result.backLink).to.be.toEqual({
           href: `/system/company-contacts/${companyContactId}/communications`,
@@ -260,7 +260,7 @@ describe('Notifications - View Notification presenter', () => {
 
     describe('when no licence is provided', () => {
       it('returns a back link to the view notice page', () => {
-        const result = ViewNotificationPresenter.go(notification)
+        const result = ViewNotificationPresenter(notification)
 
         expect(result.backLink).to.be.toEqual({
           href: `/system/notices/${notice.id}`,
@@ -273,7 +273,7 @@ describe('Notifications - View Notification presenter', () => {
   describe('the "pageTitleCaption" property', () => {
     describe('when a licence is provided', () => {
       it('returns a caption with the licence reference', () => {
-        const result = ViewNotificationPresenter.go(notification, licence)
+        const result = ViewNotificationPresenter(notification, licence)
 
         expect(result.pageTitleCaption).to.be.toEqual(`Licence ${licence.licenceRef}`)
       })
@@ -281,7 +281,7 @@ describe('Notifications - View Notification presenter', () => {
 
     describe('when no licence is provided', () => {
       it('returns a caption with the notice reference', () => {
-        const result = ViewNotificationPresenter.go(notification)
+        const result = ViewNotificationPresenter(notification)
 
         expect(result.pageTitleCaption).to.be.toEqual(`Notice ${notice.referenceCode}`)
       })
@@ -291,7 +291,7 @@ describe('Notifications - View Notification presenter', () => {
   describe('the "paperForm" property', () => {
     describe('when the notification is not a paper return or reminder', () => {
       it('returns null', () => {
-        const result = ViewNotificationPresenter.go(notification, licence)
+        const result = ViewNotificationPresenter(notification, licence)
 
         expect(result.paperForm).toBeNull()
       })
@@ -311,7 +311,7 @@ describe('Notifications - View Notification presenter', () => {
         })
 
         it('returns paper return or reminder details without a link to view the PDF', () => {
-          const result = ViewNotificationPresenter.go(notification, licence)
+          const result = ViewNotificationPresenter(notification, licence)
 
           expect(result.paperForm).toEqual({
             downloadLink: null,
@@ -330,7 +330,7 @@ describe('Notifications - View Notification presenter', () => {
         })
 
         it('returns paper return or reminder details with a link to view the PDF', () => {
-          const result = ViewNotificationPresenter.go(notification, licence)
+          const result = ViewNotificationPresenter(notification, licence)
 
           expect(result.paperForm).toEqual({
             downloadLink: `/system/notifications/${notification.id}/download`,
@@ -349,7 +349,7 @@ describe('Notifications - View Notification presenter', () => {
         })
 
         it('returns an empty site description in the "paperForm" details', () => {
-          const result = ViewNotificationPresenter.go(notification, licence)
+          const result = ViewNotificationPresenter(notification, licence)
 
           expect(result.paperForm.siteDescription).toHaveLength(0)
         })
@@ -360,7 +360,7 @@ describe('Notifications - View Notification presenter', () => {
   describe('the "reference" property', () => {
     describe('when a licence is provided', () => {
       it('returns the notice reference', () => {
-        const result = ViewNotificationPresenter.go(notification, licence)
+        const result = ViewNotificationPresenter(notification, licence)
 
         expect(result.reference).to.be.toEqual(notice.referenceCode)
       })
@@ -368,7 +368,7 @@ describe('Notifications - View Notification presenter', () => {
 
     describe('when no licence is provided', () => {
       it('returns null', () => {
-        const result = ViewNotificationPresenter.go(notification)
+        const result = ViewNotificationPresenter(notification)
 
         expect(result.reference).toBeNull()
       })
@@ -378,7 +378,7 @@ describe('Notifications - View Notification presenter', () => {
   describe('the "returnedDate" property', () => {
     describe('when the notification does not have a "returnedAt" value', () => {
       it('returns null', () => {
-        const result = ViewNotificationPresenter.go(notification, licence)
+        const result = ViewNotificationPresenter(notification, licence)
 
         expect(result.returnedDate).toBeNull()
       })
@@ -390,7 +390,7 @@ describe('Notifications - View Notification presenter', () => {
       })
 
       it('returns the "returnedAt" date formatted for the page', () => {
-        const result = ViewNotificationPresenter.go(notification, licence)
+        const result = ViewNotificationPresenter(notification, licence)
 
         expect(result.returnedDate).toEqual('13 October 2025')
       })
@@ -400,7 +400,7 @@ describe('Notifications - View Notification presenter', () => {
   describe('the "sentTo" property', () => {
     describe('when the "messageType" is "email"', () => {
       it('returns the "recipient"', () => {
-        const result = ViewNotificationPresenter.go(notification, licence)
+        const result = ViewNotificationPresenter(notification, licence)
 
         expect(result.sentTo).toEqual('grace.hopper@acme.co.uk')
       })
@@ -413,7 +413,7 @@ describe('Notifications - View Notification presenter', () => {
       })
 
       it('returns the "address_line_1"', () => {
-        const result = ViewNotificationPresenter.go(notification, licence)
+        const result = ViewNotificationPresenter(notification, licence)
 
         expect(result.sentTo).toEqual('ACME Services Ltd')
       })

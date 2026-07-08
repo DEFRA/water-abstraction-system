@@ -14,7 +14,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
 
   describe('when provided with a populated session', () => {
     it('correctly presents the data', () => {
-      const result = VolumesPresenter.go(session, yearMonth)
+      const result = VolumesPresenter(session, yearMonth)
 
       expect(result).toEqual({
         backLink: { href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/check', text: 'Back' },
@@ -40,7 +40,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
       })
 
       it('returns the line data for April 2023', () => {
-        const result = VolumesPresenter.go(session, yearMonth)
+        const result = VolumesPresenter(session, yearMonth)
 
         expect(result.inputLines).toEqual([
           {
@@ -58,7 +58,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
         })
 
         it('correctly formats the line label', () => {
-          const result = VolumesPresenter.go(session, yearMonth)
+          const result = VolumesPresenter(session, yearMonth)
 
           expect(result.inputLines[0].label).toEqual('30 April 2023')
         })
@@ -70,7 +70,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
         })
 
         it('correctly formats the line label', () => {
-          const result = VolumesPresenter.go(session, yearMonth)
+          const result = VolumesPresenter(session, yearMonth)
 
           expect(result.inputLines[0].label).toEqual('Week ending 30 April 2023')
         })
@@ -82,7 +82,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
         })
 
         it('correctly formats the line label', () => {
-          const result = VolumesPresenter.go(session, yearMonth)
+          const result = VolumesPresenter(session, yearMonth)
 
           expect(result.inputLines[0].label).toEqual('April 2023')
         })
@@ -94,7 +94,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
         })
 
         it('includes the error message in the line data', () => {
-          const result = VolumesPresenter.go(session, yearMonth)
+          const result = VolumesPresenter(session, yearMonth)
 
           expect(result.inputLines).toEqual([
             {
@@ -117,7 +117,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
       })
 
       it('returns the page title for June', () => {
-        const result = VolumesPresenter.go(session, yearMonth)
+        const result = VolumesPresenter(session, yearMonth)
 
         expect(result.pageTitle).toEqual('Water abstracted June 2023')
       })
@@ -131,7 +131,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
       })
 
       it('returns the unit of measurement as "Cubic metres"', () => {
-        const result = VolumesPresenter.go(session, yearMonth)
+        const result = VolumesPresenter(session, yearMonth)
 
         expect(result.units).toEqual('Cubic metres')
       })
@@ -143,7 +143,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
       })
 
       it('returns the unit of measurement as "Litres"', () => {
-        const result = VolumesPresenter.go(session, yearMonth)
+        const result = VolumesPresenter(session, yearMonth)
 
         expect(result.units).toEqual('Litres')
       })
@@ -155,7 +155,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
       })
 
       it('returns the unit of measurement as "Megalitres"', () => {
-        const result = VolumesPresenter.go(session, yearMonth)
+        const result = VolumesPresenter(session, yearMonth)
 
         expect(result.units).toEqual('Megalitres')
       })
@@ -167,7 +167,7 @@ describe('Return Logs Setup - Volumes presenter', () => {
       })
 
       it('returns the unit of measurement as "Gallons"', () => {
-        const result = VolumesPresenter.go(session, yearMonth)
+        const result = VolumesPresenter(session, yearMonth)
 
         expect(result.units).toEqual('Gallons')
       })

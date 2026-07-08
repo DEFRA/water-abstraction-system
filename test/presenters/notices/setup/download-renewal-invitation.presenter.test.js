@@ -24,7 +24,7 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
     })
 
     it('correctly formats the data to a csv string', () => {
-      const result = DownloadRenewalInvitationPresenter.go([recipient], session)
+      const result = DownloadRenewalInvitationPresenter([recipient], session)
 
       const recipientRow = _transformRecipientToRow(recipient, session)
       const expected =
@@ -42,7 +42,7 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
     })
 
     it('correctly formats the data to a csv string', () => {
-      const result = DownloadRenewalInvitationPresenter.go([recipient], session)
+      const result = DownloadRenewalInvitationPresenter([recipient], session)
 
       const recipientRow = _transformRecipientToRow(recipient, session)
       const expected =
@@ -61,7 +61,7 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
     })
 
     it('joins the licence refs with a comma', () => {
-      const result = DownloadRenewalInvitationPresenter.go([recipient], session)
+      const result = DownloadRenewalInvitationPresenter([recipient], session)
 
       const recipientRow = _transformRecipientToRow(recipient, session)
       const expected =

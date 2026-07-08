@@ -29,7 +29,7 @@ describe('Licence Monitoring Station Setup - Check Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view with default session data', () => {
-      const result = CheckPresenter.go(session)
+      const result = CheckPresenter(session)
 
       expect(result).toMatchObject({
         abstractionPeriod: '1 January to 31 December',
@@ -44,7 +44,7 @@ describe('Licence Monitoring Station Setup - Check Presenter', () => {
     })
 
     it('returns correct change links', () => {
-      const result = CheckPresenter.go(session)
+      const result = CheckPresenter(session)
 
       expect(result.links).toEqual({
         threshold: '/system/licence-monitoring-station/setup/b9593e3f-865e-4594-a686-2be8910a876b/threshold-and-unit',
@@ -63,7 +63,7 @@ describe('Licence Monitoring Station Setup - Check Presenter', () => {
       })
 
       it('correctly sets "abstractionPeriodManuallyEntered" to "true"', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.abstractionPeriodManuallyEntered).toBe(true)
       })
@@ -75,7 +75,7 @@ describe('Licence Monitoring Station Setup - Check Presenter', () => {
       })
 
       it('correctly sets "abstractionPeriodManuallyEntered" to "false"', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.abstractionPeriodManuallyEntered).toBe(false)
       })
@@ -88,7 +88,7 @@ describe('Licence Monitoring Station Setup - Check Presenter', () => {
         })
 
         it('correctly sets "type" as "Stop"', () => {
-          const result = CheckPresenter.go(session)
+          const result = CheckPresenter(session)
 
           expect(result.type).toEqual('Stop')
         })
@@ -105,7 +105,7 @@ describe('Licence Monitoring Station Setup - Check Presenter', () => {
           })
 
           it('correctly sets "type" as "Reduce with a maximum volume limit"', () => {
-            const result = CheckPresenter.go(session)
+            const result = CheckPresenter(session)
 
             expect(result.type).toEqual('Reduce with a maximum volume limit')
           })
@@ -117,7 +117,7 @@ describe('Licence Monitoring Station Setup - Check Presenter', () => {
           })
 
           it('correctly sets "type" as "Reduce"', () => {
-            const result = CheckPresenter.go(session)
+            const result = CheckPresenter(session)
 
             expect(result.type).toEqual('Reduce')
           })

@@ -19,7 +19,7 @@ describe('Company Contacts - Setup - Contact Email Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ContactEmailPresenter.go(session)
+      const result = ContactEmailPresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -39,7 +39,7 @@ describe('Company Contacts - Setup - Contact Email Presenter', () => {
         })
 
         it('returns the email from the session', () => {
-          const result = ContactEmailPresenter.go(session)
+          const result = ContactEmailPresenter(session)
 
           expect(result.email).toEqual('eric@test.com')
         })
@@ -47,7 +47,7 @@ describe('Company Contacts - Setup - Contact Email Presenter', () => {
 
       describe('when the email has not previously been saved', () => {
         it('returns an empty string', () => {
-          const result = ContactEmailPresenter.go(session)
+          const result = ContactEmailPresenter(session)
 
           expect(result.email).toBeNull()
         })

@@ -28,7 +28,7 @@ describe('Return Versions Setup - Check presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = CheckPresenter.go(session)
+      const result = CheckPresenter(session)
 
       expect(result).toEqual({
         licenceRef: '01/ABC',
@@ -61,7 +61,7 @@ describe('Return Versions Setup - Check presenter', () => {
       })
 
       it('returns the value', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.multipleUpload).toBe(true)
       })
@@ -69,7 +69,7 @@ describe('Return Versions Setup - Check presenter', () => {
 
     describe('when there is not a multipleUpload', () => {
       it('returns the value', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.multipleUpload).toBe(false)
       })
@@ -83,7 +83,7 @@ describe('Return Versions Setup - Check presenter', () => {
       })
 
       it('returns true', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.quarterlyReturns).toBe(true)
       })
@@ -95,7 +95,7 @@ describe('Return Versions Setup - Check presenter', () => {
       })
 
       it('returns false', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.quarterlyReturns).toBe(false)
       })
@@ -103,7 +103,7 @@ describe('Return Versions Setup - Check presenter', () => {
 
     describe('when quarterlyReturns has not been set', () => {
       it('returns undefined', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.quarterlyReturns).toBeUndefined()
       })
@@ -117,7 +117,7 @@ describe('Return Versions Setup - Check presenter', () => {
       })
 
       it('returns true', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.quarterlyReturnSubmissions).toBe(true)
       })
@@ -129,7 +129,7 @@ describe('Return Versions Setup - Check presenter', () => {
       })
 
       it('returns false', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.quarterlyReturnSubmissions).toBe(false)
       })
@@ -145,7 +145,7 @@ describe('Return Versions Setup - Check presenter', () => {
       })
 
       it('returns text with the note content and the change and delete a note action', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.note).toEqual({
           actions: [
@@ -165,7 +165,7 @@ describe('Return Versions Setup - Check presenter', () => {
 
     describe('when the user has not added a note', () => {
       it('returns text with "No notes added" and the add a note action', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.note).toEqual({
           actions: [
@@ -182,7 +182,7 @@ describe('Return Versions Setup - Check presenter', () => {
 
   describe('the "pageTitle" property', () => {
     it('returns the page title combined with the licence holder name', () => {
-      const result = CheckPresenter.go(session)
+      const result = CheckPresenter(session)
 
       expect(result.pageTitle).toEqual('Check the requirements for returns for Turbo Kid')
       expect(result.pageTitleCaption).toEqual('Licence 01/ABC')
@@ -191,7 +191,7 @@ describe('Return Versions Setup - Check presenter', () => {
 
   describe('the "reason" property', () => {
     it('returns the display version for the reason', () => {
-      const result = CheckPresenter.go(session)
+      const result = CheckPresenter(session)
 
       expect(result.reason).toEqual('Major change')
     })
@@ -200,7 +200,7 @@ describe('Return Versions Setup - Check presenter', () => {
   describe('the "reasonLink" property', () => {
     describe('when the journey is for returns required', () => {
       it('returns a link to the "reason" page', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.reasonLink).toEqual('/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/reason')
       })
@@ -212,7 +212,7 @@ describe('Return Versions Setup - Check presenter', () => {
       })
 
       it('returns a link to the "no-returns-required" page', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.reasonLink).toEqual(
           '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/no-returns-required'
@@ -224,7 +224,7 @@ describe('Return Versions Setup - Check presenter', () => {
   describe('the "startDate" property', () => {
     describe('when the user has previously selected the licence start date as the start date', () => {
       it('returns the licence version start date formatted as a long date', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.startDate).toEqual('1 January 2023')
       })
@@ -236,7 +236,7 @@ describe('Return Versions Setup - Check presenter', () => {
       })
 
       it('returns the start date parts formatted as a long date', () => {
-        const result = CheckPresenter.go(session)
+        const result = CheckPresenter(session)
 
         expect(result.startDate).toEqual('26 November 2023')
       })

@@ -39,7 +39,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
   })
 
   it('confirms the data is valid', () => {
-    const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+    const result = LicenceRenewalValidator(payload, licenceRenewal)
 
     expect(result.value).toBeDefined()
     expect(result.error).toBeUndefined()
@@ -53,7 +53,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+        const result = LicenceRenewalValidator(payload, licenceRenewal)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -67,7 +67,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+        const result = LicenceRenewalValidator(payload, licenceRenewal)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -82,7 +82,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
         })
 
         it('confirms the data is invalid', () => {
-          const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+          const result = LicenceRenewalValidator(payload, licenceRenewal)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -96,7 +96,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
         })
 
         it('confirms the data is invalid', () => {
-          const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+          const result = LicenceRenewalValidator(payload, licenceRenewal)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -110,7 +110,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
         })
 
         it('confirms the data is invalid', () => {
-          const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+          const result = LicenceRenewalValidator(payload, licenceRenewal)
 
           expect(result.value).toBeDefined()
           expect(result.error).toBeDefined()
@@ -126,7 +126,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+        const result = LicenceRenewalValidator(payload, licenceRenewal)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -140,7 +140,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+        const result = LicenceRenewalValidator(payload, licenceRenewal)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

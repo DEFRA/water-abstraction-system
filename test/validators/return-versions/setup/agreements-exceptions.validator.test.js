@@ -14,7 +14,7 @@ describe('Return Versions Setup - Agreements Exception validator', () => {
     })
 
     it('confirms the data is valid', () => {
-      const result = AgreementsExceptionsValidator.go(payload)
+      const result = AgreementsExceptionsValidator(payload)
 
       expect(result.value.agreementsExceptions).toEqual(['gravity-fill', 'two-part-tariff', '56-returns-exception'])
 
@@ -30,7 +30,7 @@ describe('Return Versions Setup - Agreements Exception validator', () => {
     })
 
     it('fails validation', () => {
-      const result = AgreementsExceptionsValidator.go(payload)
+      const result = AgreementsExceptionsValidator(payload)
 
       expect(result.error.details[0].message).toEqual(
         'Select if there are any agreements and exceptions needed for the requirements for returns'
@@ -44,7 +44,7 @@ describe('Return Versions Setup - Agreements Exception validator', () => {
     })
 
     it('fails validation', () => {
-      const result = AgreementsExceptionsValidator.go(payload)
+      const result = AgreementsExceptionsValidator(payload)
 
       expect(result.error.details[0].message).toEqual(
         'Select if there are any agreements and exceptions needed for the requirements for returns'

@@ -36,7 +36,7 @@ describe('Address - Select Presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = SelectPresenter.go(session, addresses)
+    const result = SelectPresenter(session, addresses)
 
     expect(result).toEqual({
       activeNavBar: 'manage',
@@ -69,7 +69,7 @@ describe('Address - Select Presenter', () => {
   describe('the "addresses" property', () => {
     describe('when multiple addresses were found', () => {
       it('returns all the addresses, and the inserted description entry is pluralised and selected', () => {
-        const result = SelectPresenter.go(session, addresses)
+        const result = SelectPresenter(session, addresses)
 
         expect(result.addresses).toEqual([
           {
@@ -91,7 +91,7 @@ describe('Address - Select Presenter', () => {
 
     describe('when one address was found', () => {
       it('returns the one address, and the inserted description entry is singular and selected', () => {
-        const result = SelectPresenter.go(session, [addresses[0]])
+        const result = SelectPresenter(session, [addresses[0]])
 
         expect(result.addresses).toEqual([
           {
@@ -111,7 +111,7 @@ describe('Address - Select Presenter', () => {
   describe('the "pageTitleCaption" property', () => {
     describe('when the property has not been configured', () => {
       it('returns null', () => {
-        const result = SelectPresenter.go(session, addresses)
+        const result = SelectPresenter(session, addresses)
 
         expect(result.pageTitleCaption).toEqual(null)
       })
@@ -123,7 +123,7 @@ describe('Address - Select Presenter', () => {
       })
 
       it('returns the set value', () => {
-        const result = SelectPresenter.go(session, addresses)
+        const result = SelectPresenter(session, addresses)
 
         expect(result.pageTitleCaption).toEqual('Super awesome caption')
       })

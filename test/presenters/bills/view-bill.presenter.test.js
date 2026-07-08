@@ -17,7 +17,7 @@ describe('View Bill presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = ViewBillPresenter.go(bill, billingAccount)
+      const result = ViewBillPresenter(bill, billingAccount)
 
       expect(result).toEqual({
         accountName: 'Wessex Water Services Ltd',
@@ -51,7 +51,7 @@ describe('View Bill presenter', () => {
     describe('the "billTotal" property', () => {
       describe('when the bill is a debit', () => {
         it('returns just the bill total formatted as money', () => {
-          const result = ViewBillPresenter.go(bill, billingAccount)
+          const result = ViewBillPresenter(bill, billingAccount)
 
           expect(result.billTotal).toEqual('£213,178.00')
         })
@@ -63,7 +63,7 @@ describe('View Bill presenter', () => {
         })
 
         it('returns the bill total formatted as money plus "credit" as a suffix', () => {
-          const result = ViewBillPresenter.go(bill, billingAccount)
+          const result = ViewBillPresenter(bill, billingAccount)
 
           expect(result.billTotal).toEqual('£213,178.00 credit')
         })
@@ -73,7 +73,7 @@ describe('View Bill presenter', () => {
     describe('the "creditsTotal" property', () => {
       describe('when the bill run was created in WRLS', () => {
         it('returns the "creditNoteValue" of the bill (£0.00)', () => {
-          const result = ViewBillPresenter.go(bill, billingAccount)
+          const result = ViewBillPresenter(bill, billingAccount)
 
           expect(result.creditsTotal).toEqual('£0.00')
         })
@@ -86,7 +86,7 @@ describe('View Bill presenter', () => {
 
         describe('and "netAmount" on the bill is 21317800', () => {
           it('returns £0.00', () => {
-            const result = ViewBillPresenter.go(bill, billingAccount)
+            const result = ViewBillPresenter(bill, billingAccount)
 
             expect(result.creditsTotal).toEqual('£0.00')
           })
@@ -98,7 +98,7 @@ describe('View Bill presenter', () => {
           })
 
           it('returns £213,178.00', () => {
-            const result = ViewBillPresenter.go(bill, billingAccount)
+            const result = ViewBillPresenter(bill, billingAccount)
 
             expect(result.creditsTotal).toEqual('£213,178.00')
           })
@@ -110,7 +110,7 @@ describe('View Bill presenter', () => {
           })
 
           it('returns £0.00', () => {
-            const result = ViewBillPresenter.go(bill, billingAccount)
+            const result = ViewBillPresenter(bill, billingAccount)
 
             expect(result.creditsTotal).toEqual('£0.00')
           })
@@ -121,7 +121,7 @@ describe('View Bill presenter', () => {
     describe('the "debitsTotal" property', () => {
       describe('when the bill run was created in WRLS', () => {
         it('returns the "invoiceValue" of the bill (£213,178.00)', () => {
-          const result = ViewBillPresenter.go(bill, billingAccount)
+          const result = ViewBillPresenter(bill, billingAccount)
 
           expect(result.debitsTotal).toEqual('£213,178.00')
         })
@@ -134,7 +134,7 @@ describe('View Bill presenter', () => {
 
         describe('and "netAmount" on the bill is 21317800', () => {
           it('returns £213,178.00', () => {
-            const result = ViewBillPresenter.go(bill, billingAccount)
+            const result = ViewBillPresenter(bill, billingAccount)
 
             expect(result.debitsTotal).toEqual('£213,178.00')
           })
@@ -146,7 +146,7 @@ describe('View Bill presenter', () => {
           })
 
           it('returns £0.00', () => {
-            const result = ViewBillPresenter.go(bill, billingAccount)
+            const result = ViewBillPresenter(bill, billingAccount)
 
             expect(result.debitsTotal).toEqual('£0.00')
           })
@@ -158,7 +158,7 @@ describe('View Bill presenter', () => {
           })
 
           it('returns £0.00', () => {
-            const result = ViewBillPresenter.go(bill, billingAccount)
+            const result = ViewBillPresenter(bill, billingAccount)
 
             expect(result.debitsTotal).toEqual('£0.00')
           })

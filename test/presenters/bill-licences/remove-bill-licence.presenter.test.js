@@ -19,7 +19,7 @@ describe('Remove Bill Licence presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = RemoveBillLicencePresenter.go(billLicence)
+      const result = RemoveBillLicencePresenter(billLicence)
 
       expect(result).toEqual({
         accountName: 'Example Trading Ltd',
@@ -41,7 +41,7 @@ describe('Remove Bill Licence presenter', () => {
     describe('the "accountName" property', () => {
       describe('when the billing account is not linked to an agent', () => {
         it('returns the name of the company linked to the billing account', () => {
-          const result = RemoveBillLicencePresenter.go(billLicence)
+          const result = RemoveBillLicencePresenter(billLicence)
 
           expect(result.accountName).toEqual('Example Trading Ltd')
         })
@@ -57,7 +57,7 @@ describe('Remove Bill Licence presenter', () => {
         })
 
         it('returns the name of the agent company', () => {
-          const result = RemoveBillLicencePresenter.go(billLicence)
+          const result = RemoveBillLicencePresenter(billLicence)
 
           expect(result.accountName).toEqual('Alan Broke')
         })
@@ -66,7 +66,7 @@ describe('Remove Bill Licence presenter', () => {
 
     describe('the "pageTitle" property', () => {
       it('returns the licence reference as part of the title', () => {
-        const result = RemoveBillLicencePresenter.go(billLicence)
+        const result = RemoveBillLicencePresenter(billLicence)
 
         expect(result.pageTitle).toEqual("You're about to remove WA/055/0017/013 from the bill run")
       })

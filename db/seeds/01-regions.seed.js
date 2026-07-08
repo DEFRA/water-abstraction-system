@@ -16,7 +16,7 @@ import ServerConfig from '../../config/server.config.js'
  * We manually check if the combination exits already and update / insert accordingly.
  *
  */
-async function seed() {
+export default async function seed() {
   for (const region of regions) {
     const exists = await _exists(region)
 
@@ -70,8 +70,5 @@ async function _update(region) {
 }
 
 export {
-  seed
-}
-export default {
   seed
 }

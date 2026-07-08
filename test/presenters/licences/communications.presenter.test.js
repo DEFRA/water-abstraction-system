@@ -37,7 +37,7 @@ describe('Licences - Communications presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = CommunicationsPresenter.go([notification], licence)
+    const result = CommunicationsPresenter([notification], licence)
 
     expect(result).toEqual({
       backLink: {

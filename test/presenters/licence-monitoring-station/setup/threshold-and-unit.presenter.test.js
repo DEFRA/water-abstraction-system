@@ -16,7 +16,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit presenter', () =
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = ThresholdAndUnitPresenter.go(session)
+      const result = ThresholdAndUnitPresenter(session)
 
       expect(result).toEqual({
         backLink: '/system/monitoring-stations/e1c44f9b-51c2-4aee-a518-5509d6f05869',
@@ -49,7 +49,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit presenter', () =
       })
 
       it('returns a link back to the "check" page', () => {
-        const result = ThresholdAndUnitPresenter.go(session)
+        const result = ThresholdAndUnitPresenter(session)
 
         expect(result.backLink).toEqual(
           '/system/licence-monitoring-station/setup/56b6545a-c8e9-4ecd-95fb-927677954f22/check'
@@ -59,7 +59,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit presenter', () =
 
     describe('when the user has come from somewhere else', () => {
       it('returns a link back to the "Monitoring Station" page', () => {
-        const result = ThresholdAndUnitPresenter.go(session)
+        const result = ThresholdAndUnitPresenter(session)
 
         expect(result.backLink).toEqual('/system/monitoring-stations/e1c44f9b-51c2-4aee-a518-5509d6f05869')
       })
@@ -73,7 +73,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit presenter', () =
       })
 
       it('returns the "displayUnits" property populated to re-select the option', () => {
-        const result = ThresholdAndUnitPresenter.go(session)
+        const result = ThresholdAndUnitPresenter(session)
 
         expect(result.displayUnits).toEqual([
           { value: 'Ml/d', text: 'Ml/d', hint: { text: 'megalitres per day' }, checked: false },
@@ -100,7 +100,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit presenter', () =
       })
 
       it('returns the "threshold" property populated to re-select the option', () => {
-        const result = ThresholdAndUnitPresenter.go(session)
+        const result = ThresholdAndUnitPresenter(session)
 
         expect(result.threshold).toEqual('1000')
       })

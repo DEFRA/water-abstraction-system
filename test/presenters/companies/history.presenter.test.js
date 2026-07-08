@@ -17,7 +17,7 @@ describe('Companies - History presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = HistoryPresenter.go(company, licences)
+      const result = HistoryPresenter(company, licences)
 
       expect(result).toEqual({
         backLink: {

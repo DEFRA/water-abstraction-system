@@ -20,7 +20,7 @@ describe('Abstraction Period Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = AbstractionPeriodPresenter.go(session)
+      const result = AbstractionPeriodPresenter(session)
 
       expect(result).toMatchObject({
         abstractionPeriodStartDay: '1',
@@ -38,7 +38,7 @@ describe('Abstraction Period Presenter', () => {
       })
 
       it('returns the back link to the check page', () => {
-        const result = AbstractionPeriodPresenter.go(session)
+        const result = AbstractionPeriodPresenter(session)
 
         expect(result.backLink).toEqual({
           href: `/system/licence-monitoring-station/setup/356bb545-3e0d-46bd-9df4-d60e1a9eae72/check`,
@@ -53,7 +53,7 @@ describe('Abstraction Period Presenter', () => {
       })
 
       it('returns the back link to the full condition page', () => {
-        const result = AbstractionPeriodPresenter.go(session)
+        const result = AbstractionPeriodPresenter(session)
 
         expect(result.backLink).toEqual({
           href: `/system/licence-monitoring-station/setup/356bb545-3e0d-46bd-9df4-d60e1a9eae72/full-condition`,

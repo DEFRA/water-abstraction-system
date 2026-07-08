@@ -18,7 +18,7 @@ describe('Users - External - Details Presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = DetailsPresenter.go(user, viewingUserScope, back)
+    const result = DetailsPresenter(user, viewingUserScope, back)
 
     expect(result).toEqual({
       activeNavBar: 'users',
@@ -39,7 +39,7 @@ describe('Users - External - Details Presenter', () => {
   describe('the "lastSignedIn" property', () => {
     describe('when the lastLogin is set', () => {
       it('returns the last signed in date and time', () => {
-        const result = DetailsPresenter.go(user, viewingUserScope, back)
+        const result = DetailsPresenter(user, viewingUserScope, back)
 
         expect(result.lastSignedIn).toEqual('6 October 2022 at 10:00:00')
       })
@@ -51,7 +51,7 @@ describe('Users - External - Details Presenter', () => {
       })
 
       it('returns "Never signed in"', () => {
-        const result = DetailsPresenter.go(user, viewingUserScope, back)
+        const result = DetailsPresenter(user, viewingUserScope, back)
 
         expect(result.lastSignedIn).toEqual('Never signed in')
       })
@@ -65,7 +65,7 @@ describe('Users - External - Details Presenter', () => {
       })
 
       it('returns an empty array', () => {
-        const result = DetailsPresenter.go(user, viewingUserScope, back)
+        const result = DetailsPresenter(user, viewingUserScope, back)
 
         expect(result.roles).toHaveLength(0)
       })
@@ -77,7 +77,7 @@ describe('Users - External - Details Presenter', () => {
       })
 
       it('returns the correct roles for a "Returns user"', () => {
-        const result = DetailsPresenter.go(user, viewingUserScope, back)
+        const result = DetailsPresenter(user, viewingUserScope, back)
 
         expect(result.roles).toEqual([
           {
@@ -94,7 +94,7 @@ describe('Users - External - Details Presenter', () => {
       })
 
       it('returns the correct roles for a "Primary user"', () => {
-        const result = DetailsPresenter.go(user, viewingUserScope, back)
+        const result = DetailsPresenter(user, viewingUserScope, back)
 
         expect(result.roles).toEqual([
           {

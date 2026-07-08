@@ -10,7 +10,7 @@ describe('Return Versions - Setup - Fetch Abstraction Data service', () => {
   let seedData
 
   beforeAll(async () => {
-    seedData = await LicenceAbstractionDataSeeder.seed()
+    seedData = await LicenceAbstractionDataSeeder()
   })
 
   describe('when called', () => {

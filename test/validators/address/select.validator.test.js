@@ -12,7 +12,7 @@ describe('Address - Select Validator', () => {
     })
 
     it('returns with no errors', () => {
-      const result = SelectValidator.go(payload)
+      const result = SelectValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -25,7 +25,7 @@ describe('Address - Select Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = SelectValidator.go(payload)
+      const result = SelectValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()
@@ -39,7 +39,7 @@ describe('Address - Select Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = SelectValidator.go(payload)
+      const result = SelectValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

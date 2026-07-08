@@ -29,7 +29,7 @@ describe('Return Versions Setup - Frequency Reported presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = FrequencyReportedPresenter.go(session, requirementIndex)
+      const result = FrequencyReportedPresenter(session, requirementIndex)
 
       expect(result).toEqual({
         backLink: {
@@ -53,7 +53,7 @@ describe('Return Versions Setup - Frequency Reported presenter', () => {
       })
 
       it('returns a link back to the "check" page', () => {
-        const result = FrequencyReportedPresenter.go(session, requirementIndex)
+        const result = FrequencyReportedPresenter(session, requirementIndex)
 
         expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
@@ -64,7 +64,7 @@ describe('Return Versions Setup - Frequency Reported presenter', () => {
 
     describe('when the user has come from somewhere else', () => {
       it('returns a link back to the "frequency-collected" page', () => {
-        const result = FrequencyReportedPresenter.go(session, requirementIndex)
+        const result = FrequencyReportedPresenter(session, requirementIndex)
 
         expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/frequency-collected/0',
@@ -81,7 +81,7 @@ describe('Return Versions Setup - Frequency Reported presenter', () => {
       })
 
       it('returns a populated frequency reported', () => {
-        const result = FrequencyReportedPresenter.go(session, requirementIndex)
+        const result = FrequencyReportedPresenter(session, requirementIndex)
 
         expect(result.frequencyReported).toEqual('week')
       })
@@ -89,7 +89,7 @@ describe('Return Versions Setup - Frequency Reported presenter', () => {
 
     describe('when the user has not previously submitted the frequency reported', () => {
       it('returns an empty frequency reported', () => {
-        const result = FrequencyReportedPresenter.go(session, requirementIndex)
+        const result = FrequencyReportedPresenter(session, requirementIndex)
 
         expect(result.frequencyReported).toBeNull()
       })

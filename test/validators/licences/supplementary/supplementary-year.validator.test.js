@@ -13,7 +13,7 @@ describe('Supplementary Year validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = SupplementaryYearValidator.go(payload)
+        const result = SupplementaryYearValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -26,7 +26,7 @@ describe('Supplementary Year validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = SupplementaryYearValidator.go(payload)
+        const result = SupplementaryYearValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeUndefined()
@@ -41,7 +41,7 @@ describe('Supplementary Year validator', () => {
       })
 
       it('fails validation', () => {
-        const result = SupplementaryYearValidator.go(payload)
+        const result = SupplementaryYearValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

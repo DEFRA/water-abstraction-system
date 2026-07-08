@@ -35,7 +35,7 @@ describe('Notifications - Notify Update presenter', () => {
   })
 
   it('correctly returns notify result', () => {
-    const result = NotifyUpdatePresenter.go(notifyResult)
+    const result = NotifyUpdatePresenter(notifyResult)
 
     expect(result).toEqual({
       notifyId: 'a8023182-5cb3-4ee3-b777-2fb82cde7fc5',
@@ -65,7 +65,7 @@ describe('Notifications - Notify Update presenter', () => {
     })
 
     it('correctly returns notify data with the error', () => {
-      const result = NotifyUpdatePresenter.go(notifyResult)
+      const result = NotifyUpdatePresenter(notifyResult)
 
       expect(result).toEqual({
         notifyError:

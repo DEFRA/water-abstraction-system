@@ -27,7 +27,7 @@ describe('Bill Runs - Setup - Allowed Bill Run presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = AllowedBillRunPresenter.go(session, blockingResults)
+      const result = AllowedBillRunPresenter(session, blockingResults)
 
       expect(result).toEqual({
         backLink: '/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region',
@@ -50,7 +50,7 @@ describe('Bill Runs - Setup - Allowed Bill Run presenter', () => {
   describe('the "chargeScheme" property', () => {
     describe('when both bill run types can be created (supplementary only)', () => {
       it('returns "Both"', () => {
-        const result = AllowedBillRunPresenter.go(session, blockingResults)
+        const result = AllowedBillRunPresenter(session, blockingResults)
 
         expect(result.chargeScheme).toEqual('Both')
       })
@@ -62,7 +62,7 @@ describe('Bill Runs - Setup - Allowed Bill Run presenter', () => {
       })
 
       it('returns "Current"', () => {
-        const result = AllowedBillRunPresenter.go(session, blockingResults)
+        const result = AllowedBillRunPresenter(session, blockingResults)
 
         expect(result.chargeScheme).toEqual('Current')
       })
@@ -74,7 +74,7 @@ describe('Bill Runs - Setup - Allowed Bill Run presenter', () => {
       })
 
       it('returns "Current"', () => {
-        const result = AllowedBillRunPresenter.go(session, blockingResults)
+        const result = AllowedBillRunPresenter(session, blockingResults)
 
         expect(result.chargeScheme).toEqual('Old')
       })

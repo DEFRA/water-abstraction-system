@@ -24,7 +24,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
       })
 
       it('correctly formats the data to a csv string', () => {
-        const result = DownloadReturnsNoticePresenter.go([recipient], session)
+        const result = DownloadReturnsNoticePresenter([recipient], session)
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
@@ -42,7 +42,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
       })
 
       it('correctly formats the data to a csv string', () => {
-        const result = DownloadReturnsNoticePresenter.go([recipient], session)
+        const result = DownloadReturnsNoticePresenter([recipient], session)
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
@@ -60,7 +60,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
       })
 
       it('correctly formats the data to a csv string', () => {
-        const result = DownloadReturnsNoticePresenter.go([recipient], session)
+        const result = DownloadReturnsNoticePresenter([recipient], session)
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
@@ -78,7 +78,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
       })
 
       it('correctly formats the data to a csv string', () => {
-        const result = DownloadReturnsNoticePresenter.go([recipient], session)
+        const result = DownloadReturnsNoticePresenter([recipient], session)
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
@@ -102,7 +102,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
       })
 
       it('correctly formats the data to a csv string', () => {
-        const result = DownloadReturnsNoticePresenter.go([recipient], session)
+        const result = DownloadReturnsNoticePresenter([recipient], session)
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
@@ -120,7 +120,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
       })
 
       it('correctly formats the data to a csv string', () => {
-        const result = DownloadReturnsNoticePresenter.go([recipient], session)
+        const result = DownloadReturnsNoticePresenter([recipient], session)
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
@@ -138,7 +138,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
       })
 
       it('correctly formats the data to a csv string', () => {
-        const result = DownloadReturnsNoticePresenter.go([recipient], session)
+        const result = DownloadReturnsNoticePresenter([recipient], session)
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
@@ -156,7 +156,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
       })
 
       it('correctly formats the data to a csv string', () => {
-        const result = DownloadReturnsNoticePresenter.go([recipient], session)
+        const result = DownloadReturnsNoticePresenter([recipient], session)
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
@@ -180,7 +180,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
       })
 
       it('correctly formats the data to a csv string', () => {
-        const result = DownloadReturnsNoticePresenter.go([recipient], session)
+        const result = DownloadReturnsNoticePresenter([recipient], session)
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
@@ -198,7 +198,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
       })
 
       it('correctly formats the data to a csv string', () => {
-        const result = DownloadReturnsNoticePresenter.go([recipient], session)
+        const result = DownloadReturnsNoticePresenter([recipient], session)
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
@@ -216,7 +216,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
       })
 
       it('correctly formats the data to a csv string', () => {
-        const result = DownloadReturnsNoticePresenter.go([recipient], session)
+        const result = DownloadReturnsNoticePresenter([recipient], session)
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
@@ -234,7 +234,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
       })
 
       it('correctly formats the data to a csv string', () => {
-        const result = DownloadReturnsNoticePresenter.go([recipient], session)
+        const result = DownloadReturnsNoticePresenter([recipient], session)
 
         const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 

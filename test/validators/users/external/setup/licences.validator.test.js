@@ -12,7 +12,7 @@ describe('Users - External - Setup - Licences Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = LicencesValidator.go(payload)
+      const result = LicencesValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -26,7 +26,7 @@ describe('Users - External - Setup - Licences Validator', () => {
       })
 
       it('fails validation', () => {
-        const result = LicencesValidator.go(payload)
+        const result = LicencesValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

@@ -27,7 +27,7 @@ describe('Users - External - Licences Presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+    const result = LicencesPresenter(user, licences, viewingUserScope, back)
 
     expect(result).toEqual({
       activeNavBar: 'users',
@@ -72,7 +72,7 @@ describe('Users - External - Licences Presenter', () => {
   describe('the "displayLicenceEndedMessage" property', () => {
     describe('when at least one licence has a status of "expired", "revoked" or "lapsed"', () => {
       it('returns "true"', () => {
-        const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+        const result = LicencesPresenter(user, licences, viewingUserScope, back)
 
         expect(result.displayLicenceEndedMessage).toBe(true)
       })
@@ -86,7 +86,7 @@ describe('Users - External - Licences Presenter', () => {
       })
 
       it('returns "false"', () => {
-        const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+        const result = LicencesPresenter(user, licences, viewingUserScope, back)
 
         expect(result.displayLicenceEndedMessage).toBe(false)
       })
@@ -97,7 +97,7 @@ describe('Users - External - Licences Presenter', () => {
     describe('when the viewing user has "unlink_licences" in their scope', () => {
       describe('and the external user is the "primary user" on at least one licence', () => {
         it('returns the link to the unlink licences journey', () => {
-          const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+          const result = LicencesPresenter(user, licences, viewingUserScope, back)
 
           expect(result.unregisterActionLink).toEqual(`/system/users/external/${user.id}/setup?back=${back}`)
         })
@@ -109,7 +109,7 @@ describe('Users - External - Licences Presenter', () => {
         })
 
         it('returns "null"', () => {
-          const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+          const result = LicencesPresenter(user, licences, viewingUserScope, back)
 
           expect(result.unregisterActionLink).toBeNull()
         })
@@ -121,7 +121,7 @@ describe('Users - External - Licences Presenter', () => {
         })
 
         it('returns "null"', () => {
-          const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+          const result = LicencesPresenter(user, licences, viewingUserScope, back)
 
           expect(result.unregisterActionLink).toBeNull()
         })
@@ -134,7 +134,7 @@ describe('Users - External - Licences Presenter', () => {
       })
 
       it('returns "null"', () => {
-        const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+        const result = LicencesPresenter(user, licences, viewingUserScope, back)
 
         expect(result.unregisterActionLink).toBeNull()
       })

@@ -21,7 +21,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = ConfirmationPresenter.go(event)
+    const result = ConfirmationPresenter(event)
 
     expect(result).toEqual({
       forwardLink: `/system/notices/${event.id}`,
@@ -37,7 +37,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = ConfirmationPresenter.go(event)
+      const result = ConfirmationPresenter(event)
 
       expect(result).toEqual({
         forwardLink: `/system/notices/${event.id}`,
@@ -54,7 +54,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = ConfirmationPresenter.go(event)
+      const result = ConfirmationPresenter(event)
 
       expect(result).toEqual({
         forwardLink: `/system/notices/${event.id}`,
@@ -73,7 +73,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = ConfirmationPresenter.go(event)
+      const result = ConfirmationPresenter(event)
 
       expect(result).toEqual({
         forwardLink: `/system/notices/${event.id}`,
@@ -90,7 +90,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = ConfirmationPresenter.go(event)
+      const result = ConfirmationPresenter(event)
 
       expect(result).toEqual({
         forwardLink: `/system/notices/${event.id}`,
@@ -107,7 +107,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = ConfirmationPresenter.go(event)
+      const result = ConfirmationPresenter(event)
 
       expect(result).toEqual({
         forwardLink: `/system/notices/${event.id}`,

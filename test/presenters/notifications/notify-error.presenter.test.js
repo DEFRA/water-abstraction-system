@@ -15,7 +15,7 @@ describe('Notifications - Notify Error presenter', () => {
   })
 
   it('correctly returns an errored notification', () => {
-    const result = NotifyErrorPresenter.go(statusCode, message, errors)
+    const result = NotifyErrorPresenter(statusCode, message, errors)
 
     expect(result).toEqual({
       notifyError: '{"status":"ENOTFOUND","message":"An error occurred","errors":["a specific error"]}',

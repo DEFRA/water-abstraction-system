@@ -13,7 +13,7 @@ describe('Return Logs Setup - Meter Provided validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = MeterProvidedValidator.go(payload)
+        const result = MeterProvidedValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -25,7 +25,7 @@ describe('Return Logs Setup - Meter Provided validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = MeterProvidedValidator.go(payload)
+        const result = MeterProvidedValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -39,7 +39,7 @@ describe('Return Logs Setup - Meter Provided validator', () => {
       })
 
       it('fails validation with the message "Select if meter details have been provided"', () => {
-        const result = MeterProvidedValidator.go(payload)
+        const result = MeterProvidedValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Select if meter details have been provided')

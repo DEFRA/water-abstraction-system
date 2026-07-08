@@ -19,7 +19,7 @@ describe('Notices - Index Notices presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = IndexNoticesPresenter.go(notices, auth)
+    const result = IndexNoticesPresenter(notices, auth)
 
     expect(result).toEqual({
       helperText: 'Create a returns invitation, reminder or paper return notice',
@@ -137,7 +137,7 @@ describe('Notices - Index Notices presenter', () => {
       })
 
       it('returns the correct helper text', () => {
-        const result = IndexNoticesPresenter.go(notices, auth)
+        const result = IndexNoticesPresenter(notices, auth)
 
         expect(result.helperText).toEqual(
           'Create a renewals invitation, returns invitation, reminder or paper return notice'
@@ -151,7 +151,7 @@ describe('Notices - Index Notices presenter', () => {
       })
 
       it('returns the correct helper text', () => {
-        const result = IndexNoticesPresenter.go(notices, auth)
+        const result = IndexNoticesPresenter(notices, auth)
 
         expect(result.helperText).toEqual('Create a returns invitation, reminder or paper return notice')
       })
@@ -163,7 +163,7 @@ describe('Notices - Index Notices presenter', () => {
       })
 
       it('returns the correct helper text', () => {
-        const result = IndexNoticesPresenter.go(notices, auth)
+        const result = IndexNoticesPresenter(notices, auth)
 
         expect(result.helperText).toEqual('Create a renewals invitation')
       })
@@ -175,7 +175,7 @@ describe('Notices - Index Notices presenter', () => {
       })
 
       it('returns null', () => {
-        const result = IndexNoticesPresenter.go(notices, auth)
+        const result = IndexNoticesPresenter(notices, auth)
 
         expect(result.helperText).toBeNull()
       })
@@ -186,7 +186,7 @@ describe('Notices - Index Notices presenter', () => {
     describe('the "type" property', () => {
       describe('when the notice is for a water abstraction alert', () => {
         it('returns the alert type', () => {
-          const results = IndexNoticesPresenter.go(notices, auth)
+          const results = IndexNoticesPresenter(notices, auth)
 
           expect(results.notices[0].type).toEqual('Reduce alert')
           expect(results.notices[1].type).toEqual('Resume alert')
@@ -197,7 +197,7 @@ describe('Notices - Index Notices presenter', () => {
 
       describe('when the notice is not for a water abstraction alert', () => {
         it('returns the notice type', () => {
-          const results = IndexNoticesPresenter.go(notices, auth)
+          const results = IndexNoticesPresenter(notices, auth)
 
           expect(results.notices[4].type).toEqual('HOF warning')
           expect(results.notices[5].type).toEqual('Renewal')
@@ -217,7 +217,7 @@ describe('Notices - Index Notices presenter', () => {
       })
 
       it('returns all of the links', () => {
-        const result = IndexNoticesPresenter.go(notices, auth)
+        const result = IndexNoticesPresenter(notices, auth)
 
         expect(result.links).toEqual({
           adhoc: {
@@ -238,7 +238,7 @@ describe('Notices - Index Notices presenter', () => {
       })
 
       it('returns none of the links', () => {
-        const result = IndexNoticesPresenter.go(notices, auth)
+        const result = IndexNoticesPresenter(notices, auth)
 
         expect(result.links).toEqual({})
       })
@@ -250,7 +250,7 @@ describe('Notices - Index Notices presenter', () => {
       })
 
       it('returns all of the links', () => {
-        const result = IndexNoticesPresenter.go(notices, auth)
+        const result = IndexNoticesPresenter(notices, auth)
 
         expect(result.links).toEqual({
           adhoc: {
@@ -271,7 +271,7 @@ describe('Notices - Index Notices presenter', () => {
       })
 
       it('returns all of the links', () => {
-        const result = IndexNoticesPresenter.go(notices, auth)
+        const result = IndexNoticesPresenter(notices, auth)
 
         expect(result.links).toEqual({
           adhoc: {

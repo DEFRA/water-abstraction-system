@@ -15,7 +15,7 @@ describe('Bill Runs - Index validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = IndexValidator.go(payload, regions)
+        const result = IndexValidator(payload, regions)
 
         expect(result.value).toEqual({
           number: 1001,
@@ -34,7 +34,7 @@ describe('Bill Runs - Index validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = IndexValidator.go(payload, regions)
+        const result = IndexValidator(payload, regions)
 
         expect(result.value).toEqual({})
         expect(result.error).toBeUndefined()
@@ -56,7 +56,7 @@ describe('Bill Runs - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload, regions)
+          const result = IndexValidator(payload, regions)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual('The Number must be a number')
@@ -70,7 +70,7 @@ describe('Bill Runs - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload, regions)
+          const result = IndexValidator(payload, regions)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual('The Number must be greater than zero')
@@ -84,7 +84,7 @@ describe('Bill Runs - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload, regions)
+          const result = IndexValidator(payload, regions)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual('The Number must be a whole number')
@@ -98,7 +98,7 @@ describe('Bill Runs - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload, regions)
+          const result = IndexValidator(payload, regions)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual('The Number cannot exceed 999999')
@@ -112,7 +112,7 @@ describe('Bill Runs - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload, regions)
+          const result = IndexValidator(payload, regions)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual('The Number must be between 1 and 999999')
@@ -128,7 +128,7 @@ describe('Bill Runs - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload, regions)
+          const result = IndexValidator(payload, regions)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual('Select a valid Run type')
@@ -144,7 +144,7 @@ describe('Bill Runs - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload, regions)
+          const result = IndexValidator(payload, regions)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual('The Year created must be a number')
@@ -160,7 +160,7 @@ describe('Bill Runs - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload, regions)
+          const result = IndexValidator(payload, regions)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual(
@@ -176,7 +176,7 @@ describe('Bill Runs - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload, regions)
+          const result = IndexValidator(payload, regions)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual('The Year created must be greater or equal to 2014')
@@ -190,7 +190,7 @@ describe('Bill Runs - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload, regions)
+          const result = IndexValidator(payload, regions)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual('The Year created must be a whole number')
@@ -206,7 +206,7 @@ describe('Bill Runs - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload, regions)
+          const result = IndexValidator(payload, regions)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual(`The Year created must be between 2014 and ${currentYear}`)
@@ -222,7 +222,7 @@ describe('Bill Runs - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload, regions)
+          const result = IndexValidator(payload, regions)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual('Select a valid Region')
@@ -238,7 +238,7 @@ describe('Bill Runs - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload, regions)
+          const result = IndexValidator(payload, regions)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual('Select a valid Status')
@@ -255,7 +255,7 @@ describe('Bill Runs - Index validator', () => {
         })
 
         it('fails validation and displays all errors', () => {
-          const result = IndexValidator.go(payload, regions)
+          const result = IndexValidator(payload, regions)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual('Select a valid Region')

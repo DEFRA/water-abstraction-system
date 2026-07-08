@@ -19,7 +19,7 @@ describe('Bill Runs - Setup - Year presenter', () => {
 
     describe('where the user has not previously selected a financial year', () => {
       it('correctly presents the data', () => {
-        const result = YearPresenter.go(licenceSupplementaryYears, session)
+        const result = YearPresenter(licenceSupplementaryYears, session)
 
         expect(result).toEqual({
           backlink: `/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region`,
@@ -48,7 +48,7 @@ describe('Bill Runs - Setup - Year presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = YearPresenter.go(licenceSupplementaryYears, session)
+        const result = YearPresenter(licenceSupplementaryYears, session)
 
         expect(result).toEqual({
           backlink: `/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region`,
@@ -83,7 +83,7 @@ describe('Bill Runs - Setup - Year presenter', () => {
 
     describe('where the user has not previously selected a financial year', () => {
       it('correctly presents the data', () => {
-        const result = YearPresenter.go(licenceSupplementaryYears, session)
+        const result = YearPresenter(licenceSupplementaryYears, session)
 
         expect(result).toEqual({
           backlink: `/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region`,
@@ -101,7 +101,7 @@ describe('Bill Runs - Setup - Year presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = YearPresenter.go(licenceSupplementaryYears, session)
+        const result = YearPresenter(licenceSupplementaryYears, session)
 
         expect(result).toEqual({
           backlink: `/system/bill-runs/setup/98ad3a1f-8e4f-490a-be05-0aece6755466/region`,

@@ -12,7 +12,7 @@ describe('Billing Accounts - Setup - Contact Name Validator', () => {
     })
 
     it('returns with no errors', () => {
-      const result = ContactNameValidator.go(payload)
+      const result = ContactNameValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -26,7 +26,7 @@ describe('Billing Accounts - Setup - Contact Name Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = ContactNameValidator.go(payload)
+        const result = ContactNameValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -40,7 +40,7 @@ describe('Billing Accounts - Setup - Contact Name Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = ContactNameValidator.go(payload)
+        const result = ContactNameValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

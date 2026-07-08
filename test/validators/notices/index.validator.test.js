@@ -18,7 +18,7 @@ describe('Notices - Index validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = IndexValidator.go(payload)
+        const result = IndexValidator(payload)
 
         expect(result.value).toEqual({
           noticeTypes: ['reduce', 'stop'],
@@ -49,7 +49,7 @@ describe('Notices - Index validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = IndexValidator.go(payload)
+        const result = IndexValidator(payload)
 
         expect(result.value).toEqual({
           fromDate: new Date('2024-04-01'),
@@ -70,7 +70,7 @@ describe('Notices - Index validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = IndexValidator.go(payload)
+        const result = IndexValidator(payload)
 
         expect(result.value).toEqual({ fromDate: undefined, toDate: undefined })
         expect(result.error).toBeUndefined()
@@ -89,7 +89,7 @@ describe('Notices - Index validator', () => {
       })
 
       it('fails validation', () => {
-        const result = IndexValidator.go(payload)
+        const result = IndexValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error.details[0].message).toEqual('Reference must be 11 characters or less')
@@ -103,7 +103,7 @@ describe('Notices - Index validator', () => {
       })
 
       it('fails validation', () => {
-        const result = IndexValidator.go(payload)
+        const result = IndexValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error.details[0].message).toEqual('Sent by must be 255 characters or less')
@@ -118,7 +118,7 @@ describe('Notices - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload)
+          const result = IndexValidator(payload)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual('Enter a valid from date')
@@ -132,7 +132,7 @@ describe('Notices - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload)
+          const result = IndexValidator(payload)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual('Enter a valid from date')
@@ -146,7 +146,7 @@ describe('Notices - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload)
+          const result = IndexValidator(payload)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual('Enter a valid from date')
@@ -163,7 +163,7 @@ describe('Notices - Index validator', () => {
       })
 
       it('fails validation', () => {
-        const result = IndexValidator.go(payload)
+        const result = IndexValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error.details[0].message).toEqual("From date must be either today's date or in the past")
@@ -178,7 +178,7 @@ describe('Notices - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload)
+          const result = IndexValidator(payload)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual('Enter a valid to date')
@@ -192,7 +192,7 @@ describe('Notices - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload)
+          const result = IndexValidator(payload)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual('Enter a valid to date')
@@ -206,7 +206,7 @@ describe('Notices - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload)
+          const result = IndexValidator(payload)
 
           expect(result.value).toBeDefined()
           expect(result.error.details[0].message).toEqual('Enter a valid to date')
@@ -223,7 +223,7 @@ describe('Notices - Index validator', () => {
       })
 
       it('fails validation', () => {
-        const result = IndexValidator.go(payload)
+        const result = IndexValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error.details[0].message).toEqual("To date must be either today's date or in the past")
@@ -237,7 +237,7 @@ describe('Notices - Index validator', () => {
       })
 
       it('fails validation', () => {
-        const result = IndexValidator.go(payload)
+        const result = IndexValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error.details[0].message).toEqual('The from date must be before the to date')
@@ -251,7 +251,7 @@ describe('Notices - Index validator', () => {
       })
 
       it('fails validation', () => {
-        const result = IndexValidator.go(payload)
+        const result = IndexValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error.details[0].message).toEqual('Select a valid notice type')
@@ -265,7 +265,7 @@ describe('Notices - Index validator', () => {
       })
 
       it('fails validation', () => {
-        const result = IndexValidator.go(payload)
+        const result = IndexValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error.details[0].message).toEqual('Select a valid status')

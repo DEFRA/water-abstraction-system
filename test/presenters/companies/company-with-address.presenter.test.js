@@ -20,7 +20,7 @@ describe('Companies - Company With Address Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CompanyWithAddressPresenter.go(company, address, role, licenceId)
+      const result = CompanyWithAddressPresenter(company, address, role, licenceId)
 
       expect(result).toEqual({
         backLink: {
@@ -48,7 +48,7 @@ describe('Companies - Company With Address Presenter', () => {
     describe('the "backLink" property', () => {
       describe('when the "licenceId" is provide', () => {
         it('returns a link to the licence contact details page', () => {
-          const result = CompanyWithAddressPresenter.go(company, address, role, licenceId)
+          const result = CompanyWithAddressPresenter(company, address, role, licenceId)
 
           expect(result.backLink).toEqual({
             href: `/system/licences/${licenceId}/contact-details`,
@@ -59,7 +59,7 @@ describe('Companies - Company With Address Presenter', () => {
 
       describe('when the "licenceId" is not provided', () => {
         it('returns a link to the licence holder contacts page', () => {
-          const result = CompanyWithAddressPresenter.go(company, address, role)
+          const result = CompanyWithAddressPresenter(company, address, role)
 
           expect(result.backLink).toEqual({
             href: `/system/companies/${company.id}/contacts`,

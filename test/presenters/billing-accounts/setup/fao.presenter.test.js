@@ -19,7 +19,7 @@ describe('Billing Accounts - Setup - FAO Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = FAOPresenter.go(session)
+      const result = FAOPresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -36,7 +36,7 @@ describe('Billing Accounts - Setup - FAO Presenter', () => {
   describe('the "backLink.href" property', () => {
     describe('when no "checkPageVisited" is not set', () => {
       it('returns the link for the "existing-address" page', () => {
-        const result = FAOPresenter.go(session)
+        const result = FAOPresenter(session)
 
         expect(result.backLink.href).toEqual(`/system/billing-accounts/setup/${session.id}/existing-address`)
       })
@@ -44,7 +44,7 @@ describe('Billing Accounts - Setup - FAO Presenter', () => {
 
     describe('when "checkPageVisited" is true', () => {
       it('returns the link for the "check" page', () => {
-        const result = FAOPresenter.go({
+        const result = FAOPresenter({
           ...session,
           checkPageVisited: true
         })

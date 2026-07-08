@@ -16,7 +16,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = StopOrReducePresenter.go(session)
+      const result = StopOrReducePresenter(session)
 
       expect(result).toEqual({
         backLink: '/system/licence-monitoring-station/setup/56b6545a-c8e9-4ecd-95fb-927677954f22/threshold-and-unit',
@@ -36,7 +36,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce presenter', () => {
       })
 
       it('returns a link back to the "check" page', () => {
-        const result = StopOrReducePresenter.go(session)
+        const result = StopOrReducePresenter(session)
 
         expect(result.backLink).toEqual(
           '/system/licence-monitoring-station/setup/56b6545a-c8e9-4ecd-95fb-927677954f22/check'
@@ -46,7 +46,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce presenter', () => {
 
     describe('when the user has come from somewhere else', () => {
       it('returns a link back to the "Threshold And Unit" page', () => {
-        const result = StopOrReducePresenter.go(session)
+        const result = StopOrReducePresenter(session)
 
         expect(result.backLink).toEqual(
           '/system/licence-monitoring-station/setup/56b6545a-c8e9-4ecd-95fb-927677954f22/threshold-and-unit'
@@ -62,7 +62,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce presenter', () => {
       })
 
       it('returns the "stopOrReduce" property populated to re-select the option', () => {
-        const result = StopOrReducePresenter.go(session)
+        const result = StopOrReducePresenter(session)
 
         expect(result.stopOrReduce).toEqual('stop')
       })
@@ -76,7 +76,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce presenter', () => {
       })
 
       it('returns the "reduceAtThreshold" property populated to re-select the option', () => {
-        const result = StopOrReducePresenter.go(session)
+        const result = StopOrReducePresenter(session)
 
         expect(result.reduceAtThreshold).toEqual('yes')
       })

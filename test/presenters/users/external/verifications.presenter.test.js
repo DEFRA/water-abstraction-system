@@ -23,7 +23,7 @@ describe('Users - External - Verifications Presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = VerificationsPresenter.go(user, verifications, viewingUserScope, back)
+    const result = VerificationsPresenter(user, verifications, viewingUserScope, back)
 
     expect(result).toEqual({
       activeNavBar: 'users',
@@ -70,7 +70,7 @@ describe('Users - External - Verifications Presenter', () => {
     describe('the "count" property', () => {
       describe('when there are multiple verifications with the same verification code', () => {
         it('returns the correct count of verifications with that code', () => {
-          const result = VerificationsPresenter.go(user, verifications, viewingUserScope, back)
+          const result = VerificationsPresenter(user, verifications, viewingUserScope, back)
 
           expect(result.verifications[0].count).toEqual(2)
           expect(result.verifications[1].count).toEqual(2)
@@ -79,7 +79,7 @@ describe('Users - External - Verifications Presenter', () => {
 
       describe('when there is only one verification with a particular verification code', () => {
         it('returns a count of "1" for that code', () => {
-          const result = VerificationsPresenter.go(user, verifications, viewingUserScope, back)
+          const result = VerificationsPresenter(user, verifications, viewingUserScope, back)
 
           expect(result.verifications[2].count).toEqual(1)
         })
@@ -89,7 +89,7 @@ describe('Users - External - Verifications Presenter', () => {
     describe('the "verifiedOn" property', () => {
       describe('when the verification has a "verifiedAt" value', () => {
         it('returns the formatted "verifiedAt" date', () => {
-          const result = VerificationsPresenter.go(user, verifications, viewingUserScope, back)
+          const result = VerificationsPresenter(user, verifications, viewingUserScope, back)
 
           expect(result.verifications[2].verifiedOn).toEqual(formatLongDate(today()))
         })
@@ -97,7 +97,7 @@ describe('Users - External - Verifications Presenter', () => {
 
       describe('when the verification does not have a "verifiedAt" value', () => {
         it('returns null', () => {
-          const result = VerificationsPresenter.go(user, verifications, viewingUserScope, back)
+          const result = VerificationsPresenter(user, verifications, viewingUserScope, back)
 
           expect(result.verifications[0].verifiedOn).toBeNull()
           expect(result.verifications[1].verifiedOn).toBeNull()

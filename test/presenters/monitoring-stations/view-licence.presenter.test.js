@@ -77,7 +77,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+    const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
     expect(result).toEqual({
       backLink: {
@@ -140,7 +140,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+        const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
         expect(result.lastAlertSentForLicence).toBeNull()
       })
@@ -148,7 +148,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
 
     describe('when just one licence monitoring stations is linked to an alert', () => {
       it('returns that records alert details', () => {
-        const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+        const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
         expect(result.lastAlertSentForLicence).toEqual('Resume email on 26 August 2025 sent to carol.shaw@atari.com')
       })
@@ -167,7 +167,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
       })
 
       it('returns the details of the most recent alert', () => {
-        const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+        const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
         expect(result.lastAlertSentForLicence).toEqual('Resume email on 26 August 2025 sent to carol.shaw@atari.com')
       })
@@ -178,7 +178,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
     describe('the "actions" property', () => {
       describe('when the user has permissions to remove tags', () => {
         it('returns an "items" object need by the govukSummaryList to display a link to the remove page', () => {
-          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+          const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
           expect(result.licenceTags[0].actions).toEqual({
             items: [
@@ -207,7 +207,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+          const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
           expect(result.licenceTags[0].actions).toBeNull()
           expect(result.licenceTags[1].actions).toBeNull()
@@ -218,7 +218,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
     describe('the "created" property', () => {
       describe('when the user that created the licence monitoring station is known', () => {
         it('returns when it was created and who by', () => {
-          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+          const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
           expect(result.licenceTags[0].created).toEqual('Created on 7 August 2025 by environment.officer@wrls.gov.uk')
           expect(result.licenceTags[1].created).toEqual('Created on 6 August 2025 by environment.officer@wrls.gov.uk')
@@ -232,7 +232,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
         })
 
         it('returns just when it was created', () => {
-          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+          const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
           expect(result.licenceTags[0].created).toEqual('Created on 7 August 2025')
           expect(result.licenceTags[1].created).toEqual('Created on 6 August 2025')
@@ -248,7 +248,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
         })
 
         it('returns true (display the warning)', () => {
-          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+          const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
           expect(result.licenceTags[1].displaySupersededWarning).toBe(true)
         })
@@ -256,7 +256,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
 
       describe('when the licence monitoring station is linked via its condition to a current licence version', () => {
         it('returns false (do not display the warning)', () => {
-          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+          const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
           expect(result.licenceTags[1].displaySupersededWarning).toBe(false)
         })
@@ -264,7 +264,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
 
       describe('when the licence monitoring station is not linked to a condition', () => {
         it('returns false (do not display the warning)', () => {
-          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+          const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
           expect(result.licenceTags[1].displaySupersededWarning).toBe(false)
         })
@@ -274,7 +274,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
     describe('the "effectOfRestriction" property', () => {
       describe('when the licence monitoring station is linked to a condition with notes', () => {
         it('returns the notes', () => {
-          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+          const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
           expect(result.licenceTags[1].effectOfRestriction).toEqual('This is the effect of restriction')
         })
@@ -286,7 +286,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+          const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
           expect(result.licenceTags[1].effectOfRestriction).toBeNull()
         })
@@ -294,7 +294,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
 
       describe('when the licence monitoring station is not linked to a condition', () => {
         it('returns null', () => {
-          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+          const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
           expect(result.licenceTags[0].effectOfRestriction).toBeNull()
         })
@@ -308,7 +308,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
         })
 
         it('returns null (we are already showing it in the "lastAlertSentForLicence" property)', () => {
-          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+          const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
           expect(result.licenceTags[0].lastAlertSent).toBeNull()
           expect(result.lastAlertSentForLicence).toEqual('Resume email on 26 August 2025 sent to carol.shaw@atari.com')
@@ -319,7 +319,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
         describe('when a licence monitoring station has a latest notification', () => {
           describe('and it was an email', () => {
             it('returns the details of the alert', () => {
-              const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+              const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
               expect(result.licenceTags[1].lastAlertSent).toEqual(
                 'Resume email on 26 August 2025 sent to carol.shaw@atari.com'
@@ -335,7 +335,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
             })
 
             it('returns the details of the alert', () => {
-              const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+              const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
               expect(result.licenceTags[1].lastAlertSent).toEqual(
                 'Resume letter on 26 August 2025 sent to Sherlock Holmes'
@@ -346,7 +346,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
 
         describe('when licence monitoring station does not have a latest notification', () => {
           it('returns an empty string (indicates show row in the view but leave empty)', () => {
-            const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+            const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
             expect(result.licenceTags[0].lastAlertSent).toEqual('')
           })
@@ -357,7 +357,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
     describe('the "linkedCondition" property', () => {
       describe('when the licence monitoring station is linked to a condition', () => {
         it('returns the details of the condition', () => {
-          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+          const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
           expect(result.licenceTags[1].linkedCondition).toEqual('Rates m3 per day, NALD ID 1234')
         })
@@ -365,7 +365,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
 
       describe('when the licence monitoring station is not linked to a condition', () => {
         it('returns "Not linked to a condition"', () => {
-          const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+          const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
           expect(result.licenceTags[0].linkedCondition).toEqual('Not linked to a condition')
         })
@@ -376,7 +376,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
   describe('the "pageTitleCaption" property', () => {
     describe('when the monitoring station has a river name recorded', () => {
       it('returns both the station and river name', () => {
-        const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+        const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
         expect(result.pageTitleCaption).toEqual('The River Styx at Hades')
       })
@@ -388,7 +388,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
       })
 
       it('returns just the station name', () => {
-        const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+        const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
         expect(result.pageTitleCaption).toEqual('Hades')
       })
@@ -402,7 +402,7 @@ describe('Monitoring Stations - View Licence presenter', () => {
       })
 
       it('returns the warning', () => {
-        const result = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
+        const result = ViewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth)
 
         expect(result.warning).toEqual({
           iconFallbackText: 'Warning',

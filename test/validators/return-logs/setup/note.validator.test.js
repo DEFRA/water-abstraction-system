@@ -6,7 +6,7 @@ const NoteValidator = require('../../../../app/validators/return-logs/setup/note
 describe('Return Logs Setup - Note validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = NoteValidator.go({ note: 'Note added to return requirement' })
+      const result = NoteValidator({ note: 'Note added to return requirement' })
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -16,7 +16,7 @@ describe('Return Logs Setup - Note validator', () => {
   describe('when invalid data is provided', () => {
     describe('because no "note" is given', () => {
       it('fails validation', () => {
-        const result = NoteValidator.go({ note: '' })
+        const result = NoteValidator({ note: '' })
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -26,7 +26,7 @@ describe('Return Logs Setup - Note validator', () => {
 
     describe('because too much "note" text is given', () => {
       it('fails validation', () => {
-        const result = NoteValidator.go({
+        const result = NoteValidator({
           note: `Lorem ipsum dolor sit amet consectetur adipiscing elit
             Lorem ipsum dolor sit amet consectetur adipiscing elit
             Lorem ipsum dolor sit amet consectetur adipiscing elit

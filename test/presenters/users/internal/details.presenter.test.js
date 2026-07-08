@@ -16,7 +16,7 @@ describe('Users - Internal - Details Presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = DetailsPresenter.go(auth, user)
+    const result = DetailsPresenter(auth, user)
 
     expect(result).toEqual({
       backLink: {
@@ -37,7 +37,7 @@ describe('Users - Internal - Details Presenter', () => {
   describe('the "lastSignedIn" property', () => {
     describe('when the lastLogin is not "null"', () => {
       it('returns the date and time of the last login', () => {
-        const result = DetailsPresenter.go(auth, user)
+        const result = DetailsPresenter(auth, user)
 
         expect(result.lastSignedIn).toEqual('6 October 2022 at 10:00:00')
       })
@@ -49,7 +49,7 @@ describe('Users - Internal - Details Presenter', () => {
       })
 
       it('returns "Never signed in"', () => {
-        const result = DetailsPresenter.go(auth, user)
+        const result = DetailsPresenter(auth, user)
 
         expect(result.lastSignedIn).toEqual('Never signed in')
       })
@@ -59,7 +59,7 @@ describe('Users - Internal - Details Presenter', () => {
   describe('the "roles" property', () => {
     describe('when the user has no group or user roles', () => {
       it('returns an empty array', () => {
-        const result = DetailsPresenter.go(auth, user)
+        const result = DetailsPresenter(auth, user)
 
         expect(result.roles).toEqual([])
       })
@@ -73,7 +73,7 @@ describe('Users - Internal - Details Presenter', () => {
       })
 
       it('returns the "roles" for the group in sentence case, sorted by name', () => {
-        const result = DetailsPresenter.go(auth, user)
+        const result = DetailsPresenter(auth, user)
 
         expect(result.roles).toEqual([
           {
@@ -96,7 +96,7 @@ describe('Users - Internal - Details Presenter', () => {
       })
 
       it('returns all "roles" in sentence case, sorted by name', () => {
-        const result = DetailsPresenter.go(auth, user)
+        const result = DetailsPresenter(auth, user)
 
         expect(result.roles).toEqual([
           {
@@ -131,7 +131,7 @@ describe('Users - Internal - Details Presenter', () => {
       })
 
       it('returns the "roles" for the group in sentence case, sorted by name, with "unlink" mapped to "unregister"', () => {
-        const result = DetailsPresenter.go(auth, user)
+        const result = DetailsPresenter(auth, user)
 
         expect(result.roles).toEqual([
           {
@@ -158,7 +158,7 @@ describe('Users - Internal - Details Presenter', () => {
   describe('the "showEditButton" property', () => {
     describe('when the authorised user is different to the one being edited', () => {
       it('returns "true"', () => {
-        const result = DetailsPresenter.go(auth, user)
+        const result = DetailsPresenter(auth, user)
 
         expect(result.showEditButton).toBe(true)
       })
@@ -170,7 +170,7 @@ describe('Users - Internal - Details Presenter', () => {
       })
 
       it('returns "false"', () => {
-        const result = DetailsPresenter.go(auth, user)
+        const result = DetailsPresenter(auth, user)
 
         expect(result.showEditButton).toBe(false)
       })

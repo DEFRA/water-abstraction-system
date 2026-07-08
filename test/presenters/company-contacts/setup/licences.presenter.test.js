@@ -26,7 +26,7 @@ describe('Company Contacts - Setup - Licences Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = LicencesPresenter.go(session)
+      const result = LicencesPresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -52,7 +52,7 @@ describe('Company Contacts - Setup - Licences Presenter', () => {
         })
 
         it('returns the matching licence as checked', () => {
-          const result = LicencesPresenter.go(session)
+          const result = LicencesPresenter(session)
 
           expect(result.licences).toEqual([
             {

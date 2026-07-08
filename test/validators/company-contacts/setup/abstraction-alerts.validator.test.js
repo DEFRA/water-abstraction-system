@@ -12,7 +12,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = AbstractionAlertsValidator.go(payload)
+      const result = AbstractionAlertsValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -26,7 +26,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = AbstractionAlertsValidator.go(payload)
+        const result = AbstractionAlertsValidator(payload)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

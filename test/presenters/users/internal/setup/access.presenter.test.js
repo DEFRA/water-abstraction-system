@@ -15,7 +15,7 @@ describe('Users - Internal - Setup - Access Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = AccessPresenter.go(session)
+      const result = AccessPresenter(session)
 
       expect(result).toEqual({
         access: 'enabled',

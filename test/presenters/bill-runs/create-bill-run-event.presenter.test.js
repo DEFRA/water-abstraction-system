@@ -20,7 +20,7 @@ describe('Create Bill Run Event presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = CreateBillRunEventPresenter.go(billRun)
+      const result = CreateBillRunEventPresenter(billRun)
 
       expect(result.batch).toBeDefined()
       expect(result.batch.id).toEqual(billRun.id)

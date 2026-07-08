@@ -12,7 +12,7 @@ describe('Address - Postcode Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = PostcodeValidator.go(payload)
+      const result = PostcodeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -25,7 +25,7 @@ describe('Address - Postcode Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = PostcodeValidator.go(payload)
+      const result = PostcodeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()
@@ -39,7 +39,7 @@ describe('Address - Postcode Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = PostcodeValidator.go(payload)
+      const result = PostcodeValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

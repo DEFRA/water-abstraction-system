@@ -44,7 +44,7 @@ describe('Licence Versions - View presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+      const result = ViewPresenter(licenceVersionData, auth, conditions)
 
       expect(result).toEqual({
         backLink: {
@@ -76,7 +76,7 @@ describe('Licence Versions - View presenter', () => {
   describe('the "changeType" property', () => {
     describe('when the licence version is not administrative', () => {
       it('returns "licence issued"', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+        const result = ViewPresenter(licenceVersionData, auth, conditions)
 
         expect(result.changeType).toEqual('licence issued')
       })
@@ -88,7 +88,7 @@ describe('Licence Versions - View presenter', () => {
       })
 
       it('returns "no licence issued"', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+        const result = ViewPresenter(licenceVersionData, auth, conditions)
 
         expect(result.changeType).toEqual('no licence issued')
       })
@@ -101,7 +101,7 @@ describe('Licence Versions - View presenter', () => {
     })
 
     it('returns the "conditionTypes"', () => {
-      const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+      const result = ViewPresenter(licenceVersionData, auth, conditions)
 
       expect(result.conditionTypes).toEqual([
         {
@@ -136,7 +136,7 @@ describe('Licence Versions - View presenter', () => {
   describe('the "errorInDataEmail" property', () => {
     describe('when the user does NOT have the "billing" role', () => {
       it('returns the email address', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+        const result = ViewPresenter(licenceVersionData, auth, conditions)
 
         expect(result.errorInDataEmail).toEqual('notify@test.gov.uk')
       })
@@ -148,7 +148,7 @@ describe('Licence Versions - View presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+        const result = ViewPresenter(licenceVersionData, auth, conditions)
 
         expect(result.errorInDataEmail).toBeNull()
       })
@@ -164,7 +164,7 @@ describe('Licence Versions - View presenter', () => {
       })
 
       it('returns the licence details', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+        const result = ViewPresenter(licenceVersionData, auth, conditions)
 
         expect(result.licenceDetails).toEqual({
           address: ['12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
@@ -179,7 +179,7 @@ describe('Licence Versions - View presenter', () => {
 
     describe('when there are licence details missing', () => {
       it('returns the licence details', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+        const result = ViewPresenter(licenceVersionData, auth, conditions)
 
         expect(result.licenceDetails).toEqual({
           address: ['12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
@@ -196,7 +196,7 @@ describe('Licence Versions - View presenter', () => {
   describe('the "notes" property', () => {
     describe('when the user does not have the "billing" role', () => {
       it('returns null', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+        const result = ViewPresenter(licenceVersionData, auth, conditions)
 
         expect(result.notes).toBeNull()
       })
@@ -209,7 +209,7 @@ describe('Licence Versions - View presenter', () => {
 
       describe('and there are notes', () => {
         it('returns the notes', () => {
-          const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+          const result = ViewPresenter(licenceVersionData, auth, conditions)
 
           expect(result.notes).toEqual({
             additionalNotes: [],
@@ -224,7 +224,7 @@ describe('Licence Versions - View presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+          const result = ViewPresenter(licenceVersionData, auth, conditions)
 
           expect(result.notes).toBeNull()
         })
@@ -235,7 +235,7 @@ describe('Licence Versions - View presenter', () => {
   describe('the "pagination" property', () => {
     describe('when there is no "pagination" required', () => {
       it('returns null', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+        const result = ViewPresenter(licenceVersionData, auth, conditions)
 
         expect(result.pagination).toBeNull()
       })
@@ -263,7 +263,7 @@ describe('Licence Versions - View presenter', () => {
         })
 
         it('returns the "previous" and "next" links', () => {
-          const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+          const result = ViewPresenter(licenceVersionData, auth, conditions)
 
           expect(result.pagination).toEqual({
             next: {
@@ -286,7 +286,7 @@ describe('Licence Versions - View presenter', () => {
         })
 
         it('returns the "next" link', () => {
-          const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+          const result = ViewPresenter(licenceVersionData, auth, conditions)
 
           expect(result.pagination).toEqual({
             next: {
@@ -304,7 +304,7 @@ describe('Licence Versions - View presenter', () => {
         })
 
         it('returns the "previous" link', () => {
-          const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+          const result = ViewPresenter(licenceVersionData, auth, conditions)
 
           expect(result.pagination).toEqual({
             previous: {
@@ -321,7 +321,7 @@ describe('Licence Versions - View presenter', () => {
   describe('the "points" property', () => {
     describe('when there are no points', () => {
       it('returns an empty array', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+        const result = ViewPresenter(licenceVersionData, auth, conditions)
 
         expect(result.points).toEqual([])
       })
@@ -339,7 +339,7 @@ describe('Licence Versions - View presenter', () => {
       })
 
       it('returns the points', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+        const result = ViewPresenter(licenceVersionData, auth, conditions)
 
         expect(result.points).toEqual([
           {
@@ -399,7 +399,7 @@ describe('Licence Versions - View presenter', () => {
       })
 
       it('returns the points ordered by the description and no duplicates', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+        const result = ViewPresenter(licenceVersionData, auth, conditions)
 
         expect(result.points).toEqual([
           {
@@ -474,7 +474,7 @@ describe('Licence Versions - View presenter', () => {
       })
 
       it('should return the purposes', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+        const result = ViewPresenter(licenceVersionData, auth, conditions)
 
         expect(result.purposes).toEqual([
           {
@@ -495,7 +495,7 @@ describe('Licence Versions - View presenter', () => {
 
     describe('when there are no "purposes"', () => {
       it('should return an empty array', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+        const result = ViewPresenter(licenceVersionData, auth, conditions)
 
         expect(result.purposes).toEqual([])
       })

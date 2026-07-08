@@ -16,7 +16,7 @@ describe('Bill Runs - Setup - Type presenter', () => {
 
     describe('where the user has not previously selected a bill run type', () => {
       it('correctly presents the data', () => {
-        const result = TypePresenter.go(session)
+        const result = TypePresenter(session)
 
         expect(result).toEqual({
           backlink: '/system/bill-runs',
@@ -33,7 +33,7 @@ describe('Bill Runs - Setup - Type presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = TypePresenter.go(session)
+        const result = TypePresenter(session)
 
         expect(result).toEqual({
           backlink: '/system/bill-runs',

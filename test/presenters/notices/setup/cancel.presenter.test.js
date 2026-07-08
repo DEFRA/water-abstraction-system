@@ -22,7 +22,7 @@ describe('Notices - Setup - Cancel presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = CancelPresenter.go(session)
+    const result = CancelPresenter(session)
 
     expect(result).toEqual({
       backLink: { href: `/system/notices/setup/${session.id}/check`, text: 'Back' },
@@ -37,7 +37,7 @@ describe('Notices - Setup - Cancel presenter', () => {
 
   describe('when a licence ref has been chosen', () => {
     it('correctly formats the summary list', () => {
-      const result = CancelPresenter.go(session)
+      const result = CancelPresenter(session)
 
       expect(result.summaryList).toEqual({
         text: 'Licence number',
@@ -57,7 +57,7 @@ describe('Notices - Setup - Cancel presenter', () => {
     })
 
     it('correctly formats the summary list', () => {
-      const result = CancelPresenter.go(session)
+      const result = CancelPresenter(session)
 
       expect(result.summaryList).toEqual({
         text: 'Alert type',
@@ -83,7 +83,7 @@ describe('Notices - Setup - Cancel presenter', () => {
       })
 
       it('correctly formats the summary list', () => {
-        const result = CancelPresenter.go(session)
+        const result = CancelPresenter(session)
 
         expect(result.summaryList).toEqual({
           text: 'Returns period',
@@ -108,7 +108,7 @@ describe('Notices - Setup - Cancel presenter', () => {
       })
 
       it('correctly formats the summary list', () => {
-        const result = CancelPresenter.go(session)
+        const result = CancelPresenter(session)
 
         expect(result.summaryList).toEqual({
           text: 'Returns period',
@@ -134,7 +134,7 @@ describe('Notices - Setup - Cancel presenter', () => {
         })
 
         it('correctly formats the summary list', () => {
-          const result = CancelPresenter.go(session)
+          const result = CancelPresenter(session)
 
           expect(result.summaryList).toEqual({
             text: 'Returns period',
@@ -159,7 +159,7 @@ describe('Notices - Setup - Cancel presenter', () => {
         })
 
         it('correctly formats the summary list', () => {
-          const result = CancelPresenter.go(session)
+          const result = CancelPresenter(session)
 
           expect(result.summaryList).toEqual({
             text: 'Returns period',
@@ -184,7 +184,7 @@ describe('Notices - Setup - Cancel presenter', () => {
         })
 
         it('correctly formats the summary list', () => {
-          const result = CancelPresenter.go(session)
+          const result = CancelPresenter(session)
 
           expect(result.summaryList).toEqual({
             text: 'Returns period',

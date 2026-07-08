@@ -12,7 +12,7 @@ describe('Bill Runs Review - Authorised validator', () => {
     })
 
     it('confirms the data is valid', () => {
-      const result = AuthorisedValidator.go(payload)
+      const result = AuthorisedValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -26,7 +26,7 @@ describe('Bill Runs Review - Authorised validator', () => {
       })
 
       it('fails the validation with the message "Enter an authorised volume"', () => {
-        const result = AuthorisedValidator.go(payload)
+        const result = AuthorisedValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Enter an authorised volume')
@@ -39,7 +39,7 @@ describe('Bill Runs Review - Authorised validator', () => {
       })
 
       it('fails the validation with the message "The authorised volume must be a number"', () => {
-        const result = AuthorisedValidator.go(payload)
+        const result = AuthorisedValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('The authorised volume must be a number')
@@ -52,7 +52,7 @@ describe('Bill Runs Review - Authorised validator', () => {
       })
 
       it('fails the validation with the message "The authorised volume must be greater than 6"', () => {
-        const result = AuthorisedValidator.go(payload)
+        const result = AuthorisedValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('The authorised volume must be greater than 6')
@@ -65,7 +65,7 @@ describe('Bill Runs Review - Authorised validator', () => {
       })
 
       it('fails the validation with the message "The authorised volume must not have more than 6 decimal places"', () => {
-        const result = AuthorisedValidator.go(payload)
+        const result = AuthorisedValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual(

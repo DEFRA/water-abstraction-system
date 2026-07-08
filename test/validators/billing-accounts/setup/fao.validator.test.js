@@ -12,7 +12,7 @@ describe('Billing Accounts - Setup - FAO Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = FAOValidator.go(payload)
+      const result = FAOValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -25,7 +25,7 @@ describe('Billing Accounts - Setup - FAO Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = FAOValidator.go(payload)
+      const result = FAOValidator(payload)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeDefined()

@@ -69,7 +69,7 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = PaperReturnNotificationsPresenter.go(session, recipients, noticeId)
+    const result = PaperReturnNotificationsPresenter(session, recipients, noticeId)
 
     expect(result).toEqual([
       {

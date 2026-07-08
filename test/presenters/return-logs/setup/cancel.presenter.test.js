@@ -26,7 +26,7 @@ describe('Return Logs Setup - Cancel presenter', () => {
 
   describe('when provided with a populated session', () => {
     it('correctly presents the data', () => {
-      const result = CancelPresenter.go(session)
+      const result = CancelPresenter(session)
 
       expect(result).toEqual({
         abstractionPeriod: '1 January to 31 December',
@@ -50,7 +50,7 @@ describe('Return Logs Setup - Cancel presenter', () => {
       })
 
       it('returns the tariff as "Two-part"', () => {
-        const result = CancelPresenter.go(session)
+        const result = CancelPresenter(session)
 
         expect(result.tariff).toEqual('Two-part')
       })
@@ -62,7 +62,7 @@ describe('Return Logs Setup - Cancel presenter', () => {
       })
 
       it('returns the tariff as "Standard"', () => {
-        const result = CancelPresenter.go(session)
+        const result = CancelPresenter(session)
 
         expect(result.tariff).toEqual('Standard')
       })

@@ -25,7 +25,7 @@ describe('Companies - Contacts presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ContactsPresenter.go(company, contacts)
+      const result = ContactsPresenter(company, contacts)
 
       expect(result).toEqual({
         backLink: {
@@ -60,7 +60,7 @@ describe('Companies - Contacts presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactsPresenter.go(company, contacts)
+          const result = ContactsPresenter(company, contacts)
 
           expect(result.contacts).toEqual([
             {
@@ -84,7 +84,7 @@ describe('Companies - Contacts presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactsPresenter.go(company, contacts)
+          const result = ContactsPresenter(company, contacts)
 
           expect(result.contacts).toEqual([
             {
@@ -108,7 +108,7 @@ describe('Companies - Contacts presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactsPresenter.go(company, contacts)
+          const result = ContactsPresenter(company, contacts)
 
           expect(result.contacts).toEqual([
             {
@@ -132,7 +132,7 @@ describe('Companies - Contacts presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactsPresenter.go(company, contacts)
+          const result = ContactsPresenter(company, contacts)
 
           expect(result.contacts).toEqual([
             {
@@ -156,7 +156,7 @@ describe('Companies - Contacts presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactsPresenter.go(company, contacts)
+          const result = ContactsPresenter(company, contacts)
 
           expect(result.contacts).toEqual([
             {
@@ -180,7 +180,7 @@ describe('Companies - Contacts presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactsPresenter.go(company, contacts)
+          const result = ContactsPresenter(company, contacts)
 
           expect(result.contacts).toEqual([
             {
@@ -204,7 +204,7 @@ describe('Companies - Contacts presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactsPresenter.go(company, contacts)
+          const result = ContactsPresenter(company, contacts)
 
           expect(result.contacts).toEqual([
             {
@@ -228,7 +228,7 @@ describe('Companies - Contacts presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = ContactsPresenter.go(company, contacts)
+          const result = ContactsPresenter(company, contacts)
 
           expect(result.contacts).toEqual([
             {

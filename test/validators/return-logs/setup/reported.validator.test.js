@@ -13,7 +13,7 @@ describe('Return Logs Setup - Reported validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = ReportedValidator.go(payload)
+        const result = ReportedValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -25,7 +25,7 @@ describe('Return Logs Setup - Reported validator', () => {
       })
 
       it('confirms the payload is valid', () => {
-        const result = ReportedValidator.go(payload)
+        const result = ReportedValidator(payload)
 
         expect(result.error).toBeUndefined()
       })
@@ -39,7 +39,7 @@ describe('Return Logs Setup - Reported validator', () => {
       })
 
       it('fails validation with the message "Select how this return was reported"', () => {
-        const result = ReportedValidator.go(payload)
+        const result = ReportedValidator(payload)
 
         expect(result.error).toBeDefined()
         expect(result.error.details[0].message).toEqual('Select how this return was reported')

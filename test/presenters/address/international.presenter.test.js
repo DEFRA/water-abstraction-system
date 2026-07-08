@@ -25,7 +25,7 @@ describe('Address - International Presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = InternationalPresenter.go(session)
+    const result = InternationalPresenter(session)
 
     expect(result).toEqual({
       activeNavBar: 'manage',
@@ -47,7 +47,7 @@ describe('Address - International Presenter', () => {
   describe('the "addressLine1" property', () => {
     describe('when the property has not been set', () => {
       it('returns null', () => {
-        const result = InternationalPresenter.go(session)
+        const result = InternationalPresenter(session)
 
         expect(result.addressLine1).toEqual(null)
       })
@@ -59,7 +59,7 @@ describe('Address - International Presenter', () => {
       })
 
       it('returns the set value', () => {
-        const result = InternationalPresenter.go(session)
+        const result = InternationalPresenter(session)
 
         expect(result.addressLine1).toEqual('Fake Farm')
       })
@@ -69,7 +69,7 @@ describe('Address - International Presenter', () => {
   describe('the "addressLine2" property', () => {
     describe('when the property has not been set', () => {
       it('returns null', () => {
-        const result = InternationalPresenter.go(session)
+        const result = InternationalPresenter(session)
 
         expect(result.addressLine2).toEqual(null)
       })
@@ -81,7 +81,7 @@ describe('Address - International Presenter', () => {
       })
 
       it('returns the set value', () => {
-        const result = InternationalPresenter.go(session)
+        const result = InternationalPresenter(session)
 
         expect(result.addressLine2).toEqual('1 Fake Street')
       })
@@ -91,7 +91,7 @@ describe('Address - International Presenter', () => {
   describe('the "addressLine3" property', () => {
     describe('when the property has not been set', () => {
       it('returns null', () => {
-        const result = InternationalPresenter.go(session)
+        const result = InternationalPresenter(session)
 
         expect(result.addressLine3).toEqual(null)
       })
@@ -103,7 +103,7 @@ describe('Address - International Presenter', () => {
       })
 
       it('returns the set value', () => {
-        const result = InternationalPresenter.go(session)
+        const result = InternationalPresenter(session)
 
         expect(result.addressLine3).toEqual('Fake Village')
       })
@@ -113,7 +113,7 @@ describe('Address - International Presenter', () => {
   describe('the "addressLine4" property', () => {
     describe('when the property has not been set', () => {
       it('returns null', () => {
-        const result = InternationalPresenter.go(session)
+        const result = InternationalPresenter(session)
 
         expect(result.addressLine4).toEqual(null)
       })
@@ -125,7 +125,7 @@ describe('Address - International Presenter', () => {
       })
 
       it('returns the set value', () => {
-        const result = InternationalPresenter.go(session)
+        const result = InternationalPresenter(session)
 
         expect(result.addressLine4).toEqual('Fake City')
       })
@@ -135,7 +135,7 @@ describe('Address - International Presenter', () => {
   describe('the "country" property', () => {
     describe('when the property has not been set', () => {
       it('returns the list of countries with the "Select a country" option selected', () => {
-        const result = InternationalPresenter.go(session)
+        const result = InternationalPresenter(session)
 
         expect(result.country).toEqual(countryLookup())
       })
@@ -147,7 +147,7 @@ describe('Address - International Presenter', () => {
       })
 
       it('returns the list of countries with the matching country selected', () => {
-        const result = InternationalPresenter.go(session)
+        const result = InternationalPresenter(session)
 
         expect(result.country).toEqual(countryLookup('France'))
       })
@@ -157,7 +157,7 @@ describe('Address - International Presenter', () => {
   describe('the "pageTitleCaption" property', () => {
     describe('when the property has not been configured', () => {
       it('returns null', () => {
-        const result = InternationalPresenter.go(session)
+        const result = InternationalPresenter(session)
 
         expect(result.pageTitleCaption).toEqual(null)
       })
@@ -169,7 +169,7 @@ describe('Address - International Presenter', () => {
       })
 
       it('returns the set value', () => {
-        const result = InternationalPresenter.go(session)
+        const result = InternationalPresenter(session)
 
         expect(result.pageTitleCaption).toEqual('Super awesome caption')
       })
@@ -179,7 +179,7 @@ describe('Address - International Presenter', () => {
   describe('the "postcode" property', () => {
     describe('when the property has not been set', () => {
       it('returns null', () => {
-        const result = InternationalPresenter.go(session)
+        const result = InternationalPresenter(session)
 
         expect(result.postcode).toEqual(null)
       })
@@ -191,7 +191,7 @@ describe('Address - International Presenter', () => {
       })
 
       it('returns the set value', () => {
-        const result = InternationalPresenter.go(session)
+        const result = InternationalPresenter(session)
 
         expect(result.postcode).toEqual('SW1A 1AA')
       })

@@ -16,7 +16,7 @@ describe('Licence Monitoring Station Setup - Licence Number Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = LicenceNumberPresenter.go(session)
+      const result = LicenceNumberPresenter(session)
 
       expect(result).toMatchObject({
         licenceRef: 'LICENCE_REF',
@@ -31,7 +31,7 @@ describe('Licence Monitoring Station Setup - Licence Number Presenter', () => {
       })
 
       it('returns the back link to the check page', () => {
-        const result = LicenceNumberPresenter.go(session)
+        const result = LicenceNumberPresenter(session)
 
         expect(result.backLink).toEqual(
           `/system/licence-monitoring-station/setup/d9afac37-9754-4bfa-95f7-87ab26824423/check`
@@ -45,7 +45,7 @@ describe('Licence Monitoring Station Setup - Licence Number Presenter', () => {
       })
 
       it('returns the back link to the stop or reduce page', () => {
-        const result = LicenceNumberPresenter.go(session)
+        const result = LicenceNumberPresenter(session)
 
         expect(result.backLink).toEqual(
           `/system/licence-monitoring-station/setup/d9afac37-9754-4bfa-95f7-87ab26824423/stop-or-reduce`

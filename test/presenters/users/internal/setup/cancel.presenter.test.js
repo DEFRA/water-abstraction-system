@@ -15,7 +15,7 @@ describe('Users - Internal - Setup - Cancel Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CancelPresenter.go(session)
+      const result = CancelPresenter(session)
 
       expect(result).toEqual({
         activeNavBar: 'users',

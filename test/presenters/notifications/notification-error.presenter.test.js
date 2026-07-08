@@ -19,7 +19,7 @@ describe('Notifications - Notification error presenter', () => {
 
   describe('when the notification does not have a status of "ERROR"', () => {
     it('returns null', () => {
-      const result = NotificationErrorPresenter.go(notification)
+      const result = NotificationErrorPresenter(notification)
 
       expect(result).toBeNull()
     })
@@ -36,7 +36,7 @@ describe('Notifications - Notification error presenter', () => {
       })
 
       it("returns the notify status and Notify's error description", () => {
-        const result = NotificationErrorPresenter.go(notification)
+        const result = NotificationErrorPresenter(notification)
 
         expect(result).toEqual({
           status: 'permanent-failure',
@@ -57,7 +57,7 @@ describe('Notifications - Notification error presenter', () => {
         })
 
         it('returns our generic status and our own error description', () => {
-          const result = NotificationErrorPresenter.go(notification)
+          const result = NotificationErrorPresenter(notification)
 
           expect(result).toEqual({
             status: 'Failed to send to Notify',
@@ -73,7 +73,7 @@ describe('Notifications - Notification error presenter', () => {
         })
 
         it('returns our generic status and our own error description', () => {
-          const result = NotificationErrorPresenter.go(notification)
+          const result = NotificationErrorPresenter(notification)
 
           expect(result).toEqual({
             status: 'Failed to send to Notify',
@@ -89,7 +89,7 @@ describe('Notifications - Notification error presenter', () => {
         })
 
         it('returns our generic status and description', () => {
-          const result = NotificationErrorPresenter.go(notification)
+          const result = NotificationErrorPresenter(notification)
 
           expect(result).toEqual({
             status: 'Failed to send to Notify',
@@ -104,7 +104,7 @@ describe('Notifications - Notification error presenter', () => {
         })
 
         it('returns our generic status and our "No error logged" description', () => {
-          const result = NotificationErrorPresenter.go(notification)
+          const result = NotificationErrorPresenter(notification)
 
           expect(result).toEqual({
             status: 'Failed to send to Notify',
@@ -119,7 +119,7 @@ describe('Notifications - Notification error presenter', () => {
         })
 
         it('returns our generic status and our "No error logged" description', () => {
-          const result = NotificationErrorPresenter.go(notification)
+          const result = NotificationErrorPresenter(notification)
 
           expect(result).toEqual({
             status: 'Failed to send to Notify',

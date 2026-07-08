@@ -12,7 +12,7 @@ describe('Bill Runs Setup Region validator', () => {
 
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = RegionValidator.go({ region: '19a027c6-4aad-47d3-80e3-3917a4579a5b' }, regions)
+      const result = RegionValidator({ region: '19a027c6-4aad-47d3-80e3-3917a4579a5b' }, regions)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -22,7 +22,7 @@ describe('Bill Runs Setup Region validator', () => {
   describe('when invalid data is provided', () => {
     describe('because no "region" is given', () => {
       it('fails validation', () => {
-        const result = RegionValidator.go({ region: '' }, regions)
+        const result = RegionValidator({ region: '' }, regions)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -32,7 +32,7 @@ describe('Bill Runs Setup Region validator', () => {
 
     describe('because an unknown "region" is given', () => {
       it('fails validation', () => {
-        const result = RegionValidator.go({ region: '34b43f8a-aee4-48e0-ab17-f819ac2c9a15' }, regions)
+        const result = RegionValidator({ region: '34b43f8a-aee4-48e0-ab17-f819ac2c9a15' }, regions)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

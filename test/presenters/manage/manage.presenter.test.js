@@ -30,7 +30,7 @@ describe('Manage - Manage presenter', () => {
     })
 
     it('provides the correct items to display', async () => {
-      const result = await ManagePresenter.go(auth.credentials.scope)
+      const result = await ManagePresenter(auth.credentials.scope)
 
       expect(result).toEqual({
         pageTitle: 'Manage',
@@ -50,7 +50,7 @@ describe('Manage - Manage presenter', () => {
     })
 
     it('provides the correct items to display', async () => {
-      const result = await ManagePresenter.go(auth.credentials.scope)
+      const result = await ManagePresenter(auth.credentials.scope)
 
       expect(result).toEqual({
         pageTitle: 'Manage',
@@ -70,7 +70,7 @@ describe('Manage - Manage presenter', () => {
     })
 
     it('provides the correct items to display', async () => {
-      const result = await ManagePresenter.go(auth.credentials.scope)
+      const result = await ManagePresenter(auth.credentials.scope)
 
       expect(result).toEqual({
         pageTitle: 'Manage',
@@ -90,7 +90,7 @@ describe('Manage - Manage presenter', () => {
     })
 
     it('provides the correct items to display', async () => {
-      const result = await ManagePresenter.go(auth.credentials.scope)
+      const result = await ManagePresenter(auth.credentials.scope)
 
       expect(result).toEqual({
         pageTitle: 'Manage',
@@ -110,7 +110,7 @@ describe('Manage - Manage presenter', () => {
     })
 
     it('provides the correct items to display', async () => {
-      const result = await ManagePresenter.go(auth.credentials.scope)
+      const result = await ManagePresenter(auth.credentials.scope)
 
       expect(result).toEqual({
         pageTitle: 'Manage',
@@ -130,7 +130,7 @@ describe('Manage - Manage presenter', () => {
     })
 
     it('provides the correct items to display', async () => {
-      const result = await ManagePresenter.go(auth.credentials.scope)
+      const result = await ManagePresenter(auth.credentials.scope)
 
       expect(result).toEqual({
         pageTitle: 'Manage',
@@ -150,7 +150,7 @@ describe('Manage - Manage presenter', () => {
     })
 
     it('provides the correct items to display', async () => {
-      const result = await ManagePresenter.go(auth.credentials.scope)
+      const result = await ManagePresenter(auth.credentials.scope)
 
       expect(result).toEqual({
         pageTitle: 'Manage',
@@ -170,7 +170,7 @@ describe('Manage - Manage presenter', () => {
     })
 
     it('provides the correct items to display', async () => {
-      const result = await ManagePresenter.go(auth.credentials.scope)
+      const result = await ManagePresenter(auth.credentials.scope)
 
       expect(result).toEqual({
         pageTitle: 'Manage',
@@ -190,7 +190,7 @@ describe('Manage - Manage presenter', () => {
     })
 
     it('provides the correct items to display', async () => {
-      const result = await ManagePresenter.go(auth.credentials.scope)
+      const result = await ManagePresenter(auth.credentials.scope)
 
       expect(result).toEqual({
         pageTitle: 'Manage',

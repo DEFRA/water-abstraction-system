@@ -32,7 +32,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
     })
 
     it('condenses the middle address parts', () => {
-      const result = NotifyAddressPresenter.go(contact)
+      const result = NotifyAddressPresenter(contact)
 
       expect(result).toEqual({
         address_line_1: 'Mr J H Watson',
@@ -54,7 +54,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
     })
 
     it('excludes them from the result', () => {
-      const result = NotifyAddressPresenter.go(contact)
+      const result = NotifyAddressPresenter(contact)
 
       expect(result).toEqual({
         address_line_1: 'Mr J H Watson',
@@ -73,7 +73,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
     })
 
     it('excludes it from the result', () => {
-      const result = NotifyAddressPresenter.go(contact)
+      const result = NotifyAddressPresenter(contact)
 
       expect(result).toEqual({
         address_line_1: 'Mr J H Watson',
@@ -93,7 +93,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
     })
 
     it('removes the duplication from the result', () => {
-      const result = NotifyAddressPresenter.go(contact)
+      const result = NotifyAddressPresenter(contact)
 
       expect(result).toEqual({
         address_line_1: 'Sherlock Holmes Consulting Detective',
@@ -111,7 +111,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
     describe('and "country" is populated', () => {
       describe('and it is one in the United Kingdom', () => {
         it('excludes "country" in the result', () => {
-          const result = NotifyAddressPresenter.go(contact)
+          const result = NotifyAddressPresenter(contact)
 
           expect(result).toEqual({
             address_line_1: 'Mr J H Watson',
@@ -131,7 +131,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
         })
 
         it('includes "country" in the result _before_ the postcode', () => {
-          const result = NotifyAddressPresenter.go(contact)
+          const result = NotifyAddressPresenter(contact)
 
           expect(result).toEqual({
             address_line_1: 'Mr J H Watson',
@@ -152,7 +152,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
       })
 
       it('ensures "postcode" is the last address line', () => {
-        const result = NotifyAddressPresenter.go(contact)
+        const result = NotifyAddressPresenter(contact)
 
         expect(result).toEqual({
           address_line_1: 'Mr J H Watson',
@@ -186,7 +186,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
 
     describe('and "postcode" is populated', () => {
       it('includes "country" in the result _after_ the postcode', () => {
-        const result = NotifyAddressPresenter.go(contact)
+        const result = NotifyAddressPresenter(contact)
 
         expect(result).toEqual({
           address_line_1: 'Professor J H Moriarty',
@@ -206,7 +206,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
       })
 
       it('ensures "country" is the last address line', () => {
-        const result = NotifyAddressPresenter.go(contact)
+        const result = NotifyAddressPresenter(contact)
 
         expect(result).toEqual({
           address_line_1: 'Professor J H Moriarty',
@@ -233,7 +233,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
         })
 
         it('returns all populated address parts plus an "INVALID" message', () => {
-          const result = NotifyAddressPresenter.go(contact)
+          const result = NotifyAddressPresenter(contact)
 
           expect(result).toEqual({
             address_line_1: 'Mr J H Watson',
@@ -250,7 +250,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
 
       describe('and "country" is in the UK', () => {
         it('returns all populated address parts plus an "INVALID" message', () => {
-          const result = NotifyAddressPresenter.go(contact)
+          const result = NotifyAddressPresenter(contact)
 
           expect(result).toEqual({
             address_line_1: 'Mr J H Watson',
@@ -272,7 +272,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
         })
 
         it('returns all populated address parts plus an "INVALID" message', () => {
-          const result = NotifyAddressPresenter.go(contact)
+          const result = NotifyAddressPresenter(contact)
 
           expect(result).toEqual({
             address_line_1: 'Mr J H Watson',
@@ -295,7 +295,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
       })
 
       it('returns all populated address parts plus an "INVALID" message', () => {
-        const result = NotifyAddressPresenter.go(contact)
+        const result = NotifyAddressPresenter(contact)
 
         expect(result).toEqual({
           address_line_1: 'Mr J H Watson',
@@ -318,7 +318,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
       })
 
       it('returns all populated address parts plus an "INVALID" message', () => {
-        const result = NotifyAddressPresenter.go(contact)
+        const result = NotifyAddressPresenter(contact)
 
         expect(result).toEqual({
           address_line_1: 'Mr J H Watson',

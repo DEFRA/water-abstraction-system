@@ -12,7 +12,7 @@ describe('Bill Runs - View Send Bill Run presenter', () => {
     })
 
     it('correctly presents the data', () => {
-      const result = ViewSendBillRunPresenter.go(billRun)
+      const result = ViewSendBillRunPresenter(billRun)
 
       expect(result).toEqual({
         backLink: '/system/bill-runs/420e948f-1992-437e-8a47-74c0066cb017',

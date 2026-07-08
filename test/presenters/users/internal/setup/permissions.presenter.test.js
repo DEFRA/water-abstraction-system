@@ -15,7 +15,7 @@ describe('Users - Internal - Setup - Permissions Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = PermissionsPresenter.go(session)
+      const result = PermissionsPresenter(session)
 
       expect(result).toEqual({
         activeNavBar: 'users',
@@ -32,7 +32,7 @@ describe('Users - Internal - Setup - Permissions Presenter', () => {
     describe('"backLink" property', () => {
       describe('when check page has not been visited', () => {
         it('returns the correct back link', () => {
-          const result = PermissionsPresenter.go(session)
+          const result = PermissionsPresenter(session)
 
           expect(result.backLink.href).toEqual(`/system/users/internal/setup/${session.id}/email`)
         })
@@ -44,7 +44,7 @@ describe('Users - Internal - Setup - Permissions Presenter', () => {
         })
 
         it('returns the correct back link', () => {
-          const result = PermissionsPresenter.go(session)
+          const result = PermissionsPresenter(session)
 
           expect(result.backLink.href).toEqual(`/system/users/internal/setup/${session.id}/check`)
         })

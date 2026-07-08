@@ -17,7 +17,7 @@ describe('Users - Internal - Setup - Email Validator', () => {
     })
 
     it('returns with no errors', () => {
-      const result = EmailValidator.go(payload, emailExists)
+      const result = EmailValidator(payload, emailExists)
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -31,7 +31,7 @@ describe('Users - Internal - Setup - Email Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = EmailValidator.go(payload, emailExists)
+        const result = EmailValidator(payload, emailExists)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -45,7 +45,7 @@ describe('Users - Internal - Setup - Email Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = EmailValidator.go(payload, emailExists)
+        const result = EmailValidator(payload, emailExists)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -61,7 +61,7 @@ describe('Users - Internal - Setup - Email Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = EmailValidator.go(payload, emailExists)
+        const result = EmailValidator(payload, emailExists)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -75,7 +75,7 @@ describe('Users - Internal - Setup - Email Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = EmailValidator.go(payload, emailExists)
+        const result = EmailValidator(payload, emailExists)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -92,7 +92,7 @@ describe('Users - Internal - Setup - Email Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = EmailValidator.go(payload, emailExists)
+        const result = EmailValidator(payload, emailExists)
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

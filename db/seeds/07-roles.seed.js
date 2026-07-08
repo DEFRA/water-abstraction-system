@@ -2,7 +2,7 @@ import { timestampForPostgres } from '../../app/lib/general.lib.js'
 import { db } from '../db.js'
 import { data as roles } from './data/roles.js'
 
-async function seed() {
+export default async function seed() {
   for (const role of roles) {
     await _upsert(role)
   }
@@ -31,8 +31,5 @@ async function _upsert(role) {
 }
 
 export {
-  seed
-}
-export default {
   seed
 }

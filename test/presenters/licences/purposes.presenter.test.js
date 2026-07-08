@@ -17,7 +17,7 @@ describe('Licences - Purposes presenter', () => {
 
   describe('when provided with populated licence purposes', () => {
     it('returns the expected licence purpose details', () => {
-      const result = PurposesPresenter.go(purposes, licence)
+      const result = PurposesPresenter(purposes, licence)
 
       expect(result).toEqual({
         backLink: {

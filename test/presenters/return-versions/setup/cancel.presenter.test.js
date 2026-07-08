@@ -43,7 +43,7 @@ describe('Return Versions Setup - Cancel presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = CancelPresenter.go(session)
+      const result = CancelPresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -64,7 +64,7 @@ describe('Return Versions Setup - Cancel presenter', () => {
 
   describe('the "reason" property', () => {
     it('returns the display version for the reason', () => {
-      const result = CancelPresenter.go(session)
+      const result = CancelPresenter(session)
 
       expect(result.reason).toEqual('Major change')
     })
@@ -77,7 +77,7 @@ describe('Return Versions Setup - Cancel presenter', () => {
       })
 
       it('returns null', () => {
-        const result = CancelPresenter.go(session)
+        const result = CancelPresenter(session)
 
         expect(result.returnRequirements).toBeNull()
       })
@@ -85,7 +85,7 @@ describe('Return Versions Setup - Cancel presenter', () => {
 
     describe('when the user journey was "returns-required"', () => {
       it('returns a summary for each requirement in the session', () => {
-        const result = CancelPresenter.go(session)
+        const result = CancelPresenter(session)
 
         expect(result.returnRequirements).toEqual([
           'Winter and all year monthly requirements for returns, Bore hole in rear field.'
@@ -97,7 +97,7 @@ describe('Return Versions Setup - Cancel presenter', () => {
   describe('the "startDate" property', () => {
     describe('when the user has previously selected the licence start date as the start date', () => {
       it('returns the licence version start date formatted as a long date', () => {
-        const result = CancelPresenter.go(session)
+        const result = CancelPresenter(session)
 
         expect(result.startDate).toEqual('1 January 2023')
       })
@@ -112,7 +112,7 @@ describe('Return Versions Setup - Cancel presenter', () => {
       })
 
       it('returns the start date parts formatted as a long date', () => {
-        const result = CancelPresenter.go(session)
+        const result = CancelPresenter(session)
 
         expect(result.startDate).toEqual('26 November 2023')
       })

@@ -39,7 +39,7 @@ describe('Full Condition Presenter', () => {
       })
 
       it('returns the back link to the check page', () => {
-        const result = FullConditionPresenter.go(session, conditions)
+        const result = FullConditionPresenter(session, conditions)
 
         expect(result.backLink).toEqual(
           '/system/licence-monitoring-station/setup/2a1f9931-6821-4441-96f3-b8c0e4847515/check'
@@ -53,7 +53,7 @@ describe('Full Condition Presenter', () => {
       })
 
       it('returns the back link to the licence number page', () => {
-        const result = FullConditionPresenter.go(session, conditions)
+        const result = FullConditionPresenter(session, conditions)
 
         expect(result.backLink).toEqual(
           '/system/licence-monitoring-station/setup/2a1f9931-6821-4441-96f3-b8c0e4847515/licence-number'
@@ -63,14 +63,14 @@ describe('Full Condition Presenter', () => {
 
     describe('when there are conditions', () => {
       it('returns the correct page title and monitoring station label', () => {
-        const result = FullConditionPresenter.go(session, conditions)
+        const result = FullConditionPresenter(session, conditions)
 
         expect(result.pageTitle).toEqual('Select the full condition for licence LIC/001')
         expect(result.monitoringStationLabel).toEqual('My Test Station')
       })
 
       it('formats a list of conditions into radio buttons', () => {
-        const result = FullConditionPresenter.go(session, conditions)
+        const result = FullConditionPresenter(session, conditions)
 
         expect(result.radioButtons).toEqual([
           {
@@ -106,7 +106,7 @@ describe('Full Condition Presenter', () => {
         })
 
         it('marks the option as checked', () => {
-          const result = FullConditionPresenter.go(session, conditions)
+          const result = FullConditionPresenter(session, conditions)
 
           expect(result.radioButtons[0].checked).toBe(true)
         })
@@ -118,7 +118,7 @@ describe('Full Condition Presenter', () => {
         })
 
         it('marks the option as checked', () => {
-          const result = FullConditionPresenter.go(session, conditions)
+          const result = FullConditionPresenter(session, conditions)
 
           expect(result.radioButtons[3].checked).toBe(true)
         })
@@ -138,7 +138,7 @@ describe('Full Condition Presenter', () => {
         })
 
         it('correctly handles their display', () => {
-          const result = FullConditionPresenter.go(session, conditions)
+          const result = FullConditionPresenter(session, conditions)
 
           expect(result.radioButtons[0]).toEqual({
             value: '03dd7ae6-607b-43bc-a195-3f1692678686',
@@ -158,14 +158,14 @@ describe('Full Condition Presenter', () => {
       })
 
       it('returns the correct page title and monitoring station label', () => {
-        const result = FullConditionPresenter.go(session, conditions)
+        const result = FullConditionPresenter(session, conditions)
 
         expect(result.pageTitle).toEqual('There are no flow or level cessation conditions for licence LIC/001')
         expect(result.monitoringStationLabel).toEqual('My Test Station')
       })
 
       it('returns no radio buttons', () => {
-        const result = FullConditionPresenter.go(session, [])
+        const result = FullConditionPresenter(session, [])
 
         expect(result.radioButtons).toHaveLength(0)
       })

@@ -6,7 +6,7 @@ const MethodValidator = require('../../../../app/validators/return-versions/setu
 describe('Return Versions Setup - Method validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = MethodValidator.go({ method: 'useAbstractionData' })
+      const result = MethodValidator({ method: 'useAbstractionData' })
 
       expect(result.value).toBeDefined()
       expect(result.error).toBeUndefined()
@@ -16,7 +16,7 @@ describe('Return Versions Setup - Method validator', () => {
   describe('when invalid data is provided', () => {
     describe('because no "method" is given', () => {
       it('fails validation', () => {
-        const result = MethodValidator.go({ method: '' })
+        const result = MethodValidator({ method: '' })
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()
@@ -26,7 +26,7 @@ describe('Return Versions Setup - Method validator', () => {
 
     describe('because an unknown "method" is given', () => {
       it('fails validation', () => {
-        const result = MethodValidator.go({ method: 'just-because' })
+        const result = MethodValidator({ method: 'just-because' })
 
         expect(result.value).toBeDefined()
         expect(result.error).toBeDefined()

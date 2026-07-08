@@ -26,7 +26,7 @@ describe('Return Versions Setup - No Returns Required presenter', () => {
 
   describe('when provided with a session', () => {
     it('correctly presents the data', () => {
-      const result = NoReturnsRequiredPresenter.go(session)
+      const result = NoReturnsRequiredPresenter(session)
 
       expect(result).toEqual({
         backLink: {
@@ -49,7 +49,7 @@ describe('Return Versions Setup - No Returns Required presenter', () => {
       })
 
       it('returns a link back to the "check" page', () => {
-        const result = NoReturnsRequiredPresenter.go(session)
+        const result = NoReturnsRequiredPresenter(session)
 
         expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/check',
@@ -60,7 +60,7 @@ describe('Return Versions Setup - No Returns Required presenter', () => {
 
     describe('when the user has come from somewhere else', () => {
       it('returns a link back to the "start-date" page', () => {
-        const result = NoReturnsRequiredPresenter.go(session)
+        const result = NoReturnsRequiredPresenter(session)
 
         expect(result.backLink).toEqual({
           href: '/system/return-versions/setup/61e07498-f309-4829-96a9-72084a54996d/start-date',
@@ -77,7 +77,7 @@ describe('Return Versions Setup - No Returns Required presenter', () => {
       })
 
       it('returns a populated reason', () => {
-        const result = NoReturnsRequiredPresenter.go(session)
+        const result = NoReturnsRequiredPresenter(session)
 
         expect(result.reason).toEqual('licence-conditions-do-not-require-returns')
       })
@@ -85,7 +85,7 @@ describe('Return Versions Setup - No Returns Required presenter', () => {
 
     describe('when the user has not previously submitted a reason', () => {
       it('returns an empty reason', () => {
-        const result = NoReturnsRequiredPresenter.go(session)
+        const result = NoReturnsRequiredPresenter(session)
 
         expect(result.reason).toBeNull()
       })
