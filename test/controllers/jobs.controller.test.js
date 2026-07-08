@@ -183,7 +183,7 @@ describe('Jobs controller', () => {
         it('calls the "ProcessRenewalInvitationsService"', async () => {
           await server.inject(options)
 
-          expect(ProcessRenewalInvitationsService.go).toHaveBeenCalled()
+          expect(ProcessRenewalInvitationsService.default).toHaveBeenCalled()
         })
       })
     })
