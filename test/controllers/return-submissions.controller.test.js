@@ -64,7 +64,8 @@ describe('Return Submissions controller', () => {
         it('passes the parameters to the service', async () => {
           await server.inject(options)
 
-          const calls = ViewReturnSubmissionService.go.firstCall
+          const calls = ViewReturnSubmissionService.default.mock.calls[0]
+
           expect(calls.args).toContain('d1f4826a-a8b1-479a-ac25-07b491ebcddd')
           expect(calls.args).toContain('2025-02')
         })
