@@ -7,7 +7,7 @@
 // Importing dotenv in multiple places has no effect on the app when running for real.
 import 'dotenv/config'
 
-const config = {
+export default {
   legacyAuthToken: process.env.LEGACY_AUTH_TOKEN,
   serviceForeground: {
     url: process.env.SERVICE_FOREGROUND_URL
@@ -37,5 +37,3 @@ const config = {
     url: process.env.RETURNS_URL
   }
 }
-
-export default config

@@ -7,10 +7,8 @@
 // Importing dotenv in multiple places has no effect on the app when running for real.
 import 'dotenv/config'
 
-const config = {
+export default {
   s3: {
     bucket: process.env.AWS_MAINTENANCE_BUCKET
   }
 }
-
-export default config

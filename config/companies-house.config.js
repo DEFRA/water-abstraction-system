@@ -7,9 +7,7 @@
 // Importing dotenv in multiple places has no effect on the app when running for real.
 import 'dotenv/config'
 
-const config = {
+export default {
   apiKey: process.env.COMPANIES_HOUSE_API_KEY,
   url: 'https://api.companieshouse.gov.uk/'
 }
-
-export default config

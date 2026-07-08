@@ -7,11 +7,9 @@
 // Importing dotenv in multiple places has no effect on the app when running for real.
 import 'dotenv/config'
 
-const config = {
+export default {
   annual: {
     batchSize: Number.parseInt(process.env.BILLING_ANNUAL_BATCH_SIZE) || 5
   },
   waitForStatusPauseInMs: Number.parseInt(process.env.BILLING_WAIT_FOR_STATUS_PAUSE_IN_MS) || 1000
 }
-
-export default config

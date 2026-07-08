@@ -7,11 +7,9 @@
 // Importing dotenv in multiple places has no effect on the app when running for real.
 import 'dotenv/config'
 
-const config = {
+export default {
   host: process.env.REDIS_HOST,
   port: process.env.REDIS_PORT,
   password: process.env.REDIS_PASSWORD,
   disableTls: String(process.env.REDIS_DISABLE_TLS) === 'true' || false
 }
-
-export default config

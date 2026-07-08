@@ -7,11 +7,9 @@
 // Importing dotenv in multiple places has no effect on the app when running for real.
 import 'dotenv/config'
 
-const config = {
+export default {
   endDates: {
     batchSize: Number.parseInt(process.env.LICENCE_END_DATES_BATCH_SIZE) || 10
   },
   returnVersionBatchUser: process.env.RETURN_VERSION_BATCH_USER
 }
-
-export default config

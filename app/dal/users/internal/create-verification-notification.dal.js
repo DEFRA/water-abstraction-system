@@ -5,7 +5,7 @@
 
 import NotificationModel from '../../../models/notification.model.js'
 
-import { domains } from '../../../../config/server.config.js'
+import ServerConfig from '../../../../config/server.config.js'
 
 /**
  * Creates a verification notification record for the new user
@@ -17,7 +17,7 @@ import { domains } from '../../../../config/server.config.js'
  */
 export default async function go(email, resetGuid) {
   const personalisation = {
-    unique_create_password_link: `${domains.internal}/reset_password_change_password?resetGuid=${resetGuid}`
+    unique_create_password_link: `${ServerConfig.domains.internal}/reset_password_change_password?resetGuid=${resetGuid}`
   }
 
   const notificationData = {

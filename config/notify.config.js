@@ -7,7 +7,7 @@
 // Importing dotenv in multiple places has no effect on the app when running for real.
 import 'dotenv/config'
 
-const config = {
+export default {
   alertEmailAddresses: process.env.ALERT_EMAIL_ADDRESSES,
   apiKey: process.env.GOV_UK_NOTIFY_API_KEY,
   // The Notify service imposes a rate limit of 3,000 requests per minute and restricts the number of statuses returned
@@ -31,5 +31,3 @@ const config = {
   url: process.env.GOV_UK_NOTIFY_URL,
   waitForStatus: Number.parseInt(process.env.GOV_UK_NOTIFY_WAIT_FOR_STATUS) || 5000
 }
-
-export default config

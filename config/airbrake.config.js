@@ -7,11 +7,9 @@
 // Importing dotenv in multiple places has no effect on the app when running for real.
 import 'dotenv/config'
 
-const config = {
+export default {
   host: process.env.AIRBRAKE_HOST,
   projectKey: process.env.AIRBRAKE_KEY,
   projectId: 1,
   environment: process.env.ENVIRONMENT
 }
-
-export default config
