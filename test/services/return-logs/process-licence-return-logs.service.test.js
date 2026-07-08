@@ -123,7 +123,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
           })
 
           it('processes the _right_ return requirements for each return cycle', async () => {
-            await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
+            await ProcessLicenceReturnLogsService(licenceId, changeDate)
 
             expect(createReturnLogsStub.callCount).toEqual(5)
             expect(voidReturnLogsStub.callCount).toEqual(3)
@@ -149,7 +149,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
             })
 
             it('does not attempt to process any return cycles', async () => {
-              await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
+              await ProcessLicenceReturnLogsService(licenceId, changeDate)
 
               expect(fetchReturnRequirementsStub.called).toBe(true)
               expect(returnCycleModelStub.called).toBe(false)
@@ -168,13 +168,13 @@ describe('Return Logs - Process Licence Return Logs service', () => {
             })
 
             it('does not attempt to generate return logs', async () => {
-              await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
+              await ProcessLicenceReturnLogsService(licenceId, changeDate)
 
               expect(createReturnLogsStub.called).toBe(false)
             })
 
             it('still checks if return logs should be voided', async () => {
-              await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
+              await ProcessLicenceReturnLogsService(licenceId, changeDate)
 
               expect(voidReturnLogsStub.called).toBe(true)
             })
@@ -197,13 +197,13 @@ describe('Return Logs - Process Licence Return Logs service', () => {
           })
 
           it('does not attempt to generate return logs', async () => {
-            await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
+            await ProcessLicenceReturnLogsService(licenceId, changeDate)
 
             expect(createReturnLogsStub.called).toBe(false)
           })
 
           it('does not check if return logs should be voided (no return cycles were processed)', async () => {
-            await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
+            await ProcessLicenceReturnLogsService(licenceId, changeDate)
 
             expect(voidReturnLogsStub.called).toBe(false)
           })
@@ -242,7 +242,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
         })
 
         it('processes the return requirements for _all_ matching return cycles that exist', async () => {
-          await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
+          await ProcessLicenceReturnLogsService(licenceId, changeDate)
 
           // The requirement matches with two of the return cycles (winter), so 'create' is called twice
           expect(createReturnLogsStub.callCount).toEqual(2)
@@ -282,7 +282,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
         })
 
         it('processes the return requirements for _only_ the matching return cycles that exist', async () => {
-          await ProcessLicenceReturnLogsService.go(licenceId, changeDate, returnVersionEndDate)
+          await ProcessLicenceReturnLogsService(licenceId, changeDate, returnVersionEndDate)
 
           // The requirement only matches with one of the return cycles, hence 'create' is only called once
           expect(createReturnLogsStub.callCount).toEqual(1)
@@ -317,13 +317,13 @@ describe('Return Logs - Process Licence Return Logs service', () => {
       })
 
       it('does not attempt to generate return logs', async () => {
-        await ProcessLicenceReturnLogsService.go(licenceId, changeDate, returnVersionEndDate)
+        await ProcessLicenceReturnLogsService(licenceId, changeDate, returnVersionEndDate)
 
         expect(createReturnLogsStub.called).toBe(false)
       })
 
       it('does not check if return logs should be voided (no return cycles were processed)', async () => {
-        await ProcessLicenceReturnLogsService.go(licenceId, changeDate, returnVersionEndDate)
+        await ProcessLicenceReturnLogsService(licenceId, changeDate, returnVersionEndDate)
 
         expect(voidReturnLogsStub.called).toBe(false)
       })

@@ -39,7 +39,7 @@ describe('Companies - View Company With Address Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewCompanyWithAddressService.go(company.id, address.id, role, licenceId)
+        const result = await ViewCompanyWithAddressService(company.id, address.id, role, licenceId)
 
         expect(result).toEqual({
           backLink: {
@@ -71,7 +71,7 @@ describe('Companies - View Company With Address Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewCompanyWithAddressService.go(company.id, address.id, role, licenceId)
+        const result = await ViewCompanyWithAddressService(company.id, address.id, role, licenceId)
 
         expect(result).toEqual({
           backLink: {

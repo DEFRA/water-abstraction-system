@@ -10,7 +10,7 @@ import { db } from '../../../../db/db.js'
  *
  * @returns {Promise<object>}
  */
-async function go() {
+export default async function go() {
   return _deleteAllTestData()
 }
 
@@ -168,11 +168,4 @@ async function _deleteAllTestData() {
   ALTER TABLE crm_v2.invoice_accounts ENABLE TRIGGER ALL;
   ALTER TABLE crm_v2.invoice_account_addresses ENABLE TRIGGER ALL;
   `)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

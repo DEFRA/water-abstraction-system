@@ -85,13 +85,13 @@ describe('Return Versions - Setup - Points service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await SelectPointsService.go(session.id, requirementIndex)
+      const result = await SelectPointsService(session.id, requirementIndex)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await SelectPointsService.go(session.id, requirementIndex)
+      const result = await SelectPointsService(session.id, requirementIndex)
 
       expect(result).toMatchObject({
         pageTitle: 'Select the points for the requirements for returns',

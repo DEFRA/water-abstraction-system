@@ -86,7 +86,7 @@ describe('Search - Fetch Search Results Details service', () => {
 
   describe('when called', () => {
     it('returns all the matching details', async () => {
-      const result = await FetchSearchResultsDetailsService.go(idsByType)
+      const result = await FetchSearchResultsDetailsService(idsByType)
 
       expect(result).toEqual({
         billingAccount: [],
@@ -105,7 +105,7 @@ describe('Search - Fetch Search Results Details service', () => {
     })
 
     it('returns no matches', async () => {
-      const result = await FetchSearchResultsDetailsService.go(idsByType)
+      const result = await FetchSearchResultsDetailsService(idsByType)
 
       expect(result).toEqual({
         UNKNOWN_TYPE: []
@@ -119,7 +119,7 @@ describe('Search - Fetch Search Results Details service', () => {
     })
 
     it('finds the correct billing accounts', async () => {
-      const result = await FetchSearchResultsDetailsService.go(idsByType)
+      const result = await FetchSearchResultsDetailsService(idsByType)
 
       expect(result).toEqual({ billingAccount: [] })
 
@@ -139,7 +139,7 @@ describe('Search - Fetch Search Results Details service', () => {
     })
 
     it('finds the correct licence holders', async () => {
-      const result = await FetchSearchResultsDetailsService.go(idsByType)
+      const result = await FetchSearchResultsDetailsService(idsByType)
 
       expect(result).toEqual({ licenceHolder: [] })
 
@@ -159,7 +159,7 @@ describe('Search - Fetch Search Results Details service', () => {
     })
 
     it('finds the correct licences', async () => {
-      const result = await FetchSearchResultsDetailsService.go(idsByType)
+      const result = await FetchSearchResultsDetailsService(idsByType)
 
       expect(result).toEqual({ licence: [] })
 
@@ -179,7 +179,7 @@ describe('Search - Fetch Search Results Details service', () => {
     })
 
     it('finds the correct monitoring stations', async () => {
-      const result = await FetchSearchResultsDetailsService.go(idsByType)
+      const result = await FetchSearchResultsDetailsService(idsByType)
 
       expect(result).toEqual({ monitoringStation: [] })
 
@@ -199,7 +199,7 @@ describe('Search - Fetch Search Results Details service', () => {
     })
 
     it('finds the correct return logs', async () => {
-      const result = await FetchSearchResultsDetailsService.go(idsByType)
+      const result = await FetchSearchResultsDetailsService(idsByType)
 
       expect(result).toEqual({ returnLog: [] })
 
@@ -219,7 +219,7 @@ describe('Search - Fetch Search Results Details service', () => {
     })
 
     it('finds the correct users', async () => {
-      const result = await FetchSearchResultsDetailsService.go(idsByType)
+      const result = await FetchSearchResultsDetailsService(idsByType)
 
       expect(result).toEqual({ user: [] })
 

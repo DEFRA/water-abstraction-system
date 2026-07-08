@@ -19,7 +19,7 @@ const fsPromises = fs.promises
  * @param {string} schemaFolderPath - The folder path of the schema
  * @param {string} tableName - The name of the table
  */
-async function go(headers, rows, schemaFolderPath, tableName) {
+export default async function go(headers, rows, schemaFolderPath, tableName) {
   const filePath = await _filenameWithPath(tableName, schemaFolderPath)
   const writeToFileStream = fs.createWriteStream(filePath, { flags: 'a' })
   const promisifiedPipeline = util.promisify(pipeline)
@@ -73,11 +73,4 @@ async function _filenameWithPath(tableName, schemaFolderPath) {
       name: `${tableName}.csv`
     })
   )
-}
-
-export {
-  go
-}
-export default {
-  go
 }

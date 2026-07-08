@@ -41,7 +41,7 @@ describe('Notices - Setup - Returns Notice - Fetch Paper Returns Recipients serv
     })
 
     it('fetches the correct recipient data for sending the notice', async () => {
-      const results = await FetchPaperReturnsRecipientsService.go(session, download)
+      const results = await FetchPaperReturnsRecipientsService(session, download)
 
       // NOTE: Unlike returns invitations and reminders, the notification due date is not determined for a paper return
       // until we generate the notification itself. This is because we send a notification per recipient and return log
@@ -64,7 +64,7 @@ describe('Notices - Setup - Returns Notice - Fetch Paper Returns Recipients serv
     })
 
     it('fetches the correct recipient data for the download', async () => {
-      const results = await FetchPaperReturnsRecipientsService.go(session, download)
+      const results = await FetchPaperReturnsRecipientsService(session, download)
 
       // NOTE: When fetching data for the download, the service _can_ determine the notification due date because each
       // row is distinct to a recipient and return log combination.

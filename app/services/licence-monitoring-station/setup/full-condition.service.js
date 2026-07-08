@@ -15,21 +15,14 @@ import FullConditionPresenter from '../../../presenters/licence-monitoring-stati
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
-  const conditions = await FetchFullConditionService.go(session.licenceId)
+  const conditions = await FetchFullConditionService(session.licenceId)
 
   const pageData = FullConditionPresenter.go(session, conditions)
 
   return {
     ...pageData
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

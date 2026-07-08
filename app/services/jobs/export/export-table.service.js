@@ -16,15 +16,8 @@ import WriteTableToFileService from './write-table-to-file.service.js'
  * @param {string} schemaFolderPath - The folder path where the schema files are stored
  * @param {string} schemaName - The name of the database schema
  */
-async function go(tableName, schemaFolderPath, schemaName) {
-  const data = await FetchTableService.go(tableName, schemaName)
+export default async function go(tableName, schemaFolderPath, schemaName) {
+  const data = await FetchTableService(tableName, schemaName)
 
-  await WriteTableToFileService.go(data.headers, data.rows, schemaFolderPath, tableName)
-}
-
-export {
-  go
-}
-export default {
-  go
+  await WriteTableToFileService(data.headers, data.rows, schemaFolderPath, tableName)
 }

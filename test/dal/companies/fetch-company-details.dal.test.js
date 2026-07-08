@@ -79,7 +79,7 @@ describe('Companies - Fetch Company details dal', () => {
 
   describe('when there is a company', () => {
     it("returns the matching company's details and _all_ addresses for the specified role", async () => {
-      const result = await FetchCompanyDetailsDal.go(company.id, 'licenceHolder')
+      const result = await FetchCompanyDetailsDal(company.id, 'licenceHolder')
 
       expect(result).toEqual({
         id: company.id,
@@ -139,7 +139,7 @@ describe('Companies - Fetch Company details dal', () => {
 
     describe('and the company does not have any addresses for the specified role', () => {
       it("returns the matching company's details and no addresses", async () => {
-        const result = await FetchCompanyDetailsDal.go(company.id, 'billing')
+        const result = await FetchCompanyDetailsDal(company.id, 'billing')
 
         expect(result).toEqual({
           id: company.id,

@@ -41,7 +41,7 @@ describe('DAL - Fetch Impacted Licences dal', () => {
 
   describe('when there are charge versions that match the billing account id', () => {
     it('returns an array of unique licence references', async () => {
-      const result = await FetchImpactedLicencesDal.go(billingAccountId)
+      const result = await FetchImpactedLicencesDal(billingAccountId)
 
       expect(result).toEqual([multiUseLicenceRef, singleUseLicenceRef])
     })
@@ -49,7 +49,7 @@ describe('DAL - Fetch Impacted Licences dal', () => {
 
   describe('when there are no charge versions that match the billing account id', () => {
     it('returns an empty array', async () => {
-      const result = await FetchImpactedLicencesDal.go(generateUUID())
+      const result = await FetchImpactedLicencesDal(generateUUID())
 
       expect(result).toEqual([])
     })

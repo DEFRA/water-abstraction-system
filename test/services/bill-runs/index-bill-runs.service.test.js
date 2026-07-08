@@ -42,7 +42,7 @@ describe('Index Bill Runs service', () => {
     })
 
     it('returns the page data for the view', async () => {
-      const result = await IndexBillRunsService.go(yarStub, page)
+      const result = await IndexBillRunsService(yarStub, page)
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',
@@ -169,7 +169,7 @@ describe('Index Bill Runs service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await IndexBillRunsService.go(yarStub, page)
+        const result = await IndexBillRunsService(yarStub, page)
 
         expect(result.billRuns).toHaveLength(2)
         expect(result.filters.openFilter).toBe(false)
@@ -191,7 +191,7 @@ describe('Index Bill Runs service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await IndexBillRunsService.go(yarStub, page)
+        const result = await IndexBillRunsService(yarStub, page)
 
         expect(result.billRuns).toHaveLength(2)
         expect(result.filters.openFilter).toBe(false)
@@ -213,7 +213,7 @@ describe('Index Bill Runs service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await IndexBillRunsService.go(yarStub, page)
+        const result = await IndexBillRunsService(yarStub, page)
 
         expect(result.billRuns).toHaveLength(0)
         expect(result.filters.openFilter).toBe(false)
@@ -238,7 +238,7 @@ describe('Index Bill Runs service', () => {
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
-        const result = await IndexBillRunsService.go(yarStub, page)
+        const result = await IndexBillRunsService(yarStub, page)
 
         expect(result.filters).toEqual({
           number: null,
@@ -258,7 +258,7 @@ describe('Index Bill Runs service', () => {
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
-        const result = await IndexBillRunsService.go(yarStub, page)
+        const result = await IndexBillRunsService(yarStub, page)
 
         expect(result.filters).toEqual({
           number: null,
@@ -283,7 +283,7 @@ describe('Index Bill Runs service', () => {
       })
 
       it('returns the saved filters and that the controls should be open', async () => {
-        const result = await IndexBillRunsService.go(yarStub, page)
+        const result = await IndexBillRunsService(yarStub, page)
 
         expect(result.filters).toEqual({
           number: null,

@@ -16,20 +16,13 @@ import ViewPresenter from '../../presenters/licence-versions/view.presenter.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(licenceVersionId, auth) {
+export default async function go(licenceVersionId, auth) {
   const licenceVersionData = await FetchLicenceVersionDal(licenceVersionId)
-  const conditions = await FetchConditionsService.go(licenceVersionId)
+  const conditions = await FetchConditionsService(licenceVersionId)
 
   const pageData = ViewPresenter.go(licenceVersionData, auth, conditions)
 
   return {
     ...pageData
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

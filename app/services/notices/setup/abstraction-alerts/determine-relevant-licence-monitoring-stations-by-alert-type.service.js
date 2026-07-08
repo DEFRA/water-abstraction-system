@@ -26,7 +26,7 @@
  *
  * @returns {object[]} - The filtered list of licence monitoring stations
  */
-function go(licenceMonitoringStations, alertType) {
+export default function go(licenceMonitoringStations, alertType) {
   if (alertType === 'stop') {
     return _stop(licenceMonitoringStations, alertType)
   }
@@ -51,9 +51,4 @@ function _stop(licenceMonitoringStations, alertType) {
   return licenceMonitoringStations.filter((licenceMonitoringStation) => {
     return licenceMonitoringStation.restrictionType === alertType
   })
-}
-
-export { go }
-export default {
-  go
 }

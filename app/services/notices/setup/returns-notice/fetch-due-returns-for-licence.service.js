@@ -13,7 +13,7 @@ import { timestampForPostgres } from '../../../../lib/general.lib.js'
  *
  * @returns {Promise<object[]>} The 'due' return logs for the licence
  */
-async function go(licenceRef) {
+export default async function go(licenceRef) {
   const { rows } = await _fetch(licenceRef)
 
   return rows
@@ -48,9 +48,4 @@ async function _fetch(licenceRef) {
   `
 
   return db.raw(query, [licenceRef, timestampForPostgres()])
-}
-
-export { go }
-export default {
-  go
 }

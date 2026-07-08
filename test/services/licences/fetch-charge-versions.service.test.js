@@ -84,7 +84,7 @@ describe('Licences - Fetch Charge Versions service', () => {
     })
 
     it('returns the matching charge versions data', async () => {
-      const result = await FetchChargeVersionsService.go(licenceId)
+      const result = await FetchChargeVersionsService(licenceId)
 
       expect(result).toEqual([
         {

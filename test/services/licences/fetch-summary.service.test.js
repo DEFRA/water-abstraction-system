@@ -159,7 +159,7 @@ describe('Licences - Fetch Summary service', () => {
 
   describe('when called', () => {
     it('returns results', async () => {
-      const result = await FetchSummaryService.go(licence.id)
+      const result = await FetchSummaryService(licence.id)
 
       expect(result).toEqual({
         id: licence.id,

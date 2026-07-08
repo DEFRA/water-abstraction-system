@@ -53,7 +53,7 @@ describe('Licences - Fetch Purposes service', () => {
     })
 
     it('returns the matching licence version purposes, points, purposes, and sources', async () => {
-      const result = await FetchPurposesService.go(licence.id)
+      const result = await FetchPurposesService(licence.id)
 
       expect(result).toEqual([
         {
@@ -103,7 +103,7 @@ describe('Licences - Fetch Purposes service', () => {
     })
 
     it('returns an empty array', async () => {
-      const result = await FetchPurposesService.go(licence.id)
+      const result = await FetchPurposesService(licence.id)
 
       expect(result).toEqual([])
     })
@@ -122,7 +122,7 @@ describe('Licences - Fetch Purposes service', () => {
     })
 
     it('returns an empty array', async () => {
-      const result = await FetchPurposesService.go(licence.id)
+      const result = await FetchPurposesService(licence.id)
 
       expect(result).toEqual([])
     })

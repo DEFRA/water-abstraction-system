@@ -51,7 +51,7 @@ const LAST_PRESROC_YEAR = 2022
  * @returns {Promise<object>} Any blocking matches for the bill run being created, the `toFinancialYearEnding` to use
  * when creating it, and which bill run engine to trigger the creation with (if any)
  */
-async function go(regionId) {
+export default async function go(regionId) {
   let toFinancialYearEnding = await _toFinancialYearEnding(regionId)
 
   if (toFinancialYearEnding === 0) {
@@ -159,9 +159,4 @@ function _trigger(matches, toFinancialYearEnding) {
   }
 
   return engineTriggers.old
-}
-
-export { go }
-export default {
-  go
 }

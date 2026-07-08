@@ -68,13 +68,13 @@ describe('Return Versions - Setup - Existing service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await ExistingService.go(session.id)
+      const result = await ExistingService(session.id)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await ExistingService.go(session.id)
+      const result = await ExistingService(session.id)
 
       expect(result).toMatchObject({
         pageTitle: 'Use previous requirements for returns',

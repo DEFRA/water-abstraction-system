@@ -37,7 +37,7 @@ describe('Determine Bill Licence Flags Service', () => {
         })
 
         it('always returns the licenceId, regionId, startDate and endDate', async () => {
-          const result = await DetermineBillLicenceFlagsService.go(billLicence.id)
+          const result = await DetermineBillLicenceFlagsService(billLicence.id)
 
           expect(result.licenceId).toEqual(flaggedLicence.id)
           expect(result.regionId).toEqual(flaggedLicence.regionId)
@@ -46,7 +46,7 @@ describe('Determine Bill Licence Flags Service', () => {
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineBillLicenceFlagsService.go(billLicence.id)
+          const result = await DetermineBillLicenceFlagsService(billLicence.id)
 
           expect(result.flagForPreSrocSupplementary).toEqual(true)
           expect(result.flagForSrocSupplementary).toEqual(true)
@@ -64,7 +64,7 @@ describe('Determine Bill Licence Flags Service', () => {
         })
 
         it('always returns the licenceId, regionId, startDate and endDate', async () => {
-          const result = await DetermineBillLicenceFlagsService.go(billLicence.id)
+          const result = await DetermineBillLicenceFlagsService(billLicence.id)
 
           expect(result.licenceId).toEqual(unflaggedLicence.id)
           expect(result.regionId).toEqual(unflaggedLicence.regionId)
@@ -73,7 +73,7 @@ describe('Determine Bill Licence Flags Service', () => {
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineBillLicenceFlagsService.go(billLicence.id)
+          const result = await DetermineBillLicenceFlagsService(billLicence.id)
 
           expect(result.flagForPreSrocSupplementary).toEqual(false)
           expect(result.flagForSrocSupplementary).toEqual(false)
@@ -102,7 +102,7 @@ describe('Determine Bill Licence Flags Service', () => {
         })
 
         it('always returns the licenceId, regionId, startDate and endDate', async () => {
-          const result = await DetermineBillLicenceFlagsService.go(billLicence.id)
+          const result = await DetermineBillLicenceFlagsService(billLicence.id)
 
           expect(result.licenceId).toEqual(flaggedLicence.id)
           expect(result.regionId).toEqual(flaggedLicence.regionId)
@@ -111,7 +111,7 @@ describe('Determine Bill Licence Flags Service', () => {
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineBillLicenceFlagsService.go(billLicence.id)
+          const result = await DetermineBillLicenceFlagsService(billLicence.id)
 
           expect(result.flagForPreSrocSupplementary).toEqual(true)
           expect(result.flagForSrocSupplementary).toEqual(true)
@@ -129,7 +129,7 @@ describe('Determine Bill Licence Flags Service', () => {
         })
 
         it('always returns the licenceId, regionId, startDate and endDate', async () => {
-          const result = await DetermineBillLicenceFlagsService.go(billLicence.id)
+          const result = await DetermineBillLicenceFlagsService(billLicence.id)
 
           expect(result.licenceId).toEqual(unflaggedLicence.id)
           expect(result.regionId).toEqual(unflaggedLicence.regionId)
@@ -138,7 +138,7 @@ describe('Determine Bill Licence Flags Service', () => {
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineBillLicenceFlagsService.go(billLicence.id)
+          const result = await DetermineBillLicenceFlagsService(billLicence.id)
 
           expect(result.flagForPreSrocSupplementary).toEqual(true)
           expect(result.flagForSrocSupplementary).toEqual(false)
@@ -163,7 +163,7 @@ describe('Determine Bill Licence Flags Service', () => {
         })
 
         it('always returns the licenceId, regionId, startDate and endDate', async () => {
-          const result = await DetermineBillLicenceFlagsService.go(billLicence.id)
+          const result = await DetermineBillLicenceFlagsService(billLicence.id)
 
           expect(result.licenceId).toEqual(flaggedLicence.id)
           expect(result.regionId).toEqual(flaggedLicence.regionId)
@@ -172,7 +172,7 @@ describe('Determine Bill Licence Flags Service', () => {
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineBillLicenceFlagsService.go(billLicence.id)
+          const result = await DetermineBillLicenceFlagsService(billLicence.id)
 
           expect(result.flagForPreSrocSupplementary).toEqual(true)
           expect(result.flagForSrocSupplementary).toEqual(true)
@@ -190,7 +190,7 @@ describe('Determine Bill Licence Flags Service', () => {
         })
 
         it('always returns the licenceId, regionId, startDate and endDate', async () => {
-          const result = await DetermineBillLicenceFlagsService.go(billLicence.id)
+          const result = await DetermineBillLicenceFlagsService(billLicence.id)
 
           expect(result.licenceId).toEqual(unflaggedLicence.id)
           expect(result.regionId).toEqual(unflaggedLicence.regionId)
@@ -199,7 +199,7 @@ describe('Determine Bill Licence Flags Service', () => {
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineBillLicenceFlagsService.go(billLicence.id)
+          const result = await DetermineBillLicenceFlagsService(billLicence.id)
 
           expect(result.flagForPreSrocSupplementary).toEqual(false)
           expect(result.flagForSrocSupplementary).toEqual(true)
@@ -224,7 +224,7 @@ describe('Determine Bill Licence Flags Service', () => {
         })
 
         it('always returns the licenceId, regionId, startDate and endDate', async () => {
-          const result = await DetermineBillLicenceFlagsService.go(billLicence.id)
+          const result = await DetermineBillLicenceFlagsService(billLicence.id)
 
           expect(result.licenceId).toEqual(flaggedLicence.id)
           expect(result.regionId).toEqual(flaggedLicence.regionId)
@@ -233,7 +233,7 @@ describe('Determine Bill Licence Flags Service', () => {
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineBillLicenceFlagsService.go(billLicence.id)
+          const result = await DetermineBillLicenceFlagsService(billLicence.id)
 
           expect(result.flagForPreSrocSupplementary).toEqual(true)
           expect(result.flagForSrocSupplementary).toEqual(true)
@@ -251,7 +251,7 @@ describe('Determine Bill Licence Flags Service', () => {
         })
 
         it('always returns the licenceId, regionId, startDate and endDate', async () => {
-          const result = await DetermineBillLicenceFlagsService.go(billLicence.id)
+          const result = await DetermineBillLicenceFlagsService(billLicence.id)
 
           expect(result.licenceId).toEqual(unflaggedLicence.id)
           expect(result.regionId).toEqual(unflaggedLicence.regionId)
@@ -260,7 +260,7 @@ describe('Determine Bill Licence Flags Service', () => {
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineBillLicenceFlagsService.go(billLicence.id)
+          const result = await DetermineBillLicenceFlagsService(billLicence.id)
 
           expect(result.flagForPreSrocSupplementary).toEqual(true)
           expect(result.flagForSrocSupplementary).toEqual(false)

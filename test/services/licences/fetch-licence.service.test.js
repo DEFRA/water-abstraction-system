@@ -51,7 +51,7 @@ describe('Licences - Fetch Licence service', () => {
 
   describe('when there is a matching licence', () => {
     it('returns the matching licence', async () => {
-      const result = await FetchLicenceService.go(licence.id)
+      const result = await FetchLicenceService(licence.id)
 
       expect(result).toBeInstanceOf(LicenceModel)
       expect(result).toEqual({
@@ -78,7 +78,7 @@ describe('Licences - Fetch Licence service', () => {
 
   describe('when there is not a matching licence', () => {
     it('returns undefined', async () => {
-      const result = await FetchLicenceService.go(generateUUID())
+      const result = await FetchLicenceService(generateUUID())
 
       expect(result).toBeUndefined()
     })

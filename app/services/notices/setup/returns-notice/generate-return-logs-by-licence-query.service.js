@@ -14,7 +14,7 @@ import { NoticeType } from '../../../../lib/static-lookups.lib.js'
  *
  * @returns {object} The query to use as the 'due_return_logs` CTE in the recipients query, and the associated bindings
  */
-function go(licenceRef, noticeType) {
+export default function go(licenceRef, noticeType) {
   const bindings = [timestampForPostgres(), licenceRef]
 
   return {
@@ -39,9 +39,4 @@ function _query(noticeType) {
     AND rl.end_date < ?
     AND rl.licence_ref = ?
 ${noticeType === NoticeType.REMINDERS ? '    AND rl.due_date IS NOT NULL' : ''}`
-}
-
-export { go }
-export default {
-  go
 }

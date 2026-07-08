@@ -17,7 +17,7 @@ const REPORTED = {
  *
  * @returns {object} The return submission metadata
  */
-function go(session) {
+export default function go(session) {
   // Metadata is not required for nil returns
   if (session.journey === 'nilReturn') {
     return {}
@@ -92,9 +92,4 @@ function _totalProperties(session) {
       totalCustomDateEnd: session.toFullDate
     })
   }
-}
-
-export { go }
-export default {
-  go
 }

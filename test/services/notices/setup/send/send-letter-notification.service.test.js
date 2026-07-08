@@ -33,7 +33,7 @@ describe('Notices - Setup - Send - Send Letter Notification service', () => {
   })
 
   it('should return the notification notify response', async () => {
-    const result = await SendLetterNotificationService.go(notification, referenceCode)
+    const result = await SendLetterNotificationService(notification, referenceCode)
 
     expect(result).toEqual({
       id: notification.id,

@@ -62,7 +62,7 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
         })
 
         it('processes the licence for matching allocating', async () => {
-          await MatchAndAllocateService.go(billRun, billingPeriods)
+          await MatchAndAllocateService(billRun, billingPeriods)
 
           expect(FetchLicencesService.go.called).toBe(true)
           expect(PrepareReturnLogsService.go.called).toBe(true)
@@ -76,7 +76,7 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
         })
 
         it('returns "true" as there are licences to process', async () => {
-          const result = await MatchAndAllocateService.go(billRun, billingPeriods)
+          const result = await MatchAndAllocateService(billRun, billingPeriods)
 
           expect(result).toBe(true)
         })
@@ -88,7 +88,7 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
         })
 
         it('processes the licence for matching but does not call the allocate returns service', async () => {
-          await MatchAndAllocateService.go(billRun, billingPeriods)
+          await MatchAndAllocateService(billRun, billingPeriods)
 
           expect(FetchLicencesService.go.called).toBe(true)
           expect(PrepareReturnLogsService.go.called).toBe(true)
@@ -102,7 +102,7 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
         })
 
         it('allocates the authorised quantities to the elements up to the references authorised quantity', async () => {
-          await MatchAndAllocateService.go(billRun, billingPeriods)
+          await MatchAndAllocateService(billRun, billingPeriods)
 
           const { chargeVersions } = determineLicenceIssuesServiceStub.firstCall.args[0]
           const chargeReference = chargeVersions[0].chargeReferences[0]
@@ -113,7 +113,7 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
         })
 
         it('returns "true" as there are licences to process', async () => {
-          const result = await MatchAndAllocateService.go(billRun, billingPeriods)
+          const result = await MatchAndAllocateService(billRun, billingPeriods)
 
           expect(result).toBe(true)
         })
@@ -132,13 +132,13 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
       })
 
       it('calls the fetchLicencesService', async () => {
-        await MatchAndAllocateService.go(billRun, billingPeriods)
+        await MatchAndAllocateService(billRun, billingPeriods)
 
         expect(FetchLicencesService.go.called).toBe(true)
       })
 
       it('does not process the licences', async () => {
-        await MatchAndAllocateService.go(billRun, billingPeriods)
+        await MatchAndAllocateService(billRun, billingPeriods)
 
         expect(PrepareReturnLogsService.go.called).toBe(false)
         expect(PrepareChargeVersionService.go.called).toBe(false)
@@ -149,7 +149,7 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
       })
 
       it('returns "false" as there are no licences to process', async () => {
-        const result = await MatchAndAllocateService.go(billRun, billingPeriods)
+        const result = await MatchAndAllocateService(billRun, billingPeriods)
 
         expect(result).toBe(false)
       })

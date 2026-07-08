@@ -52,7 +52,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
+      await SubmitPermissionsService(auth, session.id, payload, yarStub)
 
       expect(session).toEqual({
         ...session,
@@ -62,7 +62,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
+      const result = await SubmitPermissionsService(auth, session.id, payload, yarStub)
 
       expect(result).toEqual({
         redirectUrl: `/system/users/internal/setup/${session.id}/check`
@@ -88,7 +88,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
             })
 
             it('does not set a notification', async () => {
-              await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
+              await SubmitPermissionsService(auth, session.id, payload, yarStub)
 
               expect(yarStub.flash.called).toBe(false)
             })
@@ -100,7 +100,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
             })
 
             it('sets a notification', async () => {
-              await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
+              await SubmitPermissionsService(auth, session.id, payload, yarStub)
 
               const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -113,7 +113,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
 
       describe('not been visited', () => {
         it('does not set a notification', async () => {
-          await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
+          await SubmitPermissionsService(auth, session.id, payload, yarStub)
 
           expect(yarStub.flash.called).toBe(false)
         })
@@ -127,7 +127,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
+      const result = await SubmitPermissionsService(auth, session.id, payload, yarStub)
 
       expect(result).toEqual({
         activeNavBar: 'users',

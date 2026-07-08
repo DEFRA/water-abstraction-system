@@ -33,7 +33,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewAccountTypeService.go(session.id)
+      const result = await ViewAccountTypeService(session.id)
 
       expect(result).toEqual({
         accountType: null,

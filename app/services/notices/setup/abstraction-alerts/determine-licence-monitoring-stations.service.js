@@ -11,7 +11,7 @@ import FetchMonitoringStationDetailsDal from '../../../../dal/monitoring-station
  * @param {string} id
  * @returns {Promise<{object}>}
  */
-async function go(id) {
+export default async function go(id) {
   const { licenceMonitoringStations, monitoringStation } = await FetchMonitoringStationDetailsDal(id)
 
   return {
@@ -86,9 +86,4 @@ function _notes(licenceMonitoringStation) {
  */
 function _thresholdGroup(measureType, thresholdValue, thresholdUnit) {
   return `${measureType}-${thresholdValue}-${thresholdUnit}`
-}
-
-export { go }
-export default {
-  go
 }

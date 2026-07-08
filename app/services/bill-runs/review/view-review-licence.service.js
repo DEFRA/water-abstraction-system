@@ -14,8 +14,8 @@ import ReviewLicencePresenter from '../../../presenters/bill-runs/review/review-
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(reviewLicenceId, yar) {
-  const reviewLicence = await FetchReviewLicenceService.go(reviewLicenceId)
+export default async function go(reviewLicenceId, yar) {
+  const reviewLicence = await FetchReviewLicenceService(reviewLicenceId)
 
   const [bannerMessage] = yar.flash('banner')
   const pageData = ReviewLicencePresenter.go(reviewLicence)
@@ -25,9 +25,4 @@ async function go(reviewLicenceId, yar) {
     bannerMessage,
     ...pageData
   }
-}
-
-export { go }
-export default {
-  go
 }

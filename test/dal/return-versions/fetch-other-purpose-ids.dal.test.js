@@ -129,7 +129,7 @@ describe('DAL - Return Versions - Fetch Other Purpose Ids dal', () => {
   describe('when called', () => {
     describe("and the purpose matches to one linked to the licences's 'current' licence version", () => {
       it('returns the matching primary and secondary purpose IDs', async () => {
-        const result = await FetchOtherPurposeIdsDal.go(licenceId, currentPurposeDetails.purposeId)
+        const result = await FetchOtherPurposeIdsDal(licenceId, currentPurposeDetails.purposeId)
 
         expect(result).toEqual({
           primaryPurposeId: currentPurposeDetails.primaryPurposeId,
@@ -140,7 +140,7 @@ describe('DAL - Return Versions - Fetch Other Purpose Ids dal', () => {
 
     describe("and the purpose matches to one linked to a licences's historic licence versions", () => {
       it('still returns the matching primary and secondary purpose IDs', async () => {
-        const result = await FetchOtherPurposeIdsDal.go(licenceId, historicPurposeDetails.purposeId)
+        const result = await FetchOtherPurposeIdsDal(licenceId, historicPurposeDetails.purposeId)
 
         expect(result).toEqual({
           primaryPurposeId: historicPurposeDetails.primaryPurposeId,

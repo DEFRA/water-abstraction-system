@@ -15,8 +15,8 @@ import FetchReviewChargeElementService from './fetch-review-charge-element.servi
  *
  * @returns {Promise<object>} the 'pageData' needed to view the edit billable return volumes page
  */
-async function go(reviewChargeElementId, elementIndex) {
-  const reviewChargeElement = await FetchReviewChargeElementService.go(reviewChargeElementId)
+export default async function go(reviewChargeElementId, elementIndex) {
+  const reviewChargeElement = await FetchReviewChargeElementService(reviewChargeElementId)
 
   const pageData = EditPresenter.go(reviewChargeElement, elementIndex)
 
@@ -24,9 +24,4 @@ async function go(reviewChargeElementId, elementIndex) {
     activeNavBar: 'bill-runs',
     ...pageData
   }
-}
-
-export { go }
-export default {
-  go
 }

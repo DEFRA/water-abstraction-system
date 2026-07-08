@@ -20,7 +20,7 @@ export async function changeAddress(request, h) {
 
   const { address, agentCompany, contact } = validatedData.value
 
-  const result = await ChangeAddressService.go(request.params.billingAccountId, address, agentCompany, contact)
+  const result = await ChangeAddressService(request.params.billingAccountId, address, agentCompany, contact)
 
   return h.response(result).code(HTTP_STATUS_CREATED)
 }
@@ -29,7 +29,7 @@ export async function view(request, h) {
   const { id } = request.params
   const { 'charge-version-id': chargeVersionId, 'company-id': companyId, 'licence-id': licenceId, page } = request.query
 
-  const pageData = await ViewBillingAccountService.go(id, page, licenceId, chargeVersionId, companyId)
+  const pageData = await ViewBillingAccountService(id, page, licenceId, chargeVersionId, companyId)
 
   return h.view('billing-accounts/view.njk', pageData)
 }

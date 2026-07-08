@@ -42,7 +42,7 @@ describe('Bill Runs - Submit Cancel Bill Run service', () => {
       })
 
       it('updates the bill run invoice numbers in the background and does not throw an error', async () => {
-        await SubmitSendBillRunService.go(billRunId)
+        await SubmitSendBillRunService(billRunId)
 
         expect(sendBillRunStub.called).toBe(true)
         expect(updateInvoiceNumbersStub.called).toBe(true)
@@ -67,7 +67,7 @@ describe('Bill Runs - Submit Cancel Bill Run service', () => {
       })
 
       it('does not update the bill run and throws an error', async () => {
-        await expect(SubmitSendBillRunService.go(billRunId)).rejects.toThrow()
+        await expect(SubmitSendBillRunService(billRunId)).rejects.toThrow()
 
         expect(updateInvoiceNumbersStub.called).toEqual(false)
       })

@@ -19,7 +19,7 @@ import { periodsOverlap } from '../../../lib/general.lib.js'
  * @param {module:LicenceModel} licence - An individual licence to prepare the return logs for
  * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  */
-async function go(licence, billingPeriod) {
+export default async function go(licence, billingPeriod) {
   await _prepareReturnLogs(licence, billingPeriod)
 }
 
@@ -30,7 +30,7 @@ function _abstractionOutsidePeriod(returnAbstractionPeriods, returnLine) {
 }
 
 async function _prepareReturnLogs(licence, billingPeriod) {
-  licence.returnLogs = await FetchReturnLogsForLicenceService.go(licence.licenceRef, billingPeriod)
+  licence.returnLogs = await FetchReturnLogsForLicenceService(licence.licenceRef, billingPeriod)
 
   _prepReturnsForMatching(licence.returnLogs, billingPeriod)
 }
@@ -64,9 +64,4 @@ function _prepReturnsForMatching(returnLogs, billingPeriod) {
     returnLog.abstractionOutsidePeriod = abstractionOutsidePeriod
     returnLog.matched = false
   })
-}
-
-export { go }
-export default {
-  go
 }

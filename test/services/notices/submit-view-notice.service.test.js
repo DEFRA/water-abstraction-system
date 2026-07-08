@@ -98,13 +98,13 @@ describe('Notices - Submit View Notice service', () => {
       })
 
       it('returns a result that tells the controller to redirect to the index page', async () => {
-        const result = await SubmitViewNoticeService.go(noticeId, payload, yarStub)
+        const result = await SubmitViewNoticeService(noticeId, payload, yarStub)
 
         expect(result).toEqual({})
       })
 
       it('clears the "noticesFilter" object from the session', async () => {
-        await SubmitViewNoticeService.go(noticeId, payload, yarStub)
+        await SubmitViewNoticeService(noticeId, payload, yarStub)
 
         expect(yarStub.clear.called).toBe(true)
       })
@@ -116,13 +116,13 @@ describe('Notices - Submit View Notice service', () => {
       })
 
       it('returns a result that tells the controller to redirect to the index page', async () => {
-        const result = await SubmitViewNoticeService.go(noticeId, payload, yarStub)
+        const result = await SubmitViewNoticeService(noticeId, payload, yarStub)
 
         expect(result).toEqual({})
       })
 
       it('saves a default "noticesFilter" object in the session', async () => {
-        await SubmitViewNoticeService.go(noticeId, payload, yarStub)
+        await SubmitViewNoticeService(noticeId, payload, yarStub)
 
         const setArgs = yarStub.set.args[0]
 
@@ -145,13 +145,13 @@ describe('Notices - Submit View Notice service', () => {
       })
 
       it('returns a result that tells the controller to redirect to the index page', async () => {
-        const result = await SubmitViewNoticeService.go(noticeId, payload, yarStub)
+        const result = await SubmitViewNoticeService(noticeId, payload, yarStub)
 
         expect(result).toEqual({})
       })
 
       it('saves the submitted filters as the "noticesFilter" object in the session', async () => {
-        await SubmitViewNoticeService.go(noticeId, payload, yarStub)
+        await SubmitViewNoticeService(noticeId, payload, yarStub)
 
         const setArgs = yarStub.set.args[0]
 
@@ -177,7 +177,7 @@ describe('Notices - Submit View Notice service', () => {
         })
 
         it('returns the page data for the view, including any errors', async () => {
-          const result = await SubmitViewNoticeService.go(noticeId, payload, yarStub)
+          const result = await SubmitViewNoticeService(noticeId, payload, yarStub)
 
           expect(result).toEqual({
             activeNavBar: 'notices',
@@ -269,7 +269,7 @@ describe('Notices - Submit View Notice service', () => {
         })
 
         it('returns the page data for the view, including any errors', async () => {
-          const result = await SubmitViewNoticeService.go(noticeId, payload, yarStub)
+          const result = await SubmitViewNoticeService(noticeId, payload, yarStub)
 
           expect(result).toEqual({
             activeNavBar: 'notices',

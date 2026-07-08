@@ -41,7 +41,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
 
   describe('when called', () => {
     it('saves the submitted value', async () => {
-      await SubmitAbstractionPeriodService.go(session.id, payload)
+      await SubmitAbstractionPeriodService(session.id, payload)
 
       expect(session.abstractionPeriodStartDay).toEqual('1')
       expect(session.abstractionPeriodStartMonth).toEqual('2')
@@ -52,7 +52,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
     })
 
     it('returns an empty object in order to continue the journey', async () => {
-      const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+      const result = await SubmitAbstractionPeriodService(session.id, payload)
 
       expect(result).toEqual({})
     })
@@ -64,7 +64,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
     })
 
     it('returns page data for the view', async () => {
-      const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+      const result = await SubmitAbstractionPeriodService(session.id, payload)
 
       expect(result).toMatchObject({
         abstractionPeriodStartDay: null,
@@ -81,7 +81,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
     })
 
     it('returns the validation error', async () => {
-      const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+      const result = await SubmitAbstractionPeriodService(session.id, payload)
 
       expect(result.error).toEqual({
         errorList: [
@@ -105,7 +105,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
 
     describe('because the user has not submitted anything', () => {
       it('includes an error for both input elements', async () => {
-        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+        const result = await SubmitAbstractionPeriodService(session.id, payload)
 
         expect(result.error).toEqual({
           errorList: [
@@ -139,7 +139,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       })
 
       it('includes an error for the start date input element', async () => {
-        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+        const result = await SubmitAbstractionPeriodService(session.id, payload)
 
         expect(result.error).toEqual({
           errorList: [
@@ -155,7 +155,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       })
 
       it('includes what was submitted', async () => {
-        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+        const result = await SubmitAbstractionPeriodService(session.id, payload)
 
         expect(result).toMatchObject({
           abstractionPeriodStartDay: null,
@@ -177,7 +177,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       })
 
       it('includes an error for the end date input element', async () => {
-        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+        const result = await SubmitAbstractionPeriodService(session.id, payload)
 
         expect(result.error).toEqual({
           errorList: [
@@ -193,7 +193,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       })
 
       it('includes what was submitted', async () => {
-        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+        const result = await SubmitAbstractionPeriodService(session.id, payload)
 
         expect(result).toMatchObject({
           abstractionPeriodStartDay: '08',
@@ -215,7 +215,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       })
 
       it('includes an error for both input elements', async () => {
-        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+        const result = await SubmitAbstractionPeriodService(session.id, payload)
 
         expect(result.error).toEqual({
           errorList: [
@@ -238,7 +238,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       })
 
       it('includes what was submitted', async () => {
-        const result = await SubmitAbstractionPeriodService.go(session.id, payload)
+        const result = await SubmitAbstractionPeriodService(session.id, payload)
 
         expect(result).toMatchObject({
           abstractionPeriodStartDay: 'abc',

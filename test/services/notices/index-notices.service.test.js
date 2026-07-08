@@ -42,7 +42,7 @@ describe('Notices - Index Notices service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await IndexNoticesService.go(yarStub, auth, page)
+      const result = await IndexNoticesService(yarStub, auth, page)
 
       expect(result).toEqual({
         activeNavBar: 'notices',
@@ -98,7 +98,7 @@ describe('Notices - Index Notices service', () => {
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
-        const result = await IndexNoticesService.go(yarStub, auth, page)
+        const result = await IndexNoticesService(yarStub, auth, page)
 
         expect(result.filters.openFilter).toBe(false)
       })
@@ -111,7 +111,7 @@ describe('Notices - Index Notices service', () => {
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
-        const result = await IndexNoticesService.go(yarStub, auth, page)
+        const result = await IndexNoticesService(yarStub, auth, page)
 
         expect(result.filters.openFilter).toBe(false)
       })
@@ -127,7 +127,7 @@ describe('Notices - Index Notices service', () => {
       })
 
       it('returns the saved filters and that the controls should be open', async () => {
-        const result = await IndexNoticesService.go(yarStub, auth, page)
+        const result = await IndexNoticesService(yarStub, auth, page)
 
         expect(result.filters.openFilter).toBe(true)
       })

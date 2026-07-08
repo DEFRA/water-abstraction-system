@@ -50,7 +50,7 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
       })
 
       it('will fetch the data, format it and group the charge version by the licence', async () => {
-        const result = await FetchLicencesService.go(billRun, billingPeriod)
+        const result = await FetchLicencesService(billRun, billingPeriod)
 
         expect(result).toHaveLength(1)
         expect(result[0].id).toEqual(licenceOne.id)
@@ -108,7 +108,7 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
       })
 
       it('will fetch the data, format it and group the charge versions by the licences', async () => {
-        const result = await FetchLicencesService.go(billRun, billingPeriod)
+        const result = await FetchLicencesService(billRun, billingPeriod)
 
         expect(result).toHaveLength(2)
         expect(result[0].id).toEqual(licenceOne.id)
@@ -129,7 +129,7 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
     })
 
     it('will return an empty array', async () => {
-      const result = await FetchLicencesService.go(billRun, billingPeriod)
+      const result = await FetchLicencesService(billRun, billingPeriod)
 
       expect(result).toHaveLength(0)
     })

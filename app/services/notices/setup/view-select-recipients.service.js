@@ -15,12 +15,12 @@ import SelectRecipientsPresenter from '../../../presenters/notices/setup/select-
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const selectedRecipients = _selectedRecipients(session)
 
-  const recipients = await FetchRecipientsService.go(session)
+  const recipients = await FetchRecipientsService(session)
 
   const pageData = SelectRecipientsPresenter.go(session, recipients, selectedRecipients)
 
@@ -43,9 +43,4 @@ function _selectedRecipients(session) {
   delete session.selectedRecipients
 
   return selectedRecipients
-}
-
-export { go }
-export default {
-  go
 }

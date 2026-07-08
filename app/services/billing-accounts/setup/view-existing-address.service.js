@@ -15,7 +15,7 @@ import FetchSessionDal from '../../../dal/fetch-session.dal.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
   const companyAddresses = await _fetchCompanyAddresses(session)
 
@@ -30,14 +30,7 @@ async function _fetchCompanyAddresses(session) {
   const newAccount = !!session.existingAccount && session.existingAccount !== 'new'
   const companyId = newAccount ? session.existingAccount : session.billingAccount.company.id
 
-  const companyAddresses = await FetchCompanyAddressesService.go(companyId)
+  const companyAddresses = await FetchCompanyAddressesService(companyId)
 
   return companyAddresses
-}
-
-export {
-  go
-}
-export default {
-  go
 }

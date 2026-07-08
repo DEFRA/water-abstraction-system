@@ -18,7 +18,7 @@ export async function submitInternational(request, h) {
     payload
   } = request
 
-  const pageData = await SubmitInternationalAddressService.go(sessionId, payload)
+  const pageData = await SubmitInternationalAddressService(sessionId, payload)
 
   if (pageData.error) {
     return h.view('address/international.njk', pageData)
@@ -33,7 +33,7 @@ export async function submitManual(request, h) {
     payload
   } = request
 
-  const pageData = await SubmitManualAddressService.go(sessionId, payload)
+  const pageData = await SubmitManualAddressService(sessionId, payload)
 
   if (pageData.error) {
     return h.view('address/manual.njk', pageData)
@@ -45,7 +45,7 @@ export async function submitManual(request, h) {
 export async function submitPostcode(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitPostcodeService.go(sessionId, request.payload)
+  const pageData = await SubmitPostcodeService(sessionId, request.payload)
 
   if (pageData.error) {
     return h.view('address/postcode.njk', pageData)
@@ -60,7 +60,7 @@ export async function submitSelect(request, h) {
     payload
   } = request
 
-  const pageData = await SubmitSelectAddressService.go(sessionId, payload)
+  const pageData = await SubmitSelectAddressService(sessionId, payload)
 
   if (pageData.error) {
     return h.view('address/select.njk', pageData)
@@ -72,7 +72,7 @@ export async function submitSelect(request, h) {
 export async function viewInternational(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await InternationalAddressService.go(sessionId)
+  const pageData = await InternationalAddressService(sessionId)
 
   return h.view('address/international.njk', pageData)
 }
@@ -80,7 +80,7 @@ export async function viewInternational(request, h) {
 export async function viewManual(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ManualAddressService.go(sessionId)
+  const pageData = await ManualAddressService(sessionId)
 
   return h.view('address/manual.njk', pageData)
 }
@@ -88,7 +88,7 @@ export async function viewManual(request, h) {
 export async function viewPostcode(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await PostcodeService.go(sessionId)
+  const pageData = await PostcodeService(sessionId)
 
   return h.view('address/postcode.njk', pageData)
 }
@@ -96,7 +96,7 @@ export async function viewPostcode(request, h) {
 export async function viewSelect(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SelectAddressService.go(sessionId)
+  const pageData = await SelectAddressService(sessionId)
 
   if (pageData.redirect) {
     return h.redirect(`/system/address/${sessionId}/manual`)

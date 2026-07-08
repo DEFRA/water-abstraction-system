@@ -33,19 +33,19 @@ import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib
  * If the request to Notify for the message details fails, the notification is not updated. This means we can try again
  * later.
  */
-async function go() {
+export default async function go() {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    const notifications = await FetchNotificationsService.go()
+    const notifications = await FetchNotificationsService()
 
     for (const notification of notifications) {
-      await CheckNotificationStatusService.go(notification)
+      await CheckNotificationStatusService(notification)
     }
 
     await _updateEventErrorCount(notifications)
 
-    await SendAlternateNoticesService.go(notifications)
+    await SendAlternateNoticesService(notifications)
 
     calculateAndLogTimeTaken(startTime, 'Notification status job complete', { count: notifications.length })
   } catch (error) {
@@ -69,12 +69,5 @@ async function _updateEventErrorCount(notifications) {
 
   const dedupeEventIds = [...new Set(eventIds)]
 
-  await UpdateNoticeService.go(dedupeEventIds)
-}
-
-export {
-  go
-}
-export default {
-  go
+  await UpdateNoticeService(dedupeEventIds)
 }

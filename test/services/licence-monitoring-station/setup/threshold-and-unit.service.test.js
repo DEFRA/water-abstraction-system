@@ -30,13 +30,13 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await ThresholdAndUnitService.go(session.id)
+      const result = await ThresholdAndUnitService(session.id)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await ThresholdAndUnitService.go(session.id)
+      const result = await ThresholdAndUnitService(session.id)
 
       expect(result).toMatchObject({
         backLink: '/system/monitoring-stations/e1c44f9b-51c2-4aee-a518-5509d6f05869',

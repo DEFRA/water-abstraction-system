@@ -31,7 +31,7 @@ describe('Return Versions - Fetch Return Version service', () => {
     })
 
     it('returns the matching return version and the pagination array', async () => {
-      const result = await FetchReturnVersionService.go(seededReturnVersion.id)
+      const result = await FetchReturnVersionService(seededReturnVersion.id)
 
       expect(result).toEqual({
         returnVersion: {

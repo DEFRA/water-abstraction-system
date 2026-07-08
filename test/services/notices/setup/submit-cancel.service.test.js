@@ -34,14 +34,14 @@ describe('Notices - Setup - Submit Cancel service', () => {
 
   describe('when called', () => {
     it('clears the session', async () => {
-      await SubmitCancelService.go(session.id)
+      await SubmitCancelService(session.id)
 
       expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
     })
 
     describe('when the journey is for a return', () => {
       it('returns the redirect url', async () => {
-        const result = await SubmitCancelService.go(session.id)
+        const result = await SubmitCancelService(session.id)
 
         expect(result).toEqual('/system/notices')
       })
@@ -61,7 +61,7 @@ describe('Notices - Setup - Submit Cancel service', () => {
       })
 
       it('returns the redirect url', async () => {
-        const result = await SubmitCancelService.go(session.id)
+        const result = await SubmitCancelService(session.id)
 
         expect(result).toEqual('/system/monitoring-stations/123')
       })

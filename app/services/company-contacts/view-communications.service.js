@@ -18,10 +18,10 @@ import PaginatorPresenter from '../../presenters/paginator.presenter.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(id, page) {
+export default async function go(id, page) {
   const companyContact = await FetchCompanyContactDal(id)
 
-  const company = await FetchCompanyService.go(companyContact.companyId)
+  const company = await FetchCompanyService(companyContact.companyId)
 
   const { notifications, totalNumber } = await FetchNotificationsDal(companyContact.contact.email, page)
 
@@ -40,11 +40,4 @@ async function go(id, page) {
     pagination,
     ...pageData
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

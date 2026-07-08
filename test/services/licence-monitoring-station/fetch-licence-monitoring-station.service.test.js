@@ -44,7 +44,7 @@ describe('Licence Monitoring Station - Fetch Licence Monitoring Station service'
     })
 
     it('returns the matching data', async () => {
-      const result = await FetchLicenceMonitoringStationService.go(licenceMonitoringStation.id)
+      const result = await FetchLicenceMonitoringStationService(licenceMonitoringStation.id)
 
       expect(result).toEqual({
         id: licenceMonitoringStation.id,
@@ -85,7 +85,7 @@ describe('Licence Monitoring Station - Fetch Licence Monitoring Station service'
     })
 
     it('returns the matching data', async () => {
-      const result = await FetchLicenceMonitoringStationService.go(licenceMonitoringStation.id)
+      const result = await FetchLicenceMonitoringStationService(licenceMonitoringStation.id)
 
       expect(result).toEqual({
         id: licenceMonitoringStation.id,

@@ -11,7 +11,7 @@ const VIEW_PAGE = 'search/search.njk'
 export async function submitSearch(request, h) {
   const { auth, payload, yar } = request
 
-  const submitResult = await SubmitSearchService.go(auth, payload, yar)
+  const submitResult = await SubmitSearchService(auth, payload, yar)
 
   if (submitResult.error) {
     return h.view(VIEW_PAGE, submitResult)
@@ -29,7 +29,7 @@ export async function viewSearch(request, h) {
     yar
   } = request
 
-  const pageData = await ViewSearchService.go(auth, yar, page)
+  const pageData = await ViewSearchService(auth, yar, page)
 
   return h.view(VIEW_PAGE, pageData)
 }

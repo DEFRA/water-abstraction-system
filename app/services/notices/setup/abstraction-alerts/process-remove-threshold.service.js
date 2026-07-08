@@ -16,7 +16,7 @@ import { formatRestrictionType, formatValueUnit } from '../../../../presenters/b
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  */
-async function go(sessionId, licenceMonitoringStationId, yar) {
+export default async function go(sessionId, licenceMonitoringStationId, yar) {
   const session = await FetchSessionDal(sessionId)
 
   await _save(session, licenceMonitoringStationId)
@@ -40,9 +40,4 @@ async function _save(session, licenceMonitoringStationId) {
   }
 
   return session.$update()
-}
-
-export { go }
-export default {
-  go
 }

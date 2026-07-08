@@ -25,7 +25,7 @@ describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipie
 
   describe('when there are abstraction alert recipients to notify', () => {
     it('fetches the correct recipient data', async () => {
-      const result = await FetchAbstractionAlertRecipientsDal.go(session)
+      const result = await FetchAbstractionAlertRecipientsDal(session)
 
       const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolder)
 

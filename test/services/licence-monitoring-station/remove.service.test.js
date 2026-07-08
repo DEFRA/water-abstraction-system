@@ -43,7 +43,7 @@ describe('Licence Monitoring Station - Remove service', () => {
 
   describe('when called', () => {
     it('returns the page data for the view', async () => {
-      const result = await RemoveService.go(licenceMonitoringStationId)
+      const result = await RemoveService(licenceMonitoringStationId)
 
       expect(result).toEqual({
         backLink: `/system/monitoring-stations/${monitoringStationId}/licence/${licenceId}`,

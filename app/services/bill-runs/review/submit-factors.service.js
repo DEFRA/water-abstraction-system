@@ -27,7 +27,7 @@ import ReviewChargeReferenceModel from '../../../models/review-charge-reference.
  * @returns {Promise<object>} An empty object if there are no errors else the page data for the page including the
  * validation error details
  */
-async function go(reviewChargeReferenceId, yar, payload) {
+export default async function go(reviewChargeReferenceId, yar, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
@@ -37,7 +37,7 @@ async function go(reviewChargeReferenceId, yar, payload) {
     return {}
   }
 
-  const reviewChargeReference = await FetchReviewChargeReferenceService.go(reviewChargeReferenceId)
+  const reviewChargeReference = await FetchReviewChargeReferenceService(reviewChargeReferenceId)
   const pageData = FactorsPresenter.go(reviewChargeReference)
 
   return {
@@ -74,9 +74,4 @@ function _validate(payload) {
   })
 
   return result
-}
-
-export { go }
-export default {
-  go
 }

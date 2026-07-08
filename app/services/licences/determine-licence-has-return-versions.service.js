@@ -12,7 +12,7 @@ import ReturnVersionModel from '../../models/return-version.model.js'
  *
  * @returns {Promise<boolean>} true if the licence has return versions else false
  */
-async function go(licenceId) {
+export default async function go(licenceId) {
   const requirement = await _fetch(licenceId)
 
   return !!requirement
@@ -20,11 +20,4 @@ async function go(licenceId) {
 
 async function _fetch(licenceId) {
   return ReturnVersionModel.query().select(['id']).where('licenceId', licenceId).limit(1).first()
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -22,7 +22,7 @@ describe('Notices - Setup - Confirmation service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewConfirmationService.go(event.id)
+      const result = await ViewConfirmationService(event.id)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

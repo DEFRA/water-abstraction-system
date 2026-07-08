@@ -11,7 +11,7 @@ describe('Payload cleaning service', () => {
         customerName: 'Bert & Ernie  '
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject.customerName).toEqual('Bert & Ernie')
     })
@@ -25,7 +25,7 @@ describe('Payload cleaning service', () => {
         }
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject.details.firstName).toEqual('Bert')
 
@@ -38,7 +38,7 @@ describe('Payload cleaning service', () => {
         codes: [' ABD1 ', 'B1 ', ' C2']
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject.codes).toEqual(['ABD1', 'B1', 'C2'])
     })
@@ -52,7 +52,7 @@ describe('Payload cleaning service', () => {
         ]
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject.contacts[0].firstName).toEqual('Bert')
       expect(cleanedObject.contacts[0].lastName).toEqual('Ernie')
@@ -66,7 +66,7 @@ describe('Payload cleaning service', () => {
         customerName: ' '
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject).not.toHaveProperty('customerName')
     })
@@ -80,7 +80,7 @@ describe('Payload cleaning service', () => {
         }
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject.details).not.toHaveProperty('firstName')
       expect(cleanedObject.details).toHaveProperty('lastName')
@@ -92,7 +92,7 @@ describe('Payload cleaning service', () => {
         codes: [' ABD1 ', ' ', 'C2']
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject.codes).toEqual(['ABD1', 'C2'])
     })
@@ -106,7 +106,7 @@ describe('Payload cleaning service', () => {
         ]
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject.contacts[0]).toHaveProperty('firstName')
       expect(cleanedObject.contacts[0]).not.toHaveProperty('lastName')
@@ -120,7 +120,7 @@ describe('Payload cleaning service', () => {
         customerName: ''
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject).not.toHaveProperty('customerName')
     })
@@ -134,7 +134,7 @@ describe('Payload cleaning service', () => {
         }
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject.details).not.toHaveProperty('firstName')
       expect(cleanedObject.details).toHaveProperty('lastName')
@@ -146,7 +146,7 @@ describe('Payload cleaning service', () => {
         codes: [' ABD1 ', '', 'C2']
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject.codes).toEqual(['ABD1', 'C2'])
     })
@@ -160,7 +160,7 @@ describe('Payload cleaning service', () => {
         ]
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject.contacts[0]).toHaveProperty('firstName')
       expect(cleanedObject.contacts[0]).not.toHaveProperty('lastName')
@@ -174,7 +174,7 @@ describe('Payload cleaning service', () => {
         customerName: null
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject).not.toHaveProperty('customerName')
     })
@@ -188,7 +188,7 @@ describe('Payload cleaning service', () => {
         }
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject.details).not.toHaveProperty('firstName')
       expect(cleanedObject.details).toHaveProperty('lastName')
@@ -200,7 +200,7 @@ describe('Payload cleaning service', () => {
         codes: [' ABD1 ', null, 'C2']
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject.codes).toEqual(['ABD1', 'C2'])
     })
@@ -214,7 +214,7 @@ describe('Payload cleaning service', () => {
         ]
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject.contacts[0]).toHaveProperty('firstName')
       expect(cleanedObject.contacts[0]).not.toHaveProperty('lastName')
@@ -229,7 +229,7 @@ describe('Payload cleaning service', () => {
         hasOrders: false
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject).toEqual(dirtyObject)
     })
@@ -243,7 +243,7 @@ describe('Payload cleaning service', () => {
         }
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject).toEqual(dirtyObject)
     })
@@ -254,7 +254,7 @@ describe('Payload cleaning service', () => {
         preferences: [true, false, true]
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject).toEqual(dirtyObject)
     })
@@ -268,7 +268,7 @@ describe('Payload cleaning service', () => {
         lines: 5
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject).toEqual(dirtyObject)
     })
@@ -282,7 +282,7 @@ describe('Payload cleaning service', () => {
         }
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject).toEqual(dirtyObject)
     })
@@ -293,7 +293,7 @@ describe('Payload cleaning service', () => {
         lineValues: [10.0, 11.54, 2.99]
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject).toEqual(dirtyObject)
     })
@@ -306,7 +306,7 @@ describe('Payload cleaning service', () => {
         customerName: 'Bert< & >Ernie'
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject).toEqual(dirtyObject)
     })
@@ -320,7 +320,7 @@ describe('Payload cleaning service', () => {
         }
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject).toEqual(dirtyObject)
     })
@@ -331,7 +331,7 @@ describe('Payload cleaning service', () => {
         codes: ['A1&', 'B2<', 'C3>']
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject).toEqual(dirtyObject)
     })
@@ -344,7 +344,7 @@ describe('Payload cleaning service', () => {
         customerName: '<script>alert(1)</script>'
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject).not.toHaveProperty('customerName')
     })
@@ -358,7 +358,7 @@ describe('Payload cleaning service', () => {
         }
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject.details).not.toHaveProperty('firstName')
       expect(cleanedObject.details).toHaveProperty('lastName')
@@ -370,7 +370,7 @@ describe('Payload cleaning service', () => {
         codes: ['ABD1', '<script>alert(1)</script>', 'C2']
       }
 
-      const cleanedObject = PayloadCleaningService.go(dirtyObject)
+      const cleanedObject = PayloadCleaningService(dirtyObject)
 
       expect(cleanedObject.codes).toEqual(['ABD1', 'C2'])
     })

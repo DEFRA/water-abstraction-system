@@ -16,7 +16,7 @@ import { determineUpcomingReturnPeriods } from '../../../lib/return-periods.lib.
  *
  * @returns {object} - the returns period and the if the period is `summer`
  */
-function go(returnsPeriod) {
+export default function go(returnsPeriod) {
   return {
     returnsPeriod: _returnsPeriod(returnsPeriod),
     summer: _summer(returnsPeriod)
@@ -49,9 +49,4 @@ function _returnsPeriod(returnsPeriod) {
  */
 function _summer(returnsPeriod) {
   return returnsPeriod === 'summer' ? 'true' : 'false'
-}
-
-export { go }
-export default {
-  go
 }

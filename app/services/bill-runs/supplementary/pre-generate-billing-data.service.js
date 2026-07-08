@@ -18,8 +18,8 @@ import { generateUUID } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<object>} An object containing arrays of bills and billLicences objects
  */
-async function go(chargeVersions, billRunId, billingPeriod) {
-  const billingAccounts = await FetchBillingAccountsService.go(chargeVersions)
+export default async function go(chargeVersions, billRunId, billingPeriod) {
+  const billingAccounts = await FetchBillingAccountsService(chargeVersions)
 
   const bills = _preGenerateBills(billingAccounts, billRunId, billingPeriod)
   const billLicences = _preGenerateBillLicences(chargeVersions, bills)
@@ -116,9 +116,4 @@ function _preGenerateBills(billingAccounts, billRunId, billingPeriod) {
   }, {})
 
   return keyedBills
-}
-
-export { go }
-export default {
-  go
 }

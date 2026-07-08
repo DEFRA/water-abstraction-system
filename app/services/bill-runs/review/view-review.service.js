@@ -18,11 +18,11 @@ import { processSavedFilters } from '../../../lib/submit-page.lib.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(id, yar, page) {
+export default async function go(id, yar, page) {
   const filterKey = `review-${id}`
   const filters = _filters(yar, filterKey)
 
-  const { billRun, licences } = await FetchBillRunLicencesService.go(id, filters, page)
+  const { billRun, licences } = await FetchBillRunLicencesService(id, filters, page)
 
   const notification = readFlashNotification(yar)
 
@@ -55,9 +55,4 @@ function _filters(yar, filterKey) {
     progress: [],
     ...savedFilters
   }
-}
-
-export { go }
-export default {
-  go
 }

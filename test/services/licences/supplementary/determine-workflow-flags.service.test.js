@@ -41,7 +41,7 @@ describe('Determine Workflow Flags Service', () => {
       })
 
       it('always returns the licenceId, regionId, startDate and endDate', async () => {
-        const result = await DetermineWorkflowFlagsService.go(workflowId)
+        const result = await DetermineWorkflowFlagsService(workflowId)
 
         expect(result.licenceId).toEqual('fee406be-d710-4c14-a4a4-9fd43dc9c5bc')
         expect(result.regionId).toEqual('06661d63-a70e-4cc2-bb6f-7b2a7e9607cc')
@@ -55,7 +55,7 @@ describe('Determine Workflow Flags Service', () => {
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineWorkflowFlagsService.go(workflowId)
+          const result = await DetermineWorkflowFlagsService(workflowId)
 
           expect(result.flagForPreSrocSupplementary).toEqual(true)
           expect(result.flagForSrocSupplementary).toEqual(false)
@@ -71,7 +71,7 @@ describe('Determine Workflow Flags Service', () => {
           })
 
           it('returns the correct flags', async () => {
-            const result = await DetermineWorkflowFlagsService.go(workflowId)
+            const result = await DetermineWorkflowFlagsService(workflowId)
 
             expect(result.flagForPreSrocSupplementary).toEqual(true)
             expect(result.flagForSrocSupplementary).toEqual(true)
@@ -91,7 +91,7 @@ describe('Determine Workflow Flags Service', () => {
           })
 
           it('returns the correct flags', async () => {
-            const result = await DetermineWorkflowFlagsService.go(workflowId)
+            const result = await DetermineWorkflowFlagsService(workflowId)
 
             expect(result.flagForPreSrocSupplementary).toEqual(true)
             expect(result.flagForSrocSupplementary).toEqual(true)
@@ -107,7 +107,7 @@ describe('Determine Workflow Flags Service', () => {
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineWorkflowFlagsService.go(workflowId)
+          const result = await DetermineWorkflowFlagsService(workflowId)
 
           expect(result.flagForPreSrocSupplementary).toEqual(true)
           expect(result.flagForSrocSupplementary).toEqual(true)
@@ -133,7 +133,7 @@ describe('Determine Workflow Flags Service', () => {
       })
 
       it('always returns the licenceId, regionId, startDate and endDate', async () => {
-        const result = await DetermineWorkflowFlagsService.go(workflowId)
+        const result = await DetermineWorkflowFlagsService(workflowId)
 
         expect(result.licenceId).toEqual('fee406be-d710-4c14-a4a4-9fd43dc9c5bc')
         expect(result.regionId).toEqual('27fc9c25-2031-454b-bdae-0aa4ce566eac')
@@ -147,7 +147,7 @@ describe('Determine Workflow Flags Service', () => {
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineWorkflowFlagsService.go(workflowId)
+          const result = await DetermineWorkflowFlagsService(workflowId)
 
           expect(result.flagForPreSrocSupplementary).toEqual(false)
           expect(result.flagForSrocSupplementary).toEqual(false)
@@ -163,7 +163,7 @@ describe('Determine Workflow Flags Service', () => {
           })
 
           it('returns the correct flags', async () => {
-            const result = await DetermineWorkflowFlagsService.go(workflowId)
+            const result = await DetermineWorkflowFlagsService(workflowId)
 
             expect(result.flagForPreSrocSupplementary).toEqual(false)
             expect(result.flagForSrocSupplementary).toEqual(false)
@@ -183,7 +183,7 @@ describe('Determine Workflow Flags Service', () => {
           })
 
           it('returns the correct flags', async () => {
-            const result = await DetermineWorkflowFlagsService.go(workflowId)
+            const result = await DetermineWorkflowFlagsService(workflowId)
 
             expect(result.flagForPreSrocSupplementary).toEqual(false)
             expect(result.flagForSrocSupplementary).toEqual(true)
@@ -199,7 +199,7 @@ describe('Determine Workflow Flags Service', () => {
         })
 
         it('returns the correct flags', async () => {
-          const result = await DetermineWorkflowFlagsService.go(workflowId)
+          const result = await DetermineWorkflowFlagsService(workflowId)
 
           expect(result.flagForPreSrocSupplementary).toEqual(false)
           expect(result.flagForSrocSupplementary).toEqual(true)
@@ -214,7 +214,7 @@ describe('Determine Workflow Flags Service', () => {
         })
 
         it('returns the unchanged flags', async () => {
-          const result = await DetermineWorkflowFlagsService.go(workflowId)
+          const result = await DetermineWorkflowFlagsService(workflowId)
 
           expect(result.flagForPreSrocSupplementary).toEqual(false)
           expect(result.flagForSrocSupplementary).toEqual(false)

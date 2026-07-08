@@ -23,8 +23,8 @@ import FetchLicenceService from './fetch-licence.service.js'
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(licenceId, journey) {
-  const licence = await FetchLicenceService.go(licenceId)
+export default async function go(licenceId, journey) {
+  const licence = await FetchLicenceService(licenceId)
 
   if (!licence) {
     throw Boom.notFound('Licence for new return requirement not found', { id: licenceId })
@@ -63,9 +63,4 @@ function _currentVersionStartDate(licenceVersions) {
   const { startDate } = licenceVersions[0]
 
   return startDate
-}
-
-export { go }
-export default {
-  go
 }

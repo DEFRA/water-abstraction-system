@@ -37,7 +37,7 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
       })
 
       it('generates return requirements setup data', async () => {
-        const result = await GenerateFromAbstractionDataService.go(licenceId, licenceVersionId, startDate)
+        const result = await GenerateFromAbstractionDataService(licenceId, licenceVersionId, startDate)
 
         expect(result).toEqual([
           {
@@ -117,7 +117,7 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
       })
 
       it('sets the collection frequency to "day" for the two-part tariff spray purpose', async () => {
-        const result = await GenerateFromAbstractionDataService.go(licenceId, licenceVersionId, startDate)
+        const result = await GenerateFromAbstractionDataService(licenceId, licenceVersionId, startDate)
 
         // We assert the others haven't changed because of this
         expect(result[0].frequencyCollected).toEqual('day')
@@ -141,7 +141,7 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
       })
 
       it('sets the agreements for each return requirement to be "two-part tariff"', async () => {
-        const result = await GenerateFromAbstractionDataService.go(licenceId, licenceVersionId, startDate)
+        const result = await GenerateFromAbstractionDataService(licenceId, licenceVersionId, startDate)
 
         expect(result[0].agreementsExceptions).toEqual(['none'])
         expect(result[1].agreementsExceptions).toEqual(['two-part-tariff'])
@@ -160,7 +160,7 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
       })
 
       it('sets the collection and reporting frequencies to "day"', async () => {
-        const result = await GenerateFromAbstractionDataService.go(licenceId, licenceVersionId, startDate)
+        const result = await GenerateFromAbstractionDataService(licenceId, licenceVersionId, startDate)
 
         expect(result[0].frequencyCollected).toEqual('day')
         expect(result[0].frequencyReported).toEqual('day')
@@ -175,7 +175,7 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
   describe('when called with a licence ID that does not exists', () => {
     it('throws an error', async () => {
       await expect(
-        GenerateFromAbstractionDataService.go('fc29a098-c1ab-4a2b-bc31-b713cccc505d', startDate)
+        GenerateFromAbstractionDataService('fc29a098-c1ab-4a2b-bc31-b713cccc505d', startDate)
       ).rejects.toThrow()
     })
   })

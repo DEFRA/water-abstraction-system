@@ -94,7 +94,7 @@ describe('Return Versions - Setup - Generate Return Version service', () => {
     })
 
     it('generates a "standard" return version for persisting from the session data', async () => {
-      const result = await GenerateReturnVersionService.go(session, userId)
+      const result = await GenerateReturnVersionService(session, userId)
 
       expect(result).toEqual({
         returnRequirements: [
@@ -150,7 +150,7 @@ describe('Return Versions - Setup - Generate Return Version service', () => {
         })
 
         it('generates a return version with quarterly returns set to true', async () => {
-          const result = await GenerateReturnVersionService.go(session, userId)
+          const result = await GenerateReturnVersionService(session, userId)
 
           expect(result.returnVersion.quarterlyReturns).toBe(true)
         })
@@ -163,7 +163,7 @@ describe('Return Versions - Setup - Generate Return Version service', () => {
         })
 
         it('generates a return version with quarterly returns set to false', async () => {
-          const result = await GenerateReturnVersionService.go(session, userId)
+          const result = await GenerateReturnVersionService(session, userId)
 
           expect(result.returnVersion.quarterlyReturns).toBe(false)
         })
@@ -196,7 +196,7 @@ describe('Return Versions - Setup - Generate Return Version service', () => {
     })
 
     it('generates a "no-returns-required" return version for persisting from the session data', async () => {
-      const result = await GenerateReturnVersionService.go(session, userId)
+      const result = await GenerateReturnVersionService(session, userId)
 
       expect(result).toEqual({
         returnRequirements: [],

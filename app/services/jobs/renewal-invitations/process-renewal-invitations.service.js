@@ -11,7 +11,7 @@ import { currentTimeInNanoseconds, calculateAndLogTimeTaken } from '../../../lib
  *
  * @param {number} days - The number of ahead of today
  */
-async function go(days) {
+export default async function go(days) {
   try {
     const startTime = currentTimeInNanoseconds()
 
@@ -21,11 +21,4 @@ async function go(days) {
   } catch (error) {
     globalThis.GlobalNotifier.omfg('Notification status job failed', null, error)
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

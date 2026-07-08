@@ -24,7 +24,7 @@ describe('Notices - Setup - Determine Returns Period service', () => {
 
   describe('when the returns period is not for summer', () => {
     it('should return the returns period and summer "false"', () => {
-      const result = DetermineReturnsPeriodService.go(returnsPeriod)
+      const result = DetermineReturnsPeriodService(returnsPeriod)
 
       expect(result).toEqual({
         returnsPeriod: {
@@ -45,7 +45,7 @@ describe('Notices - Setup - Determine Returns Period service', () => {
     })
 
     it('should return the returns period and summer "true"', () => {
-      const result = DetermineReturnsPeriodService.go(returnsPeriod)
+      const result = DetermineReturnsPeriodService(returnsPeriod)
 
       expect(result).toEqual({
         returnsPeriod: {

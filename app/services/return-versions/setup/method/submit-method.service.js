@@ -25,7 +25,7 @@ import MethodValidator from '../../../../validators/return-versions/setup/method
  * @returns {Promise<object>} If no errors a the url for where the user should be redirected else the page data for the
  * setup page including the validation error details
  */
-async function go(sessionId, payload) {
+export default async function go(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
@@ -65,7 +65,7 @@ async function _save(session, payload) {
   // `GenerateFromAbstractionDataService` to fetch the licence's abstraction data and transform it into return
   // requirements we can persist in the session
   if (payload.method === 'useAbstractionData') {
-    session.requirements = await GenerateFromAbstractionDataService.go(
+    session.requirements = await GenerateFromAbstractionDataService(
       session.licence.id,
       session.licenceVersion.id,
       session.returnVersionStartDate
@@ -79,9 +79,4 @@ function _validate(payload) {
   const validation = MethodValidator.go(payload)
 
   return formatValidationResult(validation)
-}
-
-export { go }
-export default {
-  go
 }

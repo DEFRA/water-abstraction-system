@@ -16,7 +16,7 @@ import ProcessTimeLimitedLicencesService from '../services/jobs/time-limited/pro
 const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_NOT_FOUND } = http2.constants
 
 export async function clean(_request, h) {
-  ProcessCleanService.go()
+  ProcessCleanService()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
@@ -24,7 +24,7 @@ export async function clean(_request, h) {
 export async function customerFiles(request, h) {
   const { days } = request.params
 
-  ProcessCustomerFilesService.go(days)
+  ProcessCustomerFilesService(days)
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
@@ -39,19 +39,19 @@ export async function customerFiles(request, h) {
  * @returns {Promise<object>} - A promise that resolves to an HTTP response object with a 204 status code
  */
 export async function exportDb(_request, h) {
-  ExportService.go()
+  ExportService()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
 export async function licenceUpdates(_request, h) {
-  ProcessLicenceUpdatesService.go()
+  ProcessLicenceUpdatesService()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
 export async function notificationStatus(_request, h) {
-  ProcessNotificationStatusService.go()
+  ProcessNotificationStatusService()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
@@ -59,7 +59,7 @@ export async function notificationStatus(_request, h) {
 export async function renewalInvitations(request, h) {
   const { days } = request.params
 
-  ProcessRenewalInvitationsService.go(days)
+  ProcessRenewalInvitationsService(days)
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
@@ -71,13 +71,13 @@ export async function returnLogs(request, h) {
     return h.response().code(HTTP_STATUS_NOT_FOUND)
   }
 
-  ProcessReturnLogsService.go(cycle)
+  ProcessReturnLogsService(cycle)
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
 export async function timeLimited(_request, h) {
-  ProcessTimeLimitedLicencesService.go()
+  ProcessTimeLimitedLicencesService()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }

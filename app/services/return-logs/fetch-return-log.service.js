@@ -12,7 +12,7 @@ import ReturnLogModel from '../../../app/models/return-log.model.js'
  *
  * @returns {Promise<module:ReturnLogModel>} the return log and associated licence record
  */
-async function go(returnLogId) {
+export default async function go(returnLogId) {
   return ReturnLogModel.query()
     .findById(returnLogId)
     .select(['id'])
@@ -20,11 +20,4 @@ async function go(returnLogId) {
     .modifyGraph('licence', (licenceBuilder) => {
       licenceBuilder.select(['id', 'licenceRef'])
     })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

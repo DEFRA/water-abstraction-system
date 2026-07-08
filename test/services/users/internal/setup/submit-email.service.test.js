@@ -43,7 +43,7 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitEmailService.go(session.id, payload, yarStub)
+      await SubmitEmailService(session.id, payload, yarStub)
 
       expect(session).toEqual({
         ...session,
@@ -53,7 +53,7 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitEmailService.go(session.id, payload, yarStub)
+      const result = await SubmitEmailService(session.id, payload, yarStub)
 
       expect(result).toEqual({
         redirectUrl: `/system/users/internal/setup/${session.id}/permissions`
@@ -73,7 +73,7 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
         })
 
         it('redirects to the Check page', async () => {
-          const result = await SubmitEmailService.go(session.id, payload, yarStub)
+          const result = await SubmitEmailService(session.id, payload, yarStub)
 
           expect(result).toEqual({
             redirectUrl: `/system/users/internal/setup/${session.id}/check`
@@ -83,7 +83,7 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
         describe('and the "session" and "payload" value', () => {
           describe('match', () => {
             it('does not set a notification', async () => {
-              await SubmitEmailService.go(session.id, payload, yarStub)
+              await SubmitEmailService(session.id, payload, yarStub)
 
               expect(yarStub.flash.called).toBe(false)
             })
@@ -95,7 +95,7 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
             })
 
             it('sets a notification', async () => {
-              await SubmitEmailService.go(session.id, payload, yarStub)
+              await SubmitEmailService(session.id, payload, yarStub)
 
               const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -108,7 +108,7 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
 
       describe('not been visited', () => {
         it('does not set a notification', async () => {
-          await SubmitEmailService.go(session.id, payload, yarStub)
+          await SubmitEmailService(session.id, payload, yarStub)
 
           expect(yarStub.flash.called).toBe(false)
         })
@@ -122,7 +122,7 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitEmailService.go(session.id, payload, yarStub)
+      const result = await SubmitEmailService(session.id, payload, yarStub)
 
       expect(result).toEqual({
         activeNavBar: 'users',

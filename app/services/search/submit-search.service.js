@@ -22,7 +22,7 @@ import { formatValidationResult } from '../../presenters/base.presenter.js'
  * @returns {Promise<object>} The view data for the search page if there are validation errors or a redirect to the next
  * page to display, which could be the search results or the display page for a specific record
  */
-async function go(auth, payload, yar) {
+export default async function go(auth, payload, yar) {
   const validationResult = SearchValidator.go(payload)
 
   if (validationResult.error) {
@@ -53,11 +53,4 @@ function _failedValidationResponse(auth, payload, validationResult) {
     error: formatValidationResult(validationResult),
     ...SearchPresenter.go(userScopes, query, resultType)
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

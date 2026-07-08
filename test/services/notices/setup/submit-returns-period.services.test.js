@@ -58,14 +58,14 @@ describe('Notices - Setup - Submit Returns Period service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
+        await SubmitReturnsPeriodService(session.id, payload, yarStub)
 
         expect(session.returnsPeriod).toEqual('quarterFour')
         expect(session.$update.called).toBe(true)
       })
 
       it('saves the determined returns period', async () => {
-        await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
+        await SubmitReturnsPeriodService(session.id, payload, yarStub)
 
         expect(session.determinedReturnsPeriod).toEqual({
           // The dates would be strings and not date objects when saved to the database
@@ -79,7 +79,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
       })
 
       it('returns the redirect route', async () => {
-        const result = await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
+        const result = await SubmitReturnsPeriodService(session.id, payload, yarStub)
 
         expect(result).toEqual({
           redirect: `${session.id}/check-notice-type`
@@ -97,7 +97,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
       })
 
       it('sets a flash message', async () => {
-        await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
+        await SubmitReturnsPeriodService(session.id, payload, yarStub)
 
         // Check we add the flash message
         const [flashType, bannerMessage] = yarStub.flash.args[0]
@@ -122,7 +122,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
       })
 
       it('correctly presents the data with the error', async () => {
-        const result = await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
+        const result = await SubmitReturnsPeriodService(session.id, payload, yarStub)
 
         expect(result).toEqual({
           activeNavBar: 'notices',

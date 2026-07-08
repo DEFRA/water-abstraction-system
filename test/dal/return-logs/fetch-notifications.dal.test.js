@@ -31,7 +31,7 @@ describe('Return Logs - Fetch Notifications DAL', () => {
 
   describe('when the return log has notifications', () => {
     it('returns the matching notifications and the total', async () => {
-      const result = await FetchNotificationsDal.go(notification.returnLogIds[0])
+      const result = await FetchNotificationsDal(notification.returnLogIds[0])
 
       expect(result).toEqual({
         notifications: [
@@ -55,7 +55,7 @@ describe('Return Logs - Fetch Notifications DAL', () => {
 
   describe('when the return log has no notifications', () => {
     it('returns an empty array and zero', async () => {
-      const result = await FetchNotificationsDal.go('513f8813-3782-4c1b-a095-a078adf757f4')
+      const result = await FetchNotificationsDal('513f8813-3782-4c1b-a095-a078adf757f4')
 
       expect(result).toEqual({ notifications: [], totalNumber: 0 })
     })

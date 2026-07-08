@@ -35,14 +35,14 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
   describe('when called', () => {
     describe('when the "alertType" has not been previously set', () => {
       it('saves the submitted value', async () => {
-        await SubmitAlertTypeService.go(session.id, payload)
+        await SubmitAlertTypeService(session.id, payload)
 
         expect(session.alertType).toEqual('stop')
         expect(session.$update.called).toBe(true)
       })
 
       it('returns an empty object (no page data is needed for a redirect)', async () => {
-        const result = await SubmitAlertTypeService.go(session.id, payload)
+        const result = await SubmitAlertTypeService(session.id, payload)
 
         expect(result).toEqual({})
       })
@@ -59,14 +59,14 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
       })
 
       it('sets the "alertThresholds" to an empty array', async () => {
-        await SubmitAlertTypeService.go(session.id, payload)
+        await SubmitAlertTypeService(session.id, payload)
 
         expect(session.alertThresholds).toEqual([])
         expect(session.$update.called).toBe(true)
       })
 
       it('sets the "removedThresholds" to an empty array', async () => {
-        await SubmitAlertTypeService.go(session.id, payload)
+        await SubmitAlertTypeService(session.id, payload)
 
         expect(session.removedThresholds).toEqual([])
         expect(session.$update.called).toBe(true)
@@ -84,7 +84,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
       })
 
       it('does not change the existing "alertThresholds"', async () => {
-        await SubmitAlertTypeService.go(session.id, payload)
+        await SubmitAlertTypeService(session.id, payload)
 
         expect(session.alertThresholds).toEqual(['100-flow'])
         expect(session.$update.called).toBe(true)
@@ -99,7 +99,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitAlertTypeService.go(session.id, payload)
+        const result = await SubmitAlertTypeService(session.id, payload)
 
         expect(result).toEqual({
           activeNavBar: 'notices',
@@ -172,7 +172,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
       })
 
       it('returns page data for the view, with errors (and the selected alert type checked)', async () => {
-        const result = await SubmitAlertTypeService.go(session.id, payload)
+        const result = await SubmitAlertTypeService(session.id, payload)
 
         expect(result).toEqual({
           activeNavBar: 'notices',

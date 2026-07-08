@@ -43,7 +43,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
 
       describe('that do NOT include emails to primary users', () => {
         it('returns an object with empty properties', async () => {
-          const result = await FetchFailedRenewalInvitationsService.go(notice.id)
+          const result = await FetchFailedRenewalInvitationsService(notice.id)
 
           expect(result).toEqual({ licenceRefs: [], notificationIds: [] })
         })
@@ -80,7 +80,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
           })
 
           it('returns the failed notification IDs plus the unique licence refs from them', async () => {
-            const result = await FetchFailedRenewalInvitationsService.go(notice.id)
+            const result = await FetchFailedRenewalInvitationsService(notice.id)
 
             const expectedNotificationIds = [notifications[1].id, notifications[2].id].sort(
               (referenceString, compareString) => {
@@ -116,7 +116,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
           })
 
           it('returns an object with empty properties', async () => {
-            const result = await FetchFailedRenewalInvitationsService.go(notice.id)
+            const result = await FetchFailedRenewalInvitationsService(notice.id)
 
             expect(result).toEqual({ licenceRefs: [], notificationIds: [] })
           })
@@ -130,7 +130,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
       })
 
       it('returns an object with empty properties', async () => {
-        const result = await FetchFailedRenewalInvitationsService.go(notice.id)
+        const result = await FetchFailedRenewalInvitationsService(notice.id)
 
         expect(result).toEqual({ licenceRefs: [], notificationIds: [] })
       })
@@ -143,7 +143,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
     })
 
     it('returns an object with empty properties', async () => {
-      const result = await FetchFailedRenewalInvitationsService.go(generateUUID())
+      const result = await FetchFailedRenewalInvitationsService(generateUUID())
 
       expect(result).toEqual({ licenceRefs: [], notificationIds: [] })
     })

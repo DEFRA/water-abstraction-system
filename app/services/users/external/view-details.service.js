@@ -15,7 +15,7 @@ import DetailsPresenter from '../../../presenters/users/external/details.present
  *
  * @returns {Promise<object>} The view data for the external user page
  */
-async function go(id, auth, back = 'users') {
+export default async function go(id, auth, back = 'users') {
   const user = await FetchUserDetailsDal(id)
 
   const pageData = DetailsPresenter.go(user, auth.credentials.scope, back)
@@ -24,11 +24,4 @@ async function go(id, auth, back = 'users') {
     activeSecondaryNav: 'details',
     ...pageData
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -43,7 +43,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitAccountService.go(session.id, payload)
+      await SubmitAccountService(session.id, payload)
 
       expect(session).toMatchObject({
         accountSelected: billingAccount.company.id,
@@ -54,7 +54,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitAccountService.go(session.id, payload)
+      const result = await SubmitAccountService(session.id, payload)
 
       expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/existing-address`)
     })
@@ -72,7 +72,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitAccountService.go(session.id, payload)
+        await SubmitAccountService(session.id, payload)
 
         expect(session).toMatchObject({
           accountSelected: billingAccount.company.id,
@@ -83,7 +83,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitAccountService.go(session.id, payload)
+        const result = await SubmitAccountService(session.id, payload)
 
         expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/existing-address`)
       })
@@ -99,7 +99,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       })
 
       it('saves the submitted value and deletes the other previously saved data', async () => {
-        await SubmitAccountService.go(session.id, payload)
+        await SubmitAccountService(session.id, payload)
 
         expect(session).toMatchObject({
           ..._anotherExpectedValues(session),
@@ -110,7 +110,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitAccountService.go(session.id, payload)
+        const result = await SubmitAccountService(session.id, payload)
 
         expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/existing-address`)
       })
@@ -126,7 +126,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
     })
 
     it('saves the submitted values', async () => {
-      await SubmitAccountService.go(session.id, payload)
+      await SubmitAccountService(session.id, payload)
 
       expect(session).toMatchObject({
         accountSelected: 'another',
@@ -136,7 +136,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitAccountService.go(session.id, payload)
+      const result = await SubmitAccountService(session.id, payload)
 
       expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/existing-account`)
     })
@@ -155,7 +155,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       })
 
       it('saves the submitted values', async () => {
-        await SubmitAccountService.go(session.id, payload)
+        await SubmitAccountService(session.id, payload)
 
         expect(session).toMatchObject({
           accountSelected: 'another',
@@ -165,7 +165,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitAccountService.go(session.id, payload)
+        const result = await SubmitAccountService(session.id, payload)
 
         expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/existing-account`)
       })
@@ -181,7 +181,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       })
 
       it('saves the submitted value and deletes the other previously saved data', async () => {
-        await SubmitAccountService.go(session.id, payload)
+        await SubmitAccountService(session.id, payload)
 
         expect(session).toMatchObject({
           ..._customerExpectedValues(session),
@@ -192,7 +192,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitAccountService.go(session.id, payload)
+        const result = await SubmitAccountService(session.id, payload)
 
         expect(result.redirectUrl).toEqual(`/system/billing-accounts/setup/${session.id}/existing-account`)
       })
@@ -206,7 +206,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitAccountService.go(session.id, payload)
+        const result = await SubmitAccountService(session.id, payload)
 
         expect(result.error).toEqual({
           errorList: [
@@ -228,7 +228,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitAccountService.go(session.id, payload)
+        const result = await SubmitAccountService(session.id, payload)
 
         expect(result.error).toEqual({
           errorList: [
@@ -251,7 +251,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitAccountService.go(session.id, payload)
+        const result = await SubmitAccountService(session.id, payload)
 
         expect(result.error).toEqual({
           errorList: [

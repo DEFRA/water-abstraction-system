@@ -43,14 +43,14 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitContactNameService.go(session.id, payload)
+      await SubmitContactNameService(session.id, payload)
 
       expect(session.contactName).toEqual(payload.contactName)
       expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitContactNameService.go(session.id, payload)
+      const result = await SubmitContactNameService(session.id, payload)
 
       expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
@@ -70,14 +70,14 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactNameService.go(session.id, payload)
+        await SubmitContactNameService(session.id, payload)
 
         expect(session.contactName).toEqual(payload.contactName)
         expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitContactNameService.go(session.id, payload)
+        const result = await SubmitContactNameService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
@@ -99,7 +99,7 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactNameService.go(session.id, payload)
+        await SubmitContactNameService(session.id, payload)
 
         expect(session.contactName).toEqual(payload.contactName)
         expect(session.checkPageVisited).toEqual(true)
@@ -107,7 +107,7 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
       })
 
       it('returns to the check page', async () => {
-        const result = await SubmitContactNameService.go(session.id, payload)
+        const result = await SubmitContactNameService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
@@ -133,7 +133,7 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactNameService.go(session.id, payload)
+        await SubmitContactNameService(session.id, payload)
 
         expect(session.contactName).toEqual(payload.contactName)
         expect(session.checkPageVisited).toEqual(false)
@@ -142,7 +142,7 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
       })
 
       it('returns to the check page', async () => {
-        const result = await SubmitContactNameService.go(session.id, payload)
+        const result = await SubmitContactNameService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
@@ -158,7 +158,7 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitContactNameService.go(session.id, payload)
+        const result = await SubmitContactNameService(session.id, payload)
 
         expect(result.error).toEqual({
           errorList: [
@@ -182,7 +182,7 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitContactNameService.go(session.id, payload)
+        const result = await SubmitContactNameService(session.id, payload)
 
         expect(result.error).toEqual({
           errorList: [

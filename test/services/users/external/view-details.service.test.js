@@ -30,7 +30,7 @@ describe('Users - External - View Details service', () => {
 
   describe('when called', () => {
     it('returns page data for the external user view', async () => {
-      const result = await ViewDetailsService.go(user.id, auth, back)
+      const result = await ViewDetailsService(user.id, auth, back)
 
       expect(result).toEqual({
         activeNavBar: 'users',

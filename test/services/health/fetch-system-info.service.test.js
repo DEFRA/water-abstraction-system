@@ -5,7 +5,7 @@ const FetchSystemInfoService = require('../../../app/services/health/fetch-syste
 
 describe('Fetch System Info service', () => {
   it('returns the systems version and commit hash', async () => {
-    const result = await FetchSystemInfoService.go()
+    const result = await FetchSystemInfoService()
 
     expect(result.name).toEqual('System')
     expect(result.serviceName).toEqual('system')

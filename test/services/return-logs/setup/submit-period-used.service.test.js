@@ -63,7 +63,7 @@ describe('Return Logs Setup - Submit Period Used service', () => {
         })
 
         it('saves the submitted option', async () => {
-          await SubmitPeriodUsedService.go(session.id, payload)
+          await SubmitPeriodUsedService(session.id, payload)
 
           expect(session.periodDateUsedOptions).toEqual('default')
           expect(session.fromFullDate).toEqual('2023-04-01T00:00:00.000Z')
@@ -72,7 +72,7 @@ describe('Return Logs Setup - Submit Period Used service', () => {
         })
 
         it('applies the single volume to the applicable lines', async () => {
-          await SubmitPeriodUsedService.go(session.id, payload)
+          await SubmitPeriodUsedService(session.id, payload)
 
           expect(session.lines[0].quantity).toEqual(100)
           expect(session.lines[1].quantity).toEqual(100)
@@ -103,7 +103,7 @@ describe('Return Logs Setup - Submit Period Used service', () => {
         })
 
         it('saves the submitted option', async () => {
-          await SubmitPeriodUsedService.go(session.id, payload)
+          await SubmitPeriodUsedService(session.id, payload)
 
           expect(session.periodDateUsedOptions).toEqual('customDates')
           expect(session.periodUsedFromDay).toEqual('15')
@@ -118,7 +118,7 @@ describe('Return Logs Setup - Submit Period Used service', () => {
         })
 
         it('applies the single volume to the applicable lines', async () => {
-          await SubmitPeriodUsedService.go(session.id, payload)
+          await SubmitPeriodUsedService(session.id, payload)
 
           expect(session.lines[0].quantity).toBeUndefined()
           expect(session.lines[1].quantity).toBeUndefined()
@@ -142,7 +142,7 @@ describe('Return Logs Setup - Submit Period Used service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitPeriodUsedService.go(session.id, payload)
+        const result = await SubmitPeriodUsedService(session.id, payload)
 
         expect(result).toMatchObject({
           abstractionPeriod: '1 April to 31 March',
@@ -162,7 +162,7 @@ describe('Return Logs Setup - Submit Period Used service', () => {
 
       describe('because the user has not selected anything', () => {
         it('includes an error for the radio form element', async () => {
-          const result = await SubmitPeriodUsedService.go(session.id, payload)
+          const result = await SubmitPeriodUsedService(session.id, payload)
 
           expect(result.error).toEqual({
             errorList: [

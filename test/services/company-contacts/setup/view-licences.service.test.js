@@ -42,7 +42,7 @@ describe('Company Contacts - Setup - Licences Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewLicencesService.go(session.id)
+      const result = await ViewLicencesService(session.id)
 
       expect(result).toEqual({
         backLink: {

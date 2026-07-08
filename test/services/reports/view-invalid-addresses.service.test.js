@@ -20,7 +20,7 @@ describe('Reports - View Invalid Addresses service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewInvalidAddressesService.go()
+      const result = await ViewInvalidAddressesService()
 
       expect(result).toEqual({
         activeNavBar: 'manage',

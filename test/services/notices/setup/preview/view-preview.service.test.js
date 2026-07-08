@@ -104,7 +104,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewPreviewService.go(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
+      const result = await ViewPreviewService(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
 
       expect(result).toEqual({
         activeNavBar: 'notices',
@@ -200,7 +200,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewPreviewService.go(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
+      const result = await ViewPreviewService(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
 
       expect(result).toEqual({
         activeNavBar: 'notices',
@@ -266,7 +266,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewPreviewService.go(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
+      const result = await ViewPreviewService(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

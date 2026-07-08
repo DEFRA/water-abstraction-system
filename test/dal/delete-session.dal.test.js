@@ -18,7 +18,7 @@ describe('DAL - Delete session dal', () => {
 
   describe('when the session exists', () => {
     it('deletes the session', async () => {
-      await DeleteSessionDal.go(sessionId)
+      await DeleteSessionDal(sessionId)
 
       const session = await SessionModel.query().findById(sessionId)
 

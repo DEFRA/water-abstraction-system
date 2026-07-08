@@ -25,7 +25,7 @@ describe('Fetch Existing Licence Details Service', () => {
       })
 
       it('fetches the licence data', async () => {
-        const result = await FetchExistingLicenceDetailsService.go(licence.id)
+        const result = await FetchExistingLicenceDetailsService(licence.id)
 
         expect(result.id).toEqual(licence.id)
         expect(result.region_id).toEqual(licence.regionId)
@@ -37,7 +37,7 @@ describe('Fetch Existing Licence Details Service', () => {
       })
 
       it('outlines which charge versions the licence does not have', async () => {
-        const result = await FetchExistingLicenceDetailsService.go(licence.id)
+        const result = await FetchExistingLicenceDetailsService(licence.id)
 
         expect(result.pre_sroc_charge_versions).toEqual(false)
         expect(result.sroc_charge_versions).toEqual(false)
@@ -64,7 +64,7 @@ describe('Fetch Existing Licence Details Service', () => {
       })
 
       it('fetches the licence data', async () => {
-        const result = await FetchExistingLicenceDetailsService.go(licence.id)
+        const result = await FetchExistingLicenceDetailsService(licence.id)
 
         expect(result.id).toEqual(licence.id)
         expect(result.region_id).toEqual(licence.regionId)
@@ -76,7 +76,7 @@ describe('Fetch Existing Licence Details Service', () => {
       })
 
       it('outlines which charge versions the licence has', async () => {
-        const result = await FetchExistingLicenceDetailsService.go(licence.id)
+        const result = await FetchExistingLicenceDetailsService(licence.id)
 
         expect(result.pre_sroc_charge_versions).toEqual(true)
         expect(result.sroc_charge_versions).toEqual(true)

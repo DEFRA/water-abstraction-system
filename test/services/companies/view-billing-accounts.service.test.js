@@ -45,7 +45,7 @@ describe('Companies - View Billing Accounts service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewBillingAccountsService.go(company.id, auth, page)
+      const result = await ViewBillingAccountsService(company.id, auth, page)
 
       expect(result).toEqual({
         activeSecondaryNav: 'billing-accounts',

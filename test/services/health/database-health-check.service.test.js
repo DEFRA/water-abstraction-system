@@ -5,6 +5,6 @@ const DatabaseHealthCheckService = require('../../../app/services/health/databas
 
 describe('Database Health Check service', () => {
   it('confirms connection to the db by not throwing an error', async () => {
-    await expect(DatabaseHealthCheckService.go()).resolves.toBeDefined()
+    await expect(DatabaseHealthCheckService()).resolves.toBeDefined()
   })
 })

@@ -26,7 +26,7 @@ import SeasonValidator from '../../../validators/bill-runs/setup/season.validato
  * @returns {Promise<object>} An empty object if there are no errors else the page data for the type page including the
  * validation error details
  */
-async function go(sessionId, payload) {
+export default async function go(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
@@ -64,9 +64,4 @@ function _validate(payload) {
   return {
     text: message
   }
-}
-
-export { go }
-export default {
-  go
 }

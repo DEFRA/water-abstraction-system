@@ -58,7 +58,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
   describe('when the service is called', () => {
     describe('and there are no billing accounts to process', () => {
       it('returns false (bill run is empty)', async () => {
-        const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [])
+        const result = await ProcessBillingPeriodService(billRun, billingPeriod, [])
 
         expect(result).toBe(false)
       })
@@ -99,7 +99,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
         })
 
         it('returns true (bill run is not empty) and persists the generated bills', async () => {
-          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+          const result = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount])
 
           expect(result).toBe(true)
 
@@ -159,7 +159,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
         })
 
         it('returns true (bill run is not empty) and only persists the bill licences with transactions', async () => {
-          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+          const result = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount])
 
           expect(result).toBe(true)
 
@@ -213,7 +213,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
           })
 
           it('returns false (bill run is empty) and persists nothing', async () => {
-            const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+            const result = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount])
 
             expect(result).toBe(false)
 
@@ -229,7 +229,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
           })
 
           it('returns false (bill run is empty) and persists nothing', async () => {
-            const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount])
+            const result = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount])
 
             expect(result).toBe(false)
 
@@ -251,7 +251,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount]).catch((e) => {
+        const error = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount]).catch((e) => {
           return e
         })
 
@@ -266,7 +266,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
       })
 
       it('throws an error', async () => {
-        const error = await ProcessBillingPeriodService.go(billRun, billingPeriod, [billingAccount]).catch((e) => {
+        const error = await ProcessBillingPeriodService(billRun, billingPeriod, [billingAccount]).catch((e) => {
           return e
         })
 

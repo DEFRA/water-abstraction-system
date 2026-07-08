@@ -62,7 +62,7 @@ describe('Start Bill Run Process service', () => {
       })
 
       it('initiates a new bill run', async () => {
-        await StartBillRunProcessService.go(regionId, userEmail)
+        await StartBillRunProcessService(regionId, userEmail)
 
         const financialYearEndings = InitiateBillRunService.go.firstCall.args[0]
 
@@ -70,7 +70,7 @@ describe('Start Bill Run Process service', () => {
       })
 
       it('starts processing the bill run', async () => {
-        await StartBillRunProcessService.go(regionId, userEmail)
+        await StartBillRunProcessService(regionId, userEmail)
 
         expect(AnnualProcessBillRunService.go.called).toBe(true)
       })
@@ -91,7 +91,7 @@ describe('Start Bill Run Process service', () => {
       })
 
       it('initiates a new bill run', async () => {
-        await StartBillRunProcessService.go(regionId, batchType, userEmail)
+        await StartBillRunProcessService(regionId, batchType, userEmail)
 
         const financialYearEndings = InitiateBillRunService.go.firstCall.args[0]
 
@@ -99,7 +99,7 @@ describe('Start Bill Run Process service', () => {
       })
 
       it('starts processing the bill run', async () => {
-        await StartBillRunProcessService.go(regionId, userEmail)
+        await StartBillRunProcessService(regionId, userEmail)
 
         expect(SupplementaryProcessBillRunService.go.called).toBe(true)
       })
@@ -120,7 +120,7 @@ describe('Start Bill Run Process service', () => {
       })
 
       it('initiates a new bill run', async () => {
-        await StartBillRunProcessService.go(regionId, userEmail)
+        await StartBillRunProcessService(regionId, userEmail)
 
         const financialYearEndings = InitiateBillRunService.go.firstCall.args[0]
 
@@ -128,7 +128,7 @@ describe('Start Bill Run Process service', () => {
       })
 
       it('starts processing the bill run', async () => {
-        await StartBillRunProcessService.go(regionId, userEmail)
+        await StartBillRunProcessService(regionId, userEmail)
 
         expect(TwoPartTariffProcessBillRunService.go.called).toBe(true)
       })
@@ -149,7 +149,7 @@ describe('Start Bill Run Process service', () => {
       })
 
       it('initiates a new bill run', async () => {
-        await StartBillRunProcessService.go(regionId, userEmail)
+        await StartBillRunProcessService(regionId, userEmail)
 
         const financialYearEndings = InitiateBillRunService.go.firstCall.args[0]
 
@@ -157,7 +157,7 @@ describe('Start Bill Run Process service', () => {
       })
 
       it('starts processing the bill run', async () => {
-        await StartBillRunProcessService.go(regionId, userEmail)
+        await StartBillRunProcessService(regionId, userEmail)
 
         expect(TwoPartTariffSupplementaryProcessBillRunService.go.called).toBe(true)
       })
@@ -171,7 +171,7 @@ describe('Start Bill Run Process service', () => {
       })
 
       it('throws an error', async () => {
-        await expect(StartBillRunProcessService.go(regionId, userEmail)).rejects.toThrow()
+        await expect(StartBillRunProcessService(regionId, userEmail)).rejects.toThrow()
       })
     })
 
@@ -181,7 +181,7 @@ describe('Start Bill Run Process service', () => {
       })
 
       it('throws a NoBillingPeriodsError', async () => {
-        const result = await StartBillRunProcessService.go(regionId, userEmail).catch((e) => {
+        const result = await StartBillRunProcessService(regionId, userEmail).catch((e) => {
           return e
         })
 

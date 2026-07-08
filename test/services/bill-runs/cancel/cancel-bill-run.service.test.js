@@ -43,7 +43,7 @@ describe('Bill Runs - Cancel Bill Run service', () => {
       })
 
       it('sets the status of the bill run to "cancel"', async () => {
-        await CancelBillBunService.go(billRunId)
+        await CancelBillBunService(billRunId)
 
         // Check we set the bill run status
         const [patchObject] = billRunPatchStub.args[0]
@@ -52,7 +52,7 @@ describe('Bill Runs - Cancel Bill Run service', () => {
       })
 
       it('returns an instance of the bill run including its external ID and status set to "cancel"', async () => {
-        const result = await CancelBillBunService.go(billRunId)
+        const result = await CancelBillBunService(billRunId)
 
         expect(result).toEqual({ id: billRunId, externalId, status: 'cancel' })
       })
@@ -69,14 +69,14 @@ describe('Bill Runs - Cancel Bill Run service', () => {
       })
 
       it('does not change the bill run status', async () => {
-        await CancelBillBunService.go(billRunId)
+        await CancelBillBunService(billRunId)
 
         // Check we do not change the bill run status
         expect(billRunPatchStub.called).toBe(false)
       })
 
       it('returns an instance of the bill run including its external ID and status unchanged', async () => {
-        const result = await CancelBillBunService.go(billRunId)
+        const result = await CancelBillBunService(billRunId)
 
         expect(result).toEqual({ id: billRunId, externalId, status: 'sent' })
       })
@@ -85,7 +85,7 @@ describe('Bill Runs - Cancel Bill Run service', () => {
 
   describe('when the bill run does not exist', () => {
     it('throws as error', async () => {
-      await expect(CancelBillBunService.go('47e66de7-f05f-42d2-8fef-640b55150919')).rejects.toThrow()
+      await expect(CancelBillBunService('47e66de7-f05f-42d2-8fef-640b55150919')).rejects.toThrow()
     })
   })
 })

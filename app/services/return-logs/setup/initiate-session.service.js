@@ -24,7 +24,7 @@ import { returnUnits, unitNames } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<string>} the url to redirect to
  */
-async function go(returnLogId) {
+export default async function go(returnLogId) {
   const returnLog = await _fetchReturnLog(returnLogId)
 
   const referenceData = _referenceData(returnLog)
@@ -214,9 +214,4 @@ function _submissionLines(returnSubmissionLines) {
       startDate
     }
   })
-}
-
-export { go }
-export default {
-  go
 }

@@ -40,7 +40,7 @@ describe('Delete Files service', () => {
 
   describe('When a valid folder is specified', () => {
     it('deletes the folder', async () => {
-      await DeleteFilesService.go(folderNameWithPath)
+      await DeleteFilesService(folderNameWithPath)
 
       const folderExists = fs.existsSync(folderNameWithPath)
 
@@ -48,7 +48,7 @@ describe('Delete Files service', () => {
     })
 
     it('deletes anything inside the folder', async () => {
-      await DeleteFilesService.go(folderNameWithPath)
+      await DeleteFilesService(folderNameWithPath)
 
       const fileExists = fs.existsSync(filenameWithPath)
 
@@ -60,13 +60,13 @@ describe('Delete Files service', () => {
     it('returns without throwing an error', async () => {
       const fakeFolder = 'FAKE_FILE'
 
-      await expect(DeleteFilesService.go(fakeFolder)).resolves.toBeUndefined()
+      await expect(DeleteFilesService(fakeFolder)).resolves.toBeUndefined()
     })
   })
 
   describe('When a valid file is specified', () => {
     it('deletes the file', async () => {
-      await DeleteFilesService.go(filenameWithPath)
+      await DeleteFilesService(filenameWithPath)
 
       const fileExists = fs.existsSync(filenameWithPath)
 
@@ -78,7 +78,7 @@ describe('Delete Files service', () => {
     it('returns without throwing an error', async () => {
       const fakeFile = 'FAKE_FILE'
 
-      await expect(DeleteFilesService.go(fakeFile)).resolves.toBeUndefined()
+      await expect(DeleteFilesService(fakeFile)).resolves.toBeUndefined()
     })
   })
 
@@ -86,7 +86,7 @@ describe('Delete Files service', () => {
     it('throws an error', async () => {
       const noFile = false
 
-      await DeleteFilesService.go(noFile)
+      await DeleteFilesService(noFile)
 
       expect(notifierStub.omfg.calledWith('Delete file service errored')).toBe(true)
     })

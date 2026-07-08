@@ -39,7 +39,7 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
       describe('that should be flagged for supplementary billing', () => {
         it('flags the licence for supplementary billing for the sroc years', async () => {
-          const result = await SubmitMarkForSupplementaryBillingService.go(licence.id, payload)
+          const result = await SubmitMarkForSupplementaryBillingService(licence.id, payload)
 
           const licenceSupplementaryYears = await LicenceSupplementaryYearModel.query().where('licenceId', licence.id)
 
@@ -53,7 +53,7 @@ describe('Submit Mark For Supplementary Billing Service', () => {
         })
 
         it('does not flag the licence for supplementary billing for the pre sroc years', async () => {
-          await SubmitMarkForSupplementaryBillingService.go(licence.id, payload)
+          await SubmitMarkForSupplementaryBillingService(licence.id, payload)
 
           const updatedLicence = await LicenceModel.query().findById(licence.id)
 
@@ -71,7 +71,7 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
       describe('that should be flagged for supplementary billing', () => {
         it('flags the licence for supplementary billing for the sroc years', async () => {
-          const result = await SubmitMarkForSupplementaryBillingService.go(licence.id, payload)
+          const result = await SubmitMarkForSupplementaryBillingService(licence.id, payload)
 
           const licenceSupplementaryYears = await LicenceSupplementaryYearModel.query().where('licenceId', licence.id)
 
@@ -85,7 +85,7 @@ describe('Submit Mark For Supplementary Billing Service', () => {
         })
 
         it('flags the licence for supplementary billing for the pre sroc years', async () => {
-          await SubmitMarkForSupplementaryBillingService.go(licence.id, payload)
+          await SubmitMarkForSupplementaryBillingService(licence.id, payload)
 
           const updatedLicence = await LicenceModel.query().findById(licence.id)
 
@@ -103,7 +103,7 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
       describe('that should be flagged for supplementary billing', () => {
         it('flags the licence for supplementary billing for the pre sroc years', async () => {
-          const result = await SubmitMarkForSupplementaryBillingService.go(licence.id, payload)
+          const result = await SubmitMarkForSupplementaryBillingService(licence.id, payload)
 
           const updatedLicence = await LicenceModel.query().findById(licence.id)
 
@@ -129,7 +129,7 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
       describe('because the user did not select any', () => {
         it('returns the page data with an error for the view', async () => {
-          const result = await SubmitMarkForSupplementaryBillingService.go(licence.id, payload)
+          const result = await SubmitMarkForSupplementaryBillingService(licence.id, payload)
 
           expect(result).toEqual({
             backLink: {

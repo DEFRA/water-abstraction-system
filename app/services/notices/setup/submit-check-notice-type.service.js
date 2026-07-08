@@ -17,7 +17,7 @@ import { NoticeType } from '../../../lib/static-lookups.lib.js'
  *
  * @param {string} sessionId - The UUID of the current session
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   session.addressJourney = {
@@ -55,9 +55,4 @@ function _backLink(session) {
   }
 
   return { href: `/system/notices/setup/${session.id}/contact-type`, text: 'Back' }
-}
-
-export { go }
-export default {
-  go
 }

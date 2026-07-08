@@ -43,14 +43,14 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
   describe('when called', () => {
     describe('and the user selects the username as the email address', () => {
       it('saves the submitted value', async () => {
-        await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+        await SubmitAlertEmailAddressService(session.id, payload, auth)
 
         expect(session.alertEmailAddress).toEqual('admin@defra.gov.uk')
         expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+        const result = await SubmitAlertEmailAddressService(session.id, payload, auth)
 
         expect(result).toEqual({})
       })
@@ -62,14 +62,14 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
       })
 
       it('saves the submitted value', async () => {
-        await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+        await SubmitAlertEmailAddressService(session.id, payload, auth)
 
         expect(session.alertEmailAddress).toEqual('test@defra.gov.uk')
         expect(session.$update.called).toBe(true)
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+        const result = await SubmitAlertEmailAddressService(session.id, payload, auth)
 
         expect(result).toEqual({})
       })
@@ -79,7 +79,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
   describe('when validation fails', () => {
     describe('and the payload "alertEmailAddressType" is username', () => {
       it('updates the session "alertEmailAddress" property to the users username', async () => {
-        await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+        await SubmitAlertEmailAddressService(session.id, payload, auth)
 
         expect(session.alertEmailAddress).toEqual(auth.credentials.user.username)
         expect(session.$update.called).toBe(true)
@@ -91,7 +91,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
         payload = { alertEmailAddressType: 'other', otherUser: 'test@defra.go.uk' }
       })
       it('updates the session "alertEmailAddress" property to the payload "otherUser" value', async () => {
-        await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+        await SubmitAlertEmailAddressService(session.id, payload, auth)
 
         expect(session.alertEmailAddress).toEqual('test@defra.go.uk')
         expect(session.$update.called).toBe(true)
@@ -104,7 +104,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+        const result = await SubmitAlertEmailAddressService(session.id, payload, auth)
 
         expect(result).toEqual({
           activeNavBar: 'notices',
@@ -141,7 +141,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+        const result = await SubmitAlertEmailAddressService(session.id, payload, auth)
 
         expect(result).toEqual({
           activeNavBar: 'notices',
@@ -178,7 +178,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitAlertEmailAddressService.go(session.id, payload, auth)
+        const result = await SubmitAlertEmailAddressService(session.id, payload, auth)
 
         expect(result).toEqual({
           activeNavBar: 'notices',

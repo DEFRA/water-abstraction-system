@@ -38,7 +38,7 @@ describe('Company Contacts - Setup - Cancel Service', () => {
 
   describe('when called', () => {
     it('continues the journey', async () => {
-      const result = await SubmitCancelService.go(session.id)
+      const result = await SubmitCancelService(session.id)
 
       expect(result).toEqual({
         redirectUrl: `/system/companies/${company.id}/contacts`
@@ -46,7 +46,7 @@ describe('Company Contacts - Setup - Cancel Service', () => {
     })
 
     it('clears the session', async () => {
-      await SubmitCancelService.go(session.id)
+      await SubmitCancelService(session.id)
 
       expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
     })
@@ -64,7 +64,7 @@ describe('Company Contacts - Setup - Cancel Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitCancelService.go(session.id)
+        const result = await SubmitCancelService(session.id)
 
         expect(result).toEqual({
           redirectUrl: `/system/company-contacts/${sessionData.companyContact.id}/contact-details`

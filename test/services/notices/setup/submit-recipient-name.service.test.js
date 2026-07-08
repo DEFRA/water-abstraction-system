@@ -38,7 +38,7 @@ describe('Notices - Setup - Submit Recipient Name service', () => {
 
   describe('when called', () => {
     it('saves the submitted value', async () => {
-      await SubmitRecipientNameService.go(session.id, payload)
+      await SubmitRecipientNameService(session.id, payload)
 
       expect(session).toEqual({
         ...session,
@@ -49,7 +49,7 @@ describe('Notices - Setup - Submit Recipient Name service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitRecipientNameService.go(session.id, payload)
+      const result = await SubmitRecipientNameService(session.id, payload)
 
       expect(result).toEqual({})
     })
@@ -61,7 +61,7 @@ describe('Notices - Setup - Submit Recipient Name service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitRecipientNameService.go(session.id, payload)
+      const result = await SubmitRecipientNameService(session.id, payload)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

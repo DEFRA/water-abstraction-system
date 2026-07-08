@@ -13,7 +13,7 @@ import ReturnsPeriodPresenter from '../../../presenters/notices/setup/returns-pe
  *
  * @returns {Promise<object>} The view data for the returns period page
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const formattedData = ReturnsPeriodPresenter.go(session)
@@ -22,9 +22,4 @@ async function go(sessionId) {
     activeNavBar: 'notices',
     ...formattedData
   }
-}
-
-export { go }
-export default {
-  go
 }

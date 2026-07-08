@@ -21,7 +21,7 @@ describe('Return Versions Setup - Create Return Version service', () => {
     })
 
     it('creates a new Return Version', async () => {
-      await CreateReturnVersionService.go(returnVersionData)
+      await CreateReturnVersionService(returnVersionData)
 
       const returnVersion = await ReturnVersionModel.query().where(
         'licenceId',

@@ -77,7 +77,7 @@ describe('DAL - Return Versions - Update Succeeded Return Logs dal', () => {
       // We need to create a transaction here to test the service, but in reality this would be part of a larger
       // transaction that creates a new return version and its requirements.
       await ReturnLogModel.transaction(async (trx) => {
-        await UpdateSucceededReturnLogsDal.go(licence.licenceRef, trx)
+        await UpdateSucceededReturnLogsDal(licence.licenceRef, trx)
       })
 
       const results = await ReturnLogModel.query()

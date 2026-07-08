@@ -45,7 +45,7 @@ describe('Bill Runs Review - Submit Authorised Service', () => {
       })
 
       it('saves the submitted value, adds a flash message and returns an empty object', async () => {
-        const result = await SubmitAuthorisedService.go(reviewChargeReference.id, yarStub, payload)
+        const result = await SubmitAuthorisedService(reviewChargeReference.id, yarStub, payload)
 
         // Check we save the change
         const [patchObject] = patchStub.args[0]
@@ -69,7 +69,7 @@ describe('Bill Runs Review - Submit Authorised Service', () => {
       })
 
       it('does not save the submitted value or add a flash message, and returns the page data including an error', async () => {
-        const result = await SubmitAuthorisedService.go(reviewChargeReference.id, yarStub, payload)
+        const result = await SubmitAuthorisedService(reviewChargeReference.id, yarStub, payload)
 
         // Check we didn't save
         expect(patchStub.called).toBe(false)

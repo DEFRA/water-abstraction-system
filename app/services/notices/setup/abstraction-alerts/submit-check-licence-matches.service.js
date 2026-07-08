@@ -13,7 +13,7 @@ import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
  * @param {string} sessionId
  *
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   await _save(session)
@@ -22,7 +22,7 @@ async function go(sessionId) {
 async function _save(session) {
   const { alertThresholds, licenceMonitoringStations, removedThresholds, alertType } = session
 
-  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService.go(
+  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService(
     licenceMonitoringStations,
     alertThresholds,
     removedThresholds,
@@ -37,9 +37,4 @@ async function _save(session) {
   session.relevantLicenceMonitoringStations = relevantLicenceMonitoringStations
 
   return session.$update()
-}
-
-export { go }
-export default {
-  go
 }

@@ -23,7 +23,7 @@ import ViewRestoreService from '../services/company-contacts/setup/view-restore.
 export async function setup(request, h) {
   const { companyId } = request.params
 
-  const session = await InitiateSessionService.go(companyId)
+  const session = await InitiateSessionService(companyId)
 
   return h.redirect(`/system/company-contacts/setup/${session.id}/contact-name`)
 }
@@ -31,7 +31,7 @@ export async function setup(request, h) {
 export async function setupEdit(request, h) {
   const { companyContactId } = request.params
 
-  const session = await InitiateEditSessionService.go(companyContactId)
+  const session = await InitiateEditSessionService(companyContactId)
 
   return h.redirect(`/system/company-contacts/setup/${session.id}/check`)
 }
@@ -39,7 +39,7 @@ export async function setupEdit(request, h) {
 export async function viewAbstractionAlerts(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ViewAbstractionAlertsService.go(sessionId)
+  const pageData = await ViewAbstractionAlertsService(sessionId)
 
   return h.view(`company-contacts/setup/abstraction-alerts.njk`, pageData)
 }
@@ -47,7 +47,7 @@ export async function viewAbstractionAlerts(request, h) {
 export async function viewCancel(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ViewCancelService.go(sessionId)
+  const pageData = await ViewCancelService(sessionId)
 
   return h.view(`company-contacts/setup/cancel.njk`, pageData)
 }
@@ -58,7 +58,7 @@ export async function viewCheck(request, h) {
     yar
   } = request
 
-  const pageData = await ViewCheckService.go(sessionId, yar)
+  const pageData = await ViewCheckService(sessionId, yar)
 
   return h.view(`company-contacts/setup/check.njk`, pageData)
 }
@@ -66,7 +66,7 @@ export async function viewCheck(request, h) {
 export async function viewContactEmail(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ViewContactEmailService.go(sessionId)
+  const pageData = await ViewContactEmailService(sessionId)
 
   return h.view(`company-contacts/setup/contact-email.njk`, pageData)
 }
@@ -74,7 +74,7 @@ export async function viewContactEmail(request, h) {
 export async function viewContactName(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ViewContactNameService.go(sessionId)
+  const pageData = await ViewContactNameService(sessionId)
 
   return h.view(`company-contacts/setup/contact-name.njk`, pageData)
 }
@@ -82,7 +82,7 @@ export async function viewContactName(request, h) {
 export async function viewLicences(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ViewLicencesService.go(sessionId)
+  const pageData = await ViewLicencesService(sessionId)
 
   return h.view(`company-contacts/setup/licences.njk`, pageData)
 }
@@ -90,7 +90,7 @@ export async function viewLicences(request, h) {
 export async function viewRestore(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ViewRestoreService.go(sessionId)
+  const pageData = await ViewRestoreService(sessionId)
 
   return h.view(`company-contacts/setup/restore.njk`, pageData)
 }
@@ -102,7 +102,7 @@ export async function submitAbstractionAlerts(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitAbstractionAlertsService.go(sessionId, payload, yar)
+  const pageData = await SubmitAbstractionAlertsService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view(`company-contacts/setup/abstraction-alerts.njk`, pageData)
@@ -116,7 +116,7 @@ export async function submitCancel(request, h) {
     params: { sessionId }
   } = request
 
-  const { redirectUrl } = await SubmitCancelService.go(sessionId)
+  const { redirectUrl } = await SubmitCancelService(sessionId)
 
   return h.redirect(redirectUrl)
 }
@@ -128,7 +128,7 @@ export async function submitCheck(request, h) {
     yar
   } = request
 
-  const { redirectUrl } = await SubmitCheckService.go(sessionId, yar, auth)
+  const { redirectUrl } = await SubmitCheckService(sessionId, yar, auth)
 
   return h.redirect(redirectUrl)
 }
@@ -140,7 +140,7 @@ export async function submitContactEmail(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitContactEmailService.go(sessionId, payload, yar)
+  const pageData = await SubmitContactEmailService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view(`company-contacts/setup/contact-email.njk`, pageData)
@@ -156,7 +156,7 @@ export async function submitContactName(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitContactNameService.go(sessionId, payload, yar)
+  const pageData = await SubmitContactNameService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view(`company-contacts/setup/contact-name.njk`, pageData)
@@ -171,7 +171,7 @@ export async function submitLicences(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await SubmitLicencesService.go(sessionId, payload)
+  const pageData = await SubmitLicencesService(sessionId, payload)
 
   if (pageData.error) {
     return h.view(`company-contacts/setup/licences.njk`, pageData)
@@ -187,7 +187,7 @@ export async function submitRestore(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitRestoreService.go(sessionId, yar, auth)
+  const pageData = await SubmitRestoreService(sessionId, yar, auth)
 
   return h.redirect(pageData.redirectUrl)
 }

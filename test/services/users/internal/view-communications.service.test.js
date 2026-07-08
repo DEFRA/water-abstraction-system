@@ -37,7 +37,7 @@ describe('Users - Internal - View Communications Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCommunicationsService.go(user.id, page)
+      const result = await ViewCommunicationsService(user.id, page)
 
       expect(result).toEqual({
         activeNavBar: 'users',

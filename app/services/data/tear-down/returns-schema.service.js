@@ -13,7 +13,7 @@ import { determineCycleEndDate } from '../../../lib/return-cycle-dates.lib.js'
  *
  * @returns {Promise<object>}
  */
-async function go() {
+export default async function go() {
   const endDates = _determineCurrentReturnCycleEndDates()
 
   return _deleteAllTestData(endDates)
@@ -113,11 +113,4 @@ function _determineCurrentReturnCycleEndDates() {
     summerEndDate: formatDateObjectToISO(determineCycleEndDate(true, todaysDate)),
     winterEndDate: formatDateObjectToISO(determineCycleEndDate(false, todaysDate))
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

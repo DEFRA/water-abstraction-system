@@ -44,7 +44,7 @@ describe('Users - External - Fetch User Details DAL', () => {
 
   describe('when called', () => {
     it('returns the requested user', async () => {
-      const result = await FetchUserDetailsDal.go(user.id)
+      const result = await FetchUserDetailsDal(user.id)
 
       expect(result).toEqual({
         application: user.application,

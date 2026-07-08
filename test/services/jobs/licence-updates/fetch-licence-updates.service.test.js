@@ -26,7 +26,7 @@ describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
 
     describe('and the licence is new (it has no charge versions)', () => {
       it('returns the expected result', async () => {
-        const results = await FetchLicenceUpdatesService.go()
+        const results = await FetchLicenceUpdatesService()
 
         const result = results.find((l) => {
           return l.id === licenceVersion.id
@@ -44,7 +44,7 @@ describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
       })
 
       it('returns the expected result', async () => {
-        const results = await FetchLicenceUpdatesService.go()
+        const results = await FetchLicenceUpdatesService()
 
         const result = results.find((l) => {
           return l.id === licenceVersion.id
@@ -64,7 +64,7 @@ describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
       })
 
       it('returns no results', async () => {
-        const data = await FetchLicenceUpdatesService.go()
+        const data = await FetchLicenceUpdatesService()
 
         const results = data.filter((l) => {
           return l.licenceId === licence.id
@@ -81,7 +81,7 @@ describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
       })
 
       it('returns no results', async () => {
-        const data = await FetchLicenceUpdatesService.go()
+        const data = await FetchLicenceUpdatesService()
 
         const results = data.filter((l) => {
           return l.licenceId === licence.id
@@ -106,7 +106,7 @@ describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
       })
 
       it('returns no results', async () => {
-        const data = await FetchLicenceUpdatesService.go()
+        const data = await FetchLicenceUpdatesService()
 
         const results = data.filter((l) => {
           return l.licenceId === licence.id
@@ -122,7 +122,7 @@ describe('Jobs - Licence Updates - Fetch Licence Updates service', () => {
       })
 
       it('returns no results', async () => {
-        const data = await FetchLicenceUpdatesService.go()
+        const data = await FetchLicenceUpdatesService()
 
         const results = data.filter((l) => {
           return l.licenceId === licence.id

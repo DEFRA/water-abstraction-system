@@ -45,7 +45,7 @@ describe('Bill Runs Review - Submit Review Licence Service', () => {
       })
 
       it('sets a flash message and updates the status of the review licence', async () => {
-        await SubmitReviewLicenceService.go(reviewLicence.id, yarStub, payload)
+        await SubmitReviewLicenceService(reviewLicence.id, yarStub, payload)
 
         // Check we save the status change
         const [patchObject] = patchStub.args[0]
@@ -67,7 +67,7 @@ describe('Bill Runs Review - Submit Review Licence Service', () => {
         })
 
         it('sets a flash message and updates the progress of the review licence', async () => {
-          await SubmitReviewLicenceService.go(reviewLicence.id, yarStub, payload)
+          await SubmitReviewLicenceService(reviewLicence.id, yarStub, payload)
 
           // Check we save the status change
           const [patchObject] = patchStub.args[0]
@@ -88,7 +88,7 @@ describe('Bill Runs Review - Submit Review Licence Service', () => {
         })
 
         it('sets a flash message and updates the progress of the review licence', async () => {
-          await SubmitReviewLicenceService.go(reviewLicence.id, yarStub, payload)
+          await SubmitReviewLicenceService(reviewLicence.id, yarStub, payload)
 
           // Check we save the status change
           const [patchObject] = patchStub.args[0]

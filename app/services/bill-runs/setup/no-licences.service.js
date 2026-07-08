@@ -16,7 +16,7 @@ import RegionModel from '../../../models/region.model.js'
  *
  * @returns {Promise<string>} The display name of the region
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const { region: regionId } = await FetchSessionDal(sessionId)
   const { displayName: regionName } = await RegionModel.query().findById(regionId).select('displayName')
 
@@ -26,9 +26,4 @@ async function go(sessionId) {
     pageTitle: `There are no licences marked for two-part tariff supplementary billing in the ${regionName} region`,
     sessionId
   }
-}
-
-export { go }
-export default {
-  go
 }

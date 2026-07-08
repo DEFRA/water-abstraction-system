@@ -16,8 +16,8 @@ import PreparePaperReturnService from '../prepare-paper-return.service.js'
  *
  * @returns {Promise<object>} a notification with the Notify response
  */
-async function go(notification, referenceCode) {
-  const returnFormRequest = await PreparePaperReturnService.go(notification)
+export default async function go(notification, referenceCode) {
+  const returnFormRequest = await PreparePaperReturnService(notification)
 
   if (returnFormRequest.succeeded) {
     const pdf = returnFormRequest.response.body
@@ -41,9 +41,4 @@ function _returnFromError(notification, returnFormRequest) {
     ...NotifyErrorPresenter.go(returnFormRequest.response.code, `Failed to generate the paper return PDF`, errors),
     id: notification.id
   }
-}
-
-export { go }
-export default {
-  go
 }

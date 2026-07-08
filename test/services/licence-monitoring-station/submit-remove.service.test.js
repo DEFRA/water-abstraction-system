@@ -24,7 +24,7 @@ describe('Licence Monitoring Station - Submit Remove service', () => {
 
   describe('when a user submits the licence monitoring station to be removed', () => {
     it('adds the current date to the "deletedAt" field of the licence monitoring station record', async () => {
-      await SubmitRemoveService.go(licenceMonitoringStation.id, licenceRef, yarStub)
+      await SubmitRemoveService(licenceMonitoringStation.id, licenceRef, yarStub)
 
       const refreshedSession = await licenceMonitoringStation.$query()
 
@@ -32,7 +32,7 @@ describe('Licence Monitoring Station - Submit Remove service', () => {
     })
 
     it('sets the notification message title to "Updated" and the text to "Tag removed for 99/999/9999" ', async () => {
-      await SubmitRemoveService.go(licenceMonitoringStation.id, licenceRef, yarStub)
+      await SubmitRemoveService(licenceMonitoringStation.id, licenceRef, yarStub)
 
       const [flashType, notification] = yarStub.flash.args[0]
 

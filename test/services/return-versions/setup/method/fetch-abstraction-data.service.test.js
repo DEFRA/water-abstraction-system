@@ -15,7 +15,7 @@ describe('Return Versions - Setup - Fetch Abstraction Data service', () => {
 
   describe('when called', () => {
     it('returns the abstraction data for the licence and licence version', async () => {
-      const result = await FetchAbstractionDataService.go(seedData.licenceId, seedData.licenceVersions.currentId)
+      const result = await FetchAbstractionDataService(seedData.licenceId, seedData.licenceVersions.currentId)
 
       expect(result).toEqual({
         id: seedData.licenceId,

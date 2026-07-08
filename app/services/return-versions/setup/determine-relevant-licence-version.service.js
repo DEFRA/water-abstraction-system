@@ -12,8 +12,8 @@ import FetchRelevantLicenceVersionService from './fetch-relevant-licence-version
  *
  * @returns {Promise<LicenceVersionModel>} The relevant licence version and the licence's copyable return versions
  */
-async function go(session) {
-  const relevantLicenceVersion = await FetchRelevantLicenceVersionService.go(
+export default async function go(session) {
+  const relevantLicenceVersion = await FetchRelevantLicenceVersionService(
     session.licence.id,
     session.returnVersionStartDate
   )
@@ -64,9 +64,4 @@ function _copyableExistingReturnVersions(licenceVersion, returnVersions) {
   }
 
   return copyableReturnVersions
-}
-
-export { go }
-export default {
-  go
 }

@@ -45,7 +45,7 @@ describe('Users - Internal - Create User DAL', () => {
 
   describe('when called', () => {
     it('creates the user with the correct attributes', async () => {
-      await CreateUserDal.go(auth, session)
+      await CreateUserDal(auth, session)
 
       const user = await UserModel.query().where('username', session.email).limit(1).first()
 
@@ -65,7 +65,7 @@ describe('Users - Internal - Create User DAL', () => {
     })
 
     it('creates an event', async () => {
-      await CreateUserDal.go(auth, session)
+      await CreateUserDal(auth, session)
 
       const user = await UserModel.query().where('username', session.email).limit(1).first()
       const event = await EventModel.query().where('issuer', 'internal-user-creator@wrls.gov.uk').limit(1).first()
@@ -91,7 +91,7 @@ describe('Users - Internal - Create User DAL', () => {
     })
 
     it('returns the the new users resetGuid', async () => {
-      const result = await CreateUserDal.go(auth, session)
+      const result = await CreateUserDal(auth, session)
 
       const { resetGuid } = await UserModel.query().where('username', session.email).limit(1).first()
 
@@ -104,7 +104,7 @@ describe('Users - Internal - Create User DAL', () => {
       })
 
       it('does not create any user groups or user roles', async () => {
-        await CreateUserDal.go(auth, session)
+        await CreateUserDal(auth, session)
 
         const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
         const userGroup = await UserGroupModel.query().where({ userId })
@@ -121,7 +121,7 @@ describe('Users - Internal - Create User DAL', () => {
       })
 
       it('creates the user groups but no user roles', async () => {
-        await CreateUserDal.go(auth, session)
+        await CreateUserDal(auth, session)
 
         const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
         const userGroup = await UserGroupModel.query().where({ userId }).withGraphFetched('group')
@@ -140,7 +140,7 @@ describe('Users - Internal - Create User DAL', () => {
       })
 
       it('creates the user groups and user roles', async () => {
-        await CreateUserDal.go(auth, session)
+        await CreateUserDal(auth, session)
 
         const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
         const userGroup = await UserGroupModel.query().where({ userId }).withGraphFetched('group')

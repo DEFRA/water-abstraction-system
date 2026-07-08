@@ -43,7 +43,7 @@ describe('Return Logs Setup - Cancel service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record and returns page data for the view', async () => {
-      const result = await CancelService.go(session.id)
+      const result = await CancelService(session.id)
 
       expect(result).toEqual({
         abstractionPeriod: '1 January to 31 December',

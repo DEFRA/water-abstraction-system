@@ -104,7 +104,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.redirectUrl).toEqual(`/system/billing-accounts/${billingAccount.id}`)
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
@@ -131,7 +131,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -155,7 +155,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -188,7 +188,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -220,7 +220,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -249,7 +249,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -296,7 +296,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -323,7 +323,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -347,7 +347,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -381,7 +381,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -414,7 +414,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -444,7 +444,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
           })
 
           it('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService(session.id)
 
             expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
             expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -499,7 +499,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -529,7 +529,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -556,7 +556,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -593,7 +593,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -629,7 +629,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -662,7 +662,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -711,7 +711,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -741,7 +741,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -768,7 +768,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).toEqual(address.id)
@@ -805,7 +805,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -841,7 +841,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).not.toEqual(address.id)
@@ -874,7 +874,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             })
 
             it('creates a new billing account address', async () => {
-              const result = await SubmitCheckService.go(session.id)
+              const result = await SubmitCheckService(session.id)
 
               expect(result.billingAccountAddress.billingAccountId).toEqual(billingAccount.id)
               expect(result.billingAccountAddress.addressId).not.toEqual(address.id)

@@ -25,10 +25,10 @@ import { flashNotification } from '../../../lib/general.lib.js'
  * @returns {Promise<object>} an object containing the bill run ID plus a boolean flag that indicates whether this was
  * the last licence in the bill run (bill run is now empty)
  */
-async function go(reviewLicenceId, yar) {
+export default async function go(reviewLicenceId, yar) {
   const reviewLicence = await FetchRemoveReviewLicenceModel.go(reviewLicenceId)
 
-  await RemoveReviewLicenceService.go(reviewLicenceId)
+  await RemoveReviewLicenceService(reviewLicenceId)
 
   await _flagForSupplementaryBilling(reviewLicence)
 
@@ -60,7 +60,7 @@ async function _flagForSupplementaryBilling(reviewLicence) {
   // caused it to be included in the bill run. If we are removing the licence, we need to unassign it so that it will
   // be processed by the next TPT supplementary bill run.
   if (billRun.batchType === 'two_part_supplementary') {
-    await UnassignLicencesToBillRunService.go([licenceId], billRun.id)
+    await UnassignLicencesToBillRunService([licenceId], billRun.id)
 
     return
   }
@@ -68,10 +68,5 @@ async function _flagForSupplementaryBilling(reviewLicence) {
   // If the batch type is not supplementary, then it wasn't a supplementary year record that caused the licence to be
   // included in the bill run. If we remove the licence, we want to ensure it gets picked up and processed by the next
   // supplementary bill run.
-  await CreateLicenceSupplementaryYearService.go(licenceId, [billRun.toFinancialYearEnding], true)
-}
-
-export { go }
-export default {
-  go
+  await CreateLicenceSupplementaryYearService(licenceId, [billRun.toFinancialYearEnding], true)
 }

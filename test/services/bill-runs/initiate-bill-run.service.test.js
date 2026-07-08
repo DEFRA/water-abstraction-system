@@ -59,7 +59,7 @@ describe('Initiate Bill Run service', () => {
     })
 
     it('creates a new bill run record', async () => {
-      const result = await InitiateBillRunService.go(financialYearEndings, regionId, batchType, user)
+      const result = await InitiateBillRunService(financialYearEndings, regionId, batchType, user)
 
       const billRun = await BillRunModel.query().findById(result.id)
 
@@ -68,13 +68,13 @@ describe('Initiate Bill Run service', () => {
     })
 
     it('creates a new event record', async () => {
-      await InitiateBillRunService.go(financialYearEndings, regionId, batchType, user)
+      await InitiateBillRunService(financialYearEndings, regionId, batchType, user)
 
       expect(CreateBillRunEventService.go.called).toBe(true)
     })
 
     it('returns the new bill run', async () => {
-      const result = await InitiateBillRunService.go(financialYearEndings, regionId, batchType, user)
+      const result = await InitiateBillRunService(financialYearEndings, regionId, batchType, user)
 
       const billRun = await BillRunModel.query().findById(result.id)
 
@@ -107,7 +107,7 @@ describe('Initiate Bill Run service', () => {
       })
 
       it('creates a bill run with "error" status and error code 50', async () => {
-        const result = await InitiateBillRunService.go(financialYearEndings, regionId, batchType, user)
+        const result = await InitiateBillRunService(financialYearEndings, regionId, batchType, user)
 
         const billRun = await BillRunModel.query().findById(result.id)
 

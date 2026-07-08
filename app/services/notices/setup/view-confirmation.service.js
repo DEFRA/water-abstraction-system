@@ -13,7 +13,7 @@ import EventModel from '../../../models/event.model.js'
  *
  * @returns {Promise<object>} The view data for the confirmation page
  */
-async function go(eventId) {
+export default async function go(eventId) {
   const event = await EventModel.query().findById(eventId)
 
   const formattedData = ConfirmationPresenter.go(event)
@@ -22,9 +22,4 @@ async function go(eventId) {
     activeNavBar: 'notices',
     ...formattedData
   }
-}
-
-export { go }
-export default {
-  go
 }

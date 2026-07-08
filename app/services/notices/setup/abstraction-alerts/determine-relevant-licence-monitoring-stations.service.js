@@ -25,8 +25,13 @@ import DetermineRelevantLicenceMonitoringStationsByAlertTypeService from './dete
  *
  * @returns {Array<object>}
  */
-function go(licenceMonitoringStations, selectedLicenceMonitoringStations, removedLicenceMonitoringStations, alertType) {
-  const relevantLicenceMonitoringStationsByAlertType = DetermineRelevantLicenceMonitoringStationsByAlertTypeService.go(
+export default function go(
+  licenceMonitoringStations,
+  selectedLicenceMonitoringStations,
+  removedLicenceMonitoringStations,
+  alertType
+) {
+  const relevantLicenceMonitoringStationsByAlertType = DetermineRelevantLicenceMonitoringStationsByAlertTypeService(
     licenceMonitoringStations,
     alertType
   )
@@ -44,9 +49,4 @@ function go(licenceMonitoringStations, selectedLicenceMonitoringStations, remove
   }
 
   return relevantLicenceMonitoringStations
-}
-
-export { go }
-export default {
-  go
 }

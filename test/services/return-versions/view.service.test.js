@@ -31,7 +31,7 @@ describe('Return Versions - View service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewService.go(returnVersionId)
+      const result = await ViewService(returnVersionId)
 
       expect(result).toEqual({
         backLink: {

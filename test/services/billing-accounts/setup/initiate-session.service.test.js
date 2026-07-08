@@ -22,7 +22,7 @@ describe('Billing Accounts - Setup - Initiate Session service', () => {
     })
 
     it('creates a new session record containing details of the billing account', async () => {
-      const result = await InitiateSessionService.go(billingAccount.id)
+      const result = await InitiateSessionService(billingAccount.id)
 
       expect(result.data).toEqual({
         billingAccount

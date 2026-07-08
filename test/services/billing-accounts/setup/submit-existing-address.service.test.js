@@ -58,7 +58,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitExistingAddressService.go(session.id, payload)
+      await SubmitExistingAddressService(session.id, payload)
 
       expect(session).toMatchObject({
         addressSelected: payload.addressSelected
@@ -67,7 +67,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitExistingAddressService.go(session.id, payload)
+      const result = await SubmitExistingAddressService(session.id, payload)
 
       expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
@@ -87,7 +87,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitExistingAddressService.go(session.id, payload)
+        await SubmitExistingAddressService(session.id, payload)
 
         expect(session).toMatchObject({
           addressSelected: payload.addressSelected
@@ -95,7 +95,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitExistingAddressService.go(session.id, payload)
+        const result = await SubmitExistingAddressService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
@@ -117,7 +117,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitExistingAddressService.go(session.id, payload)
+        await SubmitExistingAddressService(session.id, payload)
 
         expect(session).toMatchObject({
           addressSelected: payload.addressSelected,
@@ -126,7 +126,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitExistingAddressService.go(session.id, payload)
+        const result = await SubmitExistingAddressService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
@@ -144,7 +144,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitExistingAddressService.go(session.id, payload)
+        await SubmitExistingAddressService(session.id, payload)
 
         expect(session).toMatchObject({
           ..._newAddressExpectedValues(session),
@@ -153,7 +153,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitExistingAddressService.go(session.id, payload)
+        const result = await SubmitExistingAddressService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
@@ -180,7 +180,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitExistingAddressService.go(session.id, payload)
+      await SubmitExistingAddressService(session.id, payload)
 
       expect(session).toMatchObject({
         addressSelected: 'new'
@@ -188,7 +188,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitExistingAddressService.go(session.id, payload)
+      const result = await SubmitExistingAddressService(session.id, payload)
 
       expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
@@ -208,7 +208,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitExistingAddressService.go(session.id, payload)
+        await SubmitExistingAddressService(session.id, payload)
 
         expect(session).toMatchObject({
           addressSelected: 'new'
@@ -216,7 +216,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitExistingAddressService.go(session.id, payload)
+        const result = await SubmitExistingAddressService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
@@ -238,7 +238,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitExistingAddressService.go(session.id, payload)
+        await SubmitExistingAddressService(session.id, payload)
 
         expect(session).toMatchObject({
           addressSelected: 'new',
@@ -247,7 +247,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitExistingAddressService.go(session.id, payload)
+        const result = await SubmitExistingAddressService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
@@ -265,7 +265,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitExistingAddressService.go(session.id, payload)
+        await SubmitExistingAddressService(session.id, payload)
 
         expect(session).toMatchObject({
           ..._commonSessionData(session.billingAccount),
@@ -274,7 +274,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitExistingAddressService.go(session.id, payload)
+        const result = await SubmitExistingAddressService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
@@ -299,7 +299,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitExistingAddressService.go(session.id, payload)
+      const result = await SubmitExistingAddressService(session.id, payload)
 
       expect(result.error).toEqual({
         errorList: [

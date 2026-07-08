@@ -39,7 +39,7 @@ describe('Notices - Setup - Abstraction Alerts - View Alert Email Address servic
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewAlertEmailAddressService.go(session.id, auth)
+      const result = await ViewAlertEmailAddressService(session.id, auth)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

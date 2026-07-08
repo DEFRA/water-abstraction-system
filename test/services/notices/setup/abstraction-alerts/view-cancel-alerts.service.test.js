@@ -34,7 +34,7 @@ describe('Notices - Setup - Abstraction Alerts - View Cancel Alerts service', ()
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCancelAlertsService.go(session.id)
+      const result = await ViewCancelAlertsService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

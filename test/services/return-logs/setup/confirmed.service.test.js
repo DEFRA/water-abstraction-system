@@ -46,7 +46,7 @@ describe('Return Logs - Setup - Confirmed service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ConfirmedService.go(returnLogId)
+      const result = await ConfirmedService(returnLogId)
 
       expect(result).toEqual({
         licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',

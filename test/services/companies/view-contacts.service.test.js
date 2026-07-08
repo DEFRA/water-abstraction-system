@@ -56,7 +56,7 @@ describe('Companies - View Contacts service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewContactsService.go(company.id, auth, page, yarStub)
+      const result = await ViewContactsService(company.id, auth, page, yarStub)
 
       expect(result).toEqual({
         activeSecondaryNav: 'contacts',

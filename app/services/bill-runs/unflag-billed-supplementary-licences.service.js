@@ -38,7 +38,7 @@ import WorkflowModel from '../../models/workflow.model.js'
  *
  * @param {module:BillRunModel} billRun - Instance of the bill run being 'sent'
  */
-async function go(billRun) {
+export default async function go(billRun) {
   const { batchType, scheme } = billRun
 
   if (scheme === 'alcs') {
@@ -99,9 +99,4 @@ async function _unflagTwoPartTariff(billRun) {
         .whereColumn('licenceSupplementaryYears.licenceId', 'workflows.licenceId')
         .whereNull('workflows.deletedAt')
     )
-}
-
-export { go }
-export default {
-  go
 }

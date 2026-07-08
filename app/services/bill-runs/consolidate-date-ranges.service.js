@@ -56,7 +56,7 @@
  *
  * @returns {object[]} An array of the consolidated date ranges
  */
-function go(dateRanges) {
+export default function go(dateRanges) {
   // We sort the date ranges by start date from earliest to latest to make life easier when consolidating them
   const sortedDates = _sortDates(dateRanges)
 
@@ -115,9 +115,4 @@ function _consolidateDates(dateRanges) {
     // Start with an empty array
     []
   )
-}
-
-export { go }
-export default {
-  go
 }

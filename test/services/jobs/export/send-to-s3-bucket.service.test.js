@@ -25,7 +25,7 @@ describe('Send to S3 bucket service', () => {
     const filePath = 'test/support/fixtures/compress-files.service.csv'
 
     it('uploads a file to the S3 bucket', async () => {
-      await SendToS3BucketService.go(filePath)
+      await SendToS3BucketService(filePath)
 
       // Test that the S3 Client was called once
       expect(s3Stub.calledOnce).toBe(true)
@@ -42,7 +42,7 @@ describe('Send to S3 bucket service', () => {
       const fileName = 'FakeFolder'
 
       it('does not upload a file to the S3 bucket', async () => {
-        await expect(SendToS3BucketService.go(fileName)).rejects.toThrow()
+        await expect(SendToS3BucketService(fileName)).rejects.toThrow()
 
         expect(s3Stub.called).toBe(false)
       })

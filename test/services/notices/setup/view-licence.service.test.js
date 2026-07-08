@@ -34,7 +34,7 @@ describe('Notices - Setup - View Licence service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewLicenceService.go(session.id)
+      const result = await ViewLicenceService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

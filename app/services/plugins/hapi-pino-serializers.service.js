@@ -79,7 +79,7 @@
  *
  * @returns {object} an object containing functions to serialize the `req` and `res` objects returned by pino
  */
-function go() {
+export default function go() {
   return {
     req: _req,
     res: _res
@@ -124,11 +124,4 @@ function _res(res) {
   return {
     statusCode: res.statusCode
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

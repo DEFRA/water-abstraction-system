@@ -10,17 +10,10 @@ import { promises as fsPromises } from 'node:fs'
  *
  * @param {string} path - The folder or file path that we want to delete
  */
-async function go(path) {
+export default async function go(path) {
   try {
     await fsPromises.rm(path, { recursive: true, force: true })
   } catch (error) {
     globalThis.GlobalNotifier.omfg('Delete file service errored', { path }, error)
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

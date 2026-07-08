@@ -26,7 +26,7 @@ import GenerateFromExistingRequirementsService from './generate-from-existing-re
  * @returns {Promise<object>} If no errors an empty object else the page data for the existing page including the
  * validation error details
  */
-async function go(sessionId, payload) {
+export default async function go(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload, session)
@@ -46,7 +46,7 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
-  const { requirements, multipleUpload, quarterlyReturns } = await GenerateFromExistingRequirementsService.go(
+  const { requirements, multipleUpload, quarterlyReturns } = await GenerateFromExistingRequirementsService(
     payload.existing
   )
 
@@ -65,9 +65,4 @@ function _validate(payload, session) {
   const validation = ExistingValidator.go(payload, returnVersions)
 
   return formatValidationResult(validation)
-}
-
-export { go }
-export default {
-  go
 }

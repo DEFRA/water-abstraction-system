@@ -42,7 +42,7 @@ describe('Company Contacts - View Contact Details Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewContactDetailsService.go(companyContact.id, auth, yarStub)
+      const result = await ViewContactDetailsService(companyContact.id, auth, yarStub)
 
       expect(result).toEqual({
         activeSecondaryNav: 'contact-details',

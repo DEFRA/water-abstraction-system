@@ -39,7 +39,7 @@
  *
  * @returns {boolean} true if the request should be ignored, else false
  */
-function go(options, request) {
+export default function go(options, request) {
   const staticPaths = ['/', '/status', '/favicon.ico']
 
   // If request is a known path ignore it
@@ -54,11 +54,4 @@ function go(options, request) {
 
   // Do not ignore all other requests
   return false
-}
-
-export {
-  go
-}
-export default {
-  go
 }

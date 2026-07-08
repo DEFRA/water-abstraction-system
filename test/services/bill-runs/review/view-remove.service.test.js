@@ -27,7 +27,7 @@ describe('Bill Runs - Review - View Remove service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewRemoveService.go(removeReviewLicence.id)
+      const result = await ViewRemoveService(removeReviewLicence.id)
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',

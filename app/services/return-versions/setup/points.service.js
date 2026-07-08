@@ -18,18 +18,13 @@ import PointsPresenter from '../../../presenters/return-versions/setup/points.pr
  *
  * @returns {Promise<object>} The view data for the points page
  */
-async function go(sessionId, requirementIndex) {
+export default async function go(sessionId, requirementIndex) {
   const session = await FetchSessionDal(sessionId)
-  const points = await FetchPointsService.go(session.licenceVersion.id)
+  const points = await FetchPointsService(session.licenceVersion.id)
 
   const formattedData = PointsPresenter.go(session, requirementIndex, points)
 
   return {
     ...formattedData
   }
-}
-
-export { go }
-export default {
-  go
 }

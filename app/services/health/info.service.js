@@ -29,7 +29,7 @@ const SERVICE_RUNNING_MESSAGE = 'Up and running'
  *
  * @returns {Promise<object>} data about each service formatted for the view
  */
-async function go() {
+export default async function go() {
   const addressFacadeData = await _addressFacadeData()
   const chargingModuleData = await _chargingModuleData()
   const gotenbergData = await _gotenbergData()
@@ -55,7 +55,7 @@ async function go() {
 }
 
 async function _addSystemInfoToLegacyAppData(appData) {
-  const systemInfo = await FetchSystemInfoService.go()
+  const systemInfo = await FetchSystemInfoService()
 
   return [...appData, systemInfo]
 }
@@ -141,7 +141,7 @@ async function _redisConnectivityData() {
   let redis
 
   try {
-    redis = await CreateRedisClientService.go()
+    redis = await CreateRedisClientService()
 
     await redis.ping()
 
@@ -177,9 +177,4 @@ async function _virusScannerData() {
   } catch (error) {
     return `ERROR: ${error.message}`
   }
-}
-
-export { go }
-export default {
-  go
 }

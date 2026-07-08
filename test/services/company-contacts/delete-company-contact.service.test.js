@@ -36,7 +36,7 @@ describe('Company contact - Delete company contact service', () => {
     })
 
     it('soft deletes the company contact', async () => {
-      await DeleteCompanyContactService.go(companyContact.id, notified)
+      await DeleteCompanyContactService(companyContact.id, notified)
 
       const exists = await CompanyContactModel.query().findById(companyContact.id)
 
@@ -53,7 +53,7 @@ describe('Company contact - Delete company contact service', () => {
     })
 
     it('deletes the company contact', async () => {
-      await DeleteCompanyContactService.go(companyContact.id, notified)
+      await DeleteCompanyContactService(companyContact.id, notified)
 
       const exists = await CompanyContactModel.query().findById(companyContact.id)
 

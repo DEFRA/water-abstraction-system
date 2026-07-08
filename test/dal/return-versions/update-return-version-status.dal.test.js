@@ -24,7 +24,7 @@ describe('DAL - Return Versions - Update Return Version Status dal', () => {
 
   describe('when called without a transaction', () => {
     it('updates the status for the specified return version', async () => {
-      await UpdateReturnVersionStatusDal.go(returnVersion.$id(), status)
+      await UpdateReturnVersionStatusDal(returnVersion.$id(), status)
 
       const result = await returnVersion.$query()
 
@@ -44,7 +44,7 @@ describe('DAL - Return Versions - Update Return Version Status dal', () => {
     })
 
     it('updates the status for the specified return version', async () => {
-      await UpdateReturnVersionStatusDal.go(returnVersion.$id(), status, trx)
+      await UpdateReturnVersionStatusDal(returnVersion.$id(), status, trx)
       await trx.commit()
 
       const result = await returnVersion.$query()

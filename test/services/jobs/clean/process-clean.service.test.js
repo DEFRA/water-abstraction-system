@@ -56,7 +56,7 @@ describe('Jobs - Clean - Process Clean service', () => {
     })
 
     it('cleans expired sessions', async () => {
-      await ProcessCleanService.go()
+      await ProcessCleanService()
 
       expect(cleanEmptyBillRunsStub.called).toBe(true)
       expect(cleanEmptyVoidReturnLogsStub.called).toBe(true)
@@ -66,7 +66,7 @@ describe('Jobs - Clean - Process Clean service', () => {
     })
 
     it('logs the time taken in milliseconds and seconds, plus the count of rows deleted', async () => {
-      await ProcessCleanService.go()
+      await ProcessCleanService()
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -92,11 +92,11 @@ describe('Jobs - Clean - Process Clean service', () => {
     })
 
     it('does not throw an error', async () => {
-      await ProcessCleanService.go()
+      await ProcessCleanService()
     })
 
     it('logs the error', async () => {
-      await ProcessCleanService.go()
+      await ProcessCleanService()
 
       const errorLogArgs = notifierStub.omfg.firstCall.args
 

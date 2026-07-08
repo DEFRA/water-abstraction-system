@@ -75,7 +75,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
             })
 
             it('voids only the return log [C] that matches the cycle and ends after the "change date"', async () => {
-              await VoidLicenceReturnLogsService.go(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
+              await VoidLicenceReturnLogsService(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
 
               let returnLogBeingChecked
 
@@ -148,7 +148,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
             })
 
             it('voids only the return log [C] that matches the cycle', async () => {
-              await VoidLicenceReturnLogsService.go(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
+              await VoidLicenceReturnLogsService(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
 
               let returnLogBeingChecked
 
@@ -203,7 +203,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
         })
 
         it('voids only the existing return log [A]', async () => {
-          await VoidLicenceReturnLogsService.go(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
+          await VoidLicenceReturnLogsService(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
 
           let returnLogBeingChecked
 
@@ -258,7 +258,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
         })
 
         it('voids only the existing return log [A]', async () => {
-          await VoidLicenceReturnLogsService.go(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
+          await VoidLicenceReturnLogsService(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
 
           let returnLogBeingChecked
 

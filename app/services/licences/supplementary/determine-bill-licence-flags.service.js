@@ -37,7 +37,7 @@ import BillLicenceModel from '../../../models/bill-licence.model.js'
  * @returns {object} - An object containing the related licenceId, regionId, start and end date and
  * licence supplementary billing flags
  */
-async function go(billLicenceId) {
+export default async function go(billLicenceId) {
   const { licence, bill, licenceId } = await _fetchBillLicence(billLicenceId)
 
   const { flagForPreSrocSupplementary, flagForSrocSupplementary, flagForTwoPartTariffSupplementary } = _updateFlags(
@@ -91,11 +91,4 @@ function _updateFlags(billRun, licence) {
   }
 
   return { flagForPreSrocSupplementary, flagForSrocSupplementary, flagForTwoPartTariffSupplementary }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

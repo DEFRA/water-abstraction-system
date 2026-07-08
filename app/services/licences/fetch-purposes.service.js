@@ -12,7 +12,7 @@ import LicenceModel from '../../models/licence.model.js'
  *
  * @returns {Promise<object[]>} The licenceVersionPurposes data needed for the purposes page
  */
-async function go(licenceId) {
+export default async function go(licenceId) {
   const licence = await _fetch(licenceId)
 
   return licence.licenceVersions?.[0]?.licenceVersionPurposes || []
@@ -55,11 +55,4 @@ async function _fetch(licenceId) {
     .modifyGraph('licenceVersions.licenceVersionPurposes.purpose', (builder) => {
       builder.select(['id', 'description'])
     })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

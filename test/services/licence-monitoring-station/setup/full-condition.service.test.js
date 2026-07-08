@@ -47,7 +47,7 @@ describe('Licence Monitoring Station Setup - Full Condition Service', () => {
 
   describe('when called', () => {
     it('returns the expected output', async () => {
-      const result = await FullConditionService.go(session.id)
+      const result = await FullConditionService(session.id)
 
       expect(result).toEqual({
         backLink: `/system/licence-monitoring-station/setup/${session.id}/licence-number`,

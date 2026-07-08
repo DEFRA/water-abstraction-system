@@ -19,7 +19,7 @@ describe('Notices - Setup - Check Licence Exists DAL', () => {
 
   describe('when the licence exists', () => {
     it('returns true', async () => {
-      const result = await CheckLicenceExistsDal.go(licence.licenceRef)
+      const result = await CheckLicenceExistsDal(licence.licenceRef)
 
       expect(result).toEqual(true)
     })
@@ -27,7 +27,7 @@ describe('Notices - Setup - Check Licence Exists DAL', () => {
 
   describe('when the licence does not exist', () => {
     it('returns false', async () => {
-      const result = await CheckLicenceExistsDal.go('does-not-exist')
+      const result = await CheckLicenceExistsDal('does-not-exist')
 
       expect(result).toEqual(false)
     })

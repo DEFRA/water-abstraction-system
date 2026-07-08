@@ -84,7 +84,7 @@ describe('Notices - Setup - Process Add Recipient service', () => {
         })
 
         it('adds an `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {
-          await ProcessAddRecipientService.go(sessionId, yarStub)
+          await ProcessAddRecipientService(sessionId, yarStub)
 
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -147,7 +147,7 @@ describe('Notices - Setup - Process Add Recipient service', () => {
         })
 
         it('adds the recipient to `additionalRecipients` and pushes its hash ID into `selectedRecipients`', async () => {
-          await ProcessAddRecipientService.go(sessionId, yarStub)
+          await ProcessAddRecipientService(sessionId, yarStub)
 
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -226,7 +226,7 @@ describe('Notices - Setup - Process Add Recipient service', () => {
         })
 
         it('adds a `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {
-          await ProcessAddRecipientService.go(sessionId, yarStub)
+          await ProcessAddRecipientService(sessionId, yarStub)
 
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 

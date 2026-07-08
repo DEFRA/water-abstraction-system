@@ -22,7 +22,7 @@ import { determineFinancialYearEnd } from '../../../lib/dates.lib.js'
  *
  * @returns {Promise<object>} - An object containing the charge version and related SROC bill runs
  */
-async function go(chargeVersionId) {
+export default async function go(chargeVersionId) {
   const chargeVersion = await _fetchChargeVersion(chargeVersionId)
 
   if (chargeVersion.scheme === 'alcs') {
@@ -60,11 +60,4 @@ async function _fetchSrocBillRuns(changeDateFinancialYearEnd, licenceId) {
     .select('billRuns.regionId', 'billRuns.scheme', 'billRuns.toFinancialYearEnding', 'billRuns.batchType')
     .distinct()
     .orderBy('billRuns.toFinancialYearEnding', 'asc')
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -68,7 +68,7 @@ describe('Return Versions Setup - Submit Returns Cycle service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitReturnsCycleService.go(session.id, requirementIndex, payload, yarStub)
+        await SubmitReturnsCycleService(session.id, requirementIndex, payload, yarStub)
 
         expect(session.requirements[0].returnsCycle).toEqual('summer')
         expect(session.$update.called).toBe(true)
@@ -76,7 +76,7 @@ describe('Return Versions Setup - Submit Returns Cycle service', () => {
 
       describe('and the page has been not been visited', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitReturnsCycleService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitReturnsCycleService(session.id, requirementIndex, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: false
@@ -92,7 +92,7 @@ describe('Return Versions Setup - Submit Returns Cycle service', () => {
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
-          const result = await SubmitReturnsCycleService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitReturnsCycleService(session.id, requirementIndex, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: true
@@ -100,7 +100,7 @@ describe('Return Versions Setup - Submit Returns Cycle service', () => {
         })
 
         it('sets the notification message title to "Updated" and the text to "Requirements for returns updated" ', async () => {
-          await SubmitReturnsCycleService.go(session.id, requirementIndex, payload, yarStub)
+          await SubmitReturnsCycleService(session.id, requirementIndex, payload, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
 
@@ -119,7 +119,7 @@ describe('Return Versions Setup - Submit Returns Cycle service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitReturnsCycleService.go(session.id, requirementIndex, payload, yarStub)
+        const result = await SubmitReturnsCycleService(session.id, requirementIndex, payload, yarStub)
 
         expect(result).toMatchObject({
           pageTitle: 'Select the returns cycle for the requirements for returns',
@@ -136,7 +136,7 @@ describe('Return Versions Setup - Submit Returns Cycle service', () => {
 
       describe('because the user has not submitted anything', () => {
         it('includes an error for the input element', async () => {
-          const result = await SubmitReturnsCycleService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitReturnsCycleService(session.id, requirementIndex, payload, yarStub)
 
           expect(result.error).toEqual({
             errorList: [

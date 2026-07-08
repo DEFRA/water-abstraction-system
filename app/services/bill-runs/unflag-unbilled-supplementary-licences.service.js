@@ -43,7 +43,7 @@ import WorkflowModel from '../../models/workflow.model.js'
  * @param {module:BillRunModel} billRun - Instance of the bill run being processed
  * @param {string[]} [allLicenceIds=[]] - If a standard supplementary all licence UUIDs being processed in the bill run
  */
-async function go(billRun, allLicenceIds = []) {
+export default async function go(billRun, allLicenceIds = []) {
   if (billRun.batchType === 'two_part_supplementary') {
     await _unflagTwoPartTariff(billRun)
 
@@ -91,9 +91,4 @@ async function _unflagTwoPartTariff(billRun) {
         .whereColumn('licenceSupplementaryYears.licenceId', 'billLicences.licenceId')
         .where('bills.billRunId', '=', billRunId)
     )
-}
-
-export { go }
-export default {
-  go
 }

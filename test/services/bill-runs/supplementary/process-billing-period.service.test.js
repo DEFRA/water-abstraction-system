@@ -67,7 +67,7 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
       })
 
       it('returns false (bill run is empty)', async () => {
-        const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+        const result = await ProcessBillingPeriodService(billRun, billingPeriod, chargeVersions)
 
         expect(result).toBe(false)
       })
@@ -96,14 +96,14 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
               abstractionPeriodEndMonth: 5
             })
 
-            const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
+            const chargeVersionData = await FetchChargeVersionsService(licence.regionId, billingPeriod)
 
             chargeVersions = chargeVersionData.chargeVersions
           })
 
           describe('and there are no previous billed transactions', () => {
             it('returns false (bill run is empty)', async () => {
-              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+              const result = await ProcessBillingPeriodService(billRun, billingPeriod, chargeVersions)
 
               expect(result).toBe(false)
             })
@@ -133,13 +133,13 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
                 abstractionPeriodEndMonth: 3
               })
 
-              const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
+              const chargeVersionData = await FetchChargeVersionsService(licence.regionId, billingPeriod)
 
               chargeVersions = chargeVersionData.chargeVersions
             })
 
             it('returns false (bill run is empty)', async () => {
-              const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+              const result = await ProcessBillingPeriodService(billRun, billingPeriod, chargeVersions)
 
               expect(result).toBe(false)
             })
@@ -168,7 +168,7 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
             abstractionPeriodEndMonth: 3
           })
 
-          const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
+          const chargeVersionData = await FetchChargeVersionsService(licence.regionId, billingPeriod)
 
           chargeVersions = chargeVersionData.chargeVersions
 
@@ -220,7 +220,7 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
         })
 
         it('returns true (bill run is not empty)', async () => {
-          const result = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+          const result = await ProcessBillingPeriodService(billRun, billingPeriod, chargeVersions)
 
           expect(result).toBe(true)
         })
@@ -242,7 +242,7 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
 
       await ChargeElementHelper.add({ chargeReferenceId })
 
-      const chargeVersionData = await FetchChargeVersionsService.go(licence.regionId, billingPeriod)
+      const chargeVersionData = await FetchChargeVersionsService(licence.regionId, billingPeriod)
 
       chargeVersions = chargeVersionData.chargeVersions
     })
@@ -253,7 +253,7 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions).catch((e) => {
+        const error = await ProcessBillingPeriodService(billRun, billingPeriod, chargeVersions).catch((e) => {
           return e
         })
 
@@ -270,7 +270,7 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
       })
 
       it('throws a BillRunError with the correct code', async () => {
-        const error = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions).catch((e) => {
+        const error = await ProcessBillingPeriodService(billRun, billingPeriod, chargeVersions).catch((e) => {
           return e
         })
 

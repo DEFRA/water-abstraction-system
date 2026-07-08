@@ -79,19 +79,19 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
       })
 
       it('sends a request to the Charging Module API to send its copy', async () => {
-        await UpdateInvoiceNumbersService.go(billRun)
+        await UpdateInvoiceNumbersService(billRun)
 
         expect(chargingModuleSendBillRunRequestStub.called).toBe(true)
       })
 
       it('requests a copy of the bill run from the Charging Module API with its generated invoice numbers', async () => {
-        await UpdateInvoiceNumbersService.go(billRun)
+        await UpdateInvoiceNumbersService(billRun)
 
         expect(chargingModuleViewBillRunRequestStub.called).toBe(true)
       })
 
       it('updates the bills with the Charging Module invoice numbers', async () => {
-        await UpdateInvoiceNumbersService.go(billRun)
+        await UpdateInvoiceNumbersService(billRun)
 
         expect(billPatchStub.calledTwice).toBe(true)
         expect(billPatchStub.firstCall.firstArg).toEqual({ invoiceNumber: 'WAI1000429' })
@@ -99,7 +99,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
       })
 
       it('updates the bill run with the Charging Module transaction reference', async () => {
-        await UpdateInvoiceNumbersService.go(billRun)
+        await UpdateInvoiceNumbersService(billRun)
 
         expect(billRunPatchStub.calledOnce).toBe(true)
         expect(billRunPatchStub.firstCall.firstArg).toMatchObject({
@@ -109,7 +109,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
       })
 
       it('logs a "complete" message, the bill run passed in, and the time taken in milliseconds and seconds', async () => {
-        await UpdateInvoiceNumbersService.go(billRun)
+        await UpdateInvoiceNumbersService(billRun)
 
         const logDataArg = notifierStub.omg.args[0][1]
 
@@ -125,7 +125,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         })
 
         it('also unflags the licences for supplementary billing', async () => {
-          await UpdateInvoiceNumbersService.go(billRun)
+          await UpdateInvoiceNumbersService(billRun)
 
           expect(unflagBilledLicencesServiceStub.called).toBe(true)
         })
@@ -137,7 +137,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         })
 
         it('also unflags the licences for supplementary billing', async () => {
-          await UpdateInvoiceNumbersService.go(billRun)
+          await UpdateInvoiceNumbersService(billRun)
 
           expect(unflagBilledLicencesServiceStub.called).toBe(true)
         })
@@ -145,7 +145,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
 
       describe('and if the bill run is neither supplementary or two-part supplementary', () => {
         it('leaves the licences supplementary billing flags alone', async () => {
-          await UpdateInvoiceNumbersService.go(billRun)
+          await UpdateInvoiceNumbersService(billRun)
 
           expect(unflagBilledLicencesServiceStub.called).toBe(false)
         })
@@ -159,11 +159,11 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         })
 
         it('does not throw an error', async () => {
-          await UpdateInvoiceNumbersService.go(billRun)
+          await UpdateInvoiceNumbersService(billRun)
         })
 
         it('logs the error', async () => {
-          await UpdateInvoiceNumbersService.go(billRun)
+          await UpdateInvoiceNumbersService(billRun)
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
@@ -181,11 +181,11 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         })
 
         it('does not throw an error', async () => {
-          await UpdateInvoiceNumbersService.go(billRun)
+          await UpdateInvoiceNumbersService(billRun)
         })
 
         it('logs the error', async () => {
-          await UpdateInvoiceNumbersService.go(billRun)
+          await UpdateInvoiceNumbersService(billRun)
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
@@ -204,11 +204,11 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         })
 
         it('does not throw an error', async () => {
-          await UpdateInvoiceNumbersService.go(billRun)
+          await UpdateInvoiceNumbersService(billRun)
         })
 
         it('logs the error', async () => {
-          await UpdateInvoiceNumbersService.go(billRun)
+          await UpdateInvoiceNumbersService(billRun)
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
@@ -232,11 +232,11 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         })
 
         it('does not throw an error', async () => {
-          await UpdateInvoiceNumbersService.go(billRun)
+          await UpdateInvoiceNumbersService(billRun)
         })
 
         it('logs the error', async () => {
-          await UpdateInvoiceNumbersService.go(billRun)
+          await UpdateInvoiceNumbersService(billRun)
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
@@ -264,11 +264,11 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         })
 
         it('does not throw an error', async () => {
-          await UpdateInvoiceNumbersService.go(billRun)
+          await UpdateInvoiceNumbersService(billRun)
         })
 
         it('logs the error', async () => {
-          await UpdateInvoiceNumbersService.go(billRun)
+          await UpdateInvoiceNumbersService(billRun)
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 

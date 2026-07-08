@@ -58,7 +58,7 @@ describe('Users - External - Setup - Initiate Session service', () => {
 
   describe('when called', () => {
     it('returns the session Id and an initialised data object', async () => {
-      const result = await InitiateSessionService.go(user.id, back)
+      const result = await InitiateSessionService(user.id, back)
 
       expect(result).toEqual({
         data: { activeNavBar: back, licences, selectedLicences: [], user },
@@ -71,7 +71,7 @@ describe('Users - External - Setup - Initiate Session service', () => {
     })
 
     it('initiates the session for the journey ', async () => {
-      const result = await InitiateSessionService.go(user.id, back)
+      const result = await InitiateSessionService(user.id, back)
 
       const matchingSession = await SessionModel.query().findById(result.id)
 

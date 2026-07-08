@@ -41,7 +41,7 @@ describe('Jobs - Clean - Clean Expired Sessions service', () => {
       })
 
       it('removes the session and returns the count', async () => {
-        const result = await CleanExpiredSessionsService.go()
+        const result = await CleanExpiredSessionsService()
 
         const existsResults = await SessionModel.query().whereIn('id', [session.id])
 
@@ -58,7 +58,7 @@ describe('Jobs - Clean - Clean Expired Sessions service', () => {
       })
 
       it('does not remove the session and returns the count', async () => {
-        const result = await CleanExpiredSessionsService.go()
+        const result = await CleanExpiredSessionsService()
 
         const existsResults = await SessionModel.query().whereIn('id', [session.id])
 
@@ -80,11 +80,11 @@ describe('Jobs - Clean - Clean Expired Sessions service', () => {
     })
 
     it('does not throw an error', async () => {
-      await expect(CleanExpiredSessionsService.go()).resolves.toBeDefined()
+      await expect(CleanExpiredSessionsService()).resolves.toBeDefined()
     })
 
     it('logs the error', async () => {
-      await CleanExpiredSessionsService.go()
+      await CleanExpiredSessionsService()
 
       const errorLogArgs = notifierStub.omfg.firstCall.args
 
@@ -94,7 +94,7 @@ describe('Jobs - Clean - Clean Expired Sessions service', () => {
     })
 
     it('still returns a count', async () => {
-      const result = await CleanExpiredSessionsService.go()
+      const result = await CleanExpiredSessionsService()
 
       // Like in the previous tests, we can't check the exact count in case the test deletes void return logs created by
       // other tests. We just want to check we are always getting a number

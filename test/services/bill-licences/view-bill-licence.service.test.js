@@ -29,7 +29,7 @@ describe('View Bill Licence service', () => {
     })
 
     it('will fetch the data and format it using the bill licence services', async () => {
-      const result = await ViewBillLicenceService.go(testId)
+      const result = await ViewBillLicenceService(testId)
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',
@@ -42,7 +42,7 @@ describe('View Bill Licence service', () => {
 
   describe('when a bill with a matching ID does not exist', () => {
     it('throws an exception', async () => {
-      await expect(ViewBillLicenceService.go('testId')).rejects.toThrow()
+      await expect(ViewBillLicenceService('testId')).rejects.toThrow()
     })
   })
 })

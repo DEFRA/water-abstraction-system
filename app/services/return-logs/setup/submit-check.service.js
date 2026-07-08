@@ -27,7 +27,7 @@ import { timestampForPostgres } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<string>} - The ID of the submitted return log
  */
-async function go(sessionId, user) {
+export default async function go(sessionId, user) {
   const session = await FetchSessionDal(sessionId)
 
   const error = _validate(session)
@@ -62,9 +62,9 @@ async function _save(session, user) {
   const metadata = GenerateReturnSubmissionMetadata.go(session)
 
   await ReturnLogModel.transaction(async (trx) => {
-    const returnSubmission = await CreateReturnSubmissionService.go(metadata, session, timestamp, user, trx)
+    const returnSubmission = await CreateReturnSubmissionService(metadata, session, timestamp, user, trx)
 
-    await CreateReturnLinesService.go(returnSubmission.id, session, timestamp, trx)
+    await CreateReturnLinesService(returnSubmission.id, session, timestamp, trx)
 
     await _markReturnLogAsSubmitted(session.returnLogId, session.receivedDate, timestamp, trx)
     await _cleanupSession(session.id, trx)
@@ -79,9 +79,4 @@ function _validate(session) {
   const validationResult = CheckValidator.go(session)
 
   return formatValidationResult(validationResult)
-}
-
-export { go }
-export default {
-  go
 }

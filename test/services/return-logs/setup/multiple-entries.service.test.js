@@ -38,13 +38,13 @@ describe('Return Logs Setup - Multiple Entries service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await MultipleEntriesService.go(session.id)
+      const result = await MultipleEntriesService(session.id)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await MultipleEntriesService.go(session.id)
+      const result = await MultipleEntriesService(session.id)
 
       expect(result).toMatchObject({
         backLink: {

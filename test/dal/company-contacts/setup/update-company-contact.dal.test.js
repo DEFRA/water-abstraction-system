@@ -67,7 +67,7 @@ describe('Company Contacts - Update Company Contact dal', () => {
 
   describe('when a updating a company contact', () => {
     it('updates the company contact and associated contact', async () => {
-      await UpdateCompanyContactDal.go(updatedCompanyContact)
+      await UpdateCompanyContactDal(updatedCompanyContact)
 
       const updatedCompanyContactResult = await CompanyContactModel.query()
         .findById(companyContact.id)

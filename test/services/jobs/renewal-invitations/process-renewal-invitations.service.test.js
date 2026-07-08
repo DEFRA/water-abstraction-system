@@ -31,13 +31,13 @@ describe('Jobs - Renewal Invitations - Process Renewal Invitations service', () 
   })
 
   it('calls the "SendRenewalInvitations"', async () => {
-    await ProcessRenewalInvitationsService.go(days)
+    await ProcessRenewalInvitationsService(days)
 
     expect(SendRenewalInvitations.go.calledWith(days)).toBe(true)
   })
 
   it('logs the time taken in milliseconds and seconds', async () => {
-    await ProcessRenewalInvitationsService.go(days)
+    await ProcessRenewalInvitationsService(days)
 
     const logDataArg = notifierStub.omg.firstCall.args[1]
 

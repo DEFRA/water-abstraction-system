@@ -16,7 +16,7 @@ import { readFlashNotification } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<object>} page data needed by the view template
  */
-async function go(sessionId, yar) {
+export default async function go(sessionId, yar) {
   const session = await FetchSessionDal(sessionId)
 
   await _updateSession(session)
@@ -32,14 +32,9 @@ async function go(sessionId, yar) {
 }
 
 async function _updateSession(session) {
-  ApplyQuantitiesService.go(session)
+  ApplyQuantitiesService(session)
 
   session.checkPageVisited = true
 
   return session.$update()
-}
-
-export { go }
-export default {
-  go
 }

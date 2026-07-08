@@ -52,13 +52,13 @@ describe('Return Versions Setup - Note service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await NoteService.go(session.id)
+      const result = await NoteService(session.id)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await NoteService.go(session.id)
+      const result = await NoteService(session.id)
 
       expect(result).toMatchObject({
         pageTitle: 'Add a note',

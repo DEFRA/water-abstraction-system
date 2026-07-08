@@ -16,7 +16,7 @@ import SearchPresenter from '../../presenters/search/search.presenter.js'
  *
  * @returns {Promise<object>} The view data for the search page
  */
-async function go(auth, yar, page) {
+export default async function go(auth, yar, page) {
   const userScopes = auth.credentials.scope
 
   // Requests sent to the /search page might be either to just show the search page or to view search results, so we
@@ -51,7 +51,7 @@ async function _blankPage(userScopes) {
 }
 
 async function _pageOfResults(userScopes, searchQuery, resultType, pageNumber) {
-  const allSearchMatches = await FindAllSearchMatchesService.go(searchQuery, resultType, pageNumber, userScopes)
+  const allSearchMatches = await FindAllSearchMatchesService(searchQuery, resultType, pageNumber, userScopes)
 
   const { results, total } = allSearchMatches
 
@@ -63,11 +63,4 @@ async function _pageOfResults(userScopes, searchQuery, resultType, pageNumber) {
     ...formattedData,
     pagination
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

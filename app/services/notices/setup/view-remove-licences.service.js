@@ -13,7 +13,7 @@ import RemoveLicencesPresenter from '../../../presenters/notices/setup/remove-li
  *
  * @returns {Promise<object>} The view data for the remove licences page
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const { removeLicences = [] } = session
@@ -24,9 +24,4 @@ async function go(sessionId) {
     activeNavBar: 'notices',
     ...formattedData
   }
-}
-
-export { go }
-export default {
-  go
 }

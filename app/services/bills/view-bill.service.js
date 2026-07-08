@@ -27,8 +27,8 @@ import ViewLicenceSummariesPresenter from '../../presenters/bills/view-licence-s
  * @returns {Promise<object>} a formatted representation of the bill, its bill run and billing account plus summaries
  * for all the licences linked to the bill for use in the bill view page
  */
-async function go(id) {
-  const { bill, licenceSummaries } = await FetchBillService.go(id)
+export default async function go(id) {
+  const { bill, licenceSummaries } = await FetchBillService(id)
   const billingAccount = await _fetchBillingAccount(bill.billingAccountId)
 
   // Irrespective of of how many licences are linked to the bill, the templates always need formatted bill and billing
@@ -57,11 +57,4 @@ async function go(id) {
 
 async function _fetchBillingAccount(billingAccountId) {
   return BillingAccountModel.query().findById(billingAccountId).modify('contactDetails')
-}
-
-export {
-  go
-}
-export default {
-  go
 }

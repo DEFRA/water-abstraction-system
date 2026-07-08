@@ -14,8 +14,8 @@ import FetchCompanyService from '../../../dal/companies/fetch-company.dal.js'
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(companyId) {
-  const company = await FetchCompanyService.go(companyId)
+export default async function go(companyId) {
+  const company = await FetchCompanyService(companyId)
 
   const licences = await FetchCompanyLicencesDal(companyId)
 
@@ -25,11 +25,4 @@ async function go(companyId) {
   }
 
   return CreateSessionDal(data)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

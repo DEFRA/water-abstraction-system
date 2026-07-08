@@ -35,7 +35,7 @@ describe('DAL - Return Versions - Fetch Current Return Versions dal', () => {
 
   describe('when called without a transaction', () => {
     it('fetches the current return versions for the specified licence', async () => {
-      const result = await FetchCurrentReturnVersionsDal.go(licenceId)
+      const result = await FetchCurrentReturnVersionsDal(licenceId)
 
       expect(result).toHaveLength(2)
       expect(result[0].startDate.getTime()).toBeGreaterThan(result[1].startDate.getTime())
@@ -54,7 +54,7 @@ describe('DAL - Return Versions - Fetch Current Return Versions dal', () => {
     })
 
     it('fetches the current return versions for the specified licence', async () => {
-      const result = await FetchCurrentReturnVersionsDal.go(licenceId, trx)
+      const result = await FetchCurrentReturnVersionsDal(licenceId, trx)
 
       expect(result).toHaveLength(2)
       expect(result[0].startDate.getTime()).toBeGreaterThan(result[1].startDate.getTime())

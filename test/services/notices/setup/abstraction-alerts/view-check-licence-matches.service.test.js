@@ -48,7 +48,7 @@ describe('Notices - Setup - Abstraction Alerts - View Check Licence Matches serv
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCheckLicenceMatchesService.go(session.id, yarStub)
+      const result = await ViewCheckLicenceMatchesService(session.id, yarStub)
 
       expect(result).toEqual({
         activeNavBar: 'notices',
@@ -115,7 +115,7 @@ describe('Notices - Setup - Abstraction Alerts - View Check Licence Matches serv
       })
 
       it('should set the notification', async () => {
-        const result = await ViewCheckLicenceMatchesService.go(session.id, yarStub)
+        const result = await ViewCheckLicenceMatchesService(session.id, yarStub)
 
         expect(result.notification).toEqual('Test notification')
       })

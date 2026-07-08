@@ -57,7 +57,7 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       })
 
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
-        const results = await FetchRecipientsService.go(session, download)
+        const results = await FetchRecipientsService(session, download)
 
         expect(fetchAbstractionAlertRecipientsStub.calledOnceWith(session)).toBe(true)
 
@@ -92,7 +92,7 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       })
 
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
-        const results = await FetchRecipientsService.go(session, download)
+        const results = await FetchRecipientsService(session, download)
 
         expect(fetchPaperReturnsRecipientsStub.calledOnceWith(session, download)).toBe(true)
 
@@ -118,7 +118,7 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       })
 
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
-        const results = await FetchRecipientsService.go(session, download)
+        const results = await FetchRecipientsService(session, download)
 
         expect(fetchPaperReturnsRecipientsStub.calledOnceWith(session, download)).toBe(true)
 
@@ -150,7 +150,7 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       })
 
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
-        const results = await FetchRecipientsService.go(session, download)
+        const results = await FetchRecipientsService(session, download)
 
         expect(fetchRenewalInvitationRecipientsStub.calledOnceWith(session)).toBe(true)
 
@@ -185,7 +185,7 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       })
 
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
-        const results = await FetchRecipientsService.go(session, download)
+        const results = await FetchRecipientsService(session, download)
 
         expect(fetchReturnsInvitationRecipientsStub.calledOnceWith(session, download)).toBe(true)
 
@@ -211,7 +211,7 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       })
 
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
-        const results = await FetchRecipientsService.go(session, download)
+        const results = await FetchRecipientsService(session, download)
 
         expect(fetchReturnsInvitationRecipientsStub.calledOnceWith(session, download)).toBe(true)
 
@@ -246,7 +246,7 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       })
 
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
-        const results = await FetchRecipientsService.go(session, download)
+        const results = await FetchRecipientsService(session, download)
 
         expect(fetchReturnsReminderRecipientsStub.calledOnceWith(session, download)).toBe(true)
 
@@ -272,7 +272,7 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       })
 
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
-        const results = await FetchRecipientsService.go(session, download)
+        const results = await FetchRecipientsService(session, download)
 
         expect(fetchReturnsReminderRecipientsStub.calledOnceWith(session, download)).toBe(true)
 

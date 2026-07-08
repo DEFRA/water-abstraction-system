@@ -37,7 +37,7 @@ import UnflagUnbilledSupplementaryLicencesService from '../unflag-unbilled-suppl
  * @param {module:BillRunModel} billRun - The instance of the supplementary two-part tariff bill run that has been
  * reviewed and is ready for generating
  */
-async function go(billRun) {
+export default async function go(billRun) {
   const { id: billRunId } = billRun
 
   try {
@@ -49,7 +49,7 @@ async function go(billRun) {
 
     calculateAndLogTimeTaken(startTime, 'Generate supplementary two-part tariff bill run complete', { billRunId })
   } catch (error) {
-    await HandleErroredBillRunService.go(billRunId, error.code)
+    await HandleErroredBillRunService(billRunId, error.code)
     globalThis.GlobalNotifier.omfg('Generate supplementary two-part tariff bill run failed', { billRun }, error)
   }
 }
@@ -75,7 +75,7 @@ function _billingPeriod(billRun) {
 
 async function _fetchBillingAccounts(billRunId, billingPeriod) {
   try {
-    return await FetchBillingAccountsService.go(billRunId, billingPeriod)
+    return await FetchBillingAccountsService(billRunId, billingPeriod)
   } catch (error) {
     // We know we're saying we failed to process charge versions. But we're stuck with the legacy error codes and this
     // is the closest one related to what stage we're at in the process
@@ -102,7 +102,7 @@ async function _finaliseBillRun(billRun, billRunPopulated) {
   // will be flagged as errored and the unassigned from the licences. They can then be processed again. If we get to
   // here though, we're removing the licence supplementary year record, because we are saying the licence has been
   // processed and no new bill was needed.
-  await UnflagUnbilledSupplementaryLicencesService.go(billRun)
+  await UnflagUnbilledSupplementaryLicencesService(billRun)
 }
 
 async function _processBillingPeriod(billingPeriod, billRun) {
@@ -110,12 +110,7 @@ async function _processBillingPeriod(billingPeriod, billRun) {
 
   const billingAccounts = await _fetchBillingAccounts(billRunId, billingPeriod)
 
-  const billRunPopulated = await ProcessBillingPeriodService.go(billRun, billingPeriod, billingAccounts)
+  const billRunPopulated = await ProcessBillingPeriodService(billRun, billingPeriod, billingAccounts)
 
   await _finaliseBillRun(billRun, billRunPopulated)
-}
-
-export { go }
-export default {
-  go
 }

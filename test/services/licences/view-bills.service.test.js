@@ -51,7 +51,7 @@ describe('Licences - View Bills service', () => {
   describe('when a bill', () => {
     describe('and it has no optional fields', () => {
       it('will return all the mandatory data and default values for use in the licence bills page', async () => {
-        const result = await ViewBillsService.go(licenceId, auth)
+        const result = await ViewBillsService(licenceId, auth)
 
         expect(result).toEqual({
           activeSecondaryNav: 'bills',

@@ -36,7 +36,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
     })
 
     it('returns the correct csv string, filename and type', async () => {
-      const result = await ProcessDownloadRecipientsService.go(session.id)
+      const result = await ProcessDownloadRecipientsService(session.id)
 
       const recipientRow = _transformAbstractionAlertRecipientToRow(recipient, session)
 
@@ -62,7 +62,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
     })
 
     it('returns the correct csv string, filename and type', async () => {
-      const result = await ProcessDownloadRecipientsService.go(session.id)
+      const result = await ProcessDownloadRecipientsService(session.id)
 
       const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
@@ -88,7 +88,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
     })
 
     it('returns the correct csv string, filename and type', async () => {
-      const result = await ProcessDownloadRecipientsService.go(session.id)
+      const result = await ProcessDownloadRecipientsService(session.id)
 
       const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
@@ -114,7 +114,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
     })
 
     it('returns the correct csv string, filename and type', async () => {
-      const result = await ProcessDownloadRecipientsService.go(session.id)
+      const result = await ProcessDownloadRecipientsService(session.id)
 
       const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
@@ -140,7 +140,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
     })
 
     it('returns the correct csv string, filename and type', async () => {
-      const result = await ProcessDownloadRecipientsService.go(session.id)
+      const result = await ProcessDownloadRecipientsService(session.id)
 
       const recipientRow = _transformRenewalRecipientToRow(recipient, session)
 

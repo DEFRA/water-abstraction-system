@@ -24,7 +24,7 @@ const MAX_DECIMAL = 6
  *
  * @param {object} session - Session object containing the return submission data
  */
-function go(session) {
+export default function go(session) {
   const { fromFullDate, lines, singleVolumeQuantity, toFullDate, unitSymbol } = session
 
   const linesInsideAbstractionPeriod = _linesInsideAbstractionPeriod(fromFullDate, lines, toFullDate)
@@ -106,9 +106,4 @@ function _linesInsideAbstractionPeriod(fromFullDate, lines, toFullDate) {
 
 function _lineWithinAbstractionPeriod(lineStartDate, lineEndDate, fromFullDate, toFullDate) {
   return lineStartDate >= fromFullDate && lineEndDate <= toFullDate
-}
-
-export { go }
-export default {
-  go
 }

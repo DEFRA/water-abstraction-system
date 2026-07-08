@@ -54,7 +54,7 @@ describe('Company contact - Fetch Notifications DAL', () => {
 
   describe('when the company contact has notifications', () => {
     it('returns the matching notifications', async () => {
-      const result = await FetchNotificationsDal.go(email)
+      const result = await FetchNotificationsDal(email)
 
       expect(result).toEqual({
         notifications: [
@@ -94,7 +94,7 @@ describe('Company contact - Fetch Notifications DAL', () => {
     })
 
     it('returns no notifications', async () => {
-      const result = await FetchNotificationsDal.go(email)
+      const result = await FetchNotificationsDal(email)
 
       expect(result).toEqual({
         notifications: [],
@@ -109,7 +109,7 @@ describe('Company contact - Fetch Notifications DAL', () => {
     })
 
     it('returns no notifications', async () => {
-      const result = await FetchNotificationsDal.go(email)
+      const result = await FetchNotificationsDal(email)
 
       expect(result).toEqual({
         notifications: [],

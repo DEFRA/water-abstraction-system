@@ -41,7 +41,7 @@ describe('Bill Runs - Setup - Submit Year service', () => {
         })
 
         it('saves the submitted value and returns an object confirming setup is complete', async () => {
-          const result = await SubmitYearService.go(session.id, payload)
+          const result = await SubmitYearService(session.id, payload)
 
           expect(session.year).toEqual('2026')
           expect(result.setupComplete).toBe(true)
@@ -57,7 +57,7 @@ describe('Bill Runs - Setup - Submit Year service', () => {
         })
 
         it('saves the submitted value and returns an object confirming setup is not complete', async () => {
-          const result = await SubmitYearService.go(session.id, payload)
+          const result = await SubmitYearService(session.id, payload)
 
           expect(session.year).toEqual('2022')
           expect(result.setupComplete).toBe(false)
@@ -84,7 +84,7 @@ describe('Bill Runs - Setup - Submit Year service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitYearService.go(session.id, payload)
+          const result = await SubmitYearService(session.id, payload)
 
           expect(yearsStub.calledWith(regionId, true)).toBe(true)
 

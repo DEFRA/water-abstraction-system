@@ -27,7 +27,7 @@ import { flashNotification } from '../../../lib/general.lib.js'
  * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the frequency collected page including the validation error details
  */
-async function go(sessionId, requirementIndex, payload, yar) {
+export default async function go(sessionId, requirementIndex, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
@@ -62,9 +62,4 @@ function _validate(payload) {
   const validation = FrequencyCollectedValidator.go(payload)
 
   return formatValidationResult(validation)
-}
-
-export { go }
-export default {
-  go
 }

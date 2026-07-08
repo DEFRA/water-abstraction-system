@@ -75,7 +75,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does nothing', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(false)
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -97,14 +97,14 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('updates the status of the notification to "sent"', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(true)
           expect(notificationPatchStub.firstCall.args[0]).toMatchObject({ notifyStatus: 'received', status: 'sent' })
         })
 
         it('updates the linked licence monitoring station record', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(licenceMonitoringStationPatchStub.called).toBe(true)
           expect(licenceMonitoringStationPatchStub.firstCall.args[0]).toEqual({
@@ -128,7 +128,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('updates the status of the notification to "error"', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(true)
           expect(notificationPatchStub.firstCall.args[0]).toMatchObject({
@@ -138,7 +138,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does not update the linked licence monitoring station record', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
         })
@@ -158,7 +158,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does nothing', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(false)
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -187,7 +187,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does nothing', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(false)
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -209,14 +209,14 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('updates the status of the notification to "sent"', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(true)
           expect(notificationPatchStub.firstCall.args[0]).toMatchObject({ notifyStatus: 'delivered', status: 'sent' })
         })
 
         it('updates the linked licence monitoring station record', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(licenceMonitoringStationPatchStub.called).toBe(true)
           expect(licenceMonitoringStationPatchStub.firstCall.args[0]).toEqual({
@@ -240,7 +240,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('updates the status of the notification to "error"', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(true)
           expect(notificationPatchStub.firstCall.args[0]).toMatchObject({
@@ -250,7 +250,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does not update the linked licence monitoring station record', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
         })
@@ -270,7 +270,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does nothing', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(false)
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -310,7 +310,7 @@ describe('Notifications - Check Notification Status service', () => {
       })
 
       it('does nothing', async () => {
-        await CheckNotificationStatusService.go(notification)
+        await CheckNotificationStatusService(notification)
 
         expect(notificationPatchStub.called).toBe(false)
         expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -334,21 +334,21 @@ describe('Notifications - Check Notification Status service', () => {
       })
 
       it('updates the status of the notification to "sent"', async () => {
-        await CheckNotificationStatusService.go(notification)
+        await CheckNotificationStatusService(notification)
 
         expect(notificationPatchStub.called).toBe(true)
         expect(notificationPatchStub.firstCall.args[0]).toMatchObject({ notifyStatus: 'received', status: 'sent' })
       })
 
       it('does not attempt to update anything in licence monitoring stations', async () => {
-        await CheckNotificationStatusService.go(notification)
+        await CheckNotificationStatusService(notification)
 
         expect(licenceMonitoringStationPatchStub.called).toBe(false)
       })
 
       describe('and the contact type was "licence holder" or "single use"', () => {
         it('attempts to set the due date for the linked return log records', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(returnLogPatchStub.called).toBe(true)
           expect(returnLogPatchStub.firstCall.args[0]).toMatchObject({
@@ -368,7 +368,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does not attempt to set the due date for the linked return log records.', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(returnLogPatchStub.called).toBe(false)
         })
@@ -389,7 +389,7 @@ describe('Notifications - Check Notification Status service', () => {
       })
 
       it('updates the status of the notification to "error"', async () => {
-        await CheckNotificationStatusService.go(notification)
+        await CheckNotificationStatusService(notification)
 
         expect(notificationPatchStub.called).toBe(true)
         expect(notificationPatchStub.firstCall.args[0]).toMatchObject({
@@ -413,7 +413,7 @@ describe('Notifications - Check Notification Status service', () => {
       })
 
       it('updates the status of the notification to "cancelled"', async () => {
-        await CheckNotificationStatusService.go(notification)
+        await CheckNotificationStatusService(notification)
 
         expect(notificationPatchStub.called).toBe(true)
         expect(notificationPatchStub.firstCall.args[0]).toMatchObject({
@@ -437,7 +437,7 @@ describe('Notifications - Check Notification Status service', () => {
       })
 
       it('does nothing', async () => {
-        await CheckNotificationStatusService.go(notification)
+        await CheckNotificationStatusService(notification)
 
         expect(notificationPatchStub.called).toBe(false)
         expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -480,7 +480,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does nothing', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(false)
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -504,21 +504,21 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('updates the status of the notification to "sent"', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(true)
           expect(notificationPatchStub.firstCall.args[0]).toMatchObject({ notifyStatus: 'received', status: 'sent' })
         })
 
         it('does not attempt to update anything in licence monitoring stations', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
         })
 
         describe('and the contact type was "licence holder" or "single use"', () => {
           it('attempts to set the due date for the linked return log records', async () => {
-            await CheckNotificationStatusService.go(notification)
+            await CheckNotificationStatusService(notification)
 
             expect(returnLogPatchStub.called).toBe(true)
             expect(returnLogPatchStub.firstCall.args[0]).toMatchObject({
@@ -538,7 +538,7 @@ describe('Notifications - Check Notification Status service', () => {
           })
 
           it('does not attempt to set the due date for the linked return log records.', async () => {
-            await CheckNotificationStatusService.go(notification)
+            await CheckNotificationStatusService(notification)
 
             expect(returnLogPatchStub.called).toBe(false)
           })
@@ -559,7 +559,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('updates the status of the notification to "error"', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(true)
           expect(notificationPatchStub.firstCall.args[0]).toMatchObject({
@@ -583,7 +583,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does nothing', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(false)
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -612,7 +612,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does nothing', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(false)
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -634,21 +634,21 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('updates the status of the notification to "sent"', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(true)
           expect(notificationPatchStub.firstCall.args[0]).toMatchObject({ notifyStatus: 'delivered', status: 'sent' })
         })
 
         it('does not attempt to update anything in licence monitoring stations', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
         })
 
         describe('and the contact type was "primary user" or "single use"', () => {
           it('attempts to set the due date for the linked return log records', async () => {
-            await CheckNotificationStatusService.go(notification)
+            await CheckNotificationStatusService(notification)
 
             expect(returnLogPatchStub.called).toBe(true)
             expect(returnLogPatchStub.firstCall.args[0]).toMatchObject({
@@ -668,7 +668,7 @@ describe('Notifications - Check Notification Status service', () => {
           })
 
           it('does not attempt to set the due date for the linked return log records.', async () => {
-            await CheckNotificationStatusService.go(notification)
+            await CheckNotificationStatusService(notification)
 
             expect(returnLogPatchStub.called).toBe(false)
           })
@@ -689,7 +689,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('updates the status of the notification to "error"', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(true)
           expect(notificationPatchStub.firstCall.args[0]).toMatchObject({
@@ -713,7 +713,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does nothing', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(false)
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -757,7 +757,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does nothing', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(false)
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -781,21 +781,21 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('updates the status of the notification to "sent"', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(true)
           expect(notificationPatchStub.firstCall.args[0]).toMatchObject({ notifyStatus: 'received', status: 'sent' })
         })
 
         it('does not attempt to update anything in licence monitoring stations', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
         })
 
         describe('and the contact type was "licence holder" or "single use"', () => {
           it('attempts to set the due date for the linked return log records', async () => {
-            await CheckNotificationStatusService.go(notification)
+            await CheckNotificationStatusService(notification)
 
             expect(returnLogPatchStub.called).toBe(true)
             expect(returnLogPatchStub.firstCall.args[0]).toMatchObject({
@@ -815,7 +815,7 @@ describe('Notifications - Check Notification Status service', () => {
           })
 
           it('does not attempt to set the due date for the linked return log records.', async () => {
-            await CheckNotificationStatusService.go(notification)
+            await CheckNotificationStatusService(notification)
 
             expect(returnLogPatchStub.called).toBe(false)
           })
@@ -836,7 +836,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('updates the status of the notification to "error"', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(true)
           expect(notificationPatchStub.firstCall.args[0]).toMatchObject({
@@ -860,7 +860,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does nothing', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(false)
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -889,7 +889,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does nothing', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(false)
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -911,21 +911,21 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('updates the status of the notification to "sent"', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(true)
           expect(notificationPatchStub.firstCall.args[0]).toMatchObject({ notifyStatus: 'delivered', status: 'sent' })
         })
 
         it('does not attempt to update anything in licence monitoring stations', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
         })
 
         describe('and the contact type was "primary user" or "single use"', () => {
           it('attempts to set the due date for the linked return log records', async () => {
-            await CheckNotificationStatusService.go(notification)
+            await CheckNotificationStatusService(notification)
 
             expect(returnLogPatchStub.called).toBe(true)
             expect(returnLogPatchStub.firstCall.args[0]).toMatchObject({
@@ -945,7 +945,7 @@ describe('Notifications - Check Notification Status service', () => {
           })
 
           it('does not attempt to set the due date for the linked return log records.', async () => {
-            await CheckNotificationStatusService.go(notification)
+            await CheckNotificationStatusService(notification)
 
             expect(returnLogPatchStub.called).toBe(false)
           })
@@ -966,7 +966,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('updates the status of the notification to "error"', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(true)
           expect(notificationPatchStub.firstCall.args[0]).toMatchObject({
@@ -990,7 +990,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does nothing', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(false)
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -1033,7 +1033,7 @@ describe('Notifications - Check Notification Status service', () => {
       })
 
       it('does nothing', async () => {
-        await CheckNotificationStatusService.go(notification)
+        await CheckNotificationStatusService(notification)
 
         expect(notificationPatchStub.called).toBe(false)
         expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -1057,21 +1057,21 @@ describe('Notifications - Check Notification Status service', () => {
       })
 
       it('updates the status of the notification to "sent"', async () => {
-        await CheckNotificationStatusService.go(notification)
+        await CheckNotificationStatusService(notification)
 
         expect(notificationPatchStub.called).toBe(true)
         expect(notificationPatchStub.firstCall.args[0]).toMatchObject({ notifyStatus: 'received', status: 'sent' })
       })
 
       it('does not attempt to update anything in licence monitoring stations', async () => {
-        await CheckNotificationStatusService.go(notification)
+        await CheckNotificationStatusService(notification)
 
         expect(licenceMonitoringStationPatchStub.called).toBe(false)
       })
 
       describe('and the contact type was "licence holder" or "single use"', () => {
         it('attempts to set the due date for the linked return log records', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(returnLogPatchStub.called).toBe(true)
           expect(returnLogPatchStub.firstCall.args[0]).toMatchObject({
@@ -1091,7 +1091,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does not attempt to set the due date for the linked return log records.', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(returnLogPatchStub.called).toBe(false)
         })
@@ -1112,7 +1112,7 @@ describe('Notifications - Check Notification Status service', () => {
       })
 
       it('updates the status of the notification to "error"', async () => {
-        await CheckNotificationStatusService.go(notification)
+        await CheckNotificationStatusService(notification)
 
         expect(notificationPatchStub.called).toBe(true)
         expect(notificationPatchStub.firstCall.args[0]).toMatchObject({
@@ -1136,7 +1136,7 @@ describe('Notifications - Check Notification Status service', () => {
       })
 
       it('does nothing', async () => {
-        await CheckNotificationStatusService.go(notification)
+        await CheckNotificationStatusService(notification)
 
         expect(notificationPatchStub.called).toBe(false)
         expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -1172,7 +1172,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does nothing', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(false)
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -1196,7 +1196,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('updates the status of the notification to "sent"', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(true)
           expect(notificationPatchStub.firstCall.args[0]).toMatchObject({ notifyStatus: 'received', status: 'sent' })
@@ -1217,7 +1217,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('updates the status of the notification to "error"', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(true)
           expect(notificationPatchStub.firstCall.args[0]).toMatchObject({
@@ -1241,7 +1241,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does nothing', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(false)
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -1270,7 +1270,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does nothing', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(false)
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -1292,7 +1292,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('updates the status of the notification to "sent"', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(true)
           expect(notificationPatchStub.firstCall.args[0]).toMatchObject({ notifyStatus: 'delivered', status: 'sent' })
@@ -1313,7 +1313,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('updates the status of the notification to "error"', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(true)
           expect(notificationPatchStub.firstCall.args[0]).toMatchObject({
@@ -1337,7 +1337,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
 
         it('does nothing', async () => {
-          await CheckNotificationStatusService.go(notification)
+          await CheckNotificationStatusService(notification)
 
           expect(notificationPatchStub.called).toBe(false)
           expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -1367,7 +1367,7 @@ describe('Notifications - Check Notification Status service', () => {
     })
 
     it('does nothing', async () => {
-      await CheckNotificationStatusService.go(notification)
+      await CheckNotificationStatusService(notification)
 
       expect(notificationPatchStub.called).toBe(false)
       expect(licenceMonitoringStationPatchStub.called).toBe(false)
@@ -1375,7 +1375,7 @@ describe('Notifications - Check Notification Status service', () => {
     })
 
     it('logs the failure', async () => {
-      await CheckNotificationStatusService.go(notification)
+      await CheckNotificationStatusService(notification)
 
       const errorLogArgs = notifierStub.omfg.firstCall.args
 
@@ -1426,7 +1426,7 @@ describe('Notifications - Check Notification Status service', () => {
     })
 
     it('makes no changes and logs the failure', async () => {
-      await CheckNotificationStatusService.go(notification)
+      await CheckNotificationStatusService(notification)
 
       const errorLogArgs = notifierStub.omfg.firstCall.args
 

@@ -15,8 +15,8 @@ import ReviewChargeReferencePresenter from '../../../presenters/bill-runs/review
  * @returns {Promise<object>} the 'pageData' needed for the review charge reference page. It contains details of the
  * bill run, charge reference and the charge adjustments
  */
-async function go(reviewChargeReferenceId, yar) {
-  const reviewChargeReference = await FetchReviewChargeReferenceService.go(reviewChargeReferenceId)
+export default async function go(reviewChargeReferenceId, yar) {
+  const reviewChargeReference = await FetchReviewChargeReferenceService(reviewChargeReferenceId)
 
   const [bannerMessage] = yar.flash('banner')
   const [chargeMessage] = yar.flash('charge')
@@ -29,9 +29,4 @@ async function go(reviewChargeReferenceId, yar) {
     chargeMessage,
     ...pagedata
   }
-}
-
-export { go }
-export default {
-  go
 }

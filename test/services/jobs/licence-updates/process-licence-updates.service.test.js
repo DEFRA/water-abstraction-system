@@ -50,7 +50,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     })
 
     it('adds the updated licences to workflow', async () => {
-      await ProcessLicenceUpdatesService.go()
+      await ProcessLicenceUpdatesService()
 
       const results = await WorkflowModel.query()
         .whereIn('licenceId', [fetchResults[0].licenceId, fetchResults[1].licenceId])
@@ -70,7 +70,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
-      await ProcessLicenceUpdatesService.go()
+      await ProcessLicenceUpdatesService()
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -91,7 +91,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     it('adds nothing to workflow', async () => {
       const previousResults = await WorkflowModel.query().orderBy('createdAt', 'asc')
 
-      await ProcessLicenceUpdatesService.go()
+      await ProcessLicenceUpdatesService()
 
       const results = await WorkflowModel.query().orderBy('createdAt', 'asc')
 
@@ -99,7 +99,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
-      await ProcessLicenceUpdatesService.go()
+      await ProcessLicenceUpdatesService()
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -116,7 +116,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     })
 
     it('records the error by calling "omfg()"', async () => {
-      await ProcessLicenceUpdatesService.go()
+      await ProcessLicenceUpdatesService()
 
       const args = notifierStub.omfg.firstCall.args
 
@@ -126,7 +126,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     })
 
     it('notifies the team by calling "redAlert()"', async () => {
-      await ProcessLicenceUpdatesService.go()
+      await ProcessLicenceUpdatesService()
 
       const args = notifierStub.redAlert.firstCall.args
 
@@ -134,7 +134,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     })
 
     it('does not throw an error', async () => {
-      await ProcessLicenceUpdatesService.go()
+      await ProcessLicenceUpdatesService()
     })
   })
 })

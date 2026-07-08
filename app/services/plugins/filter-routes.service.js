@@ -27,7 +27,7 @@
  * @returns {object[]} an array of Hapi routes, filtered depending on the current environment and whether any paths
  * have been registered as needing filtering
  */
-function go(routes, environment) {
+export default function go(routes, environment) {
   if (_protectedEnvironment(environment)) {
     return _filteredRoutes(routes)
   }
@@ -43,11 +43,4 @@ function _filteredRoutes(routes) {
   return routes.filter((route) => {
     return !route?.options?.app?.excludeFromProd
   })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

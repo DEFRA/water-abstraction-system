@@ -54,13 +54,13 @@ describe('Return Versions Setup - Site Description service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await SiteDescriptionService.go(session.id, requirementIndex)
+      const result = await SiteDescriptionService(session.id, requirementIndex)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await SiteDescriptionService.go(session.id, requirementIndex)
+      const result = await SiteDescriptionService(session.id, requirementIndex)
 
       expect(result).toMatchObject({
         pageTitle: 'Enter a site description for the requirements for returns',

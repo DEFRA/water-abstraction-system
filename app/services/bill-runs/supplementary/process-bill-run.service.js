@@ -20,7 +20,7 @@ import UnflagUnbilledSupplementaryLicencesService from '../unflag-unbilled-suppl
  * @param {module:BillRunModel} billRun
  * @param {object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`
  */
-async function go(billRun, billingPeriods) {
+export default async function go(billRun, billingPeriods) {
   const { id: billRunId } = billRun
 
   try {
@@ -32,7 +32,7 @@ async function go(billRun, billingPeriods) {
 
     calculateAndLogTimeTaken(startTime, 'Process bill run complete', { billRunId, type: 'supplementary' })
   } catch (error) {
-    await HandleErroredBillRunService.go(billRunId, error.code)
+    await HandleErroredBillRunService(billRunId, error.code)
     _logError(billRun, error)
   }
 }
@@ -46,7 +46,7 @@ async function _processBillingPeriods(billingPeriods, billRun) {
 
   for (const billingPeriod of billingPeriods) {
     const { chargeVersions, licenceIdsForPeriod } = await _fetchChargeVersions(billRun, billingPeriod)
-    const isPeriodPopulated = await ProcessBillingPeriodService.go(billRun, billingPeriod, chargeVersions)
+    const isPeriodPopulated = await ProcessBillingPeriodService(billRun, billingPeriod, chargeVersions)
 
     accumulatedLicenceIds.push(...licenceIdsForPeriod)
     results.push(isPeriodPopulated)
@@ -57,9 +57,9 @@ async function _processBillingPeriods(billingPeriods, billRun) {
 
 async function _fetchChargeVersions(billRun, billingPeriod) {
   try {
-    const chargeVersionData = await FetchChargeVersionsService.go(billRun.regionId, billingPeriod)
+    const chargeVersionData = await FetchChargeVersionsService(billRun.regionId, billingPeriod)
 
-    // We don't just `return FetchChargeVersionsService.go()` as we need to call HandleErroredBillRunService if it
+    // We don't just `return FetchChargeVersionsService()` as we need to call HandleErroredBillRunService if it
     // fails
     return chargeVersionData
   } catch (error) {
@@ -79,7 +79,7 @@ async function _finaliseBillRun(billRun, accumulatedLicenceIds, resultsOfProcess
   // .findByIds() so we spread it into an array
   const allLicenceIds = [...new Set(accumulatedLicenceIds)]
 
-  await UnflagUnbilledSupplementaryLicencesService.go(billRun, allLicenceIds)
+  await UnflagUnbilledSupplementaryLicencesService(billRun, allLicenceIds)
 
   // We set `isPopulated` to `true` if at least one processing result was truthy
   const isPopulated = resultsOfProcessing.some(Boolean)
@@ -105,9 +105,4 @@ function _logError(billRun, error) {
 
 async function _updateStatus(billRunId, status) {
   await BillRunModel.query().findById(billRunId).patch({ status })
-}
-
-export { go }
-export default {
-  go
 }

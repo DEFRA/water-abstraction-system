@@ -22,7 +22,7 @@ import { db } from '../../../../db/db.js'
  *
  * @returns {Promise<object>} - The data needed to determine which supplementary flags the licence needs
  */
-async function go(workflowId) {
+export default async function go(workflowId) {
   const query = _query()
 
   const {
@@ -71,11 +71,4 @@ function _query() {
       ON l.id = w.licence_id
     WHERE w.id = ?
 `
-}
-
-export {
-  go
-}
-export default {
-  go
 }

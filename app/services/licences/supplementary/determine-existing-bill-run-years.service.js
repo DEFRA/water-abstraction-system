@@ -22,7 +22,7 @@ import BillRunModel from '../../../models/bill-run.model.js'
  *
  * @returns {Promise<object[]>} - The years that can be flagged for supplementary billing
  */
-async function go(regionId, years, twoPartTariff) {
+export default async function go(regionId, years, twoPartTariff) {
   return _supplementaryBillingYears(regionId, years, twoPartTariff)
 }
 
@@ -47,11 +47,4 @@ async function _supplementaryBillingYears(regionId, years, twoPartTariff) {
   return billRuns.map((billRun) => {
     return billRun.toFinancialYearEnding
   })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

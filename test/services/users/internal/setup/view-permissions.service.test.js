@@ -42,7 +42,7 @@ describe('Users - Internal - Setup - View Permissions Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewPermissionsService.go(auth, session.id)
+      const result = await ViewPermissionsService(auth, session.id)
 
       expect(result).toEqual({
         activeNavBar: 'users',

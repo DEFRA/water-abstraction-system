@@ -51,7 +51,7 @@ describe('Return Versions - Setup - Fetch Purposes service', () => {
 
   describe('when called with a valid licenceVersionId', () => {
     it('fetches the data', async () => {
-      const result = await FetchPurposesService.go(licenceVersion.id)
+      const result = await FetchPurposesService(licenceVersion.id)
 
       expect(result[0]).toEqual({
         id: purposes[1].id,
@@ -70,7 +70,7 @@ describe('Return Versions - Setup - Fetch Purposes service', () => {
 
   describe('when called with an invalid licenceVersionId', () => {
     it('returns an empty result', async () => {
-      const result = await FetchPurposesService.go('5505ca34-270a-4dfb-894c-168c8a4d6e23')
+      const result = await FetchPurposesService('5505ca34-270a-4dfb-894c-168c8a4d6e23')
 
       expect(result).toHaveLength(0)
     })

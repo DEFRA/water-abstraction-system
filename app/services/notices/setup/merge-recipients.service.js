@@ -11,7 +11,7 @@
  *
  * @returns {object[]} all recipients from both groups, filtered by those selected
  */
-function go(session, fetchedRecipients) {
+export default function go(session, fetchedRecipients) {
   const { selectedRecipients } = session
   const allRecipients = _additionalRecipients(session, fetchedRecipients)
 
@@ -65,9 +65,4 @@ function _selectedRecipients(selectedRecipients, allRecipients) {
   return allRecipients.filter((recipient) => {
     return selectedRecipients.includes(recipient.contact_hash_id)
   })
-}
-
-export { go }
-export default {
-  go
 }

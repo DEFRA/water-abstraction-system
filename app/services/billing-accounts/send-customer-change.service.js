@@ -28,7 +28,7 @@ import ExpandedError from '../../errors/expanded.error.js'
  * @param {module:ContactModel} contact - The new contact for the billing account if an FAO was setup by the user during
  * the change address journey
  */
-async function go(billingAccount, address, company, contact) {
+export default async function go(billingAccount, address, company, contact) {
   const requestData = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
   const result = await send(requestData)
@@ -36,11 +36,4 @@ async function go(billingAccount, address, company, contact) {
   if (!result.succeeded) {
     throw new ExpandedError('Customer change failed to send', { billingAccountId: billingAccount.id })
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

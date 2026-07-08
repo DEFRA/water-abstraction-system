@@ -75,7 +75,7 @@ import Sanitizer from 'sanitizer'
  *
  * @returns {object} - returns a 'clean' payload object
  */
-function go(payload) {
+export default function go(payload) {
   return _cleanObject(payload)
 }
 
@@ -219,11 +219,4 @@ function _cleanValue(value) {
   }
 
   return value
-}
-
-export {
-  go
-}
-export default {
-  go
 }

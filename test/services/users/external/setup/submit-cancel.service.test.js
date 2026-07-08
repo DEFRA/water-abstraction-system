@@ -34,13 +34,13 @@ describe('Users - External - Setup - Submit Cancel service', () => {
 
   describe('when called', () => {
     it('clears the session', async () => {
-      await SubmitCancelService.go(session.id)
+      await SubmitCancelService(session.id)
 
       expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
     })
 
     it('returns the redirect url', async () => {
-      const result = await SubmitCancelService.go(session.id)
+      const result = await SubmitCancelService(session.id)
 
       expect(result).toEqual({
         redirectUrl: `/system/users/external/${session.user.id}/licences?back=${session.activeNavBar}`

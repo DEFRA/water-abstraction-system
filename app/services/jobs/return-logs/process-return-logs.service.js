@@ -29,19 +29,19 @@ import FetchReturnRequirementsService from './fetch-return-requirements.service.
  *
  * @param {string} cycle - the return cycle to create logs for (summer or all-year)
  */
-async function go(cycle) {
+export default async function go(cycle) {
   try {
     const startTime = currentTimeInNanoseconds()
 
     const summer = cycle === 'summer'
-    const returnCycle = await CheckReturnCycleService.go(summer)
-    const returnRequirements = await FetchReturnRequirementsService.go(returnCycle)
+    const returnCycle = await CheckReturnCycleService(summer)
+    const returnRequirements = await FetchReturnRequirementsService(returnCycle)
 
     for (const returnRequirement of returnRequirements) {
       const licenceEndDate = _endDate(returnRequirement.returnVersion)
 
       try {
-        await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate)
+        await CreateReturnLogsService(returnRequirement, returnCycle, licenceEndDate)
       } catch (error) {
         globalThis.GlobalNotifier.omfg('Return logs creation errored', { returnRequirement, returnCycle }, error)
       }
@@ -60,11 +60,4 @@ function _endDate(returnVersion) {
   const { licence } = returnVersion
 
   return determineEarliestDate([licence.expiredDate, licence.lapsedDate, licence.revokedDate])
-}
-
-export {
-  go
-}
-export default {
-  go
 }

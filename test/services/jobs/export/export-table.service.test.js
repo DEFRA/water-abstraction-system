@@ -24,7 +24,7 @@ describe('Table Export service', () => {
   })
 
   it('runs the db export services', async () => {
-    await ExportTableService.go()
+    await ExportTableService()
 
     expect(writeTableToFileServiceStub.called).toBe(true)
     expect(fetchTableServiceStub.called).toBe(true)

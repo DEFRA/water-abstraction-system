@@ -16,12 +16,12 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence conditions template
  */
-async function go(licenceId, auth) {
-  const licence = await FetchLicenceService.go(licenceId)
+export default async function go(licenceId, auth) {
+  const licence = await FetchLicenceService(licenceId)
 
   const currentLicenceVersion = licence.$currentVersion()
 
-  const conditions = currentLicenceVersion ? await FetchConditionsService.go(currentLicenceVersion.id) : []
+  const conditions = currentLicenceVersion ? await FetchConditionsService(currentLicenceVersion.id) : []
 
   const pageData = ConditionsPresenter.go(conditions, licence)
 
@@ -31,11 +31,4 @@ async function go(licenceId, auth) {
     activeSummarySubNav: 'conditions',
     roles: userRoles(auth)
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

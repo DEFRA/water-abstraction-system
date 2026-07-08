@@ -46,13 +46,13 @@ describe('Return Versions Setup - Agreements Exceptions service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await AgreementsExceptionsService.go(session.id, requirementIndex)
+      const result = await AgreementsExceptionsService(session.id, requirementIndex)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await AgreementsExceptionsService.go(session.id, requirementIndex)
+      const result = await AgreementsExceptionsService(session.id, requirementIndex)
 
       expect(result).toMatchObject({
         pageTitle: 'Select agreements and exceptions for the requirements for returns',

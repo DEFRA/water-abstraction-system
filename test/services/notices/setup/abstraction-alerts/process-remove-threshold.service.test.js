@@ -40,7 +40,7 @@ describe('Notices - Setup - Abstraction Alerts -Process Remove Threshold service
   describe('when called', () => {
     describe('and there are no thresholds currently removed', () => {
       it('saves the "licenceMonitoringStationId" to the session to be excluded from the list', async () => {
-        await ProcessRemoveThresholdService.go(session.id, licenceMonitoringStations.one.id, yarStub)
+        await ProcessRemoveThresholdService(session.id, licenceMonitoringStations.one.id, yarStub)
 
         expect(session.removedThresholds).toEqual([licenceMonitoringStations.one.id])
         expect(session.$update.called).toBe(true)
@@ -57,7 +57,7 @@ describe('Notices - Setup - Abstraction Alerts -Process Remove Threshold service
       })
 
       it('saves the "licenceMonitoringStationId" to the session with the existing "removedThresholds"', async () => {
-        await ProcessRemoveThresholdService.go(session.id, licenceMonitoringStations.one.id, yarStub)
+        await ProcessRemoveThresholdService(session.id, licenceMonitoringStations.one.id, yarStub)
 
         expect(session.removedThresholds).toEqual([licenceMonitoringStations.one.id, licenceMonitoringStations.one.id])
       })
@@ -72,7 +72,7 @@ describe('Notices - Setup - Abstraction Alerts -Process Remove Threshold service
         fetchSessionStub.resolves(session)
       })
       it('sets a flash message', async () => {
-        await ProcessRemoveThresholdService.go(session.id, licenceMonitoringStations.one.id, yarStub)
+        await ProcessRemoveThresholdService(session.id, licenceMonitoringStations.one.id, yarStub)
 
         // Check we add the flash message
         const [flashType, bannerMessage] = yarStub.flash.args[0]

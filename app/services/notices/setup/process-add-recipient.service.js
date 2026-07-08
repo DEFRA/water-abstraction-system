@@ -18,7 +18,7 @@ import { flashNotification } from '../../../lib/general.lib.js'
  * @param {string} sessionId - The UUID of the current session
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-async function go(sessionId, yar) {
+export default async function go(sessionId, yar) {
   const session = await FetchSessionDal(sessionId)
   const { address } = session.addressJourney
 
@@ -97,9 +97,4 @@ async function _resetSession(session) {
   session.addressJourney.address = {}
 
   await session.$update()
-}
-
-export { go }
-export default {
-  go
 }

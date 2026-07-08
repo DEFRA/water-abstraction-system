@@ -79,7 +79,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
     })
 
     it('updates the billing accounts as expected', async () => {
-      await ProcessCustomerFilesService.go(days)
+      await ProcessCustomerFilesService(days)
 
       const refreshedAccountExportedOnce = await accountExportedOnce.$query()
       const refreshedAccountExportedTwice = await accountExportedTwice.$query()
@@ -106,7 +106,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
-      await ProcessCustomerFilesService.go(days)
+      await ProcessCustomerFilesService(days)
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -139,13 +139,13 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
     })
 
     it('updates no billing account records', async () => {
-      await ProcessCustomerFilesService.go(days)
+      await ProcessCustomerFilesService(days)
 
       expect(billRunQueryStub.called).toBe(false)
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
-      await ProcessCustomerFilesService.go(days)
+      await ProcessCustomerFilesService(days)
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -172,7 +172,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
     })
 
     it('records the error by calling "omfg()"', async () => {
-      await ProcessCustomerFilesService.go()
+      await ProcessCustomerFilesService()
 
       const args = notifierStub.omfg.firstCall.args
 
@@ -182,7 +182,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
     })
 
     it('notifies the team by calling "redAlert()"', async () => {
-      await ProcessCustomerFilesService.go()
+      await ProcessCustomerFilesService()
 
       const args = notifierStub.redAlert.firstCall.args
 
@@ -190,7 +190,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
     })
 
     it('does not throw an error', async () => {
-      await ProcessCustomerFilesService.go()
+      await ProcessCustomerFilesService()
     })
   })
 })

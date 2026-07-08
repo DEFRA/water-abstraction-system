@@ -14,7 +14,7 @@ import FetchSessionDal from '../../../dal/fetch-session.dal.js'
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   await _markCheckPageVisited(session)
@@ -30,11 +30,4 @@ async function _markCheckPageVisited(session) {
   session.checkPageVisited = true
 
   return session.$update()
-}
-
-export {
-  go
-}
-export default {
-  go
 }

@@ -51,13 +51,13 @@ describe('Return Versions Setup - No Returns Required service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await NoReturnsRequiredService.go(session.id)
+      const result = await NoReturnsRequiredService(session.id)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await NoReturnsRequiredService.go(session.id)
+      const result = await NoReturnsRequiredService(session.id)
 
       expect(result).toMatchObject({
         pageTitle: 'Why are no returns required?',

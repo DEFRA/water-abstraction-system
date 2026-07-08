@@ -14,7 +14,7 @@ import PaperReturnPresenter from '../../../presenters/notices/setup/paper-return
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = PaperReturnPresenter.go(session)
@@ -23,9 +23,4 @@ async function go(sessionId) {
     activeNavBar: 'notices',
     ...pageData
   }
-}
-
-export { go }
-export default {
-  go
 }

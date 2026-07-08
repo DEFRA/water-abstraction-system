@@ -81,7 +81,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
 
           describe('and the return requirement does not have an existing return log for the given cycle', () => {
             it('returns that matching return requirement and all related data needed to generate a return log', async () => {
-              const results = await FetchReturnRequirementsService.go(returnCycle)
+              const results = await FetchReturnRequirementsService(returnCycle)
 
               const expectedResult = _expectedResult()
 
@@ -103,7 +103,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
               })
 
               it('returns that matching return requirement and all related data needed to generate a return log', async () => {
-                const results = await FetchReturnRequirementsService.go(returnCycle)
+                const results = await FetchReturnRequirementsService(returnCycle)
 
                 const expectedResult = _expectedResult()
 
@@ -124,7 +124,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
               })
 
               it('does not return that return requirement', async () => {
-                const results = await FetchReturnRequirementsService.go(returnCycle)
+                const results = await FetchReturnRequirementsService(returnCycle)
 
                 const resultIds = _resultIds(results)
 
@@ -163,7 +163,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
           })
 
           it('does not return that return requirement', async () => {
-            const results = await FetchReturnRequirementsService.go(returnCycle)
+            const results = await FetchReturnRequirementsService(returnCycle)
 
             const resultIds = _resultIds(results)
 
@@ -206,7 +206,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
           })
 
           it('does not return that return requirement', async () => {
-            const results = await FetchReturnRequirementsService.go(returnCycle)
+            const results = await FetchReturnRequirementsService(returnCycle)
 
             const resultIds = _resultIds(results)
 
@@ -256,7 +256,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
           })
 
           it('does not return that return requirement', async () => {
-            const results = await FetchReturnRequirementsService.go(returnCycle)
+            const results = await FetchReturnRequirementsService(returnCycle)
 
             const resultIds = _resultIds(results)
 
@@ -314,7 +314,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
 
           describe('and the return requirement does not have an existing return log for the given cycle', () => {
             it('returns that matching return requirement and all related data needed to generate a return log', async () => {
-              const results = await FetchReturnRequirementsService.go(returnCycle)
+              const results = await FetchReturnRequirementsService(returnCycle)
 
               const expectedResult = _expectedResult()
 
@@ -336,7 +336,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
               })
 
               it('returns that matching return requirement and all related data needed to generate a return log', async () => {
-                const results = await FetchReturnRequirementsService.go(returnCycle)
+                const results = await FetchReturnRequirementsService(returnCycle)
 
                 const expectedResult = _expectedResult()
 
@@ -357,7 +357,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
               })
 
               it('does not return that return requirement', async () => {
-                const results = await FetchReturnRequirementsService.go(returnCycle)
+                const results = await FetchReturnRequirementsService(returnCycle)
 
                 const resultIds = _resultIds(results)
 
@@ -396,7 +396,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
           })
 
           it('does not return that return requirement', async () => {
-            const results = await FetchReturnRequirementsService.go(returnCycle)
+            const results = await FetchReturnRequirementsService(returnCycle)
 
             const resultIds = _resultIds(results)
 
@@ -439,7 +439,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
           })
 
           it('does not return that return requirement', async () => {
-            const results = await FetchReturnRequirementsService.go(returnCycle)
+            const results = await FetchReturnRequirementsService(returnCycle)
 
             const resultIds = _resultIds(results)
 
@@ -489,7 +489,7 @@ describe('Jobs - Return Logs - Fetch Return Requirements service', () => {
           })
 
           it('does not return that return requirement', async () => {
-            const results = await FetchReturnRequirementsService.go(returnCycle)
+            const results = await FetchReturnRequirementsService(returnCycle)
 
             const resultIds = _resultIds(results)
 

@@ -16,7 +16,7 @@ import { db } from '../../../db/db.js'
  * @returns {Promise<object>} the matching instance of BillRunModel plus a summary (Billing account number and contact,
  * licence, numbers, financial year and total net amount) for each bill linked to the bill run
  */
-async function go(id) {
+export default async function go(id) {
   const billRun = await _fetchBillRun(id)
   const billSummaries = await _fetchBillSummaries(id)
 
@@ -114,9 +114,4 @@ async function _fetchBillSummaries(id) {
     .orderBy([{ column: 'bi.account_number' }, { column: 'bi.financial_year_ending', order: 'desc' }])
 
   return results
-}
-
-export { go }
-export default {
-  go
 }

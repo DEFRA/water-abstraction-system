@@ -20,7 +20,7 @@ describe('Check Busy Bill Runs service', () => {
     })
 
     it('returns "both"', async () => {
-      const result = await CheckBusyBillRunsService.go()
+      const result = await CheckBusyBillRunsService()
 
       expect(result).toEqual('both')
     })
@@ -32,7 +32,7 @@ describe('Check Busy Bill Runs service', () => {
     })
 
     it('returns "cancelling"', async () => {
-      const result = await CheckBusyBillRunsService.go()
+      const result = await CheckBusyBillRunsService()
 
       expect(result).toEqual('cancelling')
     })
@@ -44,7 +44,7 @@ describe('Check Busy Bill Runs service', () => {
     })
 
     it('returns "building"', async () => {
-      const result = await CheckBusyBillRunsService.go()
+      const result = await CheckBusyBillRunsService()
 
       expect(result).toEqual('building')
     })
@@ -56,7 +56,7 @@ describe('Check Busy Bill Runs service', () => {
     })
 
     it('returns "none"', async () => {
-      const result = await CheckBusyBillRunsService.go()
+      const result = await CheckBusyBillRunsService()
 
       expect(result).toEqual('none')
     })

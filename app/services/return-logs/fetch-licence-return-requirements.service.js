@@ -28,7 +28,7 @@ import ReturnVersionModel from '../../models/return-version.model.js'
  *
  * @returns {Promise<module:ReturnRequirementModel[]>} the matching return requirements for the licence and change date
  */
-async function go(licenceId, changeDate, trx = null) {
+export default async function go(licenceId, changeDate, trx = null) {
   const returnVersions = await _returnVersions(licenceId, changeDate, trx)
 
   if (returnVersions.length === 0) {
@@ -248,11 +248,4 @@ async function _licence(licenceId, trx) {
     ])
     .innerJoinRelated('region')
     .findById(licenceId)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

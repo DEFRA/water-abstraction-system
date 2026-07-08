@@ -21,7 +21,7 @@ import UnassignLicencesToBillRunService from '../bill-runs/unassign-licences-to-
  *
  * @returns {Promise<string>} Returns the redirect path the controller needs
  */
-async function go(billId, user) {
+export default async function go(billId, user) {
   const bill = await _fetchBill(billId)
 
   const { billLicences, billRunId } = bill
@@ -45,7 +45,7 @@ async function _fetchBill(billId) {
 
 async function _flagRemovedBill(billLicences) {
   for (const billLicence of billLicences) {
-    await ProcessBillingFlagService.go({ billLicenceId: billLicence.id })
+    await ProcessBillingFlagService({ billLicenceId: billLicence.id })
   }
 }
 
@@ -54,12 +54,5 @@ async function _unassignLicencesToBillRun(billRunId, billLicences) {
     return billLicence.licenceId
   })
 
-  await UnassignLicencesToBillRunService.go(licenceIds, billRunId)
-}
-
-export {
-  go
-}
-export default {
-  go
+  await UnassignLicencesToBillRunService(licenceIds, billRunId)
 }

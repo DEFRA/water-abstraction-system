@@ -11,7 +11,7 @@ export async function view(request, h) {
     params: { id }
   } = request
 
-  const pageData = await ViewService.go(id, auth)
+  const pageData = await ViewService(id, auth)
 
   return h.view(`licence-versions/view.njk`, pageData)
 }

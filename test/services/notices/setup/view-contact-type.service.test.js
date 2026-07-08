@@ -30,7 +30,7 @@ describe('Notices - Setup - View Contact Type service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewContactTypeService.go(session.id)
+      const result = await ViewContactTypeService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'notices',
@@ -61,7 +61,7 @@ describe('Notices - Setup - View Contact Type service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewContactTypeService.go(session.id)
+      const result = await ViewContactTypeService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'notices',
@@ -92,7 +92,7 @@ describe('Notices - Setup - View Contact Type service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewContactTypeService.go(session.id)
+      const result = await ViewContactTypeService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

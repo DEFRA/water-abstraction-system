@@ -93,7 +93,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
       })
 
       it('returns the matching monitoring station with its licence monitoring stations correctly ordered', async () => {
-        const result = await FetchMonitoringStationDetailsDal.go(monitoringStation.id)
+        const result = await FetchMonitoringStationDetailsDal(monitoringStation.id)
 
         expect(result.monitoringStation).toEqual({
           catchmentName: null,
@@ -179,7 +179,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
 
     describe('but it has no tagged licences with restrictions', () => {
       it('returns the matching monitoring station with no licence monitoring stations', async () => {
-        const result = await FetchMonitoringStationDetailsDal.go(monitoringStation.id)
+        const result = await FetchMonitoringStationDetailsDal(monitoringStation.id)
 
         expect(result.monitoringStation).toEqual({
           catchmentName: null,
@@ -198,7 +198,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details Dal', () => {
 
   describe('when no matching monitoring station exists', () => {
     it('returns empty values', async () => {
-      const result = await FetchMonitoringStationDetailsDal.go('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
+      const result = await FetchMonitoringStationDetailsDal('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
 
       expect(result.monitoringStation).toBeUndefined()
       expect(result.licenceMonitoringStations).toEqual([])

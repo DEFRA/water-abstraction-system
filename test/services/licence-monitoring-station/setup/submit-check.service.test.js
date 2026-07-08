@@ -60,7 +60,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
 
   describe('when called', () => {
     it('creates the monitoring station tag', async () => {
-      await SubmitCheckService.go(session.id, userId, yarStub)
+      await SubmitCheckService(session.id, userId, yarStub)
 
       const result = await LicenceMonitoringStationModel.query()
         .where('monitoringStationId', sessionData.monitoringStationId)
@@ -70,7 +70,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
     })
 
     it('persists the abstraction period', async () => {
-      await SubmitCheckService.go(session.id, userId, yarStub)
+      await SubmitCheckService(session.id, userId, yarStub)
 
       const result = await LicenceMonitoringStationModel.query()
         .where('monitoringStationId', sessionData.monitoringStationId)
@@ -83,7 +83,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
     })
 
     it('persists the user that created the tag', async () => {
-      await SubmitCheckService.go(session.id, userId, yarStub)
+      await SubmitCheckService(session.id, userId, yarStub)
 
       const result = await LicenceMonitoringStationModel.query()
         .where('monitoringStationId', sessionData.monitoringStationId)
@@ -93,19 +93,19 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
     })
 
     it('deletes the session', async () => {
-      await SubmitCheckService.go(session.id, userId, yarStub)
+      await SubmitCheckService(session.id, userId, yarStub)
 
       expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitCheckService.go(session.id, userId, yarStub)
+      const result = await SubmitCheckService(session.id, userId, yarStub)
 
       expect(result).toEqual(sessionData.monitoringStationId)
     })
 
     it('sets the notification message title to "Success" and the text to "Tag for licence ... added" ', async () => {
-      await SubmitCheckService.go(session.id, userId, yarStub)
+      await SubmitCheckService(session.id, userId, yarStub)
 
       const [flashType, notification] = yarStub.flash.args[0]
 
@@ -126,7 +126,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       })
 
       it('sets "measureType" as "flow"', async () => {
-        await SubmitCheckService.go(session.id, userId, yarStub)
+        await SubmitCheckService(session.id, userId, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
           .where('monitoringStationId', sessionData.monitoringStationId)
@@ -146,7 +146,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       })
 
       it('sets "measureType" as "level"', async () => {
-        await SubmitCheckService.go(session.id, userId, yarStub)
+        await SubmitCheckService(session.id, userId, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
           .where('monitoringStationId', sessionData.monitoringStationId)
@@ -166,7 +166,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       })
 
       it('sets "restrictionType" as "stop"', async () => {
-        await SubmitCheckService.go(session.id, userId, yarStub)
+        await SubmitCheckService(session.id, userId, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
           .where('monitoringStationId', sessionData.monitoringStationId)
@@ -187,7 +187,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
         })
 
         it('sets "restrictionType" as "reduce"', async () => {
-          await SubmitCheckService.go(session.id, userId, yarStub)
+          await SubmitCheckService(session.id, userId, yarStub)
 
           const result = await LicenceMonitoringStationModel.query()
             .where('monitoringStationId', sessionData.monitoringStationId)
@@ -207,7 +207,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
         })
 
         it('sets "restrictionType" as "stop_or_reduce"', async () => {
-          await SubmitCheckService.go(session.id, userId, yarStub)
+          await SubmitCheckService(session.id, userId, yarStub)
 
           const result = await LicenceMonitoringStationModel.query()
             .where('monitoringStationId', sessionData.monitoringStationId)
@@ -228,7 +228,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       })
 
       it('persists the licence version purpose condition id', async () => {
-        await SubmitCheckService.go(session.id, userId, yarStub)
+        await SubmitCheckService(session.id, userId, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
           .where('monitoringStationId', sessionData.monitoringStationId)
@@ -240,7 +240,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
 
     describe('and "conditionId" is "no_condition"', () => {
       it('sets the licence version purpose condition id to NULL', async () => {
-        await SubmitCheckService.go(session.id, userId, yarStub)
+        await SubmitCheckService(session.id, userId, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
           .where('monitoringStationId', sessionData.monitoringStationId)

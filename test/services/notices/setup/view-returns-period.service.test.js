@@ -40,7 +40,7 @@ describe('Notices - Setup - View Returns Period service', () => {
 
   describe('when provided no params', () => {
     it('correctly presents the data', async () => {
-      const result = await ReturnsPeriodService.go(session.id)
+      const result = await ReturnsPeriodService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

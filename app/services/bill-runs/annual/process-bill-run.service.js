@@ -34,7 +34,7 @@ import HandleErroredBillRunService from '../handle-errored-bill-run.service.js'
  * @param {object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`. For
  * annual this will only ever contain a single period
  */
-async function go(billRun, billingPeriods) {
+export default async function go(billRun, billingPeriods) {
   const { id: billRunId, batchType } = billRun
   const billingPeriod = billingPeriods[0]
 
@@ -47,14 +47,14 @@ async function go(billRun, billingPeriods) {
 
     calculateAndLogTimeTaken(startTime, 'Process bill run complete', { billRunId, batchType })
   } catch (error) {
-    await HandleErroredBillRunService.go(billRunId, error.code)
+    await HandleErroredBillRunService(billRunId, error.code)
     globalThis.GlobalNotifier.omfg('Bill run process errored', { billRun }, error)
   }
 }
 
 async function _fetchBillingAccounts(billRun, billingPeriod) {
   try {
-    return await FetchBillingAccountsService.go(billRun.regionId, billingPeriod)
+    return await FetchBillingAccountsService(billRun.regionId, billingPeriod)
   } catch (error) {
     // We know we're saying we failed to process charge versions. But we're stuck with the legacy error codes and this
     // is the closest one related to what stage we're at in the process
@@ -81,16 +81,11 @@ async function _finaliseBillRun(billRun, billRunPopulated) {
 async function _processBillingPeriod(billingPeriod, billRun) {
   const billingAccounts = await _fetchBillingAccounts(billRun, billingPeriod)
 
-  const billRunPopulated = await ProcessBillingPeriodService.go(billRun, billingPeriod, billingAccounts)
+  const billRunPopulated = await ProcessBillingPeriodService(billRun, billingPeriod, billingAccounts)
 
   await _finaliseBillRun(billRun, billRunPopulated)
 }
 
 async function _updateStatus(billRunId, status) {
   await BillRunModel.query().findById(billRunId).patch({ status })
-}
-
-export { go }
-export default {
-  go
 }

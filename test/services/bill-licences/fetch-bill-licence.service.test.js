@@ -112,7 +112,7 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
     })
 
     it('returns the matching bill licence and associated data', async () => {
-      const result = await FetchBillLicenceService.go(billLicence.id)
+      const result = await FetchBillLicenceService(billLicence.id)
 
       expect(result).toEqual({
         id: billLicence.id,
@@ -192,7 +192,7 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
     })
 
     it('returns the matching bill licence and associated data', async () => {
-      const result = await FetchBillLicenceService.go(billLicence.id)
+      const result = await FetchBillLicenceService(billLicence.id)
 
       expect(result).toEqual({
         id: billLicence.id,
@@ -221,7 +221,7 @@ describe('Bill Licences - Fetch Bill Licence service', () => {
 
   describe('when a bill licence with a matching ID does not exist', () => {
     it('returns a result with no values set', async () => {
-      const result = await FetchBillLicenceService.go('93112100-152b-4860-abea-2adee11dcd69')
+      const result = await FetchBillLicenceService('93112100-152b-4860-abea-2adee11dcd69')
 
       expect(result).toBeUndefined()
     })

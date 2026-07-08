@@ -40,21 +40,21 @@ import VolumesService from '../services/return-logs/setup/volumes.service.js'
 
 export async function cancel(request, h) {
   const { sessionId } = request.params
-  const pageData = await CancelService.go(sessionId)
+  const pageData = await CancelService(sessionId)
 
   return h.view('return-logs/setup/cancel.njk', pageData)
 }
 
 export async function check(request, h) {
   const { sessionId } = request.params
-  const pageData = await CheckService.go(sessionId, request.yar)
+  const pageData = await CheckService(sessionId, request.yar)
 
   return h.view('return-logs/setup/check.njk', pageData)
 }
 
 export async function confirmed(request, h) {
   const { returnLogId } = request.params
-  const pageData = await ConfirmedService.go(returnLogId)
+  const pageData = await ConfirmedService(returnLogId)
 
   return h.view('return-logs/setup/confirmed.njk', pageData)
 }
@@ -62,7 +62,7 @@ export async function confirmed(request, h) {
 export async function deleteNote(request, h) {
   const { sessionId } = request.params
 
-  await DeleteNoteService.go(sessionId, request.yar)
+  await DeleteNoteService(sessionId, request.yar)
 
   return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
 }
@@ -73,21 +73,21 @@ export async function guidance(_request, h) {
 
 export async function meterDetails(request, h) {
   const { sessionId } = request.params
-  const pageData = await MeterDetailsService.go(sessionId)
+  const pageData = await MeterDetailsService(sessionId)
 
   return h.view('return-logs/setup/meter-details.njk', pageData)
 }
 
 export async function meterProvided(request, h) {
   const { sessionId } = request.params
-  const pageData = await MeterProvidedService.go(sessionId)
+  const pageData = await MeterProvidedService(sessionId)
 
   return h.view('return-logs/setup/meter-provided.njk', pageData)
 }
 
 export async function multipleEntries(request, h) {
   const { sessionId } = request.params
-  const pageData = await MultipleEntriesService.go(sessionId)
+  const pageData = await MultipleEntriesService(sessionId)
 
   return h.view('return-logs/setup/multiple-entries.njk', pageData)
 }
@@ -95,42 +95,42 @@ export async function multipleEntries(request, h) {
 export async function note(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await NoteService.go(sessionId)
+  const pageData = await NoteService(sessionId)
 
   return h.view('return-logs/setup/note.njk', pageData)
 }
 
 export async function periodUsed(request, h) {
   const { sessionId } = request.params
-  const pageData = await PeriodUsedService.go(sessionId)
+  const pageData = await PeriodUsedService(sessionId)
 
   return h.view('return-logs/setup/period-used.njk', pageData)
 }
 
 export async function readings(request, h) {
   const { sessionId, yearMonth } = request.params
-  const pageData = await ReadingsService.go(sessionId, yearMonth)
+  const pageData = await ReadingsService(sessionId, yearMonth)
 
   return h.view('return-logs/setup/readings.njk', pageData)
 }
 
 export async function received(request, h) {
   const { sessionId } = request.params
-  const pageData = await ReceivedService.go(sessionId)
+  const pageData = await ReceivedService(sessionId)
 
   return h.view('return-logs/setup/received.njk', pageData)
 }
 
 export async function reported(request, h) {
   const { sessionId } = request.params
-  const pageData = await ReportedService.go(sessionId)
+  const pageData = await ReportedService(sessionId)
 
   return h.view('return-logs/setup/reported.njk', pageData)
 }
 
 export async function singleVolume(request, h) {
   const { sessionId } = request.params
-  const pageData = await SingleVolumeService.go(sessionId)
+  const pageData = await SingleVolumeService(sessionId)
 
   return h.view('return-logs/setup/single-volume.njk', pageData)
 }
@@ -138,14 +138,14 @@ export async function singleVolume(request, h) {
 export async function startReading(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await StartReadingService.go(sessionId)
+  const pageData = await StartReadingService(sessionId)
 
   return h.view('return-logs/setup/start-reading.njk', pageData)
 }
 
 export async function submission(request, h) {
   const { sessionId } = request.params
-  const pageData = await SubmissionService.go(sessionId)
+  const pageData = await SubmissionService(sessionId)
 
   return h.view('return-logs/setup/submission.njk', pageData)
 }
@@ -153,7 +153,7 @@ export async function submission(request, h) {
 export async function submitConfirmed(request, h) {
   const { returnLogId } = request.params
 
-  const licenceId = await SubmitConfirmedService.go(returnLogId)
+  const licenceId = await SubmitConfirmedService(returnLogId)
 
   return h.redirect(`/system/licences/${licenceId}/returns`)
 }
@@ -162,7 +162,7 @@ export async function submitCancel(request, h) {
   const { sessionId } = request.params
   const { returnLogId } = request.payload
 
-  await SubmitCancelService.go(sessionId)
+  await SubmitCancelService(sessionId)
 
   return h.redirect(`/system/return-logs/${returnLogId}/details`)
 }
@@ -171,7 +171,7 @@ export async function submitCheck(request, h) {
   const { sessionId } = request.params
   const { user } = request.auth.credentials
 
-  const pageData = await SubmitCheckService.go(sessionId, user)
+  const pageData = await SubmitCheckService(sessionId, user)
 
   if (pageData.error) {
     return h.view('return-logs/setup/check.njk', pageData)
@@ -187,7 +187,7 @@ export async function submitMeterDetails(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitMeterDetailsService.go(sessionId, payload, yar)
+  const pageData = await SubmitMeterDetailsService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-logs/setup/meter-details.njk', pageData)
@@ -207,7 +207,7 @@ export async function submitMeterProvided(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitMeterProvidedService.go(sessionId, payload, yar)
+  const pageData = await SubmitMeterProvidedService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-logs/setup/meter-provided.njk', pageData)
@@ -231,7 +231,7 @@ export async function submitMultipleEntries(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitMultipleEntriesService.go(sessionId, payload, yar)
+  const pageData = await SubmitMultipleEntriesService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-logs/setup/multiple-entries.njk', pageData)
@@ -244,7 +244,7 @@ export async function submitNote(request, h) {
   const { sessionId } = request.params
   const { user } = request.auth.credentials
 
-  const pageData = await SubmitNoteService.go(sessionId, request.payload, user, request.yar)
+  const pageData = await SubmitNoteService(sessionId, request.payload, user, request.yar)
 
   if (pageData.error) {
     return h.view('return-logs/setup/note.njk', pageData)
@@ -256,7 +256,7 @@ export async function submitNote(request, h) {
 export async function submitPeriodUsed(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitPeriodUsedService.go(sessionId, request.payload)
+  const pageData = await SubmitPeriodUsedService(sessionId, request.payload)
 
   if (pageData.error) {
     return h.view('return-logs/setup/period-used.njk', pageData)
@@ -272,7 +272,7 @@ export async function submitReadings(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitReadingsService.go(sessionId, payload, yar, yearMonth)
+  const pageData = await SubmitReadingsService(sessionId, payload, yar, yearMonth)
 
   if (pageData.error) {
     return h.view('return-logs/setup/readings.njk', pageData)
@@ -288,7 +288,7 @@ export async function submitReceived(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitReceivedService.go(sessionId, payload, yar)
+  const pageData = await SubmitReceivedService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-logs/setup/received.njk', pageData)
@@ -308,7 +308,7 @@ export async function submitReported(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitReportedService.go(sessionId, payload, yar)
+  const pageData = await SubmitReportedService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-logs/setup/reported.njk', pageData)
@@ -329,7 +329,7 @@ export async function submitReported(request, h) {
 export async function submitSetup(request, h) {
   const { returnLogId } = request.payload
 
-  const redirectUrl = await InitiateSessionService.go(returnLogId)
+  const redirectUrl = await InitiateSessionService(returnLogId)
 
   return h.redirect(redirectUrl)
 }
@@ -340,7 +340,7 @@ export async function submitSingleVolume(request, h) {
     payload
   } = request
 
-  const pageData = await SubmitSingleVolumeService.go(sessionId, payload)
+  const pageData = await SubmitSingleVolumeService(sessionId, payload)
 
   if (pageData.error) {
     return h.view('return-logs/setup/single-volume.njk', pageData)
@@ -360,7 +360,7 @@ export async function submitStartReading(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitStartReadingService.go(sessionId, payload, yar)
+  const pageData = await SubmitStartReadingService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-logs/setup/start-reading.njk', pageData)
@@ -376,7 +376,7 @@ export async function submitStartReading(request, h) {
 export async function submitSubmission(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await SubmitSubmissionService.go(sessionId, request.payload)
+  const pageData = await SubmitSubmissionService(sessionId, request.payload)
 
   if (pageData.error) {
     return h.view('return-logs/setup/submission.njk', pageData)
@@ -398,7 +398,7 @@ export async function submitUnits(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitUnitsService.go(sessionId, payload, yar)
+  const pageData = await SubmitUnitsService(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('return-logs/setup/units.njk', pageData)
@@ -418,7 +418,7 @@ export async function submitVolumes(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitVolumesService.go(sessionId, payload, yar, yearMonth)
+  const pageData = await SubmitVolumesService(sessionId, payload, yar, yearMonth)
 
   if (pageData.error) {
     return h.view('return-logs/setup/volumes.njk', pageData)
@@ -429,14 +429,14 @@ export async function submitVolumes(request, h) {
 
 export async function units(request, h) {
   const { sessionId } = request.params
-  const pageData = await UnitsService.go(sessionId)
+  const pageData = await UnitsService(sessionId)
 
   return h.view('return-logs/setup/units.njk', pageData)
 }
 
 export async function volumes(request, h) {
   const { sessionId, yearMonth } = request.params
-  const pageData = await VolumesService.go(sessionId, yearMonth)
+  const pageData = await VolumesService(sessionId, yearMonth)
 
   return h.view('return-logs/setup/volumes.njk', pageData)
 }

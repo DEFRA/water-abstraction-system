@@ -27,7 +27,7 @@ describe('Bill Runs - Review - View Factors Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewFactorsService.go(reviewChargeReference.id)
+      const result = await ViewFactorsService(reviewChargeReference.id)
 
       expect(result).toEqual({
         activeNavBar: 'bill-runs',

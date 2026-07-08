@@ -42,7 +42,7 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
 
   describe('when called', () => {
     it('saves the submitted value', async () => {
-      await SubmitContactNameService.go(session.id, payload, yarStub)
+      await SubmitContactNameService(session.id, payload, yarStub)
 
       expect(session).toEqual({
         ...session,
@@ -52,7 +52,7 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitContactNameService.go(session.id, payload, yarStub)
+      const result = await SubmitContactNameService(session.id, payload, yarStub)
 
       expect(result).toEqual({
         redirectUrl: `/system/company-contacts/setup/${session.id}/contact-email`
@@ -74,7 +74,7 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
         describe('and the "session" and "payload" value', () => {
           describe('match', () => {
             it('does not set a notification', async () => {
-              await SubmitContactNameService.go(session.id, payload, yarStub)
+              await SubmitContactNameService(session.id, payload, yarStub)
 
               expect(yarStub.flash.called).toBe(false)
             })
@@ -86,7 +86,7 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
             })
 
             it('sets a notification', async () => {
-              await SubmitContactNameService.go(session.id, payload, yarStub)
+              await SubmitContactNameService(session.id, payload, yarStub)
 
               const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -99,7 +99,7 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
 
       describe('not been visited', () => {
         it('does not set a notification', async () => {
-          await SubmitContactNameService.go(session.id, payload, yarStub)
+          await SubmitContactNameService(session.id, payload, yarStub)
 
           expect(yarStub.flash.called).toBe(false)
         })
@@ -113,7 +113,7 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitContactNameService.go(session.id, payload, yarStub)
+      const result = await SubmitContactNameService(session.id, payload, yarStub)
 
       expect(result).toEqual({
         backLink: {

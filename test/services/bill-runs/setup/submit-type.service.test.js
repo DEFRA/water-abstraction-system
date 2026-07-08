@@ -38,13 +38,13 @@ describe('Bill Runs - Setup - Submit Type service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitTypeService.go(session.id, payload)
+        await SubmitTypeService(session.id, payload)
 
         expect(session.type).toEqual('annual')
       })
 
       it('returns an empty object (no page data is needed for a redirect)', async () => {
-        const result = await SubmitTypeService.go(session.id, payload)
+        const result = await SubmitTypeService(session.id, payload)
 
         expect(result).toEqual({})
         expect(session.$update.called).toBe(true)
@@ -58,7 +58,7 @@ describe('Bill Runs - Setup - Submit Type service', () => {
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitTypeService.go(session.id, payload)
+          const result = await SubmitTypeService(session.id, payload)
 
           expect(result).toEqual({
             activeNavBar: 'bill-runs',

@@ -47,7 +47,7 @@ describe('Return Logs - View Details service', () => {
   })
 
   it('correctly fetches return log, return log notifications and transforms it via the presenter', async () => {
-    const result = await ViewDetailsService.go(returnLog.id, { credentials: { scope: ['returns'] } }, 'RETURN_ID', 0)
+    const result = await ViewDetailsService(returnLog.id, { credentials: { scope: ['returns'] } }, 'RETURN_ID', 0)
 
     expect(result).toEqual({
       activeSecondaryNav: 'details',

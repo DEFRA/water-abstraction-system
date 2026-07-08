@@ -46,7 +46,7 @@ describe('Reissue Bills service', () => {
       })
 
       it('returns "false"', async () => {
-        const result = await ReissueBillsService.go(reissueBillRun)
+        const result = await ReissueBillsService(reissueBillRun)
 
         expect(result).toBe(false)
       })
@@ -79,13 +79,13 @@ describe('Reissue Bills service', () => {
       })
 
       it('returns "true"', async () => {
-        const result = await ReissueBillsService.go(reissueBillRun)
+        const result = await ReissueBillsService(reissueBillRun)
 
         expect(result).toBe(true)
       })
 
       it('persists all bills', async () => {
-        await ReissueBillsService.go(reissueBillRun)
+        await ReissueBillsService(reissueBillRun)
 
         const result = await BillModel.query().whereIn('billRunId', [
           reissueBillOne.bills[0].billRunId,
@@ -97,7 +97,7 @@ describe('Reissue Bills service', () => {
       })
 
       it('persists all bill licences', async () => {
-        await ReissueBillsService.go(reissueBillRun)
+        await ReissueBillsService(reissueBillRun)
 
         const result = await BillLicenceModel.query().whereIn('billId', [
           reissueBillOne.billLicences[0].billId,
@@ -109,7 +109,7 @@ describe('Reissue Bills service', () => {
       })
 
       it('persists all transactions', async () => {
-        await ReissueBillsService.go(reissueBillRun)
+        await ReissueBillsService(reissueBillRun)
 
         const result = await TransactionModel.query().whereIn('billLicenceId', [
           reissueBillOne.transactions[0].billLicenceId,

@@ -50,7 +50,7 @@ describe('Process Time Limited Licences service', () => {
     })
 
     it('adds the licences to the workflow table', async () => {
-      await ProcessTimeLimitedLicencesService.go()
+      await ProcessTimeLimitedLicencesService()
 
       const results = await WorkflowModel.query()
         .whereIn('licenceId', [fetchResults[0].id, fetchResults[1].id])
@@ -76,7 +76,7 @@ describe('Process Time Limited Licences service', () => {
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
-      await ProcessTimeLimitedLicencesService.go()
+      await ProcessTimeLimitedLicencesService()
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -95,7 +95,7 @@ describe('Process Time Limited Licences service', () => {
     })
 
     it('adds nothing to workflow', async () => {
-      await ProcessTimeLimitedLicencesService.go()
+      await ProcessTimeLimitedLicencesService()
 
       const results = await WorkflowModel.query()
         // Matches the fetched results for FetchTimeLimitedLicencesService
@@ -106,7 +106,7 @@ describe('Process Time Limited Licences service', () => {
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
-      await ProcessTimeLimitedLicencesService.go()
+      await ProcessTimeLimitedLicencesService()
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -123,7 +123,7 @@ describe('Process Time Limited Licences service', () => {
     })
 
     it('records the error by calling "omfg()"', async () => {
-      await ProcessTimeLimitedLicencesService.go()
+      await ProcessTimeLimitedLicencesService()
 
       const args = notifierStub.omfg.firstCall.args
 
@@ -133,7 +133,7 @@ describe('Process Time Limited Licences service', () => {
     })
 
     it('notifies the team by calling "redAlert()"', async () => {
-      await ProcessTimeLimitedLicencesService.go()
+      await ProcessTimeLimitedLicencesService()
 
       const args = notifierStub.redAlert.firstCall.args
 
@@ -141,7 +141,7 @@ describe('Process Time Limited Licences service', () => {
     })
 
     it('does not throw an error', async () => {
-      await ProcessTimeLimitedLicencesService.go()
+      await ProcessTimeLimitedLicencesService()
     })
   })
 })

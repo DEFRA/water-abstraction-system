@@ -13,7 +13,7 @@ import ReturnLogModel from '../../models/return-log.model.js'
  *
  * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and associated submission (if any)
  */
-async function go(returnLogId, version) {
+export default async function go(returnLogId, version) {
   const returnLog = await _fetch(returnLogId, version)
 
   returnLog.returnSubmissions[0].$applyReadings()
@@ -36,11 +36,4 @@ async function _fetch(returnLogId, version) {
           returnSubmissionLinesBuilder.select(['id', 'startDate', 'endDate', 'quantity']).orderBy('endDate', 'asc')
         })
     })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

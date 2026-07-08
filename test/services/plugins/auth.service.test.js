@@ -29,37 +29,37 @@ describe('Plugins - Auth service', () => {
     })
 
     it('returns isValid as `true`', async () => {
-      const result = await AuthService.go(12345)
+      const result = await AuthService(12345)
 
       expect(result.isValid).toBe(true)
     })
 
     it('returns the user in credentials.user', async () => {
-      const result = await AuthService.go(12345)
+      const result = await AuthService(12345)
 
       expect(result.credentials.user).toEqual({ name: 'User' })
     })
 
     it('returns the roles in credentials.roles', async () => {
-      const result = await AuthService.go(12345)
+      const result = await AuthService(12345)
 
       expect(result.credentials.roles).toEqual([{ role: 'Role' }])
     })
 
     it('returns the groups in credentials.groups', async () => {
-      const result = await AuthService.go(12345)
+      const result = await AuthService(12345)
 
       expect(result.credentials.groups).toEqual([{ group: 'Group' }])
     })
 
     it('returns the role names in credentials.scope', async () => {
-      const result = await AuthService.go(12345)
+      const result = await AuthService(12345)
 
       expect(result.credentials.scope).toEqual(['Role'])
     })
 
     it('returns the top level permissions in credentials.permission', async () => {
-      const result = await AuthService.go(12345)
+      const result = await AuthService(12345)
 
       expect(result.credentials.permission).toEqual({
         abstractionReform: false,
@@ -82,7 +82,7 @@ describe('Plugins - Auth service', () => {
       })
 
       it('returns the matching top level permission as true', async () => {
-        const result = await AuthService.go(12345)
+        const result = await AuthService(12345)
 
         expect(result.credentials.permission).toEqual({
           abstractionReform: true,
@@ -104,7 +104,7 @@ describe('Plugins - Auth service', () => {
       })
 
       it('returns the matching top level permission as true', async () => {
-        const result = await AuthService.go(12345)
+        const result = await AuthService(12345)
 
         // NOTE: Access to bill runs is granted for users with the 'billing' role. They also get access to the manage
         // page. So, there currently isn't a scenario where a user would see the 'Bill runs' option but not 'Manage'.
@@ -128,7 +128,7 @@ describe('Plugins - Auth service', () => {
       })
 
       it('returns the matching top level permission as true', async () => {
-        const result = await AuthService.go(12345)
+        const result = await AuthService(12345)
 
         expect(result.credentials.permission).toEqual({
           abstractionReform: false,
@@ -150,7 +150,7 @@ describe('Plugins - Auth service', () => {
       })
 
       it('returns the matching top level permission as true', async () => {
-        const result = await AuthService.go(12345)
+        const result = await AuthService(12345)
 
         expect(result.credentials.permission).toEqual({
           abstractionReform: false,
@@ -172,7 +172,7 @@ describe('Plugins - Auth service', () => {
       })
 
       it('returns the matching top level permission as true', async () => {
-        const result = await AuthService.go(12345)
+        const result = await AuthService(12345)
 
         expect(result.credentials.permission).toEqual({
           abstractionReform: false,
@@ -195,31 +195,31 @@ describe('Plugins - Auth service', () => {
     })
 
     it('returns isValid as "false"', async () => {
-      const result = await AuthService.go(12345)
+      const result = await AuthService(12345)
 
       expect(result.isValid).toBe(false)
     })
 
     it('returns "null" in credentials.user', async () => {
-      const result = await AuthService.go(12345)
+      const result = await AuthService(12345)
 
       expect(result.credentials.user).toBeNull()
     })
 
     it('returns an empty array in credentials.roles', async () => {
-      const result = await AuthService.go(12345)
+      const result = await AuthService(12345)
 
       expect(result.credentials.roles).toHaveLength(0)
     })
 
     it('returns an empty array in credentials.groups', async () => {
-      const result = await AuthService.go(12345)
+      const result = await AuthService(12345)
 
       expect(result.credentials.groups).toHaveLength(0)
     })
 
     it('returns an empty array in credentials.scope', async () => {
-      const result = await AuthService.go(12345)
+      const result = await AuthService(12345)
 
       expect(result.credentials.scope).toHaveLength(0)
     })

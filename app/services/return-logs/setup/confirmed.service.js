@@ -13,17 +13,12 @@ import FetchReturnLogService from '../../../services/return-logs/setup/fetch-ret
  *
  * @returns {Promise<object>} page data needed by the view template
  */
-async function go(returnLogId) {
-  const returnLog = await FetchReturnLogService.go(returnLogId)
+export default async function go(returnLogId) {
+  const returnLog = await FetchReturnLogService(returnLogId)
 
   const formattedData = ConfirmedPresenter.go(returnLog)
 
   return {
     ...formattedData
   }
-}
-
-export { go }
-export default {
-  go
 }

@@ -56,20 +56,20 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       })
 
       it('sets the bill run status only to "processing"', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
         expect(billRunPatchStub.calledOnce).toBe(true)
         expect(billRunPatchStub.firstCall.firstArg).toEqual({ status: 'processing' })
       })
 
       it('skips to "generating" the bill run', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
         expect(generateBillRunStub.calledOnce).toBe(true)
       })
 
       it('logs the time taken', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
         const args = notifierStub.omg.firstCall.args
 
@@ -90,7 +90,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       })
 
       it('sets the bill run status first to "processing" and then to "review"', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
         expect(billRunPatchStub.calledTwice).toBe(true)
         expect(billRunPatchStub.firstCall.firstArg).toEqual({ status: 'processing' })
@@ -98,13 +98,13 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       })
 
       it('does not skip to "generating" the bill run', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
         expect(generateBillRunStub.called).toBe(false)
       })
 
       it('logs the time taken', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
         const args = notifierStub.omg.firstCall.args
 
@@ -124,13 +124,13 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       })
 
       it('calls HandleErroredBillRunService', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
         expect(HandleErroredBillRunService.go.called).toBe(true)
       })
 
       it('logs the error', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
         const args = notifierStub.omfg.firstCall.args
 
@@ -148,13 +148,13 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       })
 
       it('calls HandleErroredBillRunService', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
         expect(HandleErroredBillRunService.go.called).toBe(true)
       })
 
       it('logs the error', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
         const args = notifierStub.omfg.firstCall.args
 

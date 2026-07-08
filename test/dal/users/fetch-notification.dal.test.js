@@ -28,7 +28,7 @@ describe('Users - Fetch Notification DAL', () => {
     })
 
     it('returns the matching notification', async () => {
-      const result = await FetchNotificationDal.go(notification.id, user.id)
+      const result = await FetchNotificationDal(notification.id, user.id)
 
       expect(result).toEqual({
         createdAt: notification.createdAt,
@@ -47,7 +47,7 @@ describe('Users - Fetch Notification DAL', () => {
 
   describe('when a matching notification does not exist', () => {
     it('returns undefined', async () => {
-      const result = await FetchNotificationDal.go('317aaa08-723d-4cb3-8f3b-5ab6a37b573f', user.id)
+      const result = await FetchNotificationDal('317aaa08-723d-4cb3-8f3b-5ab6a37b573f', user.id)
 
       expect(result).toBeUndefined()
     })

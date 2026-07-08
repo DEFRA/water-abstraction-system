@@ -91,7 +91,7 @@ describe('Jobs - Notification Status - Fetch Critical Notices DAL', () => {
 
   describe('when called', () => {
     it('returns only the critical notices that have notifications with errors from those request (scenario 1)', async () => {
-      const results = await FetchCriticalNoticesDal.go(noticeIds)
+      const results = await FetchCriticalNoticesDal(noticeIds)
 
       expect(results).toContainEqual(
         EventModel.fromJson({

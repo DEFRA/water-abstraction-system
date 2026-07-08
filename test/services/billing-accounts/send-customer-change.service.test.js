@@ -43,7 +43,7 @@ describe('Send Transactions service', () => {
     })
 
     it('does not throw an error', async () => {
-      await SendCustomerChangeService.go(billingAccount)
+      await SendCustomerChangeService(billingAccount)
     })
   })
 
@@ -55,7 +55,7 @@ describe('Send Transactions service', () => {
     })
 
     it('throws an error', async () => {
-      const result = await SendCustomerChangeService.go(billingAccount).catch((e) => {
+      const result = await SendCustomerChangeService(billingAccount).catch((e) => {
         return e
       })
 

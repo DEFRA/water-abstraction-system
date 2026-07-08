@@ -14,7 +14,7 @@ import ManualAddressPresenter from '../../presenters/address/manual.presenter.js
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = ManualAddressPresenter.go(session)
@@ -22,11 +22,4 @@ async function go(sessionId) {
   return {
     ...pageData
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

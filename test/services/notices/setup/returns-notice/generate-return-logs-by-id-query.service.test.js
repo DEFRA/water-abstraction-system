@@ -45,7 +45,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
 
   describe('when called', () => {
     it('returns the expected query and bindings', () => {
-      const result = GenerateReturnLogsByIdQueryService.go(returnLogIds)
+      const result = GenerateReturnLogsByIdQueryService(returnLogIds)
 
       expect(result).toEqual({
         bindings: [returnLogIds],
@@ -69,7 +69,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
 
   describe('when executed', () => {
     it('returns the expected return logs', async () => {
-      const { bindings, query } = GenerateReturnLogsByIdQueryService.go(returnLogIds)
+      const { bindings, query } = GenerateReturnLogsByIdQueryService(returnLogIds)
       const { rows } = await db.raw(query, bindings)
 
       expect(rows).toEqual([

@@ -26,13 +26,13 @@ export async function airbrake(request, _h) {
 }
 
 export async function database(_request, h) {
-  const result = await DatabaseHealthCheckService.go()
+  const result = await DatabaseHealthCheckService()
 
   return h.response(result).code(HTTP_STATUS_OK)
 }
 
 export async function info(_request, h) {
-  const pageData = await InfoService.go()
+  const pageData = await InfoService()
 
   return h.view('health/info.njk', pageData)
 }

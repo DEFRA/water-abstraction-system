@@ -18,7 +18,7 @@ describe('Users - Fetch Legacy ID DAL', () => {
     })
 
     it('returns the correct legacy "userId"', async () => {
-      const result = await FetchLegacyIdDal.go(user.id)
+      const result = await FetchLegacyIdDal(user.id)
 
       expect(result).toEqual(user.userId)
     })

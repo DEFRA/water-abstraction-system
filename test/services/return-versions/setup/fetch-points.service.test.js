@@ -41,7 +41,7 @@ describe('Return Versions - Setup - Fetch Points service', () => {
 
   describe('when the matching licence exists', () => {
     it('returns the licence version purpose points for the licence', async () => {
-      const results = await FetchPointsService.go(licenceVersion.id)
+      const results = await FetchPointsService(licenceVersion.id)
 
       // NOTE: The final list of points the user sees is sorted by their generated description. So, the service does not
       // sort the results in the fetch, which means we cannot guarantee what order they'll be in for the test. So, to
@@ -86,7 +86,7 @@ describe('Return Versions - Setup - Fetch Points service', () => {
 
   describe('when the matching licence version does not exist', () => {
     it('returns an empty array', async () => {
-      const results = await FetchPointsService.go('7f665e1b-a2cf-4241-9dc9-9351edc16533')
+      const results = await FetchPointsService('7f665e1b-a2cf-4241-9dc9-9351edc16533')
 
       expect(results).toHaveLength(0)
     })

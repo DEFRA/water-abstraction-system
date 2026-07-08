@@ -44,13 +44,13 @@ describe('Users - External - Setup - Submit Check Service', () => {
 
   describe('when called', () => {
     it('deletes the session record', async () => {
-      await SubmitCheckService.go(session.id, yarStub, auth)
+      await SubmitCheckService(session.id, yarStub, auth)
 
       expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
     })
 
     it('returns the redirect URL', async () => {
-      const result = await SubmitCheckService.go(session.id, yarStub, auth)
+      const result = await SubmitCheckService(session.id, yarStub, auth)
 
       expect(result).toEqual({
         redirectUrl: `/system/users/external/${session.user.id}/licences?back=${session.activeNavBar}`
@@ -58,13 +58,13 @@ describe('Users - External - Setup - Submit Check Service', () => {
     })
 
     it('unregisters the selected licences', async () => {
-      await SubmitCheckService.go(session.id, yarStub, auth)
+      await SubmitCheckService(session.id, yarStub, auth)
 
       expect(UnregisterLicencesDal.go.calledWith(session, auth.credentials.user)).toBe(true)
     })
 
     it('sets a notification', async () => {
-      await SubmitCheckService.go(session.id, yarStub, auth)
+      await SubmitCheckService(session.id, yarStub, auth)
 
       const [flashType, notificationData] = yarStub.flash.args[0]
 

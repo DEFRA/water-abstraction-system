@@ -13,16 +13,11 @@ import LicenceSupplementaryYearModel from '../../../models/licence-supplementary
  *
  * @returns {Promise<object[]>} An array of distinct years flagged for supplementary billing in descending order
  */
-async function go(regionId, twoPartTariff) {
+export default async function go(regionId, twoPartTariff) {
   return LicenceSupplementaryYearModel.query()
     .distinct('financialYearEnd')
     .innerJoinRelated('licence')
     .where('twoPartTariff', twoPartTariff)
     .where('regionId', regionId)
     .orderBy('financialYearEnd', 'desc')
-}
-
-export { go }
-export default {
-  go
 }

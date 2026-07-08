@@ -54,7 +54,7 @@ describe('Annual Process Bill Run service', () => {
 
     describe('and nothing is billed', () => {
       it('sets the bill run status to "empty"', async () => {
-        await ProcessBillRunService.go(billRun, [billingPeriod])
+        await ProcessBillRunService(billRun, [billingPeriod])
 
         const result = await BillRunModel.query().findById(billRun.id)
 
@@ -74,7 +74,7 @@ describe('Annual Process Bill Run service', () => {
       })
 
       it('sets the bill run status to "processing"', async () => {
-        await ProcessBillRunService.go(billRun, [billingPeriod])
+        await ProcessBillRunService(billRun, [billingPeriod])
 
         const result = await BillRunModel.query().findById(billRun.id)
 
@@ -82,13 +82,13 @@ describe('Annual Process Bill Run service', () => {
       })
 
       it('tells the charging module API to "generate" the bill run', async () => {
-        await ProcessBillRunService.go(billRun, [billingPeriod])
+        await ProcessBillRunService(billRun, [billingPeriod])
 
         expect(chargingModuleGenerateRequestStub.called).toBe(true)
       })
 
       it('tells the legacy service to start its refresh job', async () => {
-        await ProcessBillRunService.go(billRun, [billingPeriod])
+        await ProcessBillRunService(billRun, [billingPeriod])
 
         expect(legacyRefreshBillRunRequestStub.called).toBe(true)
       })
@@ -111,7 +111,7 @@ describe('Annual Process Bill Run service', () => {
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
-        await ProcessBillRunService.go(billRun, [billingPeriod])
+        await ProcessBillRunService(billRun, [billingPeriod])
 
         const handlerArgs = handleErroredBillRunStub.firstCall.args
 
@@ -119,7 +119,7 @@ describe('Annual Process Bill Run service', () => {
       })
 
       it('logs the error', async () => {
-        await ProcessBillRunService.go(billRun, [billingPeriod])
+        await ProcessBillRunService(billRun, [billingPeriod])
 
         const args = notifierStub.omfg.firstCall.args
 
@@ -142,7 +142,7 @@ describe('Annual Process Bill Run service', () => {
         })
 
         it('calls HandleErroredBillRunService with appropriate error code', async () => {
-          await ProcessBillRunService.go(billRun, [billingPeriod])
+          await ProcessBillRunService(billRun, [billingPeriod])
 
           const handlerArgs = handleErroredBillRunStub.firstCall.args
 
@@ -150,7 +150,7 @@ describe('Annual Process Bill Run service', () => {
         })
 
         it('logs the error', async () => {
-          await ProcessBillRunService.go(billRun, [billingPeriod])
+          await ProcessBillRunService(billRun, [billingPeriod])
 
           const args = notifierStub.omfg.firstCall.args
 
@@ -174,7 +174,7 @@ describe('Annual Process Bill Run service', () => {
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
-        await ProcessBillRunService.go(billRun, [billingPeriod])
+        await ProcessBillRunService(billRun, [billingPeriod])
 
         const handlerArgs = handleErroredBillRunStub.firstCall.args
 
@@ -182,7 +182,7 @@ describe('Annual Process Bill Run service', () => {
       })
 
       it('logs the error', async () => {
-        await ProcessBillRunService.go(billRun, [billingPeriod])
+        await ProcessBillRunService(billRun, [billingPeriod])
 
         const args = notifierStub.omfg.firstCall.args
 

@@ -25,7 +25,7 @@ import MatchAndAllocateService from '../match/match-and-allocate.service.js'
  * @param {object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`. For 2PT
  * this will only ever contain a single period
  */
-async function go(billRun, billingPeriods) {
+export default async function go(billRun, billingPeriods) {
   const { id: billRunId } = billRun
   // NOTE: billingPeriods come from `DetermineBillingPeriodsService` which always returns an array because it is used by
   // all billing types. For two-part tariff we know it will only contain one because 2PT supplementary bill runs are
@@ -37,9 +37,9 @@ async function go(billRun, billingPeriods) {
 
     await _updateStatus(billRunId, 'processing')
 
-    await AssignBillRunToLicencesService.go(billRunId)
+    await AssignBillRunToLicencesService(billRunId)
 
-    const populated = await MatchAndAllocateService.go(billRun, billingPeriod)
+    const populated = await MatchAndAllocateService(billRun, billingPeriod)
 
     // NOTE: Unlike two-part tariff annual, we don't automatically set the bill run status to empty if no licences were
     // found to be matched and allocated. This is because for supplementary, we have to handle licences that _were_ 2PT
@@ -55,21 +55,16 @@ async function go(billRun, billingPeriods) {
       // process. We don't await it, even though as far as the user is concerned control has already been passed back to
       // them, because the generate engines are intended to be run in the background. Plus, it'd make the log messages
       // confusing ;-)
-      GenerateBillRunService.go(billRun)
+      GenerateBillRunService(billRun)
     }
 
     calculateAndLogTimeTaken(startTime, 'Process bill run complete', { billRunId, type: 'two_part_supplementary' })
   } catch (error) {
-    await HandleErroredBillRunService.go(billRunId)
+    await HandleErroredBillRunService(billRunId)
     globalThis.GlobalNotifier.omfg('Process bill run failed', { billRun }, error)
   }
 }
 
 async function _updateStatus(billRunId, status) {
   await BillRunModel.query().findById(billRunId).patch({ status })
-}
-
-export { go }
-export default {
-  go
 }

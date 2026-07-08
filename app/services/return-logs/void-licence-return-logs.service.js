@@ -76,18 +76,11 @@ import { timestampForPostgres } from '../../lib/general.lib.js'
  * @param {Date} changeDate - The date from which the 'change' applies
  * @param {object} [trx=null] - Optional transaction object
  */
-async function go(reissuedReturnIds, licenceRef, returnCycleId, changeDate, trx = null) {
+export default async function go(reissuedReturnIds, licenceRef, returnCycleId, changeDate, trx = null) {
   await ReturnLogModel.query(trx)
     .patch({ status: 'void', updatedAt: timestampForPostgres() })
     .where('returnCycleId', returnCycleId)
     .where('licenceRef', licenceRef)
     .where('endDate', '>=', changeDate)
     .whereNotIn('returnId', reissuedReturnIds)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

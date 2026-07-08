@@ -22,7 +22,7 @@ import ChargingModuleCreateTransactionPresenter from '../../presenters/charging-
  * @returns {Promise<object[]>} Array of transactions which have been sent to the Charging Module and updated with its
  * response
  */
-async function go(transactions, billRunExternalId, accountNumber, licence) {
+export default async function go(transactions, billRunExternalId, accountNumber, licence) {
   // NOTE: we purposefully loop through all the transactions to send without awaiting them. This is for performance
   // purposes. If for example we have 3 transactions to send we'll send the requests 1 straight after the other. We
   // then wait for all 3 to complete. The overall process time will only be that of the one that takes the longest. If
@@ -32,7 +32,7 @@ async function go(transactions, billRunExternalId, accountNumber, licence) {
   })
 
   // We use Promise.all() to ensure we wait for all the send requests to resolve. The service that awaits the call to
-  // SendTransactionsService.go() will still get the updated transactions as Promise.all() returns what each promise
+  // SendTransactionsService() will still get the updated transactions as Promise.all() returns what each promise
   // resolves to as an array.
   return Promise.all(sendRequests)
 }
@@ -50,9 +50,4 @@ async function _sendTransactionToChargingModule(transaction, billRunExternalId, 
   } catch (error) {
     throw new BillRunError(error, BillRunModel.errorCodes.failedToCreateCharge)
   }
-}
-
-export { go }
-export default {
-  go
 }

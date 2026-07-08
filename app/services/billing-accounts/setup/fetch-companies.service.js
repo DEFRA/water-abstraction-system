@@ -12,7 +12,7 @@ import { send } from '../../../requests/companies-house/search-companies.request
  *
  * @returns {Promise<object[]>} an object containing the matching companies needed to populate the view
  */
-async function go(companySearch) {
+export default async function go(companySearch) {
   const result = await send(companySearch)
 
   if (!result.succeeded) {
@@ -28,11 +28,4 @@ async function go(companySearch) {
   })
 
   return companies
-}
-
-export {
-  go
-}
-export default {
-  go
 }

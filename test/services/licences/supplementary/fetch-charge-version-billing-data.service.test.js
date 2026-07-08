@@ -40,7 +40,7 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
 
     describe('and the charge version has a scheme of `alcs`', () => {
       it('fetches the charge version data', async () => {
-        const result = await FetchChargeVersionBillingDataService.go(preSrocChargeVersion.id)
+        const result = await FetchChargeVersionBillingDataService(preSrocChargeVersion.id)
 
         expect(result.chargeVersion).toEqual({
           id: preSrocChargeVersion.id,
@@ -64,7 +64,7 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
       })
 
       it('does not fetch any bill runs data', async () => {
-        const result = await FetchChargeVersionBillingDataService.go(preSrocChargeVersion.id)
+        const result = await FetchChargeVersionBillingDataService(preSrocChargeVersion.id)
 
         expect(result.srocBillRuns).toBeUndefined()
       })
@@ -72,7 +72,7 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
 
     describe('and the charge version has a scheme of `sroc`', () => {
       it('fetches the charge version data', async () => {
-        const result = await FetchChargeVersionBillingDataService.go(srocChargeVersion.id)
+        const result = await FetchChargeVersionBillingDataService(srocChargeVersion.id)
 
         expect(result.chargeVersion).toEqual({
           id: srocChargeVersion.id,
@@ -124,7 +124,7 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
         })
 
         it('fetches the bill runs in ascending order', async () => {
-          const result = await FetchChargeVersionBillingDataService.go(srocChargeVersion.id)
+          const result = await FetchChargeVersionBillingDataService(srocChargeVersion.id)
 
           expect(result.srocBillRuns).toEqual([
             {
@@ -158,7 +158,7 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
         })
 
         it('fetches only the sroc bill runs', async () => {
-          const result = await FetchChargeVersionBillingDataService.go(srocChargeVersion.id)
+          const result = await FetchChargeVersionBillingDataService(srocChargeVersion.id)
 
           expect(result.srocBillRuns.length).toEqual(2)
           expect(result.srocBillRuns[0].scheme).toEqual('sroc')
@@ -181,7 +181,7 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
         })
 
         it('fetches only the bill runs that have a financial year end >= to the charge version start date', async () => {
-          const result = await FetchChargeVersionBillingDataService.go(srocChargeVersion.id)
+          const result = await FetchChargeVersionBillingDataService(srocChargeVersion.id)
 
           expect(result.srocBillRuns.length).toEqual(2)
           expect(result.srocBillRuns[0].toFinancialYearEnding).toEqual(2024)
@@ -228,7 +228,7 @@ describe('Licences - Supplementary - Fetch Charge Version Billing Data service',
         })
 
         it('only fetches bills run with a status of sent, ready or review', async () => {
-          const result = await FetchChargeVersionBillingDataService.go(srocChargeVersion.id)
+          const result = await FetchChargeVersionBillingDataService(srocChargeVersion.id)
 
           expect(result.srocBillRuns.length).toEqual(3)
           expect(result.srocBillRuns[0].toFinancialYearEnding).toEqual(2024)

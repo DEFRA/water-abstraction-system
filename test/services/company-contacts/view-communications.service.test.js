@@ -44,7 +44,7 @@ describe('Company Contacts - View Communications Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCommunicationsService.go(companyContact.id, page)
+      const result = await ViewCommunicationsService(companyContact.id, page)
 
       expect(result).toEqual({
         activeSecondaryNav: 'communications',

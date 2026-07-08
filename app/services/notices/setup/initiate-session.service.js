@@ -28,13 +28,13 @@ import { NoticeJourney, NoticeType, NoticeTypes } from '../../../lib/static-look
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(journey, monitoringStationId = null) {
+export default async function go(journey, monitoringStationId = null) {
   const noticeProperties = _noticeProperties(journey)
 
   let additionalData = {}
 
   if (monitoringStationId) {
-    additionalData = await DetermineLicenceMonitoringStationsService.go(monitoringStationId)
+    additionalData = await DetermineLicenceMonitoringStationsService(monitoringStationId)
   }
 
   const data = {
@@ -83,9 +83,4 @@ function _redirect(journey) {
 
   // Ad-hoc
   return 'notice-type'
-}
-
-export { go }
-export default {
-  go
 }

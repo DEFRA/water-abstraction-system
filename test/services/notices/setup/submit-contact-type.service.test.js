@@ -54,7 +54,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactTypeService.go(session.id, payload, yarStub)
+        await SubmitContactTypeService(session.id, payload, yarStub)
 
         expect(session.contactType).toEqual(undefined)
         expect(session.additionalRecipients).toEqual([
@@ -72,13 +72,13 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       })
 
       it('saves the recipients "contact_hash_id" to the sessions "selectedRecipients" array', async () => {
-        await SubmitContactTypeService.go(session.id, payload, yarStub)
+        await SubmitContactTypeService(session.id, payload, yarStub)
 
         expect(session.selectedRecipients).toEqual(['123', _createMD5Hash(payload.contactEmail)])
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
+        const result = await SubmitContactTypeService(session.id, payload, yarStub)
 
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -104,7 +104,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactTypeService.go(session.id, payload, yarStub)
+        await SubmitContactTypeService(session.id, payload, yarStub)
 
         expect(session.contactType).toEqual(undefined)
         expect(session.additionalRecipients).toEqual([
@@ -121,7 +121,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
+        const result = await SubmitContactTypeService(session.id, payload, yarStub)
 
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -147,7 +147,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       })
 
       it('saves the submitted value with the email address in lowercase', async () => {
-        await SubmitContactTypeService.go(session.id, payload, yarStub)
+        await SubmitContactTypeService(session.id, payload, yarStub)
 
         expect(session.contactType).toEqual(undefined)
         expect(session.additionalRecipients).toEqual([
@@ -164,7 +164,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
+        const result = await SubmitContactTypeService(session.id, payload, yarStub)
 
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -202,7 +202,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactTypeService.go(session.id, payload, yarStub)
+        await SubmitContactTypeService(session.id, payload, yarStub)
 
         expect(session.contactType).toEqual(undefined)
         expect(session.additionalRecipients).toEqual([
@@ -228,7 +228,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
+        const result = await SubmitContactTypeService(session.id, payload, yarStub)
 
         const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -254,14 +254,14 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactTypeService.go(session.id, payload, yarStub)
+        await SubmitContactTypeService(session.id, payload, yarStub)
 
         expect(session.contactType).toEqual(payload.contactType)
         expect(session.contactName).toEqual(payload.contactName)
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
+        const result = await SubmitContactTypeService(session.id, payload, yarStub)
 
         expect(yarStub.flash.called).toBe(false)
         expect(result).toEqual({
@@ -282,7 +282,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
+        const result = await SubmitContactTypeService(session.id, payload, yarStub)
 
         expect(result).toEqual({
           activeNavBar: 'notices',
@@ -324,7 +324,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
+        const result = await SubmitContactTypeService(session.id, payload, yarStub)
 
         expect(result).toEqual({
           activeNavBar: 'notices',
@@ -366,7 +366,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitContactTypeService.go(session.id, payload, yarStub)
+        const result = await SubmitContactTypeService(session.id, payload, yarStub)
 
         expect(result).toEqual({
           activeNavBar: 'notices',

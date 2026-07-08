@@ -54,7 +54,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
           })
 
           it('assigns the bill run to the supplementary year records', async () => {
-            await AssignBillRunToLicencesService.go(billRun.id)
+            await AssignBillRunToLicencesService(billRun.id)
 
             const result = await unassignedSameRegionAndYear.licenceSupplementaryYear.$query().select()
 
@@ -76,7 +76,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
           })
 
           it('does not assign the bill run to the supplementary year records', async () => {
-            await AssignBillRunToLicencesService.go(billRun.id)
+            await AssignBillRunToLicencesService(billRun.id)
 
             const result = await unassignedDifferentRegionSameYear.licenceSupplementaryYear.$query().select()
 
@@ -99,7 +99,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
         })
 
         it('does not assign the bill run to the supplementary year records', async () => {
-          await AssignBillRunToLicencesService.go(billRun.id)
+          await AssignBillRunToLicencesService(billRun.id)
 
           const result = await unassignedSameRegionAndYearNonTpt.licenceSupplementaryYear.$query().select()
 
@@ -122,7 +122,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
       })
 
       it('does not assign the bill run to the supplementary year records', async () => {
-        await AssignBillRunToLicencesService.go(billRun.id)
+        await AssignBillRunToLicencesService(billRun.id)
 
         const result = await unassignedSameRegionDifferentYear.licenceSupplementaryYear.$query().select()
 
@@ -146,7 +146,7 @@ describe('Bill Runs - Assign Bill Run To Licences service', () => {
     })
 
     it('does not assign the bill run to the supplementary year records', async () => {
-      await AssignBillRunToLicencesService.go(billRun.id)
+      await AssignBillRunToLicencesService(billRun.id)
 
       const result = await assignedSameRegionAndYear.licenceSupplementaryYear.$query().select()
 

@@ -10,7 +10,7 @@ import { db } from '../../../../db/db.js'
  *
  * @returns {Promise<object>}
  */
-async function go() {
+export default async function go() {
   return _deleteAllTestData()
 }
 
@@ -28,11 +28,4 @@ async function _deleteAllTestData() {
     OR "user_name" LIKE '%@e'
     OR "user_name" LIKE 'regression.tests%';
   `)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

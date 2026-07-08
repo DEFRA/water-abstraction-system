@@ -25,7 +25,7 @@ describe('Seed service', () => {
   })
 
   it('uses the knex instance we configure to run the seed process', async () => {
-    await SeedService.go()
+    await SeedService()
 
     expect(knexRunStub.called).toBe(true)
   })

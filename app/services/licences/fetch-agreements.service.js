@@ -12,7 +12,7 @@ import LicenceAgreementModel from '../../models/licence-agreement.model.js'
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's set up tab
  */
-async function go(licenceRef) {
+export default async function go(licenceRef) {
   return _fetch(licenceRef)
 }
 
@@ -26,11 +26,4 @@ async function _fetch(licenceRef) {
       builder.select(['id', 'code'])
     })
     .orderBy([{ column: 'createdAt', order: 'asc' }])
-}
-
-export {
-  go
-}
-export default {
-  go
 }

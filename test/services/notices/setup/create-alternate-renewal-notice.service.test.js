@@ -46,7 +46,7 @@ describe('Notices - Setup - Create Alternate Renewal Notice service', () => {
   })
 
   it('creates and then returns the alternate notice and associated notifications ready for sending', async () => {
-    const result = await CreateAlternateRenewalNoticeService.go(notice, licenceRefs, expiryDate, renewalDate)
+    const result = await CreateAlternateRenewalNoticeService(notice, licenceRefs, expiryDate, renewalDate)
 
     expect(result.notice).toMatchObject({
       issuer: notice.issuer,

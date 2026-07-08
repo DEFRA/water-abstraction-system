@@ -53,7 +53,7 @@ describe('Fetch Return Versions service', () => {
 
   describe('when the licence has return versions data', () => {
     it('returns the matching return versions data', async () => {
-      const result = await FetchReturnVersionsService.go(supersededReturnVersion.licenceId)
+      const result = await FetchReturnVersionsService(supersededReturnVersion.licenceId)
 
       expect(result).toEqual([
         {

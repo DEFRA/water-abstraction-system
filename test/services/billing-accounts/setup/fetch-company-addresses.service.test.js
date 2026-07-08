@@ -40,7 +40,7 @@ describe('Billing Accounts - Setup - Fetch Existing Addresses service', () => {
 
   describe('when a matching company exists and has an address', () => {
     it('returns the company name and matching addresses', async () => {
-      const result = await FetchCompanyAddressesService.go(company.id)
+      const result = await FetchCompanyAddressesService(company.id)
 
       expect(result).toEqual({
         company: {
@@ -65,7 +65,7 @@ describe('Billing Accounts - Setup - Fetch Existing Addresses service', () => {
 
   describe('when a matching company exists and has no address', () => {
     it('returns the company name and an empty addresses array', async () => {
-      const result = await FetchCompanyAddressesService.go(companyWithNoAddress.id)
+      const result = await FetchCompanyAddressesService(companyWithNoAddress.id)
 
       expect(result).toEqual({
         company: {

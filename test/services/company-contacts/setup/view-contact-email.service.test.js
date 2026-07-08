@@ -34,7 +34,7 @@ describe('Company Contacts - Setup - Contact Email Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewContactEmailService.go(session.id)
+      const result = await ViewContactEmailService(session.id)
 
       expect(result).toEqual({
         backLink: {

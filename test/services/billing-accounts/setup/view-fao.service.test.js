@@ -33,7 +33,7 @@ describe('Billing Accounts - Setup - View FAO Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await FAOService.go(session.id)
+      const result = await FAOService(session.id)
 
       expect(result).toEqual({
         backLink: {

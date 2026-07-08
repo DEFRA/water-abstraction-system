@@ -34,7 +34,7 @@ describe('Billing Accounts - Setup - Fetch Company service', () => {
     })
 
     it('returns the matching company', async () => {
-      const result = await FetchCompanyService.go(companiesHouseNumber)
+      const result = await FetchCompanyService(companiesHouseNumber)
 
       expect(result).toEqual({
         companiesHouseNumber: body.company_number,
@@ -57,7 +57,7 @@ describe('Billing Accounts - Setup - Fetch Company service', () => {
     })
 
     it('returns an empty array', async () => {
-      const result = await FetchCompanyService.go(companiesHouseNumber)
+      const result = await FetchCompanyService(companiesHouseNumber)
 
       expect(result).toEqual(null)
     })

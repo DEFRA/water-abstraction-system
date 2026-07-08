@@ -19,7 +19,7 @@ import ReviewChargeElementModel from '../../../models/review-charge-element.mode
  *
  * @returns {Promise<object>} The updated value for the billable returns
  */
-async function go(reviewChargeElementId, elementIndex, yar, payload) {
+export default async function go(reviewChargeElementId, elementIndex, yar, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
@@ -29,7 +29,7 @@ async function go(reviewChargeElementId, elementIndex, yar, payload) {
     return {}
   }
 
-  const reviewChargeElement = await FetchReviewChargeElementService.go(reviewChargeElementId)
+  const reviewChargeElement = await FetchReviewChargeElementService(reviewChargeElementId)
   const pageData = EditPresenter.go(reviewChargeElement, elementIndex)
 
   return {
@@ -67,9 +67,4 @@ function _validate(payload) {
     errorList: [{ href: '#quantityOptions-error', text: message }],
     quantityOptionsErrorMessage: { text: message }
   }
-}
-
-export { go }
-export default {
-  go
 }

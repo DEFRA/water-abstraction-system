@@ -71,7 +71,7 @@ const LETTER_STATUS = {
  *
  * @param {object} notification
  */
-async function go(notification) {
+export default async function go(notification) {
   const notifyStatus = await _notifyStatus(notification.notifyId)
 
   const status = _status(notification, notifyStatus)
@@ -185,11 +185,4 @@ function _status(notification, notifyStatus) {
   }
 
   return LETTER_STATUS[notifyStatus] || NOTIFICATIONS_STATUS.pending
-}
-
-export {
-  go
-}
-export default {
-  go
 }

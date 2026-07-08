@@ -14,7 +14,7 @@ import ViewSendBillRunPresenter from '../../../presenters/bill-runs/view-send-bi
  * @returns {Promise<object>} an object representing the `pageData` needed by the send bill run template. It contains
  * details of the bill run.
  */
-async function go(id) {
+export default async function go(id) {
   const billRun = await _fetchBillRun(id)
 
   const formattedData = ViewSendBillRunPresenter.go(billRun)
@@ -33,9 +33,4 @@ async function _fetchBillRun(id) {
     .modifyGraph('region', (builder) => {
       builder.select(['id', 'displayName'])
     })
-}
-
-export { go }
-export default {
-  go
 }

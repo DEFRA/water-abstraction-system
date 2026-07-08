@@ -20,7 +20,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
       })
 
       it('returns the applicable billing account, charge information, and review results', async () => {
-        const results = await FetchBillingAccountsService.go(seedData.billRun.id, seedData.billingPeriod)
+        const results = await FetchBillingAccountsService(seedData.billRun.id, seedData.billingPeriod)
 
         expect(results).toHaveLength(1)
 
@@ -101,7 +101,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
       })
 
       it('returns both billing accounts, charge information, and review results for the applicable charge version', async () => {
-        const results = await FetchBillingAccountsService.go(seedData.billRun.id, seedData.billingPeriod)
+        const results = await FetchBillingAccountsService(seedData.billRun.id, seedData.billingPeriod)
 
         expect(results).toHaveLength(2)
 
@@ -214,7 +214,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
       })
 
       it('returns the applicable billing account, just the chargeable charge information, but no review results', async () => {
-        const results = await FetchBillingAccountsService.go(seedData.billRun.id, seedData.billingPeriod)
+        const results = await FetchBillingAccountsService(seedData.billRun.id, seedData.billingPeriod)
 
         expect(results).toHaveLength(1)
 
@@ -257,7 +257,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
       })
 
       it('returns the applicable billing account, both sets of charge information, but no review results', async () => {
-        const results = await FetchBillingAccountsService.go(seedData.billRun.id, seedData.billingPeriod)
+        const results = await FetchBillingAccountsService(seedData.billRun.id, seedData.billingPeriod)
 
         expect(results).toHaveLength(1)
 
@@ -325,7 +325,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
     })
 
     it('does not duplicate the results', async () => {
-      const results = await FetchBillingAccountsService.go(seedData.billRun.id, seedData.billingPeriod)
+      const results = await FetchBillingAccountsService(seedData.billRun.id, seedData.billingPeriod)
 
       expect(results).toHaveLength(1)
 
@@ -402,7 +402,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
   // describe('when there are billing accounts that are linked to the bill run', () => {
   //   it('returns the applicable billing accounts', async () => {
-  //     const results = await FetchBillingAccountsService.go(billRun.id, billingPeriod)
+  //     const results = await FetchBillingAccountsService(billRun.id, billingPeriod)
 
   //     expect(results).toHaveLength(1)
 
@@ -413,7 +413,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
   //   describe('and each billing account', () => {
   //     describe('for the charge versions property', () => {
   //       it('returns the applicable charge versions', async () => {
-  //         const results = await FetchBillingAccountsService.go(billRun.id, billingPeriod)
+  //         const results = await FetchBillingAccountsService(billRun.id, billingPeriod)
 
   //         expect(results[0].chargeVersions).toHaveLength(2)
 
@@ -437,7 +437,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
   //     describe('and against each charge version', () => {
   //       it('includes the licence', async () => {
-  //         const results = await FetchBillingAccountsService.go(billRun.id, billingPeriod)
+  //         const results = await FetchBillingAccountsService(billRun.id, billingPeriod)
 
   //         let licence = results[0].chargeVersions[0].licence
 
@@ -466,7 +466,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
   //       describe('and when the charge version is two-part tariff (been through match & allocate)', () => {
   //         it('includes the applicable charge references', async () => {
-  //           const results = await FetchBillingAccountsService.go(billRun.id, billingPeriod)
+  //           const results = await FetchBillingAccountsService(billRun.id, billingPeriod)
 
   //           const { chargeReferences } = results[0].chargeVersions[0]
 
@@ -488,7 +488,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
   //         describe('and against each charge reference', () => {
   //           it('includes the charge category', async () => {
-  //             const results = await FetchBillingAccountsService.go(billRun.id, billingPeriod)
+  //             const results = await FetchBillingAccountsService(billRun.id, billingPeriod)
 
   //             const { chargeCategory: result } = results[0].chargeVersions[0].chargeReferences[0]
 
@@ -498,7 +498,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
   //           })
 
   //           it('includes the review charge references', async () => {
-  //             const results = await FetchBillingAccountsService.go(billRun.id, billingPeriod)
+  //             const results = await FetchBillingAccountsService(billRun.id, billingPeriod)
 
   //             const { reviewChargeReferences: result } = results[0].chargeVersions[0].chargeReferences[0]
 
@@ -509,7 +509,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
   //           })
 
   //           it('includes the charge elements', async () => {
-  //             const results = await FetchBillingAccountsService.go(billRun.id, billingPeriod)
+  //             const results = await FetchBillingAccountsService(billRun.id, billingPeriod)
 
   //             const { chargeElements: result } = results[0].chargeVersions[0].chargeReferences[0]
 
@@ -522,7 +522,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
   //           describe('and against each charge element', () => {
   //             it('includes the review charge elements', async () => {
-  //               const results = await FetchBillingAccountsService.go(billRun.id, billingPeriod)
+  //               const results = await FetchBillingAccountsService(billRun.id, billingPeriod)
 
   //               const { reviewChargeElements: result } =
   //                 results[0].chargeVersions[0].chargeReferences[0].chargeElements[0]
@@ -536,7 +536,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
   //       describe('and when the charge version is not two-part tariff (not been through match & allocate)', () => {
   //         it('does not include any charge references', async () => {
-  //           const results = await FetchBillingAccountsService.go(billRun.id, billingPeriod)
+  //           const results = await FetchBillingAccountsService(billRun.id, billingPeriod)
 
   //           const { chargeReferences } = results[0].chargeVersions[1]
 
@@ -550,7 +550,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
   // describe('when there is a billing account linked to the bill run which has non-chargeable licences', () => {
   //   describe('as well as chargeable licences (billing account found by both services)', () => {
   //     it('merges the billing account record into one result', async () => {
-  //       const results = await FetchBillingAccountsService.go(billRun.id, billingPeriod)
+  //       const results = await FetchBillingAccountsService(billRun.id, billingPeriod)
 
   //       expect(results).toHaveLength(1)
 
@@ -581,7 +581,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
   //   describe('but no chargeable licences (billing account only found by FetchNonChargeableBillingAccounts)', () => {
   //     it('adds the billing account record to the results', async () => {
-  //       const results = await FetchBillingAccountsService.go(billRun.id, billingPeriod)
+  //       const results = await FetchBillingAccountsService(billRun.id, billingPeriod)
 
   //       expect(results).toHaveLength(2)
 
@@ -619,7 +619,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
   // describe('when there are billing accounts not linked to the bill run', () => {
   //   it('does not include them in the results', async () => {
-  //     const results = await FetchBillingAccountsService.go(billRun.id, billingPeriod)
+  //     const results = await FetchBillingAccountsService(billRun.id, billingPeriod)
 
   //     expect(results).toHaveLength(1)
 
@@ -629,7 +629,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
   describe('when there are no billing accounts at all (no results)', () => {
     it('returns no results', async () => {
-      const results = await FetchBillingAccountsService.go(
+      const results = await FetchBillingAccountsService(
         '1c1f7af5-9cba-47a7-8fc4-2c03b0d1124d',
         seedData.billingPeriod
       )

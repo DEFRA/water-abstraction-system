@@ -36,7 +36,7 @@ describe('Fetch Bills To Be Reissued service', () => {
 
   describe('when there are no bills to be reissued', () => {
     it('returns no results', async () => {
-      const result = await FetchBillsToBeReissuedService.go(regionId)
+      const result = await FetchBillsToBeReissuedService(regionId)
 
       expect(result).toHaveLength(0)
     })
@@ -48,14 +48,14 @@ describe('Fetch Bills To Be Reissued service', () => {
     })
 
     it('returns results', async () => {
-      const result = await FetchBillsToBeReissuedService.go(regionId)
+      const result = await FetchBillsToBeReissuedService(regionId)
 
       expect(result).toHaveLength(1)
       expect(result[0]).toBeInstanceOf(BillModel)
     })
 
     it('returns only the required bill fields', async () => {
-      const bill = await FetchBillsToBeReissuedService.go(regionId)
+      const bill = await FetchBillsToBeReissuedService(regionId)
 
       const result = Object.keys(bill[0])
 
@@ -73,7 +73,7 @@ describe('Fetch Bills To Be Reissued service', () => {
     })
 
     it('returns only the required bill licence fields', async () => {
-      const bill = await FetchBillsToBeReissuedService.go(regionId)
+      const bill = await FetchBillsToBeReissuedService(regionId)
 
       const { billLicences } = bill[0]
 
@@ -97,7 +97,7 @@ describe('Fetch Bills To Be Reissued service', () => {
       })
 
       it('returns only sroc bills', async () => {
-        const result = await FetchBillsToBeReissuedService.go(regionId)
+        const result = await FetchBillsToBeReissuedService(regionId)
 
         expect(result).toHaveLength(1)
         expect(result[0].id).toEqual(bill.id)
@@ -120,13 +120,13 @@ describe('Fetch Bills To Be Reissued service', () => {
 
     it('logs an error', async () => {
       // Force an error by calling the service with an invalid uuid
-      await FetchBillsToBeReissuedService.go('NOT_A_UUID')
+      await FetchBillsToBeReissuedService('NOT_A_UUID')
 
       expect(notifierStub.omfg.calledWith('Could not fetch reissue bills')).toBe(true)
     })
 
     it('returns an empty array', async () => {
-      const result = await FetchBillsToBeReissuedService.go(regionId)
+      const result = await FetchBillsToBeReissuedService(regionId)
 
       expect(result).toHaveLength(0)
     })

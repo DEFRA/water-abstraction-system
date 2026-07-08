@@ -24,7 +24,7 @@ import { clearFilters, handleOneOptionSelected } from '../../lib/submit-page.lib
  * @returns {Promise<object>} If no errors an empty object signifying the request can be redirected to the index page
  * else the data needed to re-render the page
  */
-async function go(payload, yar, page) {
+export default async function go(payload, yar, page) {
   const filterCleared = clearFilters(payload, yar, 'billRunsFilter')
 
   if (filterCleared) {
@@ -35,7 +35,7 @@ async function go(payload, yar, page) {
   handleOneOptionSelected(payload, 'runTypes')
   handleOneOptionSelected(payload, 'statuses')
 
-  const regions = await FetchRegionsService.go()
+  const regions = await FetchRegionsService()
   const error = _validate(payload, regions)
 
   if (!error) {
@@ -56,8 +56,8 @@ async function _replayView(payload, error, page, regions, savedFilters) {
   // We expect the FetchBillRunsService to take the longest to complete. But running them together means we are only
   // waiting as long as it takes FetchBillRunsService to complete rather than their combined time
   const [busyResult, { results: billRuns, total: totalNumber }] = await Promise.all([
-    CheckBusyBillRunsService.go(),
-    FetchBillRunsService.go(savedFilters, page)
+    CheckBusyBillRunsService(),
+    FetchBillRunsService(savedFilters, page)
   ])
 
   const pagination = PaginatorPresenter.go(totalNumber, page, '/system/bill-runs', billRuns.length, 'bill runs')
@@ -101,9 +101,4 @@ function _validate(payload, regions) {
   const validationResult = IndexValidator.go(payload, regions)
 
   return formatValidationResult(validationResult)
-}
-
-export { go }
-export default {
-  go
 }

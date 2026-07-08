@@ -28,11 +28,11 @@ import Workflow from '../../../models/workflow.model.js'
  * in future bill runs until Billing & Data have had a chance to review the existing charge versions. This is because
  * the change to the licence might require changes to the charge versions.
  */
-async function go() {
+export default async function go() {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    const licenceUpdateResults = await FetchLicenceUpdatesService.go()
+    const licenceUpdateResults = await FetchLicenceUpdatesService()
 
     await _addWorkflowRecords(licenceUpdateResults)
 
@@ -60,11 +60,4 @@ async function _addWorkflowRecords(licenceVersions) {
       updatedAt: timestamp
     })
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

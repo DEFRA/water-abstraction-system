@@ -24,7 +24,7 @@ import ReturnCycleModel from '../../../models/return-cycle.model.js'
  *
  * @returns {Promise<module:ReturnCycleModel>} either the matching or newly created return cycle
  */
-async function go(summer) {
+export default async function go(summer) {
   const currentDate = new Date()
   const startDate = determineCycleStartDate(summer, currentDate)
   const endDate = determineCycleEndDate(summer, currentDate)
@@ -62,11 +62,4 @@ async function _matchingReturnCycle(startDate, endDate, summer) {
     .where('summer', summer)
     .limit(1)
     .first()
-}
-
-export {
-  go
-}
-export default {
-  go
 }

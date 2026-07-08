@@ -24,7 +24,7 @@ const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_NOT_FOUND, H
  * @returns {object} Contains the properties `stopResponse:` and `statusCode:` which are used by the plugin to
  * decide how to direct the response
  */
-function go(request) {
+export default function go(request) {
   const stopResponse = _stopResponse(request)
 
   let statusCode = _extractStatusCode(request)
@@ -148,11 +148,4 @@ function _determineSafeStatusCode(statusCode) {
   // Firewall (WAF) will block the response and serve its own error page. We don't want this so we have to return a
   // 'safe' 200.
   return HTTP_STATUS_OK
-}
-
-export {
-  go
-}
-export default {
-  go
 }

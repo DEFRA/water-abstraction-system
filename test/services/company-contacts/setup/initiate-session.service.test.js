@@ -34,7 +34,7 @@ describe('Company Contacts - Setup - Initiate Session service', () => {
 
   describe('when called', () => {
     it('creates a new session record with the "company" saved', async () => {
-      const result = await InitiateSessionService.go(company.id)
+      const result = await InitiateSessionService(company.id)
 
       const matchingSession = await SessionModel.query().findById(result.id)
 

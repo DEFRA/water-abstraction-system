@@ -74,7 +74,7 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
 
   describe('when called', () => {
     it('returns the request object', async () => {
-      const result = await PreparePaperReturnService.go(notification)
+      const result = await PreparePaperReturnService(notification)
 
       expect(result).toEqual({
         response: {
@@ -85,7 +85,7 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
     })
 
     it('returns the generated pdf as an array buffer', async () => {
-      const result = await PreparePaperReturnService.go(notification)
+      const result = await PreparePaperReturnService(notification)
 
       expect(result.response.body).toBeInstanceOf(ArrayBuffer)
       // The encoded string is 9 chars
@@ -93,7 +93,7 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
     })
 
     it('should call "GeneratePaperReturnRequest" with the page data for the provided "returnLogId"', async () => {
-      await PreparePaperReturnService.go(notification)
+      await PreparePaperReturnService(notification)
 
       expect(GeneratePaperReturnRequest.send.calledOnce).toBe(true)
 

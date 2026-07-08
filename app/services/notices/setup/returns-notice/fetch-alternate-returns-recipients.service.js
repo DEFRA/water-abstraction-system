@@ -18,9 +18,9 @@ import { db } from '../../../../../db/db.js'
  *
  * @returns {Promise<object[]>} The recipient data for the alternate returns notice
  */
-async function go(returnLogIds, notificationDueDate) {
-  const { bindings, query: dueReturnLogsQuery } = GenerateReturnLogsByIdQueryService.go(returnLogIds)
-  const query = GenerateRecipientsQueryService.go(NoticeType.ALTERNATE_INVITATION, dueReturnLogsQuery, false)
+export default async function go(returnLogIds, notificationDueDate) {
+  const { bindings, query: dueReturnLogsQuery } = GenerateReturnLogsByIdQueryService(returnLogIds)
+  const query = GenerateRecipientsQueryService(NoticeType.ALTERNATE_INVITATION, dueReturnLogsQuery, false)
 
   const { rows } = await db.raw(query, bindings)
 
@@ -33,9 +33,4 @@ function _applyNotificationDueDate(rows, notificationDueDate) {
   for (const row of rows) {
     row.notificationDueDate = notificationDueDate
   }
-}
-
-export { go }
-export default {
-  go
 }

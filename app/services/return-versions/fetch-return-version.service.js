@@ -13,7 +13,7 @@ import ReturnVersionModel from '../../models/return-version.model.js'
  * @returns {Promise<ReturnVersionModel>} The return version plus linked licence, return requirements (requirement,
  * points, purposes)
  */
-async function go(returnVersionId) {
+export default async function go(returnVersionId) {
   return {
     returnVersion: await _fetch(returnVersionId),
     returnVersionsForPagination: await _fetchPagination(returnVersionId)
@@ -80,11 +80,4 @@ async function _fetchPagination(returnVersionId) {
       { column: 'startDate', order: 'asc' },
       { column: 'endDate', order: 'asc' }
     ])
-}
-
-export {
-  go
-}
-export default {
-  go
 }

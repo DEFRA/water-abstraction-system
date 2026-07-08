@@ -14,7 +14,7 @@ import MarkForSupplementaryBillingPresenter from '../../../presenters/licences/s
  * @returns {Promise<object>} an object representing the `pageData` needed by the mark for supplementary billing page.
  * It contains details of the last 6 years from todays date and the licence details.
  */
-async function go(licenceId) {
+export default async function go(licenceId) {
   const licenceData = await _fetchLicenceData(licenceId)
 
   const pageData = MarkForSupplementaryBillingPresenter.go(licenceData)
@@ -26,11 +26,4 @@ async function go(licenceId) {
 
 async function _fetchLicenceData(licenceId) {
   return LicenceModel.query().findById(licenceId).select(['id', 'licenceRef'])
-}
-
-export {
-  go
-}
-export default {
-  go
 }

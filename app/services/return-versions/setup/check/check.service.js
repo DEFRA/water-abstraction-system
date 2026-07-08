@@ -17,7 +17,7 @@ import { readFlashNotification } from '../../../../lib/general.lib.js'
  *
  * @returns {Promise<object>} page data needed by the view template
  */
-async function go(sessionId, yar) {
+export default async function go(sessionId, yar) {
   const session = await FetchSessionDal(sessionId)
 
   await _markCheckPageVisited(session)
@@ -44,12 +44,7 @@ async function _markCheckPageVisited(session) {
 async function _returnRequirements(session) {
   const { licenceVersion, requirements, journey } = session
 
-  const points = await FetchPointsService.go(licenceVersion.id)
+  const points = await FetchPointsService(licenceVersion.id)
 
   return ReturnRequirementsPresenter.go(requirements, points, journey)
-}
-
-export { go }
-export default {
-  go
 }

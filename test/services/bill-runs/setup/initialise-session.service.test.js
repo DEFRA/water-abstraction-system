@@ -9,7 +9,7 @@ const InitiateSessionService = require('../../../../app/services/bill-runs/setup
 describe('Bill Run - Setup - Initiate Session service', () => {
   describe('when called', () => {
     it('creates a new session record with an empty data property', async () => {
-      const result = await InitiateSessionService.go()
+      const result = await InitiateSessionService()
 
       const matchingSession = await SessionModel.query().findById(result.id)
 

@@ -16,7 +16,7 @@ import LicenceMonitoringStationModel from '../../../models/licence-monitoring-st
  *
  * @param {object[]} notifications
  */
-async function go(notifications) {
+export default async function go(notifications) {
   const toUpdateStations = _stations(notifications)
 
   await Promise.all(toUpdateStations)
@@ -39,11 +39,4 @@ function _stations(notifications) {
       statusUpdatedAt: createdAt
     })
   })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

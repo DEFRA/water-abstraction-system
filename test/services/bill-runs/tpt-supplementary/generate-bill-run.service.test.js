@@ -71,14 +71,14 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
       })
 
       it('sets the bill run status to "empty"', async () => {
-        await GenerateBillRunService.go(billRun)
+        await GenerateBillRunService(billRun)
 
         expect(billRunPatchStub.calledOnce).toBe(true)
         expect(billRunPatchStub.firstCall.firstArg).toMatchObject({ status: 'empty' })
       })
 
       it('triggers the "unflag unbilled supplementary licences" service', async () => {
-        await GenerateBillRunService.go(billRun)
+        await GenerateBillRunService(billRun)
 
         expect(unflagUnbilledStub.calledOnce).toBe(true)
       })
@@ -97,19 +97,19 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
       })
 
       it('tells the charging module API to "generate" the bill run', async () => {
-        await GenerateBillRunService.go(billRun)
+        await GenerateBillRunService(billRun)
 
         expect(chargingModuleGenerateRequestStub.called).toBe(true)
       })
 
       it('tells the legacy service to start its refresh job', async () => {
-        await GenerateBillRunService.go(billRun)
+        await GenerateBillRunService(billRun)
 
         expect(legacyRefreshBillRunRequestStub.called).toBe(true)
       })
 
       it('triggers the "unflag unbilled supplementary licences" service', async () => {
-        await GenerateBillRunService.go(billRun)
+        await GenerateBillRunService(billRun)
 
         expect(unflagUnbilledStub.calledOnce).toBe(true)
       })
@@ -132,7 +132,7 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
-        await GenerateBillRunService.go(billRun)
+        await GenerateBillRunService(billRun)
 
         const handlerArgs = handleErroredBillRunStub.firstCall.args
 
@@ -140,7 +140,7 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
       })
 
       it('logs the error', async () => {
-        await GenerateBillRunService.go(billRun)
+        await GenerateBillRunService(billRun)
 
         const args = notifierStub.omfg.firstCall.args
 
@@ -163,7 +163,7 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
         })
 
         it('calls HandleErroredBillRunService with appropriate error code', async () => {
-          await GenerateBillRunService.go(billRun)
+          await GenerateBillRunService(billRun)
 
           const handlerArgs = handleErroredBillRunStub.firstCall.args
 
@@ -171,7 +171,7 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
         })
 
         it('logs the error', async () => {
-          await GenerateBillRunService.go(billRun)
+          await GenerateBillRunService(billRun)
 
           const args = notifierStub.omfg.firstCall.args
 
@@ -195,7 +195,7 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
-        await GenerateBillRunService.go(billRun)
+        await GenerateBillRunService(billRun)
 
         const handlerArgs = handleErroredBillRunStub.firstCall.args
 
@@ -203,7 +203,7 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
       })
 
       it('logs the error', async () => {
-        await GenerateBillRunService.go(billRun)
+        await GenerateBillRunService(billRun)
 
         const args = notifierStub.omfg.firstCall.args
 

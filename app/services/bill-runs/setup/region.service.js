@@ -17,9 +17,9 @@ import RegionPresenter from '../../../presenters/bill-runs/setup/region.presente
  *
  * @returns {Promise<object>} The view data for the region page
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
-  const regions = await FetchRegionsService.go()
+  const regions = await FetchRegionsService()
 
   const formattedData = RegionPresenter.go(session, regions)
 
@@ -27,9 +27,4 @@ async function go(sessionId) {
     activeNavBar: 'bill-runs',
     ...formattedData
   }
-}
-
-export { go }
-export default {
-  go
 }

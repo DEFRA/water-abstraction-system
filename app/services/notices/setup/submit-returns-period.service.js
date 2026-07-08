@@ -20,7 +20,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
  * @returns {Promise<object>} An object containing where to redirect to if there are no errors else the page data for the view
  * including the validation error details
  */
-async function go(sessionId, payload, yar) {
+export default async function go(sessionId, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload, session.noticeType)
@@ -51,7 +51,7 @@ async function go(sessionId, payload, yar) {
 async function _save(session, payload) {
   session.returnsPeriod = payload.returnsPeriod
 
-  const { returnsPeriod, summer } = DetermineReturnsPeriodService.go(session.returnsPeriod)
+  const { returnsPeriod, summer } = DetermineReturnsPeriodService(session.returnsPeriod)
 
   session.determinedReturnsPeriod = {
     ...returnsPeriod,
@@ -65,9 +65,4 @@ function _validate(payload, noticeType) {
   const validationResult = ReturnsPeriodValidator.go(payload, noticeType)
 
   return formatValidationResult(validationResult)
-}
-
-export { go }
-export default {
-  go
 }

@@ -25,7 +25,7 @@ export async function index(request, h) {
     yar
   } = request
 
-  const pageData = await IndexUsersService.go(yar, auth, page)
+  const pageData = await IndexUsersService(yar, auth, page)
 
   return h.view('users/index.njk', pageData)
 }
@@ -38,7 +38,7 @@ export async function submitIndex(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitIndexUsersService.go(payload, yar, auth, page)
+  const pageData = await SubmitIndexUsersService(payload, yar, auth, page)
 
   if (pageData.error) {
     return h.view('users/index.njk', pageData)
@@ -61,7 +61,7 @@ export async function submitProfileDetails(request, h) {
   const { payload, yar } = request
   const { userId } = request.auth.credentials.user
 
-  const pageData = await SubmitProfileDetailsService.go(userId, payload, yar)
+  const pageData = await SubmitProfileDetailsService(userId, payload, yar)
 
   if (pageData.error) {
     return h.view('users/profile-details.njk', pageData)
@@ -77,7 +77,7 @@ export async function viewExternalCommunications(request, h) {
     query: { back, page }
   } = request
 
-  const pageData = await ViewExternalCommunicationsService.go(id, auth, page, back)
+  const pageData = await ViewExternalCommunicationsService(id, auth, page, back)
 
   return h.view('users/external/communications.njk', pageData)
 }
@@ -93,7 +93,7 @@ export async function viewExternalDetails(request, h) {
     return _redirectToLegacy(id, h)
   }
 
-  const pageData = await ViewExternalDetailsService.go(id, auth, back)
+  const pageData = await ViewExternalDetailsService(id, auth, back)
 
   return h.view('users/external/details.njk', pageData)
 }
@@ -106,7 +106,7 @@ export async function viewExternalLicences(request, h) {
     yar
   } = request
 
-  const pageData = await ViewExternalLicencesService.go(id, auth, page, yar, back)
+  const pageData = await ViewExternalLicencesService(id, auth, page, yar, back)
 
   return h.view('users/external/licences.njk', pageData)
 }
@@ -118,7 +118,7 @@ export async function viewExternalVerifications(request, h) {
     query: { back, page }
   } = request
 
-  const pageData = await ViewExternalVerificationsService.go(id, auth, page, back)
+  const pageData = await ViewExternalVerificationsService(id, auth, page, back)
 
   return h.view('users/external/verifications.njk', pageData)
 }
@@ -129,7 +129,7 @@ export async function viewInternalCommunications(request, h) {
     query: { page }
   } = request
 
-  const pageData = await ViewInternalCommunicationsService.go(id, page)
+  const pageData = await ViewInternalCommunicationsService(id, page)
 
   return h.view('users/internal/communications.njk', pageData)
 }
@@ -144,7 +144,7 @@ export async function viewInternalDetails(request, h) {
     return _redirectToLegacy(id, h)
   }
 
-  const pageData = await ViewInternalDetailsService.go(auth, id)
+  const pageData = await ViewInternalDetailsService(auth, id)
 
   return h.view('users/internal/details.njk', pageData)
 }
@@ -155,7 +155,7 @@ export async function viewNotification(request, h) {
     params: { type, id, notificationId }
   } = request
 
-  const pageData = await ViewNotificationService.go(notificationId, id, type, auth)
+  const pageData = await ViewNotificationService(notificationId, id, type, auth)
 
   return h.view('users/notification.njk', pageData)
 }
@@ -163,7 +163,7 @@ export async function viewNotification(request, h) {
 export async function viewProfileDetails(request, h) {
   const { userId } = request.auth.credentials.user
 
-  const pageData = await ViewProfileDetailsService.go(userId, request.yar)
+  const pageData = await ViewProfileDetailsService(userId, request.yar)
 
   return h.view('users/profile-details.njk', pageData)
 }

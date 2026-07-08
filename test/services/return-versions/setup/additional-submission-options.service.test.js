@@ -46,13 +46,13 @@ describe('Return Versions Setup - Additional Submission Options service', () => 
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await AdditionalSubmissionOptionsService.go(session.id)
+      const result = await AdditionalSubmissionOptionsService(session.id)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await AdditionalSubmissionOptionsService.go(session.id)
+      const result = await AdditionalSubmissionOptionsService(session.id)
 
       expect(result).toMatchObject({
         multipleUpload: false,

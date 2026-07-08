@@ -14,7 +14,7 @@ import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
  *
  * @returns {Promise<object>} An object containing the URL to redirect the user to after cancelling
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   await DeleteSessionDal(sessionId)
@@ -24,11 +24,4 @@ async function go(sessionId) {
   return {
     redirectUrl: `/system/users/external/${user.id}/licences?back=${session.activeNavBar}`
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

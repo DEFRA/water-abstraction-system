@@ -75,7 +75,7 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
 
   describe('when called', () => {
     it('returns generated pdf as an array buffer', async () => {
-      const result = await ProcessPreviewPaperReturnService.go(session.id, contactHashId, returnLogId)
+      const result = await ProcessPreviewPaperReturnService(session.id, contactHashId, returnLogId)
 
       expect(result).toBeInstanceOf(ArrayBuffer)
       // The encoded string is 9 chars
@@ -83,7 +83,7 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
     })
 
     it('should call "GeneratePaperReturnRequest"', async () => {
-      await ProcessPreviewPaperReturnService.go(session.id, contactHashId, returnLogId)
+      await ProcessPreviewPaperReturnService(session.id, contactHashId, returnLogId)
 
       expect(GeneratePaperReturnRequest.send.calledOnce).toBe(true)
 

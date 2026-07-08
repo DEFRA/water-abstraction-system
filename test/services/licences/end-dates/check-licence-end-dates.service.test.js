@@ -47,7 +47,7 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
 
   describe('when the "end dates" on the licence have not changed', () => {
     it('does not record the change', async () => {
-      await CheckLicenceEndDatesService.go(licence)
+      await CheckLicenceEndDatesService(licence)
 
       const licenceEndDateChanges = await LicenceEndDateChangeModel.query().where('licenceId', licence.id)
 
@@ -62,7 +62,7 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
     })
 
     it('records the change', async () => {
-      await CheckLicenceEndDatesService.go(licence)
+      await CheckLicenceEndDatesService(licence)
 
       const licenceEndDateChanges = await LicenceEndDateChangeModel.query().where('licenceId', licence.id)
 
@@ -83,7 +83,7 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
     })
 
     it('handles the error', async () => {
-      await CheckLicenceEndDatesService.go(licence)
+      await CheckLicenceEndDatesService(licence)
 
       const errorLogArgs = notifierStub.omfg.firstCall.args
 

@@ -25,7 +25,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
  *
  * @returns {Promise<object>} If no errors the page data for the period-used page else the validation error details
  */
-async function go(sessionId, payload) {
+export default async function go(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   const error = _validate(payload, session)
@@ -93,7 +93,7 @@ async function _save(session, payload) {
 
   _determineAbstractionPeriodDates(session, payload)
 
-  AllocateSingleVolumeToLinesService.go(session)
+  AllocateSingleVolumeToLinesService(session)
 
   return session.$update()
 }
@@ -114,9 +114,4 @@ function _validate(payload, session) {
   const validationResult = PeriodUsedValidator.go(payload, session.startDate, session.endDate)
 
   return formatValidationResult(validationResult)
-}
-
-export { go }
-export default {
-  go
 }

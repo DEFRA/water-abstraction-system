@@ -32,13 +32,13 @@ describe('Return Logs Setup - Reported service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await ReportedService.go(session.id)
+      const result = await ReportedService(session.id)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await ReportedService.go(session.id)
+      const result = await ReportedService(session.id)
 
       expect(result).toMatchObject({
         backLink: { href: `/system/return-logs/setup/${session.id}/submission`, text: 'Back' },

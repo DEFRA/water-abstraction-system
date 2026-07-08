@@ -63,7 +63,7 @@ describe('Bill Runs Review - Fetch Review Charge Element service', () => {
 
   describe('when a matching review charge element exists', () => {
     it('returns the match', async () => {
-      const result = await FetchReviewChargeElementService.go(reviewChargeElement.id)
+      const result = await FetchReviewChargeElementService(reviewChargeElement.id)
 
       expect(result).toEqual({
         id: reviewChargeElement.id,
@@ -138,7 +138,7 @@ describe('Bill Runs Review - Fetch Review Charge Element service', () => {
 
   describe('when no matching review charge element exists', () => {
     it('returns nothing', async () => {
-      const result = await FetchReviewChargeElementService.go('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
+      const result = await FetchReviewChargeElementService('dfa47d48-0c98-4707-a5b8-820eb16c1dfd')
 
       expect(result).toBeUndefined()
     })

@@ -46,7 +46,7 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
       })
 
       it('sets the bill run status first to "processing" and then to "empty"', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
         expect(billRunPatchStub.calledTwice).toBe(true)
         expect(billRunPatchStub.firstCall.firstArg).toEqual({ status: 'processing' })
@@ -54,7 +54,7 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
       })
 
       it('logs the time taken', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
         const args = notifierStub.omg.firstCall.args
 
@@ -71,7 +71,7 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
       })
 
       it('sets the bill run status first to "processing" and then to "review"', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
         expect(billRunPatchStub.calledTwice).toBe(true)
         expect(billRunPatchStub.firstCall.firstArg).toEqual({ status: 'processing' })
@@ -79,7 +79,7 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
       })
 
       it('logs the time taken', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
         const args = notifierStub.omg.firstCall.args
 
@@ -99,13 +99,13 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
       })
 
       it('calls HandleErroredBillRunService', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
         expect(HandleErroredBillRunService.go.called).toBe(true)
       })
 
       it('logs the error', async () => {
-        await ProcessBillRunService.go(billRun, billingPeriods)
+        await ProcessBillRunService(billRun, billingPeriods)
 
         const args = notifierStub.omfg.firstCall.args
 

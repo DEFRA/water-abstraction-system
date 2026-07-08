@@ -27,7 +27,7 @@ describe('Licences - View Mark For Supplementary Billing Service', () => {
   })
 
   it('returns page data for the view', async () => {
-    const result = await ViewMarkForSupplementaryBillingService.go(licence.id)
+    const result = await ViewMarkForSupplementaryBillingService(licence.id)
 
     expect(result).toEqual({
       backLink: {

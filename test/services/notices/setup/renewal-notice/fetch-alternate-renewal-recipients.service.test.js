@@ -23,7 +23,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Alternate Renewal Recipients 
   describe('when service is called for sending the "alternate notice"', () => {
     it('fetches the correct recipient data for sending the notice', async () => {
       const licenceRefs = scenarios.licenceHolder.licenceHolderRecipient.licenceRefs
-      const results = await FetchAlternateRenewalRecipientsService.go(licenceRefs)
+      const results = await FetchAlternateRenewalRecipientsService(licenceRefs)
 
       const expectedResult = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolder)
 

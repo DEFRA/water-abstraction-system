@@ -16,7 +16,7 @@ import FetchSessionDal from '../../../dal/fetch-session.dal.js'
  * @returns {Promise<number>} The index of the new requirement. Needed by the setup pages so they know which requirement
  * to display and update
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   await _save(session)
@@ -30,9 +30,4 @@ async function _save(session) {
   session.checkPageVisited = false
 
   return session.$update()
-}
-
-export { go }
-export default {
-  go
 }

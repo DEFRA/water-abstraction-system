@@ -20,7 +20,7 @@ import { generateUUID } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<module:ReturnSubmissionModel>} - The created return submission
  */
-async function go(metadata, session, timestamp, user, trx = null) {
+export default async function go(metadata, session, timestamp, user, trx = null) {
   const { version, previousVersion } = await _determineVersionNumbers(session.returnLogId, trx)
 
   const returnSubmission = {
@@ -62,9 +62,4 @@ async function _markPreviousVersionAsSuperseded(returnLogId, version, trx) {
     .patch({ current: false })
     .where('returnLogId', returnLogId)
     .where('version', version)
-}
-
-export { go }
-export default {
-  go
 }

@@ -75,7 +75,7 @@ describe('Users - External - Fetch Verifications DAL', () => {
 
   describe('when the user has verifications', () => {
     it('returns the matching verifications and the total', async () => {
-      const result = await FetchVerificationsDal.go(user.licenceEntityId)
+      const result = await FetchVerificationsDal(user.licenceEntityId)
 
       expect(result).toEqual({
         totalNumber: 3,
@@ -199,7 +199,7 @@ describe('Users - External - Fetch Verifications DAL', () => {
 
   describe('when the user has no verifications', () => {
     it('returns an empty array and zero', async () => {
-      const result = await FetchVerificationsDal.go('c02ac8b8-e5d4-41f3-b3df-3a370c95ff0a')
+      const result = await FetchVerificationsDal('c02ac8b8-e5d4-41f3-b3df-3a370c95ff0a')
 
       expect(result).toEqual({ verifications: [], totalNumber: 0 })
     })

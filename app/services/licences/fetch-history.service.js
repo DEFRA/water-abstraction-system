@@ -12,7 +12,7 @@ import LicenceVersionModel from '../../models/licence-version.model.js'
  *
  * @returns {Promise<module:LicenceVersionModel>} the licence versions
  */
-async function go(licenceId) {
+export default async function go(licenceId) {
   return _fetch(licenceId)
 }
 
@@ -27,11 +27,4 @@ async function _fetch(licenceId) {
       { column: 'increment', order: 'desc' }
     ])
     .modify('history')
-}
-
-export {
-  go
-}
-export default {
-  go
 }

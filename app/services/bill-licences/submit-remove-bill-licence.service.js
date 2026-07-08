@@ -24,13 +24,13 @@ import UnassignLicencesToBillRunService from '../bill-runs/unassign-licences-to-
  *
  * @returns {Promise<string>} Returns the redirect path the controller needs
  */
-async function go(billLicenceId, user) {
+export default async function go(billLicenceId, user) {
   const billLicence = await _fetchBillLicence(billLicenceId)
 
   const { bill, licenceId } = billLicence
 
-  await UnassignLicencesToBillRunService.go([licenceId], bill.billRunId)
-  await ProcessBillingFlagService.go({ billLicenceId })
+  await UnassignLicencesToBillRunService([licenceId], bill.billRunId)
+  await ProcessBillingFlagService({ billLicenceId })
   await send(billLicenceId, user)
 
   return `/billing/batch/${bill.billRunId}/processing?invoiceId=${bill.id}`
@@ -44,11 +44,4 @@ async function _fetchBillLicence(billLicenceId) {
     .modifyGraph('bill', (builder) => {
       builder.select(['id', 'billRunId'])
     })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

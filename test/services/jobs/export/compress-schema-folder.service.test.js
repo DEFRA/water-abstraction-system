@@ -29,7 +29,7 @@ describe.skip('Jobs - Export - Compress Schema Folder service', () => {
     const schemaFolderPath = '/tmp/water'
     const expectedTarballPath = '/tmp/water.tgz'
 
-    const result = await CompressSchemaFolderService.go(schemaFolderPath)
+    const result = await CompressSchemaFolderService(schemaFolderPath)
 
     expect(tar.create).toHaveBeenCalledOnce()
     expect(result).toEqual(expectedTarballPath)

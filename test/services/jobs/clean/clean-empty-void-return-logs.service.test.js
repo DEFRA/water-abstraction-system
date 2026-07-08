@@ -39,7 +39,7 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
         })
 
         it('removes the return log and returns the count', async () => {
-          const result = await CleanEmptyVoidReturnLogsService.go()
+          const result = await CleanEmptyVoidReturnLogsService()
 
           const existsResults = await ReturnLogModel.query().whereIn('id', [returnLog.id])
 
@@ -56,7 +56,7 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
         })
 
         it('does not remove the return log and returns the count', async () => {
-          const result = await CleanEmptyVoidReturnLogsService.go()
+          const result = await CleanEmptyVoidReturnLogsService()
 
           const existsResults = await ReturnLogModel.query().whereIn('id', [returnLog.id])
 
@@ -76,7 +76,7 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
       })
 
       it('does not remove the return log and returns the count', async () => {
-        const result = await CleanEmptyVoidReturnLogsService.go()
+        const result = await CleanEmptyVoidReturnLogsService()
 
         const existsResults = await ReturnLogModel.query().whereIn('id', [returnLog.id])
 
@@ -100,11 +100,11 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
     })
 
     it('does not throw an error', async () => {
-      await expect(CleanEmptyVoidReturnLogsService.go()).resolves.toBeDefined()
+      await expect(CleanEmptyVoidReturnLogsService()).resolves.toBeDefined()
     })
 
     it('logs the error', async () => {
-      await CleanEmptyVoidReturnLogsService.go()
+      await CleanEmptyVoidReturnLogsService()
 
       const errorLogArgs = notifierStub.omfg.firstCall.args
 
@@ -114,7 +114,7 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
     })
 
     it('still returns a count', async () => {
-      const result = await CleanEmptyVoidReturnLogsService.go()
+      const result = await CleanEmptyVoidReturnLogsService()
 
       // Like in the previous tests, we can't check the exact count in case the test deletes void return logs created
       // by other tests. We just want to check we are always getting a number

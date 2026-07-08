@@ -88,7 +88,7 @@ describe('Return Versions - Setup - Submit Points service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitPointsService.go(session.id, requirementIndex, payload, yarStub)
+        await SubmitPointsService(session.id, requirementIndex, payload, yarStub)
 
         expect(session.requirements[0].points).toEqual(['d03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6'])
         expect(session.$update.called).toBe(true)
@@ -96,7 +96,7 @@ describe('Return Versions - Setup - Submit Points service', () => {
 
       describe('and the page has been not been visited', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitPointsService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitPointsService(session.id, requirementIndex, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: false
@@ -115,7 +115,7 @@ describe('Return Versions - Setup - Submit Points service', () => {
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
-          const result = await SubmitPointsService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitPointsService(session.id, requirementIndex, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: true
@@ -123,7 +123,7 @@ describe('Return Versions - Setup - Submit Points service', () => {
         })
 
         it('sets the notification message title to "Updated" and the text to "Requirements for returns updated" ', async () => {
-          await SubmitPointsService.go(session.id, requirementIndex, payload, yarStub)
+          await SubmitPointsService(session.id, requirementIndex, payload, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
 
@@ -145,7 +145,7 @@ describe('Return Versions - Setup - Submit Points service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await SubmitPointsService.go(session.id, requirementIndex, payload, yarStub)
+      const result = await SubmitPointsService(session.id, requirementIndex, payload, yarStub)
 
       expect(result).toMatchObject({
         pageTitle: 'Select the points for the requirements for returns',
@@ -168,7 +168,7 @@ describe('Return Versions - Setup - Submit Points service', () => {
 
     describe('because the user has not submitted anything', () => {
       it('includes an error for the input element', async () => {
-        const result = await SubmitPointsService.go(session.id, requirementIndex, payload, yarStub)
+        const result = await SubmitPointsService(session.id, requirementIndex, payload, yarStub)
 
         expect(result.error).toEqual({
           errorList: [

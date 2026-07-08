@@ -21,7 +21,7 @@ import UnassignBillRunToLicencesService from '../../bill-runs/unassign-bill-run-
  *
  * @returns {Promise<number>} The number of rows deleted
  */
-async function go() {
+export default async function go() {
   let billRunId
   let deletedCount = 0
 
@@ -44,25 +44,18 @@ async function go() {
 }
 
 async function _deleteEmptyBillRun(billRunId) {
-  const billRun = await CancelBillBunService.go(billRunId)
+  const billRun = await CancelBillBunService(billRunId)
 
   if (billRun.status !== 'cancel') {
     return false
   }
 
-  await UnassignBillRunToLicencesService.go(billRun.id)
-  await DeleteBillRunService.go(billRun)
+  await UnassignBillRunToLicencesService(billRun.id)
+  await DeleteBillRunService(billRun)
 
   return true
 }
 
 async function _fetch() {
   return BillRunModel.query().select(['id']).where('status', 'empty')
-}
-
-export {
-  go
-}
-export default {
-  go
 }

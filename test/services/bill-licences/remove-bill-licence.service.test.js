@@ -22,7 +22,7 @@ describe('Remove Bill Licence service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await RemoveBillLicenceService.go(testId)
+      const result = await RemoveBillLicenceService(testId)
 
       expect(result).toEqual({
         accountName: 'Example Trading Ltd',

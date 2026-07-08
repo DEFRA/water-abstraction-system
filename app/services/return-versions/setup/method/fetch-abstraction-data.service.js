@@ -16,7 +16,7 @@ import LicenceModel from '../../../../models/licence.model.js'
  * @returns {Promise<module:LicenceModel>} the matching licence model instance with abstraction data related properties
  * populated
  */
-async function go(licenceId, licenceVersionId) {
+export default async function go(licenceId, licenceVersionId) {
   return LicenceModel.query()
     .findById(licenceId)
     .select(['licences.id', 'licences.licenceRef', 'licences.waterUndertaker'])
@@ -46,9 +46,4 @@ async function go(licenceId, licenceVersionId) {
             })
         })
     })
-}
-
-export { go }
-export default {
-  go
 }

@@ -43,13 +43,13 @@ describe('Users - Submit Index Users service', () => {
       })
 
       it('returns a result that tells the controller to redirect to the index page', async () => {
-        const result = await SubmitIndexUsersService.go(payload, yarStub, auth)
+        const result = await SubmitIndexUsersService(payload, yarStub, auth)
 
         expect(result).toEqual({})
       })
 
       it('clears the "usersFilter" object from the session', async () => {
-        await SubmitIndexUsersService.go(payload, yarStub, auth)
+        await SubmitIndexUsersService(payload, yarStub, auth)
 
         expect(yarStub.clear.called).toBe(true)
       })
@@ -61,13 +61,13 @@ describe('Users - Submit Index Users service', () => {
       })
 
       it('returns a result that tells the controller to redirect to the index page', async () => {
-        const result = await SubmitIndexUsersService.go(payload, yarStub, auth)
+        const result = await SubmitIndexUsersService(payload, yarStub, auth)
 
         expect(result).toEqual({})
       })
 
       it('saves a default "usersFilter" object in the session', async () => {
-        await SubmitIndexUsersService.go(payload, yarStub, auth)
+        await SubmitIndexUsersService(payload, yarStub, auth)
 
         const setArgs = yarStub.set.args[0]
 
@@ -92,13 +92,13 @@ describe('Users - Submit Index Users service', () => {
       })
 
       it('returns a result that tells the controller to redirect to the index page', async () => {
-        const result = await SubmitIndexUsersService.go(payload, yarStub, auth)
+        const result = await SubmitIndexUsersService(payload, yarStub, auth)
 
         expect(result).toEqual({})
       })
 
       it('saves the submitted filters as the "usersFilter" object in the session', async () => {
-        await SubmitIndexUsersService.go(payload, yarStub, auth)
+        await SubmitIndexUsersService(payload, yarStub, auth)
 
         const setArgs = yarStub.set.args[0]
 
@@ -127,7 +127,7 @@ describe('Users - Submit Index Users service', () => {
         })
 
         it('returns the page data for the view, including any errors', async () => {
-          const result = await SubmitIndexUsersService.go(payload, yarStub, auth, '2')
+          const result = await SubmitIndexUsersService(payload, yarStub, auth, '2')
 
           expect(result).toEqual({
             error: {
@@ -207,7 +207,7 @@ describe('Users - Submit Index Users service', () => {
         })
 
         it('returns the page data for the view, including any errors', async () => {
-          const result = await SubmitIndexUsersService.go(payload, yarStub, auth)
+          const result = await SubmitIndexUsersService(payload, yarStub, auth)
 
           expect(result).toEqual({
             error: {

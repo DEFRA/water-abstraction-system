@@ -74,7 +74,7 @@ describe('Address - Select service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await SelectService.go(sessionId)
+        const result = await SelectService(sessionId)
 
         expect(result).toEqual({
           activeNavBar: 'manage',
@@ -116,7 +116,7 @@ describe('Address - Select service', () => {
       })
 
       it('returns page data that causes a redirect to the manual page', async () => {
-        const result = await SelectService.go(sessionId)
+        const result = await SelectService(sessionId)
 
         expect(result).toEqual({ redirect: true })
       })
@@ -139,7 +139,7 @@ describe('Address - Select service', () => {
       })
 
       it('returns page data that causes a redirect to the manual page', async () => {
-        const result = await SelectService.go(sessionId)
+        const result = await SelectService(sessionId)
 
         expect(result).toEqual({ redirect: true })
       })

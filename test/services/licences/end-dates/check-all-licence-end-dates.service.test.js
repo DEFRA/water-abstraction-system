@@ -47,7 +47,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
     })
 
     it('processes all licences with a current licence version in NALD and a matching record in WRLS', async () => {
-      await CheckAllLicenceEndDatesService.go()
+      await CheckAllLicenceEndDatesService()
 
       const firstLicence = licences[0]
       const lastLicence = licences[licences.length - 1]
@@ -58,7 +58,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
     })
 
     it('processes them in batches', async () => {
-      await CheckAllLicenceEndDatesService.go()
+      await CheckAllLicenceEndDatesService()
 
       // Check the expected number of batches (100 items / 10 per batch = 10 batches)
       const expectedBatches = Math.ceil(licences.length / batchSize)
@@ -67,7 +67,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
-      await CheckAllLicenceEndDatesService.go()
+      await CheckAllLicenceEndDatesService()
 
       const logDataArg = notifierStub.omg.firstCall.args[1]
 
@@ -98,7 +98,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
     })
 
     it('takes less time to complete the job than doing them one at a time', { timeout: 4000 }, async () => {
-      await CheckAllLicenceEndDatesService.go()
+      await CheckAllLicenceEndDatesService()
 
       const args = notifierStub.omg.firstCall.args
 
@@ -112,7 +112,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
     })
 
     it('handles the error', async () => {
-      await CheckAllLicenceEndDatesService.go()
+      await CheckAllLicenceEndDatesService()
 
       const args = notifierStub.omfg.firstCall.args
 

@@ -36,7 +36,7 @@ describe('Licences - Fetch History service', () => {
 
   describe('when the licence has licence versions', () => {
     it('returns the matching licence versions', async () => {
-      const result = await FetchHistoryService.go(licence.id)
+      const result = await FetchHistoryService(licence.id)
 
       expect(result).toEqual([
         {

@@ -22,8 +22,8 @@ import FetchExistingRequirementsService from './fetch-existing-requirements.serv
  * requirements ready to be persisted to the setup session, plus whether the return version allows multiple uploads and
  * quarterly returns
  */
-async function go(returnVersionId) {
-  const returnVersion = await FetchExistingRequirementsService.go(returnVersionId)
+export default async function go(returnVersionId) {
+  const returnVersion = await FetchExistingRequirementsService(returnVersionId)
 
   return {
     multipleUpload: returnVersion.multipleUpload,
@@ -119,9 +119,4 @@ function _transformForSetup(returnVersion) {
       agreementsExceptions: _agreementExceptions(returnRequirement)
     }
   })
-}
-
-export { go }
-export default {
-  go
 }

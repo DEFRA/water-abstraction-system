@@ -14,7 +14,7 @@ describe('Bill Runs - Determine Billing Periods service', () => {
     })
 
     it('returns a single billing period for the financial year provided', () => {
-      const result = DetermineBillingPeriodsService.go(billRunType, financialYearEnding)
+      const result = DetermineBillingPeriodsService(billRunType, financialYearEnding)
 
       expect(result).toHaveLength(1)
       expect(result[0]).toEqual({
@@ -31,7 +31,7 @@ describe('Bill Runs - Determine Billing Periods service', () => {
     })
 
     it('returns a single billing period for the financial year provided', () => {
-      const result = DetermineBillingPeriodsService.go(billRunType, financialYearEnding)
+      const result = DetermineBillingPeriodsService(billRunType, financialYearEnding)
 
       expect(result).toHaveLength(1)
       expect(result[0]).toEqual({
@@ -48,7 +48,7 @@ describe('Bill Runs - Determine Billing Periods service', () => {
     })
 
     it('returns a single billing period for the financial year provided', () => {
-      const result = DetermineBillingPeriodsService.go(billRunType, financialYearEnding)
+      const result = DetermineBillingPeriodsService(billRunType, financialYearEnding)
 
       expect(result).toHaveLength(1)
       expect(result[0]).toEqual({
@@ -69,7 +69,7 @@ describe('Bill Runs - Determine Billing Periods service', () => {
       })
 
       it('returns a billing period for each year from the start of the period', () => {
-        const result = DetermineBillingPeriodsService.go(billRunType, financialYearEnding)
+        const result = DetermineBillingPeriodsService(billRunType, financialYearEnding)
 
         expect(result).toHaveLength(3)
         expect(result).toEqual([
@@ -86,7 +86,7 @@ describe('Bill Runs - Determine Billing Periods service', () => {
       })
 
       it('returns six billing periods ending with the financial year end provided', () => {
-        const result = DetermineBillingPeriodsService.go(billRunType, financialYearEnding)
+        const result = DetermineBillingPeriodsService(billRunType, financialYearEnding)
 
         expect(result).toHaveLength(6)
         expect(result).toEqual([
@@ -109,7 +109,7 @@ describe('Bill Runs - Determine Billing Periods service', () => {
       })
 
       it('returns no billing periods', () => {
-        const result = DetermineBillingPeriodsService.go(billRunType, financialYearEnding)
+        const result = DetermineBillingPeriodsService(billRunType, financialYearEnding)
 
         expect(result).toHaveLength(0)
       })

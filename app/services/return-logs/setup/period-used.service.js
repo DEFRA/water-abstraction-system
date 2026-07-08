@@ -16,7 +16,7 @@ import PeriodUsedPresenter from '../../../presenters/return-logs/setup/period-us
  *
  * @returns {Promise<object>} The view data for the period used page
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = PeriodUsedPresenter.go(session)
@@ -24,9 +24,4 @@ async function go(sessionId) {
   return {
     ...pageData
   }
-}
-
-export { go }
-export default {
-  go
 }

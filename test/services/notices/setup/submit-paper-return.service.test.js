@@ -54,14 +54,14 @@ describe('Notices - Setup - Submit Paper Return service', () => {
 
   describe('when called', () => {
     it('saves the selected returns', async () => {
-      await SubmitPaperReturnService.go(session.id, payload, yarStub)
+      await SubmitPaperReturnService(session.id, payload, yarStub)
 
       expect(session.selectedReturns).toEqual([dueReturn.returnLogId])
       expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitPaperReturnService.go(session.id, payload, yarStub)
+      const result = await SubmitPaperReturnService(session.id, payload, yarStub)
 
       expect(result).toEqual({})
     })
@@ -77,7 +77,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
       })
 
       it('saves the selected returns', async () => {
-        await SubmitPaperReturnService.go(session.id, payload, yarStub)
+        await SubmitPaperReturnService(session.id, payload, yarStub)
 
         expect(session.selectedReturns).toEqual([dueReturn.returnLogId])
       })
@@ -94,7 +94,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
         })
 
         it('sets a flash message', async () => {
-          await SubmitPaperReturnService.go(session.id, payload, yarStub)
+          await SubmitPaperReturnService(session.id, payload, yarStub)
 
           // Check we add the flash message
           const [flashType, bannerMessage] = yarStub.flash.args[0]
@@ -117,7 +117,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
         })
 
         it('does not set a flash message', async () => {
-          await SubmitPaperReturnService.go(session.id, payload, yarStub)
+          await SubmitPaperReturnService(session.id, payload, yarStub)
 
           expect(yarStub.flash.args[0]).toBeUndefined()
         })
@@ -137,7 +137,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitPaperReturnService.go(session.id, payload, yarStub)
+      const result = await SubmitPaperReturnService(session.id, payload, yarStub)
 
       expect(result).toEqual({
         activeNavBar: 'notices',
@@ -180,7 +180,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
       })
 
       it('returns page data for the view, with errors, and no options selected', async () => {
-        const result = await SubmitPaperReturnService.go(session.id, payload, yarStub)
+        const result = await SubmitPaperReturnService(session.id, payload, yarStub)
 
         expect(result).toEqual({
           activeNavBar: 'notices',

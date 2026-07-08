@@ -90,7 +90,7 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
+        await SubmitPurposeService(session.id, requirementIndex, payload, yarStub)
 
         expect(session.requirements[0].purposes).toEqual([
           { alias: 'great warm machine', description: 'Heat Pump', id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f' }
@@ -100,7 +100,7 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
 
       describe('and the page has been not been visited', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitPurposeService(session.id, requirementIndex, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: false
@@ -116,7 +116,7 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
-          const result = await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitPurposeService(session.id, requirementIndex, payload, yarStub)
 
           expect(result).toEqual({
             checkPageVisited: true
@@ -124,7 +124,7 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
         })
 
         it('sets the notification message title to "Updated" and the text to "Requirements for returns updated" ', async () => {
-          await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
+          await SubmitPurposeService(session.id, requirementIndex, payload, yarStub)
 
           const [flashType, notification] = yarStub.flash.args[0]
 
@@ -144,7 +144,7 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
         })
 
         it('returns page data for the view', async () => {
-          const result = await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitPurposeService(session.id, requirementIndex, payload, yarStub)
 
           expect(result).toEqual({
             error: {
@@ -188,7 +188,7 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
         })
 
         it('returns page data for the view', async () => {
-          const result = await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
+          const result = await SubmitPurposeService(session.id, requirementIndex, payload, yarStub)
 
           expect(result).toEqual({
             error: {

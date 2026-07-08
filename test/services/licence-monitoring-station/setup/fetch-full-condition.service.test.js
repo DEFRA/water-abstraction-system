@@ -52,7 +52,7 @@ describe('Licence Monitoring Station Setup - Fetch Full Condition Service', () =
     })
 
     it('returns current CES conditions for the specified licence', async () => {
-      const results = await FetchFullConditionService.go(licence.id)
+      const results = await FetchFullConditionService(licence.id)
 
       const ids = results.map((condition) => {
         return condition.id
@@ -62,7 +62,7 @@ describe('Licence Monitoring Station Setup - Fetch Full Condition Service', () =
     })
 
     it('does not return conditions from other licences', async () => {
-      const results = await FetchFullConditionService.go(licence.id)
+      const results = await FetchFullConditionService(licence.id)
 
       const ids = results.map((condition) => {
         return condition.id
@@ -72,7 +72,7 @@ describe('Licence Monitoring Station Setup - Fetch Full Condition Service', () =
     })
 
     it('does not return non-CES conditions', async () => {
-      const results = await FetchFullConditionService.go(licence.id)
+      const results = await FetchFullConditionService(licence.id)
 
       const ids = results.map((condition) => {
         return condition.id
@@ -82,7 +82,7 @@ describe('Licence Monitoring Station Setup - Fetch Full Condition Service', () =
     })
 
     it('does not return superseded conditions', async () => {
-      const results = await FetchFullConditionService.go(licence.id)
+      const results = await FetchFullConditionService(licence.id)
 
       const ids = results.map((condition) => {
         return condition.id

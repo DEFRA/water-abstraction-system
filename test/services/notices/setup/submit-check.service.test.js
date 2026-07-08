@@ -123,25 +123,25 @@ describe('Notices - Setup - Submit Check service', () => {
     })
 
     it('creates a notice record', async () => {
-      await SubmitCheckService.go(session.id, auth)
+      await SubmitCheckService(session.id, auth)
 
       expect(createNoticeStub.called).toBe(true)
     })
 
     it('creates notification records', async () => {
-      await SubmitCheckService.go(session.id, auth)
+      await SubmitCheckService(session.id, auth)
 
       expect(createNotificationsStub.called).toBe(true)
     })
 
     it('deletes the session record', async () => {
-      await SubmitCheckService.go(session.id, auth)
+      await SubmitCheckService(session.id, auth)
 
       expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
     })
 
     it('sends the notice', async () => {
-      await SubmitCheckService.go(session.id, auth)
+      await SubmitCheckService(session.id, auth)
 
       expect(sendNoticeStub.called).toBe(true)
     })

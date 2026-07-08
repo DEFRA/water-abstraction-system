@@ -42,7 +42,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitAlertThresholdsService.go(session.id, payload)
+      const result = await SubmitAlertThresholdsService(session.id, payload)
 
       expect(result).toEqual({})
     })
@@ -56,7 +56,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
         })
 
         it('saves the submitted value as an array', async () => {
-          await SubmitAlertThresholdsService.go(session.id, payload)
+          await SubmitAlertThresholdsService(session.id, payload)
 
           expect(session.alertThresholds).toEqual([licenceMonitoringStations.one.thresholdGroup])
           expect(session.$update.called).toBe(true)
@@ -65,7 +65,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
 
       describe('and more than one threshold has been selected ', () => {
         it('saves the submitted values as an array', async () => {
-          await SubmitAlertThresholdsService.go(session.id, payload)
+          await SubmitAlertThresholdsService(session.id, payload)
 
           expect(session.alertThresholds).toEqual([
             licenceMonitoringStations.one.thresholdGroup,
@@ -97,7 +97,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitAlertThresholdsService.go(session.id, payload)
+        const result = await SubmitAlertThresholdsService(session.id, payload)
 
         expect(result).toEqual({
           error: {
@@ -146,7 +146,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
       })
 
       it('returns page data for the view, with errors, and all the thresholds unselected', async () => {
-        const result = await SubmitAlertThresholdsService.go(session.id, payload)
+        const result = await SubmitAlertThresholdsService(session.id, payload)
 
         expect(result).toEqual({
           error: {

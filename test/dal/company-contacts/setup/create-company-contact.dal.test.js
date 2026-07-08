@@ -40,7 +40,7 @@ describe('Company Contacts - Create Company Contact dal', () => {
 
   describe('when a new company contact is added', () => {
     it('inserts the company contact and links the company contact to the "additionalContact" licence role', async () => {
-      const result = await CreateCompanyContactDal.go(company.id, companyContact)
+      const result = await CreateCompanyContactDal(company.id, companyContact)
 
       const licenceRole = LicenceRoleHelper.select('additionalContact')
 

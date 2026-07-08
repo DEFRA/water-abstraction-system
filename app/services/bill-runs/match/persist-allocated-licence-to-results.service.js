@@ -25,7 +25,7 @@ import ReviewReturnModel from '../../../models/review-return.model.js'
  * @param {module:LicenceModel} licence - the two-part tariff licence included in the bill run, along with their match
  * and allocation results
  */
-async function go(billRunId, licence) {
+export default async function go(billRunId, licence) {
   const { chargeVersions, returnLogs } = licence
 
   const reviewLicenceId = await _persistLicenceData(licence, billRunId)
@@ -176,9 +176,4 @@ async function _persistReviewReturn(returnLog, reviewLicenceId) {
   const { id: reviewReturnId } = await ReviewReturnModel.query().insert(data).returning('id')
 
   return reviewReturnId
-}
-
-export { go }
-export default {
-  go
 }

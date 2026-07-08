@@ -44,7 +44,7 @@ describe('Return Versions Setup - Add service', () => {
 
   describe('when called', () => {
     it('adds another empty object to the requirement array in the current setup session record', async () => {
-      await AddService.go(session.id)
+      await AddService(session.id)
 
       expect(session.requirements.length).toEqual(2)
       expect(session.requirements).toEqual([{}, {}])
@@ -52,7 +52,7 @@ describe('Return Versions Setup - Add service', () => {
     })
 
     it('returns the index of the new requirement', async () => {
-      const result = await AddService.go(session.id)
+      const result = await AddService(session.id)
 
       expect(result).toEqual(1)
     })

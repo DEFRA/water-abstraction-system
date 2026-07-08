@@ -60,14 +60,14 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitRemoveLicencesService.go(session.id, payload)
+        await SubmitRemoveLicencesService(session.id, payload)
 
         expect(session.removeLicences).toEqual(licenceRefWithDueReturns)
         expect(session.$update.called).toBe(true)
       })
 
       it('returns the redirect route', async () => {
-        const result = await SubmitRemoveLicencesService.go(session.id, payload)
+        const result = await SubmitRemoveLicencesService(session.id, payload)
 
         expect(result).toEqual({
           redirect: `${session.id}/check`
@@ -85,7 +85,7 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
       })
 
       it('correctly presents the data with the error', async () => {
-        const result = await SubmitRemoveLicencesService.go(session.id, payload)
+        const result = await SubmitRemoveLicencesService(session.id, payload)
 
         expect(result).toEqual({
           activeNavBar: 'notices',

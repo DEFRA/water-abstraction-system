@@ -74,7 +74,7 @@ describe('Licence Versions - Fetch licence version dal', () => {
     })
 
     it('returns the matching licence version and the pagination array (in order)', async () => {
-      const result = await FetchLicenceVersionDal.go(licenceVersion.id)
+      const result = await FetchLicenceVersionDal(licenceVersion.id)
 
       expect(result).toEqual({
         licenceVersion: {

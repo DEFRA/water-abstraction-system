@@ -20,7 +20,7 @@ import UserModel from '../../models/user.model.js'
  *
  * @returns {Promise<object>} returns an object containing the matching `UserModel` and an array of its roles and groups
  */
-async function go(userId) {
+export default async function go(userId) {
   const user = await UserModel.query()
     .where('userId', userId)
     .limit(1)
@@ -98,11 +98,4 @@ function _combineAndDedupeRoles(rolesArrayToDedupe) {
   }, [])
 
   return dedupedArray
-}
-
-export {
-  go
-}
-export default {
-  go
 }

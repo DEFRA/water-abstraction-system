@@ -43,7 +43,7 @@ describe('Address - Postcode Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await PostcodeService.go(sessionId)
+      const result = await PostcodeService(sessionId)
 
       expect(result).toEqual({
         activeNavBar: 'manage',

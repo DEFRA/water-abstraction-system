@@ -27,7 +27,7 @@ import BillingConfig from '../../../../config/billing.config.js'
  *
  * @returns {Promise<boolean>} true if the bill run is not empty (there are transactions to bill) else false
  */
-async function go(billRun, billingPeriod, billingAccounts) {
+export default async function go(billRun, billingPeriod, billingAccounts) {
   let billRunIsPopulated = false
 
   if (billingAccounts.length === 0) {
@@ -168,7 +168,7 @@ async function _generateTransactions(billLicenceId, billingPeriod, chargeVersion
       return []
     }
 
-    const chargePeriod = DetermineChargePeriodService.go(chargeVersion, billingPeriod)
+    const chargePeriod = DetermineChargePeriodService(chargeVersion, billingPeriod)
 
     // Guard clause against invalid charge periods, for example, a licence 'ends' before the charge version starts
     if (!chargePeriod.startDate) {
@@ -177,12 +177,12 @@ async function _generateTransactions(billLicenceId, billingPeriod, chargeVersion
 
     // One of the things we need to know is if the charge version is the first charge on a new licence. This information
     // needs to be passed to the Charging Module API as it affects the calculation.
-    const firstChargeOnNewLicence = DetermineMinimumChargeService.go(chargeVersion, chargePeriod)
+    const firstChargeOnNewLicence = DetermineMinimumChargeService(chargeVersion, chargePeriod)
 
     const transactions = []
 
     chargeVersion.chargeReferences.forEach((chargeReference) => {
-      const transaction = GenerateTwoPartTariffTransactionService.go(
+      const transaction = GenerateTwoPartTariffTransactionService(
         billLicenceId,
         chargeReference,
         chargePeriod,
@@ -244,7 +244,7 @@ async function _processBillingAccount(billingAccount, billRun, billingPeriod) {
  *
  * We loop through each bill licence and check if any transactions were generated. If not we skip it.
  *
- * If there are transactions we call `ProcessSupplementaryTransactionsService.go()` which will pair up newly generated
+ * If there are transactions we call `ProcessSupplementaryTransactionsService()` which will pair up newly generated
  * transactions with previously billed ones. If there are no differences (i.e. all transactions have been previously
  * billed) we skip it.
  *
@@ -257,14 +257,14 @@ async function _processBillLicences(billLicences, billingAccountId, billingPerio
   const cleansedBillLicences = []
 
   for (const billLicence of billLicences) {
-    const previousTransactions = await FetchPreviousTransactionsService.go(
+    const previousTransactions = await FetchPreviousTransactionsService(
       billingAccountId,
       billLicence.licence.id,
       financialYearEnding,
       true
     )
 
-    const processedTransactions = await ProcessSupplementaryTransactionsService.go(
+    const processedTransactions = await ProcessSupplementaryTransactionsService(
       previousTransactions,
       billLicence.transactions,
       billLicence.id
@@ -288,7 +288,7 @@ async function _persistGeneratedData(bill, processedBillLicences, billRunExterna
 
   for (const processedBillLicence of processedBillLicences) {
     const { billId, id, licence, transactions: processedTransactions } = processedBillLicence
-    const sentTransactions = await SendTransactionsService.go(
+    const sentTransactions = await SendTransactionsService(
       processedTransactions,
       billRunExternalId,
       accountNumber,
@@ -304,9 +304,4 @@ async function _persistGeneratedData(bill, processedBillLicences, billRunExterna
   await TransactionModel.query().insert(transactions)
 
   return true
-}
-
-export { go }
-export default {
-  go
 }

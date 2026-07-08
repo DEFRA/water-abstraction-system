@@ -119,7 +119,7 @@ describe('Health - Info service', () => {
     })
 
     it('returns details on each', async () => {
-      const result = await InfoService.go()
+      const result = await InfoService()
 
       expect(Object.keys(result)).toEqual(
         expect.arrayContaining([
@@ -174,7 +174,7 @@ describe('Health - Info service', () => {
       })
 
       it('handles the error and still returns a result for the other services', async () => {
-        const result = await InfoService.go()
+        const result = await InfoService()
 
         expect(Object.keys(result)).toEqual(
           expect.arrayContaining([
@@ -225,7 +225,7 @@ describe('Health - Info service', () => {
       })
 
       it('handles the error and still returns a result for the other services', async () => {
-        const result = await InfoService.go()
+        const result = await InfoService()
 
         expect(Object.keys(result)).toEqual(
           expect.arrayContaining([
@@ -264,7 +264,7 @@ describe('Health - Info service', () => {
       })
 
       it('handles the error and still returns a result for the other services', async () => {
-        const result = await InfoService.go()
+        const result = await InfoService()
 
         expect(Object.keys(result)).toEqual(
           expect.arrayContaining([
@@ -315,7 +315,7 @@ describe('Health - Info service', () => {
       })
 
       it('handles the error and still returns a result for the other services', async () => {
-        const result = await InfoService.go()
+        const result = await InfoService()
 
         expect(Object.keys(result)).toEqual(
           expect.arrayContaining([
@@ -355,7 +355,7 @@ describe('Health - Info service', () => {
       })
 
       it('handles the error and still returns a result for the other services', async () => {
-        const result = await InfoService.go()
+        const result = await InfoService()
 
         expect(Object.keys(result)).toEqual(
           expect.arrayContaining([

@@ -37,7 +37,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
       })
 
       it('returns the session Id and a formatted data object', async () => {
-        const result = await InitiateEditSessionService.go(id)
+        const result = await InitiateEditSessionService(id)
 
         expect(result).toEqual({
           access: 'enabled',
@@ -55,7 +55,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
       })
 
       it('initiates the session for the journey ', async () => {
-        const result = await InitiateEditSessionService.go(id)
+        const result = await InitiateEditSessionService(id)
 
         const matchingSession = await SessionModel.query().findById(result.id)
 
@@ -91,7 +91,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
       })
 
       it('returns the session Id and a formatted data object', async () => {
-        const result = await InitiateEditSessionService.go(id)
+        const result = await InitiateEditSessionService(id)
 
         expect(result).toEqual({
           access: 'enabled',
@@ -109,7 +109,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
       })
 
       it('initiates the session for the journey ', async () => {
-        const result = await InitiateEditSessionService.go(id)
+        const result = await InitiateEditSessionService(id)
 
         const matchingSession = await SessionModel.query().findById(result.id)
 
@@ -145,7 +145,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
       })
 
       it('returns the users access status of "enabled"', async () => {
-        const result = await InitiateEditSessionService.go(id)
+        const result = await InitiateEditSessionService(id)
 
         expect(result.access).toEqual('enabled')
       })
@@ -166,7 +166,7 @@ describe('Users - Internal - Setup - Initiate Edit Session service', () => {
       })
 
       it('returns the users access status of "disabled"', async () => {
-        const result = await InitiateEditSessionService.go(id)
+        const result = await InitiateEditSessionService(id)
 
         expect(result.access).toEqual('disabled')
       })

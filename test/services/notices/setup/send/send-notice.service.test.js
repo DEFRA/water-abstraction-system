@@ -53,7 +53,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
 
       it('sends the main notice', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendNoticeService(notice, notifications)
 
         expect(sendMainNoticeStub.calledOnce).toBe(true)
         expect(sendMainNoticeStub.firstCall.args[0]).toEqual(notice)
@@ -61,21 +61,21 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
 
       it('checks the main notice for the need to send an alternate notice', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendNoticeService(notice, notifications)
 
         expect(sendAlternateNoticeStub.calledOnce).toBe(true)
         expect(sendMainNoticeStub.firstCall.args[0]).toEqual(notice)
       })
 
       it('updates both the main and alternate notices', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendNoticeService(notice, notifications)
 
         expect(updateEventServiceStub.calledOnce).toBe(true)
         expect(updateEventServiceStub.firstCall.args[0]).toEqual([notice.id, '270d3a69-4cf7-4c90-8459-fbc35d725bd6'])
       })
 
       it('logs the time taken', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendNoticeService(notice, notifications)
 
         const args = notifierStub.omg.firstCall.args
 
@@ -93,7 +93,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
 
       it('sends the main notice', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendNoticeService(notice, notifications)
 
         expect(sendMainNoticeStub.calledOnce).toBe(true)
         expect(sendMainNoticeStub.firstCall.args[0]).toEqual(notice)
@@ -101,14 +101,14 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
 
       it('checks the main notice for the need to send an alternate notice', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendNoticeService(notice, notifications)
 
         expect(sendAlternateNoticeStub.calledOnce).toBe(true)
         expect(sendMainNoticeStub.firstCall.args[0]).toEqual(notice)
       })
 
       it('updates both the main and alternate notices', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendNoticeService(notice, notifications)
 
         expect(updateEventServiceStub.calledOnce).toBe(true)
         expect(updateEventServiceStub.firstCall.args[0]).toEqual([notice.id, '270d3a69-4cf7-4c90-8459-fbc35d725bd6'])
@@ -122,7 +122,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
 
       it('sends the main notice', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendNoticeService(notice, notifications)
 
         expect(sendMainNoticeStub.calledOnce).toBe(true)
         expect(sendMainNoticeStub.firstCall.args[0]).toEqual(notice)
@@ -130,20 +130,20 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
 
       it('does not attempt to send an alternate notice', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendNoticeService(notice, notifications)
 
         expect(sendAlternateNoticeStub.called).toBe(false)
       })
 
       it('only updates the main notice', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendNoticeService(notice, notifications)
 
         expect(updateEventServiceStub.calledOnce).toBe(true)
         expect(updateEventServiceStub.firstCall.args[0]).toEqual([notice.id])
       })
 
       it('logs the time taken', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendNoticeService(notice, notifications)
 
         const args = notifierStub.omg.firstCall.args
 
@@ -164,7 +164,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
     })
 
     it('logs the error', async () => {
-      await SendNoticeService.go(notice, notifications)
+      await SendNoticeService(notice, notifications)
 
       const args = notifierStub.omfg.firstCall.args
 

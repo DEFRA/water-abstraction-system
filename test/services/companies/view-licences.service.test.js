@@ -53,7 +53,7 @@ describe('Companies - View Licences service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewLicencesService.go(company.id, auth, page)
+      const result = await ViewLicencesService(company.id, auth, page)
 
       expect(result).toEqual({
         activeSecondaryNav: 'licences',

@@ -35,7 +35,7 @@ describe('Notices - Setup - View Remove Licences service', () => {
   })
 
   it('correctly presents the data', async () => {
-    const result = await ViewRemoveLicencesService.go(session.id)
+    const result = await ViewRemoveLicencesService(session.id)
 
     expect(result).toEqual({
       activeNavBar: 'notices',

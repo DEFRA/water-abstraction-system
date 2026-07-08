@@ -17,7 +17,7 @@ import notifyConfig from '../../../../../config/notify.config.js'
  *
  * @param {object} notification - The notification linked to the verification email to be sent
  */
-async function go(notification) {
+export default async function go(notification) {
   try {
     const notificationStatus = await _sendEmail(notification)
 
@@ -26,7 +26,7 @@ async function go(notification) {
       // The default wait is 5 seconds, which we have found is more than enough time.
       await pause(notifyConfig.waitForStatus)
 
-      await CheckNotificationStatusService.go(notification)
+      await CheckNotificationStatusService(notification)
     }
   } catch (error) {
     globalThis.GlobalNotifier.omfg(
@@ -53,11 +53,4 @@ async function _sendEmail(notification) {
   await UpdateNotificationDal(notification, sendResult)
 
   return sendResult.status
-}
-
-export {
-  go
-}
-export default {
-  go
 }

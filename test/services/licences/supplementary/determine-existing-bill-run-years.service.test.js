@@ -35,7 +35,7 @@ describe('Determine Existing Bill Run Years Service', () => {
         })
 
         it('does not return any years', async () => {
-          const result = await DetermineExistingBillRunYearsService.go(regionId, years, twoPartTariff)
+          const result = await DetermineExistingBillRunYearsService(regionId, years, twoPartTariff)
 
           expect(result).toEqual([])
         })
@@ -58,7 +58,7 @@ describe('Determine Existing Bill Run Years Service', () => {
         })
 
         it('returns the years that a bill run exists for', async () => {
-          const result = await DetermineExistingBillRunYearsService.go(regionId, years, twoPartTariff)
+          const result = await DetermineExistingBillRunYearsService(regionId, years, twoPartTariff)
 
           expect(result).toEqual([2023, 2024])
         })
@@ -83,7 +83,7 @@ describe('Determine Existing Bill Run Years Service', () => {
         })
 
         it('does not return any years', async () => {
-          const result = await DetermineExistingBillRunYearsService.go(regionId, years, twoPartTariff)
+          const result = await DetermineExistingBillRunYearsService(regionId, years, twoPartTariff)
 
           expect(result).toEqual([])
         })
@@ -106,7 +106,7 @@ describe('Determine Existing Bill Run Years Service', () => {
         })
 
         it('returns the years that a bill run exists for', async () => {
-          const result = await DetermineExistingBillRunYearsService.go(regionId, years, twoPartTariff)
+          const result = await DetermineExistingBillRunYearsService(regionId, years, twoPartTariff)
 
           expect(result).toEqual([2023, 2024])
         })

@@ -58,7 +58,7 @@ describe('Fetch Return Logs for Licence service', () => {
 
       it('returns the return log and return submission lines that are applicable', async () => {
         const { licenceRef } = returnLogRecord
-        const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
+        const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
 
         expect(result).toHaveLength(1)
         expect(result[0].id).toEqual(returnLogRecord.id)
@@ -108,7 +108,7 @@ describe('Fetch Return Logs for Licence service', () => {
 
       it('returns the return log with no return submission lines', async () => {
         const { licenceRef } = returnLogRecord
-        const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
+        const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
 
         expect(result).toHaveLength(1)
 
@@ -123,7 +123,7 @@ describe('Fetch Return Logs for Licence service', () => {
 
       it('returns the return log with "nilreturn" set to "true" and no return submission lines', async () => {
         const { licenceRef } = returnLogRecord
-        const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
+        const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
 
         expect(result).toHaveLength(1)
 
@@ -145,7 +145,7 @@ describe('Fetch Return Logs for Licence service', () => {
 
       it('returns the return log and return submission lines that are applicable', async () => {
         const { licenceRef } = returnLogRecord
-        const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
+        const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
 
         expect(result).toHaveLength(1)
         expect(result[0].id).toEqual(returnLogRecord.id)
@@ -166,7 +166,7 @@ describe('Fetch Return Logs for Licence service', () => {
 
       it('returns no records', async () => {
         const { licenceRef } = returnLogRecord
-        const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
+        const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
 
         expect(result).toHaveLength(0)
       })
@@ -183,7 +183,7 @@ describe('Fetch Return Logs for Licence service', () => {
 
       it('returns no records', async () => {
         const { licenceRef } = returnLogRecord
-        const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
+        const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
 
         expect(result).toHaveLength(0)
       })
@@ -198,7 +198,7 @@ describe('Fetch Return Logs for Licence service', () => {
 
       it('returns no records', async () => {
         const { licenceRef } = returnLogRecord
-        const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
+        const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
 
         expect(result).toHaveLength(0)
       })
@@ -206,7 +206,7 @@ describe('Fetch Return Logs for Licence service', () => {
 
     describe('because there are no return logs', () => {
       it('returns no records', async () => {
-        const result = await FetchReturnLogsForLicenceService.go('LicenceRefWithNoReturnLogs', billingPeriod)
+        const result = await FetchReturnLogsForLicenceService('LicenceRefWithNoReturnLogs', billingPeriod)
 
         expect(result).toHaveLength(0)
       })
@@ -221,7 +221,7 @@ describe('Fetch Return Logs for Licence service', () => {
 
       it('returns no records', async () => {
         const { licenceRef } = returnLogRecord
-        const result = await FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)
+        const result = await FetchReturnLogsForLicenceService(licenceRef, billingPeriod)
 
         expect(result).toHaveLength(0)
       })
@@ -245,7 +245,7 @@ describe('Fetch Return Logs for Licence service', () => {
     it('logs and records the error then rethrows it', async () => {
       const { licenceRef } = returnLogRecord
 
-      await expect(FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)).rejects.toThrow()
+      await expect(FetchReturnLogsForLicenceService(licenceRef, billingPeriod)).rejects.toThrow()
 
       const logDataArg = notifierStub.omfg.args[0][1]
 

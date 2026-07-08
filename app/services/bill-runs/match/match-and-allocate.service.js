@@ -26,8 +26,8 @@ import PrepareReturnLogsService from './prepare-return-logs.service.js'
  *
  * @returns {Promise<boolean>} - True if there are any licences matched to returns, else false
  */
-async function go(billRun, billingPeriod) {
-  const licences = await FetchLicencesService.go(billRun, billingPeriod)
+export default async function go(billRun, billingPeriod) {
+  const licences = await FetchLicencesService(billRun, billingPeriod)
 
   if (licences.length > 0) {
     await _process(licences, billingPeriod, billRun)
@@ -38,12 +38,12 @@ async function go(billRun, billingPeriod) {
 
 async function _process(licences, billingPeriod, billRun) {
   for (const licence of licences) {
-    await PrepareReturnLogsService.go(licence, billingPeriod)
+    await PrepareReturnLogsService(licence, billingPeriod)
 
     const { chargeVersions, returnLogs } = licence
 
     chargeVersions.forEach((chargeVersion) => {
-      PrepareChargeVersionService.go(chargeVersion, billingPeriod)
+      PrepareChargeVersionService(chargeVersion, billingPeriod)
 
       const { chargeReferences } = chargeVersion
 
@@ -55,12 +55,12 @@ async function _process(licences, billingPeriod, billRun) {
         const { chargeElements } = chargeReference
 
         chargeElements.forEach((chargeElement) => {
-          const matchingReturns = MatchReturnsToChargeElementService.go(chargeElement, returnLogs)
+          const matchingReturns = MatchReturnsToChargeElementService(chargeElement, returnLogs)
 
           if (matchingReturns.length > 0) {
             chargeReferenceMatched = true
 
-            AllocateReturnsToChargeElementService.go(
+            AllocateReturnsToChargeElementService(
               chargeElement,
               matchingReturns,
               chargeVersion.chargePeriod,
@@ -75,8 +75,8 @@ async function _process(licences, billingPeriod, billRun) {
       })
     })
 
-    DetermineLicenceIssuesService.go(licence)
-    await PersistAllocatedLicenceToResultsService.go(billRun.id, licence)
+    DetermineLicenceIssuesService(licence)
+    await PersistAllocatedLicenceToResultsService(billRun.id, licence)
   }
 }
 
@@ -101,9 +101,4 @@ function _useAuthorisedVolume(chargeReference) {
   })
 
   chargeReference.allocatedQuantity = totalAllocatedQuantity
-}
-
-export { go }
-export default {
-  go
 }

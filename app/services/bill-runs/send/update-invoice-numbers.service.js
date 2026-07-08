@@ -24,7 +24,7 @@ import UnflagBilledSupplementaryLicencesService from '../unflag-billed-supplemen
  *
  * @param {module:BillRunModule} billRun - The bill run to be sent
  */
-async function go(billRun) {
+export default async function go(billRun) {
   try {
     const startTime = process.hrtime.bigint()
 
@@ -39,7 +39,7 @@ async function go(billRun) {
     await _updateBillRun(billRunId, externalBillRun)
 
     if (batchType === 'supplementary' || batchType === 'two_part_supplementary') {
-      await UnflagBilledSupplementaryLicencesService.go(billRun)
+      await UnflagBilledSupplementaryLicencesService(billRun)
     }
 
     calculateAndLogTimeTaken(startTime, 'Send bill run complete', { billRun })
@@ -74,9 +74,4 @@ async function _updateBillRun(billRunId, externalBillRun) {
   return BillRunModel.query()
     .findById(billRunId)
     .patch({ status: 'sent', transactionFileReference, updatedAt: timestampForPostgres() })
-}
-
-export { go }
-export default {
-  go
 }

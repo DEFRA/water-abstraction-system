@@ -86,7 +86,7 @@ describe('Write table to file service', () => {
         rows: inputStreamTest
       }
 
-      await WriteTableToFileService.go(dataTest.headers, dataTest.rows, schemaFolderPath, tableName)
+      await WriteTableToFileService(dataTest.headers, dataTest.rows, schemaFolderPath, tableName)
 
       expect(fs.existsSync(filePath)).toBe(true)
     })
@@ -104,7 +104,7 @@ describe('Write table to file service', () => {
         rows: inputStreamTest
       }
 
-      await WriteTableToFileService.go(dataTest.headers, dataTest.rows, schemaFolderPath, tableName)
+      await WriteTableToFileService(dataTest.headers, dataTest.rows, schemaFolderPath, tableName)
       const file = fs.readFileSync(filePath, 'utf-8')
 
       expect(file).toEqual(csvHeaders + csvValues)

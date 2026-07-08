@@ -10,13 +10,13 @@ import ProcessLicenceEndDateChangesService from '../services/licences/end-dates/
 const { HTTP_STATUS_NO_CONTENT } = http2.constants
 
 export async function check(_request, h) {
-  CheckAllLicenceEndDatesService.go()
+  CheckAllLicenceEndDatesService()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
 export async function process(_request, h) {
-  ProcessLicenceEndDateChangesService.go()
+  ProcessLicenceEndDateChangesService()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }

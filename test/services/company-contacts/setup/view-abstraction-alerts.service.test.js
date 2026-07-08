@@ -34,7 +34,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewAbstractionAlertsService.go(session.id)
+      const result = await ViewAbstractionAlertsService(session.id)
 
       expect(result).toEqual({
         abstractionAlerts: null,

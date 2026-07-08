@@ -20,7 +20,7 @@ describe('Notices - Setup - Generate Renewal Invitation Licence Query DAL', () =
 
   describe('when called', () => {
     it('returns the expected query and bindings', () => {
-      const result = GenerateRenewalInvitationLicenceQueryDal.go(licence.licenceRef)
+      const result = GenerateRenewalInvitationLicenceQueryDal(licence.licenceRef)
 
       expect(result).toEqual({
         bindings: [licence.licenceRef],
@@ -31,7 +31,7 @@ describe('Notices - Setup - Generate Renewal Invitation Licence Query DAL', () =
 
   describe('when executed', () => {
     it('returns the expected licence', async () => {
-      const { bindings, query } = GenerateRenewalInvitationLicenceQueryDal.go(licence.licenceRef)
+      const { bindings, query } = GenerateRenewalInvitationLicenceQueryDal(licence.licenceRef)
       const { rows } = await db.raw(query, bindings)
 
       expect(rows).toEqual([{ licence_ref: licence.licenceRef }])

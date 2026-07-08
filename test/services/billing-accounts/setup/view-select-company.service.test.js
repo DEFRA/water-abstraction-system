@@ -46,7 +46,7 @@ describe('Billing Accounts - Setup - View Select Company Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewSelectCompanyService.go(session.id)
+      const result = await ViewSelectCompanyService(session.id)
 
       expect(result).toEqual({
         backLink: {

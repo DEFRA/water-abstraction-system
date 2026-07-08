@@ -28,7 +28,7 @@ import YearValidator from '../../../validators/bill-runs/setup/year.validator.js
  * @returns {Promise<object>} An object with a `setupComplete:` property if there are no errors else the page data for
  * the year page including the validation error details
  */
-async function go(sessionId, payload) {
+export default async function go(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
@@ -41,7 +41,7 @@ async function go(sessionId, payload) {
 
   const regionId = session.region
   const twoPartTariffSupplementary = session.type === 'two_part_supplementary'
-  const licenceSupplementaryYears = await FetchLicenceSupplementaryYearsService.go(regionId, twoPartTariffSupplementary)
+  const licenceSupplementaryYears = await FetchLicenceSupplementaryYearsService(regionId, twoPartTariffSupplementary)
 
   const pageData = YearPresenter.go(licenceSupplementaryYears, session)
 
@@ -70,9 +70,4 @@ function _validate(payload, regions) {
   return {
     text: message
   }
-}
-
-export { go }
-export default {
-  go
 }

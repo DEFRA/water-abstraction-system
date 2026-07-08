@@ -24,7 +24,7 @@ import { NoticeType } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<object>} - the created notifications
  */
-async function go(session, recipients, noticeId) {
+export default async function go(session, recipients, noticeId) {
   const notifications = _notifications(session, recipients, noticeId)
   const persistedNotifications = []
   const timestamp = timestampForPostgres()
@@ -73,9 +73,4 @@ function _notifications(session, recipients, noticeId) {
   }
 
   return ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
-}
-
-export { go }
-export default {
-  go
 }

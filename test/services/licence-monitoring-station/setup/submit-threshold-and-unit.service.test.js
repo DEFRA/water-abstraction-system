@@ -40,7 +40,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
       })
 
       it('saves the submitted option', async () => {
-        await SubmitThresholdAndUnitService.go(session.id, payload)
+        await SubmitThresholdAndUnitService(session.id, payload)
 
         expect(session.threshold).toEqual(1000)
         expect(session.unit).toEqual('Ml/d')
@@ -49,7 +49,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
 
       describe('and the page has been not been visited', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitThresholdAndUnitService.go(session.id, payload)
+          const result = await SubmitThresholdAndUnitService(session.id, payload)
 
           expect(result).toEqual({
             checkPageVisited: undefined
@@ -67,7 +67,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
-          const result = await SubmitThresholdAndUnitService.go(session.id, payload)
+          const result = await SubmitThresholdAndUnitService(session.id, payload)
 
           expect(result).toEqual({
             checkPageVisited: true
@@ -82,7 +82,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitThresholdAndUnitService.go(session.id, payload)
+        const result = await SubmitThresholdAndUnitService(session.id, payload)
 
         expect(result).toMatchObject({
           backLink: '/system/monitoring-stations/e1c44f9b-51c2-4aee-a518-5509d6f05869',
@@ -108,7 +108,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
 
       describe('because the user has not entered or selected anything', () => {
         it('includes an error for both input elements and radio elements', async () => {
-          const result = await SubmitThresholdAndUnitService.go(session.id, payload)
+          const result = await SubmitThresholdAndUnitService(session.id, payload)
 
           expect(result.error).toEqual({
             errorList: [
@@ -129,7 +129,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
         })
 
         it('includes an error for the threshold input elements', async () => {
-          const result = await SubmitThresholdAndUnitService.go(session.id, payload)
+          const result = await SubmitThresholdAndUnitService(session.id, payload)
 
           expect(result.error).toEqual({
             errorList: [{ href: '#threshold', text: 'Enter a threshold' }],

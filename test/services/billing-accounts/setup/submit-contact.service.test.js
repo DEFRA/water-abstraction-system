@@ -55,7 +55,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitContactService.go(session.id, payload)
+      await SubmitContactService(session.id, payload)
 
       expect(session).toMatchObject({
         addressSelected: billingAccountAddress.id,
@@ -65,7 +65,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitContactService.go(session.id, payload)
+      const result = await SubmitContactService(session.id, payload)
 
       expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/contact-name`
@@ -86,7 +86,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactService.go(session.id, payload)
+        await SubmitContactService(session.id, payload)
 
         expect(session).toMatchObject({
           addressSelected: billingAccountAddress.id,
@@ -95,7 +95,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitContactService.go(session.id, payload)
+        const result = await SubmitContactService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/contact-name`
@@ -118,7 +118,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactService.go(session.id, payload)
+        await SubmitContactService(session.id, payload)
 
         expect(session).toMatchObject({
           addressSelected: billingAccountAddress.id,
@@ -128,7 +128,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       it('returns to the check page', async () => {
-        const result = await SubmitContactService.go(session.id, payload)
+        const result = await SubmitContactService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
@@ -154,7 +154,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitContactService.go(session.id, payload)
+      await SubmitContactService(session.id, payload)
 
       expect(session).toMatchObject({
         addressJourney: _addressJourney(session),
@@ -165,7 +165,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitContactService.go(session.id, payload)
+      const result = await SubmitContactService(session.id, payload)
 
       expect(result).toEqual({
         redirectUrl: `/system/address/${session.id}/postcode`
@@ -191,7 +191,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactService.go(session.id, payload)
+        await SubmitContactService(session.id, payload)
 
         expect(session).toMatchObject({
           addressJourney: sessionData.addressJourney,
@@ -201,7 +201,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitContactService.go(session.id, payload)
+        const result = await SubmitContactService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/address/${session.id}/postcode`
@@ -229,7 +229,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactService.go(session.id, payload)
+        await SubmitContactService(session.id, payload)
 
         expect(session).toMatchObject({
           addressJourney: sessionData.addressJourney,
@@ -240,7 +240,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitContactService.go(session.id, payload)
+        const result = await SubmitContactService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/address/${session.id}/postcode`
@@ -268,7 +268,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitContactService.go(session.id, payload)
+        await SubmitContactService(session.id, payload)
 
         expect(session).toMatchObject({
           addressJourney: _addressJourney(session),
@@ -280,7 +280,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitContactService.go(session.id, payload)
+        const result = await SubmitContactService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/address/${session.id}/postcode`
@@ -310,7 +310,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
         })
 
         it('returns page data for the view, with errors', async () => {
-          const result = await SubmitContactService.go(session.id, payload)
+          const result = await SubmitContactService(session.id, payload)
 
           expect(result.error).toEqual({
             errorList: [
@@ -346,7 +346,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
         })
 
         it('returns page data for the view, with errors', async () => {
-          const result = await SubmitContactService.go(session.id, payload)
+          const result = await SubmitContactService(session.id, payload)
 
           expect(result.error).toEqual({
             errorList: [

@@ -17,7 +17,7 @@ import NotificationPresenter from '../../presenters/users/notification.presenter
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the view notification template.
  */
-async function go(notificationId, userId, type, auth) {
+export default async function go(notificationId, userId, type, auth) {
   const notification = await FetchNotificationDal(notificationId)
   const user = await FetchUserDal(userId)
   const superUser = _superUser(auth)
@@ -34,11 +34,4 @@ function _superUser(auth) {
   return auth.credentials.groups.find((group) => {
     return group.group === 'super'
   })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

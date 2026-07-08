@@ -23,7 +23,7 @@ import { clearFilters, handleOneOptionSelected } from '../../lib/submit-page.lib
  * @returns {Promise<object>} If no errors an empty object signifying the request can be redirected to the index page
  * else the data needed to re-render the page
  */
-async function go(payload, yar, auth, page) {
+export default async function go(payload, yar, auth, page) {
   const filterCleared = clearFilters(payload, yar, 'noticesFilter')
 
   if (filterCleared) {
@@ -47,7 +47,7 @@ async function go(payload, yar, auth, page) {
 }
 
 async function _replayView(payload, error, page, savedFilters, auth) {
-  const { results: notices, total: totalNumber } = await FetchNoticesService.go(savedFilters, page)
+  const { results: notices, total: totalNumber } = await FetchNoticesService(savedFilters, page)
 
   const pagination = PaginatorPresenter.go(totalNumber, page, `/system/notices`, notices.length, 'notices')
 
@@ -100,11 +100,4 @@ function _validate(payload) {
   const validationResult = IndexValidator.go(payload)
 
   return formatValidationResult(validationResult)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

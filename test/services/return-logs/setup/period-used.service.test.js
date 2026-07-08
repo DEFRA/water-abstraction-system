@@ -36,13 +36,13 @@ describe('Return Logs Setup - Period used service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await PeriodUsedService.go(session.id)
+      const result = await PeriodUsedService(session.id)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await PeriodUsedService.go(session.id)
+      const result = await PeriodUsedService(session.id)
 
       expect(result).toMatchObject({
         abstractionPeriod: '1 April to 31 March',

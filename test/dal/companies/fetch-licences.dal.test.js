@@ -97,7 +97,7 @@ describe('Companies - Fetch Licences dal', () => {
 
   describe('when called', () => {
     it('returns licences linked to the company where it is the licence holder', async () => {
-      const result = await FetchLicencesDal.go(companyId, pageNumber)
+      const result = await FetchLicencesDal(companyId, pageNumber)
 
       expect(result).toEqual({
         licences: [

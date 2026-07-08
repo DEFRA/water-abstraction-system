@@ -68,7 +68,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
     })
 
     it('returns the match and determines that neither engine can be triggered', async () => {
-      const result = await DetermineBlockingTwoPartSupplementaryService.go(regionId, year)
+      const result = await DetermineBlockingTwoPartSupplementaryService(regionId, year)
 
       expect(result).toEqual({ matches: [match], toFinancialYearEnding: year, trigger: engineTriggers.neither })
     })
@@ -88,7 +88,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
     })
 
     it('returns no matches and determines that the "current" engine can be triggered', async () => {
-      const result = await DetermineBlockingTwoPartSupplementaryService.go(regionId, year)
+      const result = await DetermineBlockingTwoPartSupplementaryService(regionId, year)
 
       expect(result).toEqual({ matches: [], toFinancialYearEnding: year, trigger: engineTriggers.current })
     })
@@ -102,7 +102,7 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Supplementary Bill Run
     })
 
     it("determines the 'toFinancialEndYear' to be 0 and that 'neither' engine can be triggered", async () => {
-      const result = await DetermineBlockingTwoPartSupplementaryService.go(regionId, year)
+      const result = await DetermineBlockingTwoPartSupplementaryService(regionId, year)
 
       expect(result).toEqual({ matches: [], toFinancialYearEnding: 0, trigger: engineTriggers.neither })
     })

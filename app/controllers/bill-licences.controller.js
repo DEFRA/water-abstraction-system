@@ -12,7 +12,7 @@ import ViewBillLicenceService from '../services/bill-licences/view-bill-licence.
 export async function remove(request, h) {
   const { id } = request.params
 
-  const pageData = await RemoveBillLicenceService.go(id)
+  const pageData = await RemoveBillLicenceService(id)
 
   return h.view('bill-licences/remove.njk', pageData)
 }
@@ -21,7 +21,7 @@ export async function submitRemove(request, h) {
   const { id } = request.params
 
   try {
-    const redirectPath = await SubmitRemoveBillLicenceService.go(id, request.auth.credentials.user)
+    const redirectPath = await SubmitRemoveBillLicenceService(id, request.auth.credentials.user)
 
     return h.redirect(redirectPath)
   } catch (error) {
@@ -32,7 +32,7 @@ export async function submitRemove(request, h) {
 export async function view(request, h) {
   const { id } = request.params
 
-  const pageData = await ViewBillLicenceService.go(id)
+  const pageData = await ViewBillLicenceService(id)
 
   const template = pageData.scheme === 'sroc' ? 'view-sroc.njk' : 'view-presroc.njk'
 

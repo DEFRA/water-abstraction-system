@@ -19,13 +19,13 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence set up template.
  */
-async function go(licenceId, auth) {
-  const licence = await FetchLicenceService.go(licenceId)
+export default async function go(licenceId, auth) {
+  const licence = await FetchLicenceService(licenceId)
 
-  const agreements = await FetchAgreementsService.go(licence.licenceRef)
-  const chargeVersions = await FetchChargeVersionsService.go(licenceId)
-  const workflows = await FetchWorkflowsService.go(licenceId)
-  const returnVersions = await FetchReturnVersionsService.go(licenceId)
+  const agreements = await FetchAgreementsService(licence.licenceRef)
+  const chargeVersions = await FetchChargeVersionsService(licenceId)
+  const workflows = await FetchWorkflowsService(licenceId)
+  const returnVersions = await FetchReturnVersionsService(licenceId)
 
   const pageData = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
@@ -34,11 +34,4 @@ async function go(licenceId, auth) {
     activeSecondaryNav: 'set-up',
     roles: userRoles(auth)
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

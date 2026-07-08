@@ -13,7 +13,7 @@ import { timestampForPostgres } from '../../lib/general.lib.js'
  *
  * @returns {Promise<object[]>} An object containing the points data needed for the points page
  */
-async function go(licenceId) {
+export default async function go(licenceId) {
   return _fetchPoints(licenceId)
 }
 
@@ -54,11 +54,4 @@ async function _fetchPoints(licenceId) {
         .andWhere('lv.startDate', '<=', timestampForPostgres())
     })
     .orderBy('p.description')
-}
-
-export {
-  go
-}
-export default {
-  go
 }

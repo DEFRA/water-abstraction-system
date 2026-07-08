@@ -12,7 +12,7 @@ describe('Manage - View Manage service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewManageService.go(userAuth)
+      const result = await ViewManageService(userAuth)
 
       expect(result).toEqual({
         activeNavBar: 'manage',

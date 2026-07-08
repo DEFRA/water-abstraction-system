@@ -17,13 +17,6 @@ import CreateSessionDal from '../../../../dal/create-session.dal.js'
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go() {
+export default async function go() {
   return CreateSessionDal()
-}
-
-export {
-  go
-}
-export default {
-  go
 }

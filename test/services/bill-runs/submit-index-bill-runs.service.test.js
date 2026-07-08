@@ -39,13 +39,13 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
       })
 
       it('returns a result that tells the controller to redirect to the index page', async () => {
-        const result = await SubmitIndexBillRunsService.go(payload, yarStub)
+        const result = await SubmitIndexBillRunsService(payload, yarStub)
 
         expect(result).toEqual({})
       })
 
       it('clears the "billRunsFilter" object from the session', async () => {
-        await SubmitIndexBillRunsService.go(payload, yarStub)
+        await SubmitIndexBillRunsService(payload, yarStub)
 
         expect(yarStub.clear.called).toBe(true)
       })
@@ -57,13 +57,13 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
       })
 
       it('returns a result that tells the controller to redirect to the index page', async () => {
-        const result = await SubmitIndexBillRunsService.go(payload, yarStub)
+        const result = await SubmitIndexBillRunsService(payload, yarStub)
 
         expect(result).toEqual({})
       })
 
       it('saves a default "billRunsFilter" object in the session', async () => {
-        await SubmitIndexBillRunsService.go(payload, yarStub)
+        await SubmitIndexBillRunsService(payload, yarStub)
 
         const setArgs = yarStub.set.args[0]
 
@@ -78,13 +78,13 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
       })
 
       it('returns a result that tells the controller to redirect to the index page', async () => {
-        const result = await SubmitIndexBillRunsService.go(payload, yarStub)
+        const result = await SubmitIndexBillRunsService(payload, yarStub)
 
         expect(result).toEqual({})
       })
 
       it('saves the state of the filters as the "billRunsFilter" object in the session', async () => {
-        await SubmitIndexBillRunsService.go(payload, yarStub)
+        await SubmitIndexBillRunsService(payload, yarStub)
 
         const setArgs = yarStub.set.args[0]
 
@@ -98,7 +98,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         })
 
         it('saves the state of the "Run type" filter as an array in the session', async () => {
-          await SubmitIndexBillRunsService.go(payload, yarStub)
+          await SubmitIndexBillRunsService(payload, yarStub)
 
           const setArgs = yarStub.set.args[0]
 
@@ -121,7 +121,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         })
 
         it('saves the state of the "Run type" filter as an array in the session', async () => {
-          await SubmitIndexBillRunsService.go(payload, yarStub)
+          await SubmitIndexBillRunsService(payload, yarStub)
 
           const setArgs = yarStub.set.args[0]
 
@@ -142,7 +142,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         })
 
         it('saves the state of the "Region" filter as an array in the session', async () => {
-          await SubmitIndexBillRunsService.go(payload, yarStub)
+          await SubmitIndexBillRunsService(payload, yarStub)
 
           const setArgs = yarStub.set.args[0]
 
@@ -165,7 +165,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         })
 
         it('saves the state of the "Region" filter as an array in the session', async () => {
-          await SubmitIndexBillRunsService.go(payload, yarStub)
+          await SubmitIndexBillRunsService(payload, yarStub)
 
           const setArgs = yarStub.set.args[0]
 
@@ -186,7 +186,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         })
 
         it('saves the state of the "Status" filter as an array in the session', async () => {
-          await SubmitIndexBillRunsService.go(payload, yarStub)
+          await SubmitIndexBillRunsService(payload, yarStub)
 
           const setArgs = yarStub.set.args[0]
 
@@ -209,7 +209,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         })
 
         it('saves the state of the "Status" filter as an array in the session', async () => {
-          await SubmitIndexBillRunsService.go(payload, yarStub)
+          await SubmitIndexBillRunsService(payload, yarStub)
 
           const setArgs = yarStub.set.args[0]
 
@@ -239,7 +239,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         })
 
         it('returns the page data for the view, including any errors', async () => {
-          const result = await SubmitIndexBillRunsService.go(payload, yarStub, '2')
+          const result = await SubmitIndexBillRunsService(payload, yarStub, '2')
 
           expect(result).toEqual({
             activeNavBar: 'bill-runs',
@@ -414,7 +414,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         })
 
         it('returns the page data for the view, including any errors', async () => {
-          const result = await SubmitIndexBillRunsService.go(payload, yarStub)
+          const result = await SubmitIndexBillRunsService(payload, yarStub)
 
           expect(result).toEqual({
             activeNavBar: 'bill-runs',

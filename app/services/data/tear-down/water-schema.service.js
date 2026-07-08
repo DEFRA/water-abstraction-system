@@ -10,7 +10,7 @@ import { db } from '../../../../db/db.js'
  *
  * @returns {Promise<object>}
  */
-async function go() {
+export default async function go() {
   return _deleteAllTestData()
 }
 
@@ -530,11 +530,4 @@ async function _deleteAllTestData() {
   ALTER TABLE water.return_versions ENABLE TRIGGER ALL;
   ALTER TABLE water.scheduled_notification ENABLE TRIGGER ALL;
   `)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

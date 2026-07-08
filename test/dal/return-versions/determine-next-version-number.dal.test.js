@@ -25,7 +25,7 @@ describe('DAL - Return Versions - Determine Next Version Number dal', () => {
 
   describe('when no return versions exist for the licence', () => {
     it('returns "1" as the next version number', async () => {
-      const result = await DetermineNextVersionNumberDal.go(licenceId)
+      const result = await DetermineNextVersionNumberDal(licenceId)
 
       expect(result).toEqual(1)
     })
@@ -40,7 +40,7 @@ describe('DAL - Return Versions - Determine Next Version Number dal', () => {
     })
 
     it('returns the next version number', async () => {
-      const result = await DetermineNextVersionNumberDal.go(licenceId)
+      const result = await DetermineNextVersionNumberDal(licenceId)
 
       expect(result).toEqual(3)
     })

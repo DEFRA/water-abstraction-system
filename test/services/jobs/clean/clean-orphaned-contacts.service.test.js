@@ -57,7 +57,7 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
 
     describe('and the contact is "orphaned"', () => {
       it('removes the contact and returns the count', async () => {
-        const result = await CleanOrphanedContactsService.go()
+        const result = await CleanOrphanedContactsService()
 
         const existsResults = await ContactModel.query().whereIn('id', [contact.id])
 
@@ -75,7 +75,7 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
         })
 
         it('does not remove the contact and returns the count', async () => {
-          const result = await CleanOrphanedContactsService.go()
+          const result = await CleanOrphanedContactsService()
 
           const existsResults = await ContactModel.query().whereIn('id', [contact.id])
 
@@ -93,7 +93,7 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
         })
 
         it('does not remove the contact and returns the count', async () => {
-          const result = await CleanOrphanedContactsService.go()
+          const result = await CleanOrphanedContactsService()
 
           const existsResults = await ContactModel.query().whereIn('id', [contact.id])
 
@@ -111,7 +111,7 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
         })
 
         it('does not remove the contact and returns the count', async () => {
-          const result = await CleanOrphanedContactsService.go()
+          const result = await CleanOrphanedContactsService()
 
           const existsResults = await ContactModel.query().whereIn('id', [contact.id])
 
@@ -131,7 +131,7 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
         })
 
         it('does not remove the contact and returns the count', async () => {
-          const result = await CleanOrphanedContactsService.go()
+          const result = await CleanOrphanedContactsService()
 
           const existsResults = await ContactModel.query().whereIn('id', [contact.id])
 
@@ -154,11 +154,11 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
     })
 
     it('does not throw an error', async () => {
-      await expect(CleanOrphanedContactsService.go()).resolves.toBeDefined()
+      await expect(CleanOrphanedContactsService()).resolves.toBeDefined()
     })
 
     it('logs the error', async () => {
-      await CleanOrphanedContactsService.go()
+      await CleanOrphanedContactsService()
 
       const errorLogArgs = notifierStub.omfg.firstCall.args
 
@@ -168,7 +168,7 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
     })
 
     it('still returns a count', async () => {
-      const result = await CleanOrphanedContactsService.go()
+      const result = await CleanOrphanedContactsService()
 
       // Like in the previous tests, we can't check the exact count in case the test deletes void return logs created
       // by other tests. We just want to check we are always getting a number

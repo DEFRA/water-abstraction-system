@@ -14,19 +14,12 @@ import ViewReturnSubmissionPresenter from '../../presenters/return-submissions/v
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the view return submission template.
  */
-async function go(returnSubmissionId, yearMonth) {
-  const returnSubmission = await FetchReturnSubmissionService.go(returnSubmissionId)
+export default async function go(returnSubmissionId, yearMonth) {
+  const returnSubmission = await FetchReturnSubmissionService(returnSubmissionId)
 
   const pageData = ViewReturnSubmissionPresenter.go(returnSubmission, yearMonth)
 
   return {
     ...pageData
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

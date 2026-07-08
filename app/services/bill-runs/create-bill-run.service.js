@@ -21,7 +21,7 @@ import BillRunModel from '../../models/bill-run.model.js'
  *
  * @returns {Promise<module:BillRunModel>} The newly created bill run instance with the `.region` property populated
  */
-async function go(regionId, financialYearEndings, options) {
+export default async function go(regionId, financialYearEndings, options) {
   const { fromFinancialYearEnding, toFinancialYearEnding } = financialYearEndings
   const optionsData = _defaultOptions(options)
 
@@ -52,9 +52,4 @@ function _defaultOptions(option) {
     ...defaults,
     ...option
   }
-}
-
-export { go }
-export default {
-  go
 }

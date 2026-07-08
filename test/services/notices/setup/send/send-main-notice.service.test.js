@@ -119,7 +119,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
       })
 
       it('sends the notice and records the Notify responses when all done', async () => {
-        await SendMainNoticeService.go(notice, notifications)
+        await SendMainNoticeService(notice, notifications)
 
         // Check we record the Notify responses against the notifications
         expect(notificationPatchStub.calledTwice).toBe(true)
@@ -142,7 +142,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
       })
 
       it('only checks the status of email notifications (letters are typically processed next day by Notify)', async () => {
-        await SendMainNoticeService.go(notice, notifications)
+        await SendMainNoticeService(notice, notifications)
 
         // We only check the notification status for emails
         expect(checkNotificationStatusStub.calledOnce).toBe(true)
@@ -175,7 +175,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
       })
 
       it('sends the notice and records the Notify responses, including errors when all done', async () => {
-        await SendMainNoticeService.go(notice, notifications)
+        await SendMainNoticeService(notice, notifications)
 
         // Check we record the Notify responses against the notifications
         expect(notificationPatchStub.calledTwice).toBe(true)
@@ -199,7 +199,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
       })
 
       it('only checks the status of email notifications (letters are typically processed next day by Notify)', async () => {
-        await SendMainNoticeService.go(notice, notifications)
+        await SendMainNoticeService(notice, notifications)
 
         // NOTE: We still call CheckNotificationStatusService because we know it has logic to only check pending
         // notifications. So, we don't worry about that in SendNoticeService, even though we've rigged our test to fail
@@ -229,7 +229,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
       })
 
       it('sends the notice, records the Notify responses, including errors', async () => {
-        await SendMainNoticeService.go(notice, [notifications[1]])
+        await SendMainNoticeService(notice, [notifications[1]])
 
         expect(checkNotificationStatusStub.called).toBe(false)
       })
@@ -271,7 +271,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
       })
 
       it('sends the notice and records the Notify response when all done', async () => {
-        await SendMainNoticeService.go(notice, notifications)
+        await SendMainNoticeService(notice, notifications)
 
         // Check we record the Notify responses against the notifications
         expect(notificationPatchStub.calledOnce).toBe(true)
@@ -286,7 +286,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
       })
 
       it('does not try to check the status of the notification', async () => {
-        await SendMainNoticeService.go(notice, notifications)
+        await SendMainNoticeService(notice, notifications)
 
         // We only check the notification status for emails
         expect(checkNotificationStatusStub.called).toBe(false)
@@ -304,7 +304,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
       })
 
       it('sends the notice and records the Notify response when all done', async () => {
-        await SendMainNoticeService.go(notice, notifications)
+        await SendMainNoticeService(notice, notifications)
 
         // Check we record the Notify responses against the notifications
         expect(notificationPatchStub.calledOnce).toBe(true)
@@ -319,7 +319,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
       })
 
       it('does not try to check the status of the notification', async () => {
-        await SendMainNoticeService.go(notice, notifications)
+        await SendMainNoticeService(notice, notifications)
 
         // We only check the notification status for emails
         expect(checkNotificationStatusStub.called).toBe(false)

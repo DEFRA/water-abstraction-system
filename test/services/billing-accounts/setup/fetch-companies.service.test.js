@@ -39,7 +39,7 @@ describe('Billing Accounts - Setup - Fetch Companies service', () => {
     })
 
     it('returns the matching companies', async () => {
-      const result = await FetchCompaniesService.go('ENVIRONMENT')
+      const result = await FetchCompaniesService('ENVIRONMENT')
 
       expect(result).toEqual([
         {
@@ -66,7 +66,7 @@ describe('Billing Accounts - Setup - Fetch Companies service', () => {
     })
 
     it('returns an empty array', async () => {
-      const result = await FetchCompaniesService.go('ENVIRONMENT')
+      const result = await FetchCompaniesService('ENVIRONMENT')
 
       expect(result).toEqual([])
     })
@@ -87,7 +87,7 @@ describe('Billing Accounts - Setup - Fetch Companies service', () => {
     })
 
     it('returns an empty array', async () => {
-      const result = await FetchCompaniesService.go('ENVIRONMENT')
+      const result = await FetchCompaniesService('ENVIRONMENT')
 
       expect(result).toEqual([])
     })

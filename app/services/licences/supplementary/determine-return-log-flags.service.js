@@ -36,7 +36,7 @@ const SROC_START_DATE = new Date('2022-04-01')
  * @returns {object} - An object containing the related licenceId, regionId, return start and end date and licence
  * supplementary billing flags
  */
-async function go(returnLogId) {
+export default async function go(returnLogId) {
   const { twoPartTariff, licence, endDate, startDate } = await _fetchReturnLog(returnLogId)
 
   const result = {
@@ -74,11 +74,4 @@ async function _fetchReturnLog(returnLogId) {
     .modifyGraph('licence', (builder) => {
       builder.select(['id', 'regionId', 'includeInSrocBilling', 'includeInPresrocBilling'])
     })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

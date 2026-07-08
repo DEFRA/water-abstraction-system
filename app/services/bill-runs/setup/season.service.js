@@ -16,7 +16,7 @@ import SeasonPresenter from '../../../presenters/bill-runs/setup/season.presente
  *
  * @returns {Promise<object>} The view data for the season page
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const formattedData = SeasonPresenter.go(session)
@@ -25,9 +25,4 @@ async function go(sessionId) {
     activeNavBar: 'bill-runs',
     ...formattedData
   }
-}
-
-export { go }
-export default {
-  go
 }

@@ -35,9 +35,9 @@ const TWO_PART_IRRIGATION_IDS = new Set(['380', '390', '400', '410', '420', '600
  * @returns {Promise<object[]>} an array of return requirements generated from the licence's abstraction data and ready
  * to be persisted to the setup session
  */
-async function go(licenceId, licenceVersionId, startDate) {
-  const licence = await FetchAbstractionDataService.go(licenceId, licenceVersionId)
-  licence.twoPartTariffAgreement = await DetermineTwoPartTariffAgreementService.go(licence.licenceRef, startDate)
+export default async function go(licenceId, licenceVersionId, startDate) {
+  const licence = await FetchAbstractionDataService(licenceId, licenceVersionId)
+  licence.twoPartTariffAgreement = await DetermineTwoPartTariffAgreementService(licence.licenceRef, startDate)
 
   const returnRequirements = _transformForSetup(licence)
 
@@ -247,9 +247,4 @@ function _transformForSetup(licence) {
       agreementsExceptions: _agreementExceptions(purpose)
     }
   })
-}
-
-export { go }
-export default {
-  go
 }

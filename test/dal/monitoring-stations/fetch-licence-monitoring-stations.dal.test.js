@@ -138,7 +138,7 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations dal', () => {
       })
 
       it('returns the licence, monitoring station and non-deleted licence monitoring station records', async () => {
-        const result = await FetchLicenceMonitoringStationsDal.go(licence.id, monitoringStation.id)
+        const result = await FetchLicenceMonitoringStationsDal(licence.id, monitoringStation.id)
 
         expect(result.licence).toEqual({
           expiredDate: null,
@@ -203,7 +203,7 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations dal', () => {
 
     describe('but no licence monitoring station records exist for them', () => {
       it('returns the licence, monitoring station but no licence monitoring station records', async () => {
-        const result = await FetchLicenceMonitoringStationsDal.go(licence.id, monitoringStation.id)
+        const result = await FetchLicenceMonitoringStationsDal(licence.id, monitoringStation.id)
 
         expect(result.licence).toEqual({
           expiredDate: null,
@@ -225,7 +225,7 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations dal', () => {
 
   describe('when a matching monitoring station does not exist', () => {
     it('returns only the licence record populated', async () => {
-      const result = await FetchLicenceMonitoringStationsDal.go(licence.id, '1dcbafad-a1c6-43ec-9313-7149b40ffa57')
+      const result = await FetchLicenceMonitoringStationsDal(licence.id, '1dcbafad-a1c6-43ec-9313-7149b40ffa57')
 
       expect(result.licence).toEqual({
         expiredDate: null,
@@ -241,7 +241,7 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations dal', () => {
 
   describe('when a matching licence does not exist', () => {
     it('returns only the monitoring station record populated', async () => {
-      const result = await FetchLicenceMonitoringStationsDal.go(
+      const result = await FetchLicenceMonitoringStationsDal(
         '86cb402a-5122-407a-beea-3f5422133e55',
         monitoringStation.id
       )

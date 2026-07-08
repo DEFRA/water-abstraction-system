@@ -23,7 +23,7 @@ describe('Return Logs - Fetch Return Log service', () => {
 
   describe('when called', () => {
     it('fetches the matching return log with the linked licence', async () => {
-      const result = await FetchReturnLogService.go(returnLog.id)
+      const result = await FetchReturnLogService(returnLog.id)
 
       expect(result).toEqual({
         id: returnLog.id,

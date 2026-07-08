@@ -85,7 +85,7 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
   })
 
   it('returns "pending" notifications created within the Notify retention period', async () => {
-    const results = await FetchNotificationsService.go()
+    const results = await FetchNotificationsService()
 
     for (const result of results) {
       expect(result.status).toEqual('pending')
@@ -94,7 +94,7 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
   })
 
   it('contains the test records we expect and excludes those we do not', async () => {
-    const results = await FetchNotificationsService.go()
+    const results = await FetchNotificationsService()
 
     expect(results).toContainEqual(_transformToResult(returnsInvitation))
 

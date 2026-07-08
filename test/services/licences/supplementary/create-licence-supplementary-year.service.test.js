@@ -22,7 +22,7 @@ describe('Create Licence Supplementary Years Service', () => {
 
     describe('that does not already exist', () => {
       it('persists the data', async () => {
-        await CreateLicenceSupplementaryYearService.go(licenceId, financialYearEnds, twoPartTariff)
+        await CreateLicenceSupplementaryYearService(licenceId, financialYearEnds, twoPartTariff)
 
         const result = await _fetchLicenceSupplementaryYears(licenceId)
 
@@ -43,7 +43,7 @@ describe('Create Licence Supplementary Years Service', () => {
 
       describe('without the billRunId', () => {
         it('does not persist the data', async () => {
-          await CreateLicenceSupplementaryYearService.go(licenceId, financialYearEnds, twoPartTariff)
+          await CreateLicenceSupplementaryYearService(licenceId, financialYearEnds, twoPartTariff)
 
           const result = await _fetchLicenceSupplementaryYears(licenceId)
 
@@ -65,7 +65,7 @@ describe('Create Licence Supplementary Years Service', () => {
         })
 
         it('persist the data', async () => {
-          await CreateLicenceSupplementaryYearService.go(licenceId, financialYearEnds, twoPartTariff)
+          await CreateLicenceSupplementaryYearService(licenceId, financialYearEnds, twoPartTariff)
 
           const result = await _fetchLicenceSupplementaryYears(licenceId)
 

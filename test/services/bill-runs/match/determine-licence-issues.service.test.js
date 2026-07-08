@@ -14,7 +14,7 @@ describe('Determine Licence Issues Service', () => {
 
       describe('on the licence', () => {
         it('sets "issues" to a comma separated unique list in alphabetical order of the issues found', () => {
-          DetermineLicenceIssuesService.go(licence)
+          DetermineLicenceIssuesService(licence)
 
           expect(licence.issues).toEqual([
             'Abstraction outside period',
@@ -27,7 +27,7 @@ describe('Determine Licence Issues Service', () => {
         })
 
         it('sets the status of the licence to "ready"', () => {
-          DetermineLicenceIssuesService.go(licence)
+          DetermineLicenceIssuesService(licence)
 
           expect(licence.status).toEqual('ready')
         })
@@ -41,7 +41,7 @@ describe('Determine Licence Issues Service', () => {
 
       describe('on the licence', () => {
         it('sets "issues" to a comma separated unique list in alphabetical order of the issues found', () => {
-          DetermineLicenceIssuesService.go(licence)
+          DetermineLicenceIssuesService(licence)
 
           expect(licence.issues).toEqual([
             'Aggregate',
@@ -55,7 +55,7 @@ describe('Determine Licence Issues Service', () => {
         })
 
         it('sets the status of the licence to "review"', () => {
-          DetermineLicenceIssuesService.go(licence)
+          DetermineLicenceIssuesService(licence)
 
           expect(licence.status).toEqual('review')
         })
@@ -69,7 +69,7 @@ describe('Determine Licence Issues Service', () => {
 
       describe('on the licence', () => {
         it('sets "issues" to a comma separated unique list in alphabetical order of the issues found', () => {
-          DetermineLicenceIssuesService.go(licence)
+          DetermineLicenceIssuesService(licence)
 
           expect(licence.issues).toEqual([
             'Abstraction outside period',
@@ -88,7 +88,7 @@ describe('Determine Licence Issues Service', () => {
         })
 
         it('sets the status of the licence to "review"', () => {
-          DetermineLicenceIssuesService.go(licence)
+          DetermineLicenceIssuesService(licence)
 
           expect(licence.status).toEqual('review')
         })
@@ -96,7 +96,7 @@ describe('Determine Licence Issues Service', () => {
 
       describe('on the returns', () => {
         it('sets all the issues on the returns object', () => {
-          DetermineLicenceIssuesService.go(licence)
+          DetermineLicenceIssuesService(licence)
 
           expect(licence.returnLogs[0].issues).toEqual([
             'Abstraction outside period',
@@ -112,7 +112,7 @@ describe('Determine Licence Issues Service', () => {
 
       describe('on the charge elements', () => {
         it('sets all the issues on the element object', () => {
-          DetermineLicenceIssuesService.go(licence)
+          DetermineLicenceIssuesService(licence)
 
           expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].issues).toEqual([
             'Aggregate',
@@ -126,7 +126,7 @@ describe('Determine Licence Issues Service', () => {
         })
 
         it('sets the status of the charge element to "review"', () => {
-          DetermineLicenceIssuesService.go(licence)
+          DetermineLicenceIssuesService(licence)
 
           expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].status).toEqual('review')
         })
@@ -142,7 +142,7 @@ describe('Determine Licence Issues Service', () => {
       describe('that has one matching return', () => {
         describe('and the return status is "due"', () => {
           it('sets the issue "No returns received" on the charge element', () => {
-            DetermineLicenceIssuesService.go(licence)
+            DetermineLicenceIssuesService(licence)
 
             expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].issues).toEqual([
               'No returns received'
@@ -174,7 +174,7 @@ describe('Determine Licence Issues Service', () => {
           })
 
           it('sets the issue "Some returns not received" on the charge element', () => {
-            DetermineLicenceIssuesService.go(licence)
+            DetermineLicenceIssuesService(licence)
 
             expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].issues).toEqual([
               'Some returns not received'
@@ -188,7 +188,7 @@ describe('Determine Licence Issues Service', () => {
           })
 
           it('sets the issue "No returns received" on the charge element', () => {
-            DetermineLicenceIssuesService.go(licence)
+            DetermineLicenceIssuesService(licence)
 
             expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].issues).toEqual([
               'No returns received'
@@ -209,13 +209,13 @@ describe('Determine Licence Issues Service', () => {
         })
 
         it('sets the status on the licence to "review"', () => {
-          DetermineLicenceIssuesService.go(licence)
+          DetermineLicenceIssuesService(licence)
 
           expect(licence.status).toEqual('review')
         })
 
         it('sets the status on the element to "ready"', () => {
-          DetermineLicenceIssuesService.go(licence)
+          DetermineLicenceIssuesService(licence)
 
           expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].status).toEqual('ready')
         })
@@ -227,13 +227,13 @@ describe('Determine Licence Issues Service', () => {
         })
 
         it('sets the status on the licence to "ready"', () => {
-          DetermineLicenceIssuesService.go(licence)
+          DetermineLicenceIssuesService(licence)
 
           expect(licence.status).toEqual('ready')
         })
 
         it('sets the status on the element to "ready"', () => {
-          DetermineLicenceIssuesService.go(licence)
+          DetermineLicenceIssuesService(licence)
 
           expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].status).toEqual('ready')
         })
@@ -246,13 +246,13 @@ describe('Determine Licence Issues Service', () => {
       })
 
       it('sets the licence status as "ready"', () => {
-        DetermineLicenceIssuesService.go(licence)
+        DetermineLicenceIssuesService(licence)
 
         expect(licence.status).toEqual('ready')
       })
 
       it('sets the element status as "ready"', () => {
-        DetermineLicenceIssuesService.go(licence)
+        DetermineLicenceIssuesService(licence)
 
         expect(licence.chargeVersions[0].chargeReferences[0].chargeElements[0].status).toEqual('ready')
       })

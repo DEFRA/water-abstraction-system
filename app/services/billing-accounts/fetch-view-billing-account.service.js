@@ -18,7 +18,7 @@ import DatabaseConfig from '../../../config/database.config.js'
  * @returns {Promise<object>} an object containing the billing account and matching bills needed to populate the view
  * billing account page
  */
-async function go(id, page = '1') {
+export default async function go(id, page = '1') {
   const billingAccount = await _fetchBillingAccount(id)
   const { results: bills, total: totalNumber } = await _fetchBills(id, page)
 
@@ -55,11 +55,4 @@ async function _fetchBills(billingAccountId, page) {
       builder.select(['id', 'batchType', 'billRunNumber', 'scheme', 'source', 'summer', 'status'])
     })
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

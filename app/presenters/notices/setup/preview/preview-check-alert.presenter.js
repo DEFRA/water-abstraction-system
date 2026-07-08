@@ -59,7 +59,7 @@ function _preparedLicenceMonitoringStations(contactHashId, recipientLicenceMonit
 function _recipientLicenceMonitoringStations(recipientLicenceRefs, session) {
   const { alertThresholds, alertType, licenceMonitoringStations, removedThresholds } = session
 
-  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService.go(
+  const relevantLicenceMonitoringStations = DetermineRelevantLicenceMonitoringStationsService(
     licenceMonitoringStations,
     alertThresholds,
     removedThresholds,

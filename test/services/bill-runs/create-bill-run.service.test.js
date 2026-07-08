@@ -18,7 +18,7 @@ describe('Create Bill Run service', () => {
 
   describe('when the defaults are not overridden', () => {
     it('returns the new bill run instance containing the defaults', async () => {
-      const result = await CreateBillRunService.go(region.id, financialYearEndings)
+      const result = await CreateBillRunService(region.id, financialYearEndings)
 
       expect(result).toBeInstanceOf(BillRunModel)
 
@@ -45,7 +45,7 @@ describe('Create Bill Run service', () => {
     const errorCode = 50
 
     it('returns the new bill run instance containing the provided values', async () => {
-      const result = await CreateBillRunService.go(region.id, financialYearEndings, {
+      const result = await CreateBillRunService(region.id, financialYearEndings, {
         batchType,
         scheme,
         source,
@@ -75,7 +75,7 @@ describe('Create Bill Run service', () => {
     const status = 'error'
 
     it('returns the new bill run instance containing the provided values', async () => {
-      const result = await CreateBillRunService.go(region.id, financialYearEndings, { externalId, status })
+      const result = await CreateBillRunService(region.id, financialYearEndings, { externalId, status })
 
       expect(result).toBeInstanceOf(BillRunModel)
 

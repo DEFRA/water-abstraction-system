@@ -41,7 +41,7 @@ describe('Return Logs - View Communications Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCommunicationsService.go(returnLog.id, page)
+      const result = await ViewCommunicationsService(returnLog.id, page)
 
       expect(result).toEqual({
         activeSecondaryNav: 'communications',

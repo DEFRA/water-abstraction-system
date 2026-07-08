@@ -47,7 +47,7 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
     })
 
     it('sets the "endDate" of the existing record, a null "endDate" is returned for the new return version', async () => {
-      const result = await ProcessExistingReturnVersionsService.go(licenceId, newVersionStartDate)
+      const result = await ProcessExistingReturnVersionsService(licenceId, newVersionStartDate)
 
       expect(result).toBeNull()
 
@@ -72,7 +72,7 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
     })
 
     it('sets the "endDate" of the existing record and an "endDate" is returned for the new return version', async () => {
-      const result = await ProcessExistingReturnVersionsService.go(licenceId, newVersionStartDate)
+      const result = await ProcessExistingReturnVersionsService(licenceId, newVersionStartDate)
 
       expect(result).toEqual(new Date('2024-07-01'))
 
@@ -97,7 +97,7 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
     })
 
     it('an "endDate" is returned for the new return version and no changes are made', async () => {
-      const result = await ProcessExistingReturnVersionsService.go(licenceId, newVersionStartDate)
+      const result = await ProcessExistingReturnVersionsService(licenceId, newVersionStartDate)
 
       expect(result).toEqual(new Date('2024-04-20'))
 
@@ -121,7 +121,7 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
     })
 
     it('sets the "status" of the existing record, a null end date is returned for the new return version', async () => {
-      const result = await ProcessExistingReturnVersionsService.go(licenceId, newVersionStartDate)
+      const result = await ProcessExistingReturnVersionsService(licenceId, newVersionStartDate)
 
       expect(result).toBeNull()
 
@@ -146,7 +146,7 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
     })
 
     it('sets the "status" of the existing record and an "endDate" is returned for the new return version', async () => {
-      const result = await ProcessExistingReturnVersionsService.go(licenceId, newVersionStartDate)
+      const result = await ProcessExistingReturnVersionsService(licenceId, newVersionStartDate)
 
       expect(result).toEqual(new Date('2024-07-01'))
 
@@ -183,7 +183,7 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
     })
 
     it('the correct "endDate" is returned for the existing return version and the previous ones endDate is updated', async () => {
-      const result = await ProcessExistingReturnVersionsService.go(licenceId, newVersionStartDate)
+      const result = await ProcessExistingReturnVersionsService(licenceId, newVersionStartDate)
 
       expect(result).toEqual(new Date('2025-05-11'))
 

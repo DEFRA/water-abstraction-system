@@ -42,7 +42,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
     })
 
     it("updates only the notification's required values", async () => {
-      await UpdateNotificationsService.go(notifications)
+      await UpdateNotificationsService(notifications)
 
       const result = await notification.$query()
 
@@ -97,7 +97,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
     })
 
     it('updates the first notification', async () => {
-      await UpdateNotificationsService.go(notifications)
+      await UpdateNotificationsService(notifications)
 
       const result = await notification.$query()
 
@@ -128,7 +128,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
     })
 
     it('updates the second notification', async () => {
-      await UpdateNotificationsService.go(notifications)
+      await UpdateNotificationsService(notifications)
 
       const result = await notification2.$query()
 

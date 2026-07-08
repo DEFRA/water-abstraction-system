@@ -14,17 +14,10 @@ import DeleteSessionDal from '../../../../dal/delete-session.dal.js'
  *
  * @returns {Promise<object>} An object containing the URL to redirect the user to after cancelling
  */
-async function go(sessionId) {
+export default async function go(sessionId) {
   await DeleteSessionDal(sessionId)
 
   return {
     redirectUrl: '/system/users'
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

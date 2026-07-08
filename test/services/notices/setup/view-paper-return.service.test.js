@@ -44,7 +44,7 @@ describe('Notices - Setup - View Paper Return service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewPaperReturnService.go(session.id)
+      const result = await ViewPaperReturnService(session.id)
 
       expect(result).toEqual({
         activeNavBar: 'notices',

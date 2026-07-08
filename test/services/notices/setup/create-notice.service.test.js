@@ -37,7 +37,7 @@ describe('Notices - Setup - Create Notice service', () => {
   })
 
   it('creates the notice', async () => {
-    const result = await CreateNoticeService.go(noticeData, recipients, issuer)
+    const result = await CreateNoticeService(noticeData, recipients, issuer)
 
     expect(result).toBeInstanceOf(EventModel)
     expect(result).toMatchObject({

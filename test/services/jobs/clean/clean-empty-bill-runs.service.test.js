@@ -57,7 +57,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
     })
 
     it('does not attempt to delete any bill runs', async () => {
-      await CleanEmptyBillRunsService.go()
+      await CleanEmptyBillRunsService()
 
       expect(cancelBillRunStub.called).toBe(false)
 
@@ -87,7 +87,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
       })
 
       it('removes the empty bill runs and returns the count', async () => {
-        const result = await CleanEmptyBillRunsService.go()
+        const result = await CleanEmptyBillRunsService()
 
         expect(cancelBillRunStub.calledTwice).toBe(true)
         expect(cancelBillRunStub.firstCall.calledWith(emptyBillRuns[0].id)).toBe(true)
@@ -119,7 +119,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
       })
 
       it('removes only the one that could be cancelled and returns the count', async () => {
-        const result = await CleanEmptyBillRunsService.go()
+        const result = await CleanEmptyBillRunsService()
 
         expect(cancelBillRunStub.calledTwice).toBe(true)
         expect(cancelBillRunStub.firstCall.calledWith(emptyBillRuns[0].id)).toBe(true)
@@ -142,11 +142,11 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
       })
 
       it('does not throw an error', async () => {
-        await expect(CleanEmptyBillRunsService.go()).resolves.toBeDefined()
+        await expect(CleanEmptyBillRunsService()).resolves.toBeDefined()
       })
 
       it('logs the error with no bill run ID', async () => {
-        await CleanEmptyBillRunsService.go()
+        await CleanEmptyBillRunsService()
 
         const errorLogArgs = notifierStub.omfg.firstCall.args
 
@@ -156,7 +156,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
       })
 
       it('still returns a count', async () => {
-        const result = await CleanEmptyBillRunsService.go()
+        const result = await CleanEmptyBillRunsService()
 
         expect(result).toEqual(0)
       })
@@ -170,11 +170,11 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
       })
 
       it('does not throw an error', async () => {
-        await expect(CleanEmptyBillRunsService.go()).resolves.toBeDefined()
+        await expect(CleanEmptyBillRunsService()).resolves.toBeDefined()
       })
 
       it('logs the error including the ID of the bill run that errored', async () => {
-        await CleanEmptyBillRunsService.go()
+        await CleanEmptyBillRunsService()
 
         const errorLogArgs = notifierStub.omfg.firstCall.args
 
@@ -184,7 +184,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
       })
 
       it('still returns a count', async () => {
-        const result = await CleanEmptyBillRunsService.go()
+        const result = await CleanEmptyBillRunsService()
 
         expect(result).toEqual(0)
       })

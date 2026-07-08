@@ -14,7 +14,7 @@ import { userPermissions } from '../../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(id) {
+export default async function go(id) {
   const user = await FetchUserDetailsDal(id)
 
   const data = _formatDataForJourney(user)
@@ -62,11 +62,4 @@ function _getUserPermissionKey(group, role) {
   })
 
   return matchingPermission.key
-}
-
-export {
-  go
-}
-export default {
-  go
 }

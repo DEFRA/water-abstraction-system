@@ -19,7 +19,7 @@ describe('Notifications - Fetch Download Notification service', () => {
   })
 
   it('returns the PDF file for the notification', async () => {
-    const result = await FetchDownloadNotificationService.go(notification.id)
+    const result = await FetchDownloadNotificationService(notification.id)
 
     expect(result).toEqual({
       pdf

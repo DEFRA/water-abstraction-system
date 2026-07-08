@@ -32,13 +32,13 @@ describe('Return Logs Setup - Meter Provided service', () => {
 
   describe('when called', () => {
     it('fetches the current setup session record', async () => {
-      const result = await MeterProvidedService.go(session.id)
+      const result = await MeterProvidedService(session.id)
 
       expect(result.sessionId).toEqual(session.id)
     })
 
     it('returns page data for the view', async () => {
-      const result = await MeterProvidedService.go(session.id)
+      const result = await MeterProvidedService(session.id)
 
       expect(result).toMatchObject({
         backLink: { href: `/system/return-logs/setup/${session.id}/units`, text: 'Back' },

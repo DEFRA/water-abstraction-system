@@ -157,32 +157,32 @@ describe('Reissue Bill service', () => {
 
   describe('when the service is called', () => {
     it('returns two bills per source bill (one cancelling, one reissuing)', async () => {
-      const result = await ReissueBillService.go(sourceBill, reissueBillRun)
+      const result = await ReissueBillService(sourceBill, reissueBillRun)
 
       expect(result.bills).toHaveLength(2)
     })
 
     it('returns two bill licences per source bill licence (one cancelling, one reissuing)', async () => {
-      const result = await ReissueBillService.go(sourceBill, reissueBillRun)
+      const result = await ReissueBillService(sourceBill, reissueBillRun)
 
       expect(result.billLicences).toHaveLength(4)
     })
 
     it('persists two transactions per source transaction (one cancelling, one reissuing)', async () => {
-      const result = await ReissueBillService.go(sourceBill, reissueBillRun)
+      const result = await ReissueBillService(sourceBill, reissueBillRun)
 
       expect(result.transactions).toHaveLength(4)
     })
 
     it('sets the source bill rebilling state to `rebilled`', async () => {
-      await ReissueBillService.go(sourceBill, reissueBillRun)
+      await ReissueBillService(sourceBill, reissueBillRun)
 
       expect(sourceBill.rebillingState).toEqual('rebilled')
     })
 
     describe('sets the original bill id', () => {
       it('to its own id if `null`', async () => {
-        await ReissueBillService.go(sourceBill, reissueBillRun)
+        await ReissueBillService(sourceBill, reissueBillRun)
 
         expect(sourceBill.originalBillId).toEqual(sourceBill.id)
       })
@@ -192,7 +192,7 @@ describe('Reissue Bill service', () => {
 
         await sourceBill.$query().patch({ originalBillId })
 
-        await ReissueBillService.go(sourceBill, reissueBillRun)
+        await ReissueBillService(sourceBill, reissueBillRun)
 
         expect(sourceBill.originalBillId).toEqual(originalBillId)
       })
@@ -200,7 +200,7 @@ describe('Reissue Bill service', () => {
 
     describe('sets the transaction net amount to the charge value returned by the CM', () => {
       it('negative for credits', async () => {
-        const result = await ReissueBillService.go(sourceBill, reissueBillRun)
+        const result = await ReissueBillService(sourceBill, reissueBillRun)
 
         const credits = result.transactions.filter((transaction) => {
           return transaction.credit
@@ -212,7 +212,7 @@ describe('Reissue Bill service', () => {
       })
 
       it('positive for debits', async () => {
-        const result = await ReissueBillService.go(sourceBill, reissueBillRun)
+        const result = await ReissueBillService(sourceBill, reissueBillRun)
 
         const debits = result.transactions.filter((transaction) => {
           return !transaction.credit
@@ -244,7 +244,7 @@ describe('Reissue Bill service', () => {
       })
 
       it('retries until it is no longer "pending"', async () => {
-        await ReissueBillService.go(sourceBill, reissueBillRun)
+        await ReissueBillService(sourceBill, reissueBillRun)
 
         expect(billRunStatusStub.callCount).toEqual(2)
       })
@@ -268,13 +268,13 @@ describe('Reissue Bill service', () => {
       })
 
       it('throws an error', async () => {
-        await expect(ReissueBillService.go(sourceBill, reissueBillRun)).rejects.toThrow(
+        await expect(ReissueBillService(sourceBill, reissueBillRun)).rejects.toThrow(
           'Charging Module reissue request failed'
         )
       })
 
       it('includes the bill run and source bill external ids', async () => {
-        const errorResult = await ReissueBillService.go(sourceBill, reissueBillRun).catch((e) => {
+        const errorResult = await ReissueBillService(sourceBill, reissueBillRun).catch((e) => {
           return e
         })
 
@@ -283,7 +283,7 @@ describe('Reissue Bill service', () => {
       })
 
       it('includes the Charging Module response body', async () => {
-        const errorResult = await ReissueBillService.go(sourceBill, reissueBillRun).catch((e) => {
+        const errorResult = await ReissueBillService(sourceBill, reissueBillRun).catch((e) => {
           return e
         })
 
@@ -311,13 +311,13 @@ describe('Reissue Bill service', () => {
       })
 
       it('throws an error', async () => {
-        await expect(ReissueBillService.go(sourceBill, reissueBillRun)).rejects.toThrow(
+        await expect(ReissueBillService(sourceBill, reissueBillRun)).rejects.toThrow(
           'Charging Module view bill request failed'
         )
       })
 
       it('includes the bill run and reissue bill external ids', async () => {
-        const errorResult = await ReissueBillService.go(sourceBill, reissueBillRun).catch((e) => {
+        const errorResult = await ReissueBillService(sourceBill, reissueBillRun).catch((e) => {
           return e
         })
 
@@ -328,7 +328,7 @@ describe('Reissue Bill service', () => {
       })
 
       it('includes the Charging Module response body', async () => {
-        const errorResult = await ReissueBillService.go(sourceBill, reissueBillRun).catch((e) => {
+        const errorResult = await ReissueBillService(sourceBill, reissueBillRun).catch((e) => {
           return e
         })
 

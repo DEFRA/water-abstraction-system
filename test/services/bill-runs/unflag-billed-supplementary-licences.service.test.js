@@ -64,7 +64,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
       describe('the licences in the bill run that were flagged', () => {
         describe('and are not blocked from being unflagged', () => {
           it('unflags them', async () => {
-            await UnflagBilledSupplementaryLicencesService.go(billRun)
+            await UnflagBilledSupplementaryLicencesService(billRun)
 
             const licenceToBeChecked = await presrocSupplementary.licenceToBeUnflagged.$query()
 
@@ -74,7 +74,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
         describe('but are in "workflow"', () => {
           it('leaves flagged for PRESROC standard supplementary billing', async () => {
-            await UnflagBilledSupplementaryLicencesService.go(billRun)
+            await UnflagBilledSupplementaryLicencesService(billRun)
 
             const licenceToBeChecked = await presrocSupplementary.licenceInWorkflow.$query()
 
@@ -84,7 +84,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
         describe('but were updated after the bill run was created', () => {
           it('leaves flagged for PRESROC standard supplementary billing', async () => {
-            await UnflagBilledSupplementaryLicencesService.go(billRun)
+            await UnflagBilledSupplementaryLicencesService(billRun)
 
             const licenceToBeChecked = await presrocSupplementary.licenceFlaggedAfterBillRunCreated.$query()
 
@@ -95,7 +95,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
       describe('the licences not in the bill run that were flagged', () => {
         it('leaves flagged for PRESROC standard supplementary billing', async () => {
-          await UnflagBilledSupplementaryLicencesService.go(billRun)
+          await UnflagBilledSupplementaryLicencesService(billRun)
 
           const licenceToBeChecked = await presrocSupplementary.licenceNotInRegion.$query()
 
@@ -158,7 +158,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
       describe('the licences in the bill run that were flagged', () => {
         describe('and are not blocked from being unflagged', () => {
           it('unflags them', async () => {
-            await UnflagBilledSupplementaryLicencesService.go(billRun)
+            await UnflagBilledSupplementaryLicencesService(billRun)
 
             const licenceToBeChecked = await srocSupplementary.licenceToBeUnflagged.$query()
 
@@ -168,7 +168,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
         describe('but are in "workflow"', () => {
           it('leaves flagged for SROC standard supplementary billing', async () => {
-            await UnflagBilledSupplementaryLicencesService.go(billRun)
+            await UnflagBilledSupplementaryLicencesService(billRun)
 
             const licenceToBeChecked = await srocSupplementary.licenceInWorkflow.$query()
 
@@ -178,7 +178,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
         describe('but were updated after the bill run was created', () => {
           it('leaves flagged for SROC standard supplementary billing', async () => {
-            await UnflagBilledSupplementaryLicencesService.go(billRun)
+            await UnflagBilledSupplementaryLicencesService(billRun)
 
             const licenceToBeChecked = await srocSupplementary.licenceFlaggedAfterBillRunCreated.$query()
 
@@ -189,7 +189,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
       describe('the licences not in the bill run that were flagged', () => {
         it('leaves flagged for SROC standard supplementary billing', async () => {
-          await UnflagBilledSupplementaryLicencesService.go(billRun)
+          await UnflagBilledSupplementaryLicencesService(billRun)
 
           const licenceToBeChecked = await srocSupplementary.licenceNotInBillRun.$query()
 
@@ -258,7 +258,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
     describe('the licences in the bill run that were flagged', () => {
       describe('and are not blocked from being unflagged', () => {
         it('unflags them', async () => {
-          await UnflagBilledSupplementaryLicencesService.go(billRun)
+          await UnflagBilledSupplementaryLicencesService(billRun)
 
           const licenceSupYearToBeChecked = await tptSupplementary.licenceToBeUnflaggedSupYear.$query()
 
@@ -268,7 +268,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
       describe('but are in "workflow"', () => {
         it('leaves flagged for SROC two-part tariff supplementary billing', async () => {
-          await UnflagBilledSupplementaryLicencesService.go(billRun)
+          await UnflagBilledSupplementaryLicencesService(billRun)
 
           const licenceSupYearToBeChecked = await tptSupplementary.licenceInWorkflowSupYear.$query()
 
@@ -278,7 +278,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
       describe('but were updated after the bill run was created', () => {
         it('leaves flagged for SROC two-part tariff supplementary billing', async () => {
-          await UnflagBilledSupplementaryLicencesService.go(billRun)
+          await UnflagBilledSupplementaryLicencesService(billRun)
 
           const licenceSupYearToBeChecked = await tptSupplementary.licenceInBillRunButUpdatedSupYear.$query()
 
@@ -289,7 +289,7 @@ describe('Bill Runs - Unflag Billed Supplementary Licences service', () => {
 
     describe('the licences not in the bill run that were flagged', () => {
       it('leaves flagged for SROC two-part tariff supplementary billing', async () => {
-        await UnflagBilledSupplementaryLicencesService.go(billRun)
+        await UnflagBilledSupplementaryLicencesService(billRun)
 
         const licenceSupYearToBeChecked = await tptSupplementary.licenceNotInBillRunSupYear.$query()
 

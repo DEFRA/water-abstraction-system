@@ -18,11 +18,11 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence contact details template.
  */
-async function go(licenceId, auth, page) {
-  const licence = await FetchLicenceService.go(licenceId)
+export default async function go(licenceId, auth, page) {
+  const licence = await FetchLicenceService(licenceId)
   const roles = userRoles(auth)
 
-  const { contacts, totalNumber } = await FetchLicenceCRMDataService.go(licenceId, roles, page)
+  const { contacts, totalNumber } = await FetchLicenceCRMDataService(licenceId, roles, page)
 
   const pageData = ContactDetailsPresenter.go(contacts, licence)
 
@@ -40,11 +40,4 @@ async function go(licenceId, auth, page) {
     pagination,
     roles
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

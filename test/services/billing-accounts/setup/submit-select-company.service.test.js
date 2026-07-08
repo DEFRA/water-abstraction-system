@@ -56,14 +56,14 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitSelectCompanyService.go(session.id, payload)
+      await SubmitSelectCompanyService(session.id, payload)
 
       expect(session.companiesHouseNumber).toEqual(payload.companiesHouseNumber)
       expect(session.$update.called).toBe(true)
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitSelectCompanyService.go(session.id, payload)
+      const result = await SubmitSelectCompanyService(session.id, payload)
 
       expect(result).toEqual({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
@@ -83,7 +83,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitSelectCompanyService.go(session.id, payload)
+        await SubmitSelectCompanyService(session.id, payload)
 
         expect(session).toMatchObject({
           companiesHouseNumber: payload.companiesHouseNumber
@@ -92,7 +92,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitSelectCompanyService.go(session.id, payload)
+        const result = await SubmitSelectCompanyService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
@@ -114,7 +114,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitSelectCompanyService.go(session.id, payload)
+        await SubmitSelectCompanyService(session.id, payload)
 
         expect(session).toMatchObject({
           companiesHouseNumber: payload.companiesHouseNumber,
@@ -123,7 +123,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitSelectCompanyService.go(session.id, payload)
+        const result = await SubmitSelectCompanyService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
@@ -147,7 +147,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
       })
 
       it('saves the submitted value', async () => {
-        await SubmitSelectCompanyService.go(session.id, payload)
+        await SubmitSelectCompanyService(session.id, payload)
 
         expect(session).toMatchObject({
           addressJourney: null,
@@ -162,7 +162,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
       })
 
       it('continues the journey', async () => {
-        const result = await SubmitSelectCompanyService.go(session.id, payload)
+        const result = await SubmitSelectCompanyService(session.id, payload)
 
         expect(result).toEqual({
           redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
@@ -178,7 +178,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitSelectCompanyService.go(session.id, payload)
+      const result = await SubmitSelectCompanyService(session.id, payload)
 
       expect(result.error).toEqual({
         errorList: [

@@ -34,7 +34,7 @@ describe('Company Contacts - View Remove Company Contact Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewRemoveCompanyContactService.go(companyContact.id)
+      const result = await ViewRemoveCompanyContactService(companyContact.id)
 
       expect(result).toEqual({
         backLink: {

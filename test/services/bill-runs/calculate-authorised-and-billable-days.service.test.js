@@ -51,7 +51,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 365 for authorised days and 61 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
+          const result = CalculateAuthorisedAndBillableDaysService(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).toEqual(365)
           expect(result.billableDays).toEqual(61)
@@ -67,7 +67,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 365 for authorised days and 62 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
+          const result = CalculateAuthorisedAndBillableDaysService(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).toEqual(365)
           expect(result.billableDays).toEqual(62)
@@ -83,7 +83,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 365 for authorised days 59 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
+          const result = CalculateAuthorisedAndBillableDaysService(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).toEqual(365)
           expect(result.billableDays).toEqual(59)
@@ -113,7 +113,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 181 for authorised days and 0 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
+          const result = CalculateAuthorisedAndBillableDaysService(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).toEqual(181)
           expect(result.billableDays).toEqual(0)
@@ -129,7 +129,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 181 for authorised days and 31 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
+          const result = CalculateAuthorisedAndBillableDaysService(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).toEqual(181)
           expect(result.billableDays).toEqual(31)
@@ -145,7 +145,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 181 for authorised days and 59 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
+          const result = CalculateAuthorisedAndBillableDaysService(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).toEqual(181)
           expect(result.billableDays).toEqual(59)
@@ -175,7 +175,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 182 for authorised days and 61 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
+          const result = CalculateAuthorisedAndBillableDaysService(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).toEqual(182)
           expect(result.billableDays).toEqual(61)
@@ -191,7 +191,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 182 for authorised days and 62 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
+          const result = CalculateAuthorisedAndBillableDaysService(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).toEqual(182)
           expect(result.billableDays).toEqual(62)
@@ -207,7 +207,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 182 for authorised days and 59 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
+          const result = CalculateAuthorisedAndBillableDaysService(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).toEqual(182)
           expect(result.billableDays).toEqual(59)
@@ -223,7 +223,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 182 for authorised days and 0 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
+          const result = CalculateAuthorisedAndBillableDaysService(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).toEqual(182)
           expect(result.billableDays).toEqual(0)
@@ -262,7 +262,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 120 for authorised days and 30 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
+          const result = CalculateAuthorisedAndBillableDaysService(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).toEqual(120)
           expect(result.billableDays).toEqual(30)
@@ -278,7 +278,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 120 for authorised days and 0 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
+          const result = CalculateAuthorisedAndBillableDaysService(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).toEqual(120)
           expect(result.billableDays).toEqual(0)
@@ -294,7 +294,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 120 for authorised days and 28 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
+          const result = CalculateAuthorisedAndBillableDaysService(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).toEqual(120)
           expect(result.billableDays).toEqual(28)
@@ -329,7 +329,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 181 for authorised days and 181 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
+          const result = CalculateAuthorisedAndBillableDaysService(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).toEqual(181)
           expect(result.billableDays).toEqual(181)
@@ -357,7 +357,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 151 for authorised days and 151 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
+          const result = CalculateAuthorisedAndBillableDaysService(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).toEqual(151)
           expect(result.billableDays).toEqual(151)
@@ -385,7 +385,7 @@ describe('Calculate Authorised and Billable days service', () => {
         })
 
         it('returns 182 for authorised days and 182 for billable days', () => {
-          const result = CalculateAuthorisedAndBillableDaysService.go(chargePeriod, billingPeriod, chargeReference)
+          const result = CalculateAuthorisedAndBillableDaysService(chargePeriod, billingPeriod, chargeReference)
 
           expect(result.authorisedDays).toEqual(182)
           expect(result.billableDays).toEqual(182)

@@ -40,7 +40,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
       })
 
       it('saves the submitted option', async () => {
-        await SubmitStopOrReduceService.go(session.id, payload)
+        await SubmitStopOrReduceService(session.id, payload)
 
         expect(session.stopOrReduce).toEqual('stop')
         expect(session.reduceAtThreshold).toEqual(null)
@@ -49,7 +49,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
 
       describe('and the page has been not been visited', () => {
         it('returns the correct details the controller needs to redirect the journey', async () => {
-          const result = await SubmitStopOrReduceService.go(session.id, payload)
+          const result = await SubmitStopOrReduceService(session.id, payload)
 
           expect(result).toEqual({
             checkPageVisited: undefined
@@ -67,7 +67,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
-          const result = await SubmitStopOrReduceService.go(session.id, payload)
+          const result = await SubmitStopOrReduceService(session.id, payload)
 
           expect(result).toEqual({
             checkPageVisited: true
@@ -83,7 +83,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await SubmitStopOrReduceService.go(session.id, payload)
+        const result = await SubmitStopOrReduceService(session.id, payload)
 
         expect(result).toMatchObject({
           backLink: `/system/licence-monitoring-station/setup/${session.id}/threshold-and-unit`,
@@ -96,7 +96,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
 
       describe('because the user has not entered or selected anything', () => {
         it('includes an error for both input elements and radio elements', async () => {
-          const result = await SubmitStopOrReduceService.go(session.id, payload)
+          const result = await SubmitStopOrReduceService(session.id, payload)
 
           expect(result.error).toEqual({
             message: 'Select if the licence holder needs to stop or reduce',
@@ -116,7 +116,7 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
         })
 
         it('includes an error for the reduceAtThreshold input elements', async () => {
-          const result = await SubmitStopOrReduceService.go(session.id, payload)
+          const result = await SubmitStopOrReduceService(session.id, payload)
 
           expect(result.error).toEqual({
             message: 'Select if the licence holder needs to stop abstraction when they reach a certain amount',

@@ -32,7 +32,7 @@ import { generateUUID } from '../../lib/general.lib.js'
  *
  * @returns {object[]} The "reversed" transactions
  */
-function go(transactions, billLicenceId) {
+export default function go(transactions, billLicenceId) {
   return transactions.map((transaction) => {
     return {
       ...transaction,
@@ -42,9 +42,4 @@ function go(transactions, billLicenceId) {
       status: 'candidate'
     }
   })
-}
-
-export { go }
-export default {
-  go
 }

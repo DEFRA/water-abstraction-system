@@ -16,7 +16,7 @@
  *
  * @returns {object} an empty object or one containing Hapi-pino config to tell it not to log events
  */
-function go(logInTest) {
+export default function go(logInTest) {
   if (process.env.NODE_ENV !== 'test' || logInTest) {
     return {}
   }
@@ -27,11 +27,4 @@ function go(logInTest) {
     // Don't log anything tagged with DEBUG or info, for example, req.log(['INFO'], 'User is an admin')
     ignoredEventTags: { log: ['DEBUG', 'INFO'], request: ['DEBUG', 'INFO'] }
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

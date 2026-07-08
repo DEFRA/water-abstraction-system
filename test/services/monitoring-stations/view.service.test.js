@@ -67,7 +67,7 @@ describe('Monitoring Stations - View service', () => {
 
   describe('when called', () => {
     it('returns the page data for the view', async () => {
-      const result = await ViewService.go(auth, monitoringStation.id, yarStub)
+      const result = await ViewService(auth, monitoringStation.id, yarStub)
 
       expect(result).toEqual({
         notification: 'Tag removed for 99/999/9999',

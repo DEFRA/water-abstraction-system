@@ -18,7 +18,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
  * @returns {Promise<object>} An object containing where to redirect to if there are no errors else the page data for the view
  * including the validation error details
  */
-async function go(sessionId, payload) {
+export default async function go(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   const licenceRefsWithDueReturns = await _fetchLicenceRefsWithDueReturns(session)
@@ -45,7 +45,7 @@ async function go(sessionId, payload) {
 async function _fetchLicenceRefsWithDueReturns(session) {
   const { determinedReturnsPeriod, noticeType } = session
 
-  return FetchLicenceRefsWithDueReturnsService.go(determinedReturnsPeriod, noticeType)
+  return FetchLicenceRefsWithDueReturnsService(determinedReturnsPeriod, noticeType)
 }
 
 async function _save(session, payload) {
@@ -58,9 +58,4 @@ function _validate(payload, validLicences) {
   const validationResult = RemoveLicencesValidator.go(payload, validLicences)
 
   return formatValidationResult(validationResult)
-}
-
-export { go }
-export default {
-  go
 }

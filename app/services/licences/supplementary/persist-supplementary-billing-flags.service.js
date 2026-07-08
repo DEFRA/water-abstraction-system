@@ -23,7 +23,12 @@ import { timestampForPostgres } from '../../../lib/general.lib.js'
  * sroc billing
  * @param {string} licenceId - The UUID of the licence that needs the flags persisting for
  */
-async function go(twoPartTariffBillingYears, flagForPreSrocSupplementary, flagForSrocSupplementary, licenceId) {
+export default async function go(
+  twoPartTariffBillingYears,
+  flagForPreSrocSupplementary,
+  flagForSrocSupplementary,
+  licenceId
+) {
   const includeInPresrocBilling = flagForPreSrocSupplementary ? 'yes' : 'no'
 
   await _updateLicenceFlags(includeInPresrocBilling, flagForSrocSupplementary, licenceId)
@@ -42,7 +47,7 @@ async function _flagForLicenceSupplementaryYears(twoPartTariffBillingYears, lice
 
   const twoPartTariff = true
 
-  await CreateLicenceSupplementaryYearService.go(licenceId, twoPartTariffBillingYears, twoPartTariff)
+  await CreateLicenceSupplementaryYearService(licenceId, twoPartTariffBillingYears, twoPartTariff)
 }
 
 async function _updateLicenceFlags(includeInPresrocBilling, flagForSrocSupplementary, licenceId) {
@@ -53,11 +58,4 @@ async function _updateLicenceFlags(includeInPresrocBilling, flagForSrocSupplemen
       updatedAt: timestampForPostgres()
     })
     .where('id', licenceId)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

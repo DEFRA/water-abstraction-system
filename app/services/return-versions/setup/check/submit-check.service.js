@@ -28,14 +28,14 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
  *
  * @returns {Promise<string>} The licence Id
  */
-async function go(sessionId, userId) {
+export default async function go(sessionId, userId) {
   const session = await FetchSessionDal(sessionId)
 
   await DeleteSessionDal(sessionId)
 
   try {
     const { journey, licence } = session
-    const returnVersionData = await GenerateReturnVersionService.go(session, userId)
+    const returnVersionData = await GenerateReturnVersionService(session, userId)
 
     // We wrap all the steps in a transaction to avoid only applying some of the changes
     await ReturnVersionModel.transaction(async (trx) => {
@@ -45,12 +45,12 @@ async function go(sessionId, userId) {
 
       // 2) Next, persist _all_ the return version data. We do this now so the later steps can access the new return
       //    version and requirements data
-      const returnVersion = await CreateReturnVersionService.go(returnVersionData, trx)
+      const returnVersion = await CreateReturnVersionService(returnVersionData, trx)
 
       // 3) If the return version is to declare that no returns are required, we need to void any existing return logs
       //    within the matching period.
       if (journey === 'no-returns-required') {
-        await VoidReturnLogsService.go(licence.licenceRef, returnVersion.startDate, returnVersion.endDate, trx)
+        await VoidReturnLogsService(licence.licenceRef, returnVersion.startDate, returnVersion.endDate, trx)
       }
 
       // 4) Process any existing return logs affected by the change. The change date will be the return version's start
@@ -58,7 +58,7 @@ async function go(sessionId, userId) {
       //    impacted by the change, and look to only reissue or void those that are affected.
       const changeDate = _changeDate(returnVersion.startDate)
 
-      await ProcessLicenceReturnLogsService.go(licence.id, changeDate, returnVersion.endDate, trx)
+      await ProcessLicenceReturnLogsService(licence.id, changeDate, returnVersion.endDate, trx)
 
       // 5) Finally, we have a legacy feature to support. If the reason is because the licence was transferred, we have
       //    to set a flag on those return logs that start prior to the _latest_ 'succession-or-transfer-of-licence'
@@ -122,11 +122,6 @@ async function _processEndDate(returnVersion, licenceId, trx) {
   const { startDate, version } = returnVersion
 
   if (version > 1) {
-    returnVersion.endDate = await ProcessExistingReturnVersionsService.go(licenceId, startDate, trx)
+    returnVersion.endDate = await ProcessExistingReturnVersionsService(licenceId, startDate, trx)
   }
-}
-
-export { go }
-export default {
-  go
 }

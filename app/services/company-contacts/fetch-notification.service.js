@@ -17,7 +17,7 @@ import { ignoreMessageRef } from '../../lib/static-lookups.lib.js'
  * @returns {Promise<module:NotificationModel>} a notification, or undefined if the email address has not been used to
  * send notifications
  */
-async function go(email) {
+export default async function go(email) {
   return _fetch(email)
 }
 
@@ -28,11 +28,4 @@ async function _fetch(email) {
     .whereNotIn('messageRef', ignoreMessageRef)
     .limit(1)
     .first()
-}
-
-export {
-  go
-}
-export default {
-  go
 }

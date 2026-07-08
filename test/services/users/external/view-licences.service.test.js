@@ -45,7 +45,7 @@ describe('Users - External - View Licences service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewLicencesService.go(user.id, auth, page, yarStub, back)
+      const result = await ViewLicencesService(user.id, auth, page, yarStub, back)
 
       expect(result).toEqual({
         activeNavBar: 'users',

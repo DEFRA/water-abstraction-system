@@ -14,7 +14,7 @@ const exec = promisify(childProcessExec)
  *
  * @returns {Promise<object>} An object containing the `name`, `serviceName`, `version`, `commit` & `jobs`
  */
-async function go() {
+export default async function go() {
   return {
     name: 'System',
     serviceName: 'system',
@@ -42,11 +42,4 @@ async function _getTagReference() {
   } catch (error) {
     return `ERROR: ${error.message}`
   }
-}
-
-export {
-  go
-}
-export default {
-  go
 }

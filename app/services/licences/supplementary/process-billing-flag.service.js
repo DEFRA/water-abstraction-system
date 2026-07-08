@@ -34,7 +34,7 @@ import PersistSupplementaryBillingFlagsService from './persist-supplementary-bil
  *
  * @param {object} payload - The payload from the request
  */
-async function go(payload) {
+export default async function go(payload) {
   try {
     const startTime = currentTimeInNanoseconds()
     const result = await _determineFlags(payload)
@@ -59,22 +59,22 @@ async function go(payload) {
  */
 async function _determineFlags(payload) {
   if (payload.changedDateDetails) {
-    return DetermineImportedLicenceFlagsService.go(payload.licenceId, payload.changedDateDetails.changeDate)
+    return DetermineImportedLicenceFlagsService(payload.licenceId, payload.changedDateDetails.changeDate)
   }
   if (payload.chargeVersionId) {
-    return DetermineChargeVersionFlagsService.go(payload.chargeVersionId)
+    return DetermineChargeVersionFlagsService(payload.chargeVersionId)
   }
   if (payload.returnLogId) {
-    return DetermineReturnLogFlagsService.go(payload.returnLogId)
+    return DetermineReturnLogFlagsService(payload.returnLogId)
   }
   if (payload.workflowId) {
-    return DetermineWorkflowFlagsService.go(payload.workflowId)
+    return DetermineWorkflowFlagsService(payload.workflowId)
   }
   if (payload.billLicenceId) {
-    return DetermineBillLicenceFlagsService.go(payload.billLicenceId)
+    return DetermineBillLicenceFlagsService(payload.billLicenceId)
   }
   if (payload.licenceId) {
-    return DetermineLicenceFlagsService.go(payload.licenceId, payload.scheme)
+    return DetermineLicenceFlagsService(payload.licenceId, payload.scheme)
   }
 
   throw new Error('Invalid payload for process billing flags service')
@@ -82,13 +82,13 @@ async function _determineFlags(payload) {
 
 async function _determineTwoPartTariffYears(twoPartTariffBillingYears, result) {
   const { endDate, startDate, regionId, flagForTwoPartTariffSupplementary } = result
-  const years = DetermineBillingYearsService.go(startDate, endDate)
+  const years = DetermineBillingYearsService(startDate, endDate)
 
   if (!years) {
     return twoPartTariffBillingYears
   }
 
-  return DetermineExistingBillRunYearsService.go(regionId, years, flagForTwoPartTariffSupplementary)
+  return DetermineExistingBillRunYearsService(regionId, years, flagForTwoPartTariffSupplementary)
 }
 
 async function _setFlagForLicence(result) {
@@ -100,17 +100,10 @@ async function _setFlagForLicence(result) {
     twoPartTariffBillingYears = await _determineTwoPartTariffYears(twoPartTariffBillingYears, result)
   }
 
-  await PersistSupplementaryBillingFlagsService.go(
+  await PersistSupplementaryBillingFlagsService(
     twoPartTariffBillingYears,
     flagForPreSrocSupplementary,
     flagForSrocSupplementary,
     licenceId
   )
-}
-
-export {
-  go
-}
-export default {
-  go
 }

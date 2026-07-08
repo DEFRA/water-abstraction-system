@@ -37,7 +37,7 @@ describe('Bill Runs - Review - View Review Charge Element Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewReviewChargeElementService.go(reviewChargeElement.id, elementIndex, yarStub)
+        const result = await ViewReviewChargeElementService(reviewChargeElement.id, elementIndex, yarStub)
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',
@@ -80,7 +80,7 @@ describe('Bill Runs - Review - View Review Charge Element Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ViewReviewChargeElementService.go(reviewChargeElement.id, elementIndex, yarStub)
+        const result = await ViewReviewChargeElementService(reviewChargeElement.id, elementIndex, yarStub)
 
         expect(result).toEqual({
           activeNavBar: 'bill-runs',

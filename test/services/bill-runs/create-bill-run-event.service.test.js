@@ -39,7 +39,7 @@ describe('Create Bill Run Event service', () => {
     })
 
     it('creates an event record', async () => {
-      const result = await CreateBillRunEventService.go(billRun, issuer)
+      const result = await CreateBillRunEventService(billRun, issuer)
 
       expect(result).toBeInstanceOf(EventModel)
 

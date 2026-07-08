@@ -45,7 +45,7 @@ describe('Licences - View Conditions service', () => {
     })
 
     it('correctly presents the data', async () => {
-      const result = await ViewConditionsService.go(licence.id, auth)
+      const result = await ViewConditionsService(licence.id, auth)
 
       expect(result).toEqual({
         activeSecondaryNav: 'summary',
@@ -102,7 +102,7 @@ describe('Licences - View Conditions service', () => {
     })
 
     it('correctly presents the data', async () => {
-      const result = await ViewConditionsService.go(licence.id, auth)
+      const result = await ViewConditionsService(licence.id, auth)
 
       expect(result).toEqual({
         activeSecondaryNav: 'summary',

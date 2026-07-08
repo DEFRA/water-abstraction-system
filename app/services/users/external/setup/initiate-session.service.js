@@ -23,7 +23,7 @@ import FetchUserDal from '../../../../dal/users/fetch-user.dal.js'
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(id, back) {
+export default async function go(id, back) {
   const user = await FetchUserDal(id)
 
   const licences = await FetchLicencesDal(user.licenceEntityId)
@@ -33,11 +33,4 @@ async function go(id, back) {
   const data = { activeNavBar, licences, selectedLicences: [], user }
 
   return CreateSessionDal(data)
-}
-
-export {
-  go
-}
-export default {
-  go
 }

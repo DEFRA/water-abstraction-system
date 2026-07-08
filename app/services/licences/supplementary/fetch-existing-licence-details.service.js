@@ -22,7 +22,7 @@ import { db } from '../../../../db/db.js'
  *
  * @returns {Promise<object>} - The data needed to determine which supplementary flags the licence needs
  */
-async function go(licenceId) {
+export default async function go(licenceId) {
   const query = _query()
 
   const {
@@ -83,11 +83,4 @@ function _query() {
     WHERE
       l.id = ?;
   `
-}
-
-export {
-  go
-}
-export default {
-  go
 }

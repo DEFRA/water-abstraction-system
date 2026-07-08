@@ -12,7 +12,7 @@ import TearDownService from '../services/data/tear-down/tear-down.service.js'
 const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 
 export async function dates(_request, h) {
-  const pageData = DatesService.go()
+  const pageData = DatesService()
 
   return h.response(pageData).code(HTTP_STATUS_OK)
 }
@@ -24,19 +24,19 @@ export async function deduplicate(_request, h) {
 }
 
 export async function load(request, h) {
-  const result = await LoadService.go(request.payload)
+  const result = await LoadService(request.payload)
 
   return h.response(result).code(HTTP_STATUS_OK)
 }
 
 export async function seed(_request, h) {
-  await SeedService.go()
+  await SeedService()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
 export async function tearDown(_request, h) {
-  await TearDownService.go()
+  await TearDownService()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }

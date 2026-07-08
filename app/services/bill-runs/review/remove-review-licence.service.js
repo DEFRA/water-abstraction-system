@@ -10,7 +10,7 @@ import { db } from '../../../../db/db.js'
  *
  * @param {string} reviewLicenceId - The UUID of the review licence that is being removed from the bill run
  */
-async function go(reviewLicenceId) {
+export default async function go(reviewLicenceId) {
   await _removeChargeElementReturns(reviewLicenceId)
   await _removeReturns(reviewLicenceId)
   await _removeChargeElements(reviewLicenceId)
@@ -72,9 +72,4 @@ async function _removeReturns(reviewLicenceId) {
     .from('reviewReturns AS rr')
     .innerJoin('reviewLicences AS rl', 'rr.reviewLicenceId', 'rl.id')
     .where('rl.id', reviewLicenceId)
-}
-
-export { go }
-export default {
-  go
 }

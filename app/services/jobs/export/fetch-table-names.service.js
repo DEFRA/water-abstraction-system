@@ -12,7 +12,7 @@ import { db } from '../../../../db/db.js'
  *
  * @returns {Promise<string[]>} Table names for the specified schema
  */
-async function go(schemaName) {
+export default async function go(schemaName) {
   const tableData = await _fetchTableNames(schemaName)
 
   // tableData has information we do not need
@@ -40,11 +40,4 @@ function _pluckTableNames(tableData) {
   return tableData.map((obj) => {
     return obj.table_name
   })
-}
-
-export {
-  go
-}
-export default {
-  go
 }

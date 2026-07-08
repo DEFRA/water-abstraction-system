@@ -18,11 +18,11 @@ import { NoticeJourney } from '../../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<object[]>} The recipient data for the returns reminder notice
  */
-async function go(session, download) {
+export default async function go(session, download) {
   const { noticeType } = session
 
   const { bindings, query: dueReturnLogsQuery } = _returnLogsQuery(session)
-  const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
+  const query = GenerateRecipientsQueryService(noticeType, dueReturnLogsQuery, download)
 
   const { rows } = await db.raw(query, bindings)
 
@@ -41,15 +41,10 @@ function _returnLogsQuery(session) {
   const { determinedReturnsPeriod: returnsPeriod, journey, licenceRef, noticeType, removeLicences = '' } = session
 
   if (journey === NoticeJourney.ADHOC) {
-    return GenerateReturnLogsByLicenceQueryService.go(licenceRef, noticeType)
+    return GenerateReturnLogsByLicenceQueryService(licenceRef, noticeType)
   }
 
   const licencesToExclude = transformStringOfLicencesToArray(removeLicences)
 
-  return GenerateReturnLogsByPeriodQueryService.go(noticeType, licencesToExclude, returnsPeriod)
-}
-
-export { go }
-export default {
-  go
+  return GenerateReturnLogsByPeriodQueryService(noticeType, licencesToExclude, returnsPeriod)
 }

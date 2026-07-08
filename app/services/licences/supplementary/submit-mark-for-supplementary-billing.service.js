@@ -22,7 +22,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
  *
  * @returns {Promise<object>} The licence marked for supplementary billing
  */
-async function go(licenceId, payload) {
+export default async function go(licenceId, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
@@ -77,7 +77,7 @@ async function _determineLicenceFlags(licence, supplementaryYears) {
   if (supplementaryYears.length > 0) {
     const twoPartTariff = true
 
-    twoPartTariffBillingYears = await DetermineExistingBillRunYearsService.go(
+    twoPartTariffBillingYears = await DetermineExistingBillRunYearsService(
       licence.regionId,
       supplementaryYears,
       twoPartTariff
@@ -99,7 +99,7 @@ async function _flagForBilling(supplementaryYears, licenceId) {
   const { twoPartTariffBillingYears, flagForPreSrocSupplementary, flagForSrocSupplementary } =
     await _determineLicenceFlags(licence, supplementaryYears)
 
-  await PersistSupplementaryBillingFlagsService.go(
+  await PersistSupplementaryBillingFlagsService(
     twoPartTariffBillingYears,
     flagForPreSrocSupplementary,
     flagForSrocSupplementary,
@@ -119,11 +119,4 @@ function _validate(payload) {
   const validationResult = SupplementaryYearValidator.go(payload)
 
   return formatValidationResult(validationResult)
-}
-
-export {
-  go
-}
-export default {
-  go
 }
