@@ -215,7 +215,7 @@ describe('BaseNotifierLib class', () => {
         // assert pinoFake.error.secondCall.calledWith() it always fails because the promise which calls it has not yet
         // resolved. So, callsFake() tells Sinon to call our anonymous function below that includes our assertion only
         // when pinoFake.error is called i.e. the Airbrake.notify() promise has resolved.
-        pinoFake.error.callsFake(async () => {
+        pinoFake.error.mockImplementation(async () => {
           const firstCallArgs = pinoFake.error.mock.calls[0]
 
           expect(firstCallArgs[0].err).toBeInstanceOf(Error)
@@ -247,7 +247,7 @@ describe('BaseNotifierLib class', () => {
 
         testNotifier.omfg(message)
 
-        pinoFake.error.callsFake(async () => {
+        pinoFake.error.mockImplementation(async () => {
           const firstCallArgs = pinoFake.error.mock.calls[0]
 
           expect(firstCallArgs[0].err).toBeInstanceOf(Error)
@@ -339,7 +339,7 @@ describe('BaseNotifierLib class', () => {
 
         testNotifier.redAlert(message)
 
-        pinoFake.error.callsFake(async () => {
+        pinoFake.error.mockImplementation(async () => {
           const firstCallArgs = pinoFake.error.mock.calls[0]
 
           expect(firstCallArgs[0]).toBeInstanceOf(Error)

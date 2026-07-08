@@ -81,7 +81,7 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
               // but we want to assert that the transactions we're persisting link to the bill licence we are
               // persisting. This allows us to replay back what has been generated with a 'faked' external ID from the
               // Charging Module API
-              SendTransactionsService.callsFake(
+              SendTransactionsService.mockImplementation(
                 // NOTE: We could have just referenced processedTransactions as that is a JavaScript quirk. But we
                 // wanted to highlight how you would access the other arguments
                 async (processedTransactions, _billRunExternalId, _accountNumber, _licence) => {
@@ -226,7 +226,7 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
               }
             )
 
-            SendTransactionsService.callsFake(
+            SendTransactionsService.mockImplementation(
               async (processedTransactions, _billRunExternalId, _accountNumber, _licence) => {
                 return [{ ...processedTransactions[0], externalId: '7e752fa6-a19c-4779-b28c-6e536f028795' }]
               }

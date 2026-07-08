@@ -94,7 +94,7 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
 
       expect(GeneratePaperReturnRequest.send).toHaveBeenCalledOnce()
 
-      const actualCallArgs = GeneratePaperReturnRequest.send.getCall(0).args[0]
+      const actualCallArgs = GeneratePaperReturnRequest.send.mock.calls[0][0]
       expect(actualCallArgs).toEqual({
         address: {
           address_line_1: 'Harry Potter',
