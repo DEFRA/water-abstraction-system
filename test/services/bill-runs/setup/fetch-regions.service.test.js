@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helper
-const RegionHelper = require('../../../support/helpers/region.helper.js')
+import * as RegionHelper from '../../../support/helpers/region.helper.js'
 
 // Thing under test
-const FetchRegionsService = require('../../../../app/services/bill-runs/setup/fetch-regions.service.js')
+import FetchRegionsService from '../../../../app/services/bill-runs/setup/fetch-regions.service.js'
 
 describe('Bill Runs Setup - Setup - Fetch Regions service', () => {
   describe('when called', () => {

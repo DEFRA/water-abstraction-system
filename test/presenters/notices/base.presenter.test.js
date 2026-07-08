@@ -1,20 +1,18 @@
-'use strict'
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const RecipientsFixture = require('../../support/fixtures/recipients.fixture.js')
+import * as RecipientsFixture from '../../support/fixtures/recipients.fixture.js'
 
 // Thing under test
-const BasePresenter = require('../../../app/presenters/notices/base.presenter.js')
+import BasePresenter from '../../../app/presenters/notices/base.presenter.js'
 
 describe('Notices - Base presenter', () => {
   let clock
 
   afterEach(() => {
     if (clock) {
-      clock.restore()
+      vi.useRealTimers()
     }
   })
 
@@ -108,7 +106,7 @@ describe('Notices - Base presenter', () => {
     describe('when the "messageType" is "letter', () => {
       describe('and the current date is the start of the month', () => {
         beforeEach(() => {
-          clock = Sinon.useFakeTimers(new Date(`2025-01-01`))
+          clock = vi.useFakeTimers({ now: new Date(`2025-01-01` }))
         })
 
         it('should set the date to 29 days in the future', () => {
@@ -122,7 +120,7 @@ describe('Notices - Base presenter', () => {
 
       describe('and the current date is towards the end of the month', () => {
         beforeEach(() => {
-          clock = Sinon.useFakeTimers(new Date(`2025-01-15`))
+          clock = vi.useFakeTimers({ now: new Date(`2025-01-15` }))
         })
 
         it('should correctly calculate date across month boundary', () => {
@@ -136,7 +134,7 @@ describe('Notices - Base presenter', () => {
 
       describe('and the current date is towards the end of the year', () => {
         beforeEach(() => {
-          clock = Sinon.useFakeTimers(new Date(`2024-12-15`))
+          clock = vi.useFakeTimers({ now: new Date(`2024-12-15` }))
         })
 
         it('should correctly calculate date across year boundary', () => {
@@ -152,7 +150,7 @@ describe('Notices - Base presenter', () => {
     describe('when the "messageType" is "email"', () => {
       describe('and the current date is the start of the month', () => {
         beforeEach(() => {
-          clock = Sinon.useFakeTimers(new Date(`2025-01-01`))
+          clock = vi.useFakeTimers({ now: new Date(`2025-01-01` }))
         })
 
         it('should set the date to 28 days in the future', () => {
@@ -166,7 +164,7 @@ describe('Notices - Base presenter', () => {
 
       describe('and the current date is towards the end of the month', () => {
         beforeEach(() => {
-          clock = Sinon.useFakeTimers(new Date(`2025-01-15`))
+          clock = vi.useFakeTimers({ now: new Date(`2025-01-15` }))
         })
 
         it('should correctly calculate date across month boundary', () => {
@@ -180,7 +178,7 @@ describe('Notices - Base presenter', () => {
 
       describe('and the current date is towards the end of the year', () => {
         beforeEach(() => {
-          clock = Sinon.useFakeTimers(new Date(`2024-12-15`))
+          clock = vi.useFakeTimers({ now: new Date(`2024-12-15` }))
         })
 
         it('should correctly calculate date across year boundary', () => {
@@ -196,7 +194,7 @@ describe('Notices - Base presenter', () => {
     describe('when no "messageType" is provided', () => {
       describe('and the current date is the start of the month', () => {
         beforeEach(() => {
-          clock = Sinon.useFakeTimers(new Date(`2025-01-01`))
+          clock = vi.useFakeTimers({ now: new Date(`2025-01-01` }))
         })
 
         it('should set the date to 28 days in the future', () => {
@@ -210,7 +208,7 @@ describe('Notices - Base presenter', () => {
 
       describe('and the current date is towards the end of the month', () => {
         beforeEach(() => {
-          clock = Sinon.useFakeTimers(new Date(`2025-01-15`))
+          clock = vi.useFakeTimers({ now: new Date(`2025-01-15` }))
         })
 
         it('should correctly calculate date across month boundary', () => {
@@ -224,7 +222,7 @@ describe('Notices - Base presenter', () => {
 
       describe('and the current date is towards the end of the year', () => {
         beforeEach(() => {
-          clock = Sinon.useFakeTimers(new Date(`2024-12-15`))
+          clock = vi.useFakeTimers({ now: new Date(`2024-12-15` }))
         })
 
         it('should correctly calculate date across year boundary', () => {

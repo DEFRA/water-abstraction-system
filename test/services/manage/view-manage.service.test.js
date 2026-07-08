@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ViewManageService = require('../../../app/services/manage/view-manage.service.js')
+import ViewManageService from '../../../app/services/manage/view-manage.service.js'
 
 describe('Manage - View Manage service', () => {
   let userAuth

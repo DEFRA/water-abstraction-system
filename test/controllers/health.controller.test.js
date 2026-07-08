@@ -1,17 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 // Things we need to stub
-const DatabaseHealthCheckService = require('../../app/services/health/database-health-check.service.js')
-const InfoService = require('../../app/services/health/info.service.js')
+import DatabaseHealthCheckService from '../../app/services/health/database-health-check.service.js'
+import InfoService from '../../app/services/health/info.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
 
 describe('Health controller', () => {
   let airbrakeStub
@@ -25,14 +23,14 @@ describe('Health controller', () => {
   beforeEach(async () => {
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
-    Sinon.stub(server.logger, 'error')
+    vi.spyOn(server.logger, 'error').mockImplementation(() => {})
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    airbrakeStub = Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    airbrakeStub = vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -66,7 +64,8 @@ describe('Health controller', () => {
 
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(DatabaseHealthCheckService, 'go').resolves()
+        vi.mock('../../app/services/health/database-health-check.service.js')
+        DatabaseHealthCheckService.mockResolvedValue()
       })
 
       it('returns stats about each table', async () => {
@@ -85,7 +84,8 @@ describe('Health controller', () => {
 
     describe('when the request succeeds', () => {
       beforeEach(async () => {
-        Sinon.stub(InfoService, 'go').resolves({
+        vi.mock('../../app/services/health/info.service.js')
+        InfoService.mockResolvedValue({
           virusScannerData: 'ClamAV 0.103.6/26738/Fri Dec 2 11:12:06 2022',
           redisConnectivityData: 'ERROR: Command failed: redis-server --version /bin/sh: 1: redis-server: not found',
           addressFacadeData: 'hola',

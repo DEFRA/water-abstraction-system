@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const FinancialAgreementHelper = require('../support/helpers/financial-agreement.helper.js')
-const FinancialAgreementModel = require('../../app/models/financial-agreement.model.js')
-const LicenceAgreementHelper = require('../support/helpers/licence-agreement.helper.js')
-const LicenceHelper = require('../support/helpers/licence.helper.js')
-const LicenceModel = require('../../app/models/licence.model.js')
+import * as FinancialAgreementHelper from '../support/helpers/financial-agreement.helper.js'
+import FinancialAgreementModel from '../../app/models/financial-agreement.model.js'
+import * as LicenceAgreementHelper from '../support/helpers/licence-agreement.helper.js'
+import * as LicenceHelper from '../support/helpers/licence.helper.js'
+import LicenceModel from '../../app/models/licence.model.js'
 
 // Thing under test
-const LicenceAgreementModel = require('../../app/models/licence-agreement.model.js')
+import LicenceAgreementModel from '../../app/models/licence-agreement.model.js'
 
 const FINANCIAL_AGREEMENT_MCHG_INDEX = 6
 

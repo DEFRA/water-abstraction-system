@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const AdditionalSubmissionOptionsPresenter = require('../../../../app/presenters/return-versions/setup/additional-submission-options.presenter.js')
+import AdditionalSubmissionOptionsPresenter from '../../../../app/presenters/return-versions/setup/additional-submission-options.presenter.js'
 
 describe('Return Versions Setup - Additional Submission Options presenter', () => {
   let session

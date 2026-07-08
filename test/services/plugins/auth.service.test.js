@@ -1,27 +1,25 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
-const FetchUserRolesAndGroupsService = require('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
+import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
+import FetchUserRolesAndGroupsService from '../../../app/services/idm/fetch-user-roles-and-groups.service.js'
 
 // Thing under test
-const AuthService = require('../../../app/services/plugins/auth.service.js')
+import AuthService from '../../../app/services/plugins/auth.service.js'
 
 describe('Plugins - Auth service', () => {
   beforeEach(() => {
-    Sinon.stub(FeatureFlagsConfig, 'enableUsersView').value(true)
+    vi.replaceProperty(FeatureFlagsConfig, 'enableUsersView', true)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the user id is found', () => {
     beforeEach(() => {
-      Sinon.stub(FetchUserRolesAndGroupsService, 'go').resolves({
+      vi.mock('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
+      FetchUserRolesAndGroupsService.mockResolvedValue({
         user: { name: 'User' },
         roles: [{ role: 'Role' }],
         groups: [{ group: 'Group' }]
@@ -74,7 +72,8 @@ describe('Plugins - Auth service', () => {
   describe('when the user has a top-level permission role', () => {
     describe('such as "ar_user"', () => {
       beforeEach(() => {
-        Sinon.stub(FetchUserRolesAndGroupsService, 'go').resolves({
+        vi.mock('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
+        FetchUserRolesAndGroupsService.mockResolvedValue({
           user: { name: 'User' },
           roles: [{ role: 'ar_user' }],
           groups: [{ group: 'Group' }]
@@ -96,7 +95,8 @@ describe('Plugins - Auth service', () => {
 
     describe('such as "billing"', () => {
       beforeEach(() => {
-        Sinon.stub(FetchUserRolesAndGroupsService, 'go').resolves({
+        vi.mock('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
+        FetchUserRolesAndGroupsService.mockResolvedValue({
           user: { name: 'User' },
           roles: [{ role: 'billing' }],
           groups: [{ group: 'Group' }]
@@ -120,7 +120,8 @@ describe('Plugins - Auth service', () => {
 
     describe('such as "returns"', () => {
       beforeEach(() => {
-        Sinon.stub(FetchUserRolesAndGroupsService, 'go').resolves({
+        vi.mock('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
+        FetchUserRolesAndGroupsService.mockResolvedValue({
           user: { name: 'User' },
           roles: [{ role: 'returns' }],
           groups: [{ group: 'Group' }]
@@ -142,7 +143,8 @@ describe('Plugins - Auth service', () => {
 
     describe('such as "hof_notifications"', () => {
       beforeEach(() => {
-        Sinon.stub(FetchUserRolesAndGroupsService, 'go').resolves({
+        vi.mock('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
+        FetchUserRolesAndGroupsService.mockResolvedValue({
           user: { name: 'User' },
           roles: [{ role: 'hof_notifications' }],
           groups: [{ group: 'Group' }]
@@ -164,7 +166,8 @@ describe('Plugins - Auth service', () => {
 
     describe('such as "manage_accounts"', () => {
       beforeEach(() => {
-        Sinon.stub(FetchUserRolesAndGroupsService, 'go').resolves({
+        vi.mock('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
+        FetchUserRolesAndGroupsService.mockResolvedValue({
           user: { name: 'User' },
           roles: [{ role: 'manage_accounts' }],
           groups: [{ group: 'Group' }]
@@ -187,7 +190,8 @@ describe('Plugins - Auth service', () => {
 
   describe('when the user id is not found', () => {
     beforeEach(() => {
-      Sinon.stub(FetchUserRolesAndGroupsService, 'go').resolves({
+      vi.mock('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
+      FetchUserRolesAndGroupsService.mockResolvedValue({
         user: null,
         roles: [],
         groups: []

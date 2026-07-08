@@ -1,20 +1,18 @@
-'use strict'
-
 // Test helpers
-const AddressHelper = require('../support/helpers/address.helper.js')
-const AddressModel = require('../../app/models/address.model.js')
-const CompanyHelper = require('../support/helpers/company.helper.js')
-const CompanyModel = require('../../app/models/company.model.js')
-const ContactHelper = require('../support/helpers/contact.helper.js')
-const ContactModel = require('../../app/models/contact.model.js')
-const LicenceDocumentHelper = require('../support/helpers/licence-document.helper.js')
-const LicenceDocumentModel = require('../../app/models/licence-document.model.js')
-const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
-const LicenceRoleHelper = require('../support/helpers/licence-role.helper.js')
-const LicenceRoleModel = require('../../app/models/licence-role.model.js')
+import * as AddressHelper from '../support/helpers/address.helper.js'
+import AddressModel from '../../app/models/address.model.js'
+import * as CompanyHelper from '../support/helpers/company.helper.js'
+import CompanyModel from '../../app/models/company.model.js'
+import * as ContactHelper from '../support/helpers/contact.helper.js'
+import ContactModel from '../../app/models/contact.model.js'
+import * as LicenceDocumentHelper from '../support/helpers/licence-document.helper.js'
+import LicenceDocumentModel from '../../app/models/licence-document.model.js'
+import * as LicenceDocumentRoleHelper from '../support/helpers/licence-document-role.helper.js'
+import * as LicenceRoleHelper from '../support/helpers/licence-role.helper.js'
+import LicenceRoleModel from '../../app/models/licence-role.model.js'
 
 // Thing under test
-const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
+import LicenceDocumentRoleModel from '../../app/models/licence-document-role.model.js'
 
 describe('Licence Document Role model', () => {
   let testAddress

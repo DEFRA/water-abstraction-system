@@ -1,13 +1,10 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const serverConfig = require('../../config/server.config.js')
+import serverConfig from '../../config/server.config.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
 
 describe('Airbrake plugin', () => {
   let originalProxy
@@ -23,15 +20,15 @@ describe('Airbrake plugin', () => {
     originalProxy = serverConfig.httpProxy
 
     // Silence noisy logs
-    Sinon.stub(server.logger, 'error')
+    vi.spyOn(server.logger, 'error').mockImplementation(() => {})
 
     // Stub out Airbrake notify so no real network calls are made
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
     serverConfig.httpProxy = originalProxy
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when a request error occurs', () => {
@@ -69,8 +66,8 @@ describe('Airbrake plugin', () => {
     let NotifierStub
 
     beforeEach(() => {
-      gotWrapperStub = Sinon.stub().resolves('fake-request-fn')
-      NotifierStub = Sinon.stub()
+      gotWrapperStub = vi.fn().mockResolvedValue('fake-request-fn')
+      NotifierStub = vi.fn()
 
       // TODO: Replace with vi.mock() + dynamic import() once the project migrates to ESM
       // AirbrakePluginWithStubs = Proxyquire('../../app/plugins/airbrake.plugin.js', {
@@ -81,8 +78,8 @@ describe('Airbrake plugin', () => {
 
       fakeServer = {
         app: {},
-        events: { on: Sinon.stub() },
-        logger: { error: Sinon.stub() }
+        events: { on: vi.fn() },
+        logger: { error: vi.fn() }
       }
     })
 
@@ -94,8 +91,8 @@ describe('Airbrake plugin', () => {
       it('calls gotWrapper to create a Request function', async () => {
         await AirbrakePluginWithStubs.register(fakeServer)
 
-        expect(gotWrapperStub.calledOnce).toBe(true)
-        expect(gotWrapperStub.firstCall.args[0]).toEqual({
+        expect(gotWrapperStub).toHaveBeenCalledOnce()
+        expect(gotWrapperStub.mock.calls[0][0]).toEqual({
           proxy: 'http://proxy.local:8080'
         })
       })
@@ -103,8 +100,8 @@ describe('Airbrake plugin', () => {
       it('passes the Request function to Notifier', async () => {
         await AirbrakePluginWithStubs.register(fakeServer)
 
-        expect(NotifierStub.calledOnce).toBe(true)
-        const args = NotifierStub.firstCall.args[0]
+        expect(NotifierStub).toHaveBeenCalledOnce()
+        const args = NotifierStub.mock.calls[0][0]
         expect(args.request).toEqual('fake-request-fn')
       })
     })
@@ -117,14 +114,14 @@ describe('Airbrake plugin', () => {
       it('does not call gotWrapper', async () => {
         await AirbrakePluginWithStubs.register(fakeServer)
 
-        expect(gotWrapperStub.called).toBe(false)
+        expect(gotWrapperStub).not.toHaveBeenCalled()
       })
 
       it('does not pass a request function to Notifier', async () => {
         await AirbrakePluginWithStubs.register(fakeServer)
 
-        expect(NotifierStub.calledOnce).toBe(true)
-        const args = NotifierStub.firstCall.args[0]
+        expect(NotifierStub).toHaveBeenCalledOnce()
+        const args = NotifierStub.mock.calls[0][0]
         expect(args.request).toBeUndefined()
       })
     })

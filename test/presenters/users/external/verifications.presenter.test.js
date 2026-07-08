@@ -1,13 +1,11 @@
-'use strict'
-
 // Test helpers
-const UsersFixture = require('../../../support/fixtures/users.fixture.js')
-const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
-const { generateUUID, today } = require('../../../../app/lib/general.lib.js')
-const { yesterday } = require('../../../support/general.js')
+import * as UsersFixture from '../../../support/fixtures/users.fixture.js'
+import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
+import { generateUUID, today } from '../../../../app/lib/general.lib.js'
+import { yesterday } from '../../../support/general.js'
 
 // Thing under test
-const VerificationsPresenter = require('../../../../app/presenters/users/external/verifications.presenter.js')
+import VerificationsPresenter from '../../../../app/presenters/users/external/verifications.presenter.js'
 
 describe('Users - External - Verifications Presenter', () => {
   let back

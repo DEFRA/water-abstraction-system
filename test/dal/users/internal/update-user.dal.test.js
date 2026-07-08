@@ -1,24 +1,21 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const EventModel = require('../../../../app/models/event.model.js')
-const GroupHelper = require('../../../support/helpers/group.helper.js')
-const RoleHelper = require('../../../support/helpers/role.helper.js')
-const UserGroupHelper = require('../../../support/helpers/user-group.helper.js')
-const UserGroupModel = require('../../../../app/models/user-group.model.js')
-const UserHelper = require('../../../support/helpers/user.helper.js')
-const UserModel = require('../../../../app/models/user.model.js')
-const UserRoleHelper = require('../../../support/helpers/user-role.helper.js')
-const UserRoleModel = require('../../../../app/models/user-role.model.js')
+import EventModel from '../../../../app/models/event.model.js'
+import * as GroupHelper from '../../../support/helpers/group.helper.js'
+import * as RoleHelper from '../../../support/helpers/role.helper.js'
+import * as UserGroupHelper from '../../../support/helpers/user-group.helper.js'
+import UserGroupModel from '../../../../app/models/user-group.model.js'
+import * as UserHelper from '../../../support/helpers/user.helper.js'
+import UserModel from '../../../../app/models/user.model.js'
+import * as UserRoleHelper from '../../../support/helpers/user-role.helper.js'
+import UserRoleModel from '../../../../app/models/user-role.model.js'
 
 // Things we need to stub
-const FetchUserDal = require('../../../../app/dal/users/fetch-user.dal.js')
+import FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
 
 // Thing under test
-const UpdateUserDal = require('../../../../app/dal/users/internal/update-user.dal.js')
+import UpdateUserDal from '../../../../app/dal/users/internal/update-user.dal.js'
 
 describe('Users - Internal - Update User DAL', () => {
   let auth
@@ -56,7 +53,8 @@ describe('Users - Internal - Update User DAL', () => {
       }
     }
 
-    Sinon.stub(FetchUserDal, 'go').resolves({ username: 'internal-user-creator@wrls.gov.uk' })
+    vi.mock('../../../../app/dal/users/fetch-user.dal.js')
+    FetchUserDal.mockResolvedValue({ username: 'internal-user-creator@wrls.gov.uk' })
   })
 
   afterEach(async () => {
@@ -65,7 +63,7 @@ describe('Users - Internal - Update User DAL', () => {
     await UserRoleModel.query().delete().where({ userId: existingUser.userId })
     await existingUser.$query().delete()
 
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

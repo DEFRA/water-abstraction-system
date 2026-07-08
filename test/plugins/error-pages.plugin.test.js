@@ -1,9 +1,7 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
+import http2 from 'node:http2'
 const {
   HTTP_STATUS_BAD_REQUEST,
   HTTP_STATUS_FORBIDDEN,
@@ -11,15 +9,15 @@ const {
   HTTP_STATUS_OK,
   HTTP_STATUS_GONE,
   HTTP_STATUS_INTERNAL_SERVER_ERROR
-} = require('node:http2').constants
-const Boom = require('@hapi/boom')
-const SessionNotFoundError = require('../../app/errors/session-not-found.error.js')
+} = http2.constants
+import Boom from '@hapi/boom'
+import SessionNotFoundError from '../../app/errors/session-not-found.error.js'
 
 // Things we need to stub
-const GlobalNotifierStub = require('../support/stubs/global-notifier.stub.js')
+import GlobalNotifierStub from '../support/stubs/global-notifier.stub.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
 
 describe('Error Pages plugin', () => {
   let handler
@@ -31,12 +29,12 @@ describe('Error Pages plugin', () => {
     // Create server before running the tests
     server = await init()
 
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(() => {

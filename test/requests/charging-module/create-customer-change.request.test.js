@@ -1,15 +1,13 @@
-'use strict'
-
-const { HTTP_STATUS_CREATED, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_CREATED, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
+import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
 
 // Thing under test
-const CreateCustomerChangeRequest = require('../../../app/requests/charging-module/create-customer-change.request.js')
+import * as CreateCustomerChangeRequest from '../../../app/requests/charging-module/create-customer-change.request.js'
 
 describe('Charging Module Create Customer Change request', () => {
   const requestData = {
@@ -26,12 +24,12 @@ describe('Charging Module Create Customer Change request', () => {
   }
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request can create a customer change', () => {
     beforeEach(async () => {
-      Sinon.stub(ChargingModuleRequest, 'post').resolves({
+      vi.spyOn(ChargingModuleRequest, 'postRequest').mockResolvedValue({
         succeeded: true,
         response: {
           info: {
@@ -53,7 +51,7 @@ describe('Charging Module Create Customer Change request', () => {
   describe('when the request cannot create a customer change', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequest, 'post').resolves({
+        vi.spyOn(ChargingModuleRequest, 'postRequest').mockResolvedValue({
           succeeded: false,
           response: {
             info: {
@@ -88,7 +86,7 @@ describe('Charging Module Create Customer Change request', () => {
 
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequest, 'post').resolves({
+        vi.spyOn(ChargingModuleRequest, 'postRequest').mockResolvedValue({
           succeeded: false,
           response: new Error("Timeout awaiting 'request' for 5000ms")
         })

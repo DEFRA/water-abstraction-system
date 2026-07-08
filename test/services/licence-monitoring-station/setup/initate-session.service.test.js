@@ -1,14 +1,11 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const MonitoringStationHelper = require('../../../support/helpers/monitoring-station.helper.js')
-const SessionModel = require('../../../../app/models/session.model.js')
+import * as MonitoringStationHelper from '../../../support/helpers/monitoring-station.helper.js'
+import SessionModel from '../../../../app/models/session.model.js'
 
 // Thing under test
-const InitiateSessionService = require('../../../../app/services/licence-monitoring-station/setup/initiate-session.service.js')
+import InitiateSessionService from '../../../../app/services/licence-monitoring-station/setup/initiate-session.service.js'
 
 describe('Licence Monitoring Station - Setup - Initiate Session service', () => {
   let monitoringStation
@@ -18,7 +15,7 @@ describe('Licence Monitoring Station - Setup - Initiate Session service', () => 
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

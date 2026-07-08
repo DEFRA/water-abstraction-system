@@ -1,13 +1,10 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const RespTokenRequest = require('../../app/requests/resp/token.request.js')
+import * as RespTokenRequest from '../../app/requests/resp/token.request.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
 
 const LONG_EXPIRY_TIME = 3600
 const SHORT_EXPIRY_TIME = 1
@@ -21,13 +18,14 @@ describe('ReSP Token Cache plugin', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('When the first call returns a valid token', () => {
     describe('and the second request is made before the cache expires', () => {
       beforeAll(() => {
-        Sinon.stub(RespTokenRequest, 'send')
+        vi.spyOn(RespTokenRequest, 'send')
+          .mockImplementation(() => {})
           .onFirstCall()
           .resolves({ accessToken: 'FIRST_TOKEN', expiresIn: LONG_EXPIRY_TIME })
           .onSecondCall()
@@ -45,7 +43,8 @@ describe('ReSP Token Cache plugin', () => {
 
     describe('and the second request is made after the cache expires', () => {
       beforeAll(() => {
-        Sinon.stub(RespTokenRequest, 'send')
+        vi.spyOn(RespTokenRequest, 'send')
+          .mockImplementation(() => {})
           .onFirstCall()
           .resolves({ accessToken: 'FIRST_TOKEN', expiresIn: SHORT_EXPIRY_TIME })
           .onSecondCall()
@@ -63,7 +62,8 @@ describe('ReSP Token Cache plugin', () => {
 
   describe('When the first call returns an invalid token', () => {
     beforeEach(() => {
-      Sinon.stub(RespTokenRequest, 'send')
+      vi.spyOn(RespTokenRequest, 'send')
+        .mockImplementation(() => {})
         .onFirstCall()
         .resolves({ accessToken: null, expiresIn: null })
         .onSecondCall()

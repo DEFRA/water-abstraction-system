@@ -1,21 +1,18 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Thing under test
-const MarkdownFilter = require('../../../app/views/filters/markdown.filter.js')
+import MarkdownFilter from '../../../app/views/filters/markdown.filter.js'
 
 describe('Markdown filter', () => {
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when provided with a valid markdown string', () => {
     describe('when "Marked" has been set on globalThis via the plugin', () => {
       beforeEach(() => {
         globalThis.GlobalMarked = {
-          parse: Sinon.stub().returns('<h1>How to renew your licence</h1>\n<p>This is pretend test.</p>')
+          parse: vi.fn().mockReturnValue('<h1>How to renew your licence</h1>\n<p>This is pretend test.</p>')
         }
       })
 

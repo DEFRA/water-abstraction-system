@@ -1,13 +1,10 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const ViewMarkForSupplementaryBillingService = require('../../../../app/services/licences/supplementary/view-mark-for-supplementary-billing.service.js')
+import ViewMarkForSupplementaryBillingService from '../../../../app/services/licences/supplementary/view-mark-for-supplementary-billing.service.js'
 
 describe('Licences - View Mark For Supplementary Billing Service', () => {
   let clock
@@ -16,14 +13,14 @@ describe('Licences - View Mark For Supplementary Billing Service', () => {
 
   beforeEach(async () => {
     testDate = new Date('2024-04-01')
-    clock = Sinon.useFakeTimers(testDate)
+    clock = vi.useFakeTimers({ now: testDate })
 
     licence = await LicenceHelper.add()
   })
 
   afterEach(() => {
-    Sinon.restore()
-    clock.restore()
+    vi.restoreAllMocks()
+    vi.useRealTimers()
   })
 
   it('returns page data for the view', async () => {

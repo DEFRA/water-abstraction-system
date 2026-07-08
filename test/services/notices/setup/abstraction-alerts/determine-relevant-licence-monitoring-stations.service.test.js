@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
+import * as AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 
 // Thing under test
-const DetermineRelevantLicenceMonitoringStationsService = require('../../../../../app/services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js')
+import DetermineRelevantLicenceMonitoringStationsService from '../../../../../app/services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js'
 
 describe('Notices Setup - Abstraction Alerts - Determine relevant licence monitoring stations service', () => {
   let alertType

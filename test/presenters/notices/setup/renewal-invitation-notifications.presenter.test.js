@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import { NOTIFY_TEMPLATES } from '../../../../app/lib/notify-templates.lib.js'
+import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const RenewalInvitationNotificationsPresenter = require('../../../../app/presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js')
+import RenewalInvitationNotificationsPresenter from '../../../../app/presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js'
 
 describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
   const noticeId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'

@@ -1,19 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const CRMContactsSeeder = require('../../support/seeders/crm-contacts.seeder.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import CRMContactsSeeder from '../../support/seeders/crm-contacts.seeder.js'
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import * as LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
 
 // Thing under test
-const FetchHistoryDal = require('../../../app/dal/companies/fetch-history.dal.js')
+import FetchHistoryDal from '../../../app/dal/companies/fetch-history.dal.js'
 
 describe('Companies - Fetch History dal', () => {
   let licence
@@ -44,7 +41,7 @@ describe('Companies - Fetch History dal', () => {
 
     // NOTE: We set the default page size to 1000 to ensure we get all records and avoid failed tests when run as
     // part of the full suite, and the risk our test record is returned in the second page of results.
-    Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1000)
+    vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 1000)
   })
 
   afterAll(async () => {
@@ -54,7 +51,7 @@ describe('Companies - Fetch History dal', () => {
     await licenceVersionDifferentLicenceAndCompany.$query().delete()
     await licenceVersionSameLicenceDifferentCompany.$query().delete()
 
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

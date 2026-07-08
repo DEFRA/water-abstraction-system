@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const AddressHelper = require('../../support/helpers/address.helper.js')
+import * as AddressHelper from '../../support/helpers/address.helper.js'
 
 // Thing under test
-const FetchAddressDal = require('../../../app/dal/companies/fetch-address.dal.js')
+import FetchAddressDal from '../../../app/dal/companies/fetch-address.dal.js'
 
 describe('Companies - Fetch Address dal', () => {
   let address

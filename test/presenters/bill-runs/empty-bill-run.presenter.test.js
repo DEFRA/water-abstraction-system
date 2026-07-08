@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const EmptyBillRunPresenter = require('../../../app/presenters/bill-runs/empty-bill-run.presenter.js')
+import EmptyBillRunPresenter from '../../../app/presenters/bill-runs/empty-bill-run.presenter.js'
 
 describe('Empty Bill Run presenter', () => {
   let billRun

@@ -1,25 +1,22 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const TwoPartTariffFixture = require('../../../support/fixtures/two-part-tariff.fixture.js')
+import * as RegionHelper from '../../../support/helpers/region.helper.js'
+import * as TwoPartTariffFixture from '../../../support/fixtures/two-part-tariff.fixture.js'
 
 // Things we need to stub
-const BillModel = require('../../../../app/models/bill.model.js')
-const BillLicenceModel = require('../../../../app/models/bill-licence.model.js')
-const BillRunError = require('../../../../app/errors/bill-run.error.js')
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const FetchPreviousTransactionsService = require('../../../../app/services/bill-runs/fetch-previous-transactions.service.js')
-const GenerateTwoPartTariffTransactionService = require('../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js')
-const ProcessSupplementaryTransactionsService = require('../../../../app/services/bill-runs/process-supplementary-transactions.service.js')
-const SendTransactionsService = require('../../../../app/services/bill-runs/send-transactions.service.js')
-const TransactionModel = require('../../../../app/models/transaction.model.js')
+import BillModel from '../../../../app/models/bill.model.js'
+import BillLicenceModel from '../../../../app/models/bill-licence.model.js'
+import BillRunError from '../../../../app/errors/bill-run.error.js'
+import BillRunModel from '../../../../app/models/bill-run.model.js'
+import FetchPreviousTransactionsService from '../../../../app/services/bill-runs/fetch-previous-transactions.service.js'
+import GenerateTwoPartTariffTransactionService from '../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js'
+import ProcessSupplementaryTransactionsService from '../../../../app/services/bill-runs/process-supplementary-transactions.service.js'
+import SendTransactionsService from '../../../../app/services/bill-runs/send-transactions.service.js'
+import TransactionModel from '../../../../app/models/transaction.model.js'
 
 // Thing under test
-const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/tpt-supplementary/process-billing-period.service.js')
+import ProcessBillingPeriodService from '../../../../app/services/bill-runs/tpt-supplementary/process-billing-period.service.js'
 
 describe('Bill Runs - TPT Supplementary - Process Billing Period service', () => {
   const billingPeriod = {
@@ -33,7 +30,6 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
   let billingAccount
   let licence
   let region
-  let sendTransactionsStub
   let transactionInsertStub
 
   beforeEach(async () => {
@@ -42,21 +38,22 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
     billingAccount = TwoPartTariffFixture.billingAccount()
     licence = TwoPartTariffFixture.licence(region)
 
-    sendTransactionsStub = Sinon.stub(SendTransactionsService, 'go')
+    vi.mock('../../../../app/services/bill-runs/send-transactions.service.js')
 
-    billInsertStub = Sinon.stub()
-    billLicenceInsertStub = Sinon.stub()
-    transactionInsertStub = Sinon.stub()
+    billInsertStub = vi.fn()
+    billLicenceInsertStub = vi.fn()
+    transactionInsertStub = vi.fn()
 
-    Sinon.stub(BillModel, 'query').returns({ insert: billInsertStub })
-    Sinon.stub(BillLicenceModel, 'query').returns({ insert: billLicenceInsertStub })
-    Sinon.stub(TransactionModel, 'query').returns({ insert: transactionInsertStub })
+    vi.spyOn(BillModel, 'query').mockReturnValue({ insert: billInsertStub })
+    vi.spyOn(BillLicenceModel, 'query').mockReturnValue({ insert: billLicenceInsertStub })
+    vi.spyOn(TransactionModel, 'query').mockReturnValue({ insert: transactionInsertStub })
 
-    Sinon.stub(FetchPreviousTransactionsService, 'go').resolves([])
+    vi.mock('../../../../app/services/bill-runs/fetch-previous-transactions.service.js')
+    FetchPreviousTransactionsService.mockResolvedValue([])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the service is called', () => {
@@ -86,7 +83,7 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
               // but we want to assert that the transactions we're persisting link to the bill licence we are
               // persisting. This allows us to replay back what has been generated with a 'faked' external ID from the
               // Charging Module API
-              sendTransactionsStub.callsFake(
+              SendTransactionsService.callsFake(
                 // NOTE: We could have just referenced processedTransactions as that is a JavaScript quirk. But we
                 // wanted to highlight how you would access the other arguments
                 async (processedTransactions, _billRunExternalId, _accountNumber, _licence) => {
@@ -104,9 +101,9 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
               expect(result).toBe(true)
 
               // NOTE: We pass a single bill per billing account when persisting
-              const billInsertArgs = billInsertStub.args[0]
+              const billInsertArgs = billInsertStub.mock.calls[0]
 
-              expect(billInsertStub.calledOnce).toBe(true)
+              expect(billInsertStub).toHaveBeenCalledOnce()
               expect(billInsertArgs[0]).toMatchObject({
                 accountNumber: billingAccount.accountNumber,
                 address: {}, // Address is set to an empty object for SROC billing invoices
@@ -117,9 +114,9 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
               })
 
               // NOTE: A bill may have multiple bill licences, so we always pass them as an array
-              const billLicenceInsertArgs = billLicenceInsertStub.args[0]
+              const billLicenceInsertArgs = billLicenceInsertStub.mock.calls[0]
 
-              expect(billLicenceInsertStub.calledOnce).toBe(true)
+              expect(billLicenceInsertStub).toHaveBeenCalledOnce()
               expect(billLicenceInsertArgs[0]).toHaveLength(1)
               expect(billLicenceInsertArgs[0][0]).toMatchObject({
                 billId: billInsertArgs[0].id,
@@ -128,9 +125,9 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
               })
 
               // NOTE: And for performance reasons, we pass _all_ transactions for all bill licences at once
-              const transactionInsertArgs = transactionInsertStub.args[0]
+              const transactionInsertArgs = transactionInsertStub.mock.calls[0]
 
-              expect(transactionInsertStub.calledOnce).toBe(true)
+              expect(transactionInsertStub).toHaveBeenCalledOnce()
               expect(transactionInsertArgs[0]).toHaveLength(2)
 
               // We just check that on of the transactions being persisted is linked to the records we expect
@@ -156,7 +153,7 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
 
               expect(result).toBe(false)
 
-              expect(billInsertStub.called).toBe(false)
+              expect(billInsertStub).not.toHaveBeenCalled()
             })
           })
 
@@ -172,7 +169,7 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
 
               expect(result).toBe(false)
 
-              expect(billInsertStub.called).toBe(false)
+              expect(billInsertStub).not.toHaveBeenCalled()
             })
           })
         })
@@ -183,7 +180,8 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
               // NOTE: If FetchPreviousTransactions finds existing transactions that 'cancel' out those generated as part
               // of the current bill run, ProcessSupplementaryTransactionsService will return nothing, and the engine uses
               // this to know not to create a bill.
-              Sinon.stub(ProcessSupplementaryTransactionsService, 'go').resolves([])
+              vi.mock('../../../../app/services/bill-runs/process-supplementary-transactions.service.js')
+              ProcessSupplementaryTransactionsService.mockResolvedValue([])
 
               billingAccount.chargeVersions = [TwoPartTariffFixture.chargeVersion(billingAccount.id, licence)]
             })
@@ -193,7 +191,7 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
 
               expect(result).toBe(false)
 
-              expect(billInsertStub.called).toBe(false)
+              expect(billInsertStub).not.toHaveBeenCalled()
             })
           })
         })
@@ -216,7 +214,7 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
 
             expect(result).toBe(false)
 
-            expect(billInsertStub.called).toBe(false)
+            expect(billInsertStub).not.toHaveBeenCalled()
           })
         })
 
@@ -225,13 +223,14 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
             // NOTE: If FetchPreviousTransactions finds existing transactions it'll pass them to
             // ProcessSupplementaryTransactionsService which will then reverse them as credits to
             // ProcessBillingPeriodService.
-            Sinon.stub(ProcessSupplementaryTransactionsService, 'go').callsFake(
+            vi.mock('../../../../app/services/bill-runs/process-supplementary-transactions.service.js')
+            ProcessSupplementaryTransactionsService.mockImplementation(
               async (_previousTransactions, _generatedTransactions, billLicenceId) => {
                 return [{ billLicenceId, credit: true, id: '3032d87b-176a-4db8-8b6d-f3c04311ca80' }]
               }
             )
 
-            sendTransactionsStub.callsFake(
+            SendTransactionsService.callsFake(
               async (processedTransactions, _billRunExternalId, _accountNumber, _licence) => {
                 return [{ ...processedTransactions[0], externalId: '7e752fa6-a19c-4779-b28c-6e536f028795' }]
               }
@@ -244,9 +243,9 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
             expect(result).toBe(true)
 
             // NOTE: We pass a single bill per billing account when persisting
-            const billInsertArgs = billInsertStub.args[0]
+            const billInsertArgs = billInsertStub.mock.calls[0]
 
-            expect(billInsertStub.calledOnce).toBe(true)
+            expect(billInsertStub).toHaveBeenCalledOnce()
             expect(billInsertArgs[0]).toMatchObject({
               accountNumber: billingAccount.accountNumber,
               address: {}, // Address is set to an empty object for SROC billing invoices
@@ -257,9 +256,9 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
             })
 
             // NOTE: A bill may have multiple bill licences, so we always pass them as an array
-            const billLicenceInsertArgs = billLicenceInsertStub.args[0]
+            const billLicenceInsertArgs = billLicenceInsertStub.mock.calls[0]
 
-            expect(billLicenceInsertStub.calledOnce).toBe(true)
+            expect(billLicenceInsertStub).toHaveBeenCalledOnce()
             expect(billLicenceInsertArgs[0]).toHaveLength(1)
             expect(billLicenceInsertArgs[0][0]).toMatchObject({
               billId: billInsertArgs[0].id,
@@ -268,9 +267,9 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
             })
 
             // NOTE: And for performance reasons, we pass _all_ transactions for all bill licences at once
-            const transactionInsertArgs = transactionInsertStub.args[0]
+            const transactionInsertArgs = transactionInsertStub.mock.calls[0]
 
-            expect(transactionInsertStub.calledOnce).toBe(true)
+            expect(transactionInsertStub).toHaveBeenCalledOnce()
             expect(transactionInsertArgs[0]).toHaveLength(1)
 
             expect(transactionInsertArgs[0][0].billLicenceId).toEqual(billLicenceInsertArgs[0][0].id)
@@ -288,7 +287,8 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
 
     describe('because generating the calculated transaction fails', () => {
       beforeEach(async () => {
-        Sinon.stub(GenerateTwoPartTariffTransactionService, 'go').throws()
+        vi.mock('../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js')
+        GenerateTwoPartTariffTransactionService.mockRejectedValue(new Error())
       })
 
       it('throws a BillRunError with the correct code', async () => {
@@ -303,7 +303,7 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
 
     describe('because sending the transactions fails', () => {
       beforeEach(async () => {
-        sendTransactionsStub.rejects()
+        SendTransactionsService.mockRejectedValue()
       })
 
       it('throws an error', async () => {

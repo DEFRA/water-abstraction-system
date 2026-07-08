@@ -1,27 +1,24 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const TransactionHelper = require('../support/helpers/transaction.helper.js')
-const YarStub = require('../support/stubs/yar.stub.js')
+import * as TransactionHelper from '../support/helpers/transaction.helper.js'
+import YarStub from '../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const GlobalNotifierStub = require('../support/stubs/global-notifier.stub.js')
+import GlobalNotifierStub from '../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const GeneralLib = require('../../app/lib/general.lib.js')
+import * as GeneralLib from '../../app/lib/general.lib.js'
 
 describe('GeneralLib', () => {
   let clock
   let testDate
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
 
     if (clock) {
-      clock.restore()
+      vi.useRealTimers()
     }
   })
 
@@ -36,7 +33,7 @@ describe('GeneralLib', () => {
       // app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered. As we're not
       // creating an instance of Hapi server in this test we recreate the condition by setting it directly with our own
       // stub
-      notifierStub = GlobalNotifierStub.build(Sinon)
+      notifierStub = GlobalNotifierStub()
       globalThis.GlobalNotifier = notifierStub
     })
 
@@ -48,9 +45,9 @@ describe('GeneralLib', () => {
       it('logs the message and time taken in milliseconds and seconds', () => {
         GeneralLib.calculateAndLogTimeTaken(startTime, 'I am the test with no data')
 
-        const logDataArg = notifierStub.omg.args[0][1]
+        const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-        expect(notifierStub.omg.calledWith('I am the test with no data')).toBe(true)
+        expect(notifierStub.omg).toHaveBeenCalledWith('I am the test with no data')
         expect(logDataArg.timeTakenMs).toBeDefined()
         expect(logDataArg.timeTakenSs).toBeDefined()
         expect(logDataArg.name).toBeUndefined()
@@ -61,9 +58,9 @@ describe('GeneralLib', () => {
       it('logs the message and time taken in milliseconds and seconds as well as the additional data', () => {
         GeneralLib.calculateAndLogTimeTaken(startTime, 'I am the test with data', { name: 'Foo Bar' })
 
-        const logDataArg = notifierStub.omg.args[0][1]
+        const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-        expect(notifierStub.omg.calledWith('I am the test with data')).toBe(true)
+        expect(notifierStub.omg).toHaveBeenCalledWith('I am the test with data')
         expect(logDataArg.timeTakenMs).toBeDefined()
         expect(logDataArg.name).toBeDefined()
       })
@@ -257,7 +254,7 @@ describe('GeneralLib', () => {
         beforeEach(() => {
           testDate = new Date(2023, 7, 21, 20, 31, 57)
 
-          clock = Sinon.useFakeTimers(testDate)
+          clock = vi.useFakeTimers({ now: testDate })
         })
 
         it('returns the correct start and end dates for the financial year', () => {
@@ -272,7 +269,7 @@ describe('GeneralLib', () => {
         beforeEach(() => {
           testDate = new Date(2024, 2, 21, 20, 31, 57)
 
-          clock = Sinon.useFakeTimers(testDate)
+          clock = vi.useFakeTimers({ now: testDate })
         })
 
         it('returns the correct start and end dates for the financial year', () => {
@@ -289,13 +286,13 @@ describe('GeneralLib', () => {
     let yarStub
 
     beforeEach(() => {
-      yarStub = YarStub.build(Sinon)
+      yarStub = YarStub()
     })
 
     it('returns the standard notification { titleText: "Updated", text: "Changes made" }', () => {
       GeneralLib.flashNotification(yarStub)
 
-      const [flashType, notification] = yarStub.flash.args[0]
+      const [flashType, notification] = yarStub.flash.mock.calls[0]
 
       expect(flashType).toEqual('notification')
       expect(notification).toEqual({ titleText: 'Updated', text: 'Changes made' })
@@ -304,7 +301,7 @@ describe('GeneralLib', () => {
     it('returns the overridden notification { titleText: "Fancy new title", text: "better text" }', () => {
       GeneralLib.flashNotification(yarStub, 'Fancy new title', 'better text')
 
-      const [flashType, notification] = yarStub.flash.args[0]
+      const [flashType, notification] = yarStub.flash.mock.calls[0]
 
       expect(flashType).toEqual('notification')
       expect(notification).toEqual({ titleText: 'Fancy new title', text: 'better text' })
@@ -315,8 +312,8 @@ describe('GeneralLib', () => {
     let yarStub
 
     beforeEach(() => {
-      yarStub = YarStub.build(Sinon)
-      yarStub.flash.returns([{ title: 'Updated', text: 'Changes made' }])
+      yarStub = YarStub()
+      yarStub.flash.mockReturnValue([{ title: 'Updated', text: 'Changes made' }])
     })
 
     it('returns the flash notification', () => {
@@ -616,7 +613,7 @@ describe('GeneralLib', () => {
     beforeEach(() => {
       testDate = new Date(2015, 9, 21, 20, 31, 57)
 
-      clock = Sinon.useFakeTimers(testDate)
+      clock = vi.useFakeTimers({ now: testDate })
     })
 
     it('returns the current date and time as an ISO string', () => {
@@ -630,7 +627,7 @@ describe('GeneralLib', () => {
     beforeEach(() => {
       testDate = new Date(2025, 9, 19, 20, 31, 57, 234)
 
-      clock = Sinon.useFakeTimers(testDate)
+      clock = vi.useFakeTimers({ now: testDate })
     })
 
     it('returns the current date and time as date-only (time set to midnight)', () => {

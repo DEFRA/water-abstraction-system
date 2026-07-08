@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const PostcodePresenter = require('../../../app/presenters/address/postcode.presenter.js')
+import PostcodePresenter from '../../../app/presenters/address/postcode.presenter.js'
 
 describe('Address - Postcode Presenter', () => {
   let session

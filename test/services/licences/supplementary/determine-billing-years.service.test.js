@@ -1,10 +1,7 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Thing under test
-const DetermineBillingYearsService = require('../../../../app/services/licences/supplementary/determine-billing-years.service.js')
+import DetermineBillingYearsService from '../../../../app/services/licences/supplementary/determine-billing-years.service.js'
 
 describe('Determine Billing Years Service', () => {
   let clock
@@ -14,12 +11,12 @@ describe('Determine Billing Years Service', () => {
 
   beforeEach(() => {
     testDate = new Date('2024-03-31')
-    clock = Sinon.useFakeTimers(testDate)
+    clock = vi.useFakeTimers({ now: testDate })
   })
 
   afterEach(() => {
-    Sinon.restore()
-    clock.restore()
+    vi.restoreAllMocks()
+    vi.useRealTimers()
   })
 
   describe('when given a start date beginning before April', () => {

@@ -1,16 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_OK } = http2.constants
 
 // Things we need to stub
-const ViewService = require('../../app/services/licence-versions/view.service.js')
+import ViewService from '../../app/services/licence-versions/view.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
 
 describe('Licence Versions controller', () => {
   let options
@@ -24,14 +22,14 @@ describe('Licence Versions controller', () => {
   beforeEach(async () => {
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
-    Sinon.stub(server.logger, 'error')
+    vi.spyOn(server.logger, 'error').mockImplementation(() => {})
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -53,7 +51,8 @@ describe('Licence Versions controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewService, 'go').resolves({ pageTitle: 'Licence version starting' })
+          vi.mock('../../app/services/licence-versions/view.service.js')
+          ViewService.mockResolvedValue({ pageTitle: 'Licence version starting' })
         })
 
         it('returns the page successfully', async () => {

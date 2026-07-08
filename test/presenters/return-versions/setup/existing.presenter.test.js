@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ExistingPresenter = require('../../../../app/presenters/return-versions/setup/existing.presenter.js')
+import ExistingPresenter from '../../../../app/presenters/return-versions/setup/existing.presenter.js'
 
 describe('Return Versions - Setup - Existing presenter', () => {
   let session

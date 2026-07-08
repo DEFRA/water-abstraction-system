@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const FetchTableNamesService = require('../../../../app/services/jobs/export/fetch-table-names.service.js')
+import FetchTableNamesService from '../../../../app/services/jobs/export/fetch-table-names.service.js'
 
 describe('Fetch table names', () => {
   describe('when given a schema name', () => {

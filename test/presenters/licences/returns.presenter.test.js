@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 
 // Thing under test
-const ReturnsPresenter = require('../../../app/presenters/licences/returns.presenter.js')
+import ReturnsPresenter from '../../../app/presenters/licences/returns.presenter.js'
 
 describe('Licences - Returns presenter', () => {
   let returnLogs

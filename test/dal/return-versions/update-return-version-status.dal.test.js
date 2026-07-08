@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
-const ReturnVersionModel = require('../../../app/models/return-version.model.js')
+import * as ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
+import ReturnVersionModel from '../../../app/models/return-version.model.js'
 
 // Things under test
-const UpdateReturnVersionStatusDal = require('../../../app/dal/return-versions/update-return-version-status.dal.js')
+import UpdateReturnVersionStatusDal from '../../../app/dal/return-versions/update-return-version-status.dal.js'
 
 describe('DAL - Return Versions - Update Return Version Status dal', () => {
   let status

@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
+import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import * as RegionHelper from '../../../support/helpers/region.helper.js'
 
 // Thing under test
-const DetermineExistingBillRunYearsService = require('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
+import DetermineExistingBillRunYearsService from '../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js'
 
 describe('Determine Existing Bill Run Years Service', () => {
   describe('when passed a regionId and years', () => {

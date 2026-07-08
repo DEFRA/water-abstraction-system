@@ -1,20 +1,17 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const EventModel = require('../../../../app/models/event.model.js')
-const NoticesFixture = require('../../../support/fixtures/notices.fixture.js')
-const NotificationModel = require('../../../../app/models/notification.model.js')
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.js')
+import EventModel from '../../../../app/models/event.model.js'
+import * as NoticesFixture from '../../../support/fixtures/notices.fixture.js'
+import NotificationModel from '../../../../app/models/notification.model.js'
+import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import { NOTIFY_TEMPLATES } from '../../../../app/lib/notify-templates.lib.js'
 
 // Things we need to stub
-const FetchAlternateRenewalRecipientsService = require('../../../../app/services/notices/setup/renewal-notice/fetch-alternate-renewal-recipients.service.js')
+import FetchAlternateRenewalRecipientsService from '../../../../app/services/notices/setup/renewal-notice/fetch-alternate-renewal-recipients.service.js'
 
 // Thing under test
-const CreateAlternateRenewalNoticeService = require('../../../../app/services/notices/setup/create-alternate-renewal-notice.service.js')
+import CreateAlternateRenewalNoticeService from '../../../../app/services/notices/setup/create-alternate-renewal-notice.service.js'
 
 describe('Notices - Setup - Create Alternate Renewal Notice service', () => {
   let expiryDate
@@ -35,11 +32,12 @@ describe('Notices - Setup - Create Alternate Renewal Notice service', () => {
 
     licenceRefs = notice.licences
 
-    Sinon.stub(FetchAlternateRenewalRecipientsService, 'go').resolves([recipient])
+    vi.mock('../../../../app/services/notices/setup/renewal-notice/fetch-alternate-renewal-recipients.service.js')
+    FetchAlternateRenewalRecipientsService.mockResolvedValue([recipient])
   })
 
   afterEach(async () => {
-    Sinon.restore()
+    vi.restoreAllMocks()
 
     await NotificationModel.query().deleteById(notificationId)
     await EventModel.query().deleteById(notice.id)

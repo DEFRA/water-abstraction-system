@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const StopOrReducePresenter = require('../../../../app/presenters/licence-monitoring-station/setup/stop-or-reduce.presenter.js')
+import StopOrReducePresenter from '../../../../app/presenters/licence-monitoring-station/setup/stop-or-reduce.presenter.js'
 
 describe('Licence Monitoring Station Setup - Stop Or Reduce presenter', () => {
   let session

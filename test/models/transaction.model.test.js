@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const BillLicenceModel = require('../../app/models/bill-licence.model.js')
-const BillLicenceHelper = require('../support/helpers/bill-licence.helper.js')
-const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
-const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
-const TransactionHelper = require('../support/helpers/transaction.helper.js')
+import BillLicenceModel from '../../app/models/bill-licence.model.js'
+import * as BillLicenceHelper from '../support/helpers/bill-licence.helper.js'
+import * as ChargeReferenceHelper from '../support/helpers/charge-reference.helper.js'
+import ChargeReferenceModel from '../../app/models/charge-reference.model.js'
+import * as TransactionHelper from '../support/helpers/transaction.helper.js'
 
 // Thing under test
-const TransactionModel = require('../../app/models/transaction.model.js')
+import TransactionModel from '../../app/models/transaction.model.js'
 
 describe('Transaction model', () => {
   let testBillLicence

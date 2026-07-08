@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
+import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Things we need to stub
-const FetchCompanyDal = require('../../../app/dal/companies/fetch-company.dal.js')
-const FetchHistoryDal = require('../../../app/dal/companies/fetch-history.dal.js')
+import FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'
+import FetchHistoryDal from '../../../app/dal/companies/fetch-history.dal.js'
 
 // Thing under test
-const ViewHistoryService = require('../../../app/services/companies/view-history.service.js')
+import ViewHistoryService from '../../../app/services/companies/view-history.service.js'
 
 describe('Companies - View History service', () => {
   let auth
@@ -26,8 +23,10 @@ describe('Companies - View History service', () => {
 
     licences = CustomersFixtures.licences()
 
-    Sinon.stub(FetchCompanyDal, 'go').returns(company)
-    Sinon.stub(FetchHistoryDal, 'go').returns({
+    vi.mock('../../../app/dal/companies/fetch-company.dal.js')
+    FetchCompanyDal.mockReturnValue(company)
+    vi.mock('../../../app/dal/companies/fetch-history.dal.js')
+    FetchHistoryDal.mockReturnValue({
       licences,
       totalNumber: 1
     })
@@ -36,7 +35,7 @@ describe('Companies - View History service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const MultipleEntriesValidator = require('../../../../app/validators/return-logs/setup/multiple-entries.validator.js')
+import MultipleEntriesValidator from '../../../../app/validators/return-logs/setup/multiple-entries.validator.js'
 
 describe('Return Logs Setup - Multiple Entries validator', () => {
   let frequency

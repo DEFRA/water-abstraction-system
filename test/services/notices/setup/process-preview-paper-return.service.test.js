@@ -1,22 +1,19 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const ReturnLogFixture = require('../../../support/fixtures/return-logs.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
+import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import * as ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
 
 // Things we need to stub
-const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
-const GeneratePaperReturnRequest = require('../../../../app/requests/gotenberg/generate-paper-return.request.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+import FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as GeneratePaperReturnRequest from '../../../../app/requests/gotenberg/generate-paper-return.request.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const ProcessPreviewPaperReturnService = require('../../../../app/services/notices/setup/process-preview-paper-return.service.js')
+import ProcessPreviewPaperReturnService from '../../../../app/services/notices/setup/process-preview-paper-return.service.js'
 
 describe('Notices - Setup - Process Preview Paper Return service', () => {
   let contactHashId
@@ -43,19 +40,21 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
       dueReturns: [dueReturnLog]
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
     const buffer = new TextEncoder().encode('mock file').buffer
 
-    Sinon.stub(GeneratePaperReturnRequest, 'send').resolves({
+    vi.spyOn(GeneratePaperReturnRequest, 'send').mockResolvedValue({
       response: {
         body: buffer
       }
     })
 
-    Sinon.stub(FetchRecipientsService, 'go').resolves([
+    vi.mock('../../../../app/services/notices/setup/fetch-recipients.service.js')
+    FetchRecipientsService.mockResolvedValue([
       {
         ...recipient
       },
@@ -64,12 +63,12 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
       }
     ])
 
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 

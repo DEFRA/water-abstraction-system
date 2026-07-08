@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { licenceEnds } = require('../../support/fixtures/licence.fixture.js')
-const { generateUserId } = require('../../support/helpers/user.helper.js')
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import { licenceEnds } from '../../support/fixtures/licence.fixture.js'
+import { generateUserId } from '../../support/helpers/user.helper.js'
 
 // Things we need to stub
-const FetchLicenceMonitoringStationsDal = require('../../../app/dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js')
+import FetchLicenceMonitoringStationsDal from '../../../app/dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js'
 
 // Thing under test
-const ViewLicenceService = require('../../../app/services/monitoring-stations/view-licence.service.js')
+import ViewLicenceService from '../../../app/services/monitoring-stations/view-licence.service.js'
 
 describe('Monitoring Stations - View Licence service', () => {
   let auth
@@ -81,7 +78,8 @@ describe('Monitoring Stations - View Licence service', () => {
     ]
     monitoringStation = { id: generateUUID(), label: 'Hades', riverName: 'The River Styx' }
 
-    Sinon.stub(FetchLicenceMonitoringStationsDal, 'go').resolves({
+    vi.mock('../../../app/dal/monitoring-stations/fetch-licence-monitoring-stations.dal.js')
+    FetchLicenceMonitoringStationsDal.mockResolvedValue({
       licence,
       licenceMonitoringStations,
       monitoringStation
@@ -89,7 +87,7 @@ describe('Monitoring Stations - View Licence service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

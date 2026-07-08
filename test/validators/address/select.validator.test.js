@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const SelectValidator = require('../../../app/validators/address/select.validator.js')
+import SelectValidator from '../../../app/validators/address/select.validator.js'
 
 describe('Address - Select Validator', () => {
   let payload

@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const PayloadCleaningService = require('../../../app/services/plugins/payload-cleaning.service.js')
+import PayloadCleaningService from '../../../app/services/plugins/payload-cleaning.service.js'
 
 describe('Payload cleaning service', () => {
   describe('when an object contains values with extra whitespace', () => {

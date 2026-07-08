@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const WorkflowModel = require('../../../../app/models/workflow.model.js')
+import { generateUUID } from '../../../../app/lib/general.lib.js'
+import WorkflowModel from '../../../../app/models/workflow.model.js'
 
 // Things we need to stub
-const FetchLicenceUpdatesService = require('../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+import FetchLicenceUpdatesService from '../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const ProcessLicenceUpdatesService = require('../../../../app/services/jobs/licence-updates/process-licence-updates.service.js')
+import ProcessLicenceUpdatesService from '../../../../app/services/jobs/licence-updates/process-licence-updates.service.js'
 
 describe('Jobs - Licence Updates - Process Licence Updates service', () => {
   let fetchResults
@@ -22,12 +19,12 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -46,7 +43,8 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
         }
       ]
 
-      Sinon.stub(FetchLicenceUpdatesService, 'go').resolves(fetchResults)
+      vi.mock('../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js')
+      FetchLicenceUpdatesService.mockResolvedValue(fetchResults)
     })
 
     it('adds the updated licences to workflow', async () => {
@@ -72,9 +70,9 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     it('logs the time taken in milliseconds and seconds', async () => {
       await ProcessLicenceUpdatesService()
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-      expect(notifierStub.omg.calledWith('Licence updates job complete')).toBe(true)
+      expect(notifierStub.omg).toHaveBeenCalledWith('Licence updates job complete')
       expect(logDataArg.timeTakenMs).toBeDefined()
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.count).toBeDefined()
@@ -85,7 +83,8 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     beforeEach(() => {
       fetchResults = []
 
-      Sinon.stub(FetchLicenceUpdatesService, 'go').resolves(fetchResults)
+      vi.mock('../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js')
+      FetchLicenceUpdatesService.mockResolvedValue(fetchResults)
     })
 
     it('adds nothing to workflow', async () => {
@@ -101,9 +100,9 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     it('logs the time taken in milliseconds and seconds', async () => {
       await ProcessLicenceUpdatesService()
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-      expect(notifierStub.omg.calledWith('Licence updates job complete')).toBe(true)
+      expect(notifierStub.omg).toHaveBeenCalledWith('Licence updates job complete')
       expect(logDataArg.timeTakenMs).toBeDefined()
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.count).toBeDefined()
@@ -112,7 +111,8 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
 
   describe('when there is an error', () => {
     beforeEach(() => {
-      Sinon.stub(FetchLicenceUpdatesService, 'go').rejects()
+      vi.mock('../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js')
+      FetchLicenceUpdatesService.mockRejectedValue()
     })
 
     it('records the error by calling "omfg()"', async () => {

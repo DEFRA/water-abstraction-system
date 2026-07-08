@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
+import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const NotificationsTablePresenter = require('../../../app/presenters/notifications/notifications-table.presenter.js')
+import NotificationsTablePresenter from '../../../app/presenters/notifications/notifications-table.presenter.js'
 
 describe('Notifications - Notification Table presenter', () => {
   let companyContactId

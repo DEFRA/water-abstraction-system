@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as ReturnVersionHelper from '../../support/helpers/return-version.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const DetermineNextVersionNumberDal = require('../../../app/dal/return-versions/determine-next-version-number.dal.js')
+import DetermineNextVersionNumberDal from '../../../app/dal/return-versions/determine-next-version-number.dal.js'
 
 describe('DAL - Return Versions - Determine Next Version Number dal', () => {
   let licenceId

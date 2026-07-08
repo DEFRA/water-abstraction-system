@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
-const { generateNoticeReferenceCode, generateUUID } = require('../../../../../app/lib/general.lib.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import { generateNoticeReferenceCode, generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewPreviewCheckPaperReturnService = require('../../../../../app/services/notices/setup/preview/view-preview-check-paper-return.service.js')
+import ViewPreviewCheckPaperReturnService from '../../../../../app/services/notices/setup/preview/view-preview-check-paper-return.service.js'
 
 describe('Notices - Setup - Preview - View Preview Check Paper Return service', () => {
   const contactHashId = '9df5923f179a0ed55c13173c16651ed9'
@@ -35,13 +32,14 @@ describe('Notices - Setup - Preview - View Preview Check Paper Return service', 
       selectedReturns: [dueReturn.returnLogId]
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

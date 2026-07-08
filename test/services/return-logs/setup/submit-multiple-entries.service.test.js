@@ -1,20 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitMultipleEntriesService = require('../../../../app/services/return-logs/setup/submit-multiple-entries.service.js')
+import SubmitMultipleEntriesService from '../../../../app/services/return-logs/setup/submit-multiple-entries.service.js'
 
 describe('Return Logs Setup - Submit Multiple Entries service', () => {
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -32,16 +28,17 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
       unitSymbol: 'Ml'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -64,7 +61,7 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
         it('sets the notification message title to "Updated" and the text to "2 monthly volumes have been updated" ', async () => {
           await SubmitMultipleEntriesService(session.id, payload, yarStub)
 
-          const [flashType, notification] = yarStub.flash.args[0]
+          const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
           expect(notification).toEqual({
@@ -86,9 +83,9 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
             reported: 'meterReadings'
           }
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          FetchSessionDal.mockResolvedValue(session)
         })
 
         it('saves the submitted option', async () => {
@@ -102,7 +99,7 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
         it('sets the notification message title to "Updated" and the text to "2 monthly meter readings have been updated" ', async () => {
           await SubmitMultipleEntriesService(session.id, payload, yarStub)
 
-          const [flashType, notification] = yarStub.flash.args[0]
+          const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
           expect(notification).toEqual({

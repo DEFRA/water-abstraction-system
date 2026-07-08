@@ -1,13 +1,11 @@
-'use strict'
-
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+import { generateUUID } from '../../../../app/lib/general.lib.js'
+import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import * as ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const FetchReturnLogService = require('../../../../app/services/return-logs/setup/fetch-return-log.service.js')
+import FetchReturnLogService from '../../../../app/services/return-logs/setup/fetch-return-log.service.js'
 
 describe('Return Logs - Setup - Fetch Return Log service', () => {
   let licence

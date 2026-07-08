@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const LicenceModel = require('../../../../../app/models/licence.model.js')
-const LicenceVersionPurposeModel = require('../../../../../app/models/licence-version-purpose.model.js')
+import LicenceModel from '../../../../../app/models/licence.model.js'
+import LicenceVersionPurposeModel from '../../../../../app/models/licence-version-purpose.model.js'
 
 // Things we need to stub
-const DetermineTwoPartTariffAgreementService = require('../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js')
-const FetchAbstractionDataService = require('../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js')
+import DetermineTwoPartTariffAgreementService from '../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'
+import FetchAbstractionDataService from '../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js'
 
 // Thing under test
-const GenerateFromAbstractionDataService = require('../../../../../app/services/return-versions/setup/method/generate-from-abstraction-data.service.js')
+import GenerateFromAbstractionDataService from '../../../../../app/services/return-versions/setup/method/generate-from-abstraction-data.service.js'
 
 describe('Return Versions - Setup - Generate From Abstraction Data service', () => {
   const licenceId = 'af0e52a3-db43-4add-b388-1b2564a437c7'
@@ -23,7 +20,7 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
   let twoPartTariffAgreement
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called with a licence ID that exists', () => {
@@ -32,8 +29,12 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
         abstractionData = _fetchAbstractionDataResult(licenceId)
         twoPartTariffAgreement = false
 
-        Sinon.stub(FetchAbstractionDataService, 'go').resolves(abstractionData)
-        Sinon.stub(DetermineTwoPartTariffAgreementService, 'go').resolves(twoPartTariffAgreement)
+        vi.mock('../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js')
+        FetchAbstractionDataService.mockResolvedValue(abstractionData)
+        vi.mock(
+          '../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'
+        )
+        DetermineTwoPartTariffAgreementService.mockResolvedValue(twoPartTariffAgreement)
       })
 
       it('generates return requirements setup data', async () => {
@@ -112,8 +113,12 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
         abstractionData = _fetchAbstractionDataResult(licenceId)
         twoPartTariffAgreement = true
 
-        Sinon.stub(FetchAbstractionDataService, 'go').resolves(abstractionData)
-        Sinon.stub(DetermineTwoPartTariffAgreementService, 'go').resolves(twoPartTariffAgreement)
+        vi.mock('../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js')
+        FetchAbstractionDataService.mockResolvedValue(abstractionData)
+        vi.mock(
+          '../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'
+        )
+        DetermineTwoPartTariffAgreementService.mockResolvedValue(twoPartTariffAgreement)
       })
 
       it('sets the collection frequency to "day" for the two-part tariff spray purpose', async () => {
@@ -136,8 +141,12 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
         abstractionData.licenceVersions[0].licenceVersionPurposes[1].purpose.twoPartTariff = true
         twoPartTariffAgreement = false
 
-        Sinon.stub(FetchAbstractionDataService, 'go').resolves(abstractionData)
-        Sinon.stub(DetermineTwoPartTariffAgreementService, 'go').resolves(twoPartTariffAgreement)
+        vi.mock('../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js')
+        FetchAbstractionDataService.mockResolvedValue(abstractionData)
+        vi.mock(
+          '../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'
+        )
+        DetermineTwoPartTariffAgreementService.mockResolvedValue(twoPartTariffAgreement)
       })
 
       it('sets the agreements for each return requirement to be "two-part tariff"', async () => {
@@ -155,8 +164,12 @@ describe('Return Versions - Setup - Generate From Abstraction Data service', () 
         abstractionData.waterUndertaker = true
         twoPartTariffAgreement = false
 
-        Sinon.stub(FetchAbstractionDataService, 'go').resolves(abstractionData)
-        Sinon.stub(DetermineTwoPartTariffAgreementService, 'go').resolves(twoPartTariffAgreement)
+        vi.mock('../../../../../app/services/return-versions/setup/method/fetch-abstraction-data.service.js')
+        FetchAbstractionDataService.mockResolvedValue(abstractionData)
+        vi.mock(
+          '../../../../../app/services/return-versions/setup/method/determine-two-part-tariff-agreement.service.js'
+        )
+        DetermineTwoPartTariffAgreementService.mockResolvedValue(twoPartTariffAgreement)
       })
 
       it('sets the collection and reporting frequencies to "day"', async () => {

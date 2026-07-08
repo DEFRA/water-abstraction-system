@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Thing under test
-const EmailPresenter = require('../../../../../app/presenters/users/internal/setup/email.presenter.js')
+import EmailPresenter from '../../../../../app/presenters/users/internal/setup/email.presenter.js'
 
 describe('Users - Internal - Setup - Email Presenter', () => {
   let session

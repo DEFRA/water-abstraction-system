@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const AccountTypeValidator = require('../../../../app/validators/billing-accounts/setup/account-type.validator.js')
+import AccountTypeValidator from '../../../../app/validators/billing-accounts/setup/account-type.validator.js'
 
 describe('Billing Accounts - Setup - Account Type Validator', () => {
   describe('when called', () => {

@@ -1,16 +1,14 @@
-'use strict'
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const CompanyContactModel = require('../../../../app/models/company-contact.model.js')
-const CompanyHelper = require('../../../support/helpers/company.helper.js')
-const LicenceRoleHelper = require('../../../support/helpers/licence-role.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import CompanyContactModel from '../../../../app/models/company-contact.model.js'
+import * as CompanyHelper from '../../../support/helpers/company.helper.js'
+import * as LicenceRoleHelper from '../../../support/helpers/licence-role.helper.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const CreateCompanyContactDal = require('../../../../app/dal/company-contacts/setup/create-company-contact.dal.js')
+import CreateCompanyContactDal from '../../../../app/dal/company-contacts/setup/create-company-contact.dal.js'
 
 describe('Company Contacts - Create Company Contact dal', () => {
   let clock
@@ -28,12 +26,12 @@ describe('Company Contacts - Create Company Contact dal', () => {
 
     company = await CompanyHelper.add()
 
-    clock = Sinon.useFakeTimers({ now: new Date('2021-01-01'), toFake: ['Date'] })
+    clock = vi.useFakeTimers({ now: { now: new Date('2021-01-01' }), toFake: ['Date'] })
   })
 
   afterAll(async () => {
-    Sinon.restore()
-    clock.restore()
+    vi.restoreAllMocks()
+    vi.useRealTimers()
 
     await company.$query().delete()
   })

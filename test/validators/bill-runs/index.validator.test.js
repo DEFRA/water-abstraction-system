@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const IndexValidator = require('../../../app/validators/bill-runs/index.validator.js')
+import IndexValidator from '../../../app/validators/bill-runs/index.validator.js'
 
 describe('Bill Runs - Index validator', () => {
   let payload

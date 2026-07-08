@@ -1,27 +1,25 @@
-'use strict'
-
-const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
+import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
 
 // Thing under test
-const ViewBillRunStatusRequest = require('../../../app/requests/charging-module/view-bill-run-status.request.js')
+import * as ViewBillRunStatusRequest from '../../../app/requests/charging-module/view-bill-run-status.request.js'
 
 describe('Charging Module View Bill Run Status request', () => {
   const billRunId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'
   const transactionData = { billingTransactionId: '2395429b-e703-43bc-8522-ce3f67507ffa' }
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request can get a bill run status', () => {
     beforeEach(async () => {
-      Sinon.stub(ChargingModuleRequest, 'get').resolves({
+      vi.spyOn(ChargingModuleRequest, 'getRequest').mockResolvedValue({
         succeeded: true,
         response: {
           info: {
@@ -52,7 +50,7 @@ describe('Charging Module View Bill Run Status request', () => {
   describe('when the request cannot get a bill run status', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequest, 'get').resolves({
+        vi.spyOn(ChargingModuleRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response: {
             info: {
@@ -87,7 +85,7 @@ describe('Charging Module View Bill Run Status request', () => {
 
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequest, 'get').resolves({
+        vi.spyOn(ChargingModuleRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response: new Error("Timeout awaiting 'request' for 5000ms")
         })

@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const TypePresenter = require('../../../../app/presenters/bill-runs/setup/type.presenter.js')
+import TypePresenter from '../../../../app/presenters/bill-runs/setup/type.presenter.js'
 
 describe('Bill Runs - Setup - Type presenter', () => {
   let session

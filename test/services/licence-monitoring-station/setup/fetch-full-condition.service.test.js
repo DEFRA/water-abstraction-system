@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeHelper = require('../../../support/helpers/licence-version-purpose.helper.js')
-const LicenceVersionPurposeConditionHelper = require('../../../support/helpers/licence-version-purpose-condition.helper.js')
-const LicenceVersionPurposeConditionTypeHelper = require('../../../support/helpers/licence-version-purpose-condition-type.helper.js')
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import * as LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
+import * as LicenceVersionPurposeHelper from '../../../support/helpers/licence-version-purpose.helper.js'
+import * as LicenceVersionPurposeConditionHelper from '../../../support/helpers/licence-version-purpose-condition.helper.js'
+import * as LicenceVersionPurposeConditionTypeHelper from '../../../support/helpers/licence-version-purpose-condition-type.helper.js'
 
 // Thing under test
-const FetchFullConditionService = require('../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js')
+import FetchFullConditionService from '../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js'
 
 const CES_CONDITION_TYPE = LicenceVersionPurposeConditionTypeHelper.select(20)
 const NON_CES_CONDITION_TYPE = LicenceVersionPurposeConditionTypeHelper.select(19)

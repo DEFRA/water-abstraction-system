@@ -1,13 +1,11 @@
-'use strict'
-
 // Test helpers
-const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+import * as ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
+import * as ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
+import * as ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const FetchExistingLicenceDetailsService = require('../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js')
+import FetchExistingLicenceDetailsService from '../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js'
 
 describe('Fetch Existing Licence Details Service', () => {
   describe('when passed a licence ID for a licence that exists', () => {

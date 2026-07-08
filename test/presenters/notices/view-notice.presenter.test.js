@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
+import { generateNoticeReferenceCode } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const ViewNoticePresenter = require('../../../app/presenters/notices/view-notice.presenter.js')
+import ViewNoticePresenter from '../../../app/presenters/notices/view-notice.presenter.js'
 
 describe('Notices - View Notice presenter', () => {
   let notice

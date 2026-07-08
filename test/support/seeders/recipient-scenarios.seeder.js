@@ -2,9 +2,9 @@
  * @module RecipientScenariosSeeder
  */
 
-import CRMContactsSeeder from './crm-contacts.seeder.js'
-import EmptyLicence from './empty-licence.seeder.js'
-import RecipientsFormatter from './recipients.formatter.js'
+import * as CRMContactsSeeder from './crm-contacts.seeder.js'
+import * as EmptyLicence from './empty-licence.seeder.js'
+import * as RecipientsFormatter from './recipients.formatter.js'
 import LicenceVersionHelper from '../helpers/licence-version.helper.js'
 import { compareStrings } from '../../../app/lib/general.lib.js'
 

@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const GenerateReturnSubmissionMetadataService = require('../../../../app/services/return-logs/setup/generate-return-submission-metadata.service.js')
+import GenerateReturnSubmissionMetadataService from '../../../../app/services/return-logs/setup/generate-return-submission-metadata.service.js'
 
 describe('Return Logs Setup - Generate Return Submission Metadata', () => {
   let sessionData

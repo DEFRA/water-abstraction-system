@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const ReturnVersionModel = require('../../../app/models/return-version.model.js')
-const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import ReturnVersionModel from '../../../app/models/return-version.model.js'
+import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const SetUpPresenter = require('../../../app/presenters/licences/set-up.presenter.js')
+import SetUpPresenter from '../../../app/presenters/licences/set-up.presenter.js'
 
 describe('Licences - Set Up presenter', () => {
   let agreement

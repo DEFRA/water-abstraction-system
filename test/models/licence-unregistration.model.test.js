@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../support/helpers/licence.helper.js')
-const LicenceModel = require('../../app/models/licence.model.js')
-const LicenceUnregistrationHelper = require('../support/helpers/licence-unregistration.helper.js')
-const UserHelper = require('../support/helpers/user.helper.js')
-const UserModel = require('../../app/models/user.model.js')
+import * as LicenceHelper from '../support/helpers/licence.helper.js'
+import LicenceModel from '../../app/models/licence.model.js'
+import * as LicenceUnregistrationHelper from '../support/helpers/licence-unregistration.helper.js'
+import * as UserHelper from '../support/helpers/user.helper.js'
+import UserModel from '../../app/models/user.model.js'
 
 // Thing under test
-const LicenceUnregistrationModel = require('../../app/models/licence-unregistration.model.js')
+import LicenceUnregistrationModel from '../../app/models/licence-unregistration.model.js'
 
 describe('Licence Unregistration model', () => {
   let testLicence

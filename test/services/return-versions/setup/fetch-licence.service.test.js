@@ -1,15 +1,13 @@
-'use strict'
-
 // Test helpers
-const CompanyHelper = require('../../../support/helpers/company.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
-const ModLogHelper = require('../../../support/helpers/mod-log.helper.js')
-const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
-const ReturnVersionHelper = require('../../../support/helpers/return-version.helper.js')
+import * as CompanyHelper from '../../../support/helpers/company.helper.js'
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import * as LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
+import * as ModLogHelper from '../../../support/helpers/mod-log.helper.js'
+import * as ReturnRequirementHelper from '../../../support/helpers/return-requirement.helper.js'
+import * as ReturnVersionHelper from '../../../support/helpers/return-version.helper.js'
 
 // Thing under test
-const FetchLicenceService = require('../../../../app/services/return-versions/setup/fetch-licence.service.js')
+import FetchLicenceService from '../../../../app/services/return-versions/setup/fetch-licence.service.js'
 
 describe('Return Versions - Setup - Fetch Licence service', () => {
   let company

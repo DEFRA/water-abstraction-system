@@ -1,48 +1,44 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillHelper = require('../../../support/helpers/bill.helper.js')
-const BillModel = require('../../../../app/models/bill.model.js')
-const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
-const BillLicenceModel = require('../../../../app/models/bill-licence.model.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
-const TransactionModel = require('../../../../app/models/transaction.model.js')
+import * as BillHelper from '../../../support/helpers/bill.helper.js'
+import BillModel from '../../../../app/models/bill.model.js'
+import * as BillLicenceHelper from '../../../support/helpers/bill-licence.helper.js'
+import BillLicenceModel from '../../../../app/models/bill-licence.model.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
+import * as TransactionHelper from '../../../support/helpers/transaction.helper.js'
+import TransactionModel from '../../../../app/models/transaction.model.js'
 
 // Things we need to stub
-const FetchBillsToBeReissuedService = require('../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
-const ReissueBillService = require('../../../../app/services/bill-runs/reissue/reissue-bill.service.js')
+import FetchBillsToBeReissuedService from '../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import ReissueBillService from '../../../../app/services/bill-runs/reissue/reissue-bill.service.js'
 
 // Thing under test
-const ReissueBillsService = require('../../../../app/services/bill-runs/reissue/reissue-bills.service.js')
+import ReissueBillsService from '../../../../app/services/bill-runs/reissue/reissue-bills.service.js'
 
 describe('Reissue Bills service', () => {
   const reissueBillRun = { regionId: generateUUID() }
 
   let notifierStub
-  let reissueBillServiceStub
-
   beforeEach(async () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
   describe('when the service is called', () => {
     describe('and there are no bills to reissue', () => {
       beforeEach(() => {
-        Sinon.stub(FetchBillsToBeReissuedService, 'go').resolves([])
+        vi.mock('../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js')
+        FetchBillsToBeReissuedService.mockResolvedValue([])
       })
 
       it('returns "false"', async () => {
@@ -59,7 +55,8 @@ describe('Reissue Bills service', () => {
 
       beforeEach(async () => {
         // Three dummy invoices to ensure we iterate 3x
-        Sinon.stub(FetchBillsToBeReissuedService, 'go').resolves([
+        vi.mock('../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js')
+        FetchBillsToBeReissuedService.mockResolvedValue([
           { id: generateUUID() },
           { id: generateUUID() },
           { id: generateUUID() }
@@ -72,10 +69,10 @@ describe('Reissue Bills service', () => {
 
         // This stub will result in one new bill, bill licence and transaction for each dummy invoice returned by
         // FetchBillsToBeReissuedService.
-        reissueBillServiceStub = Sinon.stub(ReissueBillService, 'go')
-        reissueBillServiceStub.onFirstCall().resolves(reissueBillOne)
-        reissueBillServiceStub.onSecondCall().resolves(reissueBillTwo)
-        reissueBillServiceStub.onThirdCall().resolves(reissueBillThree)
+        vi.mock('../../../../app/services/bill-runs/reissue/reissue-bill.service.js')
+        ReissueBillService.onFirstCall().resolves(reissueBillOne)
+        ReissueBillService.onSecondCall().resolves(reissueBillTwo)
+        ReissueBillService.onThirdCall().resolves(reissueBillThree)
       })
 
       it('returns "true"', async () => {

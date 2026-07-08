@@ -1,15 +1,13 @@
-'use strict'
-
 // Test helpers
-const EventHelper = require('../../../../support/helpers/event.helper.js')
-const NoticesFixture = require('../../../../support/fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../../../support/fixtures/notifications.fixture.js')
-const NotificationHelper = require('../../../../support/helpers/notification.helper.js')
-const { compareStrings, generateUUID } = require('../../../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
+import * as EventHelper from '../../../../support/helpers/event.helper.js'
+import * as NoticesFixture from '../../../../support/fixtures/notices.fixture.js'
+import * as NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
+import * as NotificationHelper from '../../../../support/helpers/notification.helper.js'
+import { compareStrings, generateUUID } from '../../../../../app/lib/general.lib.js'
+import { generateLicenceRef } from '../../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const FetchFailedRenewalInvitationsService = require('../../../../../app/services/notices/setup/renewal-notice/fetch-failed-renewal-invitations.service.js')
+import FetchFailedRenewalInvitationsService from '../../../../../app/services/notices/setup/renewal-notice/fetch-failed-renewal-invitations.service.js'
 
 describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations service', () => {
   let licenceRefs

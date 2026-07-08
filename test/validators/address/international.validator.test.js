@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const InternationalValidator = require('../../../app/validators/address/international.validator.js')
+import InternationalValidator from '../../../app/validators/address/international.validator.js'
 
 describe('Address - International Validator', () => {
   let payload

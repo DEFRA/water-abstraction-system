@@ -1,19 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things to stub
-const FetchCompanyAddressesService = require('../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchCompanyAddressesService from '../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js'
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitExistingAddressService = require('../../../../app/services/billing-accounts/setup/submit-existing-address.service.js')
+import SubmitExistingAddressService from '../../../../app/services/billing-accounts/setup/submit-existing-address.service.js'
 
 describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
@@ -21,24 +18,24 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
     company: billingAccount.company,
     addresses: _addresses()
   }
-
-  let fetchSessionStub
   let payload
   let session
   let sessionData
 
   beforeEach(() => {
-    Sinon.stub(FetchCompanyAddressesService, 'go').returns(companyAddresses)
+    vi.mock('../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js')
+    FetchCompanyAddressesService.mockReturnValue(companyAddresses)
 
     sessionData = {}
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the user picks an existing address', () => {
@@ -48,9 +45,9 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
         billingAccount
       }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      fetchSessionStub.resolves(session)
+      FetchSessionDal.mockResolvedValue(session)
 
       payload = {
         addressSelected: companyAddresses.addresses[0].id
@@ -81,9 +78,9 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
           billingAccount
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -111,9 +108,9 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
           checkPageVisited: true
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -138,9 +135,9 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       beforeEach(() => {
         sessionData = _newAddressSessionData(session)
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -170,9 +167,9 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
         billingAccount
       }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      fetchSessionStub.resolves(session)
+      FetchSessionDal.mockResolvedValue(session)
 
       payload = {
         addressSelected: 'new'
@@ -202,9 +199,9 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -232,9 +229,9 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
           checkPageVisited: true
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -259,9 +256,9 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       beforeEach(() => {
         sessionData = _commonSessionData(session.billingAccount)
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -291,9 +288,9 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
         billingAccount
       }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      fetchSessionStub.resolves(session)
+      FetchSessionDal.mockResolvedValue(session)
 
       payload = {}
     })

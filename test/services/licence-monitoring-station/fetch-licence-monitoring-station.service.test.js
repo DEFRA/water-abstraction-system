@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
-const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
-const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
-const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import * as LicenceMonitoringStationHelper from '../../support/helpers/licence-monitoring-station.helper.js'
+import * as LicenceVersionPurposeConditionHelper from '../../support/helpers/licence-version-purpose-condition.helper.js'
+import * as LicenceVersionPurposeConditionTypeHelper from '../../support/helpers/licence-version-purpose-condition-type.helper.js'
+import * as MonitoringStationHelper from '../../support/helpers/monitoring-station.helper.js'
 
 // Thing under test
-const FetchLicenceMonitoringStationService = require('../../../app/services/licence-monitoring-station/fetch-licence-monitoring-station.service.js')
+import FetchLicenceMonitoringStationService from '../../../app/services/licence-monitoring-station/fetch-licence-monitoring-station.service.js'
 
 describe('Licence Monitoring Station - Fetch Licence Monitoring Station service', () => {
   let licence

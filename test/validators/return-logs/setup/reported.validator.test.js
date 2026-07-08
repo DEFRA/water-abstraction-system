@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ReportedValidator = require('../../../../app/validators/return-logs/setup/reported.validator.js')
+import ReportedValidator from '../../../../app/validators/return-logs/setup/reported.validator.js'
 
 describe('Return Logs Setup - Reported validator', () => {
   let payload

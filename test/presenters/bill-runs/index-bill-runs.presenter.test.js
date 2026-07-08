@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const IndexBillRunsPresenter = require('../../../app/presenters/bill-runs/index-bill-runs.presenter.js')
+import IndexBillRunsPresenter from '../../../app/presenters/bill-runs/index-bill-runs.presenter.js'
 
 describe('Index Bill Runs presenter', () => {
   const regions = [

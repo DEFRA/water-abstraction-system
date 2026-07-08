@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
+import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Things we need to stub
-const FetchReviewChargeReferenceService = require('../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js')
+import FetchReviewChargeReferenceService from '../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js'
 
 // Thing under test
-const ViewAuthorisedService = require('../../../../app/services/bill-runs/review/view-authorised.service.js')
+import ViewAuthorisedService from '../../../../app/services/bill-runs/review/view-authorised.service.js'
 
 describe('Bill Runs - Review - View Authorised Service', () => {
   let reviewChargeReference
@@ -18,11 +15,12 @@ describe('Bill Runs - Review - View Authorised Service', () => {
   beforeEach(() => {
     reviewChargeReference = BillRunsReviewFixture.reviewChargeReference()
 
-    Sinon.stub(FetchReviewChargeReferenceService, 'go').resolves(reviewChargeReference)
+    vi.mock('../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js')
+    FetchReviewChargeReferenceService.mockResolvedValue(reviewChargeReference)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

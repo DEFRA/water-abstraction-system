@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
-const { compareStrings, generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+import * as ChargeVersionHelper from '../../support/helpers/charge-version.helper.js'
+import { compareStrings, generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 
 // Thing under test
-const FetchImpactedLicencesDal = require('../../../app/dal/billing-accounts/fetch-impacted-licences.dal.js')
+import FetchImpactedLicencesDal from '../../../app/dal/billing-accounts/fetch-impacted-licences.dal.js'
 
 describe('DAL - Fetch Impacted Licences dal', () => {
   const billingAccountId = generateUUID()

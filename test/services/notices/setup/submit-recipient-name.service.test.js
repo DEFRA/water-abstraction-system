@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const SubmitRecipientNameService = require('../../../../app/services/notices/setup/submit-recipient-name.service.js')
+import SubmitRecipientNameService from '../../../../app/services/notices/setup/submit-recipient-name.service.js'
 
 describe('Notices - Setup - Submit Recipient Name service', () => {
   let payload
@@ -27,13 +24,14 @@ describe('Notices - Setup - Submit Recipient Name service', () => {
       referenceCode
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

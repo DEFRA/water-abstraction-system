@@ -1,27 +1,25 @@
-'use strict'
-
 // Test helpers
-const CompanyHelper = require('../../support/helpers/company.helper.js')
-const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
-const LicenceEntityHelper = require('../../support/helpers/licence-entity.helper.js')
-const LicenceEntityRoleHelper = require('../../support/helpers/licence-entity-role.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
-const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
-const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
-const LicenceVersionPurposePointHelper = require('../../support/helpers/licence-version-purpose-point.helper.js')
-const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
-const PointHelper = require('../../support/helpers/point.helper.js')
-const PurposeHelper = require('../../support/helpers/purpose.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
-const SourceHelper = require('../../support/helpers/source.helper.js')
-const UserHelper = require('../../support/helpers/user.helper.js')
-const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
+import * as CompanyHelper from '../../support/helpers/company.helper.js'
+import * as LicenceDocumentHeaderHelper from '../../support/helpers/licence-document-header.helper.js'
+import * as LicenceEntityHelper from '../../support/helpers/licence-entity.helper.js'
+import * as LicenceEntityRoleHelper from '../../support/helpers/licence-entity-role.helper.js'
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import * as LicenceMonitoringStationHelper from '../../support/helpers/licence-monitoring-station.helper.js'
+import * as LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import * as LicenceVersionPurposeConditionHelper from '../../support/helpers/licence-version-purpose-condition.helper.js'
+import * as LicenceVersionPurposeConditionTypeHelper from '../../support/helpers/licence-version-purpose-condition-type.helper.js'
+import * as LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
+import * as LicenceVersionPurposePointHelper from '../../support/helpers/licence-version-purpose-point.helper.js'
+import * as MonitoringStationHelper from '../../support/helpers/monitoring-station.helper.js'
+import * as PointHelper from '../../support/helpers/point.helper.js'
+import * as PurposeHelper from '../../support/helpers/purpose.helper.js'
+import * as RegionHelper from '../../support/helpers/region.helper.js'
+import * as SourceHelper from '../../support/helpers/source.helper.js'
+import * as UserHelper from '../../support/helpers/user.helper.js'
+import * as WorkflowHelper from '../../support/helpers/workflow.helper.js'
 
 // Thing under test
-const FetchSummaryService = require('../../../app/services/licences/fetch-summary.service.js')
+import FetchSummaryService from '../../../app/services/licences/fetch-summary.service.js'
 
 const REGION_SOUTHERN_INDEX = 5
 

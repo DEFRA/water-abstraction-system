@@ -1,20 +1,17 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const LicenceVersionPurposeConditionHelper = require('../../../support/helpers/licence-version-purpose-condition.helper.js')
-const LicenceVersionPurposeHelper = require('../../../support/helpers/licence-version-purpose.helper.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import * as LicenceVersionPurposeConditionHelper from '../../../support/helpers/licence-version-purpose-condition.helper.js'
+import * as LicenceVersionPurposeHelper from '../../../support/helpers/licence-version-purpose.helper.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things to stub
-const FetchFullConditionService = require('../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
-const FullConditionService = require('../../../../app/services/licence-monitoring-station/setup/full-condition.service.js')
+import FetchFullConditionService from '../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js'
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import FullConditionService from '../../../../app/services/licence-monitoring-station/setup/full-condition.service.js'
 
 // Thing under test
-const SubmitFullConditionService = require('../../../../app/services/licence-monitoring-station/setup/submit-full-condition.service.js')
+import SubmitFullConditionService from '../../../../app/services/licence-monitoring-station/setup/submit-full-condition.service.js'
 
 describe('Licence Monitoring Station Setup - Submit Full Condition Service', () => {
   let payload
@@ -28,9 +25,10 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
   beforeEach(async () => {
     sessionData = {}
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
     const licenceVersionPurpose = await LicenceVersionPurposeHelper.add()
     const licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
@@ -44,7 +42,8 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
       condition: licenceVersionPurposeCondition.id
     }
 
-    Sinon.stub(FetchFullConditionService, 'go').resolves([
+    vi.mock('../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js')
+    FetchFullConditionService.mockResolvedValue([
       {
         ...licenceVersionPurposeCondition,
         abstractionPeriodStartDay: licenceVersionPurpose.abstractionPeriodStartDay,
@@ -54,11 +53,12 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
         displayTitle: 'LICENCE_VERSION_CONDITION_TYPE_DISPLAY_TITLE'
       }
     ])
-    Sinon.stub(FullConditionService, 'go').resolves(pageData)
+    vi.mock('../../../../app/services/licence-monitoring-station/setup/full-condition.service.js')
+    FullConditionService.mockResolvedValue(pageData)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ProfileDetailsPresenter = require('../../../app/presenters/users/profile-details.presenter.js')
+import ProfileDetailsPresenter from '../../../app/presenters/users/profile-details.presenter.js'
 
 describe('Users - Profile Details Presenter', () => {
   let profileDetails

@@ -1,16 +1,12 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const FetchOtherPurposeIdsDal = require('../../../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js')
+import FetchOtherPurposeIdsDal from '../../../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js'
 
 // Thing under test
-const GenerateReturnVersionRequirementsService = require('../../../../../app/services/return-versions/setup/check/generate-return-version-requirements.service.js')
+import GenerateReturnVersionRequirementsService from '../../../../../app/services/return-versions/setup/check/generate-return-version-requirements.service.js'
 
 describe('Return Versions - Setup - Generate Return Version Requirements service', () => {
-  let fetchOtherPurposeIdsStub
   let licenceId
   let sessionRequirements
 
@@ -84,7 +80,7 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
       }
     ]
 
-    fetchOtherPurposeIdsStub = Sinon.stub(FetchOtherPurposeIdsDal, 'go')
+    vi.mock('../../../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js')
       .onFirstCall()
       .resolves({
         primaryPurposeId: 'c6fd4b2a-82b5-42b0-a98a-087ba52f9a4f',
@@ -103,7 +99,7 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -171,10 +167,10 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
 
       // Because the two session data requirements share the same purpose, but the second has an additional one, we
       // expect the FetchOtherPurposeIdsService to be called three times - once for each 'valid' purpose
-      expect(fetchOtherPurposeIdsStub.callCount).toEqual(3)
-      expect(fetchOtherPurposeIdsStub.getCall(0).args).toEqual([licenceId, 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'])
-      expect(fetchOtherPurposeIdsStub.getCall(1).args).toEqual([licenceId, 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'])
-      expect(fetchOtherPurposeIdsStub.getCall(2).args).toEqual([licenceId, '58855070-25d1-4f17-92e5-2a67721a4434'])
+      expect(FetchOtherPurposeIdsDal.callCount).toEqual(3)
+      expect(FetchOtherPurposeIdsDal.getCall(0).args).toEqual([licenceId, 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'])
+      expect(FetchOtherPurposeIdsDal.getCall(1).args).toEqual([licenceId, 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'])
+      expect(FetchOtherPurposeIdsDal.getCall(2).args).toEqual([licenceId, '58855070-25d1-4f17-92e5-2a67721a4434'])
     })
   })
 })

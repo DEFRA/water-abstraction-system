@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const LicencePresenter = require('../../../../app/presenters/notices/setup/licence.presenter.js')
+import LicencePresenter from '../../../../app/presenters/notices/setup/licence.presenter.js'
 
 describe('Notices - Setup - Licence presenter', () => {
   let session

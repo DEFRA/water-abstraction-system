@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const UsersFixture = require('../../support/fixtures/users.fixture.js')
-const YarStub = require('../../support/stubs/yar.stub.js')
+import * as UsersFixture from '../../support/fixtures/users.fixture.js'
+import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
-const FetchUsersDal = require('../../../app/dal/users/fetch-users.dal.js')
+import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
+import FetchUsersDal from '../../../app/dal/users/fetch-users.dal.js'
 
 // Thing under test
-const IndexUsersService = require('../../../app/services/users/index-users.service.js')
+import IndexUsersService from '../../../app/services/users/index-users.service.js'
 
 describe('Users - Index Users service', () => {
   let auth
@@ -21,29 +18,30 @@ describe('Users - Index Users service', () => {
   let yarStub
 
   beforeEach(() => {
-    Sinon.stub(FeatureFlagsConfig, 'enableUsersManagement').value(true)
-    Sinon.stub(FeatureFlagsConfig, 'enableUsersView').value(true)
+    vi.replaceProperty(FeatureFlagsConfig, 'enableUsersManagement', true)
+    vi.replaceProperty(FeatureFlagsConfig, 'enableUsersView', true)
 
     auth = {
       credentials: { scope: ['manage_accounts'] }
     }
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     beforeEach(() => {
-      yarStub.get.returns(null)
+      yarStub.get.mockReturnValue(null)
 
       const results = [UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess())]
 
       fetchResults = { results, total: 1 }
-      Sinon.stub(FetchUsersDal, 'go').resolves(fetchResults)
+      vi.mock('../../../app/dal/users/fetch-users.dal.js')
+      FetchUsersDal.mockResolvedValue(fetchResults)
     })
 
     it('returns page data for the view', async () => {
@@ -83,12 +81,13 @@ describe('Users - Index Users service', () => {
     beforeEach(() => {
       // For the purposes of these tests the results don't matter
       fetchResults = { results: [], total: 0 }
-      Sinon.stub(FetchUsersDal, 'go').resolves(fetchResults)
+      vi.mock('../../../app/dal/users/fetch-users.dal.js')
+      FetchUsersDal.mockResolvedValue(fetchResults)
     })
 
     describe('and none were ever set or they were cleared', () => {
       beforeEach(() => {
-        yarStub.get.returns(null)
+        yarStub.get.mockReturnValue(null)
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -100,8 +99,8 @@ describe('Users - Index Users service', () => {
 
     describe('and the filters were submitted empty', () => {
       beforeEach(() => {
-        yarStub.flash.returns([])
-        yarStub.get.returns(_filters())
+        yarStub.flash.mockReturnValue([])
+        yarStub.get.mockReturnValue(_filters())
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -117,7 +116,7 @@ describe('Users - Index Users service', () => {
 
         filters.email = 'carol.shaw@wrls.gov.uk'
 
-        yarStub.get.returns(filters)
+        yarStub.get.mockReturnValue(filters)
       })
 
       it('returns the saved filters and that the controls should be open', async () => {
@@ -130,8 +129,8 @@ describe('Users - Index Users service', () => {
 
   describe('when there is a notification', () => {
     beforeEach(() => {
-      yarStub.flash.returns(['Test notification'])
-      yarStub.get.returns(null)
+      yarStub.flash.mockReturnValue(['Test notification'])
+      yarStub.get.mockReturnValue(null)
     })
 
     it('sets the notification', async () => {

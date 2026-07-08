@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const EventHelper = require('../../support/helpers/event.helper.js')
-const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
-const NotificationHelper = require('../../support/helpers/notification.helper.js')
-const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as EventHelper from '../../support/helpers/event.helper.js'
+import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
+import * as NotificationHelper from '../../support/helpers/notification.helper.js'
+import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const FetchNotificationService = require('../../../app/services/company-contacts/fetch-notification.service.js')
+import FetchNotificationService from '../../../app/services/company-contacts/fetch-notification.service.js'
 
 describe('Company Contacts - Fetch Notification service', () => {
   let email

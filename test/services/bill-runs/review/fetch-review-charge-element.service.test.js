@@ -1,19 +1,17 @@
-'use strict'
-
 // Test helpers
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
-const ReviewChargeElementReturnHelper = require('../../../support/helpers/review-charge-element-return.helper.js')
-const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
-const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
-const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
-const ReviewReturnHelper = require('../../../support/helpers/review-return.helper.js')
+import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import * as ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
+import * as RegionHelper from '../../../support/helpers/region.helper.js'
+import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import * as ReviewChargeElementHelper from '../../../support/helpers/review-charge-element.helper.js'
+import * as ReviewChargeElementReturnHelper from '../../../support/helpers/review-charge-element-return.helper.js'
+import * as ReviewChargeReferenceHelper from '../../../support/helpers/review-charge-reference.helper.js'
+import * as ReviewChargeVersionHelper from '../../../support/helpers/review-charge-version.helper.js'
+import * as ReviewLicenceHelper from '../../../support/helpers/review-licence.helper.js'
+import * as ReviewReturnHelper from '../../../support/helpers/review-return.helper.js'
 
 // Thing under test
-const FetchReviewChargeElementService = require('../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js')
+import FetchReviewChargeElementService from '../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js'
 
 describe('Bill Runs Review - Fetch Review Charge Element service', () => {
   let billRun

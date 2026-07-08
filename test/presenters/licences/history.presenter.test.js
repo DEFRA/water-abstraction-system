@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import LicenceVersionModel from '../../../app/models/licence-version.model.js'
+import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const HistoryPresenter = require('../../../app/presenters/licences/history.presenter.js')
+import HistoryPresenter from '../../../app/presenters/licences/history.presenter.js'
 
 describe('Licences - History presenter', () => {
   let licence

@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const TwoPartTariffSupplementarySeeder = require('../../../support/seeders/two-part-tariff-supplementary.seeder.js')
+import TwoPartTariffSupplementarySeeder from '../../../support/seeders/two-part-tariff-supplementary.seeder.js'
 
 // Thing under test
-const FetchBillingAccountsService = require('../../../../app/services/bill-runs/tpt-supplementary/fetch-billing-accounts.service.js')
+import FetchBillingAccountsService from '../../../../app/services/bill-runs/tpt-supplementary/fetch-billing-accounts.service.js'
 
 describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () => {
   let seedData
@@ -629,10 +627,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
   describe('when there are no billing accounts at all (no results)', () => {
     it('returns no results', async () => {
-      const results = await FetchBillingAccountsService(
-        '1c1f7af5-9cba-47a7-8fc4-2c03b0d1124d',
-        seedData.billingPeriod
-      )
+      const results = await FetchBillingAccountsService('1c1f7af5-9cba-47a7-8fc4-2c03b0d1124d', seedData.billingPeriod)
 
       expect(results).toHaveLength(0)
     })

@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const SplitMultipleEntriesService = require('../../../../app/services/return-logs/setup/split-multiple-entries.service.js')
+import SplitMultipleEntriesService from '../../../../app/services/return-logs/setup/split-multiple-entries.service.js'
 
 describe('Return Logs - Split Multiple Entries Service', () => {
   let multipleEntries

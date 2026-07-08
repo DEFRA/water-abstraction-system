@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const AdditionalSubmissionOptionsValidator = require('../../../../app/validators/return-versions/setup/additional-submission-options.validator.js')
+import AdditionalSubmissionOptionsValidator from '../../../../app/validators/return-versions/setup/additional-submission-options.validator.js'
 
 describe('Return Versions Setup - Additional Submission Options validator', () => {
   let payload

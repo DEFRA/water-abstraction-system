@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const DetermineChargePeriodService = require('../../../app/services/bill-runs/determine-charge-period.service.js')
+import DetermineChargePeriodService from '../../../app/services/bill-runs/determine-charge-period.service.js'
 
 describe('Determine charge period service', () => {
   const billingPeriod = {

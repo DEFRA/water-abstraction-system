@@ -1,9 +1,7 @@
-'use strict'
-
-const Joi = require('joi')
+import Joi from 'joi'
 
 // Thing under test
-const { licenceRefSchema } = require('../../../app/validators/schemas/licence-ref.schema.js')
+import { licenceRefSchema } from '../../../app/validators/schemas/licence-ref.schema.js'
 
 describe('Validators - Schema - licence ref schema', () => {
   let licenceExists

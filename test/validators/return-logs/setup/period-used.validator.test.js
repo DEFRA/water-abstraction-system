@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const PeriodUsedValidator = require('../../../../app/validators/return-logs/setup/period-used.validator.js')
+import PeriodUsedValidator from '../../../../app/validators/return-logs/setup/period-used.validator.js'
 
 describe('Return Logs Setup - Period Used validator', () => {
   const startDate = '2023-04-01'

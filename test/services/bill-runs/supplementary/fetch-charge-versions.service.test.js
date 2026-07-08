@@ -1,17 +1,15 @@
-'use strict'
-
 // Test helpers
-const ChangeReasonHelper = require('../../../support/helpers/change-reason.helper.js')
-const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
-const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
+import * as ChangeReasonHelper from '../../../support/helpers/change-reason.helper.js'
+import * as ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
+import * as ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
+import * as ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
+import * as ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
+import * as WorkflowHelper from '../../../support/helpers/workflow.helper.js'
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import * as RegionHelper from '../../../support/helpers/region.helper.js'
 
 // Thing under test
-const FetchChargeVersionsService = require('../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js')
+import FetchChargeVersionsService from '../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js'
 
 const CHANGE_REASON_NEW_LICENCE_PART_INDEX = 10
 const REGION_THAMES_INDEX = 6

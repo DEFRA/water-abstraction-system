@@ -1,15 +1,13 @@
-'use strict'
-
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const AddressFacadeRequest = require('../../../app/requests/address-facade.request.js')
+import * as AddressFacadeRequest from '../../../app/requests/address-facade.request.js'
 
 // Thing under test
-const LookupUPRNRequest = require('../../../app/requests/address-facade/lookup-uprn.request.js')
+import * as LookupUPRNRequest from '../../../app/requests/address-facade/lookup-uprn.request.js'
 
 describe('Address Facade - Lookup UPRN request', () => {
   const match = {
@@ -26,12 +24,12 @@ describe('Address Facade - Lookup UPRN request', () => {
   const uprn = '123456789'
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request succeeds', () => {
     beforeEach(async () => {
-      Sinon.stub(AddressFacadeRequest, 'get').resolves({
+      vi.spyOn(AddressFacadeRequest, 'getRequest').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -46,7 +44,7 @@ describe('Address Facade - Lookup UPRN request', () => {
     it('hits the correct endpoint', async () => {
       await LookupUPRNRequest.send(uprn)
 
-      const requestArgs = AddressFacadeRequest.get.firstCall.args
+      const requestArgs = AddressFacadeRequest.getRequest.firstCall.args
 
       expect(requestArgs[0]).toEqual(`address-service/v1/addresses/${uprn}?key=client1`)
     })
@@ -67,7 +65,7 @@ describe('Address Facade - Lookup UPRN request', () => {
   describe('when the request cannot lookup a postcode', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
-        Sinon.stub(AddressFacadeRequest, 'get').resolves({
+        vi.spyOn(AddressFacadeRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response: {
             statusCode: HTTP_STATUS_NOT_FOUND,
@@ -104,7 +102,7 @@ describe('Address Facade - Lookup UPRN request', () => {
 
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
-        Sinon.stub(AddressFacadeRequest, 'get').resolves({
+        vi.spyOn(AddressFacadeRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response: new Error("Timeout awaiting 'request' for 5000ms"),
           matches: []

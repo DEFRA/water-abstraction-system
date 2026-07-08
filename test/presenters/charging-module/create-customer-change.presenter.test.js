@@ -1,13 +1,11 @@
-'use strict'
-
 // Test helpers
-const AddressModel = require('../../../app/models/address.model.js')
-const BillingAccountModel = require('../../../app/models/billing-account.model.js')
-const CompanyModel = require('../../../app/models/company.model.js')
-const ContactModel = require('../../../app/models/contact.model.js')
+import AddressModel from '../../../app/models/address.model.js'
+import BillingAccountModel from '../../../app/models/billing-account.model.js'
+import CompanyModel from '../../../app/models/company.model.js'
+import ContactModel from '../../../app/models/contact.model.js'
 
 // Thing under test
-const CreateCustomerChangePresenter = require('../../../app/presenters/charging-module/create-customer-change.presenter.js')
+import CreateCustomerChangePresenter from '../../../app/presenters/charging-module/create-customer-change.presenter.js'
 
 // NOTE: We are currently required to replicate what the legacy code is doing and unfortunately the conversion of a
 // WRLS billing billing account's address to the format required by the Charging Module is convoluted to say the least!

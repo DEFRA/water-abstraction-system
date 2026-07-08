@@ -1,24 +1,21 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillRunError = require('../../../../app/errors/bill-run.error.js')
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
+import BillRunError from '../../../../app/errors/bill-run.error.js'
+import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import BillRunModel from '../../../../app/models/bill-run.model.js'
+import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const ChargingModuleGenerateRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
-const FetchBillingAccountsService = require('../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
-const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
-const LegacyRefreshBillRunRequest = require('../../../../app/requests/legacy/refresh-bill-run.request.js')
-const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/annual/process-billing-period.service.js')
+import * as ChargingModuleGenerateRequest from '../../../../app/requests/charging-module/generate-bill-run.request.js'
+import FetchBillingAccountsService from '../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
+import * as LegacyRefreshBillRunRequest from '../../../../app/requests/legacy/refresh-bill-run.request.js'
+import ProcessBillingPeriodService from '../../../../app/services/bill-runs/annual/process-billing-period.service.js'
 
 // Thing under test
-const ProcessBillRunService = require('../../../../app/services/bill-runs/annual/process-bill-run.service.js')
+import ProcessBillRunService from '../../../../app/services/bill-runs/annual/process-bill-run.service.js'
 
 describe('Annual Process Bill Run service', () => {
   const billingPeriod = determineCurrentFinancialYear()
@@ -38,18 +35,19 @@ describe('Annual Process Bill Run service', () => {
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
   describe('when the service is called', () => {
     beforeEach(() => {
-      Sinon.stub(FetchBillingAccountsService, 'go').resolves([])
+      vi.mock('../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js')
+      FetchBillingAccountsService.mockResolvedValue([])
     })
 
     describe('and nothing is billed', () => {
@@ -67,10 +65,11 @@ describe('Annual Process Bill Run service', () => {
       let legacyRefreshBillRunRequestStub
 
       beforeEach(() => {
-        chargingModuleGenerateRequestStub = Sinon.stub(ChargingModuleGenerateRequest, 'send')
-        legacyRefreshBillRunRequestStub = Sinon.stub(LegacyRefreshBillRunRequest, 'send')
+        chargingModuleGenerateRequestStub = vi.spyOn(ChargingModuleGenerateRequest, 'send').mockImplementation(() => {})
+        legacyRefreshBillRunRequestStub = vi.spyOn(LegacyRefreshBillRunRequest, 'send').mockImplementation(() => {})
 
-        Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
+        vi.mock('../../../../app/services/bill-runs/annual/process-billing-period.service.js')
+        ProcessBillingPeriodService.mockResolvedValue(true)
       })
 
       it('sets the bill run status to "processing"', async () => {
@@ -84,36 +83,36 @@ describe('Annual Process Bill Run service', () => {
       it('tells the charging module API to "generate" the bill run', async () => {
         await ProcessBillRunService(billRun, [billingPeriod])
 
-        expect(chargingModuleGenerateRequestStub.called).toBe(true)
+        expect(chargingModuleGenerateRequestStub).toHaveBeenCalled()
       })
 
       it('tells the legacy service to start its refresh job', async () => {
         await ProcessBillRunService(billRun, [billingPeriod])
 
-        expect(legacyRefreshBillRunRequestStub.called).toBe(true)
+        expect(legacyRefreshBillRunRequestStub).toHaveBeenCalled()
       })
     })
   })
 
   describe('when the service errors', () => {
-    let handleErroredBillRunStub
     let thrownError
 
     beforeEach(() => {
-      handleErroredBillRunStub = Sinon.stub(HandleErroredBillRunService, 'go')
+      vi.mock('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
     })
 
     describe('because fetching the billing accounts fails', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        Sinon.stub(FetchBillingAccountsService, 'go').rejects(thrownError)
+        vi.mock('../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js')
+        FetchBillingAccountsService.mockRejectedValue(thrownError)
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
         await ProcessBillRunService(billRun, [billingPeriod])
 
-        const handlerArgs = handleErroredBillRunStub.firstCall.args
+        const handlerArgs = HandleErroredBillRunService.firstCall.args
 
         expect(handlerArgs[1]).toEqual(BillRunModel.errorCodes.failedToProcessChargeVersions)
       })
@@ -137,14 +136,16 @@ describe('Annual Process Bill Run service', () => {
         beforeEach(() => {
           thrownError = new BillRunError(new Error(), BillRunModel.errorCodes.failedToPrepareTransactions)
 
-          Sinon.stub(FetchBillingAccountsService, 'go').resolves([])
-          Sinon.stub(ProcessBillingPeriodService, 'go').rejects(thrownError)
+          vi.mock('../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js')
+          FetchBillingAccountsService.mockResolvedValue([])
+          vi.mock('../../../../app/services/bill-runs/annual/process-billing-period.service.js')
+          ProcessBillingPeriodService.mockRejectedValue(thrownError)
         })
 
         it('calls HandleErroredBillRunService with appropriate error code', async () => {
           await ProcessBillRunService(billRun, [billingPeriod])
 
-          const handlerArgs = handleErroredBillRunStub.firstCall.args
+          const handlerArgs = HandleErroredBillRunService.firstCall.args
 
           expect(handlerArgs[1]).toEqual(BillRunModel.errorCodes.failedToPrepareTransactions)
         })
@@ -168,15 +169,17 @@ describe('Annual Process Bill Run service', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        Sinon.stub(FetchBillingAccountsService, 'go').resolves([])
-        Sinon.stub(ProcessBillingPeriodService, 'go').resolves(true)
-        Sinon.stub(ChargingModuleGenerateRequest, 'send').rejects(thrownError)
+        vi.mock('../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js')
+        FetchBillingAccountsService.mockResolvedValue([])
+        vi.mock('../../../../app/services/bill-runs/annual/process-billing-period.service.js')
+        ProcessBillingPeriodService.mockResolvedValue(true)
+        vi.spyOn(ChargingModuleGenerateRequest, 'send').mockRejectedValue(thrownError)
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
         await ProcessBillRunService(billRun, [billingPeriod])
 
-        const handlerArgs = handleErroredBillRunStub.firstCall.args
+        const handlerArgs = HandleErroredBillRunService.firstCall.args
 
         expect(handlerArgs[1]).toBeUndefined()
       })

@@ -1,23 +1,21 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const ExpandedError = require('../../../app/errors/expanded.error.js')
+import ExpandedError from '../../../app/errors/expanded.error.js'
 
 // Things we need to stub
-const ChargingModuleCreateCustomerChangePresenter = require('../../../app/presenters/charging-module/create-customer-change.presenter.js')
-const ChargingModuleCreateCustomerChangeRequest = require('../../../app/requests/charging-module/create-customer-change.request.js')
+import ChargingModuleCreateCustomerChangePresenter from '../../../app/presenters/charging-module/create-customer-change.presenter.js'
+import * as ChargingModuleCreateCustomerChangeRequest from '../../../app/requests/charging-module/create-customer-change.request.js'
 
 // Thing under test
-const SendCustomerChangeService = require('../../../app/services/billing-accounts/send-customer-change.service.js')
+import SendCustomerChangeService from '../../../app/services/billing-accounts/send-customer-change.service.js'
 
 describe('Send Transactions service', () => {
   const billingAccount = { id: '3b53f101-d256-40f8-a6be-ddefb5f9647c' }
 
   beforeEach(() => {
-    Sinon.stub(ChargingModuleCreateCustomerChangePresenter, 'go').returns({
+    vi.mock('../../../app/presenters/charging-module/create-customer-change.presenter.js')
+    ChargingModuleCreateCustomerChangePresenter.mockReturnValue({
       region: 'B',
       customerReference: 'B19120000A',
       customerName: 'Mr W Aston',
@@ -32,12 +30,12 @@ describe('Send Transactions service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when calling the Charging Module API is successful', () => {
     beforeEach(() => {
-      Sinon.stub(ChargingModuleCreateCustomerChangeRequest, 'send').resolves({
+      vi.spyOn(ChargingModuleCreateCustomerChangeRequest, 'send').mockResolvedValue({
         succeeded: true
       })
     })
@@ -49,7 +47,7 @@ describe('Send Transactions service', () => {
 
   describe('when calling the Charging Module API is unsuccessful', () => {
     beforeEach(() => {
-      Sinon.stub(ChargingModuleCreateCustomerChangeRequest, 'send').resolves({
+      vi.spyOn(ChargingModuleCreateCustomerChangeRequest, 'send').mockResolvedValue({
         succeeded: false
       })
     })

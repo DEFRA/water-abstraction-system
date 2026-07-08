@@ -1,22 +1,20 @@
-'use strict'
-
 // Test helpers
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
-const BillingAccountModel = require('../../../../app/models/billing-account.model.js')
-const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
-const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
-const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
-const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
-const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
+import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import * as BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
+import BillingAccountModel from '../../../../app/models/billing-account.model.js'
+import * as ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
+import * as ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
+import * as ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
+import * as ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import * as RegionHelper from '../../../support/helpers/region.helper.js'
+import * as ReviewChargeElementHelper from '../../../support/helpers/review-charge-element.helper.js'
+import * as ReviewChargeReferenceHelper from '../../../support/helpers/review-charge-reference.helper.js'
+import * as ReviewChargeVersionHelper from '../../../support/helpers/review-charge-version.helper.js'
+import * as ReviewLicenceHelper from '../../../support/helpers/review-licence.helper.js'
 
 // Thing under test
-const FetchBillingAccountsService = require('../../../../app/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js')
+import FetchBillingAccountsService from '../../../../app/services/bill-runs/two-part-tariff/fetch-billing-accounts.service.js'
 
 // NOTE: These are declared outside the describe to make them accessible to our `_cleanUp()` function
 let billRun

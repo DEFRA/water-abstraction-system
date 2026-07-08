@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import * as RegionHelper from '../../../support/helpers/region.helper.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchRegionsService = require('../../../../app/services/bill-runs/setup/fetch-regions.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchRegionsService from '../../../../app/services/bill-runs/setup/fetch-regions.service.js'
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const RegionService = require('../../../../app/services/bill-runs/setup/region.service.js')
+import RegionService from '../../../../app/services/bill-runs/setup/region.service.js'
 
 describe('Bill Runs - Setup - Region service', () => {
   let session
@@ -26,15 +23,17 @@ describe('Bill Runs - Setup - Region service', () => {
 
     sessionData = { region: region.id }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
-    Sinon.stub(FetchRegionsService, 'go').resolves(regions)
+    vi.mock('../../../../app/services/bill-runs/setup/fetch-regions.service.js')
+    FetchRegionsService.mockResolvedValue(regions)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
-const YarStub = require('../../support/stubs/yar.stub.js')
+import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
+import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things to stub
-const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')
+import FetchNoticesService from '../../../app/services/notices/fetch-notices.service.js'
 
 // Thing under test
-const IndexNoticesService = require('../../../app/services/notices/index-notices.service.js')
+import IndexNoticesService from '../../../app/services/notices/index-notices.service.js'
 
 describe('Notices - Index Notices service', () => {
   let auth
@@ -26,19 +23,20 @@ describe('Notices - Index Notices service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     beforeEach(() => {
       // For the purposes of this tests the filter doesn't matter
-      yarStub = YarStub.build(Sinon)
-      yarStub.get.returns(null)
+      yarStub = YarStub()
+      yarStub.get.mockReturnValue(null)
 
       const results = NoticesFixture.mapToFetchNoticesResult([NoticesFixture.alertReduce()])
 
       fetchResults = { results, total: 1 }
-      Sinon.stub(FetchNoticesService, 'go').resolves(fetchResults)
+      vi.mock('../../../app/services/notices/fetch-notices.service.js')
+      FetchNoticesService.mockResolvedValue(fetchResults)
     })
 
     it('returns page data for the view', async () => {
@@ -88,13 +86,14 @@ describe('Notices - Index Notices service', () => {
     beforeEach(() => {
       // For the purposes of these tests the results don't matter
       fetchResults = { results: [], total: 0 }
-      Sinon.stub(FetchNoticesService, 'go').resolves(fetchResults)
+      vi.mock('../../../app/services/notices/fetch-notices.service.js')
+      FetchNoticesService.mockResolvedValue(fetchResults)
     })
 
     describe('and none were ever set or they were cleared', () => {
       beforeEach(() => {
-        yarStub = YarStub.build(Sinon)
-        yarStub.get.returns(null)
+        yarStub = YarStub()
+        yarStub.get.mockReturnValue(null)
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -106,8 +105,8 @@ describe('Notices - Index Notices service', () => {
 
     describe('and the filters were submitted empty', () => {
       beforeEach(() => {
-        yarStub = YarStub.build(Sinon)
-        yarStub.get.returns(_noticeFilters())
+        yarStub = YarStub()
+        yarStub.get.mockReturnValue(_noticeFilters())
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -122,8 +121,8 @@ describe('Notices - Index Notices service', () => {
         const filters = _noticeFilters()
 
         filters.sentBy = 'carol.shaw@wrls.gov.uk'
-        yarStub = YarStub.build(Sinon)
-        yarStub.get.returns(filters)
+        yarStub = YarStub()
+        yarStub.get.mockReturnValue(filters)
       })
 
       it('returns the saved filters and that the controls should be open', async () => {

@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const UsersFixture = require('../../../support/fixtures/users.fixture.js')
+import * as UsersFixture from '../../../support/fixtures/users.fixture.js'
 
 // Things we want to stub
-const FetchUserDetailsDal = require('../../../../app/dal/users/external/fetch-user-details.dal.js')
+import FetchUserDetailsDal from '../../../../app/dal/users/external/fetch-user-details.dal.js'
 
 // Thing under test
-const ViewDetailsService = require('../../../../app/services/users/external/view-details.service.js')
+import ViewDetailsService from '../../../../app/services/users/external/view-details.service.js'
 
 describe('Users - External - View Details service', () => {
   const auth = {
@@ -21,11 +18,12 @@ describe('Users - External - View Details service', () => {
   let back
 
   beforeEach(() => {
-    Sinon.stub(FetchUserDetailsDal, 'go').resolves(user)
+    vi.mock('../../../../app/dal/users/external/fetch-user-details.dal.js')
+    FetchUserDetailsDal.mockResolvedValue(user)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

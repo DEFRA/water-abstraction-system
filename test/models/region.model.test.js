@@ -1,16 +1,14 @@
-'use strict'
-
 // Test helpers
-const BillRunHelper = require('../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../app/models/bill-run.model.js')
-const CompanyHelper = require('../support/helpers/company.helper.js')
-const CompanyModel = require('../../app/models/company.model.js')
-const LicenceHelper = require('../support/helpers/licence.helper.js')
-const LicenceModel = require('../../app/models/licence.model.js')
-const RegionHelper = require('../support/helpers/region.helper.js')
+import * as BillRunHelper from '../support/helpers/bill-run.helper.js'
+import BillRunModel from '../../app/models/bill-run.model.js'
+import * as CompanyHelper from '../support/helpers/company.helper.js'
+import CompanyModel from '../../app/models/company.model.js'
+import * as LicenceHelper from '../support/helpers/licence.helper.js'
+import LicenceModel from '../../app/models/licence.model.js'
+import * as RegionHelper from '../support/helpers/region.helper.js'
 
 // Thing under test
-const RegionModel = require('../../app/models/region.model.js')
+import RegionModel from '../../app/models/region.model.js'
 
 describe('Region model', () => {
   let testBillRuns

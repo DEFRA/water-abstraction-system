@@ -1,20 +1,17 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test Helpers
-const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
+import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
+import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
-const FetchNotificationsDal = require('../../../app/dal/licences/fetch-notifications.dal.js')
+import FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import FetchNotificationsDal from '../../../app/dal/licences/fetch-notifications.dal.js'
 
 // Thing under test
-const ViewCommunicationsService = require('../../../app/services/licences/view-communications.service.js')
+import ViewCommunicationsService from '../../../app/services/licences/view-communications.service.js'
 
 describe('Licences - View Communications service', () => {
   const page = '1'
@@ -54,19 +51,21 @@ describe('Licences - View Communications service', () => {
       }
     }
 
-    Sinon.stub(FetchLicenceService, 'go').resolves({
+    vi.mock('../../../app/services/licences/fetch-licence.service.js')
+    FetchLicenceService.mockResolvedValue({
       id: licenceId,
       licenceRef
     })
 
-    Sinon.stub(FetchNotificationsDal, 'go').resolves({
+    vi.mock('../../../app/dal/licences/fetch-notifications.dal.js')
+    FetchNotificationsDal.mockResolvedValue({
       notifications: [notification],
       totalNumber: 1
     })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

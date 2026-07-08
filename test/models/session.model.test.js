@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const SessionHelper = require('../support/helpers/session.helper.js')
+import * as SessionHelper from '../support/helpers/session.helper.js'
 
 // Thing under test
-const SessionModel = require('../../app/models/session.model.js')
+import SessionModel from '../../app/models/session.model.js'
 
 describe('Session model', () => {
   let testRecord

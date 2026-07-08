@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const FetchSystemInfoService = require('../../../app/services/health/fetch-system-info.service.js')
+import FetchSystemInfoService from '../../../app/services/health/fetch-system-info.service.js'
 
 describe('Fetch System Info service', () => {
   it('returns the systems version and commit hash', async () => {

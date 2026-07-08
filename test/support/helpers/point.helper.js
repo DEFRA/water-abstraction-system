@@ -4,7 +4,7 @@
 
 import { generateRandomInteger } from '../../../app/lib/general.lib.js'
 import PointModel from '../../../app/models/point.model.js'
-import SourceHelper from './source.helper.js'
+import * as SourceHelper from './source.helper.js'
 
 /**
  * Add a new licence version purpose point

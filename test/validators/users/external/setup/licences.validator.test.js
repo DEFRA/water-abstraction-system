@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const LicencesValidator = require('../../../../../app/validators/users/external/setup/licences.validator.js')
+import LicencesValidator from '../../../../../app/validators/users/external/setup/licences.validator.js'
 
 describe('Users - External - Setup - Licences Validator', () => {
   let payload

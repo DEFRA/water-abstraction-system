@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const AddressHelper = require('../../support/helpers/address.helper.js')
-const CompanyAddressHelper = require('../../support/helpers/company-address.helper.js')
-const CompanyHelper = require('../../support/helpers/company.helper.js')
-const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
-const { tomorrow, yesterday } = require('../../support/general.js')
+import * as AddressHelper from '../../support/helpers/address.helper.js'
+import * as CompanyAddressHelper from '../../support/helpers/company-address.helper.js'
+import * as CompanyHelper from '../../support/helpers/company.helper.js'
+import * as LicenceRoleHelper from '../../support/helpers/licence-role.helper.js'
+import { tomorrow, yesterday } from '../../support/general.js'
 
 // Thing under test
-const FetchCompanyDetailsDal = require('../../../app/dal/companies/fetch-company-details.dal.js')
+import FetchCompanyDetailsDal from '../../../app/dal/companies/fetch-company-details.dal.js'
 
 describe('Companies - Fetch Company details dal', () => {
   let addressDifferentRole

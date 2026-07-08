@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const FetchTableService = require('../../../../app/services/jobs/export/fetch-table.service.js')
+import FetchTableService from '../../../../app/services/jobs/export/fetch-table.service.js'
 
 const regionsColumnInfo = [
   'regionId',

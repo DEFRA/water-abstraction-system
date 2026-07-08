@@ -1,23 +1,21 @@
-'use strict'
-
 // Test helpers
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const CRMContactsSeeder = require('../../../support/seeders/crm-contacts.seeder.js')
-const ChangeReasonHelper = require('../../../support/helpers/change-reason.helper.js')
-const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
-const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
-const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const EmptyLicenceSeeder = require('../../../support/seeders/empty-licence.seeder.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceSupplementaryYearHelper = require('../../../support/helpers/licence-supplementary-year.helper.js')
-const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import CRMContactsSeeder from '../../../support/seeders/crm-contacts.seeder.js'
+import * as ChangeReasonHelper from '../../../support/helpers/change-reason.helper.js'
+import * as ChargeCategoryHelper from '../../../support/helpers/charge-category.helper.js'
+import * as ChargeElementHelper from '../../../support/helpers/charge-element.helper.js'
+import * as ChargeReferenceHelper from '../../../support/helpers/charge-reference.helper.js'
+import * as ChargeVersionHelper from '../../../support/helpers/charge-version.helper.js'
+import EmptyLicenceSeeder from '../../../support/seeders/empty-licence.seeder.js'
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import * as LicenceSupplementaryYearHelper from '../../../support/helpers/licence-supplementary-year.helper.js'
+import * as PurposeHelper from '../../../support/helpers/purpose.helper.js'
+import * as RegionHelper from '../../../support/helpers/region.helper.js'
+import * as WorkflowHelper from '../../../support/helpers/workflow.helper.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const FetchChargeVersionsService = require('../../../../app/services/bill-runs/match/fetch-charge-versions.service.js')
+import FetchChargeVersionsService from '../../../../app/services/bill-runs/match/fetch-charge-versions.service.js'
 
 const CHANGE_NEW_AGREEMENT_INDEX = 2
 const PURPOSE_SPRAY_IRRIGATION_INDEX = 41

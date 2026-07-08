@@ -1,18 +1,16 @@
-'use strict'
-
 // Test helpers
-const AddressHelper = require('../support/helpers/address.helper.js')
-const AddressModel = require('../../app/models/address.model.js')
-const BillingAccountAddressHelper = require('../support/helpers/billing-account-address.helper.js')
-const BillingAccountHelper = require('../support/helpers/billing-account.helper.js')
-const BillingAccountModel = require('../../app/models/billing-account.model.js')
-const CompanyHelper = require('../support/helpers/company.helper.js')
-const CompanyModel = require('../../app/models/company.model.js')
-const ContactHelper = require('../support/helpers/contact.helper.js')
-const ContactModel = require('../../app/models/contact.model.js')
+import * as AddressHelper from '../support/helpers/address.helper.js'
+import AddressModel from '../../app/models/address.model.js'
+import * as BillingAccountAddressHelper from '../support/helpers/billing-account-address.helper.js'
+import * as BillingAccountHelper from '../support/helpers/billing-account.helper.js'
+import BillingAccountModel from '../../app/models/billing-account.model.js'
+import * as CompanyHelper from '../support/helpers/company.helper.js'
+import CompanyModel from '../../app/models/company.model.js'
+import * as ContactHelper from '../support/helpers/contact.helper.js'
+import ContactModel from '../../app/models/contact.model.js'
 
 // Thing under test
-const BillingAccountAddressModel = require('../../app/models/billing-account-address.model.js')
+import BillingAccountAddressModel from '../../app/models/billing-account-address.model.js'
 
 describe('Billing Account Address model', () => {
   let testAddress

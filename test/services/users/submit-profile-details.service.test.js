@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const YarStub = require('../../support/stubs/yar.stub.js')
+import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things to stub
-const UserModel = require('../../../app/models/user.model.js')
+import UserModel from '../../../app/models/user.model.js'
 
 // Thing under test
-const SubmitProfileDetailsService = require('../../../app/services/users/submit-profile-details.service.js')
+import SubmitProfileDetailsService from '../../../app/services/users/submit-profile-details.service.js'
 
 describe('Users - Submit profile details service', () => {
   const userId = 123
@@ -24,14 +21,14 @@ describe('Users - Submit profile details service', () => {
   beforeEach(() => {
     // NOTE: We stub the UserModel `findById().patch()` query to avoid hitting the DB as part of the test. It is
     // sufficiently simple running it would just be testing Objection.js and not our logic.
-    patchStub = Sinon.stub().resolves()
-    whereStub = Sinon.stub().returns({ patch: patchStub, whereNull: Sinon.stub().returnsThis() })
-    userModelQueryStub = Sinon.stub(UserModel, 'query').returns({ where: whereStub })
-    yarStub = YarStub.build(Sinon)
+    patchStub = vi.fn().mockResolvedValue()
+    whereStub = vi.fn().mockReturnValue({ patch: patchStub, whereNull: vi.fn().mockReturnThis() })
+    userModelQueryStub = vi.spyOn(UserModel, 'query').mockReturnValue({ where: whereStub })
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -49,8 +46,8 @@ describe('Users - Submit profile details service', () => {
       it('saves the user details', async () => {
         const result = await SubmitProfileDetailsService(userId, payload, yarStub)
 
-        expect(patchStub.called).toBe(true)
-        expect(whereStub.calledWith('userId', userId)).toBe(true)
+        expect(patchStub).toHaveBeenCalled()
+        expect(whereStub).toHaveBeenCalledWith('userId', userId)
         expect(
           patchStub.calledWith({
             'userData:contactDetails.address': payload.address,
@@ -66,8 +63,8 @@ describe('Users - Submit profile details service', () => {
       it('flashes a notification of successful update', async () => {
         await SubmitProfileDetailsService(userId, payload, yarStub)
 
-        expect(yarStub.flash.lastCall.args[0]).toEqual('notification')
-        expect(yarStub.flash.lastCall.args[1]).toEqual({
+        expect(yarStub.flash.lastCall.mock.calls[0]).toEqual('notification')
+        expect(yarStub.flash.lastCall.mock.calls[1]).toEqual({
           title: 'Updated',
           text: 'Profile details updated'
         })
@@ -100,7 +97,7 @@ describe('Users - Submit profile details service', () => {
       it('does not save', async () => {
         await SubmitProfileDetailsService(userId, payload, yarStub)
 
-        expect(userModelQueryStub.notCalled).toBe(true)
+        expect(userModelQueryStub).not.toHaveBeenCalled()
       })
 
       it('returns the details required to redisplay the page including validation errors', async () => {
@@ -157,7 +154,9 @@ describe('Users - Submit profile details service', () => {
   describe('when the service errors', () => {
     beforeEach(() => {
       userModelQueryStub.restore()
-      Sinon.stub(UserModel, 'query').throws(new Error('Model query error'))
+      vi.spyOn(UserModel, 'query').mockImplementation(() => {
+        throw new Error('Model query error')
+      })
     })
 
     it('throws the error', async () => {

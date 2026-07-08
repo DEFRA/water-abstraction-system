@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const PeriodUsedPresenter = require('../../../../app/presenters/return-logs/setup/period-used.presenter.js')
+import PeriodUsedPresenter from '../../../../app/presenters/return-logs/setup/period-used.presenter.js'
 
 describe('Return Logs Setup - Period Used presenter', () => {
   let session

@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const NotifyAddressPresenter = require('../../../../app/presenters/notices/setup/notify-address.presenter.js')
+import NotifyAddressPresenter from '../../../../app/presenters/notices/setup/notify-address.presenter.js'
 
 describe('Notices - Setup - Notify Address presenter', () => {
   let contact

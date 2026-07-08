@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const AgreementsExceptionsPresenter = require('../../../../app/presenters/return-versions/setup/agreements-exceptions.presenter.js')
+import AgreementsExceptionsPresenter from '../../../../app/presenters/return-versions/setup/agreements-exceptions.presenter.js'
 
 describe('Return Versions Setup - Agreements Exceptions presenter', () => {
   const requirementIndex = 0

@@ -1,22 +1,18 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
-const YarStub = require('../../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import YarStub from '../../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
-const FetchUserDetailsDal = require('../../../../../app/dal/users/internal/fetch-user-details.dal.js')
+import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import FetchUserDetailsDal from '../../../../../app/dal/users/internal/fetch-user-details.dal.js'
 
 // Thing under test
-const SubmitPermissionsService = require('../../../../../app/services/users/internal/setup/submit-permissions.service.js')
+import SubmitPermissionsService from '../../../../../app/services/users/internal/setup/submit-permissions.service.js'
 
 describe('Users - Internal - Setup - Submit Permissions Service', () => {
   let auth
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -27,23 +23,25 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
 
     sessionData = {}
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
     const currentUserPermissions = 'billing_and_data'
 
-    Sinon.stub(FetchUserDetailsDal, 'go').resolves({
+    vi.mock('../../../../../app/dal/users/internal/fetch-user-details.dal.js')
+    FetchUserDetailsDal.mockResolvedValue({
       $permissions: () => {
         return { key: currentUserPermissions }
       }
     })
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called with a valid payload', () => {
@@ -72,13 +70,13 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
     describe('and the check page has', () => {
       describe('been visited', () => {
         beforeEach(() => {
-          session = SessionModelStub.build(Sinon, {
+          session = SessionModelStub({
             ...sessionData,
             checkPageVisited: true,
             permission: 'basic'
           })
 
-          fetchSessionStub.resolves(session)
+          FetchSessionDal.mockResolvedValue(session)
         })
 
         describe('and the "session" and "payload" value', () => {
@@ -90,7 +88,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
             it('does not set a notification', async () => {
               await SubmitPermissionsService(auth, session.id, payload, yarStub)
 
-              expect(yarStub.flash.called).toBe(false)
+              expect(yarStub.flash).not.toHaveBeenCalled()
             })
           })
 
@@ -102,7 +100,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
             it('sets a notification', async () => {
               await SubmitPermissionsService(auth, session.id, payload, yarStub)
 
-              const [flashType, bannerMessage] = yarStub.flash.args[0]
+              const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
               expect(flashType).toEqual('notification')
               expect(bannerMessage).toEqual({ titleText: 'Updated', text: 'Permissions updated' })
@@ -115,7 +113,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
         it('does not set a notification', async () => {
           await SubmitPermissionsService(auth, session.id, payload, yarStub)
 
-          expect(yarStub.flash.called).toBe(false)
+          expect(yarStub.flash).not.toHaveBeenCalled()
         })
       })
     })

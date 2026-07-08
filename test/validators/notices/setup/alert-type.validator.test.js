@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
+import * as AbstractionAlertSessionData from '../../../support/fixtures/abstraction-alert-session-data.fixture.js'
 
 // Thing under test
-const AlertTypeValidator = require('../../../../app/validators/notices/setup/alert-type.validator.js')
+import AlertTypeValidator from '../../../../app/validators/notices/setup/alert-type.validator.js'
 
 describe('Notices - Setup - Alert Type validator', () => {
   let licenceMonitoringStations

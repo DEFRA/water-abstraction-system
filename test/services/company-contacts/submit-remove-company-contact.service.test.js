@@ -1,20 +1,17 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
-const YarStub = require('../../support/stubs/yar.stub.js')
+import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
+import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const DeleteCompanyContactService = require('../../../app/services/company-contacts/delete-company-contact.service.js')
-const FetchCompanyContactDal = require('../../../app/dal/company-contacts/fetch-company-contact.dal.js')
-const FetchNotificationService = require('../../../app/services/company-contacts/fetch-notification.service.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import DeleteCompanyContactService from '../../../app/services/company-contacts/delete-company-contact.service.js'
+import FetchCompanyContactDal from '../../../app/dal/company-contacts/fetch-company-contact.dal.js'
+import FetchNotificationService from '../../../app/services/company-contacts/fetch-notification.service.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const SubmitRemoveCompanyContactService = require('../../../app/services/company-contacts/submit-remove-company-contact.service.js')
+import SubmitRemoveCompanyContactService from '../../../app/services/company-contacts/submit-remove-company-contact.service.js'
 
 describe('Company Contacts - Submit Remove Company Contact Service', () => {
   let companyContact
@@ -24,21 +21,24 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
   beforeEach(() => {
     companyContact = CustomersFixtures.companyContact()
 
-    Sinon.stub(DeleteCompanyContactService, 'go').resolves()
-    Sinon.stub(FetchCompanyContactDal, 'go').resolves(companyContact)
+    vi.mock('../../../app/services/company-contacts/delete-company-contact.service.js')
+    DeleteCompanyContactService.mockResolvedValue()
+    vi.mock('../../../app/dal/company-contacts/fetch-company-contact.dal.js')
+    FetchCompanyContactDal.mockResolvedValue(companyContact)
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     describe('and there are notifications', () => {
       beforeEach(() => {
         notification = { id: generateUUID() }
-        Sinon.stub(FetchNotificationService, 'go').resolves(notification)
+        vi.mock('../../../app/services/company-contacts/fetch-notification.service.js')
+        FetchNotificationService.mockResolvedValue(notification)
       })
 
       it('returns page data for the view', async () => {
@@ -53,7 +53,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
         await SubmitRemoveCompanyContactService(companyContact.id, yarStub)
 
         // Check we add the flash message
-        const [flashType, bannerMessage] = yarStub.flash.args[0]
+        const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('notification')
         expect(bannerMessage).toEqual({
@@ -72,7 +72,8 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
     describe('and there are no notifications', () => {
       beforeEach(() => {
         notification = undefined
-        Sinon.stub(FetchNotificationService, 'go').resolves(notification)
+        vi.mock('../../../app/services/company-contacts/fetch-notification.service.js')
+        FetchNotificationService.mockResolvedValue(notification)
       })
 
       it('returns page data for the view', async () => {
@@ -87,7 +88,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
         await SubmitRemoveCompanyContactService(companyContact.id, yarStub)
 
         // Check we add the flash message
-        const [flashType, bannerMessage] = yarStub.flash.args[0]
+        const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('notification')
         expect(bannerMessage).toEqual({

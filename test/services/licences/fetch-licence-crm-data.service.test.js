@@ -1,14 +1,11 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const DatabaseConfig = require('../../../config/database.config.js')
-const CRMSeeder = require('../../support/seeders/crm.seeder.js')
+import DatabaseConfig from '../../../config/database.config.js'
+import CRMSeeder from '../../support/seeders/crm.seeder.js'
 
 // Thing under test
-const FetchLicenceCRMDataService = require('../../../app/services/licences/fetch-licence-crm-data.service.js')
+import FetchLicenceCRMDataService from '../../../app/services/licences/fetch-licence-crm-data.service.js'
 
 describe('Licences - Fetch Licence CRM data service', () => {
   let crmData
@@ -31,7 +28,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the licence has contact details', () => {
@@ -125,7 +122,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
 
     describe('when paginating', () => {
       beforeEach(() => {
-        Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1)
+        vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 1)
       })
 
       describe('and the page is not set', () => {

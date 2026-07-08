@@ -1,16 +1,14 @@
-'use strict'
-
 // Test helpers
-const AddressHelper = require('../../support/helpers/address.helper.js')
-const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
-const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const ContactHelper = require('../../support/helpers/contact.helper.js')
-const CompanyHelper = require('../../support/helpers/company.helper.js')
+import * as AddressHelper from '../../support/helpers/address.helper.js'
+import * as BillHelper from '../../support/helpers/bill.helper.js'
+import * as BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
+import * as BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
+import * as BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import * as ContactHelper from '../../support/helpers/contact.helper.js'
+import * as CompanyHelper from '../../support/helpers/company.helper.js'
 
 // Thing under test
-const FetchViewBillingAccountService = require('../../../app/services/billing-accounts/fetch-view-billing-account.service.js')
+import FetchViewBillingAccountService from '../../../app/services/billing-accounts/fetch-view-billing-account.service.js'
 
 describe('Billing Accounts - Fetch View Billing Account service', () => {
   let address

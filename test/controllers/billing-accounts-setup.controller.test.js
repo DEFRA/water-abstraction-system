@@ -1,38 +1,36 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-const { generateUUID } = require('../../app/lib/general.lib.js')
-const { postRequestOptions } = require('../support/general.js')
+import http2 from 'node:http2'
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
+import { generateUUID } from '../../app/lib/general.lib.js'
+import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-const InitiateSessionService = require('../../app/services/billing-accounts/setup/initiate-session.service.js')
-const SubmitAccountService = require('../../app/services/billing-accounts/setup/submit-account.service.js')
-const SubmitAccountTypeService = require('../../app/services/billing-accounts/setup/submit-account-type.service.js')
-const SubmitCheckService = require('../../app/services/billing-accounts/setup/submit-check.service.js')
-const SubmitCompanySearchService = require('../../app/services/billing-accounts/setup/submit-company-search.service.js')
-const SubmitContactService = require('../../app/services/billing-accounts/setup/submit-contact.service.js')
-const SubmitContactNameService = require('../../app/services/billing-accounts/setup/submit-contact-name.service.js')
-const SubmitExistingAccountService = require('../../app/services/billing-accounts/setup/submit-existing-account.service.js')
-const SubmitExistingAddressService = require('../../app/services/billing-accounts/setup/submit-existing-address.service.js')
-const SubmitFaoService = require('../../app/services/billing-accounts/setup/submit-fao.service.js')
-const SubmitSelectCompanyService = require('../../app/services/billing-accounts/setup/submit-select-company.service.js')
-const ViewAccountService = require('../../app/services/billing-accounts/setup/view-account.service.js')
-const ViewAccountTypeService = require('../../app/services/billing-accounts/setup/view-account-type.service.js')
-const ViewCheckService = require('../../app/services/billing-accounts/setup/view-check.service.js')
-const ViewCompanySearchService = require('../../app/services/billing-accounts/setup/view-company-search.service.js')
-const ViewContactService = require('../../app/services/billing-accounts/setup/view-contact.service.js')
-const ViewContactNameService = require('../../app/services/billing-accounts/setup/view-contact-name.service.js')
-const ViewExistingAccountService = require('../../app/services/billing-accounts/setup/view-existing-account.service.js')
-const ViewExistingAddressService = require('../../app/services/billing-accounts/setup/view-existing-address.service.js')
-const ViewFaoService = require('../../app/services/billing-accounts/setup/view-fao.service.js')
-const ViewSelectCompanyService = require('../../app/services/billing-accounts/setup/view-select-company.service.js')
+import InitiateSessionService from '../../app/services/billing-accounts/setup/initiate-session.service.js'
+import SubmitAccountService from '../../app/services/billing-accounts/setup/submit-account.service.js'
+import SubmitAccountTypeService from '../../app/services/billing-accounts/setup/submit-account-type.service.js'
+import SubmitCheckService from '../../app/services/billing-accounts/setup/submit-check.service.js'
+import SubmitCompanySearchService from '../../app/services/billing-accounts/setup/submit-company-search.service.js'
+import SubmitContactService from '../../app/services/billing-accounts/setup/submit-contact.service.js'
+import SubmitContactNameService from '../../app/services/billing-accounts/setup/submit-contact-name.service.js'
+import SubmitExistingAccountService from '../../app/services/billing-accounts/setup/submit-existing-account.service.js'
+import SubmitExistingAddressService from '../../app/services/billing-accounts/setup/submit-existing-address.service.js'
+import SubmitFaoService from '../../app/services/billing-accounts/setup/submit-fao.service.js'
+import SubmitSelectCompanyService from '../../app/services/billing-accounts/setup/submit-select-company.service.js'
+import ViewAccountService from '../../app/services/billing-accounts/setup/view-account.service.js'
+import ViewAccountTypeService from '../../app/services/billing-accounts/setup/view-account-type.service.js'
+import ViewCheckService from '../../app/services/billing-accounts/setup/view-check.service.js'
+import ViewCompanySearchService from '../../app/services/billing-accounts/setup/view-company-search.service.js'
+import ViewContactService from '../../app/services/billing-accounts/setup/view-contact.service.js'
+import ViewContactNameService from '../../app/services/billing-accounts/setup/view-contact-name.service.js'
+import ViewExistingAccountService from '../../app/services/billing-accounts/setup/view-existing-account.service.js'
+import ViewExistingAddressService from '../../app/services/billing-accounts/setup/view-existing-address.service.js'
+import ViewFaoService from '../../app/services/billing-accounts/setup/view-fao.service.js'
+import ViewSelectCompanyService from '../../app/services/billing-accounts/setup/view-select-company.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
 
 describe('Billing Accounts Setup controller', () => {
   let billingAccountId
@@ -47,14 +45,14 @@ describe('Billing Accounts Setup controller', () => {
   beforeEach(async () => {
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
-    Sinon.stub(server.logger, 'error')
+    vi.spyOn(server.logger, 'error').mockImplementation(() => {})
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -71,7 +69,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when this url ', () => {
         beforeEach(() => {
-          Sinon.stub(InitiateSessionService, 'go').resolves({ id: sessionId })
+          vi.mock('../../app/services/billing-accounts/setup/initiate-session.service.js')
+          InitiateSessionService.mockResolvedValue({ id: sessionId })
         })
 
         it('creates a new session and redirects to the "Who should the bills go to" page', async () => {
@@ -93,7 +92,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ViewAccountService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/view-account.service.js')
+          ViewAccountService.mockResolvedValue({
             pageTitle: 'Who should the bills go to?'
           })
         })
@@ -115,7 +115,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the user selects existing customer option', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitAccountService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/submit-account.service.js')
+          SubmitAccountService.mockResolvedValue({
             redirectUrl: `/system/billing-accounts/setup/${sessionId}/existing-address`
           })
         })
@@ -130,7 +131,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the user selects another billing account option', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitAccountService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/submit-account.service.js')
+          SubmitAccountService.mockResolvedValue({
             redirectUrl: `/system/billing-accounts/setup/${sessionId}/existing-account`
           })
         })
@@ -154,7 +156,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ViewExistingAddressService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/view-existing-address.service.js')
+          ViewExistingAddressService.mockResolvedValue({
             pageTitle: 'Select an existing address for Test User?'
           })
         })
@@ -176,7 +179,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the user selects an existing address option', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitExistingAddressService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/submit-existing-address.service.js')
+          SubmitExistingAddressService.mockResolvedValue({
             redirectUrl: `/system/billing-accounts/setup/${sessionId}/fao`
           })
         })
@@ -191,7 +195,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the user selects to set up a new address', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitExistingAddressService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/submit-existing-address.service.js')
+          SubmitExistingAddressService.mockResolvedValue({
             redirectUrl: `/system/address/${sessionId}/postcode`
           })
         })
@@ -215,7 +220,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ViewExistingAccountService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/view-existing-account.service.js')
+          ViewExistingAccountService.mockResolvedValue({
             pageTitle: 'Does this account already exist?'
           })
         })
@@ -237,7 +243,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the user selects an existing account option', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitExistingAccountService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/submit-existing-account.service.js')
+          SubmitExistingAccountService.mockResolvedValue({
             redirectUrl: `/system/address/${sessionId}/postcode`
           })
         })
@@ -252,7 +259,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the user selects to set up a new account', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitExistingAccountService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/submit-existing-account.service.js')
+          SubmitExistingAccountService.mockResolvedValue({
             redirectUrl: `/system/billing-accounts/setup/${sessionId}/account-type`
           })
         })
@@ -276,7 +284,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ViewAccountTypeService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/view-account-type.service.js')
+          ViewAccountTypeService.mockResolvedValue({
             pageTitle: 'Select the account type'
           })
         })
@@ -298,7 +307,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the user selects to set up an "individual" account', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitAccountTypeService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/submit-account-type.service.js')
+          SubmitAccountTypeService.mockResolvedValue({
             redirectUrl: `/system/billing-accounts/setup/${sessionId}/existing-address`
           })
         })
@@ -313,7 +323,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the user selects to set up a "company" account', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitAccountTypeService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/submit-account-type.service.js')
+          SubmitAccountTypeService.mockResolvedValue({
             redirectUrl: `/system/billing-accounts/setup/${sessionId}/company-search`
           })
         })
@@ -337,7 +348,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ViewContactService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/view-contact.service.js')
+          ViewContactService.mockResolvedValue({
             pageTitle: 'Set up a contact for Company Name'
           })
         })
@@ -359,7 +371,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the user selects a new contact option', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitContactService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/submit-contact.service.js')
+          SubmitContactService.mockResolvedValue({
             redirectUrl: `/system/billing-accounts/setup/${sessionId}/contact-name`
           })
         })
@@ -383,7 +396,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ViewContactNameService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/view-contact-name.service.js')
+          ViewContactNameService.mockResolvedValue({
             pageTitle: 'Enter a name for the contact'
           })
         })
@@ -405,7 +419,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the user enters a name for the contact', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitContactNameService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/submit-contact-name.service.js')
+          SubmitContactNameService.mockResolvedValue({
             redirectUrl: `/system/billing-accounts/setup/${sessionId}/check`
           })
         })
@@ -429,7 +444,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ViewAccountTypeService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/view-account-type.service.js')
+          ViewAccountTypeService.mockResolvedValue({
             pageTitle: 'Select the account type'
           })
         })
@@ -451,7 +467,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the user selects an to set up an "individual" account', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitAccountTypeService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/submit-account-type.service.js')
+          SubmitAccountTypeService.mockResolvedValue({
             redirectUrl: `/system/billing-accounts/setup/${sessionId}/existing-address`
           })
         })
@@ -466,7 +483,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the user selects an to set up a "company" account', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitAccountTypeService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/submit-account-type.service.js')
+          SubmitAccountTypeService.mockResolvedValue({
             redirectUrl: `/system/billing-accounts/setup/${sessionId}/company-search`
           })
         })
@@ -490,7 +508,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ViewCompanySearchService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/view-company-search.service.js')
+          ViewCompanySearchService.mockResolvedValue({
             pageTitle: 'Enter the company details'
           })
         })
@@ -512,7 +531,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the user enters a company name or company number', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitCompanySearchService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/submit-company-search.service.js')
+          SubmitCompanySearchService.mockResolvedValue({
             redirectUrl: `/system/billing-accounts/setup/${sessionId}/select-company`
           })
         })
@@ -536,7 +556,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ViewSelectCompanyService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/view-select-company.service.js')
+          ViewSelectCompanyService.mockResolvedValue({
             pageTitle: 'Select the registered company details'
           })
         })
@@ -558,7 +579,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the user selects a company', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitSelectCompanyService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/submit-select-company.service.js')
+          SubmitSelectCompanyService.mockResolvedValue({
             redirectUrl: `/system/billing-accounts/setup/${sessionId}/existing-address`
           })
         })
@@ -582,7 +604,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ViewFaoService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/view-fao.service.js')
+          ViewFaoService.mockResolvedValue({
             pageTitle: 'Do you need to add an FAO?'
           })
         })
@@ -604,7 +627,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the user selects "yes"', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitFaoService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/submit-fao.service.js')
+          SubmitFaoService.mockResolvedValue({
             redirectUrl: `/system/billing-accounts/setup/${sessionId}/contact`
           })
         })
@@ -619,7 +643,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the user selects "no"', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitFaoService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/submit-fao.service.js')
+          SubmitFaoService.mockResolvedValue({
             redirectUrl: `/system/billing-accounts/setup/${sessionId}/check`
           })
         })
@@ -643,7 +668,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ViewCheckService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/view-check.service.js')
+          ViewCheckService.mockResolvedValue({
             pageTitle: 'Check billing account details'
           })
         })
@@ -665,7 +691,8 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the user clicks "Confirm"', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitCheckService, 'go').resolves({
+          vi.mock('../../app/services/billing-accounts/setup/submit-check.service.js')
+          SubmitCheckService.mockResolvedValue({
             redirectUrl: `system/billing-accounts/${billingAccountId}`
           })
         })

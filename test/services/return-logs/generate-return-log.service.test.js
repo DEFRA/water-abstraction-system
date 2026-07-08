@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const ReturnCyclesFixture = require('../../support/fixtures/return-cycles.fixture.js')
-const ReturnRequirementsFixture = require('../../support/fixtures/return-requirements.fixture.js')
+import * as ReturnCyclesFixture from '../../support/fixtures/return-cycles.fixture.js'
+import * as ReturnRequirementsFixture from '../../support/fixtures/return-requirements.fixture.js'
 
 // Thing under test
-const GenerateReturnLogService = require('../../../app/services/return-logs/generate-return-log.service.js')
+import GenerateReturnLogService from '../../../app/services/return-logs/generate-return-log.service.js'
 
 describe('Return Logs - Generate Return Log service', () => {
   let returnCycle

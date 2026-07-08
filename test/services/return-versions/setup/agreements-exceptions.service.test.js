@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const AgreementsExceptionsService = require('../../../../app/services/return-versions/setup/agreements-exceptions.service.js')
+import AgreementsExceptionsService from '../../../../app/services/return-versions/setup/agreements-exceptions.service.js'
 
 describe('Return Versions Setup - Agreements Exceptions service', () => {
   const requirementIndex = 0
@@ -35,13 +32,14 @@ describe('Return Versions Setup - Agreements Exceptions service', () => {
       reason: 'major-change'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

@@ -1,16 +1,14 @@
-'use strict'
-
 // Test helpers
-const {
+import {
   exLicenceHolderWithSingleLicences,
   licenceHolderWithMultipleLicences,
   licenceHolderWithSingleLicence
-} = require('../../support/seeders/licence.seeder.js')
-const { generateUUID, today } = require('../../../app/lib/general.lib.js')
-const { tomorrow, yesterday } = require('../../support/general.js')
+} from '../../support/seeders/licence.seeder.js'
+import { generateUUID, today } from '../../../app/lib/general.lib.js'
+import { tomorrow, yesterday } from '../../support/general.js'
 
 // Thing under test
-const FetchCompanyLicencesDal = require('../../../app/dal/company-contacts/fetch-company-licences.dal.js')
+import FetchCompanyLicencesDal from '../../../app/dal/company-contacts/fetch-company-licences.dal.js'
 
 describe('Company Contacts - Fetch Company Licences Dal', () => {
   let scenarios

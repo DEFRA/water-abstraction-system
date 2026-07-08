@@ -1,38 +1,36 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const DetermineBillLicenceFlagsService = require('../../../../app/services/licences/supplementary/determine-bill-licence-flags.service.js')
-const DetermineChargeVersionFlagsService = require('../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js')
-const DetermineExistingBillRunYearsService = require('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
-const DetermineImportedLicenceFlagsService = require('../../../../app/services/licences/supplementary/determine-imported-licence-flags.service.js')
-const DetermineLicenceFlagsService = require('../../../../app/services/licences/supplementary/determine-licence-flags.service.js')
-const DetermineReturnLogFlagsService = require('../../../../app/services/licences/supplementary/determine-return-log-flags.service.js')
-const DetermineWorkflowFlagsService = require('../../../../app/services/licences/supplementary/determine-workflow-flags.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
-const PersistSupplementaryBillingFlagsService = require('../../../../app/services/licences/supplementary/persist-supplementary-billing-flags.service.js')
+import DetermineBillLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-bill-licence-flags.service.js'
+import DetermineChargeVersionFlagsService from '../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js'
+import DetermineExistingBillRunYearsService from '../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js'
+import DetermineImportedLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-imported-licence-flags.service.js'
+import DetermineLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-licence-flags.service.js'
+import DetermineReturnLogFlagsService from '../../../../app/services/licences/supplementary/determine-return-log-flags.service.js'
+import DetermineWorkflowFlagsService from '../../../../app/services/licences/supplementary/determine-workflow-flags.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import PersistSupplementaryBillingFlagsService from '../../../../app/services/licences/supplementary/persist-supplementary-billing-flags.service.js'
 
 // Thing under test
-const ProcessBillingFlagService = require('../../../../app/services/licences/supplementary/process-billing-flag.service.js')
+import ProcessBillingFlagService from '../../../../app/services/licences/supplementary/process-billing-flag.service.js'
 
 describe('Licences - Supplementary - Process Billing Flag service', () => {
   let notifierStub
   let payload
 
   beforeEach(() => {
-    Sinon.stub(PersistSupplementaryBillingFlagsService, 'go').resolves()
+    vi.mock('../../../../app/services/licences/supplementary/persist-supplementary-billing-flags.service.js')
+    PersistSupplementaryBillingFlagsService.mockResolvedValue()
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -47,8 +45,10 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineChargeVersionFlagsService, 'go').resolves(_licenceData(true))
-          Sinon.stub(DetermineExistingBillRunYearsService, 'go').resolves([2023])
+          vi.mock('../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js')
+          DetermineChargeVersionFlagsService.mockResolvedValue(_licenceData(true))
+          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
+          DetermineExistingBillRunYearsService.mockResolvedValue([2023])
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" with the correct flags to persist', async () => {
@@ -67,9 +67,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -78,8 +78,10 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should not be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineChargeVersionFlagsService, 'go').resolves(_licenceData(false))
-          Sinon.stub(DetermineWorkflowFlagsService, 'go').resolves(_licenceData(false))
+          vi.mock('../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js')
+          DetermineChargeVersionFlagsService.mockResolvedValue(_licenceData(false))
+          vi.mock('../../../../app/services/licences/supplementary/determine-workflow-flags.service.js')
+          DetermineWorkflowFlagsService.mockResolvedValue(_licenceData(false))
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -98,9 +100,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -117,8 +119,10 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineWorkflowFlagsService, 'go').resolves(_licenceData(true))
-          Sinon.stub(DetermineExistingBillRunYearsService, 'go').resolves([2023])
+          vi.mock('../../../../app/services/licences/supplementary/determine-workflow-flags.service.js')
+          DetermineWorkflowFlagsService.mockResolvedValue(_licenceData(true))
+          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
+          DetermineExistingBillRunYearsService.mockResolvedValue([2023])
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -137,9 +141,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -148,8 +152,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should not be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineWorkflowFlagsService, 'go').resolves(_licenceData(false))
-          Sinon.stub(DetermineExistingBillRunYearsService, 'go')
+          vi.mock('../../../../app/services/licences/supplementary/determine-workflow-flags.service.js')
+          DetermineWorkflowFlagsService.mockResolvedValue(_licenceData(false))
+          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -168,9 +173,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -187,8 +192,10 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineReturnLogFlagsService, 'go').resolves(_licenceData(true))
-          Sinon.stub(DetermineExistingBillRunYearsService, 'go').resolves([2023])
+          vi.mock('../../../../app/services/licences/supplementary/determine-return-log-flags.service.js')
+          DetermineReturnLogFlagsService.mockResolvedValue(_licenceData(true))
+          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
+          DetermineExistingBillRunYearsService.mockResolvedValue([2023])
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -207,9 +214,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -218,8 +225,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should not be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineReturnLogFlagsService, 'go').resolves(_licenceData(false))
-          Sinon.stub(DetermineExistingBillRunYearsService, 'go')
+          vi.mock('../../../../app/services/licences/supplementary/determine-return-log-flags.service.js')
+          DetermineReturnLogFlagsService.mockResolvedValue(_licenceData(false))
+          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -238,9 +246,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -263,8 +271,10 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineImportedLicenceFlagsService, 'go').resolves(_licenceData(true))
-          Sinon.stub(DetermineExistingBillRunYearsService, 'go').resolves([2023])
+          vi.mock('../../../../app/services/licences/supplementary/determine-imported-licence-flags.service.js')
+          DetermineImportedLicenceFlagsService.mockResolvedValue(_licenceData(true))
+          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
+          DetermineExistingBillRunYearsService.mockResolvedValue([2023])
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -283,9 +293,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -294,8 +304,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should not be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineImportedLicenceFlagsService, 'go').resolves(_licenceData(false))
-          Sinon.stub(DetermineExistingBillRunYearsService, 'go')
+          vi.mock('../../../../app/services/licences/supplementary/determine-imported-licence-flags.service.js')
+          DetermineImportedLicenceFlagsService.mockResolvedValue(_licenceData(false))
+          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -314,9 +325,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -333,8 +344,10 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should be flagged for sroc supplementary billing', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineLicenceFlagsService, 'go').resolves(_srocLicenceData(true))
-          Sinon.stub(DetermineExistingBillRunYearsService, 'go').resolves([2023])
+          vi.mock('../../../../app/services/licences/supplementary/determine-licence-flags.service.js')
+          DetermineLicenceFlagsService.mockResolvedValue(_srocLicenceData(true))
+          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
+          DetermineExistingBillRunYearsService.mockResolvedValue([2023])
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -352,8 +365,8 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService(payload)
-          const logDataArg = notifierStub.omg.firstCall.args[1]
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          const logDataArg = notifierStub.omg.mock.calls[0][1]
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -362,8 +375,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should not be flagged for sroc supplementary billing', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineLicenceFlagsService, 'go').resolves(_srocLicenceData(false))
-          Sinon.stub(DetermineExistingBillRunYearsService, 'go')
+          vi.mock('../../../../app/services/licences/supplementary/determine-licence-flags.service.js')
+          DetermineLicenceFlagsService.mockResolvedValue(_srocLicenceData(false))
+          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -381,8 +395,8 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService(payload)
-          const logDataArg = notifierStub.omg.firstCall.args[1]
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          const logDataArg = notifierStub.omg.mock.calls[0][1]
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -399,8 +413,10 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineBillLicenceFlagsService, 'go').resolves(_licenceData(true))
-          Sinon.stub(DetermineExistingBillRunYearsService, 'go').resolves([2023])
+          vi.mock('../../../../app/services/licences/supplementary/determine-bill-licence-flags.service.js')
+          DetermineBillLicenceFlagsService.mockResolvedValue(_licenceData(true))
+          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
+          DetermineExistingBillRunYearsService.mockResolvedValue([2023])
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -419,9 +435,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()
@@ -430,8 +446,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
       describe('that should not be flagged for two-part tariff supplementary billing', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineBillLicenceFlagsService, 'go').resolves(_licenceData(false))
-          Sinon.stub(DetermineExistingBillRunYearsService, 'go')
+          vi.mock('../../../../app/services/licences/supplementary/determine-bill-licence-flags.service.js')
+          DetermineBillLicenceFlagsService.mockResolvedValue(_licenceData(false))
+          vi.mock('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
         })
 
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
@@ -450,9 +467,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).toBe(true)
+          expect(notifierStub.omg).toHaveBeenCalledWith('Supplementary Billing Flag complete')
           expect(logDataArg.timeTakenMs).toBeDefined()
           expect(logDataArg.timeTakenSs).toBeDefined()
           expect(logDataArg.licenceId).toBeDefined()

@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const UnitsPresenter = require('../../../../app/presenters/return-logs/setup/units.presenter.js')
+import UnitsPresenter from '../../../../app/presenters/return-logs/setup/units.presenter.js'
 
 describe('Return Logs Setup - Units presenter', () => {
   let session

@@ -1,17 +1,15 @@
-'use strict'
-
 // Test helpers
-const CRMContactsSeeder = require('../../support/seeders/crm-contacts.seeder.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
-const LicenceVersionPurposePointHelper = require('../../support/helpers/licence-version-purpose-point.helper.js')
-const PointHelper = require('../../support/helpers/point.helper.js')
-const PurposeHelper = require('../../support/helpers/purpose.helper.js')
-const SourceHelper = require('../../support/helpers/source.helper.js')
+import CRMContactsSeeder from '../../support/seeders/crm-contacts.seeder.js'
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import * as LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import * as LicenceVersionPurposeHelper from '../../support/helpers/licence-version-purpose.helper.js'
+import * as LicenceVersionPurposePointHelper from '../../support/helpers/licence-version-purpose-point.helper.js'
+import * as PointHelper from '../../support/helpers/point.helper.js'
+import * as PurposeHelper from '../../support/helpers/purpose.helper.js'
+import * as SourceHelper from '../../support/helpers/source.helper.js'
 
 // Thing under test
-const FetchLicenceVersionDal = require('../../../app/dal/licence-versions/fetch-licence-version.dal.js')
+import FetchLicenceVersionDal from '../../../app/dal/licence-versions/fetch-licence-version.dal.js'
 
 describe('Licence Versions - Fetch licence version dal', () => {
   let additionalLicenceVersionOne

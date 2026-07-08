@@ -5,7 +5,7 @@
 import { generateUUID } from '../../../app/lib/general.lib.js'
 import { selectRandomEntry } from '../general.js'
 import { generateUserId } from './user.helper.js'
-import GroupHelper from './group.helper.js'
+import * as GroupHelper from './group.helper.js'
 import UserGroupModel from '../../../app/models/user-group.model.js'
 import { data as userGroups } from '../../../db/seeds/data/user-groups.js'
 

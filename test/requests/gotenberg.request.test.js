@@ -1,17 +1,15 @@
-'use strict'
-
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const BaseRequest = require('../../app/requests/base.request.js')
-const gotenbergConfig = require('../../config/gotenberg.config.js')
-const serverConfig = require('../../config/server.config.js')
+import * as BaseRequest from '../../app/requests/base.request.js'
+import gotenbergConfig from '../../config/gotenberg.config.js'
+import serverConfig from '../../config/server.config.js'
 
 // Thing under test
-const GotenbergRequest = require('../../app/requests/gotenberg.request.js')
+import * as GotenbergRequest from '../../app/requests/gotenberg.request.js'
 
 describe('Gotenberg Request', () => {
   const headers = {}
@@ -23,18 +21,18 @@ describe('Gotenberg Request', () => {
 
   beforeEach(() => {
     // Set delay to a value that won't cause the tests to timeout or run needlessly slow. By default it's 2 seconds.
-    Sinon.stub(gotenbergConfig, 'delay').value(25)
+    vi.replaceProperty(gotenbergConfig, 'delay', 25)
     // Set the timeout value to 1234ms for these tests. We don't trigger a timeout but we do test that the module
     // uses it when making a request to the charging module, rather than the default request timeout config value
-    Sinon.stub(gotenbergConfig, 'timeout').value(1234)
-    Sinon.stub(serverConfig, 'requestTimeout').value(1000)
+    vi.replaceProperty(gotenbergConfig, 'timeout', 1234)
+    vi.replaceProperty(serverConfig, 'requestTimeout', 1000)
 
     formData = new FormData()
     formData.append('index.html', new Blob([Buffer.from('<p>Test</p>')]), 'index.html')
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('#post', () => {
@@ -47,7 +45,7 @@ describe('Gotenberg Request', () => {
         // This is what we expect the GotenbergRequest module to return after it casts the Uint8Array to a Node buffer
         bodyAsBuffer = Buffer.from(bodyAsUint8Array)
 
-        Sinon.stub(BaseRequest, 'post').resolves({
+        vi.spyOn(BaseRequest, 'postRequest').mockResolvedValue({
           succeeded: true,
           response: {
             headers,
@@ -58,9 +56,9 @@ describe('Gotenberg Request', () => {
       })
 
       it('calls Gotenberg with the required options', async () => {
-        await GotenbergRequest.post(testRoute, formData)
+        await GotenbergRequest.postRequest(testRoute, formData)
 
-        const requestArgs = BaseRequest.post.firstCall.args
+        const requestArgs = BaseRequest.postRequest.firstCall.args
 
         expect(requestArgs[0]).toMatch(/TEST_ROUTE$/)
         expect(requestArgs[1].responseType).toEqual('buffer')
@@ -68,27 +66,27 @@ describe('Gotenberg Request', () => {
       })
 
       it('uses the Gotenberg timeout', async () => {
-        await GotenbergRequest.post(testRoute, formData)
+        await GotenbergRequest.postRequest(testRoute, formData)
 
-        const requestArgs = BaseRequest.post.firstCall.args
+        const requestArgs = BaseRequest.postRequest.firstCall.args
 
         expect(requestArgs[1].timeout).toEqual({ request: 1234 })
       })
 
       it('returns a "true" success status', async () => {
-        const result = await GotenbergRequest.post(testRoute, formData)
+        const result = await GotenbergRequest.postRequest(testRoute, formData)
 
         expect(result.succeeded).toBe(true)
       })
 
       it('returns the response body as an array buffer', async () => {
-        const result = await GotenbergRequest.post(testRoute, formData)
+        const result = await GotenbergRequest.postRequest(testRoute, formData)
 
         expect(result.response.body).toEqual(bodyAsBuffer)
       })
 
       it('returns the status code', async () => {
-        const result = await GotenbergRequest.post(testRoute, formData)
+        const result = await GotenbergRequest.postRequest(testRoute, formData)
 
         expect(result.response.statusCode).toEqual(HTTP_STATUS_OK)
       })
@@ -102,7 +100,7 @@ describe('Gotenberg Request', () => {
         // Uint8Array and then telling the BaseRequest stub to return it.
         bodyAsUint8Array = new TextEncoder().encode('Not Found')
 
-        Sinon.stub(BaseRequest, 'post').resolves({
+        vi.spyOn(BaseRequest, 'postRequest').mockResolvedValue({
           succeeded: false,
           response: {
             headers,
@@ -114,19 +112,19 @@ describe('Gotenberg Request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await GotenbergRequest.post(testRoute, formData)
+        const result = await GotenbergRequest.postRequest(testRoute, formData)
 
         expect(result.succeeded).toBe(false)
       })
 
       it('returns the error response', async () => {
-        const result = await GotenbergRequest.post(testRoute, formData)
+        const result = await GotenbergRequest.postRequest(testRoute, formData)
 
         expect(result.response.body).toEqual('Not Found')
       })
 
       it('returns the status code', async () => {
-        const result = await GotenbergRequest.post(testRoute, formData)
+        const result = await GotenbergRequest.postRequest(testRoute, formData)
 
         expect(result.response.statusCode).toEqual(HTTP_STATUS_NOT_FOUND)
       })

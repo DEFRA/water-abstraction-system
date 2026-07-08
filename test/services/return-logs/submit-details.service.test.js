@@ -1,14 +1,11 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
+import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import ReturnLogModel from '../../../app/models/return-log.model.js'
 
 // Thing under test
-const SubmitDetailsService = require('../../../app/services/return-logs/submit-details.service.js')
+import SubmitDetailsService from '../../../app/services/return-logs/submit-details.service.js'
 
 describe('Return Logs - Submit Details Service', () => {
   let payload
@@ -18,15 +15,15 @@ describe('Return Logs - Submit Details Service', () => {
   beforeEach(() => {
     mockReturnLog = ReturnLogModel.fromJson({ ...ReturnLogHelper.defaults() })
 
-    patchStub = Sinon.stub().returnsThis()
-    Sinon.stub(ReturnLogModel, 'query').returns({
+    patchStub = vi.fn().mockReturnThis()
+    vi.spyOn(ReturnLogModel, 'query').mockReturnValue({
       patch: patchStub,
-      findById: Sinon.stub().withArgs(mockReturnLog.id).resolves()
+      findById: vi.fn().mockResolvedValue()
     })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -39,7 +36,7 @@ describe('Return Logs - Submit Details Service', () => {
         await SubmitDetailsService(payload, mockReturnLog.id)
 
         // Check we save the status change
-        const [patchObject] = patchStub.args[0]
+        const [patchObject] = patchStub.mock.calls[0]
 
         expect(patchObject).toMatchObject({ underQuery: true })
       })
@@ -54,7 +51,7 @@ describe('Return Logs - Submit Details Service', () => {
         await SubmitDetailsService(payload, mockReturnLog.id)
 
         // Check we save the status change
-        const [patchObject] = patchStub.args[0]
+        const [patchObject] = patchStub.mock.calls[0]
 
         expect(patchObject).toMatchObject({ underQuery: false })
       })

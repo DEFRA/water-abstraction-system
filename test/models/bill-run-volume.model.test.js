@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const BillRunHelper = require('../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../app/models/bill-run.model.js')
-const BillRunVolumeHelper = require('../support/helpers/bill-run-volume.helper.js')
-const ChargeReferenceHelper = require('../support/helpers/charge-reference.helper.js')
-const ChargeReferenceModel = require('../../app/models/charge-reference.model.js')
+import * as BillRunHelper from '../support/helpers/bill-run.helper.js'
+import BillRunModel from '../../app/models/bill-run.model.js'
+import * as BillRunVolumeHelper from '../support/helpers/bill-run-volume.helper.js'
+import * as ChargeReferenceHelper from '../support/helpers/charge-reference.helper.js'
+import ChargeReferenceModel from '../../app/models/charge-reference.model.js'
 
 // Thing under test
-const BillRunVolumeModel = require('../../app/models/bill-run-volume.model.js')
+import BillRunVolumeModel from '../../app/models/bill-run-volume.model.js'
 
 describe('Bill Run Volume model', () => {
   let testBillRun

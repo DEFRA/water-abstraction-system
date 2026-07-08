@@ -1,10 +1,9 @@
-'use strict'
-
 // Test helpers
-const { HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_OK } = http2.constants
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
 
 describe('Root controller: GET /', () => {
   let server

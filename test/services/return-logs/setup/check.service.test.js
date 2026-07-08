@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const CheckService = require('../../../../app/services/return-logs/setup/check.service.js')
+import CheckService from '../../../../app/services/return-logs/setup/check.service.js'
 
 describe('Return Logs Setup - Check service', () => {
   let session
@@ -19,18 +16,19 @@ describe('Return Logs Setup - Check service', () => {
   let yarStub
 
   beforeEach(() => {
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([])
 
     sessionData = _sessionData()
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called for the first time', () => {

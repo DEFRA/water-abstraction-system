@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceSupplementaryYearHelper = require('../../../support/helpers/licence-supplementary-year.helper.js')
-const LicenceSupplementaryYearModel = require('../../../../app/models/licence-supplementary-year.model.js')
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import * as LicenceSupplementaryYearHelper from '../../../support/helpers/licence-supplementary-year.helper.js'
+import LicenceSupplementaryYearModel from '../../../../app/models/licence-supplementary-year.model.js'
 
 // Thing under test
-const FetchLicenceSupplementaryYearsService = require('../../../../app/services/bill-runs/setup/fetch-licence-supplementary-years.service.js')
+import FetchLicenceSupplementaryYearsService from '../../../../app/services/bill-runs/setup/fetch-licence-supplementary-years.service.js'
 
 describe('Bill Runs - Setup - Fetch Licence Supplementary Years service', () => {
   const regionId = 'acbfbba3-d5ac-422e-9e48-8683c1797e86'

@@ -1,15 +1,13 @@
-'use strict'
-
-const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const LegacyRequest = require('../../../app/requests/legacy.request.js')
+import * as LegacyRequest from '../../../app/requests/legacy.request.js'
 
 // Thing under test
-const CreateBillRunRequest = require('../../../app/requests/legacy/create-bill-run.request.js')
+import * as CreateBillRunRequest from '../../../app/requests/legacy/create-bill-run.request.js'
 
 describe('Legacy Create Bill Run request', () => {
   const batchType = 'two_part_tariff'
@@ -19,12 +17,12 @@ describe('Legacy Create Bill Run request', () => {
   const summer = true
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request can create a bill run', () => {
     beforeEach(async () => {
-      Sinon.stub(LegacyRequest, 'post').resolves({
+      vi.spyOn(LegacyRequest, 'postRequest').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -50,7 +48,7 @@ describe('Legacy Create Bill Run request', () => {
   describe('when the request cannot create a bill run', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
-        Sinon.stub(LegacyRequest, 'post').resolves({
+        vi.spyOn(LegacyRequest, 'postRequest').mockResolvedValue({
           succeeded: false,
           response: {
             statusCode: HTTP_STATUS_UNAUTHORIZED,
@@ -81,7 +79,7 @@ describe('Legacy Create Bill Run request', () => {
 
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
-        Sinon.stub(LegacyRequest, 'post').resolves({
+        vi.spyOn(LegacyRequest, 'postRequest').mockResolvedValue({
           succeeded: false,
           response: new Error("Timeout awaiting 'request' for 5000ms")
         })

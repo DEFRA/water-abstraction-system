@@ -1,17 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = require('node:http2').constants
-const { NOTIFY_TEMPLATES } = require('../../../app/lib/notify-templates.lib.js')
+import http2 from 'node:http2'
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = http2.constants
+import { NOTIFY_TEMPLATES } from '../../../app/lib/notify-templates.lib.js'
 
 // Things we need to stub
-const NotifyRequest = require('../../../app/requests/notify.request.js')
+import * as NotifyRequest from '../../../app/requests/notify.request.js'
 
 // Thing under test
-const GeneratePreviewRequest = require('../../../app/requests/notify/generate-preview.request.js')
+import * as GeneratePreviewRequest from '../../../app/requests/notify/generate-preview.request.js'
 
 describe('Notify - Generate Preview request', () => {
   let personalisation
@@ -29,7 +27,7 @@ describe('Notify - Generate Preview request', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request succeeds', () => {
@@ -47,7 +45,7 @@ describe('Notify - Generate Preview request', () => {
         }
       }
 
-      Sinon.stub(NotifyRequest, 'post').resolves({
+      vi.spyOn(NotifyRequest, 'postRequest').mockResolvedValue({
         succeeded: true,
         response
       })
@@ -82,7 +80,7 @@ describe('Notify - Generate Preview request', () => {
           }
         }
 
-        Sinon.stub(NotifyRequest, 'post').resolves({
+        vi.spyOn(NotifyRequest, 'postRequest').mockResolvedValue({
           succeeded: false,
           response
         })

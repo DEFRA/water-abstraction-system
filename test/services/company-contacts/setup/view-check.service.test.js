@@ -1,53 +1,50 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import * as CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchCompanyContactsDal = require('../../../../app/dal/company-contacts/setup/fetch-company-contacts.dal.js')
-const FetchNotificationService = require('../../../../app/services/company-contacts/fetch-notification.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchCompanyContactsDal from '../../../../app/dal/company-contacts/setup/fetch-company-contacts.dal.js'
+import FetchNotificationService from '../../../../app/services/company-contacts/fetch-notification.service.js'
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewCheckService = require('../../../../app/services/company-contacts/setup/view-check.service.js')
+import ViewCheckService from '../../../../app/services/company-contacts/setup/view-check.service.js'
 
 describe('Company Contacts - Setup - Check Service', () => {
   let company
   let notification
   let session
   let yarStub
-  let stubFetchCompanyContactsDal
-
   beforeEach(async () => {
     company = CustomersFixtures.company()
 
-    session = SessionModelStub.build(Sinon, { company, abstractionAlerts: 'yes', name: 'Eric', email: 'eric@test.com' })
+    session = SessionModelStub({ company, abstractionAlerts: 'yes', name: 'Eric', email: 'eric@test.com' })
 
     notification = undefined
 
-    Sinon.stub(FetchNotificationService, 'go').resolves(notification)
+    vi.mock('../../../../app/services/company-contacts/fetch-notification.service.js')
+    FetchNotificationService.mockResolvedValue(notification)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
-    stubFetchCompanyContactsDal = Sinon.stub(FetchCompanyContactsDal, 'go')
+    vi.mock('../../../../app/dal/company-contacts/setup/fetch-company-contacts.dal.js')
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([{ title: 'Test', text: 'Notification' }])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([{ title: 'Test', text: 'Notification' }])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     describe('when there is no matching contact', () => {
       beforeEach(() => {
-        stubFetchCompanyContactsDal.resolves(CustomersFixtures.companyContacts())
+        FetchCompanyContactsDal.mockResolvedValue(CustomersFixtures.companyContacts())
       })
 
       it('returns page data for the view', async () => {
@@ -99,7 +96,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         matchingContact.contact.email = 'eric@test.com'
         matchingContact.contact.contactType = 'department'
 
-        stubFetchCompanyContactsDal.returns([matchingContact])
+        FetchCompanyContactsDal.mockReturnValue([matchingContact])
       })
 
       it('updates the session', async () => {

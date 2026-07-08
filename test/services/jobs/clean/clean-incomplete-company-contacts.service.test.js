@@ -1,20 +1,17 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const LicenceEntityHelper = require('../../../support/helpers/licence-entity.helper.js')
-const LicenceRoleHelper = require('../../../support/helpers/licence-role.helper.js')
-const CompanyContactHelper = require('../../../support/helpers/company-contact.helper.js')
-const CompanyContactModel = require('../../../../app/models/company-contact.model.js')
-const ContactHelper = require('../../../support/helpers/contact.helper.js')
+import * as LicenceEntityHelper from '../../../support/helpers/licence-entity.helper.js'
+import * as LicenceRoleHelper from '../../../support/helpers/licence-role.helper.js'
+import * as CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'
+import CompanyContactModel from '../../../../app/models/company-contact.model.js'
+import * as ContactHelper from '../../../support/helpers/contact.helper.js'
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const CleanIncompleteCompanyContactsService = require('../../../../app/services/jobs/clean/clean-incomplete-company-contacts.service.js')
+import CleanIncompleteCompanyContactsService from '../../../../app/services/jobs/clean/clean-incomplete-company-contacts.service.js'
 
 describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
   let companyContact
@@ -25,12 +22,12 @@ describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(async () => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
 
     await contact.$query().delete()
@@ -112,11 +109,11 @@ describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
 
   describe('when the clean errors', () => {
     beforeEach(() => {
-      Sinon.stub(CompanyContactModel, 'query').returns({
-        delete: Sinon.stub().returnsThis(),
-        innerJoinRelated: Sinon.stub().returnsThis(),
-        where: Sinon.stub().returnsThis(),
-        whereNull: Sinon.stub().rejects()
+      vi.spyOn(CompanyContactModel, 'query').mockReturnValue({
+        delete: vi.fn().mockReturnThis(),
+        innerJoinRelated: vi.fn().mockReturnThis(),
+        where: vi.fn().mockReturnThis(),
+        whereNull: vi.fn().rejects()
       })
     })
 
@@ -129,7 +126,7 @@ describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
 
       const errorLogArgs = notifierStub.omfg.firstCall.args
 
-      expect(notifierStub.omfg.calledWith('Clean job failed')).toBe(true)
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed')
       expect(errorLogArgs[1]).toEqual({ job: 'clean-incomplete-company-contacts' })
       expect(errorLogArgs[2]).toBeInstanceOf(Error)
     })

@@ -1,15 +1,13 @@
-'use strict'
-
 // Test helpers
-const LicenceDocumentHeaderHelper = require('../../../support/helpers/licence-document-header.helper.js')
-const LicenceEntityHelper = require('../../../support/helpers/licence-entity.helper.js')
-const LicenceEntityRoleHelper = require('../../../support/helpers/licence-entity-role.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const UserHelper = require('../../../support/helpers/user.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import * as LicenceDocumentHeaderHelper from '../../../support/helpers/licence-document-header.helper.js'
+import * as LicenceEntityHelper from '../../../support/helpers/licence-entity.helper.js'
+import * as LicenceEntityRoleHelper from '../../../support/helpers/licence-entity-role.helper.js'
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import * as UserHelper from '../../../support/helpers/user.helper.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const FetchUserDetailsDal = require('../../../../app/dal/users/external/fetch-user-details.dal.js')
+import FetchUserDetailsDal from '../../../../app/dal/users/external/fetch-user-details.dal.js'
 
 describe('Users - External - Fetch User Details DAL', () => {
   let licence

@@ -1,13 +1,11 @@
-'use strict'
-
 // Test helpers
-const PointModel = require('../../app/models/point.model.js')
-const ViewLicencesFixture = require('../support/fixtures/view-licences.fixture.js')
-const { generateUUID } = require('../../app/lib/general.lib.js')
-const { licenceEnds } = require('../support/fixtures/licence.fixture.js')
+import PointModel from '../../app/models/point.model.js'
+import * as ViewLicencesFixture from '../support/fixtures/view-licences.fixture.js'
+import { generateUUID } from '../../app/lib/general.lib.js'
+import { licenceEnds } from '../support/fixtures/licence.fixture.js'
 
 // Thing under test
-const LicencePresenter = require('../../app/presenters/licence.presenter.js')
+import LicencePresenter from '../../app/presenters/licence.presenter.js'
 
 describe('Licences presenter', () => {
   describe('#formatConditionTypes()', () => {

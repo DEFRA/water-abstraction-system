@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const FetchLicenceDal = require('../../../app/dal/licence-monitoring-station/fetch-licence.dal.js')
+import FetchLicenceDal from '../../../app/dal/licence-monitoring-station/fetch-licence.dal.js'
 
 describe('Licence Monitoring Station - Fetch Licence DAL', () => {
   let licence

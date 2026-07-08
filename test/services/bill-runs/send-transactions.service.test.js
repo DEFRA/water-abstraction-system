@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillRunError = require('../../../app/errors/bill-run.error.js')
-const BillRunModel = require('../../../app/models/bill-run.model.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+import BillRunError from '../../../app/errors/bill-run.error.js'
+import BillRunModel from '../../../app/models/bill-run.model.js'
+import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 
 // Things we need to stub
-const ChargingModuleCreateTransactionRequest = require('../../../app/requests/charging-module/create-transaction.request.js')
+import * as ChargingModuleCreateTransactionRequest from '../../../app/requests/charging-module/create-transaction.request.js'
 
 // Thing under test
-const SendTransactionsService = require('../../../app/services/bill-runs/send-transactions.service.js')
+import SendTransactionsService from '../../../app/services/bill-runs/send-transactions.service.js'
 
 describe('Bill Runs - Send Transactions service', () => {
   const accountNumber = 'ABC123'
@@ -28,7 +25,9 @@ describe('Bill Runs - Send Transactions service', () => {
   let transactions
 
   beforeEach(() => {
-    chargingModuleCreateTransactionRequestStub = Sinon.stub(ChargingModuleCreateTransactionRequest, 'send')
+    chargingModuleCreateTransactionRequestStub = vi
+      .spyOn(ChargingModuleCreateTransactionRequest, 'send')
+      .mockImplementation(() => {})
 
     transactions = [
       _transaction('fca14c7e-c895-4991-9651-9a76f45b971d'),
@@ -37,7 +36,7 @@ describe('Bill Runs - Send Transactions service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when calling the Charging Module API is successful', () => {

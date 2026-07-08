@@ -1,35 +1,33 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
+import DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
 
 // Thing under test
-const SubmitCancelService = require('../../../../app/services/return-versions/setup/submit-cancel.service.js')
+import SubmitCancelService from '../../../../app/services/return-versions/setup/submit-cancel.service.js'
 
 describe('Return Versions Setup - Submit Cancel service', () => {
   let session
 
   beforeEach(() => {
-    session = SessionModelStub.build(Sinon, {})
+    session = SessionModelStub({})
 
-    Sinon.stub(DeleteSessionDal, 'go').resolves()
+    vi.mock('../../../../app/dal/delete-session.dal.js')
+    DeleteSessionDal.mockResolvedValue()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when a user submits the return requirements to be cancelled', () => {
     it('deletes the session data', async () => {
       await SubmitCancelService(session.id)
 
-      expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
+      expect(DeleteSessionDal.go).toHaveBeenCalledWith(session.id)
     })
   })
 })

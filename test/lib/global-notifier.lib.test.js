@@ -1,28 +1,25 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const BaseNotifierLib = require('../../app/lib/base-notifier.lib.js')
+import * as BaseNotifierLib from '../../app/lib/base-notifier.lib.js'
 
 // Thing under test
-const GlobalNotifierLib = require('../../app/lib/global-notifier.lib.js')
+import * as GlobalNotifierLib from '../../app/lib/global-notifier.lib.js'
 
 describe('GlobalNotifierLib class', () => {
   let airbrakeFake
   let pinoFake
 
   beforeEach(async () => {
-    airbrakeFake = { notify: Sinon.fake.resolves({ id: 1 }), flush: Sinon.fake() }
-    Sinon.stub(BaseNotifierLib.prototype, '_setNotifier').returns(airbrakeFake)
+    airbrakeFake = { notify: vi.fn().mockResolvedValue({ id: 1 }), flush: vi.fn() }
+    vi.spyOn(BaseNotifierLib.prototype, '_setNotifier').mockReturnValue(airbrakeFake)
 
-    pinoFake = { info: Sinon.fake(), error: Sinon.fake() }
-    Sinon.stub(BaseNotifierLib.prototype, '_setLogger').returns(pinoFake)
+    pinoFake = { info: vi.fn(), error: vi.fn() }
+    vi.spyOn(BaseNotifierLib.prototype, '_setLogger').mockReturnValue(pinoFake)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('#constructor', () => {

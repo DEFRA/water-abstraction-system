@@ -1,23 +1,20 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
-const CRMContactsSeeder = require('../../support/seeders/crm-contacts.seeder.js')
-const CompanyHelper = require('../../support/helpers/company.helper.js')
-const EmptyLicenceSeeder = require('../../support/seeders/empty-licence.seeder.js')
-const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const UserHelper = require('../../support/helpers/user.helper.js')
+import * as BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
+import CRMContactsSeeder from '../../support/seeders/crm-contacts.seeder.js'
+import * as CompanyHelper from '../../support/helpers/company.helper.js'
+import EmptyLicenceSeeder from '../../support/seeders/empty-licence.seeder.js'
+import * as MonitoringStationHelper from '../../support/helpers/monitoring-station.helper.js'
+import * as RegionHelper from '../../support/helpers/region.helper.js'
+import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import * as UserHelper from '../../support/helpers/user.helper.js'
 
 // Things we need to stub
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
 
 // Thing under test
-const FetchSearchResultsService = require('../../../app/services/search/fetch-search-results.service.js')
+import FetchSearchResultsService from '../../../app/services/search/fetch-search-results.service.js'
 
 describe('Search - Fetch Search Results service', () => {
   const billingAccounts = []
@@ -299,14 +296,14 @@ describe('Search - Fetch Search Results service', () => {
   describe('when multiple pages of results exist', () => {
     beforeEach(() => {
       // Set the page size to 1 to force multiple pages of results
-      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1)
+      vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 1)
 
       query = 'TESTSEARCH'
       page = '2'
     })
 
     afterEach(() => {
-      Sinon.restore()
+      vi.restoreAllMocks()
     })
 
     it('correctly returns the requested page of results', async () => {

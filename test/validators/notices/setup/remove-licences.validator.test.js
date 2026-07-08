@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const RemoveLicencesValidator = require('../../../../app/validators/notices/setup/remove-licences.validator.js')
+import RemoveLicencesValidator from '../../../../app/validators/notices/setup/remove-licences.validator.js'
 
 describe('Notices - Setup - Remove Licences validator', () => {
   let licenceRefsWithDueReturns

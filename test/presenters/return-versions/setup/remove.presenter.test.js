@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const RemovePresenter = require('../../../../app/presenters/return-versions/setup/remove.presenter.js')
+import RemovePresenter from '../../../../app/presenters/return-versions/setup/remove.presenter.js'
 
 describe('Return Versions Setup - Remove presenter', () => {
   const requirementIndex = 0

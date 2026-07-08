@@ -1,13 +1,10 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const FetchChargeVersionsService = require('../../../../app/services/bill-runs/match/fetch-charge-versions.service.js')
+import FetchChargeVersionsService from '../../../../app/services/bill-runs/match/fetch-charge-versions.service.js'
 
 // Thing under test
-const FetchLicencesService = require('../../../../app/services/bill-runs/match/fetch-licences.service.js')
+import FetchLicencesService from '../../../../app/services/bill-runs/match/fetch-licences.service.js'
 
 describe('Bill Runs - Match - Fetch Licences service', () => {
   const billRun = {
@@ -20,11 +17,11 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
   }
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when at least one 2PT licence exists for the region and billing period', () => {
-    const licenceHolderStub = Sinon.stub().returns('Mock Licence Holder')
+    const licenceHolderStub = vi.fn().mockReturnValue('Mock Licence Holder')
 
     const licenceOne = {
       id: '301d4ef9-41b9-4ec9-927b-0c78d9ece5ba',
@@ -38,7 +35,8 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
 
     describe('and there is a single licence linked to a single charge version', () => {
       beforeEach(() => {
-        Sinon.stub(FetchChargeVersionsService, 'go').resolves([
+        vi.mock('../../../../app/services/bill-runs/match/fetch-charge-versions.service.js')
+        FetchChargeVersionsService.mockResolvedValue([
           {
             id: '9407b74d-816c-44a2-9926-73a89a9da985',
             startDate: '2022-04-01T00:00:00.000Z',
@@ -82,7 +80,8 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
       }
 
       beforeEach(() => {
-        Sinon.stub(FetchChargeVersionsService, 'go').resolves([
+        vi.mock('../../../../app/services/bill-runs/match/fetch-charge-versions.service.js')
+        FetchChargeVersionsService.mockResolvedValue([
           {
             id: '9407b74d-816c-44a2-9926-73a89a9da985',
             startDate: '2022-10-01T00:00:00.000Z',
@@ -125,7 +124,8 @@ describe('Bill Runs - Match - Fetch Licences service', () => {
 
   describe('when no 2PT licences exist for the region and billing period', () => {
     beforeEach(() => {
-      Sinon.stub(FetchChargeVersionsService, 'go').resolves([])
+      vi.mock('../../../../app/services/bill-runs/match/fetch-charge-versions.service.js')
+      FetchChargeVersionsService.mockResolvedValue([])
     })
 
     it('will return an empty array', async () => {

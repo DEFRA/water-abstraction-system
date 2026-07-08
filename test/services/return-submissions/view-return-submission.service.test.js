@@ -1,21 +1,18 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const FetchReturnSubmissionService = require('../../../app/services/return-submissions/fetch-return-submission.service.js')
+import FetchReturnSubmissionService from '../../../app/services/return-submissions/fetch-return-submission.service.js'
 
 // Test helpers
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const ReturnSubmissionLineModel = require('../../../app/models/return-submission-line.model.js')
-const ReturnSubmissionLineHelper = require('../../support/helpers/return-submission-line.helper.js')
-const ReturnSubmissionModel = require('../../../app/models/return-submission.model.js')
-const ReturnSubmissionHelper = require('../../support/helpers/return-submission.helper.js')
+import ReturnLogModel from '../../../app/models/return-log.model.js'
+import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import ReturnSubmissionLineModel from '../../../app/models/return-submission-line.model.js'
+import * as ReturnSubmissionLineHelper from '../../support/helpers/return-submission-line.helper.js'
+import ReturnSubmissionModel from '../../../app/models/return-submission.model.js'
+import * as ReturnSubmissionHelper from '../../support/helpers/return-submission.helper.js'
 
 // Thing under test
-const ViewReturnSubmissionService = require('../../../app/services/return-submissions/view-return-submission.service.js')
+import ViewReturnSubmissionService from '../../../app/services/return-submissions/view-return-submission.service.js'
 
 describe('View Return Submission service', () => {
   beforeEach(() => {
@@ -33,11 +30,12 @@ describe('View Return Submission service', () => {
       })
     ]
 
-    Sinon.stub(FetchReturnSubmissionService, 'go').resolves(mockReturnSubmission)
+    vi.mock('../../../app/services/return-submissions/fetch-return-submission.service.js')
+    FetchReturnSubmissionService.mockResolvedValue(mockReturnSubmission)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   it('correctly fetches return log and transforms it via the presenter', async () => {

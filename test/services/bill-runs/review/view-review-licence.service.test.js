@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchReviewLicenceService = require('../../../../app/services/bill-runs/review/fetch-review-licence.service.js')
+import FetchReviewLicenceService from '../../../../app/services/bill-runs/review/fetch-review-licence.service.js'
 
 // Thing under test
-const ViewReviewLicenceService = require('../../../../app/services/bill-runs/review/view-review-licence.service.js')
+import ViewReviewLicenceService from '../../../../app/services/bill-runs/review/view-review-licence.service.js'
 
 describe('Bill Runs - Review - View Review Licence Service', () => {
   let reviewLicence
@@ -21,17 +18,18 @@ describe('Bill Runs - Review - View Review Licence Service', () => {
   beforeEach(() => {
     reviewLicence = BillRunsReviewFixture.reviewLicence()
 
-    Sinon.stub(FetchReviewLicenceService, 'go').resolves(reviewLicence)
+    vi.mock('../../../../app/services/bill-runs/review/fetch-review-licence.service.js')
+    FetchReviewLicenceService.mockResolvedValue(reviewLicence)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     describe('and there is a flash message to display', () => {
       beforeEach(() => {
-        yarStub = YarStub.build(Sinon)
+        yarStub = YarStub()
         yarStub.flash.withArgs('banner').returns(['This licence has been marked.'])
       })
 
@@ -129,7 +127,7 @@ describe('Bill Runs - Review - View Review Licence Service', () => {
 
     describe('and there is no flash message to display', () => {
       beforeEach(() => {
-        yarStub = YarStub.build(Sinon)
+        yarStub = YarStub()
         yarStub.flash.withArgs('banner').returns([undefined])
       })
 

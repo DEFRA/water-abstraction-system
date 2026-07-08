@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const ContactModel = require('../../../app/models/contact.model.js')
-const LicenceModel = require('../../../app/models/licence.model.js')
-const PointModel = require('../../../app/models/point.model.js')
-const ReturnVersionModel = require('../../../app/models/return-version.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import ContactModel from '../../../app/models/contact.model.js'
+import LicenceModel from '../../../app/models/licence.model.js'
+import PointModel from '../../../app/models/point.model.js'
+import ReturnVersionModel from '../../../app/models/return-version.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const ViewPresenter = require('../../../app/presenters/return-versions/view.presenter.js')
+import ViewPresenter from '../../../app/presenters/return-versions/view.presenter.js'
 
 describe('Return Versions - View presenter', () => {
   let returnVersion

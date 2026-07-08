@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const MatchReturnsToChargeElementService = require('../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js')
+import MatchReturnsToChargeElementService from '../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js'
 
 describe('Match Returns To Charge Element Service', () => {
   let chargeElement

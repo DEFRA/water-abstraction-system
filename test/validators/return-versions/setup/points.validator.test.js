@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const PointsValidator = require('../../../../app/validators/return-versions/setup/points.validator.js')
+import PointsValidator from '../../../../app/validators/return-versions/setup/points.validator.js'
 
 describe('Return Versions Setup - Point validator', () => {
   describe('when valid data is provided', () => {

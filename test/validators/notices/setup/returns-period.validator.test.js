@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ReturnsPeriodValidator = require('../../../../app/validators/notices/setup/returns-periods.validator.js')
+import ReturnsPeriodValidator from '../../../../app/validators/notices/setup/returns-periods.validator.js'
 
 describe('Notices - Setup - Returns Period validator', () => {
   const noticeType = 'invitations'

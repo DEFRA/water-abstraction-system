@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
-const GenerateFromAbstractionDataService = require('../../../../../app/services/return-versions/setup/method/generate-from-abstraction-data.service.js')
+import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import GenerateFromAbstractionDataService from '../../../../../app/services/return-versions/setup/method/generate-from-abstraction-data.service.js'
 
 // Thing under test
-const SubmitMethodService = require('../../../../../app/services/return-versions/setup/method/submit-method.service.js')
+import SubmitMethodService from '../../../../../app/services/return-versions/setup/method/submit-method.service.js'
 
 describe('Return Versions - Setup - Submit Method service', () => {
   let payload
@@ -59,13 +56,14 @@ describe('Return Versions - Setup - Submit Method service', () => {
       reason: 'major-change'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -75,7 +73,8 @@ describe('Return Versions - Setup - Submit Method service', () => {
           method: 'useAbstractionData'
         }
 
-        Sinon.stub(GenerateFromAbstractionDataService, 'go').resolves(_generatedReturnRequirements())
+        vi.mock('../../../../../app/services/return-versions/setup/method/generate-from-abstraction-data.service.js')
+        GenerateFromAbstractionDataService.mockResolvedValue(_generatedReturnRequirements())
       })
 
       it('saves the submitted value', async () => {

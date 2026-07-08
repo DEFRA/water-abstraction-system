@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
-const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
-const MatchAndAllocateService = require('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
+import BillRunModel from '../../../../app/models/bill-run.model.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
+import MatchAndAllocateService from '../../../../app/services/bill-runs/match/match-and-allocate.service.js'
 
 // Thing under test
-const ProcessBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js')
+import ProcessBillRunService from '../../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js'
 
 describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
   const billingPeriods = [{ startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }]
@@ -20,29 +17,30 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
   let notifierStub
 
   beforeEach(async () => {
-    billRunPatchStub = Sinon.stub().resolves()
+    billRunPatchStub = vi.fn().mockResolvedValue()
 
-    Sinon.stub(BillRunModel, 'query').returns({
-      findById: Sinon.stub().returnsThis(),
+    vi.spyOn(BillRunModel, 'query').mockReturnValue({
+      findById: vi.fn().mockReturnThis(),
       patch: billRunPatchStub
     })
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
   describe('when the service is called', () => {
     describe('and there are no licences to be billed', () => {
       beforeEach(() => {
-        Sinon.stub(MatchAndAllocateService, 'go').resolves(false)
+        vi.mock('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
+        MatchAndAllocateService.mockResolvedValue(false)
       })
 
       it('sets the bill run status first to "processing" and then to "empty"', async () => {
@@ -67,7 +65,8 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
 
     describe('and licences are matched and allocated', () => {
       beforeEach(() => {
-        Sinon.stub(MatchAndAllocateService, 'go').resolves(true)
+        vi.mock('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
+        MatchAndAllocateService.mockResolvedValue(true)
       })
 
       it('sets the bill run status first to "processing" and then to "review"', async () => {
@@ -94,14 +93,15 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
   describe('when the service errors', () => {
     describe('because matching and allocating fails', () => {
       beforeEach(() => {
-        Sinon.stub(MatchAndAllocateService, 'go').throws('MatchAndAllocateService has gone pop')
-        Sinon.stub(HandleErroredBillRunService, 'go')
+        vi.mock('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
+        MatchAndAllocateService.mockRejectedValue('MatchAndAllocateService has gone pop')
+        vi.mock('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
       })
 
       it('calls HandleErroredBillRunService', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        expect(HandleErroredBillRunService.go.called).toBe(true)
+        expect(HandleErroredBillRunService.go).toHaveBeenCalled()
       })
 
       it('logs the error', async () => {

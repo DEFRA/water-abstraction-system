@@ -1,20 +1,17 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const EventModel = require('../../../../app/models/event.model.js')
-const UserGroupModel = require('../../../../app/models/user-group.model.js')
-const UserModel = require('../../../../app/models/user.model.js')
-const UserRoleModel = require('../../../../app/models/user-role.model.js')
-const { generateUserName } = require('../../../support/helpers/user.helper.js')
+import EventModel from '../../../../app/models/event.model.js'
+import UserGroupModel from '../../../../app/models/user-group.model.js'
+import UserModel from '../../../../app/models/user.model.js'
+import UserRoleModel from '../../../../app/models/user-role.model.js'
+import { generateUserName } from '../../../support/helpers/user.helper.js'
 
 // Things we need to stub
-const FetchUserDal = require('../../../../app/dal/users/fetch-user.dal.js')
+import FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
 
 // Thing under test
-const CreateUserDal = require('../../../../app/dal/users/internal/create-user.dal.js')
+import CreateUserDal from '../../../../app/dal/users/internal/create-user.dal.js'
 
 describe('Users - Internal - Create User DAL', () => {
   let auth
@@ -26,7 +23,8 @@ describe('Users - Internal - Create User DAL', () => {
     auth = { credentials: { user: { id: 'f42aa5b2-95e2-49c0-9ad4-4a7c3c5aefaf' } } }
     session = { email, permission: 'basic' }
 
-    Sinon.stub(FetchUserDal, 'go').resolves({ username: 'internal-user-creator@wrls.gov.uk' })
+    vi.mock('../../../../app/dal/users/fetch-user.dal.js')
+    FetchUserDal.mockResolvedValue({ username: 'internal-user-creator@wrls.gov.uk' })
   })
 
   afterEach(async () => {
@@ -40,7 +38,7 @@ describe('Users - Internal - Create User DAL', () => {
       await user.$query().delete()
     }
 
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

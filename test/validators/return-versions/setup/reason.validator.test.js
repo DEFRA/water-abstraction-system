@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ReasonValidator = require('../../../../app/validators/return-versions/setup/reason.validator.js')
+import ReasonValidator from '../../../../app/validators/return-versions/setup/reason.validator.js'
 
 describe('Return Versions Setup - Reason validator', () => {
   describe('when valid data is provided', () => {

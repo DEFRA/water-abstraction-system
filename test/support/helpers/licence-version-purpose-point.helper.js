@@ -4,7 +4,7 @@
 
 import { generateRandomInteger, generateUUID } from '../../../app/lib/general.lib.js'
 import LicenceVersionPurposePointModel from '../../../app/models/licence-version-purpose-point.model.js'
-import PointHelper from './point.helper.js'
+import * as PointHelper from './point.helper.js'
 
 /**
  * Add a new licence version purpose point

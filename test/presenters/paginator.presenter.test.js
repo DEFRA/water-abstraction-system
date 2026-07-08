@@ -1,13 +1,10 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const DatabaseConfig = require('../../config/database.config.js')
+import DatabaseConfig from '../../config/database.config.js'
 
 // Thing under test
-const PaginatorPresenter = require('../../app/presenters/paginator.presenter.js')
+import PaginatorPresenter from '../../app/presenters/paginator.presenter.js'
 
 describe('Paginator Presenter', () => {
   const path = '/system/bill-runs'
@@ -24,7 +21,7 @@ describe('Paginator Presenter', () => {
     // NOTE: We set the default page so we have control over how we expect the paginator to 'page up' our results. But
     // it also allows us to set it to something different to the current default of 25 to confirm changing the default
     // won't break the presenter
-    Sinon.replace(DatabaseConfig, 'defaultPageSize', 50)
+    vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 50)
 
     // The default page count is used, as the queries will be returning this amount.
     currentAmount = '50'
@@ -32,7 +29,7 @@ describe('Paginator Presenter', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when no pagination is needed', () => {

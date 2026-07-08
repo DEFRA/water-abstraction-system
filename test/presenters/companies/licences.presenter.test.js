@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
-const LicenceModel = require('../../../app/models/licence.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { yesterday } = require('../../support/general.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
+import LicenceModel from '../../../app/models/licence.model.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import { yesterday } from '../../support/general.js'
+import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 
 // Thing under test
-const LicencesPresenter = require('../../../app/presenters/companies/licences.presenter.js')
+import LicencesPresenter from '../../../app/presenters/companies/licences.presenter.js'
 
 describe('Companies - Licences presenter', () => {
   let company

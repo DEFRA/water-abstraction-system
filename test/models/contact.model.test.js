@@ -1,16 +1,14 @@
-'use strict'
-
 // Test helpers
-const BillingAccountAddressHelper = require('../support/helpers/billing-account-address.helper.js')
-const BillingAccountAddressModel = require('../../app/models/billing-account-address.model.js')
-const CompanyContactHelper = require('../support/helpers/company-contact.helper.js')
-const CompanyContactModel = require('../../app/models/company-contact.model.js')
-const ContactHelper = require('../support/helpers/contact.helper.js')
-const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
-const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
+import * as BillingAccountAddressHelper from '../support/helpers/billing-account-address.helper.js'
+import BillingAccountAddressModel from '../../app/models/billing-account-address.model.js'
+import * as CompanyContactHelper from '../support/helpers/company-contact.helper.js'
+import CompanyContactModel from '../../app/models/company-contact.model.js'
+import * as ContactHelper from '../support/helpers/contact.helper.js'
+import * as LicenceDocumentRoleHelper from '../support/helpers/licence-document-role.helper.js'
+import LicenceDocumentRoleModel from '../../app/models/licence-document-role.model.js'
 
 // Thing under test
-const ContactModel = require('../../app/models/contact.model.js')
+import ContactModel from '../../app/models/contact.model.js'
 
 describe('Contact model', () => {
   let testBillingAccountAddresses

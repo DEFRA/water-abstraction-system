@@ -1,26 +1,24 @@
-'use strict'
-
-const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
+import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
 
 // Thing under test
-const DeleteBillRunRequest = require('../../../app/requests/charging-module/delete-bill-run.request.js')
+import * as DeleteBillRunRequest from '../../../app/requests/charging-module/delete-bill-run.request.js'
 
 describe('Charging Module Delete Bill Run request', () => {
   const billRunId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request can delete a bill run', () => {
     beforeEach(async () => {
-      Sinon.stub(ChargingModuleRequest, 'delete').resolves({
+      vi.spyOn(ChargingModuleRequest, 'deleteRequest').mockResolvedValue({
         succeeded: true,
         response: {
           info: {
@@ -50,7 +48,7 @@ describe('Charging Module Delete Bill Run request', () => {
   describe('when the request cannot delete a bill run', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequest, 'delete').resolves({
+        vi.spyOn(ChargingModuleRequest, 'deleteRequest').mockResolvedValue({
           succeeded: false,
           response: {
             info: {
@@ -85,7 +83,7 @@ describe('Charging Module Delete Bill Run request', () => {
 
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequest, 'delete').resolves({
+        vi.spyOn(ChargingModuleRequest, 'deleteRequest').mockResolvedValue({
           succeeded: false,
           response: new Error("Timeout awaiting 'request' for 5000ms")
         })

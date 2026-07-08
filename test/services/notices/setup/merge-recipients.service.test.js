@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
+import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 
 // Thing under test
-const MergeRecipientsService = require('../../../../app/services/notices/setup/merge-recipients.service.js')
+import MergeRecipientsService from '../../../../app/services/notices/setup/merge-recipients.service.js'
 
 describe('Notices - Setup - Merge Recipients service', () => {
   let additionalRecipient

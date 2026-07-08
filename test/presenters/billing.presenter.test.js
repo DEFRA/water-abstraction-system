@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const BillingPresenter = require('../../app/presenters/billing.presenter.js')
+import BillingPresenter from '../../app/presenters/billing.presenter.js'
 
 describe('Billing presenter', () => {
   describe('#formatBillRunType()', () => {

@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const FrequencyCollectedPresenter = require('../../../../app/presenters/return-versions/setup/frequency-collected.presenter.js')
+import FrequencyCollectedPresenter from '../../../../app/presenters/return-versions/setup/frequency-collected.presenter.js'
 
 describe('Return Versions Setup - Frequency Collected presenter', () => {
   const requirementIndex = 0

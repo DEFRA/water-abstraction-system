@@ -1,16 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_OK } = http2.constants
 
 // Things we need to stub
-const ViewService = require('../../app/services/return-versions/view.service.js')
+import ViewService from '../../app/services/return-versions/view.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
 
 describe('Return Versions controller', () => {
   let server
@@ -23,14 +21,14 @@ describe('Return Versions controller', () => {
   beforeEach(async () => {
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
-    Sinon.stub(server.logger, 'error')
+    vi.spyOn(server.logger, 'error').mockImplementation(() => {})
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -42,7 +40,8 @@ describe('Return Versions controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        Sinon.stub(ViewService, 'go').resolves({
+        vi.mock('../../app/services/return-versions/view.service.js')
+        ViewService.mockResolvedValue({
           pageTitle: 'Requirements for returns valid from'
         })
       })

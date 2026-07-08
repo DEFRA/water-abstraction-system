@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ChangeAddressValidator = require('../../app/validators/change-address.validator.js')
+import ChangeAddressValidator from '../../app/validators/change-address.validator.js'
 
 describe('Create Bill Run validator', () => {
   const completeAddress = {

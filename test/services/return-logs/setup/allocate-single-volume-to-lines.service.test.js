@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const Big = require('big.js')
+import Big from 'big.js'
 
 // Thing under test
-const AllocateSingleVolumeToLinesService = require('../../../../app/services/return-logs/setup/allocate-single-volume-to-lines.service.js')
+import AllocateSingleVolumeToLinesService from '../../../../app/services/return-logs/setup/allocate-single-volume-to-lines.service.js'
 
 describe('Return Logs - Allocate Single Volume To Lines Service', () => {
   describe('when passed an abstraction periods to and from date', () => {

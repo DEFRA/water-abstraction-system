@@ -1,28 +1,25 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const NoticeSessionFixture = require('../../../support/fixtures/notice-session.fixture.js')
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const { formatAbstractionPeriod, formatValueUnit } = require('../../../../app/presenters/base.presenter.js')
-const { addressToCSV } = require('../../../../app/presenters/notices/base.presenter.js')
-const { transformArrayToCSVRow } = require('../../../../app/lib/transform-to-csv.lib.js')
+import * as NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
+import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import { formatAbstractionPeriod, formatValueUnit } from '../../../../app/presenters/base.presenter.js'
+import { addressToCSV } from '../../../../app/presenters/notices/base.presenter.js'
+import { transformArrayToCSVRow } from '../../../../app/lib/transform-to-csv.lib.js'
 
 // Things to stub
-const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ProcessDownloadRecipientsService = require('../../../../app/services/notices/setup/process-download-recipients.service.js')
+import ProcessDownloadRecipientsService from '../../../../app/services/notices/setup/process-download-recipients.service.js'
 
 describe('Notices - Setup - Process Download Recipients service', () => {
   let session
   let recipient
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the notice type is an "abstraction alert"', () => {
@@ -30,9 +27,11 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       recipient = RecipientsFixture.alertNoticePrimaryUser()
       session = NoticeSessionFixture.abstractionAlertStop(recipient.licence_refs[0])
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.mock('../../../../app/dal/fetch-session.dal.js')
+      FetchSessionDal.mockResolvedValue(session)
 
-      Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
+      vi.mock('../../../../app/services/notices/setup/fetch-recipients.service.js')
+      FetchRecipientsService.mockResolvedValue([recipient])
     })
 
     it('returns the correct csv string, filename and type', async () => {
@@ -56,9 +55,11 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       recipient = RecipientsFixture.returnsNoticeLicenceHolder()
       session = NoticeSessionFixture.paperReturn(recipient.licence_refs[0])
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.mock('../../../../app/dal/fetch-session.dal.js')
+      FetchSessionDal.mockResolvedValue(session)
 
-      Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
+      vi.mock('../../../../app/services/notices/setup/fetch-recipients.service.js')
+      FetchRecipientsService.mockResolvedValue([recipient])
     })
 
     it('returns the correct csv string, filename and type', async () => {
@@ -82,9 +83,11 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       recipient = RecipientsFixture.returnsNoticeLicenceHolder()
       session = NoticeSessionFixture.standardReminder(recipient.licence_refs[0])
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.mock('../../../../app/dal/fetch-session.dal.js')
+      FetchSessionDal.mockResolvedValue(session)
 
-      Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
+      vi.mock('../../../../app/services/notices/setup/fetch-recipients.service.js')
+      FetchRecipientsService.mockResolvedValue([recipient])
     })
 
     it('returns the correct csv string, filename and type', async () => {
@@ -108,9 +111,11 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       recipient = RecipientsFixture.returnsNoticeLicenceHolder()
       session = NoticeSessionFixture.standardInvitation(recipient.licence_refs[0])
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.mock('../../../../app/dal/fetch-session.dal.js')
+      FetchSessionDal.mockResolvedValue(session)
 
-      Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
+      vi.mock('../../../../app/services/notices/setup/fetch-recipients.service.js')
+      FetchRecipientsService.mockResolvedValue([recipient])
     })
 
     it('returns the correct csv string, filename and type', async () => {
@@ -134,9 +139,11 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       recipient = RecipientsFixture.renewalInvitationLicenceHolder()
       session = NoticeSessionFixture.adHocRenewalInvitation(recipient.licence_refs[0])
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.mock('../../../../app/dal/fetch-session.dal.js')
+      FetchSessionDal.mockResolvedValue(session)
 
-      Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
+      vi.mock('../../../../app/services/notices/setup/fetch-recipients.service.js')
+      FetchRecipientsService.mockResolvedValue([recipient])
     })
 
     it('returns the correct csv string, filename and type', async () => {

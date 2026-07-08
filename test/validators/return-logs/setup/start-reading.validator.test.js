@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const StartReadingValidator = require('../../../../app/validators/return-logs/setup/start-reading.validator.js')
+import StartReadingValidator from '../../../../app/validators/return-logs/setup/start-reading.validator.js'
 
 describe('Return Logs Setup - Start Reading validator', () => {
   let payload

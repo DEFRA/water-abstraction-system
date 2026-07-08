@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const CheckNoticeTypePresenter = require('../../../../app/presenters/notices/setup/check-notice-type.presenter.js')
+import CheckNoticeTypePresenter from '../../../../app/presenters/notices/setup/check-notice-type.presenter.js'
 
 describe('Notices - Setup - Check Notice Type presenter', () => {
   let licenceRef

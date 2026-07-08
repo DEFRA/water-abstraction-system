@@ -1,19 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const NoticeSessionFixture = require('../../../support/fixtures/notice-session.fixture.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import * as NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
-const SessionModel = require('../../../../app/models/session.model.js')
+import FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
+import SessionModel from '../../../../app/models/session.model.js'
 
 // Thing under test
-const ViewCheckService = require('../../../../app/services/notices/setup/view-check.service.js')
+import ViewCheckService from '../../../../app/services/notices/setup/view-check.service.js'
 
 describe('Notices - Setup - View Check service', () => {
   let session
@@ -25,21 +22,22 @@ describe('Notices - Setup - View Check service', () => {
     recipient = RecipientsFixture.returnsNoticePrimaryUser()
 
     session = NoticeSessionFixture.standardInvitation(recipient.licence_refs[0])
-    sessionUpdateStub = Sinon.stub().resolves()
+    sessionUpdateStub = vi.fn().mockResolvedValue()
     session.$update = sessionUpdateStub
 
-    Sinon.stub(SessionModel, 'query').returns({
-      findById: Sinon.stub().resolves(session)
+    vi.spyOn(SessionModel, 'query').mockReturnValue({
+      findById: vi.fn().mockResolvedValue(session)
     })
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([{ title: 'Test', text: 'Notification' }])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([{ title: 'Test', text: 'Notification' }])
 
-    Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
+    vi.mock('../../../../app/services/notices/setup/fetch-recipients.service.js')
+    FetchRecipientsService.mockResolvedValue([recipient])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   it('correctly presents the data', async () => {
@@ -83,7 +81,7 @@ describe('Notices - Setup - View Check service', () => {
     it('initialises the "selectedRecipients" property in the session', async () => {
       await ViewCheckService(session.id, yarStub)
 
-      expect(sessionUpdateStub.called).toBe(true)
+      expect(sessionUpdateStub).toHaveBeenCalled()
     })
   })
 
@@ -95,7 +93,7 @@ describe('Notices - Setup - View Check service', () => {
     it('leaves the "selectedRecipients" property alone', async () => {
       await ViewCheckService(session.id, yarStub)
 
-      expect(sessionUpdateStub.called).toBe(false)
+      expect(sessionUpdateStub).not.toHaveBeenCalled()
     })
   })
 })

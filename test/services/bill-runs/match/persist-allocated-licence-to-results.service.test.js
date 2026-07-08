@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { generateReturnId } = require('../../../support/helpers/return-log.helper.js')
-const ReviewLicenceModel = require('../../../../app/models/review-licence.model.js')
+import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateReturnId } from '../../../support/helpers/return-log.helper.js'
+import ReviewLicenceModel from '../../../../app/models/review-licence.model.js'
 
 // Thing under test
-const PersistAllocatedLicenceToResultsService = require('../../../../app/services/bill-runs/match/persist-allocated-licence-to-results.service.js')
+import PersistAllocatedLicenceToResultsService from '../../../../app/services/bill-runs/match/persist-allocated-licence-to-results.service.js'
 
 describe('Persist Allocated Licence to Results service', () => {
   const billRunId = generateUUID()

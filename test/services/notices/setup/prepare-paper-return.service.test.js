@@ -1,19 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const ReturnLogFixture = require('../../../support/fixtures/return-logs.fixture.js')
-const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+import * as ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
+import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
+import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 
 // Things we need to stub
-const GeneratePaperReturnRequest = require('../../../../app/requests/gotenberg/generate-paper-return.request.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+import * as GeneratePaperReturnRequest from '../../../../app/requests/gotenberg/generate-paper-return.request.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const PreparePaperReturnService = require('../../../../app/services/notices/setup/prepare-paper-return.service.js')
+import PreparePaperReturnService from '../../../../app/services/notices/setup/prepare-paper-return.service.js'
 
 describe('Notices - Setup - Prepare Paper Return service', () => {
   const buffer = new TextEncoder().encode('mock file').buffer
@@ -56,19 +53,19 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
       }
     }
 
-    Sinon.stub(GeneratePaperReturnRequest, 'send').resolves({
+    vi.spyOn(GeneratePaperReturnRequest, 'send').mockResolvedValue({
       succeeded: true,
       response: {
         body: buffer
       }
     })
 
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 

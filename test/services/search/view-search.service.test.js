@@ -1,13 +1,10 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things to stub
-const FindAllSearchMatchesService = require('../../../app/services/search/find-all-search-matches.service.js')
+import FindAllSearchMatchesService from '../../../app/services/search/find-all-search-matches.service.js'
 
 // Thing under test
-const ViewSearchService = require('../../../app/services/search/view-search.service.js')
+import ViewSearchService from '../../../app/services/search/view-search.service.js'
 
 describe('Search - View Search service', () => {
   let page
@@ -33,7 +30,8 @@ describe('Search - View Search service', () => {
   beforeEach(() => {
     page = '1'
 
-    Sinon.stub(FindAllSearchMatchesService, 'go').resolves({
+    vi.mock('../../../app/services/search/find-all-search-matches.service.js')
+    FindAllSearchMatchesService.mockResolvedValue({
       results: [
         {
           exact: false,
@@ -61,7 +59,7 @@ describe('Search - View Search service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

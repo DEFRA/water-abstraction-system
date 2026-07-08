@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const UsersFixture = require('../../support/fixtures/users.fixture.js')
+import * as UsersFixture from '../../support/fixtures/users.fixture.js'
 
 // Things we need to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
 
 // Thing under test
-const IndexUsersPresenter = require('../../../app/presenters/users/index-users.presenter.js')
+import IndexUsersPresenter from '../../../app/presenters/users/index-users.presenter.js'
 
 describe('Users - Index Users presenter', () => {
   let auth
@@ -29,11 +26,11 @@ describe('Users - Index Users presenter', () => {
       credentials: { scope: ['manage_accounts'] }
     }
 
-    Sinon.stub(FeatureFlagsConfig, 'enableUsersManagement').value(true)
+    vi.replaceProperty(FeatureFlagsConfig, 'enableUsersManagement', true)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   it('correctly presents the data', () => {

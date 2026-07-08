@@ -1,14 +1,11 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const CheckLicenceExistsDal = require('../../../../../app/dal/notices/setup/check-licence-exists.dal.js')
-const FetchDueReturnsForLicenceService = require('../../../../../app/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js')
+import CheckLicenceExistsDal from '../../../../../app/dal/notices/setup/check-licence-exists.dal.js'
+import FetchDueReturnsForLicenceService from '../../../../../app/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js'
 
 // Thing under test
-const ProcessReturnsNoticeLicenceSubmission = require('../../../../../app/services/notices/setup/returns-notice/process-licence-submission.service.js')
+import ProcessReturnsNoticeLicenceSubmission from '../../../../../app/services/notices/setup/returns-notice/process-licence-submission.service.js'
 
 describe('Notices - Setup - Returns Notice - Process Returns Notice Licence Submission', () => {
   let dueReturns
@@ -20,24 +17,26 @@ describe('Notices - Setup - Returns Notice - Process Returns Notice Licence Subm
     licenceRef = '01/234/R01'
     payload = { licenceRef }
 
-    Sinon.stub(CheckLicenceExistsDal, 'go').resolves(true)
-    Sinon.stub(FetchDueReturnsForLicenceService, 'go').resolves(dueReturns)
+    vi.mock('../../../../../app/dal/notices/setup/check-licence-exists.dal.js')
+    CheckLicenceExistsDal.mockResolvedValue(true)
+    vi.mock('../../../../../app/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js')
+    FetchDueReturnsForLicenceService.mockResolvedValue(dueReturns)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     it('returns the due returns as additional session data', async () => {
-      const result = await ProcessReturnsNoticeLicenceSubmission.go(payload)
+      const result = await ProcessReturnsNoticeLicenceSubmission(payload)
 
       expect(result.additionalSessionData).toEqual({ dueReturns })
     })
 
     describe('with a valid payload', () => {
       it('returns no validation error', async () => {
-        const result = await ProcessReturnsNoticeLicenceSubmission.go(payload)
+        const result = await ProcessReturnsNoticeLicenceSubmission(payload)
 
         expect(result.validationResult).toBeNull()
       })
@@ -49,7 +48,7 @@ describe('Notices - Setup - Returns Notice - Process Returns Notice Licence Subm
       })
 
       it('returns a validation error', async () => {
-        const result = await ProcessReturnsNoticeLicenceSubmission.go(payload)
+        const result = await ProcessReturnsNoticeLicenceSubmission(payload)
 
         expect(result).toEqual({
           additionalSessionData: { dueReturns: [] },

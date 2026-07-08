@@ -1,29 +1,26 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
-const BillHelper = require('../../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const BillRunChargeVersionYearHelper = require('../../../support/helpers/bill-run-charge-version-year.helper.js')
-const BillRunVolumeHelper = require('../../../support/helpers/bill-run-volume.helper.js')
-const ReviewChargeElementHelper = require('../../../support/helpers/review-charge-element.helper.js')
-const ReviewChargeElementReturnHelper = require('../../../support/helpers/review-charge-element-return.helper.js')
-const ReviewChargeReferenceHelper = require('../../../support/helpers/review-charge-reference.helper.js')
-const ReviewChargeVersionHelper = require('../../../support/helpers/review-charge-version.helper.js')
-const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
-const ReviewReturnHelper = require('../../../support/helpers/review-return.helper.js')
-const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
+import * as BillHelper from '../../../support/helpers/bill.helper.js'
+import * as BillLicenceHelper from '../../../support/helpers/bill-licence.helper.js'
+import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import * as BillRunChargeVersionYearHelper from '../../../support/helpers/bill-run-charge-version-year.helper.js'
+import * as BillRunVolumeHelper from '../../../support/helpers/bill-run-volume.helper.js'
+import * as ReviewChargeElementHelper from '../../../support/helpers/review-charge-element.helper.js'
+import * as ReviewChargeElementReturnHelper from '../../../support/helpers/review-charge-element-return.helper.js'
+import * as ReviewChargeReferenceHelper from '../../../support/helpers/review-charge-reference.helper.js'
+import * as ReviewChargeVersionHelper from '../../../support/helpers/review-charge-version.helper.js'
+import * as ReviewLicenceHelper from '../../../support/helpers/review-licence.helper.js'
+import * as ReviewReturnHelper from '../../../support/helpers/review-return.helper.js'
+import * as TransactionHelper from '../../../support/helpers/transaction.helper.js'
 
 // Things we need to stub
-const BillLicenceModel = require('../../../../app/models/bill-licence.model.js')
-const ChargingModuleDeleteBillRunRequest = require('../../../../app/requests/charging-module/delete-bill-run.request.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
-const ReviewLicenceModel = require('../../../../app/models/review-licence.model.js')
+import BillLicenceModel from '../../../../app/models/bill-licence.model.js'
+import * as ChargingModuleDeleteBillRunRequest from '../../../../app/requests/charging-module/delete-bill-run.request.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import ReviewLicenceModel from '../../../../app/models/review-licence.model.js'
 
 // Thing under test
-const DeleteBillBunService = require('../../../../app/services/bill-runs/cancel/delete-bill-run.service.js')
+import DeleteBillBunService from '../../../../app/services/bill-runs/cancel/delete-bill-run.service.js'
 
 describe('Bill Runs - Delete Bill Run service', () => {
   let billRun
@@ -31,18 +28,20 @@ describe('Bill Runs - Delete Bill Run service', () => {
   let notifierStub
 
   beforeEach(() => {
-    chargingModuleDeleteBillRunRequestStub = Sinon.stub(ChargingModuleDeleteBillRunRequest, 'send')
+    chargingModuleDeleteBillRunRequestStub = vi
+      .spyOn(ChargingModuleDeleteBillRunRequest, 'send')
+      .mockImplementation(() => {})
 
     // The service depends on GlobalNotifier to have been set. This happens in
     // app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered. As we're not
     // creating an instance of Hapi server in this test we recreate the condition by setting it directly with our
     // own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -68,13 +67,13 @@ describe('Bill Runs - Delete Bill Run service', () => {
         billLicence = await BillLicenceHelper.add({ billId: bill.id })
         transaction = await TransactionHelper.add({ billLicenceId: billLicence.id })
 
-        chargingModuleDeleteBillRunRequestStub.resolves()
+        chargingModuleDeleteBillRunRequestStub.mockResolvedValue()
       })
 
       it('sends a request to the Charging Module API to delete its copy', async () => {
         await DeleteBillBunService(billRun)
 
-        expect(chargingModuleDeleteBillRunRequestStub.called).toBe(true)
+        expect(chargingModuleDeleteBillRunRequestStub).toHaveBeenCalled()
       })
 
       it('deletes any billing data data', async () => {
@@ -98,9 +97,9 @@ describe('Bill Runs - Delete Bill Run service', () => {
       it('logs a "complete" message, the bill run passed in, and the time taken in milliseconds and seconds', async () => {
         await DeleteBillBunService(billRun)
 
-        const logDataArg = notifierStub.omg.args[0][1]
+        const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-        expect(notifierStub.omg.calledWith('Delete bill run complete')).toBe(true)
+        expect(notifierStub.omg).toHaveBeenCalledWith('Delete bill run complete')
         expect(logDataArg.timeTakenMs).toBeDefined()
         expect(logDataArg.timeTakenSs).toBeDefined()
         expect(logDataArg.billRun).toEqual(billRun)
@@ -166,7 +165,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Delete bill run failed')).toBe(true)
+          expect(notifierStub.omfg).toHaveBeenCalledWith('Delete bill run failed')
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })
@@ -176,7 +175,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
         beforeEach(async () => {
           billRun = _billRun()
 
-          chargingModuleDeleteBillRunRequestStub.rejects()
+          chargingModuleDeleteBillRunRequestStub.mockRejectedValue()
         })
 
         it('does not throw an error', async () => {
@@ -188,7 +187,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Delete bill run failed')).toBe(true)
+          expect(notifierStub.omfg).toHaveBeenCalledWith('Delete bill run failed')
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })
@@ -198,10 +197,10 @@ describe('Bill Runs - Delete Bill Run service', () => {
         beforeEach(async () => {
           billRun = _billRun()
 
-          chargingModuleDeleteBillRunRequestStub.resolves()
-          Sinon.stub(BillLicenceModel, 'query').returns({
-            delete: Sinon.stub().returnsThis(),
-            whereExists: Sinon.stub().rejects()
+          chargingModuleDeleteBillRunRequestStub.mockResolvedValue()
+          vi.spyOn(BillLicenceModel, 'query').mockReturnValue({
+            delete: vi.fn().mockReturnThis(),
+            whereExists: vi.fn().rejects()
           })
         })
 
@@ -214,7 +213,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Delete bill run failed')).toBe(true)
+          expect(notifierStub.omfg).toHaveBeenCalledWith('Delete bill run failed')
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })
@@ -224,10 +223,10 @@ describe('Bill Runs - Delete Bill Run service', () => {
         beforeEach(async () => {
           billRun = _billRun()
 
-          chargingModuleDeleteBillRunRequestStub.resolves()
-          Sinon.stub(ReviewLicenceModel, 'query').returns({
-            delete: Sinon.stub().returnsThis(),
-            where: Sinon.stub().rejects()
+          chargingModuleDeleteBillRunRequestStub.mockResolvedValue()
+          vi.spyOn(ReviewLicenceModel, 'query').mockReturnValue({
+            delete: vi.fn().mockReturnThis(),
+            where: vi.fn().rejects()
           })
         })
 
@@ -240,7 +239,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Delete bill run failed')).toBe(true)
+          expect(notifierStub.omfg).toHaveBeenCalledWith('Delete bill run failed')
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })
@@ -256,15 +255,15 @@ describe('Bill Runs - Delete Bill Run service', () => {
     it('still sends a request to the Charging Module API', async () => {
       await DeleteBillBunService(billRun)
 
-      expect(chargingModuleDeleteBillRunRequestStub.called).toBe(true)
+      expect(chargingModuleDeleteBillRunRequestStub).toHaveBeenCalled()
     })
 
     it('still logs a "complete" message, the bill run passed in, and the time taken in milliseconds and seconds', async () => {
       await DeleteBillBunService(billRun)
 
-      const logDataArg = notifierStub.omg.args[0][1]
+      const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-      expect(notifierStub.omg.calledWith('Delete bill run complete')).toBe(true)
+      expect(notifierStub.omg).toHaveBeenCalledWith('Delete bill run complete')
       expect(logDataArg.timeTakenMs).toBeDefined()
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.billRun).toEqual(billRun)

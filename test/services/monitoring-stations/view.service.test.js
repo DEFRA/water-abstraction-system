@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const YarStub = require('../../support/stubs/yar.stub.js')
+import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchMonitoringStationDetailsDal = require('../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js')
+import FetchMonitoringStationDetailsDal from '../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js'
 
 // Thing under test
-const ViewService = require('../../../app/services/monitoring-stations/view.service.js')
+import ViewService from '../../../app/services/monitoring-stations/view.service.js'
 
 describe('Monitoring Stations - View service', () => {
   let auth
@@ -55,14 +52,15 @@ describe('Monitoring Stations - View service', () => {
       }
     ]
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns(['Tag removed for 99/999/9999'])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue(['Tag removed for 99/999/9999'])
 
-    Sinon.stub(FetchMonitoringStationDetailsDal, 'go').resolves({ licenceMonitoringStations, monitoringStation })
+    vi.mock('../../../app/dal/monitoring-stations/fetch-monitoring-station-details.dal.js')
+    FetchMonitoringStationDetailsDal.mockResolvedValue({ licenceMonitoringStations, monitoringStation })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

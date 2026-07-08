@@ -1,22 +1,19 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+import * as RegionHelper from '../../../support/helpers/region.helper.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 
 // Test helpers
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const DatabaseConfig = require('../../../../config/database.config.js')
-const FetchBillRunLicencesService = require('../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js')
+import DatabaseConfig from '../../../../config/database.config.js'
+import FetchBillRunLicencesService from '../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js'
 
 // Thing under test
-const ViewReviewService = require('../../../../app/services/bill-runs/review/view-review.service.js')
+import ViewReviewService from '../../../../app/services/bill-runs/review/view-review.service.js'
 
 const billRunId = generateUUID()
 
@@ -28,11 +25,11 @@ describe('Bill Runs - Review - View Review Service', () => {
 
   beforeEach(() => {
     // The default page size is 25, but we set it here in case any local config is overriding the default
-    Sinon.replace(DatabaseConfig, 'defaultPageSize', 25)
+    vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 25)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -64,16 +61,17 @@ describe('Bill Runs - Review - View Review Service', () => {
         }
       }
 
-      Sinon.stub(FetchBillRunLicencesService, 'go').resolves(fetchData)
+      vi.mock('../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js')
+      FetchBillRunLicencesService.mockResolvedValue(fetchData)
 
       notification = {
         text: 'Licence 1/11/11/*11/1111 removed from the bill run.',
         titleText: 'Licence removed'
       }
 
-      yarStub = YarStub.build(Sinon)
-      yarStub.flash.returns([notification])
-      yarStub.get.returns(null)
+      yarStub = YarStub()
+      yarStub.flash.mockReturnValue([notification])
+      yarStub.get.mockReturnValue(null)
     })
 
     it('returns the page data for the view', async () => {
@@ -137,15 +135,16 @@ describe('Bill Runs - Review - View Review Service', () => {
         licences: { results: [], total: 0 }
       }
 
-      Sinon.stub(FetchBillRunLicencesService, 'go').resolves(fetchData)
+      vi.mock('../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js')
+      FetchBillRunLicencesService.mockResolvedValue(fetchData)
 
-      yarStub = YarStub.build(Sinon)
-      yarStub.flash.returns([])
+      yarStub = YarStub()
+      yarStub.flash.mockReturnValue([])
     })
 
     describe('and none were ever set or they were cleared', () => {
       beforeEach(() => {
-        yarStub.get = Sinon.stub().returns(null)
+        yarStub.get = vi.fn().mockReturnValue(null)
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -157,7 +156,7 @@ describe('Bill Runs - Review - View Review Service', () => {
 
     describe('and the filters were submitted empty', () => {
       beforeEach(() => {
-        yarStub.get = Sinon.stub().returns(_filters())
+        yarStub.get = vi.fn().mockReturnValue(_filters())
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -172,7 +171,7 @@ describe('Bill Runs - Review - View Review Service', () => {
         const filters = _filters()
 
         filters.licenceHolderNumber = 'carol shaw'
-        yarStub.get = Sinon.stub().returns(filters)
+        yarStub.get = vi.fn().mockReturnValue(filters)
       })
 
       it('returns the saved filters and that the controls should be open', async () => {

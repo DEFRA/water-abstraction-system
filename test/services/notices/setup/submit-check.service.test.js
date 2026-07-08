@@ -1,26 +1,23 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const NoticesFixture = require('../../../support/fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
+import * as NoticesFixture from '../../../support/fixtures/notices.fixture.js'
+import * as NotificationsFixture from '../../../support/fixtures/notifications.fixture.js'
+import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import { generateNoticeReferenceCode, generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const CreateNoticeService = require('../../../../app/services/notices/setup/create-notice.service.js')
-const CreateNotificationsService = require('../../../../app/services/notices/setup/create-notifications.service.js')
-const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
-const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
-const SendNoticeService = require('../../../../app/services/notices/setup/send/send-notice.service.js')
+import CreateNoticeService from '../../../../app/services/notices/setup/create-notice.service.js'
+import CreateNotificationsService from '../../../../app/services/notices/setup/create-notifications.service.js'
+import DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
+import FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import SendNoticeService from '../../../../app/services/notices/setup/send/send-notice.service.js'
 
 // Thing under test
-const SubmitCheckService = require('../../../../app/services/notices/setup/submit-check.service.js')
+import SubmitCheckService from '../../../../app/services/notices/setup/submit-check.service.js'
 
 describe('Notices - Setup - Submit Check service', () => {
   const auth = {
@@ -30,12 +27,8 @@ describe('Notices - Setup - Submit Check service', () => {
       }
     }
   }
-
-  let createNoticeStub
-  let createNotificationsStub
   let recipients
   let referenceCode
-  let sendNoticeStub
   let session
   let sessionData
 
@@ -68,7 +61,8 @@ describe('Notices - Setup - Submit Check service', () => {
         return_log_ids: [dueReturns[0].returnLogId]
       }
     ]
-    Sinon.stub(FetchRecipientsService, 'go').resolves(recipients)
+    vi.mock('../../../../app/services/notices/setup/fetch-recipients.service.js')
+    FetchRecipientsService.mockResolvedValue(recipients)
 
     referenceCode = generateNoticeReferenceCode('RINV-')
 
@@ -96,54 +90,59 @@ describe('Notices - Setup - Submit Check service', () => {
       subType: 'returnInvitation'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
-    Sinon.stub(DeleteSessionDal, 'go').resolves()
+    vi.mock('../../../../app/dal/delete-session.dal.js')
+    DeleteSessionDal.mockResolvedValue()
 
     const notice = NoticesFixture.returnsInvitation()
 
     notice.referenceCode = session.referenceCode
     notice.metadata.recipients = 1
-    createNoticeStub = Sinon.stub(CreateNoticeService, 'go').resolves(notice)
+    vi.mock('../../../../app/services/notices/setup/create-notice.service.js')
+    CreateNoticeService.mockResolvedValue(notice)
 
     const notification = NotificationsFixture.returnsInvitationEmail(notice)
 
-    createNotificationsStub = Sinon.stub(CreateNotificationsService, 'go').resolves([notification])
+    vi.mock('../../../../app/services/notices/setup/create-notifications.service.js')
+    CreateNotificationsService.mockResolvedValue([notification])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     beforeEach(() => {
-      sendNoticeStub = Sinon.stub(SendNoticeService, 'go').resolves()
+      vi.mock('../../../../app/services/notices/setup/send/send-notice.service.js')
+      SendNoticeService.mockResolvedValue()
     })
 
     it('creates a notice record', async () => {
       await SubmitCheckService(session.id, auth)
 
-      expect(createNoticeStub.called).toBe(true)
+      expect(CreateNoticeService).toHaveBeenCalled()
     })
 
     it('creates notification records', async () => {
       await SubmitCheckService(session.id, auth)
 
-      expect(createNotificationsStub.called).toBe(true)
+      expect(CreateNotificationsService).toHaveBeenCalled()
     })
 
     it('deletes the session record', async () => {
       await SubmitCheckService(session.id, auth)
 
-      expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
+      expect(DeleteSessionDal.go).toHaveBeenCalledWith(session.id)
     })
 
     it('sends the notice', async () => {
       await SubmitCheckService(session.id, auth)
 
-      expect(sendNoticeStub.called).toBe(true)
+      expect(SendNoticeService).toHaveBeenCalled()
     })
   })
 })

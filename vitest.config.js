@@ -68,6 +68,8 @@ export default {
           ],
           // Share a single worker context across test files rather than isolating each file in its own module scope
           isolate: false,
+          // Module(s) to run once per test file before importing it. Used to add polyfills and test-level setup
+          setupFiles: ['test/setup.js'],
           // Human-readable label for this project shown in the Vitest output
           name: 'parallel',
           // In CI use 2 workers (GitHub actions have 2 cores) to avoid resource contention; locally use 50%
@@ -120,6 +122,8 @@ export default {
           ],
           // Share a single worker context across test files rather than isolating each file in its own module scope
           isolate: false,
+          // Module(s) to run once per test file before importing it. Used to add polyfills and test-level setup
+          setupFiles: ['test/setup.js'],
           // Human-readable label for this project shown in the Vitest output
           name: 'series',
           // Force a single worker so tests run one at a time and cannot interfere with each other via the database

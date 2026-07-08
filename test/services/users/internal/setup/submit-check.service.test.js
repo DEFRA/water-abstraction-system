@@ -1,22 +1,19 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
-const YarStub = require('../../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import YarStub from '../../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const CreateUserDal = require('../../../../../app/dal/users/internal/create-user.dal.js')
-const CreateVerificationNotificationDal = require('../../../../../app/dal/users/internal/create-verification-notification.dal.js')
-const DeleteSessionDal = require('../../../../../app/dal/delete-session.dal.js')
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
-const SendVerificationEmailService = require('../../../../../app/services/users/internal/setup/send-verification-email.service.js')
-const UpdateUserDal = require('../../../../../app/dal/users/internal/update-user.dal.js')
+import CreateUserDal from '../../../../../app/dal/users/internal/create-user.dal.js'
+import CreateVerificationNotificationDal from '../../../../../app/dal/users/internal/create-verification-notification.dal.js'
+import DeleteSessionDal from '../../../../../app/dal/delete-session.dal.js'
+import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import SendVerificationEmailService from '../../../../../app/services/users/internal/setup/send-verification-email.service.js'
+import UpdateUserDal from '../../../../../app/dal/users/internal/update-user.dal.js'
 
 // Thing under test
-const SubmitCheckService = require('../../../../../app/services/users/internal/setup/submit-check.service.js')
+import SubmitCheckService from '../../../../../app/services/users/internal/setup/submit-check.service.js'
 
 describe('Users - Internal - Setup - Submit Check Service', () => {
   let auth
@@ -28,14 +25,16 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
   beforeEach(() => {
     auth = { credentials: { user: { id: '89b25863-918f-484f-b7fa-49f7062b4af3' } } }
 
-    Sinon.stub(DeleteSessionDal, 'go').resolves()
-    Sinon.stub(SendVerificationEmailService, 'go').resolves()
+    vi.mock('../../../../../app/dal/delete-session.dal.js')
+    DeleteSessionDal.mockResolvedValue()
+    vi.mock('../../../../../app/services/users/internal/setup/send-verification-email.service.js')
+    SendVerificationEmailService.mockResolvedValue()
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when creating a user', () => {
@@ -54,17 +53,20 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
 
       sessionData = _createSessionData()
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      Sinon.stub(CreateUserDal, 'go').resolves(resetGuid)
-      Sinon.stub(CreateVerificationNotificationDal, 'go').resolves(notification)
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.mock('../../../../../app/dal/users/internal/create-user.dal.js')
+      CreateUserDal.mockResolvedValue(resetGuid)
+      vi.mock('../../../../../app/dal/users/internal/create-verification-notification.dal.js')
+      CreateVerificationNotificationDal.mockResolvedValue(notification)
+      vi.mock('../../../../../app/dal/fetch-session.dal.js')
+      FetchSessionDal.mockResolvedValue(session)
     })
 
     it('deletes the session', async () => {
       await SubmitCheckService(auth, session.id, yarStub)
 
-      expect(DeleteSessionDal.go.calledWith(session.id)).toBe(true)
+      expect(DeleteSessionDal.go).toHaveBeenCalledWith(session.id)
     })
 
     it('returns the redirect URL', async () => {
@@ -76,7 +78,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
     it('sets a notification', async () => {
       await SubmitCheckService(auth, session.id, yarStub)
 
-      const [flashType, bannerMessage] = yarStub.flash.args[0]
+      const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
       expect(flashType).toEqual('notification')
       expect(bannerMessage).toEqual({
@@ -88,20 +90,20 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
     it('sends a verification email', async () => {
       await SubmitCheckService(auth, session.id, yarStub)
 
-      expect(SendVerificationEmailService.go.calledWith(notification)).toBe(true)
+      expect(SendVerificationEmailService.go).toHaveBeenCalledWith(notification)
     })
   })
 
   describe('when updating a user', () => {
-    let updateUserStub
-
     beforeEach(() => {
       sessionData = _updateSessionData()
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
-      updateUserStub = Sinon.stub(UpdateUserDal, 'go').resolves(null)
+      vi.mock('../../../../../app/dal/fetch-session.dal.js')
+      FetchSessionDal.mockResolvedValue(session)
+      vi.mock('../../../../../app/dal/users/internal/update-user.dal.js')
+      UpdateUserDal.mockResolvedValue(null)
     })
 
     it('returns the redirect URL', async () => {
@@ -124,21 +126,22 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
           recipient: 'bob.bobbles@environment-agency.gov.uk'
         }
 
-        updateUserStub.resolves(newResetGuid)
+        UpdateUserDal.mockResolvedValue(newResetGuid)
 
-        Sinon.stub(CreateVerificationNotificationDal, 'go').resolves(notification)
+        vi.mock('../../../../../app/dal/users/internal/create-verification-notification.dal.js')
+        CreateVerificationNotificationDal.mockResolvedValue(notification)
       })
 
       it('creates a new password reset link', async () => {
         await SubmitCheckService(auth, session.id, yarStub)
 
-        expect(CreateVerificationNotificationDal.go.calledWith(session.email, newResetGuid)).toBe(true)
+        expect(CreateVerificationNotificationDal.go).toHaveBeenCalledWith(session.email, newResetGuid)
       })
 
       it('sets a notification', async () => {
         await SubmitCheckService(auth, session.id, yarStub)
 
-        const [flashType, bannerMessage] = yarStub.flash.args[0]
+        const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('notification')
         expect(bannerMessage).toEqual({
@@ -150,7 +153,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
       it('sends a verification email', async () => {
         await SubmitCheckService(auth, session.id, yarStub)
 
-        expect(SendVerificationEmailService.go.calledWith(notification)).toBe(true)
+        expect(SendVerificationEmailService.go).toHaveBeenCalledWith(notification)
       })
     })
 
@@ -158,7 +161,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
       it('sets a notification', async () => {
         await SubmitCheckService(auth, session.id, yarStub)
 
-        const [flashType, bannerMessage] = yarStub.flash.args[0]
+        const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('notification')
         expect(bannerMessage).toEqual({
@@ -170,7 +173,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
       it('does not send a verification email', async () => {
         await SubmitCheckService(auth, session.id, yarStub)
 
-        expect(SendVerificationEmailService.go.called).toBe(false)
+        expect(SendVerificationEmailService.go).not.toHaveBeenCalled()
       })
     })
   })

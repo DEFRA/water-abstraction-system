@@ -1,15 +1,13 @@
-'use strict'
-
 // Test helpers
-const LicenceDocumentHeaderHelper = require('../support/helpers/licence-document-header.helper.js')
-const LicenceDocumentHeaderModel = require('../../app/models/licence-document-header.model.js')
-const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
-const LicenceEntityModel = require('../../app/models/licence-entity.model.js')
-const UserVerificationDocumentHelper = require('../support/helpers/user-verification-document.helper.js')
-const UserVerificationHelper = require('../support/helpers/user-verification.helper.js')
+import * as LicenceDocumentHeaderHelper from '../support/helpers/licence-document-header.helper.js'
+import LicenceDocumentHeaderModel from '../../app/models/licence-document-header.model.js'
+import * as LicenceEntityHelper from '../support/helpers/licence-entity.helper.js'
+import LicenceEntityModel from '../../app/models/licence-entity.model.js'
+import * as UserVerificationDocumentHelper from '../support/helpers/user-verification-document.helper.js'
+import * as UserVerificationHelper from '../support/helpers/user-verification.helper.js'
 
 // Thing under test
-const UserVerificationModel = require('../../app/models/user-verification.model.js')
+import UserVerificationModel from '../../app/models/user-verification.model.js'
 
 describe('User Verification model', () => {
   let testLicenceDocumentHeaders

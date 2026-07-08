@@ -1,22 +1,17 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitNoteService = require('../../../../app/services/return-logs/setup/submit-note.service.js')
+import SubmitNoteService from '../../../../app/services/return-logs/setup/submit-note.service.js'
 
 describe('Return Logs Setup - Submit Note service', () => {
   const user = { username: 'carol.shaw@atari.com' }
-
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -25,15 +20,16 @@ describe('Return Logs Setup - Submit Note service', () => {
   beforeEach(() => {
     sessionData = { returnReference: '1234' }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -62,7 +58,7 @@ describe('Return Logs Setup - Submit Note service', () => {
         it('sets the notification message to "Added"', async () => {
           await SubmitNoteService(session.id, payload, user, yarStub)
 
-          const [flashType, notification] = yarStub.flash.args[0]
+          const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
           expect(notification).toEqual({ title: 'Added', text: 'Note added' })
@@ -78,9 +74,9 @@ describe('Return Logs Setup - Submit Note service', () => {
             }
           }
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          FetchSessionDal.mockResolvedValue(session)
 
           payload = { note: 'An updated note related to return requirement' }
         })
@@ -103,7 +99,7 @@ describe('Return Logs Setup - Submit Note service', () => {
         it('sets the notification message to "Updated"', async () => {
           await SubmitNoteService(session.id, payload, user, yarStub)
 
-          const [flashType, notification] = yarStub.flash.args[0]
+          const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
           expect(notification).toEqual({ title: 'Updated', text: 'Note updated' })

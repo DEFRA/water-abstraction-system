@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things to stub
-const FetchFullConditionService = require('../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchFullConditionService from '../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js'
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const FullConditionService = require('../../../../app/services/licence-monitoring-station/setup/full-condition.service.js')
+import FullConditionService from '../../../../app/services/licence-monitoring-station/setup/full-condition.service.js'
 
 describe('Licence Monitoring Station Setup - Full Condition Service', () => {
   let condition
@@ -28,7 +25,8 @@ describe('Licence Monitoring Station Setup - Full Condition Service', () => {
       displayTitle: 'DISPLAY_TITLE'
     }
 
-    Sinon.stub(FetchFullConditionService, 'go').resolves([condition])
+    vi.mock('../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js')
+    FetchFullConditionService.mockResolvedValue([condition])
 
     sessionData = {
       label: 'Monitoring Station',
@@ -36,13 +34,14 @@ describe('Licence Monitoring Station Setup - Full Condition Service', () => {
       licenceRef: 'LICENCE_REF'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

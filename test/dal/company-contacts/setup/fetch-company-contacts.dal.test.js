@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const CompanyContactHelper = require('../../../support/helpers/company-contact.helper.js')
-const ContactHelper = require('../../../support/helpers/contact.helper.js')
+import * as CompanyContactHelper from '../../../support/helpers/company-contact.helper.js'
+import * as ContactHelper from '../../../support/helpers/contact.helper.js'
 
 // Thing under test
-const FetchCompanyContactsDal = require('../../../../app/dal/company-contacts/setup/fetch-company-contacts.dal.js')
+import FetchCompanyContactsDal from '../../../../app/dal/company-contacts/setup/fetch-company-contacts.dal.js'
 
 describe('Company Contacts - Setup - Fetch Company Contacts dal', () => {
   let additionalCompanyContact

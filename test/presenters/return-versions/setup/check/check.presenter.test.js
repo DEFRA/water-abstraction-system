@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const CheckPresenter = require('../../../../../app/presenters/return-versions/setup/check/check.presenter.js')
+import CheckPresenter from '../../../../../app/presenters/return-versions/setup/check/check.presenter.js'
 
 describe('Return Versions Setup - Check presenter', () => {
   let session

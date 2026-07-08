@@ -1,71 +1,69 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const AssignBillRunToLicencesService = require('../../../../app/services/bill-runs/assign-bill-run-to-licences.service.js')
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
-const GenerateBillRunService = require('../../../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
-const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
-const MatchAndAllocateService = require('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
+import AssignBillRunToLicencesService from '../../../../app/services/bill-runs/assign-bill-run-to-licences.service.js'
+import BillRunModel from '../../../../app/models/bill-run.model.js'
+import GenerateBillRunService from '../../../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
+import MatchAndAllocateService from '../../../../app/services/bill-runs/match/match-and-allocate.service.js'
 
 // Thing under test
-const ProcessBillRunService = require('../../../../app/services/bill-runs/tpt-supplementary/process-bill-run.service.js')
+import ProcessBillRunService from '../../../../app/services/bill-runs/tpt-supplementary/process-bill-run.service.js'
 
 describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
   const billingPeriods = [{ startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') }]
   const billRun = { id: '410c84a5-39d3-441a-97ca-6104e14d00a2' }
 
   let billRunPatchStub
-  let generateBillRunStub
   let notifierStub
 
   beforeEach(async () => {
-    billRunPatchStub = Sinon.stub().resolves()
+    billRunPatchStub = vi.fn().mockResolvedValue()
 
-    Sinon.stub(BillRunModel, 'query').returns({
-      findById: Sinon.stub().returnsThis(),
+    vi.spyOn(BillRunModel, 'query').mockReturnValue({
+      findById: vi.fn().mockReturnThis(),
       patch: billRunPatchStub
     })
 
-    generateBillRunStub = Sinon.stub(GenerateBillRunService, 'go')
+    vi.mock('../../../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js')
 
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
   describe('when the service is called', () => {
     beforeEach(() => {
-      Sinon.stub(AssignBillRunToLicencesService, 'go').resolves()
+      vi.mock('../../../../app/services/bill-runs/assign-bill-run-to-licences.service.js')
+      AssignBillRunToLicencesService.mockResolvedValue()
     })
 
     describe('and no licences are matched and allocated', () => {
       beforeEach(() => {
-        Sinon.stub(MatchAndAllocateService, 'go').resolves(false)
-        generateBillRunStub.resolves()
+        vi.mock('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
+        MatchAndAllocateService.mockResolvedValue(false)
+        GenerateBillRunService.mockResolvedValue()
       })
 
       it('sets the bill run status only to "processing"', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        expect(billRunPatchStub.calledOnce).toBe(true)
+        expect(billRunPatchStub).toHaveBeenCalledOnce()
         expect(billRunPatchStub.firstCall.firstArg).toEqual({ status: 'processing' })
       })
 
       it('skips to "generating" the bill run', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        expect(generateBillRunStub.calledOnce).toBe(true)
+        expect(GenerateBillRunService).toHaveBeenCalledOnce()
       })
 
       it('logs the time taken', async () => {
@@ -86,7 +84,8 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
         // it is calling. As long as MatchAndAllocateService returns a 'licence', ProcessBillRunService will trigger the
         // work to happen. This is why for these tests it is not critical what we stub MatchAndAllocateService to
         // return, only that it returns something!
-        Sinon.stub(MatchAndAllocateService, 'go').resolves(true)
+        vi.mock('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
+        MatchAndAllocateService.mockResolvedValue(true)
       })
 
       it('sets the bill run status first to "processing" and then to "review"', async () => {
@@ -100,7 +99,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       it('does not skip to "generating" the bill run', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        expect(generateBillRunStub.called).toBe(false)
+        expect(GenerateBillRunService).not.toHaveBeenCalled()
       })
 
       it('logs the time taken', async () => {
@@ -119,14 +118,15 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
   describe('when the service errors', () => {
     describe('because assigning the bill run to the licences fails', () => {
       beforeEach(() => {
-        Sinon.stub(AssignBillRunToLicencesService, 'go').rejects()
-        Sinon.stub(HandleErroredBillRunService, 'go')
+        vi.mock('../../../../app/services/bill-runs/assign-bill-run-to-licences.service.js')
+        AssignBillRunToLicencesService.mockRejectedValue()
+        vi.mock('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
       })
 
       it('calls HandleErroredBillRunService', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        expect(HandleErroredBillRunService.go.called).toBe(true)
+        expect(HandleErroredBillRunService.go).toHaveBeenCalled()
       })
 
       it('logs the error', async () => {
@@ -142,15 +142,17 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
 
     describe('because matching and allocating fails', () => {
       beforeEach(() => {
-        Sinon.stub(AssignBillRunToLicencesService, 'go').resolves()
-        Sinon.stub(MatchAndAllocateService, 'go').rejects()
-        Sinon.stub(HandleErroredBillRunService, 'go')
+        vi.mock('../../../../app/services/bill-runs/assign-bill-run-to-licences.service.js')
+        AssignBillRunToLicencesService.mockResolvedValue()
+        vi.mock('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
+        MatchAndAllocateService.mockRejectedValue()
+        vi.mock('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
       })
 
       it('calls HandleErroredBillRunService', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        expect(HandleErroredBillRunService.go.called).toBe(true)
+        expect(HandleErroredBillRunService.go).toHaveBeenCalled()
       })
 
       it('logs the error', async () => {

@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
+import * as BillRunHelper from '../../support/helpers/bill-run.helper.js'
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../support/stubs/global-notifier.stub.js')
+import GlobalNotifierStub from '../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const HandleErroredBillRunService = require('../../../app/services/bill-runs/handle-errored-bill-run.service.js')
+import HandleErroredBillRunService from '../../../app/services/bill-runs/handle-errored-bill-run.service.js'
 
 describe('Handle Errored Bill Run service', () => {
   let billRun
@@ -22,12 +19,12 @@ describe('Handle Errored Bill Run service', () => {
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -72,9 +69,9 @@ describe('Handle Errored Bill Run service', () => {
         // in lieu of a working method of stubbing Objection
         await HandleErroredBillRunService(billRun.id, 'INVALID_ERROR_CODE')
 
-        const logDataArg = notifierStub.omfg.firstCall.args[1]
+        const logDataArg = notifierStub.omfg.mock.calls[0][1]
 
-        expect(notifierStub.omfg.calledWith('Failed to set error status on bill run')).toBe(true)
+        expect(notifierStub.omfg).toHaveBeenCalledWith('Failed to set error status on bill run')
         expect(logDataArg.billRunId).toEqual(billRun.id)
         expect(logDataArg.errorCode).toEqual('INVALID_ERROR_CODE')
       })

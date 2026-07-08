@@ -1,13 +1,11 @@
-'use strict'
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const ReturnLogFixture = require('../../../support/fixtures/return-logs.fixture.js')
+import * as ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
 
 // Thing under test
-const PreparePaperReturnPresenter = require('../../../../app/presenters/notices/setup/prepare-paper-return.presenter.js')
+import PreparePaperReturnPresenter from '../../../../app/presenters/notices/setup/prepare-paper-return.presenter.js'
 
 describe('Notices - Setup - Prepare Paper Return presenter', () => {
   const licenceRef = '01/123'
@@ -51,11 +49,11 @@ describe('Notices - Setup - Prepare Paper Return presenter', () => {
       }
     }
 
-    clock = Sinon.useFakeTimers(new Date(`2025-01-01`))
+    clock = vi.useFakeTimers({ now: new Date(`2025-01-01` }))
   })
 
   afterEach(() => {
-    clock.restore()
+    vi.useRealTimers()
   })
 
   describe('when called', () => {

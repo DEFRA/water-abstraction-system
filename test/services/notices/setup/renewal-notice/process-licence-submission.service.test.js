@@ -1,22 +1,19 @@
-'use strict'
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Helpers
-const LicenceModel = require('../../../../../app/models/licence.model.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
+import LicenceModel from '../../../../../app/models/licence.model.js'
+import { generateUUID } from '../../../../../app/lib/general.lib.js'
+import { generateLicenceRef } from '../../../../support/helpers/licence.helper.js'
 
 // Things we need to stub
-const FetchRenewalLicenceDal = require('../../../../../app/dal/notices/setup/fetch-renewal-licence.dal.js')
+import FetchRenewalLicenceDal from '../../../../../app/dal/notices/setup/fetch-renewal-licence.dal.js'
 
 // Thing under test
-const ProcessRenewalsNoticeLicenceSubmission = require('../../../../../app/services/notices/setup/renewal-notice/process-licence-submission.service.js')
+import ProcessRenewalsNoticeLicenceSubmission from '../../../../../app/services/notices/setup/renewal-notice/process-licence-submission.service.js'
 
 describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Submission', () => {
   let clock
-  let fetchRenewalLicenceDalStub
   let licenceExpiryDate
   let licenceRef
   let licenceRenewal
@@ -37,20 +34,21 @@ describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Sub
       revokedDate: null
     })
 
-    clock = Sinon.useFakeTimers(new Date('2026-05-21'))
+    clock = vi.useFakeTimers({ now: new Date('2026-05-21' }))
 
-    fetchRenewalLicenceDalStub = Sinon.stub(FetchRenewalLicenceDal, 'go').resolves(licenceRenewal)
+        vi.mock('../../../../../app/dal/notices/setup/fetch-renewal-licence.dal.js')
+    FetchRenewalLicenceDal.mockResolvedValue(licenceRenewal)
   })
 
   afterEach(() => {
-    clock.restore()
-    Sinon.restore()
+    vi.useRealTimers()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
     describe('with a valid payload', () => {
       it('returns the expected result', async () => {
-        const result = await ProcessRenewalsNoticeLicenceSubmission.go(payload)
+        const result = await ProcessRenewalsNoticeLicenceSubmission(payload)
 
         expect(result).toEqual({
           additionalSessionData: { expiryDate: licenceExpiryDate, renewalDate },
@@ -67,7 +65,7 @@ describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Sub
           })
 
           it('returns a validation error', async () => {
-            const result = await ProcessRenewalsNoticeLicenceSubmission.go(payload)
+            const result = await ProcessRenewalsNoticeLicenceSubmission(payload)
 
             expect(result).toEqual({
               additionalSessionData: {},
@@ -83,11 +81,11 @@ describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Sub
           beforeEach(() => {
             payload = { licenceRef }
 
-            fetchRenewalLicenceDalStub.resolves(undefined)
+            FetchRenewalLicenceDal.mockResolvedValue(undefined)
           })
 
           it('returns a validation error', async () => {
-            const result = await ProcessRenewalsNoticeLicenceSubmission.go(payload)
+            const result = await ProcessRenewalsNoticeLicenceSubmission(payload)
 
             expect(result).toEqual({
               additionalSessionData: {},

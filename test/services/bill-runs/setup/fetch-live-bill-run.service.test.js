@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
+import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import * as RegionHelper from '../../../support/helpers/region.helper.js'
 
 // Thing under test
-const FetchLiveBillRunsService = require('../../../../app/services/bill-runs/setup/fetch-live-bill-run.service.js')
+import FetchLiveBillRunsService from '../../../../app/services/bill-runs/setup/fetch-live-bill-run.service.js'
 
 describe('Bill Runs - Setup - Fetch Live Bill Run service', () => {
   const differentRegion = RegionHelper.select(0)

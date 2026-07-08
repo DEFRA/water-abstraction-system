@@ -1,13 +1,11 @@
-'use strict'
-
 // Test helpers
-const ReturnLogsFixture = require('../../support/fixtures/return-logs.fixture.js')
-const { formatNumber } = require('../../../app/presenters/base.presenter.js')
-const { today } = require('../../../app/lib/general.lib.js')
-const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
+import * as ReturnLogsFixture from '../../support/fixtures/return-logs.fixture.js'
+import { formatNumber } from '../../../app/presenters/base.presenter.js'
+import { today } from '../../../app/lib/general.lib.js'
+import { unitNames } from '../../../app/lib/static-lookups.lib.js'
 
 // Thing under test
-const DetailsPresenter = require('../../../app/presenters/return-logs/details.presenter.js')
+import DetailsPresenter from '../../../app/presenters/return-logs/details.presenter.js'
 
 describe('Return Logs - Details presenter', () => {
   let auth

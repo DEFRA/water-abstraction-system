@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
 
 // Thing under test
-const DetermineReturnLogFlagsService = require('../../../../app/services/licences/supplementary/determine-return-log-flags.service.js')
+import DetermineReturnLogFlagsService from '../../../../app/services/licences/supplementary/determine-return-log-flags.service.js'
 
 describe('Determine Return Log Flags Service', () => {
   describe('when given a returnLogId', () => {

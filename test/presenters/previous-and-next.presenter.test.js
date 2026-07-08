@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const { generateUUID } = require('../../app/lib/general.lib.js')
+import { generateUUID } from '../../app/lib/general.lib.js'
 
 // Thing under test
-const PreviousAndNextPresenter = require('../../app/presenters/previous-and-next.presenter.js')
+import PreviousAndNextPresenter from '../../app/presenters/previous-and-next.presenter.js'
 
 describe('Previous and next presenter', () => {
   let anchorElement

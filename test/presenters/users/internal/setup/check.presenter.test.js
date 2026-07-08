@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Thing under test
-const CheckPresenter = require('../../../../../app/presenters/users/internal/setup/check.presenter.js')
+import CheckPresenter from '../../../../../app/presenters/users/internal/setup/check.presenter.js'
 
 describe('Users - Internal - Setup - Check Presenter', () => {
   let session

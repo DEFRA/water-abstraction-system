@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceSupplementaryYearHelper = require('../../support/helpers/licence-supplementary-year.helper.js')
-const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
+import * as BillHelper from '../../support/helpers/bill.helper.js'
+import * as BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import * as LicenceSupplementaryYearHelper from '../../support/helpers/licence-supplementary-year.helper.js'
+import * as WorkflowHelper from '../../support/helpers/workflow.helper.js'
 
 // Thing under test
-const UnflagUnbilledSupplementaryLicencesService = require('../../../app/services/bill-runs/unflag-unbilled-supplementary-licences.service.js')
+import UnflagUnbilledSupplementaryLicencesService from '../../../app/services/bill-runs/unflag-unbilled-supplementary-licences.service.js'
 
 describe('Bill Runs - Unflag Unbilled Supplementary Licences service', () => {
   const billRun = { id: '42e7a42b-8a9a-42b4-b527-2baaedf952f2', scheme: 'sroc', toFinancialYearEnding: 2024 }

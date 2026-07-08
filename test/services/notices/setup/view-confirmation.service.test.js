@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const EventHelper = require('../../../support/helpers/event.helper.js')
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+import * as EventHelper from '../../../support/helpers/event.helper.js'
+import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const ViewConfirmationService = require('../../../../app/services/notices/setup/view-confirmation.service.js')
+import ViewConfirmationService from '../../../../app/services/notices/setup/view-confirmation.service.js'
 
 describe('Notices - Setup - View Confirmation service', () => {
   const referenceCode = generateNoticeReferenceCode('RINV-')

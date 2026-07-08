@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
-const UsersFixture = require('../../support/fixtures/users.fixture.js')
+import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
+import * as UsersFixture from '../../support/fixtures/users.fixture.js'
 
 // Things we need to stub
-const FetchNotificationDal = require('../../../app/dal/users/fetch-notification.dal.js')
-const FetchUserDal = require('../../../app/dal/users/fetch-user.dal.js')
+import FetchNotificationDal from '../../../app/dal/users/fetch-notification.dal.js'
+import FetchUserDal from '../../../app/dal/users/fetch-user.dal.js'
 
 // Thing under test
-const ViewNotificationService = require('../../../app/services/users/view-notification.service.js')
+import ViewNotificationService from '../../../app/services/users/view-notification.service.js'
 
 describe('Users - Internal - View Notifications Service', () => {
   let auth
@@ -29,12 +26,14 @@ describe('Users - Internal - View Notifications Service', () => {
 
     notification = NotificationsFixture.userInternalPasswordResetEmail(user.username)
 
-    Sinon.stub(FetchUserDal, 'go').returns(user)
-    Sinon.stub(FetchNotificationDal, 'go').returns(notification)
+    vi.mock('../../../app/dal/users/fetch-user.dal.js')
+    FetchUserDal.mockReturnValue(user)
+    vi.mock('../../../app/dal/users/fetch-notification.dal.js')
+    FetchNotificationDal.mockReturnValue(notification)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

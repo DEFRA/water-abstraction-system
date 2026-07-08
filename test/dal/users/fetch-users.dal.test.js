@@ -1,22 +1,19 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const DatabaseConfig = require('../../../config/database.config.js')
+import DatabaseConfig from '../../../config/database.config.js'
 
 // Test helpers
-const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
-const LicenceEntityHelper = require('../../support/helpers/licence-entity.helper.js')
-const LicenceEntityRoleHelper = require('../../support/helpers/licence-entity-role.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const UserHelper = require('../../support/helpers/user.helper.js')
-const UsersFixture = require('../../support/fixtures/users.fixture.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as LicenceDocumentHeaderHelper from '../../support/helpers/licence-document-header.helper.js'
+import * as LicenceEntityHelper from '../../support/helpers/licence-entity.helper.js'
+import * as LicenceEntityRoleHelper from '../../support/helpers/licence-entity-role.helper.js'
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import * as UserHelper from '../../support/helpers/user.helper.js'
+import * as UsersFixture from '../../support/fixtures/users.fixture.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const FetchUsersDal = require('../../../app/dal/users/fetch-users.dal.js')
+import FetchUsersDal from '../../../app/dal/users/fetch-users.dal.js'
 
 describe('Users - Fetch Users DAL', () => {
   const seededUsersLength = UserHelper.data.length
@@ -145,7 +142,7 @@ describe('Users - Fetch Users DAL', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -169,7 +166,7 @@ describe('Users - Fetch Users DAL', () => {
     beforeEach(() => {
       // NOTE: We set the default page size to 1000 to ensure we get all records and avoid failed tests when run as
       // part of the full suite, and the risk our test record is returned in the second page of results.
-      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1000)
+      vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 1000)
     })
 
     it('returns all users ordered by their username (email) ascending', async () => {
@@ -196,7 +193,7 @@ describe('Users - Fetch Users DAL', () => {
 
   describe('when a filter is applied', () => {
     beforeEach(() => {
-      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1000)
+      vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 1000)
     })
 
     describe('and "Email" has been set', () => {
@@ -816,7 +813,7 @@ describe('Users - Fetch Users DAL', () => {
       pageNumber = 2
 
       // NOTE: We know we create 3 records so we set the value to 2 to ensure the results are paginated
-      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(2)
+      vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 2)
     })
 
     it('can return the selected page', async () => {

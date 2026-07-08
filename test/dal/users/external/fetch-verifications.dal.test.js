@@ -1,19 +1,17 @@
-'use strict'
-
 // Test helpers
-const CompanyHelper = require('../../../support/helpers/company.helper.js')
-const LicenceDocumentHeaderHelper = require('../../../support/helpers/licence-document-header.helper.js')
-const LicenceEntityHelper = require('../../../support/helpers/licence-entity.helper.js')
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
-const UserHelper = require('../../../support/helpers/user.helper.js')
-const UserVerificationHelper = require('../../../support/helpers/user-verification.helper.js')
-const UserVerificationDocumentHelper = require('../../../support/helpers/user-verification-document.helper.js')
-const { today } = require('../../../../app/lib/general.lib.js')
-const { yesterday } = require('../../../support/general.js')
+import * as CompanyHelper from '../../../support/helpers/company.helper.js'
+import * as LicenceDocumentHeaderHelper from '../../../support/helpers/licence-document-header.helper.js'
+import * as LicenceEntityHelper from '../../../support/helpers/licence-entity.helper.js'
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import * as LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
+import * as UserHelper from '../../../support/helpers/user.helper.js'
+import * as UserVerificationHelper from '../../../support/helpers/user-verification.helper.js'
+import * as UserVerificationDocumentHelper from '../../../support/helpers/user-verification-document.helper.js'
+import { today } from '../../../../app/lib/general.lib.js'
+import { yesterday } from '../../../support/general.js'
 
 // Thing under test
-const FetchVerificationsDal = require('../../../../app/dal/users/external/fetch-verifications.dal.js')
+import FetchVerificationsDal from '../../../../app/dal/users/external/fetch-verifications.dal.js'
 
 describe('Users - External - Fetch Verifications DAL', () => {
   let licenceData1

@@ -1,21 +1,18 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillHelper = require('../../../support/helpers/bill.helper.js')
-const BillModel = require('../../../../app/models/bill.model.js')
-const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
+import * as BillHelper from '../../../support/helpers/bill.helper.js'
+import BillModel from '../../../../app/models/bill.model.js'
+import * as BillLicenceHelper from '../../../support/helpers/bill-licence.helper.js'
+import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
+import * as TransactionHelper from '../../../support/helpers/transaction.helper.js'
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const FetchBillsToBeReissuedService = require('../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js')
+import FetchBillsToBeReissuedService from '../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js'
 
 describe('Fetch Bills To Be Reissued service', () => {
   let billRun
@@ -109,12 +106,12 @@ describe('Fetch Bills To Be Reissued service', () => {
     let notifierStub
 
     beforeEach(() => {
-      notifierStub = GlobalNotifierStub.build(Sinon)
+      notifierStub = GlobalNotifierStub()
       globalThis.GlobalNotifier = notifierStub
     })
 
     afterEach(() => {
-      Sinon.restore()
+      vi.restoreAllMocks()
       delete globalThis.GlobalNotifier
     })
 
@@ -122,7 +119,7 @@ describe('Fetch Bills To Be Reissued service', () => {
       // Force an error by calling the service with an invalid uuid
       await FetchBillsToBeReissuedService('NOT_A_UUID')
 
-      expect(notifierStub.omfg.calledWith('Could not fetch reissue bills')).toBe(true)
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Could not fetch reissue bills')
     })
 
     it('returns an empty array', async () => {

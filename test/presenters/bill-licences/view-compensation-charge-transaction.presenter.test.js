@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ViewCompensationChargeTransactionPresenter = require('../../../app/presenters/bill-licences/view-compensation-charge-transaction.presenter.js')
+import ViewCompensationChargeTransactionPresenter from '../../../app/presenters/bill-licences/view-compensation-charge-transaction.presenter.js'
 
 describe('View Compensation Charge Transaction presenter', () => {
   let transaction

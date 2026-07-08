@@ -1,43 +1,39 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const CrmSchemaService = require('../../../../app/services/data/tear-down/crm-schema.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
-const IdmSchemaService = require('../../../../app/services/data/tear-down/idm-schema.service.js')
-const PermitSchemaService = require('../../../../app/services/data/tear-down/permit-schema.service.js')
-const ReturnsSchemaService = require('../../../../app/services/data/tear-down/returns-schema.service.js')
-const WaterSchemaService = require('../../../../app/services/data/tear-down/water-schema.service.js')
+import CrmSchemaService from '../../../../app/services/data/tear-down/crm-schema.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import IdmSchemaService from '../../../../app/services/data/tear-down/idm-schema.service.js'
+import PermitSchemaService from '../../../../app/services/data/tear-down/permit-schema.service.js'
+import ReturnsSchemaService from '../../../../app/services/data/tear-down/returns-schema.service.js'
+import WaterSchemaService from '../../../../app/services/data/tear-down/water-schema.service.js'
 
 // Thing under test
-const TearDownService = require('../../../../app/services/data/tear-down/tear-down.service.js')
+import TearDownService from '../../../../app/services/data/tear-down/tear-down.service.js'
 
 describe('Tear down service', () => {
-  let crmSchemaServiceStub
-  let idmSchemaServiceStub
   let notifierStub
-  let permitSchemaServiceStub
-  let returnsSchemaServiceStub
-  let waterSchemaServiceStub
-
   beforeEach(async () => {
-    crmSchemaServiceStub = Sinon.stub(CrmSchemaService, 'go').resolves()
-    idmSchemaServiceStub = Sinon.stub(IdmSchemaService, 'go').resolves()
-    permitSchemaServiceStub = Sinon.stub(PermitSchemaService, 'go').resolves()
-    returnsSchemaServiceStub = Sinon.stub(ReturnsSchemaService, 'go').resolves()
-    waterSchemaServiceStub = Sinon.stub(WaterSchemaService, 'go').resolves()
+    vi.mock('../../../../app/services/data/tear-down/crm-schema.service.js')
+    CrmSchemaService.mockResolvedValue()
+    vi.mock('../../../../app/services/data/tear-down/idm-schema.service.js')
+    IdmSchemaService.mockResolvedValue()
+    vi.mock('../../../../app/services/data/tear-down/permit-schema.service.js')
+    PermitSchemaService.mockResolvedValue()
+    vi.mock('../../../../app/services/data/tear-down/returns-schema.service.js')
+    ReturnsSchemaService.mockResolvedValue()
+    vi.mock('../../../../app/services/data/tear-down/water-schema.service.js')
+    WaterSchemaService.mockResolvedValue()
 
     // TearDownService depends on the GlobalNotifier being set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -49,10 +45,10 @@ describe('Tear down service', () => {
     expect(args[0]).toEqual('Tear down complete')
     expect(args[1].timeTakenMs).toBeDefined()
 
-    expect(crmSchemaServiceStub.called).toBe(true)
-    expect(idmSchemaServiceStub.called).toBe(true)
-    expect(permitSchemaServiceStub.called).toBe(true)
-    expect(returnsSchemaServiceStub.called).toBe(true)
-    expect(waterSchemaServiceStub.called).toBe(true)
+    expect(CrmSchemaService).toHaveBeenCalled()
+    expect(IdmSchemaService).toHaveBeenCalled()
+    expect(PermitSchemaService).toHaveBeenCalled()
+    expect(ReturnsSchemaService).toHaveBeenCalled()
+    expect(WaterSchemaService).toHaveBeenCalled()
   })
 })

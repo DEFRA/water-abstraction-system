@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.js')
-const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
-const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import { NOTIFY_TEMPLATES } from '../../../../app/lib/notify-templates.lib.js'
+import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
+import { futureDueDate } from '../../../../app/presenters/notices/base.presenter.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const ReturnsNoticeNotificationsPresenter = require('../../../../app/presenters/notices/setup/returns-notice-notifications.presenter.js')
+import ReturnsNoticeNotificationsPresenter from '../../../../app/presenters/notices/setup/returns-notice-notifications.presenter.js'
 
 describe('Notices - Setup - Returns Notice Notifications presenter', () => {
   let noticeId

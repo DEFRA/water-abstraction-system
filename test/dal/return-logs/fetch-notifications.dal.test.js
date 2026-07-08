@@ -1,15 +1,13 @@
-'use strict'
-
 // Test helpers
-const EventHelper = require('../../support/helpers/event.helper.js')
-const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
-const NotificationHelper = require('../../support/helpers/notification.helper.js')
-const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
+import * as EventHelper from '../../support/helpers/event.helper.js'
+import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
+import * as NotificationHelper from '../../support/helpers/notification.helper.js'
+import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
 
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 
 // Thing under test
-const FetchNotificationsDal = require('../../../app/dal/return-logs/fetch-notifications.dal.js')
+import FetchNotificationsDal from '../../../app/dal/return-logs/fetch-notifications.dal.js'
 
 describe('Return Logs - Fetch Notifications DAL', () => {
   let notice

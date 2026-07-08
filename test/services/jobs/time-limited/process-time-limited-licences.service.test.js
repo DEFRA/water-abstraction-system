@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const WorkflowModel = require('../../../../app/models/workflow.model.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import WorkflowModel from '../../../../app/models/workflow.model.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const FetchTimeLimitedLicencesService = require('../../../../app/services/jobs/time-limited/fetch-time-limited-licences.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+import FetchTimeLimitedLicencesService from '../../../../app/services/jobs/time-limited/fetch-time-limited-licences.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const ProcessTimeLimitedLicencesService = require('../../../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
+import ProcessTimeLimitedLicencesService from '../../../../app/services/jobs/time-limited/process-time-limited-licences.service.js'
 
 describe('Process Time Limited Licences service', () => {
   let fetchResults
@@ -22,12 +19,12 @@ describe('Process Time Limited Licences service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -46,7 +43,8 @@ describe('Process Time Limited Licences service', () => {
         }
       ]
 
-      Sinon.stub(FetchTimeLimitedLicencesService, 'go').resolves(fetchResults)
+      vi.mock('../../../../app/services/jobs/time-limited/fetch-time-limited-licences.service.js')
+      FetchTimeLimitedLicencesService.mockResolvedValue(fetchResults)
     })
 
     it('adds the licences to the workflow table', async () => {
@@ -78,9 +76,9 @@ describe('Process Time Limited Licences service', () => {
     it('logs the time taken in milliseconds and seconds', async () => {
       await ProcessTimeLimitedLicencesService()
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-      expect(notifierStub.omg.calledWith('Time limited job complete')).toBe(true)
+      expect(notifierStub.omg).toHaveBeenCalledWith('Time limited job complete')
       expect(logDataArg.timeTakenMs).toBeDefined()
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.count).toBeDefined()
@@ -91,7 +89,8 @@ describe('Process Time Limited Licences service', () => {
     beforeEach(() => {
       fetchResults = []
 
-      Sinon.stub(FetchTimeLimitedLicencesService, 'go').resolves(fetchResults)
+      vi.mock('../../../../app/services/jobs/time-limited/fetch-time-limited-licences.service.js')
+      FetchTimeLimitedLicencesService.mockResolvedValue(fetchResults)
     })
 
     it('adds nothing to workflow', async () => {
@@ -108,9 +107,9 @@ describe('Process Time Limited Licences service', () => {
     it('logs the time taken in milliseconds and seconds', async () => {
       await ProcessTimeLimitedLicencesService()
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-      expect(notifierStub.omg.calledWith('Time limited job complete')).toBe(true)
+      expect(notifierStub.omg).toHaveBeenCalledWith('Time limited job complete')
       expect(logDataArg.timeTakenMs).toBeDefined()
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.count).toBeDefined()
@@ -119,7 +118,8 @@ describe('Process Time Limited Licences service', () => {
 
   describe('when there is an error', () => {
     beforeEach(() => {
-      Sinon.stub(FetchTimeLimitedLicencesService, 'go').rejects()
+      vi.mock('../../../../app/services/jobs/time-limited/fetch-time-limited-licences.service.js')
+      FetchTimeLimitedLicencesService.mockRejectedValue()
     })
 
     it('records the error by calling "omfg()"', async () => {

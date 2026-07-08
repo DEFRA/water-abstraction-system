@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const { generateUUID } = require('../../app/lib/general.lib.js')
-const { licence } = require('../support/fixtures/licence.fixture.js')
+import { generateUUID } from '../../app/lib/general.lib.js'
+import { licence } from '../support/fixtures/licence.fixture.js'
 
 // Thing under test
-const CRMPresenter = require('../../app/presenters/crm.presenter.js')
+import CRMPresenter from '../../app/presenters/crm.presenter.js'
 
 describe('CRM presenter', () => {
   describe('#abstractionAlertsLabel()', () => {

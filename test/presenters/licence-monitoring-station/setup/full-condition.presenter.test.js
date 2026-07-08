@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const FullConditionPresenter = require('../../../../app/presenters/licence-monitoring-station/setup/full-condition.presenter.js')
+import FullConditionPresenter from '../../../../app/presenters/licence-monitoring-station/setup/full-condition.presenter.js'
 
 describe('Full Condition Presenter', () => {
   let conditions

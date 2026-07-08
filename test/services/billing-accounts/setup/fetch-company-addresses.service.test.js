@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const AddressHelper = require('../../../support/helpers/address.helper.js')
-const CompanyHelper = require('../../../support/helpers/company.helper.js')
-const CompanyAddressHelper = require('../../../support/helpers/company-address.helper.js')
+import * as AddressHelper from '../../../support/helpers/address.helper.js'
+import * as CompanyHelper from '../../../support/helpers/company.helper.js'
+import * as CompanyAddressHelper from '../../../support/helpers/company-address.helper.js'
 
 // Thing under test
-const FetchCompanyAddressesService = require('../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js')
+import FetchCompanyAddressesService from '../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js'
 
 describe('Billing Accounts - Setup - Fetch Existing Addresses service', () => {
   let address

@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const AbstractionPeriodPresenter = require('../../../../app/presenters/licence-monitoring-station/setup/abstraction-period.presenter.js')
+import AbstractionPeriodPresenter from '../../../../app/presenters/licence-monitoring-station/setup/abstraction-period.presenter.js'
 
 describe('Abstraction Period Presenter', () => {
   let session

@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const StartReadingPresenter = require('../../../../app/presenters/return-logs/setup/start-reading.presenter.js')
+import StartReadingPresenter from '../../../../app/presenters/return-logs/setup/start-reading.presenter.js'
 
 describe('Return Logs Setup - Start Reading presenter', () => {
   let session

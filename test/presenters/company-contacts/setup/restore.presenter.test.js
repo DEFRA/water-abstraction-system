@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import * as CustomersFixtures from '../../../support/fixtures/customers.fixture.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const RestorePresenter = require('../../../../app/presenters/company-contacts/setup/restore.presenter.js')
+import RestorePresenter from '../../../../app/presenters/company-contacts/setup/restore.presenter.js'
 
 describe('Company Contacts - Setup - Restore Presenter', () => {
   let company

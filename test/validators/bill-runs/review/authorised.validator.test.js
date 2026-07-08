@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const AuthorisedValidator = require('../../../../app/validators/bill-runs/review/authorised.validator.js')
+import AuthorisedValidator from '../../../../app/validators/bill-runs/review/authorised.validator.js'
 
 describe('Bill Runs Review - Authorised validator', () => {
   let payload

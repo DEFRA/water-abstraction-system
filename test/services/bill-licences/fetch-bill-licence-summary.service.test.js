@@ -1,19 +1,17 @@
-'use strict'
-
 // Test helpers
-const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
-const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
-const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const CompanyHelper = require('../../support/helpers/company.helper.js')
-const ContactHelper = require('../../support/helpers/contact.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
-const TransactionHelper = require('../../support/helpers/transaction.helper.js')
+import * as BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
+import * as BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
+import * as BillHelper from '../../support/helpers/bill.helper.js'
+import * as BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
+import * as BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import * as CompanyHelper from '../../support/helpers/company.helper.js'
+import * as ContactHelper from '../../support/helpers/contact.helper.js'
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import * as RegionHelper from '../../support/helpers/region.helper.js'
+import * as TransactionHelper from '../../support/helpers/transaction.helper.js'
 
 // Thing under test
-const FetchBillLicenceSummaryService = require('../../../app/services/bill-licences/fetch-bill-licence-summary.service.js')
+import FetchBillLicenceSummaryService from '../../../app/services/bill-licences/fetch-bill-licence-summary.service.js'
 
 describe('Fetch Bill Licence Summary service', () => {
   let accountNumber

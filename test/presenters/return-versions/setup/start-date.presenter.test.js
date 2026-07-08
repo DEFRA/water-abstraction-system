@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const StartDatePresenter = require('../../../../app/presenters/return-versions/setup/start-date.presenter.js')
+import StartDatePresenter from '../../../../app/presenters/return-versions/setup/start-date.presenter.js'
 
 describe('Return Versions Setup - Start Date presenter', () => {
   let session

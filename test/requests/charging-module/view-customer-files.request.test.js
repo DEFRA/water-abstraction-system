@@ -1,26 +1,24 @@
-'use strict'
-
-const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const ChargingModuleRequest = require('../../../app/requests/charging-module.request.js')
+import * as ChargingModuleRequest from '../../../app/requests/charging-module.request.js'
 
 // Thing under test
-const ChargingModuleViewCustomerFilesRequest = require('../../../app/requests/charging-module/view-customer-files.request.js')
+import * as ChargingModuleViewCustomerFilesRequest from '../../../app/requests/charging-module/view-customer-files.request.js'
 
 describe('Charging Module - View Customer Files request', () => {
   const days = 7
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the service can view a bill run', () => {
     beforeEach(async () => {
-      Sinon.stub(ChargingModuleRequest, 'get').resolves({
+      vi.spyOn(ChargingModuleRequest, 'getRequest').mockResolvedValue({
         succeeded: true,
         response: {
           info: {
@@ -50,7 +48,7 @@ describe('Charging Module - View Customer Files request', () => {
 
     it('hits the correct endpoint', async () => {
       await ChargingModuleViewCustomerFilesRequest.send(days)
-      const endpoint = ChargingModuleRequest.get.firstCall.firstArg
+      const endpoint = ChargingModuleRequest.getRequest.firstCall.firstArg
 
       expect(endpoint).toEqual(`v3/wrls/customer-files/${days}`)
     })
@@ -72,7 +70,7 @@ describe('Charging Module - View Customer Files request', () => {
   describe('when the service cannot view customer files', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequest, 'get').resolves({
+        vi.spyOn(ChargingModuleRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response: {
             info: {
@@ -107,7 +105,7 @@ describe('Charging Module - View Customer Files request', () => {
 
     describe('because the request attempt returned an error, for example, TimeoutError', () => {
       beforeEach(async () => {
-        Sinon.stub(ChargingModuleRequest, 'get').resolves({
+        vi.spyOn(ChargingModuleRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response: new Error("Timeout awaiting 'request' for 5000ms")
         })

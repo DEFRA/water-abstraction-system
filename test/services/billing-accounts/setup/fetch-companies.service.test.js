@@ -1,15 +1,13 @@
-'use strict'
-
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const SearchCompaniesRequest = require('../../../../app/requests/companies-house/search-companies.request.js')
+import * as SearchCompaniesRequest from '../../../../app/requests/companies-house/search-companies.request.js'
 
 // Thing under test
-const FetchCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
+import FetchCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-companies.service.js'
 
 describe('Billing Accounts - Setup - Fetch Companies service', () => {
   const matches = [
@@ -21,12 +19,12 @@ describe('Billing Accounts - Setup - Fetch Companies service', () => {
   ]
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called with a "companySearch" that has responses', () => {
     beforeEach(async () => {
-      Sinon.stub(SearchCompaniesRequest, 'send').resolves({
+      vi.spyOn(SearchCompaniesRequest, 'send').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -53,7 +51,7 @@ describe('Billing Accounts - Setup - Fetch Companies service', () => {
 
   describe('when called with a "companySearch" that has no responses', () => {
     beforeEach(async () => {
-      Sinon.stub(SearchCompaniesRequest, 'send').resolves({
+      vi.spyOn(SearchCompaniesRequest, 'send').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -74,7 +72,7 @@ describe('Billing Accounts - Setup - Fetch Companies service', () => {
 
   describe('when called with a "companySearch" and a not 200 status is returned', () => {
     beforeEach(async () => {
-      Sinon.stub(SearchCompaniesRequest, 'send').resolves({
+      vi.spyOn(SearchCompaniesRequest, 'send').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_NOT_FOUND,

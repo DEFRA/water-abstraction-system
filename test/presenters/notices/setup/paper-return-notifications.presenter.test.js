@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const ReturnLogFixture = require('../../../support/fixtures/return-logs.fixture.js')
-const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
-const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import * as ReturnLogFixture from '../../../support/fixtures/return-logs.fixture.js'
+import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
+import { futureDueDate } from '../../../../app/presenters/notices/base.presenter.js'
+import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const PaperReturnNotificationsPresenter = require('../../../../app/presenters/notices/setup/paper-return-notifications.presenter.js')
+import PaperReturnNotificationsPresenter from '../../../../app/presenters/notices/setup/paper-return-notifications.presenter.js'
 
 describe('Notices - Setup - Paper Return Notifications presenter', () => {
   const noticeId = '32f4cab2-ce0c-4711-aac8-fb4941f3b59a'

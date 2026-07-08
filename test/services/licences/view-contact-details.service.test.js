@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const FetchLicenceCRMDataService = require('../../../app/services/licences/fetch-licence-crm-data.service.js')
-const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
+import FetchLicenceCRMDataService from '../../../app/services/licences/fetch-licence-crm-data.service.js'
+import FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
 
 // Thing under test
-const ViewContactDetailsService = require('../../../app/services/licences/view-contact-details.service.js')
+import ViewContactDetailsService from '../../../app/services/licences/view-contact-details.service.js'
 
 describe('Licences - View Contact Details service', () => {
   let auth
@@ -45,18 +42,20 @@ describe('Licences - View Contact Details service', () => {
       }
     ]
 
-    Sinon.stub(FetchLicenceService, 'go').returns({
+    vi.mock('../../../app/services/licences/fetch-licence.service.js')
+    FetchLicenceService.mockReturnValue({
       licenceRef
     })
 
-    Sinon.stub(FetchLicenceCRMDataService, 'go').returns({
+    vi.mock('../../../app/services/licences/fetch-licence-crm-data.service.js')
+    FetchLicenceCRMDataService.mockReturnValue({
       contacts,
       totalNumber: contacts.length
     })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

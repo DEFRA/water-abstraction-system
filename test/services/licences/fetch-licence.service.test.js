@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceModel = require('../../../app/models/licence.model.js')
-const LicenceSupplementaryYearModel = require('../../support/helpers/licence-supplementary-year.helper.js')
-const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import LicenceModel from '../../../app/models/licence.model.js'
+import * as LicenceSupplementaryYearModel from '../../support/helpers/licence-supplementary-year.helper.js'
+import * as LicenceVersionHelper from '../../support/helpers/licence-version.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
+import FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
 
 describe('Licences - Fetch Licence service', () => {
   let licence

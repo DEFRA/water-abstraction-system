@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const PaperReturnValidator = require('../../../../app/validators/notices/setup/paper-return.validator.js')
+import PaperReturnValidator from '../../../../app/validators/notices/setup/paper-return.validator.js'
 
 describe('Paper Return Validator', () => {
   let payload

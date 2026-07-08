@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+import { generateUUID } from '../../../app/lib/general.lib.js'
+import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 
 // Things we need to stub
-const FetchNotificationsDal = require('../../../app/dal/return-logs/fetch-notifications.dal.js')
-const FetchReturnLogService = require('../../../app/services/return-logs/fetch-return-log.service.js')
+import FetchNotificationsDal from '../../../app/dal/return-logs/fetch-notifications.dal.js'
+import FetchReturnLogService from '../../../app/services/return-logs/fetch-return-log.service.js'
 
 // Thing under test
-const ViewCommunicationsService = require('../../../app/services/return-logs/view-communications.service.js')
+import ViewCommunicationsService from '../../../app/services/return-logs/view-communications.service.js'
 
 describe('Return Logs - View Communications Service', () => {
   const page = '1'
@@ -28,15 +25,17 @@ describe('Return Logs - View Communications Service', () => {
       }
     }
 
-    Sinon.stub(FetchReturnLogService, 'go').returns(returnLog)
-    Sinon.stub(FetchNotificationsDal, 'go').returns({
+    vi.mock('../../../app/services/return-logs/fetch-return-log.service.js')
+    FetchReturnLogService.mockReturnValue(returnLog)
+    vi.mock('../../../app/dal/return-logs/fetch-notifications.dal.js')
+    FetchNotificationsDal.mockReturnValue({
       notifications: [],
       totalNumber: 0
     })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

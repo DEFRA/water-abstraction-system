@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
+import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
 
 // Things we need to stub
-const FetchPurposesService = require('../../../app/services/licences/fetch-purposes.service.js')
-const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
+import FetchPurposesService from '../../../app/services/licences/fetch-purposes.service.js'
+import FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
 
 // Thing under test
-const ViewPurposesService = require('../../../app/services/licences/view-purposes.service.js')
+import ViewPurposesService from '../../../app/services/licences/view-purposes.service.js'
 
 describe('Licences - View Purposes service', () => {
   let auth
@@ -33,13 +30,15 @@ describe('Licences - View Purposes service', () => {
 
     purposes = [ViewLicencesFixture.licenceVersionPurpose()]
 
-    Sinon.stub(FetchLicenceService, 'go').returns(licence)
+    vi.mock('../../../app/services/licences/fetch-licence.service.js')
+    FetchLicenceService.mockReturnValue(licence)
 
-    Sinon.stub(FetchPurposesService, 'go').returns(purposes)
+    vi.mock('../../../app/services/licences/fetch-purposes.service.js')
+    FetchPurposesService.mockReturnValue(purposes)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when a licence with a matching ID exists', () => {

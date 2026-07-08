@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const PurposePresenter = require('../../../../app/presenters/return-versions/setup/purpose.presenter.js')
+import PurposePresenter from '../../../../app/presenters/return-versions/setup/purpose.presenter.js'
 
 describe('Return Versions - Setup - Purpose presenter', () => {
   const requirementIndex = 0

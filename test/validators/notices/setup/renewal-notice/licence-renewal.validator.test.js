@@ -1,15 +1,13 @@
-'use strict'
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Helpers
-const LicenceModel = require('../../../../../app/models/licence.model.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
+import LicenceModel from '../../../../../app/models/licence.model.js'
+import { generateUUID } from '../../../../../app/lib/general.lib.js'
+import { generateLicenceRef } from '../../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const LicenceRenewalValidator = require('../../../../../app/validators/notices/setup/renewal-notice/licence-renewal.validator.js')
+import LicenceRenewalValidator from '../../../../../app/validators/notices/setup/renewal-notice/licence-renewal.validator.js'
 
 describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
   let clock
@@ -18,7 +16,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
   let licenceRef
 
   beforeEach(() => {
-    clock = Sinon.useFakeTimers(new Date('2026-05-21'))
+    clock = vi.useFakeTimers({ now: new Date('2026-05-21' }))
 
     licenceRef = generateLicenceRef()
 
@@ -34,8 +32,8 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
   })
 
   afterEach(() => {
-    clock.restore()
-    Sinon.restore()
+    vi.useRealTimers()
+    vi.restoreAllMocks()
   })
 
   it('confirms the data is valid', () => {

@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewLicenceService = require('../../../../app/services/notices/setup/view-licence.service.js')
+import ViewLicenceService from '../../../../app/services/notices/setup/view-licence.service.js'
 
 describe('Notices - Setup - View Licence service', () => {
   let licenceRef
@@ -23,13 +20,14 @@ describe('Notices - Setup - View Licence service', () => {
 
     sessionData = { licenceRef }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

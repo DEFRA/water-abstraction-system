@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const AbstractionPeriodPresenter = require('../../../../app/presenters/return-versions/setup/abstraction-period.presenter.js')
+import AbstractionPeriodPresenter from '../../../../app/presenters/return-versions/setup/abstraction-period.presenter.js'
 
 describe('Return Versions Setup - Abstraction Period presenter', () => {
   const requirementIndex = 0

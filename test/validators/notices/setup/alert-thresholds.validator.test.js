@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const AlertThresholdsValidator = require('../../../../app/validators/notices/setup/alert-thresholds.validator.js')
+import AlertThresholdsValidator from '../../../../app/validators/notices/setup/alert-thresholds.validator.js'
 
 describe('Notices Setup - Setup - Alert Thresholds validator', () => {
   let payload

@@ -1,19 +1,17 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
-const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
-const BillingAccountModel = require('../../../../app/models/billing-account.model.js')
+import http2 from 'node:http2'
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
+import * as BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
+import BillingAccountModel from '../../../../app/models/billing-account.model.js'
 
 // Things we need to stub
-const ChargingModuleViewCustomerFilesRequest = require('../../../../app/requests/charging-module/view-customer-files.request.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+import * as ChargingModuleViewCustomerFilesRequest from '../../../../app/requests/charging-module/view-customer-files.request.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const ProcessCustomerFilesService = require('../../../../app/services/jobs/customer-files/process-customer-files.service.js')
+import ProcessCustomerFilesService from '../../../../app/services/jobs/customer-files/process-customer-files.service.js'
 
 describe('Jobs - Customer Files - Process Customer Files service', () => {
   const days = 7
@@ -28,12 +26,12 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -46,7 +44,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
         lastTransactionFileCreatedAt: new Date('2025-08-10T12:34:56.789Z')
       })
 
-      Sinon.stub(ChargingModuleViewCustomerFilesRequest, 'send').resolves({
+      vi.spyOn(ChargingModuleViewCustomerFilesRequest, 'send').mockResolvedValue({
         succeeded: true,
         response: {
           info: {
@@ -108,9 +106,9 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
     it('logs the time taken in milliseconds and seconds', async () => {
       await ProcessCustomerFilesService(days)
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-      expect(notifierStub.omg.calledWith('Customer files job complete')).toBe(true)
+      expect(notifierStub.omg).toHaveBeenCalledWith('Customer files job complete')
       expect(logDataArg.timeTakenMs).toBeDefined()
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.count).toEqual(3)
@@ -119,7 +117,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
 
   describe('when the Charging Module API response is empty', () => {
     beforeEach(() => {
-      Sinon.stub(ChargingModuleViewCustomerFilesRequest, 'send').resolves({
+      vi.spyOn(ChargingModuleViewCustomerFilesRequest, 'send').mockResolvedValue({
         succeeded: true,
         response: {
           info: {
@@ -131,25 +129,25 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
         }
       })
 
-      billRunQueryStub = Sinon.stub(BillingAccountModel, 'query').returns({
-        patch: Sinon.stub().returnsThis(),
-        where: Sinon.stub().returnsThis(),
-        whereNot: Sinon.stub().resolves()
+      billRunQueryStub = vi.spyOn(BillingAccountModel, 'query').mockReturnValue({
+        patch: vi.fn().mockReturnThis(),
+        where: vi.fn().mockReturnThis(),
+        whereNot: vi.fn().mockResolvedValue()
       })
     })
 
     it('updates no billing account records', async () => {
       await ProcessCustomerFilesService(days)
 
-      expect(billRunQueryStub.called).toBe(false)
+      expect(billRunQueryStub).not.toHaveBeenCalled()
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {
       await ProcessCustomerFilesService(days)
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-      expect(notifierStub.omg.calledWith('Customer files job complete')).toBe(true)
+      expect(notifierStub.omg).toHaveBeenCalledWith('Customer files job complete')
       expect(logDataArg.timeTakenMs).toBeDefined()
       expect(logDataArg.timeTakenSs).toBeDefined()
       expect(logDataArg.count).toEqual(0)
@@ -158,7 +156,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
 
   describe('when the Charging Module API request fails', () => {
     beforeEach(() => {
-      Sinon.stub(ChargingModuleViewCustomerFilesRequest, 'send').resolves({
+      vi.spyOn(ChargingModuleViewCustomerFilesRequest, 'send').mockResolvedValue({
         succeeded: false,
         response: {
           info: {

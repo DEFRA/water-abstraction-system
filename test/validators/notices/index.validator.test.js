@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const { today } = require('../../../app/lib/general.lib.js')
+import { today } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const IndexValidator = require('../../../app/validators/notices/index.validator.js')
+import IndexValidator from '../../../app/validators/notices/index.validator.js'
 
 describe('Notices - Index validator', () => {
   let payload

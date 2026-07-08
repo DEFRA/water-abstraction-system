@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const { tomorrow, yesterday } = require('../../support/general.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
+import { tomorrow, yesterday } from '../../support/general.js'
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import * as LicenceDocumentHeaderHelper from '../../support/helpers/licence-document-header.helper.js'
 
 // Thing under test
-const FetchInvalidAddressesService = require('../../../app/services/reports/fetch-invalid-addresses.service.js')
+import FetchInvalidAddressesService from '../../../app/services/reports/fetch-invalid-addresses.service.js'
 
 describe('Reports - Fetch Invalid Addresses service', () => {
   const metadata = {

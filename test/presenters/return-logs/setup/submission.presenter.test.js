@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const SubmissionPresenter = require('../../../../app/presenters/return-logs/setup/submission.presenter.js')
+import SubmissionPresenter from '../../../../app/presenters/return-logs/setup/submission.presenter.js'
 
 describe('Return Logs Setup - Submission presenter', () => {
   let session

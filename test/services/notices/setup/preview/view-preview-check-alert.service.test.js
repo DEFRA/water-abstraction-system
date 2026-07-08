@@ -1,20 +1,17 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const AbstractionAlertSessionDataFixture = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const RecipientsFixture = require('../../../../support/fixtures/recipients.fixture.js')
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
-const { generateNoticeReferenceCode } = require('../../../../../app/lib/general.lib.js')
+import * as AbstractionAlertSessionDataFixture from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
+import * as RecipientsFixture from '../../../../support/fixtures/recipients.fixture.js'
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import { generateNoticeReferenceCode } from '../../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const FetchAbstractionAlertRecipientsDal = require('../../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import FetchAbstractionAlertRecipientsDal from '../../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'
+import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewPreviewCheckAlertService = require('../../../../../app/services/notices/setup/preview/view-preview-check-alert.service.js')
+import ViewPreviewCheckAlertService from '../../../../../app/services/notices/setup/preview/view-preview-check-alert.service.js'
 
 describe('Notices - Setup - Preview - View Preview Check Alert service', () => {
   let licenceMonitoringStations
@@ -38,7 +35,7 @@ describe('Notices - Setup - Preview - View Preview Check Alert service', () => {
       referenceCode: generateNoticeReferenceCode('WAA-')
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
     // Create the recipients data
     recipients = RecipientsFixture.recipients()
@@ -47,12 +44,14 @@ describe('Notices - Setup - Preview - View Preview Check Alert service', () => {
     testRecipients[0].licence_refs = licenceMonitoringStations.two.licence.licenceRef
     testRecipient = testRecipients[0]
 
-    Sinon.stub(FetchAbstractionAlertRecipientsDal, 'go').resolves(testRecipients)
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
+    FetchAbstractionAlertRecipientsDal.mockResolvedValue(testRecipients)
+    vi.mock('../../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewCheckService = require('../../../../../app/services/users/internal/setup/view-check.service.js')
+import ViewCheckService from '../../../../../app/services/users/internal/setup/view-check.service.js'
 
 describe('Users - Internal - Setup - Check Service', () => {
   let session
@@ -23,15 +20,16 @@ describe('Users - Internal - Setup - Check Service', () => {
       permission: 'billing_and_data'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
-    yarStub = { flash: Sinon.stub().returns([]) }
+    yarStub = { flash: vi.fn().mockReturnValue([]) }
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -65,7 +63,7 @@ describe('Users - Internal - Setup - Check Service', () => {
 
     describe('when there is a notification', () => {
       beforeEach(() => {
-        yarStub = { flash: Sinon.stub().returns(['Test notification']) }
+        yarStub = { flash: vi.fn().mockReturnValue(['Test notification']) }
       })
 
       it('sets the notification', async () => {

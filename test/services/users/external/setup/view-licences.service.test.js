@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
-const UserSessionsFixture = require('../../../../support/fixtures/user-sessions.fixture.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import * as UserSessionsFixture from '../../../../support/fixtures/user-sessions.fixture.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewLicencesService = require('../../../../../app/services/users/external/setup/view-licences.service.js')
+import ViewLicencesService from '../../../../../app/services/users/external/setup/view-licences.service.js'
 
 describe('Users - External - Setup - View Licences Service', () => {
   let session
@@ -20,13 +17,14 @@ describe('Users - External - Setup - View Licences Service', () => {
   beforeEach(() => {
     sessionData = UserSessionsFixture.unregistrationSession()
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReturnLogModel = require('../../../../app/models/return-log.model.js')
-const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
+import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import ReturnLogModel from '../../../../app/models/return-log.model.js'
+import * as ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const CleanEmptyVoidReturnLogsService = require('../../../../app/services/jobs/clean/clean-empty-void-return-logs.service.js')
+import CleanEmptyVoidReturnLogsService from '../../../../app/services/jobs/clean/clean-empty-void-return-logs.service.js'
 
 describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
   let returnLog
@@ -22,12 +19,12 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -91,11 +88,11 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
 
   describe('when the clean errors', () => {
     beforeEach(() => {
-      Sinon.stub(ReturnLogModel, 'query').returns({
-        delete: Sinon.stub().returnsThis(),
-        where: Sinon.stub().returnsThis(),
-        whereNotNull: Sinon.stub().returnsThis(),
-        whereNotExists: Sinon.stub().rejects()
+      vi.spyOn(ReturnLogModel, 'query').mockReturnValue({
+        delete: vi.fn().mockReturnThis(),
+        where: vi.fn().mockReturnThis(),
+        whereNotNull: vi.fn().mockReturnThis(),
+        whereNotExists: vi.fn().rejects()
       })
     })
 
@@ -108,7 +105,7 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
 
       const errorLogArgs = notifierStub.omfg.firstCall.args
 
-      expect(notifierStub.omfg.calledWith('Clean job failed')).toBe(true)
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed')
       expect(errorLogArgs[1]).toEqual({ job: 'clean-empty-void-return-logs' })
       expect(errorLogArgs[2]).toBeInstanceOf(Error)
     })

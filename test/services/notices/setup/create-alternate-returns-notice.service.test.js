@@ -1,22 +1,19 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const EventModel = require('../../../../app/models/event.model.js')
-const NoticesFixture = require('../../../support/fixtures/notices.fixture.js')
-const NotificationModel = require('../../../../app/models/notification.model.js')
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
-const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
-const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.js')
+import EventModel from '../../../../app/models/event.model.js'
+import * as NoticesFixture from '../../../support/fixtures/notices.fixture.js'
+import NotificationModel from '../../../../app/models/notification.model.js'
+import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import { formatLongDate } from '../../../../app/presenters/base.presenter.js'
+import { futureDueDate } from '../../../../app/presenters/notices/base.presenter.js'
+import { NOTIFY_TEMPLATES } from '../../../../app/lib/notify-templates.lib.js'
 
 // Things we need to stub
-const FetchAlternateReturnsRecipientsService = require('../../../../app/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js')
+import FetchAlternateReturnsRecipientsService from '../../../../app/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js'
 
 // Thing under test
-const CreateAlternateReturnsNoticeService = require('../../../../app/services/notices/setup/create-alternate-returns-notice.service.js')
+import CreateAlternateReturnsNoticeService from '../../../../app/services/notices/setup/create-alternate-returns-notice.service.js'
 
 describe('Notices - Setup - Create Alternate Returns Notice service', () => {
   let dueDate
@@ -37,11 +34,12 @@ describe('Notices - Setup - Create Alternate Returns Notice service', () => {
     licenceRefs = notice.licences
     returnLogIds = recipient.return_log_ids
 
-    Sinon.stub(FetchAlternateReturnsRecipientsService, 'go').resolves([recipient])
+    vi.mock('../../../../app/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js')
+    FetchAlternateReturnsRecipientsService.mockResolvedValue([recipient])
   })
 
   afterEach(async () => {
-    Sinon.restore()
+    vi.restoreAllMocks()
 
     await NotificationModel.query().deleteById(notificationId)
     await EventModel.query().deleteById(notice.id)

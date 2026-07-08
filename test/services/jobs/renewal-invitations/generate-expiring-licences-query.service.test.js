@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const { db } = require('../../../../db/db.js')
-const { tomorrow, yesterday } = require('../../../support/general.js')
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import { db } from '../../../../db/db.js'
+import { tomorrow, yesterday } from '../../../support/general.js'
 
 // Thing under test
-const GenerateExpiringLicencesQueryService = require('../../../../app/services/jobs/renewal-invitations/generate-expiring-licences-query.service.js')
+import GenerateExpiringLicencesQueryService from '../../../../app/services/jobs/renewal-invitations/generate-expiring-licences-query.service.js'
 
 describe('Jobs - Renewal Invitations - Generate Expiring Licences Query Service', () => {
   let afterExpiredDate

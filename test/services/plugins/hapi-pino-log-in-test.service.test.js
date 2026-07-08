@@ -1,14 +1,11 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Thing under test
-const HapiPinoLogInTestService = require('../../../app/services/plugins//hapi-pino-log-in-test.service.js')
+import HapiPinoLogInTestService from '../../../app/services/plugins//hapi-pino-log-in-test.service.js'
 
 describe('Hapi Pino Log In Test service', () => {
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when unit tests are running', () => {
@@ -34,7 +31,7 @@ describe('Hapi Pino Log In Test service', () => {
 
   describe('when unit tests are not running', () => {
     beforeEach(() => {
-      Sinon.stub(process, 'env').value({ ...process.env, NODE_ENV: 'development' })
+      vi.replaceProperty(process, 'env', { ...process.env, NODE_ENV: 'development' })
     })
 
     describe('and we tell it not to log events in test', () => {

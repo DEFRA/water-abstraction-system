@@ -1,13 +1,10 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const BillRunModel = require('../../../../app/models/bill-run.model.js')
+import BillRunModel from '../../../../app/models/bill-run.model.js'
 
 // Thing under test
-const CancelBillBunService = require('../../../../app/services/bill-runs/cancel/cancel-bill-run.service.js')
+import CancelBillBunService from '../../../../app/services/bill-runs/cancel/cancel-bill-run.service.js'
 
 describe('Bill Runs - Cancel Bill Run service', () => {
   const billRunId = '20f530db-aa69-42d1-8a27-0ab838ca1916'
@@ -17,26 +14,27 @@ describe('Bill Runs - Cancel Bill Run service', () => {
   let billRunPatchStub
 
   beforeEach(() => {
-    billRunPatchStub = Sinon.stub().resolves()
+    billRunPatchStub = vi.fn().mockResolvedValue()
 
-    queryStub = Sinon.stub(BillRunModel, 'query')
+    queryStub = vi.spyOn(BillRunModel, 'query').mockImplementation(() => {})
 
     queryStub.onSecondCall().returns({
-      findById: Sinon.stub().withArgs(billRunId).returnsThis(),
+      findById: vi.fn().mockReturnThis(),
       patch: billRunPatchStub
     })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the bill run exists', () => {
     describe('and can be deleted', () => {
       beforeEach(() => {
         queryStub.onFirstCall().returns({
-          findById: Sinon.stub().withArgs(billRunId).returnsThis(),
-          select: Sinon.stub()
+          findById: vi.fn().mockReturnThis(),
+          select: vi
+            .fn()
             .withArgs('id', 'externalId', 'status')
             .resolves({ id: billRunId, externalId, status: 'ready' })
         })
@@ -46,7 +44,7 @@ describe('Bill Runs - Cancel Bill Run service', () => {
         await CancelBillBunService(billRunId)
 
         // Check we set the bill run status
-        const [patchObject] = billRunPatchStub.args[0]
+        const [patchObject] = billRunPatchStub.mock.calls[0]
 
         expect(patchObject).toMatchObject({ status: 'cancel' })
       })
@@ -61,10 +59,8 @@ describe('Bill Runs - Cancel Bill Run service', () => {
     describe('but cannot be deleted because of its status', () => {
       beforeEach(async () => {
         queryStub.onFirstCall().returns({
-          findById: Sinon.stub().withArgs(billRunId).returnsThis(),
-          select: Sinon.stub()
-            .withArgs('id', 'externalId', 'status')
-            .resolves({ id: billRunId, externalId, status: 'sent' })
+          findById: vi.fn().mockReturnThis(),
+          select: vi.fn().mockResolvedValue({ id: billRunId, externalId, status: 'sent' })
         })
       })
 
@@ -72,7 +68,7 @@ describe('Bill Runs - Cancel Bill Run service', () => {
         await CancelBillBunService(billRunId)
 
         // Check we do not change the bill run status
-        expect(billRunPatchStub.called).toBe(false)
+        expect(billRunPatchStub).not.toHaveBeenCalled()
       })
 
       it('returns an instance of the bill run including its external ID and status unchanged', async () => {

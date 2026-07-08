@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
 
 // Thing under test
-const FetchReturnsService = require('../../../app/services/licences/fetch-returns.service.js')
+import FetchReturnsService from '../../../app/services/licences/fetch-returns.service.js'
 
 describe('Licences - Fetch Returns service', () => {
   let licence

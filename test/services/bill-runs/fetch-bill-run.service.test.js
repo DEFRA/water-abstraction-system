@@ -1,21 +1,19 @@
-'use strict'
-
 // Test helpers
-const AddressHelper = require('../../support/helpers/address.helper.js')
-const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
-const BillingAccountAddressHelper = require('../../support/helpers/billing-account-address.helper.js')
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../../app/models/bill-run.model.js')
-const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
-const CompanyHelper = require('../../support/helpers/company.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
-const RegionModel = require('../../../app/models/region.model.js')
-const { compareStrings } = require('../../../app/lib/general.lib.js')
+import * as AddressHelper from '../../support/helpers/address.helper.js'
+import * as BillHelper from '../../support/helpers/bill.helper.js'
+import * as BillingAccountHelper from '../../support/helpers/billing-account.helper.js'
+import * as BillingAccountAddressHelper from '../../support/helpers/billing-account-address.helper.js'
+import * as BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import BillRunModel from '../../../app/models/bill-run.model.js'
+import * as BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
+import * as CompanyHelper from '../../support/helpers/company.helper.js'
+import * as LicenceHelper from '../../support/helpers/licence.helper.js'
+import * as RegionHelper from '../../support/helpers/region.helper.js'
+import RegionModel from '../../../app/models/region.model.js'
+import { compareStrings } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const FetchBillRunService = require('../../../app/services/bill-runs/fetch-bill-run.service.js')
+import FetchBillRunService from '../../../app/services/bill-runs/fetch-bill-run.service.js'
 
 describe('Fetch Bill Run service', () => {
   let linkedBillingAccounts

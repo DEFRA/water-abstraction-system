@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const LicenceModel = require('../../../app/models/licence.model.js')
-const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
-const { licenceEnds } = require('../../support/fixtures/licence.fixture.js')
+import LicenceModel from '../../../app/models/licence.model.js'
+import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
+import { licenceEnds } from '../../support/fixtures/licence.fixture.js'
 
 // Thing under test
-const SummaryHeadingPresenter = require('../../../app/presenters/licences/summary-heading.presenter.js')
+import SummaryHeadingPresenter from '../../../app/presenters/licences/summary-heading.presenter.js'
 
 describe('Licences - Summary Heading presenter', () => {
   let licence

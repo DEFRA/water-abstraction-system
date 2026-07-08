@@ -2,7 +2,7 @@
  * @module TransactionHelper
  */
 
-import ChargeCategoryHelper from './charge-category.helper.js'
+import * as ChargeCategoryHelper from './charge-category.helper.js'
 import { determineCurrentFinancialYear, generateUUID } from '../../../app/lib/general.lib.js'
 import TransactionModel from '../../../app/models/transaction.model.js'
 

@@ -1,33 +1,29 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const AllocateReturnsToChargeElementService = require('../../../../app/services/bill-runs/match/allocate-returns-to-charge-element.service.js')
-const DetermineLicenceIssuesService = require('../../../../app/services/bill-runs/match/determine-licence-issues.service.js')
-const FetchLicencesService = require('../../../../app/services/bill-runs/match/fetch-licences.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
-const MatchReturnsToChargeElementService = require('../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js')
-const PrepareChargeVersionService = require('../../../../app/services/bill-runs/match/prepare-charge-version.service.js')
-const PrepareReturnLogsService = require('../../../../app/services/bill-runs/match/prepare-return-logs.service.js')
-const PersistAllocatedLicenceToResultsService = require('../../../../app/services/bill-runs/match/persist-allocated-licence-to-results.service.js')
+import AllocateReturnsToChargeElementService from '../../../../app/services/bill-runs/match/allocate-returns-to-charge-element.service.js'
+import DetermineLicenceIssuesService from '../../../../app/services/bill-runs/match/determine-licence-issues.service.js'
+import FetchLicencesService from '../../../../app/services/bill-runs/match/fetch-licences.service.js'
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import MatchReturnsToChargeElementService from '../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js'
+import PrepareChargeVersionService from '../../../../app/services/bill-runs/match/prepare-charge-version.service.js'
+import PrepareReturnLogsService from '../../../../app/services/bill-runs/match/prepare-return-logs.service.js'
+import PersistAllocatedLicenceToResultsService from '../../../../app/services/bill-runs/match/persist-allocated-licence-to-results.service.js'
 
 // Thing under test
-const MatchAndAllocateService = require('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
+import MatchAndAllocateService from '../../../../app/services/bill-runs/match/match-and-allocate.service.js'
 
 describe('Bill Runs - Match - Match And Allocate service', () => {
-  let determineLicenceIssuesServiceStub
   let notifierStub
   let licences
 
   beforeEach(() => {
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(async () => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -45,34 +41,36 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
     describe('when there are licences to be processed', () => {
       beforeEach(() => {
         licences = _generateLicencesData()
-        determineLicenceIssuesServiceStub = Sinon.stub(DetermineLicenceIssuesService, 'go')
+        vi.mock('../../../../app/services/bill-runs/match/determine-licence-issues.service.js')
 
-        Sinon.stub(AllocateReturnsToChargeElementService, 'go')
-        Sinon.stub(FetchLicencesService, 'go').returns(licences)
-        Sinon.stub(PersistAllocatedLicenceToResultsService, 'go')
-        Sinon.stub(PrepareChargeVersionService, 'go')
-        Sinon.stub(PrepareReturnLogsService, 'go')
+        vi.mock('../../../../app/services/bill-runs/match/allocate-returns-to-charge-element.service.js')
+        vi.mock('../../../../app/services/bill-runs/match/fetch-licences.service.js')
+        FetchLicencesService.mockReturnValue(licences)
+        vi.mock('../../../../app/services/bill-runs/match/persist-allocated-licence-to-results.service.js')
+        vi.mock('../../../../app/services/bill-runs/match/prepare-charge-version.service.js')
+        vi.mock('../../../../app/services/bill-runs/match/prepare-return-logs.service.js')
       })
 
       describe('and a charge element has a matching return', () => {
         beforeEach(() => {
           const matchingReturns = _generateMatchingReturnsData()
 
-          Sinon.stub(MatchReturnsToChargeElementService, 'go').returns(matchingReturns)
+          vi.mock('../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js')
+          MatchReturnsToChargeElementService.mockReturnValue(matchingReturns)
         })
 
         it('processes the licence for matching allocating', async () => {
           await MatchAndAllocateService(billRun, billingPeriods)
 
-          expect(FetchLicencesService.go.called).toBe(true)
-          expect(PrepareReturnLogsService.go.called).toBe(true)
-          expect(PrepareChargeVersionService.go.called).toBe(true)
+          expect(FetchLicencesService.go).toHaveBeenCalled()
+          expect(PrepareReturnLogsService.go).toHaveBeenCalled()
+          expect(PrepareChargeVersionService.go).toHaveBeenCalled()
 
-          expect(MatchReturnsToChargeElementService.go.called).toBe(true)
-          expect(AllocateReturnsToChargeElementService.go.called).toBe(true)
+          expect(MatchReturnsToChargeElementService.go).toHaveBeenCalled()
+          expect(AllocateReturnsToChargeElementService.go).toHaveBeenCalled()
 
-          expect(DetermineLicenceIssuesService.go.called).toBe(true)
-          expect(PersistAllocatedLicenceToResultsService.go.called).toBe(true)
+          expect(DetermineLicenceIssuesService.go).toHaveBeenCalled()
+          expect(PersistAllocatedLicenceToResultsService.go).toHaveBeenCalled()
         })
 
         it('returns "true" as there are licences to process', async () => {
@@ -84,27 +82,28 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
 
       describe('and the charge elements do not have matching returns', () => {
         beforeEach(() => {
-          Sinon.stub(MatchReturnsToChargeElementService, 'go').returns([])
+          vi.mock('../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js')
+          MatchReturnsToChargeElementService.mockReturnValue([])
         })
 
         it('processes the licence for matching but does not call the allocate returns service', async () => {
           await MatchAndAllocateService(billRun, billingPeriods)
 
-          expect(FetchLicencesService.go.called).toBe(true)
-          expect(PrepareReturnLogsService.go.called).toBe(true)
-          expect(PrepareChargeVersionService.go.called).toBe(true)
+          expect(FetchLicencesService.go).toHaveBeenCalled()
+          expect(PrepareReturnLogsService.go).toHaveBeenCalled()
+          expect(PrepareChargeVersionService.go).toHaveBeenCalled()
 
-          expect(MatchReturnsToChargeElementService.go.called).toBe(true)
-          expect(AllocateReturnsToChargeElementService.go.called).toBe(false)
+          expect(MatchReturnsToChargeElementService.go).toHaveBeenCalled()
+          expect(AllocateReturnsToChargeElementService.go).not.toHaveBeenCalled()
 
-          expect(DetermineLicenceIssuesService.go.called).toBe(true)
-          expect(PersistAllocatedLicenceToResultsService.go.called).toBe(true)
+          expect(DetermineLicenceIssuesService.go).toHaveBeenCalled()
+          expect(PersistAllocatedLicenceToResultsService.go).toHaveBeenCalled()
         })
 
         it('allocates the authorised quantities to the elements up to the references authorised quantity', async () => {
           await MatchAndAllocateService(billRun, billingPeriods)
 
-          const { chargeVersions } = determineLicenceIssuesServiceStub.firstCall.args[0]
+          const { chargeVersions } = DetermineLicenceIssuesService.mock.calls[0][0]
           const chargeReference = chargeVersions[0].chargeReferences[0]
 
           expect(chargeReference.allocatedQuantity).toEqual(32)
@@ -122,30 +121,31 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
 
     describe('when there are no licences to be processed', () => {
       beforeEach(() => {
-        Sinon.stub(FetchLicencesService, 'go').returns([])
-        Sinon.stub(PrepareReturnLogsService, 'go')
-        Sinon.stub(PrepareChargeVersionService, 'go')
-        Sinon.stub(MatchReturnsToChargeElementService, 'go')
-        Sinon.stub(AllocateReturnsToChargeElementService, 'go')
-        Sinon.stub(DetermineLicenceIssuesService, 'go')
-        Sinon.stub(PersistAllocatedLicenceToResultsService, 'go')
+        vi.mock('../../../../app/services/bill-runs/match/fetch-licences.service.js')
+        FetchLicencesService.mockReturnValue([])
+        vi.mock('../../../../app/services/bill-runs/match/prepare-return-logs.service.js')
+        vi.mock('../../../../app/services/bill-runs/match/prepare-charge-version.service.js')
+        vi.mock('../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js')
+        vi.mock('../../../../app/services/bill-runs/match/allocate-returns-to-charge-element.service.js')
+        vi.mock('../../../../app/services/bill-runs/match/determine-licence-issues.service.js')
+        vi.mock('../../../../app/services/bill-runs/match/persist-allocated-licence-to-results.service.js')
       })
 
       it('calls the fetchLicencesService', async () => {
         await MatchAndAllocateService(billRun, billingPeriods)
 
-        expect(FetchLicencesService.go.called).toBe(true)
+        expect(FetchLicencesService.go).toHaveBeenCalled()
       })
 
       it('does not process the licences', async () => {
         await MatchAndAllocateService(billRun, billingPeriods)
 
-        expect(PrepareReturnLogsService.go.called).toBe(false)
-        expect(PrepareChargeVersionService.go.called).toBe(false)
-        expect(MatchReturnsToChargeElementService.go.called).toBe(false)
-        expect(AllocateReturnsToChargeElementService.go.called).toBe(false)
-        expect(DetermineLicenceIssuesService.go.called).toBe(false)
-        expect(PersistAllocatedLicenceToResultsService.go.called).toBe(false)
+        expect(PrepareReturnLogsService.go).not.toHaveBeenCalled()
+        expect(PrepareChargeVersionService.go).not.toHaveBeenCalled()
+        expect(MatchReturnsToChargeElementService.go).not.toHaveBeenCalled()
+        expect(AllocateReturnsToChargeElementService.go).not.toHaveBeenCalled()
+        expect(DetermineLicenceIssuesService.go).not.toHaveBeenCalled()
+        expect(PersistAllocatedLicenceToResultsService.go).not.toHaveBeenCalled()
       })
 
       it('returns "false" as there are no licences to process', async () => {

@@ -1,18 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-const billingConfig = require('../../../config/billing.config.js')
-const ExpandedError = require('../../../app/errors/expanded.error.js')
+import http2 from 'node:http2'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
+import billingConfig from '../../../config/billing.config.js'
+import ExpandedError from '../../../app/errors/expanded.error.js'
 
 // Things we need to stub
-const ChargingModuleViewBillRunStatusRequest = require('../../../app/requests/charging-module/view-bill-run-status.request.js')
+import * as ChargingModuleViewBillRunStatusRequest from '../../../app/requests/charging-module/view-bill-run-status.request.js'
 
 // Thing under test
-const ChargingModuleWaitForStatusRequest = require('../../../app/requests/charging-module/wait-for-status.request.js')
+import * as ChargingModuleWaitForStatusRequest from '../../../app/requests/charging-module/wait-for-status.request.js'
 
 describe('Charging Module Wait For Status request', () => {
   const billRunId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'
@@ -22,14 +20,16 @@ describe('Charging Module Wait For Status request', () => {
   let maxNumberOfAttempts
 
   beforeEach(async () => {
-    chargingModuleViewBillRunStatusRequestStub = Sinon.stub(ChargingModuleViewBillRunStatusRequest, 'send')
+    chargingModuleViewBillRunStatusRequestStub = vi
+      .spyOn(ChargingModuleViewBillRunStatusRequest, 'send')
+      .mockImplementation(() => {})
 
     // Set the pause between requests to just 50ms so our tests are not slowed down or cause a timeout
-    Sinon.replace(billingConfig, 'waitForStatusPauseInMs', 50)
+    vi.replaceProperty(billingConfig, 'waitForStatusPauseInMs', 50)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the Charging Module returns one of the statuses waited for', () => {
@@ -119,7 +119,7 @@ describe('Charging Module Wait For Status request', () => {
 
   describe('when a request to get the bill run status fails', () => {
     beforeEach(() => {
-      chargingModuleViewBillRunStatusRequestStub.resolves({
+      chargingModuleViewBillRunStatusRequestStub.mockResolvedValue({
         succeeded: false,
         response: {
           headers: {

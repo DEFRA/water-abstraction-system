@@ -1,24 +1,22 @@
-'use strict'
-
+import http2 from 'node:http2'
 const {
   HTTP_STATUS_FORBIDDEN,
   HTTP_STATUS_INTERNAL_SERVER_ERROR,
   HTTP_STATUS_NOT_FOUND,
   HTTP_STATUS_OK,
   HTTP_STATUS_GONE
-} = require('node:http2').constants
+} = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionNotFoundError = require('../../../app/errors/session-not-found.error.js')
+import SessionNotFoundError from '../../../app/errors/session-not-found.error.js'
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../support/stubs/global-notifier.stub.js')
+import GlobalNotifierStub from '../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const ErrorPagesService = require('../../../app/services/plugins/error-pages.service.js')
+import ErrorPagesService from '../../../app/services/plugins/error-pages.service.js'
 
 describe('Error pages service', () => {
   const boom403Response = {
@@ -59,12 +57,12 @@ describe('Error pages service', () => {
   let request
 
   beforeEach(() => {
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -80,7 +78,7 @@ describe('Error pages service', () => {
     it('logs an error', () => {
       ErrorPagesService(request)
 
-      expect(notifierStub.omfg.calledWith(boom500Response.message)).toBe(true)
+      expect(notifierStub.omfg).toHaveBeenCalledWith(boom500Response.message)
     })
 
     describe('and the route is configured for plain output (do not redirect to error page)', () => {
@@ -134,7 +132,7 @@ describe('Error pages service', () => {
     it('logs a message', () => {
       ErrorPagesService(request)
 
-      expect(notifierStub.omg.calledWith('Page not found', { path })).toBe(true)
+      expect(notifierStub.omg).toHaveBeenCalledWith('Page not found', { path })
     })
 
     describe('and the route is configured to return plain output (do not redirect to error page)', () => {
@@ -170,7 +168,7 @@ describe('Error pages service', () => {
     it('logs a message', () => {
       ErrorPagesService(request)
 
-      expect(notifierStub.omg.calledWith('Not authorised', { path })).toBe(true)
+      expect(notifierStub.omg).toHaveBeenCalledWith('Not authorised', { path })
     })
 
     describe('and the route is configured to return plain output (do not redirect to error page)', () => {
@@ -218,7 +216,7 @@ describe('Error pages service', () => {
     it('logs a message', () => {
       ErrorPagesService(request)
 
-      expect(notifierStub.omg.calledWith('Session not found', { path })).toBe(true)
+      expect(notifierStub.omg).toHaveBeenCalledWith('Session not found', { path })
     })
 
     describe('and the route is configured to return plain output (do not redirect to error page)', () => {
@@ -272,8 +270,8 @@ describe('Error pages service', () => {
     it('does not log anything', () => {
       ErrorPagesService(request)
 
-      expect(notifierStub.omg.called).toBe(false)
-      expect(notifierStub.omfg.called).toBe(false)
+      expect(notifierStub.omg).not.toHaveBeenCalled()
+      expect(notifierStub.omfg).not.toHaveBeenCalled()
     })
 
     describe('and the route is configured for plain output (do not redirect to error page)', () => {

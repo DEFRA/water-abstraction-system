@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const NotifyStatusPresenter = require('../../../../app/presenters/jobs/notifications/notify-status.presenter.js')
+import NotifyStatusPresenter from '../../../../app/presenters/jobs/notifications/notify-status.presenter.js'
 
 describe('Jobs - Notifications - Notify Status presenter', () => {
   let notifyStatus

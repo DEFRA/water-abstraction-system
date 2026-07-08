@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ViewLicenceSummariesPresenter = require('../../../app/presenters/bills/view-licence-summaries.presenter.js')
+import ViewLicenceSummariesPresenter from '../../../app/presenters/bills/view-licence-summaries.presenter.js'
 
 describe('View Licence Summaries presenter', () => {
   let licenceSummaries

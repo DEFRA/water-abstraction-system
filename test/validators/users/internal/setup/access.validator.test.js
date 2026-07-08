@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const AccessValidator = require('../../../../../app/validators/users/internal/setup/access.validator.js')
+import AccessValidator from '../../../../../app/validators/users/internal/setup/access.validator.js'
 
 describe('Users - Internal - Setup - Access Validator', () => {
   let payload

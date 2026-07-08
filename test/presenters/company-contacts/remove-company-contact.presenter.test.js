@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
-const { licenceEnds } = require('../../support/fixtures/licence.fixture.js')
+import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
+import { licenceEnds } from '../../support/fixtures/licence.fixture.js'
 
 // Thing under test
-const RemoveCompanyContactPresenter = require('../../../app/presenters/company-contacts/remove-company-contact.presenter.js')
+import RemoveCompanyContactPresenter from '../../../app/presenters/company-contacts/remove-company-contact.presenter.js'
 
 describe('Company Contacts - Remove Company Contact Presenter', () => {
   let companyContact

@@ -1,19 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
+import { generateNoticeReferenceCode } from '../../../app/lib/general.lib.js'
 
 // Test helpers
-const YarStub = require('../../support/stubs/yar.stub.js')
+import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things to stub
-const FetchNoticeService = require('../../../app/services/notices/fetch-notice.service.js')
+import FetchNoticeService from '../../../app/services/notices/fetch-notice.service.js'
 
 // Thing under test
-const ViewNoticeService = require('../../../app/services/notices/view-notice.service.js')
+import ViewNoticeService from '../../../app/services/notices/view-notice.service.js'
 
 describe('Notices - View Notice service', () => {
   let fetchResults
@@ -87,7 +84,7 @@ describe('Notices - View Notice service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -95,10 +92,11 @@ describe('Notices - View Notice service', () => {
       page = '1'
 
       // For the purposes of this tests the filter doesn't matter
-      yarStub = YarStub.build(Sinon)
-      yarStub.get.returns(_noticeFilters())
+      yarStub = YarStub()
+      yarStub.get.mockReturnValue(_noticeFilters())
 
-      Sinon.stub(FetchNoticeService, 'go').resolves(fetchResults)
+      vi.mock('../../../app/services/notices/fetch-notice.service.js')
+      FetchNoticeService.mockResolvedValue(fetchResults)
     })
 
     it('returns page data for the view', async () => {
@@ -161,13 +159,14 @@ describe('Notices - View Notice service', () => {
 
   describe('when the filters are assessed', () => {
     beforeEach(() => {
-      Sinon.stub(FetchNoticeService, 'go').resolves(fetchResults)
+      vi.mock('../../../app/services/notices/fetch-notice.service.js')
+      FetchNoticeService.mockResolvedValue(fetchResults)
     })
 
     describe('and none were ever set or they were cleared', () => {
       beforeEach(() => {
-        yarStub = YarStub.build(Sinon)
-        yarStub.get.returns(null)
+        yarStub = YarStub()
+        yarStub.get.mockReturnValue(null)
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -179,8 +178,8 @@ describe('Notices - View Notice service', () => {
 
     describe('and the filters were submitted empty', () => {
       beforeEach(() => {
-        yarStub = YarStub.build(Sinon)
-        yarStub.get.returns(_noticeFilters())
+        yarStub = YarStub()
+        yarStub.get.mockReturnValue(_noticeFilters())
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -195,8 +194,8 @@ describe('Notices - View Notice service', () => {
         const filters = _noticeFilters()
 
         filters.recipient = 'carol.shaw@wrls.gov.uk'
-        yarStub = YarStub.build(Sinon)
-        yarStub.get.returns(filters)
+        yarStub = YarStub()
+        yarStub.get.mockReturnValue(filters)
       })
 
       it('returns the saved filters and that the controls should be open', async () => {
@@ -215,7 +214,8 @@ describe('Notices - View Notice service', () => {
       // NOTE: We up the total number to force the paginator to calculate that there is more than one page.
       fetchResults.totalNumber = 150
 
-      Sinon.stub(FetchNoticeService, 'go').resolves(fetchResults)
+      vi.mock('../../../app/services/notices/fetch-notice.service.js')
+      FetchNoticeService.mockResolvedValue(fetchResults)
     })
 
     it('defaults to 1', async () => {

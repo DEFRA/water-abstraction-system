@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const RegionHelper = require('../../../../support/helpers/region.helper.js')
-const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
+import * as RegionHelper from '../../../../support/helpers/region.helper.js'
+import * as ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
+import { generateLicenceRef } from '../../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const FetchDueReturnsForLicence = require('../../../../../app/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js')
+import FetchDueReturnsForLicence from '../../../../../app/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js'
 
 describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence service', () => {
   let licenceRef
@@ -79,7 +77,7 @@ describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence servi
 
   describe('when called', () => {
     it('returns the "due" returns for the licence', async () => {
-      const result = await FetchDueReturnsForLicence.go(licenceRef)
+      const result = await FetchDueReturnsForLicence(licenceRef)
 
       expect(result).toEqual([
         {

@@ -1,24 +1,22 @@
-'use strict'
-
 // Test helpers
-const BillingAccountAddressHelper = require('../support/helpers/billing-account-address.helper.js')
-const BillingAccountAddressModel = require('../../app/models/billing-account-address.model.js')
-const BillingAccountHelper = require('../support/helpers/billing-account.helper.js')
-const BillingAccountModel = require('../../app/models/billing-account.model.js')
-const CompanyAddressHelper = require('../support/helpers/company-address.helper.js')
-const CompanyAddressModel = require('../../app/models/company-address.model.js')
-const CompanyContactHelper = require('../support/helpers/company-contact.helper.js')
-const CompanyContactModel = require('../../app/models/company-contact.model.js')
-const CompanyHelper = require('../support/helpers/company.helper.js')
-const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
-const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
-const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
-const LicenceVersionModel = require('../../app/models/licence-version.model.js')
-const RegionHelper = require('../support/helpers/region.helper.js')
-const RegionModel = require('../../app/models/region.model.js')
+import * as BillingAccountAddressHelper from '../support/helpers/billing-account-address.helper.js'
+import BillingAccountAddressModel from '../../app/models/billing-account-address.model.js'
+import * as BillingAccountHelper from '../support/helpers/billing-account.helper.js'
+import BillingAccountModel from '../../app/models/billing-account.model.js'
+import * as CompanyAddressHelper from '../support/helpers/company-address.helper.js'
+import CompanyAddressModel from '../../app/models/company-address.model.js'
+import * as CompanyContactHelper from '../support/helpers/company-contact.helper.js'
+import CompanyContactModel from '../../app/models/company-contact.model.js'
+import * as CompanyHelper from '../support/helpers/company.helper.js'
+import * as LicenceDocumentRoleHelper from '../support/helpers/licence-document-role.helper.js'
+import LicenceDocumentRoleModel from '../../app/models/licence-document-role.model.js'
+import * as LicenceVersionHelper from '../support/helpers/licence-version.helper.js'
+import LicenceVersionModel from '../../app/models/licence-version.model.js'
+import * as RegionHelper from '../support/helpers/region.helper.js'
+import RegionModel from '../../app/models/region.model.js'
 
 // Thing under test
-const CompanyModel = require('../../app/models/company.model.js')
+import CompanyModel from '../../app/models/company.model.js'
 
 describe('Company model', () => {
   let billingAccountAddresses

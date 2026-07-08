@@ -1,32 +1,30 @@
-'use strict'
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const { db } = require('../../../../db/db.js')
+import { db } from '../../../../db/db.js'
 
 // Thing under test
-const SeedService = require('../../../../app/services/data/seed/seed.service.js')
+import SeedService from '../../../../app/services/data/seed/seed.service.js'
 
 describe('Seed service', () => {
   let knexRunStub
 
   beforeEach(async () => {
-    knexRunStub = Sinon.stub().resolves()
+    knexRunStub =     vi.fn().mockResolvedValue()
 
-    Sinon.replaceGetter(db, 'seed', () => {
+    vi.spyOn(db, 'seed', 'get').mockReturnValue((()) => {
       return { run: knexRunStub }
     })
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   it('uses the knex instance we configure to run the seed process', async () => {
     await SeedService()
 
-    expect(knexRunStub.called).toBe(true)
+    expect(knexRunStub).toHaveBeenCalled()
   })
 })

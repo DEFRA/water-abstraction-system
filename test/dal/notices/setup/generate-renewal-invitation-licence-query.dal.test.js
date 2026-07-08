@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const { db } = require('../../../../db/db.js')
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import { db } from '../../../../db/db.js'
 
 // Thing under test
-const GenerateRenewalInvitationLicenceQueryDal = require('../../../../app/dal/notices/setup/generate-renewal-invitation-licence-query.dal.js')
+import GenerateRenewalInvitationLicenceQueryDal from '../../../../app/dal/notices/setup/generate-renewal-invitation-licence-query.dal.js'
 
 describe('Notices - Setup - Generate Renewal Invitation Licence Query DAL', () => {
   let licence

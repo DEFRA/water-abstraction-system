@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const LicenceVersionPresenter = require('../../app/presenters/licence-version.presenter.js')
+import LicenceVersionPresenter from '../../app/presenters/licence-version.presenter.js'
 
 describe('Licence version presenter', () => {
   describe('#linkToLicenceVersion', () => {

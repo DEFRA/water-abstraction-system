@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const DetermineSearchItemsService = require('../../../app/services/search/determine-search-items.service.js')
+import DetermineSearchItemsService from '../../../app/services/search/determine-search-items.service.js'
 
 describe('Search - Determine Search Items service', () => {
   let selectedResultType

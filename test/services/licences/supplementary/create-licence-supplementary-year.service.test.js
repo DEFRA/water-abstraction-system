@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const LicenceSupplementaryYearHelper = require('../../../support/helpers/licence-supplementary-year.helper.js')
-const LicenceSupplementaryYearModel = require('../../../../app/models/licence-supplementary-year.model.js')
+import { generateUUID } from '../../../../app/lib/general.lib.js'
+import * as LicenceSupplementaryYearHelper from '../../../support/helpers/licence-supplementary-year.helper.js'
+import LicenceSupplementaryYearModel from '../../../../app/models/licence-supplementary-year.model.js'
 
 // Thing under test
-const CreateLicenceSupplementaryYearService = require('../../../../app/services/licences/supplementary/create-licence-supplementary-year.service.js')
+import CreateLicenceSupplementaryYearService from '../../../../app/services/licences/supplementary/create-licence-supplementary-year.service.js'
 
 describe('Create Licence Supplementary Years Service', () => {
   let licenceId

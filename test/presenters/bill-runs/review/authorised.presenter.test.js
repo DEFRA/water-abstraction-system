@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
+import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Thing under test
-const AuthorisedPresenter = require('../../../../app/presenters/bill-runs/review/authorised.presenter.js')
+import AuthorisedPresenter from '../../../../app/presenters/bill-runs/review/authorised.presenter.js'
 
 describe('Bill Runs Review - Authorised presenter', () => {
   let reviewChargeReference

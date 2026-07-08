@@ -1,30 +1,30 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const ViewCompensationChargeTransactionPresenter = require('../../../app/presenters/bill-licences/view-compensation-charge-transaction.presenter.js')
-const ViewMinimumChargeTransactionPresenter = require('../../../app/presenters/bill-licences/view-minimum-charge-transaction.presenter.js')
-const ViewStandardChargeTransactionPresenter = require('../../../app/presenters/bill-licences/view-standard-charge-transaction.presenter.js')
+import ViewCompensationChargeTransactionPresenter from '../../../app/presenters/bill-licences/view-compensation-charge-transaction.presenter.js'
+import ViewMinimumChargeTransactionPresenter from '../../../app/presenters/bill-licences/view-minimum-charge-transaction.presenter.js'
+import ViewStandardChargeTransactionPresenter from '../../../app/presenters/bill-licences/view-standard-charge-transaction.presenter.js'
 
 // Thing under test
-const ViewBillLicencePresenter = require('../../../app/presenters/bill-licences/view-bill-licence.presenter.js')
+import ViewBillLicencePresenter from '../../../app/presenters/bill-licences/view-bill-licence.presenter.js'
 
 describe('View Bill Licence presenter', () => {
   let billLicence
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when provided with a populated bill licence', () => {
     beforeEach(() => {
       billLicence = _testBillLicence()
 
-      Sinon.stub(ViewCompensationChargeTransactionPresenter, 'go').returns({ chargeType: 'compensation' })
-      Sinon.stub(ViewMinimumChargeTransactionPresenter, 'go').returns({ chargeType: 'minimum_charge' })
-      Sinon.stub(ViewStandardChargeTransactionPresenter, 'go').returns({ chargeType: 'standard' })
+      vi.mock('../../../app/presenters/bill-licences/view-compensation-charge-transaction.presenter.js')
+      ViewCompensationChargeTransactionPresenter.mockReturnValue({ chargeType: 'compensation' })
+      vi.mock('../../../app/presenters/bill-licences/view-minimum-charge-transaction.presenter.js')
+      ViewMinimumChargeTransactionPresenter.mockReturnValue({ chargeType: 'minimum_charge' })
+      vi.mock('../../../app/presenters/bill-licences/view-standard-charge-transaction.presenter.js')
+      ViewStandardChargeTransactionPresenter.mockReturnValue({ chargeType: 'standard' })
     })
 
     describe('the "removeLicenceLink" property', () => {

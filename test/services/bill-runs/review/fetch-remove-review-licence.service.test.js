@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
+import * as BillRunHelper from '../../../support/helpers/bill-run.helper.js'
+import * as RegionHelper from '../../../support/helpers/region.helper.js'
+import * as ReviewLicenceHelper from '../../../support/helpers/review-licence.helper.js'
 
 // Thing under test
-const FetchRemoveReviewLicenceService = require('../../../../app/services/bill-runs/review/fetch-remove-review-licence.service.js')
+import FetchRemoveReviewLicenceService from '../../../../app/services/bill-runs/review/fetch-remove-review-licence.service.js'
 
 describe('Bill Runs - Review - Fetch Remove Review Licence service', () => {
   let billRun

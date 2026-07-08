@@ -1,16 +1,14 @@
-'use strict'
-
 // Test helpers
-const BillHelper = require('../../support/helpers/bill.helper.js')
-const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const ChargeElementHelper = require('../../support/helpers/charge-element.helper.js')
-const ChargeReferenceHelper = require('../../support/helpers/charge-reference.helper.js')
-const PurposeHelper = require('../../support/helpers/purpose.helper.js')
-const TransactionHelper = require('../../support/helpers/transaction.helper.js')
+import * as BillHelper from '../../support/helpers/bill.helper.js'
+import * as BillLicenceHelper from '../../support/helpers/bill-licence.helper.js'
+import * as BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import * as ChargeElementHelper from '../../support/helpers/charge-element.helper.js'
+import * as ChargeReferenceHelper from '../../support/helpers/charge-reference.helper.js'
+import * as PurposeHelper from '../../support/helpers/purpose.helper.js'
+import * as TransactionHelper from '../../support/helpers/transaction.helper.js'
 
 // Thing under test
-const FetchBillLicenceService = require('../../../app/services/bill-licences/fetch-bill-licence.service.js')
+import FetchBillLicenceService from '../../../app/services/bill-licences/fetch-bill-licence.service.js'
 
 describe('Bill Licences - Fetch Bill Licence service', () => {
   let bill

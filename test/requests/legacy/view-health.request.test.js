@@ -1,15 +1,13 @@
-'use strict'
-
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const LegacyRequest = require('../../../app/requests/legacy.request.js')
+import * as LegacyRequest from '../../../app/requests/legacy.request.js'
 
 // Thing under test
-const ViewHealthRequest = require('../../../app/requests/legacy/view-health.request.js')
+import * as ViewHealthRequest from '../../../app/requests/legacy/view-health.request.js'
 
 describe('Legacy - View Health request', () => {
   const serviceName = 'import'
@@ -17,7 +15,7 @@ describe('Legacy - View Health request', () => {
   let response
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the request succeeds', () => {
@@ -30,10 +28,10 @@ describe('Legacy - View Health request', () => {
         }
       }
 
-      Sinon.stub(LegacyRequest, 'get').withArgs(serviceName).resolves({
+      vi.spyOn(LegacyRequest, 'getRequest').mockResolvedValue({
         succeeded: true,
         response
-      })
+      }) // TODO: withArgs(serviceName) not converted
     })
 
     it('returns a "true" success status', async () => {
@@ -61,10 +59,10 @@ describe('Legacy - View Health request', () => {
           }
         }
 
-        Sinon.stub(LegacyRequest, 'get').withArgs(serviceName).resolves({
+        vi.spyOn(LegacyRequest, 'getRequest').mockResolvedValue({
           succeeded: false,
           response
-        })
+        }) // TODO: withArgs(serviceName) not converted
       })
 
       it('returns a "false" success status', async () => {

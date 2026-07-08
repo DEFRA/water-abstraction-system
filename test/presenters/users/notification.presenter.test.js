@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
-const UsersFixture = require('../../support/fixtures/users.fixture.js')
+import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
+import * as UsersFixture from '../../support/fixtures/users.fixture.js'
 
 // Thing under test
-const NotificationPresenter = require('../../../app/presenters/users/notification.presenter.js')
+import NotificationPresenter from '../../../app/presenters/users/notification.presenter.js'
 
 describe('Users - Notification presenter', () => {
   let notification

@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const FinancialAgreementHelper = require('../../support/helpers/financial-agreement.helper.js')
-const LicenceAgreementHelper = require('../../support/helpers/licence-agreement.helper.js')
+import * as FinancialAgreementHelper from '../../support/helpers/financial-agreement.helper.js'
+import * as LicenceAgreementHelper from '../../support/helpers/licence-agreement.helper.js'
 
 // Thing under test
-const FetchAgreementsService = require('../../../app/services/licences/fetch-agreements.service.js')
+import FetchAgreementsService from '../../../app/services/licences/fetch-agreements.service.js'
 
 const FINANCIAL_AGREEMENT_S130U_INDEX = 5
 

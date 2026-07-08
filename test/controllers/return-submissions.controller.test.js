@@ -1,16 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_OK } = http2.constants
 
 // Things we need to stub
-const ViewReturnSubmissionService = require('../../app/services/return-submissions/view-return-submission.service.js')
+import ViewReturnSubmissionService from '../../app/services/return-submissions/view-return-submission.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
 
 describe('Return Submissions controller', () => {
   let options
@@ -23,15 +21,15 @@ describe('Return Submissions controller', () => {
 
   beforeEach(() => {
     // We silence any calls to server.logger.error and info to try and keep the test output as clean as possible
-    Sinon.stub(server.logger, 'error')
-    Sinon.stub(server.logger, 'info')
+    vi.spyOn(server.logger, 'error').mockImplementation(() => {})
+    vi.spyOn(server.logger, 'info').mockImplementation(() => {})
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -41,7 +39,8 @@ describe('Return Submissions controller', () => {
   describe('/system/return-submissions/{yearMonth}/{returnSubmissionId}', () => {
     describe('GET', () => {
       beforeEach(() => {
-        Sinon.stub(ViewReturnSubmissionService, 'go').resolves({
+        vi.mock('../../app/services/return-submissions/view-return-submission.service.js')
+        ViewReturnSubmissionService.mockResolvedValue({
           pageTitle: 'Return Submission'
         })
 

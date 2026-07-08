@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../../app/models/bill-run.model.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
+import * as BillRunHelper from '../../support/helpers/bill-run.helper.js'
+import BillRunModel from '../../../app/models/bill-run.model.js'
+import * as RegionHelper from '../../support/helpers/region.helper.js'
 
 // Thing under test
-const CreateBillRunEventPresenter = require('../../../app/presenters/bill-runs/create-bill-run-event.presenter.js')
+import CreateBillRunEventPresenter from '../../../app/presenters/bill-runs/create-bill-run-event.presenter.js'
 
 describe('Create Bill Run Event presenter', () => {
   describe('when a BillRunModel instance is provided', () => {

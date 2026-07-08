@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const { generateAccountNumber } = require('../../support/helpers/billing-account.helper.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import { generateAccountNumber } from '../../support/helpers/billing-account.helper.js'
+import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Thing under test
-const BillsPresenter = require('../../../app/presenters/licences/bills.presenter.js')
+import BillsPresenter from '../../../app/presenters/licences/bills.presenter.js'
 
 describe('Licences - Bills presenter', () => {
   let licence

@@ -1,49 +1,47 @@
-'use strict'
-
 // Test helpers
-const BillLicenceHelper = require('../support/helpers/bill-licence.helper.js')
-const BillLicenceModel = require('../../app/models/bill-licence.model.js')
-const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
-const ChargeVersionModel = require('../../app/models/charge-version.model.js')
-const CompanyHelper = require('../support/helpers/company.helper.js')
-const LicenceAgreementHelper = require('../support/helpers/licence-agreement.helper.js')
-const LicenceAgreementModel = require('../../app/models/licence-agreement.model.js')
-const LicenceHelper = require('../support/helpers/licence.helper.js')
-const LicenceDocumentHelper = require('../support/helpers/licence-document.helper.js')
-const LicenceDocumentModel = require('../../app/models/licence-document.model.js')
-const LicenceDocumentHeaderHelper = require('../support/helpers/licence-document-header.helper.js')
-const LicenceDocumentHeaderModel = require('../../app/models/licence-document-header.model.js')
-const LicenceEndDateChangeHelper = require('../support/helpers/licence-end-date-change.helper.js')
-const LicenceEndDateChangeModel = require('../../app/models/licence-end-date-change.model.js')
-const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
-const LicenceEntityRoleHelper = require('../support/helpers/licence-entity-role.helper.js')
-const LicenceMonitoringStationHelper = require('../support/helpers/licence-monitoring-station.helper.js')
-const LicenceMonitoringStationModel = require('../../app/models/licence-monitoring-station.model.js')
-const LicenceSupplementaryYearHelper = require('../support/helpers/licence-supplementary-year.helper.js')
-const LicenceSupplementaryYearModel = require('../../app/models/licence-supplementary-year.model.js')
-const LicenceUnregistrationHelper = require('../support/helpers/licence-unregistration.helper.js')
-const LicenceUnregistrationModel = require('../../app/models/licence-unregistration.model.js')
-const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
-const LicenceVersionModel = require('../../app/models/licence-version.model.js')
-const ModLogHelper = require('../support/helpers/mod-log.helper.js')
-const ModLogModel = require('../../app/models/mod-log.model.js')
-const RegionHelper = require('../support/helpers/region.helper.js')
-const RegionModel = require('../../app/models/region.model.js')
-const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
-const ReturnLogModel = require('../../app/models/return-log.model.js')
-const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
-const ReturnVersionModel = require('../../app/models/return-version.model.js')
-const ReviewLicenceHelper = require('../support/helpers/review-licence.helper.js')
-const ReviewLicenceModel = require('../../app/models/review-licence.model.js')
-const UserHelper = require('../support/helpers/user.helper.js')
-const UserModel = require('../../app/models/user.model.js')
-const WorkflowHelper = require('../support/helpers/workflow.helper.js')
-const WorkflowModel = require('../../app/models/workflow.model.js')
-const { generateUUID, today } = require('../../app/lib/general.lib.js')
-const { tomorrow, yesterday } = require('../support/general.js')
+import * as BillLicenceHelper from '../support/helpers/bill-licence.helper.js'
+import BillLicenceModel from '../../app/models/bill-licence.model.js'
+import * as ChargeVersionHelper from '../support/helpers/charge-version.helper.js'
+import ChargeVersionModel from '../../app/models/charge-version.model.js'
+import * as CompanyHelper from '../support/helpers/company.helper.js'
+import * as LicenceAgreementHelper from '../support/helpers/licence-agreement.helper.js'
+import LicenceAgreementModel from '../../app/models/licence-agreement.model.js'
+import * as LicenceHelper from '../support/helpers/licence.helper.js'
+import * as LicenceDocumentHelper from '../support/helpers/licence-document.helper.js'
+import LicenceDocumentModel from '../../app/models/licence-document.model.js'
+import * as LicenceDocumentHeaderHelper from '../support/helpers/licence-document-header.helper.js'
+import LicenceDocumentHeaderModel from '../../app/models/licence-document-header.model.js'
+import * as LicenceEndDateChangeHelper from '../support/helpers/licence-end-date-change.helper.js'
+import LicenceEndDateChangeModel from '../../app/models/licence-end-date-change.model.js'
+import * as LicenceEntityHelper from '../support/helpers/licence-entity.helper.js'
+import * as LicenceEntityRoleHelper from '../support/helpers/licence-entity-role.helper.js'
+import * as LicenceMonitoringStationHelper from '../support/helpers/licence-monitoring-station.helper.js'
+import LicenceMonitoringStationModel from '../../app/models/licence-monitoring-station.model.js'
+import * as LicenceSupplementaryYearHelper from '../support/helpers/licence-supplementary-year.helper.js'
+import LicenceSupplementaryYearModel from '../../app/models/licence-supplementary-year.model.js'
+import * as LicenceUnregistrationHelper from '../support/helpers/licence-unregistration.helper.js'
+import LicenceUnregistrationModel from '../../app/models/licence-unregistration.model.js'
+import * as LicenceVersionHelper from '../support/helpers/licence-version.helper.js'
+import LicenceVersionModel from '../../app/models/licence-version.model.js'
+import * as ModLogHelper from '../support/helpers/mod-log.helper.js'
+import ModLogModel from '../../app/models/mod-log.model.js'
+import * as RegionHelper from '../support/helpers/region.helper.js'
+import RegionModel from '../../app/models/region.model.js'
+import * as ReturnLogHelper from '../support/helpers/return-log.helper.js'
+import ReturnLogModel from '../../app/models/return-log.model.js'
+import * as ReturnVersionHelper from '../support/helpers/return-version.helper.js'
+import ReturnVersionModel from '../../app/models/return-version.model.js'
+import * as ReviewLicenceHelper from '../support/helpers/review-licence.helper.js'
+import ReviewLicenceModel from '../../app/models/review-licence.model.js'
+import * as UserHelper from '../support/helpers/user.helper.js'
+import UserModel from '../../app/models/user.model.js'
+import * as WorkflowHelper from '../support/helpers/workflow.helper.js'
+import WorkflowModel from '../../app/models/workflow.model.js'
+import { generateUUID, today } from '../../app/lib/general.lib.js'
+import { tomorrow, yesterday } from '../support/general.js'
 
 // Thing under test
-const LicenceModel = require('../../app/models/licence.model.js')
+import LicenceModel from '../../app/models/licence.model.js'
 
 describe('Licence model', () => {
   let billLicences

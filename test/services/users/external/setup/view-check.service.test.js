@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
-const UserSessionsFixture = require('../../../../support/fixtures/user-sessions.fixture.js')
-const YarStub = require('../../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import * as UserSessionsFixture from '../../../../support/fixtures/user-sessions.fixture.js'
+import YarStub from '../../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ViewCheckService = require('../../../../../app/services/users/external/setup/view-check.service.js')
+import ViewCheckService from '../../../../../app/services/users/external/setup/view-check.service.js'
 
 describe('Users - External - Setup - View Check Service', () => {
   let session
@@ -23,16 +20,17 @@ describe('Users - External - Setup - View Check Service', () => {
     sessionData = UserSessionsFixture.unregistrationSession()
     sessionData.allLicences = true
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([{ title: 'Updated', text: 'Licences unregistered.' }])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([{ title: 'Updated', text: 'Licences unregistered.' }])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -68,7 +66,7 @@ describe('Users - External - Setup - View Check Service', () => {
 
     describe('when there is a notification', () => {
       beforeEach(() => {
-        yarStub = { flash: Sinon.stub().returns(['Test notification']) }
+        yarStub = { flash: vi.fn().mockReturnValue(['Test notification']) }
       })
 
       it('displays the notification', async () => {

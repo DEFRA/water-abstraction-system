@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const NotificationHelper = require('../../support/helpers/notification.helper.js')
+import * as NotificationHelper from '../../support/helpers/notification.helper.js'
 
 // Thing under test
-const FetchDownloadNotificationService = require('../../../app/services/notifications/fetch-notification-download.service.js')
+import FetchDownloadNotificationService from '../../../app/services/notifications/fetch-notification-download.service.js'
 
 describe('Notifications - Fetch Download Notification service', () => {
   let notification

@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
+import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
 
 // Thing under test
-const IndexNoticesPresenter = require('../../../app/presenters/notices/index-notices.presenter.js')
+import IndexNoticesPresenter from '../../../app/presenters/notices/index-notices.presenter.js'
 
 describe('Notices - Index Notices presenter', () => {
   let auth

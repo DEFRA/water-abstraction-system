@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ReturnsCyclePresenter = require('../../../../app/presenters/return-versions/setup/returns-cycle.presenter.js')
+import ReturnsCyclePresenter from '../../../../app/presenters/return-versions/setup/returns-cycle.presenter.js'
 
 describe('Return Versions Setup - Returns Cycle presenter', () => {
   const requirementIndex = 0

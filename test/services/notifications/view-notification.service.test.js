@@ -1,19 +1,16 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as NoticesFixture from '../../support/fixtures/notices.fixture.js'
+import * as NotificationsFixture from '../../support/fixtures/notifications.fixture.js'
+import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const FetchNotificationService = require('../../../app/services/notifications/fetch-notification.service.js')
+import FetchNotificationService from '../../../app/services/notifications/fetch-notification.service.js'
 
 // Thing under test
-const ViewNotificationService = require('../../../app/services/notifications/view-notification.service.js')
+import ViewNotificationService from '../../../app/services/notifications/view-notification.service.js'
 
 describe('Notifications - View Notification service', () => {
   let companyContactId
@@ -34,7 +31,7 @@ describe('Notifications - View Notification service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -45,7 +42,8 @@ describe('Notifications - View Notification service', () => {
           licenceRef: generateLicenceRef()
         }
 
-        Sinon.stub(FetchNotificationService, 'go').resolves({ licence, notification })
+        vi.mock('../../../app/services/notifications/fetch-notification.service.js')
+        FetchNotificationService.mockResolvedValue({ licence, notification })
       })
 
       it('returns the page data for the view', async () => {
@@ -74,7 +72,8 @@ describe('Notifications - View Notification service', () => {
 
     describe('from the view notice page', () => {
       beforeEach(() => {
-        Sinon.stub(FetchNotificationService, 'go').resolves({ licence: null, notification })
+        vi.mock('../../../app/services/notifications/fetch-notification.service.js')
+        FetchNotificationService.mockResolvedValue({ licence: null, notification })
       })
 
       it('returns the page data for the view', async () => {
@@ -107,7 +106,8 @@ describe('Notifications - View Notification service', () => {
     describe('from the view return log page', () => {
       beforeEach(() => {
         returnLogId = generateUUID()
-        Sinon.stub(FetchNotificationService, 'go').resolves({ licence: null, notification })
+        vi.mock('../../../app/services/notifications/fetch-notification.service.js')
+        FetchNotificationService.mockResolvedValue({ licence: null, notification })
       })
 
       it('returns the page data for the view', async () => {
@@ -140,7 +140,8 @@ describe('Notifications - View Notification service', () => {
     describe('from the view company contacts page', () => {
       beforeEach(() => {
         companyContactId = generateUUID()
-        Sinon.stub(FetchNotificationService, 'go').resolves({ licence: null, notification })
+        vi.mock('../../../app/services/notifications/fetch-notification.service.js')
+        FetchNotificationService.mockResolvedValue({ licence: null, notification })
       })
 
       it('returns the page data for the view', async () => {

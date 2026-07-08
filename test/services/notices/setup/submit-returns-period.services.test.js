@@ -1,24 +1,20 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
 
 // Test helpers
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitReturnsPeriodService = require('../../../../app/services/notices/setup/submit-returns-period.service.js')
+import SubmitReturnsPeriodService from '../../../../app/services/notices/setup/submit-returns-period.service.js'
 
 describe('Notices - Setup - Submit Returns Period service', () => {
   let clock
-  let fetchSessionStub
   let payload
   let referenceCode
   let session
@@ -30,25 +26,26 @@ describe('Notices - Setup - Submit Returns Period service', () => {
 
     const testDate = new Date('2024-12-01')
 
-    clock = Sinon.useFakeTimers(testDate)
+    clock = vi.useFakeTimers({ now: testDate })
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   beforeEach(() => {
     sessionData = { referenceCode, noticeType: 'invitations' }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterAll(() => {
-    clock.restore()
+    vi.useRealTimers()
   })
 
   afterEach(() => {
-    fetchSessionStub.restore()
+    FetchSessionDal.restore()
   })
 
   describe('when submitting as returns period ', () => {
@@ -91,16 +88,16 @@ describe('Notices - Setup - Submit Returns Period service', () => {
       beforeEach(() => {
         sessionData = { referenceCode, noticeType: 'invitations', checkPageVisited: true }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('sets a flash message', async () => {
         await SubmitReturnsPeriodService(session.id, payload, yarStub)
 
         // Check we add the flash message
-        const [flashType, bannerMessage] = yarStub.flash.args[0]
+        const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('notification')
         expect(bannerMessage).toEqual({
@@ -114,9 +111,9 @@ describe('Notices - Setup - Submit Returns Period service', () => {
       beforeEach(() => {
         sessionData = { referenceCode, journey: 'invitations', noticeType: 'invitations' }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
 
         payload = {}
       })

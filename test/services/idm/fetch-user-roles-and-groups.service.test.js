@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const GroupHelper = require('../../support/helpers/group.helper.js')
-const RoleHelper = require('../../support/helpers/role.helper.js')
-const UserHelper = require('../../support/helpers/user.helper.js')
-const UserGroupHelper = require('../../support/helpers/user-group.helper.js')
-const UserRoleHelper = require('../../support/helpers/user-role.helper.js')
+import * as GroupHelper from '../../support/helpers/group.helper.js'
+import * as RoleHelper from '../../support/helpers/role.helper.js'
+import * as UserHelper from '../../support/helpers/user.helper.js'
+import * as UserGroupHelper from '../../support/helpers/user-group.helper.js'
+import * as UserRoleHelper from '../../support/helpers/user-role.helper.js'
 
 // Thing under test
-const FetchUserRolesAndGroupsService = require('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
+import FetchUserRolesAndGroupsService from '../../../app/services/idm/fetch-user-roles-and-groups.service.js'
 
 const GROUP_ENV_OFFICER_INDEX = 0
 const ROLE_RETURNS_INDEX = 0

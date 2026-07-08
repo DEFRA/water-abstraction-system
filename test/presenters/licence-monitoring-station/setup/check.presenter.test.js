@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const CheckPresenter = require('../../../../app/presenters/licence-monitoring-station/setup/check.presenter.js')
+import CheckPresenter from '../../../../app/presenters/licence-monitoring-station/setup/check.presenter.js'
 
 describe('Licence Monitoring Station Setup - Check Presenter', () => {
   let session

@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const SearchValidator = require('../../../app/validators/search/search.validator.js')
+import SearchValidator from '../../../app/validators/search/search.validator.js'
 
 describe('Search - Search validator', () => {
   let payload

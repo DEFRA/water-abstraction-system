@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const { generateUUID, timestampForPostgres } = require('../../../../app/lib/general.lib.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReturnLogModel = require('../../../../app/models/return-log.model.js')
-const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
-const ReturnSubmissionModel = require('../../../../app/models/return-submission.model.js')
+import { generateUUID, timestampForPostgres } from '../../../../app/lib/general.lib.js'
+import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import ReturnLogModel from '../../../../app/models/return-log.model.js'
+import * as ReturnSubmissionHelper from '../../../support/helpers/return-submission.helper.js'
+import ReturnSubmissionModel from '../../../../app/models/return-submission.model.js'
 
 // Thing under test
-const CreateReturnSubmissionService = require('../../../../app/services/return-logs/setup/create-return-submission.service.js')
+import CreateReturnSubmissionService from '../../../../app/services/return-logs/setup/create-return-submission.service.js'
 
 describe('Return Logs - Setup - Create Return Submission service', () => {
   const metadata = {}

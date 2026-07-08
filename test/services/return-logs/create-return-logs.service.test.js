@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const ReturnCyclesFixture = require('../../support/fixtures/return-cycles.fixture.js')
-const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const ReturnRequirementsFixture = require('../../support/fixtures/return-requirements.fixture.js')
-const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
+import * as ReturnCyclesFixture from '../../support/fixtures/return-cycles.fixture.js'
+import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
+import ReturnLogModel from '../../../app/models/return-log.model.js'
+import * as ReturnRequirementsFixture from '../../support/fixtures/return-requirements.fixture.js'
+import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
 
 // Thing under test
-const CreateReturnLogsService = require('../../../app/services/return-logs/create-return-logs.service.js')
+import CreateReturnLogsService from '../../../app/services/return-logs/create-return-logs.service.js'
 
 describe('Return Logs - Create Return Logs service', () => {
   let results

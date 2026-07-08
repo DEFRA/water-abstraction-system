@@ -1,25 +1,20 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const FetchExistingCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchExistingCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js'
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitExistingAccountService = require('../../../../app/services/billing-accounts/setup/submit-existing-account.service.js')
+import SubmitExistingAccountService from '../../../../app/services/billing-accounts/setup/submit-existing-account.service.js'
 
 describe('Billing Accounts - Setup - Submit Existing Account service', () => {
   const companies = _companies()
-
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -30,13 +25,14 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       billingAccount: BillingAccountsFixture.billingAccount().billingAccount
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the user picks an existing account', () => {
@@ -70,9 +66,9 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
           existingAccount: payload.existingAccount
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -101,9 +97,9 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
           existingAccount: payload.existingAccount
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -129,9 +125,9 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       beforeEach(() => {
         sessionData = _newAccountSessionData(session)
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value and deletes the previously saved data', async () => {
@@ -185,9 +181,9 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
           existingAccount: payload.existingAccount
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -212,9 +208,9 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       beforeEach(() => {
         sessionData = _existingAccountSessionData(session)
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -240,7 +236,8 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
   describe('when validation fails', () => {
     beforeEach(() => {
       payload = {}
-      Sinon.stub(FetchExistingCompaniesService, 'go').returns(companies)
+      vi.mock('../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js')
+      FetchExistingCompaniesService.mockReturnValue(companies)
     })
 
     it('returns page data for the view, with errors', async () => {

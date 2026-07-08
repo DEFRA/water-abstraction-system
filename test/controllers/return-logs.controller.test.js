@@ -1,20 +1,18 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-const { postRequestOptions } = require('../support/general.js')
+import http2 from 'node:http2'
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
+import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-const DownloadReturnLogService = require('../../app/services/return-logs/download-return-log.service.js')
-const SubmitDetailsService = require('../../app/services/return-logs/submit-details.service.js')
-const ViewCommunicationsService = require('../../app/services/return-logs/view-communications.service.js')
-const ViewDetailsService = require('../../app/services/return-logs/view-details.service.js')
+import DownloadReturnLogService from '../../app/services/return-logs/download-return-log.service.js'
+import SubmitDetailsService from '../../app/services/return-logs/submit-details.service.js'
+import ViewCommunicationsService from '../../app/services/return-logs/view-communications.service.js'
+import ViewDetailsService from '../../app/services/return-logs/view-details.service.js'
 
 // For running our service
-const { init } = require('../../app/server.js')
+import { init } from '../../app/server.js'
 
 describe('Return Logs controller', () => {
   const returnLogId = '168026d8-f29b-4165-8726-734c6b14adec'
@@ -29,15 +27,15 @@ describe('Return Logs controller', () => {
 
   beforeEach(() => {
     // We silence any calls to server.logger.error and info to try and keep the test output as clean as possible
-    Sinon.stub(server.logger, 'error')
-    Sinon.stub(server.logger, 'info')
+    vi.spyOn(server.logger, 'error').mockImplementation(() => {})
+    vi.spyOn(server.logger, 'info').mockImplementation(() => {})
 
     // We silence sending a notification to our Errbit instance using Airbrake
-    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   afterAll(async () => {
@@ -56,7 +54,8 @@ describe('Return Logs controller', () => {
           }
         }
 
-        Sinon.stub(ViewCommunicationsService, 'go').resolves({ pageTitle: 'Communications' })
+        vi.mock('../../app/services/return-logs/view-communications.service.js')
+        ViewCommunicationsService.mockResolvedValue({ pageTitle: 'Communications' })
       })
 
       it('returns the page successfully', async () => {
@@ -80,7 +79,8 @@ describe('Return Logs controller', () => {
           }
         }
 
-        Sinon.stub(ViewDetailsService, 'go').resolves({ pageTitle: 'Return details' })
+        vi.mock('../../app/services/return-logs/view-details.service.js')
+        ViewDetailsService.mockResolvedValue({ pageTitle: 'Return details' })
       })
 
       describe('and no version is passed as a query parameter', () => {
@@ -119,7 +119,8 @@ describe('Return Logs controller', () => {
         beforeEach(() => {
           postOptions = postRequestOptions(`/return-logs/${returnLogId}/details`, null)
 
-          Sinon.stub(SubmitDetailsService, 'go').resolves()
+          vi.mock('../../app/services/return-logs/submit-details.service.js')
+          SubmitDetailsService.mockResolvedValue()
         })
 
         it('redirects back to the "return details" page', async () => {
@@ -149,7 +150,8 @@ describe('Return Logs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(DownloadReturnLogService, 'go').returns({ data: 'test', type: 'type/csv', filename: 'test.csv' })
+          vi.mock('../../app/services/return-logs/download-return-log.service.js')
+          DownloadReturnLogService.mockReturnValue({ data: 'test', type: 'type/csv', filename: 'test.csv' })
         })
 
         it('returns the file successfully', async () => {

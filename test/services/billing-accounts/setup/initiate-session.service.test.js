@@ -1,16 +1,13 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
+import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
 
 // Things we need to stub
-const FetchViewBillingAccountService = require('../../../../app/services/billing-accounts/fetch-view-billing-account.service.js')
+import FetchViewBillingAccountService from '../../../../app/services/billing-accounts/fetch-view-billing-account.service.js'
 
 // Thing under test
-const InitiateSessionService = require('../../../../app/services/billing-accounts/setup/initiate-session.service.js')
+import InitiateSessionService from '../../../../app/services/billing-accounts/setup/initiate-session.service.js'
 
 describe('Billing Accounts - Setup - Initiate Session service', () => {
   const billingAccountData = BillingAccountsFixture.billingAccount()
@@ -18,7 +15,8 @@ describe('Billing Accounts - Setup - Initiate Session service', () => {
 
   describe('when called', () => {
     beforeAll(async () => {
-      Sinon.stub(FetchViewBillingAccountService, 'go').returns(billingAccountData)
+      vi.mock('../../../../app/services/billing-accounts/fetch-view-billing-account.service.js')
+      FetchViewBillingAccountService.mockReturnValue(billingAccountData)
     })
 
     it('creates a new session record containing details of the billing account', async () => {

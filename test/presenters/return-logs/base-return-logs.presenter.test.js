@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
+import { unitNames } from '../../../app/lib/static-lookups.lib.js'
 
 // Thing under test
-const BaseReturnLogsPresenter = require('../../../app/presenters/return-logs/base-return-logs.presenter.js')
+import BaseReturnLogsPresenter from '../../../app/presenters/return-logs/base-return-logs.presenter.js'
 
 describe('Return Logs - Base Return Logs presenter', () => {
   describe('#formatMeterDetails()', () => {

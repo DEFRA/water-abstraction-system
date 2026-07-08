@@ -1,22 +1,20 @@
-'use strict'
-
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const PointHelper = require('../../../support/helpers/point.helper.js')
-const PrimaryPurposeHelper = require('../../../support/helpers/primary-purpose.helper.js')
-const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
-const ReturnCycleHelper = require('../../../support/helpers/return-cycle.helper.js')
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
-const ReturnRequirementModel = require('../../../../app/models/return-requirement.model.js')
-const ReturnRequirementPointHelper = require('../../../support/helpers/return-requirement-point.helper.js')
-const ReturnRequirementPurposeHelper = require('../../../support/helpers/return-requirement-purpose.helper.js')
-const ReturnVersionHelper = require('../../../support/helpers/return-version.helper.js')
-const SecondaryPurposeHelper = require('../../../support/helpers/secondary-purpose.helper.js')
+import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
+import * as PointHelper from '../../../support/helpers/point.helper.js'
+import * as PrimaryPurposeHelper from '../../../support/helpers/primary-purpose.helper.js'
+import * as PurposeHelper from '../../../support/helpers/purpose.helper.js'
+import * as ReturnCycleHelper from '../../../support/helpers/return-cycle.helper.js'
+import * as RegionHelper from '../../../support/helpers/region.helper.js'
+import * as ReturnLogHelper from '../../../support/helpers/return-log.helper.js'
+import * as ReturnRequirementHelper from '../../../support/helpers/return-requirement.helper.js'
+import ReturnRequirementModel from '../../../../app/models/return-requirement.model.js'
+import * as ReturnRequirementPointHelper from '../../../support/helpers/return-requirement-point.helper.js'
+import * as ReturnRequirementPurposeHelper from '../../../support/helpers/return-requirement-purpose.helper.js'
+import * as ReturnVersionHelper from '../../../support/helpers/return-version.helper.js'
+import * as SecondaryPurposeHelper from '../../../support/helpers/secondary-purpose.helper.js'
 
 // Thing under test
-const FetchReturnRequirementsService = require('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
+import FetchReturnRequirementsService from '../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js'
 
 // NOTE: These have been declared outside the top level describe() by exception. We want to assert the result in detail
 // but it leads to a big block of object-code we then go on to duplicate a number of times in these tests. We've moved

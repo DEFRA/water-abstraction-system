@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const EventHelper = require('../support/helpers/event.helper.js')
-const NotificationHelper = require('../support/helpers/notification.helper.js')
-const NotificationModel = require('../../app/models/notification.model.js')
+import * as EventHelper from '../support/helpers/event.helper.js'
+import * as NotificationHelper from '../support/helpers/notification.helper.js'
+import NotificationModel from '../../app/models/notification.model.js'
 
 // Thing under test
-const EventModel = require('../../app/models/event.model.js')
+import EventModel from '../../app/models/event.model.js'
 
 describe('Event model', () => {
   let testNotifications

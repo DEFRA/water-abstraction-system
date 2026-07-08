@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const AbstractionAlertsValidator = require('../../../../app/validators/company-contacts/setup/abstraction-alerts.validator.js')
+import AbstractionAlertsValidator from '../../../../app/validators/company-contacts/setup/abstraction-alerts.validator.js'
 
 describe('Company Contacts - Setup - Abstraction Alerts Validator', () => {
   let payload

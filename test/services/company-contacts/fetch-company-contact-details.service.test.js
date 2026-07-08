@@ -1,13 +1,11 @@
-'use strict'
-
 // Test helpers
-const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
-const ContactHelper = require('../../support/helpers/contact.helper.js')
-const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
-const UserHelper = require('../../support/helpers/user.helper.js')
+import * as CompanyContactHelper from '../../support/helpers/company-contact.helper.js'
+import * as ContactHelper from '../../support/helpers/contact.helper.js'
+import * as LicenceRoleHelper from '../../support/helpers/licence-role.helper.js'
+import * as UserHelper from '../../support/helpers/user.helper.js'
 
 // Thing under test
-const FetchCompanyContactDetailsService = require('../../../app/services/company-contacts/fetch-company-contact-details.service.js')
+import FetchCompanyContactDetailsService from '../../../app/services/company-contacts/fetch-company-contact-details.service.js'
 
 describe('Company Contacts - Fetch Company Contact Details service', () => {
   let additionalCompanyContact

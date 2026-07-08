@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const SubmissionValidator = require('../../../../app/validators/return-logs/setup/submission.validator.js')
+import SubmissionValidator from '../../../../app/validators/return-logs/setup/submission.validator.js'
 
 describe('Return Logs Setup - Submission validator', () => {
   describe('when valid data is provided', () => {

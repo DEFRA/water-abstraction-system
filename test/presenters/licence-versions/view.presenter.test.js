@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixture.js'
+import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const NotifyConfig = require('../../../config/notify.config.js')
+import NotifyConfig from '../../../config/notify.config.js'
 
 // Thing under test
-const ViewPresenter = require('../../../app/presenters/licence-versions/view.presenter.js')
+import ViewPresenter from '../../../app/presenters/licence-versions/view.presenter.js'
 
 describe('Licence Versions - View presenter', () => {
   let auth
@@ -35,11 +32,11 @@ describe('Licence Versions - View presenter', () => {
 
     conditions = []
 
-    Sinon.stub(NotifyConfig, 'replyTo').value('notify@test.gov.uk')
+    vi.replaceProperty(NotifyConfig, 'replyTo', 'notify@test.gov.uk')
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

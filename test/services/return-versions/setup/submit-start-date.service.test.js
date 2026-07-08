@@ -1,23 +1,19 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Things we need to stub
-const DetermineRelevantLicenceVersionService = require('../../../../app/services/return-versions/setup/determine-relevant-licence-version.service.js')
+import DetermineRelevantLicenceVersionService from '../../../../app/services/return-versions/setup/determine-relevant-licence-version.service.js'
 
 // Thing under test
-const SubmitStartDateService = require('../../../../app/services/return-versions/setup/submit-start-date.service.js')
+import SubmitStartDateService from '../../../../app/services/return-versions/setup/submit-start-date.service.js'
 
 describe('Return Versions - Setup - Submit Start Date service', () => {
-  let fetchSessionStub
   let payload
   let relevantLicenceVersion
   let session
@@ -48,15 +44,16 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
       requirements: [{}]
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -74,7 +71,8 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
             id: 'c0e59520-3164-43ac-8f64-e1d38dfb90c4',
             startDate: new Date('2023-01-01')
           }
-          Sinon.stub(DetermineRelevantLicenceVersionService, 'go').resolves(relevantLicenceVersion)
+          vi.mock('../../../../app/services/return-versions/setup/determine-relevant-licence-version.service.js')
+          DetermineRelevantLicenceVersionService.mockResolvedValue(relevantLicenceVersion)
         })
 
         it('returns a result that tells the controller to redirect to the next page in the journey', async () => {
@@ -144,9 +142,9 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           beforeEach(() => {
             sessionData.licence.waterUndertaker = true
 
-            session = SessionModelStub.build(Sinon, sessionData)
+            session = SessionModelStub(sessionData)
 
-            fetchSessionStub.resolves(session)
+            FetchSessionDal.mockResolvedValue(session)
           })
 
           describe('and the selected start date is before 1 April 2025', () => {
@@ -200,9 +198,9 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           sessionData.requirements = [{ index: 1, name: 'foo' }]
           sessionData.method = 'existing'
 
-          session = SessionModelStub.build(Sinon, sessionData)
+          session = SessionModelStub(sessionData)
 
-          fetchSessionStub.resolves(session)
+          FetchSessionDal.mockResolvedValue(session)
         })
 
         describe('and the start date is not changed (user just clicks continue)', () => {
@@ -210,7 +208,8 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
             payload = {
               startDateOptions: 'licenceStartDate'
             }
-            Sinon.stub(DetermineRelevantLicenceVersionService, 'go').resolves(relevantLicenceVersion)
+            vi.mock('../../../../app/services/return-versions/setup/determine-relevant-licence-version.service.js')
+            DetermineRelevantLicenceVersionService.mockResolvedValue(relevantLicenceVersion)
           })
 
           it('returns a result that tells the controller to redirect back to the "check" page', async () => {
@@ -225,7 +224,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           it('sets the notification message title to "Updated" and the text to "Return version updated" ', async () => {
             await SubmitStartDateService(session.id, payload, yarStub)
 
-            const [flashType, notification] = yarStub.flash.args[0]
+            const [flashType, notification] = yarStub.flash.mock.calls[0]
 
             expect(flashType).toEqual('notification')
             expect(notification).toEqual({ titleText: 'Updated', text: 'Return version updated' })
@@ -252,7 +251,8 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
               startDateYear: '2024'
             }
 
-            Sinon.stub(DetermineRelevantLicenceVersionService, 'go').resolves(relevantLicenceVersion)
+            vi.mock('../../../../app/services/return-versions/setup/determine-relevant-licence-version.service.js')
+            DetermineRelevantLicenceVersionService.mockResolvedValue(relevantLicenceVersion)
           })
 
           it('returns a result that tells the controller to redirect back to the "check" page', async () => {
@@ -267,7 +267,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           it('sets the notification message title to "Updated" and the text to "Return version updated" ', async () => {
             await SubmitStartDateService(session.id, payload, yarStub)
 
-            const [flashType, notification] = yarStub.flash.args[0]
+            const [flashType, notification] = yarStub.flash.mock.calls[0]
 
             expect(flashType).toEqual('notification')
             expect(notification).toEqual({ titleText: 'Updated', text: 'Return version updated' })
@@ -303,7 +303,8 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
               startDateYear: '2021'
             }
 
-            Sinon.stub(DetermineRelevantLicenceVersionService, 'go').resolves(newRelevantLicenceVersion)
+            vi.mock('../../../../app/services/return-versions/setup/determine-relevant-licence-version.service.js')
+            DetermineRelevantLicenceVersionService.mockResolvedValue(newRelevantLicenceVersion)
           })
 
           it('returns a result that tells the controller to redirect to the next page in the journey', async () => {
@@ -315,7 +316,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           it('does not set the notification message', async () => {
             await SubmitStartDateService(session.id, payload, yarStub)
 
-            expect(yarStub.flash.called).toBe(false)
+            expect(yarStub.flash).not.toHaveBeenCalled()
           })
 
           it('updates the relevant licence version for the session and resets the session', async () => {

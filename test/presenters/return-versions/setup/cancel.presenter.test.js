@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const CancelPresenter = require('../../../../app/presenters/return-versions/setup/cancel.presenter.js')
+import CancelPresenter from '../../../../app/presenters/return-versions/setup/cancel.presenter.js'
 
 describe('Return Versions Setup - Cancel presenter', () => {
   let session

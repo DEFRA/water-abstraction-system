@@ -1,22 +1,17 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitFrequencyCollectedService = require('../../../../app/services/return-versions/setup/submit-frequency-collected.service.js')
+import SubmitFrequencyCollectedService from '../../../../app/services/return-versions/setup/submit-frequency-collected.service.js'
 
 describe('Return Versions Setup - Submit Frequency Collected service', () => {
   const requirementIndex = 0
-
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -47,16 +42,17 @@ describe('Return Versions Setup - Submit Frequency Collected service', () => {
       reason: 'major-change'
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -86,12 +82,12 @@ describe('Return Versions Setup - Submit Frequency Collected service', () => {
 
       describe('and the page has been visited', () => {
         beforeEach(() => {
-          session = SessionModelStub.build(Sinon, {
+          session = SessionModelStub({
             ...sessionData,
             checkPageVisited: true
           })
 
-          fetchSessionStub.resolves(session)
+          FetchSessionDal.mockResolvedValue(session)
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
@@ -105,7 +101,7 @@ describe('Return Versions Setup - Submit Frequency Collected service', () => {
         it('sets the notification message title to "Updated" and the text to "Requirements for returns updated" ', async () => {
           await SubmitFrequencyCollectedService(session.id, requirementIndex, payload, yarStub)
 
-          const [flashType, notification] = yarStub.flash.args[0]
+          const [flashType, notification] = yarStub.flash.mock.calls[0]
 
           expect(flashType).toEqual('notification')
           expect(notification).toEqual({

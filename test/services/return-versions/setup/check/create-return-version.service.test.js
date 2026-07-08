@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
-const ReturnVersionModel = require('../../../../../app/models/return-version.model.js')
-const ReturnRequirementModel = require('../../../../../app/models/return-requirement.model.js')
-const ReturnRequirementPointModel = require('../../../../../app/models/return-requirement-point.model.js')
-const ReturnRequirementPurposeModel = require('../../../../../app/models/return-requirement-purpose.model.js')
+import { generateUUID } from '../../../../../app/lib/general.lib.js'
+import ReturnVersionModel from '../../../../../app/models/return-version.model.js'
+import ReturnRequirementModel from '../../../../../app/models/return-requirement.model.js'
+import ReturnRequirementPointModel from '../../../../../app/models/return-requirement-point.model.js'
+import ReturnRequirementPurposeModel from '../../../../../app/models/return-requirement-purpose.model.js'
 
 // Thing under test
-const CreateReturnVersionService = require('../../../../../app/services/return-versions/setup/check/create-return-version.service.js')
+import CreateReturnVersionService from '../../../../../app/services/return-versions/setup/check/create-return-version.service.js'
 
 describe('Return Versions Setup - Create Return Version service', () => {
   describe('when called with data to create', () => {

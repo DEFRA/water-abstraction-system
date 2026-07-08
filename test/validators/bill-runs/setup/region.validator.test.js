@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const RegionValidator = require('../../../../app/validators/bill-runs/setup/region.validator.js')
+import RegionValidator from '../../../../app/validators/bill-runs/setup/region.validator.js'
 
 describe('Bill Runs Setup Region validator', () => {
   const regions = [

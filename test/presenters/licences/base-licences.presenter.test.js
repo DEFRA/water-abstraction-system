@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const BaseLicencesPresenter = require('../../../app/presenters/licences/base-licences.presenter.js')
+import BaseLicencesPresenter from '../../../app/presenters/licences/base-licences.presenter.js'
 
 describe('Licences - Base Licences presenter', () => {
   describe('#formatAbstractionAmounts()', () => {

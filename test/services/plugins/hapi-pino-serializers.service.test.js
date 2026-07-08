@@ -1,9 +1,8 @@
-'use strict'
-
-const { HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_OK } = http2.constants
 
 // Thing under test
-const HapiPinoSerializersService = require('../../../app/services/plugins/hapi-pino-serializers.service.js')
+import HapiPinoSerializersService from '../../../app/services/plugins/hapi-pino-serializers.service.js'
 
 describe('Hapi Pino Serializers service', () => {
   describe('when called', () => {

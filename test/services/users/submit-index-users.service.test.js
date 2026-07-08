@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const UsersFixture = require('../../support/fixtures/users.fixture.js')
+import * as UsersFixture from '../../support/fixtures/users.fixture.js'
 
 // Things to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
-const FetchUsersDal = require('../../../app/dal/users/fetch-users.dal.js')
-const YarStub = require('../../support/stubs/yar.stub.js')
+import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
+import FetchUsersDal from '../../../app/dal/users/fetch-users.dal.js'
+import YarStub from '../../support/stubs/yar.stub.js'
 
 // Thing under test
-const SubmitIndexUsersService = require('../../../app/services/users/submit-index-users.service.js')
+import SubmitIndexUsersService from '../../../app/services/users/submit-index-users.service.js'
 
 describe('Users - Submit Index Users service', () => {
   let auth
@@ -25,13 +22,13 @@ describe('Users - Submit Index Users service', () => {
       credentials: { scope: ['manage_accounts'] }
     }
 
-    Sinon.stub(FeatureFlagsConfig, 'enableUsersManagement').value(true)
+    vi.replaceProperty(FeatureFlagsConfig, 'enableUsersManagement', true)
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -51,7 +48,7 @@ describe('Users - Submit Index Users service', () => {
       it('clears the "usersFilter" object from the session', async () => {
         await SubmitIndexUsersService(payload, yarStub, auth)
 
-        expect(yarStub.clear.called).toBe(true)
+        expect(yarStub.clear).toHaveBeenCalled()
       })
     })
 
@@ -69,7 +66,7 @@ describe('Users - Submit Index Users service', () => {
       it('saves a default "usersFilter" object in the session', async () => {
         await SubmitIndexUsersService(payload, yarStub, auth)
 
-        const setArgs = yarStub.set.args[0]
+        const setArgs = yarStub.set.mock.calls[0]
 
         expect(setArgs[0]).toEqual('usersFilter')
         expect(setArgs[1]).toEqual({
@@ -100,7 +97,7 @@ describe('Users - Submit Index Users service', () => {
       it('saves the submitted filters as the "usersFilter" object in the session', async () => {
         await SubmitIndexUsersService(payload, yarStub, auth)
 
-        const setArgs = yarStub.set.args[0]
+        const setArgs = yarStub.set.mock.calls[0]
 
         expect(setArgs[0]).toEqual('usersFilter')
         expect(setArgs[1]).toEqual({
@@ -123,7 +120,8 @@ describe('Users - Submit Index Users service', () => {
 
       describe('and the results are paginated', () => {
         beforeEach(() => {
-          Sinon.stub(FetchUsersDal, 'go').resolves({ results, total: 70 })
+          vi.mock('../../../app/dal/users/fetch-users.dal.js')
+          FetchUsersDal.mockResolvedValue({ results, total: 70 })
         })
 
         it('returns the page data for the view, including any errors', async () => {
@@ -203,7 +201,8 @@ describe('Users - Submit Index Users service', () => {
 
       describe('and the results are not paginated', () => {
         beforeEach(() => {
-          Sinon.stub(FetchUsersDal, 'go').resolves({ results, total: 1 })
+          vi.mock('../../../app/dal/users/fetch-users.dal.js')
+          FetchUsersDal.mockResolvedValue({ results, total: 1 })
         })
 
         it('returns the page data for the view, including any errors', async () => {

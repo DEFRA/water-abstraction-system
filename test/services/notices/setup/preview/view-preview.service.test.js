@@ -1,23 +1,21 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { HTTP_STATUS_OK } = require('node:http2').constants
+import http2 from 'node:http2'
+const { HTTP_STATUS_OK } = http2.constants
 
-const RecipientsFixture = require('../../../../support/fixtures/recipients.fixture.js')
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
-const { generateNoticeReferenceCode, generateUUID } = require('../../../../../app/lib/general.lib.js')
+import * as RecipientsFixture from '../../../../support/fixtures/recipients.fixture.js'
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import { generateLicenceRef } from '../../../../support/helpers/licence.helper.js'
+import { generateNoticeReferenceCode, generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const FetchRecipientsService = require('../../../../../app/services/notices/setup/fetch-recipients.service.js')
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
-const GeneratePreviewRequest = require('../../../../../app/requests/notify/generate-preview.request.js')
+import FetchRecipientsService from '../../../../../app/services/notices/setup/fetch-recipients.service.js'
+import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as GeneratePreviewRequest from '../../../../../app/requests/notify/generate-preview.request.js'
 
 // Thing under test
-const ViewPreviewService = require('../../../../../app/services/notices/setup/preview/view-preview.service.js')
+import ViewPreviewService from '../../../../../app/services/notices/setup/preview/view-preview.service.js'
 
 describe('Notices - Setup - Preview - View Preview service', () => {
   let licenceMonitoringStationId
@@ -26,7 +24,7 @@ describe('Notices - Setup - Preview - View Preview service', () => {
   let sessionData
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when previewing an abstraction alert notification', () => {
@@ -77,16 +75,18 @@ describe('Notices - Setup - Preview - View Preview service', () => {
         subType: 'waterAbstractionAlerts'
       }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.mock('../../../../../app/dal/fetch-session.dal.js')
+      FetchSessionDal.mockResolvedValue(session)
 
       licenceMonitoringStationId = licenceMonitoringStations[0].id
 
-      Sinon.stub(FetchRecipientsService, 'go').resolves([{ ...recipients[0] }])
+      vi.mock('../../../../../app/services/notices/setup/fetch-recipients.service.js')
+      FetchRecipientsService.mockResolvedValue([{ ...recipients[0] }])
 
       // The Preview Presenter uses Notify to generate the template preview contents, so we need to stub the request.
-      Sinon.stub(GeneratePreviewRequest, 'send').resolves({
+      vi.spyOn(GeneratePreviewRequest, 'send').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -173,16 +173,18 @@ describe('Notices - Setup - Preview - View Preview service', () => {
         subType: 'returnInvitation'
       }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.mock('../../../../../app/dal/fetch-session.dal.js')
+      FetchSessionDal.mockResolvedValue(session)
 
       licenceMonitoringStationId = null
 
-      Sinon.stub(FetchRecipientsService, 'go').resolves([{ ...recipients[0] }])
+      vi.mock('../../../../../app/services/notices/setup/fetch-recipients.service.js')
+      FetchRecipientsService.mockResolvedValue([{ ...recipients[0] }])
 
       // The Preview Presenter uses Notify to generate the template preview contents, so we need to stub the request.
-      Sinon.stub(GeneratePreviewRequest, 'send').resolves({
+      vi.spyOn(GeneratePreviewRequest, 'send').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -239,16 +241,18 @@ describe('Notices - Setup - Preview - View Preview service', () => {
         subType: 'renewalInvitation'
       }
 
-      session = SessionModelStub.build(Sinon, sessionData)
+      session = SessionModelStub(sessionData)
 
-      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+      vi.mock('../../../../../app/dal/fetch-session.dal.js')
+      FetchSessionDal.mockResolvedValue(session)
 
       licenceMonitoringStationId = null
 
-      Sinon.stub(FetchRecipientsService, 'go').resolves([{ ...recipients[0] }])
+      vi.mock('../../../../../app/services/notices/setup/fetch-recipients.service.js')
+      FetchRecipientsService.mockResolvedValue([{ ...recipients[0] }])
 
       // The Preview Presenter uses Notify to generate the template preview contents, so we need to stub the request.
-      Sinon.stub(GeneratePreviewRequest, 'send').resolves({
+      vi.spyOn(GeneratePreviewRequest, 'send').mockResolvedValue({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,

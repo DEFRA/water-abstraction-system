@@ -1,27 +1,24 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
-const SchemaExportService = require('../../../../app/services/jobs/export/schema-export.service.js')
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
+import SchemaExportService from '../../../../app/services/jobs/export/schema-export.service.js'
 
 // Thing under test
-const ExportService = require('../../../../app/services/jobs/export/export.service.js')
+import ExportService from '../../../../app/services/jobs/export/export.service.js'
 
 describe('Export Service', () => {
-  let SchemaExportServiceStub
   let notifierStub
 
   beforeEach(async () => {
-    SchemaExportServiceStub = Sinon.stub(SchemaExportService, 'go').resolves()
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    vi.mock('../../../../app/services/jobs/export/schema-export.service.js')
+    SchemaExportService.mockResolvedValue()
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -30,7 +27,7 @@ describe('Export Service', () => {
 
     await ExportService()
 
-    const allArgs = SchemaExportServiceStub.getCalls().flatMap((call) => {
+    const allArgs = SchemaExportService.getCalls().flatMap((call) => {
       return call.args
     })
 

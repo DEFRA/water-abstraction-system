@@ -1,22 +1,17 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
+import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitAccountService = require('../../../../app/services/billing-accounts/setup/submit-account.service.js')
+import SubmitAccountService from '../../../../app/services/billing-accounts/setup/submit-account.service.js'
 
 describe('Billing Accounts - Setup - Submit Account Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
-
-  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -26,13 +21,14 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       billingAccount
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when the user picks the "customer" option', () => {
@@ -66,9 +62,9 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
           billingAccount
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -93,9 +89,9 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       beforeEach(() => {
         sessionData = _anotherSessionData(session)
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value and deletes the other previously saved data', async () => {
@@ -149,9 +145,9 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
           searchInput: 'Customer Name'
         }
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted values', async () => {
@@ -175,9 +171,9 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       beforeEach(() => {
         sessionData = _customerSessionData(session)
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the submitted value and deletes the other previously saved data', async () => {

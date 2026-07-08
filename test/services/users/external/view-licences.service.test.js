@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const UsersFixture = require('../../../support/fixtures/users.fixture.js')
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import * as UsersFixture from '../../../support/fixtures/users.fixture.js'
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we want to stub
-const FetchLicencesDal = require('../../../../app/dal/users/external/fetch-licences.dal.js')
-const FetchUserDal = require('../../../../app/dal/users/fetch-user.dal.js')
+import FetchLicencesDal from '../../../../app/dal/users/external/fetch-licences.dal.js'
+import FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
 
 // Thing under test
-const ViewLicencesService = require('../../../../app/services/users/external/view-licences.service.js')
+import ViewLicencesService from '../../../../app/services/users/external/view-licences.service.js'
 
 describe('Users - External - View Licences service', () => {
   const auth = {
@@ -29,18 +26,20 @@ describe('Users - External - View Licences service', () => {
 
     user = { id, licenceEntityId: 'b2c55396-9bbb-448d-85e7-2be1dbefc02b', username }
 
-    Sinon.stub(FetchUserDal, 'go').resolves(user)
-    Sinon.stub(FetchLicencesDal, 'go').resolves({
+    vi.mock('../../../../app/dal/users/fetch-user.dal.js')
+    FetchUserDal.mockResolvedValue(user)
+    vi.mock('../../../../app/dal/users/external/fetch-licences.dal.js')
+    FetchLicencesDal.mockResolvedValue({
       licences: [],
       totalNumber: 0
     })
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {

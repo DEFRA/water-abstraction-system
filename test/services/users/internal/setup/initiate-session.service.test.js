@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const SessionModel = require('../../../../../app/models/session.model.js')
+import SessionModel from '../../../../../app/models/session.model.js'
 
 // Thing under test
-const InitiateSessionService = require('../../../../../app/services/users/internal/setup/initiate-session.service.js')
+import InitiateSessionService from '../../../../../app/services/users/internal/setup/initiate-session.service.js'
 
 describe('Users - Internal - Setup - Initiate Session service', () => {
   describe('when called', () => {

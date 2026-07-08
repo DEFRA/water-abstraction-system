@@ -1,18 +1,15 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
-const SessionModel = require('../../../../app/models/session.model.js')
-const { today } = require('../../../../app/lib/general.lib.js')
+import * as SessionHelper from '../../../support/helpers/session.helper.js'
+import SessionModel from '../../../../app/models/session.model.js'
+import { today } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
-const CleanExpiredSessionsService = require('../../../../app/services/jobs/clean/clean-expired-sessions.service.js')
+import CleanExpiredSessionsService from '../../../../app/services/jobs/clean/clean-expired-sessions.service.js'
 
 describe('Jobs - Clean - Clean Expired Sessions service', () => {
   const todaysDate = today()
@@ -25,12 +22,12 @@ describe('Jobs - Clean - Clean Expired Sessions service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = GlobalNotifierStub.build(Sinon)
+    notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
     delete globalThis.GlobalNotifier
   })
 
@@ -73,9 +70,9 @@ describe('Jobs - Clean - Clean Expired Sessions service', () => {
 
   describe('when the clean errors', () => {
     beforeEach(() => {
-      Sinon.stub(SessionModel, 'query').returns({
-        delete: Sinon.stub().returnsThis(),
-        where: Sinon.stub().rejects()
+      vi.spyOn(SessionModel, 'query').mockReturnValue({
+        delete: vi.fn().mockReturnThis(),
+        where: vi.fn().rejects()
       })
     })
 
@@ -88,7 +85,7 @@ describe('Jobs - Clean - Clean Expired Sessions service', () => {
 
       const errorLogArgs = notifierStub.omfg.firstCall.args
 
-      expect(notifierStub.omfg.calledWith('Clean job failed')).toBe(true)
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed')
       expect(errorLogArgs[1]).toEqual({ job: 'clean-expired-sessions' })
       expect(errorLogArgs[2]).toBeInstanceOf(Error)
     })

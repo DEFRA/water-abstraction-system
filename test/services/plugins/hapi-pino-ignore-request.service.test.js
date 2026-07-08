@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const HapiPinoIgnoreRequestService = require('../../../app/services/plugins/hapi-pino-ignore-request.service.js')
+import HapiPinoIgnoreRequestService from '../../../app/services/plugins/hapi-pino-ignore-request.service.js'
 
 describe('Hapi Pino Ignore Request service', () => {
   describe('when the request is for the root "/"', () => {

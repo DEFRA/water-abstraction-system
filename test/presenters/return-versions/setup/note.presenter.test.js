@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const NotePresenter = require('../../../../app/presenters/return-versions/setup/note.presenter.js')
+import NotePresenter from '../../../../app/presenters/return-versions/setup/note.presenter.js'
 
 describe('Return Versions Setup - Note presenter', () => {
   let session

@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const NoticeSessionFixture = require('../../../../support/fixtures/notice-session.fixture.js')
-const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
-const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
+import * as NoticeSessionFixture from '../../../../support/fixtures/notice-session.fixture.js'
+import RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
+import * as ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
 
 // Thing under test
-const FetchReturnsReminderRecipients = require('../../../../../app/services/notices/setup/returns-notice/fetch-returns-reminder-recipients.service.js')
+import FetchReturnsReminderRecipients from '../../../../../app/services/notices/setup/returns-notice/fetch-returns-reminder-recipients.service.js'
 
 describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients service', () => {
   let download
@@ -56,7 +54,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
       })
 
       it('fetches the correct recipient data for sending the notice', async () => {
-        const results = await FetchReturnsReminderRecipients.go(session, download)
+        const results = await FetchReturnsReminderRecipients(session, download)
 
         // NOTE: We know GenerateReturnLogsByLicenceQueryService when called for a returns reminder will generate a
         // query that will only fetch return logs with due dates. So, we know only the return log with the due date will
@@ -82,7 +80,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
       })
 
       it('fetches the correct recipient data for the download', async () => {
-        const results = await FetchReturnsReminderRecipients.go(session, download)
+        const results = await FetchReturnsReminderRecipients(session, download)
 
         const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios.licenceHolder)
 
@@ -104,7 +102,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
       })
 
       it('fetches the correct recipient data for sending the notice', async () => {
-        const results = await FetchReturnsReminderRecipients.go(session, download)
+        const results = await FetchReturnsReminderRecipients(session, download)
 
         // NOTE: We know GenerateReturnLogsByPeriodQueryService when called for a returns reminder will generate a
         // query that will only fetch return logs with due dates. So, we know only the return log with the due date will
@@ -130,7 +128,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
       })
 
       it('fetches the correct recipient data for the download', async () => {
-        const results = await FetchReturnsReminderRecipients.go(session, download)
+        const results = await FetchReturnsReminderRecipients(session, download)
 
         const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios.licenceHolder)
 

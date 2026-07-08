@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
+import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const ExistingAddressPresenter = require('../../../../app/presenters/billing-accounts/setup/existing-address.presenter.js')
+import ExistingAddressPresenter from '../../../../app/presenters/billing-accounts/setup/existing-address.presenter.js'
 
 describe('Billing Accounts - Setup - Existing Address Presenter', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount

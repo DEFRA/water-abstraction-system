@@ -1,12 +1,10 @@
-'use strict'
-
 // Test helpers
-const LicenceMonitoringStationHelper = require('../support/helpers/licence-monitoring-station.helper.js')
-const LicenceMonitoringStationModel = require('../../app/models/licence-monitoring-station.model.js')
-const MonitoringStationHelper = require('../support/helpers/monitoring-station.helper.js')
+import * as LicenceMonitoringStationHelper from '../support/helpers/licence-monitoring-station.helper.js'
+import LicenceMonitoringStationModel from '../../app/models/licence-monitoring-station.model.js'
+import * as MonitoringStationHelper from '../support/helpers/monitoring-station.helper.js'
 
 // Thing under test
-const MonitoringStationModel = require('../../app/models/monitoring-station.model.js')
+import MonitoringStationModel from '../../app/models/monitoring-station.model.js'
 
 describe('Monitoring Station model', () => {
   let testLicenceMonitoringStations

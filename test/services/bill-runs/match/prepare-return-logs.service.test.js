@@ -1,13 +1,10 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const FetchReturnLogsForLicenceService = require('../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js')
+import FetchReturnLogsForLicenceService from '../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js'
 
 // Thing under test
-const PrepareReturnLogService = require('../../../../app/services/bill-runs/match/prepare-return-logs.service.js')
+import PrepareReturnLogService from '../../../../app/services/bill-runs/match/prepare-return-logs.service.js'
 
 describe('Prepare Return Logs Service', () => {
   const billingPeriod = {
@@ -16,7 +13,7 @@ describe('Prepare Return Logs Service', () => {
   }
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('for a licence', () => {
@@ -31,7 +28,8 @@ describe('Prepare Return Logs Service', () => {
         beforeEach(async () => {
           const returnLog = _testReturnLog()
 
-          Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves([returnLog])
+          vi.mock('../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js')
+          FetchReturnLogsForLicenceService.mockResolvedValue([returnLog])
         })
 
         it('preps the returns correctly', async () => {
@@ -94,7 +92,8 @@ describe('Prepare Return Logs Service', () => {
 
           returnLog.returnSubmissions[0].returnSubmissionLines[0].startDate = new Date('2023-04-05')
 
-          Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves([returnLog])
+          vi.mock('../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js')
+          FetchReturnLogsForLicenceService.mockResolvedValue([returnLog])
         })
 
         it('flags the return as outside the abstraction period', async () => {
@@ -110,7 +109,8 @@ describe('Prepare Return Logs Service', () => {
 
           returnLog.returnSubmissions[0].nilReturn = true
 
-          Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves([returnLog])
+          vi.mock('../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js')
+          FetchReturnLogsForLicenceService.mockResolvedValue([returnLog])
         })
 
         it('flags the return as a nil return', async () => {
@@ -123,7 +123,8 @@ describe('Prepare Return Logs Service', () => {
 
     describe('when no matching returns exist', () => {
       beforeEach(async () => {
-        Sinon.stub(FetchReturnLogsForLicenceService, 'go').resolves([])
+        vi.mock('../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js')
+        FetchReturnLogsForLicenceService.mockResolvedValue([])
       })
 
       it('assigns no return logs to the licence', async () => {

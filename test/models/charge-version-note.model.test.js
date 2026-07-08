@@ -1,14 +1,12 @@
-'use strict'
-
 // Test helpers
-const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
-const ChargeVersionModel = require('../../app/models/charge-version.model.js')
-const ChargeVersionNoteHelper = require('../support/helpers/charge-version-note.helper.js')
-const UserHelper = require('../support/helpers/user.helper.js')
-const UserModel = require('../../app/models/user.model.js')
+import * as ChargeVersionHelper from '../support/helpers/charge-version.helper.js'
+import ChargeVersionModel from '../../app/models/charge-version.model.js'
+import * as ChargeVersionNoteHelper from '../support/helpers/charge-version-note.helper.js'
+import * as UserHelper from '../support/helpers/user.helper.js'
+import UserModel from '../../app/models/user.model.js'
 
 // Thing under test
-const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
+import ChargeVersionNoteModel from '../../app/models/charge-version-note.model.js'
 
 describe('Charge Version Note model', () => {
   let testChargeVersion

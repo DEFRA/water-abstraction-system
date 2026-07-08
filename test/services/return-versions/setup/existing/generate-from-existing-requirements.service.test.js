@@ -1,13 +1,10 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Things we need to stub
-const FetchExistingRequirementsService = require('../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js')
+import FetchExistingRequirementsService from '../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js'
 
 // Thing under test
-const GenerateFromExistingRequirementsService = require('../../../../../app/services/return-versions/setup/existing/generate-from-existing-requirements.service.js')
+import GenerateFromExistingRequirementsService from '../../../../../app/services/return-versions/setup/existing/generate-from-existing-requirements.service.js'
 
 describe('Return Versions Setup - Generate From Existing Requirements service', () => {
   const returnVersionId = '7af310df-8bd1-476e-8476-eac7ce4153e9'
@@ -15,7 +12,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
   let fetchResult
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when a matching return version exists', () => {
@@ -23,7 +20,8 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
       beforeEach(() => {
         fetchResult = _fetchResult(returnVersionId)
 
-        Sinon.stub(FetchExistingRequirementsService, 'go').resolves(fetchResult)
+        vi.mock('../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js')
+        FetchExistingRequirementsService.mockResolvedValue(fetchResult)
       })
 
       it('returns the saved value', async () => {
@@ -37,7 +35,8 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
       beforeEach(() => {
         fetchResult = _fetchResult(returnVersionId)
 
-        Sinon.stub(FetchExistingRequirementsService, 'go').resolves(fetchResult)
+        vi.mock('../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js')
+        FetchExistingRequirementsService.mockResolvedValue(fetchResult)
       })
 
       it('returns the saved value', async () => {
@@ -51,7 +50,8 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
       beforeEach(() => {
         fetchResult = _fetchResult(returnVersionId)
 
-        Sinon.stub(FetchExistingRequirementsService, 'go').resolves(fetchResult)
+        vi.mock('../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js')
+        FetchExistingRequirementsService.mockResolvedValue(fetchResult)
       })
 
       it('returns the details of its return requirements transformed for use in the journey', async () => {
@@ -114,7 +114,8 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
         fetchResult = _fetchResult()
         fetchResult.returnRequirements[1].siteDescription = null
 
-        Sinon.stub(FetchExistingRequirementsService, 'go').resolves(fetchResult)
+        vi.mock('../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js')
+        FetchExistingRequirementsService.mockResolvedValue(fetchResult)
       })
 
       it('returns the details of its return requirements transformed, falling back to point description for the missing site description', async () => {

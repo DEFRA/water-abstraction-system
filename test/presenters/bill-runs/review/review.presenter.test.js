@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const { generateRandomInteger, generateUUID } = require('../../../../app/lib/general.lib.js')
+import * as RegionHelper from '../../../support/helpers/region.helper.js'
+import { generateRandomInteger, generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
-const ReviewPresenter = require('../../../../app/presenters/bill-runs/review/review.presenter.js')
+import ReviewPresenter from '../../../../app/presenters/bill-runs/review/review.presenter.js'
 
 describe('Bill Runs - Review - Review presenter', () => {
   let billRun

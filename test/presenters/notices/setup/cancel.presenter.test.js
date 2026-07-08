@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 
 // Thing under test
-const CancelPresenter = require('../../../../app/presenters/notices/setup/cancel.presenter.js')
+import CancelPresenter from '../../../../app/presenters/notices/setup/cancel.presenter.js'
 
 describe('Notices - Setup - Cancel presenter', () => {
   const referenceCode = 'RNIV-1234'

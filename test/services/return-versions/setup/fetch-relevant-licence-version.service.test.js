@@ -1,11 +1,9 @@
-'use strict'
-
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
+import { generateUUID } from '../../../../app/lib/general.lib.js'
+import * as LicenceVersionHelper from '../../../support/helpers/licence-version.helper.js'
 
 // Thing under test
-const FetchRelevantLicenceVersionService = require('../../../../app/services/return-versions/setup/fetch-relevant-licence-version.service.js')
+import FetchRelevantLicenceVersionService from '../../../../app/services/return-versions/setup/fetch-relevant-licence-version.service.js'
 
 describe('Return Versions - Setup - Fetch Relevant Licence Version service', () => {
   const licenceId = generateUUID()

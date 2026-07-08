@@ -1,7 +1,5 @@
-'use strict'
-
 // Thing under test
-const ManualPresenter = require('../../../app/presenters/address/manual.presenter.js')
+import ManualPresenter from '../../../app/presenters/address/manual.presenter.js'
 
 describe('Address - Manual Presenter', () => {
   let session

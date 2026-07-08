@@ -1,22 +1,19 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
 
 // Test helpers
-const YarStub = require('../../../support/stubs/yar.stub.js')
+import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitSelectRecipientsService = require('../../../../app/services/notices/setup/submit-select-recipients.service.js')
+import SubmitSelectRecipientsService from '../../../../app/services/notices/setup/submit-select-recipients.service.js'
 
 describe('Notices - Setup - Submit Select Recipients service', () => {
   let payload
@@ -33,20 +30,22 @@ describe('Notices - Setup - Submit Select Recipients service', () => {
 
     sessionData = { referenceCode }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
     recipients = RecipientsFixture.recipients()
 
-    Sinon.stub(FetchRecipientsService, 'go').resolves([recipients.primaryUser])
+    vi.mock('../../../../app/services/notices/setup/fetch-recipients.service.js')
+    FetchRecipientsService.mockResolvedValue([recipients.primaryUser])
 
-    yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([{ title: 'Test', text: 'Notification' }])
+    yarStub = YarStub()
+    yarStub.flash.mockReturnValue([{ title: 'Test', text: 'Notification' }])
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -61,7 +60,7 @@ describe('Notices - Setup - Submit Select Recipients service', () => {
       await SubmitSelectRecipientsService(session.id, payload, yarStub)
 
       // Check we add the flash message
-      const [flashType, bannerMessage] = yarStub.flash.args[0]
+      const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
       expect(flashType).toEqual('notification')
       expect(bannerMessage).toEqual({

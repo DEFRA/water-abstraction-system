@@ -1,18 +1,16 @@
-'use strict'
-
 // Test helpers
-const BillHelper = require('../support/helpers/bill.helper.js')
-const BillModel = require('../../app/models/bill.model.js')
-const BillRunHelper = require('../support/helpers/bill-run.helper.js')
-const BillRunVolumeHelper = require('../support/helpers/bill-run-volume.helper.js')
-const BillRunVolumeModel = require('../../app/models/bill-run-volume.model.js')
-const RegionHelper = require('../support/helpers/region.helper.js')
-const RegionModel = require('../../app/models/region.model.js')
-const ReviewLicenceHelper = require('../support/helpers/review-licence.helper.js')
-const ReviewLicenceModel = require('../../app/models/review-licence.model.js')
+import * as BillHelper from '../support/helpers/bill.helper.js'
+import BillModel from '../../app/models/bill.model.js'
+import * as BillRunHelper from '../support/helpers/bill-run.helper.js'
+import * as BillRunVolumeHelper from '../support/helpers/bill-run-volume.helper.js'
+import BillRunVolumeModel from '../../app/models/bill-run-volume.model.js'
+import * as RegionHelper from '../support/helpers/region.helper.js'
+import RegionModel from '../../app/models/region.model.js'
+import * as ReviewLicenceHelper from '../support/helpers/review-licence.helper.js'
+import ReviewLicenceModel from '../../app/models/review-licence.model.js'
 
 // Thing under test
-const BillRunModel = require('../../app/models/bill-run.model.js')
+import BillRunModel from '../../app/models/bill-run.model.js'
 
 describe('Bill Run model', () => {
   let testBillRunVolumes

@@ -1,22 +1,18 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const SessionModelStub = require('../../../support/stubs/session.stub.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+import SessionModelStub from '../../../support/stubs/session.stub.js'
+import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
+import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-const FetchLicenceRefsWithDueReturnsService = require('../../../../app/services/notices/setup/fetch-licence-refs-with-due-returns.service.js')
-const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+import FetchLicenceRefsWithDueReturnsService from '../../../../app/services/notices/setup/fetch-licence-refs-with-due-returns.service.js'
+import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const SubmitRemoveLicencesService = require('../../../../app/services/notices/setup/submit-remove-licences.service.js')
+import SubmitRemoveLicencesService from '../../../../app/services/notices/setup/submit-remove-licences.service.js'
 
 describe('Notices - Setup - Submit Remove Licences service', () => {
-  let fetchLicenceRefsWithDueReturnsStub
   let licenceRefWithDueReturns
   let payload
   let referenceCode
@@ -38,17 +34,18 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
       }
     }
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
     licenceRefWithDueReturns = generateLicenceRef()
 
-    fetchLicenceRefsWithDueReturnsStub = Sinon.stub(FetchLicenceRefsWithDueReturnsService, 'go')
+    vi.mock('../../../../app/services/notices/setup/fetch-licence-refs-with-due-returns.service.js')
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when submitting licences to remove ', () => {
@@ -56,7 +53,7 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
       beforeEach(() => {
         payload = { removeLicences: licenceRefWithDueReturns }
 
-        fetchLicenceRefsWithDueReturnsStub.resolves([licenceRefWithDueReturns])
+        FetchLicenceRefsWithDueReturnsService.mockResolvedValue([licenceRefWithDueReturns])
       })
 
       it('saves the submitted value', async () => {
@@ -81,7 +78,7 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
 
         licenceRefWithDueReturns = []
 
-        fetchLicenceRefsWithDueReturnsStub.resolves([licenceRefWithDueReturns])
+        FetchLicenceRefsWithDueReturnsService.mockResolvedValue([licenceRefWithDueReturns])
       })
 
       it('correctly presents the data with the error', async () => {

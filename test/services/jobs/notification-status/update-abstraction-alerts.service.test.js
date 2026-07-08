@@ -1,10 +1,8 @@
-'use strict'
-
 // Test helpers
-const LicenceMonitoringStationHelper = require('../../../support/helpers/licence-monitoring-station.helper.js')
+import * as LicenceMonitoringStationHelper from '../../../support/helpers/licence-monitoring-station.helper.js'
 
 // Thing under test
-const UpdateAbstractionAlertsService = require('../../../../app/services/jobs/notification-status/update-abstraction-alerts.service.js')
+import UpdateAbstractionAlertsService from '../../../../app/services/jobs/notification-status/update-abstraction-alerts.service.js'
 
 describe('Job - Notification Status - Update Abstraction Alerts service', () => {
   let licenceMonitoringStation

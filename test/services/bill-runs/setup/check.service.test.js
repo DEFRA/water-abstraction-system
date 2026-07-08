@@ -1,17 +1,14 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
+import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
 
 // Things we need to stub
-const DetermineBlockingBillRunService = require('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
-const SessionModel = require('../../../../app/models/session.model.js')
+import DetermineBlockingBillRunService from '../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js'
+import SessionModel from '../../../../app/models/session.model.js'
 
 // Thing under test
-const CheckService = require('../../../../app/services/bill-runs/setup/check.service.js')
+import CheckService from '../../../../app/services/bill-runs/setup/check.service.js'
 
 // NOTE: We have broken our normal pattern for tests of services that provide formatted page data. Because of the number
 // of scenarios that need to be covered for this service, we've broken up the presenter logic. This means the tests for
@@ -29,7 +26,7 @@ describe('Bill Runs - Setup - Check service', () => {
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -37,14 +34,15 @@ describe('Bill Runs - Setup - Check service', () => {
       beforeEach(() => {
         session.type = 'annual'
 
-        Sinon.stub(SessionModel, 'query').returns({
-          findById: Sinon.stub().withArgs(sessionId).resolves(session)
+        vi.spyOn(SessionModel, 'query').mockReturnValue({
+          findById: vi.fn().mockResolvedValue(session)
         })
       })
 
       describe('and there is no existing blocking bill run', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineBlockingBillRunService, 'go').resolves({
+          vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
+          DetermineBlockingBillRunService.mockResolvedValue({
             matches: [],
             toFinancialYearEnding: 2025,
             trigger: engineTriggers.current
@@ -75,7 +73,8 @@ describe('Bill Runs - Setup - Check service', () => {
 
       describe('and there is an existing blocking bill run', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineBlockingBillRunService, 'go').resolves({
+          vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
+          DetermineBlockingBillRunService.mockResolvedValue({
             matches: [
               {
                 id: 'c0608545-9870-4605-a407-5ff49f8a5182',
@@ -126,14 +125,15 @@ describe('Bill Runs - Setup - Check service', () => {
         beforeEach(() => {
           session.year = '2024'
 
-          Sinon.stub(SessionModel, 'query').returns({
-            findById: Sinon.stub().withArgs(sessionId).resolves(session)
+          vi.spyOn(SessionModel, 'query').mockReturnValue({
+            findById: vi.fn().mockResolvedValue(session)
           })
         })
 
         describe('and there is no existing blocking bill run', () => {
           beforeEach(() => {
-            Sinon.stub(DetermineBlockingBillRunService, 'go').resolves({
+            vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
+            DetermineBlockingBillRunService.mockResolvedValue({
               matches: [],
               toFinancialYearEnding: Number(session.year),
               trigger: engineTriggers.current
@@ -164,7 +164,8 @@ describe('Bill Runs - Setup - Check service', () => {
 
         describe('and there is an existing blocking bill run', () => {
           beforeEach(() => {
-            Sinon.stub(DetermineBlockingBillRunService, 'go').resolves({
+            vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
+            DetermineBlockingBillRunService.mockResolvedValue({
               matches: [
                 {
                   id: 'c0608545-9870-4605-a407-5ff49f8a5182',
@@ -211,14 +212,15 @@ describe('Bill Runs - Setup - Check service', () => {
           session.year = '2022'
           session.season = 'winter_all_year'
 
-          Sinon.stub(SessionModel, 'query').returns({
-            findById: Sinon.stub().withArgs(sessionId).resolves(session)
+          vi.spyOn(SessionModel, 'query').mockReturnValue({
+            findById: vi.fn().mockResolvedValue(session)
           })
         })
 
         describe('and there is no existing blocking bill run', () => {
           beforeEach(() => {
-            Sinon.stub(DetermineBlockingBillRunService, 'go').resolves({
+            vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
+            DetermineBlockingBillRunService.mockResolvedValue({
               matches: [],
               toFinancialYearEnding: 2022,
               trigger: engineTriggers.old
@@ -249,7 +251,8 @@ describe('Bill Runs - Setup - Check service', () => {
 
         describe('and there is an existing blocking bill run', () => {
           beforeEach(() => {
-            Sinon.stub(DetermineBlockingBillRunService, 'go').resolves({
+            vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
+            DetermineBlockingBillRunService.mockResolvedValue({
               matches: [
                 {
                   id: 'c0608545-9870-4605-a407-5ff49f8a5182',
@@ -297,14 +300,15 @@ describe('Bill Runs - Setup - Check service', () => {
       beforeEach(() => {
         session.type = 'supplementary'
 
-        Sinon.stub(SessionModel, 'query').returns({
-          findById: Sinon.stub().withArgs(sessionId).resolves(session)
+        vi.spyOn(SessionModel, 'query').mockReturnValue({
+          findById: vi.fn().mockResolvedValue(session)
         })
       })
 
       describe('and there are no existing blocking bill runs', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineBlockingBillRunService, 'go').resolves({
+          vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
+          DetermineBlockingBillRunService.mockResolvedValue({
             matches: [],
             toFinancialYearEnding: 2025,
             trigger: engineTriggers.both
@@ -335,7 +339,8 @@ describe('Bill Runs - Setup - Check service', () => {
 
       describe('and there are existing blocking bill runs for both schemes', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineBlockingBillRunService, 'go').resolves({
+          vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
+          DetermineBlockingBillRunService.mockResolvedValue({
             matches: [
               {
                 id: 'c0608545-9870-4605-a407-5ff49f8a5182',
@@ -387,7 +392,8 @@ describe('Bill Runs - Setup - Check service', () => {
 
       describe('and there is an existing blocking PRESROC bill run', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineBlockingBillRunService, 'go').resolves({
+          vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
+          DetermineBlockingBillRunService.mockResolvedValue({
             matches: [
               {
                 id: 'c0608545-9870-4605-a407-5ff49f8a5182',
@@ -429,7 +435,8 @@ describe('Bill Runs - Setup - Check service', () => {
 
       describe('and there is an existing blocking SROC bill run', () => {
         beforeEach(() => {
-          Sinon.stub(DetermineBlockingBillRunService, 'go').resolves({
+          vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
+          DetermineBlockingBillRunService.mockResolvedValue({
             matches: [
               {
                 id: 'c0608545-9870-4605-a407-5ff49f8a5182',
@@ -476,7 +483,8 @@ describe('Bill Runs - Setup - Check service', () => {
           // year from
           describe('but the financial year could not be determined (no annual bill runs for the region)', () => {
             beforeEach(() => {
-              Sinon.stub(DetermineBlockingBillRunService, 'go').resolves({
+              vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
+              DetermineBlockingBillRunService.mockResolvedValue({
                 matches: [],
                 toFinancialYearEnding: 0,
                 trigger: engineTriggers.neither
@@ -510,7 +518,8 @@ describe('Bill Runs - Setup - Check service', () => {
           // years SROC annual has not been run, so last year's is the latest. But never only PRESROC.
           describe('but the financial year determined as 2022 (last annual for the region was for FY 2022)', () => {
             beforeEach(() => {
-              Sinon.stub(DetermineBlockingBillRunService, 'go').resolves({
+              vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
+              DetermineBlockingBillRunService.mockResolvedValue({
                 matches: [],
                 toFinancialYearEnding: 2022,
                 trigger: engineTriggers.old

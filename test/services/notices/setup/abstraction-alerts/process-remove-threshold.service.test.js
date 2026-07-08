@@ -1,21 +1,17 @@
-'use strict'
-
 // Test framework dependencies
-const Sinon = require('sinon')
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const SessionModelStub = require('../../../../support/stubs/session.stub.js')
-const YarStub = require('../../../../support/stubs/yar.stub.js')
+import * as AbstractionAlertSessionData from '../../../../support/fixtures/abstraction-alert-session-data.fixture.js'
+import SessionModelStub from '../../../../support/stubs/session.stub.js'
+import YarStub from '../../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
-const ProcessRemoveThresholdService = require('../../../../../app/services/notices/setup/abstraction-alerts/process-remove-threshold.service.js')
+import ProcessRemoveThresholdService from '../../../../../app/services/notices/setup/abstraction-alerts/process-remove-threshold.service.js'
 
 describe('Notices - Setup - Abstraction Alerts -Process Remove Threshold service', () => {
-  let fetchSessionStub
   let licenceMonitoringStations
   let session
   let sessionData
@@ -26,15 +22,16 @@ describe('Notices - Setup - Abstraction Alerts -Process Remove Threshold service
 
     sessionData = AbstractionAlertSessionData.get(licenceMonitoringStations)
 
-    session = SessionModelStub.build(Sinon, sessionData)
+    session = SessionModelStub(sessionData)
 
-    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    vi.mock('../../../../../app/dal/fetch-session.dal.js')
+    FetchSessionDal.mockResolvedValue(session)
 
-    yarStub = YarStub.build(Sinon)
+    yarStub = YarStub()
   })
 
   afterEach(() => {
-    Sinon.restore()
+    vi.restoreAllMocks()
   })
 
   describe('when called', () => {
@@ -51,9 +48,9 @@ describe('Notices - Setup - Abstraction Alerts -Process Remove Threshold service
       beforeEach(() => {
         sessionData.removedThresholds = [licenceMonitoringStations.one.id]
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
 
       it('saves the "licenceMonitoringStationId" to the session with the existing "removedThresholds"', async () => {
@@ -67,15 +64,15 @@ describe('Notices - Setup - Abstraction Alerts -Process Remove Threshold service
       beforeEach(() => {
         sessionData.removedThresholds = [licenceMonitoringStations.one.id]
 
-        session = SessionModelStub.build(Sinon, sessionData)
+        session = SessionModelStub(sessionData)
 
-        fetchSessionStub.resolves(session)
+        FetchSessionDal.mockResolvedValue(session)
       })
       it('sets a flash message', async () => {
         await ProcessRemoveThresholdService(session.id, licenceMonitoringStations.one.id, yarStub)
 
         // Check we add the flash message
-        const [flashType, bannerMessage] = yarStub.flash.args[0]
+        const [flashType, bannerMessage] = yarStub.flash.mock.calls[0]
 
         expect(flashType).toEqual('notification')
         expect(bannerMessage).toEqual({
