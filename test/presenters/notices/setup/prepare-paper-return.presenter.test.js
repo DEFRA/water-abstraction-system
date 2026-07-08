@@ -49,7 +49,7 @@ describe('Notices - Setup - Prepare Paper Return presenter', () => {
       }
     }
 
-    clock = vi.useFakeTimers({ now: new Date(`2025-01-01` }))
+    clock = vi.useFakeTimers({ now: new Date(`2025-01-01`) })
   })
 
   afterEach(() => {

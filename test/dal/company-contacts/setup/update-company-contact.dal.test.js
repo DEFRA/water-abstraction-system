@@ -24,7 +24,7 @@ describe('Company Contacts - Update Company Contact dal', () => {
     seedDate = new Date('2021-01-01')
     today = new Date('2025-06-02')
 
-    clock = vi.useFakeTimers({ now: { now: today, toFake: ['Date'] } })
+    clock = vi.useFakeTimers({ now: today, toFake: ['Date'] })
 
     licenceRole = LicenceRoleHelper.select('additionalContact')
 
