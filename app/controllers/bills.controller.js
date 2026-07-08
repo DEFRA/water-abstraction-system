@@ -9,7 +9,7 @@ import RemoveBillService from '../services/bills/remove-bill.service.js'
 import SubmitRemoveBillService from '../services/bills/submit-remove-bill.service.js'
 import ViewBillService from '../services/bills/view-bill.service.js'
 
-async function remove(request, h) {
+export async function remove(request, h) {
   const { id } = request.params
 
   const pageData = await RemoveBillService.go(id)
@@ -17,7 +17,7 @@ async function remove(request, h) {
   return h.view('bills/remove.njk', pageData)
 }
 
-async function submitRemove(request, h) {
+export async function submitRemove(request, h) {
   const { id } = request.params
 
   try {
@@ -29,7 +29,7 @@ async function submitRemove(request, h) {
   }
 }
 
-async function view(request, h) {
+export async function view(request, h) {
   const { id } = request.params
 
   const pageData = await ViewBillService.go(id)
@@ -49,15 +49,4 @@ function _determineView(pageData) {
   }
 
   return 'bills/view-single-licence-presroc.njk'
-}
-
-export {
-  remove,
-  submitRemove,
-  view
-}
-export default {
-  remove,
-  submitRemove,
-  view
 }

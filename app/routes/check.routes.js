@@ -1,11 +1,11 @@
-import CheckController from '../controllers/check.controller.js'
+import { placeholder } from '../controllers/check.controller.js'
 
 const routes = [
   {
     method: 'POST',
     path: '/check/placeholder',
     options: {
-      handler: CheckController.placeholder,
+      handler: placeholder,
       app: {
         excludeFromProd: true,
         plainOutput: true

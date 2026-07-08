@@ -1,11 +1,11 @@
-import BillingAccountsController from '../controllers/billing-accounts.controller.js'
+import { changeAddress, view } from '../controllers/billing-accounts.controller.js'
 
 const routes = [
   {
     method: 'GET',
     path: '/billing-accounts/{id}',
     options: {
-      handler: BillingAccountsController.view,
+      handler: view,
       auth: {
         access: {
           scope: ['billing']
@@ -17,7 +17,7 @@ const routes = [
     method: 'POST',
     path: '/billing-accounts/{billingAccountId}/change-address',
     options: {
-      handler: BillingAccountsController.changeAddress,
+      handler: changeAddress,
       app: {
         plainOutput: true
       },

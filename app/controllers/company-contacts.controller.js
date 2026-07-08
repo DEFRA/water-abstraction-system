@@ -8,7 +8,7 @@ import ViewContactDetailsService from '../services/company-contacts/view-contact
 import ViewRemoveCompanyContactService from '../services/company-contacts/view-remove-company-contact.service.js'
 import SubmitRemoveCompanyContactService from '../services/company-contacts/submit-remove-company-contact.service.js'
 
-async function viewCommunications(request, h) {
+export async function viewCommunications(request, h) {
   const {
     params: { id },
     query: { page }
@@ -19,7 +19,7 @@ async function viewCommunications(request, h) {
   return h.view(`company-contacts/communications.njk`, pageData)
 }
 
-async function viewContactDetails(request, h) {
+export async function viewContactDetails(request, h) {
   const {
     params: { id },
     auth,
@@ -31,7 +31,7 @@ async function viewContactDetails(request, h) {
   return h.view(`company-contacts/contact-details.njk`, pageData)
 }
 
-async function viewRemoveCompanyContact(request, h) {
+export async function viewRemoveCompanyContact(request, h) {
   const { id } = request.params
 
   const pageData = await ViewRemoveCompanyContactService.go(id)
@@ -39,7 +39,7 @@ async function viewRemoveCompanyContact(request, h) {
   return h.view(`company-contacts/remove-company-contact.njk`, pageData)
 }
 
-async function submitRemoveCompanyContact(request, h) {
+export async function submitRemoveCompanyContact(request, h) {
   const {
     params: { id },
     yar
@@ -48,17 +48,4 @@ async function submitRemoveCompanyContact(request, h) {
   const { companyId } = await SubmitRemoveCompanyContactService.go(id, yar)
 
   return h.redirect(`/system/companies/${companyId}/contacts`)
-}
-
-export {
-  viewCommunications,
-  viewContactDetails,
-  viewRemoveCompanyContact,
-  submitRemoveCompanyContact
-}
-export default {
-  viewCommunications,
-  viewContactDetails,
-  viewRemoveCompanyContact,
-  submitRemoveCompanyContact
 }

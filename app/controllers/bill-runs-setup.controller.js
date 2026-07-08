@@ -16,7 +16,7 @@ import SubmitYearService from '../services/bill-runs/setup/submit-year.service.j
 import TypeService from '../services/bill-runs/setup/type.service.js'
 import YearService from '../services/bill-runs/setup/year.service.js'
 
-async function check(request, h) {
+export async function check(request, h) {
   const { sessionId } = request.params
 
   const pageData = await CheckService.go(sessionId)
@@ -24,7 +24,7 @@ async function check(request, h) {
   return h.view('bill-runs/setup/check.njk', pageData)
 }
 
-async function noLicences(request, h) {
+export async function noLicences(request, h) {
   const { sessionId } = request.params
 
   const pageData = await NoLicencesService.go(sessionId)
@@ -32,7 +32,7 @@ async function noLicences(request, h) {
   return h.view('bill-runs/setup/no-licences.njk', pageData)
 }
 
-async function region(request, h) {
+export async function region(request, h) {
   const { sessionId } = request.params
 
   const pageData = await RegionService.go(sessionId)
@@ -40,7 +40,7 @@ async function region(request, h) {
   return h.view('bill-runs/setup/region.njk', pageData)
 }
 
-async function season(request, h) {
+export async function season(request, h) {
   const { sessionId } = request.params
 
   const pageData = await SeasonService.go(sessionId)
@@ -48,13 +48,13 @@ async function season(request, h) {
   return h.view('bill-runs/setup/season.njk', pageData)
 }
 
-async function setup(_request, h) {
+export async function setup(_request, h) {
   const session = await InitiateSessionService.go()
 
   return h.redirect(`/system/bill-runs/setup/${session.id}/type`)
 }
 
-async function submitCheck(request, h) {
+export async function submitCheck(request, h) {
   const { sessionId } = request.params
 
   const pageData = await SubmitCheckService.go(sessionId, request.auth)
@@ -66,7 +66,7 @@ async function submitCheck(request, h) {
   return h.redirect(`/system/bill-runs`)
 }
 
-async function submitRegion(request, h) {
+export async function submitRegion(request, h) {
   const { sessionId } = request.params
 
   const pageData = await SubmitRegionService.go(sessionId, request.payload)
@@ -82,7 +82,7 @@ async function submitRegion(request, h) {
   return h.redirect(`/system/bill-runs/setup/${sessionId}/year`)
 }
 
-async function submitSeason(request, h) {
+export async function submitSeason(request, h) {
   const { sessionId } = request.params
 
   const pageData = await SubmitSeasonService.go(sessionId, request.payload)
@@ -94,7 +94,7 @@ async function submitSeason(request, h) {
   return h.redirect(`/system/bill-runs/setup/${sessionId}/check`)
 }
 
-async function submitType(request, h) {
+export async function submitType(request, h) {
   const { sessionId } = request.params
 
   const pageData = await SubmitTypeService.go(sessionId, request.payload)
@@ -106,7 +106,7 @@ async function submitType(request, h) {
   return h.redirect(`/system/bill-runs/setup/${sessionId}/region`)
 }
 
-async function submitYear(request, h) {
+export async function submitYear(request, h) {
   const { sessionId } = request.params
 
   const pageData = await SubmitYearService.go(sessionId, request.payload)
@@ -122,7 +122,7 @@ async function submitYear(request, h) {
   return h.redirect(`/system/bill-runs/setup/${sessionId}/season`)
 }
 
-async function type(request, h) {
+export async function type(request, h) {
   const { sessionId } = request.params
 
   const pageData = await TypeService.go(sessionId)
@@ -130,7 +130,7 @@ async function type(request, h) {
   return h.view('bill-runs/setup/type.njk', pageData)
 }
 
-async function year(request, h) {
+export async function year(request, h) {
   const { sessionId } = request.params
 
   const pageData = await YearService.go(sessionId)
@@ -140,33 +140,4 @@ async function year(request, h) {
   }
 
   return h.view('bill-runs/setup/year.njk', pageData)
-}
-
-export {
-  check,
-  noLicences,
-  region,
-  season,
-  setup,
-  submitCheck,
-  submitRegion,
-  submitSeason,
-  submitType,
-  submitYear,
-  type,
-  year
-}
-export default {
-  check,
-  noLicences,
-  region,
-  season,
-  setup,
-  submitCheck,
-  submitRegion,
-  submitSeason,
-  submitType,
-  submitYear,
-  type,
-  year
 }

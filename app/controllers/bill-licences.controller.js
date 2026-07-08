@@ -9,7 +9,7 @@ import RemoveBillLicenceService from '../services/bill-licences/remove-bill-lice
 import SubmitRemoveBillLicenceService from '../services/bill-licences/submit-remove-bill-licence.service.js'
 import ViewBillLicenceService from '../services/bill-licences/view-bill-licence.service.js'
 
-async function remove(request, h) {
+export async function remove(request, h) {
   const { id } = request.params
 
   const pageData = await RemoveBillLicenceService.go(id)
@@ -17,7 +17,7 @@ async function remove(request, h) {
   return h.view('bill-licences/remove.njk', pageData)
 }
 
-async function submitRemove(request, h) {
+export async function submitRemove(request, h) {
   const { id } = request.params
 
   try {
@@ -29,7 +29,7 @@ async function submitRemove(request, h) {
   }
 }
 
-async function view(request, h) {
+export async function view(request, h) {
   const { id } = request.params
 
   const pageData = await ViewBillLicenceService.go(id)
@@ -37,15 +37,4 @@ async function view(request, h) {
   const template = pageData.scheme === 'sroc' ? 'view-sroc.njk' : 'view-presroc.njk'
 
   return h.view(`bill-licences/${template}`, pageData)
-}
-
-export {
-  remove,
-  submitRemove,
-  view
-}
-export default {
-  remove,
-  submitRemove,
-  view
 }

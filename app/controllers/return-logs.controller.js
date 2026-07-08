@@ -8,7 +8,7 @@ import SubmitDetailsService from '../services/return-logs/submit-details.service
 import ViewCommunicationsService from '../services/return-logs/view-communications.service.js'
 import ViewDetailsService from '../services/return-logs/view-details.service.js'
 
-async function download(request, h) {
+export async function download(request, h) {
   const {
     params: { id },
     query
@@ -26,7 +26,7 @@ async function download(request, h) {
     .header('Content-Disposition', `attachment; filename="${filename}"`)
 }
 
-async function viewCommunications(request, h) {
+export async function viewCommunications(request, h) {
   const {
     params: { id },
     query: { page }
@@ -37,7 +37,7 @@ async function viewCommunications(request, h) {
   return h.view('return-logs/communications.njk', pageData)
 }
 
-async function viewDetails(request, h) {
+export async function viewDetails(request, h) {
   const {
     auth,
     params: { id },
@@ -51,23 +51,10 @@ async function viewDetails(request, h) {
   return h.view('return-logs/details.njk', pageData)
 }
 
-async function submitDetails(request, h) {
+export async function submitDetails(request, h) {
   const { id } = request.params
 
   await SubmitDetailsService.go(request.payload, id)
 
   return h.redirect(`/system/return-logs/${id}/details`)
-}
-
-export {
-  download,
-  submitDetails,
-  viewCommunications,
-  viewDetails
-}
-export default {
-  download,
-  submitDetails,
-  viewCommunications,
-  viewDetails
 }

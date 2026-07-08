@@ -15,13 +15,13 @@ import ProcessTimeLimitedLicencesService from '../services/jobs/time-limited/pro
 
 const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_NOT_FOUND } = http2.constants
 
-async function clean(_request, h) {
+export async function clean(_request, h) {
   ProcessCleanService.go()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-async function customerFiles(request, h) {
+export async function customerFiles(request, h) {
   const { days } = request.params
 
   ProcessCustomerFilesService.go(days)
@@ -38,25 +38,25 @@ async function customerFiles(request, h) {
  *
  * @returns {Promise<object>} - A promise that resolves to an HTTP response object with a 204 status code
  */
-async function exportDb(_request, h) {
+export async function exportDb(_request, h) {
   ExportService.go()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-async function licenceUpdates(_request, h) {
+export async function licenceUpdates(_request, h) {
   ProcessLicenceUpdatesService.go()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-async function notificationStatus(_request, h) {
+export async function notificationStatus(_request, h) {
   ProcessNotificationStatusService.go()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-async function renewalInvitations(request, h) {
+export async function renewalInvitations(request, h) {
   const { days } = request.params
 
   ProcessRenewalInvitationsService.go(days)
@@ -64,7 +64,7 @@ async function renewalInvitations(request, h) {
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-async function returnLogs(request, h) {
+export async function returnLogs(request, h) {
   const { cycle } = request.params
 
   if (!['summer', 'all-year'].includes(cycle)) {
@@ -76,29 +76,8 @@ async function returnLogs(request, h) {
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-async function timeLimited(_request, h) {
+export async function timeLimited(_request, h) {
   ProcessTimeLimitedLicencesService.go()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
-}
-
-export {
-  clean,
-  customerFiles,
-  exportDb,
-  licenceUpdates,
-  notificationStatus,
-  renewalInvitations,
-  returnLogs,
-  timeLimited
-}
-export default {
-  clean,
-  customerFiles,
-  exportDb,
-  licenceUpdates,
-  notificationStatus,
-  renewalInvitations,
-  returnLogs,
-  timeLimited
 }

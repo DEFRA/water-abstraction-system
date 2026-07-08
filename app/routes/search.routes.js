@@ -1,18 +1,18 @@
-import SearchController from '../controllers/search.controller.js'
+import { submitSearch, viewSearch } from '../controllers/search.controller.js'
 
 const routes = [
   {
     method: 'GET',
     path: '/search',
     options: {
-      handler: SearchController.viewSearch
+      handler: viewSearch
     }
   },
   {
     method: 'POST',
     path: '/search',
     options: {
-      handler: SearchController.submitSearch
+      handler: submitSearch
     }
   }
 ]

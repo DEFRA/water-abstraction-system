@@ -17,7 +17,7 @@ import SubmitStopOrReduceService from '../services//licence-monitoring-station/s
 import SubmitThresholdAndUnitService from '../services/licence-monitoring-station/setup/submit-threshold-and-unit.service.js'
 import ThresholdAndUnitService from '../services/licence-monitoring-station/setup/threshold-and-unit.service.js'
 
-async function abstractionPeriod(request, h) {
+export async function abstractionPeriod(request, h) {
   const {
     params: { sessionId }
   } = request
@@ -27,7 +27,7 @@ async function abstractionPeriod(request, h) {
   return h.view('licence-monitoring-station/setup/abstraction-period.njk', pageData)
 }
 
-async function check(request, h) {
+export async function check(request, h) {
   const {
     params: { sessionId }
   } = request
@@ -37,7 +37,7 @@ async function check(request, h) {
   return h.view(`licence-monitoring-station/setup/check.njk`, pageData)
 }
 
-async function fullCondition(request, h) {
+export async function fullCondition(request, h) {
   const {
     params: { sessionId }
   } = request
@@ -47,7 +47,7 @@ async function fullCondition(request, h) {
   return h.view(`licence-monitoring-station/setup/full-condition.njk`, pageData)
 }
 
-async function licenceNumber(request, h) {
+export async function licenceNumber(request, h) {
   const {
     params: { sessionId }
   } = request
@@ -57,7 +57,7 @@ async function licenceNumber(request, h) {
   return h.view(`licence-monitoring-station/setup/licence-number.njk`, pageData)
 }
 
-async function submitAbstractionPeriod(request, h) {
+export async function submitAbstractionPeriod(request, h) {
   const {
     params: { sessionId },
     payload
@@ -73,7 +73,7 @@ async function submitAbstractionPeriod(request, h) {
   return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/check`)
 }
 
-async function submitCheck(request, h) {
+export async function submitCheck(request, h) {
   const {
     params: { sessionId },
     yar
@@ -86,7 +86,7 @@ async function submitCheck(request, h) {
   return h.redirect(`/system/monitoring-stations/${monitoringStationId}`)
 }
 
-async function submitFullCondition(request, h) {
+export async function submitFullCondition(request, h) {
   const {
     params: { sessionId },
     payload
@@ -107,7 +107,7 @@ async function submitFullCondition(request, h) {
   return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/check`)
 }
 
-async function submitLicenceNumber(request, h) {
+export async function submitLicenceNumber(request, h) {
   const {
     params: { sessionId },
     payload
@@ -126,7 +126,7 @@ async function submitLicenceNumber(request, h) {
   return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/full-condition`)
 }
 
-async function submitSetup(request, h) {
+export async function submitSetup(request, h) {
   const { monitoringStationId } = request.payload
 
   const sessionId = await InitiateSessionService.go(monitoringStationId)
@@ -134,7 +134,7 @@ async function submitSetup(request, h) {
   return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/threshold-and-unit`)
 }
 
-async function stopOrReduce(request, h) {
+export async function stopOrReduce(request, h) {
   const { sessionId } = request.params
 
   const pageData = await StopOrReduceService.go(sessionId)
@@ -142,7 +142,7 @@ async function stopOrReduce(request, h) {
   return h.view(`licence-monitoring-station/setup/stop-or-reduce.njk`, pageData)
 }
 
-async function submitStopOrReduce(request, h) {
+export async function submitStopOrReduce(request, h) {
   const {
     payload,
     params: { sessionId }
@@ -161,7 +161,7 @@ async function submitStopOrReduce(request, h) {
   return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/licence-number`)
 }
 
-async function submitThresholdAndUnit(request, h) {
+export async function submitThresholdAndUnit(request, h) {
   const {
     params: { sessionId },
     payload
@@ -180,41 +180,10 @@ async function submitThresholdAndUnit(request, h) {
   return h.redirect(`/system/licence-monitoring-station/setup/${sessionId}/stop-or-reduce`)
 }
 
-async function thresholdAndUnit(request, h) {
+export async function thresholdAndUnit(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ThresholdAndUnitService.go(sessionId)
 
   return h.view('licence-monitoring-station/setup/threshold-and-unit.njk', pageData)
-}
-
-export {
-  abstractionPeriod,
-  check,
-  fullCondition,
-  licenceNumber,
-  stopOrReduce,
-  submitAbstractionPeriod,
-  submitCheck,
-  submitFullCondition,
-  submitLicenceNumber,
-  submitSetup,
-  submitStopOrReduce,
-  submitThresholdAndUnit,
-  thresholdAndUnit
-}
-export default {
-  abstractionPeriod,
-  check,
-  fullCondition,
-  licenceNumber,
-  stopOrReduce,
-  submitAbstractionPeriod,
-  submitCheck,
-  submitFullCondition,
-  submitLicenceNumber,
-  submitSetup,
-  submitStopOrReduce,
-  submitThresholdAndUnit,
-  thresholdAndUnit
 }

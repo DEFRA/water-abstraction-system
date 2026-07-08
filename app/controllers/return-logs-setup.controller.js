@@ -38,28 +38,28 @@ import SubmitVolumesService from '../services/return-logs/setup/submit-volumes.s
 import UnitsService from '../services/return-logs/setup/units.service.js'
 import VolumesService from '../services/return-logs/setup/volumes.service.js'
 
-async function cancel(request, h) {
+export async function cancel(request, h) {
   const { sessionId } = request.params
   const pageData = await CancelService.go(sessionId)
 
   return h.view('return-logs/setup/cancel.njk', pageData)
 }
 
-async function check(request, h) {
+export async function check(request, h) {
   const { sessionId } = request.params
   const pageData = await CheckService.go(sessionId, request.yar)
 
   return h.view('return-logs/setup/check.njk', pageData)
 }
 
-async function confirmed(request, h) {
+export async function confirmed(request, h) {
   const { returnLogId } = request.params
   const pageData = await ConfirmedService.go(returnLogId)
 
   return h.view('return-logs/setup/confirmed.njk', pageData)
 }
 
-async function deleteNote(request, h) {
+export async function deleteNote(request, h) {
   const { sessionId } = request.params
 
   await DeleteNoteService.go(sessionId, request.yar)
@@ -67,32 +67,32 @@ async function deleteNote(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
 }
 
-async function guidance(_request, h) {
+export async function guidance(_request, h) {
   return h.view('return-logs/setup/guidance.njk')
 }
 
-async function meterDetails(request, h) {
+export async function meterDetails(request, h) {
   const { sessionId } = request.params
   const pageData = await MeterDetailsService.go(sessionId)
 
   return h.view('return-logs/setup/meter-details.njk', pageData)
 }
 
-async function meterProvided(request, h) {
+export async function meterProvided(request, h) {
   const { sessionId } = request.params
   const pageData = await MeterProvidedService.go(sessionId)
 
   return h.view('return-logs/setup/meter-provided.njk', pageData)
 }
 
-async function multipleEntries(request, h) {
+export async function multipleEntries(request, h) {
   const { sessionId } = request.params
   const pageData = await MultipleEntriesService.go(sessionId)
 
   return h.view('return-logs/setup/multiple-entries.njk', pageData)
 }
 
-async function note(request, h) {
+export async function note(request, h) {
   const { sessionId } = request.params
 
   const pageData = await NoteService.go(sessionId)
@@ -100,42 +100,42 @@ async function note(request, h) {
   return h.view('return-logs/setup/note.njk', pageData)
 }
 
-async function periodUsed(request, h) {
+export async function periodUsed(request, h) {
   const { sessionId } = request.params
   const pageData = await PeriodUsedService.go(sessionId)
 
   return h.view('return-logs/setup/period-used.njk', pageData)
 }
 
-async function readings(request, h) {
+export async function readings(request, h) {
   const { sessionId, yearMonth } = request.params
   const pageData = await ReadingsService.go(sessionId, yearMonth)
 
   return h.view('return-logs/setup/readings.njk', pageData)
 }
 
-async function received(request, h) {
+export async function received(request, h) {
   const { sessionId } = request.params
   const pageData = await ReceivedService.go(sessionId)
 
   return h.view('return-logs/setup/received.njk', pageData)
 }
 
-async function reported(request, h) {
+export async function reported(request, h) {
   const { sessionId } = request.params
   const pageData = await ReportedService.go(sessionId)
 
   return h.view('return-logs/setup/reported.njk', pageData)
 }
 
-async function singleVolume(request, h) {
+export async function singleVolume(request, h) {
   const { sessionId } = request.params
   const pageData = await SingleVolumeService.go(sessionId)
 
   return h.view('return-logs/setup/single-volume.njk', pageData)
 }
 
-async function startReading(request, h) {
+export async function startReading(request, h) {
   const { sessionId } = request.params
 
   const pageData = await StartReadingService.go(sessionId)
@@ -143,14 +143,14 @@ async function startReading(request, h) {
   return h.view('return-logs/setup/start-reading.njk', pageData)
 }
 
-async function submission(request, h) {
+export async function submission(request, h) {
   const { sessionId } = request.params
   const pageData = await SubmissionService.go(sessionId)
 
   return h.view('return-logs/setup/submission.njk', pageData)
 }
 
-async function submitConfirmed(request, h) {
+export async function submitConfirmed(request, h) {
   const { returnLogId } = request.params
 
   const licenceId = await SubmitConfirmedService.go(returnLogId)
@@ -158,7 +158,7 @@ async function submitConfirmed(request, h) {
   return h.redirect(`/system/licences/${licenceId}/returns`)
 }
 
-async function submitCancel(request, h) {
+export async function submitCancel(request, h) {
   const { sessionId } = request.params
   const { returnLogId } = request.payload
 
@@ -167,7 +167,7 @@ async function submitCancel(request, h) {
   return h.redirect(`/system/return-logs/${returnLogId}/details`)
 }
 
-async function submitCheck(request, h) {
+export async function submitCheck(request, h) {
   const { sessionId } = request.params
   const { user } = request.auth.credentials
 
@@ -180,7 +180,7 @@ async function submitCheck(request, h) {
   return h.redirect(`/system/return-logs/setup/confirmed/${pageData.returnLogId}`)
 }
 
-async function submitMeterDetails(request, h) {
+export async function submitMeterDetails(request, h) {
   const {
     params: { sessionId },
     payload,
@@ -200,7 +200,7 @@ async function submitMeterDetails(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
 }
 
-async function submitMeterProvided(request, h) {
+export async function submitMeterProvided(request, h) {
   const {
     params: { sessionId },
     payload,
@@ -224,7 +224,7 @@ async function submitMeterProvided(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/meter-details`)
 }
 
-async function submitMultipleEntries(request, h) {
+export async function submitMultipleEntries(request, h) {
   const {
     params: { sessionId },
     payload,
@@ -240,7 +240,7 @@ async function submitMultipleEntries(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
 }
 
-async function submitNote(request, h) {
+export async function submitNote(request, h) {
   const { sessionId } = request.params
   const { user } = request.auth.credentials
 
@@ -253,7 +253,7 @@ async function submitNote(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
 }
 
-async function submitPeriodUsed(request, h) {
+export async function submitPeriodUsed(request, h) {
   const { sessionId } = request.params
 
   const pageData = await SubmitPeriodUsedService.go(sessionId, request.payload)
@@ -265,7 +265,7 @@ async function submitPeriodUsed(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
 }
 
-async function submitReadings(request, h) {
+export async function submitReadings(request, h) {
   const {
     params: { sessionId, yearMonth },
     payload,
@@ -281,7 +281,7 @@ async function submitReadings(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
 }
 
-async function submitReceived(request, h) {
+export async function submitReceived(request, h) {
   const {
     params: { sessionId },
     payload,
@@ -301,7 +301,7 @@ async function submitReceived(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/submission`)
 }
 
-async function submitReported(request, h) {
+export async function submitReported(request, h) {
   const {
     params: { sessionId },
     payload,
@@ -326,7 +326,7 @@ async function submitReported(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/units`)
 }
 
-async function submitSetup(request, h) {
+export async function submitSetup(request, h) {
   const { returnLogId } = request.payload
 
   const redirectUrl = await InitiateSessionService.go(returnLogId)
@@ -334,7 +334,7 @@ async function submitSetup(request, h) {
   return h.redirect(redirectUrl)
 }
 
-async function submitSingleVolume(request, h) {
+export async function submitSingleVolume(request, h) {
   const {
     params: { sessionId },
     payload
@@ -353,7 +353,7 @@ async function submitSingleVolume(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/period-used`)
 }
 
-async function submitStartReading(request, h) {
+export async function submitStartReading(request, h) {
   const {
     params: { sessionId },
     payload,
@@ -373,7 +373,7 @@ async function submitStartReading(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/units`)
 }
 
-async function submitSubmission(request, h) {
+export async function submitSubmission(request, h) {
   const { sessionId } = request.params
 
   const pageData = await SubmitSubmissionService.go(sessionId, request.payload)
@@ -391,7 +391,7 @@ async function submitSubmission(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/${pageData.redirect}`)
 }
 
-async function submitUnits(request, h) {
+export async function submitUnits(request, h) {
   const {
     params: { sessionId },
     payload,
@@ -411,7 +411,7 @@ async function submitUnits(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/meter-provided`)
 }
 
-async function submitVolumes(request, h) {
+export async function submitVolumes(request, h) {
   const {
     params: { sessionId, yearMonth },
     payload,
@@ -427,91 +427,16 @@ async function submitVolumes(request, h) {
   return h.redirect(`/system/return-logs/setup/${sessionId}/check`)
 }
 
-async function units(request, h) {
+export async function units(request, h) {
   const { sessionId } = request.params
   const pageData = await UnitsService.go(sessionId)
 
   return h.view('return-logs/setup/units.njk', pageData)
 }
 
-async function volumes(request, h) {
+export async function volumes(request, h) {
   const { sessionId, yearMonth } = request.params
   const pageData = await VolumesService.go(sessionId, yearMonth)
 
   return h.view('return-logs/setup/volumes.njk', pageData)
-}
-
-export {
-  cancel,
-  check,
-  confirmed,
-  deleteNote,
-  guidance,
-  meterDetails,
-  meterProvided,
-  multipleEntries,
-  note,
-  periodUsed,
-  readings,
-  received,
-  reported,
-  singleVolume,
-  startReading,
-  submission,
-  submitConfirmed,
-  submitCancel,
-  submitCheck,
-  submitMeterDetails,
-  submitMeterProvided,
-  submitMultipleEntries,
-  submitNote,
-  submitPeriodUsed,
-  submitReadings,
-  submitReceived,
-  submitReported,
-  submitSetup,
-  submitSingleVolume,
-  submitStartReading,
-  submitSubmission,
-  submitUnits,
-  submitVolumes,
-  units,
-  volumes
-}
-export default {
-  cancel,
-  check,
-  confirmed,
-  deleteNote,
-  guidance,
-  meterDetails,
-  meterProvided,
-  multipleEntries,
-  note,
-  periodUsed,
-  readings,
-  received,
-  reported,
-  singleVolume,
-  startReading,
-  submission,
-  submitConfirmed,
-  submitCancel,
-  submitCheck,
-  submitMeterDetails,
-  submitMeterProvided,
-  submitMultipleEntries,
-  submitNote,
-  submitPeriodUsed,
-  submitReadings,
-  submitReceived,
-  submitReported,
-  submitSetup,
-  submitSingleVolume,
-  submitStartReading,
-  submitSubmission,
-  submitUnits,
-  submitVolumes,
-  units,
-  volumes
 }

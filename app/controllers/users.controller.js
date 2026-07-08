@@ -18,7 +18,7 @@ import ViewProfileDetailsService from '../services/users/view-profile-details.se
 
 import FeatureFlagsConfig from '../../config/feature-flags.config.js'
 
-async function index(request, h) {
+export async function index(request, h) {
   const {
     auth,
     query: { page },
@@ -30,7 +30,7 @@ async function index(request, h) {
   return h.view('users/index.njk', pageData)
 }
 
-async function submitIndex(request, h) {
+export async function submitIndex(request, h) {
   const {
     auth,
     payload,
@@ -47,7 +47,7 @@ async function submitIndex(request, h) {
   return h.redirect('/system/users')
 }
 
-async function submitInternalDetails(request, h) {
+export async function submitInternalDetails(request, h) {
   const { id } = request.params
 
   if (!FeatureFlagsConfig.enableUsersManagement) {
@@ -57,7 +57,7 @@ async function submitInternalDetails(request, h) {
   return h.redirect(`/system/users/internal/setup/${id}/edit`)
 }
 
-async function submitProfileDetails(request, h) {
+export async function submitProfileDetails(request, h) {
   const { payload, yar } = request
   const { userId } = request.auth.credentials.user
 
@@ -70,7 +70,7 @@ async function submitProfileDetails(request, h) {
   return h.redirect('/system/users/me/profile-details')
 }
 
-async function viewExternalCommunications(request, h) {
+export async function viewExternalCommunications(request, h) {
   const {
     auth,
     params: { id },
@@ -82,7 +82,7 @@ async function viewExternalCommunications(request, h) {
   return h.view('users/external/communications.njk', pageData)
 }
 
-async function viewExternalDetails(request, h) {
+export async function viewExternalDetails(request, h) {
   const {
     auth,
     params: { id },
@@ -98,7 +98,7 @@ async function viewExternalDetails(request, h) {
   return h.view('users/external/details.njk', pageData)
 }
 
-async function viewExternalLicences(request, h) {
+export async function viewExternalLicences(request, h) {
   const {
     auth,
     params: { id },
@@ -111,7 +111,7 @@ async function viewExternalLicences(request, h) {
   return h.view('users/external/licences.njk', pageData)
 }
 
-async function viewExternalVerifications(request, h) {
+export async function viewExternalVerifications(request, h) {
   const {
     auth,
     params: { id },
@@ -123,7 +123,7 @@ async function viewExternalVerifications(request, h) {
   return h.view('users/external/verifications.njk', pageData)
 }
 
-async function viewInternalCommunications(request, h) {
+export async function viewInternalCommunications(request, h) {
   const {
     params: { id },
     query: { page }
@@ -134,7 +134,7 @@ async function viewInternalCommunications(request, h) {
   return h.view('users/internal/communications.njk', pageData)
 }
 
-async function viewInternalDetails(request, h) {
+export async function viewInternalDetails(request, h) {
   const {
     auth,
     params: { id }
@@ -149,7 +149,7 @@ async function viewInternalDetails(request, h) {
   return h.view('users/internal/details.njk', pageData)
 }
 
-async function viewNotification(request, h) {
+export async function viewNotification(request, h) {
   const {
     auth,
     params: { type, id, notificationId }
@@ -160,7 +160,7 @@ async function viewNotification(request, h) {
   return h.view('users/notification.njk', pageData)
 }
 
-async function viewProfileDetails(request, h) {
+export async function viewProfileDetails(request, h) {
   const { userId } = request.auth.credentials.user
 
   const pageData = await ViewProfileDetailsService.go(userId, request.yar)
@@ -172,33 +172,4 @@ async function _redirectToLegacy(id, h) {
   const userId = await FetchLegacyIdDal.go(id)
 
   return h.redirect(`/user/${userId}/status`)
-}
-
-export {
-  index,
-  submitIndex,
-  submitProfileDetails,
-  submitInternalDetails,
-  viewExternalCommunications,
-  viewExternalDetails,
-  viewExternalLicences,
-  viewExternalVerifications,
-  viewNotification,
-  viewProfileDetails,
-  viewInternalCommunications,
-  viewInternalDetails
-}
-export default {
-  index,
-  submitIndex,
-  submitProfileDetails,
-  submitInternalDetails,
-  viewExternalCommunications,
-  viewExternalDetails,
-  viewExternalLicences,
-  viewExternalVerifications,
-  viewNotification,
-  viewProfileDetails,
-  viewInternalCommunications,
-  viewInternalDetails
 }

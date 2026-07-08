@@ -1,11 +1,11 @@
-import BillsController from '../controllers/bills.controller.js'
+import { remove, submitRemove, view } from '../controllers/bills.controller.js'
 
 const routes = [
   {
     method: 'GET',
     path: '/bills/{id}',
     options: {
-      handler: BillsController.view,
+      handler: view,
       auth: {
         access: {
           scope: ['billing']
@@ -17,7 +17,7 @@ const routes = [
     method: 'GET',
     path: '/bills/{id}/remove',
     options: {
-      handler: BillsController.remove,
+      handler: remove,
       auth: {
         access: {
           scope: ['billing']
@@ -29,7 +29,7 @@ const routes = [
     method: 'POST',
     path: '/bills/{id}/remove',
     options: {
-      handler: BillsController.submitRemove,
+      handler: submitRemove,
       auth: {
         access: {
           scope: ['billing']

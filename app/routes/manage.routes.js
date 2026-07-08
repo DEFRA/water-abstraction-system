@@ -1,11 +1,11 @@
-import ManageController from '../controllers/manage.controller.js'
+import { view } from '../controllers/manage.controller.js'
 
 const routes = [
   {
     method: 'GET',
     path: '/manage',
     options: {
-      handler: ManageController.view,
+      handler: view,
       auth: {
         access: {
           scope: [

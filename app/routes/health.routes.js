@@ -1,11 +1,11 @@
-import HealthController from '../controllers/health.controller.js'
+import { airbrake, database, info } from '../controllers/health.controller.js'
 
 const routes = [
   {
     method: 'GET',
     path: '/health/airbrake',
     options: {
-      handler: HealthController.airbrake,
+      handler: airbrake,
       app: {
         plainOutput: true
       },
@@ -16,7 +16,7 @@ const routes = [
     method: 'GET',
     path: '/health/database',
     options: {
-      handler: HealthController.database,
+      handler: database,
       app: {
         plainOutput: true
       },
@@ -27,7 +27,7 @@ const routes = [
     method: 'GET',
     path: '/health/info',
     options: {
-      handler: HealthController.info,
+      handler: info,
       auth: {
         // NOTE: this means any request credentials are attempted authentication, but if the credentials are invalid,
         // the request proceeds regardless of the authentication error. We do this so we can display the change

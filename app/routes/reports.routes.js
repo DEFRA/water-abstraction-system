@@ -1,11 +1,11 @@
-import ReportsController from '../controllers/reports.controller.js'
+import { invalidAddresses } from '../controllers/reports.controller.js'
 
 const routes = [
   {
     method: 'GET',
     path: '/reports/invalid-addresses',
     options: {
-      handler: ReportsController.invalidAddresses,
+      handler: invalidAddresses,
       auth: {
         access: {
           scope: [

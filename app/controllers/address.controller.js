@@ -12,7 +12,7 @@ import SubmitManualAddressService from '../services/address/submit-manual.servic
 import SubmitPostcodeService from '../services/address/submit-postcode.service.js'
 import SubmitSelectAddressService from '../services/address/submit-select.service.js'
 
-async function submitInternational(request, h) {
+export async function submitInternational(request, h) {
   const {
     params: { sessionId },
     payload
@@ -27,7 +27,7 @@ async function submitInternational(request, h) {
   return h.redirect(pageData.redirect)
 }
 
-async function submitManual(request, h) {
+export async function submitManual(request, h) {
   const {
     params: { sessionId },
     payload
@@ -42,7 +42,7 @@ async function submitManual(request, h) {
   return h.redirect(pageData.redirect)
 }
 
-async function submitPostcode(request, h) {
+export async function submitPostcode(request, h) {
   const { sessionId } = request.params
 
   const pageData = await SubmitPostcodeService.go(sessionId, request.payload)
@@ -54,7 +54,7 @@ async function submitPostcode(request, h) {
   return h.redirect(`/system/address/${sessionId}/select`)
 }
 
-async function submitSelect(request, h) {
+export async function submitSelect(request, h) {
   const {
     params: { sessionId },
     payload
@@ -69,7 +69,7 @@ async function submitSelect(request, h) {
   return h.redirect(pageData.redirect)
 }
 
-async function viewInternational(request, h) {
+export async function viewInternational(request, h) {
   const { sessionId } = request.params
 
   const pageData = await InternationalAddressService.go(sessionId)
@@ -77,7 +77,7 @@ async function viewInternational(request, h) {
   return h.view('address/international.njk', pageData)
 }
 
-async function viewManual(request, h) {
+export async function viewManual(request, h) {
   const { sessionId } = request.params
 
   const pageData = await ManualAddressService.go(sessionId)
@@ -85,7 +85,7 @@ async function viewManual(request, h) {
   return h.view('address/manual.njk', pageData)
 }
 
-async function viewPostcode(request, h) {
+export async function viewPostcode(request, h) {
   const { sessionId } = request.params
 
   const pageData = await PostcodeService.go(sessionId)
@@ -93,7 +93,7 @@ async function viewPostcode(request, h) {
   return h.view('address/postcode.njk', pageData)
 }
 
-async function viewSelect(request, h) {
+export async function viewSelect(request, h) {
   const { sessionId } = request.params
 
   const pageData = await SelectAddressService.go(sessionId)
@@ -103,25 +103,4 @@ async function viewSelect(request, h) {
   }
 
   return h.view('address/select.njk', pageData)
-}
-
-export {
-  submitInternational,
-  submitManual,
-  submitPostcode,
-  submitSelect,
-  viewInternational,
-  viewManual,
-  viewPostcode,
-  viewSelect
-}
-export default {
-  submitInternational,
-  submitManual,
-  submitPostcode,
-  submitSelect,
-  viewInternational,
-  viewManual,
-  viewPostcode,
-  viewSelect
 }

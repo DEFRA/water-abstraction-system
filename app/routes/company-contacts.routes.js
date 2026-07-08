@@ -1,25 +1,30 @@
-import CompanyContactsController from '../controllers/company-contacts.controller.js'
+import {
+  submitRemoveCompanyContact,
+  viewCommunications,
+  viewContactDetails,
+  viewRemoveCompanyContact
+} from '../controllers/company-contacts.controller.js'
 
 const routes = [
   {
     method: 'GET',
     path: '/company-contacts/{id}/communications',
     options: {
-      handler: CompanyContactsController.viewCommunications
+      handler: viewCommunications
     }
   },
   {
     method: 'GET',
     path: '/company-contacts/{id}/contact-details',
     options: {
-      handler: CompanyContactsController.viewContactDetails
+      handler: viewContactDetails
     }
   },
   {
     method: 'GET',
     path: '/company-contacts/{id}/remove',
     options: {
-      handler: CompanyContactsController.viewRemoveCompanyContact,
+      handler: viewRemoveCompanyContact,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -31,7 +36,7 @@ const routes = [
     method: 'POST',
     path: '/company-contacts/{id}/remove',
     options: {
-      handler: CompanyContactsController.submitRemoveCompanyContact,
+      handler: submitRemoveCompanyContact,
       auth: {
         access: {
           scope: ['hof_notifications']

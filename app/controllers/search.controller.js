@@ -8,7 +8,7 @@ import ViewSearchService from '../services/search/view-search.service.js'
 
 const VIEW_PAGE = 'search/search.njk'
 
-async function submitSearch(request, h) {
+export async function submitSearch(request, h) {
   const { auth, payload, yar } = request
 
   const submitResult = await SubmitSearchService.go(auth, payload, yar)
@@ -22,7 +22,7 @@ async function submitSearch(request, h) {
   return h.redirect(redirect)
 }
 
-async function viewSearch(request, h) {
+export async function viewSearch(request, h) {
   const {
     auth,
     query: { page },
@@ -32,13 +32,4 @@ async function viewSearch(request, h) {
   const pageData = await ViewSearchService.go(auth, yar, page)
 
   return h.view(VIEW_PAGE, pageData)
-}
-
-export {
-  submitSearch,
-  viewSearch
-}
-export default {
-  submitSearch,
-  viewSearch
 }

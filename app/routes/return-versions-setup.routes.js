@@ -1,11 +1,51 @@
-import ReturnVersionsSetupController from '../controllers/return-versions-setup.controller.js'
+import {
+  abstractionPeriod,
+  add,
+  additionalSubmissionOptions,
+  agreementsExceptions,
+  approved,
+  cancel,
+  check,
+  deleteNote,
+  existing,
+  frequencyCollected,
+  frequencyReported,
+  method,
+  noReturnsRequired,
+  note,
+  points,
+  purpose,
+  reason,
+  remove,
+  returnsCycle,
+  siteDescription,
+  startDate,
+  submitAbstractionPeriod,
+  submitAdditionalSubmissionOptions,
+  submitAgreementsExceptions,
+  submitCancel,
+  submitCheck,
+  submitExisting,
+  submitFrequencyCollected,
+  submitFrequencyReported,
+  submitMethod,
+  submitNoReturnsRequired,
+  submitNote,
+  submitPoints,
+  submitPurpose,
+  submitReason,
+  submitRemove,
+  submitReturnsCycle,
+  submitSiteDescription,
+  submitStartDate
+} from '../controllers/return-versions-setup.controller.js'
 
 const routes = [
   {
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/abstraction-period/{requirementIndex}',
     options: {
-      handler: ReturnVersionsSetupController.abstractionPeriod,
+      handler: abstractionPeriod,
       auth: {
         access: {
           scope: ['billing']
@@ -17,7 +57,7 @@ const routes = [
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/abstraction-period/{requirementIndex}',
     options: {
-      handler: ReturnVersionsSetupController.submitAbstractionPeriod,
+      handler: submitAbstractionPeriod,
       auth: {
         access: {
           scope: ['billing']
@@ -29,7 +69,7 @@ const routes = [
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/add',
     options: {
-      handler: ReturnVersionsSetupController.add,
+      handler: add,
       auth: {
         access: {
           scope: ['billing']
@@ -41,7 +81,7 @@ const routes = [
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/additional-submission-options',
     options: {
-      handler: ReturnVersionsSetupController.additionalSubmissionOptions,
+      handler: additionalSubmissionOptions,
       auth: {
         access: {
           scope: ['billing']
@@ -53,7 +93,7 @@ const routes = [
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/additional-submission-options',
     options: {
-      handler: ReturnVersionsSetupController.submitAdditionalSubmissionOptions,
+      handler: submitAdditionalSubmissionOptions,
       auth: {
         access: {
           scope: ['billing']
@@ -65,7 +105,7 @@ const routes = [
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/agreements-exceptions/{requirementIndex}',
     options: {
-      handler: ReturnVersionsSetupController.agreementsExceptions,
+      handler: agreementsExceptions,
       auth: {
         access: {
           scope: ['billing']
@@ -77,7 +117,7 @@ const routes = [
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/agreements-exceptions/{requirementIndex}',
     options: {
-      handler: ReturnVersionsSetupController.submitAgreementsExceptions,
+      handler: submitAgreementsExceptions,
       auth: {
         access: {
           scope: ['billing']
@@ -89,7 +129,7 @@ const routes = [
     method: 'GET',
     path: '/return-versions/setup/{licenceId}/approved',
     options: {
-      handler: ReturnVersionsSetupController.approved,
+      handler: approved,
       auth: {
         access: {
           scope: ['billing']
@@ -101,7 +141,7 @@ const routes = [
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/cancel',
     options: {
-      handler: ReturnVersionsSetupController.cancel,
+      handler: cancel,
       auth: {
         access: {
           scope: ['billing']
@@ -113,7 +153,7 @@ const routes = [
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/cancel',
     options: {
-      handler: ReturnVersionsSetupController.submitCancel,
+      handler: submitCancel,
       auth: {
         access: {
           scope: ['billing']
@@ -125,7 +165,7 @@ const routes = [
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/check',
     options: {
-      handler: ReturnVersionsSetupController.check,
+      handler: check,
       auth: {
         access: {
           scope: ['billing']
@@ -137,7 +177,7 @@ const routes = [
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/check',
     options: {
-      handler: ReturnVersionsSetupController.submitCheck,
+      handler: submitCheck,
       auth: {
         access: {
           scope: ['billing']
@@ -149,7 +189,7 @@ const routes = [
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/delete-note',
     options: {
-      handler: ReturnVersionsSetupController.deleteNote,
+      handler: deleteNote,
       auth: {
         access: {
           scope: ['billing']
@@ -161,7 +201,7 @@ const routes = [
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/existing',
     options: {
-      handler: ReturnVersionsSetupController.existing,
+      handler: existing,
       auth: {
         access: {
           scope: ['billing']
@@ -173,7 +213,7 @@ const routes = [
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/existing',
     options: {
-      handler: ReturnVersionsSetupController.submitExisting,
+      handler: submitExisting,
       auth: {
         access: {
           scope: ['billing']
@@ -185,7 +225,7 @@ const routes = [
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/frequency-collected/{requirementIndex}',
     options: {
-      handler: ReturnVersionsSetupController.frequencyCollected,
+      handler: frequencyCollected,
       auth: {
         access: {
           scope: ['billing']
@@ -197,7 +237,7 @@ const routes = [
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/frequency-collected/{requirementIndex}',
     options: {
-      handler: ReturnVersionsSetupController.submitFrequencyCollected,
+      handler: submitFrequencyCollected,
       auth: {
         access: {
           scope: ['billing']
@@ -209,7 +249,7 @@ const routes = [
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/frequency-reported/{requirementIndex}',
     options: {
-      handler: ReturnVersionsSetupController.frequencyReported,
+      handler: frequencyReported,
       auth: {
         access: {
           scope: ['billing']
@@ -221,7 +261,7 @@ const routes = [
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/frequency-reported/{requirementIndex}',
     options: {
-      handler: ReturnVersionsSetupController.submitFrequencyReported,
+      handler: submitFrequencyReported,
       auth: {
         access: {
           scope: ['billing']
@@ -233,7 +273,7 @@ const routes = [
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/method',
     options: {
-      handler: ReturnVersionsSetupController.method,
+      handler: method,
       auth: {
         access: {
           scope: ['billing']
@@ -245,7 +285,7 @@ const routes = [
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/method',
     options: {
-      handler: ReturnVersionsSetupController.submitMethod,
+      handler: submitMethod,
       auth: {
         access: {
           scope: ['billing']
@@ -257,7 +297,7 @@ const routes = [
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/no-returns-required',
     options: {
-      handler: ReturnVersionsSetupController.noReturnsRequired,
+      handler: noReturnsRequired,
       auth: {
         access: {
           scope: ['billing']
@@ -269,7 +309,7 @@ const routes = [
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/no-returns-required',
     options: {
-      handler: ReturnVersionsSetupController.submitNoReturnsRequired,
+      handler: submitNoReturnsRequired,
       auth: {
         access: {
           scope: ['billing']
@@ -281,7 +321,7 @@ const routes = [
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/note',
     options: {
-      handler: ReturnVersionsSetupController.note,
+      handler: note,
       auth: {
         access: {
           scope: ['billing']
@@ -293,7 +333,7 @@ const routes = [
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/note',
     options: {
-      handler: ReturnVersionsSetupController.submitNote,
+      handler: submitNote,
       auth: {
         access: {
           scope: ['billing']
@@ -305,7 +345,7 @@ const routes = [
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/points/{requirementIndex}',
     options: {
-      handler: ReturnVersionsSetupController.points,
+      handler: points,
       auth: {
         access: {
           scope: ['billing']
@@ -317,7 +357,7 @@ const routes = [
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/points/{requirementIndex}',
     options: {
-      handler: ReturnVersionsSetupController.submitPoints,
+      handler: submitPoints,
       auth: {
         access: {
           scope: ['billing']
@@ -329,7 +369,7 @@ const routes = [
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/purpose/{requirementIndex}',
     options: {
-      handler: ReturnVersionsSetupController.purpose,
+      handler: purpose,
       auth: {
         access: {
           scope: ['billing']
@@ -341,7 +381,7 @@ const routes = [
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/purpose/{requirementIndex}',
     options: {
-      handler: ReturnVersionsSetupController.submitPurpose,
+      handler: submitPurpose,
       auth: {
         access: {
           scope: ['billing']
@@ -353,7 +393,7 @@ const routes = [
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/reason',
     options: {
-      handler: ReturnVersionsSetupController.reason,
+      handler: reason,
       auth: {
         access: {
           scope: ['billing']
@@ -365,7 +405,7 @@ const routes = [
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/reason',
     options: {
-      handler: ReturnVersionsSetupController.submitReason,
+      handler: submitReason,
       auth: {
         access: {
           scope: ['billing']
@@ -377,7 +417,7 @@ const routes = [
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/remove/{requirementIndex}',
     options: {
-      handler: ReturnVersionsSetupController.remove,
+      handler: remove,
       auth: {
         access: {
           scope: ['billing']
@@ -389,7 +429,7 @@ const routes = [
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/remove/{requirementIndex}',
     options: {
-      handler: ReturnVersionsSetupController.submitRemove,
+      handler: submitRemove,
       auth: {
         access: {
           scope: ['billing']
@@ -401,7 +441,7 @@ const routes = [
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/returns-cycle/{requirementIndex}',
     options: {
-      handler: ReturnVersionsSetupController.returnsCycle,
+      handler: returnsCycle,
       auth: {
         access: {
           scope: ['billing']
@@ -413,7 +453,7 @@ const routes = [
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/returns-cycle/{requirementIndex}',
     options: {
-      handler: ReturnVersionsSetupController.submitReturnsCycle,
+      handler: submitReturnsCycle,
       auth: {
         access: {
           scope: ['billing']
@@ -425,7 +465,7 @@ const routes = [
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/site-description/{requirementIndex}',
     options: {
-      handler: ReturnVersionsSetupController.siteDescription,
+      handler: siteDescription,
       auth: {
         access: {
           scope: ['billing']
@@ -437,7 +477,7 @@ const routes = [
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/site-description/{requirementIndex}',
     options: {
-      handler: ReturnVersionsSetupController.submitSiteDescription,
+      handler: submitSiteDescription,
       auth: {
         access: {
           scope: ['billing']
@@ -449,7 +489,7 @@ const routes = [
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/start-date',
     options: {
-      handler: ReturnVersionsSetupController.startDate,
+      handler: startDate,
       auth: {
         access: {
           scope: ['billing']
@@ -461,7 +501,7 @@ const routes = [
     method: 'POST',
     path: '/return-versions/setup/{sessionId}/start-date',
     options: {
-      handler: ReturnVersionsSetupController.submitStartDate,
+      handler: submitStartDate,
       auth: {
         access: {
           scope: ['billing']

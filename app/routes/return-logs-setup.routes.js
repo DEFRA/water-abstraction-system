@@ -1,11 +1,47 @@
-import ReturnLogsSetupController from '../controllers/return-logs-setup.controller.js'
+import {
+  cancel,
+  check,
+  confirmed,
+  deleteNote,
+  guidance,
+  meterDetails,
+  meterProvided,
+  multipleEntries,
+  note,
+  periodUsed,
+  readings,
+  received,
+  reported,
+  singleVolume,
+  startReading,
+  submission,
+  submitCancel,
+  submitCheck,
+  submitConfirmed,
+  submitMeterDetails,
+  submitMeterProvided,
+  submitMultipleEntries,
+  submitNote,
+  submitPeriodUsed,
+  submitReadings,
+  submitReceived,
+  submitReported,
+  submitSetup,
+  submitSingleVolume,
+  submitStartReading,
+  submitSubmission,
+  submitUnits,
+  submitVolumes,
+  units,
+  volumes
+} from '../controllers/return-logs-setup.controller.js'
 
 const routes = [
   {
     method: 'POST',
     path: '/return-logs/setup',
     options: {
-      handler: ReturnLogsSetupController.submitSetup,
+      handler: submitSetup,
       auth: {
         access: {
           scope: ['returns']
@@ -17,7 +53,7 @@ const routes = [
     method: 'GET',
     path: '/return-logs/setup/confirmed/{returnLogId}',
     options: {
-      handler: ReturnLogsSetupController.confirmed,
+      handler: confirmed,
       auth: {
         access: {
           scope: ['returns']
@@ -29,7 +65,7 @@ const routes = [
     method: 'POST',
     path: '/return-logs/setup/confirmed/{returnLogId}',
     options: {
-      handler: ReturnLogsSetupController.submitConfirmed,
+      handler: submitConfirmed,
       auth: {
         access: {
           scope: ['returns']
@@ -41,7 +77,7 @@ const routes = [
     method: 'GET',
     path: '/return-logs/setup/guidance',
     options: {
-      handler: ReturnLogsSetupController.guidance,
+      handler: guidance,
       auth: {
         access: {
           scope: ['returns']
@@ -53,7 +89,7 @@ const routes = [
     method: 'GET',
     path: '/return-logs/setup/{sessionId}/cancel',
     options: {
-      handler: ReturnLogsSetupController.cancel,
+      handler: cancel,
       auth: {
         access: {
           scope: ['returns']
@@ -65,7 +101,7 @@ const routes = [
     method: 'POST',
     path: '/return-logs/setup/{sessionId}/cancel',
     options: {
-      handler: ReturnLogsSetupController.submitCancel,
+      handler: submitCancel,
       auth: {
         access: {
           scope: ['returns']
@@ -77,7 +113,7 @@ const routes = [
     method: 'GET',
     path: '/return-logs/setup/{sessionId}/check',
     options: {
-      handler: ReturnLogsSetupController.check,
+      handler: check,
       auth: {
         access: {
           scope: ['returns']
@@ -89,7 +125,7 @@ const routes = [
     method: 'POST',
     path: '/return-logs/setup/{sessionId}/check',
     options: {
-      handler: ReturnLogsSetupController.submitCheck,
+      handler: submitCheck,
       auth: {
         access: {
           scope: ['returns']
@@ -101,7 +137,7 @@ const routes = [
     method: 'GET',
     path: '/return-logs/setup/{sessionId}/delete-note',
     options: {
-      handler: ReturnLogsSetupController.deleteNote,
+      handler: deleteNote,
       auth: {
         access: {
           scope: ['returns']
@@ -113,7 +149,7 @@ const routes = [
     method: 'GET',
     path: '/return-logs/setup/{sessionId}/meter-details',
     options: {
-      handler: ReturnLogsSetupController.meterDetails,
+      handler: meterDetails,
       auth: {
         access: {
           scope: ['returns']
@@ -125,7 +161,7 @@ const routes = [
     method: 'POST',
     path: '/return-logs/setup/{sessionId}/meter-details',
     options: {
-      handler: ReturnLogsSetupController.submitMeterDetails,
+      handler: submitMeterDetails,
       auth: {
         access: {
           scope: ['returns']
@@ -137,7 +173,7 @@ const routes = [
     method: 'GET',
     path: '/return-logs/setup/{sessionId}/meter-provided',
     options: {
-      handler: ReturnLogsSetupController.meterProvided,
+      handler: meterProvided,
       auth: {
         access: {
           scope: ['returns']
@@ -149,7 +185,7 @@ const routes = [
     method: 'POST',
     path: '/return-logs/setup/{sessionId}/meter-provided',
     options: {
-      handler: ReturnLogsSetupController.submitMeterProvided,
+      handler: submitMeterProvided,
       auth: {
         access: {
           scope: ['returns']
@@ -161,7 +197,7 @@ const routes = [
     method: 'GET',
     path: '/return-logs/setup/{sessionId}/note',
     options: {
-      handler: ReturnLogsSetupController.note,
+      handler: note,
       auth: {
         access: {
           scope: ['returns']
@@ -173,7 +209,7 @@ const routes = [
     method: 'POST',
     path: '/return-logs/setup/{sessionId}/note',
     options: {
-      handler: ReturnLogsSetupController.submitNote,
+      handler: submitNote,
       auth: {
         access: {
           scope: ['returns']
@@ -185,7 +221,7 @@ const routes = [
     method: 'GET',
     path: '/return-logs/setup/{sessionId}/period-used',
     options: {
-      handler: ReturnLogsSetupController.periodUsed,
+      handler: periodUsed,
       auth: {
         access: {
           scope: ['returns']
@@ -197,7 +233,7 @@ const routes = [
     method: 'POST',
     path: '/return-logs/setup/{sessionId}/period-used',
     options: {
-      handler: ReturnLogsSetupController.submitPeriodUsed,
+      handler: submitPeriodUsed,
       auth: {
         access: {
           scope: ['returns']
@@ -209,7 +245,7 @@ const routes = [
     method: 'GET',
     path: '/return-logs/setup/{sessionId}/readings/{yearMonth}',
     options: {
-      handler: ReturnLogsSetupController.readings,
+      handler: readings,
       auth: {
         access: {
           scope: ['returns']
@@ -221,7 +257,7 @@ const routes = [
     method: 'POST',
     path: '/return-logs/setup/{sessionId}/readings/{yearMonth}',
     options: {
-      handler: ReturnLogsSetupController.submitReadings,
+      handler: submitReadings,
       auth: {
         access: {
           scope: ['returns']
@@ -233,7 +269,7 @@ const routes = [
     method: 'GET',
     path: '/return-logs/setup/{sessionId}/volumes/{yearMonth}',
     options: {
-      handler: ReturnLogsSetupController.volumes,
+      handler: volumes,
       auth: {
         access: {
           scope: ['returns']
@@ -245,7 +281,7 @@ const routes = [
     method: 'POST',
     path: '/return-logs/setup/{sessionId}/volumes/{yearMonth}',
     options: {
-      handler: ReturnLogsSetupController.submitVolumes,
+      handler: submitVolumes,
       auth: {
         access: {
           scope: ['returns']
@@ -257,7 +293,7 @@ const routes = [
     method: 'GET',
     path: '/return-logs/setup/{sessionId}/received',
     options: {
-      handler: ReturnLogsSetupController.received,
+      handler: received,
       auth: {
         access: {
           scope: ['returns']
@@ -269,7 +305,7 @@ const routes = [
     method: 'POST',
     path: '/return-logs/setup/{sessionId}/received',
     options: {
-      handler: ReturnLogsSetupController.submitReceived,
+      handler: submitReceived,
       auth: {
         access: {
           scope: ['returns']
@@ -281,7 +317,7 @@ const routes = [
     method: 'GET',
     path: '/return-logs/setup/{sessionId}/reported',
     options: {
-      handler: ReturnLogsSetupController.reported,
+      handler: reported,
       auth: {
         access: {
           scope: ['returns']
@@ -293,7 +329,7 @@ const routes = [
     method: 'POST',
     path: '/return-logs/setup/{sessionId}/reported',
     options: {
-      handler: ReturnLogsSetupController.submitReported,
+      handler: submitReported,
       auth: {
         access: {
           scope: ['returns']
@@ -305,7 +341,7 @@ const routes = [
     method: 'GET',
     path: '/return-logs/setup/{sessionId}/single-volume',
     options: {
-      handler: ReturnLogsSetupController.singleVolume,
+      handler: singleVolume,
       auth: {
         access: {
           scope: ['returns']
@@ -317,7 +353,7 @@ const routes = [
     method: 'POST',
     path: '/return-logs/setup/{sessionId}/single-volume',
     options: {
-      handler: ReturnLogsSetupController.submitSingleVolume,
+      handler: submitSingleVolume,
       auth: {
         access: {
           scope: ['returns']
@@ -329,7 +365,7 @@ const routes = [
     method: 'GET',
     path: '/return-logs/setup/{sessionId}/start-reading',
     options: {
-      handler: ReturnLogsSetupController.startReading,
+      handler: startReading,
       auth: {
         access: {
           scope: ['returns']
@@ -341,7 +377,7 @@ const routes = [
     method: 'POST',
     path: '/return-logs/setup/{sessionId}/start-reading',
     options: {
-      handler: ReturnLogsSetupController.submitStartReading,
+      handler: submitStartReading,
       auth: {
         access: {
           scope: ['returns']
@@ -353,7 +389,7 @@ const routes = [
     method: 'GET',
     path: '/return-logs/setup/{sessionId}/submission',
     options: {
-      handler: ReturnLogsSetupController.submission,
+      handler: submission,
       auth: {
         access: {
           scope: ['returns']
@@ -365,7 +401,7 @@ const routes = [
     method: 'POST',
     path: '/return-logs/setup/{sessionId}/submission',
     options: {
-      handler: ReturnLogsSetupController.submitSubmission,
+      handler: submitSubmission,
       auth: {
         access: {
           scope: ['returns']
@@ -377,7 +413,7 @@ const routes = [
     method: 'GET',
     path: '/return-logs/setup/{sessionId}/units',
     options: {
-      handler: ReturnLogsSetupController.units,
+      handler: units,
       auth: {
         access: {
           scope: ['returns']
@@ -389,7 +425,7 @@ const routes = [
     method: 'POST',
     path: '/return-logs/setup/{sessionId}/units',
     options: {
-      handler: ReturnLogsSetupController.submitUnits,
+      handler: submitUnits,
       auth: {
         access: {
           scope: ['returns']
@@ -401,7 +437,7 @@ const routes = [
     method: 'GET',
     path: '/return-logs/setup/{sessionId}/multiple-entries',
     options: {
-      handler: ReturnLogsSetupController.multipleEntries,
+      handler: multipleEntries,
       auth: {
         access: {
           scope: ['returns']
@@ -413,7 +449,7 @@ const routes = [
     method: 'POST',
     path: '/return-logs/setup/{sessionId}/multiple-entries',
     options: {
-      handler: ReturnLogsSetupController.submitMultipleEntries,
+      handler: submitMultipleEntries,
       auth: {
         access: {
           scope: ['returns']
