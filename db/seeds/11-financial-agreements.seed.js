@@ -14,7 +14,3 @@ async function _upsert(financialAgreement) {
     .onConflict('code')
     .merge(['description', 'disabled', 'updatedAt'])
 }
-
-export {
-  seed
-}

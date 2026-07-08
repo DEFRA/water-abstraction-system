@@ -24,7 +24,3 @@ async function _upsert(licenceVersionPurposeConditionType) {
     .onConflict(['code', 'subcode'])
     .merge(['description', 'displayTitle', 'subcodeDescription', 'updatedAt'])
 }
-
-export {
-  seed
-}

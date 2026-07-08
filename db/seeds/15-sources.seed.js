@@ -14,7 +14,3 @@ async function _upsert(source) {
     .onConflict('externalId')
     .merge(['description', 'sourceType', 'ngr', 'updatedAt'])
 }
-
-export {
-  seed
-}

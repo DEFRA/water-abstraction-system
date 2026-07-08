@@ -39,7 +39,3 @@ async function _update(licenceRole) {
     .where('name', name)
     .andWhere('label', label)
 }
-
-export {
-  seed
-}

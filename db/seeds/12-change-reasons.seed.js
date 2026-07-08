@@ -44,7 +44,3 @@ async function _update(changeReason) {
     .where('description', description)
     .where('type', type)
 }
-
-export {
-  seed
-}
