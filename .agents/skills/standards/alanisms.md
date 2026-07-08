@@ -29,7 +29,7 @@ return {
 }
 ```
 
-This applies everywhere: return values, inline objects, `module.exports`, test assertions.
+This applies everywhere: return values, inline objects, export declarations, test assertions.
 
 ## 2 — `import` statements must be in alphabetical order by variable name
 
