@@ -52,7 +52,7 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
         await SubmitAdditionalSubmissionOptionsService(session.id, payload, yarStub)
 
         expect(session.noAdditionalOptions).toBe(true)
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('sets the notification message to "Updated"', async () => {

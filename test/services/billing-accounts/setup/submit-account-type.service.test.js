@@ -41,7 +41,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
         accountType: 'company',
         individualName: null
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
@@ -71,7 +71,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
           accountType: 'company',
           individualName: null
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -104,7 +104,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
           checkPageVisited: true,
           individualName: null
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -133,7 +133,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
           accountType: 'company',
           individualName: null
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -158,7 +158,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
         accountType: 'individual',
         individualName: 'John Doe'
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
@@ -189,7 +189,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
           accountType: 'individual',
           individualName: 'John Doe'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -223,7 +223,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
           checkPageVisited: true,
           individualName: 'John Doe'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -254,7 +254,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
           companySearch: null,
           individualName: 'John Doe'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -290,7 +290,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
           companySearch: null,
           individualName: 'Jane Doe'
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {

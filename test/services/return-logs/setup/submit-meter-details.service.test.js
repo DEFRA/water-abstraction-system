@@ -51,7 +51,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
         expect(session.meterSerialNumber).toEqual('123')
         expect(session.meter10TimesDisplay).toEqual('yes')
 
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
     })
 

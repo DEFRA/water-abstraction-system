@@ -44,7 +44,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
         await SubmitMeterProvidedService(session.id, payload, yarStub)
 
         expect(session.meterProvided).toEqual('yes')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the user has selected "yes" to a meter being provided', () => {
@@ -101,7 +101,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
               expect(session.meterMake).toBeNull()
               expect(session.meterSerialNumber).toBeNull()
               expect(session.meter10TimesDisplay).toBeNull()
-              expect(session.$update.called).toBe(true)
+              expect(session.$update).toHaveBeenCalled()
             })
           })
         })

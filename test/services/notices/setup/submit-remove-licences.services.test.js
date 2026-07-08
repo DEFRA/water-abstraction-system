@@ -58,7 +58,7 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
         await SubmitRemoveLicencesService(session.id, payload)
 
         expect(session.removeLicences).toEqual(licenceRefWithDueReturns)
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('returns the redirect route', async () => {

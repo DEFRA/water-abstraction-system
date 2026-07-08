@@ -56,7 +56,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
           await SubmitAlertThresholdsService(session.id, payload)
 
           expect(session.alertThresholds).toEqual([licenceMonitoringStations.one.thresholdGroup])
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
 
@@ -69,7 +69,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
             licenceMonitoringStations.two.thresholdGroup
           ])
 
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
       })
     })

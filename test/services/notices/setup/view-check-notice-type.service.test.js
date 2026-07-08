@@ -59,7 +59,7 @@ describe('Notices - Setup - View Check Notice Type service', () => {
       await ViewCheckNoticeTypeService(session.id, yarStub)
 
       expect(session.checkPageVisited).toBe(true)
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     describe('when there is a notification', () => {

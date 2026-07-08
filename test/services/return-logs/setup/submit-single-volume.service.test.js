@@ -41,7 +41,7 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
         expect(session.singleVolume).toEqual('yes')
         expect(session.singleVolumeQuantity).toEqual(1000)
 
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the user has previously selected "yes" to a single volume being provided', () => {

@@ -45,7 +45,7 @@ describe('Company Contacts - Setup - Licences Service', () => {
       await SubmitLicencesService(session.id, payload)
 
       expect(session.abstractionAlertLicences).toEqual([licence.id])
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {

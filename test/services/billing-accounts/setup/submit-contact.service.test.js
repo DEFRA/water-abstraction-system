@@ -56,7 +56,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
         addressSelected: billingAccountAddress.id,
         contactSelected: payload.contactSelected
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
@@ -156,7 +156,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
         addressSelected: 'new',
         contactSelected: payload.contactSelected
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {

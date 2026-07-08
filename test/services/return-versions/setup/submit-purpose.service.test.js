@@ -90,7 +90,7 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
         expect(session.requirements[0].purposes).toEqual([
           { alias: 'great warm machine', description: 'Heat Pump', id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f' }
         ])
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the page has been not been visited', () => {

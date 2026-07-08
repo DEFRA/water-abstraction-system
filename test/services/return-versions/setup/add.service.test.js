@@ -45,7 +45,7 @@ describe('Return Versions Setup - Add service', () => {
 
       expect(session.requirements.length).toEqual(2)
       expect(session.requirements).toEqual([{}, {}])
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('returns the index of the new requirement', async () => {

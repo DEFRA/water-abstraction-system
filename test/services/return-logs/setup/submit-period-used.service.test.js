@@ -65,7 +65,7 @@ describe('Return Logs Setup - Submit Period Used service', () => {
           expect(session.periodDateUsedOptions).toEqual('default')
           expect(session.fromFullDate).toEqual('2023-04-01T00:00:00.000Z')
           expect(session.toFullDate).toEqual('2024-03-31T00:00:00.000Z')
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
 
         it('applies the single volume to the applicable lines', async () => {
@@ -111,7 +111,7 @@ describe('Return Logs Setup - Submit Period Used service', () => {
           expect(session.periodUsedToYear).toEqual('2024')
           expect(session.fromFullDate).toEqual('2023-08-15T00:00:00.000Z')
           expect(session.toFullDate).toEqual('2024-01-20T00:00:00.000Z')
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
 
         it('applies the single volume to the applicable lines', async () => {

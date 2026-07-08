@@ -63,7 +63,7 @@ describe('Return Versions Setup - Submit No Returns Required service', () => {
         await SubmitNoReturnsRequiredService(session.id, payload)
 
         expect(session.reason).toEqual('abstraction-below-100-cubic-metres-per-day')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('returns the correct details the controller needs to redirect the journey', async () => {

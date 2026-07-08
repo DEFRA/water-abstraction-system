@@ -57,7 +57,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
         await SubmitReturnsPeriodService(session.id, payload, yarStub)
 
         expect(session.returnsPeriod).toEqual('quarterFour')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('saves the determined returns period', async () => {

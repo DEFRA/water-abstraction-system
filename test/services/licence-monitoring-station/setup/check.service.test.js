@@ -65,7 +65,7 @@ describe('Licence Monitoring Station Setup - Check Service', () => {
       await CheckService(session.id)
 
       expect(session.checkPageVisited).toBe(true)
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
   })
 })

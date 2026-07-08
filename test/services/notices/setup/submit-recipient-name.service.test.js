@@ -42,7 +42,7 @@ describe('Notices - Setup - Submit Recipient Name service', () => {
         contactName: 'Ronald Weasley'
       })
 
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {

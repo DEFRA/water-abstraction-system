@@ -70,7 +70,7 @@ describe('Return Versions Setup - Submit Agreements and Exceptions service', () 
           'two-part-tariff',
           '56-returns-exception'
         ])
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the page has been not been visited', () => {

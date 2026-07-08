@@ -86,7 +86,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
               startDate: '2023-06-01T00:00:00.000Z'
             }
           ])
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
 
         it('sets the notification message title to "Updated" and the text to "Volumes have been updated" ', async () => {

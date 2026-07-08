@@ -45,7 +45,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
       expect(session.abstractionPeriodEndDay).toEqual('3')
       expect(session.abstractionPeriodEndMonth).toEqual('4')
 
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('returns an empty object in order to continue the journey', async () => {

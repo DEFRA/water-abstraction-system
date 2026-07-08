@@ -54,7 +54,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
 
         expect(session.receivedDateOptions).toEqual('today')
         expect(new Date(session.receivedDate)).toEqual(testDate)
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the page has been not been visited', () => {
@@ -107,7 +107,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
 
         expect(session.receivedDateOptions).toEqual('yesterday')
         expect(new Date(session.receivedDate)).toEqual(testDate)
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
     })
 
@@ -129,7 +129,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
         expect(session.receivedDateMonth).toEqual('11')
         expect(session.receivedDateYear).toEqual('2023')
         expect(new Date(session.receivedDate)).toEqual(new Date('2023-11-26'))
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('returns the correct details the controller needs to redirect the journey', async () => {

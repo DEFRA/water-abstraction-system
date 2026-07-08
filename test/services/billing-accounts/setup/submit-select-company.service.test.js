@@ -54,7 +54,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
       await SubmitSelectCompanyService(session.id, payload)
 
       expect(session.companiesHouseNumber).toEqual(payload.companiesHouseNumber)
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
@@ -83,7 +83,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
         expect(session).toMatchObject({
           companiesHouseNumber: payload.companiesHouseNumber
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {
@@ -153,7 +153,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
           contactSelected: null,
           fao: null
         })
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('continues the journey', async () => {

@@ -45,7 +45,7 @@ describe('Return Logs Setup - Submit Note service', () => {
             content: 'A new note related to return logs',
             userEmail: 'carol.shaw@atari.com'
           })
-          expect(session.$update.called).toBe(true)
+          expect(session.$update).toHaveBeenCalled()
         })
 
         it('returns the correct details the controller needs to redirect the journey', async () => {

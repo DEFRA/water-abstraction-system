@@ -66,7 +66,7 @@ describe('Return Versions Setup - Submit Site Description service', () => {
         await SubmitSiteDescriptionService(session.id, requirementIndex, payload, yarStub)
 
         expect(session.requirements[0].siteDescription).toEqual('This is a valid return requirement description')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the page has been not been visited', () => {

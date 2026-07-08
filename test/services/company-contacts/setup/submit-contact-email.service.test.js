@@ -44,7 +44,7 @@ describe('Company Contacts - Setup - Contact Email Service', () => {
         ...session,
         email: 'eric@test.com'
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {

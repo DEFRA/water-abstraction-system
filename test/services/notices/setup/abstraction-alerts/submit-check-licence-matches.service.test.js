@@ -54,7 +54,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Check Licence Matches se
           licenceMonitoringStations.three.licence.licenceRef
         ])
 
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('saves the "relevantLicenceMonitoringStations" to the session', async () => {

@@ -42,7 +42,7 @@ describe('Users - Internal - Setup - Submit Access Service', () => {
         ...session,
         access: 'disabled'
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {

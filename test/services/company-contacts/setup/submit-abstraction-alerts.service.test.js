@@ -44,7 +44,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
         ...session,
         abstractionAlerts: 'yes'
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     describe('the redirect URL', () => {

@@ -66,7 +66,7 @@ describe('Return Versions Setup - Submit Frequency Collected service', () => {
         await SubmitFrequencyCollectedService(session.id, requirementIndex, payload, yarStub)
 
         expect(session.requirements[0].frequencyCollected).toEqual('week')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the page has been not been visited', () => {

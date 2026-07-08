@@ -34,7 +34,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
         await SubmitAlertTypeService(session.id, payload)
 
         expect(session.alertType).toEqual('stop')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('returns an empty object (no page data is needed for a redirect)', async () => {
@@ -58,14 +58,14 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
         await SubmitAlertTypeService(session.id, payload)
 
         expect(session.alertThresholds).toEqual([])
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('sets the "removedThresholds" to an empty array', async () => {
         await SubmitAlertTypeService(session.id, payload)
 
         expect(session.removedThresholds).toEqual([])
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
     })
 
@@ -83,7 +83,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
         await SubmitAlertTypeService(session.id, payload)
 
         expect(session.alertThresholds).toEqual(['100-flow'])
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
     })
   })

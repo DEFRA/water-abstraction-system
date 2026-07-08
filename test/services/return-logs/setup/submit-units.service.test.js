@@ -44,7 +44,7 @@ describe('Return Logs Setup - Submit Units service', () => {
 
         expect(session.units).toEqual('litres')
         expect(session.unitSymbol).toEqual('l')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the page has been not been visited', () => {

@@ -40,7 +40,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
 
         expect(session.threshold).toEqual(1000)
         expect(session.unit).toEqual('Ml/d')
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       describe('and the page has been not been visited', () => {

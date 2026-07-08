@@ -63,7 +63,7 @@ describe('Notices - Setup - Submit Licence service', () => {
         await SubmitLicenceService(session.id, payload, yarStub)
 
         expect(session.licenceRef).toEqual(licenceRef)
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('returns the redirect url', async () => {

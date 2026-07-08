@@ -41,7 +41,7 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
       await SubmitCompanySearchService(session.id, payload)
 
       expect(session.companySearch).toEqual(payload.companySearch)
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
@@ -69,7 +69,7 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
       await SubmitCompanySearchService(session.id, payload)
 
       expect(session.companySearch).toEqual(payload.companySearch)
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
@@ -99,7 +99,7 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
 
       expect(session.companySearch).toEqual(payload.companySearch)
       expect(session.checkPageVisited).toEqual(true)
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {
@@ -109,7 +109,7 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
         checkPageVisited: true,
         companySearch: payload.companySearch
       })
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
   })
 
@@ -130,7 +130,7 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
       await SubmitCompanySearchService(session.id, payload)
 
       expect(session.companySearch).toEqual(payload.companySearch)
-      expect(session.$update.called).toBe(true)
+      expect(session.$update).toHaveBeenCalled()
     })
 
     it('continues the journey', async () => {

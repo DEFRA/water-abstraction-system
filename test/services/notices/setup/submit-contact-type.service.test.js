@@ -65,7 +65,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
             message_type: 'Email'
           }
         ])
-        expect(session.$update.called).toBe(true)
+        expect(session.$update).toHaveBeenCalled()
       })
 
       it('saves the recipients "contact_hash_id" to the sessions "selectedRecipients" array', async () => {
