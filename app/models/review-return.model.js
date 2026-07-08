@@ -6,6 +6,10 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import ReturnLogModel from './return-log.model.js'
+import ReviewChargeElementModel from './review-charge-element.model.js'
+import ReviewChargeElementReturnModel from './review-charge-element-return.model.js'
+import ReviewLicenceModel from './review-licence.model.js'
 
 class ReviewReturnModel extends BaseModel {
   static get tableName() {
@@ -21,7 +25,7 @@ class ReviewReturnModel extends BaseModel {
     return {
       returnLog: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'return-log.model',
+        modelClass: ReturnLogModel,
         join: {
           from: 'reviewReturns.returnLogId',
           to: 'returnLogs.id'
@@ -29,7 +33,7 @@ class ReviewReturnModel extends BaseModel {
       },
       reviewChargeElements: {
         relation: Model.ManyToManyRelation,
-        modelClass: 'review-charge-element.model',
+        modelClass: ReviewChargeElementModel,
         join: {
           from: 'reviewReturns.id',
           through: {
@@ -41,7 +45,7 @@ class ReviewReturnModel extends BaseModel {
       },
       reviewChargeElementReturns: {
         relation: Model.HasManyRelation,
-        modelClass: 'review-charge-element-return.model',
+        modelClass: ReviewChargeElementReturnModel,
         join: {
           from: 'reviewReturns.id',
           to: 'reviewChargeElementReturns.reviewReturnId'
@@ -49,7 +53,7 @@ class ReviewReturnModel extends BaseModel {
       },
       reviewLicence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'review-licence.model',
+        modelClass: ReviewLicenceModel,
         join: {
           from: 'reviewReturns.reviewLicenceId',
           to: 'reviewLicences.id'

@@ -6,6 +6,7 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import LicenceEntityModel from './licence-entity.model.js'
 
 /**
  * Represents an instance of a licence entity role record
@@ -28,7 +29,7 @@ class LicenceEntityRoleModel extends BaseModel {
     return {
       companyEntity: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-entity.model',
+        modelClass: LicenceEntityModel,
         join: {
           from: 'licenceEntityRoles.companyEntityId',
           to: 'licenceEntities.id'
@@ -36,7 +37,7 @@ class LicenceEntityRoleModel extends BaseModel {
       },
       licenceEntity: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-entity.model',
+        modelClass: LicenceEntityModel,
         join: {
           from: 'licenceEntityRoles.licenceEntityId',
           to: 'licenceEntities.id'
@@ -44,7 +45,7 @@ class LicenceEntityRoleModel extends BaseModel {
       },
       regimeEntity: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-entity.model',
+        modelClass: LicenceEntityModel,
         join: {
           from: 'licenceEntityRoles.regimeEntityId',
           to: 'licenceEntities.id'

@@ -6,6 +6,8 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import LicenceDocumentRoleModel from './licence-document-role.model.js'
+import LicenceModel from './licence.model.js'
 
 /**
  * Represents an instance of a licence document record
@@ -32,7 +34,7 @@ class LicenceDocumentModel extends BaseModel {
     return {
       licence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'licenceDocuments.licenceRef',
           to: 'licences.licenceRef'
@@ -40,7 +42,7 @@ class LicenceDocumentModel extends BaseModel {
       },
       licenceDocumentRoles: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-document-role.model',
+        modelClass: LicenceDocumentRoleModel,
         join: {
           from: 'licenceDocuments.id',
           to: 'licenceDocumentRoles.licenceDocumentId'

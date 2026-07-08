@@ -6,6 +6,7 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import LicenceAgreementModel from './licence-agreement.model.js'
 
 class FinancialAgreementModel extends BaseModel {
   static get tableName() {
@@ -16,7 +17,7 @@ class FinancialAgreementModel extends BaseModel {
     return {
       licenceAgreements: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-agreement.model',
+        modelClass: LicenceAgreementModel,
         join: {
           from: 'financialAgreements.id',
           to: 'licenceAgreements.financialAgreementId'

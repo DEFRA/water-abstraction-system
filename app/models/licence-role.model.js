@@ -6,6 +6,9 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import CompanyAddressModel from './company-address.model.js'
+import CompanyContactModel from './company-contact.model.js'
+import LicenceDocumentRoleModel from './licence-document-role.model.js'
 
 class LicenceRoleModel extends BaseModel {
   static get tableName() {
@@ -16,7 +19,7 @@ class LicenceRoleModel extends BaseModel {
     return {
       companyAddresses: {
         relation: Model.HasManyRelation,
-        modelClass: 'company-address.model',
+        modelClass: CompanyAddressModel,
         join: {
           from: 'licenceRoles.id',
           to: 'companyAddresses.licenceRoleId'
@@ -24,7 +27,7 @@ class LicenceRoleModel extends BaseModel {
       },
       companyContacts: {
         relation: Model.HasManyRelation,
-        modelClass: 'company-contact.model',
+        modelClass: CompanyContactModel,
         join: {
           from: 'licenceRoles.id',
           to: 'companyContacts.licenceRoleId'
@@ -32,7 +35,7 @@ class LicenceRoleModel extends BaseModel {
       },
       licenceDocumentRoles: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-document-role.model',
+        modelClass: LicenceDocumentRoleModel,
         join: {
           from: 'licenceRoles.id',
           to: 'licenceDocumentRoles.licenceRoleId'

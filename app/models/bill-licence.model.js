@@ -6,6 +6,9 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import BillModel from './bill.model.js'
+import LicenceModel from './licence.model.js'
+import TransactionModel from './transaction.model.js'
 
 class BillLicenceModel extends BaseModel {
   static get tableName() {
@@ -16,7 +19,7 @@ class BillLicenceModel extends BaseModel {
     return {
       bill: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'bill.model',
+        modelClass: BillModel,
         join: {
           from: 'billLicences.billId',
           to: 'bills.id'
@@ -24,7 +27,7 @@ class BillLicenceModel extends BaseModel {
       },
       transactions: {
         relation: Model.HasManyRelation,
-        modelClass: 'transaction.model',
+        modelClass: TransactionModel,
         join: {
           from: 'billLicences.id',
           to: 'transactions.billLicenceId'
@@ -32,7 +35,7 @@ class BillLicenceModel extends BaseModel {
       },
       licence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'billLicences.licenceId',
           to: 'licences.id'

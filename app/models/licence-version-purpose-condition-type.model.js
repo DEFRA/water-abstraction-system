@@ -6,6 +6,7 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import LicenceVersionPurposeConditionModel from './licence-version-purpose-condition.model.js'
 
 class LicenceVersionPurposeConditionTypeModel extends BaseModel {
   static get tableName() {
@@ -16,7 +17,7 @@ class LicenceVersionPurposeConditionTypeModel extends BaseModel {
     return {
       licenceVersionPurposeConditions: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-version-purpose-condition.model',
+        modelClass: LicenceVersionPurposeConditionModel,
         join: {
           from: 'licenceVersionPurposeConditionTypes.id',
           to: 'licenceVersionPurposeConditions.licenceVersionPurposeConditionTypeId'

@@ -6,6 +6,7 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import PointModel from './point.model.js'
 
 class SourceModel extends BaseModel {
   static get tableName() {
@@ -16,7 +17,7 @@ class SourceModel extends BaseModel {
     return {
       points: {
         relation: Model.HasManyRelation,
-        modelClass: 'point.model',
+        modelClass: PointModel,
         join: {
           from: 'sources.id',
           to: 'points.sourceId'

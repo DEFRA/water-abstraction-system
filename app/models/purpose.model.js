@@ -6,6 +6,10 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import ChargeElementModel from './charge-element.model.js'
+import ChargeReferenceModel from './charge-reference.model.js'
+import LicenceVersionPurposeModel from './licence-version-purpose.model.js'
+import ReturnRequirementPurposeModel from './return-requirement-purpose.model.js'
 
 class PurposeModel extends BaseModel {
   static get tableName() {
@@ -16,7 +20,7 @@ class PurposeModel extends BaseModel {
     return {
       chargeElements: {
         relation: Model.HasManyRelation,
-        modelClass: 'charge-element.model',
+        modelClass: ChargeElementModel,
         join: {
           from: 'purposes.id',
           to: 'chargeElements.purposeId'
@@ -24,7 +28,7 @@ class PurposeModel extends BaseModel {
       },
       chargeReferences: {
         relation: Model.HasManyRelation,
-        modelClass: 'charge-reference.model',
+        modelClass: ChargeReferenceModel,
         join: {
           from: 'purposes.id',
           to: 'chargeReferences.purposeId'
@@ -32,7 +36,7 @@ class PurposeModel extends BaseModel {
       },
       licenceVersionPurposes: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-version-purpose.model',
+        modelClass: LicenceVersionPurposeModel,
         join: {
           from: 'purposes.id',
           to: 'licenceVersionPurposes.purposeId'
@@ -40,7 +44,7 @@ class PurposeModel extends BaseModel {
       },
       returnRequirementPurposes: {
         relation: Model.HasManyRelation,
-        modelClass: 'return-requirement-purpose.model',
+        modelClass: ReturnRequirementPurposeModel,
         join: {
           from: 'purposes.id',
           to: 'returnRequirementPurposes.purposeId'

@@ -6,6 +6,7 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import ReturnLogModel from './return-log.model.js'
 
 class ReturnCycleModel extends BaseModel {
   static get tableName() {
@@ -16,7 +17,7 @@ class ReturnCycleModel extends BaseModel {
     return {
       returnLogs: {
         relation: Model.HasManyRelation,
-        modelClass: 'return-log.model',
+        modelClass: ReturnLogModel,
         join: {
           from: 'returnCycles.id',
           to: 'returnLogs.returnCycleId'

@@ -6,6 +6,7 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import LicenceModel from './licence.model.js'
 
 class WorkflowModel extends BaseModel {
   static get tableName() {
@@ -16,7 +17,7 @@ class WorkflowModel extends BaseModel {
     return {
       licence: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence.model',
+        modelClass: LicenceModel,
         join: {
           from: 'workflows.licenceId',
           to: 'licences.id'

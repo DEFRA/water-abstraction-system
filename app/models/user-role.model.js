@@ -6,6 +6,8 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import RoleModel from './role.model.js'
+import UserModel from './user.model.js'
 
 class UserRoleModel extends BaseModel {
   static get tableName() {
@@ -16,7 +18,7 @@ class UserRoleModel extends BaseModel {
     return {
       role: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'role.model',
+        modelClass: RoleModel,
         join: {
           from: 'userRoles.roleId',
           to: 'roles.id'
@@ -24,7 +26,7 @@ class UserRoleModel extends BaseModel {
       },
       user: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'user.model',
+        modelClass: UserModel,
         join: {
           from: 'userRoles.userId',
           to: 'users.userId'

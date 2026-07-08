@@ -6,6 +6,8 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import ChargeVersionModel from './charge-version.model.js'
+import UserModel from './user.model.js'
 
 class ChargeVersionNote extends BaseModel {
   static get tableName() {
@@ -16,7 +18,7 @@ class ChargeVersionNote extends BaseModel {
     return {
       chargeVersion: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'charge-version.model',
+        modelClass: ChargeVersionModel,
         join: {
           from: 'chargeVersionNotes.id',
           to: 'chargeVersions.noteId'
@@ -24,7 +26,7 @@ class ChargeVersionNote extends BaseModel {
       },
       user: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'user.model',
+        modelClass: UserModel,
         join: {
           from: 'chargeVersionNotes.userId',
           to: 'users.userId'

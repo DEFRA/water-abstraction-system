@@ -6,6 +6,11 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import AddressModel from './address.model.js'
+import CompanyModel from './company.model.js'
+import ContactModel from './contact.model.js'
+import LicenceDocumentModel from './licence-document.model.js'
+import LicenceRoleModel from './licence-role.model.js'
 
 class LicenceDocumentRoleModel extends BaseModel {
   static get tableName() {
@@ -16,7 +21,7 @@ class LicenceDocumentRoleModel extends BaseModel {
     return {
       address: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'address.model',
+        modelClass: AddressModel,
         join: {
           from: 'licenceDocumentRoles.addressId',
           to: 'addresses.id'
@@ -24,7 +29,7 @@ class LicenceDocumentRoleModel extends BaseModel {
       },
       company: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'company.model',
+        modelClass: CompanyModel,
         join: {
           from: 'licenceDocumentRoles.companyId',
           to: 'companies.id'
@@ -32,7 +37,7 @@ class LicenceDocumentRoleModel extends BaseModel {
       },
       contact: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'contact.model',
+        modelClass: ContactModel,
         join: {
           from: 'licenceDocumentRoles.contactId',
           to: 'contacts.id'
@@ -40,7 +45,7 @@ class LicenceDocumentRoleModel extends BaseModel {
       },
       licenceDocument: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-document.model',
+        modelClass: LicenceDocumentModel,
         join: {
           from: 'licenceDocumentRoles.licenceDocumentId',
           to: 'licenceDocuments.id'
@@ -48,7 +53,7 @@ class LicenceDocumentRoleModel extends BaseModel {
       },
       licenceRole: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-role.model',
+        modelClass: LicenceRoleModel,
         join: {
           from: 'licenceDocumentRoles.licenceRoleId',
           to: 'licenceRoles.id'

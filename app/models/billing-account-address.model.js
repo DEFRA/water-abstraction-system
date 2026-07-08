@@ -6,6 +6,10 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import AddressModel from './address.model.js'
+import BillingAccountModel from './billing-account.model.js'
+import CompanyModel from './company.model.js'
+import ContactModel from './contact.model.js'
 
 class BillingAccountAddressModel extends BaseModel {
   static get tableName() {
@@ -16,7 +20,7 @@ class BillingAccountAddressModel extends BaseModel {
     return {
       address: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'address.model',
+        modelClass: AddressModel,
         join: {
           from: 'billingAccountAddresses.addressId',
           to: 'addresses.id'
@@ -24,7 +28,7 @@ class BillingAccountAddressModel extends BaseModel {
       },
       billingAccount: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'billing-account.model',
+        modelClass: BillingAccountModel,
         join: {
           from: 'billingAccountAddresses.billingAccountId',
           to: 'billingAccounts.id'
@@ -32,7 +36,7 @@ class BillingAccountAddressModel extends BaseModel {
       },
       company: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'company.model',
+        modelClass: CompanyModel,
         join: {
           from: 'billingAccountAddresses.companyId',
           to: 'companies.id'
@@ -40,7 +44,7 @@ class BillingAccountAddressModel extends BaseModel {
       },
       contact: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'contact.model',
+        modelClass: ContactModel,
         join: {
           from: 'billingAccountAddresses.contactId',
           to: 'contacts.id'

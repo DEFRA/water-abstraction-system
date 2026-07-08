@@ -6,6 +6,13 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import LicenceVersionModel from './licence-version.model.js'
+import LicenceVersionPurposeConditionModel from './licence-version-purpose-condition.model.js'
+import LicenceVersionPurposePointModel from './licence-version-purpose-point.model.js'
+import PointModel from './point.model.js'
+import PrimaryPurposeModel from './primary-purpose.model.js'
+import PurposeModel from './purpose.model.js'
+import SecondaryPurposeModel from './secondary-purpose.model.js'
 
 class LicenceVersionPurposeModel extends BaseModel {
   static get tableName() {
@@ -16,7 +23,7 @@ class LicenceVersionPurposeModel extends BaseModel {
     return {
       licenceVersion: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-version.model',
+        modelClass: LicenceVersionModel,
         join: {
           from: 'licenceVersionPurposes.licenceVersionId',
           to: 'licenceVersions.id'
@@ -24,7 +31,7 @@ class LicenceVersionPurposeModel extends BaseModel {
       },
       licenceVersionPurposeConditions: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-version-purpose-condition.model',
+        modelClass: LicenceVersionPurposeConditionModel,
         join: {
           from: 'licenceVersionPurposes.id',
           to: 'licenceVersionPurposeConditions.licenceVersionPurposeId'
@@ -32,7 +39,7 @@ class LicenceVersionPurposeModel extends BaseModel {
       },
       licenceVersionPurposePoints: {
         relation: Model.HasManyRelation,
-        modelClass: 'licence-version-purpose-point.model',
+        modelClass: LicenceVersionPurposePointModel,
         join: {
           from: 'licenceVersionPurposes.id',
           to: 'licenceVersionPurposePoints.licenceVersionPurposeId'
@@ -40,7 +47,7 @@ class LicenceVersionPurposeModel extends BaseModel {
       },
       points: {
         relation: Model.ManyToManyRelation,
-        modelClass: 'point.model',
+        modelClass: PointModel,
         join: {
           from: 'licenceVersionPurposes.id',
           through: {
@@ -52,7 +59,7 @@ class LicenceVersionPurposeModel extends BaseModel {
       },
       primaryPurpose: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'primary-purpose.model.js',
+        modelClass: PrimaryPurposeModel,
         join: {
           from: 'licenceVersionPurposes.primaryPurposeId',
           to: 'primaryPurposes.id'
@@ -60,7 +67,7 @@ class LicenceVersionPurposeModel extends BaseModel {
       },
       purpose: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'purpose.model.js',
+        modelClass: PurposeModel,
         join: {
           from: 'licenceVersionPurposes.purposeId',
           to: 'purposes.id'
@@ -68,7 +75,7 @@ class LicenceVersionPurposeModel extends BaseModel {
       },
       secondaryPurpose: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'secondary-purpose.model.js',
+        modelClass: SecondaryPurposeModel,
         join: {
           from: 'licenceVersionPurposes.secondaryPurposeId',
           to: 'secondaryPurposes.id'

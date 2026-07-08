@@ -6,6 +6,8 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import GroupModel from './group.model.js'
+import UserModel from './user.model.js'
 
 class UserGroupModel extends BaseModel {
   static get tableName() {
@@ -16,7 +18,7 @@ class UserGroupModel extends BaseModel {
     return {
       group: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'group.model',
+        modelClass: GroupModel,
         join: {
           from: 'userGroups.groupId',
           to: 'groups.id'
@@ -24,7 +26,7 @@ class UserGroupModel extends BaseModel {
       },
       user: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'user.model',
+        modelClass: UserModel,
         join: {
           from: 'userGroups.userId',
           to: 'users.userId'

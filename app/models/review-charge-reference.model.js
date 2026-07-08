@@ -6,6 +6,9 @@
 import { Model } from 'objection'
 
 import BaseModel from './base.model.js'
+import ChargeReferenceModel from './charge-reference.model.js'
+import ReviewChargeElementModel from './review-charge-element.model.js'
+import ReviewChargeVersionModel from './review-charge-version.model.js'
 
 class ReviewChargeReferenceModel extends BaseModel {
   static get tableName() {
@@ -16,7 +19,7 @@ class ReviewChargeReferenceModel extends BaseModel {
     return {
       reviewChargeVersion: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'review-charge-version.model',
+        modelClass: ReviewChargeVersionModel,
         join: {
           from: 'reviewChargeReferences.reviewChargeVersionId',
           to: 'reviewChargeVersions.id'
@@ -24,7 +27,7 @@ class ReviewChargeReferenceModel extends BaseModel {
       },
       reviewChargeElements: {
         relation: Model.HasManyRelation,
-        modelClass: 'review-charge-element.model',
+        modelClass: ReviewChargeElementModel,
         join: {
           from: 'reviewChargeReferences.id',
           to: 'reviewChargeElements.reviewChargeReferenceId'
@@ -32,7 +35,7 @@ class ReviewChargeReferenceModel extends BaseModel {
       },
       chargeReference: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'charge-reference.model',
+        modelClass: ChargeReferenceModel,
         join: {
           from: 'reviewChargeReferences.chargeReferenceId',
           to: 'chargeReferences.id'

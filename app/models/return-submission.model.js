@@ -8,6 +8,8 @@ import { Model } from 'objection'
 import BaseModel from './base.model.js'
 import { formatDateObjectToISO } from '../lib/dates.lib.js'
 import { unitNames } from '../lib/static-lookups.lib.js'
+import ReturnLogModel from './return-log.model.js'
+import ReturnSubmissionLineModel from './return-submission-line.model.js'
 
 class ReturnSubmissionModel extends BaseModel {
   static get tableName() {
@@ -23,7 +25,7 @@ class ReturnSubmissionModel extends BaseModel {
     return {
       returnLog: {
         relation: Model.BelongsToOneRelation,
-        modelClass: 'return-log.model',
+        modelClass: ReturnLogModel,
         join: {
           from: 'returnSubmissions.returnLogId',
           to: 'returnLogs.id'
@@ -31,7 +33,7 @@ class ReturnSubmissionModel extends BaseModel {
       },
       returnSubmissionLines: {
         relation: Model.HasManyRelation,
-        modelClass: 'return-submission-line.model',
+        modelClass: ReturnSubmissionLineModel,
         join: {
           from: 'returnSubmissions.id',
           to: 'returnSubmissionLines.returnSubmissionId'
