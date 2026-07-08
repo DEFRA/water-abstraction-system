@@ -335,7 +335,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
 
   describe('when there are applicable charge versions', () => {
     beforeEach(async () => {
-      licenceSeedData = await EmptyLicenceSeeder('01/128', region.id)
+      licenceSeedData = await EmptyLicenceSeeder.seed('01/128', region.id)
 
       // NOTE: The first part of the setup creates a charge version we will test exactly matches what we expect. The
       // second part is to create another charge version with a different licence ref so we can test the order of the
@@ -367,7 +367,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
       licenceHolderDetails = await CRMContactsSeeder.licenceHolder(licenceSeedData, 'Licence Holder Ltd')
 
       // Second charge version to test ordering
-      otherLicence = await EmptyLicenceSeeder('01/130', region.id)
+      otherLicence = await EmptyLicenceSeeder.seed('01/130', region.id)
       otherChargeVersion = await ChargeVersionHelper.add({
         changeReasonId: changeReason.id,
         licenceId: otherLicence.licence.id,

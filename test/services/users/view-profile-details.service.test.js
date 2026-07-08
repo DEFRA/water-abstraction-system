@@ -36,7 +36,7 @@ describe('Users - View profile details service', () => {
     })
     userModelQueryStub = vi.spyOn(UserModel, 'query').mockReturnValue({ where: whereStub })
     yarStub = YarStub()
-    yarStub.flash.withArgs('notification').returns([])
+    yarStub.flash.mockReturnValue([])
   })
 
   afterEach(() => {
@@ -66,7 +66,7 @@ describe('Users - View profile details service', () => {
     describe('and there is a notification to be displayed', () => {
       beforeEach(() => {
         yarStub = YarStub()
-        yarStub.flash.withArgs('notification').returns([testNotification])
+        yarStub.flash.mockReturnValue([testNotification])
       })
 
       it('returns the notification', async () => {

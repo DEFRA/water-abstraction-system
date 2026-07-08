@@ -14,7 +14,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
   describe('when there is a licence flagged for supplementary', () => {
     describe('simply because it was removed from the annual bill run for checking', () => {
       beforeEach(async () => {
-        seedData = await TwoPartTariffSupplementarySeeder('simple')
+        seedData = await TwoPartTariffSupplementarySeeder.seed('simple')
       })
 
       it('returns the applicable billing account, charge information, and review results', async () => {
@@ -95,7 +95,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
     describe('because the billing account was updated', () => {
       beforeEach(async () => {
-        seedData = await TwoPartTariffSupplementarySeeder('change-billing-account')
+        seedData = await TwoPartTariffSupplementarySeeder.seed('change-billing-account')
       })
 
       it('returns both billing accounts, charge information, and review results for the applicable charge version', async () => {
@@ -208,7 +208,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
     describe('because it was made non-chargeable', () => {
       beforeEach(async () => {
-        seedData = await TwoPartTariffSupplementarySeeder('non-chargeable')
+        seedData = await TwoPartTariffSupplementarySeeder.seed('non-chargeable')
       })
 
       it('returns the applicable billing account, just the chargeable charge information, but no review results', async () => {
@@ -251,7 +251,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
     describe('because it was made non-two-part tariff', () => {
       beforeEach(async () => {
-        seedData = await TwoPartTariffSupplementarySeeder('non-two-part-tariff')
+        seedData = await TwoPartTariffSupplementarySeeder.seed('non-two-part-tariff')
       })
 
       it('returns the applicable billing account, both sets of charge information, but no review results', async () => {
@@ -319,7 +319,7 @@ describe('Bill Runs - TPT Supplementary - Fetch Billing Accounts service', () =>
 
   describe('when there is a licence flagged multiple times for supplementary', () => {
     beforeEach(async () => {
-      seedData = await TwoPartTariffSupplementarySeeder('duplicate')
+      seedData = await TwoPartTariffSupplementarySeeder.seed('duplicate')
     })
 
     it('does not duplicate the results', async () => {
