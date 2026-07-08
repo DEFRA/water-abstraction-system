@@ -49,7 +49,3 @@ async function _upsert(cycle) {
     .onConflict(['startDate', 'endDate', 'summer'])
     .merge(['dueDate', 'submittedInWrls', 'updatedAt'])
 }
-
-export {
-  seed
-}

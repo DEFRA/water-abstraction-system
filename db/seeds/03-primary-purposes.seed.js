@@ -24,7 +24,3 @@ async function _upsert(primaryPurpose) {
     .onConflict('legacyId')
     .merge(['description', 'updatedAt'])
 }
-
-export {
-  seed
-}

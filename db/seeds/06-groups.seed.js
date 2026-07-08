@@ -29,7 +29,3 @@ async function _upsert(group) {
     .onConflict(['application', 'group'])
     .merge(['description', 'dateUpdated'])
 }
-
-export {
-  seed
-}

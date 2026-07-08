@@ -25,7 +25,3 @@ async function _upsert(chargeCategory) {
       'updatedAt'
     ])
 }
-
-export {
-  seed
-}

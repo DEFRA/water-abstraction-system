@@ -68,7 +68,3 @@ async function _update(region) {
     .where('chargeRegionId', chargeRegionId)
     .andWhere('naldRegionId', naldRegionId)
 }
-
-export {
-  seed
-}

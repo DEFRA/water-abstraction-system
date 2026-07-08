@@ -170,7 +170,3 @@ async function _update(user, password) {
     .where('application', application)
     .andWhere('username', username)
 }
-
-export {
-  seed
-}
