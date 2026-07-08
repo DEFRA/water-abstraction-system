@@ -21,7 +21,7 @@
  * @module StopPlugin
  */
 
-const StopPlugin = {
+export default {
   name: 'stop',
   register: (server, _options) => {
     // The timeout is set to 25 seconds (it has to be passed to Hapi in milliseconds) based on AWS ECS. When it sends a
@@ -53,5 +53,3 @@ const StopPlugin = {
     }
   }
 }
-
-export default StopPlugin

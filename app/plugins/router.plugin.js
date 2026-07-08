@@ -88,7 +88,7 @@ const routes = [
   ...UsersSetupRoutes
 ]
 
-const RouterPlugin = {
+export default {
   name: 'router',
   register: (server, _options) => {
     // Filter our any routes which should not be registered. Typically, these will be unfinished endpoints we filter
@@ -98,5 +98,3 @@ const RouterPlugin = {
     server.route(filteredRoutes)
   }
 }
-
-export default RouterPlugin

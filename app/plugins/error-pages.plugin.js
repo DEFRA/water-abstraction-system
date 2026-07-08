@@ -8,7 +8,7 @@ import ErrorPagesService from '../services/plugins/error-pages.service.js'
 
 const { HTTP_STATUS_OK } = http2.constants
 
-const ErrorPagesPlugin = {
+export default {
   plugin: {
     name: 'error-pages',
     register: (server, _options) => {
@@ -32,5 +32,3 @@ const ErrorPagesPlugin = {
     }
   }
 }
-
-export default ErrorPagesPlugin

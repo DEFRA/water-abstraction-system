@@ -1,4 +1,4 @@
-const KeepYarAlivePlugin = {
+export default {
   name: 'keepYarAlive',
   register: (server, _options) => {
     server.ext('onPreHandler', (request, h) => {
@@ -20,5 +20,3 @@ const KeepYarAlivePlugin = {
     })
   }
 }
-
-export default KeepYarAlivePlugin

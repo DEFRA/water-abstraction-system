@@ -5,11 +5,9 @@
 
 import GlobalNotifierLib from '../lib/global-notifier.lib.js'
 
-const GlobalNotifierPlugin = {
+export default {
   name: 'global-notifier',
   register: (server, _options) => {
     globalThis.GlobalNotifier = new GlobalNotifierLib(server.logger, server.app.airbrake)
   }
 }
-
-export default GlobalNotifierPlugin

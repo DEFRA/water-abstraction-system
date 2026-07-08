@@ -26,7 +26,7 @@
 
 import Blankie from 'blankie'
 
-const ContentSecurityPolicyPlugin = {
+export default {
   plugin: Blankie,
   options: {
     baseUri: ['self'],
@@ -40,5 +40,3 @@ const ContentSecurityPolicyPlugin = {
     workerSrc: ['self']
   }
 }
-
-export default ContentSecurityPolicyPlugin

@@ -8,11 +8,9 @@
  * @module GlobalHapiServerMethods
  */
 
-const GlobalHapiServerMethods = {
+export default {
   name: 'global-hapi-server-methods',
   register: (server, _options) => {
     globalThis.HapiServerMethods = server.methods
   }
 }
-
-export default GlobalHapiServerMethods
