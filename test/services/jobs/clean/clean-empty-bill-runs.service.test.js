@@ -25,6 +25,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
     })
 
     // We'll control whether this one succeeds or not in the tests
+    vi.spyOn(CancelBillRunService, 'default').mockResolvedValue()
 
     // These we stub to always resolve
     vi.spyOn(DeleteBillRunService, 'default').mockResolvedValue()
@@ -64,31 +65,31 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
 
     describe('and they can be cancelled (CancelBillRunService updates status to "cancel")', () => {
       beforeEach(() => {
-        CancelBillRunService.mockResolvedValueOnce({
-          id: emptyBillRuns[0].id,
-          externalId: 'd704cb32-a309-4a04-9b0e-f316614a5927',
-          status: 'cancel'
-        })
-
-        CancelBillRunService.mockResolvedValueOnce({
-          id: emptyBillRuns[1].id,
-          externalId: '4f64f905-94b4-460d-aefc-098f57834085',
-          status: 'cancel'
-        })
+        vi.spyOn(CancelBillRunService, 'default')
+          .mockResolvedValueOnce({
+            id: emptyBillRuns[0].id,
+            externalId: 'd704cb32-a309-4a04-9b0e-f316614a5927',
+            status: 'cancel'
+          })
+          .mockResolvedValueOnce({
+            id: emptyBillRuns[1].id,
+            externalId: '4f64f905-94b4-460d-aefc-098f57834085',
+            status: 'cancel'
+          })
       })
 
       it('removes the empty bill runs and returns the count', async () => {
         const result = await CleanEmptyBillRunsService()
 
-        expect(CancelBillRunService).toHaveBeenCalledTimes(2)
-        expect(CancelBillRunService).toHaveBeenNthCalledWith(1, emptyBillRuns[0].id)
-        expect(CancelBillRunService).toHaveBeenNthCalledWith(2, emptyBillRuns[1].id)
+        expect(CancelBillRunService.default).toHaveBeenCalledTimes(2)
+        expect(CancelBillRunService.default).toHaveBeenNthCalledWith(1, emptyBillRuns[0].id)
+        expect(CancelBillRunService.default).toHaveBeenNthCalledWith(2, emptyBillRuns[1].id)
 
-        expect(UnassignBillRunToLicencesService).toHaveBeenCalledTimes(2)
-        expect(UnassignBillRunToLicencesService).toHaveBeenNthCalledWith(1, emptyBillRuns[0].id)
-        expect(UnassignBillRunToLicencesService).toHaveBeenNthCalledWith(2, emptyBillRuns[1].id)
+        expect(UnassignBillRunToLicencesService.default).toHaveBeenCalledTimes(2)
+        expect(UnassignBillRunToLicencesService.default).toHaveBeenNthCalledWith(1, emptyBillRuns[0].id)
+        expect(UnassignBillRunToLicencesService.default).toHaveBeenNthCalledWith(2, emptyBillRuns[1].id)
 
-        expect(DeleteBillRunService).toHaveBeenCalledTimes(2)
+        expect(DeleteBillRunService.default).toHaveBeenCalledTimes(2)
 
         expect(result).toEqual(2)
       })
@@ -96,28 +97,28 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
 
     describe('but one cannot be cancelled (CancelBillRunService does not update status)', () => {
       beforeEach(() => {
-        CancelBillRunService.mockResolvedValueOnce({
-          id: emptyBillRuns[0].id,
-          externalId: 'd704cb32-a309-4a04-9b0e-f316614a5927',
-          status: 'cancel'
-        })
-
-        CancelBillRunService.mockResolvedValueOnce({
-          id: emptyBillRuns[1].id,
-          externalId: '4f64f905-94b4-460d-aefc-098f57834085',
-          status: 'sending'
-        })
+        vi.spyOn(CancelBillRunService, 'default')
+          .mockResolvedValueOnce({
+            id: emptyBillRuns[0].id,
+            externalId: 'd704cb32-a309-4a04-9b0e-f316614a5927',
+            status: 'cancel'
+          })
+          .mockResolvedValueOnce({
+            id: emptyBillRuns[1].id,
+            externalId: '4f64f905-94b4-460d-aefc-098f57834085',
+            status: 'sending'
+          })
       })
 
       it('removes only the one that could be cancelled and returns the count', async () => {
         const result = await CleanEmptyBillRunsService()
 
-        expect(CancelBillRunService).toHaveBeenCalledTimes(2)
-        expect(CancelBillRunService).toHaveBeenNthCalledWith(1, emptyBillRuns[0].id)
-        expect(CancelBillRunService).toHaveBeenNthCalledWith(2, emptyBillRuns[1].id)
+        expect(CancelBillRunService.default).toHaveBeenCalledTimes(2)
+        expect(CancelBillRunService.default).toHaveBeenNthCalledWith(1, emptyBillRuns[0].id)
+        expect(CancelBillRunService.default).toHaveBeenNthCalledWith(2, emptyBillRuns[1].id)
 
         expect(UnassignBillRunToLicencesService.default).toHaveBeenCalledOnce()
-        expect(UnassignBillRunToLicencesService).toHaveBeenNthCalledWith(1, emptyBillRuns[0].id)
+        expect(UnassignBillRunToLicencesService.default).toHaveBeenNthCalledWith(1, emptyBillRuns[0].id)
 
         expect(DeleteBillRunService.default).toHaveBeenCalledOnce()
 
@@ -129,7 +130,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
   describe('when the clean errors', () => {
     describe('whilst fetching the empty bill runs', () => {
       beforeEach(() => {
-        emptyBillRunFetchStub.mockRejectedValue()
+        emptyBillRunFetchStub.mockRejectedValue(new Error('test error'))
       })
 
       it('does not throw an error', async () => {
@@ -141,7 +142,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
 
         const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-        expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed', expect.any(Object))
+        expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed', expect.any(Object), expect.any(Error))
         expect(errorLogArgs[1]).toEqual({ billRunId: undefined, job: 'clean-empty-bill-runs' })
         expect(errorLogArgs[2]).toBeInstanceOf(Error)
       })
@@ -157,7 +158,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
       beforeEach(() => {
         emptyBillRunFetchStub.mockResolvedValue(emptyBillRuns)
 
-        vi.spyOn(CancelBillRunService, 'default').mockRejectedValue()
+        vi.spyOn(CancelBillRunService, 'default').mockRejectedValue(new Error('test error'))
       })
 
       it('does not throw an error', async () => {
@@ -169,7 +170,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
 
         const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-        expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed', expect.any(Object))
+        expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed', expect.any(Object), expect.any(Error))
         expect(errorLogArgs[1]).toEqual({ billRunId: emptyBillRuns[0].id, job: 'clean-empty-bill-runs' })
         expect(errorLogArgs[2]).toBeInstanceOf(Error)
       })

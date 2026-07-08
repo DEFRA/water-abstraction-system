@@ -91,7 +91,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
   describe('when the notification status check errors', () => {
     beforeEach(() => {
-      vi.spyOn(CheckNotificationStatusService, 'default').mockRejectedValue()
+      vi.spyOn(CheckNotificationStatusService, 'default').mockRejectedValue(new Error())
     })
 
     it('does not update the linked notices', async () => {

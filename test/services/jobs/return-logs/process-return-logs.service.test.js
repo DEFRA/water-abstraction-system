@@ -101,7 +101,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
   describe('when the service errors', () => {
     describe('because the check return cycle service errors', () => {
       beforeEach(() => {
-        vi.spyOn(CheckReturnCycleService, 'default').mockRejectedValue()
+        vi.spyOn(CheckReturnCycleService, 'default').mockRejectedValue(new Error())
       })
 
       it('records the error by calling "omfg()"', async () => {
@@ -131,7 +131,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
         returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
         vi.spyOn(FetchReturnRequirementsService, 'default').mockResolvedValue([returnRequirement])
 
-        vi.spyOn(CreateReturnLogsService, 'default').mockRejectedValue()
+        vi.spyOn(CreateReturnLogsService, 'default').mockRejectedValue(new Error())
       })
 
       it('records the error by calling "omfg()"', async () => {

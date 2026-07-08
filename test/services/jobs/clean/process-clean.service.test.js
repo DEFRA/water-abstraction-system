@@ -77,7 +77,7 @@ describe('Jobs - Clean - Process Clean service', () => {
   // try/catch. Hence, we have tests to confirm it is doing what we expect.
   describe('when a clean task errors', () => {
     beforeEach(() => {
-      vi.spyOn(CleanEmptyBillRunsService, 'default').mockRejectedValue()
+      vi.spyOn(CleanEmptyBillRunsService, 'default').mockRejectedValue(new Error())
     })
 
     it('does not throw an error', async () => {
@@ -89,7 +89,7 @@ describe('Jobs - Clean - Process Clean service', () => {
 
       const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-      expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed', expect.any(Object))
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Clean job failed', expect.any(Object), expect.any(Error))
       expect(errorLogArgs[1]).toEqual({})
       expect(errorLogArgs[2]).toBeInstanceOf(Error)
     })

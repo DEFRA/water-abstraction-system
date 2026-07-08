@@ -91,7 +91,7 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
   describe('when there is an error', () => {
     describe('during the processing of a licence', () => {
       beforeEach(() => {
-        vi.spyOn(ProcessBillingFlagService, 'default').mockRejectedValue()
+        vi.spyOn(ProcessBillingFlagService, 'default').mockRejectedValue(new Error())
       })
 
       it('handles the error', async () => {
@@ -99,7 +99,7 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
 
         const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-        expect(notifierStub.omfg).toHaveBeenCalledWith('Process licence end date change failed', expect.any(Object))
+        expect(notifierStub.omfg).toHaveBeenCalledWith('Process licence end date change failed', expect.any(Object), expect.any(Error))
         expect(errorLogArgs[1]).toEqual({
           id: licenceEndDateChange.id,
           licenceId: licenceEndDateChange.licenceId,
@@ -124,7 +124,7 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
 
         const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-        expect(notifierStub.omfg).toHaveBeenCalledWith('Process licence end date changes failed', expect.any(Object))
+        expect(notifierStub.omfg).toHaveBeenCalledWith('Process licence end date changes failed', expect.any(Object), expect.any(Error))
         expect(errorLogArgs[1]).toBeNull()
         expect(errorLogArgs[2]).toBeInstanceOf(Error)
       })

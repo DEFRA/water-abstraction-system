@@ -116,7 +116,7 @@ describe('Process Time Limited Licences service', () => {
 
   describe('when there is an error', () => {
     beforeEach(() => {
-      vi.spyOn(FetchTimeLimitedLicencesService, 'default').mockRejectedValue()
+      vi.spyOn(FetchTimeLimitedLicencesService, 'default').mockRejectedValue(new Error())
     })
 
     it('records the error by calling "omfg()"', async () => {

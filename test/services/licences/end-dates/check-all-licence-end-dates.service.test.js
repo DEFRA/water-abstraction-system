@@ -103,7 +103,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
 
   describe('when there is an error', () => {
     beforeEach(() => {
-      vi.spyOn(CheckLicenceEndDatesService, 'default').mockRejectedValue()
+      vi.spyOn(CheckLicenceEndDatesService, 'default').mockRejectedValue(new Error())
     })
 
     it('handles the error', async () => {
