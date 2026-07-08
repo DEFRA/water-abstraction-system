@@ -13,7 +13,7 @@ describe('Seed service', () => {
   beforeEach(async () => {
     knexRunStub =     vi.fn().mockResolvedValue()
 
-    vi.spyOn(db, 'seed', 'get').mockReturnValue((()) => {
+    vi.spyOn(db, 'seed', 'get').mockReturnValue(() => {
       return { run: knexRunStub }
     })
   })

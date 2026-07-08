@@ -26,7 +26,7 @@ describe('Company Contacts - Create Company Contact dal', () => {
 
     company = await CompanyHelper.add()
 
-    clock = vi.useFakeTimers({ now: { now: new Date('2021-01-01' }), toFake: ['Date'] })
+    clock = vi.useFakeTimers({ now: new Date('2021-01-01'), toFake: ['Date'] })
   })
 
   afterAll(async () => {
