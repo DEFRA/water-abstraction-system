@@ -83,9 +83,7 @@ async function _fetch(licenceRef, billingPeriod) {
   return returnLogs
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

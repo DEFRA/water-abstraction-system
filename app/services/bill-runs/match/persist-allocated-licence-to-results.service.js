@@ -178,9 +178,7 @@ async function _persistReviewReturn(returnLog, reviewLicenceId) {
   return reviewReturnId
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

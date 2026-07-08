@@ -269,9 +269,7 @@ function _generateDates(startDate, endDate, returnsFrequency) {
   return _formatPeriodsToLongDate(dates)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

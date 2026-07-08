@@ -61,9 +61,7 @@ function _textPrefix(name) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

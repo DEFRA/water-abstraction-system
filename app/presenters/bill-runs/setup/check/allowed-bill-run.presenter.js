@@ -50,9 +50,7 @@ function _chargeScheme(trigger) {
   return formatChargeScheme(scheme)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

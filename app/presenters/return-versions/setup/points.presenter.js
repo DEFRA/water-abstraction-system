@@ -56,9 +56,7 @@ function _licencePoints(points) {
   })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

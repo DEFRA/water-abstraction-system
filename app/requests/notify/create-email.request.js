@@ -3,7 +3,7 @@
  * @module CreateEmailRequest
  */
 
-import NotifyRequest from '../notify.request.js'
+import { postRequest } from '../notify.request.js'
 
 /**
  * Create and send an email using GOV.UK Notify
@@ -32,7 +32,7 @@ import NotifyRequest from '../notify.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(templateId, emailAddress, options) {
+export async function send(templateId, emailAddress, options) {
   const path = 'v2/notifications/email'
 
   const body = {
@@ -41,12 +41,5 @@ async function send(templateId, emailAddress, options) {
     ...options
   }
 
-  return NotifyRequest.post(path, body)
-}
-
-export {
-  send
-}
-export default {
-  send
+  return postRequest(path, body)
 }

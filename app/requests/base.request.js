@@ -12,7 +12,7 @@ import serverConfig from '../../config/server.config.js'
  *
  * We want to be able to export these options so we can set specific settings that may be multiple objects deep. For
  * example, if we want to set `retry.backoffLimit` then we can't simply pass `{ retry: { backoffLimit: 5 } }` to the lib
- * as `additionalOptions` as this would replace the entire `retry` section. We would therefore want to get the exported
+ * as `additionalOptions` as this would replace the entire `retry` section. We would therefore want to getRequest the exported
  * `retry` section and add our setting to it before passing it back as `additionalOptions`.
  *
  * Note that we have a function here rather than defining a const as this did not allow us to override settings using
@@ -21,7 +21,7 @@ import serverConfig from '../../config/server.config.js'
  *
  * @returns {object} default options to pass to Got when making a request
  */
-function defaultOptions() {
+export function defaultOptions() {
   return {
     // This uses the ternary operator to give either an `agent` object or an empty object, and the spread operator to
     // bring the result back into the top level of the `defaultOptions` object.
@@ -33,7 +33,7 @@ function defaultOptions() {
         }
       : {}),
     // If we don't have this setting Got will throw its own HTTPError unless the result is 2xx or 3xx. That makes it
-    // impossible to see what the status code was because it doesn't get set on the response object Got provides when
+    // impossible to see what the status code was because it doesn't getRequest set on the response object Got provides when
     // an error is thrown. With this set Got will treat a 404 in the same way it treats a 204.
     throwHttpErrors: false,
     // Got has a built in retry mechanism. We have found though you have to be careful with what gets retried. Our
@@ -77,7 +77,7 @@ function defaultOptions() {
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function deleteRequest(url, additionalOptions = {}) {
+export async function deleteRequest(url, additionalOptions = {}) {
   return _sendRequest('delete', url, additionalOptions)
 }
 
@@ -102,8 +102,8 @@ async function deleteRequest(url, additionalOptions = {}) {
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function get(url, additionalOptions = {}) {
-  return _sendRequest('get', url, additionalOptions)
+export async function getRequest(url, additionalOptions = {}) {
+  return _sendRequest('getRequest', url, additionalOptions)
 }
 
 /**
@@ -127,8 +127,8 @@ async function get(url, additionalOptions = {}) {
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function patch(url, additionalOptions = {}) {
-  return _sendRequest('patch', url, additionalOptions)
+export async function patchRequest(url, additionalOptions = {}) {
+  return _sendRequest('patchRequest', url, additionalOptions)
 }
 
 /**
@@ -152,8 +152,8 @@ async function patch(url, additionalOptions = {}) {
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function post(url, additionalOptions = {}) {
-  return _sendRequest('post', url, additionalOptions)
+export async function postRequest(url, additionalOptions = {}) {
+  return _sendRequest('postRequest', url, additionalOptions)
 }
 
 function _beforeRetryHook(error, retryCount) {
@@ -250,12 +250,4 @@ async function _sendRequest(method, url, additionalOptions) {
   }
 
   return result
-}
-
-export default {
-  delete: deleteRequest,
-  get,
-  patch,
-  post,
-  defaultOptions: defaultOptions()
 }

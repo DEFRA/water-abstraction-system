@@ -26,9 +26,7 @@ async function go(reviewChargeElementId, elementIndex) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -75,9 +75,7 @@ function _formatBillNumber(bill) {
 
   return ''
 }
-export {
-  go
-}
+export { go }
 export default {
   go
 }

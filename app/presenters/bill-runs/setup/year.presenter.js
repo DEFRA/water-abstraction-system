@@ -62,9 +62,7 @@ function _tptAnnualFinancialYearsData(selectedYear) {
   ]
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

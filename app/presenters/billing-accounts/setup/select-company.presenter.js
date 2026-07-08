@@ -46,9 +46,7 @@ function _radioOptions(companies, companiesHouseNumber) {
   return items
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

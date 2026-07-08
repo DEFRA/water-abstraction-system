@@ -4,7 +4,7 @@
  */
 
 import BillRunModel from '../../models/bill-run.model.js'
-import ChargingModuleCreateBillRunRequest from '../../requests/charging-module/create-bill-run.request.js'
+import { send } from '../../requests/charging-module/create-bill-run.request.js'
 import CreateBillRunService from './create-bill-run.service.js'
 import CreateBillRunEventService from './create-bill-run-event.service.js'
 
@@ -22,7 +22,7 @@ import CreateBillRunEventService from './create-bill-run-event.service.js'
  * @returns {Promise<module:BillRunModel>} The newly created bill run instance
  */
 async function go(financialYearEndings, regionId, batchType, userEmail) {
-  const chargingModuleResult = await ChargingModuleCreateBillRunRequest.send(regionId, 'sroc')
+  const chargingModuleResult = await send(regionId, 'sroc')
 
   const billRunOptions = _billRunOptions(chargingModuleResult, batchType)
   const billRun = await CreateBillRunService.go(regionId, financialYearEndings, billRunOptions)
@@ -51,9 +51,7 @@ function _billRunOptions(chargingModuleResult, batchType) {
   return options
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -67,9 +67,7 @@ function _purposeDetails(purposes) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

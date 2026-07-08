@@ -3,7 +3,7 @@
  * @module PreviewPresenter
  */
 
-import GeneratePreviewRequest from '../../../../requests/notify/generate-preview.request.js'
+import { send } from '../../../../requests/notify/generate-preview.request.js'
 
 import { NoticeType } from '../../../../lib/static-lookups.lib.js'
 import { sentenceCase } from '../../../base.presenter.js'
@@ -56,7 +56,7 @@ function _backLink(contactHashId, noticeType, sessionId) {
 }
 
 async function _notifyPreview(personalisation, templateId) {
-  const previewResult = await GeneratePreviewRequest.send(templateId, personalisation)
+  const previewResult = await send(templateId, personalisation)
 
   if (previewResult.succeeded) {
     return previewResult.response.body.body
@@ -75,9 +75,7 @@ function _refreshPageLink(contactHashId, noticeType, licenceMonitoringStationId,
   return baseRefreshPageLink
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

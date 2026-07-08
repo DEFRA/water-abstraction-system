@@ -3,7 +3,7 @@
  * @module ViewHealthRequest
  */
 
-import BaseRequest from '../base.request.js'
+import { getRequest } from '../base.request.js'
 
 import gotenbergConfig from '../../../config/gotenberg.config.js'
 
@@ -12,15 +12,8 @@ import gotenbergConfig from '../../../config/gotenberg.config.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send() {
+export async function send() {
   const statusUrl = new URL('/health', gotenbergConfig.url)
 
-  return BaseRequest.get(statusUrl.href, { responseType: 'json' })
-}
-
-export {
-  send
-}
-export default {
-  send
+  return getRequest(statusUrl.href, { responseType: 'json' })
 }

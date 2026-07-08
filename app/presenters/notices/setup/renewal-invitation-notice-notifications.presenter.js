@@ -105,9 +105,7 @@ function _templateType(recipient) {
   return 'single licence'
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -3,7 +3,7 @@
  * @module CreateService
  */
 
-import LegacyCreateBillRunRequest from '../../../requests/legacy/create-bill-run.request.js'
+import { send } from '../../../requests/legacy/create-bill-run.request.js'
 import StartBillRunProcessService from '../start-bill-run-process.service.js'
 import { engineTriggers } from '../../../lib/static-lookups.lib.js'
 
@@ -30,13 +30,11 @@ async function go(session, blockingResults, user) {
   }
 
   if (trigger === engineTriggers.old || trigger === engineTriggers.both) {
-    await LegacyCreateBillRunRequest.send(type, regionId, toFinancialYearEnding, user, season === 'summer')
+    await send(type, regionId, toFinancialYearEnding, user, season === 'summer')
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

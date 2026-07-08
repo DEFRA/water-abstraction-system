@@ -103,9 +103,7 @@ function _tagLicenceButton(auth, monitoringStationId) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

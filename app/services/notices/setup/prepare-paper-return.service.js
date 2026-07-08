@@ -4,7 +4,7 @@
  * @module PreparePaperReturnService
  */
 
-import GeneratePaperReturnRequest from '../../../requests/gotenberg/generate-paper-return.request.js'
+import { send } from '../../../requests/gotenberg/generate-paper-return.request.js'
 import PreparePaperReturnPresenter from '../../../presenters/notices/setup/prepare-paper-return.presenter.js'
 
 /**
@@ -20,7 +20,7 @@ import PreparePaperReturnPresenter from '../../../presenters/notices/setup/prepa
 async function go(notification) {
   const pageData = PreparePaperReturnPresenter.go(notification)
 
-  return GeneratePaperReturnRequest.send(pageData)
+  return send(pageData)
 }
 
 export { go }

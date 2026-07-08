@@ -4,7 +4,7 @@
  */
 
 import BillLicenceModel from '../../models/bill-licence.model.js'
-import LegacyDeleteBillLicenceRequest from '../../requests/legacy/delete-bill-licence.request.js'
+import { send } from '../../requests/legacy/delete-bill-licence.request.js'
 import ProcessBillingFlagService from '../licences/supplementary/process-billing-flag.service.js'
 import UnassignLicencesToBillRunService from '../bill-runs/unassign-licences-to-bill-run.service.js'
 
@@ -31,7 +31,7 @@ async function go(billLicenceId, user) {
 
   await UnassignLicencesToBillRunService.go([licenceId], bill.billRunId)
   await ProcessBillingFlagService.go({ billLicenceId })
-  await LegacyDeleteBillLicenceRequest.send(billLicenceId, user)
+  await send(billLicenceId, user)
 
   return `/billing/batch/${bill.billRunId}/processing?invoiceId=${bill.id}`
 }

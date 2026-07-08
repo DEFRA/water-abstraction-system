@@ -79,9 +79,7 @@ function _noticeRowData(notices) {
   })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

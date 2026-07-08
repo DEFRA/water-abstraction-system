@@ -53,9 +53,7 @@ function _companyAddresses(companyAddresses) {
   })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

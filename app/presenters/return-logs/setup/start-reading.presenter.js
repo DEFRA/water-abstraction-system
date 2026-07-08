@@ -39,9 +39,7 @@ function _savedValue(startReading) {
   return startReading ?? null
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

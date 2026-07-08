@@ -110,9 +110,7 @@ function _userLicences(licences) {
   })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

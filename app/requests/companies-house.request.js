@@ -3,7 +3,7 @@
  * @module CompaniesHouseRequest
  */
 
-import BaseRequest from './base.request.js'
+import { getRequest as baseGetRequest } from './base.request.js'
 
 import companiesHouseConfig from '../../config/companies-house.config.js'
 
@@ -15,8 +15,8 @@ import companiesHouseConfig from '../../config/companies-house.config.js'
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function get(path, searchParams) {
-  const result = await _sendRequest(path, BaseRequest.get, searchParams)
+export async function getRequest(path, searchParams) {
+  const result = await _sendRequest(path, baseGetRequest, searchParams)
 
   return _parseResult(result)
 }
@@ -78,11 +78,4 @@ function _requestOptions(accessToken, searchParams) {
     responseType: 'json',
     ...(searchParams && { searchParams })
   }
-}
-
-export {
-  get
-}
-export default {
-  get
 }

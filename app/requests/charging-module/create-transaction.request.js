@@ -3,7 +3,7 @@
  * @module CreateTransactionRequest
  */
 
-import ChargingModuleRequest from '../charging-module.request.js'
+import { postRequest } from '../charging-module.request.js'
 
 /**
  * Sends a request to the Charging Module to create a transaction and returns the result.
@@ -16,15 +16,8 @@ import ChargingModuleRequest from '../charging-module.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(billRunId, transactionData) {
+export async function send(billRunId, transactionData) {
   const path = `v3/wrls/bill-runs/${billRunId}/transactions`
 
-  return ChargingModuleRequest.post(path, transactionData)
-}
-
-export {
-  send
-}
-export default {
-  send
+  return postRequest(path, transactionData)
 }

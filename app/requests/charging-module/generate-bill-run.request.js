@@ -3,7 +3,7 @@
  * @module GenerateBillRunRequest
  */
 
-import ChargingModuleRequest from '../charging-module.request.js'
+import { patchRequest } from '../charging-module.request.js'
 
 /**
  * Generate a bill run in the Charging Module API
@@ -15,15 +15,8 @@ import ChargingModuleRequest from '../charging-module.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(billRunId) {
+export async function send(billRunId) {
   const path = `v3/wrls/bill-runs/${billRunId}/generate`
 
-  return ChargingModuleRequest.patch(path)
-}
-
-export {
-  send
-}
-export default {
-  send
+  return patchRequest(path)
 }

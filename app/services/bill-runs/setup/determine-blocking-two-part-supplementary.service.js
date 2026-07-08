@@ -88,9 +88,7 @@ async function _toFinancialYearEnding(regionId, year) {
   return billRun ? year : 0
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

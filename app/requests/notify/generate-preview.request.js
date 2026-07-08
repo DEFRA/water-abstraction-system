@@ -3,7 +3,7 @@
  * @module GeneratePreviewRequest
  */
 
-import NotifyRequest from '../notify.request.js'
+import { postRequest } from '../notify.request.js'
 
 /**
  * Generate a preview of a notification using GOV.UK Notify
@@ -31,17 +31,10 @@ import NotifyRequest from '../notify.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(templateId, personalisation) {
+export async function send(templateId, personalisation) {
   const path = `v2/template/${templateId}/preview`
 
   const body = { personalisation }
 
-  return NotifyRequest.post(path, body)
-}
-
-export {
-  send
-}
-export default {
-  send
+  return postRequest(path, body)
 }

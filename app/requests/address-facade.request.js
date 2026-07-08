@@ -3,7 +3,7 @@
  * @module AddressFacadeRequest
  */
 
-import BaseRequest from './base.request.js'
+import { getRequest as baseGetRequest } from './base.request.js'
 
 import addressFacadeConfig from '../../config/address-facade.config.js'
 
@@ -14,8 +14,8 @@ import addressFacadeConfig from '../../config/address-facade.config.js'
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function get(path) {
-  const result = await _sendRequest(path, BaseRequest.get)
+export async function getRequest(path) {
+  const result = await _sendRequest(path, baseGetRequest)
 
   return _parseResult(result)
 }
@@ -71,11 +71,4 @@ function _requestOptions() {
     prefixUrl: addressFacadeConfig.url,
     responseType: 'json'
   }
-}
-
-export {
-  get
-}
-export default {
-  get
 }

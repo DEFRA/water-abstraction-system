@@ -25,9 +25,7 @@ function go(statusCode, message, errors) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

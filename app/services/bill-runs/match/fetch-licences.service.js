@@ -62,9 +62,7 @@ function _groupByLicence(chargeVersions, uniqueLicenceIds) {
   return licences
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

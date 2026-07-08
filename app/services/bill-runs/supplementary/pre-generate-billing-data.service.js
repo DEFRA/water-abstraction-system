@@ -118,9 +118,7 @@ function _preGenerateBills(billingAccounts, billRunId, billingPeriod) {
   return keyedBills
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

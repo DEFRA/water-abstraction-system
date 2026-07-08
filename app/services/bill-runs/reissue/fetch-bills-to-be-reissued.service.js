@@ -43,9 +43,7 @@ async function go(regionId) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

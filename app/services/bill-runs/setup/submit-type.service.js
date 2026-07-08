@@ -66,9 +66,7 @@ function _validate(payload) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -25,9 +25,7 @@ function _communicationType(companyContact) {
   return companyContact.licenceRole.label
 }
 
-export {
-  formatCompanyContact
-}
+export { formatCompanyContact }
 export default {
   formatCompanyContact
 }

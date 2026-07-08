@@ -259,9 +259,7 @@ function _totalCubicMetres(lines) {
   return formatNumber(totalCubicMetres)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -36,9 +36,7 @@ function _save(payload, yar, filterKey) {
   })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

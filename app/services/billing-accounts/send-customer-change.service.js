@@ -3,7 +3,7 @@
  * @module SendCustomerChangeService
  */
 
-import ChargingModuleCreateCustomerChangeRequest from '../../requests/charging-module/create-customer-change.request.js'
+import { send } from '../../requests/charging-module/create-customer-change.request.js'
 import CreateCustomerChangePresenter from '../../presenters/charging-module/create-customer-change.presenter.js'
 import ExpandedError from '../../errors/expanded.error.js'
 
@@ -31,7 +31,7 @@ import ExpandedError from '../../errors/expanded.error.js'
 async function go(billingAccount, address, company, contact) {
   const requestData = CreateCustomerChangePresenter.go(billingAccount, address, company, contact)
 
-  const result = await ChargingModuleCreateCustomerChangeRequest.send(requestData)
+  const result = await send(requestData)
 
   if (!result.succeeded) {
     throw new ExpandedError('Customer change failed to send', { billingAccountId: billingAccount.id })

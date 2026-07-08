@@ -57,9 +57,7 @@ function _alertTypeOptions(alertType) {
   ]
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

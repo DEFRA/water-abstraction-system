@@ -6,7 +6,7 @@
 import LicenceMonitoringStationModel from '../../models/licence-monitoring-station.model.js'
 import NotificationModel from '../../models/notification.model.js'
 import ReturnLogModel from '../../models/return-log.model.js'
-import ViewMessageDataRequest from '../../requests/notify/view-message-data.request.js'
+import { send } from '../../requests/notify/view-message-data.request.js'
 import { timestampForPostgres } from '../../lib/general.lib.js'
 
 const NOTIFICATIONS_STATUS = {
@@ -84,7 +84,7 @@ async function go(notification) {
 }
 
 async function _notifyStatus(notifyId) {
-  const notifyResult = await ViewMessageDataRequest.send(notifyId)
+  const notifyResult = await send(notifyId)
 
   const { response, succeeded } = notifyResult
 

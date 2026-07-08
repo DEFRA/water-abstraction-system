@@ -55,9 +55,7 @@ function _pageData(fetchResult) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

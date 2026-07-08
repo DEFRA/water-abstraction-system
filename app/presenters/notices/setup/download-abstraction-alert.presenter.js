@@ -126,9 +126,7 @@ function _transformToCsv(recipients, session) {
   return rows
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

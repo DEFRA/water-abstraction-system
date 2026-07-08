@@ -21,9 +21,7 @@ function go(session, regions) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

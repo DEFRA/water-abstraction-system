@@ -71,10 +71,7 @@ function sourceNavigation(requestedQueryValue, canManageAccounts) {
   }
 }
 
-export {
-  formatLicencesToUnlink,
-  sourceNavigation
-}
+export { formatLicencesToUnlink, sourceNavigation }
 export default {
   formatLicencesToUnlink,
   sourceNavigation

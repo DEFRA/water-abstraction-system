@@ -65,9 +65,7 @@ function _recipient(notification) {
   ].filter(Boolean)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

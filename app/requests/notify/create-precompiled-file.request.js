@@ -3,7 +3,7 @@
  * @module CreatePrecompiledFileRequest
  */
 
-import NotifyRequest from '../notify.request.js'
+import { postRequest } from '../notify.request.js'
 
 /**
  * Create and send a precompiled file using GOV.UK Notify
@@ -21,7 +21,7 @@ import NotifyRequest from '../notify.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(content, reference) {
+export async function send(content, reference) {
   const path = 'v2/notifications/letter'
 
   const body = {
@@ -29,12 +29,5 @@ async function send(content, reference) {
     content: Buffer.from(content).toString('base64')
   }
 
-  return NotifyRequest.post(path, body)
-}
-
-export {
-  send
-}
-export default {
-  send
+  return postRequest(path, body)
 }

@@ -3,7 +3,7 @@
  * @module LookupPostcodeRequest
  */
 
-import AddressFacadeRequest from '../address-facade.request.js'
+import { getRequest } from '../address-facade.request.js'
 
 /**
  * Sends a request to the address facade for the provided postcode
@@ -12,15 +12,8 @@ import AddressFacadeRequest from '../address-facade.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(postcode) {
+export async function send(postcode) {
   const path = `address-service/v1/addresses/postcode?query-string=${postcode}&key=client1`
 
-  return AddressFacadeRequest.get(path)
-}
-
-export {
-  send
-}
-export default {
-  send
+  return getRequest(path)
 }

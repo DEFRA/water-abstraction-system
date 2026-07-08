@@ -69,9 +69,7 @@ function _canAmend(reviewChargeReference) {
   return aggregate !== 1 || chargeAdjustment !== 1
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

@@ -63,9 +63,7 @@ async function _processEmptyBillRun(billRun) {
   GenerateTwoPartTariffBillRunService.go(billRun.id)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

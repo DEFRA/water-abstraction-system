@@ -52,9 +52,7 @@ function _authorisedQuantity(reviewChargeElement) {
   return Math.min(chargeElement.authorisedAnnualQuantity, reviewChargeReference.amendedAuthorisedVolume)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

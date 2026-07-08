@@ -3,7 +3,7 @@
  * @module CreateCustomerChangeRequest
  */
 
-import ChargingModuleRequest from '../charging-module.request.js'
+import { postRequest } from '../charging-module.request.js'
 
 /**
  * Sends a request to the Charging Module to create a new customer change and returns the result
@@ -15,15 +15,8 @@ import ChargingModuleRequest from '../charging-module.request.js'
  *
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
-async function send(customerChangeData) {
+export async function send(customerChangeData) {
   const path = 'v3/wrls/customer-changes'
 
-  return ChargingModuleRequest.post(path, customerChangeData)
-}
-
-export {
-  send
-}
-export default {
-  send
+  return postRequest(path, customerChangeData)
 }

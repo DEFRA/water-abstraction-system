@@ -80,9 +80,7 @@ function _bills(bills) {
   })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

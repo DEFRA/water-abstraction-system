@@ -61,9 +61,7 @@ function _returns(returns) {
   })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

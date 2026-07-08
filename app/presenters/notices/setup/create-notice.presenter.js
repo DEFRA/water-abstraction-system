@@ -113,9 +113,7 @@ function _summer(returnsPeriod) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

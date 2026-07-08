@@ -27,9 +27,7 @@ function go(returnLog, notifications) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

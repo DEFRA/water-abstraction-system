@@ -62,9 +62,7 @@ function _matchReturns(chargeElement, returnLogs) {
   })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

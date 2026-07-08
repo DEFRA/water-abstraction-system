@@ -70,9 +70,7 @@ function _type(stopOrReduce, reduceAtThreshold) {
   return 'Reduce with a maximum volume limit'
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

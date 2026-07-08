@@ -4,7 +4,7 @@
  */
 
 import ExpandedError from '../../errors/expanded.error.js'
-import ViewBillRunStatusRequest from './view-bill-run-status.request.js'
+import { send as viewBillRunStatus } from './view-bill-run-status.request.js'
 import { pause } from '../../lib/general.lib.js'
 
 import billingConfig from '../../../config/billing.config.js'
@@ -42,12 +42,12 @@ import billingConfig from '../../../config/billing.config.js'
  *
  * @returns {Promise<object>} returns the results of the wait
  */
-async function send(billRunId, statusesToWaitFor, maximumAttempts = 120) {
+export async function send(billRunId, statusesToWaitFor, maximumAttempts = 120) {
   let attempts = 0
   let status
 
   for (let i = 1; i <= maximumAttempts; i++) {
-    const result = await ViewBillRunStatusRequest.send(billRunId)
+    const result = await viewBillRunStatus(billRunId)
 
     attempts = i
 
@@ -79,11 +79,4 @@ function _requestFailed(billRunId, result) {
   })
 
   throw error
-}
-
-export {
-  send
-}
-export default {
-  send
 }

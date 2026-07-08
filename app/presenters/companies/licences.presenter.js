@@ -68,9 +68,7 @@ function _status(licenceEndDetails) {
   return null
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

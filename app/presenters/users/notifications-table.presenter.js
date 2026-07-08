@@ -41,9 +41,7 @@ function _link(notification, sentDate, userId, type) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

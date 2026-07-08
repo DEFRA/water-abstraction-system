@@ -59,9 +59,7 @@ async function _persistData(dataToPersist) {
   await TransactionModel.query().insert(dataToPersist.transactions)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

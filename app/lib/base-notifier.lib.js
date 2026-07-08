@@ -7,7 +7,7 @@ import { Notifier } from '@airbrake/node'
 import Pino from 'pino'
 
 import AirbrakeConfig from '../../config/airbrake.config.js'
-import CreateEmailRequest from '../requests/notify/create-email.request.js'
+import { send } from '../requests/notify/create-email.request.js'
 import NotifyConfig from '../../config/notify.config.js'
 import { NOTIFY_TEMPLATES } from './notify-templates.lib.js'
 
@@ -133,7 +133,7 @@ class BaseNotifierLib {
     const emails = NotifyConfig.alertEmailAddresses.split(',')
 
     for (const email of emails) {
-      CreateEmailRequest.send(NOTIFY_TEMPLATES.system.statusAlert, email, options).catch((err) => {
+      send(NOTIFY_TEMPLATES.system.statusAlert, email, options).catch((err) => {
         this._logger.error(err, `${this.constructor.name} - CreateEmailRequest errored`)
       })
     }

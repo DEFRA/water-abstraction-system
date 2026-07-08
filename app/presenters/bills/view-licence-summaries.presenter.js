@@ -45,9 +45,7 @@ function _tableCaption(billLicences) {
   return `${numberOfRows} licences`
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

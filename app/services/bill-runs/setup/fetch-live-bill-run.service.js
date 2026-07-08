@@ -31,9 +31,7 @@ async function go(regionId, toFinancialYearEnding) {
     .first()
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

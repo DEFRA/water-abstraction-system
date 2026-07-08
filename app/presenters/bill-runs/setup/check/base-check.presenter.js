@@ -20,9 +20,7 @@ function checkPageBackLink(session) {
   return `/system/bill-runs/setup/${id}/season`
 }
 
-export {
-  checkPageBackLink
-}
+export { checkPageBackLink }
 export default {
   checkPageBackLink
 }

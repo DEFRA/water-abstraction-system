@@ -287,9 +287,7 @@ async function _persistBillData(bill, billLicences, transactions) {
   return true
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

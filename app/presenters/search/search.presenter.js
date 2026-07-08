@@ -243,9 +243,7 @@ function _user(user) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

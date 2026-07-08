@@ -28,9 +28,7 @@ function _summaryList(session) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

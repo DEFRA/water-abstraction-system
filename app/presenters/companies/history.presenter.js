@@ -52,9 +52,7 @@ function _licenceVersions(licences) {
   return versions
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

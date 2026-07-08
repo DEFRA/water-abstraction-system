@@ -54,9 +54,7 @@ function go(transaction, accountNumber, licence) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

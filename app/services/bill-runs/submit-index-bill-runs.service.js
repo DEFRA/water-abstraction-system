@@ -103,9 +103,7 @@ function _validate(payload, regions) {
   return formatValidationResult(validationResult)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

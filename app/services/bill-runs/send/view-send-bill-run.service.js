@@ -35,9 +35,7 @@ async function _fetchBillRun(id) {
     })
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

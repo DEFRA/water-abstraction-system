@@ -1,4 +1,4 @@
-import ChargingModuleTokenRequest from '../requests/charging-module/token.request.js'
+import { send } from '../requests/charging-module/token.request.js'
 
 /**
  * Adds a server method which returns a Cognito token for the Charging Module.
@@ -19,7 +19,7 @@ const ChargingModuleTokenCachePlugin = {
     server.method(
       'getChargingModuleToken',
       async (flags) => {
-        const token = await ChargingModuleTokenRequest.send()
+        const token = await send()
 
         // If the token request was successful it returns an expiry time, so use this to set the cache expiry
         // Otherwise, set the expiry time to 0 to avoid caching the unsuccessful attempt

@@ -89,9 +89,7 @@ function _warning(licences) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

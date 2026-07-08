@@ -5,11 +5,11 @@
 
 import BillRunError from '../../../errors/bill-run.error.js'
 import BillRunModel from '../../../models/bill-run.model.js'
-import ChargingModuleGenerateBillRunRequest from '../../../requests/charging-module/generate-bill-run.request.js'
+import { send as generateBillRun } from '../../../requests/charging-module/generate-bill-run.request.js'
 import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } from '../../../lib/general.lib.js'
 import FetchBillingAccountsService from './fetch-billing-accounts.service.js'
 import HandleErroredBillRunService from '../handle-errored-bill-run.service.js'
-import LegacyRefreshBillRunRequest from '../../../requests/legacy/refresh-bill-run.request.js'
+import { send as refreshBillRun } from '../../../requests/legacy/refresh-bill-run.request.js'
 import ProcessBillingPeriodService from './process-billing-period.service.js'
 import UnflagUnbilledSupplementaryLicencesService from '../unflag-unbilled-supplementary-licences.service.js'
 
@@ -87,11 +87,11 @@ async function _finaliseBillRun(billRun, billRunPopulated) {
   if (billRunPopulated) {
     // We now need to tell the Charging Module to run its generate process. This is where the Charging module finalises
     // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
-    await ChargingModuleGenerateBillRunRequest.send(billRun.externalId)
+    await generateBillRun(billRun.externalId)
 
     // TODO: The legacy service still handles refreshing the billing information on our side after the Charging Module API
     // has finished generating the bill run. We need to take this over when we next get the opportunity.
-    await LegacyRefreshBillRunRequest.send(billRun.id)
+    await refreshBillRun(billRun.id)
   } else {
     // If there are no bill licences then the bill run is considered empty. We just need to set the status to indicate
     // this in the UI
@@ -115,9 +115,7 @@ async function _processBillingPeriod(billingPeriod, billRun) {
   await _finaliseBillRun(billRun, billRunPopulated)
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

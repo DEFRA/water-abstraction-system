@@ -205,9 +205,7 @@ function _warning(formattedRecipients) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

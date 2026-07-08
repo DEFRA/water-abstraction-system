@@ -183,9 +183,7 @@ function _whereExistsClause(billRunId, billingPeriod) {
   return query
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }

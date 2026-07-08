@@ -54,9 +54,7 @@ function _filters(yar) {
   }
 }
 
-export {
-  go
-}
+export { go }
 export default {
   go
 }
