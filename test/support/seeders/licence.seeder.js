@@ -12,7 +12,7 @@ import { generateUUID } from '../../../app/lib/general.lib.js'
  *
  * @returns {Promise<object>} an object containing the company, both licences and their versions, and a clean function
  */
-async function licenceHolderWithMultipleLicences() {
+export async function licenceHolderWithMultipleLicences() {
   const { company, licence, licenceVersion } = await licenceHolderWithSingleLicence()
 
   const licenceTwo = await LicenceHelper.add()
@@ -46,7 +46,7 @@ async function licenceHolderWithMultipleLicences() {
  *
  * @returns {Promise<object>} an object containing the company, the licence, both licence versions, and a clean function
  */
-async function exLicenceHolderWithSingleLicences() {
+export async function exLicenceHolderWithSingleLicences() {
   const { clean, ...licenceHolder } = await licenceHolderWithSingleLicence()
 
   const newerLicenceVersion = await LicenceVersionHelper.add({
@@ -72,7 +72,7 @@ async function exLicenceHolderWithSingleLicences() {
  *
  * @returns {Promise<object>} an object containing the company, licence, licence version, and a clean function
  */
-async function licenceHolderWithSingleLicence(data = {}) {
+export async function licenceHolderWithSingleLicence(data = {}) {
   const company = await CompanyHelper.add()
 
   const licence = await LicenceHelper.add(data)
@@ -88,15 +88,4 @@ async function licenceHolderWithSingleLicence(data = {}) {
       await company.$query().delete()
     }
   }
-}
-
-export {
-  exLicenceHolderWithSingleLicences,
-  licenceHolderWithMultipleLicences,
-  licenceHolderWithSingleLicence
-}
-export default {
-  exLicenceHolderWithSingleLicences,
-  licenceHolderWithMultipleLicences,
-  licenceHolderWithSingleLicence
 }

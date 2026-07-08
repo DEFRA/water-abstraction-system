@@ -53,7 +53,7 @@ const { generateLicenceRef } = LicenceHelper
  *
  * @returns {object} - all the contacts
  */
-async function seed() {
+export async function seed() {
   // Setup company - The company will be the licence holder
   const company = await _company('Hogwarts')
   const companyId = company.record.id
@@ -473,11 +473,4 @@ async function _returnsUser(companyEntityId, name) {
       await user.$query().delete()
     }
   }
-}
-
-export {
-  seed
-}
-export default {
-  seed
 }

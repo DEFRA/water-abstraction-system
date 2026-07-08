@@ -29,7 +29,7 @@ import UserHelper from '../helpers/user.helper.js'
  * point and a purpose plus an instance of `UserModel` for the user that created it and `LicenceModel` for the licence
  * it is linked to
  */
-async function seed() {
+export async function seed() {
   // Select a user
   const user = UserHelper.select()
 
@@ -118,11 +118,4 @@ async function _returnRequirement(returnVersionId, legacyId, reportingFrequency,
   returnRequirement.returnRequirementPurposes = [returnRequirementPurpose]
 
   return returnRequirement
-}
-
-export {
-  seed
-}
-export default {
-  seed
 }
