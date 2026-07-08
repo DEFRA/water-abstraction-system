@@ -29,9 +29,8 @@ All files must comply with `.editorconfig`. When creating new files, verify comp
 ## Writing code
 
 - Match the style and conventions of the surrounding code
-- Every file must begin with `'use strict'`
-- All internal `require()` paths must include the `.js` extension
-- All `require()` calls must be at the top of the file, after the `@module` JSDoc and before any function definitions — never inside functions
+- All internal `import` paths must include the `.js` extension
+- All `import` statements must be at the top of the file, after the `@module` JSDoc and before any function definitions
 - Arrow functions must always use braces: `const fn = () => { return x }`
 - No inline comments unless the *why* is genuinely non-obvious
 - JSDoc is required on all public functions — use `@param`, `@returns`, and a description; controllers, seeds, and routes files are exempt from `@module` JSDoc
