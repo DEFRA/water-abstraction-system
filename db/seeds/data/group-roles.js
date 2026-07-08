@@ -1,7 +1,7 @@
 import { data as groups } from './groups.js'
 import { data as roles } from './roles.js'
 
-const data = [
+export const data = [
   {
     id: 'e6fec455-1c2f-4cea-8ce6-7f8a8a52f384',
     groupId: groups.find((group) => {
@@ -345,10 +345,3 @@ const data = [
     }).id
   }
 ]
-
-export {
-  data
-}
-export default {
-  data
-}
