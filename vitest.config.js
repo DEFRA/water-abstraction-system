@@ -1,6 +1,6 @@
 const ci = String(process.env.CI) === 'true' || false
 
-const vitestConfig = {
+export default {
   test: {
     cache: !ci,
     coverage: {
@@ -143,5 +143,3 @@ const vitestConfig = {
     ]
   }
 }
-
-export default vitestConfig
