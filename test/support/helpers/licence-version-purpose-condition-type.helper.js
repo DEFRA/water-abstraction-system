@@ -6,6 +6,8 @@ import LicenceVersionConditionTypeModel from '../../../app/models/licence-versio
 import { selectRandomEntry } from '../general.js'
 import { data as licenceVersionPurposeConditionTypes } from '../../../db/seeds/data/licence-version-purpose-condition-types.js'
 
+export const data = licenceVersionPurposeConditionTypes
+
 /**
  * Select an entry from the reference data entries seeded at the start of testing
  *

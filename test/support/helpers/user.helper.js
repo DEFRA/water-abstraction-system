@@ -7,6 +7,8 @@ import { generateRandomInteger, generateUUID } from '../../../app/lib/general.li
 import UserModel from '../../../app/models/user.model.js'
 import { data as users } from '../../../db/seeds/data/users.js'
 
+export const data = users
+
 /**
  * List of attributes to skip when comparing user records in tests
  */

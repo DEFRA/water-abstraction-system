@@ -5,6 +5,8 @@
 import LicenceRoleModel from '../../../app/models/licence-role.model.js'
 import { data as licenceRoles } from '../../../db/seeds/data/licence-roles.js'
 
+export const data = licenceRoles
+
 /**
  * Select an entry from the reference data entries seeded at the start of testing
  *

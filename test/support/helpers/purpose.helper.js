@@ -6,6 +6,8 @@ import PurposeModel from '../../../app/models/purpose.model.js'
 import { selectRandomEntry } from '../general.js'
 import { data as purposes } from '../../../db/seeds/data/purposes.js'
 
+export const data = purposes
+
 /**
  * Select an entry from the reference data entries seeded at the start of testing
  *

@@ -6,6 +6,8 @@ import GroupModel from '../../../app/models/group.model.js'
 import { selectRandomEntry } from '../general.js'
 import { data as groups } from '../../../db/seeds/data/groups.js'
 
+export const data = groups
+
 /**
  * Select an entry from the reference data entries seeded at the start of testing
  *

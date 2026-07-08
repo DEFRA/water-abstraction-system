@@ -6,6 +6,8 @@ import FinancialAgreementModel from '../../../app/models/financial-agreement.mod
 import { data as financialAgreements } from '../../../db/seeds/data/financial-agreements.js'
 import { selectRandomEntry } from '../general.js'
 
+export const data = financialAgreements
+
 /**
  * Select an entry from the reference data entries seeded at the start of testing
  *
