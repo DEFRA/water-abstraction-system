@@ -30,7 +30,7 @@ describe('Jobs - Renewal Invitations - Process Renewal Invitations service', () 
   it('calls the "SendRenewalInvitations"', async () => {
     await ProcessRenewalInvitationsService(days)
 
-    expect(SendRenewalInvitations.go).toHaveBeenCalledWith(days)
+    expect(SendRenewalInvitations.default).toHaveBeenCalledWith(days)
   })
 
   it('logs the time taken in milliseconds and seconds', async () => {

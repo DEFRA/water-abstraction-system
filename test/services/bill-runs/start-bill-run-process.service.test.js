@@ -42,6 +42,10 @@ describe('Start Bill Run Process service', () => {
       ]
 
       vi.spyOn(DetermineBillingPeriodsService, 'default').mockReturnValue(billingPeriods)
+      vi.spyOn(AnnualProcessBillRunService, 'default').mockResolvedValue()
+      vi.spyOn(SupplementaryProcessBillRunService, 'default').mockResolvedValue()
+      vi.spyOn(TwoPartTariffProcessBillRunService, 'default').mockResolvedValue()
+      vi.spyOn(TwoPartTariffSupplementaryProcessBillRunService, 'default').mockResolvedValue()
     })
 
     describe('and the bill run type is "annual"', () => {
@@ -60,7 +64,7 @@ describe('Start Bill Run Process service', () => {
       it('initiates a new bill run', async () => {
         await StartBillRunProcessService(regionId, userEmail)
 
-        const financialYearEndings = InitiateBillRunService.go.mock.calls[0][0]
+        const financialYearEndings = InitiateBillRunService.default.mock.calls[0][0]
 
         expect(financialYearEndings).toEqual({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
       })
@@ -68,7 +72,7 @@ describe('Start Bill Run Process service', () => {
       it('starts processing the bill run', async () => {
         await StartBillRunProcessService(regionId, userEmail)
 
-        expect(AnnualProcessBillRunService.go).toHaveBeenCalled()
+        expect(AnnualProcessBillRunService.default).toHaveBeenCalled()
       })
     })
 
@@ -82,13 +86,12 @@ describe('Start Bill Run Process service', () => {
         }
 
         vi.spyOn(InitiateBillRunService, 'default').mockResolvedValue(supplementaryBillRun)
-
       })
 
       it('initiates a new bill run', async () => {
         await StartBillRunProcessService(regionId, batchType, userEmail)
 
-        const financialYearEndings = InitiateBillRunService.go.mock.calls[0][0]
+        const financialYearEndings = InitiateBillRunService.default.mock.calls[0][0]
 
         expect(financialYearEndings).toEqual({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
       })
@@ -96,7 +99,7 @@ describe('Start Bill Run Process service', () => {
       it('starts processing the bill run', async () => {
         await StartBillRunProcessService(regionId, userEmail)
 
-        expect(SupplementaryProcessBillRunService.go).toHaveBeenCalled()
+        expect(SupplementaryProcessBillRunService.default).toHaveBeenCalled()
       })
     })
 
@@ -116,7 +119,7 @@ describe('Start Bill Run Process service', () => {
       it('initiates a new bill run', async () => {
         await StartBillRunProcessService(regionId, userEmail)
 
-        const financialYearEndings = InitiateBillRunService.go.mock.calls[0][0]
+        const financialYearEndings = InitiateBillRunService.default.mock.calls[0][0]
 
         expect(financialYearEndings).toEqual({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
       })
@@ -124,7 +127,7 @@ describe('Start Bill Run Process service', () => {
       it('starts processing the bill run', async () => {
         await StartBillRunProcessService(regionId, userEmail)
 
-        expect(TwoPartTariffProcessBillRunService.go).toHaveBeenCalled()
+        expect(TwoPartTariffProcessBillRunService.default).toHaveBeenCalled()
       })
     })
 
@@ -144,7 +147,7 @@ describe('Start Bill Run Process service', () => {
       it('initiates a new bill run', async () => {
         await StartBillRunProcessService(regionId, userEmail)
 
-        const financialYearEndings = InitiateBillRunService.go.mock.calls[0][0]
+        const financialYearEndings = InitiateBillRunService.default.mock.calls[0][0]
 
         expect(financialYearEndings).toEqual({ fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 })
       })
@@ -152,7 +155,7 @@ describe('Start Bill Run Process service', () => {
       it('starts processing the bill run', async () => {
         await StartBillRunProcessService(regionId, userEmail)
 
-        expect(TwoPartTariffSupplementaryProcessBillRunService.go).toHaveBeenCalled()
+        expect(TwoPartTariffSupplementaryProcessBillRunService.default).toHaveBeenCalled()
       })
     })
   })

@@ -140,7 +140,7 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
     it('delegates to RenewalInvitationAlternateNoticeService', async () => {
       await SendAlternateNoticeService(mainNotice)
 
-      expect(RenewalInvitationAlternateNoticeService.go).toHaveBeenCalledOnce()
+      expect(RenewalInvitationAlternateNoticeService.default).toHaveBeenCalledOnce()
     })
 
     it('returns the sent alternate notice', async () => {

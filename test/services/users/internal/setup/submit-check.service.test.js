@@ -61,7 +61,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
     it('deletes the session', async () => {
       await SubmitCheckService(auth, session.id, yarStub)
 
-      expect(DeleteSessionDal.go).toHaveBeenCalledWith(session.id)
+      expect(DeleteSessionDal.default).toHaveBeenCalledWith(session.id)
     })
 
     it('returns the redirect URL', async () => {
@@ -85,7 +85,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
     it('sends a verification email', async () => {
       await SubmitCheckService(auth, session.id, yarStub)
 
-      expect(SendVerificationEmailService.go).toHaveBeenCalledWith(notification)
+      expect(SendVerificationEmailService.default).toHaveBeenCalledWith(notification)
     })
   })
 
@@ -127,7 +127,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
       it('creates a new password reset link', async () => {
         await SubmitCheckService(auth, session.id, yarStub)
 
-        expect(CreateVerificationNotificationDal.go).toHaveBeenCalledWith(session.email, newResetGuid)
+        expect(CreateVerificationNotificationDal.default).toHaveBeenCalledWith(session.email, newResetGuid)
       })
 
       it('sets a notification', async () => {
@@ -145,7 +145,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
       it('sends a verification email', async () => {
         await SubmitCheckService(auth, session.id, yarStub)
 
-        expect(SendVerificationEmailService.go).toHaveBeenCalledWith(notification)
+        expect(SendVerificationEmailService.default).toHaveBeenCalledWith(notification)
       })
     })
 

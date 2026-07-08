@@ -26,7 +26,7 @@ describe('Return Logs Setup - Submit Cancel service', () => {
     it('deletes the session data', async () => {
       await SubmitCancelService(session.id)
 
-      expect(DeleteSessionDal.go).toHaveBeenCalledWith(session.id)
+      expect(DeleteSessionDal.default).toHaveBeenCalledWith(session.id)
     })
   })
 })

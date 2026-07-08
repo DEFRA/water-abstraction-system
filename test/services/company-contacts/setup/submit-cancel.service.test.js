@@ -44,7 +44,7 @@ describe('Company Contacts - Setup - Cancel Service', () => {
     it('clears the session', async () => {
       await SubmitCancelService(session.id)
 
-      expect(DeleteSessionDal.go).toHaveBeenCalledWith(session.id)
+      expect(DeleteSessionDal.default).toHaveBeenCalledWith(session.id)
     })
 
     describe('and the company contact is being edited', () => {

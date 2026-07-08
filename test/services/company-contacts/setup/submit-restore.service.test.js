@@ -63,7 +63,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
     it('persists the company contact details', async () => {
       await SubmitRestoreService(session.id, yarStub, auth)
 
-      const [actualContact] = UpdateCompanyContactDal.go.mock.calls[0]
+      const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
       expect(actualContact).toEqual({
         id: companyContact.id,
@@ -87,7 +87,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
     it('clears the session', async () => {
       await SubmitRestoreService(session.id, yarStub, auth)
 
-      expect(DeleteSessionDal.go).toHaveBeenCalledWith(session.id)
+      expect(DeleteSessionDal.default).toHaveBeenCalledWith(session.id)
     })
 
     describe('the "abstractionAlerts" property', () => {
@@ -95,7 +95,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
         it('persists the "abstractionAlerts" as "true"', async () => {
           await SubmitRestoreService(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactDal.go.mock.calls[0]
+          const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
           expect(actualContact.abstractionAlerts).toBe(true)
         })
@@ -114,7 +114,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
         it('persists the "abstractionAlerts" as "false"', async () => {
           await SubmitRestoreService(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactDal.go.mock.calls[0]
+          const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
           expect(actualContact.abstractionAlerts).toBe(false)
         })
@@ -135,7 +135,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
         it('persists the "email" in lowercase', async () => {
           await SubmitRestoreService(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactDal.go.mock.calls[0]
+          const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
           expect(actualContact.email).toEqual('erice@test.com')
         })

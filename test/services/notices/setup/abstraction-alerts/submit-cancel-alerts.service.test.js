@@ -39,7 +39,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Cancel Alerts service', 
     it('clears the session', async () => {
       await SubmitCancelAlertsService(session.id)
 
-      expect(DeleteSessionDal.go).toHaveBeenCalledWith(session.id)
+      expect(DeleteSessionDal.default).toHaveBeenCalledWith(session.id)
     })
   })
 })

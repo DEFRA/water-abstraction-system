@@ -32,7 +32,7 @@ describe('Notices - Setup - Submit Cancel service', () => {
     it('clears the session', async () => {
       await SubmitCancelService(session.id)
 
-      expect(DeleteSessionDal.go).toHaveBeenCalledWith(session.id)
+      expect(DeleteSessionDal.default).toHaveBeenCalledWith(session.id)
     })
 
     describe('when the journey is for a return', () => {

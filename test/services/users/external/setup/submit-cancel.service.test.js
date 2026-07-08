@@ -33,7 +33,7 @@ describe('Users - External - Setup - Submit Cancel service', () => {
     it('clears the session', async () => {
       await SubmitCancelService(session.id)
 
-      expect(DeleteSessionDal.go).toHaveBeenCalledWith(session.id)
+      expect(DeleteSessionDal.default).toHaveBeenCalledWith(session.id)
     })
 
     it('returns the redirect url', async () => {

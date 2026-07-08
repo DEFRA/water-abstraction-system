@@ -68,7 +68,7 @@ describe('Company Contacts - Setup - Check Service', () => {
     it('persists the company contact details', async () => {
       await SubmitCheckService(session.id, yarStub, auth)
 
-      const actualContact = CreateCompanyContactDal.go.mock.calls[0]
+      const actualContact = CreateCompanyContactDal.default.mock.calls[0]
 
       expect(actualContact).toEqual([
         company.id,
@@ -96,7 +96,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists the "abstractionAlerts" as "true"', async () => {
           await SubmitCheckService(session.id, yarStub, auth)
 
-          const actualContact = CreateCompanyContactDal.go.mock.calls[0][1]
+          const actualContact = CreateCompanyContactDal.default.mock.calls[0][1]
 
           expect(actualContact.abstractionAlerts).toBe(true)
         })
@@ -112,7 +112,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists the "abstractionAlerts" as "true"', async () => {
           await SubmitCheckService(session.id, yarStub, auth)
 
-          const actualContact = CreateCompanyContactDal.go.mock.calls[0][1]
+          const actualContact = CreateCompanyContactDal.default.mock.calls[0][1]
 
           expect(actualContact.abstractionAlerts).toBe(true)
         })
@@ -128,7 +128,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists the "abstractionAlerts" as "false"', async () => {
           await SubmitCheckService(session.id, yarStub, auth)
 
-          const actualContact = CreateCompanyContactDal.go.mock.calls[0][1]
+          const actualContact = CreateCompanyContactDal.default.mock.calls[0][1]
 
           expect(actualContact.abstractionAlerts).toBe(false)
         })
@@ -154,7 +154,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists "abstractionAlertLicences" as a JSON string', async () => {
           await SubmitCheckService(session.id, yarStub, auth)
 
-          const actualContact = CreateCompanyContactDal.go.mock.calls[0][1]
+          const actualContact = CreateCompanyContactDal.default.mock.calls[0][1]
           const expectedAbstractionAlertLicences = JSON.stringify(abstractionAlertLicences)
 
           expect(actualContact.abstractionAlertLicences).toEqual(expectedAbstractionAlertLicences)
@@ -165,7 +165,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists "abstractionAlertLicences" as null', async () => {
           await SubmitCheckService(session.id, yarStub, auth)
 
-          const actualContact = CreateCompanyContactDal.go.mock.calls[0][1]
+          const actualContact = CreateCompanyContactDal.default.mock.calls[0][1]
 
           expect(actualContact.abstractionAlertLicences).toBeNull()
         })
@@ -182,7 +182,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       it('persists the "email" in lowercase', async () => {
         await SubmitCheckService(session.id, yarStub, auth)
 
-        const actualContact = CreateCompanyContactDal.go.mock.calls[0][1]
+        const actualContact = CreateCompanyContactDal.default.mock.calls[0][1]
 
         expect(actualContact.email).toEqual('erice@test.com')
       })
@@ -211,7 +211,7 @@ describe('Company Contacts - Setup - Check Service', () => {
     it('persists the company contact details', async () => {
       await SubmitCheckService(session.id, yarStub, auth)
 
-      const [actualContact] = UpdateCompanyContactDal.go.mock.calls[0]
+      const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
       expect(actualContact).toEqual({
         id: companyContact.id,
@@ -238,7 +238,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists the "abstractionAlerts" as "true"', async () => {
           await SubmitCheckService(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactDal.go.mock.calls[0]
+          const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
           expect(actualContact.abstractionAlerts).toBe(true)
         })
@@ -254,7 +254,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists the "abstractionAlerts" as "true"', async () => {
           await SubmitCheckService(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactDal.go.mock.calls[0]
+          const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
           expect(actualContact.abstractionAlerts).toBe(true)
         })
@@ -270,7 +270,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists the "abstractionAlerts" as "false"', async () => {
           await SubmitCheckService(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactDal.go.mock.calls[0]
+          const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
           expect(actualContact.abstractionAlerts).toBe(false)
         })
@@ -296,7 +296,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists "abstractionAlertLicences" as a JSON string', async () => {
           await SubmitCheckService(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactDal.go.mock.calls[0]
+          const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
           const expectedAbstractionAlertLicences = JSON.stringify(abstractionAlertLicences)
 
           expect(actualContact.abstractionAlertLicences).toEqual(expectedAbstractionAlertLicences)
@@ -307,7 +307,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists "abstractionAlertLicences" as null', async () => {
           await SubmitCheckService(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactDal.go.mock.calls[0]
+          const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
           expect(actualContact.abstractionAlertLicences).toBeNull()
         })
@@ -325,7 +325,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('persists the "email" in lowercase', async () => {
           await SubmitCheckService(session.id, yarStub, auth)
 
-          const [actualContact] = UpdateCompanyContactDal.go.mock.calls[0]
+          const [actualContact] = UpdateCompanyContactDal.default.mock.calls[0]
 
           expect(actualContact.email).toEqual('erice@test.com')
         })
