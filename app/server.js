@@ -26,7 +26,7 @@ import Scooter from '@hapi/scooter'
 
 import ServerConfig from '../config/server.config.js'
 
-const registerPlugins = async (server) => {
+async function registerPlugins(server) {
   // NOTE: This order matters to some plugins we register. Inserting into the order should be fine. But if you reorder
   // any existing plugin registration double-check you haven't broken anything!
   await server.register(StopPlugin)
@@ -53,7 +53,7 @@ const registerPlugins = async (server) => {
   await server.register(KeepYarAlivePlugin)
 }
 
-const init = async () => {
+async function init() {
   // Create the hapi server
   const server = Hapi.server(ServerConfig.hapi)
 
@@ -63,7 +63,7 @@ const init = async () => {
   return server
 }
 
-const start = async () => {
+async function start() {
   const server = await init()
 
   await server.start()
