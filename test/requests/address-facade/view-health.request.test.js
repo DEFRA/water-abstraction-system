@@ -29,12 +29,7 @@ describe('Address Facade - View Health request', () => {
       }
 
       vi.spyOn(BaseRequest, 'getRequest')
-        .mockImplementation(() => {})
-        .withArgs('http://localhost:8009/address-service/hola', { responseType: 'text' })
-        .resolves({
-          succeeded: true,
-          response
-        })
+        .mockResolvedValue({ succeeded: true, response })
     })
 
     it('returns a "true" success status', async () => {

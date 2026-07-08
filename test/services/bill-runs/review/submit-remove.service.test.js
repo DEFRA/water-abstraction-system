@@ -25,8 +25,6 @@ describe('Bill Runs - Review - Submit Remove service', () => {
 
     vi.spyOn(UnassignLicencesToBillRunService, 'default').mockResolvedValue()
 
-      .withArgs(removeReviewLicence.licenceId, [removeReviewLicence.billRun.toFinancialYearEnding], true)
-      .resolves()
 
     yarStub = YarStub()
      vi.spyOn(CreateLicenceSupplementaryYearService, 'default').mockResolvedValue()

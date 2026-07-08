@@ -86,22 +86,17 @@ describe('Reissue Bill service', () => {
     reissueBillRun = { externalId: generateUUID() }
 
     vi.spyOn(ChargingModuleReissueBillRequest, 'send')
-      .mockImplementation(() => {})
-      .withArgs(reissueBillRun.externalId, INVOICE_EXTERNAL_ID)
-      .resolves({
+      .mockResolvedValue({
         succeeded: true,
         response: { body: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE }
       })
 
     vi.spyOn(ChargingModuleViewBillRequest, 'send')
-      .mockImplementation(() => {})
-      .withArgs(reissueBillRun.externalId, CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE.invoice.id)
-      .resolves({
+      .mockResolvedValueOnce({
         succeeded: true,
         response: { body: CHARGING_MODULE_VIEW_INVOICE_CREDIT_RESPONSE }
       })
-      .withArgs(reissueBillRun.externalId, CHARGING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE.invoice.id)
-      .resolves({
+      .mockResolvedValueOnce({
         succeeded: true,
         response: { body: CHARGING_MODULE_VIEW_INVOICE_REISSUE_RESPONSE }
       })
