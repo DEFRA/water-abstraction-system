@@ -5,7 +5,7 @@ import http2 from 'node:http2'
 const { HTTP_STATUS_OK } = http2.constants
 
 // Things we need to stub
-import ViewService from '../../app/services/licence-versions/view.service.js'
+import * as ViewService from '../../app/services/licence-versions/view.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -51,8 +51,7 @@ describe('Licence Versions controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/licence-versions/view.service.js')
-          ViewService.mockResolvedValue({ pageTitle: 'Licence version starting' })
+          vi.spyOn(ViewService, 'default').mockResolvedValue({ pageTitle: 'Licence version starting' })
         })
 
         it('returns the page successfully', async () => {

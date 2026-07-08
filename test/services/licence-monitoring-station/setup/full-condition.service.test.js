@@ -4,8 +4,8 @@
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things to stub
-import FetchFullConditionService from '../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchFullConditionService from '../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import FullConditionService from '../../../../app/services/licence-monitoring-station/setup/full-condition.service.js'
@@ -25,8 +25,7 @@ describe('Licence Monitoring Station Setup - Full Condition Service', () => {
       displayTitle: 'DISPLAY_TITLE'
     }
 
-    vi.mock('../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js')
-    FetchFullConditionService.mockResolvedValue([condition])
+    vi.spyOn(FetchFullConditionService, 'default').mockResolvedValue([condition])
 
     sessionData = {
       label: 'Monitoring Station',
@@ -36,8 +35,7 @@ describe('Licence Monitoring Station Setup - Full Condition Service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {

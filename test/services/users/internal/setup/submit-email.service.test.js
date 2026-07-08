@@ -5,8 +5,8 @@ import SessionModelStub from '../../../../support/stubs/session.stub.js'
 import YarStub from '../../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import CheckEmailExistsDal from '../../../../../app/dal/users/check-email-exists.dal.js'
-import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as CheckEmailExistsDal from '../../../../../app/dal/users/check-email-exists.dal.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitEmailService from '../../../../../app/services/users/internal/setup/submit-email.service.js'
@@ -22,11 +22,9 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    vi.mock('../../../../../app/dal/users/check-email-exists.dal.js')
-    CheckEmailExistsDal.mockResolvedValue(false)
+    vi.spyOn(CheckEmailExistsDal, 'default').mockResolvedValue(false)
 
     yarStub = YarStub()
   })
@@ -67,7 +65,7 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
             email: 'bob@environment-agency.gov.uk'
           })
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('redirects to the Check page', async () => {

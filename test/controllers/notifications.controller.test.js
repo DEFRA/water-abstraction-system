@@ -9,9 +9,9 @@ import { generateUUID } from '../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../support/helpers/licence.helper.js'
 
 // Things we need to stub
-import DownloadNotificationService from '../../app/services/notifications/download-notification.service.js'
-import ProcessReturnedLetterService from '../../app/services/notifications/process-returned-letter.service.js'
-import ViewNotificationService from '../../app/services/notifications/view-notification.service.js'
+import * as DownloadNotificationService from '../../app/services/notifications/download-notification.service.js'
+import * as ProcessReturnedLetterService from '../../app/services/notifications/process-returned-letter.service.js'
+import * as ViewNotificationService from '../../app/services/notifications/view-notification.service.js'
 import notifyConfig from '../../config/notify.config.js'
 
 // For running our service
@@ -69,8 +69,7 @@ describe('Notifications controller', () => {
             const notification = NotificationsFixture.returnsInvitationEmail(notice)
             notification.event = notice
 
-            vi.mock('../../app/services/notifications/view-notification.service.js')
-            ViewNotificationService.mockResolvedValue({
+            vi.spyOn(ViewNotificationService, 'default').mockResolvedValue({
               address: [],
               alertDetails: null,
               backLink: { href: `/system/notices/${notice.id}`, text: `Go back to notice ${notice.referenceCode}` },
@@ -124,8 +123,7 @@ describe('Notifications controller', () => {
             const notification = NotificationsFixture.returnsInvitationEmail(notice)
             notification.event = notice
 
-            vi.mock('../../app/services/notifications/view-notification.service.js')
-            ViewNotificationService.mockResolvedValue({
+            vi.spyOn(ViewNotificationService, 'default').mockResolvedValue({
               address: [],
               alertDetails: null,
               backLink: { href: `/system/licences/${licence.id}/communications`, text: 'Go back to communications' },
@@ -180,8 +178,7 @@ describe('Notifications controller', () => {
             const notification = NotificationsFixture.returnsInvitationEmail(notice)
             notification.event = notice
 
-            vi.mock('../../app/services/notifications/view-notification.service.js')
-            ViewNotificationService.mockResolvedValue({
+            vi.spyOn(ViewNotificationService, 'default').mockResolvedValue({
               address: [],
               alertDetails: null,
               backLink: { href: `/system/return-logs/${returnLogId}/details`, text: 'Go back to return log' },
@@ -230,8 +227,7 @@ describe('Notifications controller', () => {
 
         describe('when a request is valid', () => {
           beforeEach(async () => {
-            vi.mock('../../app/services/notifications/download-notification.service.js')
-            DownloadNotificationService.mockResolvedValue(buffer)
+            vi.spyOn(DownloadNotificationService, 'default').mockResolvedValue(buffer)
           })
 
           it('returns the page successfully', async () => {
@@ -253,8 +249,7 @@ describe('Notifications controller', () => {
         beforeEach(() => {
           vi.replaceProperty(notifyConfig, 'callbackToken', 'valid')
 
-          vi.mock('../../app/services/notifications/process-returned-letter.service.js')
-          ProcessReturnedLetterService.mockResolvedValue()
+          vi.spyOn(ProcessReturnedLetterService, 'default').mockResolvedValue()
         })
 
         describe('when the request has valid authorization', () => {

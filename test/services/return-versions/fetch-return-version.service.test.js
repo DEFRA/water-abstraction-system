@@ -1,5 +1,5 @@
 // Test helpers
-import RequirementsForReturnsSeeder from '../../support/seeders/requirements-for-returns.seeder.js'
+import * as RequirementsForReturnsSeeder from '../../support/seeders/requirements-for-returns.seeder.js'
 import * as ModLogHelper from '../../support/helpers/mod-log.helper.js'
 
 // Thing under test

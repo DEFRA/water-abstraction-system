@@ -5,7 +5,7 @@ import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import ReturnsPeriodService from '../../../../app/services/notices/setup/view-returns-period.service.js'
@@ -23,8 +23,7 @@ describe('Notices - Setup - View Returns Period service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     const testDate = new Date('2024-12-01')
 

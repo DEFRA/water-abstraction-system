@@ -5,7 +5,7 @@ import * as AbstractionAlertSessionData from '../../../../support/fixtures/abstr
 import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitAlertThresholdsService from '../../../../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js'
@@ -35,8 +35,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
 
       session = SessionModelStub(sessionData)
 
-      vi.mock('../../../../../app/dal/fetch-session.dal.js')
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('continues the journey', async () => {
@@ -89,8 +88,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
 
         session = SessionModelStub(sessionData)
 
-        vi.mock('../../../../../app/dal/fetch-session.dal.js')
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
         payload = {}
       })
@@ -139,8 +137,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Thresholds service
 
         session = SessionModelStub(sessionData)
 
-        vi.mock('../../../../../app/dal/fetch-session.dal.js')
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
         payload = {}
       })

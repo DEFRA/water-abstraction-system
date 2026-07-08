@@ -8,8 +8,8 @@ import { addressToCSV } from '../../../../app/presenters/notices/base.presenter.
 import { transformArrayToCSVRow } from '../../../../app/lib/transform-to-csv.lib.js'
 
 // Things to stub
-import FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import ProcessDownloadRecipientsService from '../../../../app/services/notices/setup/process-download-recipients.service.js'
@@ -27,11 +27,9 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       recipient = RecipientsFixture.alertNoticePrimaryUser()
       session = NoticeSessionFixture.abstractionAlertStop(recipient.licence_refs[0])
 
-      vi.mock('../../../../app/dal/fetch-session.dal.js')
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-      vi.mock('../../../../app/services/notices/setup/fetch-recipients.service.js')
-      FetchRecipientsService.mockResolvedValue([recipient])
+      vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([recipient])
     })
 
     it('returns the correct csv string, filename and type', async () => {
@@ -55,11 +53,9 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       recipient = RecipientsFixture.returnsNoticeLicenceHolder()
       session = NoticeSessionFixture.paperReturn(recipient.licence_refs[0])
 
-      vi.mock('../../../../app/dal/fetch-session.dal.js')
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-      vi.mock('../../../../app/services/notices/setup/fetch-recipients.service.js')
-      FetchRecipientsService.mockResolvedValue([recipient])
+      vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([recipient])
     })
 
     it('returns the correct csv string, filename and type', async () => {
@@ -83,11 +79,9 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       recipient = RecipientsFixture.returnsNoticeLicenceHolder()
       session = NoticeSessionFixture.standardReminder(recipient.licence_refs[0])
 
-      vi.mock('../../../../app/dal/fetch-session.dal.js')
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-      vi.mock('../../../../app/services/notices/setup/fetch-recipients.service.js')
-      FetchRecipientsService.mockResolvedValue([recipient])
+      vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([recipient])
     })
 
     it('returns the correct csv string, filename and type', async () => {
@@ -111,11 +105,9 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       recipient = RecipientsFixture.returnsNoticeLicenceHolder()
       session = NoticeSessionFixture.standardInvitation(recipient.licence_refs[0])
 
-      vi.mock('../../../../app/dal/fetch-session.dal.js')
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-      vi.mock('../../../../app/services/notices/setup/fetch-recipients.service.js')
-      FetchRecipientsService.mockResolvedValue([recipient])
+      vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([recipient])
     })
 
     it('returns the correct csv string, filename and type', async () => {
@@ -139,11 +131,9 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       recipient = RecipientsFixture.renewalInvitationLicenceHolder()
       session = NoticeSessionFixture.adHocRenewalInvitation(recipient.licence_refs[0])
 
-      vi.mock('../../../../app/dal/fetch-session.dal.js')
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-      vi.mock('../../../../app/services/notices/setup/fetch-recipients.service.js')
-      FetchRecipientsService.mockResolvedValue([recipient])
+      vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([recipient])
     })
 
     it('returns the correct csv string, filename and type', async () => {

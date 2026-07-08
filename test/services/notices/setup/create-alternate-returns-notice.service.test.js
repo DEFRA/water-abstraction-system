@@ -10,7 +10,7 @@ import { futureDueDate } from '../../../../app/presenters/notices/base.presenter
 import { NOTIFY_TEMPLATES } from '../../../../app/lib/notify-templates.lib.js'
 
 // Things we need to stub
-import FetchAlternateReturnsRecipientsService from '../../../../app/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js'
+import * as FetchAlternateReturnsRecipientsService from '../../../../app/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js'
 
 // Thing under test
 import CreateAlternateReturnsNoticeService from '../../../../app/services/notices/setup/create-alternate-returns-notice.service.js'
@@ -34,8 +34,7 @@ describe('Notices - Setup - Create Alternate Returns Notice service', () => {
     licenceRefs = notice.licences
     returnLogIds = recipient.return_log_ids
 
-    vi.mock('../../../../app/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js')
-    FetchAlternateReturnsRecipientsService.mockResolvedValue([recipient])
+    vi.spyOn(FetchAlternateReturnsRecipientsService, 'default').mockResolvedValue([recipient])
   })
 
   afterEach(async () => {

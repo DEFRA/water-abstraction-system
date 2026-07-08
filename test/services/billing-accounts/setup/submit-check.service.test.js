@@ -10,10 +10,10 @@ import * as CustomersFixture from '../../../support/fixtures/customers.fixture.j
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things to stub
-import FetchCompanyContactsService from '../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js'
-import FetchCompanyService from '../../../../app/services/billing-accounts/setup/fetch-company.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
-import SendCustomerChangeService from '../../../../app/services/billing-accounts/send-customer-change.service.js'
+import * as FetchCompanyContactsService from '../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js'
+import * as FetchCompanyService from '../../../../app/services/billing-accounts/setup/fetch-company.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as SendCustomerChangeService from '../../../../app/services/billing-accounts/send-customer-change.service.js'
 
 // Thing under test
 import SubmitCheckService from '../../../../app/services/billing-accounts/setup/submit-check.service.js'
@@ -64,10 +64,8 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
       contacts: [contact]
     }
 
-    vi.mock('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
-    FetchCompanyContactsService.mockResolvedValue(companyContacts)
-    vi.mock('../../../../app/services/billing-accounts/send-customer-change.service.js')
-    SendCustomerChangeService.mockResolvedValue()
+    vi.spyOn(FetchCompanyContactsService, 'default').mockResolvedValue(companyContacts)
+    vi.spyOn(SendCustomerChangeService, 'default').mockResolvedValue()
   })
 
   afterEach(async () => {
@@ -99,8 +97,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
             session = SessionModelStub(sessionData)
 
-            vi.mock('../../../../app/dal/fetch-session.dal.js')
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -127,8 +124,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
             session = SessionModelStub(sessionData)
 
-            vi.mock('../../../../app/dal/fetch-session.dal.js')
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -152,8 +148,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
             session = SessionModelStub(sessionData)
 
-            vi.mock('../../../../app/dal/fetch-session.dal.js')
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -186,8 +181,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
             session = SessionModelStub(sessionData)
 
-            vi.mock('../../../../app/dal/fetch-session.dal.js')
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -219,8 +213,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
             session = SessionModelStub(sessionData)
 
-            vi.mock('../../../../app/dal/fetch-session.dal.js')
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -249,8 +242,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
             session = SessionModelStub(sessionData)
 
-            vi.mock('../../../../app/dal/fetch-session.dal.js')
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -297,8 +289,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
             session = SessionModelStub(sessionData)
 
-            vi.mock('../../../../app/dal/fetch-session.dal.js')
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -325,8 +316,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
             session = SessionModelStub(sessionData)
 
-            vi.mock('../../../../app/dal/fetch-session.dal.js')
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -350,8 +340,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
             session = SessionModelStub(sessionData)
 
-            vi.mock('../../../../app/dal/fetch-session.dal.js')
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -385,8 +374,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
             session = SessionModelStub(sessionData)
 
-            vi.mock('../../../../app/dal/fetch-session.dal.js')
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -419,8 +407,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
             session = SessionModelStub(sessionData)
 
-            vi.mock('../../../../app/dal/fetch-session.dal.js')
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -450,8 +437,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
             session = SessionModelStub(sessionData)
 
-            vi.mock('../../../../app/dal/fetch-session.dal.js')
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -490,8 +476,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
           sessionData.accountType = 'company'
           sessionData.companiesHouseNumber = '12345678'
 
-          vi.mock('../../../../app/services/billing-accounts/setup/fetch-company.service.js')
-          FetchCompanyService.mockReturnValue(companySearchResult)
+          vi.spyOn(FetchCompanyService, 'default').mockReturnValue(companySearchResult)
         })
 
         describe('and selected an existing address', () => {
@@ -507,8 +492,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
               session = SessionModelStub(sessionData)
 
-              vi.mock('../../../../app/dal/fetch-session.dal.js')
-              FetchSessionDal.mockResolvedValue(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -538,8 +522,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
               session = SessionModelStub(sessionData)
 
-              vi.mock('../../../../app/dal/fetch-session.dal.js')
-              FetchSessionDal.mockResolvedValue(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -566,8 +549,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
               session = SessionModelStub(sessionData)
 
-              vi.mock('../../../../app/dal/fetch-session.dal.js')
-              FetchSessionDal.mockResolvedValue(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -604,8 +586,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
               session = SessionModelStub(sessionData)
 
-              vi.mock('../../../../app/dal/fetch-session.dal.js')
-              FetchSessionDal.mockResolvedValue(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -641,8 +622,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
               session = SessionModelStub(sessionData)
 
-              vi.mock('../../../../app/dal/fetch-session.dal.js')
-              FetchSessionDal.mockResolvedValue(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -675,8 +655,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
               session = SessionModelStub(sessionData)
 
-              vi.mock('../../../../app/dal/fetch-session.dal.js')
-              FetchSessionDal.mockResolvedValue(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -725,8 +704,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
               session = SessionModelStub(sessionData)
 
-              vi.mock('../../../../app/dal/fetch-session.dal.js')
-              FetchSessionDal.mockResolvedValue(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -756,8 +734,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
               session = SessionModelStub(sessionData)
 
-              vi.mock('../../../../app/dal/fetch-session.dal.js')
-              FetchSessionDal.mockResolvedValue(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -784,8 +761,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
               session = SessionModelStub(sessionData)
 
-              vi.mock('../../../../app/dal/fetch-session.dal.js')
-              FetchSessionDal.mockResolvedValue(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -822,8 +798,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
               session = SessionModelStub(sessionData)
 
-              vi.mock('../../../../app/dal/fetch-session.dal.js')
-              FetchSessionDal.mockResolvedValue(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -859,8 +834,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
               session = SessionModelStub(sessionData)
 
-              vi.mock('../../../../app/dal/fetch-session.dal.js')
-              FetchSessionDal.mockResolvedValue(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -893,8 +867,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
 
               session = SessionModelStub(sessionData)
 
-              vi.mock('../../../../app/dal/fetch-session.dal.js')
-              FetchSessionDal.mockResolvedValue(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
             })
 
             it('creates a new billing account address', async () => {

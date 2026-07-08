@@ -5,15 +5,14 @@ import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
 import LicenceModel from '../../../../app/models/licence.model.js'
 
 // Things we need to stub
-import CreateLicenceSupplementaryYearService from '../../../../app/services/licences/supplementary/create-licence-supplementary-year.service.js'
+import * as CreateLicenceSupplementaryYearService from '../../../../app/services/licences/supplementary/create-licence-supplementary-year.service.js'
 
 // Thing under test
 import PersistSupplementaryBillingFlagsService from '../../../../app/services/licences/supplementary/persist-supplementary-billing-flags.service.js'
 
 describe('Persist Supplementary Billing Flags Service', () => {
   beforeEach(async () => {
-    vi.mock('../../../../app/services/licences/supplementary/create-licence-supplementary-year.service.js')
-    CreateLicenceSupplementaryYearService.mockResolvedValue()
+    vi.spyOn(CreateLicenceSupplementaryYearService, 'default').mockResolvedValue()
   })
 
   afterEach(() => {

@@ -7,7 +7,7 @@ import { generateNoticeReferenceCode } from '../../../../../app/lib/general.lib.
 
 // Things we need to stub
 import * as CreatePrecompiledFileRequest from '../../../../../app/requests/notify/create-precompiled-file.request.js'
-import PreparePaperReturnService from '../../../../../app/services/notices/setup/prepare-paper-return.service.js'
+import * as PreparePaperReturnService from '../../../../../app/services/notices/setup/prepare-paper-return.service.js'
 
 // Thing under test
 import SendPaperReturnNotificationService from '../../../../../app/services/notices/setup/send/send-paper-return-notification.service.js'
@@ -35,8 +35,7 @@ describe('Notices - Setup - Send - Send Paper Return Notification service', () =
 
   describe('when the notification is successful', () => {
     beforeEach(() => {
-      vi.mock('../../../../../app/services/notices/setup/prepare-paper-return.service.js')
-      PreparePaperReturnService.mockResolvedValue({
+      vi.spyOn(PreparePaperReturnService, 'default').mockResolvedValue({
         succeeded: true,
         response: { body: buffer }
       })
@@ -58,8 +57,7 @@ describe('Notices - Setup - Send - Send Paper Return Notification service', () =
 
   describe('when generating the return form fails', () => {
     beforeEach(() => {
-      vi.mock('../../../../../app/services/notices/setup/prepare-paper-return.service.js')
-      PreparePaperReturnService.mockResolvedValue({
+      vi.spyOn(PreparePaperReturnService, 'default').mockResolvedValue({
         succeeded: false,
         response: { code: 'ENOTFOUND', message: 'getaddrinfo ENOTFOUND gotenberg' }
       })

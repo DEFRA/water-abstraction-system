@@ -9,8 +9,8 @@ import BillModel from '../../../../app/models/bill.model.js'
 import BillLicenceModel from '../../../../app/models/bill-licence.model.js'
 import BillRunError from '../../../../app/errors/bill-run.error.js'
 import BillRunModel from '../../../../app/models/bill-run.model.js'
-import GenerateTwoPartTariffTransactionService from '../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js'
-import SendTransactionsService from '../../../../app/services/bill-runs/send-transactions.service.js'
+import * as GenerateTwoPartTariffTransactionService from '../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js'
+import * as SendTransactionsService from '../../../../app/services/bill-runs/send-transactions.service.js'
 import TransactionModel from '../../../../app/models/transaction.model.js'
 
 // Thing under test
@@ -36,7 +36,6 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
     billingAccount = TwoPartTariffFixture.billingAccount()
     licence = TwoPartTariffFixture.licence(region)
 
-    vi.mock('../../../../app/services/bill-runs/send-transactions.service.js')
 
     billInsertStub = vi.fn()
     billLicenceInsertStub = vi.fn()
@@ -243,8 +242,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
 
     describe('because generating the calculated transaction fails', () => {
       beforeEach(async () => {
-        vi.mock('../../../../app/services/bill-runs/generate-two-part-tariff-transaction.service.js')
-        GenerateTwoPartTariffTransactionService.mockRejectedValue(new Error())
+        vi.spyOn(GenerateTwoPartTariffTransactionService, 'default').mockRejectedValue(new Error())
       })
 
       it('throws a BillRunError with the correct code', async () => {
@@ -259,7 +257,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
 
     describe('because sending the transactions fails', () => {
       beforeEach(async () => {
-        SendTransactionsService.mockRejectedValue()
+        vi.spyOn(SendTransactionsService, 'default').mockRejectedValue()
       })
 
       it('throws an error', async () => {

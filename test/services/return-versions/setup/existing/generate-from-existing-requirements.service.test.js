@@ -1,7 +1,7 @@
 // Test framework dependencies
 
 // Things we need to stub
-import FetchExistingRequirementsService from '../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js'
+import * as FetchExistingRequirementsService from '../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js'
 
 // Thing under test
 import GenerateFromExistingRequirementsService from '../../../../../app/services/return-versions/setup/existing/generate-from-existing-requirements.service.js'
@@ -20,8 +20,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
       beforeEach(() => {
         fetchResult = _fetchResult(returnVersionId)
 
-        vi.mock('../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js')
-        FetchExistingRequirementsService.mockResolvedValue(fetchResult)
+        vi.spyOn(FetchExistingRequirementsService, 'default').mockResolvedValue(fetchResult)
       })
 
       it('returns the saved value', async () => {
@@ -35,8 +34,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
       beforeEach(() => {
         fetchResult = _fetchResult(returnVersionId)
 
-        vi.mock('../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js')
-        FetchExistingRequirementsService.mockResolvedValue(fetchResult)
+        vi.spyOn(FetchExistingRequirementsService, 'default').mockResolvedValue(fetchResult)
       })
 
       it('returns the saved value', async () => {
@@ -50,8 +48,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
       beforeEach(() => {
         fetchResult = _fetchResult(returnVersionId)
 
-        vi.mock('../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js')
-        FetchExistingRequirementsService.mockResolvedValue(fetchResult)
+        vi.spyOn(FetchExistingRequirementsService, 'default').mockResolvedValue(fetchResult)
       })
 
       it('returns the details of its return requirements transformed for use in the journey', async () => {
@@ -114,8 +111,7 @@ describe('Return Versions Setup - Generate From Existing Requirements service', 
         fetchResult = _fetchResult()
         fetchResult.returnRequirements[1].siteDescription = null
 
-        vi.mock('../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js')
-        FetchExistingRequirementsService.mockResolvedValue(fetchResult)
+        vi.spyOn(FetchExistingRequirementsService, 'default').mockResolvedValue(fetchResult)
       })
 
       it('returns the details of its return requirements transformed, falling back to point description for the missing site description', async () => {

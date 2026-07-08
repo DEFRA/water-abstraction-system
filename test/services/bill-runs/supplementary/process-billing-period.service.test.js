@@ -16,9 +16,9 @@ import * as RegionHelper from '../../../support/helpers/region.helper.js'
 
 // Things we need to stub
 import * as ChargingModuleGenerateBillRunRequest from '../../../../app/requests/charging-module/generate-bill-run.request.js'
-import FetchPreviousTransactionsService from '../../../../app/services/bill-runs/fetch-previous-transactions.service.js'
-import GenerateTransactionsService from '../../../../app/services/bill-runs/generate-transactions.service.js'
-import SendTransactionsService from '../../../../app/services/bill-runs/send-transactions.service.js'
+import * as FetchPreviousTransactionsService from '../../../../app/services/bill-runs/fetch-previous-transactions.service.js'
+import * as GenerateTransactionsService from '../../../../app/services/bill-runs/generate-transactions.service.js'
+import * as SendTransactionsService from '../../../../app/services/bill-runs/send-transactions.service.js'
 
 // Thing under test
 import ProcessBillingPeriodService from '../../../../app/services/bill-runs/supplementary/process-billing-period.service.js'
@@ -50,8 +50,7 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
 
     billRun = await BillRunHelper.add({ regionId: region.id })
 
-    vi.mock('../../../../app/services/bill-runs/fetch-previous-transactions.service.js')
-    FetchPreviousTransactionsService.mockResolvedValue([])
+    vi.spyOn(FetchPreviousTransactionsService, 'default').mockResolvedValue([])
   })
 
   afterEach(() => {
@@ -210,8 +209,7 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
             }
           ]
 
-          vi.mock('../../../../app/services/bill-runs/send-transactions.service.js')
-          SendTransactionsService.mockResolvedValue(sentTransactions)
+          vi.spyOn(SendTransactionsService, 'default').mockResolvedValue(sentTransactions)
           vi.spyOn(ChargingModuleGenerateBillRunRequest, 'send').mockResolvedValue({
             succeeded: true,
             response: {}
@@ -248,8 +246,7 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
 
     describe('because generating the calculated transactions fails', () => {
       beforeEach(async () => {
-        vi.mock('../../../../app/services/bill-runs/generate-transactions.service.js')
-        GenerateTransactionsService.mockRejectedValue(new Error())
+        vi.spyOn(GenerateTransactionsService, 'default').mockRejectedValue(new Error())
       })
 
       it('throws a BillRunError with the correct code', async () => {
@@ -266,8 +263,7 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
       beforeEach(async () => {
         const thrownError = new BillRunError(new Error(), BillRunModel.errorCodes.failedToCreateCharge)
 
-        vi.mock('../../../../app/services/bill-runs/send-transactions.service.js')
-        SendTransactionsService.mockRejectedValue(thrownError)
+        vi.spyOn(SendTransactionsService, 'default').mockRejectedValue(thrownError)
       })
 
       it('throws a BillRunError with the correct code', async () => {

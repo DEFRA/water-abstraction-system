@@ -1,6 +1,6 @@
 // Test helpers
 import * as NoticeSessionFixture from '../../../../support/fixtures/notice-session.fixture.js'
-import RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
+import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
 import * as ReturnLogHelper from '../../../../support/helpers/return-log.helper.js'
 import { compareStrings, generateUUID } from '../../../../../app/lib/general.lib.js'
 import { futureDueDate } from '../../../../../app/presenters/notices/base.presenter.js'

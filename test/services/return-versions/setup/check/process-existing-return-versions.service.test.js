@@ -1,9 +1,9 @@
 // Test framework dependencies
 
 // Things we need to stub
-import FetchCurrentReturnVersionsDal from '../../../../../app/dal/return-versions/fetch-current-return-versions.dal.js'
-import UpdateReturnVersionEndDateDal from '../../../../../app/dal/return-versions/update-return-version-end-date.dal.js'
-import UpdateReturnVersionStatusDal from '../../../../../app/dal/return-versions/update-return-version-status.dal.js'
+import * as FetchCurrentReturnVersionsDal from '../../../../../app/dal/return-versions/fetch-current-return-versions.dal.js'
+import * as UpdateReturnVersionEndDateDal from '../../../../../app/dal/return-versions/update-return-version-end-date.dal.js'
+import * as UpdateReturnVersionStatusDal from '../../../../../app/dal/return-versions/update-return-version-status.dal.js'
 
 // Thing under test
 import ProcessExistingReturnVersionsService from '../../../../../app/services/return-versions/setup/check/process-existing-return-versions.service.js'
@@ -15,12 +15,9 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
   beforeEach(() => {
     licenceId = '7cf4a46b-1375-42c8-bfe7-24c1bfff765c'
 
-    vi.mock('../../../../../app/dal/return-versions/fetch-current-return-versions.dal.js')
 
-    vi.mock('../../../../../app/dal/return-versions/update-return-version-end-date.dal.js')
-    UpdateReturnVersionEndDateDal.mockResolvedValue()
-    vi.mock('../../../../../app/dal/return-versions/update-return-version-status.dal.js')
-    UpdateReturnVersionStatusDal.mockResolvedValue()
+    vi.spyOn(UpdateReturnVersionEndDateDal, 'default').mockResolvedValue()
+    vi.spyOn(UpdateReturnVersionStatusDal, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
@@ -31,7 +28,7 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
     beforeEach(() => {
       newVersionStartDate = new Date('2024-06-01')
 
-      FetchCurrentReturnVersionsDal.mockResolvedValue([
+      vi.spyOn(FetchCurrentReturnVersionsDal, 'default').mockResolvedValue([
         {
           id: '46c0fef8-70bb-41c8-bfa1-ace5c21ef739',
           licenceId,
@@ -46,9 +43,9 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
 
       expect(result).toBeNull()
 
-      expect(UpdateReturnVersionEndDateDal).toHaveBeenCalledOnce()
-      expect(UpdateReturnVersionEndDateDal.mock.calls[0][0]).toEqual('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
-      expect(UpdateReturnVersionEndDateDal.mock.calls[0][1]).toEqual(new Date('2024-05-31'))
+      expect(UpdateReturnVersionEndDateDal.default).toHaveBeenCalledOnce()
+      expect(UpdateReturnVersionEndDateDal.default.mock.calls[0][0]).toEqual('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
+      expect(UpdateReturnVersionEndDateDal.default.mock.calls[0][1]).toEqual(new Date('2024-05-31'))
     })
   })
 
@@ -56,7 +53,7 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
     beforeEach(() => {
       newVersionStartDate = new Date('2024-06-01')
 
-      FetchCurrentReturnVersionsDal.mockResolvedValue([
+      vi.spyOn(FetchCurrentReturnVersionsDal, 'default').mockResolvedValue([
         {
           id: '46c0fef8-70bb-41c8-bfa1-ace5c21ef739',
           licenceId,
@@ -71,9 +68,9 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
 
       expect(result).toEqual(new Date('2024-07-01'))
 
-      expect(UpdateReturnVersionEndDateDal).toHaveBeenCalledOnce()
-      expect(UpdateReturnVersionEndDateDal.mock.calls[0][0]).toEqual('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
-      expect(UpdateReturnVersionEndDateDal.mock.calls[0][1]).toEqual(new Date('2024-05-31'))
+      expect(UpdateReturnVersionEndDateDal.default).toHaveBeenCalledOnce()
+      expect(UpdateReturnVersionEndDateDal.default.mock.calls[0][0]).toEqual('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
+      expect(UpdateReturnVersionEndDateDal.default.mock.calls[0][1]).toEqual(new Date('2024-05-31'))
     })
   })
 
@@ -81,7 +78,7 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
     beforeEach(() => {
       newVersionStartDate = new Date('2024-04-01')
 
-      FetchCurrentReturnVersionsDal.mockResolvedValue([
+      vi.spyOn(FetchCurrentReturnVersionsDal, 'default').mockResolvedValue([
         {
           id: '46c0fef8-70bb-41c8-bfa1-ace5c21ef739',
           licenceId,
@@ -96,8 +93,8 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
 
       expect(result).toEqual(new Date('2024-04-20'))
 
-      expect(UpdateReturnVersionEndDateDal).not.toHaveBeenCalled()
-      expect(UpdateReturnVersionStatusDal).not.toHaveBeenCalled()
+      expect(UpdateReturnVersionEndDateDal.default).not.toHaveBeenCalled()
+      expect(UpdateReturnVersionStatusDal.default).not.toHaveBeenCalled()
     })
   })
 
@@ -105,7 +102,7 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
     beforeEach(async () => {
       newVersionStartDate = new Date('2024-04-01')
 
-      FetchCurrentReturnVersionsDal.mockResolvedValue([
+      vi.spyOn(FetchCurrentReturnVersionsDal, 'default').mockResolvedValue([
         {
           id: '46c0fef8-70bb-41c8-bfa1-ace5c21ef739',
           licenceId,
@@ -120,9 +117,9 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
 
       expect(result).toBeNull()
 
-      expect(UpdateReturnVersionStatusDal).toHaveBeenCalledOnce()
-      expect(UpdateReturnVersionStatusDal.mock.calls[0][0]).toEqual('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
-      expect(UpdateReturnVersionStatusDal.mock.calls[0][1]).toEqual('superseded')
+      expect(UpdateReturnVersionStatusDal.default).toHaveBeenCalledOnce()
+      expect(UpdateReturnVersionStatusDal.default.mock.calls[0][0]).toEqual('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
+      expect(UpdateReturnVersionStatusDal.default.mock.calls[0][1]).toEqual('superseded')
     })
   })
 
@@ -130,7 +127,7 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
     beforeEach(() => {
       newVersionStartDate = new Date('2024-04-01')
 
-      FetchCurrentReturnVersionsDal.mockResolvedValue([
+      vi.spyOn(FetchCurrentReturnVersionsDal, 'default').mockResolvedValue([
         {
           id: '46c0fef8-70bb-41c8-bfa1-ace5c21ef739',
           licenceId,
@@ -145,9 +142,9 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
 
       expect(result).toEqual(new Date('2024-07-01'))
 
-      expect(UpdateReturnVersionStatusDal).toHaveBeenCalledOnce()
-      expect(UpdateReturnVersionStatusDal.mock.calls[0][0]).toEqual('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
-      expect(UpdateReturnVersionStatusDal.mock.calls[0][1]).toEqual('superseded')
+      expect(UpdateReturnVersionStatusDal.default).toHaveBeenCalledOnce()
+      expect(UpdateReturnVersionStatusDal.default.mock.calls[0][0]).toEqual('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
+      expect(UpdateReturnVersionStatusDal.default.mock.calls[0][1]).toEqual('superseded')
     })
   })
 
@@ -155,7 +152,7 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
     beforeEach(() => {
       newVersionStartDate = new Date('2025-04-01')
 
-      FetchCurrentReturnVersionsDal.mockResolvedValue([
+      vi.spyOn(FetchCurrentReturnVersionsDal, 'default').mockResolvedValue([
         {
           id: 'c4738c45-f43c-440d-a353-823cc0148d68',
           licenceId,
@@ -182,9 +179,9 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
 
       expect(result).toEqual(new Date('2025-05-11'))
 
-      expect(UpdateReturnVersionEndDateDal).toHaveBeenCalledOnce()
-      expect(UpdateReturnVersionEndDateDal.mock.calls[0][0]).toEqual('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
-      expect(UpdateReturnVersionEndDateDal.mock.calls[0][1]).toEqual(new Date('2025-03-31'))
+      expect(UpdateReturnVersionEndDateDal.default).toHaveBeenCalledOnce()
+      expect(UpdateReturnVersionEndDateDal.default.mock.calls[0][0]).toEqual('46c0fef8-70bb-41c8-bfa1-ace5c21ef739')
+      expect(UpdateReturnVersionEndDateDal.default.mock.calls[0][1]).toEqual(new Date('2025-03-31'))
     })
   })
 })

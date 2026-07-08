@@ -6,12 +6,12 @@ import BillRunError from '../../../../app/errors/bill-run.error.js'
 // Things we need to stub
 import BillRunModel from '../../../../app/models/bill-run.model.js'
 import * as ChargingModuleGenerateBillRunRequest from '../../../../app/requests/charging-module/generate-bill-run.request.js'
-import FetchChargeVersionsService from '../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js'
+import * as FetchChargeVersionsService from '../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
-import HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
+import * as HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
 import * as LegacyRefreshBillRunRequest from '../../../../app/requests/legacy/refresh-bill-run.request.js'
-import ProcessBillingPeriodService from '../../../../app/services/bill-runs/supplementary/process-billing-period.service.js'
-import UnflagUnbilledSupplementaryLicencesService from '../../../../app/services/bill-runs/unflag-unbilled-supplementary-licences.service.js'
+import * as ProcessBillingPeriodService from '../../../../app/services/bill-runs/supplementary/process-billing-period.service.js'
+import * as UnflagUnbilledSupplementaryLicencesService from '../../../../app/services/bill-runs/unflag-unbilled-supplementary-licences.service.js'
 
 // Thing under test
 import ProcessBillRunService from '../../../../app/services/bill-runs/supplementary/process-bill-run.service.js'
@@ -36,7 +36,6 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
       patch: billRunPatchStub
     })
 
-    vi.mock('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
     chargingModuleGenerateBillRunRequestStub = vi
       .spyOn(ChargingModuleGenerateBillRunRequest, 'send')
       .mockImplementation(() => {})
@@ -56,15 +55,12 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
 
   describe('when the service is called', () => {
     beforeEach(() => {
-      vi.mock('../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js')
-      FetchChargeVersionsService.mockResolvedValue({ chargeVersions: [], licenceIdsForPeriod: [] })
-      vi.mock('../../../../app/services/bill-runs/unflag-unbilled-supplementary-licences.service.js')
+      vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue({ chargeVersions: [], licenceIdsForPeriod: [] })
     })
 
     describe('and nothing is billed', () => {
       beforeEach(() => {
-        vi.mock('../../../../app/services/bill-runs/supplementary/process-billing-period.service.js')
-        ProcessBillingPeriodService.mockResolvedValue(false)
+        vi.spyOn(ProcessBillingPeriodService, 'default').mockResolvedValue(false)
       })
 
       it('sets the bill run status first to "processing" and then to "empty"', async () => {
@@ -89,8 +85,7 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
 
     describe('and some charge versions are billed', () => {
       beforeEach(() => {
-        vi.mock('../../../../app/services/bill-runs/supplementary/process-billing-period.service.js')
-        ProcessBillingPeriodService.mockResolvedValue(true)
+        vi.spyOn(ProcessBillingPeriodService, 'default').mockResolvedValue(true)
       })
 
       it('sets the bill run status to "processing"', async () => {
@@ -131,14 +126,13 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        vi.mock('../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js')
-        FetchChargeVersionsService.mockRejectedValue(thrownError)
+        vi.spyOn(FetchChargeVersionsService, 'default').mockRejectedValue(thrownError)
       })
 
       it('calls HandleErroredBillRunService with appropriate error code', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        const handlerArgs = HandleErroredBillRunService.mock.calls[0]
+        const handlerArgs = HandleErroredBillRunService.default.mock.calls[0]
 
         expect(handlerArgs[1]).toEqual(BillRunModel.errorCodes.failedToProcessChargeVersions)
       })
@@ -162,16 +156,14 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
         beforeEach(() => {
           thrownError = new BillRunError(new Error(), BillRunModel.errorCodes.failedToPrepareTransactions)
 
-          vi.mock('../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js')
-          FetchChargeVersionsService.mockResolvedValue({ chargeVersions: [], licenceIdsForPeriod: [] })
-          vi.mock('../../../../app/services/bill-runs/supplementary/process-billing-period.service.js')
-          ProcessBillingPeriodService.mockRejectedValue(thrownError)
+          vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue({ chargeVersions: [], licenceIdsForPeriod: [] })
+          vi.spyOn(ProcessBillingPeriodService, 'default').mockRejectedValue(thrownError)
         })
 
         it('calls HandleErroredBillRunService with the error code', async () => {
           await ProcessBillRunService(billRun, billingPeriods)
 
-          const handlerArgs = HandleErroredBillRunService.mock.calls[0]
+          const handlerArgs = HandleErroredBillRunService.default.mock.calls[0]
 
           expect(handlerArgs[1]).toEqual(BillRunModel.errorCodes.failedToPrepareTransactions)
         })
@@ -195,18 +187,15 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        vi.mock('../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js')
-        FetchChargeVersionsService.mockResolvedValue({ chargeVersions: [], licenceIdsForPeriod: [] })
-        vi.mock('../../../../app/services/bill-runs/supplementary/process-billing-period.service.js')
-        ProcessBillingPeriodService.mockResolvedValue(false)
-        vi.mock('../../../../app/services/bill-runs/unflag-unbilled-supplementary-licences.service.js')
-        UnflagUnbilledSupplementaryLicencesService.mockRejectedValue(thrownError)
+        vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue({ chargeVersions: [], licenceIdsForPeriod: [] })
+        vi.spyOn(ProcessBillingPeriodService, 'default').mockResolvedValue(false)
+        vi.spyOn(UnflagUnbilledSupplementaryLicencesService, 'default').mockRejectedValue(thrownError)
       })
 
       it('calls HandleErroredBillRunService without an error code', async () => {
         await ProcessBillRunService(billRun, billingPeriods)
 
-        const handlerArgs = HandleErroredBillRunService.mock.calls[0]
+        const handlerArgs = HandleErroredBillRunService.default.mock.calls[0]
 
         expect(handlerArgs[1]).toBeUndefined()
       })

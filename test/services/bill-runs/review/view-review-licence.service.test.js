@@ -5,7 +5,7 @@ import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-revi
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchReviewLicenceService from '../../../../app/services/bill-runs/review/fetch-review-licence.service.js'
+import * as FetchReviewLicenceService from '../../../../app/services/bill-runs/review/fetch-review-licence.service.js'
 
 // Thing under test
 import ViewReviewLicenceService from '../../../../app/services/bill-runs/review/view-review-licence.service.js'
@@ -18,8 +18,7 @@ describe('Bill Runs - Review - View Review Licence Service', () => {
   beforeEach(() => {
     reviewLicence = BillRunsReviewFixture.reviewLicence()
 
-    vi.mock('../../../../app/services/bill-runs/review/fetch-review-licence.service.js')
-    FetchReviewLicenceService.mockResolvedValue(reviewLicence)
+    vi.spyOn(FetchReviewLicenceService, 'default').mockResolvedValue(reviewLicence)
   })
 
   afterEach(() => {

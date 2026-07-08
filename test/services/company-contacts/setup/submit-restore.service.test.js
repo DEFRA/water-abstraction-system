@@ -9,9 +9,9 @@ import { generateUUID } from '../../../../app/lib/general.lib.js'
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
-import UpdateCompanyContactDal from '../../../../app/dal/company-contacts/setup/update-company-contact.dal.js'
+import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as UpdateCompanyContactDal from '../../../../app/dal/company-contacts/setup/update-company-contact.dal.js'
 
 // Thing under test
 import SubmitRestoreService from '../../../../app/services/company-contacts/setup/submit-restore.service.js'
@@ -41,15 +41,12 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     yarStub = YarStub()
 
-    vi.mock('../../../../app/dal/company-contacts/setup/update-company-contact.dal.js')
-    UpdateCompanyContactDal.mockResolvedValue()
-    vi.mock('../../../../app/dal/delete-session.dal.js')
-    DeleteSessionDal.mockResolvedValue()
+    vi.spyOn(UpdateCompanyContactDal, 'default').mockResolvedValue()
+    vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
@@ -111,7 +108,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
             abstractionAlerts: 'no'
           })
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('persists the "abstractionAlerts" as "false"', async () => {
@@ -132,7 +129,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
             email: 'ERICE@TEST.COM'
           })
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('persists the "email" in lowercase', async () => {

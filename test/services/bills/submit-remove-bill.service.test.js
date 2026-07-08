@@ -3,8 +3,8 @@
 // Things we need to stub
 import BillModel from '../../../app/models/bill.model.js'
 import * as LegacyDeleteBillRequest from '../../../app/requests/legacy/delete-bill.request.js'
-import ProcessBillingFlagService from '../../../app/services/licences/supplementary/process-billing-flag.service.js'
-import UnassignLicencesToBillRunService from '../../../app/services/bill-runs/unassign-licences-to-bill-run.service.js'
+import * as ProcessBillingFlagService from '../../../app/services/licences/supplementary/process-billing-flag.service.js'
+import * as UnassignLicencesToBillRunService from '../../../app/services/bill-runs/unassign-licences-to-bill-run.service.js'
 
 // Thing under test
 import SubmitRemoveBillService from '../../../app/services/bills/submit-remove-bill.service.js'
@@ -34,10 +34,8 @@ describe('Bills - Submit Remove Bill service', () => {
     })
 
     legacyDeleteBillRequestStub = vi.spyOn(LegacyDeleteBillRequest, 'send').mockResolvedValue()
-    vi.mock('../../../app/services/licences/supplementary/process-billing-flag.service.js')
-    ProcessBillingFlagService.mockResolvedValue()
-    vi.mock('../../../app/services/bill-runs/unassign-licences-to-bill-run.service.js')
-    UnassignLicencesToBillRunService.mockResolvedValue()
+    vi.spyOn(ProcessBillingFlagService, 'default').mockResolvedValue()
+    vi.spyOn(UnassignLicencesToBillRunService, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
@@ -48,7 +46,7 @@ describe('Bills - Submit Remove Bill service', () => {
     it('unassigns any two-part tariff supplementary licences in the bill from the bill run', async () => {
       await SubmitRemoveBillService(bill.id, user)
 
-      expect(UnassignLicencesToBillRunService).toHaveBeenCalled()
+      expect(UnassignLicencesToBillRunService.default).toHaveBeenCalled()
     })
 
     it('flags the two licences in the bill for supplementary billing', async () => {

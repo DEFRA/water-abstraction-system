@@ -5,7 +5,7 @@ import * as BillingAccountsFixture from '../../support/fixtures/billing-accounts
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchViewBillingAccountService from '../../../app/services/billing-accounts/fetch-view-billing-account.service.js'
+import * as FetchViewBillingAccountService from '../../../app/services/billing-accounts/fetch-view-billing-account.service.js'
 
 // Thing under test
 import ViewBillingAccountService from '../../../app/services/billing-accounts/view-billing-account.service.js'
@@ -23,8 +23,7 @@ describe('Billing Accounts - View Billing Account service', () => {
     companyId = generateUUID()
     licenceId = generateUUID()
 
-    vi.mock('../../../app/services/billing-accounts/fetch-view-billing-account.service.js')
-    FetchViewBillingAccountService.mockReturnValue(billingAccountData)
+    vi.spyOn(FetchViewBillingAccountService, 'default').mockReturnValue(billingAccountData)
   })
 
   afterEach(() => {

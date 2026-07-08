@@ -4,10 +4,10 @@
 import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
 
 // Things we need to stub
-import CreateService from '../../../../app/services/bill-runs/setup/create.service.js'
-import DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
-import DetermineBlockingBillRunService from '../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as CreateService from '../../../../app/services/bill-runs/setup/create.service.js'
+import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
+import * as DetermineBlockingBillRunService from '../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitCheckService from '../../../../app/services/bill-runs/setup/submit-check.service.js'
@@ -32,10 +32,8 @@ describe('Bill Runs - Setup - Submit Check service', () => {
   beforeEach(async () => {
     session = { id: sessionId, region: region.id, regionName: region.displayName, type: 'annual' }
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
-    vi.mock('../../../../app/dal/delete-session.dal.js')
-    DeleteSessionDal.mockResolvedValue()
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
+    vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
@@ -47,17 +45,15 @@ describe('Bill Runs - Setup - Submit Check service', () => {
       beforeEach(async () => {
         blockingResults = { matches: [], toFinancialYearEnding: 2025, trigger: engineTriggers.current }
 
-        vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
-        DetermineBlockingBillRunService.mockResolvedValue(blockingResults)
+        vi.spyOn(DetermineBlockingBillRunService, 'default').mockResolvedValue(blockingResults)
 
-        vi.mock('../../../../app/services/bill-runs/setup/create.service.js')
-        CreateService.mockResolvedValue()
+        vi.spyOn(CreateService, 'default').mockResolvedValue()
       })
 
       it('triggers creation of the bill run and returns empty page data', async () => {
         const result = await SubmitCheckService(session.id, auth)
 
-        expect(CreateService).toHaveBeenCalled()
+        expect(CreateService.default).toHaveBeenCalled()
         expect(result).toEqual({})
       })
 
@@ -90,8 +86,7 @@ describe('Bill Runs - Setup - Submit Check service', () => {
           trigger: engineTriggers.neither
         }
 
-        vi.mock('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
-        DetermineBlockingBillRunService.mockResolvedValue(blockingResults)
+        vi.spyOn(DetermineBlockingBillRunService, 'default').mockResolvedValue(blockingResults)
       })
 
       it('returns page data needed to re-render the view', async () => {

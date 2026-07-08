@@ -7,7 +7,7 @@ import { generateNoticeReferenceCode } from '../../../app/lib/general.lib.js'
 import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things to stub
-import FetchNoticeService from '../../../app/services/notices/fetch-notice.service.js'
+import * as FetchNoticeService from '../../../app/services/notices/fetch-notice.service.js'
 
 // Thing under test
 import ViewNoticeService from '../../../app/services/notices/view-notice.service.js'
@@ -95,8 +95,7 @@ describe('Notices - View Notice service', () => {
       yarStub = YarStub()
       yarStub.get.mockReturnValue(_noticeFilters())
 
-      vi.mock('../../../app/services/notices/fetch-notice.service.js')
-      FetchNoticeService.mockResolvedValue(fetchResults)
+      vi.spyOn(FetchNoticeService, 'default').mockResolvedValue(fetchResults)
     })
 
     it('returns page data for the view', async () => {
@@ -159,8 +158,7 @@ describe('Notices - View Notice service', () => {
 
   describe('when the filters are assessed', () => {
     beforeEach(() => {
-      vi.mock('../../../app/services/notices/fetch-notice.service.js')
-      FetchNoticeService.mockResolvedValue(fetchResults)
+      vi.spyOn(FetchNoticeService, 'default').mockResolvedValue(fetchResults)
     })
 
     describe('and none were ever set or they were cleared', () => {
@@ -214,8 +212,7 @@ describe('Notices - View Notice service', () => {
       // NOTE: We up the total number to force the paginator to calculate that there is more than one page.
       fetchResults.totalNumber = 150
 
-      vi.mock('../../../app/services/notices/fetch-notice.service.js')
-      FetchNoticeService.mockResolvedValue(fetchResults)
+      vi.spyOn(FetchNoticeService, 'default').mockResolvedValue(fetchResults)
     })
 
     it('defaults to 1', async () => {

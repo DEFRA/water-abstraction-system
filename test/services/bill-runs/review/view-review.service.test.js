@@ -10,7 +10,7 @@ import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
 import DatabaseConfig from '../../../../config/database.config.js'
-import FetchBillRunLicencesService from '../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js'
+import * as FetchBillRunLicencesService from '../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js'
 
 // Thing under test
 import ViewReviewService from '../../../../app/services/bill-runs/review/view-review.service.js'
@@ -61,8 +61,7 @@ describe('Bill Runs - Review - View Review Service', () => {
         }
       }
 
-      vi.mock('../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js')
-      FetchBillRunLicencesService.mockResolvedValue(fetchData)
+      vi.spyOn(FetchBillRunLicencesService, 'default').mockResolvedValue(fetchData)
 
       notification = {
         text: 'Licence 1/11/11/*11/1111 removed from the bill run.',
@@ -135,8 +134,7 @@ describe('Bill Runs - Review - View Review Service', () => {
         licences: { results: [], total: 0 }
       }
 
-      vi.mock('../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js')
-      FetchBillRunLicencesService.mockResolvedValue(fetchData)
+      vi.spyOn(FetchBillRunLicencesService, 'default').mockResolvedValue(fetchData)
 
       yarStub = YarStub()
       yarStub.flash.mockReturnValue([])

@@ -5,7 +5,7 @@ import http2 from 'node:http2'
 const { HTTP_STATUS_OK } = http2.constants
 
 // Things we need to stub
-import ViewService from '../../app/services/return-versions/view.service.js'
+import * as ViewService from '../../app/services/return-versions/view.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -40,8 +40,7 @@ describe('Return Versions controller', () => {
 
     describe('GET', () => {
       beforeEach(async () => {
-        vi.mock('../../app/services/return-versions/view.service.js')
-        ViewService.mockResolvedValue({
+        vi.spyOn(ViewService, 'default').mockResolvedValue({
           pageTitle: 'Requirements for returns valid from'
         })
       })

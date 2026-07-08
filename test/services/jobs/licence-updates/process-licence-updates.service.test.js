@@ -5,7 +5,7 @@ import { generateUUID } from '../../../../app/lib/general.lib.js'
 import WorkflowModel from '../../../../app/models/workflow.model.js'
 
 // Things we need to stub
-import FetchLicenceUpdatesService from '../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js'
+import * as FetchLicenceUpdatesService from '../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
@@ -43,8 +43,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
         }
       ]
 
-      vi.mock('../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js')
-      FetchLicenceUpdatesService.mockResolvedValue(fetchResults)
+      vi.spyOn(FetchLicenceUpdatesService, 'default').mockResolvedValue(fetchResults)
     })
 
     it('adds the updated licences to workflow', async () => {
@@ -83,8 +82,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     beforeEach(() => {
       fetchResults = []
 
-      vi.mock('../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js')
-      FetchLicenceUpdatesService.mockResolvedValue(fetchResults)
+      vi.spyOn(FetchLicenceUpdatesService, 'default').mockResolvedValue(fetchResults)
     })
 
     it('adds nothing to workflow', async () => {
@@ -111,8 +109,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
 
   describe('when there is an error', () => {
     beforeEach(() => {
-      vi.mock('../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js')
-      FetchLicenceUpdatesService.mockRejectedValue()
+      vi.spyOn(FetchLicenceUpdatesService, 'default').mockRejectedValue()
     })
 
     it('records the error by calling "omfg()"', async () => {

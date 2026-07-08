@@ -4,8 +4,8 @@
 import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import DetermineNextVersionNumberDal from '../../../../../app/dal/return-versions/determine-next-version-number.dal.js'
-import FetchOtherPurposeIdsDal from '../../../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js'
+import * as DetermineNextVersionNumberDal from '../../../../../app/dal/return-versions/determine-next-version-number.dal.js'
+import * as FetchOtherPurposeIdsDal from '../../../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js'
 
 // Thing under test
 import GenerateReturnVersionService from '../../../../../app/services/return-versions/setup/check/generate-return-version.service.js'
@@ -20,8 +20,7 @@ describe('Return Versions - Setup - Generate Return Version service', () => {
     licenceId = '7cf4a46b-1375-42c8-bfe7-24c1bfff765c'
     userId = 12345
 
-    vi.mock('../../../../../app/dal/return-versions/determine-next-version-number.dal.js')
-    DetermineNextVersionNumberDal.mockResolvedValue(1)
+    vi.spyOn(DetermineNextVersionNumberDal, 'default').mockResolvedValue(1)
   })
 
   afterEach(() => {
@@ -85,8 +84,7 @@ describe('Return Versions - Setup - Generate Return Version service', () => {
 
       session = SessionModelStub(sessionData)
 
-      vi.mock('../../../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js')
-      FetchOtherPurposeIdsDal.mockResolvedValue({
+      vi.spyOn(FetchOtherPurposeIdsDal, 'default').mockResolvedValue({
         primaryPurposeId: 'c6fd4b2a-82b5-42b0-a98a-087ba52f9a4f',
         secondaryPurposeId: '0a80d135-9bd4-40ec-90ff-f4a365ccac3f'
       })

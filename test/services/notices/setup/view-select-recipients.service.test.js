@@ -6,8 +6,8 @@ import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import ViewSelectRecipientsService from '../../../../app/services/notices/setup/view-select-recipients.service.js'
@@ -30,10 +30,8 @@ describe('Notices - Setup - View Select Recipients service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/services/notices/setup/fetch-recipients.service.js')
-    FetchRecipientsService.mockResolvedValue([recipients.primaryUser])
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([recipients.primaryUser])
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {

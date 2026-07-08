@@ -6,7 +6,7 @@ const { HTTP_STATUS_NOT_FOUND } = http2.constants
 import LicenceModel from '../../../../app/models/licence.model.js'
 
 // Things we need to stub
-import FetchLicenceService from '../../../../app/services/return-versions/setup/fetch-licence.service.js'
+import * as FetchLicenceService from '../../../../app/services/return-versions/setup/fetch-licence.service.js'
 
 // Thing under test
 import InitiateSessionService from '../../../../app/services/return-versions/setup/initiate-session.service.js'
@@ -26,8 +26,7 @@ describe('Return Versions - Setup - Initiate Session service', () => {
         beforeEach(async () => {
           licence = _licence()
 
-          vi.mock('../../../../app/services/return-versions/setup/fetch-licence.service.js')
-          FetchLicenceService.mockResolvedValue(licence)
+          vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licence)
         })
 
         it('creates a new session record containing details of the licence', async () => {
@@ -71,8 +70,7 @@ describe('Return Versions - Setup - Initiate Session service', () => {
           licence = _licence()
           licence.expiredDate = null
 
-          vi.mock('../../../../app/services/return-versions/setup/fetch-licence.service.js')
-          FetchLicenceService.mockResolvedValue(licence)
+          vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licence)
         })
 
         it('creates a new session record containing details of the licence', async () => {
@@ -115,8 +113,7 @@ describe('Return Versions - Setup - Initiate Session service', () => {
     describe('and the matching licence does not exist', () => {
       beforeEach(async () => {
         licence = undefined
-        vi.mock('../../../../app/services/return-versions/setup/fetch-licence.service.js')
-        FetchLicenceService.mockResolvedValue(licence)
+        vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licence)
       })
 
       it('throws a Boom not found error', async () => {

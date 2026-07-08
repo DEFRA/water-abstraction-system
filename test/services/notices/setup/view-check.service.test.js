@@ -6,7 +6,7 @@ import * as NoticeSessionFixture from '../../../support/fixtures/notice-session.
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
+import * as FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
 import SessionModel from '../../../../app/models/session.model.js'
 
 // Thing under test
@@ -32,8 +32,7 @@ describe('Notices - Setup - View Check service', () => {
     yarStub = YarStub()
     yarStub.flash.mockReturnValue([{ title: 'Test', text: 'Notification' }])
 
-    vi.mock('../../../../app/services/notices/setup/fetch-recipients.service.js')
-    FetchRecipientsService.mockResolvedValue([recipient])
+    vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([recipient])
   })
 
   afterEach(() => {

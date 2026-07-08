@@ -6,7 +6,7 @@ import ReviewLicenceModel from '../../../../app/models/review-licence.model.js'
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchReviewLicenceService from '../../../../app/services/bill-runs/review/fetch-review-licence.service.js'
+import * as FetchReviewLicenceService from '../../../../app/services/bill-runs/review/fetch-review-licence.service.js'
 
 // Thing under test
 import SubmitReviewLicenceService from '../../../../app/services/bill-runs/review/submit-review-licence.service.js'
@@ -20,8 +20,7 @@ describe('Bill Runs Review - Submit Review Licence Service', () => {
   beforeEach(async () => {
     reviewLicence = BillRunsReviewFixture.reviewLicence()
 
-    vi.mock('../../../../app/services/bill-runs/review/fetch-review-licence.service.js')
-    FetchReviewLicenceService.mockResolvedValue(reviewLicence)
+    vi.spyOn(FetchReviewLicenceService, 'default').mockResolvedValue(reviewLicence)
 
     patchStub = vi.fn().mockResolvedValue()
     vi.spyOn(ReviewLicenceModel, 'query').mockReturnValue({

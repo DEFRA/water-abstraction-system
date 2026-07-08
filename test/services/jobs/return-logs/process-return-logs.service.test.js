@@ -5,9 +5,9 @@ import * as ReturnCyclesFixture from '../../../support/fixtures/return-cycles.fi
 import * as ReturnRequirementsFixture from '../../../support/fixtures/return-requirements.fixture.js'
 
 // Things we need to stub
-import CreateReturnLogsService from '../../../../app/services/return-logs/create-return-logs.service.js'
-import CheckReturnCycleService from '../../../../app/services/jobs/return-logs/check-return-cycle.service.js'
-import FetchReturnRequirementsService from '../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js'
+import * as CreateReturnLogsService from '../../../../app/services/return-logs/create-return-logs.service.js'
+import * as CheckReturnCycleService from '../../../../app/services/jobs/return-logs/check-return-cycle.service.js'
+import * as FetchReturnRequirementsService from '../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
@@ -33,18 +33,15 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
 
   describe('when the requested return cycle exists', () => {
     beforeEach(() => {
-      vi.mock('../../../../app/services/return-logs/create-return-logs.service.js')
-      CreateReturnLogsService.mockResolvedValue()
+      vi.spyOn(CreateReturnLogsService, 'default').mockResolvedValue()
 
-      vi.mock('../../../../app/services/jobs/return-logs/check-return-cycle.service.js')
-      CheckReturnCycleService.mockResolvedValue(ReturnCyclesFixture.winterCycle())
+      vi.spyOn(CheckReturnCycleService, 'default').mockResolvedValue(ReturnCyclesFixture.winterCycle())
     })
 
     describe('and there are return requirements that need return logs created', () => {
       beforeEach(() => {
         returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
-        vi.mock('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
-        FetchReturnRequirementsService.mockResolvedValue([returnRequirement])
+        vi.spyOn(FetchReturnRequirementsService, 'default').mockResolvedValue([returnRequirement])
       })
 
       it('logs the time taken in milliseconds and seconds', async () => {
@@ -52,7 +49,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
 
         const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-        expect(CreateReturnLogsService).toHaveBeenCalled()
+        expect(CreateReturnLogsService.default).toHaveBeenCalled()
         expect(notifierStub.omg).toHaveBeenCalledWith('Return logs job complete')
         expect(logDataArg.timeTakenMs).toBeDefined()
         expect(logDataArg.timeTakenSs).toBeDefined()
@@ -65,8 +62,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
       beforeEach(() => {
         returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
         returnRequirement.returnVersion.endDate = '2023-05-28'
-        vi.mock('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
-        FetchReturnRequirementsService.mockResolvedValue([returnRequirement])
+        vi.spyOn(FetchReturnRequirementsService, 'default').mockResolvedValue([returnRequirement])
       })
 
       it('logs the time taken in milliseconds and seconds', async () => {
@@ -74,7 +70,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
 
         const logDataArg = notifierStub.omg.mock.calls[0][1]
 
-        expect(CreateReturnLogsService).toHaveBeenCalled()
+        expect(CreateReturnLogsService.default).toHaveBeenCalled()
         expect(notifierStub.omg).toHaveBeenCalledWith('Return logs job complete')
         expect(logDataArg.timeTakenMs).toBeDefined()
         expect(logDataArg.timeTakenSs).toBeDefined()
@@ -85,8 +81,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
 
     describe('but there are no return requirements that need return logs created', () => {
       beforeEach(() => {
-        vi.mock('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
-        FetchReturnRequirementsService.mockResolvedValue([])
+        vi.spyOn(FetchReturnRequirementsService, 'default').mockResolvedValue([])
       })
 
       it('still logs the time taken in milliseconds and seconds', async () => {
@@ -106,8 +101,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
   describe('when the service errors', () => {
     describe('because the check return cycle service errors', () => {
       beforeEach(() => {
-        vi.mock('../../../../app/services/jobs/return-logs/check-return-cycle.service.js')
-        CheckReturnCycleService.mockRejectedValue()
+        vi.spyOn(CheckReturnCycleService, 'default').mockRejectedValue()
       })
 
       it('records the error by calling "omfg()"', async () => {
@@ -135,11 +129,9 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
     describe('because the create return logs service errors', () => {
       beforeEach(() => {
         returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
-        vi.mock('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
-        FetchReturnRequirementsService.mockResolvedValue([returnRequirement])
+        vi.spyOn(FetchReturnRequirementsService, 'default').mockResolvedValue([returnRequirement])
 
-        vi.mock('../../../../app/services/return-logs/create-return-logs.service.js')
-        CreateReturnLogsService.mockRejectedValue()
+        vi.spyOn(CreateReturnLogsService, 'default').mockRejectedValue()
       })
 
       it('records the error by calling "omfg()"', async () => {

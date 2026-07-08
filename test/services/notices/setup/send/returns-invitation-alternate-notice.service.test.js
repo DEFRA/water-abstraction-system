@@ -5,8 +5,8 @@ import * as NoticesFixture from '../../../../support/fixtures/notices.fixture.js
 import * as NotificationsFixture from '../../../../support/fixtures/notifications.fixture.js'
 
 // Things we need to stub
-import CreateAlternateReturnsNoticeService from '../../../../../app/services/notices/setup/create-alternate-returns-notice.service.js'
-import FetchFailedReturnsInvitationsService from '../../../../../app/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js'
+import * as CreateAlternateReturnsNoticeService from '../../../../../app/services/notices/setup/create-alternate-returns-notice.service.js'
+import * as FetchFailedReturnsInvitationsService from '../../../../../app/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js'
 
 // Thing under test
 import ReturnsInvitationAlternateNoticeService from '../../../../../app/services/notices/setup/send/returns-invitation-alternate-notice.service.js'
@@ -29,8 +29,7 @@ describe('Notices - Setup - Send - Returns Invitation Alternate Notice service',
 
     alternateNotification = NotificationsFixture.returnsInvitationLetter(alternateNotice)
 
-    vi.mock('../../../../../app/services/notices/setup/create-alternate-returns-notice.service.js')
-    CreateAlternateReturnsNoticeService.mockResolvedValue({
+    vi.spyOn(CreateAlternateReturnsNoticeService, 'default').mockResolvedValue({
       notice: alternateNotice,
       notifications: [alternateNotification]
     })
@@ -42,8 +41,7 @@ describe('Notices - Setup - Send - Returns Invitation Alternate Notice service',
 
   describe('when the main notice has failed primary user email notifications', () => {
     beforeEach(() => {
-      vi.mock('../../../../../app/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js')
-      FetchFailedReturnsInvitationsService.mockResolvedValue({
+      vi.spyOn(FetchFailedReturnsInvitationsService, 'default').mockResolvedValue({
         dueDate: failedNotification.dueDate,
         licenceRefs: failedNotification.licences,
         notificationIds: [failedNotification.id],
@@ -54,8 +52,8 @@ describe('Notices - Setup - Send - Returns Invitation Alternate Notice service',
     it('creates the alternate notice and notifications', async () => {
       await ReturnsInvitationAlternateNoticeService(mainNotice)
 
-      expect(CreateAlternateReturnsNoticeService).toHaveBeenCalledOnce()
-      expect(CreateAlternateReturnsNoticeService.mock.calls[0]).toEqual([
+      expect(CreateAlternateReturnsNoticeService.default).toHaveBeenCalledOnce()
+      expect(CreateAlternateReturnsNoticeService.default.mock.calls[0]).toEqual([
         mainNotice,
         failedNotification.licences,
         failedNotification.dueDate,
@@ -76,8 +74,7 @@ describe('Notices - Setup - Send - Returns Invitation Alternate Notice service',
 
   describe('when the main notice has no failed primary user email notifications', () => {
     beforeEach(() => {
-      vi.mock('../../../../../app/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js')
-      FetchFailedReturnsInvitationsService.mockResolvedValue({
+      vi.spyOn(FetchFailedReturnsInvitationsService, 'default').mockResolvedValue({
         licenceRefs: [],
         notificationIds: [],
         returnLogIds: []
@@ -87,7 +84,7 @@ describe('Notices - Setup - Send - Returns Invitation Alternate Notice service',
     it('does not create the alternate notice', async () => {
       await ReturnsInvitationAlternateNoticeService(mainNotice)
 
-      expect(CreateAlternateReturnsNoticeService).not.toHaveBeenCalled()
+      expect(CreateAlternateReturnsNoticeService.default).not.toHaveBeenCalled()
     })
 
     it('returns null', async () => {

@@ -7,8 +7,8 @@ const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED, HTTP_STATUS_INTERNAL_SERVE
 
 // Things we need to stub
 import Boom from '@hapi/boom'
-import ChangeAddressService from '../../app/services/billing-accounts/change-address.service.js'
-import ViewBillingAccountService from '../../app/services/billing-accounts/view-billing-account.service.js'
+import * as ChangeAddressService from '../../app/services/billing-accounts/change-address.service.js'
+import * as ViewBillingAccountService from '../../app/services/billing-accounts/view-billing-account.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -64,8 +64,7 @@ describe('Billing Accounts controller', () => {
 
         describe('when the request succeeds', () => {
           beforeEach(() => {
-            vi.mock('../../app/services/billing-accounts/view-billing-account.service.js')
-            ViewBillingAccountService.mockResolvedValue(_viewBillingAccount())
+            vi.spyOn(ViewBillingAccountService, 'default').mockResolvedValue(_viewBillingAccount())
           })
 
           it('returns the page successfully', async () => {
@@ -91,8 +90,7 @@ describe('Billing Accounts controller', () => {
 
         describe('when the request succeeds', () => {
           beforeEach(() => {
-            vi.mock('../../app/services/billing-accounts/view-billing-account.service.js')
-            ViewBillingAccountService.mockResolvedValue(_viewBillingAccount())
+            vi.spyOn(ViewBillingAccountService, 'default').mockResolvedValue(_viewBillingAccount())
           })
 
           it('returns the page successfully', async () => {
@@ -118,8 +116,7 @@ describe('Billing Accounts controller', () => {
 
         describe('when the request succeeds', () => {
           beforeEach(() => {
-            vi.mock('../../app/services/billing-accounts/view-billing-account.service.js')
-            ViewBillingAccountService.mockResolvedValue(_viewBillingAccount())
+            vi.spyOn(ViewBillingAccountService, 'default').mockResolvedValue(_viewBillingAccount())
           })
 
           it('returns the page successfully', async () => {
@@ -156,8 +153,7 @@ describe('Billing Accounts controller', () => {
       beforeEach(() => {
         options.payload = { ...validPayload }
 
-        vi.mock('../../app/services/billing-accounts/change-address.service.js')
-        ChangeAddressService.mockResolvedValue(validResponse)
+        vi.spyOn(ChangeAddressService, 'default').mockResolvedValue(validResponse)
       })
 
       it('returns a 201 status', async () => {
@@ -197,8 +193,7 @@ describe('Billing Accounts controller', () => {
           vi.spyOn(Boom, 'badImplementation').mockReturnValue(
             new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR })
           )
-          vi.mock('../../app/services/billing-accounts/change-address.service.js')
-          ChangeAddressService.mockRejectedValue()
+          vi.spyOn(ChangeAddressService, 'default').mockRejectedValue()
         })
 
         it('returns an error response', async () => {

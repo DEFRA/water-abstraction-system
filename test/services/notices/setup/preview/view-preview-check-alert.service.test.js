@@ -7,8 +7,8 @@ import SessionModelStub from '../../../../support/stubs/session.stub.js'
 import { generateNoticeReferenceCode } from '../../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchAbstractionAlertRecipientsDal from '../../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'
-import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as FetchAbstractionAlertRecipientsDal from '../../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import ViewPreviewCheckAlertService from '../../../../../app/services/notices/setup/preview/view-preview-check-alert.service.js'
@@ -44,10 +44,8 @@ describe('Notices - Setup - Preview - View Preview Check Alert service', () => {
     testRecipients[0].licence_refs = licenceMonitoringStations.two.licence.licenceRef
     testRecipient = testRecipients[0]
 
-    vi.mock('../../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
-    FetchAbstractionAlertRecipientsDal.mockResolvedValue(testRecipients)
-    vi.mock('../../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchAbstractionAlertRecipientsDal, 'default').mockResolvedValue(testRecipients)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {

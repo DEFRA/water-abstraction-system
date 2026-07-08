@@ -2,7 +2,7 @@
 
 // Things we need to stub
 import BillRunModel from '../../../../app/models/bill-run.model.js'
-import GenerateTwoPartTariffBillRunService from '../../../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js'
+import * as GenerateTwoPartTariffBillRunService from '../../../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js'
 
 // Thing under test
 import ProcessBillRunPostRemoveService from '../../../../app/services/bill-runs/review/process-bill-run-post-remove.service.js'
@@ -25,8 +25,7 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
       patch: billRunPatchStub
     })
 
-    vi.mock('../../../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js')
-    GenerateTwoPartTariffBillRunService.mockResolvedValue()
+    vi.spyOn(GenerateTwoPartTariffBillRunService, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
@@ -59,7 +58,7 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
         it('does not trigger the generate two-part tariff bill run process', async () => {
           await ProcessBillRunPostRemoveService(billRunId)
 
-          expect(GenerateTwoPartTariffBillRunService).not.toHaveBeenCalled()
+          expect(GenerateTwoPartTariffBillRunService.default).not.toHaveBeenCalled()
         })
       })
 
@@ -82,7 +81,7 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
         it('does not trigger the generate two-part tariff bill run process', async () => {
           await ProcessBillRunPostRemoveService(billRunId)
 
-          expect(GenerateTwoPartTariffBillRunService).not.toHaveBeenCalled()
+          expect(GenerateTwoPartTariffBillRunService.default).not.toHaveBeenCalled()
         })
       })
     })
@@ -104,7 +103,7 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
 
           expect(result).toBe(true)
 
-          expect(GenerateTwoPartTariffBillRunService).toHaveBeenCalled()
+          expect(GenerateTwoPartTariffBillRunService.default).toHaveBeenCalled()
         })
 
         it('does change the status of the bill run to "empty"', async () => {
@@ -126,7 +125,7 @@ describe('Bill Runs - Review - Process Bill Run Post Remove service', () => {
 
           expect(result).toBe(false)
 
-          expect(GenerateTwoPartTariffBillRunService).not.toHaveBeenCalled()
+          expect(GenerateTwoPartTariffBillRunService.default).not.toHaveBeenCalled()
         })
 
         it('does change the status of the bill run', async () => {

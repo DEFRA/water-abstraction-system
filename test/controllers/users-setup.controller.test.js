@@ -7,25 +7,25 @@ import { generateUUID } from '../../app/lib/general.lib.js'
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-import InitiateExternalSessionService from '../../app/services/users/external/setup/initiate-session.service.js'
-import InitiateInternalEditSessionService from '../../app/services/users/internal/setup/initiate-edit-session.service.js'
-import InitiateInternalSessionService from '../../app/services/users/internal/setup/initiate-session.service.js'
-import SubmitExternalCancelService from '../../app/services/users/external/setup/submit-cancel.service.js'
-import SubmitExternalCheckService from '../../app/services/users/external/setup/submit-check.service.js'
-import SubmitExternalLicencesService from '../../app/services/users/external/setup/submit-licences.service.js'
-import SubmitInternalAccessService from '../../app/services/users/internal/setup/submit-access.service.js'
-import SubmitInternalCancelService from '../../app/services/users/internal/setup/submit-cancel.service.js'
-import SubmitInternalCheckService from '../../app/services/users/internal/setup/submit-check.service.js'
-import SubmitInternalEmailService from '../../app/services/users/internal/setup/submit-email.service.js'
-import SubmitInternalPermissionsService from '../../app/services/users/internal/setup/submit-permissions.service.js'
-import ViewExternalCancelService from '../../app/services/users/external/setup/view-cancel.service.js'
-import ViewExternalCheckService from '../../app/services/users/external/setup/view-check.service.js'
-import ViewExternalLicencesService from '../../app/services/users/external/setup/view-licences.service.js'
-import ViewInternalAccessService from '../../app/services/users/internal/setup/view-access.service.js'
-import ViewInternalCancelService from '../../app/services/users/internal/setup/view-cancel.service.js'
-import ViewInternalCheckService from '../../app/services/users/internal/setup/view-check.service.js'
-import ViewInternalEmailService from '../../app/services/users/internal/setup/view-email.service.js'
-import ViewInternalPermissionsService from '../../app/services/users/internal/setup/view-permissions.service.js'
+import * as InitiateExternalSessionService from '../../app/services/users/external/setup/initiate-session.service.js'
+import * as InitiateInternalEditSessionService from '../../app/services/users/internal/setup/initiate-edit-session.service.js'
+import * as InitiateInternalSessionService from '../../app/services/users/internal/setup/initiate-session.service.js'
+import * as SubmitExternalCancelService from '../../app/services/users/external/setup/submit-cancel.service.js'
+import * as SubmitExternalCheckService from '../../app/services/users/external/setup/submit-check.service.js'
+import * as SubmitExternalLicencesService from '../../app/services/users/external/setup/submit-licences.service.js'
+import * as SubmitInternalAccessService from '../../app/services/users/internal/setup/submit-access.service.js'
+import * as SubmitInternalCancelService from '../../app/services/users/internal/setup/submit-cancel.service.js'
+import * as SubmitInternalCheckService from '../../app/services/users/internal/setup/submit-check.service.js'
+import * as SubmitInternalEmailService from '../../app/services/users/internal/setup/submit-email.service.js'
+import * as SubmitInternalPermissionsService from '../../app/services/users/internal/setup/submit-permissions.service.js'
+import * as ViewExternalCancelService from '../../app/services/users/external/setup/view-cancel.service.js'
+import * as ViewExternalCheckService from '../../app/services/users/external/setup/view-check.service.js'
+import * as ViewExternalLicencesService from '../../app/services/users/external/setup/view-licences.service.js'
+import * as ViewInternalAccessService from '../../app/services/users/internal/setup/view-access.service.js'
+import * as ViewInternalCancelService from '../../app/services/users/internal/setup/view-cancel.service.js'
+import * as ViewInternalCheckService from '../../app/services/users/internal/setup/view-check.service.js'
+import * as ViewInternalEmailService from '../../app/services/users/internal/setup/view-email.service.js'
+import * as ViewInternalPermissionsService from '../../app/services/users/internal/setup/view-permissions.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -67,8 +67,7 @@ describe('Users Setup controller', () => {
 
         postOptions = postRequestOptions(`/users/external/${userId}/setup`, {}, ['unlink_licences'])
 
-        vi.mock('../../app/services/users/external/setup/initiate-session.service.js')
-        InitiateExternalSessionService.mockResolvedValue({
+        vi.spyOn(InitiateExternalSessionService, 'default').mockResolvedValue({
           data: { selectedLicences: [], userId },
           id: sessionId
         })
@@ -88,8 +87,7 @@ describe('Users Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions(`/users/external/setup/${sessionId}/cancel`, { scope: ['unlink_licences'] })
 
-        vi.mock('../../app/services/users/external/setup/view-cancel.service.js')
-        ViewExternalCancelService.mockResolvedValue({
+        vi.spyOn(ViewExternalCancelService, 'default').mockResolvedValue({
           pageTitle: 'You are about to cancel unregistering these licences'
         })
       })
@@ -113,8 +111,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/users/external/setup/submit-cancel.service.js')
-          SubmitExternalCancelService.mockResolvedValue({
+          vi.spyOn(SubmitExternalCancelService, 'default').mockResolvedValue({
             redirectUrl: `/system/users/external/${userId}/licences?back=users`
           })
         })
@@ -134,8 +131,7 @@ describe('Users Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions(`/users/external/setup/${sessionId}/check`, { scope: ['unlink_licences'] })
 
-        vi.mock('../../app/services/users/external/setup/view-check.service.js')
-        ViewExternalCheckService.mockResolvedValue({
+        vi.spyOn(ViewExternalCheckService, 'default').mockResolvedValue({
           pageTitle: 'Check licences to unregister'
         })
       })
@@ -159,8 +155,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/users/external/setup/submit-check.service.js')
-          SubmitExternalCheckService.mockResolvedValue({
+          vi.spyOn(SubmitExternalCheckService, 'default').mockResolvedValue({
             redirectUrl: `/system/users/external/${userId}/licences?back=users`
           })
         })
@@ -180,8 +175,7 @@ describe('Users Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions(`/users/external/setup/${sessionId}/licences`, { scope: ['unlink_licences'] })
 
-        vi.mock('../../app/services/users/external/setup/view-licences.service.js')
-        ViewExternalLicencesService.mockResolvedValue({
+        vi.spyOn(ViewExternalLicencesService, 'default').mockResolvedValue({
           pageTitle: 'Select licences to unregister'
         })
       })
@@ -205,8 +199,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/users/external/setup/submit-licences.service.js')
-          SubmitExternalLicencesService.mockResolvedValue({
+          vi.spyOn(SubmitExternalLicencesService, 'default').mockResolvedValue({
             redirectUrl: `/system/users/external/setup/${sessionId}/check`
           })
         })
@@ -228,8 +221,7 @@ describe('Users Setup controller', () => {
       beforeEach(() => {
         options = _getOptions('/users/internal/setup', { scope: ['manage_accounts'] })
 
-        vi.mock('../../app/services/users/internal/setup/initiate-session.service.js')
-        InitiateInternalSessionService.mockResolvedValue({ data: {}, id })
+        vi.spyOn(InitiateInternalSessionService, 'default').mockResolvedValue({ data: {}, id })
       })
 
       it('initiates a session and redirects to the "Enter an email address for the user" page', async () => {
@@ -249,8 +241,7 @@ describe('Users Setup controller', () => {
       beforeEach(() => {
         options = _getOptions(`/users/internal/setup/${userId}/edit`, { scope: ['manage_accounts'] })
 
-        vi.mock('../../app/services/users/internal/setup/initiate-edit-session.service.js')
-        InitiateInternalEditSessionService.mockResolvedValue({
+        vi.spyOn(InitiateInternalEditSessionService, 'default').mockResolvedValue({
           data: {
             email: 'bob.bobbles@environment-agency.gov.uk',
             permission: 'basic',
@@ -277,8 +268,7 @@ describe('Users Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions(`/users/internal/setup/${sessionId}/access`, { scope: ['manage_accounts'] })
 
-        vi.mock('../../app/services/users/internal/setup/view-access.service.js')
-        ViewInternalAccessService.mockResolvedValue({
+        vi.spyOn(ViewInternalAccessService, 'default').mockResolvedValue({
           pageTitle: 'Select access for the user'
         })
       })
@@ -300,8 +290,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/users/internal/setup/submit-access.service.js')
-          SubmitInternalAccessService.mockResolvedValue({
+          vi.spyOn(SubmitInternalAccessService, 'default').mockResolvedValue({
             redirectUrl: `/system/users/internal/setup/${sessionId}/check`
           })
         })
@@ -316,8 +305,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is invalid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/users/internal/setup/submit-access.service.js')
-          SubmitInternalAccessService.mockResolvedValue({
+          vi.spyOn(SubmitInternalAccessService, 'default').mockResolvedValue({
             error: {
               errorList: [{ text: 'Select access for the user' }]
             },
@@ -340,8 +328,7 @@ describe('Users Setup controller', () => {
       beforeEach(() => {
         options = _getOptions(`/users/internal/setup/${sessionId}/cancel`, { scope: ['manage_accounts'] })
 
-        vi.mock('../../app/services/users/internal/setup/view-cancel.service.js')
-        ViewInternalCancelService.mockResolvedValue({
+        vi.spyOn(ViewInternalCancelService, 'default').mockResolvedValue({
           pageTitle: 'You are about to cancel this user'
         })
       })
@@ -363,8 +350,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/users/internal/setup/submit-cancel.service.js')
-          SubmitInternalCancelService.mockResolvedValue({
+          vi.spyOn(SubmitInternalCancelService, 'default').mockResolvedValue({
             redirectUrl: '/system/users'
           })
         })
@@ -384,8 +370,7 @@ describe('Users Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions(`/users/internal/setup/${sessionId}/check`, { scope: ['manage_accounts'] })
 
-        vi.mock('../../app/services/users/internal/setup/view-check.service.js')
-        ViewInternalCheckService.mockResolvedValue({
+        vi.spyOn(ViewInternalCheckService, 'default').mockResolvedValue({
           pageTitle: 'Check user'
         })
       })
@@ -407,8 +392,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/users/internal/setup/submit-check.service.js')
-          SubmitInternalCheckService.mockResolvedValue({
+          vi.spyOn(SubmitInternalCheckService, 'default').mockResolvedValue({
             redirectUrl: '/system/users'
           })
         })
@@ -428,8 +412,7 @@ describe('Users Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions(`/users/internal/setup/${sessionId}/email`, { scope: ['manage_accounts'] })
 
-        vi.mock('../../app/services/users/internal/setup/view-email.service.js')
-        ViewInternalEmailService.mockResolvedValue({
+        vi.spyOn(ViewInternalEmailService, 'default').mockResolvedValue({
           pageTitle: 'Enter an email address for the user'
         })
       })
@@ -451,8 +434,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/users/internal/setup/submit-email.service.js')
-          SubmitInternalEmailService.mockResolvedValue({
+          vi.spyOn(SubmitInternalEmailService, 'default').mockResolvedValue({
             redirectUrl: `/system/users/internal/setup/${sessionId}/permissions`
           })
         })
@@ -467,8 +449,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is invalid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/users/internal/setup/submit-email.service.js')
-          SubmitInternalEmailService.mockResolvedValue({
+          vi.spyOn(SubmitInternalEmailService, 'default').mockResolvedValue({
             error: {
               errorList: [{ text: 'Enter a gov.uk email address, like name@environment-agency.gov.uk' }]
             },
@@ -492,8 +473,7 @@ describe('Users Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions(`/users/internal/setup/${sessionId}/permissions`, { scope: ['manage_accounts'] })
 
-        vi.mock('../../app/services/users/internal/setup/view-permissions.service.js')
-        ViewInternalPermissionsService.mockResolvedValue({
+        vi.spyOn(ViewInternalPermissionsService, 'default').mockResolvedValue({
           pageTitle: 'Select permissions for the user'
         })
       })
@@ -515,8 +495,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/users/internal/setup/submit-permissions.service.js')
-          SubmitInternalPermissionsService.mockResolvedValue({
+          vi.spyOn(SubmitInternalPermissionsService, 'default').mockResolvedValue({
             redirectUrl: `/system/users/internal/setup/${sessionId}/check`
           })
         })
@@ -531,8 +510,7 @@ describe('Users Setup controller', () => {
 
       describe('when a request is invalid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/users/internal/setup/submit-permissions.service.js')
-          SubmitInternalPermissionsService.mockResolvedValue({
+          vi.spyOn(SubmitInternalPermissionsService, 'default').mockResolvedValue({
             error: {
               errorList: [{ text: 'Select a permission' }]
             },

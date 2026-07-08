@@ -6,7 +6,7 @@ import SessionModelStub from '../../../../support/stubs/session.stub.js'
 import YarStub from '../../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import ProcessRemoveThresholdService from '../../../../../app/services/notices/setup/abstraction-alerts/process-remove-threshold.service.js'
@@ -24,8 +24,7 @@ describe('Notices - Setup - Abstraction Alerts -Process Remove Threshold service
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     yarStub = YarStub()
   })
@@ -50,7 +49,7 @@ describe('Notices - Setup - Abstraction Alerts -Process Remove Threshold service
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the "licenceMonitoringStationId" to the session with the existing "removedThresholds"', async () => {
@@ -66,7 +65,7 @@ describe('Notices - Setup - Abstraction Alerts -Process Remove Threshold service
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
       it('sets a flash message', async () => {
         await ProcessRemoveThresholdService(session.id, licenceMonitoringStations.one.id, yarStub)

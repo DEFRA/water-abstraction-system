@@ -6,7 +6,7 @@ import * as UserSessionsFixture from '../../../../support/fixtures/user-sessions
 import YarStub from '../../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitLicencesService from '../../../../../app/services/users/external/setup/submit-licences.service.js'
@@ -22,8 +22,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     yarStub = YarStub()
   })
@@ -66,7 +65,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
                 allLicences: true
               })
 
-              FetchSessionDal.mockResolvedValue(session)
+              vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
               payload = { licences: 'all' }
             })
@@ -87,7 +86,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
                   allLicences: true
                 })
 
-                FetchSessionDal.mockResolvedValue(session)
+                vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
                 payload = { licences: sessionData.licences[0].id }
               })
@@ -111,7 +110,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
                   selectedLicences: [sessionData.licences[0].id, sessionData.licences[1].id]
                 })
 
-                FetchSessionDal.mockResolvedValue(session)
+                vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
                 payload = { licences: sessionData.licences[0].id }
               })
@@ -135,7 +134,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
                   selectedLicences: [sessionData.licences[1].id]
                 })
 
-                FetchSessionDal.mockResolvedValue(session)
+                vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
                 payload = { licences: sessionData.licences[0].id }
               })

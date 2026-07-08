@@ -6,8 +6,8 @@ const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-import RemoveService from '../../app/services/licence-monitoring-station/remove.service.js'
-import SubmitRemoveService from '../../app/services/licence-monitoring-station/submit-remove.service.js'
+import * as RemoveService from '../../app/services/licence-monitoring-station/remove.service.js'
+import * as SubmitRemoveService from '../../app/services/licence-monitoring-station/submit-remove.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -45,8 +45,7 @@ describe('Licence Monitoring Station - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/licence-monitoring-station/remove.service.js')
-          RemoveService.mockResolvedValue({ pageTitle: 'You’re about to remove the tag for this licence' })
+          vi.spyOn(RemoveService, 'default').mockResolvedValue({ pageTitle: 'You’re about to remove the tag for this licence' })
         })
 
         it('returns the page successfully', async () => {
@@ -63,8 +62,7 @@ describe('Licence Monitoring Station - Controller', () => {
         const monitoringStationId = '8685eadf-15a5-4270-b57e-b9196a23218a'
 
         beforeEach(() => {
-          vi.mock('../../app/services/licence-monitoring-station/submit-remove.service.js')
-          SubmitRemoveService.mockResolvedValue()
+          vi.spyOn(SubmitRemoveService, 'default').mockResolvedValue()
         })
 
         it('redirects to the view monitoring station page', async () => {

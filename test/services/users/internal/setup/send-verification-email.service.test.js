@@ -1,13 +1,13 @@
 // Test framework dependencies
 
 // Things we need to stub
-import CheckNotificationStatusService from '../../../../../app/services/notifications/check-notification-status.service.js'
+import * as CheckNotificationStatusService from '../../../../../app/services/notifications/check-notification-status.service.js'
 import * as CreateEmailRequest from '../../../../../app/requests/notify/create-email.request.js'
 import * as GeneralLib from '../../../../../app/lib/general.lib.js'
 import GlobalNotifierStub from '../../../../support/stubs/global-notifier.stub.js'
 import NotifyConfig from '../../../../../config/notify.config.js'
-import NotifyUpdatePresenter from '../../../../../app/presenters/notifications/notify-update.presenter.js'
-import UpdateNotificationDal from '../../../../../app/dal/users/internal/update-notification.dal.js'
+import * as NotifyUpdatePresenter from '../../../../../app/presenters/notifications/notify-update.presenter.js'
+import * as UpdateNotificationDal from '../../../../../app/dal/users/internal/update-notification.dal.js'
 
 // Thing under test
 import SendVerificationEmailService from '../../../../../app/services/users/internal/setup/send-verification-email.service.js'
@@ -26,8 +26,7 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
   let notifierStub
   let pauseStub
   beforeEach(() => {
-    vi.mock('../../../../../app/services/notifications/check-notification-status.service.js')
-    CheckNotificationStatusService.mockResolvedValue()
+    vi.spyOn(CheckNotificationStatusService, 'default').mockResolvedValue()
 
     createEmailRequestStub = vi.spyOn(CreateEmailRequest, 'send').mockResolvedValue({
       succeeded: true,
@@ -52,12 +51,10 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
       recipient: 'new.user@environment-agency.gov.uk'
     }
 
-    vi.mock('../../../../../app/presenters/notifications/notify-update.presenter.js')
 
     pauseStub = vi.spyOn(GeneralLib, 'pause').mockResolvedValue()
 
-    vi.mock('../../../../../app/dal/users/internal/update-notification.dal.js')
-    UpdateNotificationDal.mockResolvedValue()
+    vi.spyOn(UpdateNotificationDal, 'default').mockResolvedValue()
 
     // We have to set wait for status to 25ms to avoid the tests timing out. By default it would be 5 seconds and is
     // used to give Notify a chance to process the email notifications.
@@ -76,7 +73,7 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
 
   describe('when the email is sent to Notify successfully', () => {
     beforeEach(() => {
-      NotifyUpdatePresenter.mockReturnValue({
+      vi.spyOn(NotifyUpdatePresenter, 'default').mockReturnValue({
         notifyId,
         notifyStatus: 'created',
         plaintext: verificationEmailPlaintext,
@@ -97,9 +94,9 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     it('records the Notify response to the notification', async () => {
       await SendVerificationEmailService(notification)
 
-      expect(UpdateNotificationDal).toHaveBeenCalledOnce()
-      expect(UpdateNotificationDal.mock.calls[0][0]).toEqual(notification)
-      expect(UpdateNotificationDal.mock.calls[0][1]).toEqual({
+      expect(UpdateNotificationDal.default).toHaveBeenCalledOnce()
+      expect(UpdateNotificationDal.default.mock.calls[0][0]).toEqual(notification)
+      expect(UpdateNotificationDal.default.mock.calls[0][1]).toEqual({
         notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
         notifyStatus: 'created',
         plaintext: verificationEmailPlaintext,
@@ -110,8 +107,8 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     it('checks the status of the updated notification', async () => {
       await SendVerificationEmailService(notification)
 
-      expect(CheckNotificationStatusService).toHaveBeenCalledOnce()
-      const notificationPassedToCheck = CheckNotificationStatusService.mock.calls[0][0]
+      expect(CheckNotificationStatusService.default).toHaveBeenCalledOnce()
+      const notificationPassedToCheck = CheckNotificationStatusService.default.mock.calls[0][0]
 
       expect(notificationPassedToCheck).toEqual(notification)
     })
@@ -130,7 +127,7 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
         status: 400
       })
 
-      NotifyUpdatePresenter.mockReturnValue({
+      vi.spyOn(NotifyUpdatePresenter, 'default').mockReturnValue({
         notifyError: errorMessage,
         status: 'error'
       })
@@ -139,8 +136,8 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     it('records the error against the notification', async () => {
       await SendVerificationEmailService(notification)
 
-      expect(UpdateNotificationDal).toHaveBeenCalledOnce()
-      const patchData = UpdateNotificationDal.mock.calls[0][1]
+      expect(UpdateNotificationDal.default).toHaveBeenCalledOnce()
+      const patchData = UpdateNotificationDal.default.mock.calls[0][1]
 
       expect(patchData.status).toEqual('error')
       expect(patchData.notifyError).toBeDefined()
@@ -150,13 +147,13 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
       await SendVerificationEmailService(notification)
 
       expect(pauseStub).not.toHaveBeenCalled()
-      expect(CheckNotificationStatusService).not.toHaveBeenCalled()
+      expect(CheckNotificationStatusService.default).not.toHaveBeenCalled()
     })
   })
 
   describe('when there is an error', () => {
     beforeEach(() => {
-      CheckNotificationStatusService.mockRejectedValue()
+      vi.spyOn(CheckNotificationStatusService, 'default').mockRejectedValue()
     })
 
     it('handles the error', async () => {

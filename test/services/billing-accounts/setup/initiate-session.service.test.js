@@ -4,7 +4,7 @@
 import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
 
 // Things we need to stub
-import FetchViewBillingAccountService from '../../../../app/services/billing-accounts/fetch-view-billing-account.service.js'
+import * as FetchViewBillingAccountService from '../../../../app/services/billing-accounts/fetch-view-billing-account.service.js'
 
 // Thing under test
 import InitiateSessionService from '../../../../app/services/billing-accounts/setup/initiate-session.service.js'
@@ -15,8 +15,7 @@ describe('Billing Accounts - Setup - Initiate Session service', () => {
 
   describe('when called', () => {
     beforeAll(async () => {
-      vi.mock('../../../../app/services/billing-accounts/fetch-view-billing-account.service.js')
-      FetchViewBillingAccountService.mockReturnValue(billingAccountData)
+      vi.spyOn(FetchViewBillingAccountService, 'default').mockReturnValue(billingAccountData)
     })
 
     it('creates a new session record containing details of the billing account', async () => {

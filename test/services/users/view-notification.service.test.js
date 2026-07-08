@@ -5,8 +5,8 @@ import * as NotificationsFixture from '../../support/fixtures/notifications.fixt
 import * as UsersFixture from '../../support/fixtures/users.fixture.js'
 
 // Things we need to stub
-import FetchNotificationDal from '../../../app/dal/users/fetch-notification.dal.js'
-import FetchUserDal from '../../../app/dal/users/fetch-user.dal.js'
+import * as FetchNotificationDal from '../../../app/dal/users/fetch-notification.dal.js'
+import * as FetchUserDal from '../../../app/dal/users/fetch-user.dal.js'
 
 // Thing under test
 import ViewNotificationService from '../../../app/services/users/view-notification.service.js'
@@ -26,10 +26,8 @@ describe('Users - Internal - View Notifications Service', () => {
 
     notification = NotificationsFixture.userInternalPasswordResetEmail(user.username)
 
-    vi.mock('../../../app/dal/users/fetch-user.dal.js')
-    FetchUserDal.mockReturnValue(user)
-    vi.mock('../../../app/dal/users/fetch-notification.dal.js')
-    FetchNotificationDal.mockReturnValue(notification)
+    vi.spyOn(FetchUserDal, 'default').mockReturnValue(user)
+    vi.spyOn(FetchNotificationDal, 'default').mockReturnValue(notification)
   })
 
   afterEach(() => {

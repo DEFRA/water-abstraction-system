@@ -3,8 +3,8 @@
 // Things we need to stub
 import BillRunModel from '../../../../app/models/bill-run.model.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
-import HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
-import MatchAndAllocateService from '../../../../app/services/bill-runs/match/match-and-allocate.service.js'
+import * as HandleErroredBillRunService from '../../../../app/services/bill-runs/handle-errored-bill-run.service.js'
+import * as MatchAndAllocateService from '../../../../app/services/bill-runs/match/match-and-allocate.service.js'
 
 // Thing under test
 import ProcessBillRunService from '../../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js'
@@ -39,8 +39,7 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
   describe('when the service is called', () => {
     describe('and there are no licences to be billed', () => {
       beforeEach(() => {
-        vi.mock('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
-        MatchAndAllocateService.mockResolvedValue(false)
+        vi.spyOn(MatchAndAllocateService, 'default').mockResolvedValue(false)
       })
 
       it('sets the bill run status first to "processing" and then to "empty"', async () => {
@@ -65,8 +64,7 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
 
     describe('and licences are matched and allocated', () => {
       beforeEach(() => {
-        vi.mock('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
-        MatchAndAllocateService.mockResolvedValue(true)
+        vi.spyOn(MatchAndAllocateService, 'default').mockResolvedValue(true)
       })
 
       it('sets the bill run status first to "processing" and then to "review"', async () => {
@@ -93,9 +91,7 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
   describe('when the service errors', () => {
     describe('because matching and allocating fails', () => {
       beforeEach(() => {
-        vi.mock('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
-        MatchAndAllocateService.mockRejectedValue('MatchAndAllocateService has gone pop')
-        vi.mock('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
+        vi.spyOn(MatchAndAllocateService, 'default').mockRejectedValue('MatchAndAllocateService has gone pop')
       })
 
       it('calls HandleErroredBillRunService', async () => {

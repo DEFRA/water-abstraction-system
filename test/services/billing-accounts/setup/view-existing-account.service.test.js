@@ -6,8 +6,8 @@ import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchExistingCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchExistingCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import ViewExistingAccountService from '../../../../app/services/billing-accounts/setup/view-existing-account.service.js'
@@ -26,11 +26,9 @@ describe('Billing Accounts - Setup - View Existing Account service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    vi.mock('../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js')
-    FetchExistingCompaniesService.mockReturnValue(fetchResults)
+    vi.spyOn(FetchExistingCompaniesService, 'default').mockReturnValue(fetchResults)
   })
 
   afterEach(() => {

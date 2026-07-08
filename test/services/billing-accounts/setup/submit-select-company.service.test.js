@@ -1,12 +1,12 @@
 // Test framework dependencies
 
 // Test helpers
-import FetchCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-companies.service.js'
+import * as FetchCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-companies.service.js'
 import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitSelectCompanyService from '../../../../app/services/billing-accounts/setup/submit-select-company.service.js'
@@ -32,8 +32,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
@@ -75,7 +74,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -106,7 +105,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -139,7 +138,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the submitted value', async () => {
@@ -170,8 +169,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
   describe('when validation fails', () => {
     beforeEach(() => {
       payload = {}
-      vi.mock('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
-      FetchCompaniesService.mockReturnValue(companies)
+      vi.spyOn(FetchCompaniesService, 'default').mockReturnValue(companies)
     })
 
     it('returns page data for the view, with errors', async () => {

@@ -8,7 +8,7 @@ import UserRoleModel from '../../../../app/models/user-role.model.js'
 import { generateUserName } from '../../../support/helpers/user.helper.js'
 
 // Things we need to stub
-import FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
+import * as FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
 
 // Thing under test
 import CreateUserDal from '../../../../app/dal/users/internal/create-user.dal.js'
@@ -23,8 +23,7 @@ describe('Users - Internal - Create User DAL', () => {
     auth = { credentials: { user: { id: 'f42aa5b2-95e2-49c0-9ad4-4a7c3c5aefaf' } } }
     session = { email, permission: 'basic' }
 
-    vi.mock('../../../../app/dal/users/fetch-user.dal.js')
-    FetchUserDal.mockResolvedValue({ username: 'internal-user-creator@wrls.gov.uk' })
+    vi.spyOn(FetchUserDal, 'default').mockResolvedValue({ username: 'internal-user-creator@wrls.gov.uk' })
   })
 
   afterEach(async () => {

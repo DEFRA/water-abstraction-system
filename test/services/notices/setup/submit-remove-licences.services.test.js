@@ -6,8 +6,8 @@ import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchLicenceRefsWithDueReturnsService from '../../../../app/services/notices/setup/fetch-licence-refs-with-due-returns.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchLicenceRefsWithDueReturnsService from '../../../../app/services/notices/setup/fetch-licence-refs-with-due-returns.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitRemoveLicencesService from '../../../../app/services/notices/setup/submit-remove-licences.service.js'
@@ -36,12 +36,10 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     licenceRefWithDueReturns = generateLicenceRef()
 
-    vi.mock('../../../../app/services/notices/setup/fetch-licence-refs-with-due-returns.service.js')
   })
 
   afterEach(() => {
@@ -53,7 +51,7 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
       beforeEach(() => {
         payload = { removeLicences: licenceRefWithDueReturns }
 
-        FetchLicenceRefsWithDueReturnsService.mockResolvedValue([licenceRefWithDueReturns])
+        vi.spyOn(FetchLicenceRefsWithDueReturnsService, 'default').mockResolvedValue([licenceRefWithDueReturns])
       })
 
       it('saves the submitted value', async () => {
@@ -78,7 +76,7 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
 
         licenceRefWithDueReturns = []
 
-        FetchLicenceRefsWithDueReturnsService.mockResolvedValue([licenceRefWithDueReturns])
+        vi.spyOn(FetchLicenceRefsWithDueReturnsService, 'default').mockResolvedValue([licenceRefWithDueReturns])
       })
 
       it('correctly presents the data with the error', async () => {

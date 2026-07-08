@@ -6,9 +6,9 @@ import * as NotificationsFixture from '../../../../support/fixtures/notification
 
 // Things we need to stub
 import GlobalNotifierStub from '../../../../support/stubs/global-notifier.stub.js'
-import SendAlternateNoticeService from '../../../../../app/services/notices/setup/send/send-alternate-notice.service.js'
-import SendMainNoticeService from '../../../../../app/services/notices/setup/send/send-main-notice.service.js'
-import UpdateNoticeService from '../../../../../app/services/notices/update-notice.service.js'
+import * as SendAlternateNoticeService from '../../../../../app/services/notices/setup/send/send-alternate-notice.service.js'
+import * as SendMainNoticeService from '../../../../../app/services/notices/setup/send/send-main-notice.service.js'
+import * as UpdateNoticeService from '../../../../../app/services/notices/update-notice.service.js'
 
 // Thing under test
 import SendNoticeService from '../../../../../app/services/notices/setup/send/send-notice.service.js'
@@ -18,10 +18,8 @@ describe('Notices - Setup - Send - Send Notice service', () => {
   let notifications
   let notifierStub
   beforeEach(() => {
-    vi.mock('../../../../../app/services/notices/setup/send/send-main-notice.service.js')
-    SendMainNoticeService.mockResolvedValue()
-    vi.mock('../../../../../app/services/notices/update-notice.service.js')
-    UpdateNoticeService.mockResolvedValue()
+    vi.spyOn(SendMainNoticeService, 'default').mockResolvedValue()
+    vi.spyOn(UpdateNoticeService, 'default').mockResolvedValue()
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -36,8 +34,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
 
   describe('when the service is called', () => {
     beforeEach(() => {
-      vi.mock('../../../../../app/services/notices/setup/send/send-alternate-notice.service.js')
-      SendAlternateNoticeService.mockResolvedValue({
+      vi.spyOn(SendAlternateNoticeService, 'default').mockResolvedValue({
         id: '270d3a69-4cf7-4c90-8459-fbc35d725bd6'
       })
     })
@@ -51,23 +48,23 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       it('sends the main notice', async () => {
         await SendNoticeService(notice, notifications)
 
-        expect(SendMainNoticeService).toHaveBeenCalledOnce()
-        expect(SendMainNoticeService.mock.calls[0][0]).toEqual(notice)
-        expect(SendMainNoticeService.mock.calls[0][1]).toEqual(notifications)
+        expect(SendMainNoticeService.default).toHaveBeenCalledOnce()
+        expect(SendMainNoticeService.default.mock.calls[0][0]).toEqual(notice)
+        expect(SendMainNoticeService.default.mock.calls[0][1]).toEqual(notifications)
       })
 
       it('checks the main notice for the need to send an alternate notice', async () => {
         await SendNoticeService(notice, notifications)
 
-        expect(SendAlternateNoticeService).toHaveBeenCalledOnce()
-        expect(SendMainNoticeService.mock.calls[0][0]).toEqual(notice)
+        expect(SendAlternateNoticeService.default).toHaveBeenCalledOnce()
+        expect(SendMainNoticeService.default.mock.calls[0][0]).toEqual(notice)
       })
 
       it('updates both the main and alternate notices', async () => {
         await SendNoticeService(notice, notifications)
 
-        expect(UpdateNoticeService).toHaveBeenCalledOnce()
-        expect(UpdateNoticeService.mock.calls[0][0]).toEqual([notice.id, '270d3a69-4cf7-4c90-8459-fbc35d725bd6'])
+        expect(UpdateNoticeService.default).toHaveBeenCalledOnce()
+        expect(UpdateNoticeService.default.mock.calls[0][0]).toEqual([notice.id, '270d3a69-4cf7-4c90-8459-fbc35d725bd6'])
       })
 
       it('logs the time taken', async () => {
@@ -91,23 +88,23 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       it('sends the main notice', async () => {
         await SendNoticeService(notice, notifications)
 
-        expect(SendMainNoticeService).toHaveBeenCalledOnce()
-        expect(SendMainNoticeService.mock.calls[0][0]).toEqual(notice)
-        expect(SendMainNoticeService.mock.calls[0][1]).toEqual(notifications)
+        expect(SendMainNoticeService.default).toHaveBeenCalledOnce()
+        expect(SendMainNoticeService.default.mock.calls[0][0]).toEqual(notice)
+        expect(SendMainNoticeService.default.mock.calls[0][1]).toEqual(notifications)
       })
 
       it('checks the main notice for the need to send an alternate notice', async () => {
         await SendNoticeService(notice, notifications)
 
-        expect(SendAlternateNoticeService).toHaveBeenCalledOnce()
-        expect(SendMainNoticeService.mock.calls[0][0]).toEqual(notice)
+        expect(SendAlternateNoticeService.default).toHaveBeenCalledOnce()
+        expect(SendMainNoticeService.default.mock.calls[0][0]).toEqual(notice)
       })
 
       it('updates both the main and alternate notices', async () => {
         await SendNoticeService(notice, notifications)
 
-        expect(UpdateNoticeService).toHaveBeenCalledOnce()
-        expect(UpdateNoticeService.mock.calls[0][0]).toEqual([notice.id, '270d3a69-4cf7-4c90-8459-fbc35d725bd6'])
+        expect(UpdateNoticeService.default).toHaveBeenCalledOnce()
+        expect(UpdateNoticeService.default.mock.calls[0][0]).toEqual([notice.id, '270d3a69-4cf7-4c90-8459-fbc35d725bd6'])
       })
     })
 
@@ -120,22 +117,22 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       it('sends the main notice', async () => {
         await SendNoticeService(notice, notifications)
 
-        expect(SendMainNoticeService).toHaveBeenCalledOnce()
-        expect(SendMainNoticeService.mock.calls[0][0]).toEqual(notice)
-        expect(SendMainNoticeService.mock.calls[0][1]).toEqual(notifications)
+        expect(SendMainNoticeService.default).toHaveBeenCalledOnce()
+        expect(SendMainNoticeService.default.mock.calls[0][0]).toEqual(notice)
+        expect(SendMainNoticeService.default.mock.calls[0][1]).toEqual(notifications)
       })
 
       it('does not attempt to send an alternate notice', async () => {
         await SendNoticeService(notice, notifications)
 
-        expect(SendAlternateNoticeService).not.toHaveBeenCalled()
+        expect(SendAlternateNoticeService.default).not.toHaveBeenCalled()
       })
 
       it('only updates the main notice', async () => {
         await SendNoticeService(notice, notifications)
 
-        expect(UpdateNoticeService).toHaveBeenCalledOnce()
-        expect(UpdateNoticeService.mock.calls[0][0]).toEqual([notice.id])
+        expect(UpdateNoticeService.default).toHaveBeenCalledOnce()
+        expect(UpdateNoticeService.default.mock.calls[0][0]).toEqual([notice.id])
       })
 
       it('logs the time taken', async () => {
@@ -156,8 +153,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       notice = NoticesFixture.returnsInvitation()
       notifications = [NotificationsFixture.returnsInvitationEmail(notice)]
 
-      vi.mock('../../../../../app/services/notices/setup/send/send-alternate-notice.service.js')
-      SendAlternateNoticeService.mockRejectedValue('Computer says no')
+      vi.spyOn(SendAlternateNoticeService, 'default').mockRejectedValue('Computer says no')
     })
 
     it('logs the error', async () => {

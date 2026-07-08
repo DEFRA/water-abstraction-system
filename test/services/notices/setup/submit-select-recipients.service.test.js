@@ -9,8 +9,8 @@ import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchRecipientsService from '../../../../app/services/notices/setup/fetch-recipients.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitSelectRecipientsService from '../../../../app/services/notices/setup/submit-select-recipients.service.js'
@@ -32,13 +32,11 @@ describe('Notices - Setup - Submit Select Recipients service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     recipients = RecipientsFixture.recipients()
 
-    vi.mock('../../../../app/services/notices/setup/fetch-recipients.service.js')
-    FetchRecipientsService.mockResolvedValue([recipients.primaryUser])
+    vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([recipients.primaryUser])
 
     yarStub = YarStub()
     yarStub.flash.mockReturnValue([{ title: 'Test', text: 'Notification' }])

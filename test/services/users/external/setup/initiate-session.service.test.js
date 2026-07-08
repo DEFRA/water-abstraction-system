@@ -6,8 +6,8 @@ import * as UsersFixture from '../../../../support/fixtures/users.fixture.js'
 import { generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Things to stub
-import FetchLicencesDal from '../../../../../app/dal/users/external/setup/fetch-licences.dal.js'
-import FetchUsersDal from '../../../../../app/dal/users/fetch-user.dal.js'
+import * as FetchLicencesDal from '../../../../../app/dal/users/external/setup/fetch-licences.dal.js'
+import * as FetchUsersDal from '../../../../../app/dal/users/fetch-user.dal.js'
 
 // Thing under test
 import InitiateSessionService from '../../../../../app/services/users/external/setup/initiate-session.service.js'
@@ -45,10 +45,8 @@ describe('Users - External - Setup - Initiate Session service', () => {
       }
     ]
 
-    vi.mock('../../../../../app/dal/users/fetch-user.dal.js')
-    FetchUsersDal.mockResolvedValue(user)
-    vi.mock('../../../../../app/dal/users/external/setup/fetch-licences.dal.js')
-    FetchLicencesDal.mockResolvedValue(licences)
+    vi.spyOn(FetchUsersDal, 'default').mockResolvedValue(user)
+    vi.spyOn(FetchLicencesDal, 'default').mockResolvedValue(licences)
   })
 
   afterEach(() => {

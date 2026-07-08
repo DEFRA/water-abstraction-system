@@ -4,7 +4,7 @@
 import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Things we need to stub
-import FetchReviewChargeReferenceService from '../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js'
+import * as FetchReviewChargeReferenceService from '../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js'
 
 // Thing under test
 import ViewAuthorisedService from '../../../../app/services/bill-runs/review/view-authorised.service.js'
@@ -15,8 +15,7 @@ describe('Bill Runs - Review - View Authorised Service', () => {
   beforeEach(() => {
     reviewChargeReference = BillRunsReviewFixture.reviewChargeReference()
 
-    vi.mock('../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js')
-    FetchReviewChargeReferenceService.mockResolvedValue(reviewChargeReference)
+    vi.spyOn(FetchReviewChargeReferenceService, 'default').mockResolvedValue(reviewChargeReference)
   })
 
   afterEach(() => {

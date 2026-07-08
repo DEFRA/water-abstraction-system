@@ -7,7 +7,7 @@ const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 import SessionModelStub from '../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../app/dal/fetch-session.dal.js'
 import * as LookupPostcodeRequest from '../../../app/requests/address-facade/lookup-postcode.request.js'
 
 // Thing under test
@@ -47,8 +47,7 @@ describe('Address - Select service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     lookupPostcodeRequestStub = vi.spyOn(LookupPostcodeRequest, 'send').mockImplementation(() => {})
   })

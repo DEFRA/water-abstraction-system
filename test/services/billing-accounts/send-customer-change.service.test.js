@@ -4,7 +4,7 @@
 import ExpandedError from '../../../app/errors/expanded.error.js'
 
 // Things we need to stub
-import ChargingModuleCreateCustomerChangePresenter from '../../../app/presenters/charging-module/create-customer-change.presenter.js'
+import * as ChargingModuleCreateCustomerChangePresenter from '../../../app/presenters/charging-module/create-customer-change.presenter.js'
 import * as ChargingModuleCreateCustomerChangeRequest from '../../../app/requests/charging-module/create-customer-change.request.js'
 
 // Thing under test
@@ -14,8 +14,7 @@ describe('Send Transactions service', () => {
   const billingAccount = { id: '3b53f101-d256-40f8-a6be-ddefb5f9647c' }
 
   beforeEach(() => {
-    vi.mock('../../../app/presenters/charging-module/create-customer-change.presenter.js')
-    ChargingModuleCreateCustomerChangePresenter.mockReturnValue({
+    vi.spyOn(ChargingModuleCreateCustomerChangePresenter, 'default').mockReturnValue({
       region: 'B',
       customerReference: 'B19120000A',
       customerName: 'Mr W Aston',

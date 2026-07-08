@@ -4,7 +4,7 @@
 import BillingAccountModel from '../../../app/models/billing-account.model.js'
 
 // Things we need to stub
-import FetchBillSummaryService from '../../../app/services/bills/fetch-bill-summary.service.js'
+import * as FetchBillSummaryService from '../../../app/services/bills/fetch-bill-summary.service.js'
 
 // Thing under test
 import RemoveBillService from '../../../app/services/bills/remove-bill.service.js'
@@ -13,8 +13,7 @@ describe('Remove Bill service', () => {
   const testId = '71d03336-f683-42fe-b67c-c861f25f1fbd'
 
   beforeEach(() => {
-    vi.mock('../../../app/services/bills/fetch-bill-summary.service.js')
-    FetchBillSummaryService.mockResolvedValue(_billSummary())
+    vi.spyOn(FetchBillSummaryService, 'default').mockResolvedValue(_billSummary())
   })
 
   afterEach(() => {

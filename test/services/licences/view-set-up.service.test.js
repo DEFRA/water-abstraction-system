@@ -6,11 +6,11 @@ import * as ViewLicencesFixture from '../../support/fixtures/view-licences.fixtu
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchAgreementsService from '../../../app/services/licences/fetch-agreements.service.js'
-import FetchChargeVersionsService from '../../../app/services/licences/fetch-charge-versions.service.js'
-import FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
-import FetchReturnVersionsService from '../../../app/services/licences/fetch-return-versions.service.js'
-import FetchWorkflowsService from '../../../app/services/licences/fetch-workflows.service.js'
+import * as FetchAgreementsService from '../../../app/services/licences/fetch-agreements.service.js'
+import * as FetchChargeVersionsService from '../../../app/services/licences/fetch-charge-versions.service.js'
+import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import * as FetchReturnVersionsService from '../../../app/services/licences/fetch-return-versions.service.js'
+import * as FetchWorkflowsService from '../../../app/services/licences/fetch-workflows.service.js'
 
 // Thing under test
 import ViewSetUpService from '../../../app/services/licences/view-set-up.service.js'
@@ -83,20 +83,15 @@ describe('Licences - View Set Up service', () => {
       licenceId: licence.id
     }
 
-    vi.mock('../../../app/services/licences/fetch-agreements.service.js')
-    FetchAgreementsService.mockReturnValue([agreement])
+    vi.spyOn(FetchAgreementsService, 'default').mockReturnValue([agreement])
 
-    vi.mock('../../../app/services/licences/fetch-charge-versions.service.js')
-    FetchChargeVersionsService.mockReturnValue([chargeVersion])
+    vi.spyOn(FetchChargeVersionsService, 'default').mockReturnValue([chargeVersion])
 
-    vi.mock('../../../app/services/licences/fetch-return-versions.service.js')
-    FetchReturnVersionsService.mockReturnValue([returnVersion])
+    vi.spyOn(FetchReturnVersionsService, 'default').mockReturnValue([returnVersion])
 
-    vi.mock('../../../app/services/licences/fetch-workflows.service.js')
-    FetchWorkflowsService.mockReturnValue([workflow])
+    vi.spyOn(FetchWorkflowsService, 'default').mockReturnValue([workflow])
 
-    vi.mock('../../../app/services/licences/fetch-licence.service.js')
-    FetchLicenceService.mockResolvedValue(licence)
+    vi.spyOn(FetchLicenceService, 'default').mockResolvedValue(licence)
   })
 
   afterEach(() => {

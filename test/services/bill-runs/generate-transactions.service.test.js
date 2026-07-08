@@ -6,7 +6,7 @@ import * as ChargeElementHelper from '../../support/helpers/charge-element.helpe
 import * as ChargeReferenceHelper from '../../support/helpers/charge-reference.helper.js'
 
 // Things we need to stub
-import CalculateAuthorisedAndBillableDaysService from '../../../app/services/bill-runs/calculate-authorised-and-billable-days.service.js'
+import * as CalculateAuthorisedAndBillableDaysService from '../../../app/services/bill-runs/calculate-authorised-and-billable-days.service.js'
 
 // Thing under test
 import GenerateTransactionsService from '../../../app/services/bill-runs/generate-transactions.service.js'
@@ -87,8 +87,7 @@ describe('Generate Transactions service', () => {
         winterOnly: false
       }
 
-      vi.mock('../../../app/services/bill-runs/calculate-authorised-and-billable-days.service.js')
-      CalculateAuthorisedAndBillableDaysService.mockReturnValue({ authorisedDays: 365, billableDays: 214 })
+      vi.spyOn(CalculateAuthorisedAndBillableDaysService, 'default').mockReturnValue({ authorisedDays: 365, billableDays: 214 })
     })
 
     describe('and is a water undertaker', () => {
@@ -271,8 +270,7 @@ describe('Generate Transactions service', () => {
         endDate: new Date('2022-10-31')
       }
 
-      vi.mock('../../../app/services/bill-runs/calculate-authorised-and-billable-days.service.js')
-      CalculateAuthorisedAndBillableDaysService.mockReturnValue({ authorisedDays: 365, billableDays: 0 })
+      vi.spyOn(CalculateAuthorisedAndBillableDaysService, 'default').mockReturnValue({ authorisedDays: 365, billableDays: 0 })
     })
 
     it('returns an empty array', () => {

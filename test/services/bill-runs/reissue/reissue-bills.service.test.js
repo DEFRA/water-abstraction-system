@@ -10,9 +10,9 @@ import * as TransactionHelper from '../../../support/helpers/transaction.helper.
 import TransactionModel from '../../../../app/models/transaction.model.js'
 
 // Things we need to stub
-import FetchBillsToBeReissuedService from '../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js'
+import * as FetchBillsToBeReissuedService from '../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
-import ReissueBillService from '../../../../app/services/bill-runs/reissue/reissue-bill.service.js'
+import * as ReissueBillService from '../../../../app/services/bill-runs/reissue/reissue-bill.service.js'
 
 // Thing under test
 import ReissueBillsService from '../../../../app/services/bill-runs/reissue/reissue-bills.service.js'
@@ -37,8 +37,7 @@ describe('Reissue Bills service', () => {
   describe('when the service is called', () => {
     describe('and there are no bills to reissue', () => {
       beforeEach(() => {
-        vi.mock('../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js')
-        FetchBillsToBeReissuedService.mockResolvedValue([])
+        vi.spyOn(FetchBillsToBeReissuedService, 'default').mockResolvedValue([])
       })
 
       it('returns "false"', async () => {
@@ -55,8 +54,7 @@ describe('Reissue Bills service', () => {
 
       beforeEach(async () => {
         // Three dummy invoices to ensure we iterate 3x
-        vi.mock('../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js')
-        FetchBillsToBeReissuedService.mockResolvedValue([
+        vi.spyOn(FetchBillsToBeReissuedService, 'default').mockResolvedValue([
           { id: generateUUID() },
           { id: generateUUID() },
           { id: generateUUID() }
@@ -69,7 +67,6 @@ describe('Reissue Bills service', () => {
 
         // This stub will result in one new bill, bill licence and transaction for each dummy invoice returned by
         // FetchBillsToBeReissuedService.
-        vi.mock('../../../../app/services/bill-runs/reissue/reissue-bill.service.js')
         ReissueBillService.onFirstCall().resolves(reissueBillOne)
         ReissueBillService.onSecondCall().resolves(reissueBillTwo)
         ReissueBillService.onThirdCall().resolves(reissueBillThree)

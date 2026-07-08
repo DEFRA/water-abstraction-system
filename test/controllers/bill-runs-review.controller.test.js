@@ -6,20 +6,20 @@ const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-import PreviewService from '../../app/services/bill-runs/review/preview.service.js'
-import SubmitAuthorisedService from '../../app/services/bill-runs/review/submit-authorised.service.js'
-import SubmitEditService from '../../app/services/bill-runs/review/submit-edit.service.js'
-import SubmitFactorsService from '../../app/services/bill-runs/review/submit-factors.service.js'
-import SubmitRemoveService from '../../app/services/bill-runs/review/submit-remove.service.js'
-import SubmitReviewService from '../../app/services/bill-runs/review/submit-review.service.js'
-import ViewAuthorisedService from '../../app/services/bill-runs/review/view-authorised.service.js'
-import ViewFactorsService from '../../app/services/bill-runs/review/view-factors.service.js'
-import ViewEditService from '../../app/services/bill-runs/review/view-edit.service.js'
-import ViewRemoveService from '../../app/services/bill-runs/review/view-remove.service.js'
-import ViewReviewChargeElementService from '../../app/services/bill-runs/review/view-review-charge-element.service.js'
-import ViewReviewChargeReferenceService from '../../app/services/bill-runs/review/view-review-charge-reference.service.js'
-import ViewReviewLicenceService from '../../app/services/bill-runs/review/view-review-licence.service.js'
-import ViewReviewService from '../../app/services/bill-runs/review/view-review.service.js'
+import * as PreviewService from '../../app/services/bill-runs/review/preview.service.js'
+import * as SubmitAuthorisedService from '../../app/services/bill-runs/review/submit-authorised.service.js'
+import * as SubmitEditService from '../../app/services/bill-runs/review/submit-edit.service.js'
+import * as SubmitFactorsService from '../../app/services/bill-runs/review/submit-factors.service.js'
+import * as SubmitRemoveService from '../../app/services/bill-runs/review/submit-remove.service.js'
+import * as SubmitReviewService from '../../app/services/bill-runs/review/submit-review.service.js'
+import * as ViewAuthorisedService from '../../app/services/bill-runs/review/view-authorised.service.js'
+import * as ViewFactorsService from '../../app/services/bill-runs/review/view-factors.service.js'
+import * as ViewEditService from '../../app/services/bill-runs/review/view-edit.service.js'
+import * as ViewRemoveService from '../../app/services/bill-runs/review/view-remove.service.js'
+import * as ViewReviewChargeElementService from '../../app/services/bill-runs/review/view-review-charge-element.service.js'
+import * as ViewReviewChargeReferenceService from '../../app/services/bill-runs/review/view-review-charge-reference.service.js'
+import * as ViewReviewLicenceService from '../../app/services/bill-runs/review/view-review-licence.service.js'
+import * as ViewReviewService from '../../app/services/bill-runs/review/view-review.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -60,8 +60,7 @@ describe('Bill Runs Review controller', () => {
 
     describe('GET', () => {
       beforeEach(() => {
-        vi.mock('../../app/services/bill-runs/review/view-review.service.js')
-        ViewReviewService.mockResolvedValue({
+        vi.spyOn(ViewReviewService, 'default').mockResolvedValue({
           activeNavBar: 'bill-runs',
           filters: {
             issues: [],
@@ -143,8 +142,7 @@ describe('Bill Runs Review controller', () => {
       beforeEach(async () => {
         options = _postRequestOptions(path)
 
-        vi.mock('../../app/services/bill-runs/review/submit-review.service.js')
-        SubmitReviewService.mockResolvedValue()
+        vi.spyOn(SubmitReviewService, 'default').mockResolvedValue()
       })
 
       describe('when a request is valid', () => {
@@ -167,8 +165,7 @@ describe('Bill Runs Review controller', () => {
       beforeEach(async () => {
         options = _getRequestOptions(path)
 
-        vi.mock('../../app/services/bill-runs/review/view-review-charge-element.service.js')
-        ViewReviewChargeElementService.mockResolvedValue({
+        vi.spyOn(ViewReviewChargeElementService, 'default').mockResolvedValue({
           authorisedVolume: 9.092,
           billableReturns: 0,
           chargeDescription: 'Spray Irrigation - Direct',
@@ -223,8 +220,7 @@ describe('Bill Runs Review controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/bill-runs/review/view-edit.service.js')
-          ViewEditService.mockResolvedValue({
+          vi.spyOn(ViewEditService, 'default').mockResolvedValue({
             pageTitle: 'Set the billable returns quantity for this bill run',
             authorisedQuantity: 9.092,
             billableReturns: 0,
@@ -255,8 +251,7 @@ describe('Bill Runs Review controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/bill-runs/review/submit-edit.service.js')
-          SubmitEditService.mockResolvedValue({})
+          vi.spyOn(SubmitEditService, 'default').mockResolvedValue({})
         })
 
         it('redirects to the Review charge element page', async () => {
@@ -271,8 +266,7 @@ describe('Bill Runs Review controller', () => {
 
       describe('when a request is invalid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/bill-runs/review/submit-edit.service.js')
-          SubmitEditService.mockResolvedValue({
+          vi.spyOn(SubmitEditService, 'default').mockResolvedValue({
             customQuantitySelected: false,
             customQuantityValue: undefined,
             error: {
@@ -312,8 +306,7 @@ describe('Bill Runs Review controller', () => {
       beforeEach(async () => {
         options = _getRequestOptions(path)
 
-        vi.mock('../../app/services/bill-runs/review/view-review-charge-reference.service.js')
-        ViewReviewChargeReferenceService.mockResolvedValue({
+        vi.spyOn(ViewReviewChargeReferenceService, 'default').mockResolvedValue({
           additionalCharges: '',
           adjustments: ['Aggregate factor (0.333333333)', 'Two part tariff agreement'],
           amendedAuthorisedVolume: 9.092,
@@ -355,8 +348,7 @@ describe('Bill Runs Review controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/bill-runs/review/view-authorised.service.js')
-          ViewAuthorisedService.mockResolvedValue({
+          vi.spyOn(ViewAuthorisedService, 'default').mockResolvedValue({
             amendedAuthorisedVolume: 9.092,
             chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
             chargePeriod: '1 April 2023 to 31 March 2024',
@@ -387,8 +379,7 @@ describe('Bill Runs Review controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/bill-runs/review/submit-authorised.service.js')
-          SubmitAuthorisedService.mockResolvedValue({})
+          vi.spyOn(SubmitAuthorisedService, 'default').mockResolvedValue({})
         })
 
         it('redirects to the Review charge reference page', async () => {
@@ -403,8 +394,7 @@ describe('Bill Runs Review controller', () => {
 
       describe('when a request is invalid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/bill-runs/review/submit-authorised.service.js')
-          SubmitAuthorisedService.mockResolvedValue({
+          vi.spyOn(SubmitAuthorisedService, 'default').mockResolvedValue({
             amendedAuthorisedVolume: 'foo',
             error: { text: 'The authorised volume must be a number' },
             pageTitle: 'Set the authorised volume',
@@ -440,8 +430,7 @@ describe('Bill Runs Review controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/bill-runs/review/view-factors.service.js')
-          ViewFactorsService.mockResolvedValue({
+          vi.spyOn(ViewFactorsService, 'default').mockResolvedValue({
             amendedAggregate: 0.333333333,
             amendedChargeAdjustment: 1,
             chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
@@ -472,8 +461,7 @@ describe('Bill Runs Review controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/bill-runs/review/submit-factors.service.js')
-          SubmitFactorsService.mockResolvedValue({})
+          vi.spyOn(SubmitFactorsService, 'default').mockResolvedValue({})
         })
 
         it('redirects to the Review charge reference page', async () => {
@@ -488,8 +476,7 @@ describe('Bill Runs Review controller', () => {
 
       describe('when a request is invalid', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/bill-runs/review/submit-factors.service.js')
-          SubmitFactorsService.mockResolvedValue({
+          vi.spyOn(SubmitFactorsService, 'default').mockResolvedValue({
             amendedAggregate: 'foo',
             amendedChargeAdjustment: '1',
             error: {
@@ -526,8 +513,7 @@ describe('Bill Runs Review controller', () => {
       beforeEach(async () => {
         options = _getRequestOptions(path)
 
-        vi.mock('../../app/services/bill-runs/review/preview.service.js')
-        PreviewService.mockResolvedValue()
+        vi.spyOn(PreviewService, 'default').mockResolvedValue()
       })
 
       describe('when a request is valid', () => {
@@ -552,8 +538,7 @@ describe('Bill Runs Review controller', () => {
       beforeEach(async () => {
         options = _getRequestOptions(path)
 
-        vi.mock('../../app/services/bill-runs/review/view-review-licence.service.js')
-        ViewReviewLicenceService.mockResolvedValue({
+        vi.spyOn(ViewReviewLicenceService, 'default').mockResolvedValue({
           billRunId: '97db1a27-8308-4aba-b463-8a6af2558b28',
           chargeVersions: [
             {
@@ -662,8 +647,7 @@ describe('Bill Runs Review controller', () => {
       beforeEach(() => {
         options = _getRequestOptions(path)
 
-        vi.mock('../../app/services/bill-runs/review/view-remove.service.js')
-        ViewRemoveService.mockResolvedValue({
+        vi.spyOn(ViewRemoveService, 'default').mockResolvedValue({
           billRunNumber: 12345,
           billRunStatus: 'review',
           dateCreated: '3 May 2024',
@@ -694,8 +678,7 @@ describe('Bill Runs Review controller', () => {
         beforeEach(() => {
           options = _postRequestOptions(path)
 
-          vi.mock('../../app/services/bill-runs/review/submit-remove.service.js')
-          SubmitRemoveService.mockResolvedValue({
+          vi.spyOn(SubmitRemoveService, 'default').mockResolvedValue({
             billRunId: '97db1a27-8308-4aba-b463-8a6af2558b28',
             empty: false
           })
@@ -715,8 +698,7 @@ describe('Bill Runs Review controller', () => {
         beforeEach(() => {
           options = _postRequestOptions(path)
 
-          vi.mock('../../app/services/bill-runs/review/submit-remove.service.js')
-          SubmitRemoveService.mockResolvedValue({
+          vi.spyOn(SubmitRemoveService, 'default').mockResolvedValue({
             billRunId: '97db1a27-8308-4aba-b463-8a6af2558b28',
             empty: true
           })

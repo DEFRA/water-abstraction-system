@@ -1,5 +1,5 @@
 // Test helpers
-import RequirementsForReturnsSeeder from '../../../../support/seeders/requirements-for-returns.seeder.js'
+import * as RequirementsForReturnsSeeder from '../../../../support/seeders/requirements-for-returns.seeder.js'
 
 // Thing under test
 import FetchExistingRequirementsService from '../../../../../app/services/return-versions/setup/existing/fetch-existing-requirements.service.js'

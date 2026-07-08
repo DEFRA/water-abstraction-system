@@ -4,8 +4,8 @@
 import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 
 // Things we need to stub
-import FetchAddressDal from '../../../app/dal/companies/fetch-address.dal.js'
-import FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'
+import * as FetchAddressDal from '../../../app/dal/companies/fetch-address.dal.js'
+import * as FetchCompanyDal from '../../../app/dal/companies/fetch-company.dal.js'
 
 // Thing under test
 import ViewCompanyWithAddressService from '../../../app/services/companies/view-company-with-address.service.js'
@@ -21,10 +21,8 @@ describe('Companies - View Company With Address Service', () => {
     company = CustomersFixtures.company()
     address = CustomersFixtures.companyAddress().address
 
-    vi.mock('../../../app/dal/companies/fetch-company.dal.js')
-    FetchCompanyDal.mockReturnValue(company)
-    vi.mock('../../../app/dal/companies/fetch-address.dal.js')
-    FetchAddressDal.mockReturnValue(address)
+    vi.spyOn(FetchCompanyDal, 'default').mockReturnValue(company)
+    vi.spyOn(FetchAddressDal, 'default').mockReturnValue(address)
   })
 
   afterEach(() => {

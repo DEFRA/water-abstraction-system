@@ -5,7 +5,7 @@ import * as AbstractionAlertSessionData from '../../../../support/fixtures/abstr
 import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitAlertEmailAddressService from '../../../../../app/services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js'
@@ -30,8 +30,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Email Address serv
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {

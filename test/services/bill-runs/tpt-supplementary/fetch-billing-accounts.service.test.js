@@ -1,5 +1,5 @@
 // Test helpers
-import TwoPartTariffSupplementarySeeder from '../../../support/seeders/two-part-tariff-supplementary.seeder.js'
+import * as TwoPartTariffSupplementarySeeder from '../../../support/seeders/two-part-tariff-supplementary.seeder.js'
 
 // Thing under test
 import FetchBillingAccountsService from '../../../../app/services/bill-runs/tpt-supplementary/fetch-billing-accounts.service.js'

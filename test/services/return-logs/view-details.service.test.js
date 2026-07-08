@@ -5,7 +5,7 @@ import * as ReturnLogsFixture from '../../support/fixtures/return-logs.fixture.j
 import * as ReturnLogHelper from '../../support/helpers/return-log.helper.js'
 
 // Things we need to stub
-import FetchReturnLogDetailsService from '../../../app/services/return-logs/fetch-return-log-details.service.js'
+import * as FetchReturnLogDetailsService from '../../../app/services/return-logs/fetch-return-log-details.service.js'
 
 // Thing under test
 import ViewDetailsService from '../../../app/services/return-logs/view-details.service.js'
@@ -36,8 +36,7 @@ describe('Return Logs - View Details service', () => {
     returnLog.current = metadata.isCurrent
     returnLog.twoPartTariff = metadata.isTwoPartTariff
 
-    vi.mock('../../../app/services/return-logs/fetch-return-log-details.service.js')
-    FetchReturnLogDetailsService.mockResolvedValue(returnLog)
+    vi.spyOn(FetchReturnLogDetailsService, 'default').mockResolvedValue(returnLog)
   })
 
   afterEach(() => {

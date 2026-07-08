@@ -7,7 +7,7 @@ import ReturnVersionModel from '../../../app/models/return-version.model.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we want to stub
-import FetchReturnVersionService from '../../../app/services/return-versions/fetch-return-version.service.js'
+import * as FetchReturnVersionService from '../../../app/services/return-versions/fetch-return-version.service.js'
 
 // Thing under test
 import ViewService from '../../../app/services/return-versions/view.service.js'
@@ -19,8 +19,7 @@ describe('Return Versions - View service', () => {
   const returnVersion = returnVersionData.returnVersion
 
   beforeEach(() => {
-    vi.mock('../../../app/services/return-versions/fetch-return-version.service.js')
-    FetchReturnVersionService.mockResolvedValue(returnVersionData)
+    vi.spyOn(FetchReturnVersionService, 'default').mockResolvedValue(returnVersionData)
   })
 
   afterEach(() => {

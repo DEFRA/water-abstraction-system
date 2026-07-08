@@ -5,7 +5,7 @@ import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-revi
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchReviewChargeReferenceService from '../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js'
+import * as FetchReviewChargeReferenceService from '../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js'
 import ReviewChargeReferenceModel from '../../../../app/models/review-charge-reference.model.js'
 
 // Thing under test
@@ -20,8 +20,7 @@ describe('Bill Runs Review - Submit Factors Service', () => {
   beforeEach(() => {
     reviewChargeReference = BillRunsReviewFixture.reviewChargeReference()
 
-    vi.mock('../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js')
-    FetchReviewChargeReferenceService.mockResolvedValue(reviewChargeReference)
+    vi.spyOn(FetchReviewChargeReferenceService, 'default').mockResolvedValue(reviewChargeReference)
 
     patchStub = vi.fn().mockResolvedValue()
     vi.spyOn(ReviewChargeReferenceModel, 'query').mockReturnValue({

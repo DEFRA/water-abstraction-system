@@ -1,7 +1,7 @@
 // Test framework dependencies
 
 // Test helpers
-import CRMSeeder from '../../support/seeders/crm.seeder.js'
+import * as CRMSeeder from '../../support/seeders/crm.seeder.js'
 
 // Things we need to stub
 import DatabaseConfig from '../../../config/database.config.js'

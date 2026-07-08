@@ -1,7 +1,7 @@
 // Test framework dependencies
 
 // Things we need to stub
-import FetchReturnLogService from '../../../../app/services/return-logs/setup/fetch-return-log.service.js'
+import * as FetchReturnLogService from '../../../../app/services/return-logs/setup/fetch-return-log.service.js'
 
 // Thing under test
 import ConfirmedService from '../../../../app/services/return-logs/setup/confirmed.service.js'
@@ -10,8 +10,7 @@ describe('Return Logs - Setup - Confirmed service', () => {
   const returnLogId = 'e8d145d9-2da4-4d2d-b338-92cedc7cea7f'
 
   beforeEach(() => {
-    vi.mock('../../../../app/services/return-logs/setup/fetch-return-log.service.js')
-    FetchReturnLogService.mockResolvedValue({
+    vi.spyOn(FetchReturnLogService, 'default').mockResolvedValue({
       id: returnLogId,
       licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
       licenceRef: '01/117',

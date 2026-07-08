@@ -6,9 +6,9 @@ import * as LicenceVersionPurposeHelper from '../../../support/helpers/licence-v
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things to stub
-import FetchFullConditionService from '../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
-import FullConditionService from '../../../../app/services/licence-monitoring-station/setup/full-condition.service.js'
+import * as FetchFullConditionService from '../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FullConditionService from '../../../../app/services/licence-monitoring-station/setup/full-condition.service.js'
 
 // Thing under test
 import SubmitFullConditionService from '../../../../app/services/licence-monitoring-station/setup/submit-full-condition.service.js'
@@ -27,8 +27,7 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     const licenceVersionPurpose = await LicenceVersionPurposeHelper.add()
     const licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
@@ -42,8 +41,7 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
       condition: licenceVersionPurposeCondition.id
     }
 
-    vi.mock('../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js')
-    FetchFullConditionService.mockResolvedValue([
+    vi.spyOn(FetchFullConditionService, 'default').mockResolvedValue([
       {
         ...licenceVersionPurposeCondition,
         abstractionPeriodStartDay: licenceVersionPurpose.abstractionPeriodStartDay,
@@ -53,8 +51,7 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
         displayTitle: 'LICENCE_VERSION_CONDITION_TYPE_DISPLAY_TITLE'
       }
     ])
-    vi.mock('../../../../app/services/licence-monitoring-station/setup/full-condition.service.js')
-    FullConditionService.mockResolvedValue(pageData)
+    vi.spyOn(FullConditionService, 'default').mockResolvedValue(pageData)
   })
 
   afterEach(() => {

@@ -5,7 +5,7 @@ import { formatDateObjectToISO } from '../../../app/lib/dates.lib.js'
 import * as ReturnLogsFixture from '../../support/fixtures/return-logs.fixture.js'
 
 // Things we need to stub
-import FetchDownloadReturnLogService from '../../../app/services/return-logs/fetch-download-return-log.service.js'
+import * as FetchDownloadReturnLogService from '../../../app/services/return-logs/fetch-download-return-log.service.js'
 
 // Thing under test
 import DownloadReturnLogService from '../../../app/services/return-logs/download-return-log.service.js'
@@ -17,8 +17,7 @@ describe('Return Logs - Download Return Log Service', () => {
     returnLog = ReturnLogsFixture.returnLog('month')
     returnLog.returnSubmissions = [ReturnLogsFixture.returnSubmission(returnLog, 'estimated')]
 
-    vi.mock('../../../app/services/return-logs/fetch-download-return-log.service.js')
-    FetchDownloadReturnLogService.mockResolvedValue(returnLog)
+    vi.spyOn(FetchDownloadReturnLogService, 'default').mockResolvedValue(returnLog)
   })
 
   afterEach(() => {

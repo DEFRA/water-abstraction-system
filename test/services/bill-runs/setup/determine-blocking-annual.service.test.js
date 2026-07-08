@@ -6,7 +6,7 @@ import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'
 
 // Things we need to stub
 import BillRunModel from '../../../../app/models/bill-run.model.js'
-import FetchLiveBillRunService from '../../../../app/services/bill-runs/setup/fetch-live-bill-run.service.js'
+import * as FetchLiveBillRunService from '../../../../app/services/bill-runs/setup/fetch-live-bill-run.service.js'
 
 // Thing under test
 import DetermineBlockingAnnualService from '../../../../app/services/bill-runs/setup/determine-blocking-annual.service.js'
@@ -41,7 +41,6 @@ describe('Bill Runs - Setup - Determine Blocking Annual Bill Run service', () =>
       limit: vi.fn().mockReturnThis()
     }
 
-    vi.mock('../../../../app/services/bill-runs/setup/fetch-live-bill-run.service.js')
   })
 
   afterEach(async () => {
@@ -64,7 +63,7 @@ describe('Bill Runs - Setup - Determine Blocking Annual Bill Run service', () =>
     it('does not bother to check for live bill runs', async () => {
       await DetermineBlockingAnnualService(regionId, toFinancialYearEnding)
 
-      expect(FetchLiveBillRunService).not.toHaveBeenCalled()
+      expect(FetchLiveBillRunService.default).not.toHaveBeenCalled()
     })
   })
 
@@ -75,7 +74,7 @@ describe('Bill Runs - Setup - Determine Blocking Annual Bill Run service', () =>
 
     describe('and no live bill run', () => {
       beforeEach(() => {
-        FetchLiveBillRunService.mockResolvedValue(null)
+        vi.spyOn(FetchLiveBillRunService, 'default').mockResolvedValue(null)
       })
 
       it('returns no matches and determines that the "current" engine can be triggered', async () => {
@@ -90,7 +89,7 @@ describe('Bill Runs - Setup - Determine Blocking Annual Bill Run service', () =>
         match.batchType = 'supplementary'
         match.status = 'ready'
 
-        FetchLiveBillRunService.mockResolvedValue(match)
+        vi.spyOn(FetchLiveBillRunService, 'default').mockResolvedValue(match)
       })
 
       it('returns the match and determines that neither engine can be triggered', async () => {

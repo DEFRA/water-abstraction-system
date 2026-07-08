@@ -4,7 +4,7 @@
 import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 
 // Things we need to stub
-import FetchReviewChargeElementService from '../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js'
+import * as FetchReviewChargeElementService from '../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js'
 
 // Thing under test
 import ViewEditService from '../../../../app/services/bill-runs/review/view-edit.service.js'
@@ -17,8 +17,7 @@ describe('Bill Runs - Review - View Edit Service', () => {
   beforeEach(() => {
     reviewChargeElement = BillRunsReviewFixture.reviewChargeElement()
 
-    vi.mock('../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js')
-    FetchReviewChargeElementService.mockResolvedValue(reviewChargeElement)
+    vi.spyOn(FetchReviewChargeElementService, 'default').mockResolvedValue(reviewChargeElement)
   })
 
   afterEach(() => {

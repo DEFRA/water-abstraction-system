@@ -2,7 +2,7 @@
 
 // Things we need to stub
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
-import SendRenewalInvitations from '../../../../app/services/jobs/renewal-invitations/send-renewal-invitations.service.js'
+import * as SendRenewalInvitations from '../../../../app/services/jobs/renewal-invitations/send-renewal-invitations.service.js'
 
 // Thing under test
 import ProcessRenewalInvitationsService from '../../../../app/services/jobs/renewal-invitations/process-renewal-invitations.service.js'
@@ -13,8 +13,7 @@ describe('Jobs - Renewal Invitations - Process Renewal Invitations service', () 
   let notifierStub
 
   beforeEach(() => {
-    vi.mock('../../../../app/services/jobs/renewal-invitations/send-renewal-invitations.service.js')
-    SendRenewalInvitations.mockResolvedValue(['mock invitation'])
+    vi.spyOn(SendRenewalInvitations, 'default').mockResolvedValue(['mock invitation'])
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this

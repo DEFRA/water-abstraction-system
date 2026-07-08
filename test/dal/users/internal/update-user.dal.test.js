@@ -12,7 +12,7 @@ import * as UserRoleHelper from '../../../support/helpers/user-role.helper.js'
 import UserRoleModel from '../../../../app/models/user-role.model.js'
 
 // Things we need to stub
-import FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
+import * as FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
 
 // Thing under test
 import UpdateUserDal from '../../../../app/dal/users/internal/update-user.dal.js'
@@ -53,8 +53,7 @@ describe('Users - Internal - Update User DAL', () => {
       }
     }
 
-    vi.mock('../../../../app/dal/users/fetch-user.dal.js')
-    FetchUserDal.mockResolvedValue({ username: 'internal-user-creator@wrls.gov.uk' })
+    vi.spyOn(FetchUserDal, 'default').mockResolvedValue({ username: 'internal-user-creator@wrls.gov.uk' })
   })
 
   afterEach(async () => {

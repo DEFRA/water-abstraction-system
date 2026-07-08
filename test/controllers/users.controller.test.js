@@ -8,18 +8,18 @@ import { generateUUID, today } from '../../app/lib/general.lib.js'
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-import FetchLegacyIdDal from '../../app/dal/users/fetch-legacy-id.dal.js'
-import IndexUsersService from '../../app/services/users/index-users.service.js'
-import SubmitIndexUsersService from '../../app/services/users/submit-index-users.service.js'
-import SubmitProfileDetailsService from '../../app/services/users/submit-profile-details.service.js'
-import ViewExternalCommunicationsService from '../../app/services/users/external/view-communications.service.js'
-import ViewExternalDetailsService from '../../app/services/users/external/view-details.service.js'
-import ViewExternalLicencesService from '../../app/services/users/external/view-licences.service.js'
-import ViewExternalVerificationsService from '../../app/services/users/external/view-verifications.service.js'
-import ViewInternalCommunicationsService from '../../app/services/users/internal/view-communications.service.js'
-import ViewInternalDetailsService from '../../app/services/users/internal/view-details.service.js'
-import ViewNotificationService from '../../app/services/users/view-notification.service.js'
-import ViewProfileDetailsService from '../../app/services/users/view-profile-details.service.js'
+import * as FetchLegacyIdDal from '../../app/dal/users/fetch-legacy-id.dal.js'
+import * as IndexUsersService from '../../app/services/users/index-users.service.js'
+import * as SubmitIndexUsersService from '../../app/services/users/submit-index-users.service.js'
+import * as SubmitProfileDetailsService from '../../app/services/users/submit-profile-details.service.js'
+import * as ViewExternalCommunicationsService from '../../app/services/users/external/view-communications.service.js'
+import * as ViewExternalDetailsService from '../../app/services/users/external/view-details.service.js'
+import * as ViewExternalLicencesService from '../../app/services/users/external/view-licences.service.js'
+import * as ViewExternalVerificationsService from '../../app/services/users/external/view-verifications.service.js'
+import * as ViewInternalCommunicationsService from '../../app/services/users/internal/view-communications.service.js'
+import * as ViewInternalDetailsService from '../../app/services/users/internal/view-details.service.js'
+import * as ViewNotificationService from '../../app/services/users/view-notification.service.js'
+import * as ViewProfileDetailsService from '../../app/services/users/view-profile-details.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -85,8 +85,7 @@ describe('Users controller', () => {
 
       describe('with no results', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/users/index-users.service.js')
-          IndexUsersService.mockResolvedValue(pageData)
+          vi.spyOn(IndexUsersService, 'default').mockResolvedValue(pageData)
         })
 
         it('returns the page successfully', async () => {
@@ -115,8 +114,7 @@ describe('Users controller', () => {
           beforeEach(() => {
             pageData.pagination.showingMessage = 'Showing all 1 users'
 
-            vi.mock('../../app/services/users/index-users.service.js')
-            IndexUsersService.mockReturnValue(pageData)
+            vi.spyOn(IndexUsersService, 'default').mockReturnValue(pageData)
           })
 
           it('returns the page successfully', async () => {
@@ -136,8 +134,7 @@ describe('Users controller', () => {
             pageData.pagination.numberOfPages = 3
             pageData.pagination.showingMessage = 'Showing 25 of 70 users'
 
-            vi.mock('../../app/services/users/index-users.service.js')
-            IndexUsersService.mockReturnValue(pageData)
+            vi.spyOn(IndexUsersService, 'default').mockReturnValue(pageData)
           })
 
           it('returns the page successfully', async () => {
@@ -160,8 +157,7 @@ describe('Users controller', () => {
         beforeEach(() => {
           pageData = {}
 
-          vi.mock('../../app/services/users/submit-index-users.service.js')
-          SubmitIndexUsersService.mockReturnValue(pageData)
+          vi.spyOn(SubmitIndexUsersService, 'default').mockReturnValue(pageData)
         })
 
         it('redirects back to the index page', async () => {
@@ -190,8 +186,7 @@ describe('Users controller', () => {
 
         describe('with no results', () => {
           beforeEach(() => {
-            vi.mock('../../app/services/users/submit-index-users.service.js')
-            SubmitIndexUsersService.mockReturnValue(pageData)
+            vi.spyOn(SubmitIndexUsersService, 'default').mockReturnValue(pageData)
           })
 
           it('re-renders the index page with no pagination and an error', async () => {
@@ -222,8 +217,7 @@ describe('Users controller', () => {
             beforeEach(() => {
               pageData.pagination.showingMessage = 'Showing all 1 users'
 
-              vi.mock('../../app/services/users/submit-index-users.service.js')
-              SubmitIndexUsersService.mockReturnValue(pageData)
+              vi.spyOn(SubmitIndexUsersService, 'default').mockReturnValue(pageData)
             })
 
             it('re-renders the index page with no pagination and an error', async () => {
@@ -245,8 +239,7 @@ describe('Users controller', () => {
               pageData.pagination.numberOfPages = 3
               pageData.pagination.showingMessage = 'Showing 25 of 70 users'
 
-              vi.mock('../../app/services/users/submit-index-users.service.js')
-              SubmitIndexUsersService.mockReturnValue(pageData)
+              vi.spyOn(SubmitIndexUsersService, 'default').mockReturnValue(pageData)
             })
 
             it('re-renders the index page with pagination and an error', async () => {
@@ -291,8 +284,7 @@ describe('Users controller', () => {
 
       describe('with no results', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/users/external/view-communications.service.js')
-          ViewExternalCommunicationsService.mockResolvedValue(pageData)
+          vi.spyOn(ViewExternalCommunicationsService, 'default').mockResolvedValue(pageData)
         })
 
         it('returns the external user page successfully', async () => {
@@ -321,8 +313,7 @@ describe('Users controller', () => {
           beforeEach(async () => {
             pageData.pagination.showingMessage = 'Showing all 1 communications'
 
-            vi.mock('../../app/services/users/external/view-communications.service.js')
-            ViewExternalCommunicationsService.mockResolvedValue(pageData)
+            vi.spyOn(ViewExternalCommunicationsService, 'default').mockResolvedValue(pageData)
           })
 
           it('returns the external user page successfully', async () => {
@@ -342,8 +333,7 @@ describe('Users controller', () => {
             pageData.pagination.numberOfPages = 3
             pageData.pagination.showingMessage = 'Showing 25 of 70 communications'
 
-            vi.mock('../../app/services/users/external/view-communications.service.js')
-            ViewExternalCommunicationsService.mockResolvedValue(pageData)
+            vi.spyOn(ViewExternalCommunicationsService, 'default').mockResolvedValue(pageData)
           })
 
           it('returns the external user page successfully', async () => {
@@ -364,8 +354,7 @@ describe('Users controller', () => {
         id = generateUUID()
         options = _getOptions(`/users/external/${id}/details`, { scope: [], user: { id } })
 
-        vi.mock('../../app/services/users/external/view-details.service.js')
-        ViewExternalDetailsService.mockResolvedValue({
+        vi.spyOn(ViewExternalDetailsService, 'default').mockResolvedValue({
           activeNavBar: 'users',
           activeSecondaryNav: 'details',
           backLink: {
@@ -420,8 +409,7 @@ describe('Users controller', () => {
 
       describe('with no results', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/users/external/view-licences.service.js')
-          ViewExternalLicencesService.mockResolvedValue(pageData)
+          vi.spyOn(ViewExternalLicencesService, 'default').mockResolvedValue(pageData)
         })
 
         it('returns the external user page successfully', async () => {
@@ -471,8 +459,7 @@ describe('Users controller', () => {
           beforeEach(async () => {
             pageData.pagination.showingMessage = 'Showing all 1 licences'
 
-            vi.mock('../../app/services/users/external/view-licences.service.js')
-            ViewExternalLicencesService.mockResolvedValue(pageData)
+            vi.spyOn(ViewExternalLicencesService, 'default').mockResolvedValue(pageData)
           })
 
           it('returns the external user page successfully', async () => {
@@ -492,8 +479,7 @@ describe('Users controller', () => {
             pageData.pagination.numberOfPages = 3
             pageData.pagination.showingMessage = 'Showing 25 of 70 licences'
 
-            vi.mock('../../app/services/users/external/view-licences.service.js')
-            ViewExternalLicencesService.mockResolvedValue(pageData)
+            vi.spyOn(ViewExternalLicencesService, 'default').mockResolvedValue(pageData)
           })
 
           it('returns the external user page successfully', async () => {
@@ -535,8 +521,7 @@ describe('Users controller', () => {
 
       describe('with no results', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/users/external/view-verifications.service.js')
-          ViewExternalVerificationsService.mockResolvedValue(pageData)
+          vi.spyOn(ViewExternalVerificationsService, 'default').mockResolvedValue(pageData)
         })
 
         it('returns the external user page successfully', async () => {
@@ -588,8 +573,7 @@ describe('Users controller', () => {
           beforeEach(async () => {
             pageData.pagination.showingMessage = 'Showing all 1 verifications'
 
-            vi.mock('../../app/services/users/external/view-verifications.service.js')
-            ViewExternalVerificationsService.mockResolvedValue(pageData)
+            vi.spyOn(ViewExternalVerificationsService, 'default').mockResolvedValue(pageData)
           })
 
           it('returns the external user page successfully', async () => {
@@ -609,8 +593,7 @@ describe('Users controller', () => {
             pageData.pagination.numberOfPages = 3
             pageData.pagination.showingMessage = 'Showing 25 of 70 verifications'
 
-            vi.mock('../../app/services/users/external/view-verifications.service.js')
-            ViewExternalVerificationsService.mockResolvedValue(pageData)
+            vi.spyOn(ViewExternalVerificationsService, 'default').mockResolvedValue(pageData)
           })
 
           it('returns the external user page successfully', async () => {
@@ -651,8 +634,7 @@ describe('Users controller', () => {
 
       describe('with no results', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/users/internal/view-communications.service.js')
-          ViewInternalCommunicationsService.mockResolvedValue(pageData)
+          vi.spyOn(ViewInternalCommunicationsService, 'default').mockResolvedValue(pageData)
         })
 
         it('returns the internal user page successfully', async () => {
@@ -681,8 +663,7 @@ describe('Users controller', () => {
           beforeEach(async () => {
             pageData.pagination.showingMessage = 'Showing all 1 communications'
 
-            vi.mock('../../app/services/users/internal/view-communications.service.js')
-            ViewInternalCommunicationsService.mockResolvedValue(pageData)
+            vi.spyOn(ViewInternalCommunicationsService, 'default').mockResolvedValue(pageData)
           })
 
           it('returns the internal user page successfully', async () => {
@@ -702,8 +683,7 @@ describe('Users controller', () => {
             pageData.pagination.numberOfPages = 3
             pageData.pagination.showingMessage = 'Showing 25 of 70 communications'
 
-            vi.mock('../../app/services/users/internal/view-communications.service.js')
-            ViewInternalCommunicationsService.mockResolvedValue(pageData)
+            vi.spyOn(ViewInternalCommunicationsService, 'default').mockResolvedValue(pageData)
           })
 
           it('returns the internal user page successfully', async () => {
@@ -724,8 +704,7 @@ describe('Users controller', () => {
         id = generateUUID()
         options = _getOptions(`/users/internal/${id}/details`, { scope: ['manage_accounts'], user: { id } })
 
-        vi.mock('../../app/services/users/internal/view-details.service.js')
-        ViewInternalDetailsService.mockResolvedValue({
+        vi.spyOn(ViewInternalDetailsService, 'default').mockResolvedValue({
           activeNavBar: 'users',
           activeSecondaryNav: 'details',
           backLink: {
@@ -759,8 +738,7 @@ describe('Users controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          vi.mock('../../app/dal/users/fetch-legacy-id.dal.js')
-          FetchLegacyIdDal.mockReturnValue(456)
+          vi.spyOn(FetchLegacyIdDal, 'default').mockReturnValue(456)
         })
 
         it('redirects to the internal initiate edit session url', async () => {
@@ -783,8 +761,7 @@ describe('Users controller', () => {
           user: { id }
         })
 
-        vi.mock('../../app/services/users/view-notification.service.js')
-        ViewNotificationService.mockResolvedValue({
+        vi.spyOn(ViewNotificationService, 'default').mockResolvedValue({
           activeNavBar: 'users',
           backLink: {
             href: `/system/users/internal/${id}/communications`,
@@ -815,8 +792,7 @@ describe('Users controller', () => {
       beforeEach(async () => {
         options = _getOptions('/users/me/profile-details', { scope: ['hof_notifications'], user: { id: 1000 } })
 
-        vi.mock('../../app/services/users/view-profile-details.service.js')
-        ViewProfileDetailsService.mockResolvedValue({
+        vi.spyOn(ViewProfileDetailsService, 'default').mockResolvedValue({
           pageTitle: 'Profile details'
         })
       })
@@ -839,8 +815,7 @@ describe('Users controller', () => {
       describe('when the request succeeds', () => {
         describe('and is valid', () => {
           beforeEach(async () => {
-            vi.mock('../../app/services/users/submit-profile-details.service.js')
-            SubmitProfileDetailsService.mockResolvedValue({})
+            vi.spyOn(SubmitProfileDetailsService, 'default').mockResolvedValue({})
           })
 
           it('redirects to itself', async () => {
@@ -853,8 +828,7 @@ describe('Users controller', () => {
 
         describe('and the validation fails', () => {
           beforeEach(async () => {
-            vi.mock('../../app/services/users/submit-profile-details.service.js')
-            SubmitProfileDetailsService.mockResolvedValue({ error: { details: [] } })
+            vi.spyOn(SubmitProfileDetailsService, 'default').mockResolvedValue({ error: { details: [] } })
           })
 
           it('returns the page successfully with the error summary banner', async () => {

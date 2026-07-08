@@ -5,9 +5,9 @@ import http2 from 'node:http2'
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 
 // Things we need to stub
-import LoadService from '../../app/services/data/load/load.service.js'
-import SeedService from '../../app/services/data/seed/seed.service.js'
-import TearDownService from '../../app/services/data/tear-down/tear-down.service.js'
+import * as LoadService from '../../app/services/data/load/load.service.js'
+import * as SeedService from '../../app/services/data/seed/seed.service.js'
+import * as TearDownService from '../../app/services/data/tear-down/tear-down.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -68,8 +68,7 @@ describe('Data controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/data/load/load.service.js')
-          LoadService.mockResolvedValue({
+          vi.spyOn(LoadService, 'default').mockResolvedValue({
             regions: ['d0a4123d-1e19-480d-9dd4-f70f3387c4b9']
           })
         })
@@ -85,8 +84,7 @@ describe('Data controller', () => {
       describe('when the request fails', () => {
         describe('because the LoadService errors', () => {
           beforeEach(async () => {
-            vi.mock('../../app/services/data/load/load.service.js')
-            LoadService.mockRejectedValue()
+            vi.spyOn(LoadService, 'default').mockRejectedValue()
           })
 
           it('returns a 500 status', async () => {
@@ -108,8 +106,7 @@ describe('Data controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/data/seed/seed.service.js')
-          SeedService.mockResolvedValue()
+          vi.spyOn(SeedService, 'default').mockResolvedValue()
         })
 
         it('displays the correct message', async () => {
@@ -122,8 +119,7 @@ describe('Data controller', () => {
       describe('when the request fails', () => {
         describe('because the SeedService errors', () => {
           beforeEach(async () => {
-            vi.mock('../../app/services/data/seed/seed.service.js')
-            SeedService.mockRejectedValue()
+            vi.spyOn(SeedService, 'default').mockRejectedValue()
           })
 
           it('returns a 500 status', async () => {
@@ -145,8 +141,7 @@ describe('Data controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/data/tear-down/tear-down.service.js')
-          TearDownService.mockResolvedValue()
+          vi.spyOn(TearDownService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 status', async () => {
@@ -159,8 +154,7 @@ describe('Data controller', () => {
       describe('when the request fails', () => {
         describe('because the TearDownService errors', () => {
           beforeEach(async () => {
-            vi.mock('../../app/services/data/tear-down/tear-down.service.js')
-            TearDownService.mockRejectedValue()
+            vi.spyOn(TearDownService, 'default').mockRejectedValue()
           })
 
           it('returns a 500 status', async () => {

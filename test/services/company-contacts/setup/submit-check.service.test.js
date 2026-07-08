@@ -10,9 +10,9 @@ import { generateUUID } from '../../../../app/lib/general.lib.js'
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import CreateCompanyContactDal from '../../../../app/dal/company-contacts/setup/create-company-contact.dal.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
-import UpdateCompanyContactDal from '../../../../app/dal/company-contacts/setup/update-company-contact.dal.js'
+import * as CreateCompanyContactDal from '../../../../app/dal/company-contacts/setup/create-company-contact.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as UpdateCompanyContactDal from '../../../../app/dal/company-contacts/setup/update-company-contact.dal.js'
 
 // Thing under test
 import SubmitCheckService from '../../../../app/services/company-contacts/setup/submit-check.service.js'
@@ -30,10 +30,8 @@ describe('Company Contacts - Setup - Check Service', () => {
 
     company = CustomersFixtures.company()
 
-    vi.mock('../../../../app/dal/company-contacts/setup/create-company-contact.dal.js')
-    CreateCompanyContactDal.mockResolvedValue()
-    vi.mock('../../../../app/dal/company-contacts/setup/update-company-contact.dal.js')
-    UpdateCompanyContactDal.mockResolvedValue()
+    vi.spyOn(CreateCompanyContactDal, 'default').mockResolvedValue()
+    vi.spyOn(UpdateCompanyContactDal, 'default').mockResolvedValue()
 
     yarStub = YarStub()
   })
@@ -48,8 +46,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       session = SessionModelStub(sessionData)
 
-      vi.mock('../../../../app/dal/fetch-session.dal.js')
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('clears the session', async () => {
@@ -109,7 +106,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         beforeEach(() => {
           session = SessionModelStub({ ...sessionData, abstractionAlerts: 'some' })
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('persists the "abstractionAlerts" as "true"', async () => {
@@ -125,7 +122,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         beforeEach(async () => {
           session = SessionModelStub({ ...sessionData, abstractionAlerts: 'no' })
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('persists the "abstractionAlerts" as "false"', async () => {
@@ -151,7 +148,7 @@ describe('Company Contacts - Setup - Check Service', () => {
             abstractionAlertLicences
           })
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('persists "abstractionAlertLicences" as a JSON string', async () => {
@@ -179,7 +176,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       beforeEach(async () => {
         session = SessionModelStub({ ...sessionData, email: 'ERICE@TEST.COM' })
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('persists the "email" in lowercase', async () => {
@@ -200,8 +197,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       session = SessionModelStub(sessionData)
 
-      vi.mock('../../../../app/dal/fetch-session.dal.js')
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('returns the redirect URL', async () => {
@@ -252,7 +248,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         beforeEach(() => {
           session = SessionModelStub({ ...sessionData, abstractionAlerts: 'some' })
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('persists the "abstractionAlerts" as "true"', async () => {
@@ -268,7 +264,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         beforeEach(async () => {
           session = SessionModelStub({ ...sessionData, abstractionAlerts: 'no' })
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('persists the "abstractionAlerts" as "false"', async () => {
@@ -294,7 +290,7 @@ describe('Company Contacts - Setup - Check Service', () => {
             abstractionAlertLicences
           })
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('persists "abstractionAlertLicences" as a JSON string', async () => {
@@ -323,7 +319,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         beforeEach(async () => {
           session = SessionModelStub({ ...sessionData, email: 'ERICE@TEST.COM' })
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('persists the "email" in lowercase', async () => {

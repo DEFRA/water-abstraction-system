@@ -10,8 +10,8 @@ import { generateLicenceRef } from '../../../../support/helpers/licence.helper.j
 import { generateNoticeReferenceCode, generateUUID } from '../../../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchRecipientsService from '../../../../../app/services/notices/setup/fetch-recipients.service.js'
-import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as FetchRecipientsService from '../../../../../app/services/notices/setup/fetch-recipients.service.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 import * as GeneratePreviewRequest from '../../../../../app/requests/notify/generate-preview.request.js'
 
 // Thing under test
@@ -77,13 +77,11 @@ describe('Notices - Setup - Preview - View Preview service', () => {
 
       session = SessionModelStub(sessionData)
 
-      vi.mock('../../../../../app/dal/fetch-session.dal.js')
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
       licenceMonitoringStationId = licenceMonitoringStations[0].id
 
-      vi.mock('../../../../../app/services/notices/setup/fetch-recipients.service.js')
-      FetchRecipientsService.mockResolvedValue([{ ...recipients[0] }])
+      vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([{ ...recipients[0] }])
 
       // The Preview Presenter uses Notify to generate the template preview contents, so we need to stub the request.
       vi.spyOn(GeneratePreviewRequest, 'send').mockResolvedValue({
@@ -175,13 +173,11 @@ describe('Notices - Setup - Preview - View Preview service', () => {
 
       session = SessionModelStub(sessionData)
 
-      vi.mock('../../../../../app/dal/fetch-session.dal.js')
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
       licenceMonitoringStationId = null
 
-      vi.mock('../../../../../app/services/notices/setup/fetch-recipients.service.js')
-      FetchRecipientsService.mockResolvedValue([{ ...recipients[0] }])
+      vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([{ ...recipients[0] }])
 
       // The Preview Presenter uses Notify to generate the template preview contents, so we need to stub the request.
       vi.spyOn(GeneratePreviewRequest, 'send').mockResolvedValue({
@@ -243,13 +239,11 @@ describe('Notices - Setup - Preview - View Preview service', () => {
 
       session = SessionModelStub(sessionData)
 
-      vi.mock('../../../../../app/dal/fetch-session.dal.js')
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
       licenceMonitoringStationId = null
 
-      vi.mock('../../../../../app/services/notices/setup/fetch-recipients.service.js')
-      FetchRecipientsService.mockResolvedValue([{ ...recipients[0] }])
+      vi.spyOn(FetchRecipientsService, 'default').mockResolvedValue([{ ...recipients[0] }])
 
       // The Preview Presenter uses Notify to generate the template preview contents, so we need to stub the request.
       vi.spyOn(GeneratePreviewRequest, 'send').mockResolvedValue({

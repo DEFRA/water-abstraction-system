@@ -6,9 +6,9 @@ import SessionModelStub from '../../../support/stubs/session.stub.js'
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchCompanyContactsDal from '../../../../app/dal/company-contacts/setup/fetch-company-contacts.dal.js'
-import FetchNotificationService from '../../../../app/services/company-contacts/fetch-notification.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchCompanyContactsDal from '../../../../app/dal/company-contacts/setup/fetch-company-contacts.dal.js'
+import * as FetchNotificationService from '../../../../app/services/company-contacts/fetch-notification.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import ViewCheckService from '../../../../app/services/company-contacts/setup/view-check.service.js'
@@ -25,13 +25,10 @@ describe('Company Contacts - Setup - Check Service', () => {
 
     notification = undefined
 
-    vi.mock('../../../../app/services/company-contacts/fetch-notification.service.js')
-    FetchNotificationService.mockResolvedValue(notification)
+    vi.spyOn(FetchNotificationService, 'default').mockResolvedValue(notification)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    vi.mock('../../../../app/dal/company-contacts/setup/fetch-company-contacts.dal.js')
 
     yarStub = YarStub()
     yarStub.flash.mockReturnValue([{ title: 'Test', text: 'Notification' }])
@@ -44,7 +41,7 @@ describe('Company Contacts - Setup - Check Service', () => {
   describe('when called', () => {
     describe('when there is no matching contact', () => {
       beforeEach(() => {
-        FetchCompanyContactsDal.mockResolvedValue(CustomersFixtures.companyContacts())
+        vi.spyOn(FetchCompanyContactsDal, 'default').mockResolvedValue(CustomersFixtures.companyContacts())
       })
 
       it('returns page data for the view', async () => {
@@ -96,7 +93,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         matchingContact.contact.email = 'eric@test.com'
         matchingContact.contact.contactType = 'department'
 
-        FetchCompanyContactsDal.mockReturnValue([matchingContact])
+        vi.spyOn(FetchCompanyContactsDal, 'default').mockReturnValue([matchingContact])
       })
 
       it('updates the session', async () => {

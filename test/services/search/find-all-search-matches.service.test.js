@@ -1,9 +1,9 @@
 // Test framework dependencies
 
 // Things to stub
-import DetermineSearchItemsService from '../../../app/services/search/determine-search-items.service.js'
-import FetchSearchResultsDetailsService from '../../../app/services/search/fetch-search-results-details.service.js'
-import FetchSearchResultsService from '../../../app/services/search/fetch-search-results.service.js'
+import * as DetermineSearchItemsService from '../../../app/services/search/determine-search-items.service.js'
+import * as FetchSearchResultsDetailsService from '../../../app/services/search/fetch-search-results-details.service.js'
+import * as FetchSearchResultsService from '../../../app/services/search/fetch-search-results.service.js'
 
 // Thing under test
 import FindAllSearchMatchesService from '../../../app/services/search/find-all-search-matches.service.js'
@@ -15,11 +15,9 @@ describe('Search - Find All Search Matches service', () => {
   let userScopes
 
   beforeEach(() => {
-    vi.mock('../../../app/services/search/determine-search-items.service.js')
-    DetermineSearchItemsService.mockResolvedValue(['billingAccount'])
+    vi.spyOn(DetermineSearchItemsService, 'default').mockResolvedValue(['billingAccount'])
 
-    vi.mock('../../../app/services/search/fetch-search-results-details.service.js')
-    FetchSearchResultsDetailsService.mockResolvedValue({
+    vi.spyOn(FetchSearchResultsDetailsService, 'default').mockResolvedValue({
       billingAccount: [
         {
           accountNumber: 'A12345678A',
@@ -32,8 +30,7 @@ describe('Search - Find All Search Matches service', () => {
       ]
     })
 
-    vi.mock('../../../app/services/search/fetch-search-results.service.js')
-    FetchSearchResultsService.mockResolvedValue({
+    vi.spyOn(FetchSearchResultsService, 'default').mockResolvedValue({
       results: [
         { exact: true, id: 'billing-account-1', type: 'billingAccount' },
         { exact: false, id: 'billing-account-2', type: 'billingAccount' }

@@ -4,8 +4,8 @@
 import * as UsersFixture from '../../../support/fixtures/users.fixture.js'
 
 // Things we want to stub
-import FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
-import FetchVerificationsDal from '../../../../app/dal/users/external/fetch-verifications.dal.js'
+import * as FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
+import * as FetchVerificationsDal from '../../../../app/dal/users/external/fetch-verifications.dal.js'
 
 // Thing under test
 import ViewVerificationsService from '../../../../app/services/users/external/view-verifications.service.js'
@@ -24,10 +24,8 @@ describe('Users - External - View Verifications service', () => {
 
     user = { id, licenceEntityId: 'b2c55396-9bbb-448d-85e7-2be1dbefc02b', username }
 
-    vi.mock('../../../../app/dal/users/fetch-user.dal.js')
-    FetchUserDal.mockResolvedValue(user)
-    vi.mock('../../../../app/dal/users/external/fetch-verifications.dal.js')
-    FetchVerificationsDal.mockResolvedValue({
+    vi.spyOn(FetchUserDal, 'default').mockResolvedValue(user)
+    vi.spyOn(FetchVerificationsDal, 'default').mockResolvedValue({
       verifications: [],
       totalNumber: 0
     })

@@ -2,7 +2,7 @@
 
 // Things to stub
 import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
-import FetchUserRolesAndGroupsService from '../../../app/services/idm/fetch-user-roles-and-groups.service.js'
+import * as FetchUserRolesAndGroupsService from '../../../app/services/idm/fetch-user-roles-and-groups.service.js'
 
 // Thing under test
 import AuthService from '../../../app/services/plugins/auth.service.js'
@@ -18,8 +18,7 @@ describe('Plugins - Auth service', () => {
 
   describe('when the user id is found', () => {
     beforeEach(() => {
-      vi.mock('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
-      FetchUserRolesAndGroupsService.mockResolvedValue({
+      vi.spyOn(FetchUserRolesAndGroupsService, 'default').mockResolvedValue({
         user: { name: 'User' },
         roles: [{ role: 'Role' }],
         groups: [{ group: 'Group' }]
@@ -72,8 +71,7 @@ describe('Plugins - Auth service', () => {
   describe('when the user has a top-level permission role', () => {
     describe('such as "ar_user"', () => {
       beforeEach(() => {
-        vi.mock('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
-        FetchUserRolesAndGroupsService.mockResolvedValue({
+        vi.spyOn(FetchUserRolesAndGroupsService, 'default').mockResolvedValue({
           user: { name: 'User' },
           roles: [{ role: 'ar_user' }],
           groups: [{ group: 'Group' }]
@@ -95,8 +93,7 @@ describe('Plugins - Auth service', () => {
 
     describe('such as "billing"', () => {
       beforeEach(() => {
-        vi.mock('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
-        FetchUserRolesAndGroupsService.mockResolvedValue({
+        vi.spyOn(FetchUserRolesAndGroupsService, 'default').mockResolvedValue({
           user: { name: 'User' },
           roles: [{ role: 'billing' }],
           groups: [{ group: 'Group' }]
@@ -120,8 +117,7 @@ describe('Plugins - Auth service', () => {
 
     describe('such as "returns"', () => {
       beforeEach(() => {
-        vi.mock('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
-        FetchUserRolesAndGroupsService.mockResolvedValue({
+        vi.spyOn(FetchUserRolesAndGroupsService, 'default').mockResolvedValue({
           user: { name: 'User' },
           roles: [{ role: 'returns' }],
           groups: [{ group: 'Group' }]
@@ -143,8 +139,7 @@ describe('Plugins - Auth service', () => {
 
     describe('such as "hof_notifications"', () => {
       beforeEach(() => {
-        vi.mock('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
-        FetchUserRolesAndGroupsService.mockResolvedValue({
+        vi.spyOn(FetchUserRolesAndGroupsService, 'default').mockResolvedValue({
           user: { name: 'User' },
           roles: [{ role: 'hof_notifications' }],
           groups: [{ group: 'Group' }]
@@ -166,8 +161,7 @@ describe('Plugins - Auth service', () => {
 
     describe('such as "manage_accounts"', () => {
       beforeEach(() => {
-        vi.mock('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
-        FetchUserRolesAndGroupsService.mockResolvedValue({
+        vi.spyOn(FetchUserRolesAndGroupsService, 'default').mockResolvedValue({
           user: { name: 'User' },
           roles: [{ role: 'manage_accounts' }],
           groups: [{ group: 'Group' }]
@@ -190,8 +184,7 @@ describe('Plugins - Auth service', () => {
 
   describe('when the user id is not found', () => {
     beforeEach(() => {
-      vi.mock('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
-      FetchUserRolesAndGroupsService.mockResolvedValue({
+      vi.spyOn(FetchUserRolesAndGroupsService, 'default').mockResolvedValue({
         user: null,
         roles: [],
         groups: []

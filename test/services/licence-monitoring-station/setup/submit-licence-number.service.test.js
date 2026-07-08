@@ -7,8 +7,8 @@ import { generateUUID } from '../../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 
 // Things we need to stub
-import FetchLicenceDal from '../../../../app/dal/licence-monitoring-station/fetch-licence.dal.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchLicenceDal from '../../../../app/dal/licence-monitoring-station/fetch-licence.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitLicenceNumberService from '../../../../app/services/licence-monitoring-station/setup/submit-licence-number.service.js'
@@ -36,11 +36,9 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    vi.mock('../../../../app/dal/licence-monitoring-station/fetch-licence.dal.js')
-    FetchLicenceDal.mockResolvedValue(licence)
+    vi.spyOn(FetchLicenceDal, 'default').mockResolvedValue(licence)
   })
 
   afterEach(() => {
@@ -83,7 +81,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
 
             session = SessionModelStub(sessionData)
 
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('still returns a false value so the controller can redirect to the check page', async () => {
@@ -103,7 +101,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
 
             session = SessionModelStub(sessionData)
 
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('returns a falsy value so the controller can redirect to the next page', async () => {
@@ -121,7 +119,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
 
             session = SessionModelStub(sessionData)
 
-            FetchSessionDal.mockResolvedValue(session)
+            vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
           })
 
           it('leaves the checkPageVisited flag in the session as true', async () => {
@@ -146,7 +144,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
     beforeEach(() => {
       payload = { licenceRef: '1234567890' }
 
-      FetchLicenceDal.mockResolvedValue(null)
+      vi.spyOn(FetchLicenceDal, 'default').mockResolvedValue(null)
     })
 
     it('returns page data for the view, with errors', async () => {

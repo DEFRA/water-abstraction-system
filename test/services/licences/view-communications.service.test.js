@@ -7,8 +7,8 @@ import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
-import FetchNotificationsDal from '../../../app/dal/licences/fetch-notifications.dal.js'
+import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import * as FetchNotificationsDal from '../../../app/dal/licences/fetch-notifications.dal.js'
 
 // Thing under test
 import ViewCommunicationsService from '../../../app/services/licences/view-communications.service.js'
@@ -51,14 +51,12 @@ describe('Licences - View Communications service', () => {
       }
     }
 
-    vi.mock('../../../app/services/licences/fetch-licence.service.js')
-    FetchLicenceService.mockResolvedValue({
+    vi.spyOn(FetchLicenceService, 'default').mockResolvedValue({
       id: licenceId,
       licenceRef
     })
 
-    vi.mock('../../../app/dal/licences/fetch-notifications.dal.js')
-    FetchNotificationsDal.mockResolvedValue({
+    vi.spyOn(FetchNotificationsDal, 'default').mockResolvedValue({
       notifications: [notification],
       totalNumber: 1
     })

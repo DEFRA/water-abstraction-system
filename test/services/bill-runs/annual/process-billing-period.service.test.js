@@ -9,7 +9,7 @@ import BillModel from '../../../../app/models/bill.model.js'
 import BillRunError from '../../../../app/errors/bill-run.error.js'
 import BillRunModel from '../../../../app/models/bill-run.model.js'
 import * as ChargingModuleCreateTransactionRequest from '../../../../app/requests/charging-module/create-transaction.request.js'
-import GenerateTransactionsService from '../../../../app/services/bill-runs/generate-transactions.service.js'
+import * as GenerateTransactionsService from '../../../../app/services/bill-runs/generate-transactions.service.js'
 
 // Thing under test
 import ProcessBillingPeriodService from '../../../../app/services/bill-runs/annual/process-billing-period.service.js'
@@ -136,8 +136,7 @@ describe('Annual Process billing period service', () => {
 
     describe('because generating the calculated transactions fails', () => {
       beforeEach(async () => {
-        vi.mock('../../../../app/services/bill-runs/generate-transactions.service.js')
-        GenerateTransactionsService.mockRejectedValue(new Error())
+        vi.spyOn(GenerateTransactionsService, 'default').mockRejectedValue(new Error())
       })
 
       it('throws a BillRunError with the correct code', async () => {

@@ -5,8 +5,8 @@ import http2 from 'node:http2'
 const { HTTP_STATUS_OK } = http2.constants
 
 // Things we need to stub
-import ViewLicenceService from '../../app/services/monitoring-stations/view-licence.service.js'
-import ViewService from '../../app/services/monitoring-stations/view.service.js'
+import * as ViewLicenceService from '../../app/services/monitoring-stations/view-licence.service.js'
+import * as ViewService from '../../app/services/monitoring-stations/view.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -49,8 +49,7 @@ describe('Monitoring stations controller', () => {
           }
         }
 
-        vi.mock('../../app/services/monitoring-stations/view.service.js')
-        ViewService.mockResolvedValue({
+        vi.spyOn(ViewService, 'default').mockResolvedValue({
           pageTitle: 'Bodney Bridge',
           monitoringStationId: '499247a2-bebf-4a94-87dc-b83af2a133f3',
           monitoringStationName: 'Bodney Bridge',
@@ -104,8 +103,7 @@ describe('Monitoring stations controller', () => {
           }
         }
 
-        vi.mock('../../app/services/monitoring-stations/view-licence.service.js')
-        ViewLicenceService.mockResolvedValue({
+        vi.spyOn(ViewLicenceService, 'default').mockResolvedValue({
           backLink: '/system/monitoring-stations/499247a2-bebf-4a94-87dc-b83af2a133f3',
           lastAlertSent: 'Warning letter on 13 August 2024 sent to Big Farm Co Ltd',
           licenceTags: [

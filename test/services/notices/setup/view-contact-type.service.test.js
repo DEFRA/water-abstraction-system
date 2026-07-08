@@ -4,7 +4,7 @@
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import ViewContactTypeService from '../../../../app/services/notices/setup/view-contact-type.service.js'
@@ -23,8 +23,7 @@ describe('Notices - Setup - View Contact Type service', () => {
 
       session = SessionModelStub(sessionData)
 
-      vi.mock('../../../../app/dal/fetch-session.dal.js')
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('returns page data for the view', async () => {
@@ -55,8 +54,7 @@ describe('Notices - Setup - View Contact Type service', () => {
 
       session = SessionModelStub(sessionData)
 
-      vi.mock('../../../../app/dal/fetch-session.dal.js')
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('returns page data for the view', async () => {
@@ -87,8 +85,7 @@ describe('Notices - Setup - View Contact Type service', () => {
 
       session = SessionModelStub(sessionData)
 
-      vi.mock('../../../../app/dal/fetch-session.dal.js')
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('returns page data for the view', async () => {

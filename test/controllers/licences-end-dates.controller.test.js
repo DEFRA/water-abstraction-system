@@ -5,8 +5,8 @@ import http2 from 'node:http2'
 const { HTTP_STATUS_NO_CONTENT } = http2.constants
 
 // Things we need to stub
-import CheckAllLicenceEndDatesService from '../../app/services/licences/end-dates/check-all-licence-end-dates.service.js'
-import ProcessLicenceEndDateChangesService from '../../app/services/licences/end-dates/process-licence-end-date-changes.service.js'
+import * as CheckAllLicenceEndDatesService from '../../app/services/licences/end-dates/check-all-licence-end-dates.service.js'
+import * as ProcessLicenceEndDateChangesService from '../../app/services/licences/end-dates/process-licence-end-date-changes.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -45,8 +45,7 @@ describe('Licences End Dates controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/licences/end-dates/check-all-licence-end-dates.service.js')
-          CheckAllLicenceEndDatesService.mockResolvedValue()
+          vi.spyOn(CheckAllLicenceEndDatesService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {
@@ -66,8 +65,7 @@ describe('Licences End Dates controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(async () => {
-          vi.mock('../../app/services/licences/end-dates/process-licence-end-date-changes.service.js')
-          ProcessLicenceEndDateChangesService.mockResolvedValue()
+          vi.spyOn(ProcessLicenceEndDateChangesService, 'default').mockResolvedValue()
         })
 
         it('returns a 204 response', async () => {

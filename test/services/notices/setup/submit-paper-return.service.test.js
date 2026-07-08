@@ -9,7 +9,7 @@ import { generateUUID } from '../../../../app/lib/general.lib.js'
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitPaperReturnService from '../../../../app/services/notices/setup/submit-paper-return.service.js'
@@ -39,8 +39,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     yarStub = YarStub()
   })
@@ -70,7 +69,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('saves the selected returns', async () => {
@@ -87,7 +86,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
 
           session = SessionModelStub(sessionData)
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('sets a flash message', async () => {
@@ -110,7 +109,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
 
           session = SessionModelStub(sessionData)
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('does not set a flash message', async () => {
@@ -130,7 +129,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
 
       session = SessionModelStub(sessionData)
 
-      FetchSessionDal.mockResolvedValue(session)
+      vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
     })
 
     it('returns page data for the view, with errors', async () => {
@@ -173,7 +172,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('returns page data for the view, with errors, and no options selected', async () => {

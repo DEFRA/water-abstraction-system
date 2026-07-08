@@ -6,8 +6,8 @@ import * as LicenceEndDateChangeHelper from '../../../support/helpers/licence-en
 // Things we need to stub
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 import LicenceEndDateChangeModel from '../../../../app/models/licence-end-date-change.model.js'
-import ProcessBillingFlagService from '../../../../app/services/licences/supplementary/process-billing-flag.service.js'
-import ProcessLicenceReturnLogsService from '../../../../app/services/return-logs/process-licence-return-logs.service.js'
+import * as ProcessBillingFlagService from '../../../../app/services/licences/supplementary/process-billing-flag.service.js'
+import * as ProcessLicenceReturnLogsService from '../../../../app/services/return-logs/process-licence-return-logs.service.js'
 
 // Thing under test
 import ProcessLicenceEndDateChangesService from '../../../../app/services/licences/end-dates/process-licence-end-date-changes.service.js'
@@ -32,23 +32,21 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
 
   describe('when processing the licence end date changes', () => {
     beforeEach(() => {
-      vi.mock('../../../../app/services/licences/supplementary/process-billing-flag.service.js')
-      ProcessBillingFlagService.mockResolvedValue()
-      vi.mock('../../../../app/services/return-logs/process-licence-return-logs.service.js')
-      ProcessLicenceReturnLogsService.mockResolvedValue()
+      vi.spyOn(ProcessBillingFlagService, 'default').mockResolvedValue()
+      vi.spyOn(ProcessLicenceReturnLogsService, 'default').mockResolvedValue()
     })
 
     it('processes the changed licence for supplementary billing flags', async () => {
       await ProcessLicenceEndDateChangesService()
 
-      expect(ProcessBillingFlagService).toHaveBeenCalled()
+      expect(ProcessBillingFlagService.default).toHaveBeenCalled()
     })
 
     describe('and the app is managing "requirements for returns"', () => {
       it('processes the changed licence for reissuing return logs', async () => {
         await ProcessLicenceEndDateChangesService()
 
-        expect(ProcessLicenceReturnLogsService).toHaveBeenCalled()
+        expect(ProcessLicenceReturnLogsService.default).toHaveBeenCalled()
       })
     })
 
@@ -93,8 +91,7 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
   describe('when there is an error', () => {
     describe('during the processing of a licence', () => {
       beforeEach(() => {
-        vi.mock('../../../../app/services/licences/supplementary/process-billing-flag.service.js')
-        ProcessBillingFlagService.mockRejectedValue()
+        vi.spyOn(ProcessBillingFlagService, 'default').mockRejectedValue()
       })
 
       it('handles the error', async () => {

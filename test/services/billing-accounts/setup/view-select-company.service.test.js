@@ -4,8 +4,8 @@
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-companies.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchCompaniesService from '../../../../app/services/billing-accounts/setup/fetch-companies.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Test helpers
 import * as BillingAccountsFixture from '../../../support/fixtures/billing-accounts.fixture.js'
@@ -32,11 +32,9 @@ describe('Billing Accounts - Setup - View Select Company Service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    vi.mock('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
-    FetchCompaniesService.mockReturnValue(companies)
+    vi.spyOn(FetchCompaniesService, 'default').mockReturnValue(companies)
   })
 
   afterEach(() => {

@@ -4,8 +4,8 @@
 import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
-import GenerateFromAbstractionDataService from '../../../../../app/services/return-versions/setup/method/generate-from-abstraction-data.service.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as GenerateFromAbstractionDataService from '../../../../../app/services/return-versions/setup/method/generate-from-abstraction-data.service.js'
 
 // Thing under test
 import SubmitMethodService from '../../../../../app/services/return-versions/setup/method/submit-method.service.js'
@@ -58,8 +58,7 @@ describe('Return Versions - Setup - Submit Method service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
@@ -73,8 +72,7 @@ describe('Return Versions - Setup - Submit Method service', () => {
           method: 'useAbstractionData'
         }
 
-        vi.mock('../../../../../app/services/return-versions/setup/method/generate-from-abstraction-data.service.js')
-        GenerateFromAbstractionDataService.mockResolvedValue(_generatedReturnRequirements())
+        vi.spyOn(GenerateFromAbstractionDataService, 'default').mockResolvedValue(_generatedReturnRequirements())
       })
 
       it('saves the submitted value', async () => {

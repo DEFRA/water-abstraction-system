@@ -5,8 +5,8 @@ import * as UsersFixture from '../../../support/fixtures/users.fixture.js'
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we want to stub
-import FetchLicencesDal from '../../../../app/dal/users/external/fetch-licences.dal.js'
-import FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
+import * as FetchLicencesDal from '../../../../app/dal/users/external/fetch-licences.dal.js'
+import * as FetchUserDal from '../../../../app/dal/users/fetch-user.dal.js'
 
 // Thing under test
 import ViewLicencesService from '../../../../app/services/users/external/view-licences.service.js'
@@ -26,10 +26,8 @@ describe('Users - External - View Licences service', () => {
 
     user = { id, licenceEntityId: 'b2c55396-9bbb-448d-85e7-2be1dbefc02b', username }
 
-    vi.mock('../../../../app/dal/users/fetch-user.dal.js')
-    FetchUserDal.mockResolvedValue(user)
-    vi.mock('../../../../app/dal/users/external/fetch-licences.dal.js')
-    FetchLicencesDal.mockResolvedValue({
+    vi.spyOn(FetchUserDal, 'default').mockResolvedValue(user)
+    vi.spyOn(FetchLicencesDal, 'default').mockResolvedValue({
       licences: [],
       totalNumber: 0
     })

@@ -6,8 +6,8 @@ import SessionModelStub from '../../../support/stubs/session.stub.js'
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchPointsService from '../../../../app/services/return-versions/setup/fetch-points.service.js'
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchPointsService from '../../../../app/services/return-versions/setup/fetch-points.service.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitPointsService from '../../../../app/services/return-versions/setup/submit-points.service.js'
@@ -62,8 +62,7 @@ describe('Return Versions - Setup - Submit Points service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     yarStub = YarStub()
     yarStub.flash.mockReturnValue([])
@@ -80,8 +79,7 @@ describe('Return Versions - Setup - Submit Points service', () => {
           points: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6'
         }
 
-        vi.mock('../../../../app/services/return-versions/setup/fetch-points.service.js')
-        FetchPointsService.mockResolvedValue(_points())
+        vi.spyOn(FetchPointsService, 'default').mockResolvedValue(_points())
       })
 
       it('saves the submitted value', async () => {
@@ -108,7 +106,7 @@ describe('Return Versions - Setup - Submit Points service', () => {
             checkPageVisited: true
           })
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
@@ -138,8 +136,7 @@ describe('Return Versions - Setup - Submit Points service', () => {
     beforeEach(() => {
       payload = {}
 
-      vi.mock('../../../../app/services/return-versions/setup/fetch-points.service.js')
-      FetchPointsService.mockResolvedValue(_points())
+      vi.spyOn(FetchPointsService, 'default').mockResolvedValue(_points())
     })
 
     it('returns page data for the view', async () => {

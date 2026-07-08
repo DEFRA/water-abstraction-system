@@ -8,7 +8,7 @@ import * as RegionHelper from '../../support/helpers/region.helper.js'
 
 // Things we need to stub
 import * as ChargingModuleCreateBillRunRequest from '../../../app/requests/charging-module/create-bill-run.request.js'
-import CreateBillRunEventService from '../../../app/services/bill-runs/create-bill-run-event.service.js'
+import * as CreateBillRunEventService from '../../../app/services/bill-runs/create-bill-run-event.service.js'
 
 // Thing under test
 import InitiateBillRunService from '../../../app/services/bill-runs/initiate-bill-run.service.js'
@@ -25,8 +25,7 @@ describe('Initiate Bill Run service', () => {
 
     regionId = region.id
 
-    vi.mock('../../../app/services/bill-runs/create-bill-run-event.service.js')
-    CreateBillRunEventService.mockResolvedValue()
+    vi.spyOn(CreateBillRunEventService, 'default').mockResolvedValue()
   })
 
   afterEach(() => {

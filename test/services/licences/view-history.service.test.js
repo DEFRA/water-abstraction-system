@@ -6,8 +6,8 @@ import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
-import FetchHistoryService from '../../../app/services/licences/fetch-history.service.js'
-import FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
+import * as FetchHistoryService from '../../../app/services/licences/fetch-history.service.js'
+import * as FetchLicenceService from '../../../app/services/licences/fetch-licence.service.js'
 
 // Thing under test
 import ViewHistoryService from '../../../app/services/licences/view-history.service.js'
@@ -42,10 +42,8 @@ describe('Licences - View History service', () => {
       })
     ]
 
-    vi.mock('../../../app/services/licences/fetch-licence.service.js')
-    FetchLicenceService.mockReturnValue(licence)
-    vi.mock('../../../app/services/licences/fetch-history.service.js')
-    FetchHistoryService.mockReturnValue(licenceHistory)
+    vi.spyOn(FetchLicenceService, 'default').mockReturnValue(licence)
+    vi.spyOn(FetchHistoryService, 'default').mockReturnValue(licenceHistory)
   })
 
   afterEach(() => {

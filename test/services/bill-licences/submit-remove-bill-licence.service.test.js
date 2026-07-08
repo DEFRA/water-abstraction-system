@@ -3,8 +3,8 @@
 // Things we need to stub
 import BillLicenceModel from '../../../app/models/bill-licence.model.js'
 import * as LegacyDeleteBillLicenceRequest from '../../../app/requests/legacy/delete-bill-licence.request.js'
-import ProcessBillingFlagService from '../../../app/services/licences/supplementary/process-billing-flag.service.js'
-import UnassignLicencesToBillRunService from '../../../app/services/bill-runs/unassign-licences-to-bill-run.service.js'
+import * as ProcessBillingFlagService from '../../../app/services/licences/supplementary/process-billing-flag.service.js'
+import * as UnassignLicencesToBillRunService from '../../../app/services/bill-runs/unassign-licences-to-bill-run.service.js'
 
 // Thing under test
 import SubmitRemoveBillLicenceService from '../../../app/services/bill-licences/submit-remove-bill-licence.service.js'
@@ -34,10 +34,8 @@ describe('Bill Licences - Submit Remove Bill Licence service', () => {
     })
 
     legacyDeleteBillLicenceRequestStub = vi.spyOn(LegacyDeleteBillLicenceRequest, 'send').mockResolvedValue()
-    vi.mock('../../../app/services/licences/supplementary/process-billing-flag.service.js')
-    ProcessBillingFlagService.mockResolvedValue()
-    vi.mock('../../../app/services/bill-runs/unassign-licences-to-bill-run.service.js')
-    UnassignLicencesToBillRunService.mockResolvedValue()
+    vi.spyOn(ProcessBillingFlagService, 'default').mockResolvedValue()
+    vi.spyOn(UnassignLicencesToBillRunService, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
@@ -48,13 +46,13 @@ describe('Bill Licences - Submit Remove Bill Licence service', () => {
     it('calls the "UnassignLicencesToBillRunService" to unassign any licence supplementary year records from the bill run', async () => {
       await SubmitRemoveBillLicenceService(billLicence.id, user)
 
-      expect(UnassignLicencesToBillRunService).toHaveBeenCalled()
+      expect(UnassignLicencesToBillRunService.default).toHaveBeenCalled()
     })
 
     it('calls the "ProcessBillingFlagService" to check if the licence needs a supplementary billing flag', async () => {
       await SubmitRemoveBillLicenceService(billLicence.id, user)
 
-      expect(ProcessBillingFlagService).toHaveBeenCalled()
+      expect(ProcessBillingFlagService.default).toHaveBeenCalled()
     })
 
     it('sends a request to the legacy service to delete the bill licence', async () => {

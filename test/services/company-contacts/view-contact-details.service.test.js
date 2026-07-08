@@ -5,9 +5,9 @@ import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 import YarStub from '../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchAbstractionAlertLicencesDal from '../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js'
-import FetchCompanyContactDetailsService from '../../../app/services/company-contacts/fetch-company-contact-details.service.js'
-import FetchCompanyService from '../../../app/dal/companies/fetch-company.dal.js'
+import * as FetchAbstractionAlertLicencesDal from '../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js'
+import * as FetchCompanyContactDetailsService from '../../../app/services/company-contacts/fetch-company-contact-details.service.js'
+import * as FetchCompanyService from '../../../app/dal/companies/fetch-company.dal.js'
 
 // Thing under test
 import ViewContactDetailsService from '../../../app/services/company-contacts/view-contact-details.service.js'
@@ -25,12 +25,9 @@ describe('Company Contacts - View Contact Details Service', () => {
 
     company = CustomersFixtures.company()
 
-    vi.mock('../../../app/dal/company-contacts/fetch-abstraction-alert-licences.dal.js')
-    FetchAbstractionAlertLicencesDal.mockResolvedValue([])
-    vi.mock('../../../app/dal/companies/fetch-company.dal.js')
-    FetchCompanyService.mockResolvedValue(company)
-    vi.mock('../../../app/services/company-contacts/fetch-company-contact-details.service.js')
-    FetchCompanyContactDetailsService.mockResolvedValue(companyContact)
+    vi.spyOn(FetchAbstractionAlertLicencesDal, 'default').mockResolvedValue([])
+    vi.spyOn(FetchCompanyService, 'default').mockResolvedValue(company)
+    vi.spyOn(FetchCompanyContactDetailsService, 'default').mockResolvedValue(companyContact)
 
     yarStub = YarStub()
     yarStub.flash.mockReturnValue([{ titleText: 'Updated', text: 'Contact details updated.' }])

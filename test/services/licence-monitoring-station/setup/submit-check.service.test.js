@@ -9,8 +9,8 @@ import { generateUUID } from '../../../../app/lib/general.lib.js'
 import YarStub from '../../../support/stubs/yar.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
-import DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as DeleteSessionDal from '../../../../app/dal/delete-session.dal.js'
 
 // Thing under test
 import SubmitCheckService from '../../../../app/services/licence-monitoring-station/setup/submit-check.service.js'
@@ -42,11 +42,9 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-    vi.mock('../../../../app/dal/delete-session.dal.js')
-    DeleteSessionDal.mockResolvedValue()
+    vi.spyOn(DeleteSessionDal, 'default').mockResolvedValue()
 
     yarStub = YarStub()
   })
@@ -119,7 +117,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('sets "measureType" as "flow"', async () => {
@@ -139,7 +137,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('sets "measureType" as "level"', async () => {
@@ -159,7 +157,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('sets "restrictionType" as "stop"', async () => {
@@ -180,7 +178,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
 
           session = SessionModelStub(sessionData)
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('sets "restrictionType" as "reduce"', async () => {
@@ -200,7 +198,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
 
           session = SessionModelStub(sessionData)
 
-          FetchSessionDal.mockResolvedValue(session)
+          vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
         })
 
         it('sets "restrictionType" as "stop_or_reduce"', async () => {
@@ -221,7 +219,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('persists the licence version purpose condition id', async () => {

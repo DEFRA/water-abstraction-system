@@ -7,9 +7,9 @@ import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
 import Boom from '@hapi/boom'
-import RemoveBillService from '../../app/services/bills/remove-bill.service.js'
-import SubmitRemoveBillService from '../../app/services/bills/submit-remove-bill.service.js'
-import ViewBillService from '../../app/services/bills/view-bill.service.js'
+import * as RemoveBillService from '../../app/services/bills/remove-bill.service.js'
+import * as SubmitRemoveBillService from '../../app/services/bills/submit-remove-bill.service.js'
+import * as ViewBillService from '../../app/services/bills/view-bill.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -58,8 +58,7 @@ describe('Bills controller', () => {
       describe('when the request succeeds', () => {
         describe('and it is for a bill with multiple licences', () => {
           beforeEach(async () => {
-            vi.mock('../../app/services/bills/view-bill.service.js')
-            ViewBillService.mockResolvedValue(_testMultiLicenceBill())
+            vi.spyOn(ViewBillService, 'default').mockResolvedValue(_testMultiLicenceBill())
           })
 
           it('returns the page successfully', async () => {
@@ -73,8 +72,7 @@ describe('Bills controller', () => {
 
         describe('and it is for a bill with a single licence', () => {
           beforeEach(async () => {
-            vi.mock('../../app/services/bills/view-bill.service.js')
-            ViewBillService.mockResolvedValue(_testSingleLicenceBill())
+            vi.spyOn(ViewBillService, 'default').mockResolvedValue(_testSingleLicenceBill())
           })
 
           it('returns the page successfully', async () => {
@@ -89,8 +87,7 @@ describe('Bills controller', () => {
 
         describe('and it is for a bill with a single licence pre sroc', () => {
           beforeEach(async () => {
-            vi.mock('../../app/services/bills/view-bill.service.js')
-            ViewBillService.mockResolvedValue(_testSingleLicenceBillPreSroc())
+            vi.spyOn(ViewBillService, 'default').mockResolvedValue(_testSingleLicenceBillPreSroc())
           })
 
           it('returns the page successfully', async () => {
@@ -118,8 +115,7 @@ describe('Bills controller', () => {
           }
         }
 
-        vi.mock('../../app/services/bills/remove-bill.service.js')
-        RemoveBillService.mockResolvedValue({
+        vi.spyOn(RemoveBillService, 'default').mockResolvedValue({
           pageTitle: "You're about to remove the bill for T65757520A from the bill run"
         })
       })
@@ -141,8 +137,7 @@ describe('Bills controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/bills/submit-remove-bill.service.js')
-          SubmitRemoveBillService.mockResolvedValue('/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing')
+          vi.spyOn(SubmitRemoveBillService, 'default').mockResolvedValue('/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing')
         })
 
         it('redirects to the legacy processing bill run page', async () => {
@@ -159,8 +154,7 @@ describe('Bills controller', () => {
             vi.spyOn(Boom, 'badImplementation').mockReturnValue(
               new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR })
             )
-            vi.mock('../../app/services/bills/submit-remove-bill.service.js')
-            SubmitRemoveBillService.mockRejectedValue()
+            vi.spyOn(SubmitRemoveBillService, 'default').mockRejectedValue()
           })
 
           it('returns the error page', async () => {

@@ -1,8 +1,8 @@
 // Test helpers
-import CRMContactsSeeder from '../../../../support/seeders/crm-contacts.seeder.js'
-import EmptyLicence from '../../../../support/seeders/empty-licence.seeder.js'
-import RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
-import RecipientsFormatter from '../../../../support/seeders/recipients.formatter.js'
+import * as CRMContactsSeeder from '../../../../support/seeders/crm-contacts.seeder.js'
+import * as EmptyLicence from '../../../../support/seeders/empty-licence.seeder.js'
+import * as RecipientScenariosSeeder from '../../../../support/seeders/recipient-scenarios.seeder.js'
+import * as RecipientsFormatter from '../../../../support/seeders/recipients.formatter.js'
 import { compareStrings } from '../../../../../app/lib/general.lib.js'
 import { db } from '../../../../../db/db.js'
 

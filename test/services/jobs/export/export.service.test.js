@@ -2,7 +2,7 @@
 
 // Things we need to stub
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
-import SchemaExportService from '../../../../app/services/jobs/export/schema-export.service.js'
+import * as SchemaExportService from '../../../../app/services/jobs/export/schema-export.service.js'
 
 // Thing under test
 import ExportService from '../../../../app/services/jobs/export/export.service.js'
@@ -11,8 +11,7 @@ describe('Export Service', () => {
   let notifierStub
 
   beforeEach(async () => {
-    vi.mock('../../../../app/services/jobs/export/schema-export.service.js')
-    SchemaExportService.mockResolvedValue()
+    vi.spyOn(SchemaExportService, 'default').mockResolvedValue()
     notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
   })

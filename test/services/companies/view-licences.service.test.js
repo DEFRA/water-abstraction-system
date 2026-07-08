@@ -5,8 +5,8 @@ import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 import LicenceModel from '../../../app/models/licence.model.js'
 
 // Things we need to stub
-import FetchCompanyService from '../../../app/dal/companies/fetch-company.dal.js'
-import FetchLicencesService from '../../../app/dal/companies/fetch-licences.dal.js'
+import * as FetchCompanyService from '../../../app/dal/companies/fetch-company.dal.js'
+import * as FetchLicencesService from '../../../app/dal/companies/fetch-licences.dal.js'
 import { generateUUID } from '../../../app/lib/general.lib.js'
 import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 
@@ -24,8 +24,7 @@ describe('Companies - View Licences service', () => {
 
     company = CustomersFixtures.company()
 
-    vi.mock('../../../app/dal/companies/fetch-company.dal.js')
-    FetchCompanyService.mockReturnValue(company)
+    vi.spyOn(FetchCompanyService, 'default').mockReturnValue(company)
 
     licences = licences = [
       LicenceModel.fromJson({
@@ -40,8 +39,7 @@ describe('Companies - View Licences service', () => {
       })
     ]
 
-    vi.mock('../../../app/dal/companies/fetch-licences.dal.js')
-    FetchLicencesService.mockReturnValue({ licences, totalNumber: 1 })
+    vi.spyOn(FetchLicencesService, 'default').mockReturnValue({ licences, totalNumber: 1 })
 
     page = '1'
   })

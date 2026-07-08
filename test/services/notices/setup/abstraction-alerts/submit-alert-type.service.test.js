@@ -5,7 +5,7 @@ import * as AbstractionAlertSessionData from '../../../../support/fixtures/abstr
 import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
 
 // Thing under test
 import SubmitAlertTypeService from '../../../../../app/services/notices/setup/abstraction-alerts/submit-alert-type.service.js'
@@ -21,8 +21,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
   })
 
   afterEach(() => {
@@ -52,7 +51,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('sets the "alertThresholds" to an empty array', async () => {
@@ -77,7 +76,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('does not change the existing "alertThresholds"', async () => {
@@ -165,7 +164,7 @@ describe('Notices - Setup - Abstraction Alerts - Submit Alert Type service', () 
 
         session = SessionModelStub(sessionData)
 
-        FetchSessionDal.mockResolvedValue(session)
+        vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
       })
 
       it('returns page data for the view, with errors (and the selected alert type checked)', async () => {

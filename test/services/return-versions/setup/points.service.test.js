@@ -5,10 +5,10 @@ import PointModel from '../../../../app/models/point.model.js'
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
+import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 
 // Things we need to stub
-import FetchPointsService from '../../../../app/services/return-versions/setup/fetch-points.service.js'
+import * as FetchPointsService from '../../../../app/services/return-versions/setup/fetch-points.service.js'
 
 // Thing under test
 import SelectPointsService from '../../../../app/services/return-versions/setup/points.service.js'
@@ -62,8 +62,7 @@ describe('Return Versions - Setup - Points service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     const point = PointModel.fromJson({
       description: 'RIVER MEDWAY AT YALDING INTAKE',
@@ -74,8 +73,7 @@ describe('Return Versions - Setup - Points service', () => {
       ngr4: null
     })
 
-    vi.mock('../../../../app/services/return-versions/setup/fetch-points.service.js')
-    FetchPointsService.mockResolvedValue([point])
+    vi.spyOn(FetchPointsService, 'default').mockResolvedValue([point])
   })
 
   afterEach(() => {

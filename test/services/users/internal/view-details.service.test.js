@@ -5,7 +5,7 @@ import * as UsersFixture from '../../../support/fixtures/users.fixture.js'
 
 // Things we want to stub
 import FeatureFlagsConfig from '../../../../config/feature-flags.config.js'
-import FetchUserDetailsDal from '../../../../app/dal/users/internal/fetch-user-details.dal.js'
+import * as FetchUserDetailsDal from '../../../../app/dal/users/internal/fetch-user-details.dal.js'
 
 // Thing under test
 import ViewDetailsService from '../../../../app/services/users/internal/view-details.service.js'
@@ -16,8 +16,7 @@ describe('Users - Internal - View Details service', () => {
 
   beforeEach(() => {
     vi.replaceProperty(FeatureFlagsConfig, 'enableUsersView', true)
-    vi.mock('../../../../app/dal/users/internal/fetch-user-details.dal.js')
-    FetchUserDetailsDal.mockResolvedValue(user)
+    vi.spyOn(FetchUserDetailsDal, 'default').mockResolvedValue(user)
   })
 
   afterEach(() => {

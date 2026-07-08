@@ -6,7 +6,7 @@ import { generateAccountNumber } from '../../../support/helpers/billing-account.
 import { generateLicenceRef } from '../../../support/helpers/licence.helper.js'
 
 // Things we need to stub
-import FetchBillingAccountsService from '../../../../app/services/bill-runs/supplementary/fetch-billing-accounts.service.js'
+import * as FetchBillingAccountsService from '../../../../app/services/bill-runs/supplementary/fetch-billing-accounts.service.js'
 
 // Thing under test
 import PreGenerateBillingDataService from '../../../../app/services/bill-runs/supplementary/pre-generate-billing-data.service.js'
@@ -49,8 +49,7 @@ describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => 
         { billingAccountId: billingAccounts[1].id, licence: licences[1] }
       ]
 
-      vi.mock('../../../../app/services/bill-runs/supplementary/fetch-billing-accounts.service.js')
-      FetchBillingAccountsService.mockResolvedValue(billingAccounts)
+      vi.spyOn(FetchBillingAccountsService, 'default').mockResolvedValue(billingAccounts)
     })
 
     describe('returns an object with a bills property', () => {

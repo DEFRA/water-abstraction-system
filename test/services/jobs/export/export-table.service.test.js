@@ -1,18 +1,16 @@
 // Test framework dependencies
 
 // Things we need to stub
-import FetchTableService from '../../../../app/services/jobs/export/fetch-table.service.js'
-import WriteTableToFileService from '../../../../app/services/jobs/export/write-table-to-file.service.js'
+import * as FetchTableService from '../../../../app/services/jobs/export/fetch-table.service.js'
+import * as WriteTableToFileService from '../../../../app/services/jobs/export/write-table-to-file.service.js'
 
 // Thing under test
 import ExportTableService from '../../../../app/services/jobs/export/export-table.service.js'
 
 describe('Table Export service', () => {
   beforeEach(async () => {
-    vi.mock('../../../../app/services/jobs/export/fetch-table.service.js')
-    FetchTableService.mockResolvedValue({ headers: [], rows: [] })
-    vi.mock('../../../../app/services/jobs/export/write-table-to-file.service.js')
-    WriteTableToFileService.mockResolvedValue()
+    vi.spyOn(FetchTableService, 'default').mockResolvedValue({ headers: [], rows: [] })
+    vi.spyOn(WriteTableToFileService, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
@@ -22,7 +20,7 @@ describe('Table Export service', () => {
   it('runs the db export services', async () => {
     await ExportTableService()
 
-    expect(WriteTableToFileService).toHaveBeenCalled()
-    expect(FetchTableService).toHaveBeenCalled()
+    expect(WriteTableToFileService.default).toHaveBeenCalled()
+    expect(FetchTableService.default).toHaveBeenCalled()
   })
 })

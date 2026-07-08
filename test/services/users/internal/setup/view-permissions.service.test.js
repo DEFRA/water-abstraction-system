@@ -4,8 +4,8 @@
 import SessionModelStub from '../../../../support/stubs/session.stub.js'
 
 // Things we need to stub
-import FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
-import FetchUserDetailsDal from '../../../../../app/dal/users/internal/fetch-user-details.dal.js'
+import * as FetchSessionDal from '../../../../../app/dal/fetch-session.dal.js'
+import * as FetchUserDetailsDal from '../../../../../app/dal/users/internal/fetch-user-details.dal.js'
 
 // Thing under test
 import ViewPermissionsService from '../../../../../app/services/users/internal/setup/view-permissions.service.js'
@@ -22,13 +22,11 @@ describe('Users - Internal - Setup - View Permissions Service', () => {
 
     session = SessionModelStub(sessionData)
 
-    vi.mock('../../../../../app/dal/fetch-session.dal.js')
-    FetchSessionDal.mockResolvedValue(session)
+    vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     const currentUserPermissions = 'super'
 
-    vi.mock('../../../../../app/dal/users/internal/fetch-user-details.dal.js')
-    FetchUserDetailsDal.mockResolvedValue({
+    vi.spyOn(FetchUserDetailsDal, 'default').mockResolvedValue({
       $permissions: () => {
         return { key: currentUserPermissions }
       }

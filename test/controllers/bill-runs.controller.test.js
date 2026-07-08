@@ -7,14 +7,14 @@ import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
 import Boom from '@hapi/boom'
-import GenerateTwoPartTariffBillRunService from '../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js'
-import IndexBillRunsService from '../../app/services/bill-runs/index-bill-runs.service.js'
-import SubmitCancelBillRunService from '../../app/services/bill-runs/cancel/submit-cancel-bill-run.service.js'
-import SubmitIndexBillRunsService from '../../app/services/bill-runs/submit-index-bill-runs.service.js'
-import SubmitSendBillRunService from '../../app/services/bill-runs/send/submit-send-bill-run.service.js'
-import ViewBillRunService from '../../app/services/bill-runs/view-bill-run.service.js'
-import ViewCancelBillRunService from '../../app/services/bill-runs/cancel/view-cancel-bill-run.service.js'
-import ViewSendBillRunService from '../../app/services/bill-runs/send/view-send-bill-run.service.js'
+import * as GenerateTwoPartTariffBillRunService from '../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js'
+import * as IndexBillRunsService from '../../app/services/bill-runs/index-bill-runs.service.js'
+import * as SubmitCancelBillRunService from '../../app/services/bill-runs/cancel/submit-cancel-bill-run.service.js'
+import * as SubmitIndexBillRunsService from '../../app/services/bill-runs/submit-index-bill-runs.service.js'
+import * as SubmitSendBillRunService from '../../app/services/bill-runs/send/submit-send-bill-run.service.js'
+import * as ViewBillRunService from '../../app/services/bill-runs/view-bill-run.service.js'
+import * as ViewCancelBillRunService from '../../app/services/bill-runs/cancel/view-cancel-bill-run.service.js'
+import * as ViewSendBillRunService from '../../app/services/bill-runs/send/view-send-bill-run.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -60,8 +60,7 @@ describe('Bill Runs controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/bill-runs/index-bill-runs.service.js')
-          IndexBillRunsService.mockResolvedValue({
+          vi.spyOn(IndexBillRunsService, 'default').mockResolvedValue({
             billRuns: [
               {
                 id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
@@ -111,8 +110,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/bill-runs/submit-index-bill-runs.service.js')
-          SubmitIndexBillRunsService.mockResolvedValue({})
+          vi.spyOn(SubmitIndexBillRunsService, 'default').mockResolvedValue({})
         })
 
         it('redirects to the bill runs page', async () => {
@@ -128,8 +126,7 @@ describe('Bill Runs controller', () => {
           const pageData = { error: 'There is a validation error', pageTitle: 'Bill runs' }
 
           beforeEach(() => {
-            vi.mock('../../app/services/bill-runs/submit-index-bill-runs.service.js')
-            SubmitIndexBillRunsService.mockResolvedValue(pageData)
+            vi.spyOn(SubmitIndexBillRunsService, 'default').mockResolvedValue(pageData)
           })
 
           it('re-renders the bill runs page with an error', async () => {
@@ -153,8 +150,7 @@ describe('Bill Runs controller', () => {
       describe('when the request succeeds', () => {
         describe('and it is for a bill run with multiple bill groups', () => {
           beforeEach(() => {
-            vi.mock('../../app/services/bill-runs/view-bill-run.service.js')
-            ViewBillRunService.mockResolvedValue(_multiGroupBillRun())
+            vi.spyOn(ViewBillRunService, 'default').mockResolvedValue(_multiGroupBillRun())
           })
 
           it('returns the page successfully', async () => {
@@ -169,8 +165,7 @@ describe('Bill Runs controller', () => {
 
         describe('and it is for a bill run with a single bill group', () => {
           beforeEach(() => {
-            vi.mock('../../app/services/bill-runs/view-bill-run.service.js')
-            ViewBillRunService.mockResolvedValue(_singleGroupBillRun())
+            vi.spyOn(ViewBillRunService, 'default').mockResolvedValue(_singleGroupBillRun())
           })
 
           it('returns the page successfully', async () => {
@@ -195,8 +190,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/bill-runs/cancel/view-cancel-bill-run.service.js')
-          ViewCancelBillRunService.mockResolvedValue({
+          vi.spyOn(ViewCancelBillRunService, 'default').mockResolvedValue({
             id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
             billRunType: 'Two-part tariff',
             pageTitle: "You're about to cancel this bill run"
@@ -220,8 +214,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/bill-runs/cancel/submit-cancel-bill-run.service.js')
-          SubmitCancelBillRunService.mockResolvedValue()
+          vi.spyOn(SubmitCancelBillRunService, 'default').mockResolvedValue()
         })
 
         it('redirects to the bill runs page', async () => {
@@ -238,8 +231,7 @@ describe('Bill Runs controller', () => {
             vi.spyOn(Boom, 'badImplementation').mockReturnValue(
               new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR })
             )
-            vi.mock('../../app/services/bill-runs/cancel/submit-cancel-bill-run.service.js')
-            SubmitCancelBillRunService.mockRejectedValue()
+            vi.spyOn(SubmitCancelBillRunService, 'default').mockRejectedValue()
           })
 
           it('returns the error page', async () => {
@@ -261,8 +253,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/bill-runs/send/view-send-bill-run.service.js')
-          ViewSendBillRunService.mockResolvedValue({
+          vi.spyOn(ViewSendBillRunService, 'default').mockResolvedValue({
             id: '8702b98f-ae51-475d-8fcc-e049af8b8d38',
             billRunType: 'Two-part tariff',
             pageTitle: "You're about to send this bill run"
@@ -286,8 +277,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/bill-runs/send/submit-send-bill-run.service.js')
-          SubmitSendBillRunService.mockResolvedValue()
+          vi.spyOn(SubmitSendBillRunService, 'default').mockResolvedValue()
         })
 
         it('redirects to the legacy processing bill run page', async () => {
@@ -304,8 +294,7 @@ describe('Bill Runs controller', () => {
             vi.spyOn(Boom, 'badImplementation').mockReturnValue(
               new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR })
             )
-            vi.mock('../../app/services/bill-runs/send/submit-send-bill-run.service.js')
-            SubmitSendBillRunService.mockRejectedValue()
+            vi.spyOn(SubmitSendBillRunService, 'default').mockRejectedValue()
           })
 
           it('returns the error page', async () => {
@@ -327,8 +316,7 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js')
-          GenerateTwoPartTariffBillRunService.mockResolvedValue('97db1a27-8308-4aba-b463-8a6af2558b28')
+          vi.spyOn(GenerateTwoPartTariffBillRunService, 'default').mockResolvedValue('97db1a27-8308-4aba-b463-8a6af2558b28')
         })
 
         it('redirects to the bill runs page', async () => {
@@ -345,8 +333,7 @@ describe('Bill Runs controller', () => {
             vi.spyOn(Boom, 'badImplementation').mockReturnValue(
               new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR })
             )
-            vi.mock('../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js')
-            GenerateTwoPartTariffBillRunService.mockRejectedValue()
+            vi.spyOn(GenerateTwoPartTariffBillRunService, 'default').mockRejectedValue()
           })
 
           it('returns the error page', async () => {

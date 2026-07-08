@@ -6,10 +6,10 @@ const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
-import DownloadReturnLogService from '../../app/services/return-logs/download-return-log.service.js'
-import SubmitDetailsService from '../../app/services/return-logs/submit-details.service.js'
-import ViewCommunicationsService from '../../app/services/return-logs/view-communications.service.js'
-import ViewDetailsService from '../../app/services/return-logs/view-details.service.js'
+import * as DownloadReturnLogService from '../../app/services/return-logs/download-return-log.service.js'
+import * as SubmitDetailsService from '../../app/services/return-logs/submit-details.service.js'
+import * as ViewCommunicationsService from '../../app/services/return-logs/view-communications.service.js'
+import * as ViewDetailsService from '../../app/services/return-logs/view-details.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
@@ -54,8 +54,7 @@ describe('Return Logs controller', () => {
           }
         }
 
-        vi.mock('../../app/services/return-logs/view-communications.service.js')
-        ViewCommunicationsService.mockResolvedValue({ pageTitle: 'Communications' })
+        vi.spyOn(ViewCommunicationsService, 'default').mockResolvedValue({ pageTitle: 'Communications' })
       })
 
       it('returns the page successfully', async () => {
@@ -79,8 +78,7 @@ describe('Return Logs controller', () => {
           }
         }
 
-        vi.mock('../../app/services/return-logs/view-details.service.js')
-        ViewDetailsService.mockResolvedValue({ pageTitle: 'Return details' })
+        vi.spyOn(ViewDetailsService, 'default').mockResolvedValue({ pageTitle: 'Return details' })
       })
 
       describe('and no version is passed as a query parameter', () => {
@@ -119,8 +117,7 @@ describe('Return Logs controller', () => {
         beforeEach(() => {
           postOptions = postRequestOptions(`/return-logs/${returnLogId}/details`, null)
 
-          vi.mock('../../app/services/return-logs/submit-details.service.js')
-          SubmitDetailsService.mockResolvedValue()
+          vi.spyOn(SubmitDetailsService, 'default').mockResolvedValue()
         })
 
         it('redirects back to the "return details" page', async () => {
@@ -150,8 +147,7 @@ describe('Return Logs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.mock('../../app/services/return-logs/download-return-log.service.js')
-          DownloadReturnLogService.mockReturnValue({ data: 'test', type: 'type/csv', filename: 'test.csv' })
+          vi.spyOn(DownloadReturnLogService, 'default').mockReturnValue({ data: 'test', type: 'type/csv', filename: 'test.csv' })
         })
 
         it('returns the file successfully', async () => {
