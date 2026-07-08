@@ -9,7 +9,7 @@ import BaseModel from './base.model.js'
 import BillRunModel from './bill-run.model.js'
 import LicenceModel from './licence.model.js'
 
-class LicenceSupplementaryYearModel extends BaseModel {
+export default class LicenceSupplementaryYearModel extends BaseModel {
   static get tableName() {
     return 'licenceSupplementaryYears'
   }
@@ -35,5 +35,3 @@ class LicenceSupplementaryYearModel extends BaseModel {
     }
   }
 }
-
-export default LicenceSupplementaryYearModel

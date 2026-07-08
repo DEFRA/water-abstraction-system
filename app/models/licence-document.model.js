@@ -25,7 +25,7 @@ import LicenceModel from './licence.model.js'
  * So, `licence_documents` is a less detailed copy of `licences` but with a different ID. We can't have two tables
  * called `licences`, nor can we think of a better name. So, LicenceDocument it is! ¯\_(ツ)_/¯
  */
-class LicenceDocumentModel extends BaseModel {
+export default class LicenceDocumentModel extends BaseModel {
   static get tableName() {
     return 'licenceDocuments'
   }
@@ -51,5 +51,3 @@ class LicenceDocumentModel extends BaseModel {
     }
   }
 }
-
-export default LicenceDocumentModel

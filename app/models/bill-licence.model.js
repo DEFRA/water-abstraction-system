@@ -10,7 +10,7 @@ import BillModel from './bill.model.js'
 import LicenceModel from './licence.model.js'
 import TransactionModel from './transaction.model.js'
 
-class BillLicenceModel extends BaseModel {
+export default class BillLicenceModel extends BaseModel {
   static get tableName() {
     return 'billLicences'
   }
@@ -44,5 +44,3 @@ class BillLicenceModel extends BaseModel {
     }
   }
 }
-
-export default BillLicenceModel

@@ -31,7 +31,7 @@ import LicenceModel from './licence.model.js'
  *
  * Welcome to dealing with the legacy database schema! ¯\_(ツ)_/¯
  */
-class LicenceDocumentHeaderModel extends BaseModel {
+export default class LicenceDocumentHeaderModel extends BaseModel {
   static get tableName() {
     return 'licenceDocumentHeaders'
   }
@@ -62,5 +62,3 @@ class LicenceDocumentHeaderModel extends BaseModel {
     }
   }
 }
-
-export default LicenceDocumentHeaderModel

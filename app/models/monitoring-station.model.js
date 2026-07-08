@@ -8,7 +8,7 @@ import { Model } from 'objection'
 import BaseModel from './base.model.js'
 import LicenceMonitoringStationModel from './licence-monitoring-station.model.js'
 
-class MonitoringStationModel extends BaseModel {
+export default class MonitoringStationModel extends BaseModel {
   static get tableName() {
     return 'monitoringStations'
   }
@@ -31,5 +31,3 @@ class MonitoringStationModel extends BaseModel {
     }
   }
 }
-
-export default MonitoringStationModel

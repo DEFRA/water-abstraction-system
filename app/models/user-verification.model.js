@@ -23,7 +23,7 @@ import LicenceEntityModel from './licence-entity.model.js'
  * (licence_entity) so this verification record is not needed to manage the licence, but is solely used to manage the
  * verification process.
  */
-class UserVerificationModel extends BaseModel {
+export default class UserVerificationModel extends BaseModel {
   static get tableName() {
     return 'userVerifications'
   }
@@ -64,5 +64,3 @@ class UserVerificationModel extends BaseModel {
     }
   }
 }
-
-export default UserVerificationModel

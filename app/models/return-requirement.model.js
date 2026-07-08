@@ -11,7 +11,7 @@ import ReturnLogModel from './return-log.model.js'
 import ReturnRequirementPurposeModel from './return-requirement-purpose.model.js'
 import ReturnVersionModel from './return-version.model.js'
 
-class ReturnRequirementModel extends BaseModel {
+export default class ReturnRequirementModel extends BaseModel {
   static get tableName() {
     return 'returnRequirements'
   }
@@ -57,5 +57,3 @@ class ReturnRequirementModel extends BaseModel {
     }
   }
 }
-
-export default ReturnRequirementModel

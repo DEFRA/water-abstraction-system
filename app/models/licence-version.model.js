@@ -13,7 +13,7 @@ import LicenceVersionPurposeModel from './licence-version-purpose.model.js'
 import ModLogModel from './mod-log.model.js'
 import PurposeModel from './purpose.model.js'
 
-class LicenceVersionModel extends BaseModel {
+export default class LicenceVersionModel extends BaseModel {
   static get tableName() {
     return 'licenceVersions'
   }
@@ -266,5 +266,3 @@ class LicenceVersionModel extends BaseModel {
     return null
   }
 }
-
-export default LicenceVersionModel

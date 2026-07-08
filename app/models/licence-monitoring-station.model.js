@@ -12,7 +12,7 @@ import MonitoringStationModel from './monitoring-station.model.js'
 import NotificationModel from './notification.model.js'
 import UserModel from './user.model.js'
 
-class LicenceMonitoringStationModel extends BaseModel {
+export default class LicenceMonitoringStationModel extends BaseModel {
   static get tableName() {
     return 'licenceMonitoringStations'
   }
@@ -62,5 +62,3 @@ class LicenceMonitoringStationModel extends BaseModel {
     }
   }
 }
-
-export default LicenceMonitoringStationModel

@@ -8,7 +8,7 @@ import { Model } from 'objection'
 import BaseModel from './base.model.js'
 import NotificationModel from './notification.model.js'
 
-class EventModel extends BaseModel {
+export default class EventModel extends BaseModel {
   static get tableName() {
     return 'events'
   }
@@ -31,5 +31,3 @@ class EventModel extends BaseModel {
     }
   }
 }
-
-export default EventModel

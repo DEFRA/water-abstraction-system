@@ -11,7 +11,7 @@ import ContactModel from './contact.model.js'
 import LicenceRoleModel from './licence-role.model.js'
 import UserModel from './user.model.js'
 
-class CompanyContactModel extends BaseModel {
+export default class CompanyContactModel extends BaseModel {
   static get tableName() {
     return 'companyContacts'
   }
@@ -74,5 +74,3 @@ class CompanyContactModel extends BaseModel {
     return this.abstractionAlertLicences ? 'some' : 'yes'
   }
 }
-
-export default CompanyContactModel

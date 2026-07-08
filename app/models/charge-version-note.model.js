@@ -9,7 +9,7 @@ import BaseModel from './base.model.js'
 import ChargeVersionModel from './charge-version.model.js'
 import UserModel from './user.model.js'
 
-class ChargeVersionNote extends BaseModel {
+export default class ChargeVersionNote extends BaseModel {
   static get tableName() {
     return 'chargeVersionNotes'
   }
@@ -35,5 +35,3 @@ class ChargeVersionNote extends BaseModel {
     }
   }
 }
-
-export default ChargeVersionNote

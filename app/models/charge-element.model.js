@@ -10,7 +10,7 @@ import ChargeReferenceModel from './charge-reference.model.js'
 import PurposeModel from './purpose.model.js'
 import ReviewChargeElementModel from './review-charge-element.model.js'
 
-class ChargeElementModel extends BaseModel {
+export default class ChargeElementModel extends BaseModel {
   static get tableName() {
     return 'chargeElements'
   }
@@ -44,5 +44,3 @@ class ChargeElementModel extends BaseModel {
     }
   }
 }
-
-export default ChargeElementModel

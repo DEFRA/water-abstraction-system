@@ -10,7 +10,7 @@ import AddressModel from './address.model.js'
 import CompanyModel from './company.model.js'
 import LicenceRoleModel from './licence-role.model.js'
 
-class CompanyAddressModel extends BaseModel {
+export default class CompanyAddressModel extends BaseModel {
   static get tableName() {
     return 'companyAddresses'
   }
@@ -44,5 +44,3 @@ class CompanyAddressModel extends BaseModel {
     }
   }
 }
-
-export default CompanyAddressModel

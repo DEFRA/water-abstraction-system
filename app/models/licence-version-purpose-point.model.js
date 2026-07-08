@@ -9,7 +9,7 @@ import BaseModel from './base.model.js'
 import LicenceVersionPurposeModel from './licence-version-purpose.model.js'
 import PointModel from './point.model.js'
 
-class LicenceVersionPurposePointModel extends BaseModel {
+export default class LicenceVersionPurposePointModel extends BaseModel {
   static get tableName() {
     return 'licenceVersionPurposePoints'
   }
@@ -35,5 +35,3 @@ class LicenceVersionPurposePointModel extends BaseModel {
     }
   }
 }
-
-export default LicenceVersionPurposePointModel

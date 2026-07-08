@@ -11,7 +11,7 @@ import LicenceModel from './licence.model.js'
 import ReviewChargeVersionModel from './review-charge-version.model.js'
 import ReviewReturnModel from './review-return.model.js'
 
-class ReviewLicenceModel extends BaseModel {
+export default class ReviewLicenceModel extends BaseModel {
   static get tableName() {
     return 'reviewLicences'
   }
@@ -53,5 +53,3 @@ class ReviewLicenceModel extends BaseModel {
     }
   }
 }
-
-export default ReviewLicenceModel

@@ -11,7 +11,7 @@ import LicenceModel from './licence.model.js'
 import LicenceVersionModel from './licence-version.model.js'
 import ReturnVersionModel from './return-version.model.js'
 
-class ModLogModel extends BaseModel {
+export default class ModLogModel extends BaseModel {
   static get tableName() {
     return 'modLogs'
   }
@@ -53,5 +53,3 @@ class ModLogModel extends BaseModel {
     }
   }
 }
-
-export default ModLogModel

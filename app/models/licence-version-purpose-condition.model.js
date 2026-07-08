@@ -10,7 +10,7 @@ import LicenceMonitoringStationModel from './licence-monitoring-station.model.js
 import LicenceVersionPurposeConditionTypeModel from './licence-version-purpose-condition-type.model.js'
 import LicenceVersionPurposeModel from './licence-version-purpose.model.js'
 
-class LicenceVersionPurposeConditionModel extends BaseModel {
+export default class LicenceVersionPurposeConditionModel extends BaseModel {
   static get tableName() {
     return 'licenceVersionPurposeConditions'
   }
@@ -44,5 +44,3 @@ class LicenceVersionPurposeConditionModel extends BaseModel {
     }
   }
 }
-
-export default LicenceVersionPurposeConditionModel

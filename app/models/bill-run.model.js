@@ -11,7 +11,7 @@ import BillRunVolumeModel from './bill-run-volume.model.js'
 import RegionModel from './region.model.js'
 import ReviewLicenceModel from './review-licence.model.js'
 
-class BillRunModel extends BaseModel {
+export default class BillRunModel extends BaseModel {
   static get tableName() {
     return 'billRuns'
   }
@@ -67,5 +67,3 @@ class BillRunModel extends BaseModel {
     }
   }
 }
-
-export default BillRunModel

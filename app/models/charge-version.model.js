@@ -15,7 +15,7 @@ import LicenceModel from './licence.model.js'
 import ModLogModel from './mod-log.model.js'
 import ReviewChargeVersionModel from './review-charge-version.model.js'
 
-class ChargeVersionModel extends BaseModel {
+export default class ChargeVersionModel extends BaseModel {
   static get tableName() {
     return 'chargeVersions'
   }
@@ -269,5 +269,3 @@ class ChargeVersionModel extends BaseModel {
     return null
   }
 }
-
-export default ChargeVersionModel

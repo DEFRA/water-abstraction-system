@@ -9,7 +9,7 @@ import BaseModel from './base.model.js'
 import FinancialAgreementModel from './financial-agreement.model.js'
 import LicenceModel from './licence.model.js'
 
-class LicenceAgreementModel extends BaseModel {
+export default class LicenceAgreementModel extends BaseModel {
   static get tableName() {
     return 'licenceAgreements'
   }
@@ -35,5 +35,3 @@ class LicenceAgreementModel extends BaseModel {
     }
   }
 }
-
-export default LicenceAgreementModel

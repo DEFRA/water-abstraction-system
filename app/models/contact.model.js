@@ -37,7 +37,7 @@ import LicenceDocumentRoleModel from './licence-document-role.model.js'
  * - as of 2023-08-01 there were 6 contacts with `suffix` populated out of 42,827 (1,621 WRLS)
  *
  */
-class ContactModel extends BaseModel {
+export default class ContactModel extends BaseModel {
   static get tableName() {
     return 'contacts'
   }
@@ -115,5 +115,3 @@ class ContactModel extends BaseModel {
     return null
   }
 }
-
-export default ContactModel
