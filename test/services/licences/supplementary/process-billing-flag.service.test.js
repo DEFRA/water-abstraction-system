@@ -51,14 +51,12 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('calls "PersistSupplementaryBillingFlagsService" with the correct flags to persist', async () => {
           await ProcessBillingFlagService(payload)
 
-          expect(
-            PersistSupplementaryBillingFlagsService.go.calledOnceWith(
+          expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
               [2023],
               false,
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -82,14 +80,12 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
           await ProcessBillingFlagService(payload)
 
-          expect(
-            PersistSupplementaryBillingFlagsService.go.calledOnceWith(
+          expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
               [],
               false,
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -121,14 +117,12 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
           await ProcessBillingFlagService(payload)
 
-          expect(
-            PersistSupplementaryBillingFlagsService.go.calledOnceWith(
+          expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
               [2023],
               false,
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -151,14 +145,12 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
           await ProcessBillingFlagService(payload)
 
-          expect(
-            PersistSupplementaryBillingFlagsService.go.calledOnceWith(
+          expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
               [],
               false,
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -190,14 +182,12 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
           await ProcessBillingFlagService(payload)
 
-          expect(
-            PersistSupplementaryBillingFlagsService.go.calledOnceWith(
+          expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
               [2023],
               false,
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -220,14 +210,12 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
           await ProcessBillingFlagService(payload)
 
-          expect(
-            PersistSupplementaryBillingFlagsService.go.calledOnceWith(
+          expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
               [],
               false,
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -265,14 +253,12 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
           await ProcessBillingFlagService(payload)
 
-          expect(
-            PersistSupplementaryBillingFlagsService.go.calledOnceWith(
+          expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
               [2023],
               false,
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -295,14 +281,12 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
           await ProcessBillingFlagService(payload)
 
-          expect(
-            PersistSupplementaryBillingFlagsService.go.calledOnceWith(
+          expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
               [],
               false,
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -334,14 +318,12 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
           await ProcessBillingFlagService(payload)
 
-          expect(
-            PersistSupplementaryBillingFlagsService.go.calledOnceWith(
+          expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
               [],
               false,
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -362,14 +344,12 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
           await ProcessBillingFlagService(payload)
 
-          expect(
-            PersistSupplementaryBillingFlagsService.go.calledOnceWith(
+          expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
               [],
               false,
               false,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -399,14 +379,12 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
           await ProcessBillingFlagService(payload)
 
-          expect(
-            PersistSupplementaryBillingFlagsService.go.calledOnceWith(
+          expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
               [2023],
               false,
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -429,14 +407,12 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('calls "PersistSupplementaryBillingFlagsService" to persist the flags', async () => {
           await ProcessBillingFlagService(payload)
 
-          expect(
-            PersistSupplementaryBillingFlagsService.go.calledOnceWith(
+          expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
               [],
               false,
               true,
               'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
             )
-          ).toBe(true)
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {

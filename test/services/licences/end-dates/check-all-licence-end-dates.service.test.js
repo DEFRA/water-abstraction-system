@@ -58,7 +58,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
       // Check the expected number of batches (100 items / 10 per batch = 10 batches)
       const expectedBatches = Math.ceil(licences.length / batchSize)
 
-      expect(CheckLicenceEndDatesService.getCalls().length / batchSize).toEqual(expectedBatches)
+      expect(CheckLicenceEndDatesService.default.mock.calls.length / batchSize).toEqual(expectedBatches)
     })
 
     it('logs the time taken in milliseconds and seconds', async () => {

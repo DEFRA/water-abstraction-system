@@ -39,9 +39,7 @@ describe('Schema export service', () => {
 
       await SchemaExportService('water')
 
-      const allArgs = ExportTableService.getCalls().flatMap((call) => {
-        return call.args
-      })
+      const allArgs = ExportTableService.default.mock.calls.flatMap((args) => args)
 
       expect(allArgs).toEqual(tableNames)
     })
@@ -52,9 +50,7 @@ describe('Schema export service', () => {
 
       await SchemaExportService(schemaName)
 
-      const args = SendToS3BucketService.getCalls().flatMap((call) => {
-        return call.args
-      })
+      const args = SendToS3BucketService.default.mock.calls.flatMap((args) => args)
 
       expect(args).toEqual(expectedFolderPath)
     })
