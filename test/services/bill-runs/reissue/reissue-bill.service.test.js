@@ -223,16 +223,15 @@ describe('Reissue Bill service', () => {
       let billRunStatusStub
 
       beforeEach(() => {
-        ChargingModuleViewBillRunStatusRequest.send.restore()
 
         billRunStatusStub = vi
           .spyOn(ChargingModuleViewBillRunStatusRequest, 'send')
-          
+
           .mockResolvedValueOnce({
             succeeded: true,
             response: { body: { status: 'pending' } }
           })
-          
+
           .mockResolvedValueOnce({
             succeeded: true,
             response: { body: { status: 'initialised' } }
@@ -250,7 +249,6 @@ describe('Reissue Bill service', () => {
   describe('and the Charging Module returns an error', () => {
     describe('when sending the reissue request', () => {
       beforeEach(() => {
-        ChargingModuleReissueBillRequest.send.restore()
         vi.spyOn(ChargingModuleReissueBillRequest, 'send').mockResolvedValue({
           succeeded: false,
           response: {
@@ -293,7 +291,6 @@ describe('Reissue Bill service', () => {
 
     describe('when viewing a bill', () => {
       beforeEach(() => {
-        ChargingModuleViewBillRequest.send.restore()
         vi.spyOn(ChargingModuleViewBillRequest, 'send').mockResolvedValue({
           succeeded: false,
           response: {

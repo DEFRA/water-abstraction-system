@@ -65,7 +65,7 @@ describe('Notify Token Cache plugin', () => {
       expect(firstCall).not.toBeNull()
 
       // Jump forwards in time 20 seconds
-      clock.jump(TWENTY_SECONDS_IN_MILLISECONDS)
+      vi.advanceTimersByTime(TWENTY_SECONDS_IN_MILLISECONDS)
 
       const secondCall = await server.methods.getNotifyToken()
 
@@ -82,7 +82,7 @@ describe('Notify Token Cache plugin', () => {
       expect(firstCall).not.toBeNull()
 
       // Jump forwards in time 30 seconds
-      clock.jump(THIRTY_SECONDS_IN_MILLISECONDS)
+      vi.advanceTimersByTime(THIRTY_SECONDS_IN_MILLISECONDS)
 
       const secondCall = await server.methods.getNotifyToken()
 

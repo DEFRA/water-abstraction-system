@@ -153,7 +153,6 @@ describe('Users - Submit profile details service', () => {
 
   describe('when the service errors', () => {
     beforeEach(() => {
-      userModelQueryStub.restore()
       vi.spyOn(UserModel, 'query').mockImplementation(() => {
         throw new Error('Model query error')
       })
