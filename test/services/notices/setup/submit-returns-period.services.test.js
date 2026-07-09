@@ -44,7 +44,6 @@ describe('Notices - Setup - Submit Returns Period service', () => {
   })
 
   afterEach(() => {
-    FetchSessionDal.restore()
   })
 
   describe('when submitting as returns period ', () => {

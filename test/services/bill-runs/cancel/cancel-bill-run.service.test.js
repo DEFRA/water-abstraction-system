@@ -16,12 +16,11 @@ describe('Bill Runs - Cancel Bill Run service', () => {
   beforeEach(() => {
     billRunPatchStub = vi.fn().mockResolvedValue()
 
-    queryStub = vi.spyOn(BillRunModel, 'query').mockImplementation(() => {})
-
-    queryStub.mockReturnValueOnce({
+    vi.spyOn(BillRunModel, 'query').mockReturnValue({
       findById: vi.fn().mockReturnThis(),
       patch: billRunPatchStub
     })
+    queryStub = BillRunModel.query
   })
 
   afterEach(() => {
@@ -31,7 +30,7 @@ describe('Bill Runs - Cancel Bill Run service', () => {
   describe('when the bill run exists', () => {
     describe('and can be deleted', () => {
       beforeEach(() => {
-        queryStub.mockReturnValueOnce({
+        vi.spyOn(BillRunModel, 'query').mockReturnValueOnce({
           findById: vi.fn().mockReturnThis(),
           select: vi
             .fn().mockResolvedValue({ id: billRunId, externalId, status: 'ready' })
@@ -56,7 +55,7 @@ describe('Bill Runs - Cancel Bill Run service', () => {
 
     describe('but cannot be deleted because of its status', () => {
       beforeEach(async () => {
-        queryStub.mockReturnValueOnce({
+        vi.spyOn(BillRunModel, 'query').mockReturnValueOnce({
           findById: vi.fn().mockReturnThis(),
           select: vi.fn().mockResolvedValue({ id: billRunId, externalId, status: 'sent' })
         })
