@@ -10,7 +10,6 @@ import BillRunError from '../../../../app/errors/bill-run.error.js'
 import BillRunModel from '../../../../app/models/bill-run.model.js'
 import * as ChargingModuleCreateTransactionRequest from '../../../../app/requests/charging-module/create-transaction.request.js'
 import * as GenerateTransactionsService from '../../../../app/services/bill-runs/generate-transactions.service.js'
-import * as SendTransactionsService from '../../../../app/services/bill-runs/send-transactions.service.js'
 
 // Thing under test
 import ProcessBillingPeriodService from '../../../../app/services/bill-runs/annual/process-billing-period.service.js'
@@ -31,7 +30,6 @@ describe('Annual Process billing period service', () => {
     chargingModuleCreateTransactionRequestStub = vi
       .spyOn(ChargingModuleCreateTransactionRequest, 'send')
       .mockImplementation(() => {})
-    vi.spyOn(SendTransactionsService, 'default').mockResolvedValue([])
   })
 
   afterEach(() => {
