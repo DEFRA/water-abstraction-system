@@ -21,17 +21,17 @@ describe('Markdown filter', () => {
       })
 
       it('correctly converts the markdown to HTML', async () => {
-        const result = await MarkdownFilter.markdown('# Test\n\nThis is pretend test.')
+        const result = await MarkdownFilter('# Test\n\nThis is pretend test.')
 
-        expect(result).to.equal('<h1>How to renew your licence</h1>\n<p>This is pretend test.</p>')
+        expect(result).toEqual('<h1>How to renew your licence</h1>\n<p>This is pretend test.</p>')
       })
     })
 
     describe('when "Marked" has not been set on globalThis via the plugin', () => {
       it('returns the input', async () => {
-        const result = await MarkdownFilter.markdown('# Test\n\nThis is pretend test.')
+        const result = await MarkdownFilter('# Test\n\nThis is pretend test.')
 
-        expect(result).to.equal('# Test\n\nThis is pretend test.')
+        expect(result).toEqual('# Test\n\nThis is pretend test.')
       })
     })
   })

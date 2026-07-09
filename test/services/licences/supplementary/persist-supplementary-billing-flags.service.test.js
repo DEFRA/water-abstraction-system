@@ -94,7 +94,7 @@ describe('Persist Supplementary Billing Flags Service', () => {
             testLicence.id
           )
 
-          expect(CreateLicenceSupplementaryYearService.go).not.toHaveBeenCalled()
+          expect(CreateLicenceSupplementaryYearService.default).not.toHaveBeenCalled()
         })
       })
     })

@@ -48,23 +48,21 @@ describe('Users - Submit profile details service', () => {
 
         expect(patchStub).toHaveBeenCalled()
         expect(whereStub).toHaveBeenCalledWith('userId', userId)
-        expect(
-          patchStub.calledWith({
+        expect(patchStub).toHaveBeenCalledWith({
             'userData:contactDetails.address': payload.address,
             'userData:contactDetails.email': payload.email,
             'userData:contactDetails.jobTitle': payload.jobTitle,
             'userData:contactDetails.name': payload.name,
             'userData:contactDetails.tel': payload.tel
           })
-        ).toBe(true)
         expect(result.navigationLinks).toBeInstanceOf(Array)
       })
 
       it('flashes a notification of successful update', async () => {
         await SubmitProfileDetailsService(userId, payload, yarStub)
 
-        expect(yarStub.flash.lastCall.mock.calls[0]).toEqual('notification')
-        expect(yarStub.flash.lastCall.mock.calls[1]).toEqual({
+        expect(yarStub.flash.mock.calls[yarStub.flash.mock.calls.length - 1][0]).toEqual('notification')
+        expect(yarStub.flash.mock.calls[yarStub.flash.mock.calls.length - 1][1]).toEqual({
           title: 'Updated',
           text: 'Profile details updated'
         })
@@ -74,15 +72,13 @@ describe('Users - Submit profile details service', () => {
         it('saves missing values as empty strings', async () => {
           await SubmitProfileDetailsService(userId, {}, yarStub)
 
-          expect(
-            patchStub.calledWith({
+          expect(patchStub).toHaveBeenCalledWith({
               'userData:contactDetails.address': '',
               'userData:contactDetails.email': '',
               'userData:contactDetails.jobTitle': '',
               'userData:contactDetails.name': '',
               'userData:contactDetails.tel': ''
             })
-          ).toBe(true)
         })
       })
     })

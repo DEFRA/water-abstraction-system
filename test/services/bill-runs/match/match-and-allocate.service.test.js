@@ -88,7 +88,7 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
           expect(PrepareChargeVersionService.default).toHaveBeenCalled()
 
           expect(MatchReturnsToChargeElementService.default).toHaveBeenCalled()
-          expect(AllocateReturnsToChargeElementService.go).not.toHaveBeenCalled()
+          expect(AllocateReturnsToChargeElementService.default).not.toHaveBeenCalled()
 
           expect(DetermineLicenceIssuesService.default).toHaveBeenCalled()
           expect(PersistAllocatedLicenceToResultsService.default).toHaveBeenCalled()
@@ -127,12 +127,12 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
       it('does not process the licences', async () => {
         await MatchAndAllocateService(billRun, billingPeriods)
 
-        expect(PrepareReturnLogsService.go).not.toHaveBeenCalled()
-        expect(PrepareChargeVersionService.go).not.toHaveBeenCalled()
-        expect(MatchReturnsToChargeElementService.go).not.toHaveBeenCalled()
-        expect(AllocateReturnsToChargeElementService.go).not.toHaveBeenCalled()
-        expect(DetermineLicenceIssuesService.go).not.toHaveBeenCalled()
-        expect(PersistAllocatedLicenceToResultsService.go).not.toHaveBeenCalled()
+        expect(PrepareReturnLogsService.default).not.toHaveBeenCalled()
+        expect(PrepareChargeVersionService.default).not.toHaveBeenCalled()
+        expect(MatchReturnsToChargeElementService.default).not.toHaveBeenCalled()
+        expect(AllocateReturnsToChargeElementService.default).not.toHaveBeenCalled()
+        expect(DetermineLicenceIssuesService.default).not.toHaveBeenCalled()
+        expect(PersistAllocatedLicenceToResultsService.default).not.toHaveBeenCalled()
       })
 
       it('returns "false" as there are no licences to process', async () => {

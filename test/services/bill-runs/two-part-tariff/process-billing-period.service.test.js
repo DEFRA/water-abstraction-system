@@ -44,6 +44,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
     vi.spyOn(BillModel, 'query').mockReturnValue({ insert: billInsertStub })
     vi.spyOn(BillLicenceModel, 'query').mockReturnValue({ insert: billLicenceInsertStub })
     vi.spyOn(TransactionModel, 'query').mockReturnValue({ insert: transactionInsertStub })
+    vi.spyOn(GenerateTransactionsService, 'default').mockResolvedValue([])
   })
 
   afterEach(() => {
