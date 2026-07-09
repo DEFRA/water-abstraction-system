@@ -51,6 +51,7 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
     billRun = await BillRunHelper.add({ regionId: region.id })
 
     vi.spyOn(FetchPreviousTransactionsService, 'default').mockResolvedValue([])
+    vi.spyOn(GenerateTransactionsService, 'default').mockResolvedValue([])
   })
 
   afterEach(() => {

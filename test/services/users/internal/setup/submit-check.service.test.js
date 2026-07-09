@@ -165,7 +165,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
       it('does not send a verification email', async () => {
         await SubmitCheckService(auth, session.id, yarStub)
 
-        expect(SendVerificationEmailService.go).not.toHaveBeenCalled()
+        expect(SendVerificationEmailService.default).not.toHaveBeenCalled()
       })
     })
   })
