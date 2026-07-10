@@ -12,7 +12,7 @@ const {
   determineCycleEndDate,
   determineCycleStartDate
 } = require('../../../lib/return-cycle-dates.lib.js')
-const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.lib.js')
+const { determineReturnsPeriods, determineUpcomingReturnPeriods } = require('../../../lib/return-periods.lib.js')
 
 /**
  * Returns dynamic dates used by the service, for example, current financial year and returns periods
@@ -43,6 +43,7 @@ function go() {
     endDate: determineCycleEndDate(false),
     dueDate: determineCycleDueDate(false)
   }
+  const quarterlyPeriods = determineReturnsPeriods(currentWinterReturnCycle)
   const currentFinancialYear = determineCurrentFinancialYear()
   const billingPeriods = {
     annual: DetermineBillingPeriodsService.go('annual', currentFinancialYear.endDate.getFullYear()),
@@ -59,6 +60,7 @@ function go() {
     currentFinancialYear,
     currentSummerReturnCycle,
     currentWinterReturnCycle,
+    quarterlyPeriods,
     firstReturnPeriod,
     secondReturnPeriod
   }
