@@ -34,6 +34,15 @@ describe('Data - Dates service', () => {
     expect(result.billingPeriods.twoPartSupplementary[0].endDate).toBeInstanceOf(Date)
   })
 
+  it('returns the current quarterly periods', () => {
+    const result = DatesService.go()
+
+    expect(result.quarterlyPeriods).toBeDefined()
+    expect(result.quarterlyPeriods.length).toBeGreaterThanOrEqual(4)
+    expect(result.quarterlyPeriods[0].startDate).toBeInstanceOf(Date)
+    expect(result.quarterlyPeriods[0].endDate).toBeInstanceOf(Date)
+  })
+
   it('returns the current financial year', () => {
     const result = DatesService.go()
 
