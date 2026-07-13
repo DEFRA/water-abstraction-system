@@ -24,7 +24,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
  *
  * @returns {Promise<object>} If no errors the page data for the start reading page else the validation error details
  */
-export default async function submitStartReading(sessionId, payload, yar) {
+export default async function submitStartReadingService(sessionId, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const error = _validate(payload, session)

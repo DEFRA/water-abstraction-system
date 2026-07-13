@@ -14,7 +14,7 @@ import { returnRequirementFrequencies } from '../../../lib/static-lookups.lib.js
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function remove(session, requirementIndex) {
+export default function removePresenter(session, requirementIndex) {
   const { id: sessionId, licence, requirements } = session
   const requirement = requirements[requirementIndex]
 

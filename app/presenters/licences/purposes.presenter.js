@@ -14,7 +14,7 @@ import { pluralise } from './base-licences.presenter.js'
  *
  * @returns {object} licence and licenceVersionPurposes data needed by the view template
  */
-export default function purposes(purposes, licence) {
+export default function purposesPresenter(purposes, licence) {
   const { id, licenceRef } = licence
 
   const licencePurposes = formatLicencePurposes(purposes)

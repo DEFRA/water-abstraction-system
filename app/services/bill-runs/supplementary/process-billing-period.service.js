@@ -25,7 +25,7 @@ import TransactionModel from '../../../models/transaction.model.js'
  *
  * @returns {Promise<boolean>} true if the bill run is not empty (there are transactions to bill) else false
  */
-export default async function processBillingPeriod(billRun, billingPeriod, chargeVersions) {
+export default async function processBillingPeriodService(billRun, billingPeriod, chargeVersions) {
   if (chargeVersions.length === 0) {
     return false
   }

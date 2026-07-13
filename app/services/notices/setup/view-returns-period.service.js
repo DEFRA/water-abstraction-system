@@ -13,7 +13,7 @@ import ReturnsPeriodPresenter from '../../../presenters/notices/setup/returns-pe
  *
  * @returns {Promise<object>} The view data for the returns period page
  */
-export default async function viewReturnsPeriod(sessionId) {
+export default async function viewReturnsPeriodService(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const formattedData = ReturnsPeriodPresenter(session)

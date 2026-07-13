@@ -14,7 +14,7 @@ import FetchDownloadReturnLogService from './fetch-download-return-log.service.j
  *
  * @returns {Promise<object>} The data for the download return log link (csv string, filename and type)
  */
-export default async function downloadReturnLog(returnLogId, version) {
+export default async function downloadReturnLogService(returnLogId, version) {
   const returnLog = await FetchDownloadReturnLogService(returnLogId, version)
 
   const { data, filename } = DownloadReturnLogPresenter(returnLog)

@@ -18,7 +18,7 @@ import { db } from '../../../../../db/db.js'
  *
  * @returns {Promise<object[]>} The recipient data for the renewal invitation notice
  */
-export default async function fetchRenewalInvitationRecipients(session) {
+export default async function fetchRenewalInvitationRecipientsService(session) {
   const { licenceRef } = session
 
   const { bindings, query: licenceQuery } = GenerateRenewalInvitationLicenceQueryDal(licenceRef)

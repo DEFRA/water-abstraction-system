@@ -10,7 +10,7 @@ import { db } from '../../../../db/db.js'
  *
  * @returns {Promise<object>}
  */
-export default async function idmSchema() {
+export default async function idmSchemaService() {
   return _deleteAllTestData()
 }
 

@@ -34,7 +34,7 @@ import PersistSupplementaryBillingFlagsService from './persist-supplementary-bil
  *
  * @param {object} payload - The payload from the request
  */
-export default async function processBillingFlag(payload) {
+export default async function processBillingFlagService(payload) {
   try {
     const startTime = currentTimeInNanoseconds()
     const result = await _determineFlags(payload)

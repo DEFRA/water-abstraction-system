@@ -18,7 +18,7 @@ import TransactionModel from '../../models/transaction.model.js'
  *
  * @returns {Promise<object[]>} The resulting matched transactions
  */
-export default async function fetchPreviousTransactions(
+export default async function fetchPreviousTransactionsService(
   billingAccountId,
   licenceId,
   financialYearEnding,

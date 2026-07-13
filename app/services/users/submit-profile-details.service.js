@@ -22,7 +22,7 @@ import { formatValidationResult } from '../../presenters/base.presenter.js'
  *
  * @returns {Promise<object>} The page data for the profile details page including any validation error details
  */
-export default async function submitProfileDetails(userId, payload, yar) {
+export default async function submitProfileDetailsService(userId, payload, yar) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {

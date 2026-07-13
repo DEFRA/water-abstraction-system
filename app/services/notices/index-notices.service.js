@@ -17,7 +17,7 @@ import { processSavedFilters } from '../../lib/submit-page.lib.js'
  *
  * @returns {Promise<object>} The view data for the notices page
  */
-export default async function indexNotices(yar, auth, page) {
+export default async function indexNoticesService(yar, auth, page) {
   const filters = _filters(yar)
 
   const { results: notices, total: totalNumber } = await FetchNoticesService(filters, page)

@@ -16,7 +16,7 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence history template.
  */
-export default async function viewHistory(licenceId, auth) {
+export default async function viewHistoryService(licenceId, auth) {
   const licence = await FetchLicenceService(licenceId)
 
   const licenceHistory = await FetchHistoryService(licenceId)

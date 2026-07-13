@@ -11,7 +11,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function agreementsExceptions(session, requirementIndex) {
+export default function agreementsExceptionsPresenter(session, requirementIndex) {
   const { id: sessionId, licence, requirements } = session
   const requirement = requirements[requirementIndex]
 

@@ -12,7 +12,7 @@ import LicenceModel from '../../../models/licence.model.js'
  *
  * @returns {Promise<object>} The licence with the data for a renewal (expiredDate, revokedDate, lapsedDate)
  */
-export default async function fetchRenewalLicence(licenceRef) {
+export default async function fetchRenewalLicenceDal(licenceRef) {
   return LicenceModel.query()
     .where('licenceRef', licenceRef)
     .select(['id', 'licenceRef', 'expiredDate', 'revokedDate', 'lapsedDate'])

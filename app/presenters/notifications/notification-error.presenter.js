@@ -69,7 +69,7 @@ const NOTIFY_STATUS_DESCRIPTIONS = {
  *
  * @returns {object|null} If the notification is not errored returns null, else an applicable 'status' and 'description'
  */
-export default function notificationError(notification) {
+export default function notificationErrorPresenter(notification) {
   const { messageType, notifyError, notifyStatus, status } = notification
 
   if (status !== 'error') {

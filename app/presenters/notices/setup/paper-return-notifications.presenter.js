@@ -17,7 +17,7 @@ import { futureDueDate } from '../base.presenter.js'
  *
  * @returns {object[]} the recipients and return logs transformed into notifications
  */
-export default function paperReturnNotifications(session, recipients, noticeId) {
+export default function paperReturnNotificationsPresenter(session, recipients, noticeId) {
   const notifications = []
 
   const { licenceRef } = session

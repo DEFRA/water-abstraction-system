@@ -27,7 +27,7 @@ import { timestampForPostgres } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<string>} - The ID of the submitted return log
  */
-export default async function submitCheck(sessionId, user) {
+export default async function submitCheckService(sessionId, user) {
   const session = await FetchSessionDal(sessionId)
 
   const error = _validate(session)

@@ -25,7 +25,7 @@ import DetermineRelevantLicenceMonitoringStationsByAlertTypeService from './dete
  *
  * @returns {Array<object>}
  */
-export default function determineRelevantLicenceMonitoringStations(
+export default function determineRelevantLicenceMonitoringStationsService(
   licenceMonitoringStations,
   selectedLicenceMonitoringStations,
   removedLicenceMonitoringStations,

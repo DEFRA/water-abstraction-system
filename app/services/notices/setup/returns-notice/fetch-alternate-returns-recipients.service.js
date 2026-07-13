@@ -18,7 +18,7 @@ import { db } from '../../../../../db/db.js'
  *
  * @returns {Promise<object[]>} The recipient data for the alternate returns notice
  */
-export default async function fetchAlternateReturnsRecipients(returnLogIds, notificationDueDate) {
+export default async function fetchAlternateReturnsRecipientsService(returnLogIds, notificationDueDate) {
   const { bindings, query: dueReturnLogsQuery } = GenerateReturnLogsByIdQueryService(returnLogIds)
   const query = GenerateRecipientsQueryService(NoticeType.ALTERNATE_INVITATION, dueReturnLogsQuery, false)
 

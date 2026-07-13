@@ -13,7 +13,7 @@ import { NoticeType, NoticeJourney, NoticeTypes } from '../../../lib/static-look
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function noticeType(session, auth) {
+export default function noticeTypePresenter(session, auth) {
   const { checkPageVisited, id: sessionId, noticeType, journey } = session
 
   return {

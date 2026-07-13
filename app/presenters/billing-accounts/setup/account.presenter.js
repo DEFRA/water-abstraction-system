@@ -10,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-export default function account(session) {
+export default function accountPresenter(session) {
   const { billingAccount } = session
 
   return {

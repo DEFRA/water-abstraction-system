@@ -12,7 +12,7 @@ import { checkUrl } from '../../../lib/check-page.lib.js'
  *
  * @returns {object} page data needed by the view template
  */
-export default function units(session) {
+export default function unitsPresenter(session) {
   const { id: sessionId, returnReference, units } = session
 
   return {

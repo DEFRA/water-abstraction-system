@@ -19,7 +19,7 @@ const fsPromises = fs.promises
  * @param {string} schemaFolderPath - The folder path of the schema
  * @param {string} tableName - The name of the table
  */
-export default async function writeTableToFile(headers, rows, schemaFolderPath, tableName) {
+export default async function writeTableToFileService(headers, rows, schemaFolderPath, tableName) {
   const filePath = await _filenameWithPath(tableName, schemaFolderPath)
   const writeToFileStream = fs.createWriteStream(filePath, { flags: 'a' })
   const promisifiedPipeline = util.promisify(pipeline)

@@ -16,7 +16,7 @@ import ViewPresenter from '../../presenters/licence-versions/view.presenter.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function view(licenceVersionId, auth) {
+export default async function viewService(licenceVersionId, auth) {
   const licenceVersionData = await FetchLicenceVersionDal(licenceVersionId)
   const conditions = await FetchConditionsService(licenceVersionId)
 

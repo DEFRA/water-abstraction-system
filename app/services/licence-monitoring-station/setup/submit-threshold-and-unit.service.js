@@ -22,7 +22,7 @@ import ThresholdAndUnitValidator from '../../../validators/licence-monitoring-st
  * @returns {Promise<object>} If no errors the page data for the threshold and unit page else the validation error
  * details
  */
-export default async function submitThresholdAndUnit(sessionId, payload) {
+export default async function submitThresholdAndUnitService(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)

@@ -24,7 +24,7 @@ import { NoticeJourney, NoticeType } from '../../../lib/static-lookups.lib.js'
  * @returns {Promise<object>} An object with a `redirectUrl` property if there are no validation errors, else an object
  * with the presenter data and an `error` property
  */
-export default async function submitLicence(sessionId, payload, yar) {
+export default async function submitLicenceService(sessionId, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const { additionalSessionData, validationResult } = await _processedLicenceSubmission(session.noticeType, payload)

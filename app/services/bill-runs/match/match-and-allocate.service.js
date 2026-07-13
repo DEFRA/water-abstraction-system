@@ -26,7 +26,7 @@ import PrepareReturnLogsService from './prepare-return-logs.service.js'
  *
  * @returns {Promise<boolean>} - True if there are any licences matched to returns, else false
  */
-export default async function matchAndAllocate(billRun, billingPeriod) {
+export default async function matchAndAllocateService(billRun, billingPeriod) {
   const licences = await FetchLicencesService(billRun, billingPeriod)
 
   if (licences.length > 0) {

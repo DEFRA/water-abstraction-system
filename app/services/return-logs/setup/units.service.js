@@ -16,7 +16,7 @@ import UnitsPresenter from '../../../presenters/return-logs/setup/units.presente
  *
  * @returns {Promise<object>} The view data for the units page
  */
-export default async function units(sessionId) {
+export default async function unitsService(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = UnitsPresenter(session)

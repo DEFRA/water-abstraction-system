@@ -16,7 +16,7 @@ import StartDatePresenter from '../../../presenters/return-versions/setup/start-
  *
  * @returns {Promise<object>} The view data for the start date page
  */
-export default async function startDate(sessionId) {
+export default async function startDateService(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const formattedData = StartDatePresenter(session)

@@ -12,6 +12,6 @@ import UserModel from '../../models/user.model.js'
  *
  * @returns {Promise<module:UserModel>} the requested user
  */
-export default async function fetchUser(id) {
+export default async function fetchUserDal(id) {
   return UserModel.query().findById(id).select(['id', 'licenceEntityId', 'username'])
 }

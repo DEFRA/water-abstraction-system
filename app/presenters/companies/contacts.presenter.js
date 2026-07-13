@@ -13,7 +13,7 @@ import { formatContact } from '../crm.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function contacts(company, contacts) {
+export default function contactsPresenter(company, contacts) {
   return {
     backLink: {
       href: '/',

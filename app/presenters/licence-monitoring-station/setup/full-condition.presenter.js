@@ -15,7 +15,7 @@ import { checkUrl } from '../../../lib/check-page.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function fullCondition(session, conditions) {
+export default function fullConditionPresenter(session, conditions) {
   const { label, licenceRef, conditionId } = session
 
   const radioButtons = _generateRadioButtons(conditions, conditionId)

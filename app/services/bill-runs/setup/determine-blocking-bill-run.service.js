@@ -37,7 +37,7 @@ import DetermineBlockingTwoPartSupplementaryService from './determine-blocking-t
  * @returns {Promise<object>} Any blocking matches for the bill run being created, the `toFinancialYearEnding` to use
  * when creating it, and which bill run engine to trigger the creation with (if any)
  */
-export default async function determineBlockingBillRun(session) {
+export default async function determineBlockingBillRunService(session) {
   const { region, season, type, year } = session
 
   if (type === 'supplementary') {

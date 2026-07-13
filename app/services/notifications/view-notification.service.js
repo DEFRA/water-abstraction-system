@@ -25,7 +25,7 @@ import ViewNotificationPresenter from '../../presenters/notifications/view-notif
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the view notification template.
  */
-export default async function viewNotification(
+export default async function viewNotificationService(
   notificationId,
   licenceId = null,
   returnLogId = null,

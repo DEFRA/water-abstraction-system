@@ -21,7 +21,7 @@ import { NoticeType } from '../../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<object>} The view data for the preview page
  */
-export default async function viewPreview(sessionId, contactHashId, licenceMonitoringStationId = null) {
+export default async function viewPreviewService(sessionId, contactHashId, licenceMonitoringStationId = null) {
   const session = await FetchSessionDal(sessionId)
 
   const recipient = await _recipient(contactHashId, session)

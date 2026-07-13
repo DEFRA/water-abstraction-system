@@ -28,7 +28,7 @@ import Workflow from '../../../models/workflow.model.js'
  * @returns {Promise<module:BillingAccountModel[]>} An array of `BillingAccountModel` to be billed and their relevant
  * licence, charge version, charge element etc records needed to generate the bill run
  */
-export default async function fetchBillingAccounts(regionId, billingPeriod) {
+export default async function fetchBillingAccountsService(regionId, billingPeriod) {
   const allBillingAccounts = await _fetchNew(regionId, billingPeriod)
 
   return allBillingAccounts

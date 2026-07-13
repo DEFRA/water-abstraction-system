@@ -11,7 +11,7 @@ import { currentTimeInNanoseconds, calculateAndLogTimeTaken } from '../../../lib
  *
  * @param {number} days - The number of ahead of today
  */
-export default async function processRenewalInvitations(days) {
+export default async function processRenewalInvitationsService(days) {
   try {
     const startTime = currentTimeInNanoseconds()
 

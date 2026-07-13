@@ -14,7 +14,7 @@ import Joi from 'joi'
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function existingAccount(payload) {
+export default function existingAccountValidator(payload) {
   const errorMessage = 'Select does this account already exist?'
 
   const schema = Joi.object({

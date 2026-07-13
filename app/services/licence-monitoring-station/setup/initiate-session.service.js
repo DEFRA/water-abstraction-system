@@ -21,7 +21,7 @@ import MonitoringStationModel from '../../../models/monitoring-station.model.js'
  *
  * @returns {Promise<string>} the sessionId used for the redirect
  */
-export default async function initiateSession(monitoringStationId) {
+export default async function initiateSessionService(monitoringStationId) {
   const monitoringStation = await _fetchMonitoringStation(monitoringStationId)
   const data = { monitoringStationId, ...monitoringStation }
 

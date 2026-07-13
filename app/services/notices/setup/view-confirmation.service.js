@@ -13,7 +13,7 @@ import EventModel from '../../../models/event.model.js'
  *
  * @returns {Promise<object>} The view data for the confirmation page
  */
-export default async function viewConfirmation(eventId) {
+export default async function viewConfirmationService(eventId) {
   const event = await EventModel.query().findById(eventId)
 
   const formattedData = ConfirmationPresenter(event)

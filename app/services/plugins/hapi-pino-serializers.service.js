@@ -79,7 +79,7 @@
  *
  * @returns {object} an object containing functions to serialize the `req` and `res` objects returned by pino
  */
-export default function hapiPinoSerializers() {
+export default function hapiPinoSerializersService() {
   return {
     req: _req,
     res: _res

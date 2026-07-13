@@ -21,7 +21,7 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function viewContacts(companyId, auth, page, yar) {
+export default async function viewContactsService(companyId, auth, page, yar) {
   const company = await FetchCompanyDal(companyId)
 
   const roles = userRoles(auth)

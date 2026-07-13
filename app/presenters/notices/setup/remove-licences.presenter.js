@@ -11,7 +11,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function removeLicences(removeLicences, session) {
+export default function removeLicencesPresenter(removeLicences, session) {
   const { referenceCode, id: sessionId } = session
 
   return {

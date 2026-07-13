@@ -12,7 +12,7 @@ import { countryLookup } from './base-address.presenter.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function international(session) {
+export default function internationalPresenter(session) {
   const { activeNavBar, address, pageTitleCaption } = session.addressJourney
 
   return {

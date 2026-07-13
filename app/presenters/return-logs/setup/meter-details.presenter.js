@@ -10,7 +10,7 @@
  *
  * @returns {object} page data needed by the view template
  */
-export default function meterDetails(session) {
+export default function meterDetailsPresenter(session) {
   const { id: sessionId, returnReference, meterMake, meterSerialNumber, meter10TimesDisplay } = session
 
   return {

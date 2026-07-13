@@ -18,7 +18,7 @@ import { processSavedFilters } from '../../lib/submit-page.lib.js'
  *
  * @returns {Promise<object>} The view data for the bill runs page
  */
-export default async function indexBillRuns(yar, page) {
+export default async function indexBillRunsService(yar, page) {
   const filters = _filters(yar)
 
   // We expect the FetchBillRunsService to take the longest to complete. But running them together means we are only

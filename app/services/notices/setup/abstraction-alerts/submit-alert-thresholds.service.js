@@ -18,7 +18,7 @@ import { handleOneOptionSelected } from '../../../../lib/submit-page.lib.js'
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-export default async function submitAlertThresholds(sessionId, payload) {
+export default async function submitAlertThresholdsService(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   handleOneOptionSelected(payload, 'alertThresholds')

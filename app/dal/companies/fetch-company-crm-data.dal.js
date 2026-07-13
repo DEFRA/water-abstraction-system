@@ -16,7 +16,7 @@ import DatabaseConfig from '../../../config/database.config.js'
  *
  * @returns {Promise<object>} the contacts for the company
  */
-export default async function fetchCompanyCrmData(companyId, roles, page = '1') {
+export default async function fetchCompanyCrmDataDal(companyId, roles, page = '1') {
   const authorisedForBilling = roles.includes('billing')
 
   const [{ rows: contacts }, { rows: totalNumber }] = await Promise.all([

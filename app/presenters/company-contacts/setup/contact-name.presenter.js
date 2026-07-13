@@ -10,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-export default function contactName(session) {
+export default function contactNamePresenter(session) {
   const { company } = session
 
   return {

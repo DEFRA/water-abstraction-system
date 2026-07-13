@@ -10,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-export default function note(session) {
+export default function notePresenter(session) {
   const { id: sessionId, licence, note } = session
 
   return {

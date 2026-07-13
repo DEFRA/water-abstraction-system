@@ -54,7 +54,7 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
  *
  * @returns {object} An object containing an `authorisedDays` and `billableDays` property
  */
-export default function calculateAuthorisedAndBillableDays(chargePeriod, billingPeriod, chargeReference) {
+export default function calculateAuthorisedAndBillableDaysService(chargePeriod, billingPeriod, chargeReference) {
   const { chargeElements } = chargeReference
 
   const authorisedAbstractionPeriods = []

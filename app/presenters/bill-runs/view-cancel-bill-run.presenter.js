@@ -13,7 +13,7 @@ import { formatBillRunType, formatChargeScheme } from '../billing.presenter.js'
  *
  * @returns {object} - the prepared bill run data to be passed to the cancel bill run confirmation page
  */
-export default function viewCancelBillRun(billRun) {
+export default function viewCancelBillRunPresenter(billRun) {
   const { batchType, billRunNumber, createdAt, id, region, scheme, status, summer, toFinancialYearEnding } = billRun
 
   return {

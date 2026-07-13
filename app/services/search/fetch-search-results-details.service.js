@@ -18,7 +18,7 @@ import { db } from '../../../db/db.js'
  *
  * @returns {Promise<object>} An object containing the set of matching models for each result type
  */
-export default async function fetchSearchResultsDetails(idsByType) {
+export default async function fetchSearchResultsDetailsService(idsByType) {
   const finders = {}
 
   for (const [key, ids] of Object.entries(idsByType)) {

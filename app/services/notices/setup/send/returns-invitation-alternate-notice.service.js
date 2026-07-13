@@ -13,7 +13,7 @@ import FetchFailedReturnsInvitationsService from '../returns-notice/fetch-failed
  *
  * @returns {Promise<object|null>} The notice, notifications, and failed notification IDs, or null if none failed
  */
-export default async function returnsInvitationAlternateNotice(mainNotice) {
+export default async function returnsInvitationAlternateNoticeService(mainNotice) {
   const { dueDate, licenceRefs, notificationIds, returnLogIds } = await FetchFailedReturnsInvitationsService(
     mainNotice.id
   )

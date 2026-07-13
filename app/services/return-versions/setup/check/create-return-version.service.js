@@ -19,7 +19,7 @@ import ReturnVersionModel from '../../../../models/return-version.model.js'
  * @param {object} trx - Transaction object
  * @returns {Promise<module:ReturnVersionModel>} The instance of the created return version
  */
-export default async function createReturnVersion(returnVersionData, trx) {
+export default async function createReturnVersionService(returnVersionData, trx) {
   const { returnRequirements, returnVersion } = returnVersionData
 
   const persistedReturnVersion = await ReturnVersionModel.query(trx).insert(returnVersion)

@@ -27,7 +27,7 @@ import { flashNotification } from '../../../lib/general.lib.js'
  * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the abstraction period page including the validation error details
  */
-export default async function submitAbstractionPeriod(sessionId, requirementIndex, payload, yar) {
+export default async function submitAbstractionPeriodService(sessionId, requirementIndex, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)

@@ -21,7 +21,7 @@ import { userPermissions } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<string>} The resetGuid for the updated user
  */
-export default async function updateUser(auth, session) {
+export default async function updateUserDal(auth, session) {
   const { access, email, permission, user } = session
 
   const { currentPermission, id, userId, username: currentUsername } = user

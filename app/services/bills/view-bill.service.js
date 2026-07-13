@@ -27,7 +27,7 @@ import ViewLicenceSummariesPresenter from '../../presenters/bills/view-licence-s
  * @returns {Promise<object>} a formatted representation of the bill, its bill run and billing account plus summaries
  * for all the licences linked to the bill for use in the bill view page
  */
-export default async function viewBill(id) {
+export default async function viewBillService(id) {
   const { bill, licenceSummaries } = await FetchBillService(id)
   const billingAccount = await _fetchBillingAccount(bill.billingAccountId)
 

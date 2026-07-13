@@ -18,7 +18,7 @@ const ERROR_MESSAGE = 'Select at least one financial year'
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function supplementaryYear(payload) {
+export default function supplementaryYearValidator(payload) {
   const schema = Joi.object({
     supplementaryYears: Joi.array()
       .items(Joi.string())

@@ -31,7 +31,7 @@ import CalculateAuthorisedAndBillableDaysServiceService from './calculate-author
  *
  * @returns {object[]} an array of 0, 1 or 2 transaction objects
  */
-export default function generateTransactions(
+export default function generateTransactionsService(
   billLicenceId,
   chargeReference,
   billingPeriod,

@@ -18,7 +18,7 @@ import ReturnSubmissionModel from '../../models/return-submission.model.js'
  * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and associated submission (if any)
  * and licence data
  */
-export default async function fetchReturnLogDetails(returnLogId, version = 0) {
+export default async function fetchReturnLogDetailsService(returnLogId, version = 0) {
   const allReturnSubmissions = await _fetchAllReturnSubmissions(returnLogId)
 
   const selectedReturnSubmission = _returnSubmission(allReturnSubmissions, version)

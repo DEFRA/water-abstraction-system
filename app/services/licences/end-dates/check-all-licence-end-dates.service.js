@@ -33,7 +33,7 @@ import LicencesConfig from '../../../../config/licences.config.js'
  * > If a licence in NALD does not have a status of DRAFT, and at least one current licence version then it will be
  * excluded
  */
-export default async function checkAllLicenceEndDates() {
+export default async function checkAllLicenceEndDatesService() {
   try {
     const startTime = currentTimeInNanoseconds()
 

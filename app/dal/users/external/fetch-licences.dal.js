@@ -17,7 +17,7 @@ import DatabaseConfig from '../../../../config/database.config.js'
  *
  * @returns {Promise<module:LicenceModel[]>} the requested user licences
  */
-export default async function fetchLicences(licenceEntityId, page = '1') {
+export default async function fetchLicencesDal(licenceEntityId, page = '1') {
   const { results: licences, total: totalNumber } = await _fetch(licenceEntityId, page)
 
   return { licences, totalNumber }

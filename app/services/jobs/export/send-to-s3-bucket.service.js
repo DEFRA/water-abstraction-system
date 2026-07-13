@@ -17,7 +17,7 @@ import S3Config from '../../../../config/s3.config.js'
  *
  * @param {string} filePath - A string containing the path of the file to send to the S3 bucket
  */
-export default async function sendToS3Bucket(filePath) {
+export default async function sendToS3BucketService(filePath) {
   const bucketName = S3Config.s3.bucket
   const fileName = path.basename(filePath)
   const fileContent = await fsPromises.readFile(filePath)

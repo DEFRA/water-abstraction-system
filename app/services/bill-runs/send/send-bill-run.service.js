@@ -21,7 +21,7 @@ import { timestampForPostgres } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<module:BillRunModel>} the bill run including its `externalId` and status
  */
-export default async function sendBillRun(billRunId) {
+export default async function sendBillRunService(billRunId) {
   const billRun = await _fetchBillRun(billRunId)
 
   if (billRun.status === 'ready') {

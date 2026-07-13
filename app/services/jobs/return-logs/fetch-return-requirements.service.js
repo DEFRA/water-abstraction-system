@@ -15,7 +15,7 @@ import ReturnVersionModel from '../../../models/return-version.model.js'
  *
  * @returns {Promise<module:ReturnRequirementModel[]>} the matching return requirements for the given return cycle
  */
-export default async function fetchReturnRequirements(returnCycle) {
+export default async function fetchReturnRequirementsService(returnCycle) {
   return _fetch(returnCycle)
 }
 

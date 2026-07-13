@@ -10,7 +10,7 @@ import { db } from '../../../../db/db.js'
  *
  * @returns {Promise<object>}
  */
-export default async function waterSchema() {
+export default async function waterSchemaService() {
   return _deleteAllTestData()
 }
 

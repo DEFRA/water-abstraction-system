@@ -20,7 +20,7 @@ import FetchSearchResultsService from './fetch-search-results.service.js'
  *
  * @returns {Promise<object>} The full set of results for the requested page
  */
-export default async function findAllSearchMatches(query, resultType, page, userScopes) {
+export default async function findAllSearchMatchesService(query, resultType, page, userScopes) {
   const resultTypes = DetermineSearchItemsService(query, resultType, userScopes)
 
   const { results: orderedSearchResults, total } = await FetchSearchResultsService(query, resultTypes, page)

@@ -10,7 +10,7 @@ import { db } from '../../../../db/db.js'
  *
  * @returns {Promise<object>}
  */
-export default async function permitSchema() {
+export default async function permitSchemaService() {
   return _deleteAllTestData()
 }
 

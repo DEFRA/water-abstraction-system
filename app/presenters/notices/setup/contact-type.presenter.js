@@ -10,7 +10,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function contactType(session) {
+export default function contactTypePresenter(session) {
   const contactEmail = session?.contactEmail ?? null
   const contactName = session?.contactName ?? null
   const contactType = session?.contactType ?? null

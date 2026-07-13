@@ -13,7 +13,7 @@ import CompanyModel from '../../../models/company.model.js'
  *
  * @returns {Promise<object[]>} an object containing the matching addresses needed to populate the view
  */
-export default async function fetchCompanyAddresses(companyId) {
+export default async function fetchCompanyAddressesService(companyId) {
   const company = await CompanyModel.query().select(['id', 'name']).findById(companyId)
   const addresses = await AddressModel.query()
     .select(['addresses.id', 'address1', 'address2', 'address3', 'address4', 'address5', 'address6', 'postcode'])

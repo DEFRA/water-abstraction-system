@@ -27,7 +27,7 @@ import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
  * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the agreements exceptions page including the validation error details
  */
-export default async function submitAgreementsExceptions(sessionId, requirementIndex, payload, yar) {
+export default async function submitAgreementsExceptionsService(sessionId, requirementIndex, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   handleOneOptionSelected(payload, 'agreementsExceptions')

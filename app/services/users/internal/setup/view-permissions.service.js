@@ -17,7 +17,7 @@ import PermissionsPresenter from '../../../../presenters/users/internal/setup/pe
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function viewPermissions(auth, sessionId) {
+export default async function viewPermissionsService(auth, sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = PermissionsPresenter(session)

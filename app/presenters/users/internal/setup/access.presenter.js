@@ -10,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-export default function access(session) {
+export default function accessPresenter(session) {
   const { access, id: sessionId } = session
 
   return {

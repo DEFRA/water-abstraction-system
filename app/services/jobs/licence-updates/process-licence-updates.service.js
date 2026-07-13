@@ -28,7 +28,7 @@ import Workflow from '../../../models/workflow.model.js'
  * in future bill runs until Billing & Data have had a chance to review the existing charge versions. This is because
  * the change to the licence might require changes to the charge versions.
  */
-export default async function processLicenceUpdates() {
+export default async function processLicenceUpdatesService() {
   try {
     const startTime = currentTimeInNanoseconds()
 

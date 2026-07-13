@@ -18,7 +18,7 @@ const NAVIGATION_LINKS = [
  *
  * @returns {object} The data formatted for the view template
  */
-export default function profileDetails(profileDetails) {
+export default function profileDetailsPresenter(profileDetails) {
   return {
     address: profileDetails.address || '',
     backLink: {

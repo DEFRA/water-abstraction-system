@@ -18,7 +18,7 @@ const ABSTRACTION_VOLUMES_METHOD = 'abstractionVolumes'
  *
  * @returns {object} page data needed for the `/return-logs/setup/{sessionId}/check` page
  */
-export default function check(session) {
+export default function checkPresenter(session) {
   const alwaysRequiredPageData = _alwaysRequiredPageData(session)
 
   if (session.journey === 'nilReturn') {

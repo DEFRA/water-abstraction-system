@@ -35,7 +35,7 @@ const MESSAGE_REFS = {
  *
  * @returns {object[]} the recipients transformed into notifications
  */
-export default function returnsNoticeNotifications(session, recipients, noticeId) {
+export default function returnsNoticeNotificationsPresenter(session, recipients, noticeId) {
   const notifications = []
 
   for (const recipient of recipients) {

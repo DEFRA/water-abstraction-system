@@ -13,7 +13,7 @@ import NotificationsTablePresenter from '../notifications-table.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function communications(user, notifications) {
+export default function communicationsPresenter(user, notifications) {
   const { id, username } = user
 
   return {

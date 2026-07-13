@@ -17,7 +17,7 @@ import { licenceRefSchema } from '../../../schemas/licence-ref.schema.js'
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function licenceDueReturns(payload, licenceExists, dueReturnsExist) {
+export default function licenceDueReturnsValidator(payload, licenceExists, dueReturnsExist) {
   const schema = Joi.object({
     licenceRef: licenceRefSchema(licenceExists)
       .custom((value, helpers) => {

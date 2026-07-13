@@ -12,7 +12,7 @@ import { formatLongDate } from '../../base.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function startDate(session) {
+export default function startDatePresenter(session) {
   const { id: sessionId, licence, startDateOptions, startDateDay, startDateMonth, startDateYear } = session
 
   return {

@@ -14,7 +14,7 @@ import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-export default async function viewAlertThresholds(sessionId) {
+export default async function viewAlertThresholdsService(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = AlertThresholdsPresenter(session)

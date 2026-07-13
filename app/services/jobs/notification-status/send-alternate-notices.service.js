@@ -25,7 +25,7 @@ import SendAlternateNoticeService from '../../notices/setup/send/send-alternate-
  * @param {module:NotificationModel[]} notifications - The notifications that have been checked for status by the
  * notification-status job
  */
-export default async function sendAlternateNotices(notifications) {
+export default async function sendAlternateNoticesService(notifications) {
   const noticeIds = _noticeIds(notifications)
   const criticalNotices = await FetchCriticalNoticesDal(noticeIds)
 

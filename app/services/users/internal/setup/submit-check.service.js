@@ -21,7 +21,7 @@ import { flashNotification } from '../../../../lib/general.lib.js'
  *
  * @returns {Promise<object>} An object containing the URL to redirect the user to after confirming
  */
-export default async function submitCheck(auth, sessionId, yar) {
+export default async function submitCheckService(auth, sessionId, yar) {
   const session = await FetchSessionDal(sessionId)
 
   await DeleteSessionDal(sessionId)

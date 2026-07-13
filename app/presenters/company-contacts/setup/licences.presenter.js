@@ -10,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-export default function licences(session) {
+export default function licencesPresenter(session) {
   const { company, id: sessionId, licences, abstractionAlertLicences } = session
 
   return {

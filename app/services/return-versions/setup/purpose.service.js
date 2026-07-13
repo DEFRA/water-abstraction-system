@@ -18,7 +18,7 @@ import SelectPurposePresenter from '../../../presenters/return-versions/setup/pu
  *
  * @returns {Promise<object>} The view data for the purpose page
  */
-export default async function purpose(sessionId, requirementIndex) {
+export default async function purposeService(sessionId, requirementIndex) {
   const session = await FetchSessionDal(sessionId)
   const purposesData = await FetchPurposesService(session.licenceVersion.id)
 

@@ -75,7 +75,7 @@ import Sanitizer from 'sanitizer'
  *
  * @returns {object} - returns a 'clean' payload object
  */
-export default function payloadCleaning(payload) {
+export default function payloadCleaningService(payload) {
   return _cleanObject(payload)
 }
 

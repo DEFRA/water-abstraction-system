@@ -16,7 +16,7 @@ import PreparePaperReturnService from '../prepare-paper-return.service.js'
  *
  * @returns {Promise<object>} a notification with the Notify response
  */
-export default async function sendPaperReturnNotification(notification, referenceCode) {
+export default async function sendPaperReturnNotificationService(notification, referenceCode) {
   const returnFormRequest = await PreparePaperReturnService(notification)
 
   if (returnFormRequest.succeeded) {

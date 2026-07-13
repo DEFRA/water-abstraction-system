@@ -10,7 +10,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function postcode(session) {
+export default function postcodePresenter(session) {
   const { addressJourney, id } = session
 
   return {

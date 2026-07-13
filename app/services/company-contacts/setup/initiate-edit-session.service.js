@@ -15,7 +15,7 @@ import { formatEmail } from '../../../presenters/base.presenter.js'
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-export default async function initiateEditSession(companyContactId) {
+export default async function initiateEditSessionService(companyContactId) {
   const companyContact = await FetchCompanyContactDal(companyContactId)
 
   const licences = await FetchCompanyLicencesDal(companyContact.company.id)

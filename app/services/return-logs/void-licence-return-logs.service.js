@@ -76,7 +76,7 @@ import { timestampForPostgres } from '../../lib/general.lib.js'
  * @param {Date} changeDate - The date from which the 'change' applies
  * @param {object} [trx=null] - Optional transaction object
  */
-export default async function voidLicenceReturnLogs(
+export default async function voidLicenceReturnLogsService(
   reissuedReturnIds,
   licenceRef,
   returnCycleId,

@@ -15,7 +15,7 @@ import AddressModel from '../../models/address.model.js'
  *
  * @returns {Promise<object>} An address object.
  */
-export default async function fetchExistingAddress(addressId) {
+export default async function fetchExistingAddressDal(addressId) {
   return AddressModel.query()
     .select(['addresses.id', 'address1', 'address2', 'address3', 'address4', 'address5', 'address6', 'postcode'])
     .findById(addressId)

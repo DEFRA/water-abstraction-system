@@ -15,7 +15,7 @@ import LicenceSupplementaryYearModel from '../../models/licence-supplementary-ye
  * @param {string[]} licenceIds - The UUIDs of the licences to be unassigned from a bill run
  * @param {string} billRunId - The UUID of the bill run to be unassigned from the licences
  */
-export default async function unassignLicencesToBillRun(licenceIds, billRunId) {
+export default async function unassignLicencesToBillRunService(licenceIds, billRunId) {
   await LicenceSupplementaryYearModel.query()
     .patch({ billRunId: null, updatedAt: timestampForPostgres() })
     .whereIn('licenceId', licenceIds)

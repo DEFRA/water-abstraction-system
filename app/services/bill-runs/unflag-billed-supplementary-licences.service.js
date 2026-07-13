@@ -38,7 +38,7 @@ import WorkflowModel from '../../models/workflow.model.js'
  *
  * @param {module:BillRunModel} billRun - Instance of the bill run being 'sent'
  */
-export default async function unflagBilledSupplementaryLicences(billRun) {
+export default async function unflagBilledSupplementaryLicencesService(billRun) {
   const { batchType, scheme } = billRun
 
   if (scheme === 'alcs') {

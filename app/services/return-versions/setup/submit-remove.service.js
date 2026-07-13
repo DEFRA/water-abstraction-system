@@ -15,7 +15,7 @@ import FetchSessionDal from '../../../dal/fetch-session.dal.js'
  * @param {number} requirementIndex - The index of the requirement being removed
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-export default async function submitRemove(sessionId, requirementIndex, yar) {
+export default async function submitRemoveService(sessionId, requirementIndex, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const notification = {

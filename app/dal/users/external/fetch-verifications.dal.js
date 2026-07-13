@@ -15,7 +15,7 @@ import DatabaseConfig from '../../../../config/database.config.js'
  *
  * @returns {Promise<object[]>} the requested user verifications
  */
-export default async function fetchVerifications(licenceEntityId, page = '1') {
+export default async function fetchVerificationsDal(licenceEntityId, page = '1') {
   const { results: verifications, total: totalNumber } = await _fetch(licenceEntityId, page)
 
   return { totalNumber, verifications }

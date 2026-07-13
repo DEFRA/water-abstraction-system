@@ -14,7 +14,7 @@ import FetchSessionDal from '../../../dal/fetch-session.dal.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function viewContactName(sessionId) {
+export default async function viewContactNameService(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = ContactNamePresenter(session)

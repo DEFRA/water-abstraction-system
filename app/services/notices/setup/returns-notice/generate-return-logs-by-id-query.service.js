@@ -10,7 +10,7 @@
  *
  * @returns {object} The query to use as the 'due_return_logs` CTE in the recipients query, and the associated bindings
  */
-export default function generateReturnLogsByIdQuery(returnLogIds) {
+export default function generateReturnLogsByIdQueryService(returnLogIds) {
   const bindings = [returnLogIds]
 
   return {

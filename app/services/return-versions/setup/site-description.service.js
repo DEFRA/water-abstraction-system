@@ -17,7 +17,7 @@ import SiteDescriptionPresenter from '../../../presenters/return-versions/setup/
  *
  * @returns {Promise<object>} The view data for the site description page
  */
-export default async function siteDescription(sessionId, requirementIndex) {
+export default async function siteDescriptionService(sessionId, requirementIndex) {
   const session = await FetchSessionDal(sessionId)
 
   const formattedData = SiteDescriptionPresenter(session, requirementIndex)

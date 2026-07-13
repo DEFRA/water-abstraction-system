@@ -17,7 +17,7 @@ import BillLicenceModel from '../../models/bill-licence.model.js'
  * @returns {Promise<object>} the matching instance of BillLicenceModel plus the linked bill and bill run. Also all
  * transactions linked to the bill licence and their linked charge reference details
  */
-export default async function fetchBillLicence(id) {
+export default async function fetchBillLicenceService(id) {
   return _fetchBillLicence(id)
 }
 

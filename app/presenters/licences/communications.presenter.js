@@ -13,7 +13,7 @@ import NotificationsTablePresenter from '../notifications/notifications-table.pr
  *
  * @returns {object} The data formatted for the view template
  */
-export default function communications(notifications, licence) {
+export default function communicationsPresenter(notifications, licence) {
   const { id: licenceId, licenceRef } = licence
 
   const notificationsTableData = NotificationsTablePresenter(notifications, licenceId)

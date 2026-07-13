@@ -15,7 +15,7 @@ import { returnPeriodDates } from '../../../lib/static-lookups.lib.js'
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function returnsPeriods(payload, noticeType) {
+export default function returnsPeriodsValidator(payload, noticeType) {
   const validValues = Object.keys(returnPeriodDates)
 
   const errorMessage = `Select the returns periods for the ${noticeType}`

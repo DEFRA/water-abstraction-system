@@ -15,7 +15,7 @@ import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-export default async function viewAlertEmailAddress(sessionId, auth) {
+export default async function viewAlertEmailAddressService(sessionId, auth) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = AlertEmailAddressPresenter(session, auth)

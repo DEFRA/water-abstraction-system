@@ -17,7 +17,7 @@ import DatabaseConfig from '../../../config/database.config.js'
  *
  * @returns {Promise<object>} an object containing the matching notices and the total count of notices
  */
-export default async function fetchNotices(filters, page = '1') {
+export default async function fetchNoticesService(filters, page = '1') {
   const query = _fetchQuery()
 
   _applyFilters(query, filters)

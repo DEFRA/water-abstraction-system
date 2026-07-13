@@ -15,7 +15,7 @@ import { abstractionAlertsLabel } from '../crm.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function removeCompanyContact(company, companyContact, licences) {
+export default function removeCompanyContactPresenter(company, companyContact, licences) {
   const abstractionAlertType = companyContact.$abstractionAlertType()
 
   return {

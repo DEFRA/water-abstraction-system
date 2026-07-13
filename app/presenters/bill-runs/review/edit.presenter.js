@@ -16,7 +16,7 @@ import { formatChargePeriod, formatChargePeriods } from './base-review.presenter
  *
  * @returns {object} the prepared bill run and charge element data to be passed to the edit billable returns page
  */
-export default function edit(reviewChargeElement, elementIndex) {
+export default function editPresenter(reviewChargeElement, elementIndex) {
   const {
     amendedAllocated: billableReturns,
     chargeElement,

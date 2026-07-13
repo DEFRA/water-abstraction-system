@@ -14,7 +14,7 @@ import Joi from 'joi'
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function select(payload) {
+export default function selectValidator(payload) {
   const schema = Joi.object({
     addresses: Joi.string().required().invalid('select').messages({
       'any.required': 'Select an address',

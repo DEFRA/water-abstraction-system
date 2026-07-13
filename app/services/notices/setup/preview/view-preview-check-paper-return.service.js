@@ -15,7 +15,7 @@ import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-export default async function viewPreviewCheckPaperReturn(sessionId, contactHashId) {
+export default async function viewPreviewCheckPaperReturnService(sessionId, contactHashId) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = CheckPaperReturnPresenter(session, contactHashId)

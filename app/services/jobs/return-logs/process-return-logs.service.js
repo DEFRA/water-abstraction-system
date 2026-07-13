@@ -29,7 +29,7 @@ import FetchReturnRequirementsService from './fetch-return-requirements.service.
  *
  * @param {string} cycle - the return cycle to create logs for (summer or all-year)
  */
-export default async function processReturnLogs(cycle) {
+export default async function processReturnLogsService(cycle) {
   try {
     const startTime = currentTimeInNanoseconds()
 

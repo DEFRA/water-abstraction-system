@@ -17,7 +17,7 @@ import notifyConfig from '../../../../../config/notify.config.js'
  *
  * @param {object} notification - The notification linked to the verification email to be sent
  */
-export default async function sendVerificationEmail(notification) {
+export default async function sendVerificationEmailService(notification) {
   try {
     const notificationStatus = await _sendEmail(notification)
 

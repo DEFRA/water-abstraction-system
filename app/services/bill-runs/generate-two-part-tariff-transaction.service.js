@@ -30,7 +30,7 @@ import { generateUUID } from '../../lib/general.lib.js'
  *
  * @returns {object} the two-part tariff transaction
  */
-export default function generateTwoPartTariffTransaction(
+export default function generateTwoPartTariffTransactionService(
   billLicenceId,
   chargeReference,
   chargePeriod,

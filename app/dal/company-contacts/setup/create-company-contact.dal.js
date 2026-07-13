@@ -15,7 +15,7 @@ import { today } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<string>} the newly created company contact id
  */
-export default async function createCompanyContact(companyId, companyContact) {
+export default async function createCompanyContactDal(companyId, companyContact) {
   const result = await _create(companyId, companyContact)
 
   return result.id

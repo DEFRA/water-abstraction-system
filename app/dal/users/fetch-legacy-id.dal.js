@@ -24,7 +24,7 @@ import UserModel from '../../models/user.model.js'
  *
  * @returns {Promise<number>} the requested user's legacy `userId`
  */
-export default async function fetchLegacyId(id) {
+export default async function fetchLegacyIdDal(id) {
   const { userId } = await UserModel.query().select(['userId']).findById(id)
 
   return userId

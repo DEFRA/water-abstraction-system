@@ -18,7 +18,7 @@ import { isQuarterlyReturnSubmissions } from '../../../../lib/dates.lib.js'
  *
  * @returns {Promise<object>} The new return version and its return requirements data for a licence
  */
-export default async function generateReturnVersion(session, userId) {
+export default async function generateReturnVersionService(session, userId) {
   const nextVersionNumber = await DetermineNextVersionNumberDal(session.licence.id)
 
   const returnVersion = await _generateReturnVersion(nextVersionNumber, session, userId)

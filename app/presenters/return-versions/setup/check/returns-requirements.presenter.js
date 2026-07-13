@@ -24,7 +24,7 @@ const AGREEMENTS_EXCEPTIONS = {
  *
  * @returns {object} returns requirement data needed by the view template
  */
-export default function returnsRequirements(requirements, points, journey) {
+export default function returnsRequirementsPresenter(requirements, points, journey) {
   return {
     returnsRequired: journey === 'returns-required',
     requirements: _requirements(requirements, points)

@@ -12,7 +12,7 @@ import UserModel from '../../../models/user.model.js'
  *
  * @returns {Promise<module:UserModel>} the requested user
  */
-export default async function fetchUserDetails(id) {
+export default async function fetchUserDetailsDal(id) {
   const user = await UserModel.query()
     .select(['id', 'licenceEntityId', 'username'])
     .modify('permissions')

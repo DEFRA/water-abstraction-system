@@ -14,7 +14,7 @@ import { userPermissions } from '../../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-export default async function initiateEditSession(id) {
+export default async function initiateEditSessionService(id) {
   const user = await FetchUserDetailsDal(id)
 
   const data = _formatDataForJourney(user)

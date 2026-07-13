@@ -12,7 +12,7 @@ import BillingAccountModel from '../../../models/billing-account.model.js'
  *
  * @returns {Promise<object[]>} Array of objects in the format { billingAccountId: '...', accountNumber: '...' }
  */
-export default async function fetchBillingAccounts(chargeVersions) {
+export default async function fetchBillingAccountsService(chargeVersions) {
   const uniqueBillingAccountIds = _extractUniqueBillingAccountIds(chargeVersions)
   const billingAccountModels = await _fetch(uniqueBillingAccountIds)
 

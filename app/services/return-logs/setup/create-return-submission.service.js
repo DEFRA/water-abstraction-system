@@ -20,7 +20,7 @@ import { generateUUID } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<module:ReturnSubmissionModel>} - The created return submission
  */
-export default async function createReturnSubmission(metadata, session, timestamp, user, trx = null) {
+export default async function createReturnSubmissionService(metadata, session, timestamp, user, trx = null) {
   const { version, previousVersion } = await _determineVersionNumbers(session.returnLogId, trx)
 
   const returnSubmission = {

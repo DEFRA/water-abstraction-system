@@ -13,7 +13,7 @@ import { NoticeJourney } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function cancel(session) {
+export default function cancelPresenter(session) {
   const { referenceCode } = session
 
   return {

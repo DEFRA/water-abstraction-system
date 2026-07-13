@@ -13,7 +13,7 @@ import { returnRequirementReasons } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function existing(session) {
+export default function existingPresenter(session) {
   const { id: sessionId, licence, licenceVersion } = session
 
   return {

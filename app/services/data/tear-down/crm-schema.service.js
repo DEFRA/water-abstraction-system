@@ -10,7 +10,7 @@ import { db } from '../../../../db/db.js'
  *
  * @returns {Promise<object>}
  */
-export default async function crmSchema() {
+export default async function crmSchemaService() {
   return _deleteAllTestData()
 }
 

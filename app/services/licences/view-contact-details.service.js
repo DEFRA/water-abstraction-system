@@ -18,7 +18,7 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence contact details template.
  */
-export default async function viewContactDetails(licenceId, auth, page) {
+export default async function viewContactDetailsService(licenceId, auth, page) {
   const licence = await FetchLicenceService(licenceId)
   const roles = userRoles(auth)
 

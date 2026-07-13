@@ -13,7 +13,7 @@ import { timestampForPostgres } from '../../lib/general.lib.js'
  *
  * @returns {Promise<object[]>} An object containing the points data needed for the points page
  */
-export default async function fetchPoints(licenceId) {
+export default async function fetchPointsService(licenceId) {
   return _fetchPoints(licenceId)
 }
 

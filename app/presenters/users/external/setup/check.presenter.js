@@ -12,7 +12,7 @@ import { formatLicencesToUnlink } from '../../base-users.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function check(session) {
+export default function checkPresenter(session) {
   const licences = formatLicencesToUnlink(session)
 
   return {

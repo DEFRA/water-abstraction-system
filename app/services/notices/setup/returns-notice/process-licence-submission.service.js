@@ -21,7 +21,7 @@ import { formatValidationResult } from '../../../../presenters/base.presenter.js
  *
  * @returns {Promise<object>} The due returns fetched alongside the validation result (null if valid)
  */
-export default async function processLicenceSubmission(payload) {
+export default async function processLicenceSubmissionService(payload) {
   const dueReturns = await _dueReturns(payload)
 
   const validationResult = await _validate(payload, dueReturns)

@@ -15,7 +15,7 @@ import { formatAbstractionAmounts } from './base-licences.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function summary(licence, summary) {
+export default function summaryPresenter(licence, summary) {
   const { expiredDate, issueDate, licenceMonitoringStations, region, startDate } = summary
 
   const licenceVersionPurposes = _licenceVersionPurposes(summary)

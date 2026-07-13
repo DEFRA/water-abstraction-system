@@ -17,7 +17,7 @@ import Joi from 'joi'
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the `error:` property will
  * also exist detailing what the issue is.
  */
-export default function licences(payload) {
+export default function licencesValidator(payload) {
   const errorMessage = 'Select licences to unregister'
 
   const schema = Joi.object({

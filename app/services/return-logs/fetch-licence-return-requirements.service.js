@@ -28,7 +28,7 @@ import ReturnVersionModel from '../../models/return-version.model.js'
  *
  * @returns {Promise<module:ReturnRequirementModel[]>} the matching return requirements for the licence and change date
  */
-export default async function fetchLicenceReturnRequirements(licenceId, changeDate, trx = null) {
+export default async function fetchLicenceReturnRequirementsService(licenceId, changeDate, trx = null) {
   const returnVersions = await _returnVersions(licenceId, changeDate, trx)
 
   if (returnVersions.length === 0) {

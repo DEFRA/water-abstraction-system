@@ -13,7 +13,7 @@ import FetchFailedRenewalInvitationsService from '../renewal-notice/fetch-failed
  *
  * @returns {Promise<object|null>} The notice, notifications, and failed notification IDs, or null if none failed
  */
-export default async function renewalInvitationAlternateNotice(mainNotice) {
+export default async function renewalInvitationAlternateNoticeService(mainNotice) {
   const { licenceRefs, notificationIds } = await FetchFailedRenewalInvitationsService(mainNotice.id)
 
   if (notificationIds.length === 0) {

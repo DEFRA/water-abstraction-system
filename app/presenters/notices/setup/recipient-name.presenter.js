@@ -10,7 +10,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function recipientName(session) {
+export default function recipientNamePresenter(session) {
   const { id: sessionId, contactName: name, referenceCode } = session
 
   return {

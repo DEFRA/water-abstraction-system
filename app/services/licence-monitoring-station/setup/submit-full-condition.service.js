@@ -17,7 +17,7 @@ import FullConditionValidator from '../../../validators/licence-monitoring-stati
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function submitFullCondition(sessionId, payload) {
+export default async function submitFullConditionService(sessionId, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {

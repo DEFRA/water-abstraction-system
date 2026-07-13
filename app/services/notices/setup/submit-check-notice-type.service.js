@@ -17,7 +17,7 @@ import { NoticeType } from '../../../lib/static-lookups.lib.js'
  *
  * @param {string} sessionId - The UUID of the current session
  */
-export default async function submitCheckNoticeType(sessionId) {
+export default async function submitCheckNoticeTypeService(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   session.addressJourney = {

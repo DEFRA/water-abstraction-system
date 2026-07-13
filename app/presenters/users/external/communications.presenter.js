@@ -17,7 +17,7 @@ import { sourceNavigation } from '../base-users.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function communications(user, notifications, viewingUserScope, back) {
+export default function communicationsPresenter(user, notifications, viewingUserScope, back) {
   const { id, username } = user
 
   const canManageAccounts = viewingUserScope.includes('manage_accounts')

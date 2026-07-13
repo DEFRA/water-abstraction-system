@@ -16,7 +16,7 @@ import TypePresenter from '../../../presenters/bill-runs/setup/type.presenter.js
  *
  * @returns {Promise<object>} The view data for the type page
  */
-export default async function type(sessionId) {
+export default async function typeService(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = TypePresenter(session)

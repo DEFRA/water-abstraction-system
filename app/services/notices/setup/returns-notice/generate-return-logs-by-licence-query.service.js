@@ -14,7 +14,7 @@ import { NoticeType } from '../../../../lib/static-lookups.lib.js'
  *
  * @returns {object} The query to use as the 'due_return_logs` CTE in the recipients query, and the associated bindings
  */
-export default function generateReturnLogsByLicenceQuery(licenceRef, noticeType) {
+export default function generateReturnLogsByLicenceQueryService(licenceRef, noticeType) {
   const bindings = [timestampForPostgres(), licenceRef]
 
   return {

@@ -11,7 +11,7 @@ import ViewInvalidAddressesPresenter from '../../presenters/reports/view-invalid
  *
  * @returns {Promise<object>} The view data for the invalid addresses page
  */
-export default async function viewInvalidAddresses() {
+export default async function viewInvalidAddressesService() {
   const invalidAddresses = await FetchInvalidAddressesService()
 
   const pageData = ViewInvalidAddressesPresenter(invalidAddresses)

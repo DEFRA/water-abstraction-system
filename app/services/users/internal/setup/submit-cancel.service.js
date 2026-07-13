@@ -14,7 +14,7 @@ import DeleteSessionDal from '../../../../dal/delete-session.dal.js'
  *
  * @returns {Promise<object>} An object containing the URL to redirect the user to after cancelling
  */
-export default async function submitCancel(sessionId) {
+export default async function submitCancelService(sessionId) {
   await DeleteSessionDal(sessionId)
 
   return {

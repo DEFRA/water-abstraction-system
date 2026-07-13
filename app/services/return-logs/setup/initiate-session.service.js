@@ -24,7 +24,7 @@ import { returnUnits, unitNames } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<string>} the url to redirect to
  */
-export default async function initiateSession(returnLogId) {
+export default async function initiateSessionService(returnLogId) {
   const returnLog = await _fetchReturnLog(returnLogId)
 
   const referenceData = _referenceData(returnLog)

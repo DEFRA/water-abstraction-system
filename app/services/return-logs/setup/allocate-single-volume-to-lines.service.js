@@ -24,7 +24,7 @@ const MAX_DECIMAL = 6
  *
  * @param {object} session - Session object containing the return submission data
  */
-export default function allocateSingleVolumeToLines(session) {
+export default function allocateSingleVolumeToLinesService(session) {
   const { fromFullDate, lines, singleVolumeQuantity, toFullDate, unitSymbol } = session
 
   const linesInsideAbstractionPeriod = _linesInsideAbstractionPeriod(fromFullDate, lines, toFullDate)

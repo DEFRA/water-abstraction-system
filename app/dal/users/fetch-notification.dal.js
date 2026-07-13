@@ -12,7 +12,7 @@ import NotificationModel from '../../models/notification.model.js'
  *
  * @returns {Promise<module:NotificationModel>} the matching `NotificationModel` instance
  */
-export default async function fetchNotification(notificationId) {
+export default async function fetchNotificationDal(notificationId) {
   return NotificationModel.query()
     .findById(notificationId)
     .select([

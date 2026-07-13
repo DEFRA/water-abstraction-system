@@ -16,7 +16,7 @@ import LicenceMonitoringStationModel from '../../../models/licence-monitoring-st
  *
  * @param {object[]} notifications
  */
-export default async function updateAbstractionAlerts(notifications) {
+export default async function updateAbstractionAlertsService(notifications) {
   const toUpdateStations = _stations(notifications)
 
   await Promise.all(toUpdateStations)

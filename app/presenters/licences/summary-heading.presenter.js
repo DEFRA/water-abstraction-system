@@ -15,7 +15,7 @@ import { supplementaryBillingNotification } from './base-licences.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function summaryHeading(licence, summary) {
+export default function summaryHeadingPresenter(licence, summary) {
   const { licenceRef } = licence
 
   const { workflows, startDate } = summary

@@ -18,7 +18,7 @@ import { flashNotification } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function submitRestore(sessionId, yar, auth) {
+export default async function submitRestoreService(sessionId, yar, auth) {
   const session = await FetchSessionDal(sessionId)
 
   await DeleteSessionDal(sessionId)

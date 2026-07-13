@@ -13,7 +13,7 @@ import { formatLongDate, formatNoticeType } from '../base.presenter.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function indexNotices(notices, auth) {
+export default function indexNoticesPresenter(notices, auth) {
   const {
     credentials: { scope }
   } = auth
