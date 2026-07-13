@@ -13,7 +13,7 @@ import LicenceModel from '../../../../app/models/licence.model.js'
  * @returns {Promise<object>} an object representing the `pageData` needed by the marked for supplementary billing
  * confirmation page. It contains details of the licence.
  */
-export default async function go(licenceId) {
+export default async function viewMarkedForSupplementaryBillingService(licenceId) {
   const licenceData = await _fetchLicenceData(licenceId)
 
   return {

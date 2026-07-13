@@ -15,7 +15,6 @@ describe('Return Versions Setup - Process Existing Return Versions service', () 
   beforeEach(() => {
     licenceId = '7cf4a46b-1375-42c8-bfe7-24c1bfff765c'
 
-
     vi.spyOn(UpdateReturnVersionEndDateDal, 'default').mockResolvedValue()
     vi.spyOn(UpdateReturnVersionStatusDal, 'default').mockResolvedValue()
   })

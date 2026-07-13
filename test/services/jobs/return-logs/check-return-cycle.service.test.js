@@ -10,7 +10,6 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
   const currentDate = new Date('2024-05-01')
   const id = '0055799f-8b6a-4753-ac78-57c61a6ef80b'
 
-  let clock
   let cycleData
   let firstStub
   let insertStub
@@ -31,7 +30,7 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
       insert: insertStub
     })
 
-    clock = vi.useFakeTimers({ now: currentDate })
+    vi.useFakeTimers({ now: currentDate })
   })
 
   afterEach(() => {

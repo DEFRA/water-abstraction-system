@@ -19,7 +19,7 @@ import { flowUnits } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<string>} The monitoring station id used to redirect back to the monitoring station page
  */
-export default async function go(sessionId, userId, yar) {
+export default async function submitCheckService(sessionId, userId, yar) {
   const session = await FetchSessionDal(sessionId)
 
   await _createTag(session, userId)

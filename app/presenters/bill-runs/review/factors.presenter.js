@@ -14,7 +14,7 @@ import { formatAdditionalCharges, formatChargePeriod, formatAdjustments } from '
  *
  * @returns {object} page date needed for the review charge reference factors page
  */
-export default function go(reviewChargeReference) {
+export default function factorsPresenter(reviewChargeReference) {
   const {
     amendedAggregate,
     amendedChargeAdjustment,

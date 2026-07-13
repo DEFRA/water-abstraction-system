@@ -36,7 +36,7 @@ const SROC_START_DATE = new Date('2022-04-01')
  * @returns {object} - An object containing the related licenceId, regionId, return start and end date and licence
  * supplementary billing flags
  */
-export default async function go(returnLogId) {
+export default async function determineReturnLogFlagsService(returnLogId) {
   const { twoPartTariff, licence, endDate, startDate } = await _fetchReturnLog(returnLogId)
 
   const result = {

@@ -18,7 +18,7 @@ import ViewNoticePresenter from '../../presenters/notices/view-notice.presenter.
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-export default async function go(noticeId, yar, page) {
+export default async function viewNoticeService(noticeId, yar, page) {
   const filterKey = `noticeFilter-${noticeId}`
   const filters = _filters(yar, filterKey)
 

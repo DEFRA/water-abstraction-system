@@ -19,7 +19,7 @@ import {
  *
  * @returns {object} page date needed for the review charge reference page
  */
-export default function go(reviewChargeReference) {
+export default function reviewChargeReferencePresenter(reviewChargeReference) {
   const {
     amendedAuthorisedVolume,
     chargeReference,

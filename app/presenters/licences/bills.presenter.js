@@ -14,7 +14,7 @@ import { formatBillRunType } from '../billing.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function go(bills, licence) {
+export default function billsPresenter(bills, licence) {
   const { id: licenceId, licenceRef } = licence
 
   return {

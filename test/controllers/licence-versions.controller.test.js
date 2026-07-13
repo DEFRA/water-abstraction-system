@@ -2,13 +2,13 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_OK } = http2.constants
 
 // Things we need to stub
 import * as ViewService from '../../app/services/licence-versions/view.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_OK } = http2.constants
 
 describe('Licence Versions controller', () => {
   let options

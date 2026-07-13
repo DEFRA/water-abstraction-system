@@ -199,8 +199,12 @@ describe('Return Versions - Setup - Submit Check service', () => {
 
           expect(VoidReturnLogsService.default).toHaveBeenCalled()
           expect(VoidReturnLogsService.default.mock.calls[0][0]).toEqual(sessionData.licence.licenceRef)
-          expect(VoidReturnLogsService.default.mock.calls[0][1]).toEqual(generatedReturnVersionData.returnVersion.startDate)
-          expect(VoidReturnLogsService.default.mock.calls[0][2]).toEqual(generatedReturnVersionData.returnVersion.endDate)
+          expect(VoidReturnLogsService.default.mock.calls[0][1]).toEqual(
+            generatedReturnVersionData.returnVersion.startDate
+          )
+          expect(VoidReturnLogsService.default.mock.calls[0][2]).toEqual(
+            generatedReturnVersionData.returnVersion.endDate
+          )
         })
       })
     })

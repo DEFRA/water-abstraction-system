@@ -51,7 +51,6 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
       recipient: 'new.user@environment-agency.gov.uk'
     }
 
-
     pauseStub = vi.spyOn(GeneralLib, 'pause').mockResolvedValue()
 
     vi.spyOn(UpdateNotificationDal, 'default').mockResolvedValue()

@@ -10,7 +10,6 @@ describe('Bill Runs - Cancel Bill Run service', () => {
   const billRunId = '20f530db-aa69-42d1-8a27-0ab838ca1916'
   const externalId = 'c5d64590-a0c9-45ee-b381-ab1ddb569751'
 
-  let queryStub
   let billRunPatchStub
 
   beforeEach(() => {
@@ -20,7 +19,6 @@ describe('Bill Runs - Cancel Bill Run service', () => {
       findById: vi.fn().mockReturnThis(),
       patch: billRunPatchStub
     })
-    queryStub = BillRunModel.query
   })
 
   afterEach(() => {
@@ -32,8 +30,7 @@ describe('Bill Runs - Cancel Bill Run service', () => {
       beforeEach(() => {
         vi.spyOn(BillRunModel, 'query').mockReturnValueOnce({
           findById: vi.fn().mockReturnThis(),
-          select: vi
-            .fn().mockResolvedValue({ id: billRunId, externalId, status: 'ready' })
+          select: vi.fn().mockResolvedValue({ id: billRunId, externalId, status: 'ready' })
         })
       })
 

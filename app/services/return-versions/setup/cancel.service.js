@@ -16,7 +16,7 @@ import FetchSessionDal from '../../../dal/fetch-session.dal.js'
  *
  * @returns {Promise<object>} The view data for the cancel requirements page
  */
-export default async function go(sessionId) {
+export default async function cancelService(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const formattedData = CancelPresenter(session)

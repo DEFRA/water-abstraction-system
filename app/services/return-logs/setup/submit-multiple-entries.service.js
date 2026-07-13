@@ -27,7 +27,7 @@ import { returnRequirementFrequencies } from '../../../lib/static-lookups.lib.js
  * @returns {Promise<object>} If no errors it returns an empty object else the page data for the multiple entries page
  * including the validation error details
  */
-export default async function go(sessionId, payload, yar) {
+export default async function submitMultipleEntriesService(sessionId, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const measurementType = session.reported === 'abstractionVolumes' ? 'volumes' : 'meter readings'

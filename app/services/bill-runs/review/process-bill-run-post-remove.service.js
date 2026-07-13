@@ -24,7 +24,7 @@ import GenerateTwoPartTariffBillRunService from '../generate-two-part-tariff-bil
  *
  * @returns {Promise<boolean>} true if it was the last review licence in the bill run, else false
  */
-export default async function go(billRunId) {
+export default async function processBillRunPostRemoveService(billRunId) {
   const billRun = await _fetchBillRun(billRunId)
 
   const empty = billRun.reviewLicences.length === 0

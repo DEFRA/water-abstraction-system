@@ -20,7 +20,7 @@ import UnflagUnbilledSupplementaryLicencesService from '../unflag-unbilled-suppl
  * @param {module:BillRunModel} billRun
  * @param {object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`
  */
-export default async function go(billRun, billingPeriods) {
+export default async function processBillRunService(billRun, billingPeriods) {
   const { id: billRunId } = billRun
 
   try {

@@ -41,7 +41,7 @@ const HEADERS = [
  * @returns {string} - A CSV-formatted string that includes the recipients' data, with the first row as column headers
  * and subsequent rows corresponding to the recipient details.
  */
-export default function go(recipients, session) {
+export default function downloadReturnsNoticePresenter(recipients, session) {
   const { notificationType } = session
 
   const rows = _transformToCsv(recipients, notificationType)

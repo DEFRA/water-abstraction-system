@@ -33,7 +33,6 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
       patch: billRunPatchStub,
       select: billRunSelectStub
     })
-
   })
 
   afterEach(() => {

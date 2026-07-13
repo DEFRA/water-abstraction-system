@@ -20,7 +20,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
  * @returns {Promise<object>} If no errors it returns an empty object else the page data for the volumes page including
  * the validation error details
  */
-export default async function go(sessionId, payload, yar, yearMonth) {
+export default async function submitVolumesService(sessionId, payload, yar, yearMonth) {
   const session = await FetchSessionDal(sessionId)
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)

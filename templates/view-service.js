@@ -14,7 +14,7 @@ import FetchSessionDal from '__FETCH_SESSION_DAL_PATH__'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function go(sessionId) {
+export default async function __FUNCTION_NAME__(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = __PRESENTER_NAME__(session)
@@ -23,4 +23,3 @@ export default async function go(sessionId) {
     ...pageData
   }
 }
-

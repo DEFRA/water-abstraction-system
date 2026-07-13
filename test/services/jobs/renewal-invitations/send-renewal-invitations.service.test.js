@@ -18,7 +18,6 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
   const days = '300'
   const recipients = [{ licence_refs: generateLicenceRef() }]
 
-  let clock
   let expectedRenewalDate
   let expiredDate
   let noticeId
@@ -36,7 +35,7 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
     // 90 days before the expired date
     expectedRenewalDate = new Date('2026-11-11')
 
-    clock = vi.useFakeTimers({ now: todayDate })
+    vi.useFakeTimers({ now: todayDate })
 
     vi.replaceProperty(NotifyConfig, 'replyTo', 'notify@test.gov.uk')
 

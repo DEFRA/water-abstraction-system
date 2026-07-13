@@ -16,7 +16,7 @@ const errorMessage = `Enter the recipient's name`
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function go(payload) {
+export default function recipientNameValidator(payload) {
   const schema = Joi.object({
     name: Joi.string().required()
   }).messages({

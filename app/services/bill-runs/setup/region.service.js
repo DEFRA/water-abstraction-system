@@ -17,7 +17,7 @@ import RegionPresenter from '../../../presenters/bill-runs/setup/region.presente
  *
  * @returns {Promise<object>} The view data for the region page
  */
-export default async function go(sessionId) {
+export default async function regionService(sessionId) {
   const session = await FetchSessionDal(sessionId)
   const regions = await FetchRegionsService()
 

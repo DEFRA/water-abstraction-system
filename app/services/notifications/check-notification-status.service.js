@@ -71,7 +71,7 @@ const LETTER_STATUS = {
  *
  * @param {object} notification
  */
-export default async function go(notification) {
+export default async function checkNotificationStatusService(notification) {
   const notifyStatus = await _notifyStatus(notification.notifyId)
 
   const status = _status(notification, notifyStatus)

@@ -18,7 +18,7 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence communication template.
  */
-export default async function go(licenceId, auth, page) {
+export default async function viewCommunicationsService(licenceId, auth, page) {
   const licence = await FetchLicenceService(licenceId)
 
   const { notifications, totalNumber } = await FetchNotificationsDal(licence.licenceRef, page)

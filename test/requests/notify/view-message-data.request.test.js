@@ -1,5 +1,4 @@
 import http2 from 'node:http2'
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
 
@@ -8,6 +7,7 @@ import * as NotifyRequest from '../../../app/requests/notify.request.js'
 
 // Thing under test
 import * as ViewMessageDataRequest from '../../../app/requests/notify/view-message-data.request.js'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Notify - View Message Data request', () => {
   const notificationId = '5a714bec-4ca0-45ba-8edf-8fa37db09499'

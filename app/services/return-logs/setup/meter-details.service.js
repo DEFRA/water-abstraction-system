@@ -16,7 +16,7 @@ import MeterDetailsPresenter from '../../../presenters/return-logs/setup/meter-d
  *
  * @returns {Promise<object>} The view data for the meter details page
  */
-export default async function go(sessionId) {
+export default async function meterDetailsService(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = MeterDetailsPresenter(session)

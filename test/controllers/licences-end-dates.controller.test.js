@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_NO_CONTENT } = http2.constants
 
 // Things we need to stub
 import * as CheckAllLicenceEndDatesService from '../../app/services/licences/end-dates/check-all-licence-end-dates.service.js'
@@ -10,6 +9,7 @@ import * as ProcessLicenceEndDateChangesService from '../../app/services/licence
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_NO_CONTENT } = http2.constants
 
 describe('Licences End Dates controller', () => {
   let options

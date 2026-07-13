@@ -11,7 +11,6 @@ describe('Return Cycle Dates lib', () => {
   const todaysDate = today()
   const year = todaysDate.getFullYear()
 
-  let clock
   let expectedDate
   let summer
   let testDate
@@ -30,7 +29,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is after the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-12-01`)
-            clock = vi.useFakeTimers({ now: testDate })
+            vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear() + 1,
@@ -49,7 +48,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is before the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-09-01`)
-            clock = vi.useFakeTimers({ now: testDate })
+            vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear(),
@@ -110,7 +109,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is after the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-05-01`)
-            clock = vi.useFakeTimers({ now: testDate })
+            vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear() + 1,
@@ -129,7 +128,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is before the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-03-01`)
-            clock = vi.useFakeTimers({ now: testDate })
+            vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear(),
@@ -192,7 +191,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is after the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-12-01`)
-            clock = vi.useFakeTimers({ now: testDate })
+            vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear() + 1,
@@ -211,7 +210,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is before the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-09-01`)
-            clock = vi.useFakeTimers({ now: testDate })
+            vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear(),
@@ -272,7 +271,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is after the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-05-01`)
-            clock = vi.useFakeTimers({ now: testDate })
+            vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear() + 1,
@@ -291,7 +290,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is before the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-02-01`)
-            clock = vi.useFakeTimers({ now: testDate })
+            vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear(),
@@ -354,7 +353,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is after the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-12-01`)
-            clock = vi.useFakeTimers({ now: testDate })
+            vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear(),
@@ -373,7 +372,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is before the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-09-01`)
-            clock = vi.useFakeTimers({ now: testDate })
+            vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear() - 1,
@@ -436,7 +435,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is after the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-05-01`)
-            clock = vi.useFakeTimers({ now: testDate })
+            vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear(),
@@ -455,7 +454,7 @@ describe('Return Cycle Dates lib', () => {
         describe('and the current date is before the cycle end', () => {
           beforeEach(() => {
             testDate = new Date(`${year}-02-01`)
-            clock = vi.useFakeTimers({ now: testDate })
+            vi.useFakeTimers({ now: testDate })
 
             expectedDate = new Date(
               new Date().getFullYear() - 1,

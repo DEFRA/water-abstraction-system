@@ -14,7 +14,7 @@ import { timestampForPostgres } from '../../lib/general.lib.js'
  *
  * @returns {Promise<object[]>} An array of licence objects with `id` and `licenceRef`, sorted by `licenceRef`
  */
-export default async function go(companyId) {
+export default async function fetchCompanyLicencesDal(companyId) {
   const query = `
   SELECT
     l.id,

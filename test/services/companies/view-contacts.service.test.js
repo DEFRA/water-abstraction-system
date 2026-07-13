@@ -44,7 +44,9 @@ describe('Companies - View Contacts service', () => {
     page = '1'
 
     yarStub = YarStub()
-    yarStub.flash.mockReturnValue([{ titleText: 'Contact removed', text: 'Rachael Tyrell was removed from this company.' }])
+    yarStub.flash.mockReturnValue([
+      { titleText: 'Contact removed', text: 'Rachael Tyrell was removed from this company.' }
+    ])
   })
 
   afterEach(() => {

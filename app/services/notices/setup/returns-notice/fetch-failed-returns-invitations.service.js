@@ -20,7 +20,7 @@ import { compareStrings } from '../../../../lib/general.lib.js'
  * @returns {Promise<object>} An object containing the IDs of the failed notifications, plus the combined return log IDs
  * and licence references from them
  */
-export default async function go(noticeId) {
+export default async function fetchFailedReturnsInvitationsService(noticeId) {
   const notifications = await _fetch(noticeId)
 
   const dueDate = _dueDate(notifications)

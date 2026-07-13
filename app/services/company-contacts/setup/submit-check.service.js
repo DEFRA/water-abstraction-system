@@ -19,7 +19,7 @@ import { flashNotification } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function go(sessionId, yar, auth) {
+export default async function submitCheckService(sessionId, yar, auth) {
   const sessionData = await FetchSessionDal(sessionId)
 
   await DeleteSessionDal(sessionId)

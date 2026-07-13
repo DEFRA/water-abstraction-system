@@ -19,7 +19,7 @@ import { licenceHolderRecipientQuery, primaryUserRecipientQuery } from '../../..
  *
  * @returns {string} the SQL query for all renewal recipients with expired licences
  */
-export default function go(expiredLicencesQuery) {
+export default function generateRenewalRecipientsQueryService(expiredLicencesQuery) {
   const licenceHolderQuery = _licenceHolderQuery()
   const primaryUserQuery = _primaryUserQuery()
   const processQuery = _processForSending()

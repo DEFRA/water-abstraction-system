@@ -14,7 +14,7 @@ import ViewCancelBillRunPresenter from '../../../presenters/bill-runs/view-cance
  * @returns {Promise<object>} an object representing the `pageData` needed by the cancel bill run template. It contains
  * details of the bill run.
  */
-export default async function go(id) {
+export default async function viewCancelBillRunService(id) {
   const billRun = await _fetchBillRun(id)
 
   const formattedData = ViewCancelBillRunPresenter(billRun)

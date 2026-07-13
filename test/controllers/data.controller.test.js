@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 
 // Things we need to stub
 import * as LoadService from '../../app/services/data/load/load.service.js'
@@ -11,6 +10,7 @@ import * as TearDownService from '../../app/services/data/tear-down/tear-down.se
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 
 describe('Data controller', () => {
   let server

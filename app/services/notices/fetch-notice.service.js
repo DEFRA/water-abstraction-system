@@ -19,7 +19,7 @@ import DatabaseConfig from '../../../config/database.config.js'
  *
  * @returns {Promise<object>} the notice and its associated notifications
  */
-export default async function go(noticeId, filters, page = '1') {
+export default async function fetchNoticeService(noticeId, filters, page = '1') {
   const notice = await _fetchNotice(noticeId)
 
   const notificationsQuery = _fetchNotificationsQuery(noticeId)

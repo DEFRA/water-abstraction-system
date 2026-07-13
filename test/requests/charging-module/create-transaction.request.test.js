@@ -1,5 +1,4 @@
 import http2 from 'node:http2'
-const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 // Test framework dependencies
 
@@ -8,6 +7,7 @@ import * as ChargingModuleRequest from '../../../app/requests/charging-module.re
 
 // Thing under test
 import * as CreateTransactionRequest from '../../../app/requests/charging-module/create-transaction.request.js'
+const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 describe('Charging Module Create Transaction request', () => {
   const billRunId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'

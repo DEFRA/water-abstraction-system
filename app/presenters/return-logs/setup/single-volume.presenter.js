@@ -10,7 +10,7 @@
  *
  * @returns {object} page data needed by the view template
  */
-export default function go(session) {
+export default function singleVolumePresenter(session) {
   const { id: sessionId, returnReference, singleVolume, singleVolumeQuantity, units } = session
 
   return {

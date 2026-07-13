@@ -24,7 +24,7 @@ import DetermineChargePeriodService from '../determine-charge-period.service.js'
  * @param {module:ChargeVersionModel} chargeVersion - The charge version to prepare
  * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  */
-export default function go(chargeVersion, billingPeriod) {
+export default function prepareChargeVersionService(chargeVersion, billingPeriod) {
   const { chargeReferences } = chargeVersion
 
   _sortChargeReferencesBySubsistenceCharge(chargeReferences)

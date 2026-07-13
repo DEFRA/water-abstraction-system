@@ -11,7 +11,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function go(session, addresses) {
+export default function selectPresenter(session, addresses) {
   const { activeNavBar, address, pageTitleCaption } = session.addressJourney
 
   return {

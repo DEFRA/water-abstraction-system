@@ -28,7 +28,7 @@ import YearValidator from '../../../validators/bill-runs/setup/year.validator.js
  * @returns {Promise<object>} An object with a `setupComplete:` property if there are no errors else the page data for
  * the year page including the validation error details
  */
-export default async function go(sessionId, payload) {
+export default async function submitYearService(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)

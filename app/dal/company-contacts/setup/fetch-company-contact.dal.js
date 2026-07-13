@@ -12,7 +12,7 @@ import CompanyContactModel from '../../../models/company-contact.model.js'
  *
  * @returns {Promise<CompanyContactModel>} the company contact
  */
-export default async function go(companyContactId) {
+export default async function fetchCompanyContactDal(companyContactId) {
   return _fetch(companyContactId)
 }
 

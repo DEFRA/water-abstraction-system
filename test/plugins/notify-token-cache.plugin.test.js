@@ -11,7 +11,6 @@ const TWENTY_SECONDS_IN_MILLISECONDS = 20000
 const THIRTY_SECONDS_IN_MILLISECONDS = 30000
 
 describe('Notify Token Cache plugin', () => {
-  let clock
   let jwtSignSpy
   let server
   let testDate
@@ -20,7 +19,7 @@ describe('Notify Token Cache plugin', () => {
     jwtSignSpy = vi.spyOn(jwt, 'sign')
 
     testDate = new Date('2025-08-19T11:03:00.000Z')
-    clock = vi.useFakeTimers({ now: testDate })
+    vi.useFakeTimers({ now: testDate })
 
     // Create server before each test
     server = await init()

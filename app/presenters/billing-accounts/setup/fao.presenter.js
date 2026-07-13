@@ -12,7 +12,7 @@ import { checkUrl } from '../../../lib/check-page.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function go(session) {
+export default function faoPresenter(session) {
   return {
     backLink: {
       href: checkUrl(session, `/system/billing-accounts/setup/${session.id}/existing-address`),

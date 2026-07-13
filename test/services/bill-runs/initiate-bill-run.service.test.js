@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_FORBIDDEN, HTTP_STATUS_OK } = http2.constants
 import BillRunModel from '../../../app/models/bill-run.model.js'
 import * as RegionHelper from '../../support/helpers/region.helper.js'
 
@@ -12,6 +11,7 @@ import * as CreateBillRunEventService from '../../../app/services/bill-runs/crea
 
 // Thing under test
 import InitiateBillRunService from '../../../app/services/bill-runs/initiate-bill-run.service.js'
+const { HTTP_STATUS_FORBIDDEN, HTTP_STATUS_OK } = http2.constants
 
 describe('Initiate Bill Run service', () => {
   const financialYearEndings = { fromFinancialYearEnding: 2023, toFinancialYearEnding: 2024 }

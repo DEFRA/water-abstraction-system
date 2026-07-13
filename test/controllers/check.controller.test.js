@@ -2,10 +2,10 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_NO_CONTENT } = http2.constants
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_NO_CONTENT } = http2.constants
 
 describe('Check controller', () => {
   let options

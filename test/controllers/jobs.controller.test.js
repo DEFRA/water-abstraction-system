@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT } = http2.constants
 
 // Things we need to stub
 import * as ExportService from '../../app/services/jobs/export/export.service.js'
@@ -16,6 +15,7 @@ import * as ProcessTimeLimitedLicencesService from '../../app/services/jobs/time
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT } = http2.constants
 
 describe('Jobs controller', () => {
   let options

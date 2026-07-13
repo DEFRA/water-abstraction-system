@@ -18,7 +18,7 @@ import { readFlashNotification } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<object>} The view data for the review page
  */
-export default async function go(sessionId, yar, page) {
+export default async function viewCheckService(sessionId, yar, page) {
   const session = await FetchSessionDal(sessionId)
 
   const recipients = await FetchRecipientsService(session, false)

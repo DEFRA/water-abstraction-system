@@ -22,7 +22,7 @@ import { sameDate } from '../../../../lib/dates.lib.js'
  * @returns {Promise<Date>} The calculated `endDate` for the new return version if there is one. Null will be returned
  * if there is no `endDate`
  */
-export default async function go(licenceId, newVersionStartDate, trx) {
+export default async function processExistingReturnVersionsService(licenceId, newVersionStartDate, trx) {
   const previousVersions = await FetchCurrentReturnVersionsDal(licenceId, trx)
   const previousVersionEndDate = _calculateEndDate(newVersionStartDate)
 

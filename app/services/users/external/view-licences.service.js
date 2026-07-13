@@ -20,7 +20,7 @@ import { readFlashNotification } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<object>} The view data for the external user page
  */
-export default async function go(id, auth, page, yar, back = 'users') {
+export default async function viewLicencesService(id, auth, page, yar, back = 'users') {
   const user = await FetchUserDal(id)
 
   const { licences, totalNumber } = await FetchLicencesDal(user.licenceEntityId, page)

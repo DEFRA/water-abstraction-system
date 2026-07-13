@@ -18,7 +18,7 @@ import { compareStrings } from '../../../../lib/general.lib.js'
  * @returns {Promise<object>} An object containing the IDs of the failed notifications, plus the combined licence
  * references from them
  */
-export default async function go(noticeId) {
+export default async function fetchFailedRenewalInvitationsService(noticeId) {
   const notifications = await _fetch(noticeId)
 
   const licences = []

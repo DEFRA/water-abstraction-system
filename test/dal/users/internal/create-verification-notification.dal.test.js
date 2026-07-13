@@ -1,13 +1,13 @@
 // Test helpers
 import NotificationModel from '../../../../app/models/notification.model.js'
 import ServerConfig from '../../../../config/server.config.js'
-
-const { domains } = ServerConfig
 import { generateUserName } from '../../../support/helpers/user.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Thing under test
 import CreateVerificationNotificationDal from '../../../../app/dal/users/internal/create-verification-notification.dal.js'
+
+const { domains } = ServerConfig
 
 describe('Users - Internal - Create Verification Notification DAL', () => {
   let email

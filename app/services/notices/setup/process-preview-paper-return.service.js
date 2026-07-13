@@ -21,7 +21,7 @@ import PreparePaperReturnService from './prepare-paper-return.service.js'
  *
  * @returns {Promise<ArrayBuffer>} - Resolves with the generated form file as an ArrayBuffer.
  */
-export default async function go(sessionId, contactHashId, returnLogId) {
+export default async function processPreviewPaperReturnService(sessionId, contactHashId, returnLogId) {
   const session = await FetchSessionDal(sessionId)
 
   // NOTE: The notifications the presenter generates are based on the combination of recipients and selected return logs

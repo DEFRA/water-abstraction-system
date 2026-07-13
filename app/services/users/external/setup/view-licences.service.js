@@ -13,7 +13,7 @@ import LicencesPresenter from '../../../../presenters/users/external/setup/licen
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function go(sessionId) {
+export default async function viewLicencesService(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = LicencesPresenter(session)

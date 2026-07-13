@@ -1,5 +1,4 @@
 import http2 from 'node:http2'
-const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 // Test framework dependencies
 
@@ -8,6 +7,7 @@ import * as LegacyRequest from '../../../app/requests/legacy.request.js'
 
 // Thing under test
 import * as DeleteBillRequest from '../../../app/requests/legacy/delete-bill.request.js'
+const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 describe('Legacy Delete Bill request', () => {
   const billRunId = 'e39023b2-f3a5-4d56-8bd1-28919b56b603'

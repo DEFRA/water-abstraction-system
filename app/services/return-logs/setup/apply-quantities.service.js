@@ -42,7 +42,7 @@ const METER_READINGS_METHOD = 'meterReadings'
  *
  * @returns {module:SessionModel} - The updated Session object
  */
-export default function go(session) {
+export default function applyQuantitiesService(session) {
   if (session.reported === METER_READINGS_METHOD) {
     return _readingsUpdate(session)
   }

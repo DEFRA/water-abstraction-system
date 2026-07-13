@@ -13,7 +13,7 @@ import FetchReviewChargeReferenceService from './fetch-review-charge-reference.s
  *
  * @returns {Promise<object>} the 'pageData' needed for the review charge reference factors page
  */
-export default async function go(reviewChargeReferenceId) {
+export default async function viewFactorsService(reviewChargeReferenceId) {
   const reviewChargeReference = await FetchReviewChargeReferenceService(reviewChargeReferenceId)
 
   const pageData = FactorsPresenter(reviewChargeReference)

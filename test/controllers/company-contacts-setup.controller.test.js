@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_OK, HTTP_STATUS_FOUND } = http2.constants
 import { generateUUID } from '../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -27,6 +26,7 @@ import * as ViewRestoreService from '../../app/services/company-contacts/setup/v
 import { init } from '../../app/server.js'
 
 import { postRequestOptions } from '../support/general.js'
+const { HTTP_STATUS_OK, HTTP_STATUS_FOUND } = http2.constants
 
 describe('Company Contacts Setup controller', () => {
   let options
@@ -190,7 +190,9 @@ describe('Company Contacts Setup controller', () => {
 
         postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/cancel`, {}, ['hof_notifications'])
 
-        vi.spyOn(SubmitCancelService, 'default').mockReturnValue({ redirectUrl: `/system/companies/${companyId}/contacts` })
+        vi.spyOn(SubmitCancelService, 'default').mockReturnValue({
+          redirectUrl: `/system/companies/${companyId}/contacts`
+        })
       })
 
       it('redirects to companies contacts setup contact email page', async () => {
@@ -235,7 +237,9 @@ describe('Company Contacts Setup controller', () => {
 
         postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/check`, {}, ['hof_notifications'])
 
-        vi.spyOn(SubmitCheckService, 'default').mockReturnValue({ redirectUrl: `/system/companies/${companyId}/contacts` })
+        vi.spyOn(SubmitCheckService, 'default').mockReturnValue({
+          redirectUrl: `/system/companies/${companyId}/contacts`
+        })
       })
 
       it('redirects to companies contacts setup contact email page', async () => {

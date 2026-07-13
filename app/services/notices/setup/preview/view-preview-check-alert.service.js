@@ -16,7 +16,7 @@ import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-export default async function go(contactHashId, sessionId) {
+export default async function viewPreviewCheckAlertService(contactHashId, sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const recipientLicenceRefs = await _recipientLicenceRefs(contactHashId, session)

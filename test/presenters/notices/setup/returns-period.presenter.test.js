@@ -11,7 +11,6 @@ describe('Notices - Setup - Returns Period presenter', () => {
   const previousYear = currentYear - 1
   const nextYear = currentYear + 1
 
-  let clock
   let referenceCode
   let session = {}
   let testDate
@@ -29,7 +28,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
   describe('the data', () => {
     beforeEach(() => {
       testDate = new Date(`${currentYear}-01-15`)
-      clock = vi.useFakeTimers({ now: testDate })
+      vi.useFakeTimers({ now: testDate })
     })
 
     it('correctly presents the data', () => {
@@ -80,7 +79,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
   describe('the "pageTitle" property', () => {
     beforeEach(() => {
       testDate = new Date(`${currentYear}-01-15`)
-      clock = vi.useFakeTimers({ now: testDate })
+      vi.useFakeTimers({ now: testDate })
     })
 
     describe('when the noticeType is "invitations"', () => {
@@ -110,7 +109,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
         session.returnsPeriod = 'quarterOne'
 
         testDate = new Date(`${currentYear}-04-29`)
-        clock = vi.useFakeTimers({ now: testDate })
+        vi.useFakeTimers({ now: testDate })
       })
 
       it('should mark the returns period as checked', () => {
@@ -130,7 +129,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
     describe('when the current date is the same date', () => {
       beforeEach(() => {
         testDate = new Date(`${currentYear}-04-28T09:59:59.999Z`)
-        clock = vi.useFakeTimers({ now: testDate })
+        vi.useFakeTimers({ now: testDate })
       })
 
       it('returns the current return period as "quarterFour"', () => {
@@ -164,7 +163,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       describe('and the current date is between 29 January - 28 April', () => {
         beforeEach(() => {
           testDate = new Date(`${currentYear}-01-29`)
-          clock = vi.useFakeTimers({ now: testDate })
+          vi.useFakeTimers({ now: testDate })
         })
 
         it('returns the current return period as "quarterFour"', () => {
@@ -199,7 +198,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       describe('and the current date is between 29 April - 28 July', () => {
         beforeEach(() => {
           testDate = new Date(`${currentYear}-04-29`)
-          clock = vi.useFakeTimers({ now: testDate })
+          vi.useFakeTimers({ now: testDate })
         })
 
         it('returns the current return period as "quarterOne"', () => {
@@ -234,7 +233,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       describe('and the current date is between 29 July - 28 October', () => {
         beforeEach(() => {
           testDate = new Date(`${currentYear}-07-29`)
-          clock = vi.useFakeTimers({ now: testDate })
+          vi.useFakeTimers({ now: testDate })
         })
 
         it('returns the current return period as "quarterTwo"', () => {
@@ -269,7 +268,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       describe('and the current date is between 29 October - 28 November', () => {
         beforeEach(() => {
           testDate = new Date(`${currentYear}-10-29`)
-          clock = vi.useFakeTimers({ now: testDate })
+          vi.useFakeTimers({ now: testDate })
         })
 
         it('returns the current return period as "summer"', () => {
@@ -304,7 +303,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       describe('and the current date is between 29 November - 31 December', () => {
         beforeEach(() => {
           testDate = new Date(`${currentYear}-11-29`)
-          clock = vi.useFakeTimers({ now: testDate })
+          vi.useFakeTimers({ now: testDate })
         })
 
         it('returns the current return period as "quarterThree"', () => {
@@ -337,7 +336,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
       describe('and the current date is between 1 January - 28 January', () => {
         beforeEach(() => {
           testDate = new Date(`${currentYear}-01-01`)
-          clock = vi.useFakeTimers({ now: testDate })
+          vi.useFakeTimers({ now: testDate })
         })
 
         it('returns the current return period as "quarterThree" - with the start and end date in the previous year', () => {

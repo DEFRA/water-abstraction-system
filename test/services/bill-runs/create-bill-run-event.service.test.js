@@ -10,12 +10,11 @@ import * as RegionHelper from '../../support/helpers/region.helper.js'
 import CreateBillRunEventService from '../../../app/services/bill-runs/create-bill-run-event.service.js'
 
 describe('Create Bill Run Event service', () => {
-  let clock
   let testDate
 
   beforeEach(async () => {
     testDate = new Date(2015, 9, 21, 20, 31, 57)
-    clock = vi.useFakeTimers({ now: testDate, toFake: ['Date'] })
+    vi.useFakeTimers({ now: testDate, toFake: ['Date'] })
   })
 
   afterEach(() => {

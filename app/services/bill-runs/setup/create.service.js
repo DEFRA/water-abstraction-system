@@ -21,7 +21,7 @@ import { engineTriggers } from '../../../lib/static-lookups.lib.js'
  * @param {object} blockingResults - Results of `DetermineBlockingBillRunService`
  * @param {module:UserModel} user - Instance of `UserModel` that represents the user making the request
  */
-export default async function go(session, blockingResults, user) {
+export default async function createService(session, blockingResults, user) {
   const { region: regionId, type, season } = session
   const { toFinancialYearEnding, trigger } = blockingResults
 

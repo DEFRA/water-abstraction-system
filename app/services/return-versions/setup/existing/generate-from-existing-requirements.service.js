@@ -22,7 +22,7 @@ import FetchExistingRequirementsService from './fetch-existing-requirements.serv
  * requirements ready to be persisted to the setup session, plus whether the return version allows multiple uploads and
  * quarterly returns
  */
-export default async function go(returnVersionId) {
+export default async function generateFromExistingRequirementsService(returnVersionId) {
   const returnVersion = await FetchExistingRequirementsService(returnVersionId)
 
   return {

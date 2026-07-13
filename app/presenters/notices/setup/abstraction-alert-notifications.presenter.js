@@ -31,7 +31,7 @@ import { NOTIFY_TEMPLATES } from '../../../lib/notify-templates.lib.js'
  *
  * @returns {object[]} the recipients transformed into notifications
  */
-export default function go(session, recipients, noticeId) {
+export default function abstractionAlertNotificationsPresenter(session, recipients, noticeId) {
   const notifications = []
 
   const {

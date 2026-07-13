@@ -1,5 +1,4 @@
 import http2 from 'node:http2'
-const { HTTP_STATUS_CREATED, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 // Test framework dependencies
 
@@ -8,6 +7,7 @@ import * as ChargingModuleRequest from '../../../app/requests/charging-module.re
 
 // Thing under test
 import * as CreateCustomerChangeRequest from '../../../app/requests/charging-module/create-customer-change.request.js'
+const { HTTP_STATUS_CREATED, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 describe('Charging Module Create Customer Change request', () => {
   const requestData = {

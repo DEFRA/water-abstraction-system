@@ -13,7 +13,7 @@ import { checkUrl } from '../../../lib/check-page.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function go(session, companyContacts) {
+export default function contactPresenter(session, companyContacts) {
   const { billingAccount } = session
 
   return {

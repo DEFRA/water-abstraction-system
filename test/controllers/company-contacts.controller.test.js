@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_OK, HTTP_STATUS_FOUND } = http2.constants
 import { generateUUID } from '../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -14,6 +13,7 @@ import * as ViewRemoveCompanyContactService from '../../app/services/company-con
 // For running our service
 import { init } from '../../app/server.js'
 import { postRequestOptions } from '../support/general.js'
+const { HTTP_STATUS_OK, HTTP_STATUS_FOUND } = http2.constants
 
 describe('Company Contacts controller', () => {
   let options
@@ -54,7 +54,9 @@ describe('Company Contacts controller', () => {
           }
         }
 
-        vi.spyOn(ViewCommunicationsService, 'default').mockReturnValue({ pageTitle: 'Communications for Rachael Tyrell' })
+        vi.spyOn(ViewCommunicationsService, 'default').mockReturnValue({
+          pageTitle: 'Communications for Rachael Tyrell'
+        })
       })
 
       it('returns the page successfully', async () => {

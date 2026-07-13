@@ -37,7 +37,7 @@ const RETURN_TYPE = {
  *
  * @returns {object} - The data formatted for the return form
  */
-export default function go(notification) {
+export default function preparePaperReturnPresenter(notification) {
   const {
     personalisation: {
       address_line_1: addressLine1,

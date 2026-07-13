@@ -36,7 +36,7 @@ const MESSAGES = {
  * @returns {object} the result from calling Joi's schema.validate(). If any errors are found the
  * `error:` property will also exist detailing what the issue is.
  */
-export default function go(payload) {
+export default function profileDetailsValidator(payload) {
   const schema = Joi.object().keys({
     name: Joi.string().max(100).allow('').messages(MESSAGES.name),
     jobTitle: Joi.string().max(100).allow('').messages(MESSAGES.jobTitle),

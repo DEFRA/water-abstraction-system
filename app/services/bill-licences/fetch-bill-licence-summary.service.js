@@ -19,7 +19,7 @@ import BillLicenceModel from '../../models/bill-licence.model.js'
  * @returns {Promise<object>} the matching instance of BillLicenceModel plus the linked bill, billing account and bill
  * run. Also all transactions linked to the bill licence so we can work out the total for the licence
  */
-export default async function go(billLicenceId) {
+export default async function fetchBillLicenceSummaryService(billLicenceId) {
   return _fetchBillLicence(billLicenceId)
 }
 

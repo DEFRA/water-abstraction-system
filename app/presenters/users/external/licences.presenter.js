@@ -17,7 +17,7 @@ import { today } from '../../../lib/general.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function go(user, licences, viewingUserScope, back) {
+export default function licencesPresenter(user, licences, viewingUserScope, back) {
   const { username } = user
 
   const formattedLicences = _userLicences(licences)

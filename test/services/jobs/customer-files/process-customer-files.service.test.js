@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 import * as BillingAccountHelper from '../../../support/helpers/billing-account.helper.js'
 import BillingAccountModel from '../../../../app/models/billing-account.model.js'
 
@@ -12,6 +11,7 @@ import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import ProcessCustomerFilesService from '../../../../app/services/jobs/customer-files/process-customer-files.service.js'
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 describe('Jobs - Customer Files - Process Customer Files service', () => {
   const days = 7

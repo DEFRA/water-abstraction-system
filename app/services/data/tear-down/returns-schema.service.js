@@ -13,7 +13,7 @@ import { determineCycleEndDate } from '../../../lib/return-cycle-dates.lib.js'
  *
  * @returns {Promise<object>}
  */
-export default async function go() {
+export default async function returnsSchemaService() {
   const endDates = _determineCurrentReturnCycleEndDates()
 
   return _deleteAllTestData(endDates)

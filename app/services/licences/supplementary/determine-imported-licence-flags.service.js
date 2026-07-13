@@ -35,7 +35,7 @@ const SROC_START_DATE = new Date('2022-04-01')
  *
  * @returns {Promise} A promise is returned but it does not resolve to anything we expect the caller to use
  */
-export default async function go(licenceId, changeDate) {
+export default async function determineImportedLicenceFlagsService(licenceId, changeDate) {
   const existingLicenceDetails = await FetchExistingLicenceDetailsService(licenceId)
   const { endDate } = determineCurrentFinancialYear()
   const { flagForSrocSupplementary, flagForPreSrocSupplementary } = _determineExistingFlags(existingLicenceDetails)

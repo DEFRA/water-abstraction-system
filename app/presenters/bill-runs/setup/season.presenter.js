@@ -10,7 +10,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function go(session) {
+export default function seasonPresenter(session) {
   return {
     backlink: `/system/bill-runs/setup/${session.id}/year`,
     pageTitle: 'Select the season',

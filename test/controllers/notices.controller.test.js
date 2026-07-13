@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 import { generateNoticeReferenceCode } from '../../app/lib/general.lib.js'
 import { postRequestOptions } from '../support/general.js'
 
@@ -14,6 +13,7 @@ import * as ViewNoticeService from '../../app/services/notices/view-notice.servi
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Notices controller', () => {
   let options

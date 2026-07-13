@@ -19,7 +19,7 @@ import ReviewChargeElementModel from '../../../models/review-charge-element.mode
  *
  * @returns {Promise<object>} The updated value for the billable returns
  */
-export default async function go(reviewChargeElementId, elementIndex, yar, payload) {
+export default async function submitEditService(reviewChargeElementId, elementIndex, yar, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {

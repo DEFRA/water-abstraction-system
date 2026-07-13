@@ -4,14 +4,13 @@
 import DetermineBillingYearsService from '../../../../app/services/licences/supplementary/determine-billing-years.service.js'
 
 describe('Determine Billing Years Service', () => {
-  let clock
   let endDate
   let startDate
   let testDate
 
   beforeEach(() => {
     testDate = new Date('2024-03-31')
-    clock = vi.useFakeTimers({ now: testDate })
+    vi.useFakeTimers({ now: testDate })
   })
 
   afterEach(() => {
