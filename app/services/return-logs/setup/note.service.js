@@ -16,7 +16,7 @@ import NotePresenter from '../../../presenters/return-logs/setup/note.presenter.
  *
  * @returns {Promise<object>} The view data for the note page
  */
-export default async function (sessionId) {
+export default async function note(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const formattedData = NotePresenter(session)

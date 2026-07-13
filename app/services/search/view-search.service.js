@@ -16,7 +16,7 @@ import SearchPresenter from '../../presenters/search/search.presenter.js'
  *
  * @returns {Promise<object>} The view data for the search page
  */
-export default async function (auth, yar, page) {
+export default async function viewSearch(auth, yar, page) {
   const userScopes = auth.credentials.scope
 
   // Requests sent to the /search page might be either to just show the search page or to view search results, so we

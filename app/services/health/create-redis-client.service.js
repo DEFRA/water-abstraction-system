@@ -12,7 +12,7 @@ import redisConfig from '../../../config/redis.config.js'
  *
  * @returns {Promise<Redis>} - a new redis instance
  */
-export default async function () {
+export default async function createRedisClient() {
   return new Redis({
     host: redisConfig.host,
     port: redisConfig.port,

@@ -20,7 +20,7 @@ import { timestampForPostgres } from '../../lib/general.lib.js'
  * @param {object} payload - The submitted form data
  * @param {string} returnLogId - The id of the return log to update
  */
-export default async function (payload, returnLogId) {
+export default async function submitDetails(payload, returnLogId) {
   const underQuery = payload['mark-query'] === 'mark'
 
   await ReturnLogModel.query().patch({ underQuery, updatedAt: timestampForPostgres() }).findById(returnLogId)

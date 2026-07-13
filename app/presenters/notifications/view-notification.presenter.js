@@ -23,7 +23,7 @@ import { formatLongDate, formatNoticeType, formatRestrictionType, formatValueUni
  *
  * @returns {object} The data formatted for the view template
  */
-export default function (notification, licence = null, returnLogId = null, companyContactId = null) {
+export default function viewNotification(notification, licence = null, returnLogId = null, companyContactId = null) {
   const { createdAt, event, messageType, plaintext, returnedAt } = notification
 
   return {

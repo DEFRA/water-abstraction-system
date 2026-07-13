@@ -13,7 +13,7 @@ import { returnRequirementFrequencies, returnRequirementReasons } from '../../..
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function (session) {
+export default function cancel(session) {
   const { id: sessionId, journey, licence, reason, requirements } = session
 
   return {

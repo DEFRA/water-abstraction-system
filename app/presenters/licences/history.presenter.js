@@ -14,7 +14,7 @@ import { linkToLicenceVersion } from '../licence-version.presenter.js'
  *
  * @returns The data formatted and sorted for the view template
  */
-export default function (licenceHistory, licence) {
+export default function history(licenceHistory, licence) {
   const { licenceRef } = licence
 
   return {

@@ -14,7 +14,7 @@ import { formatLicencePoints } from '../licence.presenter.js'
  *
  * @returns {object} licence and points data needed by the view template
  */
-export default function (points, licence) {
+export default function points(points, licence) {
   const { id: licenceId, licenceRef } = licence
 
   const licencePoints = formatLicencePoints(points)

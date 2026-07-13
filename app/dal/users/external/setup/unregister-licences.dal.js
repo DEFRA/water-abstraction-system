@@ -38,7 +38,7 @@ import { timestampForPostgres } from '../../../../lib/general.lib.js'
  * @param {module:SessionModel} session - The session instance
  * @param {module:UserModel} user - The user that is deregistering the licences
  */
-export default async function (session, user) {
+export default async function unregisterLicences(session, user) {
   const { id: userId } = user
 
   const timestamp = timestampForPostgres()

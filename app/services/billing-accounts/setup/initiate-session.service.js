@@ -21,7 +21,7 @@ import FetchViewBillingAccountService from '../fetch-view-billing-account.servic
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-export default async function (billingAccountId) {
+export default async function initiateSession(billingAccountId) {
   const { billingAccount } = await FetchViewBillingAccountService(billingAccountId)
 
   const data = {

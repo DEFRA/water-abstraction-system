@@ -20,7 +20,7 @@ import featureFlagsConfig from '../../../config/feature-flags.config.js'
  *
  * @returns {Promise<object>} The view data for the users page
  */
-export default async function (yar, auth, page) {
+export default async function indexUsers(yar, auth, page) {
   const filters = _filters(yar)
 
   const { results: users, total: totalNumber } = await FetchUsersDal(filters, page)

@@ -18,7 +18,7 @@ import { formatValidationResult } from '../../../../presenters/base.presenter.js
  *
  * @returns {Promise<object>} The validation result (null if valid)
  */
-export default async function (payload) {
+export default async function processLicenceSubmission(payload) {
   const licenceRenewal = await _licenceRenewal(payload)
 
   const validationResult = _validate(payload, licenceRenewal)

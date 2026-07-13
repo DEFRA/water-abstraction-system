@@ -37,7 +37,7 @@ import { timestampForPostgres } from '../../lib/general.lib.js'
  *
  * @param {string} billRunId - The UUID of the bill run to assign the licences to
  */
-export default async function (billRunId) {
+export default async function assignBillRunToLicences(billRunId) {
   const params = [billRunId, timestampForPostgres(), billRunId]
   const query = `
     UPDATE public.licence_supplementary_years lsy1 SET

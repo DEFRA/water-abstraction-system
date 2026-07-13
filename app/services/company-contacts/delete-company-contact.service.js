@@ -17,7 +17,7 @@ import { timestampForPostgres } from '../../lib/general.lib.js'
  * @param {string} id - The id of the company contact
  * @param {object} notified - true if the company contacts have been notified
  */
-export default async function (id, notified) {
+export default async function deleteCompanyContact(id, notified) {
   if (notified) {
     await CompanyContactModel.query().update({ deletedAt: timestampForPostgres() }).where('id', id)
   } else {

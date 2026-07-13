@@ -10,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-export default function (session) {
+export default function licences(session) {
   const { activeNavBar, allLicences, licences, selectedLicences, user } = session
 
   const checkBoxItems = _checkBoxItems(licences, selectedLicences, allLicences)

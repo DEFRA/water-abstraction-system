@@ -35,7 +35,7 @@ import { generateUUID, pause } from '../../../lib/general.lib.js'
  * @returns {Promise<object>} an object that has been generated while reissuing the bill containing the following
  * properties: `bills`, `billLicences` and `transactions`.
  */
-export default async function (sourceBill, reissueBillRun) {
+export default async function reissueBill(sourceBill, reissueBillRun) {
   const dataToReturn = {
     bills: [],
     billLicences: [],

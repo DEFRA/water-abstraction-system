@@ -19,7 +19,7 @@ import notifyConfig from '../../../../../config/notify.config.js'
  * @param {object} notice - The notice to be sent
  * @param {object[]} notifications - The notifications linked to the notice to be sent
  */
-export default async function (notice, notifications) {
+export default async function sendMainNotice(notice, notifications) {
   const { referenceCode } = notice
 
   const sentNotifications = await _sendNotifications(notifications, referenceCode)

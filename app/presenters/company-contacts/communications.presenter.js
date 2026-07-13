@@ -14,7 +14,7 @@ import NotificationsTablePresenter from '../notifications/notifications-table.pr
  *
  * @returns {object} The data formatted for the view template
  */
-export default function (company, companyContact, notifications) {
+export default function communications(company, companyContact, notifications) {
   return {
     backLink: {
       href: `/system/companies/${company.id}/contacts`,

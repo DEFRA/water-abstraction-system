@@ -18,7 +18,7 @@ import ProcessLicenceReturnLogsService from '../../return-logs/process-licence-r
  * These downstream services depend on knowing when a licence's end dates have changed so they can determine what
  * billing flags need to be set, or what return logs need reissuing.
  */
-export default async function () {
+export default async function processLicenceEndDateChanges() {
   try {
     const startTime = currentTimeInNanoseconds()
 

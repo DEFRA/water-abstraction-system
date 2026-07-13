@@ -24,7 +24,7 @@ import UnassignLicencesToBillRunService from '../bill-runs/unassign-licences-to-
  *
  * @returns {Promise<string>} Returns the redirect path the controller needs
  */
-export default async function (billLicenceId, user) {
+export default async function submitRemoveBillLicence(billLicenceId, user) {
   const billLicence = await _fetchBillLicence(billLicenceId)
 
   const { bill, licenceId } = billLicence

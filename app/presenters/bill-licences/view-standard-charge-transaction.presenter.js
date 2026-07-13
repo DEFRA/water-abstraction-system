@@ -15,7 +15,7 @@ import { formatAbstractionPeriod, formatLongDate, formatMoney, formatPounds, tit
  *
  * @returns {object} a formatted representation of the transaction specifically for the bill-licence page
  */
-export default function (transaction) {
+export default function viewStandardChargeTransaction(transaction) {
   if (transaction.scheme === 'sroc') {
     return _srocContent(transaction)
   }

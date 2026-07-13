@@ -28,7 +28,7 @@ import Workflow from '../../../models/workflow.model.js'
  *
  * @returns {Promise<object>} Contains an array of unique licence IDs and array of charge versions to be processed
  */
-export default async function (regionId, billingPeriod) {
+export default async function fetchChargeVersions(regionId, billingPeriod) {
   const allChargeVersions = await _fetch(regionId, billingPeriod)
 
   return _extractLicenceIdsThenRemoveNonChargeableChargeVersions(allChargeVersions)

@@ -21,7 +21,7 @@ const LAST_PRE_SROC_FINANCIAL_YEAR_END = 2022
  * @returns {object[]} - The financial year end that are impacted by the changes between the start and end dates and are
  * relevant for SROC.
  */
-export default function (startDate, endDate) {
+export default function determineBillingYears(startDate, endDate) {
   const years = []
 
   const startYear = determineFinancialYearEnd(startDate)

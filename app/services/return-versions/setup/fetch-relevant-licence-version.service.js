@@ -41,7 +41,7 @@ import LicenceVersionModel from '../../../models/licence-version.model.js'
  *
  * @returns {Promise<module:LicenceVersionModel>} the relevant licence version
  */
-export default async function (licenceId, startDate) {
+export default async function fetchRelevantLicenceVersion(licenceId, startDate) {
   const licenceVersions = await _fetch(licenceId, startDate)
 
   if (licenceVersions.length === 0) {

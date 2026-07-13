@@ -20,7 +20,7 @@ import NotifyConfig from '../../../../config/notify.config.js'
  *
  * @returns {Promise<object[]>} An array of renewal invitation recipients
  */
-export default async function (days) {
+export default async function sendRenewalInvitations(days) {
   const expiryDate = renewalExpiryDate(days)
   const renewalDate = renewalNoticeDate(expiryDate)
 

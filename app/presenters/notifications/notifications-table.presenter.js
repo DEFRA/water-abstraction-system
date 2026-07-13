@@ -15,7 +15,7 @@ import { formatLongDate, formatNoticeType, sentenceCase } from '../base.presente
  *
  * @returns {object} The data formatted for the view template
  */
-export default function (notifications, licenceId, returnLogId, companyContactId) {
+export default function notificationsTable(notifications, licenceId, returnLogId, companyContactId) {
   return notifications.map((notification) => {
     const { createdAt, event, messageType, status } = notification
     const sentDate = formatLongDate(createdAt)

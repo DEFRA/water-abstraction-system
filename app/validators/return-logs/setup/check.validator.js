@@ -15,7 +15,7 @@ import Joi from 'joi'
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function (session) {
+export default function check(session) {
   const lineValuesExist = _lineValuesExist(session)
 
   const schema = Joi.valid(true).messages({ 'any.only': 'At least one return line must contain a value.' })

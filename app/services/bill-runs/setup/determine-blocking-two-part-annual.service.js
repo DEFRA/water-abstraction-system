@@ -35,7 +35,7 @@ const LAST_PRESROC_YEAR = 2022
  * @returns {Promise<object>} Any blocking matches for the bill run being created, the `toFinancialYearEnding` to use
  * when creating it, and which bill run engine to trigger the creation with (if any)
  */
-export default async function (regionId, year, summer = false) {
+export default async function determineBlockingTwoPartAnnual(regionId, year, summer = false) {
   const toFinancialYearEnding = Number(year)
 
   let match = await _fetchMatches(regionId, toFinancialYearEnding, summer)

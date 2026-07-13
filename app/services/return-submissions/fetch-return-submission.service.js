@@ -13,7 +13,7 @@ import ReturnSubmissionModel from '../../models/return-submission.model.js'
  * @returns {Promise<module:ReturnSubmissionModel>} the matching `ReturnSubmissionModel` instance and its associated
  * data (return lines and the return reference from its return log)
  */
-export default async function (returnSubmissionId) {
+export default async function fetchReturnSubmission(returnSubmissionId) {
   const returnSubmission = await _fetch(returnSubmissionId)
 
   returnSubmission.$applyReadings()

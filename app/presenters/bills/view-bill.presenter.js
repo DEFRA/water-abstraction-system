@@ -14,7 +14,7 @@ import { formatBillRunType, formatChargeScheme, displayCreditDebitTotals } from 
  *
  * @returns {object} page data formatted for the view template
  */
-export default function (bill, billingAccount) {
+export default function viewBill(bill, billingAccount) {
   const { billRun } = bill
   const accountName = billingAccount.$accountName()
 

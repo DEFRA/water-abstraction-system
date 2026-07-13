@@ -21,7 +21,7 @@ import { db } from '../../../../db/db.js'
  * @returns {Promise<object[]>} The licence IDs with time-limited elements and their current licence version ID (needed
  * else we break the workflow). Also the ID of the charge version that has the time limited charge element
  */
-export default async function () {
+export default async function fetchTimeLimitedLicences() {
   // NOTE: We've resorted to Knex rather than Objection JS due to just how many JOINS we need to get from licence to
   // charge purposes! Our Objection JS skills failed us as we could not get the query to work using innerJoinRelated()
   return db

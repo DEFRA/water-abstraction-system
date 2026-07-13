@@ -12,7 +12,7 @@ import LicenceEndDateChangeModel from '../../../models/licence-end-date-change.m
  *
  * @param {object} licence - The licence to check
  */
-export default async function (licence) {
+export default async function checkLicenceEndDates(licence) {
   let changedDateDetails
 
   try {

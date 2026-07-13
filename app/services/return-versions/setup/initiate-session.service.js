@@ -23,7 +23,7 @@ import FetchLicenceService from './fetch-licence.service.js'
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-export default async function (licenceId, journey) {
+export default async function initiateSession(licenceId, journey) {
   const licence = await FetchLicenceService(licenceId)
 
   if (!licence) {

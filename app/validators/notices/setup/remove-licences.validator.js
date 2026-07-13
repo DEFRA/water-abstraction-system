@@ -17,7 +17,7 @@ import { transformStringOfLicencesToArray } from '../../../lib/general.lib.js'
  * @returns {object} The result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function (payload, licenceRefsWithDueReturns) {
+export default function removeLicences(payload, licenceRefsWithDueReturns) {
   const schema = Joi.object({
     removeLicences: Joi.custom((value, helpers) => {
       return _removedLicencesWithDueReturnsValidator(value, helpers, licenceRefsWithDueReturns)

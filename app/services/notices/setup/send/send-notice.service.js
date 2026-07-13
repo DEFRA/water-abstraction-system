@@ -16,7 +16,7 @@ import { NoticeType, NoticeTypes } from '../../../../lib/static-lookups.lib.js'
  * @param {object} notice - The main notice to be sent
  * @param {object[]} notifications - The main notifications linked to the main notice to be sent
  */
-export default async function (notice, notifications) {
+export default async function sendNotice(notice, notifications) {
   try {
     const startTime = currentTimeInNanoseconds()
 

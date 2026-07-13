@@ -17,7 +17,7 @@ import Joi from 'joi'
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the
  * `error:` property will also exist detailing what the issue is.
  */
-export default function (payload) {
+export default function agreementsExceptions(payload) {
   const errorMessage = 'Select if there are any agreements and exceptions needed for the requirements for returns'
 
   const schema = Joi.object({

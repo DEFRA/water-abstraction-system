@@ -15,7 +15,7 @@ import { db } from '../../../db/db.js'
  *
  * @returns {Promise<object[]>} the contacts for the licence
  */
-export default async function (licenceId, roles, page = '1') {
+export default async function fetchLicenceCrmData(licenceId, roles, page = '1') {
   const authorisedForBilling = roles.includes('billing')
 
   const [{ rows: contacts }, { rows: totalNumber }] = await Promise.all([

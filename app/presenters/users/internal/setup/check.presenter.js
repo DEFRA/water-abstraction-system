@@ -13,7 +13,7 @@ import { userPermissions } from '../../../../lib/static-lookups.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function (session) {
+export default function check(session) {
   const { access, email, id: sessionId, permission, user } = session
 
   return {

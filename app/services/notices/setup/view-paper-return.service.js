@@ -14,7 +14,7 @@ import PaperReturnPresenter from '../../../presenters/notices/setup/paper-return
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-export default async function (sessionId) {
+export default async function viewPaperReturn(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = PaperReturnPresenter(session)

@@ -19,7 +19,7 @@ import { NoticeJourney } from '../../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<object[]>} The recipient data for the returns invitation notice
  */
-export default async function (session, download) {
+export default async function fetchReturnsInvitationRecipients(session, download) {
   const { noticeType } = session
 
   const { bindings, query: dueReturnLogsQuery } = _returnLogsQuery(session)

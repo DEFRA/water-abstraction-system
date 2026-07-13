@@ -12,7 +12,7 @@ import FetchRelevantLicenceVersionService from './fetch-relevant-licence-version
  *
  * @returns {Promise<LicenceVersionModel>} The relevant licence version and the licence's copyable return versions
  */
-export default async function (session) {
+export default async function determineRelevantLicenceVersion(session) {
   const relevantLicenceVersion = await FetchRelevantLicenceVersionService(
     session.licence.id,
     session.returnVersionStartDate

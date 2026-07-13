@@ -13,7 +13,7 @@
  * @returns {object} The query to use as the 'expiring_licences` CTE in the recipients query, and the associated
  * bindings
  */
-export default function (expiredDate) {
+export default function generateExpiringLicencesQuery(expiredDate) {
   const bindings = [expiredDate]
 
   return {

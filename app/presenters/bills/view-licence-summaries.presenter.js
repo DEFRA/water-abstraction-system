@@ -12,7 +12,7 @@ import { formatMoney } from '../base.presenter.js'
  *
  * @returns {object} a formatted representation of the bill's licence summaries
  */
-export default function (licenceSummaries) {
+export default function viewLicenceSummaries(licenceSummaries) {
   const billLicences = _billLicences(licenceSummaries)
 
   const formattedBill = {

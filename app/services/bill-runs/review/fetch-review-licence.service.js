@@ -15,7 +15,7 @@ import ReviewLicenceModel from '../../../models/review-licence.model.js'
  * @returns {module:ReviewLicenceModel} the matching `ReviewLicenceModel` instance and related data needed for the
  * two-part tariff review licence page
  */
-export default async function (reviewLicenceId) {
+export default async function fetchReviewLicence(reviewLicenceId) {
   return _fetch(reviewLicenceId)
 }
 

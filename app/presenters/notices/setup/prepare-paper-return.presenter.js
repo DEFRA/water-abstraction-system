@@ -37,7 +37,7 @@ const RETURN_TYPE = {
  *
  * @returns {object} - The data formatted for the return form
  */
-export default function (notification) {
+export default function preparePaperReturn(notification) {
   const {
     personalisation: {
       address_line_1: addressLine1,

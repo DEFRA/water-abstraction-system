@@ -18,7 +18,7 @@ import FetchSessionDal from '../../../dal/fetch-session.dal.js'
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-export default async function (sessionId, payload) {
+export default async function submitAbstractionPeriod(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)

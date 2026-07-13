@@ -21,7 +21,7 @@ import CreateBillRunEventService from './create-bill-run-event.service.js'
  *
  * @returns {Promise<module:BillRunModel>} The newly created bill run instance
  */
-export default async function (financialYearEndings, regionId, batchType, userEmail) {
+export default async function initiateBillRun(financialYearEndings, regionId, batchType, userEmail) {
   const chargingModuleResult = await send(regionId, 'sroc')
 
   const billRunOptions = _billRunOptions(chargingModuleResult, batchType)

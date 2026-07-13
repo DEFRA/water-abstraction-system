@@ -14,7 +14,7 @@ import { formatMoney } from '../base.presenter.js'
  * are water company bills, they are grouped under 'water-companies'. If there are other abstractor bills, they are
  * grouped under 'other-abstractors'.
  */
-export default function (billSummaries) {
+export default function viewBillSummaries(billSummaries) {
   const waterCompanies = _waterCompanies(billSummaries)
   const otherAbstractors = _otherAbstractors(billSummaries)
 

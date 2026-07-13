@@ -15,7 +15,7 @@ import { timestampForPostgres } from '../../lib/general.lib.js'
  *
  * @returns {Promise<object>} The newly created event record
  */
-export default async function (billRun, issuer) {
+export default async function createBillRunEvent(billRun, issuer) {
   // The legacy `water.events` table does not have a default set for its timestamp fields. So, we have to manually set
   // them when creating the record
   const timestamp = timestampForPostgres()

@@ -14,7 +14,7 @@ import LicenceVersionModel from '../../models/licence-version.model.js'
  *
  * @returns {Promise<object>} an object with the licence version and the licence versions for pagination
  */
-export default async function (licenceVersionId) {
+export default async function fetchLicenceVersion(licenceVersionId) {
   return {
     licenceVersion: await _fetch(licenceVersionId),
     licenceVersionsForPagination: await _fetchPagination(licenceVersionId)

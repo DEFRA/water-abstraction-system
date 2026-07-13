@@ -37,7 +37,7 @@ import StartDateValidator from '../../../validators/return-versions/setup/start-
  * @returns {Promise<object>} If no errors 2 flags that determine whether the user is returned to the check page or the
  * next page in the journey else the page data for the start date page including the validation error details
  */
-export default async function (sessionId, payload, yar) {
+export default async function submitStartDate(sessionId, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const { endDate, startDate } = session.licence

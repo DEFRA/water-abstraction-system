@@ -10,7 +10,7 @@ import ContactModel from '../../../models/contact.model.js'
  *
  * @returns {Promise<number>} The number of rows deleted
  */
-export default async function () {
+export default async function cleanOrphanedContacts() {
   let deletedCount = 0
 
   try {

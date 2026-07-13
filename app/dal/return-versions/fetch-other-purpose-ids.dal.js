@@ -33,7 +33,7 @@ import LicenceVersionPurposeModel from '../../models/licence-version-purpose.mod
  *
  * @returns {Promise<object>} An object containing the fetched primary and secondary purpose IDs
  */
-export default async function (licenceId, purposeId) {
+export default async function fetchOtherPurposeIds(licenceId, purposeId) {
   const { primaryPurposeId, secondaryPurposeId } = await LicenceVersionPurposeModel.query()
     .select('primaryPurposeId', 'secondaryPurposeId')
     .innerJoinRelated('licenceVersion')

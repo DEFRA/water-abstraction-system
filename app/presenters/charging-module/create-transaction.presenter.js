@@ -15,7 +15,7 @@ import { formatChargingModuleDate } from '../base.presenter.js'
  *
  * @returns {object} an object to be used as the body in a Charging Module POST transaction request
  */
-export default function (transaction, accountNumber, licence) {
+export default function createTransaction(transaction, accountNumber, licence) {
   const periodStart = formatChargingModuleDate(transaction.startDate)
   const periodEnd = formatChargingModuleDate(transaction.endDate)
 

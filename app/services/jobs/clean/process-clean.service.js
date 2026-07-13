@@ -17,7 +17,7 @@ import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib
  * > errors. This is a safety net in case me miss something. An error here would be an uncaught exception as it is not
  * > handled by the controller. This would cause the app itself to fall over.
  */
-export default async function () {
+export default async function processClean() {
   try {
     const startTime = currentTimeInNanoseconds()
 

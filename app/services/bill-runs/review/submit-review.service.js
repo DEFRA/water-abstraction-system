@@ -12,7 +12,7 @@ import { clearFilters, handleOneOptionSelected } from '../../../lib/submit-page.
  * @param {object} payload - The `request.payload` containing the filter data.
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-export default async function (billRunId, payload, yar) {
+export default async function submitReview(billRunId, payload, yar) {
   const filterKey = `review-${billRunId}`
 
   const filterCleared = clearFilters(payload, yar, filterKey)

@@ -15,7 +15,7 @@ import featureFlags from '../../../config/feature-flags.config.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function (userScopes) {
+export default function manage(userScopes) {
   return {
     manageUsers: _manageUsers(userScopes),
     pageTitle: 'Manage',

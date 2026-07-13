@@ -22,7 +22,7 @@ import { NoticeType } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<object[]>} The recipient data for the notice or download
  */
-export default async function (session, download) {
+export default async function fetchRecipients(session, download) {
   const recipientsData = await _recipientsData(session, download)
 
   return MergeRecipientsService(session, recipientsData)

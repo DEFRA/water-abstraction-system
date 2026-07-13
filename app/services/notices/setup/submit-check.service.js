@@ -20,7 +20,7 @@ import SendNoticeService from './send/send-notice.service.js'
  *
  * @returns {Promise<string>} - the created notice Id
  */
-export default async function (sessionId, auth) {
+export default async function submitCheck(sessionId, auth) {
   const session = await FetchSessionDal(sessionId)
 
   const recipients = await FetchRecipientsService(session)

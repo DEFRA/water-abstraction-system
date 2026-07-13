@@ -45,7 +45,7 @@ import { timestampForPostgres } from '../../lib/general.lib.js'
  *
  * @param {string[]} noticeIds - the UUIDs of the notices to update
  */
-export default async function (noticeIds) {
+export default async function updateNotice(noticeIds) {
   const query = _query()
   const updatedAt = timestampForPostgres()
 

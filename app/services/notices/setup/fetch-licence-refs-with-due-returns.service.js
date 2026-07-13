@@ -27,7 +27,7 @@ import { NoticeType } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<object[]>} an array of licence references with 'due' returns in the selected period
  */
-export default async function (returnsPeriod, noticeType) {
+export default async function fetchLicenceRefsWithDueReturns(returnsPeriod, noticeType) {
   const returnLogs = await _fetch(returnsPeriod, noticeType)
 
   return returnLogs.map((returnLog) => {

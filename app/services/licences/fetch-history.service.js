@@ -12,7 +12,7 @@ import LicenceVersionModel from '../../models/licence-version.model.js'
  *
  * @returns {Promise<module:LicenceVersionModel>} the licence versions
  */
-export default async function (licenceId) {
+export default async function fetchHistory(licenceId) {
   return _fetch(licenceId)
 }
 

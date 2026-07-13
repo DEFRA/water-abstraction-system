@@ -26,7 +26,7 @@
  *
  * @returns {object[]} - The filtered list of licence monitoring stations
  */
-export default function (licenceMonitoringStations, alertType) {
+export default function determineRelevantLicenceMonitoringStationsByAlertType(licenceMonitoringStations, alertType) {
   if (alertType === 'stop') {
     return _stop(licenceMonitoringStations, alertType)
   }

@@ -18,7 +18,7 @@ import VerificationsPresenter from '../../../presenters/users/external/verificat
  *
  * @returns {Promise<object>} The view data for the external user page
  */
-export default async function (id, auth, page, back = 'users') {
+export default async function viewVerifications(id, auth, page, back = 'users') {
   const user = await FetchUserDal(id)
 
   const { verifications, totalNumber } = await FetchVerificationsDal(user.licenceEntityId, page)

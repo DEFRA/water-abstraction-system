@@ -31,7 +31,7 @@ import Workflow from '../../../models/workflow.model.js'
  * @returns {Promise<object>} Contains an array of two-part tariff charge versions with linked licences, charge
  * references, charge elements and related purpose
  */
-export default async function (billRun, billingPeriod) {
+export default async function fetchChargeVersions(billRun, billingPeriod) {
   const { id: billRunId, batchType, regionId } = billRun
 
   const supplementary = batchType === 'two_part_supplementary'

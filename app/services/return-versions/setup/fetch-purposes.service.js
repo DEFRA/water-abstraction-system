@@ -12,7 +12,7 @@ import PurposeModel from '../../../models/purpose.model.js'
  *
  * @returns {Promise<object>} The distinct purposes for the matching licence version
  */
-export default async function (licenceVersionId) {
+export default async function fetchPurposes(licenceVersionId) {
   return PurposeModel.query()
     .select(['purposes.id', 'purposes.description'])
     .whereExists(

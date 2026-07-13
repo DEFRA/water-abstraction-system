@@ -10,6 +10,6 @@ import SessionModel from '../models/session.model.js'
  *
  * @param {string} sessionId - The UUID of the session to delete.
  */
-export default async function (sessionId) {
+export default async function deleteSession(sessionId) {
   await SessionModel.query().delete().where('id', sessionId)
 }

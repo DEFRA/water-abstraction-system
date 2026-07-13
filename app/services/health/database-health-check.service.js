@@ -16,7 +16,7 @@ import { db } from '../../../db/db.js'
  *
  * @returns an array of stats for each table found in the db
  */
-export default async function () {
+export default async function databaseHealthCheck() {
   const stats = db.select().table('pg_stat_user_tables')
 
   return stats

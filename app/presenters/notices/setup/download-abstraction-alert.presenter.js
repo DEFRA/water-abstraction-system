@@ -44,7 +44,7 @@ const HEADERS = [
  * @returns {string} - A CSV-formatted string that includes the recipients' data, with the first row as column headers
  * and subsequent rows corresponding to the recipient details.
  */
-export default function (recipients, session) {
+export default function downloadAbstractionAlert(recipients, session) {
   const rows = _transformToCsv(recipients, session)
 
   return [HEADERS + '\n', ...rows].join('')

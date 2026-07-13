@@ -14,7 +14,7 @@ import MonitoringStationModel from '../../models/monitoring-station.model.js'
  * @returns {Promise<object>} the matching instance of `MonitoringStationModel` and the `LicenceMonitoringStationModel`s
  * with the additional information needed for the view
  */
-export default async function (monitoringStationId) {
+export default async function fetchMonitoringStationDetails(monitoringStationId) {
   const monitoringStation = await _fetchMonitoringStation(monitoringStationId)
 
   const licenceMonitoringStations = await _fetchLicenceMonitoringStations(monitoringStationId)

@@ -33,7 +33,7 @@ const AGREEMENTS = {
  *
  * @returns {object} The data formatted for the view template
  */
-export default function (chargeVersions, workflows, agreements, returnVersions, auth, licence) {
+export default function setUp(chargeVersions, workflows, agreements, returnVersions, auth, licence) {
   const licenceData = {
     licenceId: licence.id,
     ends: licence.$ends()

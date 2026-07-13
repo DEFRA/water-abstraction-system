@@ -16,7 +16,7 @@ import SelectReasonPresenter from '../../../presenters/return-versions/setup/rea
  *
  * @returns {Promise<object>} page data needed by the view template
  */
-export default async function (sessionId) {
+export default async function reason(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const formattedData = SelectReasonPresenter(session)

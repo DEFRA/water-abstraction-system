@@ -18,7 +18,7 @@ import { returnUnits, unitNames } from '../../lib/static-lookups.lib.js'
  *
  * @returns {object} page data needed by the view template
  */
-export default function (returnSubmission, yearMonth) {
+export default function viewReturnSubmission(returnSubmission, yearMonth) {
   const { returnSubmissionLines } = returnSubmission
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)

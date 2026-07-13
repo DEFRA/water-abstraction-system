@@ -14,7 +14,7 @@ import InternationalPresenter from '../../presenters/address/international.prese
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-export default async function (sessionId) {
+export default async function international(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = InternationalPresenter(session)

@@ -272,7 +272,7 @@ const LOAD_HELPERS = {
  * }
  * ```
  */
-export default async function (payload) {
+export default async function load(payload) {
   // Instantiate a result object to which we'll record the ID's generated/used
   const result = {}
 

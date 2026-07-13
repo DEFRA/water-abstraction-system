@@ -42,7 +42,7 @@ import { determineEarliestDate } from '../../lib/dates.lib.js'
  * reissue
  * @param {object} [trx=null] - Optional transaction object
  */
-export default async function (licenceId, changeDate, returnVersionEndDate = null, trx = null) {
+export default async function processLicenceReturnLogs(licenceId, changeDate, returnVersionEndDate = null, trx = null) {
   const returnRequirements = await FetchLicenceReturnRequirementsService(licenceId, changeDate, trx)
 
   if (returnRequirements.length === 0) {

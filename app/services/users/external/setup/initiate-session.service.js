@@ -23,7 +23,7 @@ import FetchUserDal from '../../../../dal/users/fetch-user.dal.js'
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-export default async function (id, back) {
+export default async function initiateSession(id, back) {
   const user = await FetchUserDal(id)
 
   const licences = await FetchLicencesDal(user.licenceEntityId)

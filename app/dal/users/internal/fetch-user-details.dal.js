@@ -12,7 +12,7 @@ import UserModel from '../../../models/user.model.js'
  *
  * @returns {Promise<module:UserModel>} the requested user
  */
-export default async function (id) {
+export default async function fetchUserDetails(id) {
   return UserModel.query()
     .select(['id', 'userId', 'username'])
     .modify('status')

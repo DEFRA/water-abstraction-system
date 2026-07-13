@@ -15,7 +15,7 @@ import { engineTriggers } from '../../../../lib/static-lookups.lib.js'
  *
  * @returns {object} - The data formatted for the /check view template
  */
-export default function (session, blockingResults) {
+export default function allowedBillRun(session, blockingResults) {
   const { id: sessionId, regionName } = session
 
   const { toFinancialYearEnding, trigger } = blockingResults

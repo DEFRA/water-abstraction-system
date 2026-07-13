@@ -37,7 +37,7 @@ import { determineCurrentFinancialYear } from '../../../lib/general.lib.js'
  * @returns {object} - An object containing the related licenceId, regionId, workflow start and end date and
  * licence supplementary billing flags
  */
-export default async function (workflowId) {
+export default async function determineWorkflowFlags(workflowId) {
   const licence = await FetchLicenceService(workflowId)
   const { endDate } = determineCurrentFinancialYear()
 

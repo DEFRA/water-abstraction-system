@@ -16,7 +16,7 @@ const errorMessage = 'Select the notice type'
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function (payload) {
+export default function noticeType(payload) {
   const schema = Joi.object({ noticeType: Joi.required() }).messages({
     'any.required': errorMessage
   })

@@ -14,7 +14,7 @@
  *
  * @returns {object} the notification error data
  */
-export default function (statusCode, message, errors) {
+export default function notifyError(statusCode, message, errors) {
   return {
     notifyError: JSON.stringify({
       status: statusCode,

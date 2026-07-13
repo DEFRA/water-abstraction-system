@@ -13,7 +13,7 @@ import RemovePresenter from '../../../presenters/bill-runs/review/remove.present
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function (reviewLicenceId) {
+export default async function viewRemove(reviewLicenceId) {
   const reviewLicence = await FetchRemoveReviewLicenceService(reviewLicenceId)
 
   const pageData = RemovePresenter(reviewLicence)

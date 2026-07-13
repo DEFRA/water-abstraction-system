@@ -15,7 +15,7 @@ import { formatLongDate, formatMoney } from '../base.presenter.js'
  *
  * @returns {object} a formatted representation of the transaction specifically for the bill-licence page
  */
-export default function (transaction) {
+export default function viewCompensationChargeTransaction(transaction) {
   if (transaction.scheme === 'sroc') {
     return _srocContent(transaction)
   }

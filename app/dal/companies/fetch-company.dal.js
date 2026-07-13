@@ -12,7 +12,7 @@ import CompanyModel from '../../models/company.model.js'
  *
  * @returns {Promise<module:CompanyModel>} the data needed to populate the view customer page's
  */
-export default async function (companyId) {
+export default async function fetchCompany(companyId) {
   return _fetch(companyId)
 }
 

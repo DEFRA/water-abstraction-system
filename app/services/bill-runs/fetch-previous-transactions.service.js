@@ -18,7 +18,12 @@ import TransactionModel from '../../models/transaction.model.js'
  *
  * @returns {Promise<object[]>} The resulting matched transactions
  */
-export default async function (billingAccountId, licenceId, financialYearEnding, twoPartTariff) {
+export default async function fetchPreviousTransactions(
+  billingAccountId,
+  licenceId,
+  financialYearEnding,
+  twoPartTariff
+) {
   const transactions = await _fetch(billingAccountId, licenceId, financialYearEnding, twoPartTariff)
 
   return _cleanse(transactions)

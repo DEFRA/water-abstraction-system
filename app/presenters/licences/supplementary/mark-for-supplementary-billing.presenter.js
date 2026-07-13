@@ -16,7 +16,7 @@ const PREVIOUS_SIX_YEARS = 6
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function (licence) {
+export default function markForSupplementaryBilling(licence) {
   const { id, licenceRef } = licence
 
   return {

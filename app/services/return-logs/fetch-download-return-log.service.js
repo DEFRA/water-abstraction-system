@@ -13,7 +13,7 @@ import ReturnLogModel from '../../models/return-log.model.js'
  *
  * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and associated submission (if any)
  */
-export default async function (returnLogId, version) {
+export default async function fetchDownloadReturnLog(returnLogId, version) {
   const returnLog = await _fetch(returnLogId, version)
 
   returnLog.returnSubmissions[0].$applyReadings()

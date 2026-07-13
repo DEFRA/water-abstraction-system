@@ -12,7 +12,7 @@ import { formatLongDate } from '../../base.presenter.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function (session) {
+export default function paperReturn(session) {
   const { checkPageVisited, dueReturns, id: sessionId, selectedReturns } = session
 
   return {

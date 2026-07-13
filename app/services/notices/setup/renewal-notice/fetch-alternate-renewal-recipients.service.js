@@ -16,7 +16,7 @@ import { db } from '../../../../../db/db.js'
  *
  * @returns {Promise<object[]>} The recipient data for the alternate renewal notice
  */
-export default async function (licenceRefs) {
+export default async function fetchAlternateRenewalRecipients(licenceRefs) {
   const { rows } = await db.raw(_query(), [licenceRefs])
 
   return rows

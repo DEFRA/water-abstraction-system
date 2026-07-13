@@ -33,7 +33,7 @@ import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgre
  *
  * @param {number} days - The number of days to look back for customer files
  */
-export default async function (days) {
+export default async function processCustomerFiles(days) {
   try {
     const startTime = currentTimeInNanoseconds()
 

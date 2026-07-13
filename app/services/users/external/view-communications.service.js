@@ -19,7 +19,7 @@ import PaginatorPresenter from '../../../presenters/paginator.presenter.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function (id, auth, page, back = 'users') {
+export default async function viewCommunications(id, auth, page, back = 'users') {
   const user = await FetchUserDal(id)
 
   const { notifications, totalNumber } = await FetchNotificationsDal(user.username, page)

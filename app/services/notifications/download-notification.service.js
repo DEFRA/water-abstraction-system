@@ -12,7 +12,7 @@ import FetchDownloadNotificationService from './fetch-notification-download.serv
  *
  * @returns {Promise<ArrayBuffer>} - Resolves with the saved PDF data
  */
-export default async function (notificationId) {
+export default async function downloadNotification(notificationId) {
   const notificationData = await FetchDownloadNotificationService(notificationId)
 
   return notificationData.pdf

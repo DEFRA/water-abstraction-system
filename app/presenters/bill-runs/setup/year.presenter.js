@@ -12,7 +12,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function (licenceSupplementaryYears, session) {
+export default function year(licenceSupplementaryYears, session) {
   const selectedYear = session.year ? session.year : null
 
   let financialYearsData = []

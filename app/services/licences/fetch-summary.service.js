@@ -14,7 +14,7 @@ import LicenceModel from '../../models/licence.model.js'
  *
  * @returns {Promise<module:LicenceModel>} the data needed to populate the view licence page summary tab
  */
-export default async function (licenceId) {
+export default async function fetchSummary(licenceId) {
   return _fetch(licenceId)
 }
 

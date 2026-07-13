@@ -12,7 +12,7 @@ import ReturnVersionModel from '../../models/return-version.model.js'
  *
  * @returns {Promise<number>} The next version number to use
  */
-export default async function (licenceId) {
+export default async function determineNextVersionNumber(licenceId) {
   const { lastVersionNumber } = await ReturnVersionModel.query()
     .max('version as lastVersionNumber')
     .where({ licenceId })

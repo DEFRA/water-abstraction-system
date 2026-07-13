@@ -16,7 +16,7 @@ import { today } from '../../../lib/general.lib.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function (session) {
+export default function returnsPeriod(session) {
   const { checkPageVisited, noticeType, id: sessionId } = session
 
   const savedReturnsPeriod = session.returnsPeriod ?? null

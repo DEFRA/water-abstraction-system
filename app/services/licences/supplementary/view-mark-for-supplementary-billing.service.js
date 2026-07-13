@@ -14,7 +14,7 @@ import MarkForSupplementaryBillingPresenter from '../../../presenters/licences/s
  * @returns {Promise<object>} an object representing the `pageData` needed by the mark for supplementary billing page.
  * It contains details of the last 6 years from todays date and the licence details.
  */
-export default async function (licenceId) {
+export default async function viewMarkForSupplementaryBilling(licenceId) {
   const licenceData = await _fetchLicenceData(licenceId)
 
   const pageData = MarkForSupplementaryBillingPresenter(licenceData)

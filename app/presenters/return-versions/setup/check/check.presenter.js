@@ -14,7 +14,7 @@ import { returnRequirementReasons } from '../../../../lib/static-lookups.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function (session) {
+export default function check(session) {
   const {
     id: sessionId,
     journey,

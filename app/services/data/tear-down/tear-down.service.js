@@ -13,7 +13,7 @@ import WaterSchemaService from './water-schema.service.js'
 /**
  * Removes all data created for acceptance tests
  */
-export default async function () {
+export default async function tearDown() {
   const startTime = currentTimeInNanoseconds()
 
   await Promise.all([CrmSchemaService(), IdmSchemaService(), PermitSchemaService(), ReturnsSchemaService()])

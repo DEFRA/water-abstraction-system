@@ -18,7 +18,7 @@ import { generateUUID } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<object>} An object containing arrays of bills and billLicences objects
  */
-export default async function (chargeVersions, billRunId, billingPeriod) {
+export default async function preGenerateBillingData(chargeVersions, billRunId, billingPeriod) {
   const billingAccounts = await FetchBillingAccountsService(chargeVersions)
 
   const bills = _preGenerateBills(billingAccounts, billRunId, billingPeriod)

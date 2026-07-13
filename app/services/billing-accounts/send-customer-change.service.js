@@ -28,7 +28,7 @@ import ExpandedError from '../../errors/expanded.error.js'
  * @param {module:ContactModel} contact - The new contact for the billing account if an FAO was setup by the user during
  * the change address journey
  */
-export default async function (billingAccount, address, company, contact) {
+export default async function sendCustomerChange(billingAccount, address, company, contact) {
   const requestData = CreateCustomerChangePresenter(billingAccount, address, company, contact)
 
   const result = await send(requestData)

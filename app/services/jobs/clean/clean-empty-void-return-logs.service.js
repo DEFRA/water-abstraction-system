@@ -11,7 +11,7 @@ import ReturnSubmissionModel from '../../../models/return-submission.model.js'
  *
  * @returns {Promise<number>} The number of rows deleted
  */
-export default async function () {
+export default async function cleanEmptyVoidReturnLogs() {
   let deletedCount = 0
 
   try {

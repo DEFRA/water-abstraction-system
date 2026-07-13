@@ -16,7 +16,7 @@ import ReturnLogModel from '../../../models/return-log.model.js'
  * @returns {Promise<object>} Contains an array of `returnLogs` and the associated current `returnSubmissions`, and
  * `returnSubmissionLines` if they exist
  */
-export default async function (licenceRef, billingPeriod) {
+export default async function fetchReturnLogsForLicence(licenceRef, billingPeriod) {
   try {
     return await _fetch(licenceRef, billingPeriod)
   } catch (error) {

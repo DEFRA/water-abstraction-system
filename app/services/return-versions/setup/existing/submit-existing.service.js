@@ -26,7 +26,7 @@ import GenerateFromExistingRequirementsService from './generate-from-existing-re
  * @returns {Promise<object>} If no errors an empty object else the page data for the existing page including the
  * validation error details
  */
-export default async function (sessionId, payload) {
+export default async function submitExisting(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload, session)

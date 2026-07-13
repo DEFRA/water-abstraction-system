@@ -13,7 +13,7 @@ import ViewPresenter from '../../presenters/return-versions/view.presenter.js'
  *
  * @returns {Promise<object>} page data needed by the view template
  */
-export default async function (returnVersionId) {
+export default async function view(returnVersionId) {
   const returnVersionData = await FetchReturnVersionService(returnVersionId)
 
   const formattedData = ViewPresenter(returnVersionData)

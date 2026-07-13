@@ -30,7 +30,7 @@
  * item or the `id` is not found.
  *
  */
-export default function (arrayOfElements, anchorElement) {
+export default function previousAndNext(arrayOfElements, anchorElement) {
   const index = _indexOfAnchorId(arrayOfElements, anchorElement)
 
   if (index === -1) {

@@ -14,7 +14,7 @@ import RecipientNamePresenter from '../../../presenters/notices/setup/recipient-
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-export default async function (sessionId) {
+export default async function viewRecipientName(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = RecipientNamePresenter(session)

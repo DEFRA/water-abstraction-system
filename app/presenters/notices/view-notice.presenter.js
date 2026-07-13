@@ -13,7 +13,7 @@ import { formatLongDate, formatNoticeType } from '../base.presenter.js'
  *
  * @returns {object[]} - The data formatted for the view template
  */
-export default function (notice, notifications) {
+export default function viewNotice(notice, notifications) {
   const tableRows = _formatTableData(notifications)
 
   return {

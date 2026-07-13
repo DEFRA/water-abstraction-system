@@ -15,7 +15,7 @@ import StopOrReduceValidator from '../../../validators/licence-monitoring-statio
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-export default async function (sessionId, payload) {
+export default async function submitStopOrReduce(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)

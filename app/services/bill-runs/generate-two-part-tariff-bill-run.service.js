@@ -31,7 +31,7 @@ import GenerateSupplementaryBillRun from './tpt-supplementary/generate-bill-run.
  *
  * @param {string} billRunId - The UUID of the two-part tariff bill run that is ready for generating
  */
-export default async function (billRunId) {
+export default async function generateTwoPartTariffBillRun(billRunId) {
   const billRun = await _fetchBillRun(billRunId)
 
   _validate(billRun)

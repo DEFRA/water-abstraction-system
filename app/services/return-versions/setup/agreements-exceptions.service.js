@@ -17,7 +17,7 @@ import FetchSessionDal from '../../../dal/fetch-session.dal.js'
  *
  * @returns {Promise<object>} The view data for the agreements and exceptions page
  */
-export default async function (sessionId, requirementIndex) {
+export default async function agreementsExceptions(sessionId, requirementIndex) {
   const session = await FetchSessionDal(sessionId)
 
   const formattedData = AgreementsExceptionsPresenter(session, requirementIndex)

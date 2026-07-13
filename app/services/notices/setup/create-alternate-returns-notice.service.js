@@ -20,7 +20,7 @@ import { NoticeJourney, NoticeType, NoticeTypes } from '../../../lib/static-look
  *
  * @returns {Promise<object>} The created alternate notice and notifications
  */
-export default async function (notice, licenceRefs, dueDate, returnLogIds) {
+export default async function createAlternateReturnsNotice(notice, licenceRefs, dueDate, returnLogIds) {
   const recipients = await FetchAlternateReturnsRecipientsService(returnLogIds, dueDate)
   const alternateNotice = await _notice(notice, recipients, licenceRefs)
   const notifications = await _notifications(alternateNotice, recipients)

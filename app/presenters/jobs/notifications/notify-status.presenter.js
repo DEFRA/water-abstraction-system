@@ -30,7 +30,7 @@ const NOTIFICATIONS_STATUS = {
  *
  * @returns {object} - returns what 'status' and 'notifyStatus' should be applied to the notification
  */
-export default function (notifyStatus, notification) {
+export default function notifyStatus(notifyStatus, notification) {
   if (notification.messageType === 'email') {
     return _emailStatus(notifyStatus)
   }

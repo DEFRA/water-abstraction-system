@@ -12,7 +12,7 @@ import { NoticeType, NoticeTypes } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function (event) {
+export default function confirmation(event) {
   const { referenceCode, subtype, id: eventId, metadata } = event
 
   return {

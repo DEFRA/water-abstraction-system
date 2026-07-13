@@ -17,7 +17,7 @@ import YearPresenter from '../../../presenters/bill-runs/setup/year.presenter.js
  *
  * @returns {Promise<object>} The view data for the year page
  */
-export default async function (sessionId) {
+export default async function year(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const regionId = session.region

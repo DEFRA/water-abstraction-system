@@ -22,7 +22,7 @@ import TransactionModel from '../../../models/transaction.model.js'
  *
  * @returns {Promise<boolean>} `true` if any bills were reissued; `false` if not
  */
-export default async function (reissueBillRun) {
+export default async function reissueBills(reissueBillRun) {
   const sourceBills = await FetchBillsToBeReissuedService(reissueBillRun.regionId)
 
   if (sourceBills.length === 0) {

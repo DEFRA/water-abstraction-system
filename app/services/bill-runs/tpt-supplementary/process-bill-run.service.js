@@ -25,7 +25,7 @@ import MatchAndAllocateService from '../match/match-and-allocate.service.js'
  * @param {object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`. For 2PT
  * this will only ever contain a single period
  */
-export default async function (billRun, billingPeriods) {
+export default async function processBillRun(billRun, billingPeriods) {
   const { id: billRunId } = billRun
   // NOTE: billingPeriods come from `DetermineBillingPeriodsService` which always returns an array because it is used by
   // all billing types. For two-part tariff we know it will only contain one because 2PT supplementary bill runs are

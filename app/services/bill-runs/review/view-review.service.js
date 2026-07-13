@@ -18,7 +18,7 @@ import { processSavedFilters } from '../../../lib/submit-page.lib.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function (id, yar, page) {
+export default async function viewReview(id, yar, page) {
   const filterKey = `review-${id}`
   const filters = _filters(yar, filterKey)
 

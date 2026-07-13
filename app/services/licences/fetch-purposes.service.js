@@ -12,7 +12,7 @@ import LicenceModel from '../../models/licence.model.js'
  *
  * @returns {Promise<object[]>} The licenceVersionPurposes data needed for the purposes page
  */
-export default async function (licenceId) {
+export default async function fetchPurposes(licenceId) {
   const licence = await _fetch(licenceId)
 
   return licence.licenceVersions?.[0]?.licenceVersionPurposes || []

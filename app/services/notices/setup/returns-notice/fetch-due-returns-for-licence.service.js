@@ -13,7 +13,7 @@ import { timestampForPostgres } from '../../../../lib/general.lib.js'
  *
  * @returns {Promise<object[]>} The 'due' return logs for the licence
  */
-export default async function (licenceRef) {
+export default async function fetchDueReturnsForLicence(licenceRef) {
   const { rows } = await _fetch(licenceRef)
 
   return rows

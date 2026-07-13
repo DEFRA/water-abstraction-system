@@ -27,7 +27,7 @@
  * @returns {object[]} an array of Hapi routes, filtered depending on the current environment and whether any paths
  * have been registered as needing filtering
  */
-export default function (routes, environment) {
+export default function filterRoutes(routes, environment) {
   if (_protectedEnvironment(environment)) {
     return _filteredRoutes(routes)
   }

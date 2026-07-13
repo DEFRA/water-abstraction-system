@@ -13,7 +13,7 @@ import ContactModel from '../../../models/contact.model.js'
  *
  * @returns {Promise<object[]>} an object containing the matching contacts needed to populate the view
  */
-export default async function (companyId) {
+export default async function fetchCompanyContacts(companyId) {
   const company = await CompanyModel.query().select(['id', 'name']).findById(companyId)
   const contacts = await ContactModel.query()
     .select([

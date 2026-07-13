@@ -19,7 +19,7 @@ import { formatLicencePoints, formatLicencePurposes, formatConditionTypes } from
  *
  * @returns {object} The data formatted for the view template
  */
-export default function (licenceVersionData, auth, conditions) {
+export default function view(licenceVersionData, auth, conditions) {
   const { licenceVersion, licenceVersionsForPagination } = licenceVersionData
 
   const { licence } = licenceVersion

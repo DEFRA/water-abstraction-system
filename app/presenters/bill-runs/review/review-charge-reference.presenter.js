@@ -19,7 +19,7 @@ import {
  *
  * @returns {object} page date needed for the review charge reference page
  */
-export default function (reviewChargeReference) {
+export default function reviewChargeReference(reviewChargeReference) {
   const {
     amendedAuthorisedVolume,
     chargeReference,

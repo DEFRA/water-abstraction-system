@@ -39,7 +39,7 @@
  *
  * @returns {boolean} true if the request should be ignored, else false
  */
-export default function (options, request) {
+export default function hapiPinoIgnoreRequest(options, request) {
   const staticPaths = ['/', '/status', '/favicon.ico']
 
   // If request is a known path ignore it

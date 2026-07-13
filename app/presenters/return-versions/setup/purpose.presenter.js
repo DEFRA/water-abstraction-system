@@ -12,7 +12,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function (session, requirementIndex, licencePurposes) {
+export default function purpose(session, requirementIndex, licencePurposes) {
   const { id: sessionId, licence, requirements } = session
   const requirement = requirements[requirementIndex]
 

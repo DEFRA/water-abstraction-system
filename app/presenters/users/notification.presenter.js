@@ -24,7 +24,7 @@ import { userNotificationTypes } from '../../lib/static-lookups.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function (notification, user, type, superUser) {
+export default function notification(notification, user, type, superUser) {
   const { createdAt, messageRef, messageType, recipient } = notification
 
   return {

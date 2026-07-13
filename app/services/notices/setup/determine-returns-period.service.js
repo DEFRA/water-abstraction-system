@@ -16,7 +16,7 @@ import { determineUpcomingReturnPeriods } from '../../../lib/return-periods.lib.
  *
  * @returns {object} - the returns period and the if the period is `summer`
  */
-export default function (returnsPeriod) {
+export default function determineReturnsPeriod(returnsPeriod) {
   return {
     returnsPeriod: _returnsPeriod(returnsPeriod),
     summer: _summer(returnsPeriod)

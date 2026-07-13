@@ -16,7 +16,7 @@ import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
  *
  * @returns {Promise<object>} The view data for the purpose page
  */
-export default async function (sessionId) {
+export default async function existing(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const formattedData = ExistingPresenter(session)

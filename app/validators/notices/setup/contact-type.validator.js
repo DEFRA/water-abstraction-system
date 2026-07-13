@@ -14,7 +14,7 @@ import Joi from 'joi'
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function (payload) {
+export default function contactType(payload) {
   const schema = Joi.object({
     contactType: Joi.string().required().messages({
       'any.required': 'Select how to contact the recipient'

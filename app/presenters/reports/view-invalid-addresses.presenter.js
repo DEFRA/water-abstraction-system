@@ -12,7 +12,7 @@ import { formatDateObjectToISO } from '../../lib/dates.lib.js'
  *
  * @returns {object} page data needed by the view template
  */
-export default function (invalidAddresses) {
+export default function viewInvalidAddresses(invalidAddresses) {
   return {
     backLink: { href: '/system/manage', text: 'Go back to manage' },
     invalidAddresses: _formatTableData(invalidAddresses),

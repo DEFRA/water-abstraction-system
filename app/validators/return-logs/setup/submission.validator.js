@@ -15,7 +15,7 @@ const VALID_VALUES = ['enterReturn', 'nilReturn', 'recordReceipt']
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function (payload) {
+export default function submission(payload) {
   const errorMessage = 'Select what you want to do with this return'
 
   const schema = Joi.object({

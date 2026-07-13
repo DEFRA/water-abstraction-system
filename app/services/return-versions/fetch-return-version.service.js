@@ -13,7 +13,7 @@ import ReturnVersionModel from '../../models/return-version.model.js'
  * @returns {Promise<ReturnVersionModel>} The return version plus linked licence, return requirements (requirement,
  * points, purposes)
  */
-export default async function (returnVersionId) {
+export default async function fetchReturnVersion(returnVersionId) {
   return {
     returnVersion: await _fetch(returnVersionId),
     returnVersionsForPagination: await _fetchPagination(returnVersionId)

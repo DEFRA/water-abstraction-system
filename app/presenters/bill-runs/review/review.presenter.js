@@ -14,7 +14,7 @@ import { formatBillRunType, formatChargeScheme, generateBillRunTitle } from '../
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function (billRun, licences) {
+export default function review(billRun, licences) {
   const formattedLicences = _formatLicences(licences)
 
   const {

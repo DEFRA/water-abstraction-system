@@ -32,7 +32,7 @@ import { checkPageBackLink } from './base-check.presenter.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function (session) {
+export default function noAnnualBillRun(session) {
   const { id: sessionId, regionName } = session
 
   return {

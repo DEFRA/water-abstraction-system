@@ -16,7 +16,7 @@ import ReportedPresenter from '../../../presenters/return-logs/setup/reported.pr
  *
  * @returns {Promise<object>} The view data for the reported page
  */
-export default async function (sessionId) {
+export default async function reported(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = ReportedPresenter(session)

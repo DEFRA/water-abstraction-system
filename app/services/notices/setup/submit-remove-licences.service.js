@@ -18,7 +18,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
  * @returns {Promise<object>} An object containing where to redirect to if there are no errors else the page data for the view
  * including the validation error details
  */
-export default async function (sessionId, payload) {
+export default async function submitRemoveLicences(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   const licenceRefsWithDueReturns = await _fetchLicenceRefsWithDueReturns(session)

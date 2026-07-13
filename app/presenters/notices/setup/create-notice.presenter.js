@@ -19,7 +19,7 @@ import { futureDueDate } from '../base.presenter.js'
  *
  * @returns {object} The data formatted for persisting as a `notice` record
  */
-export default function (noticeData, recipients, issuer) {
+export default function createNotice(noticeData, recipients, issuer) {
   const { referenceCode, subType, name } = noticeData
 
   const notice = {

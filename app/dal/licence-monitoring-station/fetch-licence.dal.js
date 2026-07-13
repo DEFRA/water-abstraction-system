@@ -14,6 +14,6 @@ import LicenceModel from '../../models/licence.model.js'
  * @returns {Promise<object>} The licence with the data needed to determine if it has ended (expiredDate,
  * lapsedDate, revokedDate)
  */
-export default async function (licenceRef) {
+export default async function fetchLicence(licenceRef) {
   return LicenceModel.query().where('licenceRef', licenceRef).select('id', 'licenceRef').modify('ended').first()
 }

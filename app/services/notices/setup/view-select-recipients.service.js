@@ -15,7 +15,7 @@ import SelectRecipientsPresenter from '../../../presenters/notices/setup/select-
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-export default async function (sessionId) {
+export default async function viewSelectRecipients(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const selectedRecipients = _selectedRecipients(session)

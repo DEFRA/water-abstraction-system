@@ -25,7 +25,7 @@ import { returnRequirementFrequencies, unitNames } from '../../lib/static-lookup
  *
  * @returns {object} The data formatted for the view template
  */
-export default function (returnLog, auth) {
+export default function details(returnLog, auth) {
   const {
     current,
     endDate,

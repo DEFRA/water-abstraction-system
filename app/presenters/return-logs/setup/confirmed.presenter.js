@@ -10,7 +10,7 @@
  *
  * @returns {object} page data needed by the view template
  */
-export default function (returnLog) {
+export default function confirmed(returnLog) {
   const {
     id: returnLogId,
     licenceId,

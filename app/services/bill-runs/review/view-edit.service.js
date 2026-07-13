@@ -15,7 +15,7 @@ import FetchReviewChargeElementService from './fetch-review-charge-element.servi
  *
  * @returns {Promise<object>} the 'pageData' needed to view the edit billable return volumes page
  */
-export default async function (reviewChargeElementId, elementIndex) {
+export default async function viewEdit(reviewChargeElementId, elementIndex) {
   const reviewChargeElement = await FetchReviewChargeElementService(reviewChargeElementId)
 
   const pageData = EditPresenter(reviewChargeElement, elementIndex)

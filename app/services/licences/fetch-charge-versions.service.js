@@ -12,7 +12,7 @@ import ChargeVersionModel from '../../models/charge-version.model.js'
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's set up tab
  */
-export default async function (licenceId) {
+export default async function fetchChargeVersions(licenceId) {
   return _fetch(licenceId)
 }
 

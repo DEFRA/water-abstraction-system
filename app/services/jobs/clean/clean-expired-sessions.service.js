@@ -10,7 +10,7 @@ import SessionModel from '../../../models/session.model.js'
  *
  * @returns {Promise<number>} The number of rows deleted
  */
-export default async function () {
+export default async function cleanExpiredSessions() {
   let deletedCount = 0
 
   try {

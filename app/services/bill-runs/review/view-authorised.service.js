@@ -14,7 +14,7 @@ import FetchReviewChargeReferenceService from './fetch-review-charge-reference.s
  *
  * @returns {Promise<object>} the 'pageData' needed to view the amend authorised volume page
  */
-export default async function (reviewChargeReferenceId) {
+export default async function viewAuthorised(reviewChargeReferenceId) {
   const reviewChargeReference = await FetchReviewChargeReferenceService(reviewChargeReferenceId)
 
   const pageData = AuthorisedPresenter(reviewChargeReference)

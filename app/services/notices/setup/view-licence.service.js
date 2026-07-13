@@ -16,7 +16,7 @@ import LicencePresenter from '../../../presenters/notices/setup/licence.presente
  *
  * @returns {Promise<object>} The view data for the licence page
  */
-export default async function (sessionId) {
+export default async function viewLicence(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const formattedData = LicencePresenter(session)

@@ -16,7 +16,7 @@ import ReturnVersionModel from '../../../../models/return-version.model.js'
  *
  * @returns {Promise<module:ReturnVersionModel>} the matching return version and related return requirements
  */
-export default async function (returnVersionId) {
+export default async function fetchExistingRequirements(returnVersionId) {
   return _fetch(returnVersionId)
 }
 

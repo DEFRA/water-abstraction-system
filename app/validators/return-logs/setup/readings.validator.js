@@ -18,7 +18,7 @@ const MAX_ALLOWED_READING = 99999999999
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function (payload, requestedYear, requestedMonth, session) {
+export default function readings(payload, requestedYear, requestedMonth, session) {
   const { lines, startReading } = session
 
   const previousHighestReading = _previousHighestReading(lines, requestedYear, requestedMonth, startReading)

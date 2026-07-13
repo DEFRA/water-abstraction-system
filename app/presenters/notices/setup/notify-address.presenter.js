@@ -76,7 +76,7 @@ const CROWN_DEPENDENCIES = new Set(['guernsey', 'isle of man', 'jersey'])
  *
  * @returns {object} a Notify compatible address object
  */
-export default function (contact) {
+export default function notifyAddress(contact) {
   // Contact name will always be address_line_1 in any result we return
   const name = contact.name
 

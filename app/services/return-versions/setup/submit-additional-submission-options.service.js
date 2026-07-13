@@ -25,7 +25,7 @@ import { handleOneOptionSelected } from '../../../lib/submit-page.lib.js'
  * @returns {Promise<object>} If no errors it returns an empty object else the page data for the note page including the
  * validation error details
  */
-export default async function (sessionId, payload, yar) {
+export default async function submitAdditionalSubmissionOptions(sessionId, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   handleOneOptionSelected(payload, 'additionalSubmissionOptions')

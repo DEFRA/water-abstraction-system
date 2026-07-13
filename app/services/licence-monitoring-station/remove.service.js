@@ -17,7 +17,7 @@ import RemovePresenter from '../../presenters/licence-monitoring-station/remove.
  *
  * @returns {Promise<object>} The view data for the remove licence tag page
  */
-export default async function (licenceMonitoringStationId) {
+export default async function remove(licenceMonitoringStationId) {
   const licenceMonitoringStation = await FetchLicenceMonitoringStationService(licenceMonitoringStationId)
 
   const formattedData = RemovePresenter(licenceMonitoringStation)

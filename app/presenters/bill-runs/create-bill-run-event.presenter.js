@@ -10,7 +10,7 @@
  *
  * @returns {object} - the formatted content
  */
-export default function (billRun) {
+export default function createBillRunEvent(billRun) {
   const {
     batchType,
     creditNoteCount,

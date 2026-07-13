@@ -27,7 +27,7 @@ import BillingConfig from '../../../../config/billing.config.js'
  *
  * @returns {Promise<boolean>} true if the bill run is not empty (there are transactions to bill) else false
  */
-export default async function (billRun, billingPeriod, billingAccounts) {
+export default async function processBillingPeriod(billRun, billingPeriod, billingAccounts) {
   let billRunIsPopulated = false
 
   if (billingAccounts.length === 0) {

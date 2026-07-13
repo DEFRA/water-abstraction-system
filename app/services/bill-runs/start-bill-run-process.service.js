@@ -21,7 +21,7 @@ import TwoPartTariffSupplementaryProcessBillRunService from './tpt-supplementary
  *
  * @returns {Promise<object>} Object that will be the JSON response returned to the client
  */
-export default async function (regionId, batchType, userEmail, financialYearEnding) {
+export default async function startBillRunProcess(regionId, batchType, userEmail, financialYearEnding) {
   const billingPeriods = DetermineBillingPeriodsService(batchType, financialYearEnding)
 
   if (billingPeriods.length === 0) {

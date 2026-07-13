@@ -22,7 +22,7 @@ import { db } from '../../../../db/db.js'
  *
  * @returns {Promise<object>} - The data needed to determine which supplementary flags the licence needs
  */
-export default async function (workflowId) {
+export default async function fetchLicence(workflowId) {
   const query = _query()
 
   const {

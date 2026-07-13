@@ -21,7 +21,7 @@ const NOTICE_TYPE_TEXT = {
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function (session) {
+export default function checkNoticeType(session) {
   const {
     determinedReturnsPeriod = null,
     dueReturns = [],

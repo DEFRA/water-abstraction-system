@@ -10,7 +10,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function (session) {
+export default function method(session) {
   const { id: sessionId, licence, licenceVersion, method } = session
 
   return {

@@ -14,7 +14,7 @@ import ReviewLicencePresenter from '../../../presenters/bill-runs/review/review-
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function (reviewLicenceId, yar) {
+export default async function viewReviewLicence(reviewLicenceId, yar) {
   const reviewLicence = await FetchReviewLicenceService(reviewLicenceId)
 
   const [bannerMessage] = yar.flash('banner')

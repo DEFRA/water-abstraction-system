@@ -15,7 +15,7 @@ import Joi from 'joi'
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function (payload, name) {
+export default function existingAddress(payload, name) {
   const errorMessage = `Select an existing address for ${name}`
 
   const schema = Joi.object({

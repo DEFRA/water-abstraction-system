@@ -15,7 +15,7 @@ const VALID_VALUES = ['useAbstractionData', 'useExistingRequirements', 'setUpMan
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function (payload) {
+export default function method(payload) {
   const errorMessage = 'Select how you want to set up the requirements for returns'
   const schema = Joi.object({
     method: Joi.string()

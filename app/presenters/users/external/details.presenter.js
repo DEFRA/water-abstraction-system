@@ -28,7 +28,7 @@ const EXTERNAL_ROLES = {
  *
  * @returns {object} The data formatted for the view template
  */
-export default function (user, viewingUserScope, back) {
+export default function details(user, viewingUserScope, back) {
   const permissions = user.$permissions()
 
   const canManageAccounts = viewingUserScope.includes('manage_accounts')

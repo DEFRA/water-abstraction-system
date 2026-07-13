@@ -15,7 +15,7 @@ import { returnRequirementFrequencies } from '../../lib/static-lookups.lib.js'
  *
  * @returns {object} page data formatted for the view template
  */
-export default function (returnVersionData) {
+export default function view(returnVersionData) {
   const { returnVersion, returnVersionsForPagination } = returnVersionData
 
   const { licence, multipleUpload, quarterlyReturns, returnRequirements, startDate, status } = returnVersion

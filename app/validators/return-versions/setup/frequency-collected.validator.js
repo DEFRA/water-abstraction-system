@@ -17,7 +17,7 @@ import Joi from 'joi'
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the `error:` property will
  * also exist detailing what the issue is.
  */
-export default function (payload) {
+export default function frequencyCollected(payload) {
   const VALID_VALUES = ['day', 'week', 'month']
 
   const errorMessage = 'Select how often readings or volumes are collected'

@@ -12,6 +12,6 @@ import NotificationModel from '../../models/notification.model.js'
  *
  * @returns {Promise<module:NotificationModel>} the PDF for the notification
  */
-export default async function (notificationId) {
+export default async function fetchNotificationDownload(notificationId) {
   return NotificationModel.query().findById(notificationId).select(['pdf'])
 }

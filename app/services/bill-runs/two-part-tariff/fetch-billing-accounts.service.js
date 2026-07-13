@@ -29,7 +29,7 @@ import ChargeVersionModel from '../../../models/charge-version.model.js'
  * licence, charge version, charge element etc records, plus the two-part tariff review details needed to generate the
  * bill run
  */
-export default async function (billRunId) {
+export default async function fetchBillingAccounts(billRunId) {
   return BillingAccountModel.query()
     .select(['billingAccounts.id', 'billingAccounts.accountNumber'])
     .whereExists(_whereBillingAccountExistsClause(billRunId))

@@ -14,7 +14,7 @@ import { formatLongDateTime, sentenceCase } from '../../base.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function (auth, user) {
+export default function details(auth, user) {
   const { id, username } = user
 
   const status = user.$status()

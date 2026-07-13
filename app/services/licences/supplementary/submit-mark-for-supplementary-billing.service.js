@@ -22,7 +22,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
  *
  * @returns {Promise<object>} The licence marked for supplementary billing
  */
-export default async function (licenceId, payload) {
+export default async function submitMarkForSupplementaryBilling(licenceId, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {

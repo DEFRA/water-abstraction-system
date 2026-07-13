@@ -28,7 +28,7 @@ import DatabaseConfig from '../../../config/database.config.js'
  *
  * @returns {Promise<module:UserModel[]>} an array of users that match the selected 'page in the data
  */
-export default async function (filters, page = '1') {
+export default async function fetchUsers(filters, page = '1') {
   const query = _fetchQuery()
 
   _applyFilters(query, filters)

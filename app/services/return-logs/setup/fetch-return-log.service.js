@@ -14,7 +14,7 @@ import ReturnLogModel from '../../../models/return-log.model.js'
  *
  * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and licence data
  */
-export default async function (returnLogId) {
+export default async function fetchReturnLog(returnLogId) {
   return ReturnLogModel.query()
     .findById(returnLogId)
     .select(

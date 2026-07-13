@@ -22,7 +22,7 @@ import {
  *
  * @returns {object} page date needed for the review charge element page
  */
-export default function (reviewChargeElement, elementIndex) {
+export default function reviewChargeElement(reviewChargeElement, elementIndex) {
   const {
     amendedAllocated: billableReturns,
     chargeElement,

@@ -12,6 +12,6 @@ import DeleteSessionDal from '../../../dal/delete-session.dal.js'
  *
  * @param {string} sessionId - The UUID for the return submission setup session record
  */
-export default async function (sessionId) {
+export default async function submitCancel(sessionId) {
   await DeleteSessionDal(sessionId)
 }

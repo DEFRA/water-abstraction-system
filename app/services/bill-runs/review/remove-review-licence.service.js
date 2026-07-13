@@ -10,7 +10,7 @@ import { db } from '../../../../db/db.js'
  *
  * @param {string} reviewLicenceId - The UUID of the review licence that is being removed from the bill run
  */
-export default async function (reviewLicenceId) {
+export default async function removeReviewLicence(reviewLicenceId) {
   await _removeChargeElementReturns(reviewLicenceId)
   await _removeReturns(reviewLicenceId)
   await _removeChargeElements(reviewLicenceId)

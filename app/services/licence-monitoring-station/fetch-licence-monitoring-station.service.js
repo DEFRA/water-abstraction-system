@@ -13,7 +13,7 @@ import LicenceMonitoringStationModel from '../../models/licence-monitoring-stati
  * @returns {Promise<object>} the matching instance of the `LicenceMonitoringStationModel` populated with the data
  * needed for the remove licence tag page
  */
-export default async function (licenceMonitoringStationId) {
+export default async function fetchLicenceMonitoringStation(licenceMonitoringStationId) {
   const monitoringStationLicenceTags = await _fetchMonitoringStationLicenceTags(licenceMonitoringStationId)
 
   return monitoringStationLicenceTags

@@ -25,7 +25,7 @@ import MethodValidator from '../../../../validators/return-versions/setup/method
  * @returns {Promise<object>} If no errors a the url for where the user should be redirected else the page data for the
  * setup page including the validation error details
  */
-export default async function (sessionId, payload) {
+export default async function submitMethod(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)

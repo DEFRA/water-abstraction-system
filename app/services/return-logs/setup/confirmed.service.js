@@ -13,7 +13,7 @@ import FetchReturnLogService from '../../../services/return-logs/setup/fetch-ret
  *
  * @returns {Promise<object>} page data needed by the view template
  */
-export default async function (returnLogId) {
+export default async function confirmed(returnLogId) {
   const returnLog = await FetchReturnLogService(returnLogId)
 
   const formattedData = ConfirmedPresenter(returnLog)

@@ -13,7 +13,7 @@ import { formatBillRunType, formatChargeScheme } from '../billing.presenter.js'
  *
  * @returns {object} - the prepared bill summary data to be passed to the confirm remove a bill page
  */
-export default function (bill) {
+export default function removeBill(bill) {
   const { id: billId, billingAccount, billLicences, billRun } = bill
 
   const { billRunNumber, billRunStatus, billRunType, chargeScheme, dateCreated, financialYear, region } =

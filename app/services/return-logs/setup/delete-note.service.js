@@ -15,7 +15,7 @@ import { flashNotification } from '../../../lib/general.lib.js'
  * @param {string} sessionId - The id of the current session
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-export default async function (sessionId, yar) {
+export default async function deleteNote(sessionId, yar) {
   const session = await FetchSessionDal(sessionId)
 
   flashNotification(yar, 'Deleted', 'Note deleted')

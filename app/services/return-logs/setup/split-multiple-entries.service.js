@@ -18,7 +18,7 @@
  *
  * @returns {number[] | null} The formatted array of numbers and null values.
  */
-export default function (multipleEntries) {
+export default function splitMultipleEntries(multipleEntries) {
   if (!multipleEntries) {
     return null
   }

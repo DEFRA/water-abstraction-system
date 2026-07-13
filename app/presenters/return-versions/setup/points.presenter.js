@@ -15,7 +15,7 @@ import { compareStrings } from '../../../lib/general.lib.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function (session, requirementIndex, points) {
+export default function points(session, requirementIndex, points) {
   const { id: sessionId, licence, requirements } = session
   const requirement = requirements[requirementIndex]
 

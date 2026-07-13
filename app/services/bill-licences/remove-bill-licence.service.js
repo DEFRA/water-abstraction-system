@@ -14,7 +14,7 @@ import RemoveBillLicencePresenter from '../../presenters/bill-licences/remove-bi
  * @returns {Promise<object>} a formatted representation of the bill licence, its bill, billing account and the bill run
  * it is linked to for the remove bill licence page
  */
-export default async function (billLicenceId) {
+export default async function removeBillLicence(billLicenceId) {
   const billLicence = await FetchBillLicenceSummaryService(billLicenceId)
 
   const formattedData = RemoveBillLicencePresenter(billLicence)

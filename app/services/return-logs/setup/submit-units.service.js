@@ -25,7 +25,7 @@ import { returnUnits } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<object>} If no errors the page data for the units page else the validation error details
  */
-export default async function (sessionId, payload, yar) {
+export default async function submitUnits(sessionId, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const error = _validate(payload)

@@ -19,7 +19,7 @@ import {
  *
  * @returns {object} - the prepared bill run data to be passed to the view bill run page
  */
-export default function (billRun, billSummaries) {
+export default function viewBillRun(billRun, billSummaries) {
   const {
     batchType,
     billRunNumber,

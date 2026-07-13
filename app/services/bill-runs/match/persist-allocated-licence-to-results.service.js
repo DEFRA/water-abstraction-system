@@ -25,7 +25,7 @@ import ReviewReturnModel from '../../../models/review-return.model.js'
  * @param {module:LicenceModel} licence - the two-part tariff licence included in the bill run, along with their match
  * and allocation results
  */
-export default async function (billRunId, licence) {
+export default async function persistAllocatedLicenceToResults(billRunId, licence) {
   const { chargeVersions, returnLogs } = licence
 
   const reviewLicenceId = await _persistLicenceData(licence, billRunId)

@@ -12,7 +12,7 @@ import PointModel from '../../../models/point.model.js'
  *
  * @returns {Promise<module:PointModel[]>} The distinct points for the matching licence version
  */
-export default async function (licenceVersionId) {
+export default async function fetchPoints(licenceVersionId) {
   return PointModel.query()
     .distinct(['points.id', 'points.description', 'points.ngr1', 'points.ngr2', 'points.ngr3', 'points.ngr4'])
     .innerJoin('licenceVersionPurposePoints', 'licenceVersionPurposePoints.pointId', 'points.id')

@@ -33,7 +33,7 @@ import { compareDates, determineEarliestDate, sameDate } from '../../../lib/date
  *
  * @returns {object|null} The earliest changed date if any changes are found, otherwise null
  */
-export default function (licence) {
+export default function determineEarliestLicenceChangedDate(licence) {
   const changedDates = _changedDates(licence)
 
   if (changedDates.length === 0) {

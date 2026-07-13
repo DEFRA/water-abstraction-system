@@ -15,6 +15,6 @@ import SessionModel from '../models/session.model.js'
  *
  * @returns {Promise<module:SessionModel>} The newly created session.
  */
-export default async function (data = {}) {
+export default async function createSession(data = {}) {
   return SessionModel.query().insert({ data }).returning('id')
 }

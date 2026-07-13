@@ -18,7 +18,7 @@ import FetchSessionDal from '../../../dal/fetch-session.dal.js'
  *
  * @returns {Promise<object>} The view data for the points page
  */
-export default async function (sessionId) {
+export default async function additionalSubmissionOptions(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const formattedData = AdditionalSubmissionOptionsPresenter(session)

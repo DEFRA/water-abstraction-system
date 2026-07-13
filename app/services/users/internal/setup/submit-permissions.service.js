@@ -22,7 +22,7 @@ import { flashNotification } from '../../../../lib/general.lib.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function (auth, sessionId, payload, yar) {
+export default async function submitPermissions(auth, sessionId, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)

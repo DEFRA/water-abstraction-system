@@ -100,7 +100,7 @@ import { NoticeType } from '../../../../lib/static-lookups.lib.js'
  *
  * @returns {string} Complete SQL query for fetching the recipients for a notice or its download
  */
-export default function (noticeType, dueReturnLogsQuery, download) {
+export default function generateRecipientsQuery(noticeType, dueReturnLogsQuery, download) {
   const primaryUserQuery = _primaryUserQuery(noticeType)
   const returnsUserQuery = _returnsUserQuery(noticeType)
   const licenceHolderQuery = _licenceHolderQuery()

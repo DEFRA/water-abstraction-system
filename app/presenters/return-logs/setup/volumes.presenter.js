@@ -13,7 +13,7 @@ import { formatDateMonthYear, formatLongDate, sentenceCase } from '../../base.pr
  *
  * @returns {object} page data needed by the view template
  */
-export default function (session, yearMonth) {
+export default function volumes(session, yearMonth) {
   const { id: sessionId, lines, returnsFrequency, returnReference, units } = session
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)

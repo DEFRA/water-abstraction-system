@@ -17,7 +17,7 @@ const LAST_PRESROC_YEAR = 2022
  *
  * @returns {object} - The data formatted for the /check view template
  */
-export default function (session, blockingResults) {
+export default function blockedBillRun(session, blockingResults) {
   const { id: sessionId, regionName } = session
 
   const { matches, toFinancialYearEnding } = blockingResults

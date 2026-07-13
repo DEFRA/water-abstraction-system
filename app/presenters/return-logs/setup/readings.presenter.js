@@ -13,7 +13,7 @@ import { formatDateMonthYear, formatLongDate } from '../../base.presenter.js'
  *
  * @returns {object} page data needed by the view template
  */
-export default function (session, yearMonth) {
+export default function readings(session, yearMonth) {
   const { id: sessionId, lines, returnsFrequency, returnReference } = session
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)

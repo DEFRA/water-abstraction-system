@@ -13,7 +13,7 @@ import FeatureFlagsConfig from '../../../config/feature-flags.config.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function (users, auth) {
+export default function indexUsers(users, auth) {
   const { scope } = auth.credentials
 
   return {
