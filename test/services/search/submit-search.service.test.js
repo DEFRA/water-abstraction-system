@@ -111,7 +111,7 @@ describe('Search - Submit Search service', () => {
       const result = await SubmitSearchService(auth, payload, yar)
 
       expect(yarSpy).toHaveBeenCalledWith('searchQuery', 'searchthis')
-      expect(yarSpy.calledWithExactly('searchResultType', 'all')).toBe(true)
+      expect(yarSpy).toHaveBeenCalledWith('searchResultType', 'all')
       expect(result).toEqual({ redirect: '/system/search?page=1' })
     })
   })

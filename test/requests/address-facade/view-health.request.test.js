@@ -1,5 +1,4 @@
 import http2 from 'node:http2'
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
 
@@ -9,6 +8,7 @@ import * as BaseRequest from '../../../app/requests/base.request.js'
 
 // Thing under test
 import * as ViewHealthRequest from '../../../app/requests/address-facade/view-health.request.js'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Address Facade - View Health request', () => {
   let response
@@ -28,8 +28,7 @@ describe('Address Facade - View Health request', () => {
         body: 'hola'
       }
 
-      vi.spyOn(BaseRequest, 'getRequest')
-        .mockResolvedValue({ succeeded: true, response })
+      vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({ succeeded: true, response })
     })
 
     it('returns a "true" success status', async () => {
@@ -60,13 +59,10 @@ describe('Address Facade - View Health request', () => {
           }
         }
 
-        vi.spyOn(BaseRequest, 'getRequest')
-          .mockImplementation(() => {})
-          .withArgs('http://localhost:8009/address-service/hola', { responseType: 'text' })
-          .resolves({
-            succeeded: false,
-            response
-          })
+        vi.spyOn(BaseRequest, 'getRequest').mockResolvedValue({
+          succeeded: false,
+          response
+        })
       })
 
       it('returns a "false" success status', async () => {

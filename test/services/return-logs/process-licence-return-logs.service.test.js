@@ -1,4 +1,3 @@
-
 // Test framework dependencies
 
 // Test helpers
@@ -18,7 +17,6 @@ describe('Return Logs - Process Licence Return Logs service', () => {
   const licenceId = '3acf7d80-cf74-4e86-8128-13ef687ea091'
 
   let changeDate
-  let clock
   let returnCycles
   let returnCycleModelStub
   let returnRequirements
@@ -31,15 +29,14 @@ describe('Return Logs - Process Licence Return Logs service', () => {
     // matching return cycles, but the next year there would be one, then two, and so on. By fixing the date we can use
     // test data that still covers all possible scenarios, but doesn't require us to make them overly complicated by
     // trying to make it dynamic.
-    clock = vi.useFakeTimers({ now: new Date('2026-01-09') })
+    vi.useFakeTimers({ now: new Date('2026-01-09') })
 
-    returnCycleModelStub =     vi.fn()
-        vi.spyOn(ReturnCycleModel, 'query').mockReturnValue({
+    returnCycleModelStub = vi.fn()
+    vi.spyOn(ReturnCycleModel, 'query').mockReturnValue({
       select: vi.fn().mockReturnThis(),
       where: vi.fn().mockReturnThis(),
       orderBy: returnCycleModelStub
     })
-
 
     // Whatever CreateReturnLogsService is pushed into an array that is then passed to VoidLicenceReturnLogsService.
     // Our tests check that CreateReturnLogsService returns the results expected depending on what is passed in, so
@@ -122,15 +119,40 @@ describe('Return Logs - Process Licence Return Logs service', () => {
             expect(VoidLicenceReturnLogsService.default).toHaveBeenCalledTimes(3)
 
             // First cycle is summer ending 2026-10-31; should process current summer req only
-            expect(CreateReturnLogsService.default.mock.calls[0]).toEqual([returnRequirements[0], returnCycles[0], null, null])
+            expect(CreateReturnLogsService.default.mock.calls[0]).toEqual([
+              returnRequirements[0],
+              returnCycles[0],
+              null,
+              null
+            ])
 
             // Second cycle is winter ending 2026-03-31; should process current and previous winter req
-            expect(CreateReturnLogsService.default.mock.calls[1]).toEqual([returnRequirements[1], returnCycles[1], null, null])
-            expect(CreateReturnLogsService.default.mock.calls[2]).toEqual([returnRequirements[3], returnCycles[1], null, null])
+            expect(CreateReturnLogsService.default.mock.calls[1]).toEqual([
+              returnRequirements[1],
+              returnCycles[1],
+              null,
+              null
+            ])
+            expect(CreateReturnLogsService.default.mock.calls[2]).toEqual([
+              returnRequirements[3],
+              returnCycles[1],
+              null,
+              null
+            ])
 
             // Third cycle is summer ending 2025-10-31; should process current and previous summer req
-            expect(CreateReturnLogsService.default.mock.calls[3]).toEqual([returnRequirements[0], returnCycles[2], null, null])
-            expect(CreateReturnLogsService.default.mock.calls[4]).toEqual([returnRequirements[2], returnCycles[2], null, null])
+            expect(CreateReturnLogsService.default.mock.calls[3]).toEqual([
+              returnRequirements[0],
+              returnCycles[2],
+              null,
+              null
+            ])
+            expect(CreateReturnLogsService.default.mock.calls[4]).toEqual([
+              returnRequirements[2],
+              returnCycles[2],
+              null,
+              null
+            ])
           })
         })
 
@@ -242,15 +264,25 @@ describe('Return Logs - Process Licence Return Logs service', () => {
 
           // For every return cycle fetched, we need to call the void service, even if no return logs were created. If
           // this is the case, it means any existing return logs for that cycle need to be voided.
-          expect(VoidLicenceReturnLogsService).toHaveBeenCalledTimes(returnCycles.length)
+          expect(VoidLicenceReturnLogsService.default).toHaveBeenCalledTimes(returnCycles.length)
 
           // First cycle is summer ending 2026-10-31; should be ignored
           // Second cycle is winter ending 2026-03-31; should process our new requirement
           // Third cycle is summer ending 2025-10-31; should be ignored
           // Fourth cycle is winter ending 2025-03-31; should process our new requirement
           // Fifth cycle is summer ending 2024-10-31; should be ignored
-          expect(CreateReturnLogsService.default.mock.calls[0]).toEqual([returnRequirements[0], returnCycles[1], null, null])
-          expect(CreateReturnLogsService.default.mock.calls[1]).toEqual([returnRequirements[0], returnCycles[3], null, null])
+          expect(CreateReturnLogsService.default.mock.calls[0]).toEqual([
+            returnRequirements[0],
+            returnCycles[1],
+            null,
+            null
+          ])
+          expect(CreateReturnLogsService.default.mock.calls[1]).toEqual([
+            returnRequirements[0],
+            returnCycles[3],
+            null,
+            null
+          ])
         })
       })
 
@@ -282,11 +314,16 @@ describe('Return Logs - Process Licence Return Logs service', () => {
 
           // For every return cycle fetched, we need to call the void service, even if no return logs were created. If
           // this is the case, it means any existing return logs for that cycle need to be voided.
-          expect(VoidLicenceReturnLogsService).toHaveBeenCalledTimes(returnCycles.length)
+          expect(VoidLicenceReturnLogsService.default).toHaveBeenCalledTimes(returnCycles.length)
 
           // First cycle is winter ending 2025-03-31; should process our new requirement
           // Second cycle is summer ending 2024-10-31; should be ignored
-          expect(CreateReturnLogsService.default.mock.calls[0]).toEqual([returnRequirements[0], returnCycles[0], null, null])
+          expect(CreateReturnLogsService.default.mock.calls[0]).toEqual([
+            returnRequirements[0],
+            returnCycles[0],
+            null,
+            null
+          ])
         })
       })
     })

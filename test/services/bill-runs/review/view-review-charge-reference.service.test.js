@@ -29,8 +29,8 @@ describe('Bill Runs - Review - View Review Charge Reference Service', () => {
       beforeEach(() => {
         const stub = vi.fn()
 
-        stub.mockReturnValue(['The authorised volume for this licence have been updated'])
-        stub.mockReturnValue([undefined])
+        stub.mockReturnValueOnce(['The authorised volume for this licence have been updated'])
+        stub.mockReturnValueOnce([undefined])
 
         yarStub = YarStub()
         yarStub.flash = stub
@@ -67,8 +67,8 @@ describe('Bill Runs - Review - View Review Charge Reference Service', () => {
       beforeEach(() => {
         const stub = vi.fn()
 
-        stub.mockReturnValue([undefined])
-        stub.mockReturnValue(['Based on this information the example charge is £256.48.'])
+        stub.mockReturnValueOnce([undefined])
+        stub.mockReturnValueOnce(['Based on this information the example charge is £256.48.'])
 
         yarStub = YarStub()
         yarStub.flash = stub

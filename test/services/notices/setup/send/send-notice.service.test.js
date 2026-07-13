@@ -64,7 +64,10 @@ describe('Notices - Setup - Send - Send Notice service', () => {
         await SendNoticeService(notice, notifications)
 
         expect(UpdateNoticeService.default).toHaveBeenCalledOnce()
-        expect(UpdateNoticeService.default.mock.calls[0][0]).toEqual([notice.id, '270d3a69-4cf7-4c90-8459-fbc35d725bd6'])
+        expect(UpdateNoticeService.default.mock.calls[0][0]).toEqual([
+          notice.id,
+          '270d3a69-4cf7-4c90-8459-fbc35d725bd6'
+        ])
       })
 
       it('logs the time taken', async () => {
@@ -104,7 +107,10 @@ describe('Notices - Setup - Send - Send Notice service', () => {
         await SendNoticeService(notice, notifications)
 
         expect(UpdateNoticeService.default).toHaveBeenCalledOnce()
-        expect(UpdateNoticeService.default.mock.calls[0][0]).toEqual([notice.id, '270d3a69-4cf7-4c90-8459-fbc35d725bd6'])
+        expect(UpdateNoticeService.default.mock.calls[0][0]).toEqual([
+          notice.id,
+          '270d3a69-4cf7-4c90-8459-fbc35d725bd6'
+        ])
       })
     })
 
@@ -153,7 +159,9 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       notice = NoticesFixture.returnsInvitation()
       notifications = [NotificationsFixture.returnsInvitationEmail(notice)]
 
-      vi.spyOn(SendAlternateNoticeService, 'default').mockRejectedValue('Computer says no')
+      vi.spyOn(SendAlternateNoticeService, 'default').mockRejectedValue(
+        Object.assign(new Error(), { name: 'Computer says no' })
+      )
     })
 
     it('logs the error', async () => {

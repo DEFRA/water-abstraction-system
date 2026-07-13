@@ -31,7 +31,6 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
     globalThis.GlobalNotifier = notifierStub
     vi.spyOn(HandleErroredBillRunService, 'default').mockResolvedValue()
   })
-  })
 
   describe('when the service is called', () => {
     describe('and there are no licences to be billed', () => {
@@ -88,7 +87,9 @@ describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
   describe('when the service errors', () => {
     describe('because matching and allocating fails', () => {
       beforeEach(() => {
-        vi.spyOn(MatchAndAllocateService, 'default').mockRejectedValue('MatchAndAllocateService has gone pop')
+        vi.spyOn(MatchAndAllocateService, 'default').mockRejectedValue(
+          Object.assign(new Error(), { name: 'MatchAndAllocateService has gone pop' })
+        )
       })
 
       it('calls HandleErroredBillRunService', async () => {

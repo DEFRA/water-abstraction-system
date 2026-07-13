@@ -372,10 +372,17 @@ describe('BaseNotifierLib class', () => {
       vi.replaceProperty(AirbrakeConfig, 'environment', 'plane')
 
       // Stub the Notifier constructor
-      vi.spyOn(AirbrakeModule, 'Notifier').mockReturnValue({
-        notify: vi.fn(),
-        flush: vi.fn()
-      })
+      vi.spyOn(AirbrakeModule, 'Notifier').mockImplementation(
+        class {
+          constructor(opts) {
+            this._opt = opts
+          }
+
+          notify() {}
+
+          flush() {}
+        }
+      )
     })
 
     it('creates a new Airbrake Notifier instance with config', () => {

@@ -26,7 +26,6 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
       patch: billRunPatchStub
     })
 
-
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
@@ -43,12 +42,12 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
   describe('when the service is called', () => {
     beforeEach(() => {
       vi.spyOn(AssignBillRunToLicencesService, 'default').mockResolvedValue()
+      vi.spyOn(GenerateBillRunService, 'default').mockResolvedValue()
     })
 
     describe('and no licences are matched and allocated', () => {
       beforeEach(() => {
         vi.spyOn(MatchAndAllocateService, 'default').mockResolvedValue(false)
-        vi.spyOn(GenerateBillRunService, 'default').mockResolvedValue()
       })
 
       it('sets the bill run status only to "processing"', async () => {

@@ -1,4 +1,3 @@
-
 // Test framework dependencies
 
 // Test helpers
@@ -17,7 +16,6 @@ import * as ProcessReturnsNoticeLicenceSubmission from '../../../../app/services
 import SubmitLicenceService from '../../../../app/services/notices/setup/submit-licence.service.js'
 
 describe('Notices - Setup - Submit Licence service', () => {
-  let clock
   let licenceRef
   let payload
   let session
@@ -27,7 +25,7 @@ describe('Notices - Setup - Submit Licence service', () => {
   beforeEach(() => {
     licenceRef = generateLicenceRef()
 
-    clock = vi.useFakeTimers({ now: new Date('2020-06-06') })
+    vi.useFakeTimers({ now: new Date('2020-06-06') })
 
     sessionData = {}
 
@@ -118,7 +116,7 @@ describe('Notices - Setup - Submit Licence service', () => {
         it('calls the "ProcessRenewalsNoticeLicenceSubmission"', async () => {
           await SubmitLicenceService(session.id, payload, yarStub)
 
-          expect(ProcessRenewalsNoticeLicenceSubmission.calledOnceWithExactly(payload)).toBe(true)
+          expect(ProcessRenewalsNoticeLicenceSubmission.default).toHaveBeenCalledExactlyOnceWith(payload)
         })
 
         describe('and the check page has not been visited', () => {

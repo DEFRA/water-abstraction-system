@@ -39,7 +39,9 @@ describe('Schema export service', () => {
 
       await SchemaExportService('water')
 
-      const allArgs = ExportTableService.default.mock.calls.flatMap((args) => args)
+      const allArgs = ExportTableService.default.mock.calls.flatMap((args) => {
+        return args
+      })
 
       expect(allArgs).toEqual(tableNames)
     })
@@ -50,7 +52,9 @@ describe('Schema export service', () => {
 
       await SchemaExportService(schemaName)
 
-      const args = SendToS3BucketService.default.mock.calls.flatMap((args) => args)
+      const args = SendToS3BucketService.default.mock.calls.flatMap((args) => {
+        return args
+      })
 
       expect(args).toEqual(expectedFolderPath)
     })
@@ -61,6 +65,8 @@ describe('Schema export service', () => {
 
     beforeEach(() => {
       vi.spyOn(DeleteFilesService, 'default').mockResolvedValue()
+      vi.spyOn(SendToS3BucketService, 'default').mockResolvedValue()
+      vi.spyOn(CompressSchemaFolderService, 'default').mockResolvedValue('/tmp/water')
 
       notifierStub = GlobalNotifierStub()
       globalThis.GlobalNotifier = notifierStub
@@ -76,7 +82,7 @@ describe('Schema export service', () => {
 
       await SchemaExportService('water')
 
-      expect(notifierStub.omfg).toHaveBeenCalledWith('Error: Failed to export schema water', expect.any(Object))
+      expect(notifierStub.omfg).toHaveBeenCalledWith('Error: Failed to export schema water', null, expect.any(Error))
       expect(SendToS3BucketService.default).not.toHaveBeenCalled()
       expect(CompressSchemaFolderService.default).not.toHaveBeenCalled()
     })

@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
@@ -13,6 +12,7 @@ import * as ViewDetailsService from '../../app/services/return-logs/view-details
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Return Logs controller', () => {
   const returnLogId = '168026d8-f29b-4165-8726-734c6b14adec'
@@ -87,7 +87,7 @@ describe('Return Logs controller', () => {
 
           const calls = ViewDetailsService.default.mock.calls[0]
 
-          expect(calls.args).toContain(0)
+          expect(calls).toContain(0)
 
           expect(response.statusCode).toEqual(HTTP_STATUS_OK)
           expect(response.payload).toContain('Return details')
@@ -104,7 +104,7 @@ describe('Return Logs controller', () => {
 
           const calls = ViewDetailsService.default.mock.calls[0]
 
-          expect(calls.args).toContain(1)
+          expect(calls).toContain(1)
 
           expect(response.statusCode).toEqual(HTTP_STATUS_OK)
           expect(response.payload).toContain('Return details')
@@ -147,7 +147,11 @@ describe('Return Logs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.spyOn(DownloadReturnLogService, 'default').mockReturnValue({ data: 'test', type: 'type/csv', filename: 'test.csv' })
+          vi.spyOn(DownloadReturnLogService, 'default').mockReturnValue({
+            data: 'test',
+            type: 'type/csv',
+            filename: 'test.csv'
+          })
         })
 
         it('returns the file successfully', async () => {

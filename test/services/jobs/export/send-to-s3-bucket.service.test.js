@@ -28,7 +28,7 @@ describe('Send to S3 bucket service', () => {
       expect(s3Stub).toHaveBeenCalledOnce()
 
       // Get the first call and test that it was called with PutObjectCommand
-      const calledCommand = s3Stub.getCall(0).firstArg
+      const calledCommand = s3Stub.mock.calls[0][0]
 
       expect(calledCommand).toBeInstanceOf(PutObjectCommand)
     })

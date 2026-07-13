@@ -52,7 +52,7 @@ describe('Bills - Submit Remove Bill service', () => {
     it('flags the two licences in the bill for supplementary billing', async () => {
       await SubmitRemoveBillService(bill.id, user)
 
-      expect(ProcessBillingFlagService).toHaveBeenCalledTimes(2)
+      expect(ProcessBillingFlagService.default).toHaveBeenCalledTimes(2)
     })
 
     it('sends a request to the legacy service to delete the bill', async () => {

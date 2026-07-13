@@ -71,5 +71,5 @@ async function _checkLicences(licences) {
   // app/requests/base.request.js
   const pMap = (await import('p-map')).default
 
-  await pMap(licences, CheckLicenceEndDatesService.go, { concurrency: LicencesConfig.endDates.batchSize })
+  await pMap(licences, CheckLicenceEndDatesService, { concurrency: LicencesConfig.endDates.batchSize })
 }
