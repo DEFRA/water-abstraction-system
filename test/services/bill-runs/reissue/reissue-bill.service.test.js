@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_CONFLICT } = http2.constants
 import * as BillHelper from '../../../support/helpers/bill.helper.js'
 import * as BillLicenceHelper from '../../../support/helpers/bill-licence.helper.js'
 import { generateUUID } from '../../../../app/lib/general.lib.js'
@@ -15,6 +14,7 @@ import * as ChargingModuleViewBillRunStatusRequest from '../../../../app/request
 
 // Thing under test
 import ReissueBillService from '../../../../app/services/bill-runs/reissue/reissue-bill.service.js'
+const { HTTP_STATUS_CONFLICT } = http2.constants
 
 const ORIGINAL_BILLING_BATCH_EXTERNAL_ID = generateUUID()
 const INVOICE_EXTERNAL_ID = generateUUID()
@@ -85,11 +85,10 @@ describe('Reissue Bill service', () => {
   beforeEach(async () => {
     reissueBillRun = { externalId: generateUUID() }
 
-    vi.spyOn(ChargingModuleReissueBillRequest, 'send')
-      .mockResolvedValue({
-        succeeded: true,
-        response: { body: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE }
-      })
+    vi.spyOn(ChargingModuleReissueBillRequest, 'send').mockResolvedValue({
+      succeeded: true,
+      response: { body: CHARGING_MODULE_REISSUE_INVOICE_RESPONSE }
+    })
 
     vi.spyOn(ChargingModuleViewBillRequest, 'send')
       .mockResolvedValueOnce({
@@ -223,7 +222,6 @@ describe('Reissue Bill service', () => {
       let billRunStatusStub
 
       beforeEach(() => {
-
         billRunStatusStub = vi
           .spyOn(ChargingModuleViewBillRunStatusRequest, 'send')
 
@@ -291,16 +289,18 @@ describe('Reissue Bill service', () => {
 
     describe('when viewing a bill', () => {
       beforeEach(() => {
-        vi.spyOn(ChargingModuleViewBillRequest, 'send').mockResolvedValue({
-          succeeded: false,
-          response: {
-            body: {
-              error: 'Conflict',
-              message: 'Invoice 2274cd48-2a61-4b73-a9c0-bc5696c5218d has already been rebilled.',
-              statusCode: HTTP_STATUS_CONFLICT
+        vi.spyOn(ChargingModuleViewBillRequest, 'send')
+          .mockReset()
+          .mockResolvedValue({
+            succeeded: false,
+            response: {
+              body: {
+                error: 'Conflict',
+                message: 'Invoice 2274cd48-2a61-4b73-a9c0-bc5696c5218d has already been rebilled.',
+                statusCode: HTTP_STATUS_CONFLICT
+              }
             }
-          }
-        })
+          })
       })
 
       it('throws an error', async () => {

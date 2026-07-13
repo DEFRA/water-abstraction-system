@@ -38,7 +38,6 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
     billingAccount = TwoPartTariffFixture.billingAccount()
     licence = TwoPartTariffFixture.licence(region)
 
-
     billInsertStub = vi.fn()
     billLicenceInsertStub = vi.fn()
     transactionInsertStub = vi.fn()
@@ -48,7 +47,6 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
     vi.spyOn(TransactionModel, 'query').mockReturnValue({ insert: transactionInsertStub })
 
     vi.spyOn(FetchPreviousTransactionsService, 'default').mockResolvedValue([])
-    vi.spyOn(GenerateTransactionsService, 'default').mockResolvedValue([])
   })
 
   afterEach(() => {
@@ -284,7 +282,9 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
 
     describe('because generating the calculated transaction fails', () => {
       beforeEach(async () => {
-        vi.spyOn(GenerateTwoPartTariffTransactionService, 'default').mockRejectedValue(new Error())
+        vi.spyOn(GenerateTwoPartTariffTransactionService, 'default').mockImplementation(() => {
+          throw new Error()
+        })
       })
 
       it('throws a BillRunError with the correct code', async () => {
@@ -299,7 +299,7 @@ describe('Bill Runs - TPT Supplementary - Process Billing Period service', () =>
 
     describe('because sending the transactions fails', () => {
       beforeEach(async () => {
-        vi.spyOn(SendTransactionsService, 'default').mockRejectedValue()
+        vi.spyOn(SendTransactionsService, 'default').mockRejectedValue(new Error())
       })
 
       it('throws an error', async () => {

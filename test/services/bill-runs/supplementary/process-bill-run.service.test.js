@@ -57,6 +57,7 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
   describe('when the service is called', () => {
     beforeEach(() => {
       vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue({ chargeVersions: [], licenceIdsForPeriod: [] })
+      vi.spyOn(UnflagUnbilledSupplementaryLicencesService, 'default').mockResolvedValue()
     })
 
     describe('and nothing is billed', () => {
@@ -157,7 +158,10 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
         beforeEach(() => {
           thrownError = new BillRunError(new Error(), BillRunModel.errorCodes.failedToPrepareTransactions)
 
-          vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue({ chargeVersions: [], licenceIdsForPeriod: [] })
+          vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue({
+            chargeVersions: [],
+            licenceIdsForPeriod: []
+          })
           vi.spyOn(ProcessBillingPeriodService, 'default').mockRejectedValue(thrownError)
         })
 
@@ -188,7 +192,10 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
       beforeEach(() => {
         thrownError = new Error('ERROR')
 
-        vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue({ chargeVersions: [], licenceIdsForPeriod: [] })
+        vi.spyOn(FetchChargeVersionsService, 'default').mockResolvedValue({
+          chargeVersions: [],
+          licenceIdsForPeriod: []
+        })
         vi.spyOn(ProcessBillingPeriodService, 'default').mockResolvedValue(false)
         vi.spyOn(UnflagUnbilledSupplementaryLicencesService, 'default').mockRejectedValue(thrownError)
       })

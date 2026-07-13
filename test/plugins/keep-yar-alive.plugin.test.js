@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_OK } = http2.constants
 import Hapi from '@hapi/hapi'
 
 // Test helpers
@@ -13,6 +12,7 @@ import GlobalNotifierStub from '../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import KeepYarAlivePlugin from '../../app/plugins/keep-yar-alive.plugin.js'
+const { HTTP_STATUS_OK } = http2.constants
 
 describe('Keep Yar Alive plugin', () => {
   let notifierStub
@@ -114,7 +114,9 @@ describe('Keep Yar Alive plugin', () => {
   describe('should an error be thrown when trying to keep the session alive', () => {
     beforeEach(() => {
       yarStub = YarStub()
-      yarStub.touch.throws(new Error('boom'))
+      yarStub.touch.mockImplementation(() => {
+        throw new Error('boom')
+      })
 
       _attachYarStub(server, yarStub)
     })

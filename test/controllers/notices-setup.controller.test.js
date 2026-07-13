@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
@@ -50,6 +49,7 @@ import * as ViewSelectRecipientsService from '../../app/services/notices/setup/v
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Notices Setup controller', () => {
   const basePath = '/notices/setup'
@@ -1252,7 +1252,9 @@ describe('Notices Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
-          vi.spyOn(ViewPaperReturnService, 'default').mockReturnValue({ pageTitle: 'Select the returns for the paper forms' })
+          vi.spyOn(ViewPaperReturnService, 'default').mockReturnValue({
+            pageTitle: 'Select the returns for the paper forms'
+          })
         })
 
         it('returns the page successfully', async () => {
@@ -1390,7 +1392,9 @@ describe('Notices Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           vi.spyOn(InitiateSessionService, 'default').mockResolvedValue(session)
-          vi.spyOn(ViewContactTypeService, 'default').mockReturnValue({ pageTitle: 'Select how to contact the recipient' })
+          vi.spyOn(ViewContactTypeService, 'default').mockReturnValue({
+            pageTitle: 'Select how to contact the recipient'
+          })
         })
 
         it('returns the page successfully', async () => {
@@ -1479,6 +1483,7 @@ describe('Notices Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
+          vi.spyOn(ProcessAddRecipientService, 'default').mockResolvedValue()
         })
 
         it('redirects to the check recipient page', async () => {

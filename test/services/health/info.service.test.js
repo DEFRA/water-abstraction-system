@@ -1,5 +1,4 @@
 import http2 from 'node:http2'
-const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
 
@@ -15,6 +14,7 @@ import util from 'node:util'
 
 // Thing under test
 import InfoService from '../../../app/services/health/info.service.js'
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 describe('Health - Info service', () => {
   const goodRequestResults = {
@@ -99,7 +99,10 @@ describe('Health - Info service', () => {
 
   describe('when all the services are running', () => {
     beforeEach(() => {
-      vi.spyOn(CreateRedisClientService, 'default').mockReturnValue({ ping: vi.fn().mockResolvedValue(), disconnect: vi.fn().mockResolvedValue() })
+      vi.spyOn(CreateRedisClientService, 'default').mockReturnValue({
+        ping: vi.fn().mockResolvedValue(),
+        disconnect: vi.fn().mockResolvedValue()
+      })
 
       // In this scenario everything is hunky-dory so we return 2xx responses from these services
       addressFacadeViewStatusRequestStub.mockResolvedValue(goodRequestResults.addressFacade)
@@ -202,7 +205,10 @@ describe('Health - Info service', () => {
 
   describe('when ClamAV', () => {
     beforeEach(async () => {
-      vi.spyOn(CreateRedisClientService, 'default').mockReturnValue({ ping: vi.fn().mockResolvedValue(), disconnect: vi.fn().mockResolvedValue() })
+      vi.spyOn(CreateRedisClientService, 'default').mockReturnValue({
+        ping: vi.fn().mockResolvedValue(),
+        disconnect: vi.fn().mockResolvedValue()
+      })
 
       // In these scenarios everything is hunky-dory so we return 2xx responses from these services
       addressFacadeViewStatusRequestStub.mockResolvedValue(goodRequestResults.addressFacade)
@@ -254,7 +260,9 @@ describe('Health - Info service', () => {
       beforeEach(async () => {
         // In this tweak we tell the execStub to throw an exception when invoked. Not sure when this would happen
         // but we've coded for the eventuality so we need to test it
-        const execStub = vi.fn().mockImplementation(() => { throw new Error('ClamAV check went boom') })
+        const execStub = vi.fn().mockImplementation(() => {
+          throw new Error('ClamAV check went boom')
+        })
 
         vi.spyOn(util, 'promisify').mockReturnValue(execStub)
       })
@@ -298,7 +306,10 @@ describe('Health - Info service', () => {
 
       vi.spyOn(util, 'promisify').mockReturnValue(execStub)
 
-      vi.spyOn(CreateRedisClientService, 'default').mockReturnValue({ ping: vi.fn().mockResolvedValue(), disconnect: vi.fn().mockResolvedValue() })
+      vi.spyOn(CreateRedisClientService, 'default').mockReturnValue({
+        ping: vi.fn().mockResolvedValue(),
+        disconnect: vi.fn().mockResolvedValue()
+      })
     })
 
     describe('cannot be reached because of a network error', () => {
@@ -306,8 +317,6 @@ describe('Health - Info service', () => {
         const badResult = { succeeded: false, response: new Error('Kaboom') }
 
         addressFacadeViewStatusRequestStub.mockResolvedValue(badResult)
-
-        legacyViewHealthRequestStub.mockResolvedValue(badResult)
       })
 
       it('handles the error and still returns a result for the other services', async () => {
@@ -346,8 +355,6 @@ describe('Health - Info service', () => {
         }
 
         addressFacadeViewStatusRequestStub.mockResolvedValue(badResult)
-
-        legacyViewHealthRequestStub.mockResolvedValue(badResult)
       })
 
       it('handles the error and still returns a result for the other services', async () => {

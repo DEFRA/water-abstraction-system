@@ -67,7 +67,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         })
 
         vi.spyOn(BillModel, 'query').mockReturnValue({
-          patch: billPatchStub.returnsThis(),
+          patch: billPatchStub.mockReturnThis(),
           where: vi.fn().mockResolvedValue()
         })
 
@@ -176,7 +176,9 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         beforeEach(async () => {
           billRun = _billRun()
 
-          chargingModuleSendBillRunRequestStub.mockRejectedValue(new ExpandedError('Charging Module send request failed', {}))
+          chargingModuleSendBillRunRequestStub.mockRejectedValue(
+            new ExpandedError('Charging Module send request failed', {})
+          )
         })
 
         it('does not throw an error', async () => {

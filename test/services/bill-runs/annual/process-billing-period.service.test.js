@@ -1,8 +1,7 @@
 // Test framework dependencies
 
 // Test helpers
-import { generateUUID } from '../../../../app/lib/general.lib.js'
-import { determineCurrentFinancialYear } from '../../../../app/lib/general.lib.js'
+import { determineCurrentFinancialYear, generateUUID } from '../../../../app/lib/general.lib.js'
 
 // Things we need to stub
 import BillModel from '../../../../app/models/bill.model.js'
@@ -136,7 +135,9 @@ describe('Annual Process billing period service', () => {
 
     describe('because generating the calculated transactions fails', () => {
       beforeEach(async () => {
-        vi.spyOn(GenerateTransactionsService, 'default').mockRejectedValue(new Error())
+        vi.spyOn(GenerateTransactionsService, 'default').mockImplementation(() => {
+          throw new Error()
+        })
       })
 
       it('throws a BillRunError with the correct code', async () => {

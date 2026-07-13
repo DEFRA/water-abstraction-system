@@ -1,4 +1,3 @@
-
 // Test framework dependencies
 
 // Things we need to stub
@@ -11,11 +10,9 @@ describe('Seed service', () => {
   let knexRunStub
 
   beforeEach(async () => {
-    knexRunStub =     vi.fn().mockResolvedValue()
+    knexRunStub = vi.fn().mockResolvedValue()
 
-    vi.spyOn(db, 'seed', 'get').mockReturnValue(() => {
-      return { run: knexRunStub }
-    })
+    vi.spyOn(db, 'seed', 'get').mockReturnValue({ run: knexRunStub })
   })
 
   afterEach(() => {

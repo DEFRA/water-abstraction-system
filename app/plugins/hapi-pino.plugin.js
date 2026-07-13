@@ -35,7 +35,7 @@ export default {
     // We want our logs to focus on the main requests and not become full of 'noise' from requests for /assets or
     // pings from the AWS load balancer to /status. We pass this function to hapi-pino to control what gets filtered
     // https://github.com/pinojs/hapi-pino#optionsignorefunc-options-request--boolean
-    ignoreFunc: HapiPinoIgnoreRequestService.go,
+    ignoreFunc: HapiPinoIgnoreRequestService,
     // Add the request params as pathParams to the response event log. This, along with `logPathParams` and
     // `logQueryParams` helps us see what data was sent in the request to the app in the event of an error.
     logPathParams: true,

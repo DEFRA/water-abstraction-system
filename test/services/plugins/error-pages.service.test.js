@@ -1,11 +1,4 @@
 import http2 from 'node:http2'
-const {
-  HTTP_STATUS_FORBIDDEN,
-  HTTP_STATUS_INTERNAL_SERVER_ERROR,
-  HTTP_STATUS_NOT_FOUND,
-  HTTP_STATUS_OK,
-  HTTP_STATUS_GONE
-} = http2.constants
 
 // Test framework dependencies
 
@@ -17,6 +10,13 @@ import GlobalNotifierStub from '../../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import ErrorPagesService from '../../../app/services/plugins/error-pages.service.js'
+const {
+  HTTP_STATUS_FORBIDDEN,
+  HTTP_STATUS_INTERNAL_SERVER_ERROR,
+  HTTP_STATUS_NOT_FOUND,
+  HTTP_STATUS_OK,
+  HTTP_STATUS_GONE
+} = http2.constants
 
 describe('Error pages service', () => {
   const boom403Response = {
@@ -78,7 +78,7 @@ describe('Error pages service', () => {
     it('logs an error', () => {
       ErrorPagesService(request)
 
-      expect(notifierStub.omfg).toHaveBeenCalledWith(boom500Response.message)
+      expect(notifierStub.omfg).toHaveBeenCalledWith(boom500Response.message, {}, boom500Response)
     })
 
     describe('and the route is configured for plain output (do not redirect to error page)', () => {

@@ -22,7 +22,7 @@ describe('Notices - Setup - Send - Send Letter Notification service', () => {
 
     notifyResponse = NotifyResponseFixture.successfulResponse(referenceCode).letter
 
-    vi.spyOn(CreateLetterRequest, 'send') // TODO: onCall not auto-converted.mockResolvedValue(notifyResponse)
+    vi.spyOn(CreateLetterRequest, 'send').mockResolvedValue(notifyResponse)
   })
 
   afterEach(() => {

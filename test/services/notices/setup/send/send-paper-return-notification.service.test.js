@@ -24,7 +24,7 @@ describe('Notices - Setup - Send - Send Paper Return Notification service', () =
 
     notifyResponse = NotifyResponseFixture.successfulResponse(referenceCode).pdf
 
-    vi.spyOn(CreatePrecompiledFileRequest, 'send') // TODO: onCall not auto-converted.mockResolvedValue(notifyResponse)
+    vi.spyOn(CreatePrecompiledFileRequest, 'send').mockResolvedValue(notifyResponse)
 
     buffer = Buffer.from('mock file')
   })

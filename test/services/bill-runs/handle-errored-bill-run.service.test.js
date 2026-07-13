@@ -71,7 +71,11 @@ describe('Handle Errored Bill Run service', () => {
 
         const logDataArg = notifierStub.omfg.mock.calls[0][1]
 
-        expect(notifierStub.omfg).toHaveBeenCalledWith('Failed to set error status on bill run', expect.any(Object))
+        expect(notifierStub.omfg).toHaveBeenCalledWith(
+          'Failed to set error status on bill run',
+          expect.any(Object),
+          expect.any(Error)
+        )
         expect(logDataArg.billRunId).toEqual(billRun.id)
         expect(logDataArg.errorCode).toEqual('INVALID_ERROR_CODE')
       })
