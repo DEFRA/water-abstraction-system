@@ -36,7 +36,7 @@ import ProcessBillingPeriodService from './process-billing-period.service.js'
  * @param {module:BillRunModel} billRun - The instance of the annual two-part tariff bill run that has been reviewed and
  * is ready for generating
  */
-export default async function generateBillRunService(billRun) {
+export default async function GenerateBillRunService(billRun) {
   const { id: billRunId } = billRun
 
   try {
