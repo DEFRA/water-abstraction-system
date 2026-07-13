@@ -24,7 +24,7 @@ const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_NOT_FOUND, H
  * @returns {object} Contains the properties `stopResponse:` and `statusCode:` which are used by the plugin to
  * decide how to direct the response
  */
-export default function go(request) {
+export default function errorPagesService(request) {
   const stopResponse = _stopResponse(request)
 
   let statusCode = _extractStatusCode(request)

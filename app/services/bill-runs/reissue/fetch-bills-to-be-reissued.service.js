@@ -12,7 +12,7 @@ import BillModel from '../../../models/bill.model.js'
  *
  * @returns {Promise<module:BillModel[]>} An array of bills to be reissued
  */
-export default async function go(regionId) {
+export default async function fetchBillsToBeReissuedService(regionId) {
   try {
     const result = await BillModel.query()
       .select(

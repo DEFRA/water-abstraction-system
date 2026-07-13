@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_OK } = http2.constants
 
 // Things we need to stub
 import * as ViewLicenceService from '../../app/services/monitoring-stations/view-licence.service.js'
@@ -10,6 +9,7 @@ import * as ViewService from '../../app/services/monitoring-stations/view.servic
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_OK } = http2.constants
 
 describe('Monitoring stations controller', () => {
   let options

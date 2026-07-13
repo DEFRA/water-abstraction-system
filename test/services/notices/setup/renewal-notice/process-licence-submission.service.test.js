@@ -1,4 +1,3 @@
-
 // Test framework dependencies
 
 // Helpers
@@ -13,7 +12,6 @@ import * as FetchRenewalLicenceDal from '../../../../../app/dal/notices/setup/fe
 import ProcessRenewalsNoticeLicenceSubmission from '../../../../../app/services/notices/setup/renewal-notice/process-licence-submission.service.js'
 
 describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Submission', () => {
-  let clock
   let licenceExpiryDate
   let licenceRef
   let licenceRenewal
@@ -34,7 +32,7 @@ describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Sub
       revokedDate: null
     })
 
-    clock = vi.useFakeTimers({ now: new Date('2026-05-21') })
+    vi.useFakeTimers({ now: new Date('2026-05-21') })
 
     vi.spyOn(FetchRenewalLicenceDal, 'default').mockResolvedValue(licenceRenewal)
   })

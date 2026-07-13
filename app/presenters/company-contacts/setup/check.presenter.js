@@ -15,7 +15,7 @@ import { abstractionAlertsLabel, selectedLiveLicences } from '../../crm.presente
  *
  * @returns {object} The data formatted for the view template
  */
-export default function go(session, savedCompanyContacts, sentNotification) {
+export default function checkPresenter(session, savedCompanyContacts, sentNotification) {
   const { abstractionAlertLicences, abstractionAlerts, company, companyContact, email, licences, name } = session
 
   const matchingContact = _matchingContact(email, name, savedCompanyContacts)

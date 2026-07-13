@@ -10,7 +10,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-export default function go(session) {
+export default function __FUNCTION_NAME__(session) {
   return {
     backLink: {
       href: '',

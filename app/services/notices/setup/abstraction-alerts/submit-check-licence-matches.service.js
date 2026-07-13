@@ -13,7 +13,7 @@ import FetchSessionDal from '../../../../dal/fetch-session.dal.js'
  * @param {string} sessionId
  *
  */
-export default async function go(sessionId) {
+export default async function submitCheckLicenceMatchesService(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   await _save(session)

@@ -18,7 +18,7 @@ import { licenceEndsWarning } from '../licence.presenter.js'
  *
  * @returns {object} page data needed by the view template
  */
-export default function go(licence, licenceMonitoringStations, monitoringStation, auth) {
+export default function viewLicencePresenter(licence, licenceMonitoringStations, monitoringStation, auth) {
   const canRemoveTags = auth.credentials.scope.includes('manage_gauging_station_licence_links')
 
   return {

@@ -22,7 +22,7 @@ import BillRunModel from '../../../models/bill-run.model.js'
  *
  * @returns {Promise<object[]>} - The years that can be flagged for supplementary billing
  */
-export default async function go(regionId, years, twoPartTariff) {
+export default async function determineExistingBillRunYearsService(regionId, years, twoPartTariff) {
   return _supplementaryBillingYears(regionId, years, twoPartTariff)
 }
 

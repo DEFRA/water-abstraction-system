@@ -11,7 +11,7 @@
  *
  * @returns {object[]} all recipients from both groups, filtered by those selected
  */
-export default function go(session, fetchedRecipients) {
+export default function mergeRecipientsService(session, fetchedRecipients) {
   const { selectedRecipients } = session
   const allRecipients = _additionalRecipients(session, fetchedRecipients)
 

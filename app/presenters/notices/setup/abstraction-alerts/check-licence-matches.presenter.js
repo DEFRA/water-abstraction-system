@@ -13,7 +13,7 @@ import { determineRestrictionHeading, formatRestrictions } from '../../../monito
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function go(session) {
+export default function checkLicenceMatchesPresenter(session) {
   const relevantLicenceMonitoringStations = _relevantLicenceMonitoringStations(session)
 
   return {

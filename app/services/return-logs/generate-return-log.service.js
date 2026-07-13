@@ -14,7 +14,7 @@ import { determineEarliestDate, determineLatestDate, formatDateObjectToISO } fro
  * @returns {object|null} the generated return log data, or null if the licence or return version ends before the return
  * cycle starts
  */
-export default function go(returnRequirement, returnCycle) {
+export default function generateReturnLogService(returnRequirement, returnCycle) {
   const { id: returnRequirementId, reference, reportingFrequency, returnVersion } = returnRequirement
   const { endDate: returnCycleEndDate, id: returnCycleId, startDate: returnCycleStartDate } = returnCycle
 

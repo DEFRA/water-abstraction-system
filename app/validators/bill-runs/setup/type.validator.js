@@ -15,7 +15,7 @@ const VALID_VALUES = ['annual', 'supplementary', 'two_part_supplementary', 'two_
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function go(payload) {
+export default function typeValidator(payload) {
   const schema = Joi.object({
     type: Joi.string()
       .required()

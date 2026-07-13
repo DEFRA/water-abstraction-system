@@ -19,7 +19,7 @@ import { periodsOverlap } from '../../../lib/general.lib.js'
  * @param {module:LicenceModel} licence - An individual licence to prepare the return logs for
  * @param {object} billingPeriod - Object with a `startDate` and `endDate` property representing the period being billed
  */
-export default async function go(licence, billingPeriod) {
+export default async function prepareReturnLogsService(licence, billingPeriod) {
   await _prepareReturnLogs(licence, billingPeriod)
 }
 

@@ -55,7 +55,10 @@ describe('Monitoring Stations - View service', () => {
     yarStub = YarStub()
     yarStub.flash.mockReturnValue(['Tag removed for 99/999/9999'])
 
-    vi.spyOn(FetchMonitoringStationDetailsDal, 'default').mockResolvedValue({ licenceMonitoringStations, monitoringStation })
+    vi.spyOn(FetchMonitoringStationDetailsDal, 'default').mockResolvedValue({
+      licenceMonitoringStations,
+      monitoringStation
+    })
   })
 
   afterEach(() => {

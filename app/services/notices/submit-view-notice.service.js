@@ -23,7 +23,7 @@ import { clearFilters } from '../../lib/submit-page.lib.js'
  * @returns {Promise<object>} If no errors an empty object signifying the request can be redirected to the view page
  * else the data needed to re-render the page
  */
-export default async function go(noticeId, payload, yar, page) {
+export default async function submitViewNoticeService(noticeId, payload, yar, page) {
   const filterKey = `noticeFilter-${noticeId}`
 
   const filterCleared = clearFilters(payload, yar, filterKey)

@@ -21,7 +21,7 @@ import { userPermissions } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<string>} The resetGuid for the new user
  */
-export default async function go(auth, session) {
+export default async function createUserDal(auth, session) {
   const { email, permission } = session
   const { groups, roles } = userPermissions[permission]
 

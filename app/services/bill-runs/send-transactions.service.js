@@ -22,7 +22,7 @@ import ChargingModuleCreateTransactionPresenter from '../../presenters/charging-
  * @returns {Promise<object[]>} Array of transactions which have been sent to the Charging Module and updated with its
  * response
  */
-export default async function go(transactions, billRunExternalId, accountNumber, licence) {
+export default async function sendTransactionsService(transactions, billRunExternalId, accountNumber, licence) {
   // NOTE: we purposefully loop through all the transactions to send without awaiting them. This is for performance
   // purposes. If for example we have 3 transactions to send we'll send the requests 1 straight after the other. We
   // then wait for all 3 to complete. The overall process time will only be that of the one that takes the longest. If

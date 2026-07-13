@@ -1,4 +1,3 @@
-
 // Test framework dependencies
 
 // Test helpers
@@ -10,7 +9,6 @@ import PreparePaperReturnPresenter from '../../../../app/presenters/notices/setu
 describe('Notices - Setup - Prepare Paper Return presenter', () => {
   const licenceRef = '01/123'
 
-  let clock
   let dueReturnLog
   let notification
 
@@ -49,7 +47,7 @@ describe('Notices - Setup - Prepare Paper Return presenter', () => {
       }
     }
 
-    clock = vi.useFakeTimers({ now: new Date(`2025-01-01`) })
+    vi.useFakeTimers({ now: new Date(`2025-01-01`) })
   })
 
   afterEach(() => {

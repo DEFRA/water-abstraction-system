@@ -15,7 +15,7 @@ import { formatEmail, formatLongDate } from '../base.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function go(company, companyContact, licences) {
+export default function contactDetailsPresenter(company, companyContact, licences) {
   return {
     additionalContact: companyContact.licenceRole.name === 'additionalContact',
     backLink: {

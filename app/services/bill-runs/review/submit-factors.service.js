@@ -27,7 +27,7 @@ import ReviewChargeReferenceModel from '../../../models/review-charge-reference.
  * @returns {Promise<object>} An empty object if there are no errors else the page data for the page including the
  * validation error details
  */
-export default async function go(reviewChargeReferenceId, yar, payload) {
+export default async function submitFactorsService(reviewChargeReferenceId, yar, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {

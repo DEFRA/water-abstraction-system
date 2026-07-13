@@ -16,7 +16,7 @@ import BillRunModel from '../../../models/bill-run.model.js'
  *
  * @returns {Promise<module:BillRunModel>} The latest 'live' bill run
  */
-export default async function go(regionId, toFinancialYearEnding) {
+export default async function fetchLiveBillRunService(regionId, toFinancialYearEnding) {
   return BillRunModel.query()
     .select(['id', 'batchType', 'billRunNumber', 'createdAt', 'scheme', 'status', 'summer', 'toFinancialYearEnding'])
     .where('regionId', regionId)

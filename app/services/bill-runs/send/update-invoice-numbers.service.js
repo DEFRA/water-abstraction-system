@@ -24,7 +24,7 @@ import UnflagBilledSupplementaryLicencesService from '../unflag-billed-supplemen
  *
  * @param {module:BillRunModule} billRun - The bill run to be sent
  */
-export default async function go(billRun) {
+export default async function updateInvoiceNumbersService(billRun) {
   try {
     const startTime = process.hrtime.bigint()
 

@@ -16,7 +16,7 @@ import SeasonPresenter from '../../../presenters/bill-runs/setup/season.presente
  *
  * @returns {Promise<object>} The view data for the season page
  */
-export default async function go(sessionId) {
+export default async function seasonService(sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const formattedData = SeasonPresenter(session)

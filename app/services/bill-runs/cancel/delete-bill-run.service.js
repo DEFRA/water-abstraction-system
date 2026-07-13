@@ -30,7 +30,7 @@ import ReviewReturnModel from '../../../models/review-return.model.js'
  *
  * @param {module:BillRunModule} billRun - The bill run to be deleted
  */
-export default async function go(billRun) {
+export default async function deleteBillRunService(billRun) {
   try {
     const startTime = process.hrtime.bigint()
 

@@ -22,7 +22,7 @@ import FetchReviewChargeReferenceService from './fetch-review-charge-reference.s
  * @param {string} reviewChargeReferenceId - The UUID of the charge reference review data to calculate the charge for
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-export default async function go(reviewChargeReferenceId, yar) {
+export default async function previewService(reviewChargeReferenceId, yar) {
   const reviewChargeReference = await FetchReviewChargeReferenceService(reviewChargeReferenceId)
   const transaction = _transaction(reviewChargeReference)
 

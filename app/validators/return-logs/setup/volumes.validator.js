@@ -18,7 +18,7 @@ const MAX_DECIMALS = 6
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function go(payload) {
+export default function volumesValidator(payload) {
   const schema = Joi.object().pattern(
     /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/, // Regex to match keys like '2024-04-01T00:00:00.000Z'
     Joi.number()

@@ -14,7 +14,7 @@ import { roles } from '../../lib/static-lookups.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function go(companyDetails, role) {
+export default function companyPresenter(companyDetails, role) {
   const { name: companyName, id: companyId, companyAddresses } = companyDetails
 
   return {

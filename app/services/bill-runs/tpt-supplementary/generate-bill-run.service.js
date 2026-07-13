@@ -37,7 +37,7 @@ import UnflagUnbilledSupplementaryLicencesService from '../unflag-unbilled-suppl
  * @param {module:BillRunModel} billRun - The instance of the supplementary two-part tariff bill run that has been
  * reviewed and is ready for generating
  */
-export default async function go(billRun) {
+export default async function generateBillRunService(billRun) {
   const { id: billRunId } = billRun
 
   try {

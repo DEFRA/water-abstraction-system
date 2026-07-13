@@ -17,7 +17,7 @@ import { formatValidationResult } from '__BASE_PRESENTER_PATH__'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function go(sessionId, payload) {
+export default async function __FUNCTION_NAME__(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)
@@ -45,4 +45,3 @@ function _validate(payload) {
 
   return formatValidationResult(validationResult)
 }
-

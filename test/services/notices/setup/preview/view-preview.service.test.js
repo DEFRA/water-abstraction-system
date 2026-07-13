@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_OK } = http2.constants
 
 import * as RecipientsFixture from '../../../../support/fixtures/recipients.fixture.js'
 import SessionModelStub from '../../../../support/stubs/session.stub.js'
@@ -16,6 +15,7 @@ import * as GeneratePreviewRequest from '../../../../../app/requests/notify/gene
 
 // Thing under test
 import ViewPreviewService from '../../../../../app/services/notices/setup/preview/view-preview.service.js'
+const { HTTP_STATUS_OK } = http2.constants
 
 describe('Notices - Setup - Preview - View Preview service', () => {
   let licenceMonitoringStationId

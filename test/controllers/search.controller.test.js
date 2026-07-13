@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
@@ -11,6 +10,7 @@ import * as ViewSearchService from '../../app/services/search/view-search.servic
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Search controller', () => {
   let server

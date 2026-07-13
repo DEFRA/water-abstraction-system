@@ -13,7 +13,7 @@ import { formatMoney } from '../base.presenter.js'
  *
  * @returns {object} a formatted representation of the transaction specifically for the bill-licence page
  */
-export default function go(transaction) {
+export default function viewMinimumChargeTransactionPresenter(transaction) {
   const { chargeType, credit, netAmount } = transaction
 
   return {

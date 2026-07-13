@@ -18,7 +18,7 @@ import DatabaseConfig from '../../../config/database.config.js'
  *
  * @returns {Promise<object>} the data needed to populate the view company contacts communications
  */
-export default async function go(email, page = '1') {
+export default async function fetchNotificationsDal(email, page = '1') {
   const { results: notifications, total: totalNumber } = await _fetch(email, page)
 
   return { notifications, totalNumber }

@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 import billingConfig from '../../../config/billing.config.js'
 import ExpandedError from '../../../app/errors/expanded.error.js'
 
@@ -11,6 +10,7 @@ import * as ChargingModuleViewBillRunStatusRequest from '../../../app/requests/c
 
 // Thing under test
 import * as ChargingModuleWaitForStatusRequest from '../../../app/requests/charging-module/wait-for-status.request.js'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Charging Module Wait For Status request', () => {
   const billRunId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'

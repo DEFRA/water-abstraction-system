@@ -1,4 +1,3 @@
-
 // Test framework dependencies
 
 // Helpers
@@ -10,13 +9,12 @@ import { generateLicenceRef } from '../../../../support/helpers/licence.helper.j
 import LicenceRenewalValidator from '../../../../../app/validators/notices/setup/renewal-notice/licence-renewal.validator.js'
 
 describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
-  let clock
   let licenceRenewal
   let payload
   let licenceRef
 
   beforeEach(() => {
-    clock = vi.useFakeTimers({ now: new Date('2026-05-21') })
+    vi.useFakeTimers({ now: new Date('2026-05-21') })
 
     licenceRef = generateLicenceRef()
 

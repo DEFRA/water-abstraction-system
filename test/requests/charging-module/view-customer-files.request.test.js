@@ -1,5 +1,4 @@
 import http2 from 'node:http2'
-const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 // Test framework dependencies
 
@@ -8,6 +7,7 @@ import * as ChargingModuleRequest from '../../../app/requests/charging-module.re
 
 // Thing under test
 import * as ChargingModuleViewCustomerFilesRequest from '../../../app/requests/charging-module/view-customer-files.request.js'
+const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 describe('Charging Module - View Customer Files request', () => {
   const days = 7

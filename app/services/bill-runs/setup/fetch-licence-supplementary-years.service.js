@@ -13,7 +13,7 @@ import LicenceSupplementaryYearModel from '../../../models/licence-supplementary
  *
  * @returns {Promise<object[]>} An array of distinct years flagged for supplementary billing in descending order
  */
-export default async function go(regionId, twoPartTariff) {
+export default async function fetchLicenceSupplementaryYearsService(regionId, twoPartTariff) {
   return LicenceSupplementaryYearModel.query()
     .distinct('financialYearEnd')
     .innerJoinRelated('licence')

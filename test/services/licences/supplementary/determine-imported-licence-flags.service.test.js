@@ -9,12 +9,11 @@ import DetermineImportedLicenceFlagsService from '../../../../app/services/licen
 describe('Licences - Supplementary - Determine Imported Licence Flags service', () => {
   const licenceId = 'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
 
-  let clock
   let testDate
 
   beforeEach(() => {
     testDate = new Date('2024-10-31')
-    clock = vi.useFakeTimers({ now: testDate })
+    vi.useFakeTimers({ now: testDate })
   })
 
   afterEach(() => {

@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
@@ -43,6 +42,7 @@ import * as SubmitStartDateService from '../../app/services/return-versions/setu
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 const sessionId = '64924759-8142-4a08-9d1e-1e902cd9d316'
 const requirementIndex = 0

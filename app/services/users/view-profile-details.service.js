@@ -21,7 +21,7 @@ import { readFlashNotification } from '../../lib/general.lib.js'
  *
  * @returns {Promise<object>} The view data for the profile details page
  */
-export default async function go(userId, yar) {
+export default async function viewProfileDetailsService(userId, yar) {
   const profileDetails = await _fetchProfileDetails(userId)
 
   const notification = readFlashNotification(yar)

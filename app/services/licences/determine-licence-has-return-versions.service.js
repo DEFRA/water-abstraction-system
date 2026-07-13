@@ -12,7 +12,7 @@ import ReturnVersionModel from '../../models/return-version.model.js'
  *
  * @returns {Promise<boolean>} true if the licence has return versions else false
  */
-export default async function go(licenceId) {
+export default async function determineLicenceHasReturnVersionsService(licenceId) {
   const requirement = await _fetch(licenceId)
 
   return !!requirement

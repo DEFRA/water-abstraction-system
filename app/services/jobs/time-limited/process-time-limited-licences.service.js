@@ -10,7 +10,7 @@ import Workflow from '../../../models/workflow.model.js'
 /**
  * Puts SROC licences into workflow that have a related `purpose` that is due to expire in less than 50 days
  */
-export default async function go() {
+export default async function processTimeLimitedLicencesService() {
   try {
     const startTime = currentTimeInNanoseconds()
 

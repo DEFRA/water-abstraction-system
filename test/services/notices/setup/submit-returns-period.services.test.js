@@ -14,7 +14,6 @@ import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 import SubmitReturnsPeriodService from '../../../../app/services/notices/setup/submit-returns-period.service.js'
 
 describe('Notices - Setup - Submit Returns Period service', () => {
-  let clock
   let payload
   let referenceCode
   let session
@@ -26,7 +25,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
 
     const testDate = new Date('2024-12-01')
 
-    clock = vi.useFakeTimers({ now: testDate })
+    vi.useFakeTimers({ now: testDate })
 
     yarStub = YarStub()
   })
@@ -43,8 +42,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
     vi.useRealTimers()
   })
 
-  afterEach(() => {
-  })
+  afterEach(() => {})
 
   describe('when submitting as returns period ', () => {
     describe('is successful', () => {

@@ -12,7 +12,7 @@ import { checkUrl } from '../../../lib/check-page.lib.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function go(session) {
+export default function abstractionAlertsPresenter(session) {
   const { id: sessionId, company, licences } = session
 
   return {

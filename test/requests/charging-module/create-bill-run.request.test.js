@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 import * as RegionHelper from '../../support/helpers/region.helper.js'
 
 // Things we need to stub
@@ -10,6 +9,7 @@ import * as ChargingModuleRequest from '../../../app/requests/charging-module.re
 
 // Thing under test
 import * as CreateBillRunRequest from '../../../app/requests/charging-module/create-bill-run.request.js'
+const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 describe('Charging Module Create Bill Run request', () => {
   let testRegion

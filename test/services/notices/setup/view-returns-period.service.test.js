@@ -11,7 +11,6 @@ import * as FetchSessionDal from '../../../../app/dal/fetch-session.dal.js'
 import ReturnsPeriodService from '../../../../app/services/notices/setup/view-returns-period.service.js'
 
 describe('Notices - Setup - View Returns Period service', () => {
-  let clock
   let referenceCode
   let session
   let sessionData
@@ -27,7 +26,7 @@ describe('Notices - Setup - View Returns Period service', () => {
 
     const testDate = new Date('2024-12-01')
 
-    clock = vi.useFakeTimers({ now: testDate })
+    vi.useFakeTimers({ now: testDate })
   })
 
   afterAll(() => {

@@ -21,7 +21,7 @@ import { today } from '../../../lib/general.lib.js'
  * @returns {Promise<object[]>} The ID for each licence version created in the last 2 months without a workflow record,
  * plus associated licence ID and whether a charge version exists for the licence
  */
-export default async function go() {
+export default async function fetchLicenceUpdatesService() {
   const twoMonthsAgo = _twoMonthsAgo()
 
   // NOTE: We've resorted to Knex rather than Objection JS due to the complexity of the query. As we are not intending

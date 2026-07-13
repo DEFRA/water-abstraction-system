@@ -18,7 +18,7 @@ import { determineReturnsPeriods } from '../../lib/return-periods.lib.js'
  *
  * @returns {Promise<string[]>} an array of the generated return log ids
  */
-export default async function go(returnRequirement, returnCycle, licenceEndDate, trx = null) {
+export default async function createReturnLogsService(returnRequirement, returnCycle, licenceEndDate, trx = null) {
   const returnLogs = _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate)
 
   return _persistReturnLogs(returnLogs, trx)

@@ -19,10 +19,10 @@ import ReviewChargeVersionModel from '../../app/models/review-charge-version.mod
 import * as UserHelper from '../support/helpers/user.helper.js'
 import { generateRandomInteger } from '../../app/lib/general.lib.js'
 
-const CHANGE_REASON_NEW_LICENCE_PART_INDEX = 10
-
 // Thing under test
 import ChargeVersionModel from '../../app/models/charge-version.model.js'
+
+const CHANGE_REASON_NEW_LICENCE_PART_INDEX = 10
 
 describe('Charge Version model', () => {
   let testBillingAccount

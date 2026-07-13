@@ -18,7 +18,7 @@
  *
  * @returns {number[] | null} The formatted array of numbers and null values.
  */
-export default function go(multipleEntries) {
+export default function splitMultipleEntriesService(multipleEntries) {
   if (!multipleEntries) {
     return null
   }

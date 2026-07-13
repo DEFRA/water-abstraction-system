@@ -14,7 +14,7 @@ import Joi from 'joi'
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function go(payload) {
+export default function contactNameValidator(payload) {
   const schema = Joi.object({
     contactName: Joi.string().required().max(100).messages({
       'any.required': 'Enter a name for the contact',

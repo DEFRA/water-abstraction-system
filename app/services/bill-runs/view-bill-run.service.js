@@ -17,7 +17,7 @@ import FetchBillRunService from './fetch-bill-run.service.js'
  * @returns {Promise<object>} an object representing the `pageData` needed by the view bill run template. It contains
  * details of the bill run and the bills linked to it plus the page title.
  */
-export default async function go(id) {
+export default async function viewBillRunService(id) {
   const result = await FetchBillRunService(id)
 
   const formattedData = _pageData(result)

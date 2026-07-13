@@ -1,5 +1,4 @@
 import http2 from 'node:http2'
-const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 // Test framework dependencies
 
@@ -8,6 +7,7 @@ import * as ChargingModuleRequest from '../../../app/requests/charging-module.re
 
 // Thing under test
 import * as ReissueBillRequest from '../../../app/requests/charging-module/reissue-bill.request.js'
+const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 describe('Charging Module Reissue Bill request', () => {
   const billId = '45ddee2c-c423-4382-8abe-a6a9f284f829'

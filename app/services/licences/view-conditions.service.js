@@ -16,7 +16,7 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence conditions template
  */
-export default async function go(licenceId, auth) {
+export default async function viewConditionsService(licenceId, auth) {
   const licence = await FetchLicenceService(licenceId)
 
   const currentLicenceVersion = licence.$currentVersion()

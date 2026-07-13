@@ -14,7 +14,7 @@ import NotifyUpdatePresenter from '../../../../presenters/notifications/notify-u
  *
  * @returns {Promise<object>} a notification with the Notify response
  */
-export default async function go(notification, referenceCode) {
+export default async function sendLetterNotificationService(notification, referenceCode) {
   const notifyResult = await send(notification.templateId, {
     personalisation: notification.personalisation,
     reference: referenceCode

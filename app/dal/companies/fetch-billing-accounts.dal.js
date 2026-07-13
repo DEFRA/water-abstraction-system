@@ -14,7 +14,7 @@ import DatabaseConfig from '../../../config/database.config.js'
  *
  * @returns {Promise<object>} the billing accounts for the company and the pagination object
  */
-export default async function go(companyId, page = '1') {
+export default async function fetchBillingAccountsDal(companyId, page = '1') {
   const { results: billingAccounts, total: totalNumber } = await _fetch(companyId, page)
 
   return { billingAccounts, totalNumber }

@@ -26,7 +26,7 @@ import TypeValidator from '../../../validators/bill-runs/setup/type.validator.js
  * @returns {Promise<object>} An empty object if there are no errors else the page data for the type page including the
  * validation error details
  */
-export default async function go(sessionId, payload) {
+export default async function submitTypeService(sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)

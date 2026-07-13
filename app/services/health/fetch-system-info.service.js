@@ -14,7 +14,7 @@ const exec = promisify(childProcessExec)
  *
  * @returns {Promise<object>} An object containing the `name`, `serviceName`, `version`, `commit` & `jobs`
  */
-export default async function go() {
+export default async function fetchSystemInfoService() {
   return {
     name: 'System',
     serviceName: 'system',

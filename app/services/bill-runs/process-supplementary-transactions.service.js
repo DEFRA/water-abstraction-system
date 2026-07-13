@@ -30,7 +30,11 @@ import ReverseTransactionsService from './reverse-supplementary-transactions.ser
  * @returns {Promise<object[]>} An array of the remaining generated transactions and reversed debits from previous
  * transactions (ie. those which were not cancelled out when the generated and reversed were compared)
  */
-export default async function go(previousTransactions, generatedTransactions, billLicenceId) {
+export default async function processSupplementaryTransactionsService(
+  previousTransactions,
+  generatedTransactions,
+  billLicenceId
+) {
   if (previousTransactions.length === 0) {
     return generatedTransactions
   }

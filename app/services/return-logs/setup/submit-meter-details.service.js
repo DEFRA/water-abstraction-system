@@ -24,7 +24,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
  *
  * @returns {Promise<object>} If no errors the page data for the meter-details page else the validation error details
  */
-export default async function go(sessionId, payload, yar) {
+export default async function submitMeterDetailsService(sessionId, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const error = _validate(payload)

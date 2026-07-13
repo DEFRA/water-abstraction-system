@@ -16,7 +16,7 @@ import { generateUUID } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<module:ReturnSubmissionLineModel[]>} - The created return lines (empty if nil return)
  */
-export default async function go(returnSubmissionId, session, timestamp, trx = null) {
+export default async function createReturnLinesService(returnSubmissionId, session, timestamp, trx = null) {
   if (session.journey === 'nilReturn') {
     return []
   }

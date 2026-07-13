@@ -20,7 +20,7 @@ import { NoticeType, NoticeTypes } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<object>} The created alternate notice and notifications
  */
-export default async function go(notice, licenceRefs, expiryDate, renewalDate) {
+export default async function createAlternateRenewalNoticeService(notice, licenceRefs, expiryDate, renewalDate) {
   const recipients = await FetchAlternateRenewalRecipientsService(licenceRefs)
   const alternateNotice = await _notice(notice, recipients, licenceRefs)
   const notifications = await _notifications(alternateNotice, recipients, expiryDate, renewalDate)

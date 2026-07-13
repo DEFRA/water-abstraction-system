@@ -14,7 +14,7 @@ const NUMBER_OF_RESULTS = 15
  *
  * @returns {Promise<object[]>} an object containing the matching companies needed to populate the view
  */
-export default async function go(searchInput) {
+export default async function fetchExistingCompaniesService(searchInput) {
   const sanatisedSearchInput = searchInput
     .replaceAll('\\', '\\\\')
     .replaceAll('%', String.raw`\%`)

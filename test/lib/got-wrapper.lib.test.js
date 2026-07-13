@@ -1,11 +1,11 @@
 import http2 from 'node:http2'
-const { HTTP_STATUS_CREATED, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
 import Nock from 'nock'
 
 // Thing under test
 import { gotWrapper } from '../../app/lib/got-wrapper.lib.js'
+const { HTTP_STATUS_CREATED, HTTP_STATUS_OK } = http2.constants
 
 describe('GotWrapperLib', () => {
   let request

@@ -17,7 +17,7 @@ const REPORTED = {
  *
  * @returns {object} The return submission metadata
  */
-export default function go(session) {
+export default function generateReturnSubmissionMetadataService(session) {
   // Metadata is not required for nil returns
   if (session.journey === 'nilReturn') {
     return {}

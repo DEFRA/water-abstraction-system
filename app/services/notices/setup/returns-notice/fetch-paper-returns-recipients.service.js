@@ -17,7 +17,7 @@ import { db } from '../../../../../db/db.js'
  *
  * @returns {Promise<object[]>} The recipient data for the paper returns notice
  */
-export default async function go(session, download) {
+export default async function fetchPaperReturnsRecipientsService(session, download) {
   const { selectedReturns, noticeType } = session
 
   const { bindings, query: dueReturnLogsQuery } = GenerateReturnLogsByIdQueryService(selectedReturns)

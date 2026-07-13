@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_FOUND, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
@@ -13,6 +12,7 @@ import * as ViewBillService from '../../app/services/bills/view-bill.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_FOUND, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 describe('Bills controller', () => {
   const rootPath = '/bills/64924759-8142-4a08-9d1e-1e902cd9d316'
@@ -137,7 +137,9 @@ describe('Bills controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.spyOn(SubmitRemoveBillService, 'default').mockResolvedValue('/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing')
+          vi.spyOn(SubmitRemoveBillService, 'default').mockResolvedValue(
+            '/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing'
+          )
         })
 
         it('redirects to the legacy processing bill run page', async () => {

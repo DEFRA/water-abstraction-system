@@ -307,7 +307,6 @@ describe('Change address service', () => {
     })
 
     describe('and the "current" billing account address', () => {
-      let clock
       let existingBillingAccountAddress
 
       beforeEach(() => {
@@ -315,7 +314,7 @@ describe('Change address service', () => {
 
         const testDate = new Date(2023, 8, 4, 10, 31, 57, 2)
 
-        clock = vi.useFakeTimers({ now: testDate, toFake: ['Date'] })
+        vi.useFakeTimers({ now: testDate, toFake: ['Date'] })
       })
 
       afterEach(() => {

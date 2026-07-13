@@ -26,7 +26,10 @@
  *
  * @returns {object[]} - The filtered list of licence monitoring stations
  */
-export default function go(licenceMonitoringStations, alertType) {
+export default function determineRelevantLicenceMonitoringStationsByAlertTypeService(
+  licenceMonitoringStations,
+  alertType
+) {
   if (alertType === 'stop') {
     return _stop(licenceMonitoringStations, alertType)
   }

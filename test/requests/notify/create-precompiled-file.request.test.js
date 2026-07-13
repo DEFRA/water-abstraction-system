@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED } = http2.constants
 import { generateNoticeReferenceCode } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -10,6 +9,7 @@ import * as NotifyRequest from '../../../app/requests/notify.request.js'
 
 // Thing under test
 import * as CreatePrecompiledFileRequest from '../../../app/requests/notify/create-precompiled-file.request.js'
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED } = http2.constants
 
 describe('Notify - Create precompiled file request', () => {
   let response

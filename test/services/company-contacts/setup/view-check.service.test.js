@@ -29,7 +29,6 @@ describe('Company Contacts - Setup - Check Service', () => {
 
     vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
-
     yarStub = YarStub()
     yarStub.flash.mockReturnValue([{ title: 'Test', text: 'Notification' }])
   })

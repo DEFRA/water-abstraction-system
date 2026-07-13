@@ -23,6 +23,20 @@ to_pascal_case() {
   echo "$1" | sed -E 's/[-_]+/ /g' | awk '{for(i=1;i<=NF;++i) $i=toupper(substr($i,1,1)) substr($i,2)}1' | tr -d ' '
 }
 
+# Derives the default export function name from an output file name, matching the codebase convention of
+# camelCase(file name including its type suffix) - e.g. delete-session.dal.js -> deleteSessionDal
+to_camel_case_from_filename() {
+  local stem="${1%.js}"
+  echo "$stem" | sed -E 's/[-_.]+/ /g' | awk '{
+    out = ""
+    for (i = 1; i <= NF; i++) {
+      w = tolower($i)
+      out = out (i == 1 ? w : toupper(substr(w,1,1)) substr(w,2))
+    }
+    print out
+  }'
+}
+
 PASCAL_NAME=$(to_pascal_case "$RAW_NAME")
 
 # ------------------------------------------------------------------------------
@@ -92,6 +106,9 @@ render_file() {
     return
   fi
 
+  local function_name
+  function_name=$(to_camel_case_from_filename "$(basename "$output_path")")
+
   sed -e "s#__BASE_PRESENTER_PATH__#${RELATIVE_UP_PATH}presenters/base.presenter.js#g" \
       -e "s#__FETCH_SESSION_DAL_PATH__#${RELATIVE_UP_PATH}dal/fetch-session.dal.js#g" \
       -e "s#__PRESENTER_PATH__#${RELATIVE_UP_PATH}presenters/${REL_DIR}/${RAW_NAME}.presenter.js#g" \
@@ -99,6 +116,7 @@ render_file() {
       -e "s/__PRESENTER_NAME__/${PASCAL_NAME}Presenter/g" \
       -e "s/__VALIDATOR_NAME__/${PASCAL_NAME}Validator/g" \
       -e "s/__MODULE_NAME__/${module_name}/g" \
+      -e "s/__FUNCTION_NAME__/${function_name}/g" \
       "$template" > "$output_path"
 
   echo "✅ Created $output_path"

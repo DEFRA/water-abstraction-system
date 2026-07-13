@@ -19,7 +19,7 @@ import SendToS3BucketService from './send-to-s3-bucket.service.js'
  *
  * @param {string} schemaName - The name of the database schema to export
  */
-export default async function go(schemaName) {
+export default async function schemaExportService(schemaName) {
   const schemaFolderPath = _folderToUpload(schemaName)
   let compressedSchemaPath
 

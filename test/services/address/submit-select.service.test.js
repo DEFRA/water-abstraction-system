@@ -3,7 +3,6 @@
 // Test helpers
 import SessionModelStub from '../../support/stubs/session.stub.js'
 import http2 from 'node:http2'
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 import { generateUUID } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -13,6 +12,7 @@ import * as LookupUPRNRequest from '../../../app/requests/address-facade/lookup-
 
 // Thing under test
 import SubmitSelectService from '../../../app/services/address/submit-select.service.js'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Address - Submit Select Service', () => {
   const match = {

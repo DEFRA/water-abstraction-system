@@ -18,7 +18,9 @@ describe('Index Bill Runs service', () => {
   beforeEach(() => {
     // It doesn't matter for these tests what busy state the service returns, only that it returns one.
     vi.spyOn(CheckBusyBillRunsService, 'default').mockResolvedValue('none')
-    vi.spyOn(FetchRegionsService, 'default').mockResolvedValue([{ id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' }])
+    vi.spyOn(FetchRegionsService, 'default').mockResolvedValue([
+      { id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' }
+    ])
   })
 
   afterEach(() => {

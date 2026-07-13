@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = http2.constants
 import { NOTIFY_TEMPLATES } from '../../../app/lib/notify-templates.lib.js'
 
 // Things we need to stub
@@ -10,6 +9,7 @@ import * as NotifyRequest from '../../../app/requests/notify.request.js'
 
 // Thing under test
 import * as CreateLetterRequest from '../../../app/requests/notify/create-letter.request.js'
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = http2.constants
 
 describe('Notify - Create Letter request', () => {
   let options

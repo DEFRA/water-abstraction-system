@@ -546,13 +546,12 @@ describe('Dates lib', () => {
   })
 
   describe('renewalExpiryDate', () => {
-    let clock
     let expiryDate
 
     beforeAll(() => {
       expiryDate = new Date('2026-04-15')
 
-      clock = vi.useFakeTimers({ now: expiryDate })
+      vi.useFakeTimers({ now: expiryDate })
     })
 
     afterAll(() => {

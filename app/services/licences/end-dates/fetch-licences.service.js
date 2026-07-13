@@ -13,7 +13,7 @@ import { db } from '../../../../db/db.js'
  * @returns {Promise<object[]>} - An array of objects representing each licence, including end dates for both and the
  * WRLS ID
  */
-export default async function go() {
+export default async function fetchLicencesService() {
   const query = `
     SELECT DISTINCT ON (nal."LIC_NO")
       l.id AS id,

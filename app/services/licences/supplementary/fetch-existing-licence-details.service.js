@@ -22,7 +22,7 @@ import { db } from '../../../../db/db.js'
  *
  * @returns {Promise<object>} - The data needed to determine which supplementary flags the licence needs
  */
-export default async function go(licenceId) {
+export default async function fetchExistingLicenceDetailsService(licenceId) {
   const query = _query()
 
   const {

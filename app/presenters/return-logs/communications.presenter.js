@@ -13,7 +13,7 @@ import NotificationsTablePresenter from '../notifications/notifications-table.pr
  *
  * @returns {object} The data formatted for the view template
  */
-export default function go(returnLog, notifications) {
+export default function communicationsPresenter(returnLog, notifications) {
   const { id, licence } = returnLog
 
   return {

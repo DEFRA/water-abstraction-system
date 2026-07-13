@@ -13,7 +13,7 @@ import { formatAbstractionPeriod } from '../../base.presenter.js'
  *
  * @returns {object} page data needed by the view template
  */
-export default function go(session) {
+export default function periodUsedPresenter(session) {
   const {
     id: sessionId,
     periodStartDay,

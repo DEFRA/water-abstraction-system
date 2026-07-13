@@ -13,7 +13,7 @@ import { today } from '../../../lib/general.lib.js'
  *
  * @returns {object} page data needed by the view template
  */
-export default function go(session) {
+export default function receivedPresenter(session) {
   const {
     id: sessionId,
     returnReference,

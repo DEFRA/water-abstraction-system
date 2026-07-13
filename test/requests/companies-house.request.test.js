@@ -1,5 +1,4 @@
 import http2 from 'node:http2'
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
 
@@ -10,6 +9,7 @@ import serverConfig from '../../config/server.config.js'
 
 // Thing under test
 import * as CompaniesHouseRequest from '../../app/requests/companies-house.request.js'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Companies House Request', () => {
   const accessToken = Buffer.from('API_KEY').toString('base64')

@@ -24,7 +24,7 @@ import DatabaseConfig from '../../../config/database.config.js'
  *
  * @returns {Promise<module:BillRunModel[]>} An array of bill runs that match the selected 'page in the data
  */
-export default async function go(filters, page = '1') {
+export default async function fetchBillRunsService(filters, page = '1') {
   const query = _fetchQuery()
 
   _applyFilters(query, filters)

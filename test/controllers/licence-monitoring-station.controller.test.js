@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
@@ -11,6 +10,7 @@ import * as SubmitRemoveService from '../../app/services/licence-monitoring-stat
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 const licenceMonitoringStationId = 'ab4aff2b-cb01-4070-b896-948d80d61f96'
 
@@ -45,7 +45,9 @@ describe('Licence Monitoring Station - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          vi.spyOn(RemoveService, 'default').mockResolvedValue({ pageTitle: 'You’re about to remove the tag for this licence' })
+          vi.spyOn(RemoveService, 'default').mockResolvedValue({
+            pageTitle: 'You’re about to remove the tag for this licence'
+          })
         })
 
         it('returns the page successfully', async () => {

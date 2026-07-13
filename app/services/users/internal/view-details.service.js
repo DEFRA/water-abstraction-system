@@ -14,7 +14,7 @@ import DetailsPresenter from '../../../presenters/users/internal/details.present
  *
  * @returns {Promise<object>} The view data for the internal user details page
  */
-export default async function go(auth, id) {
+export default async function viewDetailsService(auth, id) {
   const internalUser = await FetchUserDetailsDal(id)
   const pageData = DetailsPresenter(auth, internalUser)
 
