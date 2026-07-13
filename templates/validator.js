@@ -21,4 +21,3 @@ export default function go(payload) {
 
   return schema.validate(payload, { abortEarly: false })
 }
-

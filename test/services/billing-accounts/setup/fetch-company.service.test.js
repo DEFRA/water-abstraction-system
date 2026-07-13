@@ -1,5 +1,4 @@
 import http2 from 'node:http2'
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
 
@@ -8,6 +7,7 @@ import * as LookupCompanysHouseNumberRequest from '../../../../app/requests/comp
 
 // Thing under test
 import FetchCompanyService from '../../../../app/services/billing-accounts/setup/fetch-company.service.js'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Billing Accounts - Setup - Fetch Company service', () => {
   const body = {

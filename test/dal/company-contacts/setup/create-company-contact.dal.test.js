@@ -1,4 +1,3 @@
-
 // Test framework dependencies
 
 // Test helpers
@@ -11,7 +10,6 @@ import { generateUUID } from '../../../../app/lib/general.lib.js'
 import CreateCompanyContactDal from '../../../../app/dal/company-contacts/setup/create-company-contact.dal.js'
 
 describe('Company Contacts - Create Company Contact dal', () => {
-  let clock
   let companyContact
   let company
 
@@ -26,7 +24,7 @@ describe('Company Contacts - Create Company Contact dal', () => {
 
     company = await CompanyHelper.add()
 
-    clock = vi.useFakeTimers({ now: new Date('2021-01-01'), toFake: ['Date'] })
+    vi.useFakeTimers({ now: new Date('2021-01-01'), toFake: ['Date'] })
   })
 
   afterAll(async () => {

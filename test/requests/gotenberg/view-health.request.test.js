@@ -1,5 +1,4 @@
 import http2 from 'node:http2'
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
 
@@ -9,6 +8,7 @@ import gotenbergConfig from '../../../config/gotenberg.config.js'
 
 // Thing under test
 import * as ViewHealthRequest from '../../../app/requests/gotenberg/view-health.request.js'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Gotenberg - View Health request', () => {
   let response

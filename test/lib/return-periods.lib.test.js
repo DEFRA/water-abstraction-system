@@ -1,4 +1,3 @@
-
 // Test framework dependencies
 
 import { returnPeriodDates } from '../../app/lib/static-lookups.lib.js'
@@ -12,13 +11,12 @@ describe('Return Period lib', () => {
   const nextYear = year + 1
   const lastYear = year - 1
 
-  let clock
   let testDate
   let dates
   let dueDateNextYear
 
   beforeEach(() => {
-    clock = vi.useFakeTimers({ now: new Date(`${year}-01-01`) })
+    vi.useFakeTimers({ now: new Date(`${year}-01-01`) })
   })
 
   afterEach(() => {

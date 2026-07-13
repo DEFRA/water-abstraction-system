@@ -11,15 +11,12 @@ import GlobalNotifierStub from '../support/stubs/global-notifier.stub.js'
 import * as GeneralLib from '../../app/lib/general.lib.js'
 
 describe('GeneralLib', () => {
-  let clock
   let testDate
 
   afterEach(() => {
     vi.restoreAllMocks()
 
-    if (clock) {
-      vi.useRealTimers()
-    }
+    vi.useRealTimers()
   })
 
   describe('#calculateAndLogTimeTaken', () => {
@@ -254,7 +251,7 @@ describe('GeneralLib', () => {
         beforeEach(() => {
           testDate = new Date(2023, 7, 21, 20, 31, 57)
 
-          clock = vi.useFakeTimers({ now: testDate })
+          vi.useFakeTimers({ now: testDate })
         })
 
         it('returns the correct start and end dates for the financial year', () => {
@@ -269,7 +266,7 @@ describe('GeneralLib', () => {
         beforeEach(() => {
           testDate = new Date(2024, 2, 21, 20, 31, 57)
 
-          clock = vi.useFakeTimers({ now: testDate })
+          vi.useFakeTimers({ now: testDate })
         })
 
         it('returns the correct start and end dates for the financial year', () => {
@@ -613,7 +610,7 @@ describe('GeneralLib', () => {
     beforeEach(() => {
       testDate = new Date(2015, 9, 21, 20, 31, 57)
 
-      clock = vi.useFakeTimers({ now: testDate })
+      vi.useFakeTimers({ now: testDate })
     })
 
     it('returns the current date and time as an ISO string', () => {
@@ -627,7 +624,7 @@ describe('GeneralLib', () => {
     beforeEach(() => {
       testDate = new Date(2025, 9, 19, 20, 31, 57, 234)
 
-      clock = vi.useFakeTimers({ now: testDate })
+      vi.useFakeTimers({ now: testDate })
     })
 
     it('returns the current date and time as date-only (time set to midnight)', () => {

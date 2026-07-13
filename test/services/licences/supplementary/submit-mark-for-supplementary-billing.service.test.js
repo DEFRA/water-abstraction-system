@@ -111,13 +111,11 @@ describe('Submit Mark For Supplementary Billing Service', () => {
     })
 
     describe('but no years selected', () => {
-      let clock
-
       beforeEach(() => {
         payload = {}
 
         testDate = new Date('2024-03-31')
-        clock = vi.useFakeTimers({ now: testDate })
+        vi.useFakeTimers({ now: testDate })
       })
 
       afterEach(() => {

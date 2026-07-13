@@ -1,10 +1,9 @@
 // Test framework dependencies
 
-import { generateUUID, today } from '../../../app/lib/general.lib.js'
+import { generateUUID, today, generateNoticeReferenceCode } from '../../../app/lib/general.lib.js'
 
 // Test helpers
 import * as NotificationHelper from '../../support/helpers/notification.helper.js'
-import { generateNoticeReferenceCode } from '../../../app/lib/general.lib.js'
 
 // Things we need to stub
 import GlobalNotifierStub from '../../support/stubs/global-notifier.stub.js'

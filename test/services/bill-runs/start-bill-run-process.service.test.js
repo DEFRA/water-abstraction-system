@@ -58,7 +58,6 @@ describe('Start Bill Run Process service', () => {
         }
 
         vi.spyOn(InitiateBillRunService, 'default').mockResolvedValue(annualBillRun)
-
       })
 
       it('initiates a new bill run', async () => {
@@ -113,7 +112,6 @@ describe('Start Bill Run Process service', () => {
         }
 
         vi.spyOn(InitiateBillRunService, 'default').mockResolvedValue(twoPartTariffBillRun)
-
       })
 
       it('initiates a new bill run', async () => {
@@ -141,7 +139,6 @@ describe('Start Bill Run Process service', () => {
         }
 
         vi.spyOn(InitiateBillRunService, 'default').mockResolvedValue(twoPartTariffSupplementaryBillRun)
-
       })
 
       it('initiates a new bill run', async () => {

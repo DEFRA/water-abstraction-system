@@ -1,5 +1,4 @@
 import http2 from 'node:http2'
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
 
@@ -8,6 +7,7 @@ import * as CompaniesHouseRequest from '../../../app/requests/companies-house.re
 
 // Thing under test
 import * as SearchCompaniesRequest from '../../../app/requests/companies-house/search-companies.request.js'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Companies House - Search Companies request', () => {
   const matches = [

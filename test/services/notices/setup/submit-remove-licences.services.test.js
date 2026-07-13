@@ -39,7 +39,6 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
     vi.spyOn(FetchSessionDal, 'default').mockResolvedValue(session)
 
     licenceRefWithDueReturns = generateLicenceRef()
-
   })
 
   afterEach(() => {

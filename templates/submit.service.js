@@ -45,4 +45,3 @@ function _validate(payload) {
 
   return formatValidationResult(validationResult)
 }
-

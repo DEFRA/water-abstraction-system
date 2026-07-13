@@ -1,5 +1,4 @@
 import http2 from 'node:http2'
-const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 // Test framework dependencies
 
@@ -12,6 +11,7 @@ import * as LookupPostcodeRequest from '../../../app/requests/address-facade/loo
 
 // Thing under test
 import SelectService from '../../../app/services/address/select.service.js'
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 describe('Address - Select service', () => {
   const match = {

@@ -1,9 +1,7 @@
-
 // Test framework dependencies
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK  } = http2.constants
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
@@ -44,6 +42,7 @@ import * as VolumesService from '../../app/services/return-logs/setup/volumes.se
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 const sessionId = 'f01efb63-4d27-4be7-ab10-54cf177f1908'
 
@@ -60,10 +59,10 @@ describe('Return Logs - Setup - Controller', () => {
   beforeEach(() => {
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
-        vi.spyOn(server.logger, 'error').mockImplementation(() => {})
+    vi.spyOn(server.logger, 'error').mockImplementation(() => {})
 
     // We silence sending a notification to our Errbit instance using Airbrake
-        vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
+    vi.spyOn(server.app.airbrake, 'notify').mockResolvedValue(undefined)
   })
 
   afterEach(() => {
@@ -184,7 +183,9 @@ describe('Return Logs - Setup - Controller', () => {
 
     describe('GET', () => {
       beforeEach(() => {
-        vi.spyOn(CancelService, 'default').mockResolvedValue({ pageTitle: 'You are about to cancel this return submission' })
+        vi.spyOn(CancelService, 'default').mockResolvedValue({
+          pageTitle: 'You are about to cancel this return submission'
+        })
       })
 
       describe('when the request succeeds', () => {
@@ -223,7 +224,9 @@ describe('Return Logs - Setup - Controller', () => {
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          vi.spyOn(CheckService, 'default').mockResolvedValue({ pageTitle: 'Check details and enter new volumes or readings' })
+          vi.spyOn(CheckService, 'default').mockResolvedValue({
+            pageTitle: 'Check details and enter new volumes or readings'
+          })
         })
 
         it('returns the page successfully', async () => {
@@ -238,7 +241,9 @@ describe('Return Logs - Setup - Controller', () => {
     describe('POST', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.spyOn(SubmitCheckService, 'default').mockResolvedValue({ returnLogId: '168026d8-f29b-4165-8726-734c6b14adec' })
+          vi.spyOn(SubmitCheckService, 'default').mockResolvedValue({
+            returnLogId: '168026d8-f29b-4165-8726-734c6b14adec'
+          })
         })
 
         it('redirects to the confirmed page on success', async () => {
@@ -351,7 +356,10 @@ describe('Return Logs - Setup - Controller', () => {
 
           describe('and the page has been visited previously', () => {
             beforeEach(() => {
-              vi.spyOn(SubmitMeterProvidedService, 'default').mockResolvedValue({ checkPageVisited: true, meterProvided: 'no' })
+              vi.spyOn(SubmitMeterProvidedService, 'default').mockResolvedValue({
+                checkPageVisited: true,
+                meterProvided: 'no'
+              })
             })
 
             it('redirects to the "check" page', async () => {
@@ -364,7 +372,10 @@ describe('Return Logs - Setup - Controller', () => {
 
           describe('and the reported type is "meterReadings"', () => {
             beforeEach(() => {
-              vi.spyOn(SubmitMeterProvidedService, 'default').mockResolvedValue({ meterProvided: 'no', reported: 'meterReadings' })
+              vi.spyOn(SubmitMeterProvidedService, 'default').mockResolvedValue({
+                meterProvided: 'no',
+                reported: 'meterReadings'
+              })
             })
 
             it('redirects to the "check" page', async () => {
@@ -875,7 +886,10 @@ describe('Return Logs - Setup - Controller', () => {
         describe('and the page has been visited previously', () => {
           describe('and "Meter readings" has been selected', () => {
             beforeEach(() => {
-              vi.spyOn(SubmitReportedService, 'default').mockResolvedValue({ checkPageVisited: true, reported: 'meterReadings' })
+              vi.spyOn(SubmitReportedService, 'default').mockResolvedValue({
+                checkPageVisited: true,
+                reported: 'meterReadings'
+              })
             })
 
             it('redirects to the "start-reading" page', async () => {

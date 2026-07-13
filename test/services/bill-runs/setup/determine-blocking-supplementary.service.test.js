@@ -68,13 +68,13 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
       billRunQueryStub.first = vi
         .fn()
         // Find last annual bill run
-        
+
         .mockResolvedValueOnce(lastAnnualMatch)
         // Find matching SROC
-        
+
         .mockResolvedValueOnce(srocMatch)
         // Find matching PRESROC
-        
+
         .mockResolvedValueOnce(null)
 
       vi.spyOn(BillRunModel, 'query').mockReturnValue(billRunQueryStub)
@@ -92,13 +92,13 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
       billRunQueryStub.first = vi
         .fn()
         // Find last annual bill run
-        
+
         .mockResolvedValueOnce(lastAnnualMatch)
         // Find matching SROC
-        
+
         .mockResolvedValueOnce(null)
         // Find matching PRESROC
-        
+
         .mockResolvedValueOnce(preSrocMatch)
 
       vi.spyOn(BillRunModel, 'query').mockReturnValue(billRunQueryStub)
@@ -121,13 +121,13 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
       billRunQueryStub.first = vi
         .fn()
         // Find last annual bill run
-        
+
         .mockResolvedValueOnce(lastAnnualMatch)
         // Find matching SROC
-        
+
         .mockResolvedValueOnce(srocMatch)
         // Find matching PRESROC
-        
+
         .mockResolvedValueOnce(preSrocMatch)
 
       vi.spyOn(BillRunModel, 'query').mockReturnValue(billRunQueryStub)
@@ -149,13 +149,13 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
       billRunQueryStub.first = vi
         .fn()
         // Find last annual bill run
-        
+
         .mockResolvedValueOnce(lastAnnualMatch)
         // Find matching SROC
-        
+
         .mockResolvedValueOnce(null)
         // Find matching PRESROC
-        
+
         .mockResolvedValueOnce(null)
 
       vi.spyOn(BillRunModel, 'query').mockReturnValue(billRunQueryStub)
@@ -176,13 +176,13 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
         billRunQueryStub.first = vi
           .fn()
           // Find last annual bill run
-          
+
           .mockResolvedValueOnce(lastAnnualMatch)
           // Find matching SROC
-          
+
           .mockResolvedValueOnce(null)
           // Find matching PRESROC
-          
+
           .mockResolvedValueOnce(null)
 
         vi.spyOn(BillRunModel, 'query').mockReturnValue(billRunQueryStub)
@@ -205,13 +205,13 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
         billRunQueryStub.first = vi
           .fn()
           // Find last annual bill run
-          
+
           .mockResolvedValueOnce(null)
           // Find matching SROC
-          
+
           .mockResolvedValueOnce(null)
           // Find matching PRESROC
-          
+
           .mockResolvedValueOnce(null)
 
         vi.spyOn(BillRunModel, 'query').mockReturnValue(billRunQueryStub)
@@ -233,13 +233,13 @@ describe('Bill Runs - Setup - Determine Blocking Supplementary Bill Run service'
         billRunQueryStub.first = vi
           .fn()
           // Find last annual bill run
-          
+
           .mockResolvedValueOnce(lastAnnualMatch)
           // Find matching SROC
-          
+
           .mockResolvedValueOnce(null)
           // Find matching PRESROC
-          
+
           .mockResolvedValueOnce(null)
 
         vi.spyOn(BillRunModel, 'query').mockReturnValue(billRunQueryStub)

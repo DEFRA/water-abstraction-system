@@ -2,14 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const {
-  HTTP_STATUS_BAD_REQUEST,
-  HTTP_STATUS_FORBIDDEN,
-  HTTP_STATUS_NOT_FOUND,
-  HTTP_STATUS_OK,
-  HTTP_STATUS_GONE,
-  HTTP_STATUS_INTERNAL_SERVER_ERROR
-} = http2.constants
 import Boom from '@hapi/boom'
 import SessionNotFoundError from '../../app/errors/session-not-found.error.js'
 
@@ -18,6 +10,14 @@ import GlobalNotifierStub from '../support/stubs/global-notifier.stub.js'
 
 // For running our service
 import { init } from '../../app/server.js'
+const {
+  HTTP_STATUS_BAD_REQUEST,
+  HTTP_STATUS_FORBIDDEN,
+  HTTP_STATUS_NOT_FOUND,
+  HTTP_STATUS_OK,
+  HTTP_STATUS_GONE,
+  HTTP_STATUS_INTERNAL_SERVER_ERROR
+} = http2.constants
 
 describe('Error Pages plugin', () => {
   let handler

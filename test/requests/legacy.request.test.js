@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 import legacyConfig from '../../config/legacy.config.js'
 
 // Things we need to stub
@@ -10,6 +9,7 @@ import * as BaseRequest from '../../app/requests/base.request.js'
 
 // Thing under test
 import * as LegacyRequest from '../../app/requests/legacy.request.js'
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = http2.constants
 
 describe('Legacy Request', () => {
   const testPath = 'abstraction/info'
@@ -209,7 +209,9 @@ describe('Legacy Request', () => {
 
     describe('when the request is to an unknown legacy service', () => {
       it('throws an error', async () => {
-        await expect(LegacyRequest.getRequest('foobar', testPath)).rejects.toThrow('Request to unknown legacy service foobar')
+        await expect(LegacyRequest.getRequest('foobar', testPath)).rejects.toThrow(
+          'Request to unknown legacy service foobar'
+        )
       })
     })
   })

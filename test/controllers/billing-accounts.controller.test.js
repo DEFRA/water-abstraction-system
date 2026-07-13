@@ -2,8 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } =
-  http2.constants
 
 // Things we need to stub
 import Boom from '@hapi/boom'
@@ -12,6 +10,8 @@ import * as ViewBillingAccountService from '../../app/services/billing-accounts/
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } =
+  http2.constants
 
 describe('Billing Accounts controller', () => {
   // Though the ChangeAddressValidator accepts a payload with an empty address PayLoadCleanerPlugin will strip it

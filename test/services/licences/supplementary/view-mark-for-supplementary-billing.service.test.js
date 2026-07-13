@@ -7,13 +7,12 @@ import * as LicenceHelper from '../../../support/helpers/licence.helper.js'
 import ViewMarkForSupplementaryBillingService from '../../../../app/services/licences/supplementary/view-mark-for-supplementary-billing.service.js'
 
 describe('Licences - View Mark For Supplementary Billing Service', () => {
-  let clock
   let licence
   let testDate
 
   beforeEach(async () => {
     testDate = new Date('2024-04-01')
-    clock = vi.useFakeTimers({ now: testDate })
+    vi.useFakeTimers({ now: testDate })
 
     licence = await LicenceHelper.add()
   })

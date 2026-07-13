@@ -9,7 +9,6 @@ import MarkForSupplementaryBillingPresenter from '../../../../app/presenters/lic
 
 describe('Mark For Supplementary Billing presenter', () => {
   let testDate
-  let clock
 
   afterEach(() => {
     vi.restoreAllMocks()
@@ -25,7 +24,7 @@ describe('Mark For Supplementary Billing presenter', () => {
     describe('and the current date is before April', () => {
       beforeEach(() => {
         testDate = new Date('2024-03-31')
-        clock = vi.useFakeTimers({ now: testDate })
+        vi.useFakeTimers({ now: testDate })
       })
 
       afterEach(() => {
@@ -59,7 +58,7 @@ describe('Mark For Supplementary Billing presenter', () => {
     describe('and the current date is during or after April', () => {
       beforeEach(() => {
         testDate = new Date('2024-04-01')
-        clock = vi.useFakeTimers({ now: testDate })
+        vi.useFakeTimers({ now: testDate })
       })
 
       afterEach(() => {
@@ -94,7 +93,7 @@ describe('Mark For Supplementary Billing presenter', () => {
     describe('and the previous 6 years no longer include pre sroc years', () => {
       beforeEach(() => {
         testDate = new Date('2028-03-31')
-        clock = vi.useFakeTimers({ now: testDate })
+        vi.useFakeTimers({ now: testDate })
       })
 
       afterEach(() => {

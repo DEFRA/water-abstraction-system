@@ -42,7 +42,6 @@ describe('Bill Runs - Setup - Determine Blocking Two Part Annual Bill Run servic
       modifyGraph: vi.fn().mockReturnThis(),
       limit: vi.fn().mockReturnThis()
     }
-
   })
 
   afterEach(async () => {

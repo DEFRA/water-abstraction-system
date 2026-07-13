@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_FOUND, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 import { postRequestOptions } from '../support/general.js'
 
 // Things we need to stub
@@ -18,6 +17,7 @@ import * as ViewSendBillRunService from '../../app/services/bill-runs/send/view-
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_FOUND, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 describe('Bill Runs controller', () => {
   let options
@@ -316,7 +316,9 @@ describe('Bill Runs controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(() => {
-          vi.spyOn(GenerateTwoPartTariffBillRunService, 'default').mockResolvedValue('97db1a27-8308-4aba-b463-8a6af2558b28')
+          vi.spyOn(GenerateTwoPartTariffBillRunService, 'default').mockResolvedValue(
+            '97db1a27-8308-4aba-b463-8a6af2558b28'
+          )
         })
 
         it('redirects to the bill runs page', async () => {

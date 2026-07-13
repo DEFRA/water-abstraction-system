@@ -3,7 +3,6 @@
 // Test helpers
 import FeatureFlagsConfig from '../../config/feature-flags.config.js'
 import http2 from 'node:http2'
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 import { generateUUID, today } from '../../app/lib/general.lib.js'
 import { postRequestOptions } from '../support/general.js'
 
@@ -23,6 +22,7 @@ import * as ViewProfileDetailsService from '../../app/services/users/view-profil
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = http2.constants
 
 describe('Users controller', () => {
   let id

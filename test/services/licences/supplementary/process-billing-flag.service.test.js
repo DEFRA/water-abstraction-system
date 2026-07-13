@@ -52,11 +52,11 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
           await ProcessBillingFlagService(payload)
 
           expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
-              [2023],
-              false,
-              true,
-              'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
-            )
+            [2023],
+            false,
+            true,
+            'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
+          )
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -81,11 +81,11 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
           await ProcessBillingFlagService(payload)
 
           expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
-              [],
-              false,
-              true,
-              'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
-            )
+            [],
+            false,
+            true,
+            'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
+          )
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -118,11 +118,11 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
           await ProcessBillingFlagService(payload)
 
           expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
-              [2023],
-              false,
-              true,
-              'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
-            )
+            [2023],
+            false,
+            true,
+            'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
+          )
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -146,11 +146,11 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
           await ProcessBillingFlagService(payload)
 
           expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
-              [],
-              false,
-              true,
-              'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
-            )
+            [],
+            false,
+            true,
+            'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
+          )
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -183,11 +183,11 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
           await ProcessBillingFlagService(payload)
 
           expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
-              [2023],
-              false,
-              true,
-              'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
-            )
+            [2023],
+            false,
+            true,
+            'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
+          )
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -211,11 +211,11 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
           await ProcessBillingFlagService(payload)
 
           expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
-              [],
-              false,
-              true,
-              'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
-            )
+            [],
+            false,
+            true,
+            'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
+          )
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -254,11 +254,11 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
           await ProcessBillingFlagService(payload)
 
           expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
-              [2023],
-              false,
-              true,
-              'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
-            )
+            [2023],
+            false,
+            true,
+            'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
+          )
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -282,11 +282,11 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
           await ProcessBillingFlagService(payload)
 
           expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
-              [],
-              false,
-              true,
-              'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
-            )
+            [],
+            false,
+            true,
+            'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
+          )
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -319,11 +319,11 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
           await ProcessBillingFlagService(payload)
 
           expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
-              [],
-              false,
-              true,
-              'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
-            )
+            [],
+            false,
+            true,
+            'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
+          )
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -345,11 +345,11 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
           await ProcessBillingFlagService(payload)
 
           expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
-              [],
-              false,
-              false,
-              'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
-            )
+            [],
+            false,
+            false,
+            'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
+          )
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -380,11 +380,11 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
           await ProcessBillingFlagService(payload)
 
           expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
-              [2023],
-              false,
-              true,
-              'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
-            )
+            [2023],
+            false,
+            true,
+            'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
+          )
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {
@@ -408,11 +408,11 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
           await ProcessBillingFlagService(payload)
 
           expect(PersistSupplementaryBillingFlagsService.default).toHaveBeenCalledExactlyOnceWith(
-              [],
-              false,
-              true,
-              'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
-            )
+            [],
+            false,
+            true,
+            'aad74a3d-59ea-4c18-8091-02b0f8b0a147'
+          )
         })
 
         it('logs the time taken in milliseconds and seconds', async () => {

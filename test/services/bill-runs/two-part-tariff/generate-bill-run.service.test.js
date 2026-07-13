@@ -35,7 +35,6 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
       patch: billRunPatchStub
     })
 
-
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
@@ -98,8 +97,7 @@ describe('Bill Runs - Two Part Tariff - Generate Bill Run service', () => {
   describe('when the service errors', () => {
     let thrownError
 
-    beforeEach(async () => {
-    })
+    beforeEach(async () => {})
 
     describe('because fetching the billing accounts fails', () => {
       beforeEach(() => {

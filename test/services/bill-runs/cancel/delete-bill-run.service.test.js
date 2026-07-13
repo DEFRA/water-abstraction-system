@@ -165,7 +165,11 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-          expect(notifierStub.omfg).toHaveBeenCalledWith('Delete bill run failed', expect.any(Object), expect.any(Error))
+          expect(notifierStub.omfg).toHaveBeenCalledWith(
+            'Delete bill run failed',
+            expect.any(Object),
+            expect.any(Error)
+          )
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })
@@ -187,7 +191,11 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-          expect(notifierStub.omfg).toHaveBeenCalledWith('Delete bill run failed', expect.any(Object), expect.any(Error))
+          expect(notifierStub.omfg).toHaveBeenCalledWith(
+            'Delete bill run failed',
+            expect.any(Object),
+            expect.any(Error)
+          )
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })
@@ -213,7 +221,11 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-          expect(notifierStub.omfg).toHaveBeenCalledWith('Delete bill run failed', expect.any(Object), expect.any(Error))
+          expect(notifierStub.omfg).toHaveBeenCalledWith(
+            'Delete bill run failed',
+            expect.any(Object),
+            expect.any(Error)
+          )
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })
@@ -239,7 +251,11 @@ describe('Bill Runs - Delete Bill Run service', () => {
 
           const errorLogArgs = notifierStub.omfg.mock.calls[0]
 
-          expect(notifierStub.omfg).toHaveBeenCalledWith('Delete bill run failed', expect.any(Object), expect.any(Error))
+          expect(notifierStub.omfg).toHaveBeenCalledWith(
+            'Delete bill run failed',
+            expect.any(Object),
+            expect.any(Error)
+          )
           expect(errorLogArgs[1]).toEqual(billRun)
           expect(errorLogArgs[2]).toBeInstanceOf(Error)
         })

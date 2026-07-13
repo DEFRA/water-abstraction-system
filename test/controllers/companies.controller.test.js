@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_OK, HTTP_STATUS_NOT_FOUND } = http2.constants
 import { generateUUID } from '../../app/lib/general.lib.js'
 
 // Things we need to stub
@@ -15,6 +14,7 @@ import * as ViewLicencesService from '../../app/services/companies/view-licences
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_OK, HTTP_STATUS_NOT_FOUND } = http2.constants
 
 describe('Companies controller', () => {
   let options
@@ -107,7 +107,10 @@ describe('Companies controller', () => {
             }
           }
 
-          vi.spyOn(ViewBillingAccountsService, 'default').mockReturnValue({ pageTitle: 'Billing accounts', roles: ['billing'] })
+          vi.spyOn(ViewBillingAccountsService, 'default').mockReturnValue({
+            pageTitle: 'Billing accounts',
+            roles: ['billing']
+          })
         })
 
         it('returns the page successfully', async () => {

@@ -49,12 +49,12 @@ describe('Users - Submit profile details service', () => {
         expect(patchStub).toHaveBeenCalled()
         expect(whereStub).toHaveBeenCalledWith('userId', userId)
         expect(patchStub).toHaveBeenCalledWith({
-            'userData:contactDetails.address': payload.address,
-            'userData:contactDetails.email': payload.email,
-            'userData:contactDetails.jobTitle': payload.jobTitle,
-            'userData:contactDetails.name': payload.name,
-            'userData:contactDetails.tel': payload.tel
-          })
+          'userData:contactDetails.address': payload.address,
+          'userData:contactDetails.email': payload.email,
+          'userData:contactDetails.jobTitle': payload.jobTitle,
+          'userData:contactDetails.name': payload.name,
+          'userData:contactDetails.tel': payload.tel
+        })
         expect(result.navigationLinks).toBeInstanceOf(Array)
       })
 
@@ -73,12 +73,12 @@ describe('Users - Submit profile details service', () => {
           await SubmitProfileDetailsService(userId, {}, yarStub)
 
           expect(patchStub).toHaveBeenCalledWith({
-              'userData:contactDetails.address': '',
-              'userData:contactDetails.email': '',
-              'userData:contactDetails.jobTitle': '',
-              'userData:contactDetails.name': '',
-              'userData:contactDetails.tel': ''
-            })
+            'userData:contactDetails.address': '',
+            'userData:contactDetails.email': '',
+            'userData:contactDetails.jobTitle': '',
+            'userData:contactDetails.name': '',
+            'userData:contactDetails.tel': ''
+          })
         })
       })
     })

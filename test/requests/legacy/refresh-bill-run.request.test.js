@@ -1,5 +1,4 @@
 import http2 from 'node:http2'
-const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 // Test framework dependencies
 
@@ -8,6 +7,7 @@ import * as LegacyRequest from '../../../app/requests/legacy.request.js'
 
 // Thing under test
 import * as RefreshBillRunRequest from '../../../app/requests/legacy/refresh-bill-run.request.js'
+const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = http2.constants
 
 describe('Legacy Refresh Bill Run request', () => {
   const billRunId = '2bbbe459-966e-4026-b5d2-2f10867bdddd'

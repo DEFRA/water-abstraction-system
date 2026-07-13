@@ -1,4 +1,3 @@
-
 // Test framework dependencies
 
 // Thing under test
@@ -7,11 +6,10 @@ import DetermineReturnsPeriodService from '../../../../app/services/notices/setu
 describe('Notices - Setup - Determine Returns Period service', () => {
   const year = 2025
 
-  let clock
   let returnsPeriod
 
   beforeEach(async () => {
-    clock = vi.useFakeTimers({ now: new Date(`${year}-01-01`) })
+    vi.useFakeTimers({ now: new Date(`${year}-01-01`) })
 
     returnsPeriod = 'quarterFour'
   })

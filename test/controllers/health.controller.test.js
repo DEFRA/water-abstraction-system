@@ -2,7 +2,6 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 // Things we need to stub
 import * as DatabaseHealthCheckService from '../../app/services/health/database-health-check.service.js'
@@ -10,6 +9,7 @@ import * as InfoService from '../../app/services/health/info.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 describe('Health controller', () => {
   let airbrakeStub

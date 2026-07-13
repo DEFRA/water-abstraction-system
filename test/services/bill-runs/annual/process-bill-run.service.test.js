@@ -96,8 +96,7 @@ describe('Annual Process Bill Run service', () => {
   describe('when the service errors', () => {
     let thrownError
 
-    beforeEach(() => {
-    })
+    beforeEach(() => {})
 
     describe('because fetching the billing accounts fails', () => {
       beforeEach(() => {

@@ -21,7 +21,6 @@ describe('Users - View profile details service', () => {
   const userId = 123
 
   let selectStub
-  let userModelQueryStub
   let whereStub
   let yarStub
 
@@ -34,7 +33,9 @@ describe('Users - View profile details service', () => {
       first: vi.fn().mockReturnThis(),
       limit: vi.fn().mockReturnThis()
     })
-    userModelQueryStub = vi.spyOn(UserModel, 'query').mockReturnValue({ where: whereStub })
+
+    vi.spyOn(UserModel, 'query').mockReturnValue({ where: whereStub })
+
     yarStub = YarStub()
     yarStub.flash.mockReturnValue([])
   })
