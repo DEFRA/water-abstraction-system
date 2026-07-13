@@ -39,7 +39,7 @@ async function _fetch(licenceId, page) {
     ])
     .innerJoinRelated('licence')
     .where('licence.id', licenceId)
-    .orderByRaw('return_logs.start_date desc, return_logs.return_reference::integer desc')
+    .orderByRaw('return_logs.start_date desc, return_logs.return_reference::integer desc, return_logs.end_date desc')
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
 
