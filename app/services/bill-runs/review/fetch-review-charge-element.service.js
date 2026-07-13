@@ -17,7 +17,7 @@ import ReviewChargeElementModel from '../../../models/review-charge-element.mode
  * @returns {Promise<object>} the matching `ReviewChargeElementModel` instance and related data needed for the
  * two-part tariff review charge element page
  */
-export default async function go(reviewChargeElementId) {
+export default async function (reviewChargeElementId) {
   return _fetch(reviewChargeElementId)
 }
 

@@ -15,7 +15,7 @@ const VALID_VALUES = ['yes', 'no']
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function go(payload) {
+export default function (payload) {
   const meter10TimesDisplayErrorMessage = 'Select if the meter has a ×10 display'
 
   const schema = Joi.object({

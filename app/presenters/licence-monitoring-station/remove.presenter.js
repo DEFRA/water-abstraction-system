@@ -13,7 +13,7 @@ import { formatRestrictionType, formatValueUnit } from '../base.presenter.js'
  *
  * @returns {object} page data needed by the view template
  */
-export default function go(licenceMonitoringStation) {
+export default function (licenceMonitoringStation) {
   const {
     licence,
     licenceVersionPurposeCondition,

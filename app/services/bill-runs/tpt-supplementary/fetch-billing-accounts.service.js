@@ -52,7 +52,7 @@ import ChargeVersionModel from '../../../models/charge-version.model.js'
  * @returns {Promise<object[]>} An array of 'billing accounts to be billed and their relevant licence, charge version,
  * charge element etc records, plus the two-part tariff review details needed to generate the bill run
  */
-export default async function go(billRunId, billingPeriod) {
+export default async function (billRunId, billingPeriod) {
   return _fetch(billRunId, billingPeriod)
 }
 

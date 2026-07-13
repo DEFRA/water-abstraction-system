@@ -16,7 +16,7 @@ import SingleVolumePresenter from '../../../presenters/return-logs/setup/single-
  *
  * @returns {Promise<object>} The view data for the single volume page
  */
-export default async function go(sessionId) {
+export default async function (sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const pageData = SingleVolumePresenter(session)

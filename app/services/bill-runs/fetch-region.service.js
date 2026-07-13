@@ -16,7 +16,7 @@ import RegionModel from '../../models/region.model.js'
  *
  * @returns {object} Instance of `RegionModel` with the matching NALD Region ID
  */
-export default async function go(naldRegionId) {
+export default async function (naldRegionId) {
   const region = await _fetch(naldRegionId)
 
   return region

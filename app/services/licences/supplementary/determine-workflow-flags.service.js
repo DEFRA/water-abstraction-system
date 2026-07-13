@@ -37,7 +37,7 @@ import { determineCurrentFinancialYear } from '../../../lib/general.lib.js'
  * @returns {object} - An object containing the related licenceId, regionId, workflow start and end date and
  * licence supplementary billing flags
  */
-export default async function go(workflowId) {
+export default async function (workflowId) {
   const licence = await FetchLicenceService(workflowId)
   const { endDate } = determineCurrentFinancialYear()
 
@@ -54,11 +54,9 @@ export default async function go(workflowId) {
   }
 
   // If the licence has ended then we don't want to add any new flags
-  if (licence.ended) {
-    return result
+  if (!licence.ended) {
+    await _updateFlags(licence, result)
   }
-
-  await _updateFlags(licence, result)
 
   return result
 }

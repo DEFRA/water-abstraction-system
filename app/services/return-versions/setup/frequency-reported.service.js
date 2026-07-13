@@ -17,7 +17,7 @@ import FrequencyReportedPresenter from '../../../presenters/return-versions/setu
  *
  * @returns {Promise<object>} The view data for the frequency reported page
  */
-export default async function go(sessionId, requirementIndex) {
+export default async function (sessionId, requirementIndex) {
   const session = await FetchSessionDal(sessionId)
 
   const formattedData = FrequencyReportedPresenter(session, requirementIndex)

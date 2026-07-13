@@ -34,7 +34,7 @@ import HandleErroredBillRunService from '../handle-errored-bill-run.service.js'
  * @param {object[]} billingPeriods - An array of billing periods each containing a `startDate` and `endDate`. For
  * annual this will only ever contain a single period
  */
-export default async function go(billRun, billingPeriods) {
+export default async function (billRun, billingPeriods) {
   const { id: billRunId, batchType } = billRun
   const billingPeriod = billingPeriods[0]
 

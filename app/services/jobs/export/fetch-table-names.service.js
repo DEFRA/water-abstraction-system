@@ -12,7 +12,7 @@ import { db } from '../../../../db/db.js'
  *
  * @returns {Promise<string[]>} Table names for the specified schema
  */
-export default async function go(schemaName) {
+export default async function (schemaName) {
   const tableData = await _fetchTableNames(schemaName)
 
   // tableData has information we do not need

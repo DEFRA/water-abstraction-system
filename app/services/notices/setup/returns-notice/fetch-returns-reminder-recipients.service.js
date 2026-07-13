@@ -18,7 +18,7 @@ import { NoticeJourney } from '../../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<object[]>} The recipient data for the returns reminder notice
  */
-export default async function go(session, download) {
+export default async function (session, download) {
   const { noticeType } = session
 
   const { bindings, query: dueReturnLogsQuery } = _returnLogsQuery(session)

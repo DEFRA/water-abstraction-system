@@ -10,7 +10,7 @@ import SessionModel from '../../../models/session.model.js'
  *
  * @returns {Promise<number>} The number of rows deleted
  */
-export default async function go() {
+export default async function () {
   let deletedCount = 0
 
   try {

@@ -54,7 +54,7 @@ const MAX_ADDRESS_LINE_LENGTH = 240
  *
  * @returns {object} the request data needed in the format required by the Charging Module
  */
-export default function go(billingAccount, address, company, contact) {
+export default function (billingAccount, address, company, contact) {
   const { accountNumber: customerReference } = billingAccount
 
   const region = customerReference.charAt(0)

@@ -26,7 +26,7 @@ import LicenceModel from '../../../models/licence.model.js'
  *
  * @returns {object} - An object containing the related licenceId, regionId and licence supplementary billing flags
  */
-export default async function go(licenceId, scheme) {
+export default async function (licenceId, scheme) {
   const licence = await _fetchLicence(licenceId)
 
   let flagForSrocSupplementary = licence.includeInSrocBilling

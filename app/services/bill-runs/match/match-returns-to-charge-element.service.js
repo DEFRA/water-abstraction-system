@@ -16,7 +16,7 @@ import { periodsOverlap } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<module:ReturnLogModel[]>} Return logs that matched the charge element
  */
-export default function go(chargeElement, returnLogs) {
+export default function (chargeElement, returnLogs) {
   const matchingReturns = _matchReturns(chargeElement, returnLogs)
 
   if (matchingReturns.length > 0) {

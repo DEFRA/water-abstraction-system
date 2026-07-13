@@ -76,7 +76,7 @@ const CROWN_DEPENDENCIES = new Set(['guernsey', 'isle of man', 'jersey'])
  *
  * @returns {object} a Notify compatible address object
  */
-export default function go(contact) {
+export default function (contact) {
   // Contact name will always be address_line_1 in any result we return
   const name = contact.name
 
@@ -278,7 +278,7 @@ function _invalidAddressParts(contact) {
   const hasSpecialChars = _specialCharacters(contact)
 
   // If address has either a valid postcode or country _and_ no special characters return an empty array. This tells
-  // `go()` above to continue processing the address for sending to Notify. Else the address is invalid and `go()` will
+  // the above to continue processing the address for sending to Notify. Else the address is invalid and it will
   // simply return it.
   if ((!noCountry || !noPostcode) && !hasSpecialChars) {
     return []

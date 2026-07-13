@@ -16,7 +16,7 @@ import RegionModel from '../../../models/region.model.js'
  *
  * @returns {Promise<string>} The display name of the region
  */
-export default async function go(sessionId) {
+export default async function (sessionId) {
   const { region: regionId } = await FetchSessionDal(sessionId)
   const { displayName: regionName } = await RegionModel.query().findById(regionId).select('displayName')
 

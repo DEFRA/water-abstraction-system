@@ -18,7 +18,7 @@ import { NoticeType, NoticeTypes } from '../../../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<object>} The alternate notice that was sent, if one was created and sent else null
  */
-export default async function go(mainNotice) {
+export default async function (mainNotice) {
   const result = await _alternateNoticeService(mainNotice)
 
   if (!result) {

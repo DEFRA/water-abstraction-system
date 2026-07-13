@@ -20,7 +20,7 @@ const MAX_DECIMALS = 15
  * @returns {object} The result from calling Joi's schema.validate(). If any errors are found the `error:` property will
  * also exist detailing what the issue is.
  */
-export default function go(payload) {
+export default function (payload) {
   const schema = Joi.object({
     amendedAggregate: Joi.number().min(0).required().custom(maxDecimalPlaces(MAX_DECIMALS), 'maxDecimals').messages({
       'number.base': 'The aggregate factor must be a number',

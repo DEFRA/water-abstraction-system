@@ -10,7 +10,7 @@ import { db } from '../../../../db/db.js'
  *
  * @returns {Promise<object>}
  */
-export default async function go() {
+export default async function () {
   return _deleteAllTestData()
 }
 

@@ -28,7 +28,7 @@ import RegionValidator from '../../../validators/bill-runs/setup/region.validato
  * @returns {Promise<object>} An object with a `setupComplete:` property if there are no errors else the page data for
  * the region page including the validation error details
  */
-export default async function go(sessionId, payload) {
+export default async function (sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
   const regions = await FetchRegionsService()
 

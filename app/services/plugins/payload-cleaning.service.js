@@ -75,7 +75,7 @@ import Sanitizer from 'sanitizer'
  *
  * @returns {object} - returns a 'clean' payload object
  */
-export default function go(payload) {
+export default function (payload) {
   return _cleanObject(payload)
 }
 

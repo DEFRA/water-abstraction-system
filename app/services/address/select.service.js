@@ -15,7 +15,7 @@ import SelectPresenter from '../../presenters/address/select.presenter.js'
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
-export default async function go(sessionId) {
+export default async function (sessionId) {
   const session = await FetchSessionDal(sessionId)
 
   const result = await send(session.addressJourney.address.postcode)

@@ -13,7 +13,7 @@ import { formatLongDate, formatNoticeType } from '../base.presenter.js'
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function go(notices, auth) {
+export default function (notices, auth) {
   const {
     credentials: { scope }
   } = auth

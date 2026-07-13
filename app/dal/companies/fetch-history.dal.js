@@ -15,7 +15,7 @@ import DatabaseConfig from '../../../config/database.config.js'
  *
  * @returns {Promise<object>} the licences for the company and the pagination object
  */
-export default async function go(companyId, page = '1') {
+export default async function (companyId, page = '1') {
   const { results: licences, total: totalNumber } = await _fetch(companyId, page)
 
   return { licences, totalNumber }

@@ -25,7 +25,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
  *
  * @returns {Promise<object>} If no errors the page data for the period-used page else the validation error details
  */
-export default async function go(sessionId, payload) {
+export default async function (sessionId, payload) {
   const session = await FetchSessionDal(sessionId)
 
   const error = _validate(payload, session)

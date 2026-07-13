@@ -30,7 +30,7 @@ import { generateUUID } from '../../lib/general.lib.js'
  *
  * @returns {object} the two-part tariff transaction
  */
-export default function go(billLicenceId, chargeReference, chargePeriod, newLicence, waterUndertaker) {
+export default function (billLicenceId, chargeReference, chargePeriod, newLicence, waterUndertaker) {
   const billableQuantity = _billableQuantity(chargeReference.chargeElements)
 
   if (billableQuantity === 0) {

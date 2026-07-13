@@ -22,7 +22,7 @@ import {
  *
  * @returns {object} page date needed for the review licence page
  */
-export default function go(reviewLicence) {
+export default function (reviewLicence) {
   const {
     billRun,
     id: reviewLicenceId,

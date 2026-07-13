@@ -38,7 +38,7 @@ import { engineTriggers } from '../../../lib/static-lookups.lib.js'
  * If the bill run is supplementary and 2 matches are found it returns the most recent match formatted for use in the
  * '/exists' page.
  */
-export default async function go(sessionId, auth) {
+export default async function (sessionId, auth) {
   const session = await FetchSessionDal(sessionId)
 
   await DeleteSessionDal(session.id)

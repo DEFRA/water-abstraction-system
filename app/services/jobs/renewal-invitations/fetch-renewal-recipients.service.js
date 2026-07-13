@@ -14,7 +14,7 @@ import { db } from '../../../../db/db.js'
  *
  * @returns {Promise<object[]>} - An array of recipients linked to an expiring licence
  */
-export default async function go(expiredDate) {
+export default async function (expiredDate) {
   const { bindings, query: expiringLicencesQuery } = GenerateExpiringLicencesQueryService(expiredDate)
 
   const query = GenerateRenewalRecipientsQueryService(expiringLicencesQuery)

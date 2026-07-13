@@ -14,7 +14,7 @@ import { db } from '../../../../db/db.js'
  *
  * @returns {Promise<object>} The headers, query and table name from the table
  */
-export default async function go(tableName, schemaName) {
+export default async function (tableName, schemaName) {
   const data = {
     headers: await _headers(tableName, schemaName),
     rows: _rows(tableName, schemaName)

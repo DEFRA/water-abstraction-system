@@ -13,7 +13,7 @@ import { db } from '../../../../../db/db.js'
  *
  * @returns {Promise<object[]>} The contact data for all licence refs
  */
-export default async function go(session) {
+export default async function (session) {
   const { licenceRefs } = session
 
   const { rows } = await db.raw(abstractionAlertRecipientsQuery, [licenceRefs, licenceRefs, licenceRefs])

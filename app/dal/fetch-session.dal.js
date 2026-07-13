@@ -17,7 +17,7 @@ import SessionNotFoundError from '../errors/session-not-found.error.js'
  * @returns {Promise<object>} The session record found in the database.
  * @throws {SessionNotFoundError} If no session is found with the provided sessionId.
  */
-export default async function go(sessionId) {
+export default async function (sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
   if (!session) {

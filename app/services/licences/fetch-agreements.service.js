@@ -12,7 +12,7 @@ import LicenceAgreementModel from '../../models/licence-agreement.model.js'
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's set up tab
  */
-export default async function go(licenceRef) {
+export default async function (licenceRef) {
   return _fetch(licenceRef)
 }
 

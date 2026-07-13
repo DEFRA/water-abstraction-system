@@ -14,7 +14,7 @@ import FetchSessionDal from '../../../dal/fetch-session.dal.js'
  * @param {string} sessionId - The id of the current session
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-export default async function go(sessionId, yar) {
+export default async function (sessionId, yar) {
   const session = await FetchSessionDal(sessionId)
   const notification = {
     title: 'Deleted',

@@ -50,7 +50,7 @@ import SendCustomerChangeService from './send-customer-change.service.js'
  * @returns {Promise<object>} contains a copy of the persisted address, agent company and contact if they were also
  * changed
  */
-export default async function go(billingAccountId, address, agentCompany = {}, contact = {}) {
+export default async function (billingAccountId, address, agentCompany = {}, contact = {}) {
   const billingAccount = await _fetchBillingAccount(billingAccountId)
 
   // We use the same timestamp for all date created/updated values. We then have something to tie together all the

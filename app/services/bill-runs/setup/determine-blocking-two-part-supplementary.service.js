@@ -35,7 +35,7 @@ import { engineTriggers } from '../../../lib/static-lookups.lib.js'
  * @returns {Promise<object>} Any blocking matches for the bill run being created, the `toFinancialYearEnding` to use
  * when creating it, and which bill run engine to trigger the creation with (if any)
  */
-export default async function go(regionId, year) {
+export default async function (regionId, year) {
   const toFinancialYearEnding = await _toFinancialYearEnding(regionId, year)
 
   if (toFinancialYearEnding === 0) {

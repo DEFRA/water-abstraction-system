@@ -12,7 +12,7 @@ import UserModel from '../../models/user.model.js'
  *
  * @returns {Promise<boolean>} Returns `true` if the email exists, `false` otherwise.
  */
-export default async function go(email) {
+export default async function (email) {
   const emailExists = await UserModel.query().findOne({ username: email })
 
   return !!emailExists

@@ -13,7 +13,7 @@ import { today } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<string>} the updated company contact
  */
-export default async function go(companyContact) {
+export default async function (companyContact) {
   const result = await _update(companyContact)
 
   return result.id

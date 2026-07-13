@@ -25,7 +25,7 @@ import NoReturnsRequiredValidator from '../../../validators/return-versions/setu
  *
  * @returns {Promise<object>} The page data for the no returns required page
  */
-export default async function go(sessionId, payload, yar) {
+export default async function (sessionId, payload, yar) {
   const session = await FetchSessionDal(sessionId)
   const validationResult = _validate(payload)
 

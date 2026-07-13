@@ -34,7 +34,7 @@ import { db } from '../../../db/db.js'
  * @param {string} licenceRef - The reference of the licence to update return logs for
  * @param {object} trx - Database transaction object to ensure all DB changes are applied, or none at all
  */
-export default async function go(licenceRef, trx) {
+export default async function (licenceRef, trx) {
   const bindings = [licenceRef]
 
   const query = `

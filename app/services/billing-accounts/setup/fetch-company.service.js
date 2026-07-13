@@ -12,7 +12,7 @@ import { send } from '../../../requests/companies-house/lookup-companies-house-n
  *
  * @returns {Promise<object>} an object containing the matching companies house number and name
  */
-export default async function go(companiesHouseNumber) {
+export default async function (companiesHouseNumber) {
   if (!companiesHouseNumber) {
     return null
   }

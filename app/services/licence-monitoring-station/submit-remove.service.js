@@ -16,7 +16,7 @@ import LicenceMonitoringStationModel from '../../models/licence-monitoring-stati
  * @param {string} licenceRef - The reference of the licence
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-export default async function go(licenceMonitoringStationId, licenceRef, yar) {
+export default async function (licenceMonitoringStationId, licenceRef, yar) {
   await LicenceMonitoringStationModel.query()
     .update({ deletedAt: timestampForPostgres() })
     .where('id', licenceMonitoringStationId)

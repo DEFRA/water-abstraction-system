@@ -23,7 +23,7 @@ import { timestampForPostgres } from '../../../lib/general.lib.js'
  * sroc billing
  * @param {string} licenceId - The UUID of the licence that needs the flags persisting for
  */
-export default async function go(
+export default async function (
   twoPartTariffBillingYears,
   flagForPreSrocSupplementary,
   flagForSrocSupplementary,

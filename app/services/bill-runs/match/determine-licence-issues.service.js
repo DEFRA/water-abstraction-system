@@ -24,7 +24,7 @@ import { twoPartTariffReviewIssues } from '../../../lib/static-lookups.lib.js'
  *
  * @param {module:LicenceModel} licence - The two-part tariff licence to determine issues for
  */
-export default function go(licence) {
+export default function (licence) {
   const { returnLogs: licenceReturnLogs, chargeVersions } = licence
 
   const allReturnIssues = _determineReturnLogsIssues(licenceReturnLogs, licence)

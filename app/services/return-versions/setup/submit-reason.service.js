@@ -26,7 +26,7 @@ import ReasonValidator from '../../../validators/return-versions/setup/reason.va
  * @returns {Promise<object>} If no errors a flag that determines whether the user is returned to the check page else
  * the page data for the reason page including the validation error details
  */
-export default async function go(sessionId, payload, yar) {
+export default async function (sessionId, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)

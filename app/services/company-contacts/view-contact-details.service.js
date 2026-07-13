@@ -20,7 +20,7 @@ import { userRoles } from '../../presenters/licences/base-licences.presenter.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function go(id, auth, yar) {
+export default async function (id, auth, yar) {
   const companyContact = await FetchCompanyContactDetailsService(id)
 
   const company = await FetchCompanyService(companyContact.companyId)

@@ -16,7 +16,7 @@ import { roles } from '../../lib/static-lookups.lib.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function go(companyId, role) {
+export default async function (companyId, role) {
   const companyDetails = await FetchCompanyDetailsDal(companyId, roles[role].name)
 
   const pageData = CompanyPresenter(companyDetails, role)

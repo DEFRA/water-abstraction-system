@@ -29,7 +29,7 @@ const SERVICE_RUNNING_MESSAGE = 'Up and running'
  *
  * @returns {Promise<object>} data about each service formatted for the view
  */
-export default async function go() {
+export default async function () {
   const addressFacadeData = await _addressFacadeData()
   const chargingModuleData = await _chargingModuleData()
   const gotenbergData = await _gotenbergData()
@@ -150,7 +150,7 @@ async function _redisConnectivityData() {
     return `ERROR: ${error.message}`
   } finally {
     if (redis) {
-      await redis.disconnect()
+      redis.disconnect()
     }
   }
 }

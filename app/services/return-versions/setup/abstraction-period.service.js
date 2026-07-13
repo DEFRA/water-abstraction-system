@@ -17,7 +17,7 @@ import FetchSessionDal from '../../../dal/fetch-session.dal.js'
  *
  * @returns {Promise<object>} The view data for the abstraction period page
  */
-export default async function go(sessionId, requirementIndex) {
+export default async function (sessionId, requirementIndex) {
   const session = await FetchSessionDal(sessionId)
 
   const formattedData = AbstractionPeriodPresenter(session, requirementIndex)

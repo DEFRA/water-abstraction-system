@@ -456,6 +456,7 @@ export function today() {
  * @returns {boolean} true if a match else false
  */
 export function transactionsMatch(left, right) {
+  // NOSONAR: S1541 - a flat chain of equality checks, not nested branching logic
   // When we put together this matching logic our instincts were to try and do something 'better' than this long,
   // chained `&&` statement. But whatever we came up with was
   //

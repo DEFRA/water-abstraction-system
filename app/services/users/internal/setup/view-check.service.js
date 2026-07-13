@@ -17,7 +17,7 @@ import { readFlashNotification } from '../../../../lib/general.lib.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function go(sessionId, yar) {
+export default async function (sessionId, yar) {
   const session = await FetchSessionDal(sessionId)
 
   await markCheckPageVisited(session)

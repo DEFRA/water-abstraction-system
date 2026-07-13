@@ -28,7 +28,7 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
  *
  * @returns {Promise<string>} The licence Id
  */
-export default async function go(sessionId, userId) {
+export default async function (sessionId, userId) {
   const session = await FetchSessionDal(sessionId)
 
   await DeleteSessionDal(sessionId)

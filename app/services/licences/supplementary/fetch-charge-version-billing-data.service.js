@@ -22,7 +22,7 @@ import { determineFinancialYearEnd } from '../../../lib/dates.lib.js'
  *
  * @returns {Promise<object>} - An object containing the charge version and related SROC bill runs
  */
-export default async function go(chargeVersionId) {
+export default async function (chargeVersionId) {
   const chargeVersion = await _fetchChargeVersion(chargeVersionId)
 
   if (chargeVersion.scheme === 'alcs') {

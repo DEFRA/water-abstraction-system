@@ -11,7 +11,7 @@
  *
  * @returns {object} The data formatted for the view template
  */
-export default function go(company, billingAccounts) {
+export default function (company, billingAccounts) {
   return {
     backLink: {
       href: '/',

@@ -22,7 +22,7 @@ import UpdateInvoiceNumbersService from './update-invoice-numbers.service.js'
  *
  * @param {string} billRunId - UUID of the bill run to be sent
  */
-export default async function go(billRunId) {
+export default async function (billRunId) {
   const billRun = await SendBillBunService(billRunId)
 
   if (billRun.status === 'sending') {

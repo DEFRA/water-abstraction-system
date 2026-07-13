@@ -14,7 +14,7 @@ import ViewBillLicencePresenter from '../../presenters/bill-licences/view-bill-l
  * @returns {Promise<object>} a formatted representation of the bill licence and its transactions for use in the bill
  * licence view page
  */
-export default async function go(id) {
+export default async function (id) {
   const billLicence = await FetchBillLicenceService(id)
 
   const formattedData = ViewBillLicencePresenter(billLicence)

@@ -17,7 +17,7 @@ import ServerConfig from '../../../../config/server.config.js'
  *
  * @returns {Promise<object[]>} the notifications linked to the user
  */
-export default async function go(username, page = '1') {
+export default async function (username, page = '1') {
   const { results: notifications, total: totalNumber } = await _fetch(username, page)
 
   return { notifications, totalNumber }

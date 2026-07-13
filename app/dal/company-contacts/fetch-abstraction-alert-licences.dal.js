@@ -12,7 +12,7 @@ import LicenceModel from '../../models/licence.model.js'
  *
  * @returns {Promise<object[]>} An array of licences
  */
-export default async function go(abstractionAlertLicences) {
+export default async function (abstractionAlertLicences) {
   if (abstractionAlertLicences === null) {
     return []
   }

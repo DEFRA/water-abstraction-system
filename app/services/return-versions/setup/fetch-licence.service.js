@@ -13,7 +13,7 @@ import ReturnRequirementModel from '../../../models/return-requirement.model.js'
  *
  * @returns {Promise<module:LicenceModel>} the licence and associated records
  */
-export default async function go(licenceId) {
+export default async function (licenceId) {
   return (
     LicenceModel.query()
       .findById(licenceId)

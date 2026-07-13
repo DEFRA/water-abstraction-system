@@ -11,7 +11,7 @@ import FetchMonitoringStationDetailsDal from '../../../../dal/monitoring-station
  * @param {string} id
  * @returns {Promise<{object}>}
  */
-export default async function go(id) {
+export default async function (id) {
   const { licenceMonitoringStations, monitoringStation } = await FetchMonitoringStationDetailsDal(id)
 
   return {

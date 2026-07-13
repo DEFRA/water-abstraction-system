@@ -26,7 +26,7 @@ import NoteValidator from '../../../validators/return-versions/setup/note.valida
  * @returns {Promise<object>} If no errors it returns an empty object else the page data for the note page including the
  * validation error details
  */
-export default async function go(sessionId, payload, user, yar) {
+export default async function (sessionId, payload, user, yar) {
   const session = await FetchSessionDal(sessionId)
   const validationResult = _validate(payload)
 

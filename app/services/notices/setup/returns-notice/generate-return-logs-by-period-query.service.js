@@ -14,7 +14,7 @@ import { NoticeType } from '../../../../lib/static-lookups.lib.js'
  *
  * @returns {object} The query to use as the 'due_return_logs` CTE in the recipients query, and the associated bindings
  */
-export default function go(noticeType, licencesToExclude, returnsPeriod) {
+export default function (noticeType, licencesToExclude, returnsPeriod) {
   const { endDate, startDate, quarterly, summer } = returnsPeriod
   const bindings = [startDate, endDate, summer, quarterly, licencesToExclude]
 

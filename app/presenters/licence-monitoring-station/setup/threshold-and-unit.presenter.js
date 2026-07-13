@@ -12,7 +12,7 @@ import { thresholdUnits } from '../../../lib/static-lookups.lib.js'
  *
  * @returns {object} page data needed by the view template
  */
-export default function go(session) {
+export default function (session) {
   const { id: sessionId, label, unit: sessionUnit, threshold } = session
 
   return {

@@ -19,7 +19,7 @@ import notifyConfig from '../../../../config/notify.config.js'
  *
  * @returns {Promise<object[]>} the 'pending' notifications that need their status checking with Notify
  */
-export default async function go() {
+export default async function () {
   const todaysDate = today()
   const retentionStartDate = today()
 

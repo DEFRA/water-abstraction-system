@@ -16,7 +16,7 @@ const errorMessage = 'Select the licences they should get water abstraction aler
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function go(payload) {
+export default function (payload) {
   const schema = Joi.object({
     licences: Joi.array().min(1).required().messages({
       'any.required': errorMessage,

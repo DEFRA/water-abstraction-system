@@ -57,7 +57,7 @@
  *
  * @returns {object} The start and end date of the calculated charge period
  */
-export default function go(chargeVersion, billingPeriod) {
+export default function (chargeVersion, billingPeriod) {
   const latestStartDateTimestamp = Math.max(
     billingPeriod.startDate,
     chargeVersion.startDate,

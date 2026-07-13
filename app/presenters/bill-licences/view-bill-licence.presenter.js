@@ -18,7 +18,7 @@ import ViewStandardChargeTransactionPresenter from './view-standard-charge-trans
  * @returns {object} a formatted representation of the bill licence and its transactions specifically for the
  * view bill-licence page
  */
-export default function go(billLicence) {
+export default function (billLicence) {
   const { id: billLicenceId, bill, licenceId, licenceRef, transactions } = billLicence
 
   const { creditTotal, debitTotal, total } = _totals(transactions)

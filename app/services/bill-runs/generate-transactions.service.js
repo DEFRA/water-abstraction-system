@@ -31,7 +31,7 @@ import CalculateAuthorisedAndBillableDaysServiceService from './calculate-author
  *
  * @returns {object[]} an array of 0, 1 or 2 transaction objects
  */
-export default function go(billLicenceId, chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker) {
+export default function (billLicenceId, chargeReference, billingPeriod, chargePeriod, newLicence, waterUndertaker) {
   const { authorisedDays, billableDays } = CalculateAuthorisedAndBillableDaysServiceService(
     chargePeriod,
     billingPeriod,

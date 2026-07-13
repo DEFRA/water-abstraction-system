@@ -21,7 +21,7 @@ import { sentenceCase } from '../../../base.presenter.js'
  *
  * @returns {Promise<object>} The data formatted for the preview page
  */
-export default async function go(
+export default async function (
   contactHashId,
   noticeType,
   notification,

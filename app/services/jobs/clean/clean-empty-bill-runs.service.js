@@ -21,7 +21,7 @@ import UnassignBillRunToLicencesService from '../../bill-runs/unassign-bill-run-
  *
  * @returns {Promise<number>} The number of rows deleted
  */
-export default async function go() {
+export default async function () {
   let billRunId
   let deletedCount = 0
 

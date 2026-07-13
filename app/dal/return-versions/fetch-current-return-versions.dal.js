@@ -14,7 +14,7 @@ import ReturnVersionModel from '../../models/return-version.model.js'
  * @returns {Promise<module:ReturnVersionModel[]>} The 'current' return versions for the licence ordered by `startDate`
  * descending
  */
-export default async function go(licenceId, trx) {
+export default async function (licenceId, trx) {
   return ReturnVersionModel.query(trx)
     .select(['endDate', 'id', 'startDate'])
     .where('licenceId', licenceId)

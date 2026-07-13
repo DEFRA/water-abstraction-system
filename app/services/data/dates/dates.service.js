@@ -29,7 +29,7 @@ import { determineUpcomingReturnPeriods } from '../../../lib/return-periods.lib.
  *
  * @returns {object} an object containing the current billing and return periods, plus the current financial year dates
  */
-export default function go() {
+export default function () {
   const [firstReturnPeriod, secondReturnPeriod] = determineUpcomingReturnPeriods(today())
   const currentSummerReturnCycle = {
     startDate: determineCycleStartDate(true),

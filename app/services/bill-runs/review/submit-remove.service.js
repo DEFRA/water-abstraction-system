@@ -25,7 +25,7 @@ import { flashNotification } from '../../../lib/general.lib.js'
  * @returns {Promise<object>} an object containing the bill run ID plus a boolean flag that indicates whether this was
  * the last licence in the bill run (bill run is now empty)
  */
-export default async function go(reviewLicenceId, yar) {
+export default async function (reviewLicenceId, yar) {
   const reviewLicence = await FetchRemoveReviewLicenceModel(reviewLicenceId)
 
   await RemoveReviewLicenceService(reviewLicenceId)

@@ -33,7 +33,7 @@ import { calculateAndLogTimeTaken, currentTimeInNanoseconds } from '../../../lib
  * If the request to Notify for the message details fails, the notification is not updated. This means we can try again
  * later.
  */
-export default async function go() {
+export default async function () {
   try {
     const startTime = currentTimeInNanoseconds()
 

@@ -32,7 +32,7 @@ const Joi = base.extend(joiDate)
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function go(payload, licenceStartDate, licenceEndDate) {
+export default function (payload, licenceStartDate, licenceEndDate) {
   const _payload = {
     startDateOptions: payload.startDateOptions,
     anotherStartDate: _fullDate(payload)

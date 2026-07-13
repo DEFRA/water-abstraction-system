@@ -12,7 +12,7 @@ import { checkUrl } from '../../../lib/check-page.lib.js'
  *
  * @returns {object} page data needed for the `/return-logs/setup/{sessionId}/submission` page
  */
-export default function go(session) {
+export default function (session) {
   const { beenReceived, journey, returnReference } = session
 
   return {

@@ -10,7 +10,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function go(session) {
+export default function (session) {
   return {
     backlink: '/system/bill-runs',
     pageTitle: 'Select the bill run type',

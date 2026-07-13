@@ -18,7 +18,7 @@ import ReviewChargeReferenceModel from '../../../models/review-charge-reference.
  * @returns {module:ReviewChargeReferenceModel} the matching `ReviewChargeReferenceModel` instance and related data
  * needed for the two-part tariff review charge reference page and sub-pages
  */
-export default async function go(reviewChargeReferenceId) {
+export default async function (reviewChargeReferenceId) {
   return _fetch(reviewChargeReferenceId)
 }
 

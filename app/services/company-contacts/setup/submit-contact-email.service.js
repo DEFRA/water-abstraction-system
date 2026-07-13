@@ -20,7 +20,7 @@ import { formatEmail, formatValidationResult } from '../../../presenters/base.pr
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function go(sessionId, payload, yar) {
+export default async function (sessionId, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload)

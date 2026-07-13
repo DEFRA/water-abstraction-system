@@ -9,7 +9,7 @@ import SchemaExportService from './schema-export.service.js'
 /**
  * Calls SchemaExportService giving it a schemaName
  */
-export default async function go() {
+export default async function () {
   // Mark the start time for later logging
   const startTime = currentTimeInNanoseconds()
 

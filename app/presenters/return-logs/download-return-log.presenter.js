@@ -15,7 +15,7 @@ const HEADERS = ['end date', 'reading', 'volume']
  *
  * @returns {object} the data needed for the csv download
  */
-export default function go(returnLog) {
+export default function (returnLog) {
   const { returnSubmissions } = returnLog
 
   const selectedReturnSubmission = returnSubmissions[0]

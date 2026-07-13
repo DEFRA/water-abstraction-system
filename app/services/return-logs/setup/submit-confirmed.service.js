@@ -13,7 +13,7 @@ import ReturnLogModel from '../../../models/return-log.model.js'
  *
  * @returns {Promise<string>} The licenceId to use in the redirect
  */
-export default async function go(returnLogId) {
+export default async function (returnLogId) {
   const { licenceId } = await ReturnLogModel.query()
     .findById(returnLogId)
     .select('licence.id AS licenceId')

@@ -20,7 +20,7 @@ import { formatValidationResult } from '../../../presenters/base.presenter.js'
  * @returns {Promise<object>} An object containing where to redirect to if there are no errors else the page data for the view
  * including the validation error details
  */
-export default async function go(sessionId, payload, yar) {
+export default async function (sessionId, payload, yar) {
   const session = await FetchSessionDal(sessionId)
 
   const validationResult = _validate(payload, session.noticeType)

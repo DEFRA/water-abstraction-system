@@ -25,7 +25,7 @@ const NOTIFICATION_TYPES = {
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function go(recipients, page, session) {
+export default function (recipients, page, session) {
   const { noticeType, referenceCode } = session
 
   const sortedRecipients = _recipients(noticeType, recipients, session.id)

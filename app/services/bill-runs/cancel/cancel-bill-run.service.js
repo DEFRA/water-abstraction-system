@@ -21,7 +21,7 @@ import { timestampForPostgres } from '../../../lib/general.lib.js'
  *
  * @returns {Promise<module:BillRunModel>} the bill run including its `externalId` and status
  */
-export default async function go(billRunId) {
+export default async function (billRunId) {
   const billRun = await _fetchBillRun(billRunId)
 
   const canBeDeleted = _canBeDeleted(billRun.status)

@@ -12,7 +12,7 @@
  *
  * @returns {object} - The data formatted for the view template
  */
-export default function go(session, auth) {
+export default function (session, auth) {
   const { alertEmailAddress, alertEmailAddressType, monitoringStationName, id: sessionId } = session
 
   return {

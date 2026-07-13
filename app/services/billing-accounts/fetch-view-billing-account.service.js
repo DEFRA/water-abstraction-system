@@ -18,7 +18,7 @@ import DatabaseConfig from '../../../config/database.config.js'
  * @returns {Promise<object>} an object containing the billing account and matching bills needed to populate the view
  * billing account page
  */
-export default async function go(id, page = '1') {
+export default async function (id, page = '1') {
   const billingAccount = await _fetchBillingAccount(id)
   const { results: bills, total: totalNumber } = await _fetchBills(id, page)
 

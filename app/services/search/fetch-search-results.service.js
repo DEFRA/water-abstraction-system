@@ -106,7 +106,7 @@ const USER_SQL = `
  * @returns {Promise<object>} The list of IDs of the records by search order and the total number of matching rows that
  * exist in the database
  */
-export default async function go(query, resultTypes, page) {
+export default async function (query, resultTypes, page) {
   if (resultTypes.length === 0) {
     return { results: [], total: 0 }
   }

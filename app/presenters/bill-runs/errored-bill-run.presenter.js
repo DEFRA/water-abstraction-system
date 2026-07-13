@@ -13,7 +13,7 @@ import { formatBillRunType, formatChargeScheme, generateBillRunTitle } from '../
  *
  * @returns {object} - the prepared bill run data to be passed to the errored bill run page
  */
-export default function go(billRun) {
+export default function (billRun) {
   const { batchType, billRunNumber, createdAt, errorCode, id, region, scheme, status, summer, toFinancialYearEnding } =
     billRun
 

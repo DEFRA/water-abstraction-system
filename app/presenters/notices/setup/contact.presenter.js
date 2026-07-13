@@ -17,7 +17,7 @@ import NotifyAddressPresenter from './notify-address.presenter.js'
  *
  * @returns {object} - a contact
  */
-export default function go(recipient) {
+export default function (recipient) {
   if (recipient.message_type === 'Email') {
     return [recipient.email]
   }

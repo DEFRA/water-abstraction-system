@@ -22,7 +22,7 @@ const MAX_LICENCE_LENGTH = 20
  *
  * @returns {string[]} The list of items to search for
  */
-export default function go(query, selectedResultType, userScopes) {
+export default function (query, selectedResultType, userScopes) {
   // Check if we've got a matching result type, otherwise default to all types the user has access to
   const resultTypeToUse = RESULT_TYPES.find((resultType) => {
     return resultType === selectedResultType

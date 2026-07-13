@@ -18,7 +18,7 @@ import PaginatorPresenter from '../../presenters/paginator.presenter.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function go(id, page) {
+export default async function (id, page) {
   const companyContact = await FetchCompanyContactDal(id)
 
   const company = await FetchCompanyService(companyContact.companyId)

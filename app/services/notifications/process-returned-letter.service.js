@@ -18,7 +18,7 @@ import { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgre
  *
  * @param {string} payload - Payload from the Notify callback
  */
-export default async function go(payload) {
+export default async function (payload) {
   try {
     const startTime = currentTimeInNanoseconds()
 

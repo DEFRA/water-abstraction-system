@@ -16,7 +16,7 @@ import RemoveCompanyContactPresenter from '../../presenters/company-contacts/rem
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function go(id) {
+export default async function (id) {
   const companyContact = await FetchCompanyContactDal(id)
 
   const company = await FetchCompanyService(companyContact.companyId)

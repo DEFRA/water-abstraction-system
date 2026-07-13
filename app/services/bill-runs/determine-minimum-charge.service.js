@@ -18,7 +18,7 @@ import { sameDate } from '../../lib/dates.lib.js'
  *
  * @returns {boolean} true if minimum charge applies else false
  */
-export default function go(chargeVersion, chargePeriod) {
+export default function (chargeVersion, chargePeriod) {
   const isSharedStartDate = sameDate(chargePeriod.startDate, chargeVersion.startDate)
 
   const triggersMinimumCharge = chargeVersion.changeReason?.triggersMinimumCharge ?? false

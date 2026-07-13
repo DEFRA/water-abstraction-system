@@ -11,7 +11,7 @@ import { db } from '../../../db/db.js'
  * @returns {Promise<object[]>} the matching addresses that are missing their postcodes and countries
  * and licence data
  */
-export default async function go() {
+export default async function () {
   const data = await _fetch()
 
   return data.rows

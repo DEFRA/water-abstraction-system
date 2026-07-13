@@ -24,7 +24,7 @@ import ReturnCycleModel from '../../../models/return-cycle.model.js'
  *
  * @returns {Promise<module:ReturnCycleModel>} either the matching or newly created return cycle
  */
-export default async function go(summer) {
+export default async function (summer) {
   const currentDate = new Date()
   const startDate = determineCycleStartDate(summer, currentDate)
   const endDate = determineCycleEndDate(summer, currentDate)

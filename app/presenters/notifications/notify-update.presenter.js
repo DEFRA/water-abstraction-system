@@ -19,7 +19,7 @@ import NotifyErrorPresenter from './notify-error.presenter.js'
  *
  * @returns {object} the data from the result needed to save to 'water.notifications'
  */
-export default function go(notifyResult) {
+export default function (notifyResult) {
   const { response, succeeded } = notifyResult
 
   if (succeeded) {

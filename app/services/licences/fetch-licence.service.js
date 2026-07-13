@@ -13,7 +13,7 @@ import { db } from '../../../db/db.js'
  *
  * @returns {Promise<module:LicenceModel>} the matching `LicenceModel`
  */
-export default async function go(licenceId) {
+export default async function (licenceId) {
   return LicenceModel.query()
     .findById(licenceId)
     .select([

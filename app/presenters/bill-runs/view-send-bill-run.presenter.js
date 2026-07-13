@@ -13,7 +13,7 @@ import { formatBillRunType, formatChargeScheme } from '../billing.presenter.js'
  *
  * @returns {object} - the prepared bill run data to be passed to the send bill run confirmation page
  */
-export default function go(billRun) {
+export default function (billRun) {
   const { batchType, billRunNumber, createdAt, id, region, scheme, status, summer, toFinancialYearEnding } = billRun
 
   return {

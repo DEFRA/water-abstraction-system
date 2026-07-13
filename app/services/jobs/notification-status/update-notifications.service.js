@@ -15,6 +15,6 @@ import NotificationModel from '../../../models/notification.model.js'
  * @param {object} notifications
  *
  */
-export default async function go(notifications) {
+export default async function (notifications) {
   await NotificationModel.query().insert(notifications).onConflict('id').merge(['status', 'notifyStatus'])
 }

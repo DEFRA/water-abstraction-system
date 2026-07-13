@@ -22,7 +22,7 @@ const MAX_DECIMALS = 6
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-export default function go(payload) {
+export default function (payload) {
   const { amendedAuthorisedVolume, totalBillableReturns } = payload
 
   return _validate(amendedAuthorisedVolume, Number(totalBillableReturns))

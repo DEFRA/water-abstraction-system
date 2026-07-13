@@ -14,7 +14,7 @@ import LicenceModel from '../../../../models/licence.model.js'
  *
  * @returns {Promise<module:LicenceModel[]>} the requested user licences
  */
-export default async function go(licenceEntityId) {
+export default async function (licenceEntityId) {
   return LicenceModel.query()
     .select(['licences.id', 'licences.licenceRef', 'licenceDocumentHeader.id AS licenceDocumentHeaderId'])
     .innerJoinRelated('licenceDocumentHeader')

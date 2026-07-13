@@ -17,7 +17,7 @@ import { sourceNavigation } from '../base-users.presenter.js'
  *
  * @returns {object} The data formatted for the view template
  */
-export default function go(user, verifications, viewingUserScope, back) {
+export default function (user, verifications, viewingUserScope, back) {
   const { username } = user
 
   const canManageAccounts = viewingUserScope.includes('manage_accounts')

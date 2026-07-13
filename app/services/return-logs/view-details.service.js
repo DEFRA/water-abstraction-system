@@ -16,7 +16,7 @@ import DetailsPresenter from '../../presenters/return-logs/details.presenter.js'
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-export default async function go(returnLogId, auth, version) {
+export default async function (returnLogId, auth, version) {
   const returnLog = await FetchReturnLogDetailsService(returnLogId, version)
 
   const pageData = DetailsPresenter(returnLog, auth)
