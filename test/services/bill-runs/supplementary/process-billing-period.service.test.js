@@ -51,7 +51,6 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
     billRun = await BillRunHelper.add({ regionId: region.id })
 
     vi.spyOn(FetchPreviousTransactionsService, 'default').mockResolvedValue([])
-    vi.spyOn(GenerateTransactionsService, 'default').mockResolvedValue([])
   })
 
   afterEach(() => {
@@ -247,7 +246,9 @@ describe('Bill Runs - Supplementary - Process Billing Period service', () => {
 
     describe('because generating the calculated transactions fails', () => {
       beforeEach(async () => {
-        vi.spyOn(GenerateTransactionsService, 'default').mockRejectedValue(new Error())
+        vi.spyOn(GenerateTransactionsService, 'default').mockImplementation(() => {
+          throw new Error()
+        })
       })
 
       it('throws a BillRunError with the correct code', async () => {

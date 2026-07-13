@@ -1,6 +1,4 @@
 import http2 from 'node:http2'
-const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK, HTTP_STATUS_TOO_MANY_REQUESTS } =
-  http2.constants
 
 // Test framework dependencies
 
@@ -11,6 +9,8 @@ import serverConfig from '../../config/server.config.js'
 
 // Thing under test
 import * as NotifyRequest from '../../app/requests/notify.request.js'
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK, HTTP_STATUS_TOO_MANY_REQUESTS } =
+  http2.constants
 
 describe('Notify Request', () => {
   const testRoute = 'TEST_ROUTE'
@@ -212,8 +212,8 @@ describe('Notify Request', () => {
 
         beforeEach(async () => {
           baseRequestStub = vi
-            .spyOn(BaseRequest, 'post')
-            
+            .spyOn(BaseRequest, 'postRequest')
+
             .mockResolvedValueOnce({
               succeeded: false,
               response: {
@@ -230,7 +230,7 @@ describe('Notify Request', () => {
                 }
               }
             })
-            
+
             .mockResolvedValueOnce({
               succeeded: true,
               response: {

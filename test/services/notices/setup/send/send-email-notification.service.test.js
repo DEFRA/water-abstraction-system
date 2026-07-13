@@ -22,7 +22,7 @@ describe('Notices - Setup - Send - Send Email Notification service', () => {
 
     notifyResponse = NotifyResponseFixture.successfulResponse(referenceCode).email
 
-    vi.spyOn(CreateEmailRequest, 'send') // TODO: onCall not auto-converted.mockResolvedValue(notifyResponse)
+    vi.spyOn(CreateEmailRequest, 'send').mockResolvedValue(notifyResponse)
   })
 
   afterEach(() => {

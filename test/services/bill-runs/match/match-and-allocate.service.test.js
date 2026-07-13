@@ -20,8 +20,13 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
   beforeEach(() => {
     notifierStub = GlobalNotifierStub()
     globalThis.GlobalNotifier = notifierStub
-    vi.spyOn(DetermineLicenceIssuesService, 'default').mockResolvedValue()
 
+    vi.spyOn(DetermineLicenceIssuesService, 'default').mockResolvedValue()
+    vi.spyOn(AllocateReturnsToChargeElementService, 'default').mockReturnValue()
+    vi.spyOn(MatchReturnsToChargeElementService, 'default').mockReturnValue()
+    vi.spyOn(PersistAllocatedLicenceToResultsService, 'default').mockResolvedValue()
+    vi.spyOn(PrepareChargeVersionService, 'default').mockReturnValue()
+    vi.spyOn(PrepareReturnLogsService, 'default').mockResolvedValue()
   })
 
   afterEach(async () => {

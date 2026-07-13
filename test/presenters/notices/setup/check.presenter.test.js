@@ -2,8 +2,7 @@
 
 // Test helpers
 import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
-import { generateNoticeReferenceCode } from '../../../../app/lib/general.lib.js'
-import { generateUUID } from '../../../../app/lib/general.lib.js'
+import { generateNoticeReferenceCode, generateUUID } from '../../../../app/lib/general.lib.js'
 
 //
 import DatabaseConfig from '../../../../config/database.config.js'
@@ -12,7 +11,6 @@ import DatabaseConfig from '../../../../config/database.config.js'
 import CheckPresenter from '../../../../app/presenters/notices/setup/check.presenter.js'
 
 describe('Notices - Setup - Check presenter', () => {
-  let defaultPageSizeStub
   let page
   let recipients
   let session
@@ -32,7 +30,7 @@ describe('Notices - Setup - Check presenter', () => {
 
     recipients = [...Object.values(testRecipients)]
 
-    defaultPageSizeStub = vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 25)
+    vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 25)
   })
 
   afterEach(() => {
@@ -465,7 +463,7 @@ describe('Notices - Setup - Check presenter', () => {
 
     describe('when there are multiple pages of results', () => {
       beforeEach(() => {
-        defaultPageSizeStub.value(1)
+        vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 1)
       })
 
       it('returns the "tableCaption" with the "Showing x of y" message', () => {
@@ -481,7 +479,7 @@ describe('Notices - Setup - Check presenter', () => {
             // we should see 2 recipients on the last page (in this case page 2)
             page = '2'
 
-            defaultPageSizeStub.value(3)
+            vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 3)
           })
 
           it('returns the "tableCaption" with the "Showing x of y" message', () => {
@@ -539,7 +537,7 @@ describe('Notices - Setup - Check presenter', () => {
           recipients[2].contact.postcode = null
 
           // This proves we are checking all the recipients across pages
-          defaultPageSizeStub.value(3)
+          vi.replaceProperty(DatabaseConfig, 'defaultPageSize', 3)
         })
 
         it('returns a warning that lists the recipients', () => {

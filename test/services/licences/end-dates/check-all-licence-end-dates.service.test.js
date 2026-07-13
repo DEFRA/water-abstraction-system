@@ -47,9 +47,9 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
       const firstLicence = licences[0]
       const lastLicence = licences[licences.length - 1]
 
-      expect(CheckLicenceEndDatesService).toHaveBeenCalledTimes(licences.length)
-      expect(CheckLicenceEndDatesService.getCall(0).firstArg).toEqual(firstLicence)
-      expect(CheckLicenceEndDatesService.getCall(licences.length - 1).firstArg).toEqual(lastLicence)
+      expect(CheckLicenceEndDatesService.default).toHaveBeenCalledTimes(licences.length)
+      expect(CheckLicenceEndDatesService.default.mock.calls[0][0]).toEqual(firstLicence)
+      expect(CheckLicenceEndDatesService.default.mock.calls[licences.length - 1][0]).toEqual(lastLicence)
     })
 
     it('processes them in batches', async () => {

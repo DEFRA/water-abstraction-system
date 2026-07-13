@@ -2,13 +2,13 @@
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_OK } = http2.constants
 
 // Things we need to stub
 import * as ViewReturnSubmissionService from '../../app/services/return-submissions/view-return-submission.service.js'
 
 // For running our service
 import { init } from '../../app/server.js'
+const { HTTP_STATUS_OK } = http2.constants
 
 describe('Return Submissions controller', () => {
   let options
@@ -66,8 +66,8 @@ describe('Return Submissions controller', () => {
 
           const calls = ViewReturnSubmissionService.default.mock.calls[0]
 
-          expect(calls.args).toContain('d1f4826a-a8b1-479a-ac25-07b491ebcddd')
-          expect(calls.args).toContain('2025-02')
+          expect(calls).toContain('d1f4826a-a8b1-479a-ac25-07b491ebcddd')
+          expect(calls).toContain('2025-02')
         })
       })
     })

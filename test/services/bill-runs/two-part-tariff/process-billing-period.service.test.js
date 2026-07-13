@@ -36,7 +36,6 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
     billingAccount = TwoPartTariffFixture.billingAccount()
     licence = TwoPartTariffFixture.licence(region)
 
-
     billInsertStub = vi.fn()
     billLicenceInsertStub = vi.fn()
     transactionInsertStub = vi.fn()
@@ -44,7 +43,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
     vi.spyOn(BillModel, 'query').mockReturnValue({ insert: billInsertStub })
     vi.spyOn(BillLicenceModel, 'query').mockReturnValue({ insert: billLicenceInsertStub })
     vi.spyOn(TransactionModel, 'query').mockReturnValue({ insert: transactionInsertStub })
-    vi.spyOn(GenerateTransactionsService, 'default').mockResolvedValue([])
+    vi.spyOn(SendTransactionsService, 'default').mockResolvedValue()
   })
 
   afterEach(() => {
@@ -66,7 +65,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
         // which we can then use in our response. In this case billLicenceId is generated inside the service but we want
         // to assert that the transactions we're persisting link to the bill licence we are persisting. This allows us
         // to replay back what has been generated with a 'faked' external ID from the Charging Module API
-        SendTransactionsService.onFirstCall().callsFake(
+        SendTransactionsService.default.mockImplementationOnce(
           // NOTE: We could have just referenced processedTransactions as that is a JavaScript quirk. But we
           // wanted to highlight how you would access the other arguments
           async (generatedTransactions, _billRunExternalId, _accountNumber, _licence) => {
@@ -74,7 +73,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
           }
         )
 
-        SendTransactionsService.onSecondCall().callsFake(
+        SendTransactionsService.default.mockImplementationOnce(
           // NOTE: We could have just referenced processedTransactions as that is a JavaScript quirk. But we
           // wanted to highlight how you would access the other arguments
           async (generatedTransactions, _billRunExternalId, _accountNumber, _licence) => {
@@ -243,7 +242,9 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
 
     describe('because generating the calculated transaction fails', () => {
       beforeEach(async () => {
-        vi.spyOn(GenerateTwoPartTariffTransactionService, 'default').mockRejectedValue(new Error())
+        vi.spyOn(GenerateTwoPartTariffTransactionService, 'default').mockImplementation(() => {
+          throw new Error()
+        })
       })
 
       it('throws a BillRunError with the correct code', async () => {
@@ -258,7 +259,7 @@ describe('Bill Runs - Two-part Tariff - Process Billing Period service', () => {
 
     describe('because sending the transactions fails', () => {
       beforeEach(async () => {
-        vi.spyOn(SendTransactionsService, 'default').mockRejectedValue()
+        vi.spyOn(SendTransactionsService, 'default').mockRejectedValue(new Error())
       })
 
       it('throws an error', async () => {

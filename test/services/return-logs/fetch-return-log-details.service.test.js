@@ -202,7 +202,7 @@ describe('Return Logs - Fetch Return Log Details service', () => {
         it('automatically applies readings to the submission', async () => {
           await FetchReturnLogDetailsService(returnLog.id)
 
-          expect(returnSubmissions[2].$applyReadings.calledOnce).toBe(true)
+          expect(returnSubmissions[2].$applyReadings).toHaveBeenCalledOnce()
         })
       })
 
@@ -239,7 +239,7 @@ describe('Return Logs - Fetch Return Log Details service', () => {
         it('automatically applies readings to the submission', async () => {
           await FetchReturnLogDetailsService(returnLog.id, version)
 
-          expect(returnSubmissions[1].$applyReadings.calledOnce).toBe(true)
+          expect(returnSubmissions[1].$applyReadings).toHaveBeenCalledOnce()
         })
       })
     })

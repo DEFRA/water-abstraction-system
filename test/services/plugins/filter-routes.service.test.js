@@ -1,6 +1,6 @@
 // Test framework dependencies
 
-import Hoek from '@hapi/hoek'
+import * as Hoek from '@hapi/hoek'
 
 // Thing under test
 import FilterRoutesService from '../../../app/services/plugins/filter-routes.service.js'

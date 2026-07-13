@@ -4,7 +4,6 @@ import Nock from 'nock'
 
 // Test helpers
 import http2 from 'node:http2'
-const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 import serverConfig from '../../config/server.config.js'
 
 // Things we need to stub
@@ -12,6 +11,7 @@ import GlobalNotifierStub from '../support/stubs/global-notifier.stub.js'
 
 // Thing under test
 import * as BaseRequest from '../../app/requests/base.request.js'
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = http2.constants
 
 describe('Base Request', () => {
   const testDomain = 'http://example.com'
@@ -27,7 +27,7 @@ describe('Base Request', () => {
   // The behaviour doesn't change; we are still retrying requests. But now we are only waiting a maximum of 50ms between
   // them.
   const shortBackoffLimitRetryOptions = {
-    ...BaseRequest.defaultOptions.retry,
+    ...BaseRequest.defaultOptions().retry,
     backoffLimit: 50
   }
 
