@@ -40,7 +40,7 @@ import {
   submitStartDate
 } from '../controllers/return-versions-setup.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/return-versions/setup/{sessionId}/abstraction-period/{requirementIndex}',
@@ -510,5 +510,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

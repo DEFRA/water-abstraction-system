@@ -1,6 +1,6 @@
 import { invalidAddresses } from '../controllers/reports.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/reports/invalid-addresses',
@@ -22,5 +22,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

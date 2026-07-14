@@ -16,7 +16,7 @@ import {
   viewReviewLicence
 } from '../controllers/bill-runs-review.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/bill-runs/review/{billRunId}',
@@ -198,5 +198,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

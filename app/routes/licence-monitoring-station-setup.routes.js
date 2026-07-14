@@ -14,7 +14,7 @@ import {
   thresholdAndUnit
 } from '../controllers/licence-monitoring-station-setup.controller.js'
 
-const routes = [
+export default [
   {
     method: 'POST',
     path: '/licence-monitoring-station/setup',
@@ -172,5 +172,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

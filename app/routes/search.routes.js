@@ -1,6 +1,6 @@
 import { submitSearch, viewSearch } from '../controllers/search.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/search',
@@ -16,5 +16,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

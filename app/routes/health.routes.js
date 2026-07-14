@@ -1,6 +1,6 @@
 import { airbrake, database, info } from '../controllers/health.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/health/airbrake',
@@ -39,5 +39,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

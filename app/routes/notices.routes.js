@@ -1,6 +1,6 @@
 import { index, submitIndex, submitView, view } from '../controllers/notices.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/notices',
@@ -50,5 +50,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

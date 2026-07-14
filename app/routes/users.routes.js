@@ -13,7 +13,7 @@ import {
   viewProfileDetails
 } from '../controllers/users.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/users',
@@ -134,5 +134,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

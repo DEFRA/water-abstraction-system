@@ -9,7 +9,7 @@ import {
   view
 } from '../controllers/bill-runs.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/bill-runs',
@@ -107,5 +107,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

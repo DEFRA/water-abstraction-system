@@ -5,7 +5,7 @@ import {
   viewRemoveCompanyContact
 } from '../controllers/company-contacts.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/company-contacts/{id}/communications',
@@ -45,5 +45,3 @@ const routes = [
     }
   }
 ]
-
-export default routes

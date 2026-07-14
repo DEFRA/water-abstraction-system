@@ -1,6 +1,6 @@
 import { index } from '../controllers/root.controller.js'
 
-const routes = [
+export default [
   {
     method: 'GET',
     path: '/',
@@ -34,5 +34,3 @@ const routes = [
     }
   }
 ]
-
-export default routes
