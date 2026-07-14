@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as CrmSchemaService from '../../../../app/services/data/tear-down/crm-schema.service.js'
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'

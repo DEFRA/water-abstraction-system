@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Thing under test
 import BoomNotifierLib from '../../app/lib/boom-notifier.lib.js'
 

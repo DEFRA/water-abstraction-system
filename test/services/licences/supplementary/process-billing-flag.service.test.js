@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as DetermineBillLicenceFlagsService from '../../../../app/services/licences/supplementary/determine-bill-licence-flags.service.js'
 import * as DetermineChargeVersionFlagsService from '../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js'

@@ -1,7 +1,5 @@
 import http2 from 'node:http2'
 
-// Test framework dependencies
-
 // Things we need to stub
 import * as AddressFacadeViewHealthRequest from '../../../app/requests/address-facade/view-health.request.js'
 import * as ChargingModuleViewHealthRequest from '../../../app/requests/charging-module/view-health.request.js'

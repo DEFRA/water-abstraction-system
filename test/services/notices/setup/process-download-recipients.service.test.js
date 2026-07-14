@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as NoticeSessionFixture from '../../../support/fixtures/notice-session.fixture.js'
 import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'

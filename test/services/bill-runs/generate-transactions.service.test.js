@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as ChargeCategoryHelper from '../../support/helpers/charge-category.helper.js'
 import * as ChargeElementHelper from '../../support/helpers/charge-element.helper.js'

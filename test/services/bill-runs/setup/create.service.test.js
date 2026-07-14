@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import SessionModelStub from '../../../support/stubs/session.stub.js'
 import { engineTriggers } from '../../../../app/lib/static-lookups.lib.js'

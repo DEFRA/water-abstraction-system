@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as FetchLicenceMonitoringStationService from '../../../app/services/licence-monitoring-station/fetch-licence-monitoring-station.service.js'
 

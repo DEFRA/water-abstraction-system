@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import * as GeneralLib from '../../../../app/lib/general.lib.js'
 import * as FetchChargeVersionBillingDataService from '../../../../app/services/licences/supplementary/fetch-charge-version-billing-data.service.js'

@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import { today } from '../../app/lib/general.lib.js'
 import { returnCycleDates } from '../../app/lib/static-lookups.lib.js'

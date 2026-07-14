@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import jwt from 'jsonwebtoken'
 import notifyConfig from '../../config/notify.config.js'

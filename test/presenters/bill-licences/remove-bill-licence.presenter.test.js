@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Thing under test
 import RemoveBillLicencePresenter from '../../../app/presenters/bill-licences/remove-bill-licence.presenter.js'
 

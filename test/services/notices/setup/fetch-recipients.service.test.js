@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as RecipientsFixture from '../../../support/fixtures/recipients.fixture.js'
 import { NoticeJourney, NoticeType } from '../../../../app/lib/static-lookups.lib.js'

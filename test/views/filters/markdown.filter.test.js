@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Thing under test
 import MarkdownFilter from '../../../app/views/filters/markdown.filter.js'
 

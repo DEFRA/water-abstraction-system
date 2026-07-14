@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Thing under test
 import * as CheckPageLib from '../../app/lib/check-page.lib.js'
 

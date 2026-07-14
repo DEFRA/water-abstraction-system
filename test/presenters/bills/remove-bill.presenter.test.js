@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import BillingAccountModel from '../../../app/models/billing-account.model.js'
 

@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import NoBillingPeriodsError from '../../../app/errors/no-billing-periods.error.js'
 

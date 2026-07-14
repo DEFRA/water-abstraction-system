@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import FeatureFlagsConfig from '../../config/feature-flags.config.js'
 import http2 from 'node:http2'

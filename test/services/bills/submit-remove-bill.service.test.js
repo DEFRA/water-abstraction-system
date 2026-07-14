@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import BillModel from '../../../app/models/bill.model.js'
 import * as LegacyDeleteBillRequest from '../../../app/requests/legacy/delete-bill.request.js'

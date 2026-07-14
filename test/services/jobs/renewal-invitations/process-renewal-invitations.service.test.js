@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import GlobalNotifierStub from '../../../support/stubs/global-notifier.stub.js'
 import * as SendRenewalInvitations from '../../../../app/services/jobs/renewal-invitations/send-renewal-invitations.service.js'

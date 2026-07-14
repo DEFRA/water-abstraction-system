@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as UsersFixture from '../../support/fixtures/users.fixture.js'
 

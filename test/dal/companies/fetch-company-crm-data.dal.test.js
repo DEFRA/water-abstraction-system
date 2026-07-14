@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as CRMSeeder from '../../support/seeders/crm.seeder.js'
 

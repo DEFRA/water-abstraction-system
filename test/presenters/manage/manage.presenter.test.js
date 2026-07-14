@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import AuthService from '../../../app/services/plugins/auth.service.js'
 import { data as users } from '../../../db/seeds/data/users.js'

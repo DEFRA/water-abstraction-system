@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we want to stub
 import * as FetchInvalidAddressesService from '../../../app/services/reports/fetch-invalid-addresses.service.js'
 

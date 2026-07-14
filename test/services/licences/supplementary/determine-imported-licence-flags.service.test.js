@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as FetchExistingLicenceDetailsService from '../../../../app/services/licences/supplementary/fetch-existing-licence-details.service.js'
 

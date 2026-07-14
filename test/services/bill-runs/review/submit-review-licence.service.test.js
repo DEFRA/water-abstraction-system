@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as BillRunsReviewFixture from '../../../support/fixtures/bill-runs-review.fixture.js'
 import ReviewLicenceModel from '../../../../app/models/review-licence.model.js'

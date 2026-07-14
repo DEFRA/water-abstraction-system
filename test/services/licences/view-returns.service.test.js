@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import { generateLicenceRef } from '../../support/helpers/licence.helper.js'
 

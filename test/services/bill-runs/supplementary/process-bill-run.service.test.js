@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import BillRunError from '../../../../app/errors/bill-run.error.js'
 

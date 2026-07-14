@@ -1,7 +1,5 @@
 import http2 from 'node:http2'
 
-// Test framework dependencies
-
 // Things we need to stub
 import * as LegacyRequest from '../../../app/requests/legacy.request.js'
 

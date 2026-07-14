@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import { countryLookup } from '../../../app/presenters/address/base-address.presenter.js'
 import SessionModelStub from '../../support/stubs/session.stub.js'

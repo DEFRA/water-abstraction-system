@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Thing under test
 import HapiPinoLogInTestService from '../../../app/services/plugins//hapi-pino-log-in-test.service.js'
 

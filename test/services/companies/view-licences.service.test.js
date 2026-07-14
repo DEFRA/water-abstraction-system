@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as CustomersFixtures from '../../support/fixtures/customers.fixture.js'
 import LicenceModel from '../../../app/models/licence.model.js'

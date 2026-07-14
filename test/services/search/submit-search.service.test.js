@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Thing under test
 import SubmitSearchService from '../../../app/services/search/submit-search.service.js'
 

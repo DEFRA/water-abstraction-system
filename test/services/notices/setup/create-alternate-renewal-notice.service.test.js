@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import EventModel from '../../../../app/models/event.model.js'
 import * as NoticesFixture from '../../../support/fixtures/notices.fixture.js'

@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Things we need to stub
 import BaseNotifierLib from '../../app/lib/base-notifier.lib.js'
 

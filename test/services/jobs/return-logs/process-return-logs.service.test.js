@@ -1,5 +1,3 @@
-// Test framework dependencies
-
 // Test helpers
 import * as ReturnCyclesFixture from '../../../support/fixtures/return-cycles.fixture.js'
 import * as ReturnRequirementsFixture from '../../../support/fixtures/return-requirements.fixture.js'
